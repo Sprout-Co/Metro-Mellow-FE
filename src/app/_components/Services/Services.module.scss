@@ -1,0 +1,131 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.services {
+  @include section-container;
+  padding: spacing("3xl") spacing("md");
+
+  &__container {
+    max-width: 100%;
+    padding: 0;
+
+    @include breakpoint-up("sm") {
+      max-width: map-get($container-max-widths, "2xl");
+      padding: 0 spacing("md");
+    }
+
+    // @include breakpoint-up("md") {
+    //   max-width: map-get($container-max-widths, "md");
+    // }
+
+    // @include breakpoint-up("lg") {
+    //   max-width: map-get($container-max-widths, "lg");
+    // }
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("3xl");
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-weight: map-get($font-weights, "bold");
+    font-size: map-get($font-sizes, "3xl");
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
+    position: relative;
+    display: inline-block;
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "lg");
+    color: color("neutral", "darker");
+    max-width: 700px;
+    margin: spacing("md") auto 0;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: spacing("lg");
+
+    @include breakpoint-up("sm") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include breakpoint-up("lg") {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: spacing("lg");
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    box-shadow: map-get($box-shadows, "sm");
+    transition: $transition-base;
+    text-decoration: none;
+
+    &:hover {
+      //   transform: translateY(-5px);
+      //   box-shadow: map-get($box-shadows, "md");
+
+      .services__cardLink {
+        color: color("primary", "dark");
+
+        svg {
+          transform: translateX(5px);
+        }
+      }
+    }
+  }
+
+  &__iconWrapper {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(color("primary", "base"), 0.1);
+    border-radius: border-radius("full");
+    margin-bottom: spacing("md");
+  }
+
+  &__icon {
+    font-size: map-get($font-sizes, "2xl");
+    color: color("primary", "base");
+  }
+
+  &__cardTitle {
+    font-weight: map-get($font-weights, "semibold");
+    font-size: map-get($font-sizes, "xl");
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
+  }
+
+  &__cardDescription {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("md");
+    line-height: map-get($line-heights, "relaxed");
+  }
+
+  &__cardLink {
+    display: flex;
+    align-items: center;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("primary", "base");
+
+    svg {
+      margin-left: spacing("xs");
+      transition: transform 0.2s ease;
+    }
+  }
+}

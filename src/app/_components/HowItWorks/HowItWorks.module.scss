@@ -1,0 +1,197 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.howItWorks {
+  @include section-container;
+
+  padding: spacing("3xl") spacing("md");
+  background-color: color("neutral", "white");
+  position: relative;
+  overflow: hidden;
+
+  @include breakpoint-up("sm") {
+    padding: spacing("4xl") 0;
+  }
+
+  @include breakpoint-up("md") {
+    padding: spacing("5xl") 0;
+  }
+
+  @include breakpoint-up("lg") {
+    padding: spacing("6xl") 0;
+  }
+
+  &__container {
+    position: relative;
+    max-width: 100%;
+    padding: 0;
+
+    // @include breakpoint-up("sm") {
+    //   max-width: map-get($container-max-widths, "sm");
+    //   padding: 0 spacing("md");
+    // }
+
+    // @include breakpoint-up("md") {
+    //   max-width: map-get($container-max-widths, "md");
+    // }
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("5xl");
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-weight: map-get($font-weights, "bold");
+    font-size: map-get($font-sizes, "4xl");
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
+    opacity: 0;
+    transform: translateY(20px);
+
+    &.animate {
+      opacity: 1;
+      transform: translateY(0);
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+    }
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "lg");
+    color: color("neutral", "darker");
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(20px);
+
+    &.animate {
+      opacity: 1;
+      transform: translateY(0);
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+    }
+  }
+
+  &__steps {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("4xl");
+    position: relative;
+
+    @include breakpoint-up("md") {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  &__step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(30px);
+    flex: 1;
+    max-width: 300px;
+    margin: 0 auto;
+
+    @include breakpoint-up("md") {
+      max-width: none;
+    }
+
+    &.animate {
+      opacity: 1;
+      transform: translateY(0);
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+    }
+  }
+
+  &__stepIcon {
+    width: 100px;
+    height: 100px;
+    background-color: color("neutral", "white");
+    border-radius: border-radius("full");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: spacing("md");
+    box-shadow: map-get($box-shadows, "md");
+    position: relative;
+    z-index: 2;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: map-get($box-shadows, "lg");
+    }
+  }
+
+  &__iconPlaceholder {
+    width: 60px;
+    height: 60px;
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("full");
+  }
+
+  &__stepTitle {
+    font-weight: map-get($font-weights, "semibold");
+    font-size: map-get($font-sizes, "xl");
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
+  }
+
+  &__stepDescription {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "darker");
+    line-height: map-get($line-heights, "relaxed");
+    max-width: 250px;
+    margin: 0 auto;
+  }
+}
+
+// Connecting line between steps
+.connectingLine {
+  display: none;
+
+  @include breakpoint-up("md") {
+    display: block;
+    position: absolute;
+    top: 50px;
+    left: 150px;
+    height: 2px;
+    background-color: color("primary", "light");
+    z-index: 1;
+    width: 0;
+    transition: width 1.5s ease-in-out;
+
+    &--animate {
+      width: calc(100% - 300px);
+    }
+  }
+}
+
+// Animation delays
+.fadeIn {
+  &__delay1 {
+    transition-delay: 0.2s !important;
+  }
+
+  &__delay2 {
+    transition-delay: 0.4s !important;
+  }
+
+  &__delay3 {
+    transition-delay: 0.6s !important;
+  }
+}

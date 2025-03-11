@@ -1,0 +1,214 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.hero {
+  padding: spacing("4xl") spacing("md") spacing("xl");
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  color: color("neutral", "white");
+  background: url(/images/home/hero-house.png);
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  @include breakpoint-up("sm") {
+    padding: spacing("5xl") 0 spacing("2xl");
+  }
+
+  @include breakpoint-up("lg") {
+    padding: spacing("6xl") 0 spacing("2xl");
+    min-height: 100vh;
+  }
+
+  // Background image and overlay
+  &__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      // background: linear-gradient(to bottom,
+      //         rgba(0, 0, 0, 0.6) 0%,
+      //         rgba(0, 0, 0, 0.7) 100%);
+      z-index: 1;
+    }
+
+    img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__container {
+    @include container;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xl");
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+
+    @include breakpoint-up("sm") {
+      gap: spacing("2xl");
+      padding-left: spacing("md");
+      padding-right: spacing("md");
+    }
+
+    @include breakpoint-up("md") {
+      gap: spacing("3xl");
+      padding-bottom: spacing("2xl");
+    }
+  }
+
+  &__content {
+    text-align: center;
+    max-width: map-get($container-max-widths, "lg");
+    margin: 0 auto;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-weight: map-get($font-weights, "bold");
+    font-size: map-get($font-sizes, "2xl");
+    line-height: 1.2;
+    color: color("neutral", "white");
+    margin-bottom: spacing("md");
+    opacity: 0;
+    transform: translateY(20px);
+    padding: 0 spacing("md");
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+
+    @include breakpoint-up("sm") {
+      font-size: map-get($font-sizes, "3xl");
+      margin-bottom: spacing("md");
+    }
+
+    @include breakpoint-up("md") {
+      font-size: map-get($font-sizes, "4xl");
+    }
+
+    @include breakpoint-up("lg") {
+      font-size: map-get($font-sizes, "5xl");
+    }
+
+    &.animate {
+      opacity: 1;
+      transform: translateY(0);
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+    }
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "sm");
+    line-height: map-get($line-heights, "relaxed");
+    color: color("neutral", "lighter");
+    margin: spacing("lg");
+    max-width: map-get($container-max-widths, "md");
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0;
+    transform: translateY(20px);
+    padding: 0 spacing("md");
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+
+    @include breakpoint-up("sm") {
+      font-size: map-get($font-sizes, "base");
+      margin-bottom: spacing("lg");
+    }
+
+    @include breakpoint-up("md") {
+      font-size: map-get($font-sizes, "lg");
+      margin-bottom: spacing("xl");
+    }
+
+    &.animate {
+      opacity: 1;
+      transform: translateY(0);
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+    }
+  }
+
+  &__cta {
+    margin-bottom: spacing("2xl");
+    opacity: 0;
+    transform: translateY(20px);
+
+    &.animate {
+      opacity: 1;
+      transform: translateY(0);
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+    }
+  }
+
+  &__form {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    background-color: rgba(color("neutral", "white"), 0.92);
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+
+    @include breakpoint-up("sm") {
+      max-width: 90%;
+      border-radius: border-radius("lg");
+      box-shadow: map-get($box-shadows, "lg");
+    }
+
+    @include breakpoint-up("md") {
+      max-width: 800px;
+    }
+
+    &.animate {
+      opacity: 1;
+      transform: translateY(0);
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+    }
+  }
+}
+
+// Animation delays
+.fadeIn {
+  &__delay1 {
+    transition-delay: 0.2s !important;
+  }
+
+  &__delay2 {
+    transition-delay: 0.4s !important;
+  }
+
+  &__delay3 {
+    transition-delay: 0.6s !important;
+  }
+
+  &__delay4 {
+    transition-delay: 0.8s !important;
+  }
+}
