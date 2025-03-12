@@ -1,0 +1,198 @@
+// components/booking/PlanOptions.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.planOptions {
+  padding: spacing("5xl") 0;
+  background-color: color("neutral", "lighter");
+  
+  &__container {
+    @include container;
+  }
+  
+  &__content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("3xl");
+  }
+  
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "4xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("sm");
+    
+    @include breakpoint-down("md") {
+      font-size: map-get($font-sizes, "3xl");
+    }
+  }
+  
+  &__description {
+    font-size: map-get($font-sizes, "lg");
+    color: color("neutral", "dark");
+    max-width: 600px;
+    margin: 0 auto;
+    
+    @include breakpoint-down("md") {
+      font-size: map-get($font-sizes, "base");
+    }
+  }
+  
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: spacing("lg");
+    margin-bottom: spacing("2xl");
+    
+    @include breakpoint-down("lg") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+      max-width: 400px;
+      margin: 0 auto spacing("2xl");
+    }
+  }
+  
+  &__card {
+    position: relative;
+    background-color: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    padding: spacing("xl");
+    transition: $transition-base;
+    cursor: pointer;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+    
+    &:hover {
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    &--selected {
+      border-color: color("primary", "base");
+      background-color: rgba(color("primary", "base"), 0.02);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+    }
+  }
+  
+  &__popularTag {
+    position: absolute;
+    top: 0;
+    right: spacing("md");
+    background-color: color("warning");
+    color: color("neutral", "white");
+    font-size: map-get($font-sizes, "xxs");
+    font-weight: map-get($font-weights, "bold");
+    padding: spacing("xxs") spacing("xs");
+    border-radius: 0 0 spacing("xs") spacing("xs");
+    text-transform: uppercase;
+  }
+  
+  &__cardIcon {
+    font-size: 36px;
+    margin-bottom: spacing("md");
+  }
+  
+  &__cardTitle {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("sm");
+  }
+  
+  &__cardDescription {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("lg");
+  }
+  
+  &__cardFeatures {
+    flex-grow: 1;
+    margin-bottom: spacing("lg");
+  }
+  
+  &__cardFeature {
+    display: flex;
+    align-items: center;
+    margin-bottom: spacing("xs");
+    gap: spacing("xs");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    
+    svg {
+      flex-shrink: 0;
+      color: color("success");
+    }
+  }
+  
+  &__discount {
+    color: color("primary", "base");
+    font-weight: map-get($font-weights, "semibold");
+  }
+  
+  &__cardSelect {
+    background-color: color("neutral", "lighter");
+    color: color("neutral", "dark");
+    padding: spacing("sm") spacing("md");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    text-align: center;
+    transition: $transition-base;
+    
+    .planOptions__card--selected & {
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
+    }
+  }
+  
+  &__checkmark {
+    margin-right: spacing("xs");
+  }
+  
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: spacing("lg");
+    border-top: 1px solid color("neutral", "medium");
+    
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      gap: spacing("md");
+      text-align: center;
+    }
+  }
+  
+  &__note {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    font-style: italic;
+    margin: 0;
+    max-width: 600px;
+  }
+  
+  &__continueButton {
+    @include button-primary;
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}

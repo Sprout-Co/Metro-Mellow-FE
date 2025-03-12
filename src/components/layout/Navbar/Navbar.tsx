@@ -81,6 +81,7 @@ const serviceItems = [
 // Main navigation items
 const navItems = [
     { label: 'Home', href: '/' },
+    { label: 'Bookings', href: '/bookings' },
     {
         label: 'Services',
         href: '/services',

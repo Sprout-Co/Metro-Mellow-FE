@@ -1,0 +1,155 @@
+// components/contact/MapSection.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.map {
+  padding-top: spacing("5xl");
+  background-color: color("neutral", "white");
+  
+  &__container {
+    @include container;
+    margin-bottom: spacing("xl");
+  }
+  
+  &__header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto spacing("xl");
+  }
+  
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "3xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("sm");
+    
+    @include breakpoint-down("md") {
+      font-size: map-get($font-sizes, "2xl");
+    }
+  }
+  
+  &__subtitle {
+    font-size: map-get($font-sizes, "lg");
+    color: color("neutral", "dark");
+    
+    @include breakpoint-down("md") {
+      font-size: map-get($font-sizes, "base");
+    }
+  }
+  
+  &__wrapper {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    
+    @include breakpoint-down("sm") {
+      height: 350px;
+    }
+  }
+  
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  &__marker {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+  
+  &__pin {
+    width: 40px;
+    height: 40px;
+    background-color: color("primary", "base");
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    margin: 0 auto 12px;
+    position: relative;
+    box-shadow: map-get($box-shadows, "md");
+    animation: bounce 2s infinite;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 18px;
+      height: 18px;
+      background-color: white;
+      border-radius: 50%;
+    }
+  }
+  
+  &__infoBox {
+    position: absolute;
+    bottom: 50px;
+    right: -150px;
+    width: 250px;
+    background-color: white;
+    padding: spacing("md");
+    border-radius: border-radius("md");
+    box-shadow: map-get($box-shadows, "lg");
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid white;
+    }
+    
+    @include breakpoint-down("sm") {
+      right: -125px;
+      width: 220px;
+    }
+  }
+  
+  &__infoTitle {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("xs");
+  }
+  
+  &__infoAddress {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("sm");
+    line-height: map-get($line-heights, "snug");
+  }
+  
+  &__infoLink {
+    display: inline-block;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("primary", "base");
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+      color: color("primary", "dark");
+    }
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: rotate(-45deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-45deg) translateY(-10px);
+  }
+}
