@@ -1,0 +1,157 @@
+// styles/components/cooking/CookingFAQ.module.scss
+@import '@/styles/abstracts/variables';
+@import '@/styles/abstracts/mixins';
+@import '@/styles/abstracts/functions';
+
+.faq {
+  padding: spacing('4xl') 0;
+  background-color: color('neutral', 'white');
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to top, rgba(color('secondary', 'light'), 0.05), rgba(color('neutral', 'white'), 0));
+    z-index: z-index('negative');
+  }
+
+  &__container {
+    @include container;
+    position: relative;
+    z-index: z-index('default');
+    max-width: 900px;
+  }
+
+  &__heading {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto spacing('3xl');
+  }
+
+  &__subheading {
+    font-size: map-get($font-sizes, 'sm');
+    font-weight: map-get($font-weights, 'medium');
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: color('secondary', 'base');
+    margin-bottom: spacing('xs');
+    display: block;
+  }
+
+  &__title {
+    @include heading-2;
+    color: color('neutral', 'black');
+    margin-bottom: spacing('md');
+  }
+
+  &__description {
+    @include paragraph;
+    color: color('neutral', 'dark');
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: spacing('md');
+    margin-bottom: spacing('3xl');
+  }
+
+  &__item {
+    background-color: color('neutral', 'white');
+    border-radius: border-radius('md');
+    overflow: hidden;
+    box-shadow: map-get($box-shadows, 'sm');
+    transition: $transition-base;
+    
+    &:hover {
+      box-shadow: map-get($box-shadows, 'md');
+    }
+    
+    &--active {
+      box-shadow: map-get($box-shadows, 'md');
+    }
+  }
+
+  &__question {
+    width: 100%;
+    padding: spacing('lg');
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: spacing('md');
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: map-get($font-sizes, 'lg');
+    font-weight: map-get($font-weights, 'medium');
+    color: color('neutral', 'black');
+    transition: $transition-base;
+    
+    &:hover {
+      color: color('secondary', 'base');
+    }
+    
+    .faq__item--active & {
+      color: color('secondary', 'base');
+    }
+  }
+
+  &__icon {
+    min-width: 20px;
+    height: 20px;
+    position: relative;
+    color: color('secondary', 'base');
+    transition: $transition-base;
+    
+    &--active {
+      transform: rotate(45deg);
+    }
+  }
+
+  &__answer {
+    padding: 0 spacing('lg') spacing('lg') spacing('lg');
+    overflow: hidden;
+    
+    p {
+      @include paragraph;
+      color: color('neutral', 'dark');
+      margin: 0;
+    }
+  }
+
+  &__contact {
+    text-align: center;
+    padding: spacing('xl');
+    background-color: color('neutral', 'light');
+    border-radius: border-radius('lg');
+    box-shadow: map-get($box-shadows, 'md');
+    
+    p {
+      font-size: map-get($font-sizes, 'lg');
+      color: color('neutral', 'black');
+      margin-bottom: spacing('md');
+      font-weight: map-get($font-weights, 'medium');
+    }
+  }
+
+  &__button {
+    display: inline-block;
+    padding: spacing('sm') spacing('lg');
+    background-color: color('secondary', 'base');
+    color: color('neutral', 'white');
+    font-weight: map-get($font-weights, 'medium');
+    border-radius: border-radius('md');
+    text-decoration: none;
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: color('secondary', 'dark');
+      transform: translateY(-3px);
+    }
+  }
+}
