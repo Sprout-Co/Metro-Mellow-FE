@@ -16,9 +16,7 @@ export const metadata = {
 export default function Home() {
   return (
     <main>
-      <Hero2
-        title="Guaranteed Home Care Service We Make Life Easier"
-        subtitle="Your one-shop-store for all - From cleaning and laundry to cooking, errands, mobile car washing, pest control, and more – we handle it all so you can focus on what matters most."
+      <Hero
       />
       <Services />
       {/* <ServiceCards /> */}
@@ -26,6 +24,8 @@ export default function Home() {
       <HowItWorks />
 
       <WhyChooseUs />
+      <Testimonials />
+      <CTA />
     </main>
     // <main>
     //   <Hero

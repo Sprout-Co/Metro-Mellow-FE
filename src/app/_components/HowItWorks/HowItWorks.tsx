@@ -1,116 +1,103 @@
+// components/home/HowItWorks.tsx
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
 import styles from './HowItWorks.module.scss';
 
-interface Step {
-    id: string;
-    title: string;
-    description: string;
-}
-
-const steps: Step[] = [
-    {
-        id: 'book',
-        title: 'Book Online',
-        description: 'Choose your service, select a time slot, and book in just a few clicks.'
-    },
-    {
-        id: 'dispatch',
-        title: 'We Dispatch Experts',
-        description: 'Our trained professionals arrive on time, fully equipped to serve you.'
-    },
-    {
-        id: 'enjoy',
-        title: 'Enjoy the Results',
-        description: 'Relax as we transform your home into a clean, refreshed environment.'
-    }
+const steps = [
+  {
+    id: 1,
+    title: 'Book a Service',
+    description: 'Choose from our range of home services and select a date and time that works for you.',
+    icon: '/images/icons/book.svg',
+  },
+  {
+    id: 2,
+    title: 'Get Matched',
+    description: 'We will match you with experienced, background-checked professionals in your area.',
+    icon: '/images/icons/match.svg',
+  },
+  {
+    id: 3,
+    title: 'Service Delivered',
+    description: 'Our professionals arrive on time and complete the service to your satisfaction.',
+    icon: '/images/icons/deliver.svg',
+  },
+  {
+    id: 4,
+    title: 'Rate & Review',
+    description: 'Share your feedback and book recurring services for additional convenience.',
+    icon: '/images/icons/review.svg',
+  },
 ];
 
-export const HowItWorks = () => {
-    const sectionRef = useRef<HTMLDivElement>(null);
-    const titleRef = useRef<HTMLHeadingElement>(null);
-    const subtitleRef = useRef<HTMLParagraphElement>(null);
-    const stepsRef = useRef<(HTMLDivElement | null)[]>([]);
-    const lineRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add(styles.animate);
-
-                        // Animate the connecting line when the section is visible
-                        if (entry.target === sectionRef.current && lineRef.current) {
-                            setTimeout(() => {
-                                lineRef.current?.classList.add(styles['connectingLine--animate']);
-                            }, 500);
-                        }
-                    }
-                });
-            },
-            { threshold: 0.1 }
-        );
-
-        if (sectionRef.current) observer.observe(sectionRef.current);
-        if (titleRef.current) observer.observe(titleRef.current);
-        if (subtitleRef.current) observer.observe(subtitleRef.current);
-
-        stepsRef.current.forEach(step => {
-            if (step) observer.observe(step);
-        });
-
-        return () => {
-            if (sectionRef.current) observer.unobserve(sectionRef.current);
-            if (titleRef.current) observer.unobserve(titleRef.current);
-            if (subtitleRef.current) observer.unobserve(subtitleRef.current);
-
-            stepsRef.current.forEach(step => {
-                if (step) observer.unobserve(step);
-            });
-        };
-    }, []);
-
-    return (
-        <section className={styles.howItWorks} ref={sectionRef}>
-            <div className={styles.howItWorks__container}>
-                <div className={styles.howItWorks__header}>
-                    <h2
-                        ref={titleRef}
-                        className={`${styles.howItWorks__title} ${styles.fadeIn}`}
-                    >
-                        How It Works
-                    </h2>
-                    <p
-                        ref={subtitleRef}
-                        className={`${styles.howItWorks__subtitle} ${styles.fadeIn} ${styles.fadeIn__delay1}`}
-                    >
-                        A step-by-step guide for potential clients
-                    </p>
+export default function HowItWorks() {
+  return (
+    <section className={styles.process}>
+      <div className={styles.process__container}>
+        <motion.div 
+          className={styles.process__header}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <h2 className={styles.process__title}>How It Works</h2>
+          <p className={styles.process__subtitle}>
+            Getting started with Metro Mellow is simple and straightforward
+          </p>
+        </motion.div>
+        
+        <div className={styles.process__steps}>
+          {steps.map((step, index) => (
+            <motion.div 
+              key={step.id}
+              className={styles.process__step}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <div className={styles.process__stepNumber}>
+                <span>{step.id}</span>
+                {index < steps.length - 1 && (
+                  <div className={styles.process__connector}></div>
+                )}
+              </div>
+              <div className={styles.process__stepContent}>
+                <div className={styles.process__iconWrapper}>
+                  <Image 
+                    src={step.icon} 
+                    alt={step.title} 
+                    width={32} 
+                    height={32} 
+                    className={styles.process__icon}
+                  />
                 </div>
-
-                <div className={styles.howItWorks__steps}>
-                    <div ref={lineRef} className={styles.connectingLine}></div>
-
-                    {steps.map((step, index) => (
-                        <div
-                            key={step.id}
-                            ref={el => stepsRef.current[index] = el}
-                            className={`${styles.howItWorks__step} ${styles.fadeIn}`}
-                            style={{ transitionDelay: `${0.3 * index}s` }}
-                        >
-                            <div className={styles.howItWorks__stepIcon}>
-                                <div className={styles.howItWorks__iconPlaceholder}></div>
-                            </div>
-                            <h3 className={styles.howItWorks__stepTitle}>{step.title}</h3>
-                            <p className={styles.howItWorks__stepDescription}>{step.description}</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-};
-
-export default HowItWorks;
+                <h3 className={styles.process__stepTitle}>{step.title}</h3>
+                <p className={styles.process__stepDescription}>{step.description}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+        
+        <motion.div 
+          className={styles.process__illustration}
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <Image 
+            src="/images/how-it-works.webp" 
+            alt="Metro Mellow process" 
+            width={800} 
+            height={400}
+            className={styles.process__image}
+          />
+        </motion.div>
+      </div>
+    </section>
+  );
+}

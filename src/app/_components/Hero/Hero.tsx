@@ -1,82 +1,85 @@
+// components/home/Hero.tsx
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from './Hero.module.scss';
-import Button from '@/components/ui/Button/Button';
-import ServiceForm from '../Services/ServiceForm';
 
-interface HeroProps {
-    title: string;
-    subtitle: string;
+export default function Hero() {
+  return (
+    <section className={styles.hero}>
+      <div className={styles.hero__container}>
+        <div className={styles.hero__content}>
+          <motion.h1 
+            className={styles.hero__title}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            Home Services <span className={styles['hero__title--highlight']}>Made Easy</span>
+          </motion.h1>
+          
+          <motion.p 
+            className={styles.hero__description}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            Professional cleaning, laundry, cooking, errands, and pest control services 
+            that bring comfort and peace to your home.
+          </motion.p>
+          
+          <motion.div 
+            className={styles.hero__cta}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <Link href="/services" className={styles.hero__button}>
+              Explore Services
+            </Link>
+            <Link href="/contact" className={styles['hero__button--secondary']}>
+              Contact Us
+            </Link>
+          </motion.div>
+        </div>
+        
+        <motion.div 
+          className={styles.hero__image}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+        >
+          <Image 
+            src="/images/home/hero-house.png" 
+            alt="Metro Mellow home services" 
+            width={600} 
+            height={500}
+            priority
+          />
+        </motion.div>
+      </div>
+      
+      <motion.div 
+        className={styles.hero__trust}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.8 }}
+      >
+        <p className={styles.hero__trustText}>Trusted by <span className={styles['hero__trustText--bold']}>2,000+</span> families in your area</p>
+        <div className={styles.hero__trustIcons}>
+          <div className={styles.hero__trustIcon}>
+            <Image src="/globe.svg" alt="Certified" width={80} height={40} />
+          </div>
+          <div className={styles.hero__trustIcon}>
+            <Image src="/globe.svg" alt="Insured" width={80} height={40} />
+          </div>
+          <div className={styles.hero__trustIcon}>
+            <Image src="/globe.svg" alt="100% Satisfaction" width={80} height={40} />
+          </div>
+        </div>
+      </motion.div>
+    </section>
+  );
 }
-
-export const Hero = ({ title, subtitle }: HeroProps) => {
-    const titleRef = useRef<HTMLHeadingElement>(null);
-    const subtitleRef = useRef<HTMLParagraphElement>(null);
-    const buttonRef = useRef<HTMLDivElement>(null);
-    const formRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add(styles.animate);
-                    }
-                });
-            },
-            { threshold: 0.1 }
-        );
-
-        if (titleRef.current) observer.observe(titleRef.current);
-        if (subtitleRef.current) observer.observe(subtitleRef.current);
-        if (buttonRef.current) observer.observe(buttonRef.current);
-        if (formRef.current) observer.observe(formRef.current);
-
-        return () => {
-            if (titleRef.current) observer.unobserve(titleRef.current);
-            if (subtitleRef.current) observer.unobserve(subtitleRef.current);
-            if (buttonRef.current) observer.unobserve(buttonRef.current);
-            if (formRef.current) observer.unobserve(formRef.current);
-        };
-    }, []);
-
-    return (
-        <section className={styles.hero}>
-            {/* Background Image with Overlay */}
-            <div className={styles.hero__background}>
-                {/* <Image
-                    src="/images/home/hero-house.png"
-                    alt=""
-                    fill
-                    priority
-                    sizes="100vw"
-                    quality={85}
-                /> */}
-            </div>
-
-            <div className={styles.hero__container}>
-                <div className={styles.hero__content}>
-                    <h1 ref={titleRef} className={`${styles.hero__title} ${styles.fadeIn}`}>
-                        {title}
-                    </h1>
-                    <p ref={subtitleRef} className={`${styles.hero__subtitle} ${styles.fadeIn} ${styles.fadeIn__delay1}`}>
-                        {subtitle}
-                    </p>
-                    <div ref={buttonRef} className={`${styles.hero__cta} ${styles.fadeIn} ${styles.fadeIn__delay2}`}>
-                        <Button variant="primary" size="md" href="/booking">
-                            Get Started
-                        </Button>
-                    </div>
-                </div>
-
-                {/* <div ref={formRef} className={`${styles.hero__form} ${styles.fadeIn} ${styles.fadeIn__delay3}`}>
-                    <ServiceForm />
-                </div> */}
-            </div>
-        </section>
-    );
-};
-
-export default Hero;

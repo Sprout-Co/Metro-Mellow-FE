@@ -1,232 +1,187 @@
-@import '@/styles/variables';
-@import '@/styles/mixins';
+// components/home/Testimonials.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .testimonials {
-    padding: $spacing-xl 0;
-    background-color: $color-background-light;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 $spacing-md;
-
-    @media (min-width: $breakpoint-md) {
-        padding: 0 $spacing-lg;
-    }
-}
-
-.header {
+  background-color: color("neutral", "white");
+  padding: spacing("5xl") 0;
+  
+  &__container {
+    @include container;
+  }
+  
+  &__header {
     text-align: center;
-    margin-bottom: $spacing-xl;
-}
-
-.title {
-    font-size: $font-size-xxlarge;
-    font-weight: $font-weight-bold;
-    color: $color-text-dark;
-    margin-bottom: $spacing-sm;
-    position: relative;
-    display: inline-block;
-
-    &::after {
-        content: '';
-        position: absolute;
-        bottom: -$spacing-xs;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60px;
-        height: 3px;
-        background-color: $color-primary;
-        border-radius: $border-radius-sm;
-    }
-}
-
-.subtitle {
-    font-size: $font-size-large;
-    color: $color-text-medium;
     max-width: 700px;
-    margin: $spacing-md auto 0;
-}
-
-.carousel {
+    margin: 0 auto spacing("3xl");
+  }
+  
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "4xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("md");
+    
+    @include breakpoint-down("md") {
+      font-size: map-get($font-sizes, "3xl");
+    }
+  }
+  
+  &__subtitle {
+    font-size: map-get($font-sizes, "lg");
+    color: color("neutral", "dark");
+    
+    @include breakpoint-down("md") {
+      font-size: map-get($font-sizes, "base");
+    }
+  }
+  
+  &__carousel {
     position: relative;
+    height: 320px;
     overflow: hidden;
-    border-radius: $border-radius-lg;
-    box-shadow: $shadow-md;
-    margin-bottom: $spacing-lg;
-}
-
-.carouselInner {
-    display: flex;
-    transition: transform $transition-normal;
-}
-
-.testimonialCard {
-    flex: 0 0 100%;
-    width: 100%;
-    background-color: $color-background-off;
-    padding: $spacing-xl;
-
-    @media (min-width: $breakpoint-md) {
-        padding: $spacing-xxl;
+    margin-bottom: spacing("xl");
+    
+    @include breakpoint-down("md") {
+      height: 400px;
     }
-}
-
-.content {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.rating {
-    display: flex;
-    margin-bottom: $spacing-md;
-    color: $color-secondary;
-}
-
-.starFilled {
-    color: $color-secondary;
-}
-
-.starEmpty {
-    color: $color-border-medium;
-}
-
-.comment {
-    font-size: $font-size-large;
-    line-height: 1.8;
-    color: $color-text-dark;
-    margin-bottom: $spacing-lg;
-    font-style: italic;
-
-    &::before,
-    &::after {
-        content: '"';
-        font-size: $font-size-xxlarge;
-        color: $color-primary-light;
+    
+    @include breakpoint-down("sm") {
+      height: 450px;
     }
-}
-
-.meta {
-    display: flex;
-    align-items: center;
-}
-
-.avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: $border-radius-circle;
-    overflow: hidden;
-    margin-right: $spacing-md;
-
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-}
-
-.placeholder {
-    width: 100%;
-    height: 100%;
-    background-color: $color-primary;
-    color: $color-text-white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: $font-size-xlarge;
-    font-weight: $font-weight-bold;
-}
-
-.info {
-    flex: 1;
-}
-
-.name {
-    font-size: $font-size-base;
-    font-weight: $font-weight-semibold;
-    color: $color-text-dark;
-    margin-bottom: $spacing-xxs;
-}
-
-.details {
-    font-size: $font-size-small;
-    color: $color-text-light;
-}
-
-.navButton {
+  }
+  
+  &__item {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 50px;
-    height: 50px;
-    border-radius: $border-radius-circle;
-    background-color: rgba($color-background-light, 0.9);
-    border: none;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    padding: spacing("xl");
+    box-shadow: map-get($box-shadows, "md");
+    
+    &--active {
+      z-index: 1;
+    }
+  }
+  
+  &__quote {
+    margin-bottom: spacing("lg");
+    position: relative;
+  }
+  
+  &__quoteIcon {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    color: color("primary", "light");
+    opacity: 0.3;
+    width: 40px;
+    height: 40px;
+  }
+  
+  &__text {
+    font-size: map-get($font-sizes, "lg");
+    line-height: map-get($line-heights, "relaxed");
+    color: color("neutral", "darker");
+    font-style: italic;
+    position: relative;
+    z-index: 1;
+    padding-left: spacing("lg");
+    
+    @include breakpoint-down("md") {
+      font-size: map-get($font-sizes, "base");
+    }
+  }
+  
+  &__author {
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: $color-text-dark;
-    cursor: pointer;
-    z-index: 2;
-    transition: all $transition-fast;
-    box-shadow: $shadow-sm;
-
-    &:hover {
-        background-color: $color-primary;
-        color: $color-text-white;
+    margin-top: auto;
+  }
+  
+  &__avatar {
+    margin-right: spacing("md");
+    
+    img {
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid color("primary", "light");
     }
-
-    &:focus {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba($color-primary, 0.3);
+  }
+  
+  &__info {
+    flex: 1;
+  }
+  
+  &__name {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("xxs");
+  }
+  
+  &__location {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xs");
+  }
+  
+  &__service {
+    display: inline-block;
+    font-size: map-get($font-sizes, "xs");
+    background-color: rgba(color("primary", "base"), 0.1);
+    color: color("primary", "base");
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("sm");
+    margin-bottom: spacing("xs");
+  }
+  
+  &__rating {
+    display: flex;
+    align-items: center;
+  }
+  
+  &__star {
+    color: color("neutral", "medium");
+    margin-right: 2px;
+    font-size: map-get($font-sizes, "base");
+    
+    &--active {
+      color: color("warning");
     }
-}
-
-.prevButton {
-    left: $spacing-md;
-
-    @media (min-width: $breakpoint-md) {
-        left: $spacing-lg;
-    }
-}
-
-.nextButton {
-    right: $spacing-md;
-
-    @media (min-width: $breakpoint-md) {
-        right: $spacing-lg;
-    }
-}
-
-.dots {
+  }
+  
+  &__indicators {
     display: flex;
     justify-content: center;
-    gap: $spacing-xs;
-    margin-top: $spacing-lg;
-}
-
-.dot {
+    gap: spacing("xs");
+    margin-top: spacing("xl");
+  }
+  
+  &__indicator {
     width: 12px;
     height: 12px;
-    border-radius: $border-radius-circle;
-    background-color: $color-border-medium;
+    border-radius: 50%;
+    background-color: color("neutral", "medium");
     border: none;
     padding: 0;
     cursor: pointer;
-    transition: all $transition-fast;
-
+    transition: $transition-base;
+    
+    &--active {
+      background-color: color("primary", "base");
+      transform: scale(1.2);
+    }
+    
     &:hover {
-        background-color: $color-text-light;
+      background-color: color("primary", "light");
     }
-
-    &:focus {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba($color-primary, 0.3);
-    }
-}
-
-.activeDot {
-    background-color: $color-primary;
-    transform: scale(1.2);
+  }
 }
