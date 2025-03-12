@@ -286,10 +286,10 @@ export default function Navbar() {
                     <Button
                         variant="primary"
                         size="sm"
-                        href="/booking"
+                        href="/get-started"
                         className={styles.navbar__button}
                     >
-                        Book Now
+                        Get Started
                     </Button>
                 </div>
 
@@ -408,10 +408,10 @@ export default function Navbar() {
                                 <Button
                                     variant="primary"
                                     size="md"
-                                    href="/booking"
+                                    href="/get-started"
                                     className={styles.navbar__mobileButton}
                                 >
-                                    Book Now
+                                    Get Started
                                 </Button>
 
                                 <div className={styles.navbar__mobileContact}>
