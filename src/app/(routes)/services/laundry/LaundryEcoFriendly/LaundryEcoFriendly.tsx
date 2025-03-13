@@ -141,7 +141,7 @@ const LaundryEcoFriendly = () => {
                     } : { opacity: 0, x: 50 }}
                 >
                     <Image
-                        src="/images/laundry/dry-cleaning.jpg"
+                        src="/images/laundry/l1.jpeg"
                         alt="Eco-friendly laundry practices"
                         width={600}
                         height={700}

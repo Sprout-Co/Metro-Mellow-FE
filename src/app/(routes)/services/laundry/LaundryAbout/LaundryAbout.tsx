@@ -55,7 +55,7 @@ const LaundryAbout = () => {
                 >
                     <div className={styles.about__imageMain}>
                         <Image
-                            src="/images/laundry/laundry-folding.jpg"
+                            src="/images/laundry/l3.jpeg"
                             alt="Professional laundry folding"
                             width={500}
                             height={400}
@@ -65,7 +65,7 @@ const LaundryAbout = () => {
 
                     <div className={styles.about__imageSecondary}>
                         <Image
-                            src="/images/laundry/laundry-detail.jpg"
+                            src="/images/laundry/l7.jpeg"
                             alt="Laundry service detail"
                             width={280}
                             height={200}

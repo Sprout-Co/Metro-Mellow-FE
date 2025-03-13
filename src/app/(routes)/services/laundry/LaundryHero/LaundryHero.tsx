@@ -130,7 +130,7 @@ const LaundryHero = () => {
 
                     <div className={styles.hero__imageMain}>
                         <Image
-                            src="/images/laundry/laundry-hero.jpg"
+                            src="/images/laundry/l4.jpeg"
                             alt="Professional laundry service"
                             fill
                             priority
