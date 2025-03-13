@@ -40,14 +40,14 @@ export default function DashboardOverview() {
       animate="visible"
       variants={containerVariants}
     >
-      <header className={styles.overview__header}>
+      {/* <header className={styles.overview__header}>
         <h1 className={styles.overview__title}>Welcome Back, John!</h1>
         <p className={styles.overview__subtitle}>
           Here's what's happening with your home services today.
         </p>
-      </header>
+      </header> */}
       
-      <section className={styles.overview__quickStats}>
+      {/* <section className={styles.overview__quickStats}>
         <motion.div variants={itemVariants} className={styles.overview__statCard}>
           <div className={`${styles.overview__statIcon} ${styles['overview__statIcon--upcoming']}`}>
             <Icon name="calendar" />
@@ -87,7 +87,7 @@ export default function DashboardOverview() {
             <span className={styles.overview__statLabel}>Completed Services</span>
           </div>
         </motion.div>
-      </section>
+      </section> */}
       
       <div className={styles.overview__main}>
         <div className={`${styles.overview__column} ${styles['overview__column--primary']}`}>
@@ -99,7 +99,7 @@ export default function DashboardOverview() {
             <UpcomingAppointments />
           </motion.section>
           
-          <motion.section variants={itemVariants} className={styles.overview__section}>
+          {/* <motion.section variants={itemVariants} className={styles.overview__section}>
             <h2 className={styles.overview__sectionTitle}>
               <Icon name="activity" className={styles.overview__sectionIcon} />
               Service Status
@@ -113,7 +113,7 @@ export default function DashboardOverview() {
               Recent Activity
             </h2>
             <RecentActivity />
-          </motion.section>
+          </motion.section> */}
         </div>
         
         <div className={`${styles.overview__column} ${styles['overview__column--secondary']}`}>
@@ -125,13 +125,13 @@ export default function DashboardOverview() {
             <QuickActions />
           </motion.section>
           
-          <motion.section variants={itemVariants} className={styles.overview__section}>
+          {/* <motion.section variants={itemVariants} className={styles.overview__section}>
             <h2 className={styles.overview__sectionTitle}>
               <Icon name="bell" className={styles.overview__sectionIcon} />
               Notifications
             </h2>
             <NotificationsCard />
-          </motion.section>
+          </motion.section> */}
         </div>
       </div>
     </motion.div>

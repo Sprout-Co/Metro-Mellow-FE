@@ -15,23 +15,23 @@ export default function DashboardHeader() {
     <header className={styles.header}>
       <div className={styles.header__container}>
         <div className={styles.header__logo}>
-          <Image 
-            src="/logo.svg" 
+          {/* <Image 
+            src="/images/brand/cover.png" 
             alt="Metro Mellow" 
             width={40} 
             height={40} 
-          />
+          /> */}
           <span className={styles.header__logoText}>Metro Mellow</span>
         </div>
         
-        <div className={styles.header__search}>
+        {/* <div className={styles.header__search}>
           <Icon name="search" className={styles.header__searchIcon} />
           <input 
             type="text" 
             className={styles.header__searchInput} 
             placeholder="Search services, appointments..." 
           />
-        </div>
+        </div> */}
         
         <div className={styles.header__actions}>
           <button 

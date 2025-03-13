@@ -24,12 +24,12 @@ type TabType = {
 const dashboardTabs: TabType[] = [
   { id: 'overview', label: 'Overview', icon: 'home' },
   { id: 'services', label: 'Services', icon: 'calendar' },
-  { id: 'properties', label: 'Properties', icon: 'building' },
-  { id: 'billing', label: 'Billing', icon: 'credit-card' },
-  { id: 'providers', label: 'Providers', icon: 'users' },
-  { id: 'settings', label: 'Settings', icon: 'settings' },
-  { id: 'rewards', label: 'Rewards', icon: 'gift' },
-  { id: 'help', label: 'Help', icon: 'help-circle' },
+  // { id: 'properties', label: 'Properties', icon: 'building' },
+  // { id: 'billing', label: 'Billing', icon: 'credit-card' },
+  // { id: 'providers', label: 'Providers', icon: 'users' },
+  // { id: 'settings', label: 'Settings', icon: 'settings' },
+  // { id: 'rewards', label: 'Rewards', icon: 'gift' },
+  // { id: 'help', label: 'Help', icon: 'help-circle' },
 ];
 
 export default function Dashboard() {
