@@ -113,7 +113,7 @@ const CookingAbout = () => {
         >
           <div className={styles['about__image-container']}>
             <Image 
-              src="/images/cleaning/cleaning-detail.jpg"
+              src="/images/food/f11.jpeg"
               alt="Professional chef preparing fresh ingredients for a meal"
               width={600}
               height={800}
