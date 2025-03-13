@@ -84,7 +84,7 @@ const Hero = () => {
                     <div className={styles.hero__shape}></div>
                     <div className={styles.hero__imageWrapper}>
                         <Image
-                            src="/images/cleaning/hero-cleaning.png"
+                            src="/images/cleaning/c3.jpeg"
                             alt="Professional cleaning service"
                             fill
                             priority
