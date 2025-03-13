@@ -22,24 +22,24 @@ const quickActions = [
     icon: 'headphones',
     color: 'info'
   },
-  {
-    id: 'manage',
-    label: 'Manage Subscriptions',
-    icon: 'refresh-cw',
-    color: 'success'
-  },
-  {
-    id: 'track',
-    label: 'Track Provider',
-    icon: 'map-pin',
-    color: 'warning'
-  },
-  {
-    id: 'settings',
-    label: 'Account Settings',
-    icon: 'settings',
-    color: 'neutral'
-  }
+  // {
+  //   id: 'manage',
+  //   label: 'Manage Subscriptions',
+  //   icon: 'refresh-cw',
+  //   color: 'success'
+  // },
+  // {
+  //   id: 'track',
+  //   label: 'Track Provider',
+  //   icon: 'map-pin',
+  //   color: 'warning'
+  // },
+  // {
+  //   id: 'settings',
+  //   label: 'Account Settings',
+  //   icon: 'settings',
+  //   color: 'neutral'
+  // }
 ];
 
 export default function QuickActions() {
@@ -83,7 +83,7 @@ export default function QuickActions() {
         ))}
       </div>
       
-      <motion.div 
+      {/* <motion.div 
         className={styles.actions__bookService}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -104,7 +104,7 @@ export default function QuickActions() {
           Book Now
           <Icon name="arrow-right" />
         </button>
-      </motion.div>
+      </motion.div> */}
     </div>
   );
 }
