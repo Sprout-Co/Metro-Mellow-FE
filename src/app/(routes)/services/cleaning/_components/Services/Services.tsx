@@ -45,7 +45,7 @@ const servicesData: ServiceItem[] = [
             'Window & glass surface cleaning',
             'Flexible scheduling for businesses'
         ],
-        image: '/images/cleaning/c2.jpeg',
+        image: '/images/cleaning/c6.jpeg',
         color: '#28C76F',
         price: 'From $199',
         icon: (
@@ -64,7 +64,7 @@ const servicesData: ServiceItem[] = [
             'Detailed baseboards & crown molding',
             'Wall washing & floor deep scrubbing'
         ],
-        image: '/images/cleaning/c3.jpeg',
+        image: '/images/cleaning/c4.jpeg',
         color: '#FF7A4A',
         price: 'From $249',
         icon: (
