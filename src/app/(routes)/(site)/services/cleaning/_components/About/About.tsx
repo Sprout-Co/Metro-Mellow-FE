@@ -43,7 +43,7 @@ const About = () => {
                 >
                     <div className={styles.about__imageMain}>
                         <Image
-                            src="/images/cleaning/cleaning-page-about-us.jpg"
+                            src="/images/cleaning/c2.jpeg"
                             alt="Office cleaning service"
                             width={500}
                             height={600}
