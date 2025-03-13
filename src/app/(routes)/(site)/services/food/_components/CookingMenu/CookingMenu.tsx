@@ -38,65 +38,66 @@ const CookingMenu = () => {
   const menuItems: MenuItem[] = [
     {
       id: 1,
-      name: "Herb Roasted Chicken",
-      description: "Free-range chicken breast, seasoned with fresh herbs and roasted to perfection. Served with seasonal vegetables.",
-      image: "/images/cooking/menu-chicken.webp",
+      name: "Nigerian Jollof Rice with Grilled Chicken",
+      description: "Experience the vibrant flavors of Nigeria with our signature Jollof Rice, simmered in a rich tomato and pepper sauce with traditional spices. Served with tender grilled free-range chicken and seasonal vegetables for a complete meal.",
+      image: "/images/food/f12.jpeg",
       category: "mains",
-      tags: ["protein", "low-carb", "gluten-free"],
-      prepTime: "5 min",
-      calories: 380
+      tags: ["Nigerian", "spicy", "hearty"],
+      prepTime: "8 min",
+      calories: 450
     },
     {
       id: 2,
-      name: "Mediterranean Quinoa Bowl",
-      description: "Protein-packed quinoa with roasted vegetables, feta cheese, kalamata olives, and fresh herbs. Drizzled with lemon tahini dressing.",
-      image: "/images/cooking/menu-quinoa.webp",
-      category: "vegetarian",
-      tags: ["vegetarian", "high-protein", "fiber-rich"],
-      prepTime: "3 min",
-      calories: 320
+      name: "Egusi Soup with Pounded Yam",
+      description: "Relish the authentic taste of Nigeria with our Egusi Soup, prepared with ground melon seeds, leafy greens, and tender meat, served alongside smooth, well-mashed pounded yam.",
+      image: "/images/food/f14.jpeg",
+      category: "mains",
+      tags: ["Nigerian", "rich", "hearty", "comfort food"],
+      prepTime: "12 min",
+      calories: 550
     },
     {
       id: 3,
-      name: "Wild Salmon with Citrus",
-      description: "Sustainably sourced salmon fillet with a citrus glaze, served with roasted asparagus and wild rice.",
-      image: "/images/cooking/menu-salmon.webp",
+      name: "Spicy Suya Skewers",
+      description: "Enjoy our fiery suya skewers featuring thin slices of marinated beef dusted with a spicy peanut-chili blend and grilled to perfection. Served with fresh slices of onions and tomatoes.",
+      image: "/images/food/f10.jpeg",
       category: "mains",
-      tags: ["omega-3", "protein", "gluten-free"],
-      prepTime: "6 min",
-      calories: 420
+      tags: ["Nigerian", "spicy", "grilled", "protein-rich"],
+      prepTime: "7 min",
+      calories: 430
     },
     {
       id: 4,
-      name: "Roasted Sweet Potatoes",
-      description: "Perfectly roasted sweet potatoes seasoned with cinnamon and olive oil, topped with a sprinkle of sea salt.",
-      image: "/images/cooking/menu-sweetpotato.webp",
+      name: "Fried Plantains & Fresh Salad",
+      description: "Delight in crispy golden fried plantains paired with a refreshing mixed salad of crisp lettuce, tomatoes, and cucumbers, lightly dressed to enhance the natural flavors.",
+      image: "/images/food/f9.jpeg",
       category: "sides",
-      tags: ["vegetarian", "fiber", "vitamin-rich"],
-      prepTime: "4 min",
-      calories: 180
+      tags: ["Nigerian", "crispy", "refreshing", "light"],
+      prepTime: "5 min",
+      calories: 200
     },
     {
       id: 5,
-      name: "Berry Chia Pudding",
-      description: "Creamy chia seed pudding made with almond milk and vanilla, topped with fresh seasonal berries and a drizzle of honey.",
-      image: "/images/cooking/menu-chia.webp",
+      name: "Traditional Puff Puff Dessert",
+      description: "Indulge in our classic Puff Puff dessert, featuring soft, deep-fried dough balls with a lightly sweet exterior and tender, fluffy interior—a beloved Nigerian treat.",
+      image: "/images/food/f16.jpeg",
       category: "desserts",
-      tags: ["vegetarian", "antioxidants", "omega-3"],
+      tags: ["Nigerian", "sweet", "fried", "classic"],
       prepTime: "0 min",
-      calories: 220
+      calories: 300
     },
     {
       id: 6,
-      name: "Hearty Lentil Soup",
-      description: "A comforting blend of lentils, vegetables, and aromatic herbs simmered in a savory broth. Perfect for a cozy meal.",
-      image: "/images/cooking/menu-lentil.webp",
-      category: "vegetarian",
-      tags: ["vegetarian", "protein", "fiber-rich"],
-      prepTime: "5 min",
-      calories: 290
+      name: "Banga Soup and Semo",
+      description: "Savor the rich, aromatic flavors of Banga Soup—a traditional palm fruit stew infused with spices and assorted meats, served with smooth semo for a hearty meal.",
+      image: "/images/food/f20.jpeg",
+      category: "mains",
+      tags: ["Nigerian", "aromatic", "hearty", "traditional"],
+      prepTime: "10 min",
+      calories: 600
     }
   ];
+  
 
   const filteredItems = activeCategory === 'all' 
     ? menuItems 

@@ -104,7 +104,7 @@ const CookingHero = () => {
           }}
         >
           <Image 
-            src="/images/cleaning/hero-cleaning.png"
+            src="/images/food/f6.jpeg"
             alt="Chef preparing gourmet meals in professional kitchen"
             width={600}
             height={700}
