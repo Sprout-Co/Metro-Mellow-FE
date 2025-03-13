@@ -1,0 +1,195 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.actions {
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
+    
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("md");
+    border-radius: border-radius("md");
+    background-color: color("neutral", "lighter");
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: $transition-base;
+    
+    &:hover {
+      transform: translateY(-3px);
+    }
+    
+    &--primary {
+      color: color("primary", "base");
+      &:hover { background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1); }
+    }
+    
+    &--secondary {
+      color: color("secondary", "base");
+      &:hover { background-color: rgba(map-get(map-get($colors, "secondary"), "base"), 0.1); }
+    }
+    
+    &--info {
+      color: color("info");
+      &:hover { background-color: rgba(map-get($colors, "info"), 0.1); }
+    }
+    
+    &--success {
+      color: color("success");
+      &:hover { background-color: rgba(map-get($colors, "success"), 0.1); }
+    }
+    
+    &--warning {
+      color: color("warning");
+      &:hover { background-color: rgba(map-get($colors, "warning"), 0.1); }
+    }
+    
+    &--neutral {
+      color: color("neutral", "darker");
+      &:hover { background-color: rgba(map-get(map-get($colors, "neutral"), "darker"), 0.1); }
+    }
+  }
+  
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("full");
+    margin-bottom: spacing("sm");
+    font-size: map-get($font-sizes, "xl");
+    
+    &--primary {
+      background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+      color: color("primary", "base");
+    }
+    
+    &--secondary {
+      background-color: rgba(map-get(map-get($colors, "secondary"), "base"), 0.1);
+      color: color("secondary", "base");
+    }
+    
+    &--info {
+      background-color: rgba(map-get($colors, "info"), 0.1);
+      color: color("info");
+    }
+    
+    &--success {
+      background-color: rgba(map-get($colors, "success"), 0.1);
+      color: color("success");
+    }
+    
+    &--warning {
+      background-color: rgba(map-get($colors, "warning"), 0.1);
+      color: color("warning");
+    }
+    
+    &--neutral {
+      background-color: rgba(map-get(map-get($colors, "neutral"), "dark"), 0.1);
+      color: color("neutral", "darker");
+    }
+  }
+  
+  &__label {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+  }
+  
+  &__bookService {
+    background-color: rgba(map-get(map-get($colors, "primary"), "light"), 0.1);
+    border-radius: border-radius("lg");
+    padding: spacing("md");
+    display: flex;
+    flex-direction: column;
+    
+    @include breakpoint-up("sm") {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+  
+  &__bookContent {
+    display: flex;
+    align-items: center;
+    margin-bottom: spacing("md");
+    
+    @include breakpoint-up("sm") {
+      margin-bottom: 0;
+    }
+  }
+  
+  &__bookIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("full");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    margin-right: spacing("md");
+    font-size: map-get($font-sizes, "xl");
+    flex-shrink: 0;
+  }
+  
+  &__bookText {
+    flex: 1;
+  }
+  
+  &__bookTitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+  
+  &__bookDescription {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+  }
+  
+  &__bookButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("sm") spacing("md");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border-radius: border-radius("md");
+    font-weight: map-get($font-weights, "medium");
+    border: none;
+    cursor: pointer;
+    transition: $transition-base;
+    
+    svg {
+      margin-left: spacing("xs");
+      transition: $transition-base;
+    }
+    
+    &:hover {
+      background-color: color("primary", "dark");
+      
+      svg {
+        transform: translateX(4px);
+      }
+    }
+    
+    @include breakpoint-up("sm") {
+      flex-shrink: 0;
+    }
+  }
+}

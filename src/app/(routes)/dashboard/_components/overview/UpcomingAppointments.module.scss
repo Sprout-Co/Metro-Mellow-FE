@@ -1,0 +1,270 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.appointments {
+  &__card {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+    overflow: hidden;
+    margin-bottom: spacing("md");
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  &__header {
+    display: flex;
+    align-items: center;
+    padding: spacing("md");
+    cursor: pointer;
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: color("neutral", "lighter");
+    }
+  }
+  
+  &__serviceIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("lg");
+    background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+    color: color("primary", "base");
+    margin-right: spacing("md");
+    font-size: map-get($font-sizes, "xl");
+  }
+  
+  &__details {
+    flex: 1;
+  }
+  
+  &__service {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+  
+  &__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+  
+  &__date, &__time {
+    display: flex;
+    align-items: center;
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin-right: spacing("md");
+    
+    svg {
+      margin-right: spacing("xxs");
+      font-size: map-get($font-sizes, "base");
+    }
+    
+    @include breakpoint-down("sm") {
+      margin-bottom: spacing("xxs");
+    }
+  }
+  
+  &__timer {
+    display: flex;
+    align-items: center;
+  }
+  
+  &__countdown {
+    background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+    color: color("primary", "base");
+    font-weight: map-get($font-weights, "bold");
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("md");
+    margin-right: spacing("xs");
+  }
+  
+  &__hours {
+    font-size: map-get($font-sizes, "sm");
+  }
+  
+  &__expand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: border-radius("full");
+    background: none;
+    border: none;
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: rgba(map-get(map-get($colors, "neutral"), "dark"), 0.1);
+    }
+  }
+  
+  &__content {
+    padding: spacing("md");
+    border-top: 1px solid color("neutral", "lighter");
+    overflow: hidden;
+  }
+  
+  &__provider {
+    display: flex;
+    align-items: center;
+    margin-bottom: spacing("md");
+    
+    &Avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: border-radius("full");
+      background-color: color("secondary", "base");
+      color: color("neutral", "white");
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: map-get($font-weights, "semibold");
+      font-size: map-get($font-sizes, "sm");
+      margin-right: spacing("sm");
+    }
+    
+    &Info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    &Name {
+      font-weight: map-get($font-weights, "medium");
+      color: color("neutral", "black");
+      font-size: map-get($font-sizes, "base");
+    }
+    
+    &Title {
+      font-size: map-get($font-sizes, "xs");
+      color: color("neutral", "dark");
+    }
+  }
+  
+  &__location {
+    display: flex;
+    align-items: center;
+    margin-bottom: spacing("md");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "darker");
+    
+    svg {
+      margin-right: spacing("xs");
+      color: color("neutral", "dark");
+    }
+  }
+  
+  &__status {
+    margin-bottom: spacing("md");
+  }
+  
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xxs") spacing("sm");
+    border-radius: border-radius("full");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    
+    &--confirmed {
+      background-color: rgba(map-get($colors, "success"), 0.1);
+      color: color("success");
+    }
+    
+    &--pending {
+      background-color: rgba(map-get($colors, "warning"), 0.1);
+      color: color("warning");
+    }
+  }
+  
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing("sm");
+  }
+  
+  &__actionBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xs") spacing("md");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    cursor: pointer;
+    transition: $transition-base;
+    
+    svg {
+      margin-right: spacing("xs");
+    }
+    
+    &--reschedule {
+      background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+      color: color("primary", "base");
+      border: none;
+      
+      &:hover {
+        background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.2);
+      }
+    }
+    
+    &--cancel {
+      background-color: transparent;
+      color: color("error");
+      border: 1px solid rgba(map-get($colors, "error"), 0.3);
+      
+      &:hover {
+        background-color: rgba(map-get($colors, "error"), 0.05);
+      }
+    }
+  }
+  
+  &__footer {
+    display: flex;
+    justify-content: center;
+    margin-top: spacing("lg");
+  }
+  
+  &__viewAll {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: color("primary", "base");
+    font-weight: map-get($font-weights, "medium");
+    font-size: map-get($font-sizes, "base");
+    cursor: pointer;
+    transition: $transition-base;
+    
+    svg {
+      margin-left: spacing("xs");
+      transition: $transition-base;
+    }
+    
+    &:hover {
+      color: color("primary", "dark");
+      
+      svg {
+        transform: translateX(4px);
+      }
+    }
+  }
+}
