@@ -1,11 +1,7 @@
 // app/booking/page.tsx
 import { Metadata } from 'next';
 import BookingHero from './_components/BookingHero/BookingHero';
-import ServiceSelection from './_components/ServiceSelection/ServiceSelection';
-import PlanOptions from './_components/PlanOptions/PlanOptions';
-import CustomizationPanel from './_components/CustomizationPanel/CustomizationPanel';
-import ScheduleSelector from './_components/ScheduleSelector/ScheduleSelector';
-import BookingSummary from './_components/BookingSummary/BookingSummary';
+import SubscriptionModule from './_components/SubscriptionModule/SubscriptionModule';
 
 export const metadata: Metadata = {
   title: 'Book Services | Metro Mellow',
@@ -16,11 +12,7 @@ export default function BookingPage() {
   return (
     <main className="booking-page">
       <BookingHero />
-      <ServiceSelection />
-      <PlanOptions />
-      <CustomizationPanel />
-      <ScheduleSelector />
-      <BookingSummary />
+      <SubscriptionModule />
     </main>
   );
 }

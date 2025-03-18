@@ -1,0 +1,55 @@
+// DurationSelector.module.scss
+@import '@/styles/abstracts/variables';
+@import '@/styles/abstracts/mixins';
+@import '@/styles/abstracts/functions';
+
+.duration_selector {
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, 'lg');
+    font-weight: map-get($font-weights, 'medium');
+    color: color('primary', 'dark');
+    margin-bottom: spacing('md');
+  }
+  
+  &__container {
+    display: flex;
+    gap: spacing('md');
+    margin-bottom: spacing('sm');
+  }
+  
+  &__pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    min-width: 80px;
+    padding: 0 spacing('md');
+    border-radius: border-radius('full');
+    font-size: map-get($font-sizes, 'sm');
+    font-weight: map-get($font-weights, 'medium');
+    background-color: #ffffff;
+    border: 1px solid color('neutral', 'lighter');
+    color: color('neutral', 'dark');
+    cursor: pointer;
+    transition: $transition-base;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    
+    &_active {
+      background-color: color('primary', 'dark');
+      color: #ffffff;
+      border-color: color('primary', 'dark');
+      box-shadow: 0 4px 8px rgba(color('primary', 'dark'), 0.2);
+    }
+    
+    &:hover:not(.duration_selector__pill_active) {
+      border-color: color('primary', 'light');
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  &__helper {
+    font-size: map-get($font-sizes, 'xs');
+    color: color('neutral', 'dark');
+  }
+}

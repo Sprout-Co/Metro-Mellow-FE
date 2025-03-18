@@ -1,0 +1,112 @@
+@import '@/styles/abstracts/variables';
+@import '@/styles/abstracts/mixins';
+@import '@/styles/abstracts/functions';
+
+.property {
+  &__heading, &__subheading {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, 'xl');
+    font-weight: map-get($font-weights, 'medium');
+    color: color('neutral', 'darker');
+    margin-bottom: spacing('lg');
+  }
+  
+  &__types {
+    display: flex;
+    gap: spacing('md');
+    margin-bottom: spacing('xl');
+  }
+  
+  &__type {
+    flex: 1;
+    padding: spacing('lg');
+    border: 1px solid color('neutral', 'lighter');
+    border-radius: border-radius('md');
+    text-align: center;
+    cursor: pointer;
+    transition: $transition-base;
+    background-color: #ffffff;
+    
+    &:hover {
+      border-color: color('primary', 'light');
+    }
+    
+    &_selected {
+      border-color: #8bc34a;
+      border-width: 2px;
+    }
+    
+    &_title {
+      font-size: map-get($font-sizes, 'lg');
+      font-weight: map-get($font-weights, 'semibold');
+      color: color('neutral', 'black');
+      margin-bottom: spacing('xs');
+    }
+    
+    &_description {
+      font-size: map-get($font-sizes, 'sm');
+      color: color('neutral', 'dark');
+      margin: 0;
+    }
+  }
+  
+  &__rooms_section {
+    margin-top: spacing('xl');
+  }
+  
+  &__rooms {
+    display: flex;
+    flex-direction: column;
+    gap: spacing('md');
+  }
+  
+  &__room {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  &__room_name {
+    font-size: map-get($font-sizes, 'base');
+    font-weight: map-get($font-weights, 'medium');
+    color: color('neutral', 'black');
+  }
+  
+  &__room_counter {
+    display: flex;
+    align-items: center;
+  }
+  
+  &__room_btn {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius('md');
+    border: none;
+    background-color: #1a512a;
+    color: #ffffff;
+    font-size: map-get($font-sizes, 'xl');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: $transition-base;
+    
+    &:hover:not(:disabled) {
+      background-color: darken(#1a512a, 5%);
+    }
+    
+    &:disabled {
+      background-color: color('neutral', 'light');
+      color: color('neutral', 'medium');
+      cursor: not-allowed;
+    }
+  }
+  
+  &__room_count {
+    width: 60px;
+    text-align: center;
+    font-size: map-get($font-sizes, 'xl');
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('neutral', 'black');
+  }
+}

@@ -1,0 +1,112 @@
+// SubscriptionModule.module.scss
+@import '@/styles/abstracts/variables';
+@import '@/styles/abstracts/mixins';
+@import '@/styles/abstracts/functions';
+
+.subscription {
+  padding: spacing('2xl');
+  min-height: 100vh;
+  background-color: color('neutral', 'light');
+  background-image: radial-gradient(circle at 10% 20%, rgba(color('primary', 'base'), 0.03) 0%, rgba(color('primary', 'dark'), 0.01) 90%);
+  
+  &__header {
+    text-align: center;
+    margin-bottom: spacing('2xl');
+    
+  }
+  
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, '4xl');
+    font-weight: map-get($font-weights, 'bold');
+    color: color('primary', 'dark');
+    margin-bottom: spacing('xs');
+    
+    @include breakpoint-down('md') {
+      font-size: map-get($font-sizes, '3xl');
+    }
+  }
+  
+  &__subtitle {
+    font-size: map-get($font-sizes, 'lg');
+    color: color('neutral', 'dark');
+  }
+  
+  &__container {
+    display: flex;
+    background-color: rgba(#ffffff, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: border-radius('xl');
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid color('neutral', 'lighter');
+    max-width: 1200px;
+    margin: 0 auto;
+    
+    @include breakpoint-down('lg') {
+      flex-direction: column;
+    }
+  }
+  
+  &__selection {
+    flex: 1;
+    padding: spacing('3xl');
+    display: flex;
+    flex-direction: column;
+    gap: spacing('3xl');
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 1px;
+      background-color: color('neutral', 'lighter');
+      
+      @include breakpoint-down('lg') {
+        display: none;
+      }
+    }
+  }
+  
+  &__summary {
+    width: 40%;
+    background-color: rgba(#fafafa, 0.6);
+    backdrop-filter: blur(8px);
+    padding: spacing('3xl');
+    
+    @include breakpoint-down('lg') {
+      width: 100%;
+    }
+  }
+  
+  &__proceed_btn {
+    width: 200px;
+    height: 50px;
+    border-radius: border-radius('full');
+    background-color: color('success');
+    color: color('primary', 'dark');
+    font-weight: map-get($font-weights, 'semibold');
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(color('success'), 0.3);
+    transition: $transition-base;
+    align-self: center;
+    
+    &:hover {
+      background-color: darken(color('success'), 5%);
+      box-shadow: 0 6px 12px rgba(color('success'), 0.4);
+    }
+  }
+}
+
+// Glass morphism mixin for reuse
+@mixin glass-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6));
+  backdrop-filter: blur(10px);
+  border-radius: border-radius('lg');
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+}
