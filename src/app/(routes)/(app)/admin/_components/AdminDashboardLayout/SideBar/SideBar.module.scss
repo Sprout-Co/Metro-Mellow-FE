@@ -1,0 +1,123 @@
+
+// src/components/layout/styles/Sidebar.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.sidebar {
+  width: 220px;
+  background-color: color('neutral', 'white');
+  border-right: 1px solid color('neutral', 'lighter');
+  position: fixed;
+  height: 100vh;
+  z-index: 10;
+  transition: all 0.3s ease;
+  
+  &--collapsed {
+    width: 80px;
+    
+    .sidebar__logo_container {
+      font-size: map-get($font-sizes, 'xs');
+    }
+    
+    .sidebar__nav_label,
+    .sidebar__heading {
+      display: none;
+    }
+    
+    .sidebar__nav_item {
+      justify-content: center;
+    }
+    
+    .sidebar__nav_icon {
+      margin-right: 0;
+    }
+  }
+  
+  &__logo {
+    padding: spacing('md');
+    border-bottom: 1px solid color('neutral', 'lighter');
+  }
+  
+  &__logo_container {
+    background-color: color('primary', 'base');
+    color: color('neutral', 'white');
+    font-family: $font-family-heading;
+    font-weight: map-get($font-weights, 'bold');
+    font-size: map-get($font-sizes, 'lg');
+    text-align: center;
+    padding: spacing('sm') spacing('md');
+    border-radius: border-radius('sm');
+  }
+  
+  &__navigation {
+    padding: spacing('md') spacing('sm');
+  }
+  
+  &__heading {
+    display: block;
+    font-size: map-get($font-sizes, 'xxs');
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('neutral', 'dark');
+    margin-bottom: spacing('sm');
+    padding-left: spacing('sm');
+    letter-spacing: 1px;
+  }
+  
+  &__nav {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &__nav_item {
+    display: flex;
+    align-items: center;
+    padding: spacing('sm');
+    margin-bottom: spacing('xs');
+    border-radius: border-radius('md');
+    color: color('neutral', 'dark');
+    text-decoration: none;
+    position: relative;
+    
+    &:hover {
+      background-color: color('neutral', 'lighter');
+    }
+    
+    &--active {
+      background-color: color('neutral', 'lighter');
+      color: color('primary', 'base');
+      font-weight: map-get($font-weights, 'semibold');
+    }
+  }
+  
+  &__nav_icon {
+    margin-right: spacing('sm');
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: map-get($font-sizes, 'lg');
+  }
+  
+  &__nav_label {
+    font-size: map-get($font-sizes, 'base');
+  }
+  
+  &__nav_active_indicator {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background-color: color('primary', 'base');
+    border-top-right-radius: border-radius('sm');
+    border-bottom-right-radius: border-radius('sm');
+  }
+  
+  &__settings {
+    padding: spacing('md') spacing('sm');
+    margin-top: auto;
+    border-top: 1px solid color('neutral', 'lighter');
+  }
+}

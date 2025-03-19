@@ -1,0 +1,15 @@
+
+
+// src/components/ui/styles/Chart.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.chart {
+  width: 100%;
+  
+  &__canvas {
+    width: 100%;
+    display: block;
+  }
+}
