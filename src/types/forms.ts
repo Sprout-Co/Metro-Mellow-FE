@@ -32,7 +32,6 @@ export type ServiceCategory =
   | "errands"
   | "pest-control";
 
-// src/types/forms.ts
 export interface ContactFormData {
   firstName: string;
   lastName: string;
@@ -56,7 +55,6 @@ export interface BookingFormData extends ContactFormData {
   specialInstructions?: string;
 }
 
-// src/types/common.ts
 export interface NavItem {
   label: string;
   href: string;

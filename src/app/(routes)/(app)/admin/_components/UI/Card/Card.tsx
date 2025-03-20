@@ -1,4 +1,3 @@
-// src/components/ui/Card.tsx
 import React, { ReactNode } from "react";
 import { motion } from "framer-motion";
 import styles from "./Card.module.scss";

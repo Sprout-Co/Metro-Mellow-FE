@@ -3,6 +3,9 @@ import { useState } from 'react';
 import AdminDashboardLayout from './_components/AdminDashboardLayout/AdminDashboardLayout';
 import styles from "./style.module.scss";
 import MetricCard from './_components/UI/MetricCard/MetricCard';
+import ServicePerformance from './_components/UI/ServicePerformance/ServicePerformance';
+import RevenueMetrics from './_components/UI/RevenueMetrics/RevenueMetrics';
+import RecentBookings from './_components/UI/RecentBookings/RecentBookings';
 
 export default function AdminPage() {
 
@@ -153,7 +156,7 @@ export default function AdminPage() {
             ))}
           </div>
 
-          {/* <div className={styles.dashboard_page__main_content}>
+          <div className={styles.dashboard_page__main_content}>
             <div className={styles.dashboard_page__chart_container}>
               <ServicePerformance serviceData={serviceData} />
             </div>
@@ -167,7 +170,7 @@ export default function AdminPage() {
                 <RecentBookings bookings={recentBookings} />
               </div>
             </div>
-          </div> */}
+          </div>
         </div>
       </AdminDashboardLayout>
     );

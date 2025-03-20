@@ -1,4 +1,3 @@
-// src/components/layout/TopNavigation.tsx
 import React from "react";
 import { motion } from "framer-motion";
 import styles from "./TopNavigation.module.scss";

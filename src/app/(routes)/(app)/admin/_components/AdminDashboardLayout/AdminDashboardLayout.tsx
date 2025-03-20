@@ -1,4 +1,3 @@
-// src/components/layout/AdminDashboardLayout.tsx
 import React, { ReactNode, useState } from "react";
 import { motion } from "framer-motion";
 import styles from "./AdminDashboardLayout.module.scss";

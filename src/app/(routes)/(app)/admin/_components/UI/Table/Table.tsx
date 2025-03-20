@@ -1,4 +1,3 @@
-// src/components/ui/Table.tsx
 import React, { ReactNode } from "react";
 import { motion } from "framer-motion";
 import styles from "./styles/Table.module.scss";

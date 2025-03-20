@@ -1,4 +1,3 @@
-// src/components/ui/StatusBadge.tsx
 import React from "react";
 import styles from "./styles/StatusBadge.module.scss";
 

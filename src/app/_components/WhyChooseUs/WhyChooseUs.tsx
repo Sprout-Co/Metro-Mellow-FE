@@ -1,4 +1,3 @@
-// src/components/sections/home/WhyChooseUs/WhyChooseUs.tsx
 'use client';
 
 import React, { useRef, useEffect } from 'react';
