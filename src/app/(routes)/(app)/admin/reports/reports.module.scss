@@ -1,0 +1,62 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.reports_page {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing('lg');
+    
+    @include breakpoint-down('md') {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing('md');
+    }
+  }
+  
+  &__tabs {
+    display: flex;
+    gap: spacing('sm');
+    border-bottom: 1px solid color('neutral', 'lighter');
+    
+    @include breakpoint-down('md') {
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: spacing('xs');
+    }
+  }
+  
+  &__tab {
+    padding: spacing('sm') spacing('md');
+    font-size: map-get($font-sizes, 'sm');
+    color: color('neutral', 'dark');
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    
+    &:hover {
+      color: color('primary', 'base');
+    }
+    
+    &--active {
+      color: color('primary', 'base');
+      border-bottom-color: color('primary', 'base');
+      font-weight: map-get($font-weights, 'semibold');
+    }
+  }
+  
+  &__content {
+    padding: spacing('lg');
+  }
+  
+  &__section_title {
+    font-size: map-get($font-sizes, 'lg');
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('neutral', 'black');
+    margin: 0 0 spacing('lg') 0;
+  }
+}

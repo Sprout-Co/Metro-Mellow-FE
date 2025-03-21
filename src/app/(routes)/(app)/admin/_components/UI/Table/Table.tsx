@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { motion } from "framer-motion";
-import styles from "./styles/Table.module.scss";
+import styles from "./Table.module.scss";
 
 interface TableColumn {
   key: string;

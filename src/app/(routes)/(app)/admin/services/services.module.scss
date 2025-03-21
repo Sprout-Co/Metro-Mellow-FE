@@ -1,0 +1,145 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.services_page {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing('xl');
+    
+    @include breakpoint-down('md') {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing('md');
+    }
+  }
+  
+  &__title {
+    font-size: map-get($font-sizes, '2xl');
+    font-weight: map-get($font-weights, 'bold');
+    color: color('neutral', 'black');
+    margin: 0 0 spacing('xs') 0;
+  }
+  
+  &__subtitle {
+    font-size: map-get($font-sizes, 'base');
+    color: color('neutral', 'dark');
+    margin: 0;
+  }
+  
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: spacing('lg');
+    
+    @include breakpoint-down('sm') {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &__service_card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: spacing('md');
+    }
+    
+    &__icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: color('neutral', 'lighter');
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: map-get($font-sizes, 'xl');
+    }
+    
+    &__badge {
+      padding: spacing('xxs') spacing('xs');
+      border-radius: border-radius('full');
+      font-size: map-get($font-sizes, 'xxs');
+      text-transform: uppercase;
+      font-weight: map-get($font-weights, 'semibold');
+      
+      &_cleaning {
+        background-color: rgba(color('primary', 'base'), 0.1);
+        color: color('primary', 'base');
+      }
+      
+      &_laundry {
+        background-color: rgba(color('secondary', 'base'), 0.1);
+        color: color('secondary', 'base');
+      }
+      
+      &_cooking {
+        background-color: rgba(color('success'), 0.1);
+        color: color('success');
+      }
+      
+      &_pest {
+        background-color: rgba(color('warning'), 0.1);
+        color: color('warning');
+      }
+      
+      &_errands {
+        background-color: rgba(color('info'), 0.1);
+        color: color('info');
+      }
+    }
+    
+    &__title {
+      font-size: map-get($font-sizes, 'lg');
+      font-weight: map-get($font-weights, 'semibold');
+      color: color('neutral', 'black');
+      margin: 0 0 spacing('sm') 0;
+    }
+    
+    &__description {
+      font-size: map-get($font-sizes, 'sm');
+      color: color('neutral', 'dark');
+      margin: 0 0 spacing('lg') 0;
+      flex-grow: 1;
+    }
+    
+    &__details {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: spacing('md');
+      padding-bottom: spacing('md');
+      border-bottom: 1px solid color('neutral', 'lighter');
+    }
+    
+    &__price,
+    &__duration {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    &__price_label,
+    &__duration_label {
+      font-size: map-get($font-sizes, 'xs');
+      color: color('neutral', 'dark');
+      margin-bottom: spacing('xxs');
+    }
+    
+    &__price_value,
+    &__duration_value {
+      font-size: map-get($font-sizes, 'base');
+      font-weight: map-get($font-weights, 'semibold');
+      color: color('neutral', 'black');
+    }
+    
+    &__actions {
+      display: flex;
+      gap: spacing('sm');
+    }
+  }
+}
