@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./styles/StatusBadge.module.scss";
+import styles from "./StatusBadge.module.scss";
 
 interface StatusBadgeProps {
   status: "active" | "inactive" | "pending" | "completed" | "cancelled";
