@@ -1,0 +1,134 @@
+
+
+
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.metric_card {
+  display: flex;
+  padding: spacing('md');
+  
+  &--primary {
+    .metric_card__icon_container {
+      background-color: rgba(color('primary', 'base'), 0.1);
+      color: color('primary', 'base');
+    }
+    
+    .metric_card__progress_fill {
+      background-color: color('primary', 'base');
+    }
+  }
+  
+  &--secondary {
+    .metric_card__icon_container {
+      background-color: rgba(color('secondary', 'base'), 0.1);
+      color: color('secondary', 'base');
+    }
+    
+    .metric_card__progress_fill {
+      background-color: color('secondary', 'base');
+    }
+  }
+  
+  &--success {
+    .metric_card__icon_container {
+      background-color: rgba(color('success'), 0.1);
+      color: color('success');
+    }
+    
+    .metric_card__progress_fill {
+      background-color: color('success');
+    }
+  }
+  
+  &--warning {
+    .metric_card__icon_container {
+      background-color: rgba(color('warning'), 0.1);
+      color: color('warning');
+    }
+    
+    .metric_card__progress_fill {
+      background-color: color('warning');
+    }
+  }
+  
+  &--info {
+    .metric_card__icon_container {
+      background-color: rgba(color('info'), 0.1);
+      color: color('info');
+    }
+    
+    .metric_card__progress_fill {
+      background-color: color('info');
+    }
+  }
+  
+  &--error {
+    .metric_card__icon_container {
+      background-color: rgba(color('error'), 0.1);
+      color: color('error');
+    }
+    
+    .metric_card__progress_fill {
+      background-color: color('error');
+    }
+  }
+  
+  &__icon {
+    margin-right: spacing('md');
+  }
+  
+  &__icon_container {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: map-get($font-sizes, 'xl');
+  }
+  
+  &__content {
+    flex: 1;
+  }
+  
+  &__title {
+    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, 'base');
+    color: color('neutral', 'dark');
+    font-weight: map-get($font-weights, 'regular');
+  }
+  
+  &__value {
+    margin: 0 0 spacing('md') 0;
+    font-size: map-get($font-sizes, '2xl');
+    font-weight: map-get($font-weights, 'bold');
+    color: color('neutral', 'black');
+  }
+  
+  &__progress {
+    width: 100%;
+  }
+  
+  &__progress_bar {
+    height: 6px;
+    width: 100%;
+    background-color: color('neutral', 'lighter');
+    border-radius: border-radius('full');
+    overflow: hidden;
+    margin-bottom: spacing('xs');
+  }
+  
+  &__progress_fill {
+    height: 100%;
+    border-radius: border-radius('full');
+  }
+  
+  &__progress_label {
+    display: flex;
+    justify-content: space-between;
+    font-size: map-get($font-sizes, 'xs');
+    color: color('neutral', 'dark');
+  }
+}

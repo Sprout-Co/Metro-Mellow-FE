@@ -1,0 +1,87 @@
+
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $font-family-base;
+  font-weight: map-get($font-weights, 'medium');
+  border-radius: border-radius('md');
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  
+  &:focus {
+    outline: none;
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  &__icon {
+    margin-right: spacing('xs');
+  }
+  
+  // Variants
+  &--primary {
+    @include button-primary;
+  }
+  
+  &--secondary {
+    @include button-secondary;
+  }
+  
+  &--tertiary {
+    @include button-base;
+    background-color: color('neutral', 'lighter');
+    color: color('neutral', 'darker');
+    
+    &:hover {
+      background-color: darken(color('neutral', 'lighter'), 5%);
+    }
+  }
+  
+  &--outline {
+    @include button-base;
+    background-color: transparent;
+    border: 1px solid color('neutral', 'medium');
+    color: color('neutral', 'darker');
+    
+    &:hover {
+      background-color: color('neutral', 'lighter');
+    }
+  }
+  
+  &--text {
+    @include button-base;
+    background-color: transparent;
+    color: color('primary', 'base');
+    padding: 0;
+    
+    &:hover {
+      color: color('primary', 'dark');
+      text-decoration: underline;
+    }
+  }
+  
+  // Sizes
+  &--small {
+    font-size: map-get($font-sizes, 'xs');
+    padding: spacing('xs') spacing('sm');
+  }
+  
+  &--medium {
+    font-size: map-get($font-sizes, 'sm');
+    padding: spacing('sm') spacing('md');
+  }
+  
+  &--large {
+    font-size: map-get($font-sizes, 'base');
+    padding: spacing('md') spacing('lg');
+  }
+}

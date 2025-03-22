@@ -1,0 +1,16 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.card {
+  background-color: color('neutral', 'white');
+  border-radius: border-radius('lg');
+  box-shadow: map-get($box-shadows, 'sm');
+  overflow: hidden;
+  padding: spacing('lg');
+  height: 100%;
+  
+  &:hover {
+    box-shadow: map-get($box-shadows, 'md');
+  }
+}
