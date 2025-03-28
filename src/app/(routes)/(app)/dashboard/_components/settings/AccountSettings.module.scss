@@ -1,0 +1,686 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.settings {
+  &__header {
+    margin-bottom: spacing("xl");
+  }
+  
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "3xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+    
+    @include breakpoint-down("md") {
+      font-size: map-get($font-sizes, "2xl");
+    }
+  }
+  
+  &__subtitle {
+    font-size: map-get($font-sizes, "lg");
+    color: color("neutral", "dark");
+    
+    @include breakpoint-down("md") {
+      font-size: map-get($font-sizes, "base");
+    }
+  }
+  
+  &__content {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: spacing("xl");
+    
+    @include breakpoint-down("lg") {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &__sidebar {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    box-shadow: map-get($box-shadows, "sm");
+    overflow: hidden;
+    
+    @include breakpoint-down("lg") {
+      display: flex;
+      overflow-x: auto;
+      
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      
+      scrollbar-width: none;
+    }
+  }
+  
+  &__tab {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: spacing("md");
+    border: none;
+    background: none;
+    text-align: left;
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "darker");
+    cursor: pointer;
+    transition: $transition-base;
+    border-left: 3px solid transparent;
+    
+    &:hover {
+      background-color: color("neutral", "lighter");
+    }
+    
+    &--active {
+      background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.05);
+      border-left-color: color("primary", "base");
+      color: color("primary", "base");
+      font-weight: map-get($font-weights, "medium");
+    }
+    
+    @include breakpoint-down("lg") {
+      white-space: nowrap;
+      width: auto;
+      border-left: none;
+      border-bottom: 3px solid transparent;
+      
+      &--active {
+        border-bottom-color: color("primary", "base");
+        border-left-color: transparent;
+      }
+    }
+  }
+  
+  &__tabIcon {
+    margin-right: spacing("sm");
+  }
+  
+  &__main {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    box-shadow: map-get($box-shadows, "sm");
+    padding: spacing("xl");
+    min-height: 70vh;
+  }
+  
+  &__tabContent {
+    
+  }
+  
+  &__sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: spacing("xl");
+    
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+    }
+  }
+  
+  &__sectionTitle {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+  }
+  
+  &__editBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xs") spacing("md");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border-radius: border-radius("md");
+    font-weight: map-get($font-weights, "medium");
+    border: none;
+    font-size: map-get($font-sizes, "sm");
+    cursor: pointer;
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: color("primary", "dark");
+    }
+  }
+  
+  &__profile {
+    
+  }
+  
+  &__profileHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: spacing("xl");
+    
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+  
+  &__avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: border-radius("full");
+    overflow: hidden;
+    margin-right: spacing("xl");
+    position: relative;
+    
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("md");
+    }
+  }
+  
+  &__avatarImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  &__avatarPlaceholder {
+    width: 100%;
+    height: 100%;
+    background-color: color("primary", "light");
+    color: color("neutral", "white");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: map-get($font-weights, "bold");
+    font-size: map-get($font-sizes, "2xl");
+  }
+  
+  &__avatarEdit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: border-radius("full");
+    background-color: color("neutral", "white");
+    color: color("primary", "base");
+    border: 1px solid color("neutral", "lighter");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
+    }
+  }
+  
+  &__profileInfo {
+    
+  }
+  
+  &__profileName {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+  
+  &__profileEmail {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+  }
+  
+  &__profileDetails {
+    
+  }
+  
+  &__profileSection {
+    margin-bottom: spacing("xl");
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  &__profileSectionTitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("md");
+  }
+  
+  &__profileDetail {
+    display: flex;
+    margin-bottom: spacing("sm");
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  &__profileLabel {
+    width: 120px;
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+  }
+  
+  &__profileValue {
+    color: color("neutral", "black");
+  }
+  
+  &__form {
+    
+  }
+  
+  &__formGroup {
+    margin-bottom: spacing("md");
+  }
+  
+  &__formLabel {
+    display: block;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("xs");
+  }
+  
+  &__formInput {
+    width: 100%;
+    padding: spacing("sm") spacing("md");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "black");
+    
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 2px rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+    }
+  }
+  
+  &__formSubtitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: spacing("lg") 0 spacing("md");
+  }
+  
+  &__formRow {
+    display: flex;
+    gap: spacing("md");
+    
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+    }
+  }
+  
+  &__formActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: spacing("md");
+    margin-top: spacing("xl");
+    
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+    }
+  }
+  
+  &__formSubmit {
+    padding: spacing("sm") spacing("md");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border-radius: border-radius("md");
+    font-weight: map-get($font-weights, "medium");
+    border: none;
+    cursor: pointer;
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: color("primary", "dark");
+    }
+  }
+  
+  &__formCancel {
+    padding: spacing("sm") spacing("md");
+    background: none;
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    color: color("neutral", "darker");
+    font-weight: map-get($font-weights, "medium");
+    cursor: pointer;
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: color("neutral", "lighter");
+    }
+  }
+  
+  &__security {
+    
+  }
+  
+  &__securitySection {
+    margin-bottom: spacing("xl");
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  &__securityTitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
+  }
+  
+  &__securityDescription {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("md");
+  }
+  
+  &__securityToggle {
+    display: flex;
+    align-items: center;
+    
+    .settings__toggleLabel {
+      margin-left: spacing("md");
+    }
+  }
+  
+  &__updateBtn {
+    padding: spacing("sm") spacing("md");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border-radius: border-radius("md");
+    font-weight: map-get($font-weights, "medium");
+    border: none;
+    cursor: pointer;
+    transition: $transition-base;
+    margin-top: spacing("md");
+    
+    &:hover {
+      background-color: color("primary", "dark");
+    }
+  }
+  
+  &__sessions {
+    
+  }
+  
+  &__session {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("md");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
+    margin-bottom: spacing("md");
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  &__sessionInfo {
+    
+  }
+  
+  &__sessionDevice {
+    display: flex;
+    align-items: center;
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+    
+    svg {
+      margin-right: spacing("xs");
+      color: color("primary", "base");
+    }
+  }
+  
+  &__sessionMeta {
+    display: flex;
+    flex-direction: column;
+    font-size: map-get($font-sizes, "sm");
+  }
+  
+  &__sessionCurrent {
+    color: color("success");
+    font-weight: map-get($font-weights, "medium");
+    margin-bottom: spacing("xxs");
+  }
+  
+  &__sessionTime {
+    color: color("neutral", "dark");
+  }
+  
+  &__sessionRevoke {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: color("error");
+    font-size: map-get($font-sizes, "sm");
+    cursor: pointer;
+    
+    svg {
+      margin-right: spacing("xs");
+    }
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  &__toggle {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+  }
+  
+  &__toggleInput {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    
+    &:checked + .settings__toggleSlider {
+      background-color: color("primary", "base");
+    }
+    
+    &:checked + .settings__toggleSlider:before {
+      transform: translateX(26px);
+    }
+  }
+  
+  &__toggleSlider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: color("neutral", "medium");
+    transition: $transition-base;
+    border-radius: 34px;
+    
+    &:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: color("neutral", "white");
+      transition: $transition-base;
+      border-radius: 50%;
+    }
+  }
+  
+  &__toggleLabel {
+    color: color("neutral", "darker");
+    font-weight: map-get($font-weights, "medium");
+  }
+  
+  &__notificationSection {
+    margin-bottom: spacing("xl");
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  &__notificationTitle {
+    display: flex;
+    align-items: center;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("md");
+    
+    svg {
+      margin-right: spacing("xs");
+      color: color("primary", "base");
+    }
+  }
+  
+  &__notificationList {
+    
+  }
+  
+  &__notificationItem {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: spacing("md");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
+    margin-bottom: spacing("md");
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      
+      .settings__toggle {
+        margin-top: spacing("sm");
+        align-self: flex-start;
+      }
+    }
+  }
+  
+  &__notificationInfo {
+    
+  }
+  
+  &__notificationName {
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+  
+  &__notificationDescription {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+  }
+  
+  &__preferences {
+    
+  }
+  
+  &__preferencesSection {
+    margin-bottom: spacing("xl");
+  }
+  
+  &__preferencesTitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("md");
+  }
+  
+  &__preferenceItem {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: spacing("md");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
+    margin-bottom: spacing("md");
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+    }
+  }
+  
+  &__preferenceInfo {
+    
+  }
+  
+  &__preferenceName {
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+  
+  &__preferenceDescription {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+  }
+  
+  &__preferenceControl {
+    @include breakpoint-down("sm") {
+      margin-top: spacing("md");
+      width: 100%;
+    }
+  }
+  
+  &__radioGroup {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+  
+  &__radio {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    
+    input[type="radio"] {
+      margin-right: spacing("xs");
+      accent-color: color("primary", "base");
+    }
+  }
+  
+  &__radioLabel {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "darker");
+  }
+  
+  &__select {
+    width: 100%;
+    padding: spacing("xs") spacing("sm");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "black");
+    
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+    }
+  }
+}

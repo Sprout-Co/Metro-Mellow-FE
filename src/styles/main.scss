@@ -1,0 +1,59 @@
+@import "reset";
+@import "variables";
+@import "mixins";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+// Base styles
+html {
+  font-size: 100%;
+}
+
+body {
+  background-color: color("neutral", "white");
+}
+
+// Global section styles
+// .section {
+//   @include section-padding;
+
+//   &--light {
+//     background-color: $color-background-light;
+//   }
+
+//   &--off-white {
+//     background-color: $color-background-off;
+//   }
+
+//   &--primary {
+//     background-color: $color-primary;
+//     color: $color-text-white;
+//   }
+
+//   &--dark {
+//     background-color: $color-background-dark;
+//     color: $color-text-white;
+//   }
+// }
+
+// .container {
+//   @include container;
+// }
+
+// // Global typography
+// h1 {
+//   @include heading-1;
+// }
+
+// h2 {
+//   @include heading-2;
+// }
+
+// h3 {
+//   @include heading-3;
+// }
+
+// p {
+//   @include paragraph;
+// }

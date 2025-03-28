@@ -1,0 +1,43 @@
+
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.revenue_metrics {
+  background-color: color('primary', 'base');
+  color: color('neutral', 'white');
+  padding: spacing('lg');
+  border-radius: border-radius('lg');
+  height: 100%;
+  
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing('sm');
+  }
+  
+  &__label {
+    font-size: map-get($font-sizes, 'xs');
+    font-weight: map-get($font-weights, 'semibold');
+    opacity: 0.8;
+  }
+  
+  &__badge {
+    background-color: rgba(color('neutral', 'white'), 0.2);
+    padding: spacing('xxs') spacing('xs');
+    border-radius: border-radius('full');
+    font-size: map-get($font-sizes, 'xs');
+    font-weight: map-get($font-weights, 'semibold');
+  }
+  
+  &__value {
+    font-size: map-get($font-sizes, '3xl');
+    font-weight: map-get($font-weights, 'bold');
+    margin: spacing('md') 0;
+  }
+  
+  &__chart {
+    margin-top: spacing('lg');
+  }
+}

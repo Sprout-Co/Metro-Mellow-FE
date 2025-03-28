@@ -1,0 +1,611 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.billing {
+  &__header {
+    margin-bottom: spacing("xl");
+  }
+  
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "3xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+    
+    @include breakpoint-down("md") {
+      font-size: map-get($font-sizes, "2xl");
+    }
+  }
+  
+  &__subtitle {
+    font-size: map-get($font-sizes, "lg");
+    color: color("neutral", "dark");
+    
+    @include breakpoint-down("md") {
+      font-size: map-get($font-sizes, "base");
+    }
+  }
+  
+  &__tabs {
+    display: flex;
+    border-bottom: 1px solid color("neutral", "lighter");
+    margin-bottom: spacing("xl");
+    overflow-x: auto;
+    
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    
+    scrollbar-width: none;
+  }
+  
+  &__tab {
+    display: flex;
+    align-items: center;
+    padding: spacing("md") spacing("lg");
+    border: none;
+    background: none;
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "darker");
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+    
+    svg {
+      margin-right: spacing("xs");
+    }
+    
+    &:hover {
+      color: color("primary", "base");
+    }
+    
+    &--active {
+      color: color("primary", "base");
+      font-weight: map-get($font-weights, "medium");
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: color("primary", "base");
+      }
+    }
+  }
+  
+  &__content {
+    min-height: 400px;
+  }
+  
+  &__section {
+    
+  }
+  
+  &__sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: spacing("lg");
+    
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+    }
+  }
+  
+  &__sectionTitle {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+  }
+  
+  &__addBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xs") spacing("md");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border-radius: border-radius("md");
+    font-weight: map-get($font-weights, "medium");
+    border: none;
+    font-size: map-get($font-sizes, "sm");
+    cursor: pointer;
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: color("primary", "dark");
+    }
+  }
+  
+  &__addCard {
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    padding: spacing("lg");
+    margin-bottom: spacing("xl");
+    overflow: hidden;
+  }
+  
+  &__addCardForm {
+    
+  }
+  
+  &__formRow {
+    display: flex;
+    gap: spacing("md");
+    margin-bottom: spacing("md");
+    
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+    }
+  }
+  
+  &__formGroup {
+    flex: 1;
+  }
+  
+  &__formLabel {
+    display: block;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("xs");
+  }
+  
+  &__formInput {
+    width: 100%;
+    padding: spacing("sm") spacing("md");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "black");
+    
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 2px rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+    }
+  }
+  
+  &__formActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: spacing("md");
+    margin-top: spacing("lg");
+  }
+  
+  &__formSubmit {
+    padding: spacing("sm") spacing("md");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border-radius: border-radius("md");
+    font-weight: map-get($font-weights, "medium");
+    border: none;
+    cursor: pointer;
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: color("primary", "dark");
+    }
+  }
+  
+  &__formCancel {
+    padding: spacing("sm") spacing("md");
+    background: none;
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    color: color("neutral", "darker");
+    font-weight: map-get($font-weights, "medium");
+    cursor: pointer;
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: color("neutral", "lighter");
+    }
+  }
+  
+  &__cardsList {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+  
+  &__card {
+    display: flex;
+    align-items: center;
+    padding: spacing("md");
+    background-color: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    
+    @include breakpoint-down("md") {
+      flex-wrap: wrap;
+    }
+  }
+  
+  &__cardIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("lg");
+    background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+    color: color("primary", "base");
+    margin-right: spacing("md");
+    font-size: map-get($font-sizes, "xl");
+    flex-shrink: 0;
+  }
+  
+  &__cardDetails {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("md");
+    }
+  }
+  
+  &__cardInfo {
+    
+  }
+  
+  &__cardType {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+  
+  &__cardExpiry {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+  }
+  
+  &__cardDefault {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xxs") spacing("xs");
+    background-color: rgba(map-get($colors, "success"), 0.1);
+    color: color("success");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    border-radius: border-radius("md");
+    margin-left: spacing("md");
+  }
+  
+  &__cardActions {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    
+    @include breakpoint-down("md") {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }
+  
+  &__cardBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xs") spacing("sm");
+    background: none;
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    color: color("neutral", "darker");
+    font-size: map-get($font-sizes, "sm");
+    cursor: pointer;
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: color("neutral", "lighter");
+    }
+  }
+  
+  &__filter {
+    display: flex;
+    align-items: center;
+  }
+  
+  &__filterLabel {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "darker");
+    margin-right: spacing("xs");
+  }
+  
+  &__filterSelect {
+    padding: spacing("xs") spacing("sm");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    background-color: color("neutral", "white");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "black");
+    cursor: pointer;
+    
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+    }
+  }
+  
+  &__table {
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    overflow: hidden;
+    margin-bottom: spacing("lg");
+  }
+  
+  &__tableHeader {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
+    background-color: color("neutral", "lighter");
+    
+    @include breakpoint-down("md") {
+      display: none;
+    }
+  }
+  
+  &__tableHeaderCell {
+    padding: spacing("md");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "darker");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+  
+  &__tableBody {
+    
+  }
+  
+  &__tableRow {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
+    border-bottom: 1px solid color("neutral", "lighter");
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    @include breakpoint-down("md") {
+      display: flex;
+      flex-direction: column;
+      padding: spacing("md");
+    }
+  }
+  
+  &__tableCell {
+    padding: spacing("md");
+    color: color("neutral", "black");
+    
+    @include breakpoint-down("md") {
+      padding: spacing("xs") 0;
+      display: flex;
+      justify-content: space-between;
+      
+      &::before {
+        content: attr(data-label);
+        font-weight: map-get($font-weights, "medium");
+        margin-right: spacing("md");
+      }
+    }
+  }
+  
+  &__status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    
+    &--paid {
+      background-color: rgba(map-get($colors, "success"), 0.1);
+      color: color("success");
+    }
+    
+    &--pending {
+      background-color: rgba(map-get($colors, "warning"), 0.1);
+      color: color("warning");
+    }
+  }
+  
+  &__invoiceLink {
+    display: inline-flex;
+    align-items: center;
+    color: color("primary", "base");
+    font-size: map-get($font-sizes, "sm");
+    text-decoration: none;
+    
+    svg {
+      margin-right: spacing("xxs");
+    }
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  &__pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  &__paginationBtn {
+    display: flex;
+    align-items: center;
+    padding: spacing("xs") spacing("md");
+    background: none;
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    color: color("neutral", "darker");
+    font-size: map-get($font-sizes, "sm");
+    cursor: pointer;
+    transition: $transition-base;
+    
+    &:hover:not(:disabled) {
+      background-color: color("neutral", "lighter");
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    svg {
+      &:first-child {
+        margin-right: spacing("xs");
+      }
+      
+      &:last-child {
+        margin-left: spacing("xs");
+      }
+    }
+  }
+  
+  &__paginationInfo {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+  }
+  
+  &__subscriptionsList {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+  }
+  
+  &__subscription {
+    background-color: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    overflow: hidden;
+  }
+  
+  &__subscriptionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
+    
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("xs");
+    }
+  }
+  
+  &__subscriptionTitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+  }
+  
+  &__subscriptionStatus {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    
+    &--active {
+      background-color: rgba(map-get($colors, "success"), 0.1);
+      color: color("success");
+    }
+    
+    &--paused {
+      background-color: rgba(map-get($colors, "warning"), 0.1);
+      color: color("warning");
+    }
+  }
+  
+  &__subscriptionDetails {
+    padding: spacing("md");
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: spacing("md");
+    
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &__subscriptionDetail {
+    
+  }
+  
+  &__subscriptionLabel {
+    display: block;
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xxs");
+  }
+  
+  &__subscriptionValue {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "black");
+    font-weight: map-get($font-weights, "medium");
+  }
+  
+  &__subscriptionActions {
+    display: flex;
+    padding: spacing("md");
+    border-top: 1px solid color("neutral", "lighter");
+    gap: spacing("md");
+    
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+    }
+  }
+  
+  &__subscriptionBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xs") spacing("md");
+    background: none;
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    color: color("neutral", "darker");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    cursor: pointer;
+    transition: $transition-base;
+    
+    svg {
+      margin-right: spacing("xs");
+    }
+    
+    &:hover {
+      background-color: color("neutral", "lighter");
+    }
+    
+    &--resume {
+      border-color: color("primary", "base");
+      color: color("primary", "base");
+      
+      &:hover {
+        background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.05);
+      }
+    }
+    
+    &--cancel {
+      border-color: color("error");
+      color: color("error");
+      
+      &:hover {
+        background-color: rgba(map-get($colors, "error"), 0.05);
+      }
+    }
+  }
+}

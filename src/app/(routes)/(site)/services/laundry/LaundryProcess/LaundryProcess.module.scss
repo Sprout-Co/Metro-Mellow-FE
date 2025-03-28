@@ -1,0 +1,217 @@
+// styles/components/laundry/LaundryProcess.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.process {
+  padding: spacing("4xl") 0;
+  background-color: color("neutral", "light");
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: -150px;
+    top: -150px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background-color: rgba(color("primary", "light"), 0.2);
+    opacity: 0.5;
+    z-index: z-index("negative");
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: -100px;
+    bottom: -100px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: color("secondary", "light");
+    opacity: 0.3;
+    z-index: z-index("negative");
+  }
+
+  &__container {
+    @include container;
+    position: relative;
+    z-index: z-index("default");
+  }
+
+  &__heading {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto spacing("3xl");
+  }
+
+  &__subheading {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: color("primary", "base");
+    margin-bottom: spacing("xs");
+    display: block;
+  }
+
+  &__title {
+    @include heading-2;
+    color: color("neutral", "black");
+    margin-bottom: spacing("md");
+  }
+
+  &__description {
+    @include paragraph;
+    color: color("neutral", "dark");
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  &__steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: spacing("3xl");
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      gap: spacing("xl");
+    }
+  }
+
+  &__step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 18%;
+    position: relative;
+    z-index: z-index("default");
+
+    @include breakpoint-down("md") {
+      width: 100%;
+      flex-direction: row;
+      text-align: left;
+      gap: spacing("md");
+    }
+
+    &-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: border-radius("full");
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
+      font-weight: map-get($font-weights, "semibold");
+      font-size: map-get($font-sizes, "xl");
+      margin-bottom: spacing("md");
+
+      @include breakpoint-down("md") {
+        margin-bottom: 0;
+        min-width: 40px;
+      }
+    }
+
+    &-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      height: 80px;
+      border-radius: border-radius("full");
+      background-color: color("neutral", "white");
+      color: color("primary", "base");
+      box-shadow: map-get($box-shadows, "md");
+      margin-bottom: spacing("md");
+
+      @include breakpoint-down("md") {
+        margin-bottom: 0;
+        width: 60px;
+        height: 60px;
+        min-width: 60px;
+
+        svg {
+          width: 30px;
+          height: 30px;
+        }
+      }
+    }
+
+    &-content {
+      @include breakpoint-down("md") {
+        flex: 1;
+      }
+    }
+
+    &-title {
+      font-size: map-get($font-sizes, "lg");
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "black");
+      margin-bottom: spacing("xs");
+    }
+
+    &-description {
+      font-size: map-get($font-sizes, "sm");
+      line-height: map-get($line-heights, "normal");
+      color: color("neutral", "dark");
+    }
+  }
+
+  &__line {
+    position: absolute;
+    top: 110px;
+    left: 10%;
+    width: 80%;
+    height: 2px;
+    background-color: rgba(color("primary", "base"), 0.3);
+    z-index: z-index("negative");
+    transform-origin: left;
+
+    @include breakpoint-down("md") {
+      display: none;
+    }
+  }
+
+  &__cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: spacing("md");
+    text-align: center;
+    background-color: color("neutral", "white");
+    padding: spacing("xl");
+    border-radius: border-radius("lg");
+    box-shadow: map-get($box-shadows, "md");
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  &__text {
+    @include paragraph;
+    font-size: map-get($font-sizes, "lg");
+    color: color("neutral", "black");
+    font-weight: map-get($font-weights, "medium");
+  }
+
+  &__button {
+    @include button-primary;
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+
+    svg {
+      transition: $transition-base;
+    }
+
+    &:hover {
+      svg {
+        transform: translateX(3px);
+      }
+    }
+  }
+}

@@ -1,0 +1,114 @@
+@import '@/styles/abstracts/variables';
+@import '@/styles/abstracts/mixins';
+@import '@/styles/abstracts/functions';
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-family-base;
+    font-weight: map-get($font-weights, 'medium');
+    border-radius: border-radius('lg');
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: $transition-base;
+    outline: none;
+
+    &:focus-visible {
+        box-shadow: 0 0 0 2px color('primary', 'light');
+    }
+
+    &--primary {
+        background-color: color('primary', 'base');
+        color: color('neutral', 'white');
+
+        &:hover,
+        &:focus {
+            background-color: color('primary', 'dark');
+        }
+    }
+
+    &--secondary {
+        background-color: color('secondary', 'base');
+        color: color('neutral', 'white');
+
+        &:hover,
+        &:focus {
+            background-color: color('secondary', 'dark');
+        }
+    }
+
+    &--outline {
+        background-color: transparent;
+        color: color('primary', 'base');
+        border: 1px solid color('primary', 'base');
+
+        &:hover,
+        &:focus {
+            background-color: rgba(color('primary', 'base'), 0.05);
+        }
+    }
+
+    &--text {
+        background-color: transparent;
+        color: color('primary', 'base');
+        padding-left: 0;
+        padding-right: 0;
+
+        &:hover,
+        &:focus {
+            color: color('primary', 'dark');
+            text-decoration: underline;
+        }
+    }
+
+    &--sm {
+        padding: spacing('xs') spacing('md');
+        font-size: map-get($font-sizes, 'sm');
+        height: 2rem;
+    }
+
+    &--md {
+        padding: spacing('sm') spacing('lg');
+        font-size: map-get($font-sizes, 'base');
+        height: 2.5rem;
+    }
+
+    &--lg {
+        padding: spacing('md') spacing('xl');
+        font-size: map-get($font-sizes, 'lg');
+        height: 3rem;
+    }
+
+    &--full-width {
+        width: 100%;
+    }
+
+    &--with-icon {
+        .button__icon {
+            display: flex;
+            align-items: center;
+        }
+
+        .button__text+.button__icon,
+        .button__icon+.button__text {
+            margin-left: spacing('xs');
+        }
+    }
+
+    &--icon-right {
+        flex-direction: row-reverse;
+
+        .button__text+.button__icon {
+            margin-left: 0;
+            margin-right: spacing('xs');
+        }
+    }
+
+    &--disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+}

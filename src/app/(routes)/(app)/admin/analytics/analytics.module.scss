@@ -1,0 +1,206 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.analytics_page {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: spacing('lg');
+    
+    @include breakpoint-down('md') {
+      flex-direction: column;
+      gap: spacing('md');
+    }
+  }
+  
+  &__title_area {
+    margin-bottom: spacing('md');
+  }
+  
+  &__title {
+    font-size: map-get($font-sizes, '2xl');
+    font-weight: map-get($font-weights, 'bold');
+    color: color('neutral', 'black');
+    margin: 0 0 spacing('xs') 0;
+  }
+  
+  &__subtitle {
+    font-size: map-get($font-sizes, 'base');
+    color: color('neutral', 'dark');
+    margin: 0;
+  }
+  
+  &__time_range {
+    display: flex;
+    gap: spacing('xs');
+    
+    @include breakpoint-down('sm') {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+  
+  &__time_button {
+    padding: spacing('xs') spacing('md');
+    background-color: color('neutral', 'lighter');
+    border: none;
+    border-radius: border-radius('md');
+    font-size: map-get($font-sizes, 'xs');
+    font-weight: map-get($font-weights, 'medium');
+    color: color('neutral', 'dark');
+    cursor: pointer;
+    
+    &:hover {
+      background-color: darken(color('neutral', 'lighter'), 5%);
+    }
+    
+    &--active {
+      background-color: color('primary', 'base');
+      color: color('neutral', 'white');
+      
+      &:hover {
+        background-color: darken(color('primary', 'base'), 5%);
+      }
+    }
+  }
+  
+  &__metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: spacing('md');
+    margin-bottom: spacing('xl');
+    
+    @include breakpoint-down('sm') {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &__charts {
+    display: flex;
+    flex-direction: column;
+    gap: spacing('lg');
+    margin-bottom: spacing('xl');
+  }
+  
+  &__secondary_charts {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: spacing('lg');
+    
+    @include breakpoint-down('md') {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &__chart_container {
+    height: 100%;
+  }
+  
+  &__chart_card {
+    padding: spacing('lg');
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &__chart_header {
+    margin-bottom: spacing('md');
+  }
+  
+  &__chart_title {
+    font-size: map-get($font-sizes, 'lg');
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('neutral', 'black');
+    margin: 0 0 spacing('xxs') 0;
+  }
+  
+  &__chart_subtitle {
+    font-size: map-get($font-sizes, 'sm');
+    color: color('neutral', 'dark');
+    margin: 0;
+  }
+  
+  &__chart {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  &__insights {
+    margin-bottom: spacing('lg');
+  }
+  
+  &__insights_card {
+    padding: spacing('lg');
+  }
+  
+  &__insights_title {
+    font-size: map-get($font-sizes, 'lg');
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('neutral', 'black');
+    margin: 0 0 spacing('lg') 0;
+  }
+  
+  &__insights_list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: spacing('lg');
+    
+    @include breakpoint-down('sm') {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &__insight_item {
+    display: flex;
+    gap: spacing('md');
+  }
+  
+  &__insight_icon_positive,
+  &__insight_icon_neutral,
+  &__insight_icon_negative {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: map-get($font-weights, 'bold');
+  }
+  
+  &__insight_icon_positive {
+    background-color: rgba(color('success'), 0.1);
+    color: color('success');
+  }
+  
+  &__insight_icon_neutral {
+    background-color: rgba(color('info'), 0.1);
+    color: color('info');
+  }
+  
+  &__insight_icon_negative {
+    background-color: rgba(color('error'), 0.1);
+    color: color('error');
+  }
+  
+  &__insight_content {
+    flex: 1;
+  }
+  
+  &__insight_header {
+    font-size: map-get($font-sizes, 'base');
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('neutral', 'black');
+    margin: 0 0 spacing('xs') 0;
+  }
+  
+  &__insight_text {
+    font-size: map-get($font-sizes, 'sm');
+    color: color('neutral', 'dark');
+    margin: 0;
+  }
+}

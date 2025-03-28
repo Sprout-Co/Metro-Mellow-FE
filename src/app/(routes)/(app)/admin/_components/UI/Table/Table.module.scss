@@ -1,0 +1,67 @@
+
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.table_container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  
+  &__head {
+    background-color: color('neutral', 'lighter');
+  }
+  
+  &__header {
+    padding: spacing('sm') spacing('md');
+    text-align: left;
+    font-size: map-get($font-sizes, 'xs');
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('neutral', 'dark');
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    
+    &:first-child {
+      border-top-left-radius: border-radius('md');
+      border-bottom-left-radius: border-radius('md');
+    }
+    
+    &:last-child {
+      border-top-right-radius: border-radius('md');
+      border-bottom-right-radius: border-radius('md');
+    }
+  }
+  
+  &__body {
+    .table__row {
+      border-bottom: 1px solid color('neutral', 'lighter');
+      
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+  
+  &__row {
+    cursor: pointer;
+    transition: background-color 0.2s;
+    
+    &:hover {
+      background-color: rgba(color('neutral', 'lighter'), 0.5);
+    }
+  }
+  
+  &__cell {
+    padding: spacing('md');
+    font-size: map-get($font-sizes, 'base');
+    color: color('neutral', 'dark');
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+}

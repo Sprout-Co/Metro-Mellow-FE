@@ -1,0 +1,490 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.platform_page {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: spacing('lg');
+    
+    @include breakpoint-down('md') {
+      flex-direction: column;
+      gap: spacing('md');
+    }
+  }
+  
+  &__title {
+    font-size: map-get($font-sizes, '2xl');
+    font-weight: map-get($font-weights, 'bold');
+    color: color('neutral', 'black');
+    margin: 0 0 spacing('xs') 0;
+  }
+  
+  &__description {
+    font-size: map-get($font-sizes, 'base');
+    color: color('neutral', 'dark');
+    margin: 0;
+  }
+  
+  &__actions {
+    display: flex;
+    gap: spacing('sm');
+    
+    @include breakpoint-down('sm') {
+      width: 100%;
+    }
+  }
+  
+  &__tabs {
+    display: flex;
+    margin-bottom: spacing('lg');
+    border-bottom: 1px solid color('neutral', 'lighter');
+    
+    @include breakpoint-down('sm') {
+      overflow-x: auto;
+      white-space: nowrap;
+      padding-bottom: spacing('xs');
+    }
+  }
+  
+  &__tab {
+    padding: spacing('sm') spacing('lg');
+    background: none;
+    border: none;
+    font-size: map-get($font-sizes, 'sm');
+    font-weight: map-get($font-weights, 'medium');
+    color: color('neutral', 'dark');
+    cursor: pointer;
+    position: relative;
+    
+    &:hover {
+      color: color('secondary', 'base');
+    }
+    
+    &--active {
+      color: color('secondary', 'base');
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: color('secondary', 'base');
+      }
+    }
+  }
+  
+  // Environment tab
+  &__environment_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: spacing('lg');
+    margin-bottom: spacing('xl');
+  }
+  
+  &__env_card {
+    padding: spacing('lg');
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  &__env_header {
+    display: flex;
+    align-items: center;
+    margin-bottom: spacing('md');
+  }
+  
+  &__env_icon {
+    width: 48px;
+    height: 48px;
+    background-color: rgba(color('secondary', 'base'), 0.1);
+    border-radius: border-radius('lg');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: map-get($font-sizes, '2xl');
+    margin-right: spacing('md');
+  }
+  
+  &__env_title {
+    font-size: map-get($font-sizes, 'lg');
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('neutral', 'black');
+    margin: 0;
+  }
+  
+  &__env_content {
+    flex: 1;
+  }
+  
+  &__env_status {
+    margin-bottom: spacing('md');
+  }
+  
+  &__status_item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing('xs');
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  &__status_label {
+    font-size: map-get($font-sizes, 'sm');
+    color: color('neutral', 'dark');
+  }
+  
+  &__status_value {
+    font-size: map-get($font-sizes, 'sm');
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('neutral', 'black');
+  }
+  
+  &__env_actions {
+    border-top: 1px solid color('neutral', 'lighter');
+    padding-top: spacing('md');
+    display: flex;
+    gap: spacing('sm');
+  }
+  
+  // Logs tab
+  &__logs_container {
+    margin-bottom: spacing('xl');
+  }
+  
+  &__logs_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing('md');
+    
+    @include breakpoint-down('md') {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing('md');
+    }
+  }
+  
+  &__logs_title {
+    font-size: map-get($font-sizes, 'lg');
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('neutral', 'black');
+    margin: 0;
+  }
+  
+  &__logs_filters {
+    display: flex;
+    gap: spacing('sm');
+    
+    @include breakpoint-down('sm') {
+      width: 100%;
+    }
+  }
+  
+  &__logs_filter {
+    @include breakpoint-down('sm') {
+      flex: 1;
+    }
+  }
+  
+  &__filter_select {
+    padding: spacing('xs') spacing('sm');
+    border: 1px solid color('neutral', 'medium');
+    border-radius: border-radius('md');
+    font-size: map-get($font-sizes, 'sm');
+    background-color: color('neutral', 'white');
+    
+    &:focus {
+      outline: none;
+      border-color: color('secondary', 'base');
+    }
+    
+    @include breakpoint-down('sm') {
+      width: 100%;
+    }
+  }
+  
+  &__logs_content {
+    background-color: color('neutral', 'black');
+    color: color('neutral', 'white');
+    font-family: monospace;
+    font-size: map-get($font-sizes, 'sm');
+    border-radius: border-radius('md');
+    padding: spacing('md');
+    height: 400px;
+    overflow-y: auto;
+  }
+  
+  &__log_entry {
+    margin-bottom: spacing('xs');
+    display: flex;
+    
+    &--error {
+      color: color('error');
+    }
+    
+    &--warning {
+      color: color('warning');
+    }
+    
+    &--info {
+      color: color('info');
+    }
+  }
+  
+  &__log_timestamp {
+    color: color('neutral', 'medium');
+    margin-right: spacing('sm');
+    white-space: nowrap;
+  }
+  
+  &__log_message {
+    flex: 1;
+  }
+  
+  &__logs_footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: spacing('md');
+    
+    @include breakpoint-down('sm') {
+      flex-direction: column;
+      gap: spacing('sm');
+    }
+  }
+  
+  &__logs_pagination {
+    display: flex;
+    gap: spacing('sm');
+    align-items: center;
+    
+    @include breakpoint-down('sm') {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+  
+  &__logs_actions {
+    display: flex;
+    gap: spacing('sm');
+    
+    @include breakpoint-down('sm') {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+  
+  // Domains tab
+  &__domains_container {
+    margin-bottom: spacing('xl');
+  }
+  
+  &__domains_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing('lg');
+    
+    @include breakpoint-down('md') {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing('md');
+    }
+  }
+  
+  &__domains_title {
+    font-size: map-get($font-sizes, 'lg');
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('neutral', 'black');
+    margin: 0;
+  }
+  
+  &__domains_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: spacing('lg');
+  }
+  
+  &__table_header {
+    text-align: left;
+    padding: spacing('sm');
+    background-color: color('neutral', 'lighter');
+    font-size: map-get($font-sizes, 'xs');
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('neutral', 'dark');
+    text-transform: uppercase;
+  }
+  
+  &__table_row {
+    border-bottom: 1px solid color('neutral', 'lighter');
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    &:hover {
+      background-color: rgba(color('neutral', 'lighter'), 0.5);
+    }
+  }
+  
+  &__table_cell {
+    padding: spacing('sm');
+    font-size: map-get($font-sizes, 'sm');
+  }
+  
+  &__domain_name {
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('secondary', 'base');
+  }
+  
+  &__domain_environment {
+    font-size: map-get($font-sizes, 'xs');
+    padding: spacing('xxs') spacing('xs');
+    border-radius: border-radius('sm');
+    background-color: rgba(color('neutral', 'dark'), 0.1);
+    color: color('neutral', 'dark');
+    
+    &--production {
+      background-color: rgba(color('primary', 'base'), 0.1);
+      color: color('primary', 'base');
+    }
+    
+    &--staging {
+      background-color: rgba(color('warning'), 0.1);
+      color: color('warning');
+    }
+    
+    &--development {
+      background-color: rgba(color('info'), 0.1);
+      color: color('info');
+    }
+  }
+  
+  &__domain_ssl {
+    font-size: map-get($font-sizes, 'xs');
+    padding: spacing('xxs') spacing('xs');
+    border-radius: border-radius('sm');
+    
+    &--valid {
+      background-color: rgba(color('success'), 0.1);
+      color: color('success');
+    }
+    
+    &--expiring {
+      background-color: rgba(color('warning'), 0.1);
+      color: color('warning');
+    }
+    
+    &--expired {
+      background-color: rgba(color('error'), 0.1);
+      color: color('error');
+    }
+  }
+  
+  &__domain_actions {
+    display: flex;
+    gap: spacing('xs');
+  }
+  
+  &__domain_action {
+    padding: spacing('xxs') spacing('xs');
+    font-size: map-get($font-sizes, 'xs');
+    background-color: color('neutral', 'lighter');
+    border: none;
+    border-radius: border-radius('sm');
+    cursor: pointer;
+    
+    &:hover {
+      background-color: color('secondary', 'base');
+      color: color('neutral', 'white');
+    }
+  }
+  
+  &__domains_footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  // Performance tab
+  &__performance_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: spacing('lg');
+  }
+  
+  &__performance_card {
+    padding: spacing('lg');
+  }
+  
+  &__performance_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing('md');
+  }
+  
+  &__performance_title {
+    font-size: map-get($font-sizes, 'lg');
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('neutral', 'black');
+    margin: 0;
+  }
+  
+  &__timeframe_selector {
+    display: flex;
+    background-color: color('neutral', 'lighter');
+    border-radius: border-radius('md');
+    padding: spacing('xxs');
+  }
+  
+  &__timeframe_option {
+    padding: spacing('xxs') spacing('xs');
+    font-size: map-get($font-sizes, 'xs');
+    border: none;
+    background: none;
+    border-radius: border-radius('sm');
+    cursor: pointer;
+    
+    &--active {
+      background-color: color('neutral', 'white');
+      font-weight: map-get($font-weights, 'semibold');
+    }
+  }
+  
+  &__performance_chart {
+    height: 250px;
+    margin-bottom: spacing('md');
+  }
+  
+  &__stats_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: spacing('md');
+  }
+  
+  &__stat_item {
+    text-align: center;
+  }
+  
+  &__stat_value {
+    font-size: map-get($font-sizes, 'xl');
+    font-weight: map-get($font-weights, 'bold');
+    color: color('neutral', 'black');
+    margin: 0 0 spacing('xxs') 0;
+  }
+  
+  &__stat_label {
+    font-size: map-get($font-sizes, 'xs');
+    color: color('neutral', 'dark');
+    margin: 0;
+  }
+}

@@ -1,0 +1,189 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.menu {
+  width: 100%;
+  
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+  
+  &__title {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+  }
+  
+  &__closeBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: border-radius("full");
+    background: none;
+    border: none;
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: color("neutral", "lighter");
+      color: color("neutral", "darker");
+    }
+  }
+  
+  &__content {
+    max-height: 400px;
+    overflow-y: auto;
+    
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: color("neutral", "lighter");
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background-color: color("neutral", "medium");
+      border-radius: border-radius("full");
+    }
+  }
+  
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  &__item {
+    display: flex;
+    align-items: flex-start;
+    padding: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
+    position: relative;
+    cursor: pointer;
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: color("neutral", "lighter");
+    }
+    
+    &--read {
+      opacity: 0.7;
+    }
+  }
+  
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: border-radius("lg");
+    margin-right: spacing("sm");
+    flex-shrink: 0;
+    
+    &--primary {
+      background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+      color: color("primary", "base");
+    }
+    
+    &--success {
+      background-color: rgba(map-get($colors, "success"), 0.1);
+      color: color("success");
+    }
+    
+    &--warning {
+      background-color: rgba(map-get($colors, "warning"), 0.1);
+      color: color("warning");
+    }
+    
+    &--info {
+      background-color: rgba(map-get($colors, "info"), 0.1);
+      color: color("info");
+    }
+  }
+  
+  &__details {
+    flex: 1;
+  }
+  
+  &__itemTitle {
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+  
+  &__message {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xs");
+    line-height: 1.4;
+  }
+  
+  &__time {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    display: block;
+  }
+  
+  &__unread {
+    width: 8px;
+    height: 8px;
+    border-radius: border-radius("full");
+    background-color: color("primary", "base");
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+  }
+  
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("2xl") spacing("md");
+    text-align: center;
+  }
+  
+  &__emptyIcon {
+    font-size: 2.5rem;
+    color: color("neutral", "medium");
+    margin-bottom: spacing("md");
+  }
+  
+  &__emptyText {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+  }
+  
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    padding: spacing("sm") spacing("md");
+    border-top: 1px solid color("neutral", "lighter");
+  }
+  
+  &__footerBtn {
+    background: none;
+    border: none;
+    color: color("primary", "base");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    cursor: pointer;
+    transition: $transition-base;
+    
+    &:hover {
+      color: color("primary", "dark");
+      text-decoration: underline;
+    }
+  }
+}

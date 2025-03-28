@@ -1,0 +1,90 @@
+@import '@/styles/variables';
+@import '@/styles/mixins';
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-family-base;
+    font-weight: $font-weight-medium;
+    border-radius: $border-radius-md;
+    transition: all $transition-fast;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba($color-primary, 0.3);
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+// Variants
+.primary {
+    background-color: $color-primary;
+    color: $color-text-white;
+
+    &:hover:not(:disabled) {
+        background-color: $color-primary-dark;
+    }
+}
+
+.secondary {
+    background-color: $color-secondary;
+    color: $color-text-dark;
+
+    &:hover:not(:disabled) {
+        background-color: $color-secondary-dark;
+    }
+}
+
+.outline {
+    background-color: transparent;
+    color: $color-text-white;
+    border: 2px solid $color-text-white;
+
+    &:hover:not(:disabled) {
+        background-color: rgba($color-text-white, 0.1);
+    }
+}
+
+.text {
+    background-color: transparent;
+    color: $color-primary;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+
+    &:hover:not(:disabled) {
+        color: $color-primary-dark;
+        text-decoration: underline;
+    }
+}
+
+// Sizes
+.small {
+    font-size: $font-size-small;
+    padding: ($spacing-xs - 2px) $spacing-sm;
+    height: 36px;
+}
+
+.medium {
+    font-size: $font-size-base;
+    padding: $spacing-xs $spacing-md;
+    height: 44px;
+}
+
+.large {
+    font-size: $font-size-base;
+    padding: $spacing-sm $spacing-lg;
+    height: 52px;
+}
+
+.fullWidth {
+    width: 100%;
+}
