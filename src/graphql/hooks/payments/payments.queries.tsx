@@ -11,10 +11,15 @@ import {
   GetCustomerInvoicesQuery,
   GetCustomerInvoicesQueryVariables,
   useGetPaymentsQuery,
+  useGetPaymentsLazyQuery,
   useGetCustomerPaymentsQuery,
+  useGetCustomerPaymentsLazyQuery,
   useGetPaymentMethodsQuery,
+  useGetPaymentMethodsLazyQuery,
   useGetInvoiceByIdQuery,
+  useGetInvoiceByIdLazyQuery,
   useGetCustomerInvoicesQuery,
+  useGetCustomerInvoicesLazyQuery,
 } from "@/graphql/api";
 
 type GetInvoiceByIdOptions = Omit<
@@ -24,11 +29,32 @@ type GetInvoiceByIdOptions = Omit<
   variables: GetInvoiceByIdQueryVariables;
 };
 
+type GetPaymentMethodsOptions = Omit<
+  QueryHookOptions<GetPaymentMethodsQuery, GetPaymentMethodsQueryVariables>,
+  "variables"
+>;
+
 export const useGetPaymentsHook = (
   options?: QueryHookOptions<GetPaymentsQuery, GetPaymentsQueryVariables>
 ) => {
   const { data, loading, error } = useGetPaymentsQuery(options);
   return { data, loading, error };
+};
+
+export const useLazyGetPaymentsHook = (
+  options?: QueryHookOptions<GetPaymentsQuery, GetPaymentsQueryVariables>
+) => {
+  const [getPayments, { loading, data, error }] =
+    useGetPaymentsLazyQuery(options);
+
+  return {
+    getPayments: () => {
+      getPayments();
+    },
+    data,
+    loading,
+    error,
+  };
 };
 
 export const useGetCustomerPaymentsHook = (
@@ -41,19 +67,63 @@ export const useGetCustomerPaymentsHook = (
   return { data, loading, error };
 };
 
-export const useGetPaymentMethodsHook = (
+export const useLazyGetCustomerPaymentsHook = (
   options?: QueryHookOptions<
-    GetPaymentMethodsQuery,
-    GetPaymentMethodsQueryVariables
+    GetCustomerPaymentsQuery,
+    GetCustomerPaymentsQueryVariables
   >
 ) => {
+  const [getCustomerPayments, { loading, data, error }] =
+    useGetCustomerPaymentsLazyQuery(options);
+
+  return {
+    getCustomerPayments: () => {
+      getCustomerPayments();
+    },
+    data,
+    loading,
+    error,
+  };
+};
+
+export const useGetPaymentMethodsHook = (options: GetPaymentMethodsOptions) => {
   const { data, loading, error } = useGetPaymentMethodsQuery(options);
   return { data, loading, error };
+};
+
+export const useLazyGetPaymentMethodsHook = (
+  options: GetPaymentMethodsOptions
+) => {
+  const [getPaymentMethods, { loading, data, error }] =
+    useGetPaymentMethodsLazyQuery(options);
+
+  return {
+    getPaymentMethods: () => {
+      getPaymentMethods();
+    },
+    data,
+    loading,
+    error,
+  };
 };
 
 export const useGetInvoiceByIdHook = (options: GetInvoiceByIdOptions) => {
   const { data, loading, error } = useGetInvoiceByIdQuery(options);
   return { data, loading, error };
+};
+
+export const useLazyGetInvoiceByIdHook = (options: GetInvoiceByIdOptions) => {
+  const [getInvoiceById, { loading, data, error }] =
+    useGetInvoiceByIdLazyQuery(options);
+
+  return {
+    getInvoiceById: () => {
+      getInvoiceById();
+    },
+    data,
+    loading,
+    error,
+  };
 };
 
 export const useGetCustomerInvoicesHook = (
@@ -64,4 +134,23 @@ export const useGetCustomerInvoicesHook = (
 ) => {
   const { data, loading, error } = useGetCustomerInvoicesQuery(options);
   return { data, loading, error };
+};
+
+export const useLazyGetCustomerInvoicesHook = (
+  options?: QueryHookOptions<
+    GetCustomerInvoicesQuery,
+    GetCustomerInvoicesQueryVariables
+  >
+) => {
+  const [getCustomerInvoices, { loading, data, error }] =
+    useGetCustomerInvoicesLazyQuery(options);
+
+  return {
+    getCustomerInvoices: () => {
+      getCustomerInvoices();
+    },
+    data,
+    loading,
+    error,
+  };
 };
