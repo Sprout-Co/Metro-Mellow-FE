@@ -1,0 +1,116 @@
+mutation CreatePayment($input: CreatePaymentInput!) {
+  createPayment(input: $input) {
+    id
+    booking {
+      id
+      service {
+        id
+        name
+      }
+    }
+    customer {
+      id
+      firstName
+      lastName
+      email
+    }
+    amount
+    currency
+    status
+    paymentMethod {
+      id
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+    }
+    paymentIntentId
+    refundAmount
+    refundReason
+    metadata
+    createdAt
+    updatedAt
+  }
+}
+
+mutation RefundPayment($input: RefundPaymentInput!) {
+  refundPayment(input: $input) {
+    id
+    amount
+    currency
+    status
+    refundAmount
+    refundReason
+    updatedAt
+  }
+}
+
+mutation AddPaymentMethod($input: AddPaymentMethodInput!) {
+  addPaymentMethod(input: $input) {
+    id
+    type
+    last4
+    expiryMonth
+    expiryYear
+    brand
+    isDefault
+    createdAt
+    updatedAt
+  }
+}
+
+mutation RemovePaymentMethod($id: ID!) {
+  removePaymentMethod(id: $id)
+}
+
+mutation SetDefaultPaymentMethod($id: ID!) {
+  setDefaultPaymentMethod(id: $id) {
+    id
+    type
+    last4
+    expiryMonth
+    expiryYear
+    brand
+    isDefault
+    updatedAt
+  }
+}
+
+mutation GenerateInvoice($paymentId: ID!) {
+  generateInvoice(paymentId: $paymentId) {
+    id
+    invoiceNumber
+    subtotal
+    tax
+    total
+    dueDate
+    status
+    items {
+      description
+      quantity
+      unitPrice
+      amount
+    }
+    createdAt
+    updatedAt
+  }
+}
+
+mutation MarkInvoiceAsPaid($id: ID!) {
+  markInvoiceAsPaid(id: $id) {
+    id
+    status
+    paidAt
+    updatedAt
+  }
+}
+
+mutation CancelInvoice($id: ID!) {
+  cancelInvoice(id: $id) {
+    id
+    status
+    updatedAt
+  }
+}

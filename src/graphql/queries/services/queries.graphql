@@ -1,0 +1,41 @@
+query GetServices($category: ServiceCategory, $status: ServiceStatus) {
+  services(category: $category, status: $status) {
+    id
+    name
+    description
+    category
+    price
+    duration
+    status
+    imageUrl
+    features
+    requirements
+    pricing {
+      basePrice
+      duration
+    }
+    createdAt
+    updatedAt
+  }
+}
+
+query GetServiceById($id: ID!) {
+  service(id: $id) {
+    id
+    name
+    description
+    category
+    price
+    duration
+    status
+    imageUrl
+    features
+    requirements
+    pricing {
+      basePrice
+      duration
+    }
+    createdAt
+    updatedAt
+  }
+}

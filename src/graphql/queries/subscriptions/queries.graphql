@@ -1,0 +1,77 @@
+query GetSubscriptionById($id: ID!) {
+  subscription(id: $id) {
+    id
+    customer {
+      id
+      firstName
+      lastName
+      email
+    }
+    service {
+      id
+      name
+      description
+    }
+    plan
+    startDate
+    endDate
+    status
+    frequency
+    price
+    nextBillingDate
+    lastBillingDate
+    autoRenew
+    createdAt
+    updatedAt
+  }
+}
+
+query GetSubscriptions($status: SubscriptionStatus) {
+  subscriptions(status: $status) {
+    id
+    customer {
+      id
+      firstName
+      lastName
+      email
+    }
+    service {
+      id
+      name
+      description
+    }
+    plan
+    startDate
+    endDate
+    status
+    frequency
+    price
+    nextBillingDate
+    lastBillingDate
+    autoRenew
+    createdAt
+    updatedAt
+  }
+}
+
+query GetCustomerSubscriptions {
+  customerSubscriptions {
+    id
+    service {
+      id
+      name
+      description
+    }
+    plan
+    startDate
+    endDate
+    status
+    frequency
+    price
+    nextBillingDate
+    lastBillingDate
+    autoRenew
+    createdAt
+    updatedAt
+  }
+}

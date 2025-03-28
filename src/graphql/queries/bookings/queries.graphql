@@ -1,0 +1,140 @@
+query GetBookings($status: BookingStatus) {
+  bookings(status: $status) {
+    id
+    customer {
+      id
+      firstName
+      lastName
+      email
+    }
+    service {
+      id
+      name
+      description
+    }
+    staff {
+      id
+      firstName
+      lastName
+    }
+    date
+    startTime
+    endTime
+    status
+    notes
+    address {
+      street
+      city
+      state
+      zipCode
+      country
+    }
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+  }
+}
+
+query GetBookingById($id: ID!) {
+  booking(id: $id) {
+    id
+    customer {
+      id
+      firstName
+      lastName
+      email
+    }
+    service {
+      id
+      name
+      description
+    }
+    staff {
+      id
+      firstName
+      lastName
+    }
+    date
+    startTime
+    endTime
+    status
+    notes
+    address {
+      street
+      city
+      state
+      zipCode
+      country
+    }
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+  }
+}
+
+query GetCustomerBookings {
+  customerBookings {
+    id
+    service {
+      id
+      name
+      description
+    }
+    staff {
+      id
+      firstName
+      lastName
+    }
+    date
+    startTime
+    endTime
+    status
+    notes
+    address {
+      street
+      city
+      state
+      zipCode
+      country
+    }
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+  }
+}
+
+query GetStaffBookings {
+  staffBookings {
+    id
+    customer {
+      id
+      firstName
+      lastName
+      email
+    }
+    service {
+      id
+      name
+      description
+    }
+    date
+    startTime
+    endTime
+    status
+    notes
+    address {
+      street
+      city
+      state
+      zipCode
+      country
+    }
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+  }
+}
