@@ -1,63 +1,48 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import AuthLayout from './AuthLayout';
-import LoginForm from './LoginForm';
-import RegisterForm from './RegisterForm';
-import VerificationForm from './VerificationForm';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import AuthLayout from "./AuthLayout";
+import LoginForm from "./LoginForm";
+import RegisterForm from "./RegisterForm";
 
-type AuthMode = 'login' | 'register' | 'verify';
+type AuthMode = "login" | "register";
 
 export default function AuthManagement() {
-  const [authMode, setAuthMode] = useState<AuthMode>('login');
-  const [registeredEmail, setRegisteredEmail] = useState('');
+  const [authMode, setAuthMode] = useState<AuthMode>("login");
   const router = useRouter();
-  
+
   const handleLoginSuccess = () => {
     // Redirect to dashboard or return URL
-    router.push('/dashboard');
+    router.push("/dashboard");
   };
-  
-  const handleRegisterSuccess = (email: string) => {
-    setRegisteredEmail(email);
-    setAuthMode('verify');
-  };
-  
-  const handleVerificationSuccess = () => {
+
+  const handleRegisterSuccess = () => {
     // Redirect to dashboard with welcome message
-    router.push('/dashboard?welcome=true');
+    router.push("/dashboard?welcome=true");
   };
-  
+
   const handleSwitchToLogin = () => {
-    setAuthMode('login');
+    setAuthMode("login");
   };
-  
+
   const handleSwitchToRegister = () => {
-    setAuthMode('register');
+    setAuthMode("register");
   };
 
   return (
     <AuthLayout>
-      {authMode === 'login' && (
-        <LoginForm 
-          onSuccess={handleLoginSuccess} 
+      {authMode === "login" && (
+        <LoginForm
+          onSuccess={handleLoginSuccess}
           onRegisterClick={handleSwitchToRegister}
         />
       )}
-      
-      {authMode === 'register' && (
-        <RegisterForm 
-          onSuccess={handleRegisterSuccess} 
+
+      {authMode === "register" && (
+        <RegisterForm
+          onSuccess={handleRegisterSuccess}
           onLoginClick={handleSwitchToLogin}
-        />
-      )}
-      
-      {authMode === 'verify' && (
-        <VerificationForm
-          email={registeredEmail}
-          onSuccess={handleVerificationSuccess}
-          onBack={handleSwitchToLogin}
         />
       )}
     </AuthLayout>
