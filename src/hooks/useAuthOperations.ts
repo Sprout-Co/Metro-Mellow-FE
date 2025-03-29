@@ -1,6 +1,21 @@
+/**
+ * Custom hook for handling all authentication and user-related operations.
+ * Provides a comprehensive set of functions for user management including login,
+ * registration, profile updates, password management, and role management.
+ *
+ * @returns Object containing all auth operation handlers
+ */
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { useLoginMutation, useRegisterMutation } from "@/graphql/api";
+import {
+  useLoginMutation,
+  useRegisterMutation,
+  useUpdateProfileMutation,
+  useChangePasswordMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+  useUpdateUserRoleMutation,
+} from "@/graphql/api";
 import { useAuthStore } from "@/store/slices/auth";
 import { UserRole } from "@/graphql/api";
 import { Routes } from "@/constants/routes";
@@ -9,8 +24,19 @@ export const useAuthOperations = () => {
   const router = useRouter();
   const [loginMutation] = useLoginMutation();
   const [registerMutation] = useRegisterMutation();
-  const { login, logout } = useAuthStore();
+  const [updateProfileMutation] = useUpdateProfileMutation();
+  const [changePasswordMutation] = useChangePasswordMutation();
+  const [forgotPasswordMutation] = useForgotPasswordMutation();
+  const [resetPasswordMutation] = useResetPasswordMutation();
+  const [updateUserRoleMutation] = useUpdateUserRoleMutation();
+  const { login, logout, token: currentToken } = useAuthStore();
 
+  /**
+   * Handles user login with email and password
+   * @param email - User's email address
+   * @param password - User's password
+   * @throws Error if login fails or user is unauthorized
+   */
   const handleLogin = useCallback(
     async (email: string, password: string) => {
       try {
@@ -69,12 +95,25 @@ export const useAuthOperations = () => {
     [loginMutation, login]
   );
 
+  /**
+   * Handles user registration with required and optional fields
+   * @param input - Registration input object containing user details
+   * @throws Error if registration fails
+   */
   const handleRegister = useCallback(
     async (input: {
       email: string;
       password: string;
       firstName: string;
       lastName: string;
+      phone?: string;
+      address?: {
+        street: string;
+        city: string;
+        state: string;
+        zipCode: string;
+        country: string;
+      };
     }) => {
       try {
         const { data, errors } = await registerMutation({
@@ -116,6 +155,173 @@ export const useAuthOperations = () => {
     [registerMutation, login]
   );
 
+  /**
+   * Updates user profile information
+   * @param input - Profile update input object
+   * @returns Updated user profile
+   * @throws Error if update fails
+   */
+  const handleUpdateProfile = useCallback(
+    async (input: {
+      firstName?: string;
+      lastName?: string;
+      phone?: string;
+      address?: {
+        street: string;
+        city: string;
+        state: string;
+        zipCode: string;
+        country: string;
+      };
+    }) => {
+      try {
+        const { data, errors } = await updateProfileMutation({
+          variables: { input },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        if (data?.updateProfile) {
+          // Update the user in the auth store while preserving the current token
+          login(data.updateProfile as any, currentToken || "");
+          return data.updateProfile;
+        }
+      } catch (error) {
+        console.error("Profile update error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [updateProfileMutation, login, currentToken]
+  );
+
+  /**
+   * Changes user's password
+   * @param currentPassword - Current password
+   * @param newPassword - New password
+   * @returns Boolean indicating success
+   * @throws Error if password change fails
+   */
+  const handleChangePassword = useCallback(
+    async (currentPassword: string, newPassword: string) => {
+      try {
+        const { data, errors } = await changePasswordMutation({
+          variables: { currentPassword, newPassword },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.changePassword;
+      } catch (error) {
+        console.error("Password change error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [changePasswordMutation]
+  );
+
+  /**
+   * Initiates password reset process
+   * @param email - User's email address
+   * @returns Boolean indicating success
+   * @throws Error if process fails
+   */
+  const handleForgotPassword = useCallback(
+    async (email: string) => {
+      try {
+        const { data, errors } = await forgotPasswordMutation({
+          variables: { email },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.forgotPassword;
+      } catch (error) {
+        console.error("Forgot password error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [forgotPasswordMutation]
+  );
+
+  /**
+   * Resets password using reset token
+   * @param token - Reset token received via email
+   * @param newPassword - New password
+   * @returns Boolean indicating success
+   * @throws Error if reset fails
+   */
+  const handleResetPassword = useCallback(
+    async (token: string, newPassword: string) => {
+      try {
+        const { data, errors } = await resetPasswordMutation({
+          variables: { token, newPassword },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.resetPassword;
+      } catch (error) {
+        console.error("Reset password error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [resetPasswordMutation]
+  );
+
+  /**
+   * Updates user role (admin only)
+   * @param userId - ID of user to update
+   * @param role - New role to assign
+   * @returns Updated user
+   * @throws Error if update fails
+   */
+  const handleUpdateUserRole = useCallback(
+    async (userId: string, role: UserRole) => {
+      try {
+        const { data, errors } = await updateUserRoleMutation({
+          variables: { userId, role },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.updateUserRole;
+      } catch (error) {
+        console.error("Update user role error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [updateUserRoleMutation]
+  );
+
+  /**
+   * Handles user logout
+   * @throws Error if logout fails
+   */
   const handleLogout = useCallback(async () => {
     try {
       logout();
@@ -134,5 +340,10 @@ export const useAuthOperations = () => {
     handleLogin,
     handleRegister,
     handleLogout,
+    handleUpdateProfile,
+    handleChangePassword,
+    handleForgotPassword,
+    handleResetPassword,
+    handleUpdateUserRole,
   };
 };
