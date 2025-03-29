@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useLoginMutation, useRegisterMutation } from "@/graphql/api";
-import { useAuthStore } from "@/store/auth";
+import { useAuthStore } from "@/store/slices/auth";
 import { UserRole } from "@/graphql/api";
 import { Routes } from "@/constants/routes";
 
@@ -14,20 +14,59 @@ export const useAuthOperations = () => {
   const handleLogin = useCallback(
     async (email: string, password: string) => {
       try {
-        const { data } = await loginMutation({
+        console.log("Attempting login with:", { email });
+        const { data, errors } = await loginMutation({
           variables: { email, password },
         });
 
-        if (data?.login) {
-          login(data.login.user as any, data.login.token);
-          router.push(Routes.DASHBOARD);
+        console.log("Login response:", { data, errors });
+
+        if (errors) {
+          console.error("Login errors:", errors);
+          throw new Error(errors[0].message);
+        }
+
+        if (!data?.login) {
+          console.error("No login data received");
+          throw new Error("Login failed: No response from server");
+        }
+
+        const { user, token } = data.login;
+
+        if (!user || !token) {
+          console.error("Invalid login response:", { user, token });
+          throw new Error("Login failed: Invalid response from server");
+        }
+
+        console.log("Login successful:", { user, token });
+
+        // Validate user role
+        if (
+          user.role !== UserRole.Customer &&
+          user.role !== UserRole.Admin &&
+          user.role !== UserRole.SuperAdmin
+        ) {
+          throw new Error("Unauthorized access");
+        }
+
+        // Store auth data
+        console.log("Storing auth data...");
+        login(user as any, token);
+
+        // Use a direct browser redirect for client-side navigation
+        console.log("Redirecting to dashboard...");
+        if (typeof window !== "undefined") {
+          window.location.href = Routes.DASHBOARD;
         }
       } catch (error) {
         console.error("Login error:", error);
-        throw error;
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
       }
     },
-    [loginMutation, login, router]
+    [loginMutation, login]
   );
 
   const handleRegister = useCallback(
@@ -38,7 +77,7 @@ export const useAuthOperations = () => {
       lastName: string;
     }) => {
       try {
-        const { data } = await registerMutation({
+        const { data, errors } = await registerMutation({
           variables: {
             input: {
               ...input,
@@ -47,27 +86,49 @@ export const useAuthOperations = () => {
           },
         });
 
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
         if (data?.register) {
-          login(data.register.user as any, data.register.token);
-          router.push(Routes.DASHBOARD);
+          const { user, token } = data.register;
+
+          // Validate user role
+          if (user.role !== UserRole.Customer) {
+            throw new Error("Registration failed: Invalid role");
+          }
+
+          login(user as any, token);
+
+          // Use a direct browser redirect
+          if (typeof window !== "undefined") {
+            window.location.href = Routes.DASHBOARD;
+          }
         }
       } catch (error) {
         console.error("Registration error:", error);
-        throw error;
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
       }
     },
-    [registerMutation, login, router]
+    [registerMutation, login]
   );
 
   const handleLogout = useCallback(async () => {
     try {
       logout();
-      router.push(Routes.GET_STARTED);
+
+      // Use a direct browser redirect
+      if (typeof window !== "undefined") {
+        window.location.href = Routes.GET_STARTED;
+      }
     } catch (error) {
       console.error("Logout error:", error);
-      throw error;
+      throw new Error("Failed to logout");
     }
-  }, [logout, router]);
+  }, [logout]);
 
   return {
     handleLogin,

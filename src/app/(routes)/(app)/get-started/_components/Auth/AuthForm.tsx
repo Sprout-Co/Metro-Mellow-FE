@@ -11,6 +11,7 @@ import { useAuthOperations } from "@/hooks/useAuthOperations";
 type AuthMode = "login" | "register" | "verify";
 
 export default function AuthForm() {
+  console.log("AuthForm component rendering");
   const { handleLogin, handleRegister, handleLogout } = useAuthOperations();
   const [authMode, setAuthMode] = useState<AuthMode>("login");
   const [loginData, setLoginData] = useState({
@@ -98,10 +99,21 @@ export default function AuthForm() {
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("handleLoginSubmit called");
+    console.log("Current form state:", loginData);
+
+    if (!loginData.email || !loginData.password) {
+      console.log("Form validation failed: missing required fields");
+      setError("Please fill in all required fields");
+      return;
+    }
+
     setError(null);
     try {
+      console.log("Attempting login with:", { email: loginData.email });
       await handleLogin(loginData.email, loginData.password);
     } catch (err) {
+      console.error("Login error in form:", err);
       setError("Invalid email or password");
     }
   };
