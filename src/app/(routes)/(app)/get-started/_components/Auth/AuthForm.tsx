@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./AuthForm.module.scss";
-import { useAuthOperations } from "@/hooks/useAuthOperations";
+import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 
 type AuthMode = "login" | "register" | "verify";
 

@@ -7,7 +7,7 @@ import Link from "next/link";
 import FormInput from "./FormInput";
 import SocialAuth from "./SocialAuth";
 import styles from "./AuthLayout.module.scss";
-import { useAuthOperations } from "@/hooks/useAuthOperations";
+import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 
 interface RegisterFormState {
   name: string;
