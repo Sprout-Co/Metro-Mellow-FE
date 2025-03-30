@@ -43,8 +43,6 @@ export const useAuthOperations = () => {
     setUser,
   } = useAuthStore();
   const t = useAuthStore((state) => state);
-  console.log(t);
-  console.log(currentToken);
 
   /**
    * Handles user login with email and password

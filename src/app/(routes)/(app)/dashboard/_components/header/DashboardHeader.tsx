@@ -27,7 +27,6 @@ export default function DashboardHeader() {
 
     fetchUserData();
   }, [handleGetCurrentUser]);
-  console.log(currentUser)
 
   // Get user initials for avatar
   const getUserInitials = () => {

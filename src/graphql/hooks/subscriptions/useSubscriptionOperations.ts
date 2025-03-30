@@ -10,8 +10,10 @@ import {
   useUpdateSubscriptionMutation,
   useCancelSubscriptionMutation,
   useReactivateSubscriptionMutation,
+  useUpdateSubscriptionStatusMutation,
   useGetSubscriptionByIdQuery,
   useGetSubscriptionsQuery,
+  useGetCustomerSubscriptionsQuery,
 } from "@/graphql/api";
 import {
   SubscriptionStatus,
@@ -24,6 +26,16 @@ export const useSubscriptionOperations = () => {
   const [updateSubscriptionMutation] = useUpdateSubscriptionMutation();
   const [cancelSubscriptionMutation] = useCancelSubscriptionMutation();
   const [reactivateSubscriptionMutation] = useReactivateSubscriptionMutation();
+  const [updateSubscriptionStatusMutation] =
+    useUpdateSubscriptionStatusMutation();
+  const { refetch: getSubscriptionById } = useGetSubscriptionByIdQuery({
+    skip: true,
+  });
+  const { refetch: getSubscriptions } = useGetSubscriptionsQuery({
+    skip: true,
+  });
+  const { refetch: getCustomerSubscriptions } =
+    useGetCustomerSubscriptionsQuery({ skip: true });
 
   /**
    * Creates a new subscription
@@ -157,6 +169,36 @@ export const useSubscriptionOperations = () => {
   );
 
   /**
+   * Updates subscription status
+   * @param id - Subscription ID
+   * @param status - New status
+   * @returns Updated subscription
+   * @throws Error if update fails
+   */
+  const handleUpdateSubscriptionStatus = useCallback(
+    async (id: string, status: SubscriptionStatus) => {
+      try {
+        const { data, errors } = await updateSubscriptionStatusMutation({
+          variables: { id, status },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.updateSubscriptionStatus;
+      } catch (error) {
+        console.error("Subscription status update error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [updateSubscriptionStatusMutation]
+  );
+
+  /**
    * Updates subscription plan
    * @param id - Subscription ID
    * @param plan - New plan
@@ -190,96 +232,42 @@ export const useSubscriptionOperations = () => {
   );
 
   /**
-   * Updates subscription billing information
-   * @param paymentMethodId - New payment method ID
-   * @param billingAddress - Optional billing address
-   * @returns Boolean indicating success
-   * @throws Error if update fails
+   * Fetches a single subscription by ID
+   * @param id - Subscription ID
+   * @returns Subscription data
+   * @throws Error if fetch fails
    */
-  const handleUpdateBillingInfo = useCallback(
-    async (
-      paymentMethodId: string,
-      billingAddress?: {
-        street: string;
-        city: string;
-        state: string;
-        country: string;
-        postalCode: string;
-      }
-    ) => {
+  const handleGetSubscription = useCallback(
+    async (id: string) => {
       try {
-        // There's no direct billing info update in the API,
-        // we would need to implement this on the backend first
-        console.warn("Billing info updates require backend implementation");
-        return false;
+        const { data, errors } = await getSubscriptionById({ id });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.subscription;
       } catch (error) {
-        console.error("Billing info update error:", error);
+        console.error("Subscription fetch error:", error);
         if (error instanceof Error) {
           throw new Error(error.message);
         }
         throw new Error("An unexpected error occurred");
       }
     },
-    []
+    [getSubscriptionById]
   );
 
   /**
-   * Fetches a single subscription by ID
-   * @param id - Subscription ID
-   * @returns Subscription data
-   * @throws Error if fetch fails
-   */
-  const handleGetSubscription = useCallback(async (id: string) => {
-    try {
-      const { data, errors } = await useGetSubscriptionByIdQuery({
-        variables: { id },
-      });
-
-      if (errors) {
-        throw new Error(errors[0].message);
-      }
-
-      return data?.subscription;
-    } catch (error) {
-      console.error("Subscription fetch error:", error);
-      if (error instanceof Error) {
-        throw new Error(error.message);
-      }
-      throw new Error("An unexpected error occurred");
-    }
-  }, []);
-
-  /**
-   * Fetches available subscription plans
-   * @returns Array of subscription plans
-   * @throws Error if fetch fails
-   */
-  const handleGetSubscriptionPlans = useCallback(async () => {
-    try {
-      // This would need a dedicated backend endpoint
-      // For now, returning the enum values
-      return Object.values(SubscriptionPlan);
-    } catch (error) {
-      console.error("Subscription plans fetch error:", error);
-      if (error instanceof Error) {
-        throw new Error(error.message);
-      }
-      throw new Error("An unexpected error occurred");
-    }
-  }, []);
-
-  /**
-   * Fetches subscription history
+   * Fetches all subscriptions with optional status filter
    * @param status - Optional subscription status filter
-   * @returns Array of subscription history entries
+   * @returns Array of subscriptions
    * @throws Error if fetch fails
    */
-  const handleGetSubscriptionHistory = useCallback(
+  const handleGetSubscriptions = useCallback(
     async (status?: SubscriptionStatus) => {
       try {
-        const { data, errors } = await useGetSubscriptionsQuery({
-          variables: { status },
-        });
+        const { data, errors } = await getSubscriptions({ status });
 
         if (errors) {
           throw new Error(errors[0].message);
@@ -287,45 +275,48 @@ export const useSubscriptionOperations = () => {
 
         return data?.subscriptions;
       } catch (error) {
-        console.error("Subscription history fetch error:", error);
+        console.error("Subscriptions fetch error:", error);
         if (error instanceof Error) {
           throw new Error(error.message);
         }
         throw new Error("An unexpected error occurred");
       }
     },
-    []
+    [getSubscriptions]
   );
 
   /**
-   * Fetches billing history
-   * @returns Array of billing history entries
+   * Fetches subscriptions for the current customer
+   * @returns Array of customer's subscriptions
    * @throws Error if fetch fails
    */
-  const handleGetBillingHistory = useCallback(async () => {
+  const handleGetCustomerSubscriptions = useCallback(async () => {
     try {
-      // Would need to be implemented on the backend
-      // For now, just return empty array
-      return [];
+      const { data, errors } = await getCustomerSubscriptions();
+
+      if (errors) {
+        throw new Error(errors[0].message);
+      }
+
+      return data?.customerSubscriptions;
     } catch (error) {
-      console.error("Billing history fetch error:", error);
+      console.error("Customer subscriptions fetch error:", error);
       if (error instanceof Error) {
         throw new Error(error.message);
       }
       throw new Error("An unexpected error occurred");
     }
-  }, []);
+  }, [getCustomerSubscriptions]);
 
   return {
     handleCreateSubscription,
     handleUpdateSubscription,
     handleCancelSubscription,
     handleReactivateSubscription,
+    handleUpdateSubscriptionStatus,
     handleUpdateSubscriptionPlan,
-    handleUpdateBillingInfo,
     handleGetSubscription,
-    handleGetSubscriptionPlans,
-    handleGetSubscriptionHistory,
-    handleGetBillingHistory,
+    handleGetSubscriptions,
+    handleGetCustomerSubscriptions,
   };
 };
