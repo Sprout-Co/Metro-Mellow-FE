@@ -5,7 +5,7 @@
  *
  * @returns Object containing all booking operation handlers
  */
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import {
   useCreateBookingMutation,
   useUpdateBookingMutation,
@@ -17,6 +17,10 @@ import {
   useGetBookingsQuery,
   useGetCustomerBookingsQuery,
   useGetStaffBookingsQuery,
+  useGetBookingByIdLazyQuery,
+  useGetBookingsLazyQuery,
+  useGetCustomerBookingsLazyQuery,
+  useGetStaffBookingsLazyQuery,
 } from "@/graphql/api";
 import { BookingStatus } from "@/graphql/api";
 
@@ -27,6 +31,18 @@ export const useBookingOperations = () => {
   const [completeBookingMutation] = useCompleteBookingMutation();
   const [assignStaffMutation] = useAssignStaffMutation();
   const [updateBookingStatusMutation] = useUpdateBookingStatusMutation();
+
+  // Use lazy query hooks
+  const [getBookingById] = useGetBookingByIdLazyQuery();
+  const [getBookings] = useGetBookingsLazyQuery();
+  const [getCustomerBookings] = useGetCustomerBookingsLazyQuery();
+  const [getStaffBookings] = useGetStaffBookingsLazyQuery();
+
+  // State for storing query results
+  const [bookingData, setBookingData] = useState<any>(null);
+  const [bookingsData, setBookingsData] = useState<any>(null);
+  const [customerBookingsData, setCustomerBookingsData] = useState<any>(null);
+  const [staffBookingsData, setStaffBookingsData] = useState<any>(null);
 
   /**
    * Creates a new booking
@@ -237,25 +253,27 @@ export const useBookingOperations = () => {
    * @returns Booking data
    * @throws Error if fetch fails
    */
-  const handleGetBooking = useCallback(async (id: string) => {
-    try {
-      const { data, errors } = await useGetBookingByIdQuery({
-        variables: { id },
-      });
+  const handleGetBooking = useCallback(
+    async (id: string) => {
+      try {
+        const { data, errors } = await getBookingById({ variables: { id } });
 
-      if (errors) {
-        throw new Error(errors[0].message);
-      }
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
 
-      return data?.booking;
-    } catch (error) {
-      console.error("Booking fetch error:", error);
-      if (error instanceof Error) {
-        throw new Error(error.message);
+        setBookingData(data?.booking);
+        return data?.booking;
+      } catch (error) {
+        console.error("Booking fetch error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
       }
-      throw new Error("An unexpected error occurred");
-    }
-  }, []);
+    },
+    [getBookingById]
+  );
 
   /**
    * Fetches bookings with optional status filter
@@ -263,25 +281,27 @@ export const useBookingOperations = () => {
    * @returns Array of bookings
    * @throws Error if fetch fails
    */
-  const handleGetBookings = useCallback(async (status?: BookingStatus) => {
-    try {
-      const { data, errors } = await useGetBookingsQuery({
-        variables: { status },
-      });
+  const handleGetBookings = useCallback(
+    async (status?: BookingStatus) => {
+      try {
+        const { data, errors } = await getBookings({ variables: { status } });
 
-      if (errors) {
-        throw new Error(errors[0].message);
-      }
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
 
-      return data?.bookings;
-    } catch (error) {
-      console.error("Bookings fetch error:", error);
-      if (error instanceof Error) {
-        throw new Error(error.message);
+        setBookingsData(data?.bookings);
+        return data?.bookings;
+      } catch (error) {
+        console.error("Bookings fetch error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
       }
-      throw new Error("An unexpected error occurred");
-    }
-  }, []);
+    },
+    [getBookings]
+  );
 
   /**
    * Fetches bookings for the current customer
@@ -290,12 +310,13 @@ export const useBookingOperations = () => {
    */
   const handleGetCustomerBookings = useCallback(async () => {
     try {
-      const { data, errors } = await useGetCustomerBookingsQuery();
+      const { data, errors } = await getCustomerBookings();
 
       if (errors) {
         throw new Error(errors[0].message);
       }
 
+      setCustomerBookingsData(data?.customerBookings);
       return data?.customerBookings;
     } catch (error) {
       console.error("Customer bookings fetch error:", error);
@@ -304,7 +325,7 @@ export const useBookingOperations = () => {
       }
       throw new Error("An unexpected error occurred");
     }
-  }, []);
+  }, [getCustomerBookings]);
 
   /**
    * Fetches bookings for the current staff member
@@ -313,12 +334,13 @@ export const useBookingOperations = () => {
    */
   const handleGetStaffBookings = useCallback(async () => {
     try {
-      const { data, errors } = await useGetStaffBookingsQuery();
+      const { data, errors } = await getStaffBookings();
 
       if (errors) {
         throw new Error(errors[0].message);
       }
 
+      setStaffBookingsData(data?.staffBookings);
       return data?.staffBookings;
     } catch (error) {
       console.error("Staff bookings fetch error:", error);
@@ -327,7 +349,7 @@ export const useBookingOperations = () => {
       }
       throw new Error("An unexpected error occurred");
     }
-  }, []);
+  }, [getStaffBookings]);
 
   return {
     handleCreateBooking,
@@ -340,5 +362,10 @@ export const useBookingOperations = () => {
     handleGetBookings,
     handleGetCustomerBookings,
     handleGetStaffBookings,
+    // Return the current data
+    currentBookings: bookingsData,
+    currentCustomerBookings: customerBookingsData,
+    currentStaffBookings: staffBookingsData,
+    currentBooking: bookingData,
   };
 };
