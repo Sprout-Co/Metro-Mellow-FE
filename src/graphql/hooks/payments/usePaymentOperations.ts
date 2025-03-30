@@ -14,6 +14,7 @@ import {
   useGetPaymentByIdQuery,
   useGetPaymentsQuery,
   useGetPaymentMethodsQuery,
+  useGetCustomerPaymentsQuery,
 } from "@/graphql/api";
 import { PaymentStatus, PaymentMethodType } from "@/graphql/api";
 
@@ -61,58 +62,16 @@ export const usePaymentOperations = () => {
   );
 
   /**
-   * Process payment (handled internally by the backend)
-   * This is a placeholder as this functionality would be triggered during payment creation
-   *
-   * @param bookingId - Booking ID associated with the payment
-   * @returns Boolean indicating success
-   */
-  const handleProcessPayment = useCallback(
-    async (bookingId: string) => {
-      try {
-        // Create payment also processes it
-        const { data } = await createPaymentMutation({
-          variables: {
-            input: {
-              bookingId,
-              amount: 0, // Would need to be calculated based on booking
-              currency: "USD",
-              paymentMethodId: "", // Would need to be obtained from user context
-            },
-          },
-        });
-
-        return Boolean(data?.createPayment);
-      } catch (error) {
-        console.error("Payment processing error:", error);
-        if (error instanceof Error) {
-          throw new Error(error.message);
-        }
-        throw new Error("An unexpected error occurred");
-      }
-    },
-    [createPaymentMutation]
-  );
-
-  /**
    * Refunds a payment
-   * @param paymentId - Payment ID to refund
-   * @param amount - Amount to refund (required)
-   * @param reason - Reason for the refund (required)
-   * @returns Refunded payment
+   * @param input - Refund input object
+   * @returns Updated payment
    * @throws Error if refund fails
    */
   const handleRefundPayment = useCallback(
-    async (paymentId: string, amount: number, reason: string) => {
+    async (input: { paymentId: string; amount: number; reason: string }) => {
       try {
         const { data, errors } = await refundPaymentMutation({
-          variables: {
-            input: {
-              paymentId,
-              amount,
-              reason,
-            },
-          },
+          variables: { input },
         });
 
         if (errors) {
@@ -132,55 +91,15 @@ export const usePaymentOperations = () => {
   );
 
   /**
-   * Updates payment status (handled by backend actions)
-   * This is a placeholder as status updates happen via other operations
-   *
-   * @param paymentId - Payment ID
-   * @param status - New status
-   * @returns Boolean indicating whether action was taken
-   */
-  const handleUpdatePaymentStatus = useCallback(
-    async (paymentId: string, status: PaymentStatus) => {
-      try {
-        // Status updates are typically handled by refund or process operations
-        if (status === "REFUNDED") {
-          // Would need to fetch payment amount first
-          const { data } = await refundPaymentMutation({
-            variables: {
-              input: {
-                paymentId,
-                amount: 0, // Would need actual amount
-                reason: "Customer requested refund",
-              },
-            },
-          });
-          return Boolean(data?.refundPayment);
-        }
-
-        // For other statuses, we'd need custom backend endpoints
-        console.warn("Payment status updates are handled by other operations");
-        return false;
-      } catch (error) {
-        console.error("Payment status update error:", error);
-        if (error instanceof Error) {
-          throw new Error(error.message);
-        }
-        throw new Error("An unexpected error occurred");
-      }
-    },
-    [refundPaymentMutation]
-  );
-
-  /**
    * Adds a new payment method
-   * @param input - Payment method input with token from payment processor
-   * @returns Added payment method
-   * @throws Error if addition fails
+   * @param input - Payment method input object
+   * @returns Created payment method
+   * @throws Error if creation fails
    */
   const handleAddPaymentMethod = useCallback(
     async (input: {
       type: PaymentMethodType;
-      token: string; // Stripe/payment processor token
+      token: string;
       isDefault?: boolean;
     }) => {
       try {
@@ -194,7 +113,7 @@ export const usePaymentOperations = () => {
 
         return data?.addPaymentMethod;
       } catch (error) {
-        console.error("Payment method addition error:", error);
+        console.error("Payment method creation error:", error);
         if (error instanceof Error) {
           throw new Error(error.message);
         }
@@ -234,7 +153,7 @@ export const usePaymentOperations = () => {
   );
 
   /**
-   * Sets the default payment method
+   * Sets a payment method as default
    * @param id - Payment method ID
    * @returns Updated payment method
    * @throws Error if update fails
@@ -315,7 +234,7 @@ export const usePaymentOperations = () => {
   }, []);
 
   /**
-   * Fetches user's payment methods
+   * Fetches all payment methods for the current user
    * @returns Array of payment methods
    * @throws Error if fetch fails
    */
@@ -338,26 +257,21 @@ export const usePaymentOperations = () => {
   }, []);
 
   /**
-   * Fetches user's payment history
-   *
-   * Note: This uses the general payments query as payment history
-   * is not a separate endpoint in the API
-   *
-   * @returns Array of payment history entries
+   * Fetches all payments for the current customer
+   * @returns Array of customer payments
    * @throws Error if fetch fails
    */
-  const handleGetPaymentHistory = useCallback(async () => {
+  const handleGetCustomerPayments = useCallback(async () => {
     try {
-      // Using the payments query
-      const { data, errors } = await useGetPaymentsQuery();
+      const { data, errors } = await useGetCustomerPaymentsQuery();
 
       if (errors) {
         throw new Error(errors[0].message);
       }
 
-      return data?.payments;
+      return data?.customerPayments;
     } catch (error) {
-      console.error("Payment history fetch error:", error);
+      console.error("Customer payments fetch error:", error);
       if (error instanceof Error) {
         throw new Error(error.message);
       }
@@ -367,15 +281,13 @@ export const usePaymentOperations = () => {
 
   return {
     handleCreatePayment,
-    handleProcessPayment,
     handleRefundPayment,
-    handleUpdatePaymentStatus,
     handleAddPaymentMethod,
     handleRemovePaymentMethod,
     handleSetDefaultPaymentMethod,
     handleGetPayment,
     handleGetPayments,
     handleGetPaymentMethods,
-    handleGetPaymentHistory,
+    handleGetCustomerPayments,
   };
 };

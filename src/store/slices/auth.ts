@@ -23,8 +23,13 @@ const cookieStorage = {
     return value ? value : null;
   },
   setItem: (name: string, value: string) => {
-    // Set cookie with path=/ and expires in 30 days
-    Cookies.set(name, value, { path: "/", expires: 30 });
+    // Set cookie with path=/, secure flag, and expires in 30 days
+    Cookies.set(name, value, {
+      path: "/",
+      expires: 30,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
   },
   removeItem: (name: string) => {
     Cookies.remove(name, { path: "/" });
@@ -35,16 +40,28 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
       user: null,
-      token: null,
+      token: cookieStorage.getItem("auth-token"),
       isAuthenticated: false,
       setUser: (user) => set({ user, isAuthenticated: !!user }),
-      setToken: (token) => set({ token }),
+      setToken: (token) => {
+        // Explicitly save token to cookie
+        if (token) {
+          cookieStorage.setItem("auth-token", token);
+        } else {
+          cookieStorage.removeItem("auth-token");
+        }
+        set({ token });
+      },
       login: (user, token) => {
         console.log("Auth store: Logging in", { user, token });
+        // Save token to cookie
+        cookieStorage.setItem("auth-token", token);
         set({ user, token, isAuthenticated: true });
       },
       logout: () => {
         console.log("Auth store: Logging out");
+        // Remove token from cookie
+        cookieStorage.removeItem("auth-token");
         set({ user: null, token: null, isAuthenticated: false });
       },
       get isAdmin() {

@@ -15,6 +15,9 @@ import {
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useUpdateUserRoleMutation,
+  useGetCurrentUserQuery,
+  useGetUserByIdQuery,
+  useGetUsersQuery,
 } from "@/graphql/api";
 import { useAuthStore } from "@/store/slices/auth";
 import { UserRole } from "@/graphql/api";
@@ -29,7 +32,19 @@ export const useAuthOperations = () => {
   const [forgotPasswordMutation] = useForgotPasswordMutation();
   const [resetPasswordMutation] = useResetPasswordMutation();
   const [updateUserRoleMutation] = useUpdateUserRoleMutation();
-  const { login, logout, token: currentToken } = useAuthStore();
+  const { refetch: getCurrentUser } = useGetCurrentUserQuery({ skip: true });
+  const { refetch: getUserById } = useGetUserByIdQuery({ skip: true });
+  const { refetch: getUsers } = useGetUsersQuery({ skip: true });
+  const {
+    login,
+    logout,
+    token: currentToken,
+    user: currentUser,
+    setUser,
+  } = useAuthStore();
+  const t = useAuthStore((state) => state);
+  console.log(t);
+  console.log(currentToken);
 
   /**
    * Handles user login with email and password
@@ -44,8 +59,6 @@ export const useAuthOperations = () => {
         const { data, errors } = await loginMutation({
           variables: { email, password },
         });
-
-        console.log("Login response:", { data, errors });
 
         if (errors) {
           console.error("Login errors:", errors);
@@ -336,6 +349,109 @@ export const useAuthOperations = () => {
     }
   }, [logout]);
 
+  /**
+   * Fetches the current authenticated user and updates the auth store
+   * @returns Current user data
+   * @throws Error if fetch fails or user is not authenticated
+   */
+  const handleGetCurrentUser = useCallback(async () => {
+    try {
+      if (!currentToken) {
+        throw new Error("Not authenticated");
+      }
+
+      const { data, errors } = await getCurrentUser();
+
+      if (errors) {
+        throw new Error(errors[0].message);
+      }
+
+      if (data?.me) {
+        // Update the auth store with the latest user data
+        setUser(data.me);
+      }
+
+      return data?.me;
+    } catch (error) {
+      console.error("Current user fetch error:", error);
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+      throw new Error("An unexpected error occurred");
+    }
+  }, [currentToken, setUser, getCurrentUser]);
+
+  /**
+   * Fetches a user by ID
+   * @param id - User ID
+   * @returns User data
+   * @throws Error if fetch fails or user is not authenticated
+   */
+  const handleGetUserById = useCallback(
+    async (id: string) => {
+      try {
+        if (!currentToken) {
+          throw new Error("Not authenticated");
+        }
+
+        const { data, errors } = await getUserById({ id });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.user;
+      } catch (error) {
+        console.error("User fetch error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [currentToken, getUserById]
+  );
+
+  /**
+   * Fetches all users with optional role filter
+   * @param role - Optional role filter
+   * @returns Array of users
+   * @throws Error if fetch fails or user is not authenticated
+   */
+  const handleGetUsers = useCallback(
+    async (role?: UserRole) => {
+      try {
+        if (!currentToken) {
+          throw new Error("Not authenticated");
+        }
+
+        // Only allow admins to fetch all users
+        if (
+          !currentUser ||
+          (currentUser.role !== UserRole.Admin &&
+            currentUser.role !== UserRole.SuperAdmin)
+        ) {
+          throw new Error("Unauthorized: Admin access required");
+        }
+
+        const { data, errors } = await getUsers({ role });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.users;
+      } catch (error) {
+        console.error("Users fetch error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [currentToken, currentUser, getUsers]
+  );
+
   return {
     handleLogin,
     handleRegister,
@@ -345,5 +461,8 @@ export const useAuthOperations = () => {
     handleForgotPassword,
     handleResetPassword,
     handleUpdateUserRole,
+    handleGetCurrentUser,
+    handleGetUserById,
+    handleGetUsers,
   };
 };
