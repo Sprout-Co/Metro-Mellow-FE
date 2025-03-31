@@ -12,14 +12,15 @@
   align-items: center;
   justify-content: center;
   z-index: z-index("modal");
-
+  
   &__backdrop {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(color("neutral", "black"), 0.65);
+    backdrop-filter: blur(4px);
     cursor: pointer;
   }
 
@@ -27,11 +28,12 @@
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 800px;
+    max-width: 860px;
     margin: 0 spacing("lg");
     background-color: color("neutral", "white");
-    border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "lg");
+    border-radius: border-radius("xl");
+    box-shadow: 0 10px 30px rgba(color("neutral", "black"), 0.15), 
+                0 1px 5px rgba(color("neutral", "black"), 0.1);
     overflow: hidden;
     max-height: 90vh;
     display: flex;
@@ -42,24 +44,41 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: spacing("lg");
+    padding: spacing("xl") spacing("xl") spacing("lg");
     border-bottom: 1px solid color("neutral", "lighter");
     flex-shrink: 0;
+    background: linear-gradient(
+      to right,
+      rgba(color("primary", "light"), 0.05),
+      rgba(color("primary", "base"), 0.02)
+    );
   }
 
   &__title {
     font-family: $font-family-heading;
-    font-size: map-get($font-sizes, "xl");
+    font-size: map-get($font-sizes, "2xl");
     font-weight: map-get($font-weights, "bold");
-    color: color("neutral", "black");
+    color: color("primary", "dark");
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background-color: color("primary", "base");
+      border-radius: 2px;
+    }
   }
 
   &__close {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     border-radius: border-radius("full");
     background: none;
     border: none;
@@ -68,35 +87,76 @@
     transition: $transition-base;
 
     &:hover {
-      background-color: color("neutral", "lighter");
+      background-color: rgba(color("neutral", "lighter"), 0.8);
       color: color("neutral", "black");
+      transform: rotate(90deg);
     }
   }
 
   &__body {
     flex: 1;
     overflow-y: auto;
-    padding: spacing("lg");
+    padding: spacing("xl") spacing("xl") spacing("xl");
+    
+    /* Custom scrollbar */
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: color("neutral", "lighter");
+      border-radius: 10px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: color("neutral", "medium"); 
+      border-radius: 10px;
+      
+      &:hover {
+        background: color("neutral", "dark");
+      }
+    }
   }
 
+  /* Service selection styles */
   &__services {
     display: grid;
-    gap: spacing("md");
+    gap: spacing("lg");
   }
 
   &__service {
     display: flex;
     align-items: center;
-    padding: spacing("md");
-    background-color: color("neutral", "lighter");
-    border: none;
-    border-radius: border-radius("md");
+    padding: spacing("lg");
+    background-color: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
     cursor: pointer;
-    transition: $transition-base;
+    transition: all 0.3s ease;
     text-align: left;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background-color: color("primary", "base");
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
 
     &:hover {
-      background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+      border-color: color("primary", "light");
+      box-shadow: 0 4px 12px rgba(color("primary", "base"), 0.1);
+      transform: translateY(-2px);
+      
+      &::before {
+        opacity: 1;
+      }
     }
   }
 
@@ -104,13 +164,28 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
-    border-radius: border-radius("md");
-    background-color: color("neutral", "white");
-    margin-right: spacing("md");
+    width: 60px;
+    height: 60px;
+    border-radius: border-radius("lg");
+    background: linear-gradient(
+      135deg,
+      rgba(color("primary", "light"), 0.12),
+      rgba(color("primary", "base"), 0.08)
+    );
+    margin-right: spacing("lg");
     color: color("primary", "base");
-    font-size: map-get($font-sizes, "xl");
+    font-size: map-get($font-sizes, "2xl");
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    
+    .modal__service:hover & {
+      background: linear-gradient(
+        135deg,
+        rgba(color("primary", "base"), 0.15),
+        rgba(color("primary", "dark"), 0.1)
+      );
+      transform: scale(1.05);
+    }
   }
 
   &__serviceInfo {
@@ -118,16 +193,17 @@
   }
 
   &__serviceTitle {
-    font-size: map-get($font-sizes, "base");
+    font-size: map-get($font-sizes, "lg");
     font-weight: map-get($font-weights, "semibold");
     color: color("neutral", "black");
-    margin-bottom: spacing("xxs");
+    margin-bottom: spacing("xs");
   }
 
   &__serviceDescription {
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "dark");
-    margin-bottom: spacing("xs");
+    margin-bottom: spacing("sm");
+    line-height: map-get($line-heights, "relaxed");
   }
 
   &__serviceMeta {
@@ -138,8 +214,11 @@
 
   &__servicePrice {
     font-size: map-get($font-sizes, "sm");
-    font-weight: map-get($font-weights, "medium");
+    font-weight: map-get($font-weights, "semibold");
     color: color("primary", "base");
+    background: rgba(color("primary", "base"), 0.08);
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("md");
   }
 
   &__serviceDuration {
@@ -150,78 +229,13 @@
 
     svg {
       margin-right: spacing("xxs");
+      color: color("neutral", "medium");
     }
   }
 
-  &__cleaningOptions {
-    display: flex;
-    flex-direction: column;
-    gap: spacing("xl");
-  }
-
-  &__optionsGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: spacing("md");
-  }
-
-  &__optionCard {
-    display: flex;
-    flex-direction: column;
-    padding: spacing("lg");
-    background-color: color("neutral", "lighter");
-    border: none;
-    border-radius: border-radius("md");
-    cursor: pointer;
-    transition: $transition-base;
-    text-align: left;
-
-    &:hover {
-      background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
-    }
-  }
-
-  &__optionTitle {
-    font-size: map-get($font-sizes, "base");
-    font-weight: map-get($font-weights, "semibold");
-    color: color("neutral", "black");
-    margin-bottom: spacing("xs");
-  }
-
-  &__optionDescription {
-    font-size: map-get($font-sizes, "sm");
-    color: color("neutral", "dark");
-    margin-bottom: spacing("md");
-  }
-
-  &__optionPrice {
-    font-size: map-get($font-sizes, "sm");
-    font-weight: map-get($font-weights, "medium");
-    color: color("primary", "base");
-    margin-bottom: spacing("md");
-  }
-
-  &__optionInclusions {
-    display: grid;
-    gap: spacing("sm");
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  &__optionInclusion {
-    display: flex;
-    align-items: center;
-    gap: spacing("sm");
-    font-size: map-get($font-sizes, "sm");
-    color: color("neutral", "dark");
-
-    svg {
-      color: color("success");
-    }
-  }
-
-  &__bookingDetails {
+  /* Cleaning options styles */
+  &__cleaningOptions,
+  &__laundryOptions {
     display: flex;
     flex-direction: column;
     gap: spacing("xl");
@@ -230,121 +244,173 @@
   &__selectedService {
     display: flex;
     align-items: center;
-    padding: spacing("md");
-    background-color: color("neutral", "lighter");
-    border-radius: border-radius("md");
+    padding: spacing("lg");
+    background: linear-gradient(
+      to right,
+      rgba(color("primary", "light"), 0.08),
+      rgba(color("primary", "base"), 0.03)
+    );
+    border-radius: border-radius("lg");
+    margin-bottom: spacing("lg");
+    border-left: 3px solid color("primary", "base");
   }
 
   &__changeService {
     padding: spacing("xs") spacing("md");
-    background: none;
+    background: color("neutral", "white");
     border: 1px solid color("neutral", "medium");
     border-radius: border-radius("md");
-    color: color("neutral", "dark");
+    color: color("neutral", "darker");
     font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
     cursor: pointer;
-    transition: $transition-base;
+    transition: all 0.2s ease;
+    margin-left: spacing("md");
+    flex-shrink: 0;
 
     &:hover {
       background-color: color("neutral", "lighter");
+      border-color: color("neutral", "dark");
+      transform: translateY(-1px);
     }
   }
 
   &__sectionTitle {
-    font-size: map-get($font-sizes, "base");
+    font-size: map-get($font-sizes, "lg");
     font-weight: map-get($font-weights, "semibold");
     color: color("neutral", "black");
     margin-bottom: spacing("md");
+    position: relative;
+    padding-bottom: spacing("xs");
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 30px;
+      height: 2px;
+      background-color: color("primary", "base");
+      border-radius: 2px;
+    }
+  }
+
+  &__optionsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: spacing("lg");
+  }
+
+  &__optionCard {
+    display: flex;
+    flex-direction: column;
+    padding: spacing("xl");
+    background-color: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 40px 40px 0;
+      border-color: transparent transparent transparent transparent;
+      transition: all 0.3s ease;
+    }
+
+    &:hover {
+      border-color: color("primary", "light");
+      box-shadow: 0 8px 24px rgba(color("neutral", "black"), 0.08);
+      transform: translateY(-3px);
+      
+      &::before {
+        border-color: transparent color("primary", "light") transparent transparent;
+      }
+    }
+  }
+
+  &__optionTitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
+  }
+
+  &__optionDescription {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("lg");
+    line-height: map-get($line-heights, "relaxed");
+  }
+
+  &__optionPrice {
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("primary", "base");
+    margin-bottom: spacing("lg");
+    display: inline-block;
+    padding: spacing("xs") spacing("sm");
+    background: rgba(color("primary", "base"), 0.08);
+    border-radius: border-radius("md");
+  }
+
+  &__optionInclusions {
+    display: grid;
+    gap: spacing("sm");
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid color("neutral", "lighter");
+    padding-top: spacing("md");
+  }
+
+  &__optionInclusion {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("sm");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    line-height: map-get($line-heights, "relaxed");
+
+    svg {
+      color: color("success");
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+  }
+
+  /* Booking details styles */
+  &__bookingDetails {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xl");
   }
 
   &__schedule {
-    background-color: color("neutral", "lighter");
-    padding: spacing("lg");
-    border-radius: border-radius("md");
+    background-color: color("neutral", "white");
+    padding: spacing("xl");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+    box-shadow: 0 2px 8px rgba(color("neutral", "black"), 0.04);
   }
 
   &__scheduleInputs {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: spacing("md");
+    gap: spacing("lg");
     margin-bottom: spacing("lg");
 
     @include breakpoint-down("sm") {
       grid-template-columns: 1fr;
-    }
-  }
-
-  &__laundryBags {
-    margin-bottom: spacing("lg");
-    padding: spacing("md");
-    background-color: color("neutral", "lighter");
-    border-radius: border-radius("md");
-
-    label {
-      display: block;
-      font-size: map-get($font-sizes, "sm");
-      font-weight: map-get($font-weights, "medium");
-      color: color("neutral", "dark");
-      margin-bottom: spacing("xs");
-    }
-  }
-
-  &__laundryBagsControls {
-    display: flex;
-    align-items: center;
-    gap: spacing("sm");
-    margin-bottom: spacing("xs");
-  }
-
-  &__laundryBagsNote {
-    display: block;
-    font-size: map-get($font-sizes, "xs");
-    color: color("neutral", "medium");
-  }
-
-  &__frequency {
-    label {
-      display: block;
-      font-size: map-get($font-sizes, "sm");
-      font-weight: map-get($font-weights, "medium");
-      color: color("neutral", "dark");
-      margin-bottom: spacing("xs");
-    }
-  }
-
-  &__frequencyButtons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: spacing("sm");
-
-    @include breakpoint-down("sm") {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  &__frequencyButton {
-    padding: spacing("sm") spacing("md");
-    background: none;
-    border: 1px solid color("neutral", "medium");
-    border-radius: border-radius("md");
-    color: color("neutral", "dark");
-    font-size: map-get($font-sizes, "sm");
-    cursor: pointer;
-    transition: $transition-base;
-    white-space: nowrap;
-
-    &:hover {
-      background-color: color("neutral", "lighter");
-    }
-
-    &Active {
-      background-color: color("primary", "base");
-      border-color: color("primary", "base");
-      color: color("neutral", "white");
-
-      &:hover {
-        background-color: color("primary", "dark");
-      }
     }
   }
 
@@ -355,89 +421,124 @@
 
     label {
       font-size: map-get($font-sizes, "sm");
-      font-weight: map-get($font-weights, "medium");
-      color: color("neutral", "dark");
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "darker");
+      margin-bottom: spacing("xxs");
     }
 
     input,
     select {
-      padding: spacing("sm") spacing("md");
+      padding: spacing("md") spacing("md");
       border: 1px solid color("neutral", "medium");
       border-radius: border-radius("md");
       font-size: map-get($font-sizes, "base");
       color: color("neutral", "black");
       background-color: color("neutral", "white");
+      transition: all 0.2s ease;
+
+      &:hover {
+        border-color: color("neutral", "dark");
+      }
 
       &:focus {
         outline: none;
         border-color: color("primary", "base");
-        box-shadow: 0 0 0 2px
-          rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+        box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.15);
       }
     }
   }
 
-  &__inclusions {
-    background-color: color("neutral", "lighter");
-    padding: spacing("lg");
-    border-radius: border-radius("md");
-  }
-
-  &__inclusionsList {
-    display: grid;
-    gap: spacing("sm");
-  }
-
-  &__inclusionItem {
-    display: flex;
-    align-items: center;
-    gap: spacing("sm");
-    font-size: map-get($font-sizes, "sm");
-    color: color("neutral", "dark");
-
-    svg {
-      color: color("success");
+  &__frequency {
+    label {
+      display: block;
+      font-size: map-get($font-sizes, "sm");
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "darker");
+      margin-bottom: spacing("sm");
     }
   }
 
-  &__footer {
-    margin-top: auto;
-    padding-top: spacing("lg");
-    border-top: 1px solid color("neutral", "lighter");
+  &__frequencyButtons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: spacing("sm");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: repeat(2, 1fr);
+      gap: spacing("md");
+    }
   }
 
-  &__continueBtn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: spacing("md");
-    background-color: color("primary", "base");
-    color: color("neutral", "white");
-    border: none;
+  &__frequencyButton {
+    padding: spacing("sm") spacing("xs");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "medium");
     border-radius: border-radius("md");
+    color: color("neutral", "darker");
+    font-size: map-get($font-sizes, "sm");
     font-weight: map-get($font-weights, "medium");
     cursor: pointer;
-    transition: $transition-base;
+    transition: all 0.2s ease;
+    white-space: nowrap;
 
-    &:hover:not(:disabled) {
-      background-color: color("primary", "dark");
+    &:hover {
+      border-color: color("primary", "light");
+      background-color: rgba(color("primary", "light"), 0.05);
+      transform: translateY(-1px);
     }
 
-    &:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+    &Active {
+      background-color: color("primary", "base");
+      border-color: color("primary", "base");
+      color: color("neutral", "white");
+      box-shadow: 0 2px 5px rgba(color("primary", "base"), 0.3);
 
-    svg {
-      margin-left: spacing("xs");
+      &:hover {
+        background-color: color("primary", "dark");
+        transform: translateY(-1px);
+      }
     }
   }
 
-  &__propertyDetails {
-    background-color: color("neutral", "lighter");
+  /* Laundry specific styles */
+  &__laundryBags {
+    margin-bottom: spacing("lg");
     padding: spacing("lg");
+    background-color: rgba(color("primary", "light"), 0.05);
     border-radius: border-radius("md");
+    border: 1px dashed rgba(color("primary", "base"), 0.3);
+
+    label {
+      display: block;
+      font-size: map-get($font-sizes, "sm");
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "darker");
+      margin-bottom: spacing("sm");
+    }
+  }
+
+  &__laundryBagsControls {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    margin-bottom: spacing("sm");
+  }
+
+  &__laundryBagsNote {
+    display: block;
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    margin-top: spacing("xs");
+    font-style: italic;
+  }
+
+  /* Property details styles */
+  &__propertyDetails {
+    background-color: color("neutral", "white");
+    padding: spacing("xl");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+    box-shadow: 0 2px 8px rgba(color("neutral", "black"), 0.04);
   }
 
   &__propertyType {
@@ -446,36 +547,40 @@
     label {
       display: block;
       font-size: map-get($font-sizes, "sm");
-      font-weight: map-get($font-weights, "medium");
-      color: color("neutral", "dark");
-      margin-bottom: spacing("xs");
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "darker");
+      margin-bottom: spacing("sm");
     }
   }
 
   &__propertyTypeButtons {
     display: flex;
-    gap: spacing("sm");
+    gap: spacing("md");
   }
 
   &__propertyTypeButton {
     flex: 1;
-    padding: spacing("sm") spacing("md");
-    background: none;
+    padding: spacing("md");
+    background: color("neutral", "white");
     border: 1px solid color("neutral", "medium");
     border-radius: border-radius("md");
-    color: color("neutral", "dark");
+    color: color("neutral", "darker");
     font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "medium");
     cursor: pointer;
-    transition: $transition-base;
+    transition: all 0.2s ease;
 
     &:hover {
-      background-color: color("neutral", "lighter");
+      border-color: color("primary", "light");
+      background-color: rgba(color("primary", "light"), 0.05);
+      transform: translateY(-1px);
     }
 
     &Active {
       background-color: color("primary", "base");
       border-color: color("primary", "base");
       color: color("neutral", "white");
+      box-shadow: 0 2px 5px rgba(color("primary", "base"), 0.3);
 
       &:hover {
         background-color: color("primary", "dark");
@@ -486,19 +591,26 @@
   &__roomQuantities {
     display: grid;
     gap: spacing("md");
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   }
 
   &__roomQuantity {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: spacing("sm");
-    background-color: color("neutral", "white");
+    padding: spacing("md");
+    background-color: color("neutral", "lighter");
     border-radius: border-radius("md");
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(color("primary", "light"), 0.05);
+    }
 
     label {
       font-size: map-get($font-sizes, "sm");
-      color: color("neutral", "dark");
+      color: color("neutral", "darker");
+      font-weight: map-get($font-weights, "medium");
     }
   }
 
@@ -514,15 +626,17 @@
     justify-content: center;
     width: 32px;
     height: 32px;
-    background: none;
+    background: color("neutral", "white");
     border: 1px solid color("neutral", "medium");
     border-radius: border-radius("md");
-    color: color("neutral", "dark");
+    color: color("neutral", "darker");
     cursor: pointer;
-    transition: $transition-base;
+    transition: all 0.2s ease;
 
-    &:hover {
-      background-color: color("neutral", "lighter");
+    &:hover:not(:disabled) {
+      border-color: color("primary", "base");
+      background-color: rgba(color("primary", "base"), 0.05);
+      color: color("primary", "base");
     }
 
     &:disabled {
@@ -535,20 +649,60 @@
     min-width: 32px;
     text-align: center;
     font-size: map-get($font-sizes, "base");
-    font-weight: map-get($font-weights, "medium");
+    font-weight: map-get($font-weights, "semibold");
     color: color("neutral", "black");
   }
 
-  &__priceSummary {
-    background-color: color("neutral", "lighter");
-    padding: spacing("lg");
+  /* Inclusions and price summary styles */
+  &__inclusions {
+    background-color: color("neutral", "white");
+    padding: spacing("xl");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+    box-shadow: 0 2px 8px rgba(color("neutral", "black"), 0.04);
+  }
+
+  &__inclusionsList {
+    display: grid;
+    gap: spacing("md");
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  &__inclusionItem {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("sm");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    padding: spacing("sm");
     border-radius: border-radius("md");
+    background-color: color("neutral", "lighter");
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba(color("success"), 0.05);
+      transform: translateY(-2px);
+    }
+
+    svg {
+      color: color("success");
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+  }
+
+  &__priceSummary {
+    background-color: color("neutral", "white");
+    padding: spacing("xl");
+    border-radius: border-radius("lg");
+    border: 1px solid color("primary", "light");
+    box-shadow: 0 4px 12px rgba(color("primary", "base"), 0.08);
   }
 
   &__priceDetails {
     display: flex;
     flex-direction: column;
-    gap: spacing("sm");
+    gap: spacing("md");
   }
 
   &__priceRow {
@@ -557,6 +711,7 @@
     align-items: center;
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "dark");
+    padding: spacing("xs") 0;
 
     span:last-child {
       font-weight: map-get($font-weights, "medium");
@@ -565,34 +720,95 @@
 
   &__priceDivider {
     height: 1px;
-    background-color: color("neutral", "medium");
+    background: linear-gradient(
+      to right,
+      rgba(color("primary", "light"), 0.2),
+      rgba(color("primary", "base"), 0.1)
+    );
     margin: spacing("xs") 0;
   }
 
   &__priceTotal {
-    font-size: map-get($font-sizes, "base") !important;
-    font-weight: map-get($font-weights, "semibold") !important;
+    font-size: map-get($font-sizes, "lg") !important;
+    font-weight: map-get($font-weights, "bold") !important;
     color: color("primary", "base") !important;
   }
 
   &__priceDiscount {
-    color: color("success", "base") !important;
+    color: color("success") !important;
+    font-weight: map-get($font-weights, "semibold") !important;
   }
 
+  /* Footer styles */
+  &__footer {
+    margin-top: spacing("xl");
+    padding-top: spacing("lg");
+    border-top: 1px solid color("neutral", "lighter");
+  }
+
+  &__continueBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: spacing("md") spacing("lg");
+    background: linear-gradient(
+      to right,
+      color("primary", "base"),
+      color("primary", "dark")
+    );
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("md");
+    font-weight: map-get($font-weights, "semibold");
+    font-size: map-get($font-sizes, "base");
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(color("primary", "dark"), 0.2);
+
+    &:hover:not(:disabled) {
+      background: linear-gradient(
+        to right,
+        color("primary", "dark"),
+        color("primary", "dark")
+      );
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(color("primary", "dark"), 0.25);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    svg {
+      margin-left: spacing("sm");
+      transition: transform 0.2s ease;
+    }
+    
+    &:hover:not(:disabled) svg {
+      transform: translateX(4px);
+    }
+  }
+
+  /* Extra items modal styles */
   &__extraItemsButton {
     margin-top: spacing("md");
-    padding: spacing("xs") spacing("sm");
-    background: none;
-    border: 1px solid color("primary", "base");
+    padding: spacing("sm") spacing("md");
+    background: rgba(color("primary", "base"), 0.05);
+    border: 1px dashed rgba(color("primary", "base"), 0.3);
     border-radius: border-radius("md");
     color: color("primary", "base");
     font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
     cursor: pointer;
-    transition: $transition-base;
+    transition: all 0.2s ease;
     width: 100%;
 
     &:hover {
-      background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+      background-color: rgba(color("primary", "base"), 0.1);
+      transform: translateY(-1px);
     }
   }
 
@@ -606,7 +822,8 @@
     align-items: center;
     justify-content: center;
     z-index: z-index("modal") + 1;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(color("neutral", "black"), 0.65);
+    backdrop-filter: blur(4px);
   }
 
   &__extraItemsContent {
@@ -616,25 +833,30 @@
     max-width: 600px;
     max-height: 80vh;
     overflow-y: auto;
-    box-shadow: map-get($box-shadows, "lg");
+    box-shadow: 0 10px 30px rgba(color("neutral", "black"), 0.2);
   }
 
   &__extraItemsHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: spacing("lg");
+    padding: spacing("lg") spacing("xl");
     border-bottom: 1px solid color("neutral", "lighter");
+    background: linear-gradient(
+      to right,
+      rgba(color("primary", "light"), 0.05),
+      rgba(color("primary", "base"), 0.02)
+    );
 
     h3 {
-      font-size: map-get($font-sizes, "base");
+      font-size: map-get($font-sizes, "lg");
       font-weight: map-get($font-weights, "semibold");
-      color: color("neutral", "black");
+      color: color("primary", "dark");
     }
   }
 
   &__extraItemsBody {
-    padding: spacing("lg");
+    padding: spacing("xl");
   }
 
   &__extraItemsTable {
@@ -648,31 +870,49 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: spacing("sm");
+    padding: spacing("md");
     background-color: color("neutral", "lighter");
     border-radius: border-radius("md");
+    transition: all 0.2s ease;
+
+    &:hover:not(:first-child) {
+      background-color: rgba(color("primary", "light"), 0.08);
+      transform: translateY(-1px);
+    }
 
     &:first-child {
-      background-color: color("neutral", "white");
-      font-weight: map-get($font-weights, "medium");
+      background-color: rgba(color("primary", "dark"), 0.05);
+      font-weight: map-get($font-weights, "semibold");
       color: color("neutral", "black");
+      border-left: 3px solid color("primary", "base");
     }
 
     span:last-child {
-      font-weight: map-get($font-weights, "medium");
+      font-weight: map-get($font-weights, "semibold");
       color: color("primary", "base");
     }
   }
 
   &__extraNotes {
-    padding: spacing("md");
-    background-color: color("neutral", "lighter");
+    padding: spacing("lg");
+    background-color: rgba(color("neutral", "lighter"), 0.6);
     border-radius: border-radius("md");
+    border-left: 3px solid color("primary", "light");
 
     p {
       font-size: map-get($font-sizes, "sm");
       color: color("neutral", "dark");
-      margin-bottom: spacing("xs");
+      margin-bottom: spacing("sm");
+      position: relative;
+      padding-left: spacing("lg");
+      
+      &::before {
+        content: '•';
+        position: absolute;
+        left: spacing("xs");
+        color: color("primary", "base");
+        font-weight: map-get($font-weights, "bold");
+      }
 
       &:last-child {
         margin-bottom: 0;

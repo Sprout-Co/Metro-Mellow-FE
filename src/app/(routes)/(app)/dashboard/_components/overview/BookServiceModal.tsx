@@ -1,7 +1,7 @@
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUIStore } from "@/store/slices/ui";
 import Icon, { IconName } from "../common/Icon";
-import { useState } from "react";
 import styles from "./BookServiceModal.module.scss";
 
 interface CleaningOption {
@@ -319,15 +319,48 @@ export default function BookServiceModal() {
     return basePrice;
   };
 
+  // Framer Motion animations
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 24,
+      },
+    },
+  };
+
   const renderServiceContent = () => {
     if (!selectedService) {
       return (
-        <div className={styles.modal__services}>
+        <motion.div
+          className={styles.modal__services}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
           {services.map((service) => (
             <motion.button
               key={service.id}
               className={styles.modal__service}
-              whileHover={{ scale: 1.02 }}
+              variants={itemVariants}
+              whileHover={{
+                scale: 1.02,
+                boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
+              }}
               whileTap={{ scale: 0.98 }}
               onClick={() => handleServiceSelect(service)}
             >
@@ -351,14 +384,22 @@ export default function BookServiceModal() {
               </div>
             </motion.button>
           ))}
-        </div>
+        </motion.div>
       );
     }
 
     if (selectedService.id === "cleaning" && !selectedCleaningOption) {
       return (
-        <div className={styles.modal__cleaningOptions}>
-          <div className={styles.modal__selectedService}>
+        <motion.div
+          className={styles.modal__cleaningOptions}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div
+            className={styles.modal__selectedService}
+            variants={itemVariants}
+          >
             <div className={styles.modal__serviceIcon}>
               <Icon name={selectedService.icon} />
             </div>
@@ -376,17 +417,24 @@ export default function BookServiceModal() {
             >
               Change
             </button>
-          </div>
+          </motion.div>
 
-          <h3 className={styles.modal__sectionTitle}>Select Cleaning Type</h3>
+          <motion.h3
+            className={styles.modal__sectionTitle}
+            variants={itemVariants}
+          >
+            Select Cleaning Type
+          </motion.h3>
           <div className={styles.modal__optionsGrid}>
-            {cleaningOptions.map((option) => (
+            {cleaningOptions.map((option, index) => (
               <motion.button
                 key={option.id}
                 className={styles.modal__optionCard}
-                whileHover={{ scale: 1.02 }}
+                variants={itemVariants}
+                whileHover={{ scale: 1.03, y: -5 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => handleCleaningOptionSelect(option)}
+                transition={{ delay: index * 0.1 }}
               >
                 <h4 className={styles.modal__optionTitle}>{option.label}</h4>
                 <p className={styles.modal__optionDescription}>
@@ -396,24 +444,32 @@ export default function BookServiceModal() {
                   {option.price}
                 </span>
                 <ul className={styles.modal__optionInclusions}>
-                  {option.inclusions.map((inclusion, index) => (
-                    <li key={index} className={styles.modal__optionInclusion}>
+                  {option.inclusions.map((inclusion, idx) => (
+                    <li key={idx} className={styles.modal__optionInclusion}>
                       <Icon name="check-circle" />
-                      {inclusion}
+                      <span>{inclusion}</span>
                     </li>
                   ))}
                 </ul>
               </motion.button>
             ))}
           </div>
-        </div>
+        </motion.div>
       );
     }
 
     if (selectedService.id === "laundry" && !selectedLaundryOption) {
       return (
-        <div className={styles.modal__laundryOptions}>
-          <div className={styles.modal__selectedService}>
+        <motion.div
+          className={styles.modal__laundryOptions}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div
+            className={styles.modal__selectedService}
+            variants={itemVariants}
+          >
             <div className={styles.modal__serviceIcon}>
               <Icon name={selectedService.icon} />
             </div>
@@ -431,17 +487,24 @@ export default function BookServiceModal() {
             >
               Change
             </button>
-          </div>
+          </motion.div>
 
-          <h3 className={styles.modal__sectionTitle}>Select Laundry Service</h3>
+          <motion.h3
+            className={styles.modal__sectionTitle}
+            variants={itemVariants}
+          >
+            Select Laundry Service
+          </motion.h3>
           <div className={styles.modal__optionsGrid}>
-            {laundryOptions.map((option) => (
+            {laundryOptions.map((option, index) => (
               <motion.button
                 key={option.id}
                 className={styles.modal__optionCard}
-                whileHover={{ scale: 1.02 }}
+                variants={itemVariants}
+                whileHover={{ scale: 1.03, y: -5 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => handleLaundryOptionSelect(option)}
+                transition={{ delay: index * 0.1 }}
               >
                 <h4 className={styles.modal__optionTitle}>{option.label}</h4>
                 <p className={styles.modal__optionDescription}>
@@ -463,13 +526,21 @@ export default function BookServiceModal() {
               </motion.button>
             ))}
           </div>
-        </div>
+        </motion.div>
       );
     }
 
     return (
-      <div className={styles.modal__bookingDetails}>
-        <div className={styles.modal__selectedService}>
+      <motion.div
+        className={styles.modal__bookingDetails}
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.div
+          className={styles.modal__selectedService}
+          variants={itemVariants}
+        >
           <div className={styles.modal__serviceIcon}>
             <Icon name={selectedService.icon} />
           </div>
@@ -510,9 +581,9 @@ export default function BookServiceModal() {
           >
             Change
           </button>
-        </div>
+        </motion.div>
 
-        <div className={styles.modal__schedule}>
+        <motion.div className={styles.modal__schedule} variants={itemVariants}>
           <h3 className={styles.modal__sectionTitle}>Schedule</h3>
           <div className={styles.modal__scheduleInputs}>
             <div className={styles.modal__inputGroup}>
@@ -549,6 +620,7 @@ export default function BookServiceModal() {
                 <button
                   className={styles.modal__quantityButton}
                   onClick={() => handleLaundryBagChange(false)}
+                  disabled={laundryBags <= 1}
                 >
                   <Icon name="minus" />
                 </button>
@@ -613,10 +685,13 @@ export default function BookServiceModal() {
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {selectedService.id === "cleaning" && (
-          <div className={styles.modal__propertyDetails}>
+          <motion.div
+            className={styles.modal__propertyDetails}
+            variants={itemVariants}
+          >
             <h3 className={styles.modal__sectionTitle}>Property Details</h3>
             <div className={styles.modal__propertyType}>
               <label>Property Type</label>
@@ -658,6 +733,7 @@ export default function BookServiceModal() {
                       onClick={() =>
                         handleQuantityChange(room as keyof RoomQuantity, false)
                       }
+                      disabled={quantity <= 0}
                     >
                       <Icon name="minus" />
                     </button>
@@ -676,24 +752,36 @@ export default function BookServiceModal() {
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
         )}
 
-        <div className={styles.modal__inclusions}>
+        <motion.div
+          className={styles.modal__inclusions}
+          variants={itemVariants}
+        >
           <h3 className={styles.modal__sectionTitle}>Service Inclusions</h3>
           <ul className={styles.modal__inclusionsList}>
             {(
               selectedCleaningOption?.inclusions || selectedService.inclusions
             ).map((inclusion, index) => (
-              <li key={index} className={styles.modal__inclusionItem}>
+              <motion.li
+                key={index}
+                className={styles.modal__inclusionItem}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+              >
                 <Icon name="check-circle" />
-                {inclusion}
-              </li>
+                <span>{inclusion}</span>
+              </motion.li>
             ))}
           </ul>
-        </div>
+        </motion.div>
 
-        <div className={styles.modal__priceSummary}>
+        <motion.div
+          className={styles.modal__priceSummary}
+          variants={itemVariants}
+        >
           <h3 className={styles.modal__sectionTitle}>Price Summary</h3>
           <div className={styles.modal__priceDetails}>
             <div className={styles.modal__priceRow}>
@@ -763,19 +851,21 @@ export default function BookServiceModal() {
               </span>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className={styles.modal__footer}>
-          <button
+        <motion.div className={styles.modal__footer} variants={itemVariants}>
+          <motion.button
             className={styles.modal__continueBtn}
             onClick={handleContinue}
             disabled={!selectedDate || !selectedTime}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
             Continue to Payment
             <Icon name="arrow-right" />
-          </button>
-        </div>
-      </div>
+          </motion.button>
+        </motion.div>
+      </motion.div>
     );
   };
 
@@ -789,7 +879,13 @@ export default function BookServiceModal() {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
-        <div className={styles.modal__extraItemsContent}>
+        <motion.div
+          className={styles.modal__extraItemsContent}
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.9, y: 20 }}
+          transition={{ type: "spring", bounce: 0.3 }}
+        >
           <div className={styles.modal__extraItemsHeader}>
             <h3>Extra Items for {selectedLaundryOption.label}</h3>
             <button
@@ -806,29 +902,40 @@ export default function BookServiceModal() {
                 <span>Cost</span>
               </div>
               {selectedLaundryOption.extraItems.map((item, index) => (
-                <div key={index} className={styles.modal__extraItemsRow}>
+                <motion.div
+                  key={index}
+                  className={styles.modal__extraItemsRow}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                >
                   <span>
                     {item.name} - {item.items} items
                   </span>
                   <span>₦{item.cost.toLocaleString()}</span>
-                </div>
+                </motion.div>
               ))}
             </div>
             {selectedLaundryOption.extraNotes && (
-              <div className={styles.modal__extraNotes}>
+              <motion.div
+                className={styles.modal__extraNotes}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
                 {selectedLaundryOption.extraNotes.map((note, index) => (
                   <p key={index}>{note}</p>
                 ))}
-              </div>
+              </motion.div>
             )}
           </div>
-        </div>
+        </motion.div>
       </motion.div>
     );
   };
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       <motion.div
         className={styles.modal}
         initial={{ opacity: 0 }}
@@ -847,7 +954,11 @@ export default function BookServiceModal() {
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          transition={{ duration: 0.2 }}
+          transition={{
+            type: "spring",
+            damping: 25,
+            stiffness: 300,
+          }}
         >
           <div className={styles.modal__header}>
             <h2 className={styles.modal__title}>Book a Service</h2>
@@ -858,8 +969,9 @@ export default function BookServiceModal() {
 
           <div className={styles.modal__body}>{renderServiceContent()}</div>
         </motion.div>
+
+        {showExtraItems && renderExtraItemsModal()}
       </motion.div>
-      {showExtraItems && renderExtraItemsModal()}
     </AnimatePresence>
   );
 }
