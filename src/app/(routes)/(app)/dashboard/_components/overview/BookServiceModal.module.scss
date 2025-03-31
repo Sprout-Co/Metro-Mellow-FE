@@ -1,0 +1,682 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: z-index("modal");
+
+  &__backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 spacing("lg");
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    box-shadow: map-get($box-shadows, "lg");
+    overflow: hidden;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("lg");
+    border-bottom: 1px solid color("neutral", "lighter");
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: border-radius("full");
+    background: none;
+    border: none;
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+      color: color("neutral", "black");
+    }
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: spacing("lg");
+  }
+
+  &__services {
+    display: grid;
+    gap: spacing("md");
+  }
+
+  &__service {
+    display: flex;
+    align-items: center;
+    padding: spacing("md");
+    background-color: color("neutral", "lighter");
+    border: none;
+    border-radius: border-radius("md");
+    cursor: pointer;
+    transition: $transition-base;
+    text-align: left;
+
+    &:hover {
+      background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+    }
+  }
+
+  &__serviceIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("md");
+    background-color: color("neutral", "white");
+    margin-right: spacing("md");
+    color: color("primary", "base");
+    font-size: map-get($font-sizes, "xl");
+  }
+
+  &__serviceInfo {
+    flex: 1;
+  }
+
+  &__serviceTitle {
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__serviceDescription {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xs");
+  }
+
+  &__serviceMeta {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+  }
+
+  &__servicePrice {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("primary", "base");
+  }
+
+  &__serviceDuration {
+    display: flex;
+    align-items: center;
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+
+    svg {
+      margin-right: spacing("xxs");
+    }
+  }
+
+  &__cleaningOptions {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xl");
+  }
+
+  &__optionsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: spacing("md");
+  }
+
+  &__optionCard {
+    display: flex;
+    flex-direction: column;
+    padding: spacing("lg");
+    background-color: color("neutral", "lighter");
+    border: none;
+    border-radius: border-radius("md");
+    cursor: pointer;
+    transition: $transition-base;
+    text-align: left;
+
+    &:hover {
+      background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+    }
+  }
+
+  &__optionTitle {
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+  }
+
+  &__optionDescription {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("md");
+  }
+
+  &__optionPrice {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("primary", "base");
+    margin-bottom: spacing("md");
+  }
+
+  &__optionInclusions {
+    display: grid;
+    gap: spacing("sm");
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__optionInclusion {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+
+    svg {
+      color: color("success");
+    }
+  }
+
+  &__bookingDetails {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xl");
+  }
+
+  &__selectedService {
+    display: flex;
+    align-items: center;
+    padding: spacing("md");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
+  }
+
+  &__changeService {
+    padding: spacing("xs") spacing("md");
+    background: none;
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    color: color("neutral", "dark");
+    font-size: map-get($font-sizes, "sm");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+    }
+  }
+
+  &__sectionTitle {
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("md");
+  }
+
+  &__schedule {
+    background-color: color("neutral", "lighter");
+    padding: spacing("lg");
+    border-radius: border-radius("md");
+  }
+
+  &__scheduleInputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__laundryBags {
+    margin-bottom: spacing("lg");
+    padding: spacing("md");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
+
+    label {
+      display: block;
+      font-size: map-get($font-sizes, "sm");
+      font-weight: map-get($font-weights, "medium");
+      color: color("neutral", "dark");
+      margin-bottom: spacing("xs");
+    }
+  }
+
+  &__laundryBagsControls {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    margin-bottom: spacing("xs");
+  }
+
+  &__laundryBagsNote {
+    display: block;
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "medium");
+  }
+
+  &__frequency {
+    label {
+      display: block;
+      font-size: map-get($font-sizes, "sm");
+      font-weight: map-get($font-weights, "medium");
+      color: color("neutral", "dark");
+      margin-bottom: spacing("xs");
+    }
+  }
+
+  &__frequencyButtons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: spacing("sm");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__frequencyButton {
+    padding: spacing("sm") spacing("md");
+    background: none;
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    color: color("neutral", "dark");
+    font-size: map-get($font-sizes, "sm");
+    cursor: pointer;
+    transition: $transition-base;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+    }
+
+    &Active {
+      background-color: color("primary", "base");
+      border-color: color("primary", "base");
+      color: color("neutral", "white");
+
+      &:hover {
+        background-color: color("primary", "dark");
+      }
+    }
+  }
+
+  &__inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+
+    label {
+      font-size: map-get($font-sizes, "sm");
+      font-weight: map-get($font-weights, "medium");
+      color: color("neutral", "dark");
+    }
+
+    input,
+    select {
+      padding: spacing("sm") spacing("md");
+      border: 1px solid color("neutral", "medium");
+      border-radius: border-radius("md");
+      font-size: map-get($font-sizes, "base");
+      color: color("neutral", "black");
+      background-color: color("neutral", "white");
+
+      &:focus {
+        outline: none;
+        border-color: color("primary", "base");
+        box-shadow: 0 0 0 2px
+          rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+      }
+    }
+  }
+
+  &__inclusions {
+    background-color: color("neutral", "lighter");
+    padding: spacing("lg");
+    border-radius: border-radius("md");
+  }
+
+  &__inclusionsList {
+    display: grid;
+    gap: spacing("sm");
+  }
+
+  &__inclusionItem {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+
+    svg {
+      color: color("success");
+    }
+  }
+
+  &__footer {
+    margin-top: auto;
+    padding-top: spacing("lg");
+    border-top: 1px solid color("neutral", "lighter");
+  }
+
+  &__continueBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: spacing("md");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("md");
+    font-weight: map-get($font-weights, "medium");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover:not(:disabled) {
+      background-color: color("primary", "dark");
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    svg {
+      margin-left: spacing("xs");
+    }
+  }
+
+  &__propertyDetails {
+    background-color: color("neutral", "lighter");
+    padding: spacing("lg");
+    border-radius: border-radius("md");
+  }
+
+  &__propertyType {
+    margin-bottom: spacing("lg");
+
+    label {
+      display: block;
+      font-size: map-get($font-sizes, "sm");
+      font-weight: map-get($font-weights, "medium");
+      color: color("neutral", "dark");
+      margin-bottom: spacing("xs");
+    }
+  }
+
+  &__propertyTypeButtons {
+    display: flex;
+    gap: spacing("sm");
+  }
+
+  &__propertyTypeButton {
+    flex: 1;
+    padding: spacing("sm") spacing("md");
+    background: none;
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    color: color("neutral", "dark");
+    font-size: map-get($font-sizes, "base");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+    }
+
+    &Active {
+      background-color: color("primary", "base");
+      border-color: color("primary", "base");
+      color: color("neutral", "white");
+
+      &:hover {
+        background-color: color("primary", "dark");
+      }
+    }
+  }
+
+  &__roomQuantities {
+    display: grid;
+    gap: spacing("md");
+  }
+
+  &__roomQuantity {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("sm");
+    background-color: color("neutral", "white");
+    border-radius: border-radius("md");
+
+    label {
+      font-size: map-get($font-sizes, "sm");
+      color: color("neutral", "dark");
+    }
+  }
+
+  &__quantityControls {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+  }
+
+  &__quantityButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__quantityValue {
+    min-width: 32px;
+    text-align: center;
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+  }
+
+  &__priceSummary {
+    background-color: color("neutral", "lighter");
+    padding: spacing("lg");
+    border-radius: border-radius("md");
+  }
+
+  &__priceDetails {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__priceRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+
+    span:last-child {
+      font-weight: map-get($font-weights, "medium");
+    }
+  }
+
+  &__priceDivider {
+    height: 1px;
+    background-color: color("neutral", "medium");
+    margin: spacing("xs") 0;
+  }
+
+  &__priceTotal {
+    font-size: map-get($font-sizes, "base") !important;
+    font-weight: map-get($font-weights, "semibold") !important;
+    color: color("primary", "base") !important;
+  }
+
+  &__priceDiscount {
+    color: color("success", "base") !important;
+  }
+
+  &__extraItemsButton {
+    margin-top: spacing("md");
+    padding: spacing("xs") spacing("sm");
+    background: none;
+    border: 1px solid color("primary", "base");
+    border-radius: border-radius("md");
+    color: color("primary", "base");
+    font-size: map-get($font-sizes, "sm");
+    cursor: pointer;
+    transition: $transition-base;
+    width: 100%;
+
+    &:hover {
+      background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+    }
+  }
+
+  &__extraItemsModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: z-index("modal") + 1;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  &__extraItemsContent {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: map-get($box-shadows, "lg");
+  }
+
+  &__extraItemsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("lg");
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    h3 {
+      font-size: map-get($font-sizes, "base");
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "black");
+    }
+  }
+
+  &__extraItemsBody {
+    padding: spacing("lg");
+  }
+
+  &__extraItemsTable {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+    margin-bottom: spacing("lg");
+  }
+
+  &__extraItemsRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("sm");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
+
+    &:first-child {
+      background-color: color("neutral", "white");
+      font-weight: map-get($font-weights, "medium");
+      color: color("neutral", "black");
+    }
+
+    span:last-child {
+      font-weight: map-get($font-weights, "medium");
+      color: color("primary", "base");
+    }
+  }
+
+  &__extraNotes {
+    padding: spacing("md");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
+
+    p {
+      font-size: map-get($font-sizes, "sm");
+      color: color("neutral", "dark");
+      margin-bottom: spacing("xs");
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
