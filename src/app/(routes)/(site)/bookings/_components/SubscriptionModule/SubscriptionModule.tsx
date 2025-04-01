@@ -12,7 +12,7 @@ import styles from "./SubscriptionModule.module.scss";
 
 // Types
 export type PlanType = "weekly" | "monthly";
-export type DurationType = 1 | 2 | 4 | 8;
+export type DurationType = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export type ServiceType = {
   id: string;
   name: string;
@@ -60,11 +60,11 @@ const SubscriptionModule: React.FC = () => {
       type: "laundry",
       selected: false,
       details: {
-        laundryType: 'wash-and-iron',
+        laundryType: "wash-and-iron",
         bags: 3,
         pickupFrequency: 1,
-        pickupDay: 'friday'
-      }
+        pickupDay: "friday",
+      },
     },
     {
       id: "cooking",
@@ -153,29 +153,17 @@ const SubscriptionModule: React.FC = () => {
         {/* Left Panel - Selection Area */}
         <div className={styles.subscription__selection}>
           <motion.div variants={itemVariants}>
-            <PlanTypeSelector planType={planType} setPlanType={setPlanType} />
-          </motion.div>
-
-          <motion.div variants={itemVariants}>
-            <DurationSelector duration={duration} setDuration={setDuration} />
-          </motion.div>
-
-          <motion.div variants={itemVariants}>
-            <BudgetSlider budget={budget} setBudget={setBudget} />
+            <PlanTypeSelector
+              planType={planType}
+              setPlanType={setPlanType}
+              duration={duration}
+              setDuration={setDuration}
+            />
           </motion.div>
 
           <motion.div variants={itemVariants}>
             <ServiceCards services={services} toggleService={toggleService} />
           </motion.div>
-
-          <motion.button
-            className={styles.subscription__proceed_btn}
-            variants={itemVariants}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            PROCEED
-          </motion.button>
         </div>
 
         {/* Right Panel - Summary Area */}
@@ -183,7 +171,7 @@ const SubscriptionModule: React.FC = () => {
           <PlanSummary
             planType={planType}
             duration={duration}
-            selectedServices={services.filter(i => i.selected)}
+            selectedServices={services.filter((i) => i.selected)}
             totalPrice={totalPrice}
             onUpdateService={handleUpdateService}
           />
