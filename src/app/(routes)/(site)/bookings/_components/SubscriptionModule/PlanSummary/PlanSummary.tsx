@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import styles from "./PlanSummary.module.scss";
 import ServiceEditor from "./ServiceEditor/ServiceEditor";
-import { ServiceType } from "../SubscriptionModule";
+import { ServiceType, PlanType, DurationType } from "../SubscriptionModule";
 
 interface ServiceTypeExtended extends ServiceType {
   id: string;
@@ -52,10 +52,20 @@ const mock = [
 ];
 
 type PlanSummaryProps = {
-  selectedServices: ServiceType[]
+  selectedServices: ServiceType[];
+  totalPrice?: number;
+  planType?: PlanType;
+  duration?: DurationType;
+  onUpdateService?: (serviceId: string, details: any) => void;
 };
 
-const PlanSummary: React.FC<PlanSummaryProps> = ({selectedServices}) => {
+const PlanSummary: React.FC<PlanSummaryProps> = ({
+  selectedServices,
+  totalPrice = 0,
+  planType = "weekly",
+  duration = 2,
+  onUpdateService,
+}) => {
   const [services, setServices] = useState<ServiceType[]>(selectedServices);
 
   const [editingService, setEditingService] = useState<ServiceType | null>(
@@ -84,23 +94,52 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({selectedServices}) => {
 
       setServices(updatedServices);
       setEditingService(null);
+
+      // If parent component provided an update handler, call it
+      if (onUpdateService) {
+        onUpdateService(editingService.id, serviceData);
+      }
     }
   };
 
+  // Calculate subscription totals based on plan type and duration
+  const calculateTotals = () => {
+    // Subtotal is the raw total price
+    const subtotal = totalPrice;
+
+    // Apply duration discount - longer subscriptions get better rates
+    let discount = 0;
+    if (duration >= 6) {
+      discount = subtotal * 0.1; // 10% discount for 6+ months
+    } else if (duration >= 3) {
+      discount = subtotal * 0.05; // 5% discount for 3+ months
+    }
+
+    // Calculate final total
+    const final = subtotal - discount;
+
+    return {
+      subtotal,
+      discount,
+      total: final,
+      perPeriod: planType === "weekly" ? final / 4 : final, // Assuming 4 weeks per month for weekly plans
+    };
+  };
+
+  const { subtotal, discount, total, perPeriod } = calculateTotals();
+
+  // Format price to currency
+  const formatPrice = (price: number) => {
+    return `₦${(price / 100).toLocaleString()}`;
+  };
+
   useEffect(() => {
-    setServices(selectedServices)
-  }, [selectedServices])
+    setServices(selectedServices);
+  }, [selectedServices]);
 
   return (
     <div className={styles.plan_summary}>
       <h2 className={styles.plan_summary__title}>Your Plan Summary</h2>
-
-      {/* Social proof element */}
-      <div className={styles.plan_summary__social_proof}>
-        <span className={styles.plan_summary__social_proof_text}>
-          450+ people are using similar plans
-        </span>
-      </div>
 
       {/* Services List */}
       <div className={styles.plan_summary__services}>
@@ -140,6 +179,47 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({selectedServices}) => {
           </div>
         ))}
       </div>
+
+      {/* Pricing Summary */}
+      {services.length > 0 && (
+        <div className={styles.plan_summary__pricing}>
+          <div className={styles.plan_summary__price_row}>
+            <span>Subtotal</span>
+            <span>{formatPrice(subtotal)}</span>
+          </div>
+
+          {discount > 0 && (
+            <div className={styles.plan_summary__price_row}>
+              <span>Discount (Duration)</span>
+              <span>-{formatPrice(discount)}</span>
+            </div>
+          )}
+
+          <div
+            className={`${styles.plan_summary__price_row} ${styles.plan_summary__price_row_total}`}
+          >
+            <span>
+              Total ({duration}{" "}
+              {duration === 1
+                ? planType === "weekly"
+                  ? "week"
+                  : "month"
+                : planType === "weekly"
+                  ? "weeks"
+                  : "months"}
+              )
+            </span>
+            <span>{formatPrice(total)}</span>
+          </div>
+
+          <div className={styles.plan_summary__per_period}>
+            <span>
+              Billed as {formatPrice(perPeriod)} per{" "}
+              {planType === "weekly" ? "week" : "month"}
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Service Editor Modal */}
       {editingService && (
