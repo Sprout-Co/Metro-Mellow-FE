@@ -328,13 +328,16 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
 
   // Format price to currency
   const formatPrice = (price: number) => {
-    return `₦${(price / 100).toLocaleString()}`;
+    return `₦${price.toLocaleString()}`;
   };
 
   useEffect(() => {
     setServices(selectedServices);
   }, [selectedServices]);
-
+  
+  if (services.length > 0) {
+    console.log("pricesxxx", calculateServicePrice(services[0]));
+  }
   return (
     <div className={styles.plan_summary}>
       <h2 className={styles.plan_summary__title}>Your Plan Summary</h2>
