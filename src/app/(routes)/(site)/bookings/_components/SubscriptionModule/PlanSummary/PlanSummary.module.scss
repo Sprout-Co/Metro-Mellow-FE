@@ -74,6 +74,21 @@
     padding: spacing("md");
     gap: spacing("md");
     background-color: #f9f7f5;
+    cursor: pointer;
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: darken(#f9f7f5, 3%);
+    }
+    
+    &_active {
+      background-color: rgba(color("primary", "light"), 0.1);
+      border-bottom: 1px solid color("neutral", "lighter");
+      
+      &:hover {
+        background-color: rgba(color("primary", "light"), 0.15);
+      }
+    }
   }
 
   &__service_icon {
@@ -109,10 +124,34 @@
     margin: 0;
   }
 
+  &__service_price_container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: spacing("xs");
+  }
+
   &__service_price {
     font-size: map-get($font-sizes, "base");
     font-weight: map-get($font-weights, "semibold");
     color: color("primary", "base");
+    margin: 0;
+  }
+
+  &__service_edit {
+    padding: spacing("xs") spacing("sm");
+    background-color: transparent;
+    border: 1px solid color("primary", "base");
+    border-radius: border-radius("sm");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    color: color("primary", "base");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      background-color: rgba(color("primary", "base"), 0.05);
+    }
   }
 
   &__service_details {
@@ -236,22 +275,6 @@
     margin: 0 spacing("lg");
   }
 
-  &__service_edit {
-    padding: spacing("xs") spacing("sm");
-    background-color: transparent;
-    border: 1px solid color("primary", "base");
-    border-radius: border-radius("sm");
-    font-size: map-get($font-sizes, "xs");
-    font-weight: map-get($font-weights, "medium");
-    color: color("primary", "base");
-    cursor: pointer;
-    transition: $transition-base;
-
-    &:hover {
-      background-color: rgba(color("primary", "base"), 0.05);
-    }
-  }
-
   &__pricing {
     margin-top: spacing("lg");
     background-color: #ffffff;
@@ -285,5 +308,18 @@
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "dark");
     text-align: right;
+  }
+
+  &__accordion_icon {
+    font-size: map-get($font-sizes, "xs");
+    color: color("primary", "base");
+    margin-left: spacing("sm");
+    transition: $transition-base;
+  }
+  
+  &__service_editor {
+    overflow: hidden;
+    background-color: #ffffff;
+    padding: 0;
   }
 }
