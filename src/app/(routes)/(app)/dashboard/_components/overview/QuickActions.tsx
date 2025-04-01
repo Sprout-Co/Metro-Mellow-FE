@@ -24,6 +24,12 @@ const quickActions = [
     icon: "headphones",
     color: "info",
   },
+  {
+    id: "Whatsapp",
+    label: "Talk on Whatsapp",
+    icon: "headphones",
+    color: "info",
+  },
   // {
   //   id: 'manage',
   //   label: 'Manage Subscriptions',

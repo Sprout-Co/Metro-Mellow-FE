@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import DashboardHeader from './_components/header/DashboardHeader';
 import TabNavigation from './_components/navigation/TabNavigation';
 import DashboardOverview from './_components/overview/DashboardOverview';
-import ServiceManagement from './_components/services/ServiceManagement';
 import PropertyManagement from './_components/properties/PropertyManagement';
 import PaymentBilling from './_components/billing/PaymentBilling';
 import ProviderInteraction from './_components/providers/ProviderInteraction';
@@ -12,6 +11,7 @@ import AccountSettings from './_components/settings/AccountSettings';
 import RewardsLoyalty from './_components/rewards/RewardsLoyalty';
 import HelpSupport from './_components/support/HelpSupport';
 import styles from './Dashboard.module.scss';
+import SubscriptionManagement from './_components/services/SubscriptionManagement';
 
 // Tab type definition
 type TabType = {
@@ -78,7 +78,7 @@ export default function Dashboard() {
               className={styles.dashboard__tabContent}
             >
               {activeTab === 'overview' && <DashboardOverview />}
-              {activeTab === 'services' && <ServiceManagement />}
+              {activeTab === 'services' && <SubscriptionManagement />}
               {activeTab === 'properties' && <PropertyManagement />}
               {activeTab === 'billing' && <PaymentBilling />}
               {activeTab === 'providers' && <ProviderInteraction />}
