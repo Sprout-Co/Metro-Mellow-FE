@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: center;
   z-index: z-index("modal");
-  
+
   &__backdrop {
     position: absolute;
     top: 0;
@@ -34,6 +34,7 @@
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
+    z-index: 1;
   }
 
   &__header {
@@ -42,7 +43,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: linear-gradient(to right, rgba(color("primary", "base"), 0.03), rgba(color("primary", "light"), 0.05));
+    background: linear-gradient(
+      to right,
+      rgba(color("primary", "base"), 0.03),
+      rgba(color("primary", "light"), 0.05)
+    );
   }
 
   &__title {
@@ -77,7 +82,7 @@
     padding: 24px 32px 20px;
     justify-content: space-between;
     position: relative;
-    
+
     &Line {
       position: absolute;
       height: 3px;
@@ -86,13 +91,13 @@
       left: 15%;
       right: 15%;
       z-index: 0;
-      
+
       @include breakpoint-down("sm") {
         left: 10%;
         right: 10%;
       }
     }
-    
+
     &Bar {
       position: absolute;
       height: 3px;
@@ -105,12 +110,12 @@
       left: 15%;
       z-index: 1;
       transition: width 0.5s ease;
-      
+
       @include breakpoint-down("sm") {
         left: 10%;
       }
     }
-    
+
     &Step {
       display: flex;
       flex-direction: column;
@@ -120,11 +125,11 @@
       padding: 0 10px;
       position: relative;
       transition: all 0.3s ease;
-      
+
       &:hover:not(&Disabled) {
         transform: translateY(-3px);
       }
-      
+
       &Dot {
         width: 28px;
         height: 28px;
@@ -138,9 +143,9 @@
         transition: all 0.3s ease;
         position: relative;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        
+
         &:after {
-          content: '';
+          content: "";
           position: absolute;
           width: 12px;
           height: 12px;
@@ -150,7 +155,7 @@
           transition: opacity 0.3s ease;
         }
       }
-      
+
       &Label {
         font-size: map-get($font-sizes, "sm");
         color: color("neutral", "dark");
@@ -158,42 +163,44 @@
         transition: all 0.3s ease;
         font-weight: map-get($font-weights, "medium");
         white-space: nowrap;
-        
+
         @include breakpoint-down("sm") {
           font-size: map-get($font-sizes, "xs");
         }
       }
-      
+
       &Active &Dot {
         border-color: color("primary", "base");
         background-color: white;
-        box-shadow: 0 0 0 4px rgba(color("primary", "base"), 0.1), 0 3px 10px rgba(0, 0, 0, 0.1);
+        box-shadow:
+          0 0 0 4px rgba(color("primary", "base"), 0.1),
+          0 3px 10px rgba(0, 0, 0, 0.1);
         transform: scale(1.1);
-        
+
         &:after {
           opacity: 1;
         }
       }
-      
+
       &Active &Label {
         color: color("primary", "base");
         font-weight: map-get($font-weights, "semibold");
       }
-      
+
       &Complete &Dot {
         background-color: color("primary", "base");
         border-color: color("primary", "base");
         color: color("neutral", "white");
-        
+
         &:after {
           opacity: 0;
         }
       }
-      
+
       &Complete &Label {
         color: color("primary", "dark");
       }
-      
+
       &Disabled {
         opacity: 0.7;
         cursor: not-allowed;
@@ -210,16 +217,16 @@
     &::-webkit-scrollbar {
       width: 6px;
     }
-    
+
     &::-webkit-scrollbar-track {
       background: color("neutral", "lighter");
       border-radius: 6px;
     }
-    
+
     &::-webkit-scrollbar-thumb {
-      background: color("neutral", "medium"); 
+      background: color("neutral", "medium");
       border-radius: 6px;
-      
+
       &:hover {
         background: color("neutral", "dark");
       }
@@ -233,7 +240,7 @@
     margin-bottom: 8px;
     display: flex;
     align-items: center;
-    
+
     svg {
       margin-right: 12px;
       color: color("primary", "base");
@@ -269,13 +276,17 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(to right, color("primary", "light"), color("primary", "base"));
+      background: linear-gradient(
+        to right,
+        color("primary", "light"),
+        color("primary", "base")
+      );
       opacity: 0;
       transition: opacity 0.3s ease;
     }
@@ -284,7 +295,7 @@
       border-color: color("primary", "light");
       transform: translateY(-5px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-      
+
       &:before {
         opacity: 1;
       }
@@ -295,7 +306,7 @@
       background-color: rgba(color("primary", "base"), 0.03);
       transform: translateY(-5px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-      
+
       &:before {
         opacity: 1;
       }
@@ -354,13 +365,17 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
       bottom: 0;
       width: 4px;
-      background: linear-gradient(to bottom, color("primary", "light"), color("primary", "base"));
+      background: linear-gradient(
+        to bottom,
+        color("primary", "light"),
+        color("primary", "base")
+      );
       opacity: 0;
       transition: opacity 0.3s ease;
     }
@@ -369,7 +384,7 @@
       border-color: color("primary", "light");
       transform: translateY(-5px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-      
+
       &:before {
         opacity: 1;
       }
@@ -380,7 +395,7 @@
       background-color: rgba(color("primary", "base"), 0.03);
       transform: translateY(-5px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-      
+
       &:before {
         opacity: 1;
       }
@@ -468,7 +483,7 @@
     border: 1px solid color("neutral", "lighter");
     transition: all 0.3s ease;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-    
+
     &:hover {
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
     }
@@ -485,7 +500,7 @@
       margin-bottom: 16px;
       position: relative;
       padding-left: 28px;
-      
+
       svg {
         position: absolute;
         left: 0;
@@ -511,7 +526,7 @@
       padding: 0;
       border: none;
       box-shadow: none;
-      
+
       &:hover {
         box-shadow: none;
       }
@@ -596,19 +611,23 @@
     &:not(:last-child) {
       border-right: 1px solid color("neutral", "medium");
     }
-    
+
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(135deg, rgba(color("primary", "base"), 0.1), rgba(color("primary", "light"), 0.05));
+      background: linear-gradient(
+        135deg,
+        rgba(color("primary", "base"), 0.1),
+        rgba(color("primary", "light"), 0.05)
+      );
       opacity: 0;
       transition: opacity 0.3s ease;
     }
-    
+
     &:hover:not(&Selected) {
       &:before {
         opacity: 1;
@@ -618,7 +637,7 @@
     &Selected {
       background-color: color("primary", "base");
       color: color("neutral", "white");
-      
+
       &:before {
         opacity: 0;
       }
@@ -634,7 +653,7 @@
     border-radius: 12px;
     background-color: color("neutral", "lighter");
     transition: all 0.2s ease;
-    
+
     &:hover {
       background-color: rgba(color("neutral", "medium"), 0.1);
     }
@@ -699,7 +718,7 @@
       border-bottom: none;
       padding-bottom: 0;
     }
-    
+
     &:first-child {
       padding-top: 0;
     }
@@ -754,7 +773,11 @@
     }
 
     &Primary {
-      background: linear-gradient(to right, color("primary", "base"), color("primary", "dark"));
+      background: linear-gradient(
+        to right,
+        color("primary", "base"),
+        color("primary", "dark")
+      );
       color: color("neutral", "white");
       border: none;
       box-shadow: 0 4px 10px rgba(color("primary", "base"), 0.2);
@@ -824,7 +847,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: linear-gradient(to right, rgba(color("primary", "base"), 0.03), rgba(color("primary", "light"), 0.05));
+    background: linear-gradient(
+      to right,
+      rgba(color("primary", "base"), 0.03),
+      rgba(color("primary", "light"), 0.05)
+    );
   }
 
   &__extraItemsTitle {
@@ -849,11 +876,15 @@
     transition: all 0.2s ease;
 
     &:first-child {
-      background: linear-gradient(to right, color("primary", "dark"), color("primary", "base"));
+      background: linear-gradient(
+        to right,
+        color("primary", "dark"),
+        color("primary", "base")
+      );
       color: color("neutral", "white");
       font-weight: map-get($font-weights, "semibold");
     }
-    
+
     &:not(:first-child):hover {
       transform: translateY(-2px);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -899,7 +930,7 @@
       padding-left: 16px;
 
       &:before {
-        content: '•';
+        content: "•";
         position: absolute;
         left: 0;
         color: color("primary", "base");
@@ -949,7 +980,7 @@
       line-height: map-get($line-heights, "relaxed");
     }
   }
-  
+
   /* Invoice styles for the review page */
   &__invoice {
     background-color: color("neutral", "white");
@@ -958,7 +989,7 @@
     border: 1px solid color("neutral", "lighter");
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     overflow: hidden;
-    
+
     &Header {
       display: flex;
       justify-content: space-between;
@@ -971,7 +1002,7 @@
       );
       border-bottom: 1px solid color("neutral", "lighter");
     }
-    
+
     &Logo {
       display: flex;
       align-items: center;
@@ -979,23 +1010,23 @@
       font-size: map-get($font-sizes, "lg");
       font-weight: map-get($font-weights, "bold");
       color: color("primary", "dark");
-      
+
       svg {
         color: color("primary", "base");
       }
     }
-    
+
     &Id {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      
+
       span {
         &:first-child {
           font-size: map-get($font-sizes, "xs");
           color: color("neutral", "dark");
         }
-        
+
         &:last-child {
           font-size: map-get($font-sizes, "base");
           font-weight: map-get($font-weights, "semibold");
@@ -1003,16 +1034,16 @@
         }
       }
     }
-    
+
     &Section {
       padding: 20px 24px;
       border-bottom: 1px solid color("neutral", "lighter");
-      
+
       &:last-child {
         border-bottom: none;
       }
     }
-    
+
     &SectionTitle {
       font-size: map-get($font-sizes, "base");
       font-weight: map-get($font-weights, "semibold");
@@ -1021,17 +1052,17 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      
+
       svg {
         color: color("primary", "base");
       }
     }
-    
+
     &Item {
       display: flex;
       align-items: flex-start;
       gap: 16px;
-      
+
       &Icon {
         width: 48px;
         height: 48px;
@@ -1043,7 +1074,7 @@
         color: color("primary", "base");
         flex-shrink: 0;
       }
-      
+
       &Content {
         h3 {
           font-size: map-get($font-sizes, "lg");
@@ -1051,48 +1082,48 @@
           color: color("neutral", "black");
           margin-bottom: 4px;
         }
-        
+
         p {
           font-size: map-get($font-sizes, "sm");
           color: color("neutral", "dark");
         }
       }
     }
-    
+
     &Grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 16px;
       margin-bottom: 24px;
     }
-    
+
     &DetailItem {
       display: flex;
       flex-direction: column;
       gap: 4px;
-      
+
       &Label {
         font-size: map-get($font-sizes, "xs");
         color: color("neutral", "dark");
         display: flex;
         align-items: center;
         gap: 6px;
-        
+
         svg {
           color: color("primary", "base");
         }
       }
-      
+
       &Value {
         font-size: map-get($font-sizes, "sm");
         color: color("neutral", "black");
         font-weight: map-get($font-weights, "medium");
       }
     }
-    
+
     &RoomList {
       margin-top: 16px;
-      
+
       h4 {
         font-size: map-get($font-sizes, "sm");
         font-weight: map-get($font-weights, "semibold");
@@ -1100,13 +1131,13 @@
         margin-bottom: 12px;
       }
     }
-    
+
     &Rooms {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 8px;
     }
-    
+
     &Room {
       display: flex;
       justify-content: space-between;
@@ -1114,58 +1145,59 @@
       background-color: rgba(color("neutral", "lighter"), 0.5);
       border-radius: 8px;
       font-size: map-get($font-sizes, "sm");
-      
+
       span {
         &:first-child {
           color: color("neutral", "dark");
         }
-        
+
         &:last-child {
           font-weight: map-get($font-weights, "medium");
           color: color("neutral", "black");
         }
       }
     }
-    
+
     &PriceTable {
       margin-bottom: 16px;
     }
-    
+
     &PriceRow {
       display: flex;
       justify-content: space-between;
       padding: 12px 0;
       border-bottom: 1px solid color("neutral", "lighter");
       font-size: map-get($font-sizes, "sm");
-      
+
       &:last-child {
         border-bottom: none;
       }
-      
+
       span {
         &:first-child {
           color: color("neutral", "dark");
         }
-        
+
         &:last-child {
           font-weight: map-get($font-weights, "medium");
           color: color("neutral", "black");
         }
       }
     }
-    
+
     &PriceHeader {
       font-weight: map-get($font-weights, "semibold");
       color: color("neutral", "darker");
       border-bottom: 2px solid color("neutral", "lighter");
-      
+
       span {
-        &:first-child, &:last-child {
+        &:first-child,
+        &:last-child {
           color: color("neutral", "darker");
         }
       }
     }
-    
+
     &Total {
       display: flex;
       justify-content: space-between;
@@ -1174,14 +1206,14 @@
       background-color: rgba(color("primary", "base"), 0.05);
       border-radius: 8px;
       margin-top: 16px;
-      
+
       span {
         &:first-child {
           font-size: map-get($font-sizes, "base");
           font-weight: map-get($font-weights, "semibold");
           color: color("neutral", "darker");
         }
-        
+
         &:last-child {
           font-size: map-get($font-sizes, "xl");
           font-weight: map-get($font-weights, "bold");
@@ -1189,13 +1221,13 @@
         }
       }
     }
-    
+
     &Inclusions {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 12px;
     }
-    
+
     &Inclusion {
       display: flex;
       align-items: flex-start;
@@ -1203,12 +1235,12 @@
       padding: 10px 12px;
       background-color: rgba(color("success"), 0.05);
       border-radius: 8px;
-      
+
       svg {
         color: color("success");
         flex-shrink: 0;
       }
-      
+
       span {
         font-size: map-get($font-sizes, "sm");
         color: color("neutral", "darker");

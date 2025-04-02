@@ -5,7 +5,6 @@ import styles from "./PlanSummary.module.scss";
 import ServiceEditor from "./ServiceEditor/ServiceEditor";
 import { ServiceType, PlanType, DurationType } from "../SubscriptionModule";
 import { useUIStore } from "@/store";
-import SubscriptionEditorModal from "./SubscriptionEditorModal";
 
 // Type definitions for pricing configuration
 type CleaningType = "standard" | "deep" | "post";
@@ -388,7 +387,6 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
               </div>
             </div>
 
-            <SubscriptionEditorModal />
             {/* Accordion content */}
             <AnimatePresence>
               {expandedServiceId === service.id && (
