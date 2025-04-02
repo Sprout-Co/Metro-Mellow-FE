@@ -52,7 +52,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.3 }}
         >
           <Image 
-            src="/images/home/hero-house.png" 
+            src="/images/brand/b1.jpeg" 
             alt="Metro Mellow home services" 
             width={600} 
             height={500}
