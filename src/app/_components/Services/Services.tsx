@@ -13,35 +13,35 @@ const services = [
     title: 'Home Cleaning',
     description: 'Professional cleaning services for every room in your home, from basic cleaning to deep sanitization.',
     icon: '/images/icons/cleaning.svg',
-    image: '/images/services/cleaning.webp',
+    image: '/images/brand/b1.jpeg',
   },
   {
     id: 'laundry',
     title: 'Laundry Services',
     description: 'Complete laundry solutions including washing, drying, ironing, and folding of all your clothes and linens.',
     icon: '/images/icons/laundry.svg',
-    image: '/images/services/laundry.webp',
+    image: '/images/laundry/l9.jpeg',
   },
   {
     id: 'cooking',
     title: 'Meal Preparation',
     description: 'Custom meal planning and preparation services tailored to your dietary needs and preferences.',
     icon: '/images/icons/cooking.svg',
-    image: '/images/services/cooking.webp',
+    image: '/images/food/f21.jpeg',
   },
   {
     id: 'errands',
     title: 'Errand Running',
     description: 'Save time with our personal assistant services handling grocery shopping, package delivery, and more.',
     icon: '/images/icons/errands.svg',
-    image: '/images/services/errands.webp',
+    image: '/images/errand/e1.jpeg',
   },
   {
     id: 'pest-control',
     title: 'Pest Control',
     description: 'Effective and eco-friendly solutions to keep your home free from unwanted pests and insects.',
     icon: '/images/icons/pest-control.svg',
-    image: '/images/services/pest-control.webp',
+    image: '/images/pest-control/p1.jpeg',
   },
 ];
 
@@ -97,7 +97,7 @@ export default function ServiceShowcase() {
             >
               <div className={styles.services__iconWrapper}>
                 <Image 
-                  src={service.icon} 
+                  src={service.image} 
                   alt={service.title} 
                   width={40} 
                   height={40} 
