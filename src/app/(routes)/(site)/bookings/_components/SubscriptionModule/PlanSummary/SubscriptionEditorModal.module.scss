@@ -1247,4 +1247,91 @@
       }
     }
   }
+
+  // Schedule Selector Styles
+  &__scheduleSelector {
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 10px;
+  }
+
+  &__scheduleTitle {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #333;
+  }
+
+  &__daysGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 15px;
+  }
+
+  &__dayButton {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: #8bc34a;
+      background-color: rgba(139, 195, 74, 0.05);
+    }
+
+    &Selected {
+      background-color: #8bc34a;
+      color: white;
+      border-color: #8bc34a;
+    }
+  }
+
+  &__scheduleSummary {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #555;
+  }
+
+  &__timeSelector {
+    margin-top: 20px;
+  }
+
+  &__timeOptions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  &__timeButton {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: #8bc34a;
+      background-color: rgba(139, 195, 74, 0.05);
+    }
+
+    &Selected {
+      background-color: #8bc34a;
+      color: white;
+      border-color: #8bc34a;
+    }
+  }
 }

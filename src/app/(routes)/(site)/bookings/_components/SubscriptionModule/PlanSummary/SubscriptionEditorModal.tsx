@@ -5,6 +5,7 @@ import { useUIStore } from "@/store/slices/ui";
 import { Icon, IconName } from "@/components/ui/Icon/Icon";
 import styles from "./SubscriptionEditorModal.module.scss";
 import { useState, useEffect } from "react";
+import ScheduleSelector from "./ServiceEditor/ScheduleSelector/ScheduleSelector";
 
 interface CleaningOption {
   id: string;
@@ -250,8 +251,6 @@ export default function SubscriptionEditorModal({
   );
 
   // Service details state
-  const [serviceFrequency, setServiceFrequency] =
-    useState<ServiceFrequency>("one-off");
   const [propertyType, setPropertyType] = useState<"flat" | "duplex">("flat");
   const [roomQuantities, setRoomQuantities] = useState<RoomQuantity>({
     bedrooms: 0,
@@ -265,7 +264,8 @@ export default function SubscriptionEditorModal({
 
   // Schedule state
   const [selectedDate, setSelectedDate] = useState<string>("");
-  const [selectedTime, setSelectedTime] = useState<string>("");
+  const [selectedTime, setSelectedTime] = useState<string>("8am");
+  const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
   // UI state
   const [showExtraItems, setShowExtraItems] = useState(false);
@@ -345,6 +345,34 @@ export default function SubscriptionEditorModal({
     setLaundryBags((prev) => Math.max(1, prev + (increment ? 1 : -1)));
   };
 
+  // Handle day selection
+  const toggleDay = (day: string) => {
+    let newDays = [...selectedDays];
+
+    if (selectedDays.includes(day)) {
+      // Remove day if it's not the last one
+      if (selectedDays.length > 1) {
+        newDays = newDays.filter((d) => d !== day);
+      }
+    } else {
+      // Add day
+      newDays.push(day);
+    }
+
+    setSelectedDays(newDays);
+  };
+
+  // Get days of week
+  const daysOfWeek = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+  ];
+
   // Calculate total price based on selected options
   const calculateTotalPrice = () => {
     if (!selectedService) return 0;
@@ -364,7 +392,7 @@ export default function SubscriptionEditorModal({
       basePrice = totalItems * basePricePerItem;
 
       // Apply recurring discount if applicable
-      if (serviceFrequency !== "one-off") {
+      if (selectedDays.length > 0) {
         basePrice = Math.round(basePrice * 0.9); // 10% discount for recurring
       }
     } else {
@@ -432,9 +460,8 @@ export default function SubscriptionEditorModal({
             ? selectedLaundryOption?.id
             : null,
       details: {
-        date: selectedDate,
         time: selectedTime,
-        frequency: serviceFrequency,
+        days: selectedDays,
         propertyType: selectedService?.id === "cleaning" ? propertyType : null,
         rooms: selectedService?.id === "cleaning" ? roomQuantities : null,
         laundryBags: selectedService?.id === "laundry" ? laundryBags : null,
@@ -442,7 +469,6 @@ export default function SubscriptionEditorModal({
       pricing: {
         totalPrice: calculateTotalPrice(),
         currency: "₦",
-        recurringDiscount: serviceFrequency !== "one-off",
       },
     };
 
@@ -467,12 +493,13 @@ export default function SubscriptionEditorModal({
         // Need date, time, and for cleaning - at least one room
         if (selectedService?.id === "cleaning") {
           return (
-            !selectedDate ||
-            !selectedTime ||
+            selectedDays.length === 0 ||
             Object.values(roomQuantities).every((qty) => qty === 0)
           );
+        } else if (selectedService?.id === "laundry") {
+          return selectedDays.length === 0;
         }
-        return !selectedDate || !selectedTime;
+        return selectedDays.length === 0;
       default:
         return false;
     }
@@ -710,59 +737,6 @@ export default function SubscriptionEditorModal({
         </motion.h2>
 
         <motion.div className={styles.modal__form} variants={containerVariants}>
-          {/* Service Frequency */}
-          <motion.div
-            variants={itemVariants}
-            className={styles.modal__formGroup}
-          >
-            <label>
-              <Icon name="Repeat" />
-              Service Frequency
-            </label>
-            <div className={styles.modal__toggleGroup}>
-              <button
-                className={`${styles.modal__toggleButton} ${
-                  serviceFrequency === "one-off"
-                    ? styles.modal__toggleButtonSelected
-                    : ""
-                }`}
-                onClick={() => setServiceFrequency("one-off")}
-              >
-                One-off
-              </button>
-              <button
-                className={`${styles.modal__toggleButton} ${
-                  serviceFrequency === "weekly"
-                    ? styles.modal__toggleButtonSelected
-                    : ""
-                }`}
-                onClick={() => setServiceFrequency("weekly")}
-              >
-                Weekly
-              </button>
-              <button
-                className={`${styles.modal__toggleButton} ${
-                  serviceFrequency === "bi-weekly"
-                    ? styles.modal__toggleButtonSelected
-                    : ""
-                }`}
-                onClick={() => setServiceFrequency("bi-weekly")}
-              >
-                Bi-weekly
-              </button>
-              <button
-                className={`${styles.modal__toggleButton} ${
-                  serviceFrequency === "monthly"
-                    ? styles.modal__toggleButtonSelected
-                    : ""
-                }`}
-                onClick={() => setServiceFrequency("monthly")}
-              >
-                Monthly
-              </button>
-            </div>
-          </motion.div>
-
           {/* Schedule Section */}
           <motion.div
             variants={itemVariants}
@@ -772,41 +746,62 @@ export default function SubscriptionEditorModal({
               <Icon name="Calendar" />
               Schedule
             </label>
-            <div className={styles.modal__formRow}>
-              <div className={styles.modal__formGroup}>
-                <label htmlFor="date">Date</label>
-                <input
-                  id="date"
-                  type="date"
-                  className={styles.modal__input}
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                  min={new Date().toISOString().split("T")[0]}
-                />
+
+            <div className={styles.modal__scheduleSelector}>
+              <h3 className={styles.modal__scheduleTitle}>
+                Select your service days
+              </h3>
+
+              <div className={styles.modal__daysGrid}>
+                {daysOfWeek.map((day) => (
+                  <button
+                    key={day}
+                    className={`${styles.modal__dayButton} ${
+                      selectedDays.includes(day)
+                        ? styles.modal__dayButtonSelected
+                        : ""
+                    }`}
+                    onClick={() => toggleDay(day)}
+                  >
+                    {day.charAt(0).toUpperCase() + day.slice(1, 3)}
+                  </button>
+                ))}
               </div>
-              <div className={styles.modal__formGroup}>
-                <label htmlFor="time">Time</label>
-                <select
-                  id="time"
-                  className={styles.modal__select}
-                  value={selectedTime}
-                  onChange={(e) => setSelectedTime(e.target.value)}
-                >
-                  <option value="">Select time</option>
-                  <option value="09:00">9:00 AM</option>
-                  <option value="10:00">10:00 AM</option>
-                  <option value="11:00">11:00 AM</option>
-                  <option value="12:00">12:00 PM</option>
-                  <option value="13:00">1:00 PM</option>
-                  <option value="14:00">2:00 PM</option>
-                  <option value="15:00">3:00 PM</option>
-                  <option value="16:00">4:00 PM</option>
-                </select>
-              </div>
+
+              {selectedDays.length > 0 && (
+                <div className={styles.modal__scheduleSummary}>
+                  <span>
+                    Service will be provided on:{" "}
+                    {selectedDays
+                      .map((day) => day.charAt(0).toUpperCase() + day.slice(1))
+                      .join(", ")}
+                  </span>
+                </div>
+              )}
+
+              {selectedService.id === "cleaning" && (
+                <div className={styles.modal__timeSelector}>
+                  <h3 className={styles.modal__scheduleTitle}>
+                    Select your preferred time
+                  </h3>
+                  <div className={styles.modal__timeOptions}>
+                    {["morning", "afternoon", "evening"].map((time) => (
+                      <button
+                        key={time}
+                        className={`${styles.modal__timeButton} ${
+                          selectedTime === time
+                            ? styles.modal__timeButtonSelected
+                            : ""
+                        }`}
+                        onClick={() => setSelectedTime(time)}
+                      >
+                        {time}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-            <p className={styles.modal__helper}>
-              Our service hours are 9:00 AM to 5:00 PM, Monday through Saturday
-            </p>
           </motion.div>
 
           {/* Cleaning Specific Fields */}
@@ -931,7 +926,7 @@ export default function SubscriptionEditorModal({
           )}
 
           {/* Service Inclusions */}
-          <motion.div
+          {/* <motion.div
             variants={itemVariants}
             className={styles.modal__formGroup}
           >
@@ -960,7 +955,7 @@ export default function SubscriptionEditorModal({
                   </div>
                 ))}
             </div>
-          </motion.div>
+          </motion.div> */}
 
           {/* Price Summary */}
           <motion.div
@@ -1023,28 +1018,12 @@ export default function SubscriptionEditorModal({
             )}
 
             <div className={styles.modal__summaryItem}>
-              <span className={styles.modal__summaryItemLabel}>Frequency</span>
-              <span
-                className={styles.modal__summaryItemValue}
-                style={{ textTransform: "capitalize" }}
-              >
-                {serviceFrequency.replace("-", " ")}
+              <span className={styles.modal__summaryItemLabel}>Schedule</span>
+              <span className={styles.modal__summaryItemValue}>
+                {selectedDays.length} day{selectedDays.length > 1 ? "s" : ""}{" "}
+                per week
               </span>
             </div>
-
-            {serviceFrequency !== "one-off" && (
-              <div className={styles.modal__summaryItem}>
-                <span className={styles.modal__summaryItemLabel}>
-                  Recurring Discount
-                </span>
-                <span
-                  className={styles.modal__summaryItemValue}
-                  style={{ color: "#28c76f" }}
-                >
-                  -10%
-                </span>
-              </div>
-            )}
 
             <div className={styles.modal__summaryItem}>
               <span
@@ -1147,14 +1126,11 @@ export default function SubscriptionEditorModal({
               <div className={styles.modal__invoiceDetailItem}>
                 <span className={styles.modal__invoiceDetailLabel}>
                   <Icon name="Calendar" size={14} />
-                  Date
+                  Schedule
                 </span>
                 <span className={styles.modal__invoiceDetailValue}>
-                  {new Date(selectedDate).toLocaleDateString("en-US", {
-                    weekday: "long",
-                    month: "long",
-                    day: "numeric",
-                  })}
+                  {selectedDays.length} day
+                  {selectedDays.length > 1 ? "s" : ""} per week
                 </span>
               </div>
 
@@ -1164,29 +1140,7 @@ export default function SubscriptionEditorModal({
                   Time
                 </span>
                 <span className={styles.modal__invoiceDetailValue}>
-                  {selectedTime
-                    ? new Date(`2000-01-01T${selectedTime}`).toLocaleTimeString(
-                        "en-US",
-                        {
-                          hour: "numeric",
-                          minute: "numeric",
-                          hour12: true,
-                        }
-                      )
-                    : ""}
-                </span>
-              </div>
-
-              <div className={styles.modal__invoiceDetailItem}>
-                <span className={styles.modal__invoiceDetailLabel}>
-                  <Icon name="Repeat" size={14} />
-                  Frequency
-                </span>
-                <span
-                  className={styles.modal__invoiceDetailValue}
-                  style={{ textTransform: "capitalize" }}
-                >
-                  {serviceFrequency.replace("-", " ")}
+                  {selectedTime}
                 </span>
               </div>
 
@@ -1318,13 +1272,6 @@ export default function SubscriptionEditorModal({
                       )
                     ).toLocaleString()}
                   </span>
-                </div>
-              )}
-
-              {serviceFrequency !== "one-off" && (
-                <div className={styles.modal__invoicePriceRow}>
-                  <span>Recurring Discount</span>
-                  <span style={{ color: "#28c76f" }}>-10%</span>
                 </div>
               )}
             </div>
