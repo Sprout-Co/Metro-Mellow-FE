@@ -196,6 +196,21 @@ const services: Service[] = [
     ],
   },
   {
+    id: "cooking",
+    label: "Cooking",
+    icon: "Utensils",
+    description: "Professional cooking service",
+    price: "From $40",
+    duration: "2-3 hours",
+    inclusions: [
+      "Professional chef",
+      "Meal planning",
+      "Grocery shopping",
+      "Clean up after cooking",
+      "Custom menu options",
+    ],
+  },
+  {
     id: "pest-control",
     icon: "Shield",
     label: "Pest Control",
@@ -247,7 +262,18 @@ export default function SubscriptionEditorModal({
 
   // Filter services to only show selected ones
   const filteredServices = services.filter((service) =>
-    selectedServices.some((selected) => selected.type === service.id)
+    selectedServices.some((selected) => {
+      // Map service types to IDs for proper matching
+      const typeToIdMap: Record<string, string> = {
+        cleaning: "cleaning",
+        laundry: "laundry",
+        food: "cooking",
+        "pest-control": "pest-control",
+      };
+
+      // Check if the selected service type maps to this service ID
+      return typeToIdMap[selected.type] === service.id;
+    })
   );
 
   // Service details state
@@ -261,6 +287,7 @@ export default function SubscriptionEditorModal({
     outdoor: 0,
   });
   const [laundryBags, setLaundryBags] = useState<number>(1);
+  const [mealsPerDelivery, setMealsPerDelivery] = useState<number>(1);
 
   // Schedule state
   const [selectedDate, setSelectedDate] = useState<string>("");
@@ -285,6 +312,8 @@ export default function SubscriptionEditorModal({
           return !!selectedCleaningOption;
         } else if (selectedService?.id === "laundry") {
           return !!selectedLaundryOption;
+        } else if (selectedService?.id === "cooking") {
+          return true;
         }
         return !!selectedService;
       case BookingStep.REVIEW:
@@ -345,6 +374,11 @@ export default function SubscriptionEditorModal({
     setLaundryBags((prev) => Math.max(1, prev + (increment ? 1 : -1)));
   };
 
+  // Handle meals per delivery changes
+  const handleMealsPerDeliveryChange = (increment: boolean) => {
+    setMealsPerDelivery((prev) => Math.max(1, prev + (increment ? 1 : -1)));
+  };
+
   // Handle day selection
   const toggleDay = (day: string) => {
     let newDays = [...selectedDays];
@@ -390,6 +424,15 @@ export default function SubscriptionEditorModal({
         selectedLaundryOption.price.replace(/[^0-9]/g, "")
       );
       basePrice = totalItems * basePricePerItem;
+
+      // Apply recurring discount if applicable
+      if (selectedDays.length > 0) {
+        basePrice = Math.round(basePrice * 0.9); // 10% discount for recurring
+      }
+    } else if (selectedService.id === "cooking") {
+      // For cooking, calculate based on meals per delivery
+      basePrice = parseInt(selectedService.price.replace(/[^0-9]/g, ""));
+      basePrice = basePrice * mealsPerDelivery;
 
       // Apply recurring discount if applicable
       if (selectedDays.length > 0) {
@@ -458,13 +501,17 @@ export default function SubscriptionEditorModal({
           ? selectedCleaningOption?.id
           : selectedService?.id === "laundry"
             ? selectedLaundryOption?.id
-            : null,
+            : selectedService?.id === "cooking"
+              ? "cooking"
+              : null,
       details: {
         time: selectedTime,
         days: selectedDays,
         propertyType: selectedService?.id === "cleaning" ? propertyType : null,
         rooms: selectedService?.id === "cleaning" ? roomQuantities : null,
         laundryBags: selectedService?.id === "laundry" ? laundryBags : null,
+        mealsPerDelivery:
+          selectedService?.id === "cooking" ? mealsPerDelivery : null,
       },
       pricing: {
         totalPrice: calculateTotalPrice(),
@@ -487,6 +534,8 @@ export default function SubscriptionEditorModal({
           return !selectedCleaningOption;
         } else if (selectedService?.id === "laundry") {
           return !selectedLaundryOption;
+        } else if (selectedService?.id === "cooking") {
+          return selectedDays.length === 0;
         }
         return !selectedService;
       case BookingStep.DETAILS:
@@ -497,6 +546,8 @@ export default function SubscriptionEditorModal({
             Object.values(roomQuantities).every((qty) => qty === 0)
           );
         } else if (selectedService?.id === "laundry") {
+          return selectedDays.length === 0;
+        } else if (selectedService?.id === "cooking") {
           return selectedDays.length === 0;
         }
         return selectedDays.length === 0;
@@ -925,37 +976,44 @@ export default function SubscriptionEditorModal({
             </motion.div>
           )}
 
-          {/* Service Inclusions */}
-          {/* <motion.div
-            variants={itemVariants}
-            className={styles.modal__formGroup}
-          >
-            <label>
-              <Icon name="CheckCircle" />
-              Service Inclusions
-            </label>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-                gap: "10px",
-              }}
+          {/* Cooking Specific Fields */}
+          {selectedService.id === "cooking" && (
+            <motion.div
+              variants={itemVariants}
+              className={styles.modal__formGroup}
             >
-              {(selectedCleaningOption?.inclusions || selectedLaundryOption
-                ? selectedService.inclusions
-                : selectedService.inclusions || []
-              )
-                .slice(0, 4)
-                .map((inclusion, index) => (
-                  <div key={index} className={styles.modal__inclusion}>
-                    <Icon name="Check" />
-                    <span className={styles.modal__inclusionText}>
-                      {inclusion}
-                    </span>
-                  </div>
-                ))}
-            </div>
-          </motion.div> */}
+              <label>
+                <Icon name="Utensils" />
+                Cooking Details
+              </label>
+              <div className={styles.modal__counterGroup}>
+                <span className={styles.modal__counterGroupLabel}>
+                  Meals Per Delivery
+                </span>
+                <div className={styles.modal__counterGroupControl}>
+                  <button
+                    className={styles.modal__counterGroupButton}
+                    onClick={() => handleMealsPerDeliveryChange(false)}
+                    disabled={mealsPerDelivery <= 1}
+                  >
+                    <Icon name="Minus" />
+                  </button>
+                  <span className={styles.modal__counterGroupValue}>
+                    {mealsPerDelivery}
+                  </span>
+                  <button
+                    className={styles.modal__counterGroupButton}
+                    onClick={() => handleMealsPerDeliveryChange(true)}
+                  >
+                    <Icon name="Plus" />
+                  </button>
+                </div>
+              </div>
+              <p className={styles.modal__helper}>
+                Number of meals prepared per delivery
+              </p>
+            </motion.div>
+          )}
 
           {/* Price Summary */}
           <motion.div
@@ -1154,6 +1212,18 @@ export default function SubscriptionEditorModal({
                     {propertyType === "flat"
                       ? "Flat / Apartment"
                       : "Duplex / House"}
+                  </span>
+                </div>
+              )}
+
+              {selectedService.id === "cooking" && (
+                <div className={styles.modal__invoiceDetailItem}>
+                  <span className={styles.modal__invoiceDetailLabel}>
+                    <Icon name="Utensils" size={14} />
+                    Meals Per Delivery
+                  </span>
+                  <span className={styles.modal__invoiceDetailValue}>
+                    {mealsPerDelivery} meal{mealsPerDelivery > 1 ? "s" : ""}
                   </span>
                 </div>
               )}
