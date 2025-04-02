@@ -351,8 +351,10 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
           <div key={service.id} className={styles.plan_summary__service}>
             <div
               className={`${styles.plan_summary__service_header} ${expandedServiceId === service.id ? styles.plan_summary__service_header_active : ""}`}
-              // onClick={() => toggleServiceAccordion(service.id)}
-              onClick={() => openModal("craft-subscription")}
+              onClick={() => {
+                // Pass the selected services to the modal
+                openModal("craft-subscription", { selectedServices: services });
+              }}
             >
               <div className={styles.plan_summary__service_icon}>
                 <span>{service.icon}</span>

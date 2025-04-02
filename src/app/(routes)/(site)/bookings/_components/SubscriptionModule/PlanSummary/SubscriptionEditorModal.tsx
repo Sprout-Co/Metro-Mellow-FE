@@ -218,7 +218,13 @@ const steps = [
   { label: "Review", icon: "CheckCircle" },
 ];
 
-export default function SubscriptionEditorModal() {
+interface SubscriptionEditorModalProps {
+  selectedServices: ServiceType[];
+}
+
+export default function SubscriptionEditorModal({
+  selectedServices,
+}: SubscriptionEditorModalProps) {
   const { isModalOpen, modalType, closeModal } = useUIStore();
   const [currentStep, setCurrentStep] = useState<BookingStep>(
     BookingStep.SERVICE
@@ -237,6 +243,11 @@ export default function SubscriptionEditorModal() {
   const [selectedLaundryOption, setSelectedLaundryOption] =
     useState<LaundryOption | null>(null);
   const [showServiceOptions, setShowServiceOptions] = useState<boolean>(false);
+
+  // Filter services to only show selected ones
+  const filteredServices = services.filter((service) =>
+    selectedServices.some((selected) => selected.type === service.id)
+  );
 
   // Service details state
   const [serviceFrequency, setServiceFrequency] =
@@ -531,11 +542,11 @@ export default function SubscriptionEditorModal() {
               className={styles.modal__contentSubtitle}
               variants={itemVariants}
             >
-              Choose from our range of professional services
+              Choose from your selected services
             </motion.p>
 
             <div className={styles.modal__serviceGrid}>
-              {services.map((service) => (
+              {filteredServices.map((service) => (
                 <motion.div
                   key={service.id}
                   className={`${styles.modal__serviceCard} ${
@@ -1515,7 +1526,7 @@ export default function SubscriptionEditorModal() {
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
         >
           <div className={styles.modal__header}>
-            <h2 className={styles.modal__title}>Book a Service</h2>
+            <h2 className={styles.modal__title}>Craft Your Subscription</h2>
             <button className={styles.modal__close} onClick={closeModal}>
               <Icon name="X" />
             </button>

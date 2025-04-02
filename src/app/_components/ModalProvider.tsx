@@ -2,14 +2,17 @@
 import React from "react";
 import { useUIStore } from "@/store";
 import SubscriptionEditorModal from "@/app/(routes)/(site)/bookings/_components/SubscriptionModule/PlanSummary/SubscriptionEditorModal";
+import { ServiceType } from "@/app/(routes)/(site)/bookings/_components/SubscriptionModule/SubscriptionModule";
 
 const ModalProvider: React.FC = () => {
-  const { isModalOpen, modalType } = useUIStore();
+  const { isModalOpen, modalType, modalData } = useUIStore();
 
   return (
     <>
       {isModalOpen && modalType === "craft-subscription" && (
-        <SubscriptionEditorModal />
+        <SubscriptionEditorModal
+          selectedServices={modalData?.selectedServices || []}
+        />
       )}
     </>
   );
