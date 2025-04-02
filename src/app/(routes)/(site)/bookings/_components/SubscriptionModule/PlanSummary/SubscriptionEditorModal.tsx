@@ -830,7 +830,8 @@ export default function SubscriptionEditorModal({
                 </div>
               )}
 
-              {selectedService.id === "cleaning" && (
+              {(selectedService.id === "cleaning" ||
+                selectedService.id === "cooking") && (
                 <div className={styles.modal__timeSelector}>
                   <h3 className={styles.modal__scheduleTitle}>
                     Select your preferred time

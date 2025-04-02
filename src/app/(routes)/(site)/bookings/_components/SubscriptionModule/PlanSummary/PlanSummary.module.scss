@@ -155,24 +155,27 @@
   }
 
   &__service_details {
-    padding: spacing("md");
-    border-top: 1px solid color("neutral", "lighter");
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+    margin-top: spacing("sm");
+    padding: spacing("sm");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("sm");
   }
 
-  &__detail_item {
-    margin-bottom: spacing("sm");
-
-    &:last-of-type {
-      margin-bottom: spacing("md");
-    }
+  &__detail_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("xs") spacing("sm");
+    background-color: color("neutral", "white");
+    border-radius: border-radius("xs");
   }
 
   &__detail_label {
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "dark");
-    display: inline-block;
-    margin-right: spacing("xs");
   }
 
   &__detail_value {
@@ -321,5 +324,37 @@
     overflow: hidden;
     background-color: #ffffff;
     padding: 0;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("lg");
+  }
+
+  &__edit_button {
+    padding: spacing("sm") spacing("md");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("sm");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color("primary", "dark");
+      transform: translateY(-1px);
+    }
+  }
+
+  &__service_detail {
+    padding: spacing("xs") spacing("sm");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("sm");
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
   }
 }
