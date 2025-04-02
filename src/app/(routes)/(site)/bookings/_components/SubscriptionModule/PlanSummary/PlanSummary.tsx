@@ -1,8 +1,11 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./PlanSummary.module.scss";
 import ServiceEditor from "./ServiceEditor/ServiceEditor";
 import { ServiceType, PlanType, DurationType } from "../SubscriptionModule";
+import { useUIStore } from "@/store";
+import SubscriptionEditorModal from "./SubscriptionEditorModal";
 
 // Type definitions for pricing configuration
 type CleaningType = "standard" | "deep" | "post";
@@ -147,6 +150,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
   const [servicePrices, setServicePrices] = useState<{ [key: string]: number }>(
     {}
   );
+  const { openModal } = useUIStore();
 
   // Calculate individual service prices
   const calculateServicePrice = (service: ServiceType): number => {
@@ -334,7 +338,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
   useEffect(() => {
     setServices(selectedServices);
   }, [selectedServices]);
-  
+
   if (services.length > 0) {
     console.log("pricesxxx", calculateServicePrice(services[0]));
   }
@@ -348,7 +352,8 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
           <div key={service.id} className={styles.plan_summary__service}>
             <div
               className={`${styles.plan_summary__service_header} ${expandedServiceId === service.id ? styles.plan_summary__service_header_active : ""}`}
-              onClick={() => toggleServiceAccordion(service.id)}
+              // onClick={() => toggleServiceAccordion(service.id)}
+              onClick={() => openModal("craft-subscription")}
             >
               <div className={styles.plan_summary__service_icon}>
                 <span>{service.icon}</span>
@@ -383,6 +388,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
               </div>
             </div>
 
+            <SubscriptionEditorModal />
             {/* Accordion content */}
             <AnimatePresence>
               {expandedServiceId === service.id && (
@@ -393,13 +399,15 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <ServiceEditor
+                  <h1>Hello</h1>
+
+                  {/* <ServiceEditor
                     serviceType={service.type}
                     onClose={() => setExpandedServiceId(null)}
                     onSave={(data) => handleSaveService(service.id, data)}
                     initialData={service.details}
                     accordionMode={true}
-                  />
+                  /> */}
                 </motion.div>
               )}
             </AnimatePresence>

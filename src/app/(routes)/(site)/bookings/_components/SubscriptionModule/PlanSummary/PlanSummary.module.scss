@@ -76,15 +76,15 @@
     background-color: #f9f7f5;
     cursor: pointer;
     transition: $transition-base;
-    
+
     &:hover {
       background-color: darken(#f9f7f5, 3%);
     }
-    
+
     &_active {
       background-color: rgba(color("primary", "light"), 0.1);
       border-bottom: 1px solid color("neutral", "lighter");
-      
+
       &:hover {
         background-color: rgba(color("primary", "light"), 0.15);
       }
@@ -316,7 +316,7 @@
     margin-left: spacing("sm");
     transition: $transition-base;
   }
-  
+
   &__service_editor {
     overflow: hidden;
     background-color: #ffffff;
