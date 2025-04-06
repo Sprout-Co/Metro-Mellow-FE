@@ -1,39 +1,5 @@
 mutation CreateBooking($input: CreateBookingInput!) {
-  createBooking(input: $input) {
-    id
-    customer {
-      id
-      firstName
-      lastName
-      email
-    }
-    service {
-      id
-      name
-      description
-    }
-    staff {
-      id
-      firstName
-      lastName
-    }
-    date
-    startTime
-    endTime
-    status
-    notes
-    address {
-      street
-      city
-      state
-      zipCode
-      country
-    }
-    totalPrice
-    paymentStatus
-    createdAt
-    updatedAt
-  }
+  createBooking(input: $input)
 }
 
 mutation UpdateBooking($id: ID!, $input: UpdateBookingInput!) {

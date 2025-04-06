@@ -21,8 +21,12 @@ import {
   useGetBookingsLazyQuery,
   useGetCustomerBookingsLazyQuery,
   useGetStaffBookingsLazyQuery,
+  BookingStatus,
+  ServiceType,
+  AddressInput,
+  RoomQuantitiesInput,
+  PropertyType,
 } from "@/graphql/api";
-import { BookingStatus } from "@/graphql/api";
 
 export const useBookingOperations = () => {
   const [createBookingMutation] = useCreateBookingMutation();
@@ -56,13 +60,12 @@ export const useBookingOperations = () => {
       date: Date;
       startTime: string;
       notes?: string;
-      address: {
-        street: string;
-        city: string;
-        state: string;
-        zipCode: string;
-        country: string;
-      };
+      address: AddressInput;
+      serviceOption: string;
+      serviceType: ServiceType;
+      totalPrice: number;
+      propertyType?: PropertyType;
+      roomQuantities?: RoomQuantitiesInput;
     }) => {
       try {
         const { data, errors } = await createBookingMutation({
@@ -96,16 +99,15 @@ export const useBookingOperations = () => {
     async (
       id: string,
       input: {
-        date?: Date;
-        startTime?: string;
+        date: Date;
+        startTime: string;
         notes?: string;
-        address?: {
-          street: string;
-          city: string;
-          state: string;
-          zipCode: string;
-          country: string;
-        };
+        address: AddressInput;
+        serviceOption: string;
+        serviceType: ServiceType;
+        totalPrice: number;
+        propertyType?: PropertyType;
+        roomQuantities?: RoomQuantitiesInput;
       }
     ) => {
       try {

@@ -55,13 +55,19 @@ export type Booking = {
   createdAt: Scalars['DateTime']['output'];
   customer: User;
   date: Scalars['DateTime']['output'];
-  endTime: Scalars['String']['output'];
+  endTime?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  laundryBags?: Maybe<Scalars['Int']['output']>;
   notes?: Maybe<Scalars['String']['output']>;
   paymentStatus: PaymentStatus;
-  service: Service;
+  propertyType?: Maybe<PropertyType>;
+  recurringDiscount?: Maybe<Scalars['Float']['output']>;
+  roomQuantities?: Maybe<RoomQuantities>;
+  service?: Maybe<Service>;
+  serviceOption: Scalars['String']['output'];
+  serviceType: ServiceType;
   staff?: Maybe<User>;
-  startTime: Scalars['String']['output'];
+  startTime?: Maybe<Scalars['String']['output']>;
   status: BookingStatus;
   totalPrice: Scalars['Float']['output'];
   updatedAt: Scalars['DateTime']['output'];
@@ -78,9 +84,15 @@ export enum BookingStatus {
 export type CreateBookingInput = {
   address: AddressInput;
   date: Scalars['DateTime']['input'];
+  laundryBags?: InputMaybe<Scalars['Int']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
+  propertyType?: InputMaybe<PropertyType>;
+  roomQuantities?: InputMaybe<RoomQuantitiesInput>;
   serviceId: Scalars['ID']['input'];
+  serviceOption: Scalars['String']['input'];
+  serviceType: ServiceType;
   startTime: Scalars['String']['input'];
+  totalPrice: Scalars['Float']['input'];
 };
 
 export type CreatePaymentInput = {
@@ -170,7 +182,7 @@ export type Mutation = {
   cancelSubscription: Subscription;
   changePassword: Scalars['Boolean']['output'];
   completeBooking: Booking;
-  createBooking: Booking;
+  createBooking: Scalars['Boolean']['output'];
   createPayment: Payment;
   createService: Service;
   createStaffProfile: StaffProfile;
@@ -459,6 +471,11 @@ export enum PaymentStatus {
   Refunded = 'REFUNDED'
 }
 
+export enum PropertyType {
+  Duplex = 'DUPLEX',
+  Flat = 'FLAT'
+}
+
 export type Query = {
   __typename?: 'Query';
   _?: Maybe<Scalars['Boolean']['output']>;
@@ -569,6 +586,25 @@ export type RefundPaymentInput = {
   reason: Scalars['String']['input'];
 };
 
+export type RoomQuantities = {
+  __typename?: 'RoomQuantities';
+  bathrooms: Scalars['Int']['output'];
+  bedrooms: Scalars['Int']['output'];
+  kitchen: Scalars['Int']['output'];
+  livingRooms: Scalars['Int']['output'];
+  outdoor: Scalars['Int']['output'];
+  study: Scalars['Int']['output'];
+};
+
+export type RoomQuantitiesInput = {
+  bathrooms: Scalars['Int']['input'];
+  bedrooms: Scalars['Int']['input'];
+  kitchen: Scalars['Int']['input'];
+  livingRooms: Scalars['Int']['input'];
+  outdoor: Scalars['Int']['input'];
+  study: Scalars['Int']['input'];
+};
+
 export type Service = {
   __typename?: 'Service';
   category: ServiceCategory;
@@ -609,6 +645,12 @@ export enum ServiceStatus {
   Active = 'ACTIVE',
   Inactive = 'INACTIVE',
   Maintenance = 'MAINTENANCE'
+}
+
+export enum ServiceType {
+  Cleaning = 'CLEANING',
+  Laundry = 'LAUNDRY',
+  PestControl = 'PEST_CONTROL'
 }
 
 export type StaffAvailability = {
@@ -715,15 +757,22 @@ export enum SubscriptionStatus {
   Active = 'ACTIVE',
   Cancelled = 'CANCELLED',
   Expired = 'EXPIRED',
+  Paused = 'PAUSED',
   Pending = 'PENDING',
   Suspended = 'SUSPENDED'
 }
 
 export type UpdateBookingInput = {
-  address?: InputMaybe<AddressInput>;
-  date?: InputMaybe<Scalars['DateTime']['input']>;
+  address: AddressInput;
+  date: Scalars['DateTime']['input'];
+  laundryBags?: InputMaybe<Scalars['Int']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
-  startTime?: InputMaybe<Scalars['String']['input']>;
+  propertyType?: InputMaybe<PropertyType>;
+  roomQuantities?: InputMaybe<RoomQuantitiesInput>;
+  serviceOption: Scalars['String']['input'];
+  serviceType: ServiceType;
+  startTime: Scalars['String']['input'];
+  totalPrice: Scalars['Float']['input'];
 };
 
 export type UpdateServiceInput = {
@@ -837,7 +886,7 @@ export type CreateBookingMutationVariables = Exact<{
 }>;
 
 
-export type CreateBookingMutation = { __typename?: 'Mutation', createBooking: { __typename?: 'Booking', id: string, date: any, startTime: string, endTime: string, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service: { __typename?: 'Service', id: string, name: string, description: string }, staff?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } } };
+export type CreateBookingMutation = { __typename?: 'Mutation', createBooking: boolean };
 
 export type UpdateBookingMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -845,7 +894,7 @@ export type UpdateBookingMutationVariables = Exact<{
 }>;
 
 
-export type UpdateBookingMutation = { __typename?: 'Mutation', updateBooking: { __typename?: 'Booking', id: string, date: any, startTime: string, endTime: string, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service: { __typename?: 'Service', id: string, name: string, description: string }, staff?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } } };
+export type UpdateBookingMutation = { __typename?: 'Mutation', updateBooking: { __typename?: 'Booking', id: string, date: any, startTime?: string | null, endTime?: string | null, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service?: { __typename?: 'Service', id: string, name: string, description: string } | null, staff?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } } };
 
 export type CancelBookingMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -882,7 +931,7 @@ export type CreatePaymentMutationVariables = Exact<{
 }>;
 
 
-export type CreatePaymentMutation = { __typename?: 'Mutation', createPayment: { __typename?: 'Payment', id: string, amount: number, currency: string, status: PaymentStatus, paymentIntentId: string, refundAmount?: number | null, refundReason?: string | null, metadata?: any | null, createdAt: any, updatedAt: any, booking: { __typename?: 'Booking', id: string, service: { __typename?: 'Service', id: string, name: string } }, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, paymentMethod: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean } } };
+export type CreatePaymentMutation = { __typename?: 'Mutation', createPayment: { __typename?: 'Payment', id: string, amount: number, currency: string, status: PaymentStatus, paymentIntentId: string, refundAmount?: number | null, refundReason?: string | null, metadata?: any | null, createdAt: any, updatedAt: any, booking: { __typename?: 'Booking', id: string, service?: { __typename?: 'Service', id: string, name: string } | null }, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, paymentMethod: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean } } };
 
 export type RefundPaymentMutationVariables = Exact<{
   input: RefundPaymentInput;
@@ -1087,43 +1136,43 @@ export type GetBookingsQueryVariables = Exact<{
 }>;
 
 
-export type GetBookingsQuery = { __typename?: 'Query', bookings: Array<{ __typename?: 'Booking', id: string, date: any, startTime: string, endTime: string, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service: { __typename?: 'Service', id: string, name: string, description: string }, staff?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } }> };
+export type GetBookingsQuery = { __typename?: 'Query', bookings: Array<{ __typename?: 'Booking', id: string, date: any, startTime?: string | null, endTime?: string | null, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service?: { __typename?: 'Service', id: string, name: string, description: string } | null, staff?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } }> };
 
 export type GetBookingByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetBookingByIdQuery = { __typename?: 'Query', booking?: { __typename?: 'Booking', id: string, date: any, startTime: string, endTime: string, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service: { __typename?: 'Service', id: string, name: string, description: string }, staff?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } } | null };
+export type GetBookingByIdQuery = { __typename?: 'Query', booking?: { __typename?: 'Booking', id: string, date: any, startTime?: string | null, endTime?: string | null, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service?: { __typename?: 'Service', id: string, name: string, description: string } | null, staff?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } } | null };
 
 export type GetCustomerBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCustomerBookingsQuery = { __typename?: 'Query', customerBookings: Array<{ __typename?: 'Booking', id: string, date: any, startTime: string, endTime: string, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, service: { __typename?: 'Service', id: string, name: string, description: string }, staff?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } }> };
+export type GetCustomerBookingsQuery = { __typename?: 'Query', customerBookings: Array<{ __typename?: 'Booking', id: string, date: any, startTime?: string | null, endTime?: string | null, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, service?: { __typename?: 'Service', id: string, name: string, description: string } | null, staff?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } }> };
 
 export type GetStaffBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetStaffBookingsQuery = { __typename?: 'Query', staffBookings: Array<{ __typename?: 'Booking', id: string, date: any, startTime: string, endTime: string, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service: { __typename?: 'Service', id: string, name: string, description: string }, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } }> };
+export type GetStaffBookingsQuery = { __typename?: 'Query', staffBookings: Array<{ __typename?: 'Booking', id: string, date: any, startTime?: string | null, endTime?: string | null, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service?: { __typename?: 'Service', id: string, name: string, description: string } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } }> };
 
 export type GetPaymentByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetPaymentByIdQuery = { __typename?: 'Query', payment: { __typename?: 'Payment', id: string, amount: number, currency: string, status: PaymentStatus, paymentIntentId: string, refundAmount?: number | null, refundReason?: string | null, metadata?: any | null, createdAt: any, updatedAt: any, booking: { __typename?: 'Booking', id: string, service: { __typename?: 'Service', id: string, name: string } }, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, paymentMethod: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean } } };
+export type GetPaymentByIdQuery = { __typename?: 'Query', payment: { __typename?: 'Payment', id: string, amount: number, currency: string, status: PaymentStatus, paymentIntentId: string, refundAmount?: number | null, refundReason?: string | null, metadata?: any | null, createdAt: any, updatedAt: any, booking: { __typename?: 'Booking', id: string, service?: { __typename?: 'Service', id: string, name: string } | null }, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, paymentMethod: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean } } };
 
 export type GetPaymentsQueryVariables = Exact<{
   status?: InputMaybe<PaymentStatus>;
 }>;
 
 
-export type GetPaymentsQuery = { __typename?: 'Query', payments: Array<{ __typename?: 'Payment', id: string, amount: number, currency: string, status: PaymentStatus, createdAt: any, updatedAt: any, booking: { __typename?: 'Booking', id: string, service: { __typename?: 'Service', id: string, name: string } }, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, paymentMethod: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, brand: string } }> };
+export type GetPaymentsQuery = { __typename?: 'Query', payments: Array<{ __typename?: 'Payment', id: string, amount: number, currency: string, status: PaymentStatus, createdAt: any, updatedAt: any, booking: { __typename?: 'Booking', id: string, service?: { __typename?: 'Service', id: string, name: string } | null }, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, paymentMethod: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, brand: string } }> };
 
 export type GetCustomerPaymentsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCustomerPaymentsQuery = { __typename?: 'Query', customerPayments: Array<{ __typename?: 'Payment', id: string, amount: number, currency: string, status: PaymentStatus, createdAt: any, updatedAt: any, booking: { __typename?: 'Booking', id: string, service: { __typename?: 'Service', id: string, name: string } }, paymentMethod: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, brand: string } }> };
+export type GetCustomerPaymentsQuery = { __typename?: 'Query', customerPayments: Array<{ __typename?: 'Payment', id: string, amount: number, currency: string, status: PaymentStatus, createdAt: any, updatedAt: any, booking: { __typename?: 'Booking', id: string, service?: { __typename?: 'Service', id: string, name: string } | null }, paymentMethod: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, brand: string } }> };
 
 export type GetPaymentMethodsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1491,41 +1540,7 @@ export type UpdateUserRoleMutationResult = Apollo.MutationResult<UpdateUserRoleM
 export type UpdateUserRoleMutationOptions = Apollo.BaseMutationOptions<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>;
 export const CreateBookingDocument = gql`
     mutation CreateBooking($input: CreateBookingInput!) {
-  createBooking(input: $input) {
-    id
-    customer {
-      id
-      firstName
-      lastName
-      email
-    }
-    service {
-      id
-      name
-      description
-    }
-    staff {
-      id
-      firstName
-      lastName
-    }
-    date
-    startTime
-    endTime
-    status
-    notes
-    address {
-      street
-      city
-      state
-      zipCode
-      country
-    }
-    totalPrice
-    paymentStatus
-    createdAt
-    updatedAt
-  }
+  createBooking(input: $input)
 }
     `;
 export type CreateBookingMutationFn = Apollo.MutationFunction<CreateBookingMutation, CreateBookingMutationVariables>;
