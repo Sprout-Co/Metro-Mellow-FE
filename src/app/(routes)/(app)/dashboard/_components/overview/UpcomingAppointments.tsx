@@ -117,7 +117,7 @@ export default function UpcomingAppointments() {
             onClick={() => toggleAppointment(appointment.id)}
           >
             <div className={styles.appointments__serviceIcon}>
-              <Icon
+              {/* <Icon
                 name={
                   appointment.service.name.toLowerCase().includes("cleaning")
                     ? "home"
@@ -133,7 +133,7 @@ export default function UpcomingAppointments() {
                           ? "shield"
                           : "package"
                 }
-              />
+              /> */}
             </div>
 
             <div className={styles.appointments__details}>
