@@ -8,7 +8,8 @@ mutation CreateSubscription($input: CreateSubscriptionInput!) {
       email
     }
     service {
-      id
+      _id
+      service_id
       name
       description
     }
@@ -36,7 +37,8 @@ mutation UpdateSubscription($id: ID!, $input: UpdateSubscriptionInput!) {
       email
     }
     service {
-      id
+      _id
+      service_id
       name
       description
     }

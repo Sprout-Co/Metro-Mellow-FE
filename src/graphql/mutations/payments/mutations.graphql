@@ -4,7 +4,8 @@ mutation CreatePayment($input: CreatePaymentInput!) {
     booking {
       id
       service {
-        id
+        _id
+        service_id
         name
       }
     }

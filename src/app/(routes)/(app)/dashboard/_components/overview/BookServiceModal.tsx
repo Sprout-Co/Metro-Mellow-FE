@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useUIStore } from "@/store/slices/ui";
 import Icon, { IconName } from "../common/Icon";
 import styles from "./BookServiceModal.module.scss";
+import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
+import { ServiceType, PropertyType } from "@/graphql/api";
+import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
 
 interface CleaningOption {
   id: string;
@@ -218,6 +221,8 @@ const steps = [
 
 export default function BookServiceModal() {
   const { isModalOpen, modalType, closeModal } = useUIStore();
+  const { handleCreateBooking } = useBookingOperations();
+  const {handleGetServices} = useServiceOperations()
   const [currentStep, setCurrentStep] = useState<BookingStep>(
     BookingStep.SERVICE
   );
@@ -399,36 +404,56 @@ export default function BookServiceModal() {
     }
   };
 
-  const handleSubmit = () => {
-    // Create booking data object
-    const bookingData = {
-      service: selectedService?.id,
-      serviceType:
-        selectedService?.id === "cleaning"
+  const handleSubmit = async () => {
+    if (!selectedService || !selectedDate || !selectedTime) return;
+
+    try {
+      const serviceOption =
+        selectedService.id === "cleaning"
           ? selectedCleaningOption?.id
-          : selectedService?.id === "laundry"
+          : selectedService.id === "laundry"
             ? selectedLaundryOption?.id
-            : null,
-      details: {
-        date: selectedDate,
-        time: selectedTime,
-        frequency: serviceFrequency,
-        propertyType: selectedService?.id === "cleaning" ? propertyType : null,
-        rooms: selectedService?.id === "cleaning" ? roomQuantities : null,
-        laundryBags: selectedService?.id === "laundry" ? laundryBags : null,
-      },
-      pricing: {
-        totalPrice: calculateTotalPrice(),
-        currency: "₦",
-        recurringDiscount: serviceFrequency !== "one-off",
-      },
-    };
+            : selectedService.id;
 
-    // Log the booking data to console
-    console.log("Booking submitted:", JSON.stringify(bookingData, null, 2));
+      const serviceType =
+        selectedService.id === "cleaning"
+          ? ServiceType.Cleaning
+          : selectedService.id === "laundry"
+            ? ServiceType.Laundry
+            : ServiceType.PestControl;
 
-    // Close the modal
-    closeModal();
+      const totalPrice = calculateTotalPrice();
+
+      await handleCreateBooking({
+        serviceId: selectedService.id,
+        date: new Date(selectedDate),
+        startTime: selectedTime,
+        notes: `Frequency: ${serviceFrequency}`,
+        address: {
+          street: "123 Main St", // TODO: Get from user input
+          city: "City",
+          state: "State",
+          zipCode: "12345",
+          country: "Country",
+        },
+        serviceOption: serviceOption || "",
+        serviceType,
+        totalPrice,
+        propertyType:
+          selectedService.id === "cleaning"
+            ? propertyType === "flat"
+              ? PropertyType.Flat
+              : PropertyType.Duplex
+            : undefined,
+        roomQuantities:
+          selectedService.id === "cleaning" ? roomQuantities : undefined,
+      });
+
+      closeModal();
+    } catch (error) {
+      console.error("Failed to create booking:", error);
+      // TODO: Show error message to user
+    }
   };
 
   // Check if the next button should be disabled

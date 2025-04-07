@@ -8,7 +8,8 @@ query GetSubscriptionById($id: ID!) {
       email
     }
     service {
-      id
+      _id
+      service_id
       name
       description
     }
@@ -36,7 +37,8 @@ query GetSubscriptions($status: SubscriptionStatus) {
       email
     }
     service {
-      id
+      _id
+      service_id
       name
       description
     }
@@ -58,7 +60,8 @@ query GetCustomerSubscriptions {
   customerSubscriptions {
     id
     service {
-      id
+      _id
+      service_id
       name
       description
     }

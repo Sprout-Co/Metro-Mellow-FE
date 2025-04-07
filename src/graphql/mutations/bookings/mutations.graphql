@@ -12,7 +12,8 @@ mutation UpdateBooking($id: ID!, $input: UpdateBookingInput!) {
       email
     }
     service {
-      id
+      _id
+      service_id
       name
       description
     }

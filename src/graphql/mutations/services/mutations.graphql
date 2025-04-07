@@ -1,42 +1,60 @@
 mutation CreateService($input: CreateServiceInput!) {
   createService(input: $input) {
-    id
+    _id
+    service_id
     name
+    label
     description
     category
+    icon
     price
-    duration
+    displayPrice
     status
     imageUrl
     features
-    requirements
-    pricing {
-      basePrice
-      duration
+    inclusions
+    options {
+      id
+      label
+      description
+      price
+      inclusions
+      extraItems {
+        name
+        items
+        cost
+      }
     }
-    createdAt
-    updatedAt
   }
 }
 
-mutation UpdateService($id: ID!, $input: UpdateServiceInput!) {
-  updateService(id: $id, input: $input) {
-    id
+mutation UpdateService($updateServiceId: ID!, $input: UpdateServiceInput!) {
+  updateService(id: $updateServiceId, input: $input) {
+    _id
+    service_id
     name
+    label
     description
     category
+    icon
     price
-    duration
+    displayPrice
     status
     imageUrl
     features
-    requirements
-    pricing {
-      basePrice
-      duration
+    inclusions
+    options {
+      id
+      label
+      description
+      price
+      inclusions
+      extraItems {
+        name
+        items
+        cost
+      }
     }
-    createdAt
-    updatedAt
   }
 }
 
@@ -44,44 +62,35 @@ mutation DeleteService($id: ID!) {
   deleteService(id: $id)
 }
 
-mutation UpdateServiceStatus($id: ID!, $status: ServiceStatus!) {
-  updateServiceStatus(id: $id, status: $status) {
-    id
+mutation UpdateServiceStatus(
+  $updateServiceStatusId: ID!
+  $status: ServiceStatus!
+) {
+  updateServiceStatus(id: $updateServiceStatusId, status: $status) {
+    _id
+    service_id
     name
+    label
     description
     category
+    icon
     price
-    duration
+    displayPrice
     status
     imageUrl
     features
-    requirements
-    pricing {
-      basePrice
-      duration
+    inclusions
+    options {
+      id
+      label
+      description
+      price
+      inclusions
+      extraItems {
+        name
+        items
+        cost
+      }
     }
-    createdAt
-    updatedAt
-  }
-}
-
-mutation UpdateServicePricing($id: ID!, $pricing: ServicePricingInput!) {
-  updateServicePricing(id: $id, pricing: $pricing) {
-    id
-    name
-    description
-    category
-    price
-    duration
-    status
-    imageUrl
-    features
-    requirements
-    pricing {
-      basePrice
-      duration
-    }
-    createdAt
-    updatedAt
   }
 }

@@ -4,7 +4,8 @@ query GetPaymentById($id: ID!) {
     booking {
       id
       service {
-        id
+        _id
+        service_id
         name
       }
     }
@@ -41,7 +42,8 @@ query GetPayments($status: PaymentStatus) {
     booking {
       id
       service {
-        id
+        _id
+        service_id
         name
       }
     }
@@ -71,7 +73,8 @@ query GetCustomerPayments {
     booking {
       id
       service {
-        id
+        _id
+        service_id
         name
       }
     }

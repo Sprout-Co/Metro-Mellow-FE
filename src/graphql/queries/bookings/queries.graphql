@@ -8,7 +8,8 @@ query GetBookings($status: BookingStatus) {
       email
     }
     service {
-      id
+      _id
+      service_id
       name
       description
     }
@@ -46,7 +47,8 @@ query GetBookingById($id: ID!) {
       email
     }
     service {
-      id
+      _id
+      service_id
       name
       description
     }
@@ -78,7 +80,8 @@ query GetCustomerBookings {
   customerBookings {
     id
     service {
-      id
+      _id
+      service_id
       name
       description
     }
@@ -116,7 +119,8 @@ query GetStaffBookings {
       email
     }
     service {
-      id
+      _id
+      service_id
       name
       description
     }

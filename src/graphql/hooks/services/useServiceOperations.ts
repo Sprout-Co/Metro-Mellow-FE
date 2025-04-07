@@ -11,7 +11,6 @@ import {
   useUpdateServiceMutation,
   useDeleteServiceMutation,
   useUpdateServiceStatusMutation,
-  useUpdateServicePricingMutation,
   useGetServiceByIdQuery,
   useGetServicesQuery,
 } from "@/graphql/api";
@@ -22,7 +21,6 @@ export const useServiceOperations = () => {
   const [updateServiceMutation] = useUpdateServiceMutation();
   const [deleteServiceMutation] = useDeleteServiceMutation();
   const [updateServiceStatusMutation] = useUpdateServiceStatusMutation();
-  const [updateServicePricingMutation] = useUpdateServicePricingMutation();
 
   /**
    * Creates a new service
@@ -173,42 +171,6 @@ export const useServiceOperations = () => {
   );
 
   /**
-   * Updates service pricing
-   * @param id - Service ID
-   * @param pricing - New pricing information
-   * @returns Updated service
-   * @throws Error if update fails
-   */
-  const handleUpdateServicePricing = useCallback(
-    async (
-      id: string,
-      pricing: {
-        basePrice: number;
-        duration: number;
-      }
-    ) => {
-      try {
-        const { data, errors } = await updateServicePricingMutation({
-          variables: { id, pricing },
-        });
-
-        if (errors) {
-          throw new Error(errors[0].message);
-        }
-
-        return data?.updateServicePricing;
-      } catch (error) {
-        console.error("Service pricing update error:", error);
-        if (error instanceof Error) {
-          throw new Error(error.message);
-        }
-        throw new Error("An unexpected error occurred");
-      }
-    },
-    [updateServicePricingMutation]
-  );
-
-  /**
    * Fetches a single service by ID
    * @param id - Service ID
    * @returns Service data
@@ -269,7 +231,6 @@ export const useServiceOperations = () => {
     handleUpdateService,
     handleDeleteService,
     handleUpdateServiceStatus,
-    handleUpdateServicePricing,
     handleGetService,
     handleGetServices,
   };
