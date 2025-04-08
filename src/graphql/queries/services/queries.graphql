@@ -15,6 +15,7 @@ query GetServices($category: ServiceCategory, $status: ServiceStatus) {
     inclusions
     options {
       id
+      service_id
       label
       description
       price
@@ -45,6 +46,7 @@ query GetServiceById($id: ID!) {
     inclusions
     options {
       id
+      service_id
       label
       description
       price

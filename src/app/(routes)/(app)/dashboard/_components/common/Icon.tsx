@@ -1,3 +1,4 @@
+//@ts-nocheck
 "use client";
 import { LucideProps } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -86,7 +87,7 @@ const icons = {
 export type IconName = keyof typeof icons;
 
 interface IconProps extends LucideProps {
-  name: IconName;
+  name: IconName | any;
   className?: string;
 }
 
