@@ -26,6 +26,9 @@ import {
   AddressInput,
   RoomQuantitiesInput,
   PropertyType,
+  CreateBookingMutationVariables,
+  UpdateBookingMutationVariables,
+  CreateBookingInput,
 } from "@/graphql/api";
 
 export const useBookingOperations = () => {
@@ -55,21 +58,12 @@ export const useBookingOperations = () => {
    * @throws Error if creation fails
    */
   const handleCreateBooking = useCallback(
-    async (input: {
-      serviceId: string;
-      date: Date;
-      startTime: string;
-      notes?: string;
-      address: AddressInput;
-      serviceOption: string;
-      serviceType: ServiceType;
-      totalPrice: number;
-      propertyType?: PropertyType;
-      roomQuantities?: RoomQuantitiesInput;
-    }) => {
+    async (input: CreateBookingInput) => {
       try {
         const { data, errors } = await createBookingMutation({
-          variables: { input },
+          variables: {
+            input: {...input}
+          },
         });
 
         if (errors) {
@@ -97,22 +91,11 @@ export const useBookingOperations = () => {
    */
   const handleUpdateBooking = useCallback(
     async (
-      id: string,
-      input: {
-        date: Date;
-        startTime: string;
-        notes?: string;
-        address: AddressInput;
-        serviceOption: string;
-        serviceType: ServiceType;
-        totalPrice: number;
-        propertyType?: PropertyType;
-        roomQuantities?: RoomQuantitiesInput;
-      }
+      input: UpdateBookingMutationVariables
     ) => {
       try {
         const { data, errors } = await updateBookingMutation({
-          variables: { id, input },
+          variables: {...input},
         });
 
         if (errors) {
