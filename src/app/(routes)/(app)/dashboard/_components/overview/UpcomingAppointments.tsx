@@ -138,7 +138,7 @@ export default function UpcomingAppointments() {
 
             <div className={styles.appointments__details}>
               <h3 className={styles.appointments__service}>
-                {appointment.service.name}
+                {appointment.service?.name}
               </h3>
               <div className={styles.appointments__meta}>
                 <span className={styles.appointments__date}>
@@ -147,7 +147,7 @@ export default function UpcomingAppointments() {
                 </span>
                 <span className={styles.appointments__time}>
                   <Icon name="clock" />
-                  {appointment.startTime} - {appointment.endTime}
+                  {appointment.timeSlot}
                 </span>
               </div>
             </div>

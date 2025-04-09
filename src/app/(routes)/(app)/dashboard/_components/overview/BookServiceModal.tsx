@@ -144,7 +144,6 @@ export default function BookServiceModal() {
   const [cleaningOptions, setCleaningOptions] = useState<CleaningOption[]>([]);
   const [laundryOptions, setLaundryOptions] = useState<LaundryOption[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   // Current step in the booking process
   const [currentStep, setCurrentStep] = useState<BookingStep>(
@@ -299,41 +298,6 @@ export default function BookServiceModal() {
             }}
           >
             <p>Loading services...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Show error state
-  if (error) {
-    return (
-      <div className={styles.modal}>
-        <div className={styles.modal__backdrop} />
-        <div className={styles.modal__container}>
-          <div className={styles.modal__header}>
-            <h2 className={styles.modal__title}>Book a Service</h2>
-            <button className={styles.modal__close} onClick={closeModal}>
-              <Icon name="x" />
-            </button>
-          </div>
-          <div
-            className={styles.modal__content}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-            }}
-          >
-            <p>Failed to load services. Please try again later.</p>
-            <button
-              className={`${styles.modal__button} ${styles.modal__buttonPrimary}`}
-              onClick={closeModal}
-              style={{ marginTop: "1rem" }}
-            >
-              Close
-            </button>
           </div>
         </div>
       </div>
@@ -991,15 +955,10 @@ export default function BookServiceModal() {
                   value={selectedTime}
                   onChange={(e) => setSelectedTime(e.target.value)}
                 >
-                  <option value="">Select time</option>
-                  <option value="09:00">9:00 AM</option>
-                  <option value="10:00">10:00 AM</option>
-                  <option value="11:00">11:00 AM</option>
-                  <option value="12:00">12:00 PM</option>
-                  <option value="13:00">1:00 PM</option>
-                  <option value="14:00">2:00 PM</option>
-                  <option value="15:00">3:00 PM</option>
-                  <option value="16:00">4:00 PM</option>
+                  <option value="">Select a time slot</option>
+                  <option value="MORNING">Morning</option>
+                  <option value="AFTERNOON">Afternoon</option>
+                  <option value="EVENING">Evening</option>
                 </select>
               </div>
             </div>

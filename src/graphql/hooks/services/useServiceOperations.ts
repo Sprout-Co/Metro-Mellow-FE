@@ -13,6 +13,7 @@ import {
   useUpdateServiceStatusMutation,
   useGetServiceByIdQuery,
   useGetServicesQuery,
+  CreateServiceMutationVariables,
 } from "@/graphql/api";
 import { ServiceCategory, ServiceStatus } from "@/graphql/api";
 
@@ -29,27 +30,10 @@ export const useServiceOperations = () => {
    * @throws Error if creation fails
    */
   const handleCreateService = useCallback(
-    async (input: {
-      name: string;
-      description: string;
-      category: ServiceCategory;
-      price: number;
-      duration: number;
-      imageUrl?: string;
-      features?: string[];
-      requirements?: string[];
-      pricing: {
-        basePrice: number;
-        duration: number;
-      };
-      displayPrice: string;
-      icon: string;
-      label: string;
-      service_id: string;
-    }) => {
+    async (input: CreateServiceMutationVariables) => {
       try {
         const { data, errors } = await createServiceMutation({
-          variables: { input },
+          variables:  input,
         });
 
         if (errors) {
