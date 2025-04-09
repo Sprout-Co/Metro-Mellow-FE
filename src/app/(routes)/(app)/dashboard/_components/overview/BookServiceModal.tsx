@@ -13,6 +13,7 @@ import {
   TimeSlot,
   Service,
   ServiceOption,
+  ExtraItem,
 } from "@/graphql/api";
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
 
@@ -23,45 +24,9 @@ import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperati
  */
 
 // API Service types
-interface ApiExtraItem {
-  name: string;
-  items: number;
-  cost: number;
-}
-
-interface ApiServiceOption {
-  id: string;
-  service_id: string;
-  label: string;
-  description: string;
-  price: number;
-  inclusions: string[];
-  extraItems: ApiExtraItem[];
-}
-
-interface ApiService {
-  _id: string;
-  service_id: string;
-  name: string;
-  label: string;
-  description: string;
-  category: string;
-  icon: string;
-  price: number;
-  displayPrice: string;
-  status: string;
-  imageUrl: string;
-  features: string[];
-  inclusions: string[];
-  options: ApiServiceOption[];
-}
 
 // Component types
-interface ExtraItem {
-  name: string;
-  items: number;
-  cost: number;
-}
+
 
 interface CleaningOption {
   id: string;
@@ -80,17 +45,6 @@ interface LaundryOption {
   extraItems: ExtraItem[];
   extraNotes?: string[];
 }
-
-// interface Service {
-//   id: string;
-//   label: string;
-//   icon: IconName;
-//   description: string;
-//   price: string;
-//   duration: string;
-//   inclusions: string[];
-//   options?: CleaningOption[];
-// }
 
 // Room configuration for cleaning service
 interface RoomQuantity {
