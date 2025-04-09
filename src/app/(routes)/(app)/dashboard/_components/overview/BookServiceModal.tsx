@@ -1,11 +1,16 @@
 // src/components/booking/BookServiceModal.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUIStore } from "@/store/slices/ui";
 import Icon, { IconName } from "../common/Icon";
 import styles from "./BookServiceModal.module.scss";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
-import { ServiceType, PropertyType } from "@/graphql/api";
+import {
+  ServiceType,
+  PropertyType,
+  ServiceCategory,
+  ServiceStatus,
+} from "@/graphql/api";
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
 
 /**
@@ -14,7 +19,41 @@ import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperati
  * ===============================
  */
 
-// Basic types for service options
+// API Service types
+interface ApiExtraItem {
+  name: string;
+  items: number;
+  cost: number;
+}
+
+interface ApiServiceOption {
+  id: string;
+  service_id: string;
+  label: string;
+  description: string;
+  price: number;
+  inclusions: string[];
+  extraItems: ApiExtraItem[];
+}
+
+interface ApiService {
+  _id: string;
+  service_id: string;
+  name: string;
+  label: string;
+  description: string;
+  category: string;
+  icon: string;
+  price: number;
+  displayPrice: string;
+  status: string;
+  imageUrl: string;
+  features: string[];
+  inclusions: string[];
+  options: ApiServiceOption[];
+}
+
+// Component types
 interface ExtraItem {
   name: string;
   items: number;
@@ -72,175 +111,13 @@ enum BookingStep {
 // Progress step information
 interface Step {
   label: string;
-  icon: any;
+  icon: IconName;
 }
-
-/**
- * ===============================
- * SERVICE DATA
- * ===============================
- */
-
-// Cleaning service options
-const cleaningOptions: CleaningOption[] = [
-  {
-    id: "standard",
-    label: "Standard Clean",
-    description: "Regular cleaning service for maintaining a clean home",
-    price: "From $50",
-    inclusions: [
-      "Sweeping and mopping of all floors",
-      "Disinfect and wash toilet and urinals",
-      "Dust and wipe all surfaces",
-      "Cobweb removal from all surfaces",
-      "Laying of bed",
-      "Wash dirty dishes",
-      "Empty and clean trash can",
-    ],
-  },
-  {
-    id: "deep-clean",
-    label: "Deep Clean",
-    description: "Thorough cleaning service for a more intensive clean",
-    price: "From $80",
-    inclusions: [
-      "Sweeping and mopping of all floors",
-      "Disinfect and wash toilet and urinals",
-      "Dust and wipe all surfaces",
-      "Cobweb removal from all surfaces",
-      "Scrape floors, walls and clean all surfaces",
-      "Clean cupboards and cabinets",
-      "Wash dirty dishes",
-      "Empty and clean trash can",
-      "Clean internal and external parts of home appliances",
-    ],
-  },
-  {
-    id: "post-construction",
-    label: "Post-Construction Clean",
-    description:
-      "Specialized cleaning service for after construction or renovation",
-    price: "From $120",
-    inclusions: [
-      "Washing of windows and doors",
-      "Scraping of POP from wall tiles",
-      "Washing of the walls",
-      "Dusting and wiping of all surfaces",
-      "Sweeping and mopping of the floor",
-      "Cobweb removal from all surfaces",
-      "Resurfacing of the tiles to maintain quality",
-      "Polishing of all wooden surfaces",
-      "Scraping of cements and paint stains",
-    ],
-  },
-];
-
-// Laundry service options
-const laundryOptions: LaundryOption[] = [
-  {
-    id: "wash-fold",
-    label: "Wash & Fold",
-    description: "Professional washing and folding service",
-    price: "From ₦430 per item",
-    extraItems: [
-      { name: "Curtains", items: 8, cost: 3440 },
-      { name: "Bedsheet", items: 2, cost: 860 },
-      { name: "Duvets", items: 8, cost: 3440 },
-    ],
-  },
-  {
-    id: "wash-iron",
-    label: "Wash & Iron",
-    description: "Professional washing and ironing service",
-    price: "From ₦860 per item",
-    extraItems: [
-      { name: "Curtains", items: 6, cost: 5160 },
-      { name: "Bedsheet", items: 2, cost: 1720 },
-      { name: "Duvet", items: 4, cost: 3440 },
-    ],
-    extraNotes: [
-      "Logistics charge for items on a hanger",
-      "This also applies when you have more than 1 laundry bag",
-      "Hanging clothes attracts an additional ₦300 per hanger",
-    ],
-  },
-  {
-    id: "dry-clean",
-    label: "Dry Cleaning",
-    description: "Professional dry cleaning service",
-    price: "From ₦1,600 per item",
-    extraItems: [
-      { name: "Regular Items", items: 1, cost: 1600 },
-      { name: "Wedding gowns", items: 22, cost: 35000 },
-      { name: "Custom Wedding Suit set", items: 10, cost: 15000 },
-      { name: "3pc suit", items: 5, cost: 8000 },
-      { name: "2pc suit", items: 4, cost: 6000 },
-      { name: "Stoned gowns", items: 5, cost: 7500 },
-      { name: "Wool Materials", items: 3, cost: 5000 },
-      { name: "Winter Jacket", items: 3, cost: 5000 },
-      { name: "Tshirts / Shirts / Trousers", items: 1, cost: 1600 },
-    ],
-    extraNotes: [
-      "Logistics charge for items on a hanger",
-      "This also applies when you have more than 1 laundry bag",
-      "Hanging clothes attracts an additional ₦300 per hanger",
-    ],
-  },
-];
-
-// Available services
-const services: Service[] = [
-  {
-    id: "cleaning",
-    label: "Cleaning",
-    icon: "droplet",
-    description: "Professional home cleaning service",
-    price: "From $50",
-    duration: "2-3 hours",
-    inclusions: [
-      "Professional cleaning service",
-      "Trained and experienced cleaners",
-      "Quality cleaning supplies",
-      "Satisfaction guaranteed",
-    ],
-    options: cleaningOptions,
-  },
-  {
-    id: "laundry",
-    label: "Laundry",
-    icon: "package",
-    description: "Wash, dry, and fold service",
-    price: "From $30",
-    duration: "24-48 hours",
-    inclusions: [
-      "Pickup and delivery",
-      "Wash and dry",
-      "Professional folding",
-      "Stain treatment",
-      "Fabric care",
-    ],
-  },
-  {
-    id: "pest-control",
-    icon: "shield",
-    label: "Pest Control",
-    description: "Professional pest control service",
-    price: "From $80",
-    duration: "1-2 hours",
-    inclusions: [
-      "Inspection and assessment",
-      "Treatment application",
-      "Follow-up visit",
-      "Eco-friendly solutions",
-      "Guaranteed results",
-    ],
-  },
-];
 
 // Progress bar steps
 const steps: Step[] = [
-  { label: "Choose Service", icon: "shopping-bag" },
-  { label: "Details & Schedule", icon: "sliders" },
+  { label: "Choose Service", icon: "package" },
+  { label: "Details & Schedule", icon: "settings" },
   { label: "Review", icon: "check-circle" },
 ];
 
@@ -261,6 +138,13 @@ export default function BookServiceModal() {
    * STATE MANAGEMENT
    * ==========================
    */
+
+  // API data state
+  const [services, setServices] = useState<Service[]>([]);
+  const [cleaningOptions, setCleaningOptions] = useState<CleaningOption[]>([]);
+  const [laundryOptions, setLaundryOptions] = useState<LaundryOption[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Current step in the booking process
   const [currentStep, setCurrentStep] = useState<BookingStep>(
@@ -296,8 +180,165 @@ export default function BookServiceModal() {
   // UI state
   const [showExtraItems, setShowExtraItems] = useState(false);
 
+  /**
+   * ==========================
+   * DATA FETCHING & TRANSFORMATION
+   * ==========================
+   */
+
+  // Fetch services from API
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        setIsLoading(true);
+        const apiServices = await handleGetServices(
+          undefined,
+          ServiceStatus.Active
+        );
+        console.log(apiServices)
+
+        if (!apiServices) {
+          throw new Error("No services returned from API");
+        }
+
+        // Transform API services to component format
+        const transformedServices: Service[] = apiServices.map(
+          (apiService) => ({
+            id: apiService.service_id,
+            label: apiService.label,
+            icon: apiService.icon as IconName, // Assuming icon names match IconName type
+            description: apiService.description,
+            price: apiService.displayPrice,
+            duration:
+              apiService.category === "LAUNDRY" ? "24-48 hours" : "2-3 hours", // Default durations
+            inclusions: apiService.inclusions || [],
+          })
+        );
+
+        // Extract cleaning options
+        const cleaningService = apiServices.find(
+          (s) => s.category === "CLEANING"
+        );
+        const transformedCleaningOptions: CleaningOption[] =
+          cleaningService?.options?.map((option) => ({
+            id: option.service_id,
+            label: option.label,
+            description: option.description,
+            price: `From $${option.price}`,
+            inclusions: option.inclusions || [],
+          })) || [];
+
+        // Extract laundry options
+        const laundryService = apiServices.find(
+          (s) => s.category === "LAUNDRY"
+        );
+        const transformedLaundryOptions: LaundryOption[] =
+          laundryService?.options?.map((option) => ({
+            id: option.service_id,
+            label: option.label,
+            description: option.description,
+            price: `From ₦${option.price}`,
+            extraItems: option.extraItems || [],
+            // Add default extra notes for laundry options
+            extraNotes:
+              option.service_id === "DRY_CLEANING"
+                ? [
+                    "Logistics charge for items on a hanger",
+                    "This also applies when you have more than 1 laundry bag",
+                    "Hanging clothes attracts an additional ₦300 per hanger",
+                  ]
+                : undefined,
+          })) || [];
+
+        // Add options to the respective services
+        const servicesWithOptions = transformedServices.map((service) => {
+          if (service.id === "CLEANING") {
+            return { ...service, options: transformedCleaningOptions };
+          }
+          return service;
+        });
+
+        setServices(servicesWithOptions);
+        setCleaningOptions(transformedCleaningOptions);
+        setLaundryOptions(transformedLaundryOptions);
+        setIsLoading(false);
+      } catch (err) {
+        console.error("Error fetching services:", err);
+        // setError(
+        //   err instanceof Error ? err.message : "Failed to load services"
+        // );
+        setIsLoading(false);
+        // fetchServices()
+      }
+    };
+
+    fetchServices();
+  }, [handleGetServices]);
+
   // If modal is closed or not booking service, don't render anything
   if (!isModalOpen || modalType !== "book-service") return null;
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className={styles.modal}>
+        <div className={styles.modal__backdrop} />
+        <div className={styles.modal__container}>
+          <div className={styles.modal__header}>
+            <h2 className={styles.modal__title}>Book a Service</h2>
+            <button className={styles.modal__close} onClick={closeModal}>
+              <Icon name="x" />
+            </button>
+          </div>
+          <div
+            className={styles.modal__content}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <p>Loading services...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className={styles.modal}>
+        <div className={styles.modal__backdrop} />
+        <div className={styles.modal__container}>
+          <div className={styles.modal__header}>
+            <h2 className={styles.modal__title}>Book a Service</h2>
+            <button className={styles.modal__close} onClick={closeModal}>
+              <Icon name="x" />
+            </button>
+          </div>
+          <div
+            className={styles.modal__content}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <p>Failed to load services. Please try again later.</p>
+            <button
+              className={`${styles.modal__button} ${styles.modal__buttonPrimary}`}
+              onClick={closeModal}
+              style={{ marginTop: "1rem" }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   /**
    * ==========================
@@ -311,9 +352,9 @@ export default function BookServiceModal() {
       case BookingStep.SERVICE:
         return true;
       case BookingStep.DETAILS:
-        if (selectedService?.id === "cleaning") {
+        if (selectedService?.id === "CLEANING") {
           return !!selectedCleaningOption;
-        } else if (selectedService?.id === "laundry") {
+        } else if (selectedService?.id === "LAUNDRY") {
           return !!selectedLaundryOption;
         }
         return !!selectedService;
@@ -352,7 +393,7 @@ export default function BookServiceModal() {
   const handleServiceSelect = (service: Service) => {
     setSelectedService(service);
 
-    if (service.id === "cleaning" || service.id === "laundry") {
+    if (service.id === "CLEANING" || service.id === "LAUNDRY") {
       setShowServiceOptions(true);
     } else {
       setShowServiceOptions(false);
@@ -407,9 +448,9 @@ export default function BookServiceModal() {
     let basePrice = 0;
 
     // Get base price from cleaning option or service
-    if (selectedService.id === "cleaning" && selectedCleaningOption) {
+    if (selectedService.id === "CLEANING" && selectedCleaningOption) {
       basePrice = parseInt(selectedCleaningOption.price.replace(/[^0-9]/g, ""));
-    } else if (selectedService.id === "laundry" && selectedLaundryOption) {
+    } else if (selectedService.id === "LAUNDRY" && selectedLaundryOption) {
       // For laundry, calculate based on bags and frequency
       const itemsPerBag = 30;
       const totalItems = laundryBags * itemsPerBag;
@@ -427,7 +468,7 @@ export default function BookServiceModal() {
     }
 
     // Add price per room for cleaning service
-    if (selectedService.id === "cleaning") {
+    if (selectedService.id === "CLEANING") {
       const roomPrices = {
         bedrooms: 20,
         livingRooms: 15,
@@ -496,19 +537,27 @@ export default function BookServiceModal() {
     try {
       // Determine which service option was selected
       const serviceOption =
-        selectedService.id === "cleaning"
+        selectedService.id === "CLEANING"
           ? selectedCleaningOption?.id
-          : selectedService.id === "laundry"
+          : selectedService.id === "LAUNDRY"
             ? selectedLaundryOption?.id
             : selectedService.id;
 
-      // Determine the service type
-      const serviceType =
-        selectedService.id === "cleaning"
-          ? ServiceType.Cleaning
-          : selectedService.id === "laundry"
-            ? ServiceType.Laundry
-            : ServiceType.PestControl;
+      // Determine the service type based on service ID
+      const getServiceType = (serviceId: string): ServiceType => {
+        switch (serviceId) {
+          case "CLEANING":
+            return ServiceType.Cleaning;
+          case "LAUNDRY":
+            return ServiceType.Laundry;
+          case "PEST_CONTROL":
+            return ServiceType.PestControl;
+          default:
+            return ServiceType.Cleaning;
+        }
+      };
+
+      const serviceType = getServiceType(selectedService.id);
 
       // Calculate total price
       const totalPrice = calculateTotalPrice();
@@ -530,13 +579,13 @@ export default function BookServiceModal() {
         serviceType,
         totalPrice,
         propertyType:
-          selectedService.id === "cleaning"
+          selectedService.id === "CLEANING"
             ? propertyType === "flat"
               ? PropertyType.Flat
               : PropertyType.Duplex
             : undefined,
         roomQuantities:
-          selectedService.id === "cleaning" ? roomQuantities : undefined,
+          selectedService.id === "CLEANING" ? roomQuantities : undefined,
       });
 
       // Close the modal after successful submission
@@ -557,15 +606,15 @@ export default function BookServiceModal() {
   const isNextDisabled = () => {
     switch (currentStep) {
       case BookingStep.SERVICE:
-        if (selectedService?.id === "cleaning") {
+        if (selectedService?.id === "CLEANING") {
           return !selectedCleaningOption;
-        } else if (selectedService?.id === "laundry") {
+        } else if (selectedService?.id === "LAUNDRY") {
           return !selectedLaundryOption;
         }
         return !selectedService;
       case BookingStep.DETAILS:
         // Need date, time, and for cleaning - at least one room
-        if (selectedService?.id === "cleaning") {
+        if (selectedService?.id === "CLEANING") {
           return (
             !selectedDate ||
             !selectedTime ||
@@ -746,7 +795,7 @@ export default function BookServiceModal() {
             </motion.p>
 
             {/* Cleaning options */}
-            {selectedService?.id === "cleaning" &&
+            {selectedService?.id === "CLEANING" &&
               cleaningOptions.map((option) => (
                 <motion.div
                   key={option.id}
@@ -780,7 +829,7 @@ export default function BookServiceModal() {
               ))}
 
             {/* Laundry options */}
-            {selectedService?.id === "laundry" &&
+            {selectedService?.id === "LAUNDRY" &&
               laundryOptions.map((option) => (
                 <motion.div
                   key={option.id}
@@ -852,9 +901,9 @@ export default function BookServiceModal() {
         >
           <Icon name="sliders" />
           {selectedService.label} Details
-          {selectedService.id === "cleaning" && selectedCleaningOption
+          {selectedService.id === "CLEANING" && selectedCleaningOption
             ? ` - ${selectedCleaningOption.label}`
-            : selectedService.id === "laundry" && selectedLaundryOption
+            : selectedService.id === "LAUNDRY" && selectedLaundryOption
               ? ` - ${selectedLaundryOption.label}`
               : ""}
         </motion.h2>
@@ -960,7 +1009,7 @@ export default function BookServiceModal() {
           </motion.div>
 
           {/* Cleaning Specific Fields */}
-          {selectedService.id === "cleaning" && (
+          {selectedService.id === "CLEANING" && (
             <motion.div
               variants={itemVariants}
               className={styles.modal__formGroup}
@@ -1042,7 +1091,7 @@ export default function BookServiceModal() {
           )}
 
           {/* Laundry Specific Fields */}
-          {selectedService.id === "laundry" && (
+          {selectedService.id === "LAUNDRY" && (
             <motion.div
               variants={itemVariants}
               className={styles.modal__formGroup}
@@ -1134,7 +1183,7 @@ export default function BookServiceModal() {
               </span>
             </div>
 
-            {selectedService.id === "cleaning" && (
+            {selectedService.id === "CLEANING" && (
               <div className={styles.modal__summaryItem}>
                 <span className={styles.modal__summaryItemLabel}>
                   Room Charges
@@ -1162,7 +1211,7 @@ export default function BookServiceModal() {
               </div>
             )}
 
-            {selectedService.id === "laundry" && (
+            {selectedService.id === "LAUNDRY" && (
               <div className={styles.modal__summaryItem}>
                 <span className={styles.modal__summaryItemLabel}>Laundry</span>
                 <span className={styles.modal__summaryItemValue}>
@@ -1340,7 +1389,7 @@ export default function BookServiceModal() {
                 </span>
               </div>
 
-              {selectedService.id === "cleaning" && (
+              {selectedService.id === "CLEANING" && (
                 <div className={styles.modal__invoiceDetailItem}>
                   <span className={styles.modal__invoiceDetailLabel}>
                     <Icon name="home" size={14} />
@@ -1356,7 +1405,7 @@ export default function BookServiceModal() {
             </div>
 
             {/* Service-specific details */}
-            {selectedService.id === "cleaning" && (
+            {selectedService.id === "CLEANING" && (
               <div className={styles.modal__invoiceRoomList}>
                 <h4>Rooms to Clean</h4>
                 <div className={styles.modal__invoiceRooms}>
@@ -1376,7 +1425,7 @@ export default function BookServiceModal() {
               </div>
             )}
 
-            {selectedService.id === "laundry" && (
+            {selectedService.id === "LAUNDRY" && (
               <div className={styles.modal__invoiceRoomList}>
                 <h4>Laundry Details</h4>
                 <div className={styles.modal__invoiceDetailItem}>
@@ -1429,7 +1478,7 @@ export default function BookServiceModal() {
                 </span>
               </div>
 
-              {selectedService.id === "cleaning" && (
+              {selectedService.id === "CLEANING" && (
                 <div className={styles.modal__invoicePriceRow}>
                   <span>Room Charges</span>
                   <span>
@@ -1455,7 +1504,7 @@ export default function BookServiceModal() {
                 </div>
               )}
 
-              {selectedService.id === "laundry" && (
+              {selectedService.id === "LAUNDRY" && (
                 <div className={styles.modal__invoicePriceRow}>
                   <span>Laundry Items ({laundryBags * 30} items)</span>
                   <span>
