@@ -3,24 +3,68 @@ query GetBookings($status: BookingStatus) {
     id
     customer {
       id
+      email
       firstName
       lastName
-      email
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
     }
     service {
       _id
       service_id
       name
+      label
       description
+      category
+      icon
+      price
+      displayPrice
+      status
+      imageUrl
+      features
+      inclusions
+      options {
+        id
+        service_id
+        label
+        description
+        price
+        inclusions
+        extraItems {
+          name
+          items
+          cost
+        }
+      }
     }
     staff {
       id
+      email
       firstName
       lastName
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
     }
     date
-    startTime
-    endTime
+    timeSlot
     status
     notes
     address {
@@ -34,6 +78,19 @@ query GetBookings($status: BookingStatus) {
     paymentStatus
     createdAt
     updatedAt
+    serviceType
+    serviceOption
+    propertyType
+    roomQuantities {
+      bedrooms
+      livingRooms
+      bathrooms
+      kitchen
+      study
+      outdoor
+    }
+    laundryBags
+    recurringDiscount
   }
 }
 
@@ -42,24 +99,68 @@ query GetBookingById($id: ID!) {
     id
     customer {
       id
+      email
       firstName
       lastName
-      email
+      role
+      phone
+      createdAt
+      updatedAt
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
     }
     service {
       _id
       service_id
       name
+      label
       description
+      category
+      icon
+      price
+      displayPrice
+      status
+      imageUrl
+      features
+      inclusions
+      options {
+        id
+        service_id
+        label
+        description
+        price
+        inclusions
+        extraItems {
+          name
+          items
+          cost
+        }
+      }
     }
     staff {
       id
+      email
       firstName
       lastName
+      role
+      phone
+      createdAt
+      updatedAt
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
     }
     date
-    startTime
-    endTime
+    timeSlot
     status
     notes
     address {
@@ -73,26 +174,89 @@ query GetBookingById($id: ID!) {
     paymentStatus
     createdAt
     updatedAt
+    serviceType
+    serviceOption
+    propertyType
+    roomQuantities {
+      bedrooms
+      livingRooms
+      bathrooms
+      kitchen
+      study
+      outdoor
+    }
+    laundryBags
+    recurringDiscount
   }
 }
 
 query GetCustomerBookings {
   customerBookings {
     id
+    customer {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      createdAt
+      updatedAt
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+    }
     service {
       _id
       service_id
       name
+      label
       description
+      category
+      icon
+      price
+      displayPrice
+      status
+      imageUrl
+      features
+      inclusions
+      options {
+        id
+        service_id
+        label
+        description
+        price
+        inclusions
+        extraItems {
+          name
+          items
+          cost
+        }
+      }
     }
     staff {
       id
+      email
       firstName
       lastName
+      role
+      phone
+      createdAt
+      updatedAt
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
     }
     date
-    startTime
-    endTime
+    timeSlot
     status
     notes
     address {
@@ -106,6 +270,19 @@ query GetCustomerBookings {
     paymentStatus
     createdAt
     updatedAt
+    serviceType
+    serviceOption
+    propertyType
+    roomQuantities {
+      bedrooms
+      livingRooms
+      bathrooms
+      kitchen
+      study
+      outdoor
+    }
+    laundryBags
+    recurringDiscount
   }
 }
 
@@ -114,19 +291,68 @@ query GetStaffBookings {
     id
     customer {
       id
+      email
       firstName
       lastName
-      email
+      role
+      phone
+      createdAt
+      updatedAt
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
     }
     service {
       _id
       service_id
       name
+      label
       description
+      category
+      icon
+      price
+      displayPrice
+      status
+      imageUrl
+      features
+      inclusions
+      options {
+        id
+        service_id
+        label
+        description
+        price
+        inclusions
+        extraItems {
+          name
+          items
+          cost
+        }
+      }
+    }
+    staff {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      createdAt
+      updatedAt
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
     }
     date
-    startTime
-    endTime
+    timeSlot
     status
     notes
     address {
@@ -140,5 +366,18 @@ query GetStaffBookings {
     paymentStatus
     createdAt
     updatedAt
+    serviceType
+    serviceOption
+    propertyType
+    roomQuantities {
+      bedrooms
+      livingRooms
+      bathrooms
+      kitchen
+      study
+      outdoor
+    }
+    laundryBags
+    recurringDiscount
   }
 }

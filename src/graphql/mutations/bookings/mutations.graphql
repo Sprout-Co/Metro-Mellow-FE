@@ -23,8 +23,7 @@ mutation UpdateBooking($id: ID!, $input: UpdateBookingInput!) {
       lastName
     }
     date
-    startTime
-    endTime
+    timeSlot
     status
     notes
     address {

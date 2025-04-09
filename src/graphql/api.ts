@@ -55,7 +55,6 @@ export type Booking = {
   createdAt: Scalars['DateTime']['output'];
   customer: User;
   date: Scalars['DateTime']['output'];
-  endTime?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   laundryBags?: Maybe<Scalars['Int']['output']>;
   notes?: Maybe<Scalars['String']['output']>;
@@ -67,8 +66,8 @@ export type Booking = {
   serviceOption: Scalars['String']['output'];
   serviceType: ServiceType;
   staff?: Maybe<User>;
-  startTime?: Maybe<Scalars['String']['output']>;
   status: BookingStatus;
+  timeSlot: TimeSlot;
   totalPrice: Scalars['Float']['output'];
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -91,7 +90,7 @@ export type CreateBookingInput = {
   serviceId: Scalars['ID']['input'];
   serviceOption: Scalars['String']['input'];
   serviceType: ServiceType;
-  startTime: Scalars['String']['input'];
+  timeSlot: TimeSlot;
   totalPrice: Scalars['Float']['input'];
 };
 
@@ -797,6 +796,12 @@ export enum SubscriptionStatus {
   Suspended = 'SUSPENDED'
 }
 
+export enum TimeSlot {
+  Afternoon = 'AFTERNOON',
+  Evening = 'EVENING',
+  Morning = 'MORNING'
+}
+
 export type UpdateBookingInput = {
   address: AddressInput;
   date: Scalars['DateTime']['input'];
@@ -806,7 +811,7 @@ export type UpdateBookingInput = {
   roomQuantities?: InputMaybe<RoomQuantitiesInput>;
   serviceOption: Scalars['String']['input'];
   serviceType: ServiceType;
-  startTime: Scalars['String']['input'];
+  timeSlot: TimeSlot;
   totalPrice: Scalars['Float']['input'];
 };
 
@@ -931,7 +936,7 @@ export type UpdateBookingMutationVariables = Exact<{
 }>;
 
 
-export type UpdateBookingMutation = { __typename?: 'Mutation', updateBooking: { __typename?: 'Booking', id: string, date: any, startTime?: string | null, endTime?: string | null, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, description: string } | null, staff?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } } };
+export type UpdateBookingMutation = { __typename?: 'Mutation', updateBooking: { __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, description: string } | null, staff?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } } };
 
 export type CancelBookingMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1165,24 +1170,24 @@ export type GetBookingsQueryVariables = Exact<{
 }>;
 
 
-export type GetBookingsQuery = { __typename?: 'Query', bookings: Array<{ __typename?: 'Booking', id: string, date: any, startTime?: string | null, endTime?: string | null, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, description: string } | null, staff?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } }> };
+export type GetBookingsQuery = { __typename?: 'Query', bookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceType, serviceOption: string, propertyType?: PropertyType | null, laundryBags?: number | null, recurringDiscount?: number | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, roomQuantities?: { __typename?: 'RoomQuantities', bedrooms: number, livingRooms: number, bathrooms: number, kitchen: number, study: number, outdoor: number } | null }> };
 
 export type GetBookingByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetBookingByIdQuery = { __typename?: 'Query', booking?: { __typename?: 'Booking', id: string, date: any, startTime?: string | null, endTime?: string | null, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, description: string } | null, staff?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } } | null };
+export type GetBookingByIdQuery = { __typename?: 'Query', booking?: { __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceType, serviceOption: string, propertyType?: PropertyType | null, laundryBags?: number | null, recurringDiscount?: number | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, roomQuantities?: { __typename?: 'RoomQuantities', bedrooms: number, livingRooms: number, bathrooms: number, kitchen: number, study: number, outdoor: number } | null } | null };
 
 export type GetCustomerBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCustomerBookingsQuery = { __typename?: 'Query', customerBookings: Array<{ __typename?: 'Booking', id: string, date: any, startTime?: string | null, endTime?: string | null, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, description: string } | null, staff?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } }> };
+export type GetCustomerBookingsQuery = { __typename?: 'Query', customerBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceType, serviceOption: string, propertyType?: PropertyType | null, laundryBags?: number | null, recurringDiscount?: number | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, roomQuantities?: { __typename?: 'RoomQuantities', bedrooms: number, livingRooms: number, bathrooms: number, kitchen: number, study: number, outdoor: number } | null }> };
 
 export type GetStaffBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetStaffBookingsQuery = { __typename?: 'Query', staffBookings: Array<{ __typename?: 'Booking', id: string, date: any, startTime?: string | null, endTime?: string | null, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, description: string } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } }> };
+export type GetStaffBookingsQuery = { __typename?: 'Query', staffBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceType, serviceOption: string, propertyType?: PropertyType | null, laundryBags?: number | null, recurringDiscount?: number | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, roomQuantities?: { __typename?: 'RoomQuantities', bedrooms: number, livingRooms: number, bathrooms: number, kitchen: number, study: number, outdoor: number } | null }> };
 
 export type GetPaymentByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1620,8 +1625,7 @@ export const UpdateBookingDocument = gql`
       lastName
     }
     date
-    startTime
-    endTime
+    timeSlot
     status
     notes
     address {
@@ -3047,24 +3051,68 @@ export const GetBookingsDocument = gql`
     id
     customer {
       id
+      email
       firstName
       lastName
-      email
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
     }
     service {
       _id
       service_id
       name
+      label
       description
+      category
+      icon
+      price
+      displayPrice
+      status
+      imageUrl
+      features
+      inclusions
+      options {
+        id
+        service_id
+        label
+        description
+        price
+        inclusions
+        extraItems {
+          name
+          items
+          cost
+        }
+      }
     }
     staff {
       id
+      email
       firstName
       lastName
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
     }
     date
-    startTime
-    endTime
+    timeSlot
     status
     notes
     address {
@@ -3078,6 +3126,19 @@ export const GetBookingsDocument = gql`
     paymentStatus
     createdAt
     updatedAt
+    serviceType
+    serviceOption
+    propertyType
+    roomQuantities {
+      bedrooms
+      livingRooms
+      bathrooms
+      kitchen
+      study
+      outdoor
+    }
+    laundryBags
+    recurringDiscount
   }
 }
     `;
@@ -3120,24 +3181,68 @@ export const GetBookingByIdDocument = gql`
     id
     customer {
       id
+      email
       firstName
       lastName
-      email
+      role
+      phone
+      createdAt
+      updatedAt
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
     }
     service {
       _id
       service_id
       name
+      label
       description
+      category
+      icon
+      price
+      displayPrice
+      status
+      imageUrl
+      features
+      inclusions
+      options {
+        id
+        service_id
+        label
+        description
+        price
+        inclusions
+        extraItems {
+          name
+          items
+          cost
+        }
+      }
     }
     staff {
       id
+      email
       firstName
       lastName
+      role
+      phone
+      createdAt
+      updatedAt
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
     }
     date
-    startTime
-    endTime
+    timeSlot
     status
     notes
     address {
@@ -3151,6 +3256,19 @@ export const GetBookingByIdDocument = gql`
     paymentStatus
     createdAt
     updatedAt
+    serviceType
+    serviceOption
+    propertyType
+    roomQuantities {
+      bedrooms
+      livingRooms
+      bathrooms
+      kitchen
+      study
+      outdoor
+    }
+    laundryBags
+    recurringDiscount
   }
 }
     `;
@@ -3191,20 +3309,70 @@ export const GetCustomerBookingsDocument = gql`
     query GetCustomerBookings {
   customerBookings {
     id
+    customer {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      createdAt
+      updatedAt
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+    }
     service {
       _id
       service_id
       name
+      label
       description
+      category
+      icon
+      price
+      displayPrice
+      status
+      imageUrl
+      features
+      inclusions
+      options {
+        id
+        service_id
+        label
+        description
+        price
+        inclusions
+        extraItems {
+          name
+          items
+          cost
+        }
+      }
     }
     staff {
       id
+      email
       firstName
       lastName
+      role
+      phone
+      createdAt
+      updatedAt
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
     }
     date
-    startTime
-    endTime
+    timeSlot
     status
     notes
     address {
@@ -3218,6 +3386,19 @@ export const GetCustomerBookingsDocument = gql`
     paymentStatus
     createdAt
     updatedAt
+    serviceType
+    serviceOption
+    propertyType
+    roomQuantities {
+      bedrooms
+      livingRooms
+      bathrooms
+      kitchen
+      study
+      outdoor
+    }
+    laundryBags
+    recurringDiscount
   }
 }
     `;
@@ -3259,19 +3440,68 @@ export const GetStaffBookingsDocument = gql`
     id
     customer {
       id
+      email
       firstName
       lastName
-      email
+      role
+      phone
+      createdAt
+      updatedAt
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
     }
     service {
       _id
       service_id
       name
+      label
       description
+      category
+      icon
+      price
+      displayPrice
+      status
+      imageUrl
+      features
+      inclusions
+      options {
+        id
+        service_id
+        label
+        description
+        price
+        inclusions
+        extraItems {
+          name
+          items
+          cost
+        }
+      }
+    }
+    staff {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      createdAt
+      updatedAt
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
     }
     date
-    startTime
-    endTime
+    timeSlot
     status
     notes
     address {
@@ -3285,6 +3515,19 @@ export const GetStaffBookingsDocument = gql`
     paymentStatus
     createdAt
     updatedAt
+    serviceType
+    serviceOption
+    propertyType
+    roomQuantities {
+      bedrooms
+      livingRooms
+      bathrooms
+      kitchen
+      study
+      outdoor
+    }
+    laundryBags
+    recurringDiscount
   }
 }
     `;
