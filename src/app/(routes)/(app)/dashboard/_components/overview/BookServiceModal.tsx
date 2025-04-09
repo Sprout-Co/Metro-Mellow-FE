@@ -1,3 +1,4 @@
+// src/components/booking/BookServiceModal.tsx
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUIStore } from "@/store/slices/ui";
@@ -7,18 +8,25 @@ import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperati
 import { ServiceType, PropertyType } from "@/graphql/api";
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
 
+/**
+ * ===============================
+ * TYPE DEFINITIONS
+ * ===============================
+ */
+
+// Basic types for service options
+interface ExtraItem {
+  name: string;
+  items: number;
+  cost: number;
+}
+
 interface CleaningOption {
   id: string;
   label: string;
   description: string;
   price: string;
   inclusions: string[];
-}
-
-interface ExtraItem {
-  name: string;
-  items: number;
-  cost: number;
 }
 
 interface LaundryOption {
@@ -41,6 +49,7 @@ interface Service {
   options?: CleaningOption[];
 }
 
+// Room configuration for cleaning service
 interface RoomQuantity {
   bedrooms: number;
   livingRooms: number;
@@ -50,15 +59,29 @@ interface RoomQuantity {
   outdoor: number;
 }
 
+// Service frequency options
 type ServiceFrequency = "one-off" | "weekly" | "bi-weekly" | "monthly";
 
-// Simplified 3-step booking process
+// Steps for the booking process
 enum BookingStep {
   SERVICE = 0, // Choose service and type
   DETAILS = 1, // Set details and schedule
   REVIEW = 2, // Review and confirm
 }
 
+// Progress step information
+interface Step {
+  label: string;
+  icon: any;
+}
+
+/**
+ * ===============================
+ * SERVICE DATA
+ * ===============================
+ */
+
+// Cleaning service options
 const cleaningOptions: CleaningOption[] = [
   {
     id: "standard",
@@ -112,6 +135,7 @@ const cleaningOptions: CleaningOption[] = [
   },
 ];
 
+// Laundry service options
 const laundryOptions: LaundryOption[] = [
   {
     id: "wash-fold",
@@ -164,6 +188,7 @@ const laundryOptions: LaundryOption[] = [
   },
 ];
 
+// Available services
 const services: Service[] = [
   {
     id: "cleaning",
@@ -212,17 +237,32 @@ const services: Service[] = [
   },
 ];
 
-// Step information for progress bar
-const steps = [
+// Progress bar steps
+const steps: Step[] = [
   { label: "Choose Service", icon: "shopping-bag" },
   { label: "Details & Schedule", icon: "sliders" },
   { label: "Review", icon: "check-circle" },
 ];
 
+/**
+ * ===============================
+ * MAIN COMPONENT
+ * ===============================
+ */
+
 export default function BookServiceModal() {
+  // Get modal state and operations from store
   const { isModalOpen, modalType, closeModal } = useUIStore();
   const { handleCreateBooking } = useBookingOperations();
-  const {handleGetServices} = useServiceOperations()
+  const { handleGetServices } = useServiceOperations();
+
+  /**
+   * ==========================
+   * STATE MANAGEMENT
+   * ==========================
+   */
+
+  // Current step in the booking process
   const [currentStep, setCurrentStep] = useState<BookingStep>(
     BookingStep.SERVICE
   );
@@ -256,9 +296,16 @@ export default function BookServiceModal() {
   // UI state
   const [showExtraItems, setShowExtraItems] = useState(false);
 
+  // If modal is closed or not booking service, don't render anything
   if (!isModalOpen || modalType !== "book-service") return null;
 
-  // Calculate if the step is accessible
+  /**
+   * ==========================
+   * UTILITY FUNCTIONS
+   * ==========================
+   */
+
+  // Check if the step is accessible based on current selections
   const isStepAccessible = (step: BookingStep): boolean => {
     switch (step) {
       case BookingStep.SERVICE:
@@ -288,6 +335,19 @@ export default function BookServiceModal() {
     }
   };
 
+  // Calculate progress width for the progress bar
+  const calculateProgressWidth = () => {
+    const maxSteps = steps.length - 1;
+    const progress = (currentStep / maxSteps) * 100;
+    return `${progress}%`;
+  };
+
+  /**
+   * ==========================
+   * SERVICE SELECTION HANDLERS
+   * ==========================
+   */
+
   // Handle service selection
   const handleServiceSelect = (service: Service) => {
     setSelectedService(service);
@@ -312,7 +372,13 @@ export default function BookServiceModal() {
     setCurrentStep(BookingStep.DETAILS);
   };
 
-  // Handle room quantity changes
+  /**
+   * ==========================
+   * QUANTITY & DETAILS HANDLERS
+   * ==========================
+   */
+
+  // Handle room quantity changes for cleaning service
   const handleQuantityChange = (
     room: keyof RoomQuantity,
     increment: boolean
@@ -327,6 +393,12 @@ export default function BookServiceModal() {
   const handleLaundryBagChange = (increment: boolean) => {
     setLaundryBags((prev) => Math.max(1, prev + (increment ? 1 : -1)));
   };
+
+  /**
+   * ==========================
+   * PRICE CALCULATION
+   * ==========================
+   */
 
   // Calculate total price based on selected options
   const calculateTotalPrice = () => {
@@ -378,7 +450,13 @@ export default function BookServiceModal() {
     return basePrice;
   };
 
-  // Navigation handlers
+  /**
+   * ==========================
+   * NAVIGATION HANDLERS
+   * ==========================
+   */
+
+  // Handle navigation to next step
   const handleNext = () => {
     switch (currentStep) {
       case BookingStep.SERVICE:
@@ -393,6 +471,7 @@ export default function BookServiceModal() {
     }
   };
 
+  // Handle navigation to previous step
   const handleBack = () => {
     switch (currentStep) {
       case BookingStep.DETAILS:
@@ -404,10 +483,18 @@ export default function BookServiceModal() {
     }
   };
 
+  /**
+   * ==========================
+   * FORM SUBMISSION
+   * ==========================
+   */
+
+  // Handle final booking submission
   const handleSubmit = async () => {
     if (!selectedService || !selectedDate || !selectedTime) return;
 
     try {
+      // Determine which service option was selected
       const serviceOption =
         selectedService.id === "cleaning"
           ? selectedCleaningOption?.id
@@ -415,6 +502,7 @@ export default function BookServiceModal() {
             ? selectedLaundryOption?.id
             : selectedService.id;
 
+      // Determine the service type
       const serviceType =
         selectedService.id === "cleaning"
           ? ServiceType.Cleaning
@@ -422,15 +510,17 @@ export default function BookServiceModal() {
             ? ServiceType.Laundry
             : ServiceType.PestControl;
 
+      // Calculate total price
       const totalPrice = calculateTotalPrice();
 
+      // Submit the booking
       await handleCreateBooking({
         serviceId: selectedService.id,
         date: new Date(selectedDate),
         startTime: selectedTime,
         notes: `Frequency: ${serviceFrequency}`,
         address: {
-          street: "123 Main St", // TODO: Get from user input
+          street: "123 Main St", // In a real app, get from user input
           city: "City",
           state: "State",
           zipCode: "12345",
@@ -449,12 +539,19 @@ export default function BookServiceModal() {
           selectedService.id === "cleaning" ? roomQuantities : undefined,
       });
 
+      // Close the modal after successful submission
       closeModal();
     } catch (error) {
       console.error("Failed to create booking:", error);
-      // TODO: Show error message to user
+      // Would show error message to user in a production app
     }
   };
+
+  /**
+   * ==========================
+   * UI HELPERS
+   * ==========================
+   */
 
   // Check if the next button should be disabled
   const isNextDisabled = () => {
@@ -493,14 +590,13 @@ export default function BookServiceModal() {
     }
   };
 
-  // Calculate progress width
-  const calculateProgressWidth = () => {
-    const maxSteps = steps.length - 1;
-    const progress = (currentStep / maxSteps) * 100;
-    return `${progress}%`;
-  };
+  /**
+   * ==========================
+   * ANIMATION VARIANTS
+   * ==========================
+   */
 
-  // Animation variants
+  // Animation variants for content transitions
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -522,6 +618,53 @@ export default function BookServiceModal() {
     },
   };
 
+  /**
+   * ==========================
+   * RENDER FUNCTIONS
+   * ==========================
+   */
+
+  // Render progress bar
+  const renderProgressBar = () => {
+    return (
+      <div className={styles.modal__progress}>
+        <div className={styles.modal__progressLine}></div>
+        <div
+          className={styles.modal__progressBar}
+          style={{ width: calculateProgressWidth() }}
+        ></div>
+
+        {steps.map((step, index) => {
+          const isComplete = currentStep > index;
+          const isActive = currentStep === index;
+          const isDisabled = !isStepAccessible(index as BookingStep);
+
+          return (
+            <div
+              key={index}
+              className={`
+                ${styles.modal__progressStep}
+                ${isActive ? styles.modal__progressStepActive : ""}
+                ${isComplete ? styles.modal__progressStepComplete : ""}
+                ${isDisabled ? styles.modal__progressStepDisabled : ""}
+              `}
+              onClick={() =>
+                !isDisabled && handleStepClick(index as BookingStep)
+              }
+            >
+              <div className={styles.modal__progressStepDot}>
+                {isComplete && !isActive && <Icon name="check" size={12} />}
+              </div>
+              <div className={styles.modal__progressStepLabel}>
+                {step.label}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   // Render service selection step
   const renderServiceSelection = () => {
     return (
@@ -533,6 +676,7 @@ export default function BookServiceModal() {
         style={{ marginBottom: "32px" }}
       >
         {!showServiceOptions ? (
+          // Show service type selection
           <>
             <motion.h2
               className={styles.modal__contentTitle}
@@ -576,6 +720,7 @@ export default function BookServiceModal() {
             </div>
           </>
         ) : (
+          // Show specific service options (cleaning or laundry)
           <>
             <div
               className={styles.modal__backLink}
@@ -600,6 +745,7 @@ export default function BookServiceModal() {
               you need
             </motion.p>
 
+            {/* Cleaning options */}
             {selectedService?.id === "cleaning" &&
               cleaningOptions.map((option) => (
                 <motion.div
@@ -633,6 +779,7 @@ export default function BookServiceModal() {
                 </motion.div>
               ))}
 
+            {/* Laundry options */}
             {selectedService?.id === "laundry" &&
               laundryOptions.map((option) => (
                 <motion.div
@@ -1449,47 +1596,6 @@ export default function BookServiceModal() {
     );
   };
 
-  // Render progress bar
-  const renderProgressBar = () => {
-    return (
-      <div className={styles.modal__progress}>
-        <div className={styles.modal__progressLine}></div>
-        <div
-          className={styles.modal__progressBar}
-          style={{ width: calculateProgressWidth() }}
-        ></div>
-
-        {steps.map((step, index) => {
-          const isComplete = currentStep > index;
-          const isActive = currentStep === index;
-          const isDisabled = !isStepAccessible(index as BookingStep);
-
-          return (
-            <div
-              key={index}
-              className={`
-                ${styles.modal__progressStep}
-                ${isActive ? styles.modal__progressStepActive : ""}
-                ${isComplete ? styles.modal__progressStepComplete : ""}
-                ${isDisabled ? styles.modal__progressStepDisabled : ""}
-              `}
-              onClick={() =>
-                !isDisabled && handleStepClick(index as BookingStep)
-              }
-            >
-              <div className={styles.modal__progressStepDot}>
-                {isComplete && !isActive && <Icon name="check" size={12} />}
-              </div>
-              <div className={styles.modal__progressStepLabel}>
-                {step.label}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
   // Render the appropriate step content based on the current step
   const renderStepContent = () => {
     switch (currentStep) {
@@ -1504,7 +1610,11 @@ export default function BookServiceModal() {
     }
   };
 
-  // Main render
+  /**
+   * ==========================
+   * MAIN RENDER
+   * ==========================
+   */
   return (
     <AnimatePresence>
       <motion.div
@@ -1513,6 +1623,7 @@ export default function BookServiceModal() {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
+        {/* Modal backdrop */}
         <motion.div
           className={styles.modal__backdrop}
           onClick={closeModal}
@@ -1521,6 +1632,7 @@ export default function BookServiceModal() {
           exit={{ opacity: 0 }}
         />
 
+        {/* Modal container */}
         <motion.div
           className={styles.modal__container}
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -1528,6 +1640,7 @@ export default function BookServiceModal() {
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
         >
+          {/* Modal header */}
           <div className={styles.modal__header}>
             <h2 className={styles.modal__title}>Book a Service</h2>
             <button className={styles.modal__close} onClick={closeModal}>
@@ -1535,12 +1648,15 @@ export default function BookServiceModal() {
             </button>
           </div>
 
+          {/* Progress bar */}
           {renderProgressBar()}
 
+          {/* Modal content (step-specific) */}
           <div className={styles.modal__content}>
             <AnimatePresence mode="wait">{renderStepContent()}</AnimatePresence>
           </div>
 
+          {/* Modal footer with navigation buttons */}
           {(currentStep === BookingStep.DETAILS ||
             currentStep === BookingStep.REVIEW) && (
             <div className={styles.modal__footer}>
@@ -1564,6 +1680,7 @@ export default function BookServiceModal() {
           )}
         </motion.div>
 
+        {/* Extra items modal (for laundry service) */}
         {renderExtraItemsModal()}
       </motion.div>
     </AnimatePresence>
