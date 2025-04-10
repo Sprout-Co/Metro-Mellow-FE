@@ -1,16 +1,45 @@
-'use client';
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
-import Icon from '../common/Icon';
-import NotificationsMenu from './NotificationsMenu';
-import ProfileMenu from './ProfileMenu';
-import styles from './DashboardHeader.module.scss';
+"use client";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import Icon from "../common/Icon";
+import NotificationsMenu from "./NotificationsMenu";
+import ProfileMenu from "./ProfileMenu";
+import styles from "./DashboardHeader.module.scss";
+import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
+import { useAuthStore } from "@/store/slices/auth";
 
 export default function DashboardHeader() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  
+  const { handleGetCurrentUser } = useAuthOperations();
+  const { user: currentUser } = useAuthStore();
+
+  // Fetch current user data on component mount
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        await handleGetCurrentUser();
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [handleGetCurrentUser]);
+
+  // Get user initials for avatar
+  const getUserInitials = () => {
+    if (!currentUser?.firstName || !currentUser?.lastName) return "?";
+    return `${currentUser.firstName[0]}${currentUser.lastName[0]}`;
+  };
+
+  // Get full name
+  const getFullName = () => {
+    if (!currentUser?.firstName || !currentUser?.lastName) return "User";
+    return `${currentUser.firstName} ${currentUser.lastName}`;
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.header__container}>
@@ -23,7 +52,7 @@ export default function DashboardHeader() {
           /> */}
           <span className={styles.header__logoText}>Metro Mellow</span>
         </div>
-        
+
         {/* <div className={styles.header__search}>
           <Icon name="search" className={styles.header__searchIcon} />
           <input 
@@ -32,9 +61,9 @@ export default function DashboardHeader() {
             placeholder="Search services, appointments..." 
           />
         </div> */}
-        
+
         <div className={styles.header__actions}>
-          <button 
+          <button
             className={styles.header__actionBtn}
             onClick={() => {
               setShowNotifications(!showNotifications);
@@ -44,9 +73,9 @@ export default function DashboardHeader() {
             <div className={styles.header__notificationIndicator}></div>
             <Icon name="bell" />
           </button>
-          
+
           <div className={styles.header__user}>
-            <button 
+            <button
               className={styles.header__userBtn}
               onClick={() => {
                 setShowProfileMenu(!showProfileMenu);
@@ -54,15 +83,15 @@ export default function DashboardHeader() {
               }}
             >
               <div className={styles.header__avatar}>
-                <span>JD</span>
+                <span>{getUserInitials()}</span>
               </div>
-              <span className={styles.header__userName}>John Doe</span>
+              <span className={styles.header__userName}>{getFullName()}</span>
               <Icon name="chevron-down" className={styles.header__userIcon} />
             </button>
           </div>
         </div>
       </div>
-      
+
       <AnimatePresence>
         {showNotifications && (
           <motion.div
@@ -70,19 +99,19 @@ export default function DashboardHeader() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2 }}
-            className={`${styles.header__dropdown} ${styles['header__dropdown--notifications']}`}
+            className={`${styles.header__dropdown} ${styles["header__dropdown--notifications"]}`}
           >
             <NotificationsMenu onClose={() => setShowNotifications(false)} />
           </motion.div>
         )}
-        
+
         {showProfileMenu && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2 }}
-            className={`${styles.header__dropdown} ${styles['header__dropdown--profile']}`}
+            className={`${styles.header__dropdown} ${styles["header__dropdown--profile"]}`}
           >
             <ProfileMenu onClose={() => setShowProfileMenu(false)} />
           </motion.div>

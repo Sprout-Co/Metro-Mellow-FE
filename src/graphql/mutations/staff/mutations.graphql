@@ -1,0 +1,113 @@
+mutation CreateStaffProfile($input: CreateStaffProfileInput!) {
+  createStaffProfile(input: $input) {
+    id
+    user {
+      id
+      firstName
+      lastName
+      email
+    }
+    serviceCategories
+    availability {
+      dayOfWeek
+      startTime
+      endTime
+      isAvailable
+    }
+    rating
+    totalJobs
+    completedJobs
+    activeJobs
+    documents {
+      id
+      type
+      url
+      verified
+      uploadedAt
+    }
+    status
+    createdAt
+    updatedAt
+  }
+}
+
+mutation UpdateStaffProfile($id: ID!, $input: UpdateStaffProfileInput!) {
+  updateStaffProfile(id: $id, input: $input) {
+    id
+    user {
+      id
+      firstName
+      lastName
+      email
+    }
+    serviceCategories
+    availability {
+      dayOfWeek
+      startTime
+      endTime
+      isAvailable
+    }
+    rating
+    totalJobs
+    completedJobs
+    activeJobs
+    documents {
+      id
+      type
+      url
+      verified
+      uploadedAt
+    }
+    status
+    createdAt
+    updatedAt
+  }
+}
+
+mutation UpdateStaffStatus($id: ID!, $status: StaffStatus!) {
+  updateStaffStatus(id: $id, status: $status) {
+    id
+    status
+    updatedAt
+  }
+}
+
+mutation UpdateStaffAvailability(
+  $id: ID!
+  $availability: [StaffAvailabilityInput!]!
+) {
+  updateStaffAvailability(id: $id, availability: $availability) {
+    id
+    availability {
+      dayOfWeek
+      startTime
+      endTime
+      isAvailable
+    }
+    updatedAt
+  }
+}
+
+mutation UploadStaffDocument($id: ID!, $input: StaffDocumentInput!) {
+  uploadStaffDocument(id: $id, input: $input) {
+    id
+    type
+    url
+    verified
+    uploadedAt
+  }
+}
+
+mutation VerifyStaffDocument($id: ID!, $documentId: ID!) {
+  verifyStaffDocument(id: $id, documentId: $documentId) {
+    id
+    type
+    url
+    verified
+    uploadedAt
+  }
+}
+
+mutation DeleteStaffDocument($id: ID!, $documentId: ID!) {
+  deleteStaffDocument(id: $id, documentId: $documentId)
+}

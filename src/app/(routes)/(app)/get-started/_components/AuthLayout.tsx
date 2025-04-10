@@ -17,14 +17,14 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
       <div className={styles.authLayout__container}>
         <div className={styles.authLayout__wrapper}>
           <div className={styles.authLayout__card}>
-            <Link href="/" className={styles.authLayout__logo}>
+            {/* <Link href="/" className={styles.authLayout__logo}>
               <Image 
                 src="/images/logo.svg" 
                 alt="Metro Mellow" 
                 width={180} 
                 height={50}
               />
-            </Link>
+            </Link> */}
             
             {children}
           </div>

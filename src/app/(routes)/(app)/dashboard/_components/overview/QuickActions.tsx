@@ -1,26 +1,34 @@
-'use client';
-import { motion } from 'framer-motion';
-import Icon from '../common/Icon';
-import styles from './QuickActions.module.scss';
+"use client";
+import { motion } from "framer-motion";
+import Icon from "../common/Icon";
+import { useUIStore } from "@/store/slices/ui";
+import BookServiceModal from "./BookServiceModal";
+import styles from "./QuickActions.module.scss";
 
 const quickActions = [
   {
-    id: 'book',
-    label: 'Book Service',
-    icon: 'calendar-plus',
-    color: 'primary'
+    id: "book",
+    label: "Book Service",
+    icon: "calendar-plus",
+    color: "primary",
   },
   {
-    id: 'reschedule',
-    label: 'Reschedule',
-    icon: 'calendar',
-    color: 'secondary'
+    id: "reschedule",
+    label: "Reschedule",
+    icon: "calendar",
+    color: "secondary",
   },
   {
-    id: 'contact',
-    label: 'Contact Support',
-    icon: 'headphones',
-    color: 'info'
+    id: "contact",
+    label: "Contact Support",
+    icon: "headphones",
+    color: "info",
+  },
+  {
+    id: "Whatsapp",
+    label: "Talk on Whatsapp",
+    icon: "headphones",
+    color: "info",
   },
   // {
   //   id: 'manage',
@@ -43,6 +51,8 @@ const quickActions = [
 ];
 
 export default function QuickActions() {
+  const { openModal } = useUIStore();
+
   const itemVariants = {
     hidden: { opacity: 0, scale: 0.9 },
     visible: (i: number) => ({
@@ -51,11 +61,18 @@ export default function QuickActions() {
       transition: {
         delay: i * 0.05,
         duration: 0.3,
-        type: 'spring',
+        type: "spring",
         stiffness: 300,
-        damping: 20
-      }
-    })
+        damping: 20,
+      },
+    }),
+  };
+
+  const handleActionClick = (actionId: string) => {
+    if (actionId === "book") {
+      openModal("book-service");
+    }
+    // Handle other actions here
   };
 
   return (
@@ -69,20 +86,23 @@ export default function QuickActions() {
             initial="hidden"
             animate="visible"
             variants={itemVariants}
-            whileHover={{ 
+            whileHover={{
               scale: 1.05,
-              transition: { duration: 0.2 }
+              transition: { duration: 0.2 },
             }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => handleActionClick(action.id)}
           >
-            <div className={`${styles.actions__icon} ${styles[`actions__icon--${action.color}`]}`}>
+            <div
+              className={`${styles.actions__icon} ${styles[`actions__icon--${action.color}`]}`}
+            >
               <Icon name={action.icon} />
             </div>
             <span className={styles.actions__label}>{action.label}</span>
           </motion.button>
         ))}
       </div>
-      
+
       {/* <motion.div 
         className={styles.actions__bookService}
         initial={{ opacity: 0, y: 20 }}
@@ -105,6 +125,7 @@ export default function QuickActions() {
           <Icon name="arrow-right" />
         </button>
       </motion.div> */}
+      <BookServiceModal />
     </div>
   );
 }

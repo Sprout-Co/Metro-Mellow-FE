@@ -1,0 +1,83 @@
+mutation CreateSubscription($input: CreateSubscriptionInput!) {
+  createSubscription(input: $input) {
+    id
+    customer {
+      id
+      firstName
+      lastName
+      email
+    }
+    service {
+      _id
+      service_id
+      name
+      description
+    }
+    plan
+    startDate
+    endDate
+    status
+    frequency
+    price
+    nextBillingDate
+    lastBillingDate
+    autoRenew
+    createdAt
+    updatedAt
+  }
+}
+
+mutation UpdateSubscription($id: ID!, $input: UpdateSubscriptionInput!) {
+  updateSubscription(id: $id, input: $input) {
+    id
+    customer {
+      id
+      firstName
+      lastName
+      email
+    }
+    service {
+      _id
+      service_id
+      name
+      description
+    }
+    plan
+    startDate
+    endDate
+    status
+    frequency
+    price
+    nextBillingDate
+    lastBillingDate
+    autoRenew
+    createdAt
+    updatedAt
+  }
+}
+
+mutation CancelSubscription($id: ID!) {
+  cancelSubscription(id: $id) {
+    id
+    status
+    endDate
+    updatedAt
+  }
+}
+
+mutation ReactivateSubscription($id: ID!) {
+  reactivateSubscription(id: $id) {
+    id
+    status
+    endDate
+    updatedAt
+  }
+}
+
+mutation UpdateSubscriptionStatus($id: ID!, $status: SubscriptionStatus!) {
+  updateSubscriptionStatus(id: $id, status: $status) {
+    id
+    status
+    updatedAt
+  }
+}

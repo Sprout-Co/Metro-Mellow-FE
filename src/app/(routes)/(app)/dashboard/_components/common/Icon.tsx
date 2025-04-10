@@ -1,7 +1,8 @@
-'use client';
-import { LucideProps } from 'lucide-react';
-import dynamic from 'next/dynamic';
-import { memo } from 'react';
+//@ts-nocheck
+"use client";
+import { LucideProps } from "lucide-react";
+import dynamic from "next/dynamic";
+import { memo } from "react";
 
 // Import specific icons to reduce bundle size
 import {
@@ -27,6 +28,7 @@ import {
   Settings,
   PlusCircle,
   Plus,
+  Minus,
   X,
   ClipboardList,
   Square,
@@ -35,35 +37,36 @@ import {
   Shield,
   Coffee,
   Package,
-  Users
-} from 'lucide-react';
+  Users,
+} from "lucide-react";
 
 // Map of icon names to components
 const icons = {
   home: Home,
-  'calendar-plus': CalendarPlus,
+  "calendar-plus": CalendarPlus,
   calendar: Calendar,
   search: Search,
   bell: Bell,
   user: User,
-  'chevron-down': ChevronDown,
-  'chevron-up': ChevronUp,
-  'chevron-right': ChevronRight,
-  'arrow-right': ArrowRight,
-  'arrow-left': ArrowLeft,
+  "chevron-down": ChevronDown,
+  "chevron-up": ChevronUp,
+  "chevron-right": ChevronRight,
+  "arrow-right": ArrowRight,
+  "arrow-left": ArrowLeft,
   clock: Clock,
-  'check-circle': CheckCircle,
-  'refresh-cw': RefreshCw,
+  "check-circle": CheckCircle,
+  "refresh-cw": RefreshCw,
   award: Award,
   activity: Activity,
   zap: Zap,
-  'map-pin': MapPin,
+  "map-pin": MapPin,
   headphones: Headphones,
   settings: Settings,
-  'plus-circle': PlusCircle,
+  "plus-circle": PlusCircle,
   plus: Plus,
+  minus: Minus,
   x: X,
-  'clipboard-list': ClipboardList,
+  "clipboard-list": ClipboardList,
   square: Square,
   bed: Bed,
   droplet: Droplet,
@@ -71,20 +74,24 @@ const icons = {
   coffee: Coffee,
   package: Package,
   users: Users,
-  'help-circle': dynamic(() => import('lucide-react').then((mod) => mod.HelpCircle)),
-  building: dynamic(() => import('lucide-react').then((mod) => mod.Building)),
-  'credit-card': dynamic(() => import('lucide-react').then((mod) => mod.CreditCard)),
-  gift: dynamic(() => import('lucide-react').then((mod) => mod.Gift))
+  "help-circle": dynamic(() =>
+    import("lucide-react").then((mod) => mod.HelpCircle)
+  ),
+  building: dynamic(() => import("lucide-react").then((mod) => mod.Building)),
+  "credit-card": dynamic(() =>
+    import("lucide-react").then((mod) => mod.CreditCard)
+  ),
+  gift: dynamic(() => import("lucide-react").then((mod) => mod.Gift)),
 };
 
 export type IconName = keyof typeof icons;
 
 interface IconProps extends LucideProps {
-  name: IconName;
+  name: IconName | any;
   className?: string;
 }
 
-const Icon = ({ name, className = '', ...rest }: IconProps) => {
+const Icon = ({ name, className = "", ...rest }: IconProps) => {
   const IconComponent = icons[name];
 
   if (!IconComponent) {
