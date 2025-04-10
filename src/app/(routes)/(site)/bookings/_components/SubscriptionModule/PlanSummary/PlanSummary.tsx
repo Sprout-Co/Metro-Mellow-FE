@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./PlanSummary.module.scss";
 import ServiceEditor from "./ServiceEditor/ServiceEditor";
-import { ServiceType, PlanType, DurationType } from "../SubscriptionModule";
+import { Service } from "@/graphql/api";
+import { PlanType, DurationType } from "../SubscriptionModule";
 import { useUIStore } from "@/store";
 
 // Type definitions for pricing configuration
@@ -80,10 +81,7 @@ const PRICING_CONFIG = {
   },
 };
 
-interface ServiceTypeExtended extends ServiceType {
-  id: string;
-  name: string;
-  icon: string;
+interface ExtendedService extends Service {
   type: "cleaning" | "food" | "laundry";
   details: any;
 }
@@ -128,7 +126,7 @@ const mock = [
 ];
 
 type PlanSummaryProps = {
-  selectedServices: ServiceType[];
+  selectedServices: ExtendedService[];
   totalPrice?: number;
   planType?: PlanType;
   duration?: DurationType;
@@ -142,17 +140,17 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
   duration = 2,
   onUpdateService,
 }) => {
-  const [services, setServices] = useState<ServiceType[]>(selectedServices);
+  const [services, setServices] = useState<ExtendedService[]>(selectedServices);
   const [servicePrices, setServicePrices] = useState<{ [key: string]: number }>(
     {}
   );
   const { openModal } = useUIStore();
 
   // Calculate individual service prices
-  const calculateServicePrice = (service: ServiceType): number => {
+  const calculateServicePrice = (service: ExtendedService): number => {
     const { type, details } = service;
 
-    if (!details) return service.minPrice || 0;
+    if (!details) return service.price || 0;
 
     let price = 0;
 
@@ -260,7 +258,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
         break;
 
       default:
-        price = service.minPrice || 0;
+        price = service.price || 0;
     }
 
     return Math.round(price); // Ensure we always return a rounded number
@@ -270,7 +268,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
   useEffect(() => {
     const newPrices: { [key: string]: number } = {};
     services.forEach((service) => {
-      newPrices[service.id] = calculateServicePrice(service);
+      newPrices[service._id] = calculateServicePrice(service);
     });
     setServicePrices(newPrices);
   }, [services, JSON.stringify(services.map((s) => s.details))]);
@@ -330,7 +328,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
       {/* Services List */}
       <div className={styles.plan_summary__services}>
         {services.map((service) => (
-          <div key={service.id} className={styles.plan_summary__service}>
+          <div key={service._id} className={styles.plan_summary__service}>
             <div className={styles.plan_summary__service_header}>
               <div className={styles.plan_summary__service_icon}>
                 <span>{service.icon}</span>
@@ -424,7 +422,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
               </div>
               <div className={styles.plan_summary__service_price_container}>
                 <p className={styles.plan_summary__service_price}>
-                  {formatPrice(servicePrices[service.id] || 0)}
+                  {formatPrice(servicePrices[service._id] || 0)}
                 </p>
               </div>
             </div>
