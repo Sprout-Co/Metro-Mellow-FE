@@ -1,5 +1,5 @@
 query GetBookings($status: BookingStatus) {
-  bookings(status: $status) {
+  bookings {
     id
     customer {
       id
@@ -8,13 +8,6 @@ query GetBookings($status: BookingStatus) {
       lastName
       role
       phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
       createdAt
       updatedAt
     }
@@ -53,13 +46,6 @@ query GetBookings($status: BookingStatus) {
       lastName
       role
       phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
       createdAt
       updatedAt
     }
@@ -91,6 +77,109 @@ query GetBookings($status: BookingStatus) {
     }
     laundryBags
     recurringDiscount
+    subscription {
+      _
+      id
+      startDate
+      endDate
+      status
+      billingCycle
+      duration
+      totalPrice
+      nextBillingDate
+      lastBillingDate
+      autoRenew
+      paymentMethod {
+        id
+        user {
+          id
+          email
+          firstName
+          lastName
+          role
+          phone
+          createdAt
+          updatedAt
+        }
+        type
+        last4
+        expiryMonth
+        expiryYear
+        brand
+        isDefault
+        createdAt
+        updatedAt
+      }
+      subscriptionServices {
+        id
+        serviceType
+        frequency
+        price
+        serviceDetails
+        scheduledDays
+        preferredTimeSlot
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      customer {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        address {
+          street
+          city
+          state
+          zipCode
+          country
+        }
+        createdAt
+        updatedAt
+      }
+    }
+    subscriptionService {
+      id
+      serviceType
+      frequency
+      price
+      serviceDetails
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+    }
   }
 }
 
@@ -106,13 +195,6 @@ query GetBookingById($id: ID!) {
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     service {
       _id
@@ -151,13 +233,6 @@ query GetBookingById($id: ID!) {
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     date
     timeSlot
@@ -187,6 +262,109 @@ query GetBookingById($id: ID!) {
     }
     laundryBags
     recurringDiscount
+    subscription {
+      _
+      id
+      startDate
+      endDate
+      status
+      billingCycle
+      duration
+      totalPrice
+      nextBillingDate
+      lastBillingDate
+      autoRenew
+      paymentMethod {
+        id
+        user {
+          id
+          email
+          firstName
+          lastName
+          role
+          phone
+          createdAt
+          updatedAt
+        }
+        type
+        last4
+        expiryMonth
+        expiryYear
+        brand
+        isDefault
+        createdAt
+        updatedAt
+      }
+      subscriptionServices {
+        id
+        serviceType
+        frequency
+        price
+        serviceDetails
+        scheduledDays
+        preferredTimeSlot
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      customer {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        address {
+          street
+          city
+          state
+          zipCode
+          country
+        }
+        createdAt
+        updatedAt
+      }
+    }
+    subscriptionService {
+      id
+      serviceType
+      frequency
+      price
+      serviceDetails
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+    }
   }
 }
 
@@ -202,13 +380,6 @@ query GetCustomerBookings {
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     service {
       _id
@@ -247,13 +418,6 @@ query GetCustomerBookings {
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     date
     timeSlot
@@ -283,6 +447,109 @@ query GetCustomerBookings {
     }
     laundryBags
     recurringDiscount
+    subscription {
+      _
+      id
+      startDate
+      endDate
+      status
+      billingCycle
+      duration
+      totalPrice
+      nextBillingDate
+      lastBillingDate
+      autoRenew
+      paymentMethod {
+        id
+        user {
+          id
+          email
+          firstName
+          lastName
+          role
+          phone
+          createdAt
+          updatedAt
+        }
+        type
+        last4
+        expiryMonth
+        expiryYear
+        brand
+        isDefault
+        createdAt
+        updatedAt
+      }
+      subscriptionServices {
+        id
+        serviceType
+        frequency
+        price
+        serviceDetails
+        scheduledDays
+        preferredTimeSlot
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      customer {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        address {
+          street
+          city
+          state
+          zipCode
+          country
+        }
+        createdAt
+        updatedAt
+      }
+    }
+    subscriptionService {
+      id
+      serviceType
+      frequency
+      price
+      serviceDetails
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+    }
   }
 }
 
@@ -298,13 +565,6 @@ query GetStaffBookings {
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     service {
       _id
@@ -343,13 +603,6 @@ query GetStaffBookings {
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     date
     timeSlot
@@ -379,5 +632,108 @@ query GetStaffBookings {
     }
     laundryBags
     recurringDiscount
+    subscription {
+      _
+      id
+      startDate
+      endDate
+      status
+      billingCycle
+      duration
+      totalPrice
+      nextBillingDate
+      lastBillingDate
+      autoRenew
+      paymentMethod {
+        id
+        user {
+          id
+          email
+          firstName
+          lastName
+          role
+          phone
+          createdAt
+          updatedAt
+        }
+        type
+        last4
+        expiryMonth
+        expiryYear
+        brand
+        isDefault
+        createdAt
+        updatedAt
+      }
+      subscriptionServices {
+        id
+        serviceType
+        frequency
+        price
+        serviceDetails
+        scheduledDays
+        preferredTimeSlot
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      customer {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        address {
+          street
+          city
+          state
+          zipCode
+          country
+        }
+        createdAt
+        updatedAt
+      }
+    }
+    subscriptionService {
+      id
+      serviceType
+      frequency
+      price
+      serviceDetails
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+    }
   }
 }

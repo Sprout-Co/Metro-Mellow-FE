@@ -1,27 +1,93 @@
 mutation CreateSubscription($input: CreateSubscriptionInput!) {
   createSubscription(input: $input) {
+    _
     id
     customer {
       id
+      email
       firstName
       lastName
-      email
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
     }
-    service {
-      _id
-      service_id
-      name
-      description
-    }
-    plan
     startDate
     endDate
     status
-    frequency
-    price
+    billingCycle
+    duration
+    totalPrice
     nextBillingDate
     lastBillingDate
     autoRenew
+    paymentMethod {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        createdAt
+        updatedAt
+      }
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+      createdAt
+      updatedAt
+    }
+    subscriptionServices {
+      id
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+      serviceType
+      frequency
+      price
+      serviceDetails
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+    }
     createdAt
     updatedAt
   }
@@ -29,28 +95,94 @@ mutation CreateSubscription($input: CreateSubscriptionInput!) {
 
 mutation UpdateSubscription($id: ID!, $input: UpdateSubscriptionInput!) {
   updateSubscription(id: $id, input: $input) {
+    _
     id
     customer {
       id
+      email
       firstName
       lastName
-      email
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
     }
-    service {
-      _id
-      service_id
-      name
-      description
-    }
-    plan
     startDate
     endDate
     status
-    frequency
-    price
+    billingCycle
+    duration
+    totalPrice
     nextBillingDate
     lastBillingDate
     autoRenew
+    paymentMethod {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        createdAt
+        updatedAt
+      }
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+      createdAt
+      updatedAt
+    }
+    subscriptionServices {
+      id
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+      serviceType
+      frequency
+      price
+      serviceDetails
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+    }
     createdAt
     updatedAt
   }
@@ -65,19 +197,58 @@ mutation CancelSubscription($id: ID!) {
   }
 }
 
-mutation ReactivateSubscription($id: ID!) {
-  reactivateSubscription(id: $id) {
-    id
-    status
-    endDate
-    updatedAt
+mutation PauseSubscription($pauseSubscriptionId: ID!) {
+  pauseSubscription(id: $pauseSubscriptionId) {
+    _
   }
 }
 
-mutation UpdateSubscriptionStatus($id: ID!, $status: SubscriptionStatus!) {
-  updateSubscriptionStatus(id: $id, status: $status) {
+mutation ResumeSubscription($resumeSubscriptionId: ID!) {
+  resumeSubscription(id: $resumeSubscriptionId) {
+    _
+  }
+}
+
+mutation UpdateSubscriptionStatus(
+  $updateSubscriptionStatusId: ID!
+  $status: SubscriptionStatus!
+) {
+  updateSubscriptionStatus(id: $updateSubscriptionStatusId, status: $status) {
     id
-    status
-    updatedAt
+  }
+}
+
+mutation AddServiceToSubscription(
+  $subscriptionId: ID!
+  $service: SubscriptionServiceInput!
+) {
+  addServiceToSubscription(subscriptionId: $subscriptionId, service: $service) {
+    _
+  }
+}
+
+mutation RemoveServiceFromSubscription(
+  $subscriptionId: ID!
+  $subscriptionServiceId: ID!
+) {
+  removeServiceFromSubscription(
+    subscriptionId: $subscriptionId
+    subscriptionServiceId: $subscriptionServiceId
+  ) {
+    _
+  }
+}
+
+mutation UpdateSubscriptionService(
+  $subscriptionId: ID!
+  $subscriptionServiceId: ID!
+  $input: UpdateSubscriptionServiceInput!
+) {
+  updateSubscriptionService(
+    subscriptionId: $subscriptionId
+    subscriptionServiceId: $subscriptionServiceId
+    input: $input
+  ) {
+    _
   }
 }

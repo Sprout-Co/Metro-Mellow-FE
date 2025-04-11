@@ -49,6 +49,11 @@ export type AuthPayload = {
   user: User;
 };
 
+export enum BillingCycle {
+  Monthly = 'MONTHLY',
+  Weekly = 'WEEKLY'
+}
+
 export type Booking = {
   __typename?: 'Booking';
   address: Address;
@@ -67,6 +72,8 @@ export type Booking = {
   serviceType: ServiceType;
   staff?: Maybe<User>;
   status: BookingStatus;
+  subscription?: Maybe<Subscription>;
+  subscriptionService?: Maybe<SubscriptionService>;
   timeSlot: TimeSlot;
   totalPrice: Scalars['Float']['output'];
   updatedAt: Scalars['DateTime']['output'];
@@ -90,6 +97,8 @@ export type CreateBookingInput = {
   serviceId: Scalars['ID']['input'];
   serviceOption: Scalars['String']['input'];
   serviceType: ServiceType;
+  subscriptionId?: InputMaybe<Scalars['ID']['input']>;
+  subscriptionServiceId?: InputMaybe<Scalars['ID']['input']>;
   timeSlot: TimeSlot;
   totalPrice: Scalars['Float']['input'];
 };
@@ -125,9 +134,9 @@ export type CreateStaffProfileInput = {
 
 export type CreateSubscriptionInput = {
   autoRenew: Scalars['Boolean']['input'];
-  frequency: SubscriptionFrequency;
-  plan: SubscriptionPlan;
-  serviceId: Scalars['ID']['input'];
+  billingCycle: BillingCycle;
+  duration: Scalars['Int']['input'];
+  services: Array<SubscriptionServiceInput>;
   startDate: Scalars['DateTime']['input'];
 };
 
@@ -191,6 +200,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   _?: Maybe<Scalars['Boolean']['output']>;
   addPaymentMethod: PaymentMethod;
+  addServiceToSubscription: Subscription;
   assignStaff: Booking;
   cancelBooking: Booking;
   cancelInvoice: Invoice;
@@ -208,11 +218,13 @@ export type Mutation = {
   generateInvoice: Invoice;
   login: AuthPayload;
   markInvoiceAsPaid: Invoice;
-  reactivateSubscription: Subscription;
+  pauseSubscription: Subscription;
   refundPayment: Payment;
   register: AuthPayload;
   removePaymentMethod: Scalars['Boolean']['output'];
+  removeServiceFromSubscription: Subscription;
   resetPassword: Scalars['Boolean']['output'];
+  resumeSubscription: Subscription;
   setDefaultPaymentMethod: PaymentMethod;
   updateBooking: Booking;
   updateBookingStatus: Booking;
@@ -223,6 +235,7 @@ export type Mutation = {
   updateStaffProfile: StaffProfile;
   updateStaffStatus: StaffProfile;
   updateSubscription: Subscription;
+  updateSubscriptionService: Subscription;
   updateSubscriptionStatus: Subscription;
   updateUserRole: User;
   uploadStaffDocument: StaffDocument;
@@ -232,6 +245,12 @@ export type Mutation = {
 
 export type MutationAddPaymentMethodArgs = {
   input: AddPaymentMethodInput;
+};
+
+
+export type MutationAddServiceToSubscriptionArgs = {
+  service: SubscriptionServiceInput;
+  subscriptionId: Scalars['ID']['input'];
 };
 
 
@@ -324,7 +343,7 @@ export type MutationMarkInvoiceAsPaidArgs = {
 };
 
 
-export type MutationReactivateSubscriptionArgs = {
+export type MutationPauseSubscriptionArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -344,9 +363,20 @@ export type MutationRemovePaymentMethodArgs = {
 };
 
 
+export type MutationRemoveServiceFromSubscriptionArgs = {
+  subscriptionId: Scalars['ID']['input'];
+  subscriptionServiceId: Scalars['ID']['input'];
+};
+
+
 export type MutationResetPasswordArgs = {
   newPassword: Scalars['String']['input'];
   token: Scalars['String']['input'];
+};
+
+
+export type MutationResumeSubscriptionArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -405,6 +435,13 @@ export type MutationUpdateStaffStatusArgs = {
 export type MutationUpdateSubscriptionArgs = {
   id: Scalars['ID']['input'];
   input: UpdateSubscriptionInput;
+};
+
+
+export type MutationUpdateSubscriptionServiceArgs = {
+  input: UpdateSubscriptionServiceInput;
+  subscriptionId: Scalars['ID']['input'];
+  subscriptionServiceId: Scalars['ID']['input'];
 };
 
 
@@ -506,6 +543,7 @@ export type Query = {
   staffProfile?: Maybe<StaffProfile>;
   staffProfiles: Array<StaffProfile>;
   subscription?: Maybe<Subscription>;
+  subscriptionService?: Maybe<SubscriptionService>;
   subscriptions: Array<Subscription>;
   user?: Maybe<User>;
   users: Array<User>;
@@ -570,6 +608,11 @@ export type QueryStaffProfilesArgs = {
 
 
 export type QuerySubscriptionArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QuerySubscriptionServiceArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -759,18 +802,19 @@ export type Subscription = {
   __typename?: 'Subscription';
   _?: Maybe<Scalars['Boolean']['output']>;
   autoRenew: Scalars['Boolean']['output'];
+  billingCycle: BillingCycle;
   createdAt: Scalars['DateTime']['output'];
   customer: User;
+  duration: Scalars['Int']['output'];
   endDate?: Maybe<Scalars['DateTime']['output']>;
-  frequency: SubscriptionFrequency;
   id: Scalars['ID']['output'];
   lastBillingDate?: Maybe<Scalars['DateTime']['output']>;
   nextBillingDate: Scalars['DateTime']['output'];
-  plan: SubscriptionPlan;
-  price: Scalars['Float']['output'];
-  service: Service;
+  paymentMethod?: Maybe<PaymentMethod>;
   startDate: Scalars['DateTime']['output'];
   status: SubscriptionStatus;
+  subscriptionServices: Array<SubscriptionService>;
+  totalPrice: Scalars['Float']['output'];
   updatedAt: Scalars['DateTime']['output'];
 };
 
@@ -781,11 +825,27 @@ export enum SubscriptionFrequency {
   Weekly = 'WEEKLY'
 }
 
-export enum SubscriptionPlan {
-  Basic = 'BASIC',
-  Luxury = 'LUXURY',
-  Premium = 'PREMIUM'
-}
+export type SubscriptionService = {
+  __typename?: 'SubscriptionService';
+  createdAt: Scalars['DateTime']['output'];
+  frequency: SubscriptionFrequency;
+  id: Scalars['ID']['output'];
+  preferredTimeSlot: TimeSlot;
+  price: Scalars['Float']['output'];
+  scheduledDays: Array<Scalars['String']['output']>;
+  service: Service;
+  serviceDetails: Scalars['JSON']['output'];
+  serviceType: ServiceType;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type SubscriptionServiceInput = {
+  frequency: SubscriptionFrequency;
+  preferredTimeSlot: TimeSlot;
+  scheduledDays: Array<Scalars['String']['input']>;
+  serviceDetails: Scalars['JSON']['input'];
+  serviceId: Scalars['ID']['input'];
+};
 
 export enum SubscriptionStatus {
   Active = 'ACTIVE',
@@ -811,6 +871,8 @@ export type UpdateBookingInput = {
   roomQuantities?: InputMaybe<RoomQuantitiesInput>;
   serviceOption: Scalars['String']['input'];
   serviceType: ServiceType;
+  subscriptionId?: InputMaybe<Scalars['ID']['input']>;
+  subscriptionServiceId?: InputMaybe<Scalars['ID']['input']>;
   timeSlot: TimeSlot;
   totalPrice: Scalars['Float']['input'];
 };
@@ -838,9 +900,16 @@ export type UpdateStaffProfileInput = {
 
 export type UpdateSubscriptionInput = {
   autoRenew?: InputMaybe<Scalars['Boolean']['input']>;
+  billingCycle?: InputMaybe<BillingCycle>;
+  duration?: InputMaybe<Scalars['Int']['input']>;
   endDate?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type UpdateSubscriptionServiceInput = {
   frequency?: InputMaybe<SubscriptionFrequency>;
-  plan?: InputMaybe<SubscriptionPlan>;
+  preferredTimeSlot?: InputMaybe<TimeSlot>;
+  scheduledDays?: InputMaybe<Array<Scalars['String']['input']>>;
+  serviceDetails?: InputMaybe<Scalars['JSON']['input']>;
 };
 
 export type UpdateUserInput = {
@@ -1114,7 +1183,7 @@ export type CreateSubscriptionMutationVariables = Exact<{
 }>;
 
 
-export type CreateSubscriptionMutation = { __typename?: 'Mutation', createSubscription: { __typename?: 'Subscription', id: string, plan: SubscriptionPlan, startDate: any, endDate?: any | null, status: SubscriptionStatus, frequency: SubscriptionFrequency, price: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, description: string } } };
+export type CreateSubscriptionMutation = { __typename?: 'Mutation', createSubscription: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', id: string, serviceType: ServiceType, frequency: SubscriptionFrequency, price: number, serviceDetails: any, scheduledDays: Array<string>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } }> } };
 
 export type UpdateSubscriptionMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1122,7 +1191,7 @@ export type UpdateSubscriptionMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSubscriptionMutation = { __typename?: 'Mutation', updateSubscription: { __typename?: 'Subscription', id: string, plan: SubscriptionPlan, startDate: any, endDate?: any | null, status: SubscriptionStatus, frequency: SubscriptionFrequency, price: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, description: string } } };
+export type UpdateSubscriptionMutation = { __typename?: 'Mutation', updateSubscription: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', id: string, serviceType: ServiceType, frequency: SubscriptionFrequency, price: number, serviceDetails: any, scheduledDays: Array<string>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } }> } };
 
 export type CancelSubscriptionMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1131,20 +1200,52 @@ export type CancelSubscriptionMutationVariables = Exact<{
 
 export type CancelSubscriptionMutation = { __typename?: 'Mutation', cancelSubscription: { __typename?: 'Subscription', id: string, status: SubscriptionStatus, endDate?: any | null, updatedAt: any } };
 
-export type ReactivateSubscriptionMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
+export type PauseSubscriptionMutationVariables = Exact<{
+  pauseSubscriptionId: Scalars['ID']['input'];
 }>;
 
 
-export type ReactivateSubscriptionMutation = { __typename?: 'Mutation', reactivateSubscription: { __typename?: 'Subscription', id: string, status: SubscriptionStatus, endDate?: any | null, updatedAt: any } };
+export type PauseSubscriptionMutation = { __typename?: 'Mutation', pauseSubscription: { __typename?: 'Subscription', _?: boolean | null } };
+
+export type ResumeSubscriptionMutationVariables = Exact<{
+  resumeSubscriptionId: Scalars['ID']['input'];
+}>;
+
+
+export type ResumeSubscriptionMutation = { __typename?: 'Mutation', resumeSubscription: { __typename?: 'Subscription', _?: boolean | null } };
 
 export type UpdateSubscriptionStatusMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
+  updateSubscriptionStatusId: Scalars['ID']['input'];
   status: SubscriptionStatus;
 }>;
 
 
-export type UpdateSubscriptionStatusMutation = { __typename?: 'Mutation', updateSubscriptionStatus: { __typename?: 'Subscription', id: string, status: SubscriptionStatus, updatedAt: any } };
+export type UpdateSubscriptionStatusMutation = { __typename?: 'Mutation', updateSubscriptionStatus: { __typename?: 'Subscription', id: string } };
+
+export type AddServiceToSubscriptionMutationVariables = Exact<{
+  subscriptionId: Scalars['ID']['input'];
+  service: SubscriptionServiceInput;
+}>;
+
+
+export type AddServiceToSubscriptionMutation = { __typename?: 'Mutation', addServiceToSubscription: { __typename?: 'Subscription', _?: boolean | null } };
+
+export type RemoveServiceFromSubscriptionMutationVariables = Exact<{
+  subscriptionId: Scalars['ID']['input'];
+  subscriptionServiceId: Scalars['ID']['input'];
+}>;
+
+
+export type RemoveServiceFromSubscriptionMutation = { __typename?: 'Mutation', removeServiceFromSubscription: { __typename?: 'Subscription', _?: boolean | null } };
+
+export type UpdateSubscriptionServiceMutationVariables = Exact<{
+  subscriptionId: Scalars['ID']['input'];
+  subscriptionServiceId: Scalars['ID']['input'];
+  input: UpdateSubscriptionServiceInput;
+}>;
+
+
+export type UpdateSubscriptionServiceMutation = { __typename?: 'Mutation', updateSubscriptionService: { __typename?: 'Subscription', _?: boolean | null } };
 
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1170,24 +1271,24 @@ export type GetBookingsQueryVariables = Exact<{
 }>;
 
 
-export type GetBookingsQuery = { __typename?: 'Query', bookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceType, serviceOption: string, propertyType?: PropertyType | null, laundryBags?: number | null, recurringDiscount?: number | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, roomQuantities?: { __typename?: 'RoomQuantities', bedrooms: number, livingRooms: number, bathrooms: number, kitchen: number, study: number, outdoor: number } | null }> };
+export type GetBookingsQuery = { __typename?: 'Query', bookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceType, serviceOption: string, propertyType?: PropertyType | null, laundryBags?: number | null, recurringDiscount?: number | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, roomQuantities?: { __typename?: 'RoomQuantities', bedrooms: number, livingRooms: number, bathrooms: number, kitchen: number, study: number, outdoor: number } | null, subscription?: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', id: string, serviceType: ServiceType, frequency: SubscriptionFrequency, price: number, serviceDetails: any, scheduledDays: Array<string>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any }>, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } } | null, subscriptionService?: { __typename?: 'SubscriptionService', id: string, serviceType: ServiceType, frequency: SubscriptionFrequency, price: number, serviceDetails: any, scheduledDays: Array<string>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } } | null }> };
 
 export type GetBookingByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetBookingByIdQuery = { __typename?: 'Query', booking?: { __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceType, serviceOption: string, propertyType?: PropertyType | null, laundryBags?: number | null, recurringDiscount?: number | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, roomQuantities?: { __typename?: 'RoomQuantities', bedrooms: number, livingRooms: number, bathrooms: number, kitchen: number, study: number, outdoor: number } | null } | null };
+export type GetBookingByIdQuery = { __typename?: 'Query', booking?: { __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceType, serviceOption: string, propertyType?: PropertyType | null, laundryBags?: number | null, recurringDiscount?: number | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, roomQuantities?: { __typename?: 'RoomQuantities', bedrooms: number, livingRooms: number, bathrooms: number, kitchen: number, study: number, outdoor: number } | null, subscription?: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', id: string, serviceType: ServiceType, frequency: SubscriptionFrequency, price: number, serviceDetails: any, scheduledDays: Array<string>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any }>, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } } | null, subscriptionService?: { __typename?: 'SubscriptionService', id: string, serviceType: ServiceType, frequency: SubscriptionFrequency, price: number, serviceDetails: any, scheduledDays: Array<string>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } } | null } | null };
 
 export type GetCustomerBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCustomerBookingsQuery = { __typename?: 'Query', customerBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceType, serviceOption: string, propertyType?: PropertyType | null, laundryBags?: number | null, recurringDiscount?: number | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, roomQuantities?: { __typename?: 'RoomQuantities', bedrooms: number, livingRooms: number, bathrooms: number, kitchen: number, study: number, outdoor: number } | null }> };
+export type GetCustomerBookingsQuery = { __typename?: 'Query', customerBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceType, serviceOption: string, propertyType?: PropertyType | null, laundryBags?: number | null, recurringDiscount?: number | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, roomQuantities?: { __typename?: 'RoomQuantities', bedrooms: number, livingRooms: number, bathrooms: number, kitchen: number, study: number, outdoor: number } | null, subscription?: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', id: string, serviceType: ServiceType, frequency: SubscriptionFrequency, price: number, serviceDetails: any, scheduledDays: Array<string>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any }>, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } } | null, subscriptionService?: { __typename?: 'SubscriptionService', id: string, serviceType: ServiceType, frequency: SubscriptionFrequency, price: number, serviceDetails: any, scheduledDays: Array<string>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } } | null }> };
 
 export type GetStaffBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetStaffBookingsQuery = { __typename?: 'Query', staffBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceType, serviceOption: string, propertyType?: PropertyType | null, laundryBags?: number | null, recurringDiscount?: number | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, roomQuantities?: { __typename?: 'RoomQuantities', bedrooms: number, livingRooms: number, bathrooms: number, kitchen: number, study: number, outdoor: number } | null }> };
+export type GetStaffBookingsQuery = { __typename?: 'Query', staffBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceType, serviceOption: string, propertyType?: PropertyType | null, laundryBags?: number | null, recurringDiscount?: number | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, roomQuantities?: { __typename?: 'RoomQuantities', bedrooms: number, livingRooms: number, bathrooms: number, kitchen: number, study: number, outdoor: number } | null, subscription?: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', id: string, serviceType: ServiceType, frequency: SubscriptionFrequency, price: number, serviceDetails: any, scheduledDays: Array<string>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any }>, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } } | null, subscriptionService?: { __typename?: 'SubscriptionService', id: string, serviceType: ServiceType, frequency: SubscriptionFrequency, price: number, serviceDetails: any, scheduledDays: Array<string>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } } | null }> };
 
 export type GetPaymentByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1274,19 +1375,19 @@ export type GetSubscriptionByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetSubscriptionByIdQuery = { __typename?: 'Query', subscription?: { __typename?: 'Subscription', id: string, plan: SubscriptionPlan, startDate: any, endDate?: any | null, status: SubscriptionStatus, frequency: SubscriptionFrequency, price: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, description: string } } | null };
+export type GetSubscriptionByIdQuery = { __typename?: 'Query', subscription?: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', id: string, serviceType: ServiceType, frequency: SubscriptionFrequency, price: number, serviceDetails: any, scheduledDays: Array<string>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } }> } | null };
 
 export type GetSubscriptionsQueryVariables = Exact<{
   status?: InputMaybe<SubscriptionStatus>;
 }>;
 
 
-export type GetSubscriptionsQuery = { __typename?: 'Query', subscriptions: Array<{ __typename?: 'Subscription', id: string, plan: SubscriptionPlan, startDate: any, endDate?: any | null, status: SubscriptionStatus, frequency: SubscriptionFrequency, price: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, description: string } }> };
+export type GetSubscriptionsQuery = { __typename?: 'Query', subscriptions: Array<{ __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', id: string, serviceType: ServiceType, frequency: SubscriptionFrequency, price: number, serviceDetails: any, scheduledDays: Array<string>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } }> }> };
 
 export type GetCustomerSubscriptionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCustomerSubscriptionsQuery = { __typename?: 'Query', customerSubscriptions: Array<{ __typename?: 'Subscription', id: string, plan: SubscriptionPlan, startDate: any, endDate?: any | null, status: SubscriptionStatus, frequency: SubscriptionFrequency, price: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, description: string } }> };
+export type GetCustomerSubscriptionsQuery = { __typename?: 'Query', customerSubscriptions: Array<{ __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', id: string, serviceType: ServiceType, frequency: SubscriptionFrequency, price: number, serviceDetails: any, scheduledDays: Array<string>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } }> }> };
 
 
 export const RegisterDocument = gql`
@@ -2666,28 +2767,94 @@ export type DeleteStaffDocumentMutationOptions = Apollo.BaseMutationOptions<Dele
 export const CreateSubscriptionDocument = gql`
     mutation CreateSubscription($input: CreateSubscriptionInput!) {
   createSubscription(input: $input) {
+    _
     id
     customer {
       id
+      email
       firstName
       lastName
-      email
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
     }
-    service {
-      _id
-      service_id
-      name
-      description
-    }
-    plan
     startDate
     endDate
     status
-    frequency
-    price
+    billingCycle
+    duration
+    totalPrice
     nextBillingDate
     lastBillingDate
     autoRenew
+    paymentMethod {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        createdAt
+        updatedAt
+      }
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+      createdAt
+      updatedAt
+    }
+    subscriptionServices {
+      id
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+      serviceType
+      frequency
+      price
+      serviceDetails
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+    }
     createdAt
     updatedAt
   }
@@ -2722,28 +2889,94 @@ export type CreateSubscriptionMutationOptions = Apollo.BaseMutationOptions<Creat
 export const UpdateSubscriptionDocument = gql`
     mutation UpdateSubscription($id: ID!, $input: UpdateSubscriptionInput!) {
   updateSubscription(id: $id, input: $input) {
+    _
     id
     customer {
       id
+      email
       firstName
       lastName
-      email
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
     }
-    service {
-      _id
-      service_id
-      name
-      description
-    }
-    plan
     startDate
     endDate
     status
-    frequency
-    price
+    billingCycle
+    duration
+    totalPrice
     nextBillingDate
     lastBillingDate
     autoRenew
+    paymentMethod {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        createdAt
+        updatedAt
+      }
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+      createdAt
+      updatedAt
+    }
+    subscriptionServices {
+      id
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+      serviceType
+      frequency
+      price
+      serviceDetails
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+    }
     createdAt
     updatedAt
   }
@@ -2812,48 +3045,76 @@ export function useCancelSubscriptionMutation(baseOptions?: ApolloReactHooks.Mut
 export type CancelSubscriptionMutationHookResult = ReturnType<typeof useCancelSubscriptionMutation>;
 export type CancelSubscriptionMutationResult = Apollo.MutationResult<CancelSubscriptionMutation>;
 export type CancelSubscriptionMutationOptions = Apollo.BaseMutationOptions<CancelSubscriptionMutation, CancelSubscriptionMutationVariables>;
-export const ReactivateSubscriptionDocument = gql`
-    mutation ReactivateSubscription($id: ID!) {
-  reactivateSubscription(id: $id) {
-    id
-    status
-    endDate
-    updatedAt
+export const PauseSubscriptionDocument = gql`
+    mutation PauseSubscription($pauseSubscriptionId: ID!) {
+  pauseSubscription(id: $pauseSubscriptionId) {
+    _
   }
 }
     `;
-export type ReactivateSubscriptionMutationFn = Apollo.MutationFunction<ReactivateSubscriptionMutation, ReactivateSubscriptionMutationVariables>;
+export type PauseSubscriptionMutationFn = Apollo.MutationFunction<PauseSubscriptionMutation, PauseSubscriptionMutationVariables>;
 
 /**
- * __useReactivateSubscriptionMutation__
+ * __usePauseSubscriptionMutation__
  *
- * To run a mutation, you first call `useReactivateSubscriptionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useReactivateSubscriptionMutation` returns a tuple that includes:
+ * To run a mutation, you first call `usePauseSubscriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePauseSubscriptionMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [reactivateSubscriptionMutation, { data, loading, error }] = useReactivateSubscriptionMutation({
+ * const [pauseSubscriptionMutation, { data, loading, error }] = usePauseSubscriptionMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      pauseSubscriptionId: // value for 'pauseSubscriptionId'
  *   },
  * });
  */
-export function useReactivateSubscriptionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ReactivateSubscriptionMutation, ReactivateSubscriptionMutationVariables>) {
+export function usePauseSubscriptionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<PauseSubscriptionMutation, PauseSubscriptionMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useMutation<ReactivateSubscriptionMutation, ReactivateSubscriptionMutationVariables>(ReactivateSubscriptionDocument, options);
+        return ApolloReactHooks.useMutation<PauseSubscriptionMutation, PauseSubscriptionMutationVariables>(PauseSubscriptionDocument, options);
       }
-export type ReactivateSubscriptionMutationHookResult = ReturnType<typeof useReactivateSubscriptionMutation>;
-export type ReactivateSubscriptionMutationResult = Apollo.MutationResult<ReactivateSubscriptionMutation>;
-export type ReactivateSubscriptionMutationOptions = Apollo.BaseMutationOptions<ReactivateSubscriptionMutation, ReactivateSubscriptionMutationVariables>;
+export type PauseSubscriptionMutationHookResult = ReturnType<typeof usePauseSubscriptionMutation>;
+export type PauseSubscriptionMutationResult = Apollo.MutationResult<PauseSubscriptionMutation>;
+export type PauseSubscriptionMutationOptions = Apollo.BaseMutationOptions<PauseSubscriptionMutation, PauseSubscriptionMutationVariables>;
+export const ResumeSubscriptionDocument = gql`
+    mutation ResumeSubscription($resumeSubscriptionId: ID!) {
+  resumeSubscription(id: $resumeSubscriptionId) {
+    _
+  }
+}
+    `;
+export type ResumeSubscriptionMutationFn = Apollo.MutationFunction<ResumeSubscriptionMutation, ResumeSubscriptionMutationVariables>;
+
+/**
+ * __useResumeSubscriptionMutation__
+ *
+ * To run a mutation, you first call `useResumeSubscriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResumeSubscriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resumeSubscriptionMutation, { data, loading, error }] = useResumeSubscriptionMutation({
+ *   variables: {
+ *      resumeSubscriptionId: // value for 'resumeSubscriptionId'
+ *   },
+ * });
+ */
+export function useResumeSubscriptionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ResumeSubscriptionMutation, ResumeSubscriptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<ResumeSubscriptionMutation, ResumeSubscriptionMutationVariables>(ResumeSubscriptionDocument, options);
+      }
+export type ResumeSubscriptionMutationHookResult = ReturnType<typeof useResumeSubscriptionMutation>;
+export type ResumeSubscriptionMutationResult = Apollo.MutationResult<ResumeSubscriptionMutation>;
+export type ResumeSubscriptionMutationOptions = Apollo.BaseMutationOptions<ResumeSubscriptionMutation, ResumeSubscriptionMutationVariables>;
 export const UpdateSubscriptionStatusDocument = gql`
-    mutation UpdateSubscriptionStatus($id: ID!, $status: SubscriptionStatus!) {
-  updateSubscriptionStatus(id: $id, status: $status) {
+    mutation UpdateSubscriptionStatus($updateSubscriptionStatusId: ID!, $status: SubscriptionStatus!) {
+  updateSubscriptionStatus(id: $updateSubscriptionStatusId, status: $status) {
     id
-    status
-    updatedAt
   }
 }
     `;
@@ -2872,7 +3133,7 @@ export type UpdateSubscriptionStatusMutationFn = Apollo.MutationFunction<UpdateS
  * @example
  * const [updateSubscriptionStatusMutation, { data, loading, error }] = useUpdateSubscriptionStatusMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      updateSubscriptionStatusId: // value for 'updateSubscriptionStatusId'
  *      status: // value for 'status'
  *   },
  * });
@@ -2884,6 +3145,116 @@ export function useUpdateSubscriptionStatusMutation(baseOptions?: ApolloReactHoo
 export type UpdateSubscriptionStatusMutationHookResult = ReturnType<typeof useUpdateSubscriptionStatusMutation>;
 export type UpdateSubscriptionStatusMutationResult = Apollo.MutationResult<UpdateSubscriptionStatusMutation>;
 export type UpdateSubscriptionStatusMutationOptions = Apollo.BaseMutationOptions<UpdateSubscriptionStatusMutation, UpdateSubscriptionStatusMutationVariables>;
+export const AddServiceToSubscriptionDocument = gql`
+    mutation AddServiceToSubscription($subscriptionId: ID!, $service: SubscriptionServiceInput!) {
+  addServiceToSubscription(subscriptionId: $subscriptionId, service: $service) {
+    _
+  }
+}
+    `;
+export type AddServiceToSubscriptionMutationFn = Apollo.MutationFunction<AddServiceToSubscriptionMutation, AddServiceToSubscriptionMutationVariables>;
+
+/**
+ * __useAddServiceToSubscriptionMutation__
+ *
+ * To run a mutation, you first call `useAddServiceToSubscriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddServiceToSubscriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addServiceToSubscriptionMutation, { data, loading, error }] = useAddServiceToSubscriptionMutation({
+ *   variables: {
+ *      subscriptionId: // value for 'subscriptionId'
+ *      service: // value for 'service'
+ *   },
+ * });
+ */
+export function useAddServiceToSubscriptionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddServiceToSubscriptionMutation, AddServiceToSubscriptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<AddServiceToSubscriptionMutation, AddServiceToSubscriptionMutationVariables>(AddServiceToSubscriptionDocument, options);
+      }
+export type AddServiceToSubscriptionMutationHookResult = ReturnType<typeof useAddServiceToSubscriptionMutation>;
+export type AddServiceToSubscriptionMutationResult = Apollo.MutationResult<AddServiceToSubscriptionMutation>;
+export type AddServiceToSubscriptionMutationOptions = Apollo.BaseMutationOptions<AddServiceToSubscriptionMutation, AddServiceToSubscriptionMutationVariables>;
+export const RemoveServiceFromSubscriptionDocument = gql`
+    mutation RemoveServiceFromSubscription($subscriptionId: ID!, $subscriptionServiceId: ID!) {
+  removeServiceFromSubscription(
+    subscriptionId: $subscriptionId
+    subscriptionServiceId: $subscriptionServiceId
+  ) {
+    _
+  }
+}
+    `;
+export type RemoveServiceFromSubscriptionMutationFn = Apollo.MutationFunction<RemoveServiceFromSubscriptionMutation, RemoveServiceFromSubscriptionMutationVariables>;
+
+/**
+ * __useRemoveServiceFromSubscriptionMutation__
+ *
+ * To run a mutation, you first call `useRemoveServiceFromSubscriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveServiceFromSubscriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeServiceFromSubscriptionMutation, { data, loading, error }] = useRemoveServiceFromSubscriptionMutation({
+ *   variables: {
+ *      subscriptionId: // value for 'subscriptionId'
+ *      subscriptionServiceId: // value for 'subscriptionServiceId'
+ *   },
+ * });
+ */
+export function useRemoveServiceFromSubscriptionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RemoveServiceFromSubscriptionMutation, RemoveServiceFromSubscriptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<RemoveServiceFromSubscriptionMutation, RemoveServiceFromSubscriptionMutationVariables>(RemoveServiceFromSubscriptionDocument, options);
+      }
+export type RemoveServiceFromSubscriptionMutationHookResult = ReturnType<typeof useRemoveServiceFromSubscriptionMutation>;
+export type RemoveServiceFromSubscriptionMutationResult = Apollo.MutationResult<RemoveServiceFromSubscriptionMutation>;
+export type RemoveServiceFromSubscriptionMutationOptions = Apollo.BaseMutationOptions<RemoveServiceFromSubscriptionMutation, RemoveServiceFromSubscriptionMutationVariables>;
+export const UpdateSubscriptionServiceDocument = gql`
+    mutation UpdateSubscriptionService($subscriptionId: ID!, $subscriptionServiceId: ID!, $input: UpdateSubscriptionServiceInput!) {
+  updateSubscriptionService(
+    subscriptionId: $subscriptionId
+    subscriptionServiceId: $subscriptionServiceId
+    input: $input
+  ) {
+    _
+  }
+}
+    `;
+export type UpdateSubscriptionServiceMutationFn = Apollo.MutationFunction<UpdateSubscriptionServiceMutation, UpdateSubscriptionServiceMutationVariables>;
+
+/**
+ * __useUpdateSubscriptionServiceMutation__
+ *
+ * To run a mutation, you first call `useUpdateSubscriptionServiceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateSubscriptionServiceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateSubscriptionServiceMutation, { data, loading, error }] = useUpdateSubscriptionServiceMutation({
+ *   variables: {
+ *      subscriptionId: // value for 'subscriptionId'
+ *      subscriptionServiceId: // value for 'subscriptionServiceId'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateSubscriptionServiceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateSubscriptionServiceMutation, UpdateSubscriptionServiceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<UpdateSubscriptionServiceMutation, UpdateSubscriptionServiceMutationVariables>(UpdateSubscriptionServiceDocument, options);
+      }
+export type UpdateSubscriptionServiceMutationHookResult = ReturnType<typeof useUpdateSubscriptionServiceMutation>;
+export type UpdateSubscriptionServiceMutationResult = Apollo.MutationResult<UpdateSubscriptionServiceMutation>;
+export type UpdateSubscriptionServiceMutationOptions = Apollo.BaseMutationOptions<UpdateSubscriptionServiceMutation, UpdateSubscriptionServiceMutationVariables>;
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
   me {
@@ -3047,7 +3418,7 @@ export type GetUsersSuspenseQueryHookResult = ReturnType<typeof useGetUsersSuspe
 export type GetUsersQueryResult = Apollo.QueryResult<GetUsersQuery, GetUsersQueryVariables>;
 export const GetBookingsDocument = gql`
     query GetBookings($status: BookingStatus) {
-  bookings(status: $status) {
+  bookings {
     id
     customer {
       id
@@ -3056,13 +3427,6 @@ export const GetBookingsDocument = gql`
       lastName
       role
       phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
       createdAt
       updatedAt
     }
@@ -3101,13 +3465,6 @@ export const GetBookingsDocument = gql`
       lastName
       role
       phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
       createdAt
       updatedAt
     }
@@ -3139,6 +3496,109 @@ export const GetBookingsDocument = gql`
     }
     laundryBags
     recurringDiscount
+    subscription {
+      _
+      id
+      startDate
+      endDate
+      status
+      billingCycle
+      duration
+      totalPrice
+      nextBillingDate
+      lastBillingDate
+      autoRenew
+      paymentMethod {
+        id
+        user {
+          id
+          email
+          firstName
+          lastName
+          role
+          phone
+          createdAt
+          updatedAt
+        }
+        type
+        last4
+        expiryMonth
+        expiryYear
+        brand
+        isDefault
+        createdAt
+        updatedAt
+      }
+      subscriptionServices {
+        id
+        serviceType
+        frequency
+        price
+        serviceDetails
+        scheduledDays
+        preferredTimeSlot
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      customer {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        address {
+          street
+          city
+          state
+          zipCode
+          country
+        }
+        createdAt
+        updatedAt
+      }
+    }
+    subscriptionService {
+      id
+      serviceType
+      frequency
+      price
+      serviceDetails
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+    }
   }
 }
     `;
@@ -3188,13 +3648,6 @@ export const GetBookingByIdDocument = gql`
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     service {
       _id
@@ -3233,13 +3686,6 @@ export const GetBookingByIdDocument = gql`
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     date
     timeSlot
@@ -3269,6 +3715,109 @@ export const GetBookingByIdDocument = gql`
     }
     laundryBags
     recurringDiscount
+    subscription {
+      _
+      id
+      startDate
+      endDate
+      status
+      billingCycle
+      duration
+      totalPrice
+      nextBillingDate
+      lastBillingDate
+      autoRenew
+      paymentMethod {
+        id
+        user {
+          id
+          email
+          firstName
+          lastName
+          role
+          phone
+          createdAt
+          updatedAt
+        }
+        type
+        last4
+        expiryMonth
+        expiryYear
+        brand
+        isDefault
+        createdAt
+        updatedAt
+      }
+      subscriptionServices {
+        id
+        serviceType
+        frequency
+        price
+        serviceDetails
+        scheduledDays
+        preferredTimeSlot
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      customer {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        address {
+          street
+          city
+          state
+          zipCode
+          country
+        }
+        createdAt
+        updatedAt
+      }
+    }
+    subscriptionService {
+      id
+      serviceType
+      frequency
+      price
+      serviceDetails
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+    }
   }
 }
     `;
@@ -3318,13 +3867,6 @@ export const GetCustomerBookingsDocument = gql`
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     service {
       _id
@@ -3363,13 +3905,6 @@ export const GetCustomerBookingsDocument = gql`
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     date
     timeSlot
@@ -3399,6 +3934,109 @@ export const GetCustomerBookingsDocument = gql`
     }
     laundryBags
     recurringDiscount
+    subscription {
+      _
+      id
+      startDate
+      endDate
+      status
+      billingCycle
+      duration
+      totalPrice
+      nextBillingDate
+      lastBillingDate
+      autoRenew
+      paymentMethod {
+        id
+        user {
+          id
+          email
+          firstName
+          lastName
+          role
+          phone
+          createdAt
+          updatedAt
+        }
+        type
+        last4
+        expiryMonth
+        expiryYear
+        brand
+        isDefault
+        createdAt
+        updatedAt
+      }
+      subscriptionServices {
+        id
+        serviceType
+        frequency
+        price
+        serviceDetails
+        scheduledDays
+        preferredTimeSlot
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      customer {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        address {
+          street
+          city
+          state
+          zipCode
+          country
+        }
+        createdAt
+        updatedAt
+      }
+    }
+    subscriptionService {
+      id
+      serviceType
+      frequency
+      price
+      serviceDetails
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+    }
   }
 }
     `;
@@ -3447,13 +4085,6 @@ export const GetStaffBookingsDocument = gql`
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     service {
       _id
@@ -3492,13 +4123,6 @@ export const GetStaffBookingsDocument = gql`
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     date
     timeSlot
@@ -3528,6 +4152,109 @@ export const GetStaffBookingsDocument = gql`
     }
     laundryBags
     recurringDiscount
+    subscription {
+      _
+      id
+      startDate
+      endDate
+      status
+      billingCycle
+      duration
+      totalPrice
+      nextBillingDate
+      lastBillingDate
+      autoRenew
+      paymentMethod {
+        id
+        user {
+          id
+          email
+          firstName
+          lastName
+          role
+          phone
+          createdAt
+          updatedAt
+        }
+        type
+        last4
+        expiryMonth
+        expiryYear
+        brand
+        isDefault
+        createdAt
+        updatedAt
+      }
+      subscriptionServices {
+        id
+        serviceType
+        frequency
+        price
+        serviceDetails
+        scheduledDays
+        preferredTimeSlot
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      customer {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        address {
+          street
+          city
+          state
+          zipCode
+          country
+        }
+        createdAt
+        updatedAt
+      }
+    }
+    subscriptionService {
+      id
+      serviceType
+      frequency
+      price
+      serviceDetails
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+    }
   }
 }
     `;
@@ -4284,28 +5011,94 @@ export type GetStaffPerformanceQueryResult = Apollo.QueryResult<GetStaffPerforma
 export const GetSubscriptionByIdDocument = gql`
     query GetSubscriptionById($id: ID!) {
   subscription(id: $id) {
+    _
     id
     customer {
       id
+      email
       firstName
       lastName
-      email
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
     }
-    service {
-      _id
-      service_id
-      name
-      description
-    }
-    plan
     startDate
     endDate
     status
-    frequency
-    price
+    billingCycle
+    duration
+    totalPrice
     nextBillingDate
     lastBillingDate
     autoRenew
+    paymentMethod {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        createdAt
+        updatedAt
+      }
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+      createdAt
+      updatedAt
+    }
+    subscriptionServices {
+      id
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+      serviceType
+      frequency
+      price
+      serviceDetails
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+    }
     createdAt
     updatedAt
   }
@@ -4347,28 +5140,94 @@ export type GetSubscriptionByIdQueryResult = Apollo.QueryResult<GetSubscriptionB
 export const GetSubscriptionsDocument = gql`
     query GetSubscriptions($status: SubscriptionStatus) {
   subscriptions(status: $status) {
+    _
     id
     customer {
       id
+      email
       firstName
       lastName
-      email
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
     }
-    service {
-      _id
-      service_id
-      name
-      description
-    }
-    plan
     startDate
     endDate
     status
-    frequency
-    price
+    billingCycle
+    duration
+    totalPrice
     nextBillingDate
     lastBillingDate
     autoRenew
+    paymentMethod {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        createdAt
+        updatedAt
+      }
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+      createdAt
+      updatedAt
+    }
+    subscriptionServices {
+      id
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+      serviceType
+      frequency
+      price
+      serviceDetails
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+    }
     createdAt
     updatedAt
   }
@@ -4410,22 +5269,94 @@ export type GetSubscriptionsQueryResult = Apollo.QueryResult<GetSubscriptionsQue
 export const GetCustomerSubscriptionsDocument = gql`
     query GetCustomerSubscriptions {
   customerSubscriptions {
+    _
     id
-    service {
-      _id
-      service_id
-      name
-      description
+    customer {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
     }
-    plan
     startDate
     endDate
     status
-    frequency
-    price
+    billingCycle
+    duration
+    totalPrice
     nextBillingDate
     lastBillingDate
     autoRenew
+    paymentMethod {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        createdAt
+        updatedAt
+      }
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+      createdAt
+      updatedAt
+    }
+    subscriptionServices {
+      id
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+      serviceType
+      frequency
+      price
+      serviceDetails
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+    }
     createdAt
     updatedAt
   }
