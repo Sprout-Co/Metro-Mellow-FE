@@ -2,22 +2,51 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./PlanSummary.module.scss";
-import ServiceEditor from "./ServiceEditor/ServiceEditor";
 import { Service } from "@/graphql/api";
 import { PlanType, DurationType } from "../SubscriptionModule";
-import { useUIStore } from "@/store";
+import EditServiceModal from "../EditServiceModal/EditServiceModal";
+import { Icon } from "@/components/ui/Icon/Icon";
 
-// Type definitions for pricing configuration
-type CleaningType = "standard" | "deep" | "post";
-type RoomType =
-  | "bedroom"
-  | "livingRoom"
-  | "bathroom"
-  | "kitchen"
-  | "balcony"
-  | "studyRoom";
-type FoodPlanType = "basic" | "standard" | "premium";
-type LaundryType = "wash-and-fold" | "wash-and-iron";
+// Define our extended service types
+export type CleaningDetails = {
+  cleaningType: "standard" | "deep" | "post";
+  houseType: "flat" | "duplex";
+  rooms: {
+    bedroom: number;
+    livingRoom: number;
+    bathroom: number;
+    kitchen: number;
+    balcony: number;
+    studyRoom: number;
+  };
+  frequency: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+  day: string;
+  time: string;
+};
+
+export type FoodDetails = {
+  foodPlanType: "basic" | "standard" | "premium";
+  deliveryFrequency: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+  deliveryDays: string[];
+  mealsPerDay: {
+    [key: string]: number;
+  };
+};
+
+export type LaundryDetails = {
+  laundryType: "wash-and-fold" | "wash-and-iron";
+  bags: number;
+  pickupFrequency: 1 | 2 | 3;
+  pickupDays: string[];
+};
+
+export type ServiceDetails = CleaningDetails | FoodDetails | LaundryDetails;
+
+export interface ExtendedService extends Service {
+  type: "cleaning" | "food" | "laundry";
+  details: ServiceDetails;
+}
+
 type FrequencyMultiplier = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 type LaundryFrequencyMultiplier = 1 | 2 | 3;
 
@@ -81,70 +110,99 @@ const PRICING_CONFIG = {
   },
 };
 
-interface ExtendedService extends Service {
-  type: "cleaning" | "food" | "laundry";
-  details: any;
-}
-
-const mock = [
-  {
-    id: "cleaning-1",
-    name: "Cleaning Service",
-    icon: "🧹",
-    type: "cleaning",
-    details: {
-      cleaningType: "standard",
-      houseType: "flat",
-      rooms: {
-        bedroom: 2,
-        livingRoom: 1,
-        bathroom: 1,
-        kitchen: 1,
-        balcony: 0,
-        studyRoom: 0,
-      },
-      frequency: 1,
-      day: "friday",
-      time: "8am",
+// Default service details
+const DEFAULT_SERVICE_DETAILS = {
+  cleaning: {
+    cleaningType: "standard",
+    houseType: "flat",
+    rooms: {
+      bedroom: 2,
+      livingRoom: 1,
+      bathroom: 1,
+      kitchen: 1,
+      balcony: 0,
+      studyRoom: 0,
+    },
+    frequency: 1 as const,
+    day: "friday",
+    time: "morning",
+  },
+  food: {
+    foodPlanType: "basic",
+    deliveryFrequency: 2 as const,
+    deliveryDays: ["monday", "thursday"],
+    mealsPerDay: {
+      monday: 2,
+      thursday: 2,
     },
   },
-  {
-    id: "food-1",
-    name: "Food Service",
-    icon: "🍳",
-    type: "food",
-    details: {
-      foodPlanType: "basic",
-      deliveryFrequency: 2,
-      deliveryDays: ["monday", "tuesday"],
-      mealsPerDay: {
-        monday: 5,
-        tuesday: 2,
-      },
-    },
+  laundry: {
+    laundryType: "wash-and-fold",
+    bags: 2,
+    pickupFrequency: 1 as const,
+    pickupDays: ["wednesday"],
   },
-];
-
-type PlanSummaryProps = {
-  selectedServices: ExtendedService[];
-  totalPrice?: number;
-  planType?: PlanType;
-  duration?: DurationType;
-  onUpdateService?: (serviceId: string, details: any) => void;
 };
 
-const PlanSummary: React.FC<PlanSummaryProps> = ({
+type EnhancedPlanSummaryProps = {
+  selectedServices: Service[];
+  planType: PlanType;
+  duration: DurationType;
+  onUpdateService?: (service: ExtendedService) => void;
+};
+
+const PlanSummary: React.FC<EnhancedPlanSummaryProps> = ({
   selectedServices,
-  totalPrice = 0,
   planType = "weekly",
   duration = 2,
   onUpdateService,
 }) => {
-  const [services, setServices] = useState<ExtendedService[]>(selectedServices);
+  // State to track extended services with details
+  const [extendedServices, setExtendedServices] = useState<ExtendedService[]>(
+    []
+  );
   const [servicePrices, setServicePrices] = useState<{ [key: string]: number }>(
     {}
   );
-  const { openModal } = useUIStore();
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [currentEditService, setCurrentEditService] =
+    useState<ExtendedService | null>(null);
+
+  // Extend base services with details
+  useEffect(() => {
+    const extended = selectedServices.map((service) => {
+      // Find existing extended service or create a new one
+      const existingService = extendedServices.find(
+        (es) => es._id === service._id
+      );
+
+      if (existingService) {
+        return existingService;
+      }
+
+      // Determine service type based on service ID or category
+      let serviceType: "cleaning" | "food" | "laundry";
+      if (
+        service.service_id === "CLEANING" ||
+        service.category === "CLEANING"
+      ) {
+        serviceType = "cleaning";
+      } else if (service.service_id === "FOOD" || service.category === "FOOD") {
+        serviceType = "food";
+      } else {
+        serviceType = "laundry";
+      }
+
+      // Create extended service with default details
+      return {
+        ...service,
+        type: serviceType,
+        details: DEFAULT_SERVICE_DETAILS[serviceType],
+      } as ExtendedService;
+    });
+
+    setExtendedServices(extended);
+  }, [selectedServices]);
 
   // Calculate individual service prices
   const calculateServicePrice = (service: ExtendedService): number => {
@@ -160,31 +218,21 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
         price += PRICING_CONFIG.cleaning.basePrice;
 
         // Add cost based on cleaning type
-        if (details.cleaningType) {
-          const cleaningType = details.cleaningType as CleaningType;
-          price += PRICING_CONFIG.cleaning.cleaningTypes[cleaningType] || 0;
-        }
+        price +=
+          PRICING_CONFIG.cleaning.cleaningTypes[details.cleaningType] || 0;
 
         // Add cost based on room counts
-        if (details.rooms) {
-          Object.entries(details.rooms).forEach(([roomType, count]) => {
-            const room = roomType as RoomType;
-            if (room in PRICING_CONFIG.cleaning.roomPrices && count) {
-              price +=
-                PRICING_CONFIG.cleaning.roomPrices[room] * (count as number);
-            }
-          });
-        }
+        Object.entries(details.rooms).forEach(([roomType, count]) => {
+          const room =
+            roomType as keyof typeof PRICING_CONFIG.cleaning.roomPrices;
+          price += PRICING_CONFIG.cleaning.roomPrices[room] * count;
+        });
 
         // Apply frequency multiplier
-        if (details.frequency) {
-          const frequency = details.frequency as FrequencyMultiplier;
-          if (frequency in PRICING_CONFIG.cleaning.frequencyMultiplier) {
-            price = Math.round(
-              price * PRICING_CONFIG.cleaning.frequencyMultiplier[frequency]
-            );
-          }
-        }
+        const cleaningFrequency = details.frequency as FrequencyMultiplier;
+        price = Math.round(
+          price * PRICING_CONFIG.cleaning.frequencyMultiplier[cleaningFrequency]
+        );
         break;
 
       case "food":
@@ -192,37 +240,22 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
         price += PRICING_CONFIG.food.basePrice;
 
         // Add cost based on food plan type
-        if (details.foodPlanType) {
-          const foodPlanType = details.foodPlanType as FoodPlanType;
-          price += PRICING_CONFIG.food.foodPlanTypes[foodPlanType] || 0;
-        }
+        price += PRICING_CONFIG.food.foodPlanTypes[details.foodPlanType];
 
         // Add cost based on meals per day
-        if (details.mealsPerDay) {
-          let totalMeals = 0;
-          Object.values(details.mealsPerDay).forEach((mealCount) => {
-            if (typeof mealCount === "number") {
-              totalMeals += mealCount;
-            }
-          });
-          price += PRICING_CONFIG.food.mealsPerDayPrice * totalMeals;
-        }
+        let totalMeals = 0;
+        Object.values(details.mealsPerDay).forEach((mealCount) => {
+          totalMeals += mealCount;
+        });
+        price += PRICING_CONFIG.food.mealsPerDayPrice * totalMeals;
 
         // Apply delivery frequency multiplier
-        if (details.deliveryFrequency) {
-          const deliveryFrequency =
-            details.deliveryFrequency as FrequencyMultiplier;
-          if (
-            deliveryFrequency in PRICING_CONFIG.food.deliveryFrequencyMultiplier
-          ) {
-            price = Math.round(
-              price *
-                PRICING_CONFIG.food.deliveryFrequencyMultiplier[
-                  deliveryFrequency
-                ]
-            );
-          }
-        }
+        const deliveryFrequency =
+          details.deliveryFrequency as FrequencyMultiplier;
+        price = Math.round(
+          price *
+            PRICING_CONFIG.food.deliveryFrequencyMultiplier[deliveryFrequency]
+        );
         break;
 
       case "laundry":
@@ -230,48 +263,35 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
         price += PRICING_CONFIG.laundry.basePrice;
 
         // Add cost based on laundry type
-        if (details.laundryType) {
-          const laundryType = details.laundryType as LaundryType;
-          price += PRICING_CONFIG.laundry.laundryTypes[laundryType] || 0;
-        }
+        price += PRICING_CONFIG.laundry.laundryTypes[details.laundryType];
 
         // Add cost based on bag count
-        if (typeof details.bags === "number") {
-          price += PRICING_CONFIG.laundry.bagPrice * details.bags;
-        }
+        price += PRICING_CONFIG.laundry.bagPrice * details.bags;
 
         // Apply pickup frequency multiplier
-        if (details.pickupFrequency) {
-          const pickupFrequency =
-            details.pickupFrequency as LaundryFrequencyMultiplier;
-          if (
-            pickupFrequency in PRICING_CONFIG.laundry.pickupFrequencyMultiplier
-          ) {
-            price = Math.round(
-              price *
-                PRICING_CONFIG.laundry.pickupFrequencyMultiplier[
-                  pickupFrequency
-                ]
-            );
-          }
-        }
+        const pickupFrequency =
+          details.pickupFrequency as LaundryFrequencyMultiplier;
+        price = Math.round(
+          price *
+            PRICING_CONFIG.laundry.pickupFrequencyMultiplier[pickupFrequency]
+        );
         break;
 
       default:
         price = service.price || 0;
     }
 
-    return Math.round(price); // Ensure we always return a rounded number
+    return Math.round(price);
   };
 
   // Update service prices whenever services or their details change
   useEffect(() => {
     const newPrices: { [key: string]: number } = {};
-    services.forEach((service) => {
+    extendedServices.forEach((service) => {
       newPrices[service._id] = calculateServicePrice(service);
     });
     setServicePrices(newPrices);
-  }, [services, JSON.stringify(services.map((s) => s.details))]);
+  }, [extendedServices]);
 
   // Calculate subscription totals based on plan type and duration
   const calculateTotals = () => {
@@ -307,132 +327,311 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
     return `₦${price.toLocaleString()}`;
   };
 
-  useEffect(() => {
-    setServices(selectedServices);
-  }, [selectedServices]);
+  // Handle service edit button click
+  const handleEditClick = (service: ExtendedService) => {
+    setCurrentEditService(service);
+    setEditModalOpen(true);
+  };
+
+  // Handle saving updated service details
+  const handleSaveServiceDetails = (
+    serviceId: string,
+    updatedDetails: ServiceDetails
+  ) => {
+    const updatedServices = extendedServices.map((service) =>
+      service._id === serviceId
+        ? { ...service, details: updatedDetails }
+        : service
+    );
+
+    setExtendedServices(updatedServices);
+
+    // Find the updated service to pass to parent component
+    const updatedService = updatedServices.find(
+      (service) => service._id === serviceId
+    );
+    if (updatedService && onUpdateService) {
+      onUpdateService(updatedService);
+    }
+  };
+
+  // Get frequency text based on service type and frequency value
+  const getFrequencyText = (service: ExtendedService) => {
+    if (service.type === "cleaning") {
+      const freq = service.details.frequency;
+      return freq === 1
+        ? "Once a week"
+        : freq === 2
+          ? "Twice a week"
+          : freq === 3
+            ? "Three times a week"
+            : freq === 4
+              ? "Four times a week"
+              : freq === 5
+                ? "Five times a week"
+                : freq === 6
+                  ? "Six times a week"
+                  : "Daily";
+    } else if (service.type === "food") {
+      const freq = (service.details as FoodDetails).deliveryFrequency;
+      return freq === 1
+        ? "Once a week"
+        : freq === 2
+          ? "Twice a week"
+          : freq === 3
+            ? "Three times a week"
+            : freq === 4
+              ? "Four times a week"
+              : freq === 5
+                ? "Five times a week"
+                : freq === 6
+                  ? "Six times a week"
+                  : "Daily";
+    } else if (service.type === "laundry") {
+      const freq = (service.details as LaundryDetails).pickupFrequency;
+      return freq === 1
+        ? "Once a week"
+        : freq === 2
+          ? "Twice a week"
+          : "Three times a week";
+    }
+    return "";
+  };
 
   return (
     <div className={styles.plan_summary}>
       <div className={styles.plan_summary__header}>
         <h2 className={styles.plan_summary__title}>Your Plan Summary</h2>
-        <button
-          className={styles.plan_summary__edit_button}
-          onClick={() =>
-            openModal("craft-subscription", { selectedServices: services })
-          }
-        >
-          Edit Services
-        </button>
       </div>
 
       {/* Services List */}
-      <div className={styles.plan_summary__services}>
-        {services.map((service) => (
-          <div key={service._id} className={styles.plan_summary__service}>
-            <div className={styles.plan_summary__service_header}>
-              <div className={styles.plan_summary__service_icon}>
-                <span>{service.icon}</span>
-              </div>
-              <div className={styles.plan_summary__service_info}>
-                <h3 className={styles.plan_summary__service_name}>
-                  {service.name}
-                </h3>
-                <p className={styles.plan_summary__service_type}>
-                  {service.type === "cleaning"
-                    ? service.details.cleaningType === "standard"
-                      ? "Standard Cleaning"
-                      : service.details.cleaningType === "deep"
-                        ? "Deep Cleaning"
-                        : "Post Construction Cleaning"
-                    : service.type === "food"
-                      ? service.details.foodPlanType === "basic"
-                        ? "Basic Plan"
-                        : "Standard Plan"
-                      : service.details.laundryType === "wash-and-iron"
-                        ? "Wash And Iron"
-                        : "Wash And Fold"}
-                </p>
-                {service.type === "cleaning" && service.details.rooms && (
-                  <div className={styles.plan_summary__service_details}>
-                    {Object.entries(service.details.rooms).map(
-                      ([room, count]) =>
-                        (count as number) > 0 && (
+      {extendedServices.length === 0 ? (
+        <div className={styles.plan_summary__empty}>
+          <p>Select services to see your plan summary</p>
+        </div>
+      ) : (
+        <div className={styles.plan_summary__services}>
+          <AnimatePresence>
+            {extendedServices.map((service) => (
+              <motion.div
+                key={service._id}
+                className={styles.plan_summary__service}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                whileHover={{
+                  y: -5,
+                  boxShadow: "0 6px 16px rgba(0, 0, 0, 0.1)",
+                }}
+              >
+                <div className={styles.plan_summary__service_header}>
+                  <div className={styles.plan_summary__service_icon}>
+                    <span>{service.icon}</span>
+                  </div>
+                  <div className={styles.plan_summary__service_info}>
+                    <h3 className={styles.plan_summary__service_name}>
+                      {service.name}
+                    </h3>
+                    <p className={styles.plan_summary__service_type}>
+                      {service.type === "cleaning"
+                        ? service.details.cleaningType === "standard"
+                          ? "Standard Cleaning"
+                          : service.details.cleaningType === "deep"
+                            ? "Deep Cleaning"
+                            : "Post Construction Cleaning"
+                        : service.type === "food"
+                          ? (service.details as FoodDetails).foodPlanType ===
+                            "basic"
+                            ? "Basic Plan"
+                            : (service.details as FoodDetails).foodPlanType ===
+                                "standard"
+                              ? "Standard Plan"
+                              : "Premium Plan"
+                          : (service.details as LaundryDetails).laundryType ===
+                              "wash-and-iron"
+                            ? "Wash And Iron"
+                            : "Wash And Fold"}
+                    </p>
+                  </div>
+                  <div className={styles.plan_summary__service_price_container}>
+                    <p className={styles.plan_summary__service_price}>
+                      {formatPrice(servicePrices[service._id] || 0)}
+                    </p>
+                    <button
+                      className={styles.plan_summary__service_edit}
+                      onClick={() => handleEditClick(service)}
+                    >
+                      Customize
+                    </button>
+                  </div>
+                </div>
+
+                {/* Service Details */}
+                <div className={styles.plan_summary__service_details}>
+                  {/* Cleaning Service Details */}
+                  {service.type === "cleaning" && (
+                    <>
+                      <div className={styles.plan_summary__detail_row}>
+                        <span className={styles.plan_summary__detail_label}>
+                          Frequency
+                        </span>
+                        <span className={styles.plan_summary__detail_value}>
+                          {getFrequencyText(service)}
+                        </span>
+                      </div>
+                      <div className={styles.plan_summary__detail_row}>
+                        <span className={styles.plan_summary__detail_label}>
+                          Property Type
+                        </span>
+                        <span className={styles.plan_summary__detail_value}>
+                          {service.details.houseType === "flat"
+                            ? "Flat/Apartment"
+                            : "Duplex/House"}
+                        </span>
+                      </div>
+                      <div className={styles.plan_summary__detail_row}>
+                        <span className={styles.plan_summary__detail_label}>
+                          Rooms
+                        </span>
+                        <span className={styles.plan_summary__detail_value}>
+                          <div className={styles.plan_summary__detail_list}>
+                            {Object.entries(service.details.rooms).map(
+                              ([room, count]) =>
+                                count > 0 && (
+                                  <span key={room}>
+                                    {count}{" "}
+                                    {room === "bedroom"
+                                      ? "Bedroom"
+                                      : room === "livingRoom"
+                                        ? "Living Room"
+                                        : room === "bathroom"
+                                          ? "Bathroom"
+                                          : room === "kitchen"
+                                            ? "Kitchen"
+                                            : room === "balcony"
+                                              ? "Balcony"
+                                              : "Study Room"}
+                                    {count > 1 ? "s" : ""}
+                                  </span>
+                                )
+                            )}
+                          </div>
+                        </span>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Food Service Details */}
+                  {service.type === "food" && (
+                    <>
+                      <div className={styles.plan_summary__detail_row}>
+                        <span className={styles.plan_summary__detail_label}>
+                          Delivery Frequency
+                        </span>
+                        <span className={styles.plan_summary__detail_value}>
+                          {getFrequencyText(service)}
+                        </span>
+                      </div>
+                      <div className={styles.plan_summary__detail_row}>
+                        <span className={styles.plan_summary__detail_label}>
+                          Delivery Days
+                        </span>
+                        <span className={styles.plan_summary__detail_value}>
+                          {(service.details as FoodDetails).deliveryDays
+                            .map(
+                              (day) =>
+                                day.charAt(0).toUpperCase() + day.slice(1)
+                            )
+                            .join(", ")}
+                        </span>
+                      </div>
+                      <div className={styles.plan_summary__detail_row}>
+                        <span className={styles.plan_summary__detail_label}>
+                          Meals Per Day
+                        </span>
+                        <span className={styles.plan_summary__detail_value}>
+                          <div className={styles.plan_summary__detail_list}>
+                            {Object.entries(
+                              (service.details as FoodDetails).mealsPerDay
+                            ).map(
+                              ([day, count]) =>
+                                count > 0 && (
+                                  <span key={day}>
+                                    {count} meal{count > 1 ? "s" : ""} on{" "}
+                                    {day.charAt(0).toUpperCase() + day.slice(1)}
+                                  </span>
+                                )
+                            )}
+                          </div>
+                        </span>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Laundry Service Details */}
+                  {service.type === "laundry" && (
+                    <>
+                      <div className={styles.plan_summary__detail_row}>
+                        <span className={styles.plan_summary__detail_label}>
+                          Pickup Frequency
+                        </span>
+                        <span className={styles.plan_summary__detail_value}>
+                          {getFrequencyText(service)}
+                        </span>
+                      </div>
+                      <div className={styles.plan_summary__detail_row}>
+                        <span className={styles.plan_summary__detail_label}>
+                          Pickup Days
+                        </span>
+                        <span className={styles.plan_summary__detail_value}>
+                          {(service.details as LaundryDetails).pickupDays
+                            .map(
+                              (day) =>
+                                day.charAt(0).toUpperCase() + day.slice(1)
+                            )
+                            .join(", ")}
+                        </span>
+                      </div>
+                      <div className={styles.plan_summary__detail_row}>
+                        <span className={styles.plan_summary__detail_label}>
+                          Number of Bags
+                        </span>
+                        <span className={styles.plan_summary__detail_value}>
+                          {(service.details as LaundryDetails).bags} bag
+                          {(service.details as LaundryDetails).bags > 1
+                            ? "s"
+                            : ""}
                           <span
-                            key={room}
-                            className={styles.plan_summary__service_detail}
+                            style={{
+                              fontSize: "0.8rem",
+                              display: "block",
+                              color: "#717D92",
+                            }}
                           >
-                            {count as number} {room}
+                            (approx.{" "}
+                            {(service.details as LaundryDetails).bags * 30}{" "}
+                            items)
                           </span>
-                        )
-                    )}
-                  </div>
-                )}
-                {service.type === "food" && (
-                  <div className={styles.plan_summary__service_details}>
-                    <div className={styles.plan_summary__detail_row}>
-                      <span className={styles.plan_summary__detail_label}>
-                        Delivery frequency
-                      </span>
-                      <span className={styles.plan_summary__detail_value}>
-                        {service.details.deliveryFrequency === 1
-                          ? "Once a week"
-                          : service.details.deliveryFrequency === 2
-                            ? "Twice a week"
-                            : service.details.deliveryFrequency === 3
-                              ? "Three times a week"
-                              : service.details.deliveryFrequency === 4
-                                ? "Four times a week"
-                                : service.details.deliveryFrequency === 5
-                                  ? "Five times a week"
-                                  : service.details.deliveryFrequency === 6
-                                    ? "Six times a week"
-                                    : "Daily"}
-                      </span>
-                    </div>
-                    <div className={styles.plan_summary__detail_row}>
-                      <span className={styles.plan_summary__detail_label}>
-                        Meals Per Delivery
-                      </span>
-                      <span className={styles.plan_summary__detail_value}>
-                        {Object.entries(service.details.mealsPerDay)
-                          .map(
-                            ([day, count]) =>
-                              (count as number) > 0 && `${count} on ${day}`
-                          )
-                          .join(", ")}
-                      </span>
-                    </div>
-                    <div className={styles.plan_summary__detail_row}>
-                      <span className={styles.plan_summary__detail_label}>
-                        Delivery Day(s)
-                      </span>
-                      <span className={styles.plan_summary__detail_value}>
-                        {service.details.deliveryDays?.join(", ")}
-                      </span>
-                    </div>
-                  </div>
-                )}
-                {service.type === "laundry" && service.details.bags && (
-                  <div className={styles.plan_summary__service_details}>
-                    <span className={styles.plan_summary__service_detail}>
-                      {service.details.bags} bags
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div className={styles.plan_summary__service_price_container}>
-                <p className={styles.plan_summary__service_price}>
-                  {formatPrice(servicePrices[service._id] || 0)}
-                </p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+                        </span>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+      )}
 
       {/* Pricing Summary */}
-      {services.length > 0 && (
-        <div className={styles.plan_summary__pricing}>
+      {extendedServices.length > 0 && (
+        <motion.div
+          className={styles.plan_summary__pricing}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
           <div className={styles.plan_summary__price_row}>
             <span>Subtotal</span>
             <span>{formatPrice(subtotal)}</span>
@@ -440,7 +639,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
 
           {discount > 0 && (
             <div className={styles.plan_summary__price_row}>
-              <span>Discount (Duration)</span>
+              <span>Discount ({duration >= 6 ? "10%" : "5%"})</span>
               <span>-{formatPrice(discount)}</span>
             </div>
           )}
@@ -464,11 +663,48 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
 
           <div className={styles.plan_summary__per_period}>
             <span>
-              Billed as {formatPrice(perPeriod)} per{" "}
-              {planType === "weekly" ? "week" : "month"}
+              {planType === "weekly" ? "Weekly payment: " : "Monthly payment: "}
+              {formatPrice(perPeriod)}
             </span>
           </div>
-        </div>
+        </motion.div>
+      )}
+
+      {/* Total Section */}
+      {extendedServices.length > 0 && (
+        <motion.div
+          className={styles.plan_summary__total}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <span className={styles.plan_summary__total_label}>Plan Total</span>
+          <div className={styles.plan_summary__total_value}>
+            <span className={styles.plan_summary__total_price}>
+              {formatPrice(total)}
+            </span>
+            <span className={styles.plan_summary__total_period}>
+              {duration}{" "}
+              {duration === 1
+                ? planType === "weekly"
+                  ? "week"
+                  : "month"
+                : planType === "weekly"
+                  ? "weeks"
+                  : "months"}
+            </span>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Edit Service Modal */}
+      {currentEditService && (
+        <EditServiceModal
+          isOpen={editModalOpen}
+          onClose={() => setEditModalOpen(false)}
+          service={currentEditService}
+          onSave={handleSaveServiceDetails}
+        />
       )}
     </div>
   );
