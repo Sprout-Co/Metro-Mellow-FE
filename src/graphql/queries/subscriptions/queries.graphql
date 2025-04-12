@@ -50,7 +50,6 @@ query GetSubscriptionById($id: ID!) {
       updatedAt
     }
     subscriptionServices {
-      id
       service {
         _id
         service_id
@@ -82,11 +81,42 @@ query GetSubscriptionById($id: ID!) {
       serviceType
       frequency
       price
-      serviceDetails
+      serviceDetails {
+        cleaning {
+          cleaningType
+          houseType
+          rooms {
+            bedroom
+            livingRoom
+            bathroom
+            kitchen
+            balcony
+            studyRoom
+            other
+          }
+        }
+        laundry {
+          laundryType
+          bags
+          items {
+            shirts
+            pants
+            dresses
+            suits
+            others
+          }
+        }
+        pestControl {
+          treatmentType
+          areas
+          severity
+        }
+      }
       scheduledDays
       preferredTimeSlot
       createdAt
       updatedAt
+      id
     }
     createdAt
     updatedAt
@@ -145,7 +175,6 @@ query GetSubscriptions($status: SubscriptionStatus) {
       updatedAt
     }
     subscriptionServices {
-      id
       service {
         _id
         service_id
@@ -177,11 +206,42 @@ query GetSubscriptions($status: SubscriptionStatus) {
       serviceType
       frequency
       price
-      serviceDetails
+      serviceDetails {
+        cleaning {
+          cleaningType
+          houseType
+          rooms {
+            bedroom
+            livingRoom
+            bathroom
+            kitchen
+            balcony
+            studyRoom
+            other
+          }
+        }
+        laundry {
+          laundryType
+          bags
+          items {
+            shirts
+            pants
+            dresses
+            suits
+            others
+          }
+        }
+        pestControl {
+          treatmentType
+          areas
+          severity
+        }
+      }
       scheduledDays
       preferredTimeSlot
       createdAt
       updatedAt
+      id
     }
     createdAt
     updatedAt
@@ -240,7 +300,6 @@ query GetCustomerSubscriptions {
       updatedAt
     }
     subscriptionServices {
-      id
       service {
         _id
         service_id
@@ -272,11 +331,42 @@ query GetCustomerSubscriptions {
       serviceType
       frequency
       price
-      serviceDetails
+      serviceDetails {
+        cleaning {
+          cleaningType
+          houseType
+          rooms {
+            bedroom
+            livingRoom
+            bathroom
+            kitchen
+            balcony
+            studyRoom
+            other
+          }
+        }
+        laundry {
+          laundryType
+          bags
+          items {
+            shirts
+            pants
+            dresses
+            suits
+            others
+          }
+        }
+        pestControl {
+          treatmentType
+          areas
+          severity
+        }
+      }
       scheduledDays
       preferredTimeSlot
       createdAt
       updatedAt
+      id
     }
     createdAt
     updatedAt

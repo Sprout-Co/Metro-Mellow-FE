@@ -10,6 +10,13 @@ query GetBookings($status: BookingStatus) {
       phone
       createdAt
       updatedAt
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
     }
     service {
       _id
@@ -66,118 +73,35 @@ query GetBookings($status: BookingStatus) {
     updatedAt
     serviceType
     serviceOption
-    propertyType
-    roomQuantities {
-      bedrooms
-      livingRooms
-      bathrooms
-      kitchen
-      study
-      outdoor
-    }
-    laundryBags
-    recurringDiscount
-    subscription {
-      _
-      id
-      startDate
-      endDate
-      status
-      billingCycle
-      duration
-      totalPrice
-      nextBillingDate
-      lastBillingDate
-      autoRenew
-      paymentMethod {
-        id
-        user {
-          id
-          email
-          firstName
-          lastName
-          role
-          phone
-          createdAt
-          updatedAt
+    serviceDetails {
+      cleaning {
+        cleaningType
+        houseType
+        rooms {
+          bedroom
+          livingRoom
+          bathroom
+          kitchen
+          balcony
+          studyRoom
+          other
         }
-        type
-        last4
-        expiryMonth
-        expiryYear
-        brand
-        isDefault
-        createdAt
-        updatedAt
       }
-      subscriptionServices {
-        id
-        serviceType
-        frequency
-        price
-        serviceDetails
-        scheduledDays
-        preferredTimeSlot
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      customer {
-        id
-        email
-        firstName
-        lastName
-        role
-        phone
-        address {
-          street
-          city
-          state
-          zipCode
-          country
+      laundry {
+        laundryType
+        bags
+        items {
+          shirts
+          pants
+          dresses
+          suits
+          others
         }
-        createdAt
-        updatedAt
       }
-    }
-    subscriptionService {
-      id
-      serviceType
-      frequency
-      price
-      serviceDetails
-      scheduledDays
-      preferredTimeSlot
-      createdAt
-      updatedAt
-      service {
-        _id
-        service_id
-        name
-        label
-        description
-        category
-        icon
-        price
-        displayPrice
-        status
-        imageUrl
-        features
-        inclusions
-        options {
-          id
-          service_id
-          label
-          description
-          price
-          inclusions
-          extraItems {
-            name
-            items
-            cost
-          }
-        }
+      pestControl {
+        treatmentType
+        areas
+        severity
       }
     }
   }
@@ -195,6 +119,13 @@ query GetBookingById($id: ID!) {
       phone
       createdAt
       updatedAt
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
     }
     service {
       _id
@@ -251,118 +182,35 @@ query GetBookingById($id: ID!) {
     updatedAt
     serviceType
     serviceOption
-    propertyType
-    roomQuantities {
-      bedrooms
-      livingRooms
-      bathrooms
-      kitchen
-      study
-      outdoor
-    }
-    laundryBags
-    recurringDiscount
-    subscription {
-      _
-      id
-      startDate
-      endDate
-      status
-      billingCycle
-      duration
-      totalPrice
-      nextBillingDate
-      lastBillingDate
-      autoRenew
-      paymentMethod {
-        id
-        user {
-          id
-          email
-          firstName
-          lastName
-          role
-          phone
-          createdAt
-          updatedAt
+    serviceDetails {
+      cleaning {
+        cleaningType
+        houseType
+        rooms {
+          bedroom
+          livingRoom
+          bathroom
+          kitchen
+          balcony
+          studyRoom
+          other
         }
-        type
-        last4
-        expiryMonth
-        expiryYear
-        brand
-        isDefault
-        createdAt
-        updatedAt
       }
-      subscriptionServices {
-        id
-        serviceType
-        frequency
-        price
-        serviceDetails
-        scheduledDays
-        preferredTimeSlot
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      customer {
-        id
-        email
-        firstName
-        lastName
-        role
-        phone
-        address {
-          street
-          city
-          state
-          zipCode
-          country
+      laundry {
+        laundryType
+        bags
+        items {
+          shirts
+          pants
+          dresses
+          suits
+          others
         }
-        createdAt
-        updatedAt
       }
-    }
-    subscriptionService {
-      id
-      serviceType
-      frequency
-      price
-      serviceDetails
-      scheduledDays
-      preferredTimeSlot
-      createdAt
-      updatedAt
-      service {
-        _id
-        service_id
-        name
-        label
-        description
-        category
-        icon
-        price
-        displayPrice
-        status
-        imageUrl
-        features
-        inclusions
-        options {
-          id
-          service_id
-          label
-          description
-          price
-          inclusions
-          extraItems {
-            name
-            items
-            cost
-          }
-        }
+      pestControl {
+        treatmentType
+        areas
+        severity
       }
     }
   }
@@ -380,6 +228,13 @@ query GetCustomerBookings {
       phone
       createdAt
       updatedAt
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
     }
     service {
       _id
@@ -436,118 +291,35 @@ query GetCustomerBookings {
     updatedAt
     serviceType
     serviceOption
-    propertyType
-    roomQuantities {
-      bedrooms
-      livingRooms
-      bathrooms
-      kitchen
-      study
-      outdoor
-    }
-    laundryBags
-    recurringDiscount
-    subscription {
-      _
-      id
-      startDate
-      endDate
-      status
-      billingCycle
-      duration
-      totalPrice
-      nextBillingDate
-      lastBillingDate
-      autoRenew
-      paymentMethod {
-        id
-        user {
-          id
-          email
-          firstName
-          lastName
-          role
-          phone
-          createdAt
-          updatedAt
+    serviceDetails {
+      cleaning {
+        cleaningType
+        houseType
+        rooms {
+          bedroom
+          livingRoom
+          bathroom
+          kitchen
+          balcony
+          studyRoom
+          other
         }
-        type
-        last4
-        expiryMonth
-        expiryYear
-        brand
-        isDefault
-        createdAt
-        updatedAt
       }
-      subscriptionServices {
-        id
-        serviceType
-        frequency
-        price
-        serviceDetails
-        scheduledDays
-        preferredTimeSlot
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      customer {
-        id
-        email
-        firstName
-        lastName
-        role
-        phone
-        address {
-          street
-          city
-          state
-          zipCode
-          country
+      laundry {
+        laundryType
+        bags
+        items {
+          shirts
+          pants
+          dresses
+          suits
+          others
         }
-        createdAt
-        updatedAt
       }
-    }
-    subscriptionService {
-      id
-      serviceType
-      frequency
-      price
-      serviceDetails
-      scheduledDays
-      preferredTimeSlot
-      createdAt
-      updatedAt
-      service {
-        _id
-        service_id
-        name
-        label
-        description
-        category
-        icon
-        price
-        displayPrice
-        status
-        imageUrl
-        features
-        inclusions
-        options {
-          id
-          service_id
-          label
-          description
-          price
-          inclusions
-          extraItems {
-            name
-            items
-            cost
-          }
-        }
+      pestControl {
+        treatmentType
+        areas
+        severity
       }
     }
   }
@@ -565,6 +337,13 @@ query GetStaffBookings {
       phone
       createdAt
       updatedAt
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
     }
     service {
       _id
@@ -621,118 +400,35 @@ query GetStaffBookings {
     updatedAt
     serviceType
     serviceOption
-    propertyType
-    roomQuantities {
-      bedrooms
-      livingRooms
-      bathrooms
-      kitchen
-      study
-      outdoor
-    }
-    laundryBags
-    recurringDiscount
-    subscription {
-      _
-      id
-      startDate
-      endDate
-      status
-      billingCycle
-      duration
-      totalPrice
-      nextBillingDate
-      lastBillingDate
-      autoRenew
-      paymentMethod {
-        id
-        user {
-          id
-          email
-          firstName
-          lastName
-          role
-          phone
-          createdAt
-          updatedAt
+    serviceDetails {
+      cleaning {
+        cleaningType
+        houseType
+        rooms {
+          bedroom
+          livingRoom
+          bathroom
+          kitchen
+          balcony
+          studyRoom
+          other
         }
-        type
-        last4
-        expiryMonth
-        expiryYear
-        brand
-        isDefault
-        createdAt
-        updatedAt
       }
-      subscriptionServices {
-        id
-        serviceType
-        frequency
-        price
-        serviceDetails
-        scheduledDays
-        preferredTimeSlot
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      customer {
-        id
-        email
-        firstName
-        lastName
-        role
-        phone
-        address {
-          street
-          city
-          state
-          zipCode
-          country
+      laundry {
+        laundryType
+        bags
+        items {
+          shirts
+          pants
+          dresses
+          suits
+          others
         }
-        createdAt
-        updatedAt
       }
-    }
-    subscriptionService {
-      id
-      serviceType
-      frequency
-      price
-      serviceDetails
-      scheduledDays
-      preferredTimeSlot
-      createdAt
-      updatedAt
-      service {
-        _id
-        service_id
-        name
-        label
-        description
-        category
-        icon
-        price
-        displayPrice
-        status
-        imageUrl
-        features
-        inclusions
-        options {
-          id
-          service_id
-          label
-          description
-          price
-          inclusions
-          extraItems {
-            name
-            items
-            cost
-          }
-        }
+      pestControl {
+        treatmentType
+        areas
+        severity
       }
     }
   }

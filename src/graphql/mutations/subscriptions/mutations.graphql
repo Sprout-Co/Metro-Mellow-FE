@@ -50,7 +50,6 @@ mutation CreateSubscription($input: CreateSubscriptionInput!) {
       updatedAt
     }
     subscriptionServices {
-      id
       service {
         _id
         service_id
@@ -82,11 +81,42 @@ mutation CreateSubscription($input: CreateSubscriptionInput!) {
       serviceType
       frequency
       price
-      serviceDetails
+      serviceDetails {
+        cleaning {
+          cleaningType
+          houseType
+          rooms {
+            bedroom
+            livingRoom
+            bathroom
+            kitchen
+            balcony
+            studyRoom
+            other
+          }
+        }
+        laundry {
+          laundryType
+          bags
+          items {
+            shirts
+            pants
+            dresses
+            suits
+            others
+          }
+        }
+        pestControl {
+          treatmentType
+          areas
+          severity
+        }
+      }
       scheduledDays
       preferredTimeSlot
       createdAt
       updatedAt
+      id
     }
     createdAt
     updatedAt
@@ -145,7 +175,6 @@ mutation UpdateSubscription($id: ID!, $input: UpdateSubscriptionInput!) {
       updatedAt
     }
     subscriptionServices {
-      id
       service {
         _id
         service_id
@@ -177,11 +206,42 @@ mutation UpdateSubscription($id: ID!, $input: UpdateSubscriptionInput!) {
       serviceType
       frequency
       price
-      serviceDetails
+      serviceDetails {
+        cleaning {
+          cleaningType
+          houseType
+          rooms {
+            bedroom
+            livingRoom
+            bathroom
+            kitchen
+            balcony
+            studyRoom
+            other
+          }
+        }
+        laundry {
+          laundryType
+          bags
+          items {
+            shirts
+            pants
+            dresses
+            suits
+            others
+          }
+        }
+        pestControl {
+          treatmentType
+          areas
+          severity
+        }
+      }
       scheduledDays
       preferredTimeSlot
       createdAt
       updatedAt
+      id
     }
     createdAt
     updatedAt
@@ -190,9 +250,125 @@ mutation UpdateSubscription($id: ID!, $input: UpdateSubscriptionInput!) {
 
 mutation CancelSubscription($id: ID!) {
   cancelSubscription(id: $id) {
+    _
     id
-    status
+    customer {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
+    }
+    startDate
     endDate
+    status
+    billingCycle
+    duration
+    totalPrice
+    nextBillingDate
+    lastBillingDate
+    autoRenew
+    paymentMethod {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        createdAt
+        updatedAt
+      }
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+      createdAt
+      updatedAt
+    }
+    subscriptionServices {
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+      serviceType
+      frequency
+      price
+      serviceDetails {
+        cleaning {
+          cleaningType
+          houseType
+          rooms {
+            bedroom
+            livingRoom
+            bathroom
+            kitchen
+            balcony
+            studyRoom
+            other
+          }
+        }
+        laundry {
+          laundryType
+          bags
+          items {
+            shirts
+            pants
+            dresses
+            suits
+            others
+          }
+        }
+        pestControl {
+          treatmentType
+          areas
+          severity
+        }
+      }
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      id
+    }
+    createdAt
     updatedAt
   }
 }
@@ -200,12 +376,250 @@ mutation CancelSubscription($id: ID!) {
 mutation PauseSubscription($pauseSubscriptionId: ID!) {
   pauseSubscription(id: $pauseSubscriptionId) {
     _
+    id
+    customer {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
+    }
+    startDate
+    endDate
+    status
+    billingCycle
+    duration
+    totalPrice
+    nextBillingDate
+    lastBillingDate
+    autoRenew
+    paymentMethod {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        createdAt
+        updatedAt
+      }
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+      createdAt
+      updatedAt
+    }
+    subscriptionServices {
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+      serviceType
+      frequency
+      price
+      serviceDetails {
+        cleaning {
+          cleaningType
+          houseType
+          rooms {
+            bedroom
+            livingRoom
+            bathroom
+            kitchen
+            balcony
+            studyRoom
+            other
+          }
+        }
+        laundry {
+          laundryType
+          bags
+          items {
+            shirts
+            pants
+            dresses
+            suits
+            others
+          }
+        }
+        pestControl {
+          treatmentType
+          areas
+          severity
+        }
+      }
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      id
+    }
+    createdAt
+    updatedAt
   }
 }
 
 mutation ResumeSubscription($resumeSubscriptionId: ID!) {
   resumeSubscription(id: $resumeSubscriptionId) {
     _
+    id
+    customer {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
+    }
+    startDate
+    endDate
+    status
+    billingCycle
+    duration
+    totalPrice
+    nextBillingDate
+    lastBillingDate
+    autoRenew
+    paymentMethod {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        createdAt
+        updatedAt
+      }
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+      createdAt
+      updatedAt
+    }
+    subscriptionServices {
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+      serviceType
+      frequency
+      price
+      serviceDetails {
+        cleaning {
+          cleaningType
+          houseType
+          rooms {
+            bedroom
+            livingRoom
+            bathroom
+            kitchen
+            balcony
+            studyRoom
+            other
+          }
+        }
+        laundry {
+          laundryType
+          bags
+          items {
+            shirts
+            pants
+            dresses
+            suits
+            others
+          }
+        }
+        pestControl {
+          treatmentType
+          areas
+          severity
+        }
+      }
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      id
+    }
+    createdAt
+    updatedAt
   }
 }
 
@@ -214,7 +628,126 @@ mutation UpdateSubscriptionStatus(
   $status: SubscriptionStatus!
 ) {
   updateSubscriptionStatus(id: $updateSubscriptionStatusId, status: $status) {
+    _
     id
+    customer {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
+    }
+    startDate
+    endDate
+    status
+    billingCycle
+    duration
+    totalPrice
+    nextBillingDate
+    lastBillingDate
+    autoRenew
+    paymentMethod {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        createdAt
+        updatedAt
+      }
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+      createdAt
+      updatedAt
+    }
+    subscriptionServices {
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+      serviceType
+      frequency
+      price
+      serviceDetails {
+        cleaning {
+          cleaningType
+          houseType
+          rooms {
+            bedroom
+            livingRoom
+            bathroom
+            kitchen
+            balcony
+            studyRoom
+            other
+          }
+        }
+        laundry {
+          laundryType
+          bags
+          items {
+            shirts
+            pants
+            dresses
+            suits
+            others
+          }
+        }
+        pestControl {
+          treatmentType
+          areas
+          severity
+        }
+      }
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      id
+    }
+    createdAt
+    updatedAt
   }
 }
 
@@ -224,6 +757,125 @@ mutation AddServiceToSubscription(
 ) {
   addServiceToSubscription(subscriptionId: $subscriptionId, service: $service) {
     _
+    id
+    customer {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
+    }
+    startDate
+    endDate
+    status
+    billingCycle
+    duration
+    totalPrice
+    nextBillingDate
+    lastBillingDate
+    autoRenew
+    paymentMethod {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        createdAt
+        updatedAt
+      }
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+      createdAt
+      updatedAt
+    }
+    subscriptionServices {
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+      serviceType
+      frequency
+      price
+      serviceDetails {
+        cleaning {
+          cleaningType
+          houseType
+          rooms {
+            bedroom
+            livingRoom
+            bathroom
+            kitchen
+            balcony
+            studyRoom
+            other
+          }
+        }
+        laundry {
+          laundryType
+          bags
+          items {
+            shirts
+            pants
+            dresses
+            suits
+            others
+          }
+        }
+        pestControl {
+          treatmentType
+          areas
+          severity
+        }
+      }
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      id
+    }
+    createdAt
+    updatedAt
   }
 }
 
@@ -236,6 +888,125 @@ mutation RemoveServiceFromSubscription(
     subscriptionServiceId: $subscriptionServiceId
   ) {
     _
+    id
+    customer {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
+    }
+    startDate
+    endDate
+    status
+    billingCycle
+    duration
+    totalPrice
+    nextBillingDate
+    lastBillingDate
+    autoRenew
+    paymentMethod {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        createdAt
+        updatedAt
+      }
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+      createdAt
+      updatedAt
+    }
+    subscriptionServices {
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+      serviceType
+      frequency
+      price
+      serviceDetails {
+        cleaning {
+          cleaningType
+          houseType
+          rooms {
+            bedroom
+            livingRoom
+            bathroom
+            kitchen
+            balcony
+            studyRoom
+            other
+          }
+        }
+        laundry {
+          laundryType
+          bags
+          items {
+            shirts
+            pants
+            dresses
+            suits
+            others
+          }
+        }
+        pestControl {
+          treatmentType
+          areas
+          severity
+        }
+      }
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      id
+    }
+    createdAt
+    updatedAt
   }
 }
 
@@ -250,5 +1021,124 @@ mutation UpdateSubscriptionService(
     input: $input
   ) {
     _
+    id
+    customer {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      address {
+        street
+        city
+        state
+        zipCode
+        country
+      }
+      createdAt
+      updatedAt
+    }
+    startDate
+    endDate
+    status
+    billingCycle
+    duration
+    totalPrice
+    nextBillingDate
+    lastBillingDate
+    autoRenew
+    paymentMethod {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        createdAt
+        updatedAt
+      }
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+      createdAt
+      updatedAt
+    }
+    subscriptionServices {
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+      serviceType
+      frequency
+      price
+      serviceDetails {
+        cleaning {
+          cleaningType
+          houseType
+          rooms {
+            bedroom
+            livingRoom
+            bathroom
+            kitchen
+            balcony
+            studyRoom
+            other
+          }
+        }
+        laundry {
+          laundryType
+          bags
+          items {
+            shirts
+            pants
+            dresses
+            suits
+            others
+          }
+        }
+        pestControl {
+          treatmentType
+          areas
+          severity
+        }
+      }
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      id
+    }
+    createdAt
+    updatedAt
   }
 }
