@@ -3,247 +3,93 @@
 @import "@/styles/abstracts/functions";
 
 .edit_service_modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: z-index("modal");
-
-  &__backdrop {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(color("neutral", "black"), 0.6);
-    backdrop-filter: blur(4px);
-  }
-
-  &__container {
-    position: relative;
-    width: 92%;
-    max-width: 620px;
-    max-height: 90vh;
-    background-color: color("neutral", "white");
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  &__content {
     display: flex;
     flex-direction: column;
-  }
-
-  &__header {
-    padding: 20px 24px;
-    border-bottom: 1px solid color("neutral", "lighter");
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: linear-gradient(
-      to right,
-      rgba(color("primary", "base"), 0.03),
-      rgba(color("primary", "light"), 0.05)
-    );
-  }
-
-  &__title {
-    font-size: map-get($font-sizes, "xl");
-    font-weight: map-get($font-weights, "bold");
-    color: color("primary", "dark");
-  }
-
-  &__close {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: color("neutral", "dark");
-    background-color: rgba(color("neutral", "medium"), 0.1);
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background-color: rgba(color("neutral", "medium"), 0.2);
-      color: color("neutral", "black");
-      transform: rotate(90deg);
-    }
-  }
-
-  &__content {
-    padding: 24px;
-    overflow-y: auto;
-    flex: 1;
-
-    /* Custom scrollbar */
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: color("neutral", "lighter");
-      border-radius: 6px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: color("neutral", "medium");
-      border-radius: 6px;
-
-      &:hover {
-        background: color("neutral", "dark");
-      }
-    }
+    gap: 24px;
   }
 
   &__section {
-    margin-bottom: 28px;
-    padding-bottom: 28px;
-    border-bottom: 1px solid color("neutral", "lighter");
-
-    &:last-child {
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: none;
-    }
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 
   &__section_title {
     font-size: map-get($font-sizes, "lg");
     font-weight: map-get($font-weights, "semibold");
-    color: color("neutral", "darker");
-    margin-bottom: 16px;
+    color: color("neutral", "dark");
     display: flex;
     align-items: center;
-    gap: 10px;
-
-    svg {
-      color: color("primary", "base");
-    }
+    gap: 8px;
   }
 
   &__toggle_group {
     display: flex;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid color("neutral", "medium");
-    margin-bottom: 12px;
-    background-color: color("neutral", "lighter");
+    gap: 12px;
+    flex-wrap: wrap;
   }
 
   &__toggle_button {
-    flex: 1;
-    padding: 12px 8px;
-    background: none;
-    border: none;
-    cursor: pointer;
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: 1px solid color("neutral", "lighter");
+    background-color: color("neutral", "white");
+    color: color("neutral", "dark");
     font-size: map-get($font-sizes, "sm");
     font-weight: map-get($font-weights, "medium");
-    color: color("neutral", "dark");
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
 
-    &:not(:last-child) {
-      border-right: 1px solid color("neutral", "medium");
-    }
-
-    &:before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(
-        135deg,
-        rgba(color("primary", "base"), 0.1),
-        rgba(color("primary", "light"), 0.05)
-      );
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    &:hover:not(&_selected) {
-      &:before {
-        opacity: 1;
-      }
+    &:hover {
+      background-color: rgba(color("primary", "base"), 0.05);
+      border-color: color("primary", "light");
+      color: color("primary", "dark");
     }
 
     &_selected {
       background-color: color("primary", "base");
+      border-color: color("primary", "base");
       color: color("neutral", "white");
 
-      &:before {
-        opacity: 0;
+      &:hover {
+        background-color: color("primary", "dark");
+        border-color: color("primary", "dark");
       }
     }
   }
 
-  &__helper_text {
-    font-size: map-get($font-sizes, "xs");
-    color: color("neutral", "dark");
-    margin-top: 8px;
-  }
-
-  &__rooms_grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 12px;
-  }
-
   &__counter_group {
-    margin-bottom: 12px;
-    background-color: color("neutral", "lighter");
-    border-radius: 12px;
-    padding: 14px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background-color: rgba(color("neutral", "medium"), 0.1);
-    }
-
-    &:last-child {
-      margin-bottom: 0;
-    }
+    flex-direction: column;
+    gap: 8px;
   }
 
   &__counter_label {
     font-size: map-get($font-sizes, "sm");
-    font-weight: map-get($font-weights, "medium");
-    color: color("neutral", "darker");
+    color: color("neutral", "medium");
   }
 
   &__counter_controls {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
   }
 
   &__counter_button {
     width: 32px;
     height: 32px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
-    border: 1px solid color("neutral", "medium");
-    background-color: color("neutral", "white");
-    color: color("neutral", "darker");
+    background-color: color("neutral", "lighter");
+    border: none;
     cursor: pointer;
     transition: all 0.2s ease;
 
-    &:hover:not(:disabled) {
-      border-color: color("primary", "base");
-      color: color("primary", "base");
-      transform: translateY(-2px);
+    &:hover {
+      background-color: color("neutral", "light");
     }
 
     &:disabled {
@@ -253,110 +99,103 @@
   }
 
   &__counter_value {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "dark");
     min-width: 24px;
     text-align: center;
-    font-size: map-get($font-sizes, "base");
-    font-weight: map-get($font-weights, "medium");
   }
 
   &__days_grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 10px;
-    margin-bottom: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
   }
 
   &__day_button {
-    padding: 10px;
+    padding: 12px;
     border-radius: 8px;
-    border: 1px solid color("neutral", "medium");
+    border: 1px solid color("neutral", "lighter");
     background-color: color("neutral", "white");
+    color: color("neutral", "dark");
     font-size: map-get($font-sizes, "sm");
     font-weight: map-get($font-weights, "medium");
-    color: color("neutral", "darker");
     cursor: pointer;
     transition: all 0.2s ease;
 
-    &:hover:not(:disabled) {
-      border-color: color("primary", "base");
-      color: color("primary", "base");
+    &:hover {
+      background-color: rgba(color("primary", "base"), 0.05);
+      border-color: color("primary", "light");
+      color: color("primary", "dark");
     }
 
     &_selected {
       background-color: color("primary", "base");
-      color: color("neutral", "white");
       border-color: color("primary", "base");
+      color: color("neutral", "white");
 
       &:hover {
         background-color: color("primary", "dark");
+        border-color: color("primary", "dark");
       }
     }
 
     &:disabled {
       opacity: 0.5;
       cursor: not-allowed;
-      background-color: color("neutral", "lighter");
     }
   }
 
-  &__meals_grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 12px;
-  }
-
-  &__empty_message {
-    text-align: center;
-    padding: 20px;
-    color: color("neutral", "dark");
-    font-size: map-get($font-sizes, "sm");
-    background-color: color("neutral", "lighter");
-    border-radius: 8px;
-    margin: 10px 0;
-  }
-
   &__footer {
-    padding: 16px 24px;
-    border-top: 1px solid color("neutral", "lighter");
     display: flex;
     justify-content: flex-end;
-    align-items: center;
     gap: 16px;
-    background-color: color("neutral", "white");
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid color("neutral", "lighter");
   }
 
   &__button {
-    padding: 14px 24px;
-    border-radius: 12px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: map-get($font-sizes, "sm");
     font-weight: map-get($font-weights, "medium");
-    font-size: map-get($font-sizes, "base");
     cursor: pointer;
-    transition: all 0.3s ease;
-    
+    transition: all 0.2s ease;
+
     &_cancel {
-      background: none;
-      border: 1px solid color("neutral", "medium");
-      color: color("neutral", "darker");
+      background-color: color("neutral", "lighter");
+      color: color("neutral", "dark");
+      border: none;
 
       &:hover {
-        background-color: color("neutral", "lighter");
+        background-color: color("neutral", "light");
       }
     }
 
     &_save {
-      background: linear-gradient(
-        to right,
-        color("primary", "base"),
-        color("primary", "dark")
-      );
+      background-color: color("primary", "base");
       color: color("neutral", "white");
       border: none;
-      box-shadow: 0 4px 10px rgba(color("primary", "base"), 0.2);
 
       &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 15px rgba(color("primary", "base"), 0.3);
+        background-color: color("primary", "dark");
       }
     }
+  }
+
+  &__helper_text {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "medium");
+    margin-top: 8px;
+  }
+
+  &__empty_message {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "medium");
+    text-align: center;
+    padding: 24px;
+    background-color: color("neutral", "lighter");
+    border-radius: 8px;
   }
 }
