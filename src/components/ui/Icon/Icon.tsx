@@ -21,8 +21,8 @@ export function Icon({
   const LucideIcon = LucideIcons[name] as LucideIconType;
 
   if (!LucideIcon) {
-    console.error(`Icon "${name}" not found in LucideIcons`);
-    return null;
+    // console.error(`Icon "${name}" not found in LucideIcons`);
+    return <span>✅</span>;
   }
 
   return (

@@ -1,6 +1,6 @@
 // src/app/(routes)/(site)/bookings/_components/SubscriptionModule/PlanSummary/PlanSummary.tsx
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./PlanSummary.module.scss";
 import { Service } from "@/graphql/api";
@@ -8,6 +8,7 @@ import { PlanType, DurationType } from "../SubscriptionModule";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { useUIStore } from "@/store";
 import { ServiceId, ServiceCategory } from "@/graphql/api";
+import EditServiceModal from "../EditServiceModal/EditServiceModal";
 
 // Define our extended service types
 export type CleaningDetails = {
@@ -166,6 +167,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
   const [servicePrices, setServicePrices] = useState<{ [key: string]: number }>(
     {}
   );
+  const [editServiceModal, setEditServiceModal] = useState(false)
 
   // Access the UI store to handle modals
   const { openModal } = useUIStore();
@@ -425,168 +427,176 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
   };
 
   return (
-    <div className={styles.plan_summary}>
-      <div className={styles.plan_summary__header}>
-        <h2 className={styles.plan_summary__title}>Your Plan Summary</h2>
+    <Fragment>
+      <div className={styles.plan_summary}>
+        <div className={styles.plan_summary__header}>
+          <h2 className={styles.plan_summary__title}>Your Plan Summary</h2>
 
-        {/* Edit All Services Button */}
-        {extendedServices.length > 0 && (
-          <motion.button
-            className={styles.plan_summary__edit_button}
-            onClick={handleEditAllServices}
-            whileHover={{ y: -2 }}
-            whileTap={{ y: 0 }}
+          {/* Edit All Services Button */}
+          {extendedServices.length > 0 && (
+            <motion.button
+              className={styles.plan_summary__edit_button}
+              // onClick={handleEditAllServices}
+              onClick={() => {setEditServiceModal(true)}}
+              whileHover={{ y: -2 }}
+              whileTap={{ y: 0 }}
+            >
+              <Icon name="Edit" /> Edit Services
+            </motion.button>
+          )}
+        </div>
+
+        {/* Services List */}
+        {extendedServices.length === 0 ? (
+          <div className={styles.plan_summary__empty}>
+            <p>Select services to see your plan summary</p>
+          </div>
+        ) : (
+          <motion.div
+            className={styles.plan_summary__services}
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
           >
-            <Icon name="Edit" /> Edit Services
-          </motion.button>
+            <AnimatePresence>
+              {extendedServices.map((service) => (
+                <motion.div
+                  key={service._id}
+                  className={styles.plan_summary__service}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                  whileHover={{
+                    y: -5,
+                    boxShadow: "0 6px 16px rgba(0, 0, 0, 0.1)",
+                  }}
+                >
+                  <div className={styles.plan_summary__service_header}>
+                    <div className={styles.plan_summary__service_icon}>
+                      <span>{service.icon}</span>
+                    </div>
+                    <div className={styles.plan_summary__service_info}>
+                      <h3 className={styles.plan_summary__service_name}>
+                        {service.name}
+                      </h3>
+                      <p className={styles.plan_summary__service_type}>
+                        {service.type === "cleaning"
+                          ? (service.details as CleaningDetails)
+                              .cleaningType === "standard"
+                            ? "Standard Cleaning"
+                            : (service.details as CleaningDetails)
+                                  .cleaningType === "deep"
+                              ? "Deep Cleaning"
+                              : "Post Construction Cleaning"
+                          : service.type === "food"
+                            ? (service.details as FoodDetails).foodPlanType ===
+                              "basic"
+                              ? "Basic Plan"
+                              : (service.details as FoodDetails)
+                                    .foodPlanType === "standard"
+                                ? "Standard Plan"
+                                : "Premium Plan"
+                            : (service.details as LaundryDetails)
+                                  .laundryType === "wash-and-iron"
+                              ? "Wash And Iron"
+                              : "Wash And Fold"}
+                      </p>
+                    </div>
+                    <div
+                      className={styles.plan_summary__service_price_container}
+                    >
+                      <p className={styles.plan_summary__service_price}>
+                        {formatPrice(servicePrices[service._id] || 0)}
+                      </p>
+                      <p className={styles.plan_summary__service_detail}>
+                        {getFrequencyText(service)}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        )}
+
+        {/* Pricing Summary */}
+        {extendedServices.length > 0 && (
+          <motion.div
+            className={styles.plan_summary__pricing}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <div className={styles.plan_summary__price_row}>
+              <span>Subtotal</span>
+              <span>{formatPrice(subtotal)}</span>
+            </div>
+
+            {discount > 0 && (
+              <div className={styles.plan_summary__price_row}>
+                <span>Discount ({duration >= 6 ? "10%" : "5%"})</span>
+                <span>-{formatPrice(discount)}</span>
+              </div>
+            )}
+
+            <div
+              className={`${styles.plan_summary__price_row} ${styles.plan_summary__price_row_total}`}
+            >
+              <span>
+                Total ({duration}{" "}
+                {duration === 1
+                  ? planType === "weekly"
+                    ? "week"
+                    : "month"
+                  : planType === "weekly"
+                    ? "weeks"
+                    : "months"}
+                )
+              </span>
+              <span>{formatPrice(total)}</span>
+            </div>
+
+            <div className={styles.plan_summary__per_period}>
+              <span>
+                {planType === "weekly"
+                  ? "Weekly payment: "
+                  : "Monthly payment: "}
+                {formatPrice(perPeriod)}
+              </span>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Total Section */}
+        {extendedServices.length > 0 && (
+          <motion.div
+            className={styles.plan_summary__total}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <span className={styles.plan_summary__total_label}>Plan Total</span>
+            <div className={styles.plan_summary__total_value}>
+              <span className={styles.plan_summary__total_price}>
+                {formatPrice(total)}
+              </span>
+              <span className={styles.plan_summary__total_period}>
+                {duration}{" "}
+                {duration === 1
+                  ? planType === "weekly"
+                    ? "week"
+                    : "month"
+                  : planType === "weekly"
+                    ? "weeks"
+                    : "months"}
+              </span>
+            </div>
+          </motion.div>
         )}
       </div>
-
-      {/* Services List */}
-      {extendedServices.length === 0 ? (
-        <div className={styles.plan_summary__empty}>
-          <p>Select services to see your plan summary</p>
-        </div>
-      ) : (
-        <motion.div
-          className={styles.plan_summary__services}
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <AnimatePresence>
-            {extendedServices.map((service) => (
-              <motion.div
-                key={service._id}
-                className={styles.plan_summary__service}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                whileHover={{
-                  y: -5,
-                  boxShadow: "0 6px 16px rgba(0, 0, 0, 0.1)",
-                }}
-              >
-                <div className={styles.plan_summary__service_header}>
-                  <div className={styles.plan_summary__service_icon}>
-                    <span>{service.icon}</span>
-                  </div>
-                  <div className={styles.plan_summary__service_info}>
-                    <h3 className={styles.plan_summary__service_name}>
-                      {service.name}
-                    </h3>
-                    <p className={styles.plan_summary__service_type}>
-                      {service.type === "cleaning"
-                        ? (service.details as CleaningDetails).cleaningType ===
-                          "standard"
-                          ? "Standard Cleaning"
-                          : (service.details as CleaningDetails)
-                                .cleaningType === "deep"
-                            ? "Deep Cleaning"
-                            : "Post Construction Cleaning"
-                        : service.type === "food"
-                          ? (service.details as FoodDetails).foodPlanType ===
-                            "basic"
-                            ? "Basic Plan"
-                            : (service.details as FoodDetails).foodPlanType ===
-                                "standard"
-                              ? "Standard Plan"
-                              : "Premium Plan"
-                          : (service.details as LaundryDetails).laundryType ===
-                              "wash-and-iron"
-                            ? "Wash And Iron"
-                            : "Wash And Fold"}
-                    </p>
-                  </div>
-                  <div className={styles.plan_summary__service_price_container}>
-                    <p className={styles.plan_summary__service_price}>
-                      {formatPrice(servicePrices[service._id] || 0)}
-                    </p>
-                    <p className={styles.plan_summary__service_detail}>
-                      {getFrequencyText(service)}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
-      )}
-
-      {/* Pricing Summary */}
-      {extendedServices.length > 0 && (
-        <motion.div
-          className={styles.plan_summary__pricing}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <div className={styles.plan_summary__price_row}>
-            <span>Subtotal</span>
-            <span>{formatPrice(subtotal)}</span>
-          </div>
-
-          {discount > 0 && (
-            <div className={styles.plan_summary__price_row}>
-              <span>Discount ({duration >= 6 ? "10%" : "5%"})</span>
-              <span>-{formatPrice(discount)}</span>
-            </div>
-          )}
-
-          <div
-            className={`${styles.plan_summary__price_row} ${styles.plan_summary__price_row_total}`}
-          >
-            <span>
-              Total ({duration}{" "}
-              {duration === 1
-                ? planType === "weekly"
-                  ? "week"
-                  : "month"
-                : planType === "weekly"
-                  ? "weeks"
-                  : "months"}
-              )
-            </span>
-            <span>{formatPrice(total)}</span>
-          </div>
-
-          <div className={styles.plan_summary__per_period}>
-            <span>
-              {planType === "weekly" ? "Weekly payment: " : "Monthly payment: "}
-              {formatPrice(perPeriod)}
-            </span>
-          </div>
-        </motion.div>
-      )}
-
-      {/* Total Section */}
-      {extendedServices.length > 0 && (
-        <motion.div
-          className={styles.plan_summary__total}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <span className={styles.plan_summary__total_label}>Plan Total</span>
-          <div className={styles.plan_summary__total_value}>
-            <span className={styles.plan_summary__total_price}>
-              {formatPrice(total)}
-            </span>
-            <span className={styles.plan_summary__total_period}>
-              {duration}{" "}
-              {duration === 1
-                ? planType === "weekly"
-                  ? "week"
-                  : "month"
-                : planType === "weekly"
-                  ? "weeks"
-                  : "months"}
-            </span>
-          </div>
-        </motion.div>
-      )}
-    </div>
+      <EditServiceModal onClose={() => setEditServiceModal(false)} service={""} isOpen={editServiceModal} onSave={() => {}} />
+    </Fragment>
   );
 };
 

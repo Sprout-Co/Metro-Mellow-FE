@@ -6,17 +6,19 @@ import Icon, { IconName } from "../common/Icon";
 import styles from "./BookServiceModal.module.scss";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import {
-  ServiceType,
-  PropertyType,
   ServiceCategory,
+  PropertyType,
   ServiceStatus,
   TimeSlot,
   Service,
   ServiceOption,
   ExtraItem,
+  CleaningType,
+  HouseType,
+  LaundryType,
 } from "@/graphql/api";
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
-import Modal from "@/app/(routes)/(site)/bookings/_components/Modal/Modal";
+import Modal from "@/components/ui/Modal/Modal";
 
 /**
  * ===============================
@@ -464,16 +466,16 @@ export default function BookServiceModal() {
             : selectedService.service_id;
 
       // Determine the service type based on service ID
-      const getServiceType = (serviceId: string): ServiceType => {
+      const getServiceType = (serviceId: string): ServiceCategory => {
         switch (serviceId) {
           case "CLEANING":
-            return ServiceType.Cleaning;
+            return ServiceCategory.Cleaning;
           case "LAUNDRY":
-            return ServiceType.Laundry;
+            return ServiceCategory.Laundry;
           case "PEST_CONTROL":
-            return ServiceType.PestControl;
+            return ServiceCategory.PestControl;
           default:
-            return ServiceType.Cleaning;
+            return ServiceCategory.Cleaning;
         }
       };
 
@@ -500,33 +502,48 @@ export default function BookServiceModal() {
       // Format booking data according to the schema
       const bookingData = {
         serviceId: selectedService._id,
-        serviceType: serviceType,
-        serviceOption: serviceOption || "",
+        serviceType: getServiceType(selectedService.service_id),
+        serviceOption:
+          selectedService.service_id === "CLEANING"
+            ? selectedCleaningOption?.id || ""
+            : selectedLaundryOption?.id || "",
         date: new Date(selectedDate),
         timeSlot: selectedTime,
-        // frequency: frequencyMap[serviceFrequency],
-        propertyType:
-          selectedService.service_id === "CLEANING"
-            ? propertyType === "flat"
-              ? PropertyType.Flat
-              : PropertyType.Duplex
-            : undefined,
-        roomQuantities:
-          selectedService.service_id === "CLEANING"
-            ? roomQuantities
-            : undefined,
-        laundryBags:
-          selectedService.service_id === "LAUNDRY" ? laundryBags : undefined,
         address: {
-          street: "123 Main St", // In a real app, get from user input
+          street: "123 Main St",
           city: "City",
           state: "State",
           zipCode: "12345",
           country: "Country",
         },
-        totalPrice,
-        // recurringDiscount,
         notes: `Frequency: ${serviceFrequency}`,
+        serviceDetails: {
+          cleaning:
+            selectedService.service_id === "CLEANING"
+              ? {
+                  cleaningType: selectedCleaningOption?.id as CleaningType,
+                  houseType:
+                    propertyType === "flat" ? HouseType.Flat : HouseType.Duplex,
+                  rooms: {
+                    balcony: 0,
+                    bathroom: roomQuantities.bathrooms || 0,
+                    bedroom: roomQuantities.bedrooms || 0,
+                    kitchen: roomQuantities.kitchen || 0,
+                    livingRoom: roomQuantities.livingRooms || 0,
+                    other: 0,
+                    studyRoom: 0,
+                  },
+                }
+              : undefined,
+          laundry:
+            selectedService.service_id === "LAUNDRY"
+              ? {
+                  bags: laundryBags,
+                  laundryType: LaundryType.Standard,
+                }
+              : undefined,
+        },
+        totalPrice: calculateTotalPrice(),
       };
 
       // Log the booking data

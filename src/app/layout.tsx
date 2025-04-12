@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <ApolloWrapper>
           {children}
-          <ModalProvider />
+          {/* <ModalProvider /> */}
         </ApolloWrapper>
       </body>
     </html>
