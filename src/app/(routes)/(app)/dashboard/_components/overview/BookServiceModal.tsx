@@ -16,6 +16,7 @@ import {
   ExtraItem,
 } from "@/graphql/api";
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
+import Modal from "@/app/(routes)/(site)/bookings/_components/Modal/Modal";
 
 /**
  * ===============================
@@ -26,7 +27,6 @@ import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperati
 // API Service types
 
 // Component types
-
 
 interface CleaningOption {
   id: string;
@@ -243,27 +243,16 @@ export default function BookServiceModal() {
   // Show loading state
   if (isLoading) {
     return (
-      <div className={styles.modal}>
-        <div className={styles.modal__backdrop} />
-        <div className={styles.modal__container}>
-          <div className={styles.modal__header}>
-            <h2 className={styles.modal__title}>Book a Service</h2>
-            <button className={styles.modal__close} onClick={closeModal}>
-              <Icon name="x" />
-            </button>
-          </div>
-          <div
-            className={styles.modal__content}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <p>Loading services...</p>
-          </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        title="Book a Service"
+        maxWidth="800px"
+      >
+        <div className={styles.modal__content}>
+          <p>Loading services...</p>
         </div>
-      </div>
+      </Modal>
     );
   }
 
@@ -1917,73 +1906,45 @@ export default function BookServiceModal() {
    * ==========================
    */
   return (
-    <AnimatePresence>
-      <motion.div
-        className={styles.modal}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-      >
-        {/* Modal backdrop */}
-        <motion.div
-          className={styles.modal__backdrop}
-          onClick={closeModal}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        />
+    <Modal
+      isOpen={isModalOpen}
+      onClose={closeModal}
+      title="Book a Service"
+      maxWidth="800px"
+    >
+      <div className={styles.modal__content}>
+        {/* Progress bar */}
+        {renderProgressBar()}
 
-        {/* Modal container */}
-        <motion.div
-          className={styles.modal__container}
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        >
-          {/* Modal header */}
-          <div className={styles.modal__header}>
-            <h2 className={styles.modal__title}>Book a Service</h2>
-            <button className={styles.modal__close} onClick={closeModal}>
-              <Icon name="x" />
+        {/* Modal content (step-specific) */}
+        <AnimatePresence mode="wait">{renderStepContent()}</AnimatePresence>
+
+        {/* Modal footer with navigation buttons */}
+        {(currentStep === BookingStep.DETAILS ||
+          currentStep === BookingStep.REVIEW) && (
+          <div className={styles.modal__footer}>
+            <button
+              className={`${styles.modal__button} ${styles.modal__buttonBack}`}
+              onClick={handleBack}
+            >
+              <Icon name="arrow-left" />
+              Back
+            </button>
+
+            <button
+              className={`${styles.modal__button} ${styles.modal__buttonPrimary}`}
+              onClick={handleNext}
+              disabled={isNextDisabled()}
+            >
+              {getNextButtonText()}
+              <Icon name="arrow-right" />
             </button>
           </div>
+        )}
+      </div>
 
-          {/* Progress bar */}
-          {renderProgressBar()}
-
-          {/* Modal content (step-specific) */}
-          <div className={styles.modal__content}>
-            <AnimatePresence mode="wait">{renderStepContent()}</AnimatePresence>
-          </div>
-
-          {/* Modal footer with navigation buttons */}
-          {(currentStep === BookingStep.DETAILS ||
-            currentStep === BookingStep.REVIEW) && (
-            <div className={styles.modal__footer}>
-              <button
-                className={`${styles.modal__button} ${styles.modal__buttonBack}`}
-                onClick={handleBack}
-              >
-                <Icon name="arrow-left" />
-                Back
-              </button>
-
-              <button
-                className={`${styles.modal__button} ${styles.modal__buttonPrimary}`}
-                onClick={handleNext}
-                disabled={isNextDisabled()}
-              >
-                {getNextButtonText()}
-                <Icon name="arrow-right" />
-              </button>
-            </div>
-          )}
-        </motion.div>
-
-        {/* Extra items modal (for laundry service) */}
-        {renderExtraItemsModal()}
-      </motion.div>
-    </AnimatePresence>
+      {/* Extra items modal (for laundry service) */}
+      {renderExtraItemsModal()}
+    </Modal>
   );
 }
