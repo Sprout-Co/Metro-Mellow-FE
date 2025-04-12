@@ -1,11 +1,12 @@
+// src/app/(routes)/(site)/bookings/_components/SubscriptionModule/PlanSummary/PlanSummary.tsx
 "use client";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./PlanSummary.module.scss";
 import { Service } from "@/graphql/api";
 import { PlanType, DurationType } from "../SubscriptionModule";
-import EditServiceModal from "../EditServiceModal/EditServiceModal";
 import { Icon } from "@/components/ui/Icon/Icon";
+import { useUIStore } from "@/store";
 
 // Define our extended service types
 export type CleaningDetails = {
@@ -144,14 +145,14 @@ const DEFAULT_SERVICE_DETAILS = {
   },
 };
 
-type EnhancedPlanSummaryProps = {
+type PlanSummaryProps = {
   selectedServices: Service[];
   planType: PlanType;
   duration: DurationType;
   onUpdateService?: (service: ExtendedService) => void;
 };
 
-const PlanSummary: React.FC<EnhancedPlanSummaryProps> = ({
+const PlanSummary: React.FC<PlanSummaryProps> = ({
   selectedServices,
   planType = "weekly",
   duration = 2,
@@ -164,9 +165,9 @@ const PlanSummary: React.FC<EnhancedPlanSummaryProps> = ({
   const [servicePrices, setServicePrices] = useState<{ [key: string]: number }>(
     {}
   );
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  const [currentEditService, setCurrentEditService] =
-    useState<ExtendedService | null>(null);
+
+  // Access the UI store to handle modals
+  const { openModal } = useUIStore();
 
   // Extend base services with details
   useEffect(() => {
@@ -327,32 +328,16 @@ const PlanSummary: React.FC<EnhancedPlanSummaryProps> = ({
     return `₦${price.toLocaleString()}`;
   };
 
-  // Handle service edit button click
-  const handleEditClick = (service: ExtendedService) => {
-    setCurrentEditService(service);
-    setEditModalOpen(true);
-  };
+  // Handle Edit All Services button click
+  const handleEditAllServices = () => {
+    // Get the service types that are currently selected
+    const serviceTypes = extendedServices.map((service) => ({
+      type: service.type,
+      id: service._id,
+    }));
 
-  // Handle saving updated service details
-  const handleSaveServiceDetails = (
-    serviceId: string,
-    updatedDetails: ServiceDetails
-  ) => {
-    const updatedServices = extendedServices.map((service) =>
-      service._id === serviceId
-        ? { ...service, details: updatedDetails }
-        : service
-    );
-
-    setExtendedServices(updatedServices);
-
-    // Find the updated service to pass to parent component
-    const updatedService = updatedServices.find(
-      (service) => service._id === serviceId
-    );
-    if (updatedService && onUpdateService) {
-      onUpdateService(updatedService);
-    }
+    // Open the subscription editor modal with the selected service types
+    openModal("craft-subscription", { selectedServices: serviceTypes });
   };
 
   // Get frequency text based on service type and frequency value
@@ -398,10 +383,40 @@ const PlanSummary: React.FC<EnhancedPlanSummaryProps> = ({
     return "";
   };
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.05 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 10, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { type: "spring", stiffness: 300, damping: 30 },
+    },
+  };
+
   return (
     <div className={styles.plan_summary}>
       <div className={styles.plan_summary__header}>
         <h2 className={styles.plan_summary__title}>Your Plan Summary</h2>
+
+        {/* Edit All Services Button */}
+        {extendedServices.length > 0 && (
+          <motion.button
+            className={styles.plan_summary__edit_button}
+            onClick={handleEditAllServices}
+            whileHover={{ y: -2 }}
+            whileTap={{ y: 0 }}
+          >
+            <Icon name="Edit" /> Edit Services
+          </motion.button>
+        )}
       </div>
 
       {/* Services List */}
@@ -410,7 +425,12 @@ const PlanSummary: React.FC<EnhancedPlanSummaryProps> = ({
           <p>Select services to see your plan summary</p>
         </div>
       ) : (
-        <div className={styles.plan_summary__services}>
+        <motion.div
+          className={styles.plan_summary__services}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
           <AnimatePresence>
             {extendedServices.map((service) => (
               <motion.div
@@ -458,170 +478,15 @@ const PlanSummary: React.FC<EnhancedPlanSummaryProps> = ({
                     <p className={styles.plan_summary__service_price}>
                       {formatPrice(servicePrices[service._id] || 0)}
                     </p>
-                    <button
-                      className={styles.plan_summary__service_edit}
-                      onClick={() => handleEditClick(service)}
-                    >
-                      Customize
-                    </button>
+                    <p className={styles.plan_summary__service_detail}>
+                      {getFrequencyText(service)}
+                    </p>
                   </div>
-                </div>
-
-                {/* Service Details */}
-                <div className={styles.plan_summary__service_details}>
-                  {/* Cleaning Service Details */}
-                  {service.type === "cleaning" && (
-                    <>
-                      <div className={styles.plan_summary__detail_row}>
-                        <span className={styles.plan_summary__detail_label}>
-                          Frequency
-                        </span>
-                        <span className={styles.plan_summary__detail_value}>
-                          {getFrequencyText(service)}
-                        </span>
-                      </div>
-                      <div className={styles.plan_summary__detail_row}>
-                        <span className={styles.plan_summary__detail_label}>
-                          Property Type
-                        </span>
-                        <span className={styles.plan_summary__detail_value}>
-                          {service.details.houseType === "flat"
-                            ? "Flat/Apartment"
-                            : "Duplex/House"}
-                        </span>
-                      </div>
-                      <div className={styles.plan_summary__detail_row}>
-                        <span className={styles.plan_summary__detail_label}>
-                          Rooms
-                        </span>
-                        <span className={styles.plan_summary__detail_value}>
-                          <div className={styles.plan_summary__detail_list}>
-                            {Object.entries(service.details.rooms).map(
-                              ([room, count]) =>
-                                count > 0 && (
-                                  <span key={room}>
-                                    {count}{" "}
-                                    {room === "bedroom"
-                                      ? "Bedroom"
-                                      : room === "livingRoom"
-                                        ? "Living Room"
-                                        : room === "bathroom"
-                                          ? "Bathroom"
-                                          : room === "kitchen"
-                                            ? "Kitchen"
-                                            : room === "balcony"
-                                              ? "Balcony"
-                                              : "Study Room"}
-                                    {count > 1 ? "s" : ""}
-                                  </span>
-                                )
-                            )}
-                          </div>
-                        </span>
-                      </div>
-                    </>
-                  )}
-
-                  {/* Food Service Details */}
-                  {service.type === "food" && (
-                    <>
-                      <div className={styles.plan_summary__detail_row}>
-                        <span className={styles.plan_summary__detail_label}>
-                          Delivery Frequency
-                        </span>
-                        <span className={styles.plan_summary__detail_value}>
-                          {getFrequencyText(service)}
-                        </span>
-                      </div>
-                      <div className={styles.plan_summary__detail_row}>
-                        <span className={styles.plan_summary__detail_label}>
-                          Delivery Days
-                        </span>
-                        <span className={styles.plan_summary__detail_value}>
-                          {(service.details as FoodDetails).deliveryDays
-                            .map(
-                              (day) =>
-                                day.charAt(0).toUpperCase() + day.slice(1)
-                            )
-                            .join(", ")}
-                        </span>
-                      </div>
-                      <div className={styles.plan_summary__detail_row}>
-                        <span className={styles.plan_summary__detail_label}>
-                          Meals Per Day
-                        </span>
-                        <span className={styles.plan_summary__detail_value}>
-                          <div className={styles.plan_summary__detail_list}>
-                            {Object.entries(
-                              (service.details as FoodDetails).mealsPerDay
-                            ).map(
-                              ([day, count]) =>
-                                count > 0 && (
-                                  <span key={day}>
-                                    {count} meal{count > 1 ? "s" : ""} on{" "}
-                                    {day.charAt(0).toUpperCase() + day.slice(1)}
-                                  </span>
-                                )
-                            )}
-                          </div>
-                        </span>
-                      </div>
-                    </>
-                  )}
-
-                  {/* Laundry Service Details */}
-                  {service.type === "laundry" && (
-                    <>
-                      <div className={styles.plan_summary__detail_row}>
-                        <span className={styles.plan_summary__detail_label}>
-                          Pickup Frequency
-                        </span>
-                        <span className={styles.plan_summary__detail_value}>
-                          {getFrequencyText(service)}
-                        </span>
-                      </div>
-                      <div className={styles.plan_summary__detail_row}>
-                        <span className={styles.plan_summary__detail_label}>
-                          Pickup Days
-                        </span>
-                        <span className={styles.plan_summary__detail_value}>
-                          {(service.details as LaundryDetails).pickupDays
-                            .map(
-                              (day) =>
-                                day.charAt(0).toUpperCase() + day.slice(1)
-                            )
-                            .join(", ")}
-                        </span>
-                      </div>
-                      <div className={styles.plan_summary__detail_row}>
-                        <span className={styles.plan_summary__detail_label}>
-                          Number of Bags
-                        </span>
-                        <span className={styles.plan_summary__detail_value}>
-                          {(service.details as LaundryDetails).bags} bag
-                          {(service.details as LaundryDetails).bags > 1
-                            ? "s"
-                            : ""}
-                          <span
-                            style={{
-                              fontSize: "0.8rem",
-                              display: "block",
-                              color: "#717D92",
-                            }}
-                          >
-                            (approx.{" "}
-                            {(service.details as LaundryDetails).bags * 30}{" "}
-                            items)
-                          </span>
-                        </span>
-                      </div>
-                    </>
-                  )}
                 </div>
               </motion.div>
             ))}
           </AnimatePresence>
-        </div>
+        </motion.div>
       )}
 
       {/* Pricing Summary */}
@@ -695,16 +560,6 @@ const PlanSummary: React.FC<EnhancedPlanSummaryProps> = ({
             </span>
           </div>
         </motion.div>
-      )}
-
-      {/* Edit Service Modal */}
-      {currentEditService && (
-        <EditServiceModal
-          isOpen={editModalOpen}
-          onClose={() => setEditModalOpen(false)}
-          service={currentEditService}
-          onSave={handleSaveServiceDetails}
-        />
       )}
     </div>
   );
