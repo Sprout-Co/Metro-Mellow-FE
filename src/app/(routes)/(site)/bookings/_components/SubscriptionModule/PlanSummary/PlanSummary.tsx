@@ -7,6 +7,7 @@ import { Service } from "@/graphql/api";
 import { PlanType, DurationType } from "../SubscriptionModule";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { useUIStore } from "@/store";
+import { ServiceId, ServiceCategory } from "@/graphql/api";
 
 // Define our extended service types
 export type CleaningDetails = {
@@ -183,12 +184,9 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
 
       // Determine service type based on service ID or category
       let serviceType: "cleaning" | "food" | "laundry";
-      if (
-        service.service_id === "CLEANING" ||
-        service.category === "CLEANING"
-      ) {
+      if (isCleaningService(service)) {
         serviceType = "cleaning";
-      } else if (service.service_id === "FOOD" || service.category === "FOOD") {
+      } else if (isFoodService(service)) {
         serviceType = "food";
       } else {
         serviceType = "laundry";
@@ -214,69 +212,78 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
     let price = 0;
 
     switch (type) {
-      case "cleaning":
+      case "cleaning": {
+        const cleaningDetails = details as CleaningDetails;
         // Base price
         price += PRICING_CONFIG.cleaning.basePrice;
 
         // Add cost based on cleaning type
         price +=
-          PRICING_CONFIG.cleaning.cleaningTypes[details.cleaningType] || 0;
+          PRICING_CONFIG.cleaning.cleaningTypes[cleaningDetails.cleaningType] ||
+          0;
 
         // Add cost based on room counts
-        Object.entries(details.rooms).forEach(([roomType, count]) => {
+        Object.entries(cleaningDetails.rooms).forEach(([roomType, count]) => {
           const room =
             roomType as keyof typeof PRICING_CONFIG.cleaning.roomPrices;
           price += PRICING_CONFIG.cleaning.roomPrices[room] * count;
         });
 
         // Apply frequency multiplier
-        const cleaningFrequency = details.frequency as FrequencyMultiplier;
+        const cleaningFrequency =
+          cleaningDetails.frequency as FrequencyMultiplier;
         price = Math.round(
           price * PRICING_CONFIG.cleaning.frequencyMultiplier[cleaningFrequency]
         );
         break;
+      }
 
-      case "food":
+      case "food": {
+        const foodDetails = details as FoodDetails;
         // Base price
         price += PRICING_CONFIG.food.basePrice;
 
         // Add cost based on food plan type
-        price += PRICING_CONFIG.food.foodPlanTypes[details.foodPlanType];
+        price += PRICING_CONFIG.food.foodPlanTypes[foodDetails.foodPlanType];
 
         // Add cost based on meals per day
         let totalMeals = 0;
-        Object.values(details.mealsPerDay).forEach((mealCount) => {
+        Object.values(foodDetails.mealsPerDay).forEach((mealCount) => {
           totalMeals += mealCount;
         });
         price += PRICING_CONFIG.food.mealsPerDayPrice * totalMeals;
 
         // Apply delivery frequency multiplier
         const deliveryFrequency =
-          details.deliveryFrequency as FrequencyMultiplier;
+          foodDetails.deliveryFrequency as FrequencyMultiplier;
         price = Math.round(
           price *
             PRICING_CONFIG.food.deliveryFrequencyMultiplier[deliveryFrequency]
         );
         break;
+      }
 
-      case "laundry":
+      case "laundry": {
+        const laundryDetails = details as LaundryDetails;
         // Base price
         price += PRICING_CONFIG.laundry.basePrice;
 
         // Add cost based on laundry type
-        price += PRICING_CONFIG.laundry.laundryTypes[details.laundryType];
+        price +=
+          PRICING_CONFIG.laundry.laundryTypes[laundryDetails.laundryType];
 
         // Add cost based on bag count
-        price += PRICING_CONFIG.laundry.bagPrice * details.bags;
+        price += PRICING_CONFIG.laundry.bagPrice * laundryDetails.bags;
 
         // Apply pickup frequency multiplier
         const pickupFrequency =
-          details.pickupFrequency as LaundryFrequencyMultiplier;
+          laundryDetails.pickupFrequency as LaundryFrequencyMultiplier;
         price = Math.round(
           price *
             PRICING_CONFIG.laundry.pickupFrequencyMultiplier[pickupFrequency]
         );
         break;
+      }
 
       default:
         price = service.price || 0;
@@ -343,7 +350,8 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
   // Get frequency text based on service type and frequency value
   const getFrequencyText = (service: ExtendedService) => {
     if (service.type === "cleaning") {
-      const freq = service.details.frequency;
+      const details = service.details as CleaningDetails;
+      const freq = details.frequency;
       return freq === 1
         ? "Once a week"
         : freq === 2
@@ -358,7 +366,8 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
                   ? "Six times a week"
                   : "Daily";
     } else if (service.type === "food") {
-      const freq = (service.details as FoodDetails).deliveryFrequency;
+      const details = service.details as FoodDetails;
+      const freq = details.deliveryFrequency;
       return freq === 1
         ? "Once a week"
         : freq === 2
@@ -373,7 +382,8 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
                   ? "Six times a week"
                   : "Daily";
     } else if (service.type === "laundry") {
-      const freq = (service.details as LaundryDetails).pickupFrequency;
+      const details = service.details as LaundryDetails;
+      const freq = details.pickupFrequency;
       return freq === 1
         ? "Once a week"
         : freq === 2
@@ -399,6 +409,19 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
       opacity: 1,
       transition: { type: "spring", stiffness: 300, damping: 30 },
     },
+  };
+
+  const isCleaningService = (service: Service) => {
+    return (
+      service.service_id === ServiceId.StandardCleaning ||
+      service.service_id === ServiceId.DeepCleaning ||
+      service.service_id === ServiceId.PostConstructionCleaning ||
+      service.category === ServiceCategory.Cleaning
+    );
+  };
+
+  const isFoodService = (service: Service) => {
+    return service.category === ServiceCategory.Cooking;
   };
 
   return (
@@ -455,9 +478,11 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
                     </h3>
                     <p className={styles.plan_summary__service_type}>
                       {service.type === "cleaning"
-                        ? service.details.cleaningType === "standard"
+                        ? (service.details as CleaningDetails).cleaningType ===
+                          "standard"
                           ? "Standard Cleaning"
-                          : service.details.cleaningType === "deep"
+                          : (service.details as CleaningDetails)
+                                .cleaningType === "deep"
                             ? "Deep Cleaning"
                             : "Post Construction Cleaning"
                         : service.type === "food"
