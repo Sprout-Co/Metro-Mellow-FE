@@ -98,10 +98,10 @@ export type CleaningDetailsInput = {
 };
 
 export enum CleaningType {
-  Deep = 'DEEP',
+  DeepCleaning = 'DEEP_CLEANING',
   MoveInMoveOutCleaning = 'MOVE_IN_MOVE_OUT_CLEANING',
   PostConstruction = 'POST_CONSTRUCTION',
-  Standard = 'STANDARD'
+  StandardCleaning = 'STANDARD_CLEANING'
 }
 
 export type CreateBookingInput = {
@@ -112,8 +112,6 @@ export type CreateBookingInput = {
   serviceId: Scalars['ID']['input'];
   serviceOption: Scalars['String']['input'];
   serviceType: ServiceCategory;
-  subscriptionId?: InputMaybe<Scalars['ID']['input']>;
-  subscriptionServiceId?: InputMaybe<Scalars['ID']['input']>;
   timeSlot: TimeSlot;
   totalPrice: Scalars['Float']['input'];
 };

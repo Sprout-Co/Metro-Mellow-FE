@@ -17,6 +17,7 @@ import {
   HouseType,
   LaundryType,
   RoomQuantities,
+  ServiceId,
 } from "@/graphql/api";
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
 import Modal from "@/components/ui/Modal/Modal";
@@ -205,7 +206,7 @@ export default function BookServiceModal() {
 
         // Add options to the respective services
         const servicesWithOptions = transformedServices.map((service) => {
-          if (service.service_id === "CLEANING") {
+          if (service.service_id === ServiceId.Cleaning) {
             return {
               ...service,
               options: transformedCleaningOptions as unknown as ServiceOption[],
@@ -262,7 +263,7 @@ export default function BookServiceModal() {
       case BookingStep.SERVICE:
         return true;
       case BookingStep.DETAILS:
-        if (selectedService?.service_id === "CLEANING") {
+        if (selectedService?.service_id === ServiceId.Cleaning) {
           return !!selectedCleaningOption;
         } else if (selectedService?.service_id === "LAUNDRY") {
           return !!selectedLaundryOption;
@@ -303,7 +304,7 @@ export default function BookServiceModal() {
   const handleServiceSelect = (service: Service) => {
     setSelectedService(service);
 
-    if (service.service_id === "CLEANING" || service.service_id === "LAUNDRY") {
+    if (service.service_id === ServiceId.Cleaning || service.service_id === "LAUNDRY") {
       setShowServiceOptions(true);
     } else {
       setShowServiceOptions(false);
@@ -358,7 +359,7 @@ export default function BookServiceModal() {
     let basePrice = 0;
 
     // Get base price from cleaning option or service
-    if (selectedService.service_id === "CLEANING" && selectedCleaningOption) {
+    if (selectedService.service_id === ServiceId.Cleaning && selectedCleaningOption) {
       basePrice = parseInt(selectedCleaningOption.price.replace(/[^0-9]/g, ""));
     } else if (
       selectedService.service_id === "LAUNDRY" &&
@@ -382,7 +383,7 @@ export default function BookServiceModal() {
     }
 
     // Add price per room for cleaning service
-    if (selectedService.service_id === "CLEANING") {
+    if (selectedService.service_id === ServiceId.Cleaning) {
       const roomPrices = {
         bedrooms: 20,
         livingRooms: 15,
@@ -455,7 +456,7 @@ export default function BookServiceModal() {
     try {
       // Determine which service option was selected
       const serviceOption =
-        selectedService.service_id === "CLEANING"
+        selectedService.service_id === ServiceId.Cleaning
           ? selectedCleaningOption?.service_id
           : selectedService.service_id === "LAUNDRY"
             ? selectedLaundryOption?.id
@@ -464,7 +465,7 @@ export default function BookServiceModal() {
       // Determine the service type based on service ID
       const getServiceType = (serviceId: string): ServiceCategory => {
         switch (serviceId) {
-          case "CLEANING":
+          case ServiceId.Cleaning:
             return ServiceCategory.Cleaning;
           case "LAUNDRY":
             return ServiceCategory.Laundry;
@@ -500,7 +501,7 @@ export default function BookServiceModal() {
         serviceId: selectedService._id,
         serviceType: getServiceType(selectedService.service_id),
         serviceOption:
-          selectedService.service_id === "CLEANING"
+          selectedService.service_id === ServiceId.Cleaning
             ? selectedCleaningOption?.id || ""
             : selectedLaundryOption?.id || "",
         date: new Date(selectedDate),
@@ -515,7 +516,7 @@ export default function BookServiceModal() {
         notes: `Frequency: ${serviceFrequency}`,
         serviceDetails: {
           cleaning:
-            selectedService.service_id === "CLEANING"
+            selectedService.service_id === ServiceId.Cleaning
               ? {
                   cleaningType: selectedCleaningOption?.id as CleaningType,
                   houseType:
@@ -539,7 +540,7 @@ export default function BookServiceModal() {
                 }
               : undefined,
         },
-        totalPrice: calculateTotalPrice(),
+        totalPrice: calculateTotalPrice() || 20000.2,
       };
 
       // Log the booking data
@@ -566,7 +567,7 @@ export default function BookServiceModal() {
   const isNextDisabled = () => {
     switch (currentStep) {
       case BookingStep.SERVICE:
-        if (selectedService?.service_id === "CLEANING") {
+        if (selectedService?.service_id === ServiceId.Cleaning) {
           return !selectedCleaningOption;
         } else if (selectedService?.service_id === "LAUNDRY") {
           return !selectedLaundryOption;
@@ -574,7 +575,7 @@ export default function BookServiceModal() {
         return !selectedService;
       case BookingStep.DETAILS:
         // Need date, time, and for cleaning - at least one room
-        if (selectedService?.service_id === "CLEANING") {
+        if (selectedService?.service_id === ServiceId.Cleaning) {
           return (
             !selectedDate ||
             !selectedTime ||
@@ -755,7 +756,7 @@ export default function BookServiceModal() {
             </motion.p>
 
             {/* Cleaning options */}
-            {selectedService?.service_id === "CLEANING" &&
+            {selectedService?.service_id === ServiceId.Cleaning &&
               cleaningOptions.map((option) => (
                 <motion.div
                   key={option.service_id}
@@ -861,7 +862,7 @@ export default function BookServiceModal() {
         >
           <Icon name="sliders" />
           {selectedService.label} Details
-          {selectedService.service_id === "CLEANING" && selectedCleaningOption
+          {selectedService.service_id === ServiceId.Cleaning && selectedCleaningOption
             ? ` - ${selectedCleaningOption.label}`
             : selectedService.service_id === "LAUNDRY" && selectedLaundryOption
               ? ` - ${selectedLaundryOption.label}`
@@ -964,7 +965,7 @@ export default function BookServiceModal() {
           </motion.div>
 
           {/* Cleaning Specific Fields */}
-          {selectedService.service_id === "CLEANING" && (
+          {selectedService.service_id === ServiceId.Cleaning && (
             <motion.div
               variants={itemVariants}
               className={styles.modal__formGroup}
@@ -1138,7 +1139,7 @@ export default function BookServiceModal() {
               </span>
             </div>
 
-            {selectedService.service_id === "CLEANING" && (
+            {selectedService.service_id === ServiceId.Cleaning && (
               <div className={styles.modal__summaryItem}>
                 <span className={styles.modal__summaryItemLabel}>
                   Room Charges
@@ -1374,7 +1375,7 @@ export default function BookServiceModal() {
                     </div>
                   </div>
 
-                  {selectedService.service_id === "CLEANING" && (
+                  {selectedService.service_id === ServiceId.Cleaning && (
                     <div className={styles.modal__bookingDetailItem}>
                       <div className={styles.modal__bookingDetailLabel}>
                         Property Type
@@ -1389,7 +1390,7 @@ export default function BookServiceModal() {
                 </div>
 
                 {/* Cleaning rooms detail */}
-                {selectedService.service_id === "CLEANING" &&
+                {selectedService.service_id === ServiceId.Cleaning &&
                   Object.values(roomQuantities).some(
                     (qty) => Number(qty) > 0
                   ) && (
@@ -1534,7 +1535,7 @@ export default function BookServiceModal() {
               </div>
 
               {/* Room charges breakdown for cleaning */}
-              {selectedService.service_id === "CLEANING" && (
+              {selectedService.service_id === ServiceId.Cleaning && (
                 <>
                   <div className={styles.modal__priceSectionTitle}>
                     Room Charges
@@ -1727,13 +1728,13 @@ export default function BookServiceModal() {
                 <div className={styles.modal__priceCalcRow}>
                   <span>Base Price</span>
                   <span>
-                    {selectedService.service_id === "CLEANING"
+                    {selectedService.service_id === ServiceId.Cleaning
                       ? `$${parseInt(selectedCleaningOption?.price?.replace(/[^0-9]/g, "") || "0")}`
                       : `₦${parseInt(selectedLaundryOption?.price?.replace(/[^0-9]/g, "") || "0") * laundryBags * 30}`}
                   </span>
                 </div>
 
-                {selectedService.service_id === "CLEANING" && (
+                {selectedService.service_id === ServiceId.Cleaning && (
                   <div className={styles.modal__priceCalcRow}>
                     <span>+ Room Charges</span>
                     <span>
@@ -1795,7 +1796,7 @@ export default function BookServiceModal() {
                   {serviceFrequency !== "one-off"
                     ? "Recurring bookings receive a 10% discount on laundry services."
                     : "No discounts applied for one-time bookings."}
-                  {selectedService.service_id === "CLEANING" &&
+                  {selectedService.service_id === ServiceId.Cleaning &&
                     " Room charges are based on size and cleaning requirements."}
                 </span>
               </div>
