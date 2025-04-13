@@ -7,12 +7,10 @@ import styles from "./BookServiceModal.module.scss";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import {
   ServiceCategory,
-  PropertyType,
   ServiceStatus,
   TimeSlot,
   Service,
   ServiceOption,
-  ExtraItem,
   CleaningType,
   HouseType,
   LaundryType,
@@ -23,50 +21,30 @@ import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperati
 import Modal from "@/components/ui/Modal/Modal";
 
 /**
- * ===============================
- * TYPE DEFINITIONS
- * ===============================
+ * Service frequency options
  */
-
-// API Service types
-
-// Component types
-
-interface CleaningOption {
-  id: string;
-  service_id: string;
-  label: string;
-  description: string;
-  price: string;
-  inclusions: string[];
-}
-
-interface LaundryOption {
-  id: string;
-  label: string;
-  description: string;
-  price: string;
-  extraItems: ExtraItem[];
-  extraNotes?: string[];
-}
-
-// Service frequency options
 type ServiceFrequency = "one-off" | "weekly" | "bi-weekly" | "monthly";
 
-// Steps for the booking process
+/**
+ * Steps for the booking process
+ */
 enum BookingStep {
   SERVICE = 0, // Choose service and type
   DETAILS = 1, // Set details and schedule
   REVIEW = 2, // Review and confirm
 }
 
-// Progress step information
+/**
+ * Progress step information
+ */
 interface Step {
   label: string;
   icon: IconName;
 }
 
-// Progress bar steps
+/**
+ * Progress bar steps configuration
+ */
 const steps: Step[] = [
   { label: "Choose Service", icon: "package" },
   { label: "Details & Schedule", icon: "settings" },
@@ -74,27 +52,16 @@ const steps: Step[] = [
 ];
 
 /**
- * ===============================
- * MAIN COMPONENT
- * ===============================
+ * BookServiceModal: Component for booking home services
  */
-
 export default function BookServiceModal() {
   // Get modal state and operations from store
   const { isModalOpen, modalType, closeModal } = useUIStore();
   const { handleCreateBooking } = useBookingOperations();
   const { handleGetServices } = useServiceOperations();
 
-  /**
-   * ==========================
-   * STATE MANAGEMENT
-   * ==========================
-   */
-
   // API data state
   const [services, setServices] = useState<Service[]>([]);
-  const [cleaningOptions, setCleaningOptions] = useState<CleaningOption[]>([]);
-  const [laundryOptions, setLaundryOptions] = useState<LaundryOption[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Current step in the booking process
@@ -104,10 +71,9 @@ export default function BookServiceModal() {
 
   // Service selection state
   const [selectedService, setSelectedService] = useState<Service | null>(null);
-  const [selectedCleaningOption, setSelectedCleaningOption] =
-    useState<CleaningOption | null>(null);
-  const [selectedLaundryOption, setSelectedLaundryOption] =
-    useState<LaundryOption | null>(null);
+  const [selectedOption, setSelectedOption] = useState<ServiceOption | null>(
+    null
+  );
   const [showServiceOptions, setShowServiceOptions] = useState<boolean>(false);
 
   // Service details state
@@ -133,106 +99,33 @@ export default function BookServiceModal() {
   const [showExtraItems, setShowExtraItems] = useState(false);
 
   /**
-   * ==========================
-   * DATA FETCHING & TRANSFORMATION
-   * ==========================
+   * Fetch services from API
    */
-
-  // Fetch services from API
   useEffect(() => {
     const fetchServices = async () => {
       try {
         setIsLoading(true);
-        const apiServices = await handleGetServices(
+        const services = await handleGetServices(
           undefined,
           ServiceStatus.Active
         );
-        console.log(apiServices);
 
-        if (!apiServices) {
+        if (!services) {
           throw new Error("No services returned from API");
         }
 
-        // Transform API services to component format
-        const transformedServices: Service[] = apiServices.map(
-          (apiService) => ({
-            ...apiService,
-            id: apiService.service_id,
-            label: apiService.label,
-            icon: apiService.icon as IconName, // Assuming icon names match IconName type
-            description: apiService.description,
-            price: apiService.price,
-            duration:
-              apiService.category === "LAUNDRY" ? "24-48 hours" : "2-3 hours", // Default durations
-            inclusions: apiService.inclusions || [],
-          })
-        );
-
-        // Extract cleaning options
-        const cleaningService = apiServices.find(
-          (s) => s.category === "CLEANING"
-        );
-        const transformedCleaningOptions: CleaningOption[] =
-          cleaningService?.options?.map((option) => ({
-            id: option.service_id,
-            service_id: option.service_id,
-            label: option.label,
-            description: option.description,
-            price: `From $${option.price}`,
-            inclusions: option.inclusions || [],
-          })) || [];
-
-        // Extract laundry options
-        const laundryService = apiServices.find(
-          (s) => s.category === "LAUNDRY"
-        );
-        const transformedLaundryOptions: LaundryOption[] =
-          laundryService?.options?.map((option) => ({
-            id: option.service_id,
-            label: option.label,
-            description: option.description,
-            price: `From ₦${option.price}`,
-            extraItems: option.extraItems || [],
-            // Add default extra notes for laundry options
-            extraNotes:
-              option.service_id === "DRY_CLEANING"
-                ? [
-                    "Logistics charge for items on a hanger",
-                    "This also applies when you have more than 1 laundry bag",
-                    "Hanging clothes attracts an additional ₦300 per hanger",
-                  ]
-                : undefined,
-          })) || [];
-
-        // Add options to the respective services
-        const servicesWithOptions = transformedServices.map((service) => {
-          if (service.service_id === ServiceId.Cleaning) {
-            return {
-              ...service,
-              options: transformedCleaningOptions as unknown as ServiceOption[],
-            };
-          }
-          return service;
-        });
-
-        setServices(servicesWithOptions);
-        setCleaningOptions(transformedCleaningOptions);
-        setLaundryOptions(transformedLaundryOptions);
+        setServices(services);
         setIsLoading(false);
       } catch (err) {
         console.error("Error fetching services:", err);
-        // setError(
-        //   err instanceof Error ? err.message : "Failed to load services"
-        // );
         setIsLoading(false);
-        // fetchServices()
       }
     };
 
     fetchServices();
   }, [handleGetServices]);
 
-  // If modal is closed or not booking service, don't render anything
+  // Don't render if modal is closed or not for booking service
   if (!isModalOpen || modalType !== "book-service") return null;
 
   // Show loading state
@@ -252,21 +145,18 @@ export default function BookServiceModal() {
   }
 
   /**
-   * ==========================
-   * UTILITY FUNCTIONS
-   * ==========================
+   * Check if the step is accessible based on current selections
    */
-
-  // Check if the step is accessible based on current selections
   const isStepAccessible = (step: BookingStep): boolean => {
     switch (step) {
       case BookingStep.SERVICE:
         return true;
       case BookingStep.DETAILS:
-        if (selectedService?.service_id === ServiceId.Cleaning) {
-          return !!selectedCleaningOption;
-        } else if (selectedService?.service_id === ServiceId.Laundry) {
-          return !!selectedLaundryOption;
+        if (
+          (selectedService?.service_id === ServiceId.Cleaning ||
+            selectedService?.service_id === ServiceId.Laundry) && selectedService.options && selectedService?.options?.length > 0
+        ) {
+          return !!selectedOption;
         }
         return !!selectedService;
       case BookingStep.REVIEW:
@@ -280,14 +170,18 @@ export default function BookServiceModal() {
     }
   };
 
-  // Handle clicking on progress step
+  /**
+   * Handle clicking on progress step
+   */
   const handleStepClick = (step: BookingStep) => {
     if (isStepAccessible(step)) {
       setCurrentStep(step);
     }
   };
 
-  // Calculate progress width for the progress bar
+  /**
+   * Calculate progress width for the progress bar
+   */
   const calculateProgressWidth = () => {
     const maxSteps = steps.length - 1;
     const progress = (currentStep / maxSteps) * 100;
@@ -295,16 +189,18 @@ export default function BookServiceModal() {
   };
 
   /**
-   * ==========================
-   * SERVICE SELECTION HANDLERS
-   * ==========================
+   * Handle service selection
    */
-
-  // Handle service selection
   const handleServiceSelect = (service: Service) => {
     setSelectedService(service);
+    setSelectedOption(null);
 
-    if (service.service_id === ServiceId.Cleaning || service.service_id === ServiceId.Laundry) {
+    if (
+      (service.service_id === ServiceId.Cleaning ||
+        service.service_id === ServiceId.Laundry) &&
+      service.options &&
+      service.options.length > 0
+    ) {
       setShowServiceOptions(true);
     } else {
       setShowServiceOptions(false);
@@ -312,25 +208,17 @@ export default function BookServiceModal() {
     }
   };
 
-  // Handle cleaning option selection
-  const handleCleaningOptionSelect = (option: CleaningOption) => {
-    setSelectedCleaningOption(option);
-    setCurrentStep(BookingStep.DETAILS);
-  };
-
-  // Handle laundry option selection
-  const handleLaundryOptionSelect = (option: LaundryOption) => {
-    setSelectedLaundryOption(option);
+  /**
+   * Handle service option selection
+   */
+  const handleOptionSelect = (option: ServiceOption) => {
+    setSelectedOption(option);
     setCurrentStep(BookingStep.DETAILS);
   };
 
   /**
-   * ==========================
-   * QUANTITY & DETAILS HANDLERS
-   * ==========================
+   * Handle room quantity changes for cleaning service
    */
-
-  // Handle room quantity changes for cleaning service
   const handleQuantityChange = (
     room: keyof RoomQuantities,
     increment: boolean
@@ -341,49 +229,26 @@ export default function BookServiceModal() {
     }));
   };
 
-  // Handle laundry bag quantity changes
+  /**
+   * Handle laundry bag quantity changes
+   */
   const handleLaundryBagChange = (increment: boolean) => {
     setLaundryBags((prev) => Math.max(1, prev + (increment ? 1 : -1)));
   };
 
   /**
-   * ==========================
-   * PRICE CALCULATION
-   * ==========================
+   * Calculate total price based on selected options
    */
-
-  // Calculate total price based on selected options
   const calculateTotalPrice = () => {
     if (!selectedService) return 0;
 
     let basePrice = 0;
 
-    // Get base price from cleaning option or service
-    if (selectedService.service_id === ServiceId.Cleaning && selectedCleaningOption) {
-      basePrice = parseInt(selectedCleaningOption.price.replace(/[^0-9]/g, ""));
-    } else if (
-      selectedService.service_id === ServiceId.Laundry &&
-      selectedLaundryOption
-    ) {
-      // For laundry, calculate based on bags and frequency
-      const itemsPerBag = 30;
-      const totalItems = laundryBags * itemsPerBag;
-      const basePricePerItem = parseInt(
-        selectedLaundryOption.price.replace(/[^0-9]/g, "")
-      );
-      basePrice = totalItems * basePricePerItem;
+    // Get base price from service option or service
+    if (selectedService.service_id === ServiceId.Cleaning && selectedOption) {
+      basePrice = selectedOption.price;
 
-      // Apply recurring discount if applicable
-      if (serviceFrequency !== "one-off") {
-        basePrice = Math.round(basePrice * 0.9); // 10% discount for recurring
-      }
-    } else {
-      basePrice = selectedService.price;
-      // basePrice = parseInt(selectedService.price.replace(/[^0-9]/g, ""));
-    }
-
-    // Add price per room for cleaning service
-    if (selectedService.service_id === ServiceId.Cleaning) {
+      // Add price per room for cleaning service
       const roomPrices = {
         bedrooms: 20,
         livingRooms: 15,
@@ -405,18 +270,29 @@ export default function BookServiceModal() {
       );
 
       return basePrice + roomTotal;
+    } else if (
+      selectedService.service_id === ServiceId.Laundry &&
+      selectedOption
+    ) {
+      // For laundry, calculate based on bags
+      const itemsPerBag = 30;
+      const totalItems = laundryBags * itemsPerBag;
+      basePrice = totalItems * selectedOption.price;
+
+      // Apply recurring discount if applicable
+      if (serviceFrequency !== "one-off") {
+        basePrice = Math.round(basePrice * 0.9); // 10% discount for recurring
+      }
+    } else {
+      basePrice = selectedService.price;
     }
 
     return basePrice;
   };
 
   /**
-   * ==========================
-   * NAVIGATION HANDLERS
-   * ==========================
+   * Handle navigation to next step
    */
-
-  // Handle navigation to next step
   const handleNext = () => {
     switch (currentStep) {
       case BookingStep.SERVICE:
@@ -431,7 +307,9 @@ export default function BookServiceModal() {
     }
   };
 
-  // Handle navigation to previous step
+  /**
+   * Handle navigation to previous step
+   */
   const handleBack = () => {
     switch (currentStep) {
       case BookingStep.DETAILS:
@@ -444,23 +322,15 @@ export default function BookServiceModal() {
   };
 
   /**
-   * ==========================
-   * FORM SUBMISSION
-   * ==========================
+   * Handle final booking submission
    */
-
-  // Handle final booking submission
   const handleSubmit = async () => {
     if (!selectedService || !selectedDate || !selectedTime) return;
 
     try {
-      // Determine which service option was selected
+      // Determine the service option
       const serviceOption =
-        selectedService.service_id === ServiceId.Cleaning
-          ? selectedCleaningOption?.service_id
-          : selectedService.service_id === ServiceId.Laundry
-            ? selectedLaundryOption?.id
-            : selectedService.service_id;
+        selectedOption?.service_id || selectedService.service_id;
 
       // Determine the service type based on service ID
       const getServiceType = (serviceId: string): ServiceCategory => {
@@ -476,34 +346,11 @@ export default function BookServiceModal() {
         }
       };
 
-      const serviceType = getServiceType(selectedService.service_id);
-
-      // Calculate total price
-      const totalPrice = calculateTotalPrice();
-
-      // Calculate recurring discount amount (10% for recurring laundry services)
-      const recurringDiscount =
-        selectedService.service_id === ServiceId.Laundry &&
-        serviceFrequency !== "one-off"
-          ? Math.round(totalPrice * 0.1)
-          : 0;
-
-      // Map frequency to database enum format
-      const frequencyMap = {
-        "one-off": "ONE_OFF",
-        weekly: "WEEKLY",
-        "bi-weekly": "BI_WEEKLY",
-        monthly: "MONTHLY",
-      };
-
-      // Format booking data according to the schema
+      // Format booking data
       const bookingData = {
         serviceId: selectedService._id,
         serviceType: getServiceType(selectedService.service_id),
-        serviceOption:
-          selectedService.service_id === ServiceId.Cleaning
-            ? selectedCleaningOption?.id || ""
-            : selectedLaundryOption?.id || "",
+        serviceOption: selectedOption?.id || "",
         date: new Date(selectedDate),
         timeSlot: selectedTime,
         address: {
@@ -518,18 +365,10 @@ export default function BookServiceModal() {
           cleaning:
             selectedService.service_id === ServiceId.Cleaning
               ? {
-                  cleaningType: selectedCleaningOption?.id as CleaningType,
+                  cleaningType: selectedOption?.id as CleaningType,
                   houseType:
                     propertyType === "flat" ? HouseType.Flat : HouseType.Duplex,
-                  rooms: {
-                    balcony: roomQuantities.balcony,
-                    bathroom: roomQuantities.bathroom || 0,
-                    bedroom: roomQuantities.bedroom || 0,
-                    kitchen: roomQuantities.kitchen || 0,
-                    livingRoom: roomQuantities.livingRoom || 0,
-                    other: roomQuantities.other,
-                    studyRoom: roomQuantities.studyRoom,
-                  },
+                  rooms: roomQuantities,
                 }
               : undefined,
           laundry:
@@ -540,41 +379,34 @@ export default function BookServiceModal() {
                 }
               : undefined,
         },
-        totalPrice: calculateTotalPrice() || 20000.2,
+        totalPrice: calculateTotalPrice(),
       };
 
-      // Log the booking data
-      console.log("Booking submission data:", bookingData);
-
-      // Submit the booking using the properly formatted data
+      // Submit the booking
       await handleCreateBooking(bookingData);
 
       // Close the modal after successful submission
       closeModal();
     } catch (error) {
       console.error("Failed to create booking:", error);
-      // Would show error message to user in a production app
     }
   };
 
   /**
-   * ==========================
-   * UI HELPERS
-   * ==========================
+   * Check if the next button should be disabled
    */
-
-  // Check if the next button should be disabled
   const isNextDisabled = () => {
     switch (currentStep) {
       case BookingStep.SERVICE:
-        if (selectedService?.service_id === ServiceId.Cleaning) {
-          return !selectedCleaningOption;
-        } else if (selectedService?.service_id === ServiceId.Laundry) {
-          return !selectedLaundryOption;
+        if (
+          (selectedService?.service_id === ServiceId.Cleaning ||
+            selectedService?.service_id === ServiceId.Laundry) && selectedService.options &&
+          selectedService?.options?.length > 0
+        ) {
+          return !selectedOption;
         }
         return !selectedService;
       case BookingStep.DETAILS:
-        // Need date, time, and for cleaning - at least one room
         if (selectedService?.service_id === ServiceId.Cleaning) {
           return (
             !selectedDate ||
@@ -588,7 +420,9 @@ export default function BookServiceModal() {
     }
   };
 
-  // Get the button text based on the current step
+  /**
+   * Get the button text based on the current step
+   */
   const getNextButtonText = () => {
     switch (currentStep) {
       case BookingStep.DETAILS:
@@ -601,12 +435,8 @@ export default function BookServiceModal() {
   };
 
   /**
-   * ==========================
-   * ANIMATION VARIANTS
-   * ==========================
+   * Animation variants
    */
-
-  // Animation variants for content transitions
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -629,12 +459,8 @@ export default function BookServiceModal() {
   };
 
   /**
-   * ==========================
-   * RENDER FUNCTIONS
-   * ==========================
+   * Render progress bar
    */
-
-  // Render progress bar
   const renderProgressBar = () => {
     return (
       <div className={styles.modal__progress}>
@@ -675,7 +501,9 @@ export default function BookServiceModal() {
     );
   };
 
-  // Render service selection step
+  /**
+   * Render service selection step (Step 1)
+   */
   const renderServiceSelection = () => {
     return (
       <motion.div
@@ -686,7 +514,7 @@ export default function BookServiceModal() {
         style={{ marginBottom: "32px" }}
       >
         {!showServiceOptions ? (
-          // Show service type selection
+          // Show main service selection
           <>
             <motion.h2
               className={styles.modal__contentTitle}
@@ -717,20 +545,20 @@ export default function BookServiceModal() {
                   onClick={() => handleServiceSelect(service)}
                 >
                   <div className={styles.modal__serviceCardIcon}>
-                    <Icon name={service.icon} />
+                    <Icon name={service.icon as IconName} />
                   </div>
                   <h3 className={styles.modal__serviceCardTitle}>
                     {service.label}
                   </h3>
                   <span className={styles.modal__serviceCardPrice}>
-                    {service.price}
+                    {service.displayPrice}
                   </span>
                 </motion.div>
               ))}
             </div>
           </>
         ) : (
-          // Show specific service options (cleaning or laundry)
+          // Show service options
           <>
             <div
               className={styles.modal__backLink}
@@ -755,92 +583,61 @@ export default function BookServiceModal() {
               you need
             </motion.p>
 
-            {/* Cleaning options */}
-            {selectedService?.service_id === ServiceId.Cleaning &&
-              cleaningOptions.map((option) => (
-                <motion.div
-                  key={option.service_id}
-                  className={`${styles.modal__optionCard} ${
-                    selectedCleaningOption?.id === option.id
-                      ? styles.modal__optionCardSelected
-                      : ""
-                  }`}
-                  variants={itemVariants}
-                  whileHover={{ y: -5 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleCleaningOptionSelect(option)}
-                >
-                  <div className={styles.modal__optionCardContent}>
-                    <h3 className={styles.modal__optionCardTitle}>
-                      {option.label}
-                    </h3>
-                    <p className={styles.modal__optionCardDescription}>
-                      {option.description}
-                    </p>
-                    <span className={styles.modal__optionCardPrice}>
-                      {option.price}
-                    </span>
-                  </div>
-                  <div className={styles.modal__optionCardCheckbox}>
-                    {selectedCleaningOption?.id === option.id && (
-                      <Icon name="check" />
-                    )}
-                  </div>
-                </motion.div>
-              ))}
+            {/* Service options */}
+            {selectedService?.options?.map((option) => (
+              <motion.div
+                key={option.id}
+                className={`${styles.modal__optionCard} ${
+                  selectedOption?.id === option.id
+                    ? styles.modal__optionCardSelected
+                    : ""
+                }`}
+                variants={itemVariants}
+                whileHover={{ y: -5 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => handleOptionSelect(option)}
+              >
+                <div className={styles.modal__optionCardContent}>
+                  <h3 className={styles.modal__optionCardTitle}>
+                    {option.label}
+                  </h3>
+                  <p className={styles.modal__optionCardDescription}>
+                    {option.description}
+                  </p>
+                  <span className={styles.modal__optionCardPrice}>
+                    {`From $${option.price}`}
+                  </span>
 
-            {/* Laundry options */}
-            {selectedService?.service_id === ServiceId.Laundry &&
-              laundryOptions.map((option) => (
-                <motion.div
-                  key={option.id}
-                  className={`${styles.modal__optionCard} ${
-                    selectedLaundryOption?.id === option.id
-                      ? styles.modal__optionCardSelected
-                      : ""
-                  }`}
-                  variants={itemVariants}
-                  whileHover={{ y: -5 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleLaundryOptionSelect(option)}
-                >
-                  <div className={styles.modal__optionCardContent}>
-                    <h3 className={styles.modal__optionCardTitle}>
-                      {option.label}
-                    </h3>
-                    <p className={styles.modal__optionCardDescription}>
-                      {option.description}
-                    </p>
-                    <span className={styles.modal__optionCardPrice}>
-                      {option.price}
-                    </span>
-
-                    <div
-                      className={styles.modal__optionCardInfoLink}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedLaundryOption(option);
-                        setShowExtraItems(true);
-                      }}
-                    >
-                      View extra items pricing
-                      <Icon name="info" />
-                    </div>
-                  </div>
-                  <div className={styles.modal__optionCardCheckbox}>
-                    {selectedLaundryOption?.id === option.id && (
-                      <Icon name="check" />
+                  {/* Show "View extra items" button for laundry options */}
+                  {selectedService.service_id === ServiceId.Laundry &&
+                    option.extraItems && option.extraItems?.length > 0 && (
+                      <div
+                        className={styles.modal__optionCardInfoLink}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedOption(option);
+                          setShowExtraItems(true);
+                        }}
+                      >
+                        View extra items pricing
+                        <Icon name="info" />
+                      </div>
                     )}
-                  </div>
-                </motion.div>
-              ))}
+                </div>
+                <div className={styles.modal__optionCardCheckbox}>
+                  {selectedOption?.id === option.id && <Icon name="check" />}
+                </div>
+              </motion.div>
+            ))}
           </>
         )}
       </motion.div>
     );
   };
 
-  // Render service details and scheduling step
+  /**
+   * Render service details and scheduling step (Step 2)
+   */
   const renderDetailsAndSchedule = () => {
     if (!selectedService) return null;
 
@@ -862,11 +659,7 @@ export default function BookServiceModal() {
         >
           <Icon name="sliders" />
           {selectedService.label} Details
-          {selectedService.service_id === ServiceId.Cleaning && selectedCleaningOption
-            ? ` - ${selectedCleaningOption.label}`
-            : selectedService.service_id === ServiceId.Laundry && selectedLaundryOption
-              ? ` - ${selectedLaundryOption.label}`
-              : ""}
+          {selectedOption ? ` - ${selectedOption.label}` : ""}
         </motion.h2>
 
         <motion.div className={styles.modal__form} variants={containerVariants}>
@@ -880,50 +673,27 @@ export default function BookServiceModal() {
               Service Frequency
             </label>
             <div className={styles.modal__toggleGroup}>
-              <button
-                className={`${styles.modal__toggleButton} ${
-                  serviceFrequency === "one-off"
-                    ? styles.modal__toggleButtonSelected
-                    : ""
-                }`}
-                onClick={() => setServiceFrequency("one-off")}
-              >
-                One-off
-              </button>
-              <button
-                className={`${styles.modal__toggleButton} ${
-                  serviceFrequency === "weekly"
-                    ? styles.modal__toggleButtonSelected
-                    : ""
-                }`}
-                onClick={() => setServiceFrequency("weekly")}
-              >
-                Weekly
-              </button>
-              <button
-                className={`${styles.modal__toggleButton} ${
-                  serviceFrequency === "bi-weekly"
-                    ? styles.modal__toggleButtonSelected
-                    : ""
-                }`}
-                onClick={() => setServiceFrequency("bi-weekly")}
-              >
-                Bi-weekly
-              </button>
-              <button
-                className={`${styles.modal__toggleButton} ${
-                  serviceFrequency === "monthly"
-                    ? styles.modal__toggleButtonSelected
-                    : ""
-                }`}
-                onClick={() => setServiceFrequency("monthly")}
-              >
-                Monthly
-              </button>
+              {["one-off", "weekly", "bi-weekly", "monthly"].map(
+                (frequency) => (
+                  <button
+                    key={frequency}
+                    className={`${styles.modal__toggleButton} ${
+                      serviceFrequency === frequency
+                        ? styles.modal__toggleButtonSelected
+                        : ""
+                    }`}
+                    onClick={() =>
+                      setServiceFrequency(frequency as ServiceFrequency)
+                    }
+                  >
+                    {frequency.replace("-", " ")}
+                  </button>
+                )
+              )}
             </div>
           </motion.div>
 
-          {/* Schedule Section */}
+          {/* Schedule */}
           <motion.div
             variants={itemVariants}
             className={styles.modal__formGroup}
@@ -1089,33 +859,35 @@ export default function BookServiceModal() {
           )}
 
           {/* Service Inclusions */}
-          <motion.div
-            variants={itemVariants}
-            className={styles.modal__formGroup}
-          >
-            <label>
-              <Icon name="check-circle" />
-              Service Inclusions
-            </label>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-                gap: "10px",
-              }}
+          {selectedService.inclusions && selectedService.inclusions?.length > 0 && (
+            <motion.div
+              variants={itemVariants}
+              className={styles.modal__formGroup}
             >
-              {(selectedService.inclusions || [])
-                .slice(0, 4)
-                .map((inclusion: string, index: number) => (
-                  <div key={index} className={styles.modal__inclusion}>
-                    <Icon name="check" />
-                    <span className={styles.modal__inclusionText}>
-                      {inclusion}
-                    </span>
-                  </div>
-                ))}
-            </div>
-          </motion.div>
+              <label>
+                <Icon name="check-circle" />
+                Service Inclusions
+              </label>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+                  gap: "10px",
+                }}
+              >
+                {selectedService.inclusions
+                  .slice(0, 4)
+                  .map((inclusion, index) => (
+                    <div key={index} className={styles.modal__inclusion}>
+                      <Icon name="check" />
+                      <span className={styles.modal__inclusionText}>
+                        {inclusion}
+                      </span>
+                    </div>
+                  ))}
+              </div>
+            </motion.div>
+          )}
 
           {/* Price Summary */}
           <motion.div
@@ -1130,12 +902,7 @@ export default function BookServiceModal() {
               <span className={styles.modal__summaryItemLabel}>Service</span>
               <span className={styles.modal__summaryItemValue}>
                 {selectedService.label}
-                {selectedCleaningOption
-                  ? ` - ${selectedCleaningOption.label}`
-                  : ""}
-                {selectedLaundryOption
-                  ? ` - ${selectedLaundryOption.label}`
-                  : ""}
+                {selectedOption ? ` - ${selectedOption.label}` : ""}
               </span>
             </div>
 
@@ -1190,19 +957,20 @@ export default function BookServiceModal() {
               </span>
             </div>
 
-            {serviceFrequency !== "one-off" && (
-              <div className={styles.modal__summaryItem}>
-                <span className={styles.modal__summaryItemLabel}>
-                  Recurring Discount
-                </span>
-                <span
-                  className={styles.modal__summaryItemValue}
-                  style={{ color: "#28c76f" }}
-                >
-                  -10%
-                </span>
-              </div>
-            )}
+            {serviceFrequency !== "one-off" &&
+              selectedService.service_id === ServiceId.Laundry && (
+                <div className={styles.modal__summaryItem}>
+                  <span className={styles.modal__summaryItemLabel}>
+                    Recurring Discount
+                  </span>
+                  <span
+                    className={styles.modal__summaryItemValue}
+                    style={{ color: "#28c76f" }}
+                  >
+                    -10%
+                  </span>
+                </div>
+              )}
 
             <div className={styles.modal__summaryItem}>
               <span
@@ -1230,7 +998,9 @@ export default function BookServiceModal() {
     );
   };
 
-  // Render booking summary step in invoice style
+  /**
+   * Render booking review step (Step 3)
+   */
   const renderReview = () => {
     if (!selectedService) return null;
 
@@ -1259,6 +1029,7 @@ export default function BookServiceModal() {
               #{Math.floor(100000 + Math.random() * 900000)}
             </div>
           </div>
+
           {/* Booking Details */}
           <div className={styles.modal__invoiceSection}>
             <h3 className={styles.modal__invoiceSectionTitle}>
@@ -1267,7 +1038,7 @@ export default function BookServiceModal() {
             </h3>
 
             <div className={styles.modal__bookingSummaryBox}>
-              {/* Date and Time Section */}
+              {/* Schedule Information */}
               <div className={styles.modal__bookingSection}>
                 <div className={styles.modal__bookingSectionTitle}>
                   <Icon name="calendar" size={16} />
@@ -1321,11 +1092,14 @@ export default function BookServiceModal() {
                       Service Duration
                     </div>
                     <div className={styles.modal__bookingDetailValue}>
-                      {"2-3 hours"}
+                      {selectedService.service_id === ServiceId.Laundry
+                        ? "24-48 hours"
+                        : "2-3 hours"}
                     </div>
                   </div>
                 </div>
 
+                {/* Recurring service info */}
                 {serviceFrequency !== "one-off" && (
                   <div className={styles.modal__recurringInfo}>
                     <div className={styles.modal__recurringInfoIcon}>
@@ -1352,10 +1126,10 @@ export default function BookServiceModal() {
                 )}
               </div>
 
-              {/* Service Details Section */}
+              {/* Service Details */}
               <div className={styles.modal__bookingSection}>
                 <div className={styles.modal__bookingSectionTitle}>
-                  <Icon name={selectedService.icon} size={16} />
+                  <Icon name={selectedService.icon as IconName} size={16} />
                   Service Details
                 </div>
 
@@ -1366,12 +1140,7 @@ export default function BookServiceModal() {
                     </div>
                     <div className={styles.modal__bookingDetailValue}>
                       {selectedService.label}
-                      {selectedCleaningOption
-                        ? ` - ${selectedCleaningOption.label}`
-                        : ""}
-                      {selectedLaundryOption
-                        ? ` - ${selectedLaundryOption.label}`
-                        : ""}
+                      {selectedOption ? ` - ${selectedOption.label}` : ""}
                     </div>
                   </div>
 
@@ -1470,7 +1239,7 @@ export default function BookServiceModal() {
                 )}
               </div>
 
-              {/* Service Address (For demonstration) */}
+              {/* Service Address */}
               <div className={styles.modal__bookingSection}>
                 <div className={styles.modal__bookingSectionTitle}>
                   <Icon name="map-pin" size={16} />
@@ -1493,6 +1262,7 @@ export default function BookServiceModal() {
               </div>
             </div>
           </div>
+
           {/* Price Breakdown */}
           <div className={styles.modal__invoiceSection}>
             <h3 className={styles.modal__invoiceSectionTitle}>
@@ -1519,17 +1289,12 @@ export default function BookServiceModal() {
                 <div className={styles.modal__invoicePriceRow}>
                   <span>
                     {selectedService.label}
-                    {selectedCleaningOption
-                      ? ` - ${selectedCleaningOption.label}`
-                      : ""}
-                    {selectedLaundryOption
-                      ? ` - ${selectedLaundryOption.label}`
-                      : ""}
+                    {selectedOption ? ` - ${selectedOption.label}` : ""}
                   </span>
                   <span>
-                    {selectedCleaningOption?.price ||
-                      selectedLaundryOption?.price ||
-                      selectedService.displayPrice}
+                    {selectedOption
+                      ? `From $${selectedOption.price}`
+                      : selectedService.displayPrice}
                   </span>
                 </div>
               </div>
@@ -1624,113 +1389,104 @@ export default function BookServiceModal() {
               )}
 
               {/* Laundry calculation breakdown */}
-              {selectedService.service_id === ServiceId.Laundry && (
-                <>
-                  <div className={styles.modal__priceSectionTitle}>
-                    Laundry Calculation
-                  </div>
-                  <div className={styles.modal__invoicePriceTable}>
-                    <div
-                      className={
-                        styles.modal__invoicePriceRow +
-                        " " +
-                        styles.modal__invoicePriceHeader
-                      }
-                    >
-                      <span>Item</span>
-                      <span>Calculation</span>
-                      <span>Price</span>
+              {selectedService.service_id === ServiceId.Laundry &&
+                selectedOption && (
+                  <>
+                    <div className={styles.modal__priceSectionTitle}>
+                      Laundry Calculation
                     </div>
-                    <div className={styles.modal__invoicePriceRow}>
-                      <span>Base Price Per Item</span>
-                      <span></span>
-                      <span>
-                        ₦
-                        {parseInt(
-                          selectedLaundryOption!.price.replace(/[^0-9]/g, "")
-                        )}
-                      </span>
+                    <div className={styles.modal__invoicePriceTable}>
+                      <div
+                        className={
+                          styles.modal__invoicePriceRow +
+                          " " +
+                          styles.modal__invoicePriceHeader
+                        }
+                      >
+                        <span>Item</span>
+                        <span>Calculation</span>
+                        <span>Price</span>
+                      </div>
+                      <div className={styles.modal__invoicePriceRow}>
+                        <span>Base Price Per Item</span>
+                        <span></span>
+                        <span>₦{selectedOption.price}</span>
+                      </div>
+                      <div className={styles.modal__invoicePriceRow}>
+                        <span>Laundry Items</span>
+                        <span>
+                          {laundryBags} bags × 30 items = {laundryBags * 30}{" "}
+                          items
+                        </span>
+                        <span></span>
+                      </div>
+                      <div
+                        className={
+                          styles.modal__invoicePriceRow +
+                          " " +
+                          styles.modal__invoicePriceSubtotal
+                        }
+                      >
+                        <span>Laundry Subtotal</span>
+                        <span>
+                          {laundryBags * 30} items × ₦{selectedOption.price}
+                        </span>
+                        <span>
+                          ₦
+                          {(
+                            laundryBags *
+                            30 *
+                            selectedOption.price
+                          ).toLocaleString()}
+                        </span>
+                      </div>
                     </div>
-                    <div className={styles.modal__invoicePriceRow}>
-                      <span>Laundry Items</span>
-                      <span>
-                        {laundryBags} bags × 30 items = {laundryBags * 30} items
-                      </span>
-                      <span></span>
-                    </div>
-                    <div
-                      className={
-                        styles.modal__invoicePriceRow +
-                        " " +
-                        styles.modal__invoicePriceSubtotal
-                      }
-                    >
-                      <span>Laundry Subtotal</span>
-                      <span>
-                        {laundryBags * 30} items × ₦
-                        {parseInt(
-                          selectedLaundryOption!.price.replace(/[^0-9]/g, "")
-                        )}
-                      </span>
-                      <span>
-                        ₦
-                        {(
-                          laundryBags *
-                          30 *
-                          parseInt(
-                            selectedLaundryOption!.price.replace(/[^0-9]/g, "")
-                          )
-                        ).toLocaleString()}
-                      </span>
-                    </div>
-                  </div>
-                </>
-              )}
+                  </>
+                )}
 
               {/* Discounts */}
-              {serviceFrequency !== "one-off" && (
-                <>
-                  <div className={styles.modal__priceSectionTitle}>
-                    Discounts
-                  </div>
-                  <div className={styles.modal__invoicePriceTable}>
-                    <div
-                      className={
-                        styles.modal__invoicePriceRow +
-                        " " +
-                        styles.modal__invoicePriceHeader
-                      }
-                    >
-                      <span>Type</span>
-                      <span>Details</span>
-                      <span>Amount</span>
+              {serviceFrequency !== "one-off" &&
+                selectedService.service_id === ServiceId.Laundry && (
+                  <>
+                    <div className={styles.modal__priceSectionTitle}>
+                      Discounts
                     </div>
-                    <div className={styles.modal__invoicePriceRow}>
-                      <span>Recurring Service Discount</span>
-                      <span>
-                        {serviceFrequency.replace("-", " ")} booking
-                        {selectedService.service_id === ServiceId.Laundry
-                          ? " (applied to laundry services)"
-                          : ""}
-                      </span>
-                      <span style={{ color: "#28c76f" }}>
-                        {selectedService.service_id === ServiceId.Laundry
-                          ? "-10%"
-                          : "N/A"}
-                      </span>
+                    <div className={styles.modal__invoicePriceTable}>
+                      <div
+                        className={
+                          styles.modal__invoicePriceRow +
+                          " " +
+                          styles.modal__invoicePriceHeader
+                        }
+                      >
+                        <span>Type</span>
+                        <span>Details</span>
+                        <span>Amount</span>
+                      </div>
+                      <div className={styles.modal__invoicePriceRow}>
+                        <span>Recurring Service Discount</span>
+                        <span>
+                          {serviceFrequency.replace("-", " ")} booking (applied
+                          to laundry services)
+                        </span>
+                        <span style={{ color: "#28c76f" }}>-10%</span>
+                      </div>
                     </div>
-                  </div>
-                </>
-              )}
+                  </>
+                )}
 
               {/* Final calculation */}
               <div className={styles.modal__priceCalculation}>
                 <div className={styles.modal__priceCalcRow}>
                   <span>Base Price</span>
                   <span>
-                    {selectedService.service_id === ServiceId.Cleaning
-                      ? `$${parseInt(selectedCleaningOption?.price?.replace(/[^0-9]/g, "") || "0")}`
-                      : `₦${parseInt(selectedLaundryOption?.price?.replace(/[^0-9]/g, "") || "0") * laundryBags * 30}`}
+                    {selectedService.service_id === ServiceId.Cleaning &&
+                    selectedOption
+                      ? `$${selectedOption.price}`
+                      : selectedService.service_id === ServiceId.Laundry &&
+                          selectedOption
+                        ? `₦${selectedOption.price * laundryBags * 30}`
+                        : selectedService.displayPrice}
                   </span>
                 </div>
 
@@ -1764,21 +1520,14 @@ export default function BookServiceModal() {
                 )}
 
                 {selectedService.service_id === ServiceId.Laundry &&
-                  serviceFrequency !== "one-off" && (
+                  serviceFrequency !== "one-off" &&
+                  selectedOption && (
                     <div className={styles.modal__priceCalcRow}>
                       <span>- Recurring Discount (10%)</span>
                       <span style={{ color: "#28c76f" }}>
                         -₦
                         {Math.round(
-                          laundryBags *
-                            30 *
-                            parseInt(
-                              selectedLaundryOption!.price.replace(
-                                /[^0-9]/g,
-                                ""
-                              )
-                            ) *
-                            0.1
+                          laundryBags * 30 * selectedOption.price * 0.1
                         ).toLocaleString()}
                       </span>
                     </div>
@@ -1802,35 +1551,42 @@ export default function BookServiceModal() {
               </div>
             </div>
           </div>
-          {/* Inclusions */}
-          <div className={styles.modal__invoiceSection}>
-            <h3 className={styles.modal__invoiceSectionTitle}>
-              <Icon name="check" />
-              Service Includes
-            </h3>
 
-            <div className={styles.modal__invoiceInclusions}>
-              {(selectedCleaningOption?.inclusions || selectedLaundryOption
-                ? selectedService?.inclusions || []
-                : selectedService?.inclusions || []
-              )
-                .slice(0, 3)
-                .map((inclusion, index) => (
-                  <div key={index} className={styles.modal__invoiceInclusion}>
-                    <Icon name="check-circle" size={16} />
-                    <span>{inclusion}</span>
-                  </div>
-                ))}
-            </div>
-          </div>
+          {/* Inclusions */}
+          {selectedService.inclusions &&
+            selectedService.inclusions.length > 0 && (
+              <div className={styles.modal__invoiceSection}>
+                <h3 className={styles.modal__invoiceSectionTitle}>
+                  <Icon name="check" />
+                  Service Includes
+                </h3>
+
+                <div className={styles.modal__invoiceInclusions}>
+                  {selectedService.inclusions
+                    .slice(0, 3)
+                    .map((inclusion, index) => (
+                      <div
+                        key={index}
+                        className={styles.modal__invoiceInclusion}
+                      >
+                        <Icon name="check-circle" size={16} />
+                        <span>{inclusion}</span>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
         </motion.div>
       </motion.div>
     );
   };
 
-  // Render extra items modal for laundry service
+  /**
+   * Render extra items modal for laundry service
+   */
   const renderExtraItemsModal = () => {
-    if (!selectedLaundryOption || !showExtraItems) return null;
+    if (!selectedOption || !showExtraItems || !selectedOption.extraItems)
+      return null;
 
     return (
       <motion.div
@@ -1848,7 +1604,7 @@ export default function BookServiceModal() {
         >
           <div className={styles.modal__extraItemsHeader}>
             <h3 className={styles.modal__extraItemsTitle}>
-              Extra Items for {selectedLaundryOption.label}
+              Extra Items for {selectedOption.label}
             </h3>
             <button
               className={styles.modal__close}
@@ -1864,7 +1620,7 @@ export default function BookServiceModal() {
               <span className={styles.modal__extraItemPrice}>Cost</span>
             </div>
 
-            {selectedLaundryOption.extraItems.map((item, index) => (
+            {selectedOption.extraItems.map((item, index) => (
               <motion.div
                 key={index}
                 className={styles.modal__extraItem}
@@ -1881,7 +1637,7 @@ export default function BookServiceModal() {
               </motion.div>
             ))}
 
-            {selectedLaundryOption.extraNotes && (
+            {selectedService && selectedService.service_id === "DRY_CLEANING" && (
               <motion.div
                 className={styles.modal__extraNotes}
                 initial={{ opacity: 0, y: 10 }}
@@ -1891,11 +1647,15 @@ export default function BookServiceModal() {
                 <h4 className={styles.modal__extraNotesTitle}>
                   Additional Information
                 </h4>
-                {selectedLaundryOption.extraNotes.map((note, index) => (
-                  <p key={index} className={styles.modal__extraNotesItem}>
-                    {note}
-                  </p>
-                ))}
+                <p className={styles.modal__extraNotesItem}>
+                  Logistics charge for items on a hanger
+                </p>
+                <p className={styles.modal__extraNotesItem}>
+                  This also applies when you have more than 1 laundry bag
+                </p>
+                <p className={styles.modal__extraNotesItem}>
+                  Hanging clothes attracts an additional ₦300 per hanger
+                </p>
               </motion.div>
             )}
           </div>
@@ -1913,7 +1673,9 @@ export default function BookServiceModal() {
     );
   };
 
-  // Render the appropriate step content based on the current step
+  /**
+   * Render current step content
+   */
   const renderStepContent = () => {
     switch (currentStep) {
       case BookingStep.SERVICE:
@@ -1928,9 +1690,7 @@ export default function BookServiceModal() {
   };
 
   /**
-   * ==========================
-   * MAIN RENDER
-   * ==========================
+   * Main component render
    */
   return (
     <Modal
@@ -1943,10 +1703,10 @@ export default function BookServiceModal() {
         {/* Progress bar */}
         {renderProgressBar()}
 
-        {/* Modal content (step-specific) */}
+        {/* Step content */}
         <AnimatePresence mode="wait">{renderStepContent()}</AnimatePresence>
 
-        {/* Modal footer with navigation buttons */}
+        {/* Navigation buttons */}
         {(currentStep === BookingStep.DETAILS ||
           currentStep === BookingStep.REVIEW) && (
           <div className={styles.modal__footer}>
@@ -1970,7 +1730,7 @@ export default function BookServiceModal() {
         )}
       </div>
 
-      {/* Extra items modal (for laundry service) */}
+      {/* Extra items modal */}
       {renderExtraItemsModal()}
     </Modal>
   );
