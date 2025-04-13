@@ -265,7 +265,7 @@ export default function BookServiceModal() {
       case BookingStep.DETAILS:
         if (selectedService?.service_id === ServiceId.Cleaning) {
           return !!selectedCleaningOption;
-        } else if (selectedService?.service_id === "LAUNDRY") {
+        } else if (selectedService?.service_id === ServiceId.Laundry) {
           return !!selectedLaundryOption;
         }
         return !!selectedService;
@@ -304,7 +304,7 @@ export default function BookServiceModal() {
   const handleServiceSelect = (service: Service) => {
     setSelectedService(service);
 
-    if (service.service_id === ServiceId.Cleaning || service.service_id === "LAUNDRY") {
+    if (service.service_id === ServiceId.Cleaning || service.service_id === ServiceId.Laundry) {
       setShowServiceOptions(true);
     } else {
       setShowServiceOptions(false);
@@ -362,7 +362,7 @@ export default function BookServiceModal() {
     if (selectedService.service_id === ServiceId.Cleaning && selectedCleaningOption) {
       basePrice = parseInt(selectedCleaningOption.price.replace(/[^0-9]/g, ""));
     } else if (
-      selectedService.service_id === "LAUNDRY" &&
+      selectedService.service_id === ServiceId.Laundry &&
       selectedLaundryOption
     ) {
       // For laundry, calculate based on bags and frequency
@@ -458,7 +458,7 @@ export default function BookServiceModal() {
       const serviceOption =
         selectedService.service_id === ServiceId.Cleaning
           ? selectedCleaningOption?.service_id
-          : selectedService.service_id === "LAUNDRY"
+          : selectedService.service_id === ServiceId.Laundry
             ? selectedLaundryOption?.id
             : selectedService.service_id;
 
@@ -467,7 +467,7 @@ export default function BookServiceModal() {
         switch (serviceId) {
           case ServiceId.Cleaning:
             return ServiceCategory.Cleaning;
-          case "LAUNDRY":
+          case ServiceId.Laundry:
             return ServiceCategory.Laundry;
           case "PEST_CONTROL":
             return ServiceCategory.PestControl;
@@ -483,7 +483,7 @@ export default function BookServiceModal() {
 
       // Calculate recurring discount amount (10% for recurring laundry services)
       const recurringDiscount =
-        selectedService.service_id === "LAUNDRY" &&
+        selectedService.service_id === ServiceId.Laundry &&
         serviceFrequency !== "one-off"
           ? Math.round(totalPrice * 0.1)
           : 0;
@@ -533,7 +533,7 @@ export default function BookServiceModal() {
                 }
               : undefined,
           laundry:
-            selectedService.service_id === "LAUNDRY"
+            selectedService.service_id === ServiceId.Laundry
               ? {
                   bags: laundryBags,
                   laundryType: LaundryType.Standard,
@@ -569,7 +569,7 @@ export default function BookServiceModal() {
       case BookingStep.SERVICE:
         if (selectedService?.service_id === ServiceId.Cleaning) {
           return !selectedCleaningOption;
-        } else if (selectedService?.service_id === "LAUNDRY") {
+        } else if (selectedService?.service_id === ServiceId.Laundry) {
           return !selectedLaundryOption;
         }
         return !selectedService;
@@ -790,7 +790,7 @@ export default function BookServiceModal() {
               ))}
 
             {/* Laundry options */}
-            {selectedService?.service_id === "LAUNDRY" &&
+            {selectedService?.service_id === ServiceId.Laundry &&
               laundryOptions.map((option) => (
                 <motion.div
                   key={option.id}
@@ -864,7 +864,7 @@ export default function BookServiceModal() {
           {selectedService.label} Details
           {selectedService.service_id === ServiceId.Cleaning && selectedCleaningOption
             ? ` - ${selectedCleaningOption.label}`
-            : selectedService.service_id === "LAUNDRY" && selectedLaundryOption
+            : selectedService.service_id === ServiceId.Laundry && selectedLaundryOption
               ? ` - ${selectedLaundryOption.label}`
               : ""}
         </motion.h2>
@@ -1050,7 +1050,7 @@ export default function BookServiceModal() {
           )}
 
           {/* Laundry Specific Fields */}
-          {selectedService.service_id === "LAUNDRY" && (
+          {selectedService.service_id === ServiceId.Laundry && (
             <motion.div
               variants={itemVariants}
               className={styles.modal__formGroup}
@@ -1170,7 +1170,7 @@ export default function BookServiceModal() {
               </div>
             )}
 
-            {selectedService.service_id === "LAUNDRY" && (
+            {selectedService.service_id === ServiceId.Laundry && (
               <div className={styles.modal__summaryItem}>
                 <span className={styles.modal__summaryItemLabel}>Laundry</span>
                 <span className={styles.modal__summaryItemValue}>
@@ -1344,7 +1344,7 @@ export default function BookServiceModal() {
                             : serviceFrequency === "monthly"
                               ? " Your service will be scheduled once a month on the same day and time."
                               : ""}
-                        {selectedService.service_id === "LAUNDRY" &&
+                        {selectedService.service_id === ServiceId.Laundry &&
                           " A 10% discount has been applied."}
                       </p>
                     </div>
@@ -1438,7 +1438,7 @@ export default function BookServiceModal() {
                   )}
 
                 {/* Laundry details */}
-                {selectedService.service_id === "LAUNDRY" && (
+                {selectedService.service_id === ServiceId.Laundry && (
                   <div className={styles.modal__laundryDetail}>
                     <div className={styles.modal__laundryDetailTitle}>
                       Laundry Details
@@ -1624,7 +1624,7 @@ export default function BookServiceModal() {
               )}
 
               {/* Laundry calculation breakdown */}
-              {selectedService.service_id === "LAUNDRY" && (
+              {selectedService.service_id === ServiceId.Laundry && (
                 <>
                   <div className={styles.modal__priceSectionTitle}>
                     Laundry Calculation
@@ -1709,12 +1709,12 @@ export default function BookServiceModal() {
                       <span>Recurring Service Discount</span>
                       <span>
                         {serviceFrequency.replace("-", " ")} booking
-                        {selectedService.service_id === "LAUNDRY"
+                        {selectedService.service_id === ServiceId.Laundry
                           ? " (applied to laundry services)"
                           : ""}
                       </span>
                       <span style={{ color: "#28c76f" }}>
-                        {selectedService.service_id === "LAUNDRY"
+                        {selectedService.service_id === ServiceId.Laundry
                           ? "-10%"
                           : "N/A"}
                       </span>
@@ -1763,7 +1763,7 @@ export default function BookServiceModal() {
                   </div>
                 )}
 
-                {selectedService.service_id === "LAUNDRY" &&
+                {selectedService.service_id === ServiceId.Laundry &&
                   serviceFrequency !== "one-off" && (
                     <div className={styles.modal__priceCalcRow}>
                       <span>- Recurring Discount (10%)</span>
