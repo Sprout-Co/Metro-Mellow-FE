@@ -17,9 +17,6 @@ const steps = [
   { label: "Review", icon: "CheckCircle" },
 ];
 
-interface SubscriptionEditorModalProps {
-  selectedServices: ServiceType[];
-}
 
 interface EditServiceModalProps {
   isOpen: boolean;

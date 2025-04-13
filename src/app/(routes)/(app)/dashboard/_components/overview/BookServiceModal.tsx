@@ -16,6 +16,7 @@ import {
   CleaningType,
   HouseType,
   LaundryType,
+  RoomQuantities,
 } from "@/graphql/api";
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
 import Modal from "@/components/ui/Modal/Modal";
@@ -46,16 +47,6 @@ interface LaundryOption {
   price: string;
   extraItems: ExtraItem[];
   extraNotes?: string[];
-}
-
-// Room configuration for cleaning service
-interface RoomQuantity {
-  bedrooms: number;
-  livingRooms: number;
-  bathrooms: number;
-  kitchen: number;
-  study: number;
-  outdoor: number;
 }
 
 // Service frequency options
@@ -122,13 +113,14 @@ export default function BookServiceModal() {
   const [serviceFrequency, setServiceFrequency] =
     useState<ServiceFrequency>("one-off");
   const [propertyType, setPropertyType] = useState<"flat" | "duplex">("flat");
-  const [roomQuantities, setRoomQuantities] = useState<RoomQuantity>({
-    bedrooms: 0,
-    livingRooms: 0,
-    bathrooms: 0,
+  const [roomQuantities, setRoomQuantities] = useState<RoomQuantities>({
+    balcony: 0,
+    bathroom: 0,
+    bedroom: 0,
     kitchen: 0,
-    study: 0,
-    outdoor: 0,
+    livingRoom: 0,
+    other: 0,
+    studyRoom: 0,
   });
   const [laundryBags, setLaundryBags] = useState<number>(1);
 
@@ -339,12 +331,12 @@ export default function BookServiceModal() {
 
   // Handle room quantity changes for cleaning service
   const handleQuantityChange = (
-    room: keyof RoomQuantity,
+    room: keyof RoomQuantities,
     increment: boolean
   ) => {
     setRoomQuantities((prev) => ({
       ...prev,
-      [room]: Math.max(0, prev[room] + (increment ? 1 : -1)),
+      [room]: Math.max(0, (prev[room] as number) + (increment ? 1 : -1)),
     }));
   };
 
@@ -402,7 +394,11 @@ export default function BookServiceModal() {
 
       const roomTotal = Object.entries(roomQuantities).reduce(
         (total, [room, quantity]) => {
-          return total + roomPrices[room as keyof typeof roomPrices] * quantity;
+          return (
+            total +
+            (roomPrices[room as keyof typeof roomPrices] as number) *
+              (quantity as number)
+          );
         },
         0
       );
@@ -526,10 +522,10 @@ export default function BookServiceModal() {
                     propertyType === "flat" ? HouseType.Flat : HouseType.Duplex,
                   rooms: {
                     balcony: 0,
-                    bathroom: roomQuantities.bathrooms || 0,
-                    bedroom: roomQuantities.bedrooms || 0,
+                    bathroom: roomQuantities.bathroom || 0,
+                    bedroom: roomQuantities.bedroom || 0,
                     kitchen: roomQuantities.kitchen || 0,
-                    livingRoom: roomQuantities.livingRooms || 0,
+                    livingRoom: roomQuantities.livingRoom || 0,
                     other: 0,
                     studyRoom: 0,
                   },
@@ -582,7 +578,7 @@ export default function BookServiceModal() {
           return (
             !selectedDate ||
             !selectedTime ||
-            Object.values(roomQuantities).every((qty) => qty === 0)
+            Object.values(roomQuantities).every((qty) => Number(qty) === 0)
           );
         }
         return !selectedDate || !selectedTime;
@@ -1023,11 +1019,11 @@ export default function BookServiceModal() {
                         className={styles.modal__counterGroupButton}
                         onClick={() =>
                           handleQuantityChange(
-                            room as keyof RoomQuantity,
+                            room as keyof RoomQuantities,
                             false
                           )
                         }
-                        disabled={quantity <= 0}
+                        disabled={(quantity as number) <= 0}
                       >
                         <Icon name="minus" />
                       </button>
@@ -1037,7 +1033,10 @@ export default function BookServiceModal() {
                       <button
                         className={styles.modal__counterGroupButton}
                         onClick={() =>
-                          handleQuantityChange(room as keyof RoomQuantity, true)
+                          handleQuantityChange(
+                            room as keyof RoomQuantities,
+                            true
+                          )
                         }
                       >
                         <Icon name="plus" />
@@ -1158,7 +1157,10 @@ export default function BookServiceModal() {
                       };
                       return (
                         total +
-                        roomPrices[room as keyof typeof roomPrices] * quantity
+                        (roomPrices[
+                          room as keyof typeof roomPrices
+                        ] as number) *
+                          (quantity as number)
                       );
                     },
                     0
@@ -1388,14 +1390,16 @@ export default function BookServiceModal() {
 
                 {/* Cleaning rooms detail */}
                 {selectedService.service_id === "CLEANING" &&
-                  Object.values(roomQuantities).some((qty) => qty > 0) && (
+                  Object.values(roomQuantities).some(
+                    (qty) => Number(qty) > 0
+                  ) && (
                     <div className={styles.modal__roomsDetail}>
                       <div className={styles.modal__roomsDetailTitle}>
                         Rooms to Clean
                       </div>
                       <div className={styles.modal__roomsGrid}>
                         {Object.entries(roomQuantities)
-                          .filter(([_, quantity]) => quantity > 0)
+                          .filter(([_, quantity]) => Number(quantity) > 0)
                           .map(([room, quantity]) => (
                             <div key={room} className={styles.modal__roomItem}>
                               <div className={styles.modal__roomIcon}>
@@ -1549,7 +1553,7 @@ export default function BookServiceModal() {
                       <span>Subtotal</span>
                     </div>
                     {Object.entries(roomQuantities)
-                      .filter(([_, quantity]) => quantity > 0)
+                      .filter(([_, quantity]) => Number(quantity) > 0)
                       .map(([room, quantity]) => {
                         const roomPrices = {
                           bedrooms: 20,
@@ -1559,9 +1563,10 @@ export default function BookServiceModal() {
                           study: 15,
                           outdoor: 20,
                         };
-                        const pricePerRoom =
-                          roomPrices[room as keyof typeof roomPrices];
-                        const subtotal = pricePerRoom * quantity;
+                        const pricePerRoom = roomPrices[
+                          room as keyof typeof roomPrices
+                        ] as number;
+                        const subtotal = pricePerRoom * (quantity as number);
 
                         return (
                           <div
@@ -1603,8 +1608,10 @@ export default function BookServiceModal() {
                             };
                             return (
                               total +
-                              roomPrices[room as keyof typeof roomPrices] *
-                                quantity
+                              (roomPrices[
+                                room as keyof typeof roomPrices
+                              ] as number) *
+                                (quantity as number)
                             );
                           },
                           0
@@ -1743,8 +1750,10 @@ export default function BookServiceModal() {
                           };
                           return (
                             total +
-                            roomPrices[room as keyof typeof roomPrices] *
-                              quantity
+                            (roomPrices[
+                              room as keyof typeof roomPrices
+                            ] as number) *
+                              (quantity as number)
                           );
                         },
                         0
