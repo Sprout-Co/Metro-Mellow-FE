@@ -595,7 +595,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
           </motion.div>
         )}
       </div>
-      <EditServiceModal onClose={() => setEditServiceModal(false)} service={""} isOpen={editServiceModal} onSave={() => {}} />
+      <EditServiceModal onClose={() => setEditServiceModal(false)} selectedServices={selectedServices} isOpen={editServiceModal} />
     </Fragment>
   );
 };

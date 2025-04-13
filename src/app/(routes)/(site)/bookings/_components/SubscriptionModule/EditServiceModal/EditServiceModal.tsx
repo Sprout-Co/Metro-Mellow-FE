@@ -8,7 +8,7 @@ import { Icon, IconName } from "@/components/ui/Icon/Icon";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useUIStore } from "@/store/slices/ui";
-import { CleaningDetails } from "@/graphql/api";
+import { CleaningDetails, Service } from "@/graphql/api";
 
 // Step information for progress bar
 const steps = [
@@ -21,12 +21,15 @@ const steps = [
 interface EditServiceModalProps {
   isOpen: boolean;
   onClose: () => void;
+  selectedServices: Service[];
 }
 
 const EditServiceModal: React.FC<EditServiceModalProps> = ({
   isOpen,
   onClose,
+  selectedServices,
 }) => {
+  console.log(selectedServices);
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={`Edit `} maxWidth="800px">
       <h1>Hello World</h1>
