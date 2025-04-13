@@ -522,13 +522,13 @@ export default function BookServiceModal() {
                   houseType:
                     propertyType === "flat" ? HouseType.Flat : HouseType.Duplex,
                   rooms: {
-                    balcony: 0,
+                    balcony: roomQuantities.balcony,
                     bathroom: roomQuantities.bathroom || 0,
                     bedroom: roomQuantities.bedroom || 0,
                     kitchen: roomQuantities.kitchen || 0,
                     livingRoom: roomQuantities.livingRoom || 0,
-                    other: 0,
-                    studyRoom: 0,
+                    other: roomQuantities.other,
+                    studyRoom: roomQuantities.studyRoom,
                   },
                 }
               : undefined,
