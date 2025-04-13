@@ -3,7 +3,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./PlanSummary.module.scss";
-import { Service } from "@/graphql/api";
+import { BillingCycle, CleaningType, CreateSubscriptionInput, HouseType, LaundryType, ScheduleDays, Service, ServiceDetailsInput, Severity, SubscriptionFrequency, TimeSlot, TreatmentType } from "@/graphql/api";
 import { PlanType, DurationType } from "../SubscriptionModule";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { useUIStore } from "@/store";
@@ -154,6 +154,82 @@ type PlanSummaryProps = {
   onUpdateService?: (service: ExtendedService) => void;
 };
 
+const createSubscriptionInput: CreateSubscriptionInput = {
+  billingCycle: BillingCycle.Monthly,
+  duration: 12,
+  startDate: "2024-04-01T00:00:00Z",
+  autoRenew: true,
+  services: [
+    // First service: Cleaning service
+    {
+      serviceId: "cleaning_service_id_123",
+      frequency: SubscriptionFrequency.Monthly,
+      scheduledDays: [
+        ScheduleDays.Monday,
+        ScheduleDays.Tuesday,
+        ScheduleDays.Wednesday,
+      ],
+      preferredTimeSlot: TimeSlot.Morning,
+      serviceDetails: {
+        cleaning: {
+          cleaningType: CleaningType.DeepCleaning,
+          houseType: HouseType.Flat,
+          rooms: {
+            bedroom: 2,
+            livingRoom: 1,
+            bathroom: 2,
+            kitchen: 1,
+            balcony: 1,
+            studyRoom: 1,
+            other: 0,
+          },
+        },
+      },
+    },
+    // Second service: Laundry service
+    {
+      serviceId: "laundry_service_id_456",
+      frequency: SubscriptionFrequency.BiWeekly,
+      scheduledDays: [
+        ScheduleDays.Monday,
+        ScheduleDays.Tuesday,
+        ScheduleDays.Wednesday,
+        ScheduleDays.Thursday,
+      ],
+      preferredTimeSlot: TimeSlot.Afternoon,
+      serviceDetails: {
+        laundry: {
+          laundryType: LaundryType.Premium,
+          bags: 3,
+          items: {
+            shirts: 10,
+            pants: 5,
+            dresses: 2,
+            suits: 1,
+            others: 3,
+          },
+        },
+      },
+    },
+    // Third service: Pest Control service
+    {
+      serviceId: "pest_control_service_id_789",
+      frequency: SubscriptionFrequency.BiWeekly,
+      scheduledDays: [
+        ScheduleDays.Sunday
+      ],
+      preferredTimeSlot: TimeSlot.Afternoon,
+      serviceDetails: {
+        pestControl: {
+          treatmentType: TreatmentType.Residential,
+          areas: ["kitchen", "bathroom", "living room"],
+          severity: Severity.Medium,
+        },
+      },
+    },
+  ],
+};
+
 const PlanSummary: React.FC<PlanSummaryProps> = ({
   selectedServices,
   planType = "weekly",
@@ -168,6 +244,16 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
     {}
   );
   const [editServiceModal, setEditServiceModal] = useState(false)
+  const [_, __] = useState<CreateSubscriptionInput>(createSubscriptionInput);
+  // const [_, __] = useState<SubscriptionServicesInput>({
+  //   serviceId: "",
+  //   frequency: SubscriptionFrequency.Monthly,
+  //   scheduledDays: [ScheduleDays.Monday],
+  //   preferredTimeSlot: TimeSlot.Morning,
+  //   serviceDetails: {
+
+  //   }
+  // });
 
   // Access the UI store to handle modals
   const { openModal } = useUIStore();

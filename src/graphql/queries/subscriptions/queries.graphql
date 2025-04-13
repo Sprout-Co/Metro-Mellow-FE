@@ -111,6 +111,13 @@ query GetSubscriptionById($id: ID!) {
           areas
           severity
         }
+        cooking {
+          mealType
+          mealsPerDelivery {
+            day
+            count
+          }
+        }
       }
       scheduledDays
       preferredTimeSlot
@@ -236,6 +243,13 @@ query GetSubscriptions($status: SubscriptionStatus) {
           areas
           severity
         }
+        cooking {
+          mealType
+          mealsPerDelivery {
+            day
+            count
+          }
+        }
       }
       scheduledDays
       preferredTimeSlot
@@ -360,6 +374,13 @@ query GetCustomerSubscriptions {
           treatmentType
           areas
           severity
+        }
+        cooking {
+          mealType
+          mealsPerDelivery {
+            day
+            count
+          }
         }
       }
       scheduledDays

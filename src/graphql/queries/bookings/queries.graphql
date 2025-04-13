@@ -103,6 +103,13 @@ query GetBookings($status: BookingStatus) {
         areas
         severity
       }
+      cooking {
+        mealType
+        mealsPerDelivery {
+          day
+          count
+        }
+      }
     }
   }
 }
@@ -211,6 +218,13 @@ query GetBookingById($id: ID!) {
         treatmentType
         areas
         severity
+      }
+      cooking {
+        mealType
+        mealsPerDelivery {
+          day
+          count
+        }
       }
     }
   }
@@ -321,6 +335,13 @@ query GetCustomerBookings {
         areas
         severity
       }
+      cooking {
+        mealType
+        mealsPerDelivery {
+          day
+          count
+        }
+      }
     }
   }
 }
@@ -429,6 +450,13 @@ query GetStaffBookings {
         treatmentType
         areas
         severity
+      }
+      cooking {
+        mealType
+        mealsPerDelivery {
+          day
+          count
+        }
       }
     }
   }
