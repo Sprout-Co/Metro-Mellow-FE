@@ -106,11 +106,13 @@ export enum CleaningType {
 
 export type CookingDetails = {
   __typename?: 'CookingDetails';
+  mealDeliveries: Array<MealDelivery>;
   mealType: MealType;
   mealsPerDelivery: Array<MealDelivery>;
 };
 
 export type CookingDetailsInput = {
+  mealDeliveries: Array<MealDeliveryInput>;
   mealType: MealType;
   mealsPerDelivery: Array<MealDeliveryInput>;
 };
@@ -804,7 +806,9 @@ export type ServiceDetailsInput = {
 };
 
 export enum ServiceId {
+  BasicCooking = 'BASIC_COOKING',
   Cleaning = 'CLEANING',
+  Cooking = 'COOKING',
   DeepCleaning = 'DEEP_CLEANING',
   DryCleaning = 'DRY_CLEANING',
   Laundry = 'LAUNDRY',
@@ -815,6 +819,7 @@ export enum ServiceId {
   PostConstructionCleaning = 'POST_CONSTRUCTION_CLEANING',
   PremiumLaundry = 'PREMIUM_LAUNDRY',
   StandardCleaning = 'STANDARD_CLEANING',
+  StandardCooking = 'STANDARD_COOKING',
   StandardLaundry = 'STANDARD_LAUNDRY'
 }
 

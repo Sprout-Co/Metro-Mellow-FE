@@ -123,7 +123,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
   const [showServiceOptions, setShowServiceOptions] = useState<boolean>(false);
 
   // Service details state
-  const [selectedDays, setSelectedDays] = useState<DayOfWeek[]>([]);
+  const [selectedDays, setSelectedDays] = useState<DayOfWeek[]>(["monday"]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot>(
     TimeSlot.Morning
   );
@@ -138,6 +138,16 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
     studyRoom: 0,
   });
   const [laundryBags, setLaundryBags] = useState<number>(1);
+  const [mealType, setMealType] = useState<"STANDARD" | "BASIC">("STANDARD");
+  const [mealsPerDay, setMealsPerDay] = useState<Record<DayOfWeek, number>>({
+    monday: 1,
+    tuesday: 1,
+    wednesday: 1,
+    thursday: 1,
+    friday: 1,
+    saturday: 1,
+    sunday: 1,
+  });
 
   // Schedule state
   const [selectedDate, setSelectedDate] = useState<string>("");
@@ -264,6 +274,16 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
   };
 
   /**
+   * Handle meals per day changes
+   */
+  const handleMealsPerDayChange = (day: DayOfWeek, increment: boolean) => {
+    setMealsPerDay((prev) => ({
+      ...prev,
+      [day]: Math.max(1, (prev[day] as number) + (increment ? 1 : -1)),
+    }));
+  };
+
+  /**
    * Calculate total price based on selected options
    */
   const calculateTotalPrice = () => {
@@ -310,6 +330,18 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
       if (selectedDays.length > 1) {
         basePrice = Math.round(basePrice * 0.9); // 10% discount for recurring
       }
+    } else if (
+      selectedService.service_id === "COOKING" &&
+      selectedDays.length > 0
+    ) {
+      // For cooking, calculate based on meals per day
+      const mealsPerDayTotal = selectedDays.reduce(
+        (total, day) => total + (mealsPerDay[day] || 1),
+        0
+      );
+      basePrice =
+        mealsPerDayTotal *
+        (selectedOption ? selectedOption.price : selectedService.price);
     } else {
       basePrice = selectedService.price;
     }
@@ -374,6 +406,19 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
             selectedDays.length === 0 ||
             selectedTimeSlot === TimeSlot.Morning ||
             Object.values(roomQuantities).every((qty) => Number(qty) === 0)
+          );
+        } else if (selectedService?.service_id === "COOKING") {
+          // For cooking, we require at least one day selected
+          if (
+            selectedDays.length === 0 ||
+            selectedTimeSlot === TimeSlot.Morning
+          ) {
+            return true;
+          }
+
+          // Check if meals per day is set for all selected days
+          return selectedDays.some(
+            (day) => !mealsPerDay[day] || mealsPerDay[day] < 1
           );
         }
         return (
@@ -509,7 +554,8 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                   onClick={() => handleServiceSelect(service)}
                 >
                   <div className={styles.modal__serviceCardIcon}>
-                    <Icon name={service.icon as IconName} />
+                    {service.icon}
+                    {/* <Icon name={service.icon as IconName} /> */}
                   </div>
                   <h3 className={styles.modal__serviceCardTitle}>
                     {service.label}
@@ -840,6 +886,85 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
             </motion.div>
           )}
 
+          {/* Cooking Specific Fields */}
+          {selectedService.service_id === "COOKING" && (
+            <motion.div
+              variants={itemVariants}
+              className={styles.modal__formGroup}
+            >
+              <label>
+                <Icon name="coffee" />
+                Meal Delivery Details
+              </label>
+
+              <div className={styles.modal__mealType}>
+                <div className={styles.modal__toggleGroup}>
+                  <button
+                    className={`${styles.modal__toggleButton} ${
+                      mealType === "STANDARD"
+                        ? styles.modal__toggleButtonSelected
+                        : ""
+                    }`}
+                    onClick={() => setMealType("STANDARD")}
+                  >
+                    Standard Meal
+                  </button>
+                  <button
+                    className={`${styles.modal__toggleButton} ${
+                      mealType === "BASIC"
+                        ? styles.modal__toggleButtonSelected
+                        : ""
+                    }`}
+                    onClick={() => setMealType("BASIC")}
+                  >
+                    Basic Meal
+                  </button>
+                </div>
+              </div>
+
+              <label style={{ marginTop: "20px" }}>
+                <Icon name="calendar" />
+                Meals Per Day
+              </label>
+              <div className={styles.modal__mealsPerDayContainer}>
+                {selectedDays.length > 0 ? (
+                  selectedDays.map((day) => (
+                    <div key={day} className={styles.modal__counterGroup}>
+                      <span className={styles.modal__counterGroupLabel}>
+                        {day.charAt(0).toUpperCase() + day.slice(1)}
+                      </span>
+                      <div className={styles.modal__counterGroupControl}>
+                        <button
+                          className={styles.modal__counterGroupButton}
+                          onClick={() => handleMealsPerDayChange(day, false)}
+                          disabled={mealsPerDay[day] <= 1}
+                        >
+                          <Icon name="minus" />
+                        </button>
+                        <span className={styles.modal__counterGroupValue}>
+                          {mealsPerDay[day] || 1}
+                        </span>
+                        <button
+                          className={styles.modal__counterGroupButton}
+                          onClick={() => handleMealsPerDayChange(day, true)}
+                        >
+                          <Icon name="plus" />
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className={styles.modal__noSelectedDays}>
+                    Please select at least one delivery day above.
+                  </p>
+                )}
+              </div>
+              <p className={styles.modal__helper}>
+                Select how many meals you want delivered each day
+              </p>
+            </motion.div>
+          )}
+
           {/* Service Inclusions */}
           {selectedService.inclusions &&
             selectedService.inclusions?.length > 0 && (
@@ -930,6 +1055,20 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                 </span>
               </div>
             )}
+
+            {selectedService.service_id === "COOKING" &&
+              selectedDays.length > 0 && (
+                <div className={styles.modal__summaryItem}>
+                  <span className={styles.modal__summaryItemLabel}>Meals</span>
+                  <span className={styles.modal__summaryItemValue}>
+                    {selectedDays.reduce(
+                      (total, day) => total + (mealsPerDay[day] || 1),
+                      0
+                    )}{" "}
+                    meals total ({mealType.toLowerCase()} meal plan)
+                  </span>
+                </div>
+              )}
 
             <div className={styles.modal__summaryItem}>
               <span className={styles.modal__summaryItemLabel}>Schedule</span>
