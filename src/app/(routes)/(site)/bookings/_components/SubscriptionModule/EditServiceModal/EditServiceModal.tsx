@@ -25,9 +25,25 @@ import {
 } from "@/graphql/api";
 
 /**
- * Service frequency options
+ * Days of the week for scheduling
  */
-type ServiceFrequency = "one-off" | "weekly" | "bi-weekly" | "monthly";
+type DayOfWeek =
+  | "monday"
+  | "tuesday"
+  | "wednesday"
+  | "thursday"
+  | "friday"
+  | "saturday"
+  | "sunday";
+
+/**
+ * Time slots available for selection
+ */
+interface TimeSlotOption {
+  id: TimeSlot;
+  label: string;
+  time: string;
+}
 
 /**
  * Steps for the booking process
@@ -45,6 +61,28 @@ interface Step {
   label: string;
   icon: IconName | string;
 }
+
+/**
+ * Time slot options
+ */
+const TIME_SLOT_OPTIONS: TimeSlotOption[] = [
+  { id: TimeSlot.Morning, label: "Morning", time: "8:00 AM - 12:00 PM" },
+  { id: TimeSlot.Afternoon, label: "Afternoon", time: "12:00 PM - 4:00 PM" },
+  { id: TimeSlot.Evening, label: "Evening", time: "4:00 PM - 8:00 PM" },
+];
+
+/**
+ * Days of the week
+ */
+const DAYS_OF_WEEK: DayOfWeek[] = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
+];
 
 /**
  * Progress bar steps configuration
@@ -85,8 +123,10 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
   const [showServiceOptions, setShowServiceOptions] = useState<boolean>(false);
 
   // Service details state
-  const [serviceFrequency, setServiceFrequency] =
-    useState<ServiceFrequency>("one-off");
+  const [selectedDays, setSelectedDays] = useState<DayOfWeek[]>([]);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot>(
+    TimeSlot.Morning
+  );
   const [propertyType, setPropertyType] = useState<"flat" | "duplex">("flat");
   const [roomQuantities, setRoomQuantities] = useState<RoomQuantities>({
     balcony: 0,
@@ -101,7 +141,6 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
 
   // Schedule state
   const [selectedDate, setSelectedDate] = useState<string>("");
-  const [selectedTime, setSelectedTime] = useState<TimeSlot>(TimeSlot.Morning);
 
   // UI state
   const [showExtraItems, setShowExtraItems] = useState(false);
@@ -109,6 +148,26 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
   useEffect(() => {
     setServices(selectedServices);
   }, [selectedServices]);
+
+  /**
+   * Handle selecting and deselecting days
+   */
+  const handleDayToggle = (day: DayOfWeek) => {
+    setSelectedDays((prev) => {
+      if (prev.includes(day)) {
+        return prev.filter((d) => d !== day);
+      } else {
+        return [...prev, day];
+      }
+    });
+  };
+
+  /**
+   * Handle selecting and deselecting time slots
+   */
+  const handleTimeSlotToggle = (timeSlot: TimeSlot) => {
+    setSelectedTimeSlot(timeSlot);
+  };
 
   /**
    * Check if the step is accessible based on current selections
@@ -130,8 +189,8 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
       case BookingStep.REVIEW:
         return (
           isStepAccessible(BookingStep.DETAILS) &&
-          !!selectedDate &&
-          !!selectedTime
+          selectedDays.length > 0 &&
+          selectedTimeSlot !== TimeSlot.Morning
         );
       default:
         return false;
@@ -248,7 +307,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
       basePrice = totalItems * selectedOption.price;
 
       // Apply recurring discount if applicable
-      if (serviceFrequency !== "one-off") {
+      if (selectedDays.length > 1) {
         basePrice = Math.round(basePrice * 0.9); // 10% discount for recurring
       }
     } else {
@@ -312,12 +371,14 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
       case BookingStep.DETAILS:
         if (selectedService?.service_id === ServiceId.Cleaning) {
           return (
-            !selectedDate ||
-            !selectedTime ||
+            selectedDays.length === 0 ||
+            selectedTimeSlot === TimeSlot.Morning ||
             Object.values(roomQuantities).every((qty) => Number(qty) === 0)
           );
         }
-        return !selectedDate || !selectedTime;
+        return (
+          selectedDays.length === 0 || selectedTimeSlot === TimeSlot.Morning
+        );
       default:
         return false;
     }
@@ -423,7 +484,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
               className={styles.modal__contentTitle}
               variants={itemVariants}
             >
-              {/* <Icon name="shopping-bag" /> */}
+              <Icon name="shopping-bag" />
               Select a Service
             </motion.h2>
             <motion.p
@@ -524,12 +585,12 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                         }}
                       >
                         View extra items pricing
-                        {/* <Icon name="info" /> */}
+                        <Icon name="info" />
                       </div>
                     )}
                 </div>
                 <div className={styles.modal__optionCardCheckbox}>
-                  {/* {selectedOption?.id === option.id && <Icon name="check" />} */}
+                  {selectedOption?.id === option.id && <Icon name="check" />}
                 </div>
               </motion.div>
             ))}
@@ -567,74 +628,91 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
         </motion.h2>
 
         <motion.div className={styles.modal__form} variants={containerVariants}>
-          {/* Service Frequency */}
-          <motion.div
-            variants={itemVariants}
-            className={styles.modal__formGroup}
-          >
-            <label>
-              <Icon name="repeat" />
-              Service Frequency
-            </label>
-            <div className={styles.modal__toggleGroup}>
-              {["one-off", "weekly", "bi-weekly", "monthly"].map(
-                (frequency) => (
-                  <button
-                    key={frequency}
-                    className={`${styles.modal__toggleButton} ${
-                      serviceFrequency === frequency
-                        ? styles.modal__toggleButtonSelected
-                        : ""
-                    }`}
-                    onClick={() =>
-                      setServiceFrequency(frequency as ServiceFrequency)
-                    }
-                  >
-                    {frequency.replace("-", " ")}
-                  </button>
-                )
-              )}
-            </div>
-          </motion.div>
-
-          {/* Schedule */}
+          {/* Days Selection */}
           <motion.div
             variants={itemVariants}
             className={styles.modal__formGroup}
           >
             <label>
               <Icon name="calendar" />
-              Schedule
+              Preferred Service Days
             </label>
-            <div className={styles.modal__formRow}>
-              <div className={styles.modal__formGroup}>
-                <label htmlFor="date">Date</label>
-                <input
-                  id="date"
-                  type="date"
-                  className={styles.modal__input}
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                  min={new Date().toISOString().split("T")[0]}
-                />
-              </div>
-              <div className={styles.modal__formGroup}>
-                <label htmlFor="time">Time</label>
-                <select
-                  id="time"
-                  className={styles.modal__select}
-                  value={selectedTime}
-                  onChange={(e) => setSelectedTime(e.target.value as TimeSlot)}
+            <div className={styles.modal__daySelectionContainer}>
+              {DAYS_OF_WEEK.map((day) => (
+                <button
+                  key={day}
+                  className={`${styles.modal__dayPill} ${
+                    selectedDays.includes(day)
+                      ? styles.modal__dayPillSelected
+                      : ""
+                  }`}
+                  onClick={() => handleDayToggle(day)}
                 >
-                  <option value="">Select a time slot</option>
-                  <option value={TimeSlot.Morning}>Morning</option>
-                  <option value={TimeSlot.Afternoon}>Afternoon</option>
-                  <option value={TimeSlot.Evening}>Evening</option>
-                </select>
-              </div>
+                  <span className={styles.modal__dayPillText}>
+                    {day.charAt(0).toUpperCase() + day.slice(1)}
+                  </span>
+                  {selectedDays.includes(day) && (
+                    <span className={styles.modal__dayPillCheck}>
+                      <Icon name="check" size={12} />
+                    </span>
+                  )}
+                </button>
+              ))}
             </div>
             <p className={styles.modal__helper}>
-              Our service hours are 9:00 AM to 5:00 PM, Monday through Saturday
+              Select one or more days for your service
+            </p>
+          </motion.div>
+
+          {/* Time Slot Selection */}
+          <motion.div
+            variants={itemVariants}
+            className={styles.modal__formGroup}
+          >
+            <label>
+              <Icon name="clock" />
+              Preferred Time Slot
+            </label>
+            <div className={styles.modal__timeSlotContainer}>
+              {TIME_SLOT_OPTIONS.map((slot) => (
+                <button
+                  key={slot.id}
+                  className={`${styles.modal__timeSlotPill} ${
+                    selectedTimeSlot === slot.id
+                      ? styles.modal__timeSlotPillSelected
+                      : ""
+                  }`}
+                  onClick={() => handleTimeSlotToggle(slot.id)}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      flex: 1,
+                    }}
+                  >
+                    <span className={styles.modal__timeSlotPillLabel}>
+                      {slot.label}
+                    </span>
+                    <span className={styles.modal__timeSlotPillTime}>
+                      <Icon
+                        name="clock"
+                        size={12}
+                        style={{ marginRight: "6px" }}
+                      />
+                      {slot.time}
+                    </span>
+                  </div>
+                  {selectedTimeSlot === slot.id && (
+                    <span className={styles.modal__timeSlotPillCheck}>
+                      <Icon name="check" size={14} />
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+            <p className={styles.modal__helper}>
+              Select your preferred time slot for the service
             </p>
           </motion.div>
 
@@ -854,17 +932,18 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
             )}
 
             <div className={styles.modal__summaryItem}>
-              <span className={styles.modal__summaryItemLabel}>Frequency</span>
-              <span
-                className={styles.modal__summaryItemValue}
-                style={{ textTransform: "capitalize" }}
-              >
-                {serviceFrequency.replace("-", " ")}
+              <span className={styles.modal__summaryItemLabel}>Schedule</span>
+              <span className={styles.modal__summaryItemValue}>
+                {selectedDays.length > 0
+                  ? selectedDays
+                      .map((day) => day.charAt(0).toUpperCase() + day.slice(1))
+                      .join(", ")
+                  : "No days selected"}
               </span>
             </div>
 
-            {serviceFrequency !== "one-off" &&
-              selectedService.service_id === ServiceId.Laundry && (
+            {selectedService.service_id === ServiceId.Laundry &&
+              selectedDays.length > 1 && (
                 <div className={styles.modal__summaryItem}>
                   <span className={styles.modal__summaryItemLabel}>
                     Recurring Discount
@@ -953,15 +1032,17 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                 <div className={styles.modal__bookingDetailsGrid}>
                   <div className={styles.modal__bookingDetailItem}>
                     <div className={styles.modal__bookingDetailLabel}>
-                      Service Date
+                      Service Days
                     </div>
                     <div className={styles.modal__bookingDetailValue}>
-                      {new Date(selectedDate).toLocaleDateString("en-US", {
-                        weekday: "long",
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
+                      {selectedDays.length > 0
+                        ? selectedDays
+                            .map(
+                              (day) =>
+                                day.charAt(0).toUpperCase() + day.slice(1)
+                            )
+                            .join(", ")
+                        : "No days selected"}
                     </div>
                   </div>
 
@@ -970,25 +1051,28 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                       Time Slot
                     </div>
                     <div className={styles.modal__bookingDetailValue}>
-                      {selectedTime === TimeSlot.Morning
-                        ? "Morning (8:00 AM - 12:00 PM)"
-                        : selectedTime === TimeSlot.Afternoon
-                          ? "Afternoon (12:00 PM - 4:00 PM)"
-                          : selectedTime === TimeSlot.Evening
-                            ? "Evening (4:00 PM - 8:00 PM)"
-                            : selectedTime}
+                      {(() => {
+                        const timeSlotOption = TIME_SLOT_OPTIONS.find(
+                          (option) => option.id === selectedTimeSlot
+                        );
+                        return timeSlotOption?.label || selectedTimeSlot;
+                      })()}
                     </div>
                   </div>
 
                   <div className={styles.modal__bookingDetailItem}>
                     <div className={styles.modal__bookingDetailLabel}>
-                      Booking Frequency
+                      Booking Type
                     </div>
                     <div className={styles.modal__bookingDetailValue}>
                       <span
-                        className={`${styles.modal__frequencyBadge} ${styles[`modal__frequencyBadge--${serviceFrequency}`]}`}
+                        className={`${styles.modal__frequencyBadge} ${
+                          selectedDays.length > 1
+                            ? styles["modal__frequencyBadge--weekly"]
+                            : styles["modal__frequencyBadge--one-off"]
+                        }`}
                       >
-                        {serviceFrequency.replace("-", " ")}
+                        {selectedDays.length > 1 ? "Recurring" : "One-time"}
                       </span>
                     </div>
                   </div>
@@ -1006,7 +1090,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                 </div>
 
                 {/* Recurring service info */}
-                {serviceFrequency !== "one-off" && (
+                {selectedDays.length > 1 && (
                   <div className={styles.modal__recurringInfo}>
                     <div className={styles.modal__recurringInfoIcon}>
                       <Icon name="repeat" size={18} />
@@ -1016,14 +1100,8 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                         Recurring Service
                       </div>
                       <p className={styles.modal__recurringInfoText}>
-                        This is a {serviceFrequency.replace("-", " ")} booking.
-                        {serviceFrequency === "weekly"
-                          ? " Your service will be scheduled each week on the same day and time."
-                          : serviceFrequency === "bi-weekly"
-                            ? " Your service will be scheduled every two weeks on the same day and time."
-                            : serviceFrequency === "monthly"
-                              ? " Your service will be scheduled once a month on the same day and time."
-                              : ""}
+                        This is a recurring booking scheduled for{" "}
+                        {selectedDays.length} days each week.
                         {selectedService.service_id === ServiceId.Laundry &&
                           " A 10% discount has been applied."}
                       </p>
@@ -1351,7 +1429,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                 )}
 
               {/* Discounts */}
-              {serviceFrequency !== "one-off" &&
+              {selectedDays.length > 1 &&
                 selectedService.service_id === ServiceId.Laundry && (
                   <>
                     <div className={styles.modal__priceSectionTitle}>
@@ -1372,8 +1450,8 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                       <div className={styles.modal__invoicePriceRow}>
                         <span>Recurring Service Discount</span>
                         <span>
-                          {serviceFrequency.replace("-", " ")} booking (applied
-                          to laundry services)
+                          Recurring booking ({selectedDays.length} days per
+                          week)
                         </span>
                         <span style={{ color: "#28c76f" }}>-10%</span>
                       </div>
@@ -1426,7 +1504,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                 )}
 
                 {selectedService.service_id === ServiceId.Laundry &&
-                  serviceFrequency !== "one-off" &&
+                  selectedDays.length > 1 &&
                   selectedOption && (
                     <div className={styles.modal__priceCalcRow}>
                       <span>- Recurring Discount (10%)</span>
@@ -1448,7 +1526,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
               <div className={styles.modal__priceInfoNote}>
                 <Icon name="info" size={16} />
                 <span>
-                  {serviceFrequency !== "one-off"
+                  {selectedDays.length > 1
                     ? "Recurring bookings receive a 10% discount on laundry services."
                     : "No discounts applied for one-time bookings."}
                   {selectedService.service_id === ServiceId.Cleaning &&
