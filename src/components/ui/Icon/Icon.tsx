@@ -1,31 +1,105 @@
-import React from "react";
-import * as LucideIcons from "lucide-react";
-import type { LucideIcon as LucideIconType } from "lucide-react";
+//@ts-nocheck
+"use client";
+import { LucideProps } from "lucide-react";
+import dynamic from "next/dynamic";
+import { memo } from "react";
 
-export type IconName = keyof typeof LucideIcons;
+// Import specific icons to reduce bundle size
+import {
+  Home,
+  CalendarPlus,
+  Calendar,
+  Search,
+  Bell,
+  User,
+  ChevronDown,
+  ChevronUp,
+  ChevronRight,
+  ArrowRight,
+  ArrowLeft,
+  Clock,
+  CheckCircle,
+  RefreshCw,
+  Award,
+  Activity,
+  Zap,
+  MapPin,
+  Headphones,
+  Settings,
+  PlusCircle,
+  Plus,
+  Minus,
+  X,
+  ClipboardList,
+  Square,
+  Bed,
+  Droplet,
+  Shield,
+  Coffee,
+  Package,
+  Users,
+} from "lucide-react";
 
-interface IconProps {
-  name: IconName;
-  color?: string;
-  size?: number | string;
+// Map of icon names to components
+const icons = {
+  home: Home,
+  "calendar-plus": CalendarPlus,
+  calendar: Calendar,
+  search: Search,
+  bell: Bell,
+  user: User,
+  "chevron-down": ChevronDown,
+  "chevron-up": ChevronUp,
+  "chevron-right": ChevronRight,
+  "arrow-right": ArrowRight,
+  "arrow-left": ArrowLeft,
+  clock: Clock,
+  "check-circle": CheckCircle,
+  "refresh-cw": RefreshCw,
+  award: Award,
+  activity: Activity,
+  zap: Zap,
+  "map-pin": MapPin,
+  headphones: Headphones,
+  settings: Settings,
+  "plus-circle": PlusCircle,
+  plus: Plus,
+  minus: Minus,
+  x: X,
+  "clipboard-list": ClipboardList,
+  square: Square,
+  bed: Bed,
+  droplet: Droplet,
+  shield: Shield,
+  coffee: Coffee,
+  package: Package,
+  users: Users,
+  "help-circle": dynamic(() =>
+    import("lucide-react").then((mod) => mod.HelpCircle)
+  ),
+  building: dynamic(() => import("lucide-react").then((mod) => mod.Building)),
+  "credit-card": dynamic(() =>
+    import("lucide-react").then((mod) => mod.CreditCard)
+  ),
+  gift: dynamic(() => import("lucide-react").then((mod) => mod.Gift)),
+};
+
+export type IconName = keyof typeof icons;
+
+interface IconProps extends LucideProps {
+  name: IconName | any;
   className?: string;
 }
 
-export function Icon({
-  name,
-  color,
-  size = 24,
-  className,
-  ...props
-}: IconProps) {
-  const LucideIcon = LucideIcons[name] as LucideIconType;
+const memoIcon = ({ name, className = "", ...rest }: IconProps) => {
+  const IconComponent = icons[name];
 
-  if (!LucideIcon) {
-    // console.error(`Icon "${name}" not found in LucideIcons`);
-    return <span>✅</span>;
+  if (!IconComponent) {
+    console.warn(`Icon "${name}" not found`);
+    return null;
   }
 
-  return (
-    <LucideIcon color={color} size={size} className={className} {...props} />
-  );
-}
+  return <IconComponent className={className} {...rest} />;
+};
+
+export const Icon = memo(memoIcon);

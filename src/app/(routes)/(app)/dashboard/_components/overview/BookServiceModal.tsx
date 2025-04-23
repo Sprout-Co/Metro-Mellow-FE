@@ -620,12 +620,12 @@ export default function BookServiceModal() {
                         }}
                       >
                         View extra items pricing
-                        <Icon name="info" />
+                        {/* <Icon name="info" /> */}
                       </div>
                     )}
                 </div>
                 <div className={styles.modal__optionCardCheckbox}>
-                  {selectedOption?.id === option.id && <Icon name="check" />}
+                  {/* {selectedOption?.id === option.id && <Icon name="check" />} */}
                 </div>
               </motion.div>
             ))}
