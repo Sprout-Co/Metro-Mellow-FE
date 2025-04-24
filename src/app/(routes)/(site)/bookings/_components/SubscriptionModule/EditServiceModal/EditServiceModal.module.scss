@@ -1920,4 +1920,98 @@
       color: color("info");
     }
   }
+
+  // Price breakdown styles
+  &__priceCard {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid #f0f0f0;
+    transition: all 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  &__priceCardHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    color: #333;
+
+    h4 {
+      margin: 0;
+      margin-left: 10px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+
+  &__priceRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 14px;
+  }
+
+  &__priceLabel {
+    color: #555;
+    font-weight: 400;
+  }
+
+  &__priceValue {
+    font-weight: 500;
+    color: #333;
+  }
+
+  &__priceDiscount {
+    font-weight: 500;
+    color: #28c76f;
+  }
+
+  &__priceDivider {
+    height: 1px;
+    background-color: #f0f0f0;
+    margin: 14px 0;
+  }
+
+  &__totalRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    font-size: 16px;
+  }
+
+  &__totalLabel {
+    font-weight: 600;
+    color: #333;
+  }
+
+  &__totalValue {
+    font-weight: 600;
+    color: #0057ff;
+    font-size: 18px;
+  }
+
+  &__priceInfoNote {
+    display: flex;
+    align-items: flex-start;
+    background-color: #f8faff;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 16px;
+    font-size: 12px;
+    color: #555;
+
+    svg {
+      margin-right: 8px;
+      min-width: 16px;
+      color: #0057ff;
+    }
+  }
 }

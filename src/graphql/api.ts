@@ -149,6 +149,7 @@ export type CreateServiceInput = {
   name: Scalars['String']['input'];
   options?: InputMaybe<Array<ServiceOptionInput>>;
   price: Scalars['Float']['input'];
+  roomPrices?: InputMaybe<RoomPricesInput>;
   service_id: ServiceId;
 };
 
@@ -734,6 +735,25 @@ export type RefundPaymentInput = {
   reason: Scalars['String']['input'];
 };
 
+export type RoomPrices = {
+  __typename?: 'RoomPrices';
+  bathrooms: Scalars['Float']['output'];
+  bedrooms: Scalars['Float']['output'];
+  kitchen: Scalars['Float']['output'];
+  livingRooms: Scalars['Float']['output'];
+  outdoor: Scalars['Float']['output'];
+  study: Scalars['Float']['output'];
+};
+
+export type RoomPricesInput = {
+  bathrooms: Scalars['Float']['input'];
+  bedrooms: Scalars['Float']['input'];
+  kitchen: Scalars['Float']['input'];
+  livingRooms: Scalars['Float']['input'];
+  outdoor: Scalars['Float']['input'];
+  study: Scalars['Float']['input'];
+};
+
 export type RoomQuantities = {
   __typename?: 'RoomQuantities';
   balcony: Scalars['Int']['output'];
@@ -779,6 +799,7 @@ export type Service = {
   name: Scalars['String']['output'];
   options?: Maybe<Array<ServiceOption>>;
   price: Scalars['Float']['output'];
+  roomPrices?: Maybe<RoomPrices>;
   service_id: ServiceId;
   status: ServiceStatus;
 };
@@ -1019,6 +1040,7 @@ export type UpdateServiceInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   options?: InputMaybe<Array<ServiceOptionInput>>;
   price?: InputMaybe<Scalars['Float']['input']>;
+  roomPrices?: InputMaybe<RoomPricesInput>;
   status?: InputMaybe<ServiceStatus>;
 };
 
@@ -1463,14 +1485,14 @@ export type GetServicesQueryVariables = Exact<{
 }>;
 
 
-export type GetServicesQuery = { __typename?: 'Query', services: Array<{ __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }> };
+export type GetServicesQuery = { __typename?: 'Query', services: Array<{ __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null, roomPrices?: { __typename?: 'RoomPrices', bedrooms: number, livingRooms: number, bathrooms: number, kitchen: number, study: number, outdoor: number } | null }> };
 
 export type GetServiceByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetServiceByIdQuery = { __typename?: 'Query', service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null };
+export type GetServiceByIdQuery = { __typename?: 'Query', service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null, roomPrices?: { __typename?: 'RoomPrices', bedrooms: number, livingRooms: number, bathrooms: number, kitchen: number, study: number, outdoor: number } | null } | null };
 
 export type GetStaffProfilesQueryVariables = Exact<{
   status?: InputMaybe<StaffStatus>;
@@ -5420,6 +5442,14 @@ export const GetServicesDocument = gql`
         cost
       }
     }
+    roomPrices {
+      bedrooms
+      livingRooms
+      bathrooms
+      kitchen
+      study
+      outdoor
+    }
   }
 }
     `;
@@ -5485,6 +5515,14 @@ export const GetServiceByIdDocument = gql`
         items
         cost
       }
+    }
+    roomPrices {
+      bedrooms
+      livingRooms
+      bathrooms
+      kitchen
+      study
+      outdoor
     }
   }
 }

@@ -175,9 +175,6 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
     sunday: 1,
   });
 
-  // Schedule state
-  const [selectedDate, setSelectedDate] = useState<string>("");
-
   // UI state
   const [showExtraItems, setShowExtraItems] = useState(false);
 
@@ -342,13 +339,13 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
       basePrice = selectedOption.price;
 
       // Add price per room for cleaning service
-      const roomPrices = {
-        bedrooms: 20,
-        livingRooms: 15,
-        bathrooms: 25,
-        kitchen: 30,
-        study: 15,
-        outdoor: 20,
+      const roomPrices = selectedService?.roomPrices || {
+        bedrooms: 5000, // +₦5k per extra bedroom
+        livingRooms: 4000, // +₦4k per additional living-/family room
+        bathrooms: 6000, // +₦6k per extra bathroom (more scrubbing & chemicals)
+        kitchen: 7500, // +₦7.5k for a full extra kitchen (most labour-intensive)
+        study: 4000, // +₦4k for a study/home office
+        outdoor: 5000, // +₦5k for balcony, patio or small outdoor area
       };
 
       const roomTotal = Object.entries(roomQuantities).reduce(
@@ -531,49 +528,50 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
    * Check if the next button should be disabled
    */
   const isNextDisabled = () => {
-    switch (currentStep) {
-      case BookingStep.SERVICE:
-        if (
-          (selectedService?.service_id === ServiceId.Cleaning ||
-            selectedService?.service_id === ServiceId.Laundry) &&
-          selectedService.options &&
-          selectedService?.options?.length > 0
-        ) {
-          return !selectedOption;
-        }
-        return !selectedService;
-      case BookingStep.DETAILS:
-        if (!selectedService?._id || !serviceSchedules[selectedService._id]) {
-          return true;
-        }
-        if (selectedService.service_id === ServiceId.Cleaning) {
-          return (
-            serviceSchedules[selectedService._id].days.length === 0 ||
-            serviceSchedules[selectedService._id].timeSlot ===
-              TimeSlot.Morning ||
-            Object.values(roomQuantities).every((qty) => Number(qty) === 0)
-          );
-        } else if (selectedService.service_id === "COOKING") {
-          // For cooking, we require at least one day selected
-          if (
-            serviceSchedules[selectedService._id].days.length === 0 ||
-            serviceSchedules[selectedService._id].timeSlot === TimeSlot.Morning
-          ) {
-            return true;
-          }
+    // switch (currentStep) {
+    //   case BookingStep.SERVICE:
+    //     if (
+    //       (selectedService?.service_id === ServiceId.Cleaning ||
+    //         selectedService?.service_id === ServiceId.Laundry) &&
+    //       selectedService.options &&
+    //       selectedService?.options?.length > 0
+    //     ) {
+    //       return !selectedOption;
+    //     }
+    //     return !selectedService;
+    //   case BookingStep.DETAILS:
+    //     if (!selectedService?._id || !serviceSchedules[selectedService._id]) {
+    //       return true;
+    //     }
+    //     if (selectedService.service_id === ServiceId.Cleaning) {
+    //       return (
+    //         serviceSchedules[selectedService._id].days.length === 0 ||
+    //         serviceSchedules[selectedService._id].timeSlot ===
+    //           TimeSlot.Morning ||
+    //         Object.values(roomQuantities).every((qty) => Number(qty) === 0)
+    //       );
+    //     } else if (selectedService.service_id === "COOKING") {
+    //       // For cooking, we require at least one day selected
+    //       if (
+    //         serviceSchedules[selectedService._id].days.length === 0 ||
+    //         serviceSchedules[selectedService._id].timeSlot === TimeSlot.Morning
+    //       ) {
+    //         return true;
+    //       }
 
-          // Check if meals per day is set for all selected days
-          return serviceSchedules[selectedService._id].days.some(
-            (day) => !mealsPerDay[day] || mealsPerDay[day] < 1
-          );
-        }
-        return (
-          serviceSchedules[selectedService._id].days.length === 0 ||
-          serviceSchedules[selectedService._id].timeSlot === TimeSlot.Morning
-        );
-      default:
-        return false;
-    }
+    //       // Check if meals per day is set for all selected days
+    //       return serviceSchedules[selectedService._id].days.some(
+    //         (day) => !mealsPerDay[day] || mealsPerDay[day] < 1
+    //       );
+    //     }
+    //     return (
+    //       serviceSchedules[selectedService._id].days.length === 0 ||
+    //       serviceSchedules[selectedService._id].timeSlot === TimeSlot.Morning
+    //     );
+    //   default:
+    //     return false;
+    // }
+    return false;
   };
 
   /**
@@ -762,7 +760,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                     {option.description}
                   </p>
                   <span className={styles.modal__optionCardPrice}>
-                    {`From $${option.price}`}
+                    {`From ₦${option.price.toLocaleString("en-US")}`}
                   </span>
 
                   {/* Show "View extra items" button for laundry options */}
@@ -1116,159 +1114,6 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
               </p>
             </motion.div>
           )}
-
-          {/* Service Inclusions */}
-          {/* {selectedService.inclusions &&
-            selectedService.inclusions?.length > 0 && (
-              <motion.div
-                variants={itemVariants}
-                className={styles.modal__formGroup}
-              >
-                <label>
-                  <Icon name="check-circle" />
-                  Service Inclusions
-                </label>
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns:
-                      "repeat(auto-fill, minmax(240px, 1fr))",
-                    gap: "10px",
-                  }}
-                >
-                  {selectedService.inclusions
-                    .slice(0, 4)
-                    .map((inclusion, index) => (
-                      <div key={index} className={styles.modal__inclusion}>
-                        <Icon name="check" />
-                        <span className={styles.modal__inclusionText}>
-                          {inclusion}
-                        </span>
-                      </div>
-                    ))}
-                </div>
-              </motion.div>
-            )} */}
-
-          {/* Price Summary */}
-          <motion.div
-            variants={itemVariants}
-            className={styles.modal__formGroup}
-          >
-            <label>
-              <Icon name="dollar-sign" />
-              Price Summary
-            </label>
-            <div className={styles.modal__summaryItem}>
-              <span className={styles.modal__summaryItemLabel}>Service</span>
-              <span className={styles.modal__summaryItemValue}>
-                {selectedService.label}
-                {selectedOption ? ` - ${selectedOption.label}` : ""}
-              </span>
-            </div>
-
-            {selectedService.service_id === ServiceId.Cleaning && (
-              <div className={styles.modal__summaryItem}>
-                <span className={styles.modal__summaryItemLabel}>
-                  Room Charges
-                </span>
-                <span className={styles.modal__summaryItemValue}>
-                  $
-                  {Object.entries(roomQuantities).reduce(
-                    (total, [room, quantity]) => {
-                      const roomPrices = {
-                        bedrooms: 20,
-                        livingRooms: 15,
-                        bathrooms: 25,
-                        kitchen: 30,
-                        study: 15,
-                        outdoor: 20,
-                      };
-                      return (
-                        total +
-                        (roomPrices[
-                          room as keyof typeof roomPrices
-                        ] as number) *
-                          (quantity as number)
-                      );
-                    },
-                    0
-                  )}
-                </span>
-              </div>
-            )}
-
-            {selectedService.service_id === ServiceId.Laundry && (
-              <div className={styles.modal__summaryItem}>
-                <span className={styles.modal__summaryItemLabel}>Laundry</span>
-                <span className={styles.modal__summaryItemValue}>
-                  {laundryBags} bag{laundryBags > 1 ? "s" : ""} (approx.{" "}
-                  {laundryBags * 30} items)
-                </span>
-              </div>
-            )}
-
-            {selectedService.service_id === "COOKING" &&
-              serviceSchedules[selectedService._id]?.days.length > 0 && (
-                <div className={styles.modal__summaryItem}>
-                  <span className={styles.modal__summaryItemLabel}>Meals</span>
-                  <span className={styles.modal__summaryItemValue}>
-                    {serviceSchedules[selectedService._id].days.reduce(
-                      (total, day) => total + (mealsPerDay[day] || 1),
-                      0
-                    )}{" "}
-                    meals total ({mealType.toLowerCase()} meal plan)
-                  </span>
-                </div>
-              )}
-
-            <div className={styles.modal__summaryItem}>
-              <span className={styles.modal__summaryItemLabel}>Schedule</span>
-              <span className={styles.modal__summaryItemValue}>
-                {serviceSchedules[selectedService._id]?.days.length > 0
-                  ? serviceSchedules[selectedService._id].days
-                      .map((day) => day.charAt(0).toUpperCase() + day.slice(1))
-                      .join(", ")
-                  : "No days selected"}
-              </span>
-            </div>
-
-            {selectedService.service_id === ServiceId.Laundry &&
-              serviceSchedules[selectedService._id]?.days.length > 1 && (
-                <div className={styles.modal__summaryItem}>
-                  <span className={styles.modal__summaryItemLabel}>
-                    Recurring Discount
-                  </span>
-                  <span
-                    className={styles.modal__summaryItemValue}
-                    style={{ color: "#28c76f" }}
-                  >
-                    -10%
-                  </span>
-                </div>
-              )}
-
-            <div className={styles.modal__summaryItem}>
-              <span
-                className={
-                  styles.modal__summaryItemLabel +
-                  " " +
-                  styles.modal__summaryItemTotal
-                }
-              >
-                Total Price
-              </span>
-              <span
-                className={
-                  styles.modal__summaryItemValue +
-                  " " +
-                  styles.modal__summaryItemTotal
-                }
-              >
-                ₦{calculateTotalPrice().toLocaleString()}
-              </span>
-            </div>
-          </motion.div>
         </motion.div>
       </motion.div>
     );
@@ -1555,62 +1400,38 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
 
             <div className={styles.modal__priceSummaryBox}>
               {/* Service Base Price */}
-              <div className={styles.modal__priceSectionTitle}>
-                Service Base Price
-              </div>
-              <div className={styles.modal__invoicePriceTable}>
-                <div
-                  className={
-                    styles.modal__invoicePriceRow +
-                    " " +
-                    styles.modal__invoicePriceHeader
-                  }
-                >
-                  <span>Service</span>
-                  <span>Price</span>
+              <div className={styles.modal__priceCard}>
+                <div className={styles.modal__priceCardHeader}>
+                  <Icon name="package" size={18} />
+                  <h4>Service Details</h4>
                 </div>
-                <div className={styles.modal__invoicePriceRow}>
-                  <span>
+                <div className={styles.modal__priceRow}>
+                  <span className={styles.modal__priceLabel}>
                     {selectedService.label}
                     {selectedOption ? ` - ${selectedOption.label}` : ""}
                   </span>
-                  <span>
+                  <span className={styles.modal__priceValue}>
                     {selectedOption
-                      ? `From $${selectedOption.price}`
+                      ? `₦${selectedOption.price.toLocaleString("en-US")}`
                       : selectedService.displayPrice}
                   </span>
                 </div>
-              </div>
 
-              {/* Room charges breakdown for cleaning */}
-              {selectedService.service_id === ServiceId.Cleaning && (
-                <>
-                  <div className={styles.modal__priceSectionTitle}>
-                    Room Charges
-                  </div>
-                  <div className={styles.modal__invoicePriceTable}>
-                    <div
-                      className={
-                        styles.modal__invoicePriceRow +
-                        " " +
-                        styles.modal__invoicePriceHeader
-                      }
-                    >
-                      <span>Room Type</span>
-                      <span>Quantity</span>
-                      <span>Price/Room</span>
-                      <span>Subtotal</span>
-                    </div>
+                {/* Cleaning specific breakdown */}
+                {selectedService.service_id === ServiceId.Cleaning && (
+                  <>
+                    <div className={styles.modal__priceDivider}></div>
+
                     {Object.entries(roomQuantities)
                       .filter(([_, quantity]) => Number(quantity) > 0)
                       .map(([room, quantity]) => {
                         const roomPrices = {
-                          bedrooms: 20,
-                          livingRooms: 15,
-                          bathrooms: 25,
-                          kitchen: 30,
-                          study: 15,
-                          outdoor: 20,
+                          bedrooms: 5000,
+                          livingRooms: 4000,
+                          bathrooms: 6000,
+                          kitchen: 7500,
+                          study: 4000,
+                          outdoor: 5000,
                         };
                         const pricePerRoom = roomPrices[
                           room as keyof typeof roomPrices
@@ -1618,103 +1439,49 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                         const subtotal = pricePerRoom * (quantity as number);
 
                         return (
-                          <div
-                            key={room}
-                            className={styles.modal__invoicePriceRow}
-                          >
-                            <span>
+                          <div key={room} className={styles.modal__priceRow}>
+                            <span className={styles.modal__priceLabel}>
+                              {quantity}x{" "}
                               {room
                                 .replace(/([A-Z])/g, " $1")
                                 .replace(/^./, (str) => str.toUpperCase())}
                             </span>
-                            <span>{quantity}</span>
-                            <span>${pricePerRoom}</span>
-                            <span>${subtotal}</span>
+                            <span className={styles.modal__priceValue}>
+                              ₦{subtotal.toLocaleString()}
+                            </span>
                           </div>
                         );
                       })}
-                    <div
-                      className={
-                        styles.modal__invoicePriceRow +
-                        " " +
-                        styles.modal__invoicePriceSubtotal
-                      }
-                    >
-                      <span>Room Charges Subtotal</span>
-                      <span></span>
-                      <span></span>
-                      <span>
-                        $
-                        {Object.entries(roomQuantities).reduce(
-                          (total, [room, quantity]) => {
-                            const roomPrices = {
-                              bedrooms: 20,
-                              livingRooms: 15,
-                              bathrooms: 25,
-                              kitchen: 30,
-                              study: 15,
-                              outdoor: 20,
-                            };
-                            return (
-                              total +
-                              (roomPrices[
-                                room as keyof typeof roomPrices
-                              ] as number) *
-                                (quantity as number)
-                            );
-                          },
-                          0
-                        )}
-                      </span>
-                    </div>
-                  </div>
-                </>
-              )}
+                  </>
+                )}
 
-              {/* Laundry calculation breakdown */}
-              {selectedService.service_id === ServiceId.Laundry &&
-                selectedOption && (
-                  <>
-                    <div className={styles.modal__priceSectionTitle}>
-                      Laundry Calculation
-                    </div>
-                    <div className={styles.modal__invoicePriceTable}>
-                      <div
-                        className={
-                          styles.modal__invoicePriceRow +
-                          " " +
-                          styles.modal__invoicePriceHeader
-                        }
-                      >
-                        <span>Item</span>
-                        <span>Calculation</span>
-                        <span>Price</span>
-                      </div>
-                      <div className={styles.modal__invoicePriceRow}>
-                        <span>Base Price Per Item</span>
-                        <span></span>
-                        <span>₦{selectedOption.price}</span>
-                      </div>
-                      <div className={styles.modal__invoicePriceRow}>
-                        <span>Laundry Items</span>
-                        <span>
-                          {laundryBags} bags × 30 items = {laundryBags * 30}{" "}
+                {/* Laundry specific breakdown */}
+                {selectedService.service_id === ServiceId.Laundry &&
+                  selectedOption && (
+                    <>
+                      <div className={styles.modal__priceDivider}></div>
+                      <div className={styles.modal__priceRow}>
+                        <span className={styles.modal__priceLabel}>
+                          {laundryBags} bag{laundryBags > 1 ? "s" : ""} × 30
                           items
                         </span>
-                        <span></span>
-                      </div>
-                      <div
-                        className={
-                          styles.modal__invoicePriceRow +
-                          " " +
-                          styles.modal__invoicePriceSubtotal
-                        }
-                      >
-                        <span>Laundry Subtotal</span>
-                        <span>
-                          {laundryBags * 30} items × ₦{selectedOption.price}
+                        <span className={styles.modal__priceValue}>
+                          {laundryBags * 30} items
                         </span>
-                        <span>
+                      </div>
+                      <div className={styles.modal__priceRow}>
+                        <span className={styles.modal__priceLabel}>
+                          Price per item
+                        </span>
+                        <span className={styles.modal__priceValue}>
+                          ₦{selectedOption.price.toLocaleString()}
+                        </span>
+                      </div>
+                      <div className={styles.modal__priceRow}>
+                        <span className={styles.modal__priceLabel}>
+                          Subtotal
+                        </span>
+                        <span className={styles.modal__priceValue}>
                           ₦
                           {(
                             laundryBags *
@@ -1723,71 +1490,45 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                           ).toLocaleString()}
                         </span>
                       </div>
-                    </div>
-                  </>
-                )}
+                    </>
+                  )}
+              </div>
+              {/* Summary */}
+              <div className={styles.modal__priceCard}>
+                <div className={styles.modal__priceCardHeader}>
+                  <Icon name="shopping-cart" size={18} />
+                  <h4>Order Summary</h4>
+                </div>
 
-              {/* Discounts */}
-              {serviceSchedules[selectedService._id]?.days.length > 1 &&
-                selectedService.service_id === ServiceId.Laundry && (
-                  <>
-                    <div className={styles.modal__priceSectionTitle}>
-                      Discounts
-                    </div>
-                    <div className={styles.modal__invoicePriceTable}>
-                      <div
-                        className={
-                          styles.modal__invoicePriceRow +
-                          " " +
-                          styles.modal__invoicePriceHeader
-                        }
-                      >
-                        <span>Type</span>
-                        <span>Details</span>
-                        <span>Amount</span>
-                      </div>
-                      <div className={styles.modal__invoicePriceRow}>
-                        <span>Recurring Service Discount</span>
-                        <span>
-                          Recurring booking (
-                          {serviceSchedules[selectedService._id]?.days.length}{" "}
-                          days per week)
-                        </span>
-                        <span style={{ color: "#28c76f" }}>-10%</span>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-              {/* Final calculation */}
-              <div className={styles.modal__priceCalculation}>
-                <div className={styles.modal__priceCalcRow}>
-                  <span>Base Price</span>
-                  <span>
+                <div className={styles.modal__priceRow}>
+                  <span className={styles.modal__priceLabel}>Base Price</span>
+                  <span className={styles.modal__priceValue}>
                     {selectedService.service_id === ServiceId.Cleaning &&
                     selectedOption
-                      ? `$${selectedOption.price}`
+                      ? `₦${selectedOption.price.toLocaleString()}`
                       : selectedService.service_id === ServiceId.Laundry &&
                           selectedOption
-                        ? `₦${selectedOption.price * laundryBags * 30}`
+                        ? `₦${(selectedOption.price * laundryBags * 30).toLocaleString()}`
                         : selectedService.displayPrice}
                   </span>
                 </div>
 
                 {selectedService.service_id === ServiceId.Cleaning && (
-                  <div className={styles.modal__priceCalcRow}>
-                    <span>+ Room Charges</span>
-                    <span>
-                      $
-                      {Object.entries(roomQuantities).reduce(
-                        (total, [room, quantity]) => {
+                  <div className={styles.modal__priceRow}>
+                    <span className={styles.modal__priceLabel}>
+                      Room Charges
+                    </span>
+                    <span className={styles.modal__priceValue}>
+                      ₦
+                      {Object.entries(roomQuantities)
+                        .reduce((total, [room, quantity]) => {
                           const roomPrices = {
-                            bedrooms: 20,
-                            livingRooms: 15,
-                            bathrooms: 25,
-                            kitchen: 30,
-                            study: 15,
-                            outdoor: 20,
+                            bedrooms: 5000,
+                            livingRooms: 4000,
+                            bathrooms: 6000,
+                            kitchen: 7500,
+                            study: 4000,
+                            outdoor: 5000,
                           };
                           return (
                             total +
@@ -1796,9 +1537,8 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                             ] as number) *
                               (quantity as number)
                           );
-                        },
-                        0
-                      )}
+                        }, 0)
+                        .toLocaleString()}
                     </span>
                   </div>
                 )}
@@ -1806,9 +1546,11 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                 {selectedService.service_id === ServiceId.Laundry &&
                   serviceSchedules[selectedService._id]?.days.length > 1 &&
                   selectedOption && (
-                    <div className={styles.modal__priceCalcRow}>
-                      <span>- Recurring Discount (10%)</span>
-                      <span style={{ color: "#28c76f" }}>
+                    <div className={styles.modal__priceRow}>
+                      <span className={styles.modal__priceLabel}>
+                        Recurring Discount (10%)
+                      </span>
+                      <span className={styles.modal__priceDiscount}>
                         -₦
                         {Math.round(
                           laundryBags * 30 * selectedOption.price * 0.1
@@ -1816,22 +1558,24 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                       </span>
                     </div>
                   )}
-              </div>
 
-              <div className={styles.modal__invoiceTotal}>
-                <span>Final Total</span>
-                <span>₦{calculateTotalPrice().toLocaleString()}</span>
-              </div>
+                <div className={styles.modal__priceDivider}></div>
 
-              <div className={styles.modal__priceInfoNote}>
-                <Icon name="info" size={16} />
-                <span>
-                  {serviceSchedules[selectedService._id]?.days.length > 1
-                    ? "Recurring bookings receive a 10% discount on laundry services."
-                    : "No discounts applied for one-time bookings."}
-                  {selectedService.service_id === ServiceId.Cleaning &&
-                    " Room charges are based on size and cleaning requirements."}
-                </span>
+                <div className={styles.modal__totalRow}>
+                  <span className={styles.modal__totalLabel}>Final Total</span>
+                  <span className={styles.modal__totalValue}>
+                    ₦{calculateTotalPrice().toLocaleString()}
+                  </span>
+                </div>
+
+                <div className={styles.modal__priceInfoNote}>
+                  <Icon name="info" size={16} />
+                  <span>
+                    {serviceSchedules[selectedService._id]?.days.length > 1
+                      ? "Recurring bookings receive a 10% discount on laundry services."
+                      : "No discounts applied for one-time bookings."}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

@@ -26,6 +26,14 @@ query GetServices($category: ServiceCategory, $status: ServiceStatus) {
         cost
       }
     }
+    roomPrices {
+      bedrooms
+      livingRooms
+      bathrooms
+      kitchen
+      study
+      outdoor
+    }
   }
 }
 
@@ -56,6 +64,14 @@ query GetServiceById($id: ID!) {
         items
         cost
       }
+    }
+    roomPrices {
+      bedrooms
+      livingRooms
+      bathrooms
+      kitchen
+      study
+      outdoor
     }
   }
 }
