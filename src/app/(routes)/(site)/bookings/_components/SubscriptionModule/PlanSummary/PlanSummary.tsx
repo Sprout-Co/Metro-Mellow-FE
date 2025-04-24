@@ -746,6 +746,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
         selectedServices={selectedServices}
         isOpen={editServiceModal}
         onUpdateService={onUpdateService}
+        duration={duration}
         onSubscriptionInputChange={(input) => setSubscriptionInput(input)}
       />
     </Fragment>
