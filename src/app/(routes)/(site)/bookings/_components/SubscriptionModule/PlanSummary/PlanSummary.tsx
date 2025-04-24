@@ -462,11 +462,33 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
       setSubmissionError(null);
 
       if (subscriptionInput) {
+        // Log the subscription input from the modal
         console.log("Creating subscription with input:", subscriptionInput);
+
+        // Apply any additional properties from plan summary
+        const finalSubscriptionInput = {
+          ...subscriptionInput,
+          billingCycle: planType.toUpperCase() as BillingCycle,
+          duration: Number(duration),
+          startDate: new Date().toISOString(),
+          autoRenew: true,
+        };
+
+        console.log("Final subscription input:", finalSubscriptionInput);
+
         // Here you would typically call your API to create the subscription
-        // await handleCreateSubscription(subscriptionInput);
+        // await handleCreateSubscription(finalSubscriptionInput);
+
+        // Show success message or redirect
+        setTimeout(() => {
+          setIsSubmitting(false);
+          // You could add a success message here
+        }, 1000);
       } else {
-        setSubmissionError("No subscription input available");
+        // If no subscription input is available, prompt user to edit services first
+        setSubmissionError("Please edit service details first");
+        setIsSubmitting(false);
+        setEditServiceModal(true);
       }
     } catch (error) {
       console.error("Failed to create subscription:", error);
@@ -475,7 +497,6 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
           ? error.message
           : "Failed to create subscription. Please try again."
       );
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -568,6 +589,144 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
                         {getFrequencyText(service)}
                       </p>
                     </div>
+                  </div>
+
+                  {/* Service Details Section */}
+                  <div className={styles.plan_summary__service_details}>
+                    {/* For Cleaning Services */}
+                    {service.type === "cleaning" && (
+                      <>
+                        <div className={styles.plan_summary__detail_item}>
+                          <span className={styles.plan_summary__detail_label}>
+                            <Icon name="home" size={14} /> Property:
+                          </span>
+                          <span className={styles.plan_summary__detail_value}>
+                            {(service.details as CleaningDetails).houseType ===
+                            "flat"
+                              ? "Flat/Apartment"
+                              : "Duplex/House"}
+                          </span>
+                        </div>
+                        <div className={styles.plan_summary__detail_item}>
+                          <span className={styles.plan_summary__detail_label}>
+                            <Icon name="grid" size={14} /> Rooms:
+                          </span>
+                          <span className={styles.plan_summary__detail_value}>
+                            {Object.entries(
+                              (service.details as CleaningDetails).rooms
+                            )
+                              .filter(([_, count]) => count > 0)
+                              .map(
+                                ([room, count]) =>
+                                  `${count} ${room}${count > 1 ? "s" : ""}`
+                              )
+                              .join(", ")}
+                          </span>
+                        </div>
+                        <div className={styles.plan_summary__detail_item}>
+                          <span className={styles.plan_summary__detail_label}>
+                            <Icon name="calendar" size={14} /> Day:
+                          </span>
+                          <span className={styles.plan_summary__detail_value}>
+                            {(service.details as CleaningDetails).day
+                              .charAt(0)
+                              .toUpperCase() +
+                              (service.details as CleaningDetails).day.slice(1)}
+                          </span>
+                        </div>
+                      </>
+                    )}
+
+                    {/* For Food Services */}
+                    {service.type === "food" && (
+                      <>
+                        <div className={styles.plan_summary__detail_item}>
+                          <span className={styles.plan_summary__detail_label}>
+                            <Icon name="coffee" size={14} /> Meal Plan:
+                          </span>
+                          <span className={styles.plan_summary__detail_value}>
+                            {(service.details as FoodDetails).foodPlanType
+                              .charAt(0)
+                              .toUpperCase() +
+                              (
+                                service.details as FoodDetails
+                              ).foodPlanType.slice(1)}
+                          </span>
+                        </div>
+                        <div className={styles.plan_summary__detail_item}>
+                          <span className={styles.plan_summary__detail_label}>
+                            <Icon name="calendar" size={14} /> Delivery Days:
+                          </span>
+                          <span className={styles.plan_summary__detail_value}>
+                            {(service.details as FoodDetails).deliveryDays
+                              .map(
+                                (day) =>
+                                  day.charAt(0).toUpperCase() + day.slice(1)
+                              )
+                              .join(", ")}
+                          </span>
+                        </div>
+                        <div className={styles.plan_summary__detail_item}>
+                          <span className={styles.plan_summary__detail_label}>
+                            <Icon name="package" size={14} /> Total Meals:
+                          </span>
+                          <span className={styles.plan_summary__detail_value}>
+                            {Object.values(
+                              (service.details as FoodDetails).mealsPerDay
+                            ).reduce((sum, count) => sum + count, 0)}{" "}
+                            meals/week
+                          </span>
+                        </div>
+                      </>
+                    )}
+
+                    {/* For Laundry Services */}
+                    {service.type === "laundry" && (
+                      <>
+                        <div className={styles.plan_summary__detail_item}>
+                          <span className={styles.plan_summary__detail_label}>
+                            <Icon name="package" size={14} /> Bags:
+                          </span>
+                          <span className={styles.plan_summary__detail_value}>
+                            {(service.details as LaundryDetails).bags} (
+                            {(service.details as LaundryDetails).bags * 30}{" "}
+                            items)
+                          </span>
+                        </div>
+                        <div className={styles.plan_summary__detail_item}>
+                          <span className={styles.plan_summary__detail_label}>
+                            <Icon name="calendar" size={14} /> Pickup Days:
+                          </span>
+                          <span className={styles.plan_summary__detail_value}>
+                            {(service.details as LaundryDetails).pickupDays
+                              .map(
+                                (day) =>
+                                  day.charAt(0).toUpperCase() + day.slice(1)
+                              )
+                              .join(", ")}
+                          </span>
+                        </div>
+                        <div className={styles.plan_summary__detail_item}>
+                          <span className={styles.plan_summary__detail_label}>
+                            <Icon name="repeat" size={14} /> Service Type:
+                          </span>
+                          <span className={styles.plan_summary__detail_value}>
+                            {(service.details as LaundryDetails).laundryType ===
+                            "wash-and-iron"
+                              ? "Wash & Iron"
+                              : "Wash & Fold"}
+                          </span>
+                        </div>
+                      </>
+                    )}
+
+                    {/* Edit Button */}
+                    <button
+                      className={styles.plan_summary__service_edit}
+                      onClick={() => setEditServiceModal(true)}
+                    >
+                      <Icon name="edit" size={14} /> Edit
+                    </button>
                   </div>
                 </motion.div>
               ))}

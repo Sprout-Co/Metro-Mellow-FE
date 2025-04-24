@@ -55,6 +55,8 @@
     background-color: #ffffff;
     border: 1px solid color("neutral", "lighter");
     border-radius: border-radius("lg");
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 16px;
     overflow: hidden;
     cursor: pointer;
     transition: $transition-base;
@@ -70,10 +72,11 @@
 
   &__service_header {
     display: flex;
-    align-items: center;
     padding: spacing("md");
+    align-items: center;
     gap: spacing("md");
     background-color: #f9f7f5;
+    border-bottom: 1px solid color("neutral", "lighter");
     cursor: pointer;
     transition: $transition-base;
 
@@ -99,6 +102,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-right: 16px;
+    color: color("neutral", "dark");
 
     span {
       font-size: 18px;
@@ -138,6 +143,67 @@
     margin: 0;
   }
 
+  &__service_detail {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    margin: 4px 0 0;
+  }
+
+  &__service_details {
+    padding: spacing("md");
+    background-color: color("neutral", "light");
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: spacing("sm");
+  }
+
+  &__detail_item {
+    display: flex;
+    flex-direction: column;
+    font-size: map-get($font-sizes, "sm");
+    padding: spacing("sm");
+    background-color: color("neutral", "white");
+    border-radius: border-radius("sm");
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  &__detail_label {
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xxs");
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    font-size: map-get($font-sizes, "xs");
+  }
+
+  &__detail_value {
+    color: color("neutral", "black");
+    font-weight: map-get($font-weights, "medium");
+  }
+
+  &__service_edit {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+    padding: spacing("xs") spacing("sm");
+    background-color: color("neutral", "light");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("sm");
+    font-size: map-get($font-sizes, "xs");
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    cursor: pointer;
+    color: color("neutral", "dark");
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+      color: color("neutral", "darker");
+    }
+  }
+
   &__service_edit {
     padding: spacing("xs") spacing("sm");
     background-color: transparent;
@@ -151,50 +217,6 @@
 
     &:hover {
       background-color: rgba(color("primary", "base"), 0.05);
-    }
-  }
-
-  &__service_details {
-    display: flex;
-    flex-direction: column;
-    gap: spacing("sm");
-    margin-top: spacing("sm");
-    padding: spacing("sm");
-    background-color: color("neutral", "lighter");
-    border-radius: border-radius("sm");
-  }
-
-  &__detail_row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: spacing("xs") spacing("sm");
-    background-color: color("neutral", "white");
-    border-radius: border-radius("xs");
-  }
-
-  &__detail_label {
-    font-size: map-get($font-sizes, "sm");
-    color: color("neutral", "dark");
-  }
-
-  &__detail_value {
-    font-size: map-get($font-sizes, "sm");
-    font-weight: map-get($font-weights, "medium");
-    color: color("neutral", "black");
-  }
-
-  &__detail_list {
-    display: flex;
-    flex-direction: column;
-    margin-top: spacing("xxs");
-
-    span {
-      margin-bottom: spacing("xxs");
-
-      &:last-child {
-        margin-bottom: 0;
-      }
     }
   }
 
@@ -348,14 +370,6 @@
       background-color: color("primary", "dark");
       transform: translateY(-1px);
     }
-  }
-
-  &__service_detail {
-    padding: spacing("xs") spacing("sm");
-    background-color: color("neutral", "lighter");
-    border-radius: border-radius("sm");
-    font-size: map-get($font-sizes, "xs");
-    color: color("neutral", "dark");
   }
 }
 
