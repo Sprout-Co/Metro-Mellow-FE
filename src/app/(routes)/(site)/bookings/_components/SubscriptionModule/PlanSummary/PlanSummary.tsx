@@ -1,21 +1,11 @@
-// src/app/(routes)/(site)/bookings/_components/SubscriptionModule/PlanSummary/PlanSummary.tsx
 "use client";
 import React, { Fragment, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./PlanSummary.module.scss";
 import {
   BillingCycle,
-  CleaningType,
   CreateSubscriptionInput,
-  HouseType,
-  LaundryType,
-  ScheduleDays,
   Service,
-  ServiceDetailsInput,
-  Severity,
-  SubscriptionFrequency,
-  TimeSlot,
-  TreatmentType,
   ServiceId,
   ServiceCategory,
 } from "@/graphql/api";
@@ -64,69 +54,6 @@ export interface ExtendedService extends Service {
   type: "cleaning" | "food" | "laundry";
   details: ServiceDetails;
 }
-
-type FrequencyMultiplier = 1 | 2 | 3 | 4 | 5 | 6 | 7;
-type LaundryFrequencyMultiplier = 1 | 2 | 3;
-
-// Pricing configuration for different service types
-const PRICING_CONFIG = {
-  cleaning: {
-    basePrice: 3000, // Base price for cleaning service
-    cleaningTypes: {
-      standard: 0, // Additional cost for standard cleaning (none, it's the default)
-      deep: 2500, // Additional cost for deep cleaning
-      post: 5000, // Additional cost for post construction cleaning
-    },
-    roomPrices: {
-      bedroom: 1000, // Price per bedroom
-      livingRoom: 1500, // Price per living room
-      bathroom: 1200, // Price per bathroom
-      kitchen: 2000, // Price per kitchen
-      balcony: 800, // Price per balcony
-      studyRoom: 1000, // Price per study room
-    },
-    frequencyMultiplier: {
-      1: 1, // Once a week (no discount)
-      2: 1.9, // Twice a week (5% discount per cleaning)
-      3: 2.7, // Three times a week (10% discount per cleaning)
-      4: 3.4, // Four times a week (15% discount per cleaning)
-      5: 4.0, // Five times a week (20% discount per cleaning)
-      6: 4.5, // Six times a week (25% discount per cleaning)
-      7: 5.0, // Daily (almost 30% discount per cleaning)
-    },
-  },
-  food: {
-    basePrice: 5000, // Base price for food service
-    foodPlanTypes: {
-      basic: 0, // Basic plan (no additional cost)
-      standard: 3000, // Standard plan additional cost
-      premium: 8000, // Premium plan additional cost
-    },
-    mealsPerDayPrice: 1500, // Price per meal
-    deliveryFrequencyMultiplier: {
-      1: 1, // Once a week (no discount)
-      2: 1.9, // Twice a week (5% discount)
-      3: 2.8, // Three times a week (7% discount)
-      4: 3.6, // Four times a week (10% discount)
-      5: 4.5, // Five times a week (10% discount)
-      6: 5.2, // Six times a week (13% discount)
-      7: 6.0, // Daily (15% discount)
-    },
-  },
-  laundry: {
-    basePrice: 2000, // Base price for laundry service
-    laundryTypes: {
-      "wash-and-fold": 0, // Wash and fold (no additional cost)
-      "wash-and-iron": 1500, // Wash and iron additional cost
-    },
-    bagPrice: 1000, // Price per bag
-    pickupFrequencyMultiplier: {
-      1: 1, // Once a week (no discount)
-      2: 1.9, // Twice a week (5% discount)
-      3: 2.7, // Three times a week (10% discount)
-    },
-  },
-};
 
 // Default service details
 const DEFAULT_SERVICE_DETAILS = {
@@ -231,91 +158,69 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
 
   // Calculate individual service prices
   const calculateServicePrice = (service: ExtendedService): number => {
+    // Use the price from the service object
+    // Use a reasonable default (5000) if price is missing or 0
+    const basePrice = service.price && service.price > 0 ? service.price : 5000;
+
+    if (!service.details) return basePrice;
+
     const { type, details } = service;
+    let price = basePrice;
+    let frequency = 1;
 
-    if (!details) return service.price || 0;
+    // Check if there's a selected option price to use instead of base price
+    // This applies when a specific service option has been selected
+    if (service.options && service.options.length > 0) {
+      // If there's a selected option in the service details, use its price
+      const selectedOptionId =
+        type === "cleaning"
+          ? (details as CleaningDetails).cleaningType
+          : type === "food"
+            ? (details as FoodDetails).foodPlanType
+            : type === "laundry"
+              ? (details as LaundryDetails).laundryType
+              : undefined;
 
-    let price = 0;
+      if (selectedOptionId) {
+        // Find the matching option
+        const selectedOption = service.options.find(
+          (opt) =>
+            opt.id === selectedOptionId ||
+            opt.label.toLowerCase().includes(String(selectedOptionId))
+        );
 
+        if (
+          selectedOption &&
+          selectedOption.price &&
+          selectedOption.price > 0
+        ) {
+          // Use the option price instead of base price
+          price = selectedOption.price;
+        }
+      }
+    }
+
+    // Get frequency based on service type
     switch (type) {
       case "cleaning": {
         const cleaningDetails = details as CleaningDetails;
-        // Base price
-        price += PRICING_CONFIG.cleaning.basePrice;
-
-        // Add cost based on cleaning type
-        price +=
-          PRICING_CONFIG.cleaning.cleaningTypes[cleaningDetails.cleaningType] ||
-          0;
-
-        // Add cost based on room counts
-        Object.entries(cleaningDetails.rooms).forEach(([roomType, count]) => {
-          const room =
-            roomType as keyof typeof PRICING_CONFIG.cleaning.roomPrices;
-          price += PRICING_CONFIG.cleaning.roomPrices[room] * count;
-        });
-
-        // Apply frequency multiplier
-        const cleaningFrequency =
-          cleaningDetails.frequency as FrequencyMultiplier;
-        price = Math.round(
-          price * PRICING_CONFIG.cleaning.frequencyMultiplier[cleaningFrequency]
-        );
+        frequency = cleaningDetails.frequency;
         break;
       }
-
       case "food": {
         const foodDetails = details as FoodDetails;
-        // Base price
-        price += PRICING_CONFIG.food.basePrice;
-
-        // Add cost based on food plan type
-        price += PRICING_CONFIG.food.foodPlanTypes[foodDetails.foodPlanType];
-
-        // Add cost based on meals per day
-        let totalMeals = 0;
-        Object.values(foodDetails.mealsPerDay).forEach((mealCount) => {
-          totalMeals += mealCount;
-        });
-        price += PRICING_CONFIG.food.mealsPerDayPrice * totalMeals;
-
-        // Apply delivery frequency multiplier
-        const deliveryFrequency =
-          foodDetails.deliveryFrequency as FrequencyMultiplier;
-        price = Math.round(
-          price *
-            PRICING_CONFIG.food.deliveryFrequencyMultiplier[deliveryFrequency]
-        );
+        frequency = foodDetails.deliveryFrequency;
         break;
       }
-
       case "laundry": {
         const laundryDetails = details as LaundryDetails;
-        // Base price
-        price += PRICING_CONFIG.laundry.basePrice;
-
-        // Add cost based on laundry type
-        price +=
-          PRICING_CONFIG.laundry.laundryTypes[laundryDetails.laundryType];
-
-        // Add cost based on bag count
-        price += PRICING_CONFIG.laundry.bagPrice * laundryDetails.bags;
-
-        // Apply pickup frequency multiplier
-        const pickupFrequency =
-          laundryDetails.pickupFrequency as LaundryFrequencyMultiplier;
-        price = Math.round(
-          price *
-            PRICING_CONFIG.laundry.pickupFrequencyMultiplier[pickupFrequency]
-        );
+        frequency = laundryDetails.pickupFrequency;
         break;
       }
-
-      default:
-        price = service.price || 0;
     }
 
-    return Math.round(price);
+    // Multiply base price by frequency (without any discount)
+    return Math.round(price * frequency);
   };
 
   // Update service prices whenever services or their details change
@@ -335,20 +240,14 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
       0
     );
 
-    // Apply duration discount - longer subscriptions get better rates
-    let discount = 0;
-    if (duration >= 6) {
-      discount = subtotal * 0.1; // 10% discount for 6+ months
-    } else if (duration >= 3) {
-      discount = subtotal * 0.05; // 5% discount for 3+ months
-    }
+    // No duration discount is applied
 
     // Calculate final total
-    const final = subtotal - discount;
+    const final = subtotal;
 
     return {
       subtotal,
-      discount,
+      discount: 0, // No discount
       total: final,
       perPeriod: planType === "weekly" ? final / 4 : final, // Assuming 4 weeks per month for weekly plans
     };
@@ -746,13 +645,6 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
               <span>Subtotal</span>
               <span>{formatPrice(subtotal)}</span>
             </div>
-
-            {discount > 0 && (
-              <div className={styles.plan_summary__price_row}>
-                <span>Discount ({duration >= 6 ? "10%" : "5%"})</span>
-                <span>-{formatPrice(discount)}</span>
-              </div>
-            )}
 
             <div
               className={`${styles.plan_summary__price_row} ${styles.plan_summary__price_row_total}`}
