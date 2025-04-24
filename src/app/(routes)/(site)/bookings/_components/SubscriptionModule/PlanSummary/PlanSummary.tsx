@@ -169,79 +169,79 @@ type PlanSummaryProps = {
   onUpdateService?: (service: ExtendedService) => void;
 };
 
-const createSubscriptionInput: CreateSubscriptionInput = {
-  billingCycle: BillingCycle.Monthly,
-  duration: 12,
-  startDate: "2024-04-01T00:00:00Z",
-  autoRenew: true,
-  services: [
-    // First service: Cleaning service
-    {
-      serviceId: "cleaning_service_id_123",
-      frequency: SubscriptionFrequency.Monthly,
-      scheduledDays: [
-        ScheduleDays.Monday,
-        ScheduleDays.Tuesday,
-        ScheduleDays.Wednesday,
-      ],
-      preferredTimeSlot: TimeSlot.Morning,
-      serviceDetails: {
-        cleaning: {
-          cleaningType: CleaningType.DeepCleaning,
-          houseType: HouseType.Flat,
-          rooms: {
-            bedroom: 2,
-            livingRoom: 1,
-            bathroom: 2,
-            kitchen: 1,
-            balcony: 1,
-            studyRoom: 1,
-            other: 0,
-          },
-        },
-      },
-    },
-    // Second service: Laundry service
-    {
-      serviceId: "laundry_service_id_456",
-      frequency: SubscriptionFrequency.BiWeekly,
-      scheduledDays: [
-        ScheduleDays.Monday,
-        ScheduleDays.Tuesday,
-        ScheduleDays.Wednesday,
-        ScheduleDays.Thursday,
-      ],
-      preferredTimeSlot: TimeSlot.Afternoon,
-      serviceDetails: {
-        laundry: {
-          laundryType: LaundryType.Premium,
-          bags: 3,
-          items: {
-            shirts: 10,
-            pants: 5,
-            dresses: 2,
-            suits: 1,
-            others: 3,
-          },
-        },
-      },
-    },
-    // Third service: Pest Control service
-    {
-      serviceId: "pest_control_service_id_789",
-      frequency: SubscriptionFrequency.BiWeekly,
-      scheduledDays: [ScheduleDays.Sunday],
-      preferredTimeSlot: TimeSlot.Afternoon,
-      serviceDetails: {
-        pestControl: {
-          treatmentType: TreatmentType.Residential,
-          areas: ["kitchen", "bathroom", "living room"],
-          severity: Severity.Medium,
-        },
-      },
-    },
-  ],
-};
+// const createSubscriptionInput: CreateSubscriptionInput = {
+//   billingCycle: BillingCycle.Monthly,
+//   duration: 12,
+//   startDate: "2024-04-01T00:00:00Z",
+//   autoRenew: true,
+//   services: [
+//     // First service: Cleaning service
+//     {
+//       serviceId: "cleaning_service_id_123",
+//       frequency: SubscriptionFrequency.Monthly,
+//       scheduledDays: [
+//         ScheduleDays.Monday,
+//         ScheduleDays.Tuesday,
+//         ScheduleDays.Wednesday,
+//       ],
+//       preferredTimeSlot: TimeSlot.Morning,
+//       serviceDetails: {
+//         cleaning: {
+//           cleaningType: CleaningType.DeepCleaning,
+//           houseType: HouseType.Flat,
+//           rooms: {
+//             bedroom: 2,
+//             livingRoom: 1,
+//             bathroom: 2,
+//             kitchen: 1,
+//             balcony: 1,
+//             studyRoom: 1,
+//             other: 0,
+//           },
+//         },
+//       },
+//     },
+//     // Second service: Laundry service
+//     {
+//       serviceId: "laundry_service_id_456",
+//       frequency: SubscriptionFrequency.BiWeekly,
+//       scheduledDays: [
+//         ScheduleDays.Monday,
+//         ScheduleDays.Tuesday,
+//         ScheduleDays.Wednesday,
+//         ScheduleDays.Thursday,
+//       ],
+//       preferredTimeSlot: TimeSlot.Afternoon,
+//       serviceDetails: {
+//         laundry: {
+//           laundryType: LaundryType.Premium,
+//           bags: 3,
+//           items: {
+//             shirts: 10,
+//             pants: 5,
+//             dresses: 2,
+//             suits: 1,
+//             others: 3,
+//           },
+//         },
+//       },
+//     },
+//     // Third service: Pest Control service
+//     {
+//       serviceId: "pest_control_service_id_789",
+//       frequency: SubscriptionFrequency.BiWeekly,
+//       scheduledDays: [ScheduleDays.Sunday],
+//       preferredTimeSlot: TimeSlot.Afternoon,
+//       serviceDetails: {
+//         pestControl: {
+//           treatmentType: TreatmentType.Residential,
+//           areas: ["kitchen", "bathroom", "living room"],
+//           severity: Severity.Medium,
+//         },
+//       },
+//     },
+//   ],
+// };
 
 const PlanSummary: React.FC<PlanSummaryProps> = ({
   selectedServices,
@@ -257,7 +257,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
     {}
   );
   const [editServiceModal, setEditServiceModal] = useState(false);
-  const [_, __] = useState<CreateSubscriptionInput>(createSubscriptionInput);
+  // const [_, __] = useState<CreateSubscriptionInput>(createSubscriptionInput);
   // const [_, __] = useState<SubscriptionServicesInput>({
   //   serviceId: "",
   //   frequency: SubscriptionFrequency.Monthly,
@@ -549,77 +549,77 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
         let serviceDetails: any = {};
         let scheduledDays: string[] = [];
 
-        if (service.type === "cleaning") {
-          const details = service.details as CleaningDetails;
-          serviceDetails = {
-            cleaning: {
-              cleaningType: details.cleaningType,
-              houseType: details.houseType,
-              rooms: details.rooms,
-            },
-          };
-          scheduledDays = [details.day];
-        } else if (service.type === "food") {
-          const details = service.details as FoodDetails;
-          serviceDetails = {
-            cooking: {
-              mealType: details.foodPlanType,
-              mealDeliveries: details.deliveryDays.map((day) => ({
-                day: day.toUpperCase(),
-                count: details.mealsPerDay[day],
-              })),
-            },
-          };
-          scheduledDays = details.deliveryDays;
-        } else if (service.type === "laundry") {
-          const details = service.details as LaundryDetails;
-          serviceDetails = {
-            laundry: {
-              laundryType: details.laundryType,
-              bags: details.bags,
-            },
-          };
-          scheduledDays = details.pickupDays;
+        switch (service.type) {
+          case "cleaning": {
+            const details = service.details as CleaningDetails;
+            serviceDetails = {
+              cleaning: {
+                cleaningType: details.cleaningType.toUpperCase(),
+                houseType: details.houseType.toUpperCase(),
+                rooms: details.rooms,
+              },
+            };
+            scheduledDays = [details.day.toUpperCase()];
+            break;
+          }
+          case "food": {
+            const details = service.details as FoodDetails;
+            serviceDetails = {
+              cooking: {
+                mealType: details.foodPlanType.toUpperCase(),
+                mealDeliveries: details.deliveryDays.map((day) => ({
+                  day: day.toUpperCase(),
+                  count: details.mealsPerDay[day],
+                })),
+              },
+            };
+            scheduledDays = details.deliveryDays.map((day) =>
+              day.toUpperCase()
+            );
+            break;
+          }
+          case "laundry": {
+            const details = service.details as LaundryDetails;
+            serviceDetails = {
+              laundry: {
+                laundryType: details.laundryType.toUpperCase(),
+                bags: details.bags,
+              },
+            };
+            scheduledDays = details.pickupDays.map((day) => day.toUpperCase());
+            break;
+          }
+          default:
+            console.warn(`Unknown service type: ${service.type}`);
+            break;
         }
 
         return {
           serviceId: service._id,
-          frequency: SubscriptionFrequency.Weekly,
-          scheduledDays: scheduledDays.map(
-            (day) => day.toUpperCase() as ScheduleDays
-          ),
+          frequency: "WEEKLY", // All services are weekly for now
+          scheduledDays,
           preferredTimeSlot:
             service.type === "cleaning"
-              ? ((service.details as CleaningDetails).time as TimeSlot)
-              : TimeSlot.Morning,
+              ? (service.details as CleaningDetails).time.toUpperCase()
+              : "MORNING",
           serviceDetails,
         };
       });
 
-      // Create subscription input
+      // Create subscription input using only user-selected data
       const subscriptionInput = {
-        customerId: "demo-customer-id", // This should come from auth context
-        startDate: new Date().toISOString(),
-        endDate: new Date(
-          Date.now() +
-            duration * (planType === "weekly" ? 7 : 30) * 24 * 60 * 60 * 1000
-        ).toISOString(),
-        billingCycle:
-          planType === "weekly" ? BillingCycle.Weekly : BillingCycle.Monthly,
-        duration,
-        autoRenew: true,
-        services: subscriptionServices,
+        input: {
+          customerId: "customer123", // This should come from auth context in a real app
+          billingCycle: planType.toUpperCase(),
+          duration,
+          startDate: new Date().toISOString(),
+          autoRenew: true,
+          services: subscriptionServices,
+        },
       };
 
-      // Call the API to create subscription
-      const result = await handleCreateSubscription(subscriptionInput);
-
-      // Show success modal
-      openModal("subscription-success", {
-        planType,
-        duration,
-        services: extendedServices,
-      });
+      // Log the subscription input
+      console.log("Subscription Input:", subscriptionInput);
     } catch (error) {
       console.error("Failed to create subscription:", error);
       setSubmissionError(
@@ -805,8 +805,6 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
         {/* Action Buttons */}
         {extendedServices.length > 0 && (
           <div className={styles.summary__actions}>
-          
-
             <button
               className={styles.summary__createButton}
               onClick={handleCreateSubscriptionPlan}
@@ -848,6 +846,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
         onClose={() => setEditServiceModal(false)}
         selectedServices={selectedServices}
         isOpen={editServiceModal}
+        onUpdateService={onUpdateService}
       />
     </Fragment>
   );

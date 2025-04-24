@@ -161,6 +161,7 @@ export type CreateStaffProfileInput = {
 export type CreateSubscriptionInput = {
   autoRenew: Scalars['Boolean']['input'];
   billingCycle: BillingCycle;
+  customerId: Scalars['ID']['input'];
   duration: Scalars['Int']['input'];
   services: Array<SubscriptionServiceInput>;
   startDate: Scalars['DateTime']['input'];
@@ -1030,6 +1031,7 @@ export type UpdateStaffProfileInput = {
 export type UpdateSubscriptionInput = {
   autoRenew?: InputMaybe<Scalars['Boolean']['input']>;
   billingCycle?: InputMaybe<BillingCycle>;
+  customerId: Scalars['ID']['input'];
   duration?: InputMaybe<Scalars['Int']['input']>;
   endDate?: InputMaybe<Scalars['DateTime']['input']>;
 };
