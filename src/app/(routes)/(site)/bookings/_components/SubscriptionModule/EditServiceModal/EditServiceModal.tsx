@@ -379,7 +379,9 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
       serviceSchedules[selectedService._id]?.days.length > 0
     ) {
       // For cooking, calculate based on meals per day
-      const mealsPerDayTotal = serviceSchedules[selectedService._id].days.reduce(
+      const mealsPerDayTotal = serviceSchedules[
+        selectedService._id
+      ].days.reduce(
         (total: number, day: DayOfWeek) => total + (mealsPerDay[day] || 1),
         0
       );
@@ -467,10 +469,12 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
               serviceDetails = {
                 cooking: {
                   mealType,
-                  mealDeliveries: serviceSchedules[service._id].days.map((day) => ({
-                    day: day.toUpperCase(),
-                    count: mealsPerDay[day],
-                  })),
+                  mealDeliveries: serviceSchedules[service._id].days.map(
+                    (day) => ({
+                      day: day.toUpperCase(),
+                      count: mealsPerDay[day],
+                    })
+                  ),
                 },
               };
               break;
@@ -545,7 +549,8 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
         if (selectedService.service_id === ServiceId.Cleaning) {
           return (
             serviceSchedules[selectedService._id].days.length === 0 ||
-            serviceSchedules[selectedService._id].timeSlot === TimeSlot.Morning ||
+            serviceSchedules[selectedService._id].timeSlot ===
+              TimeSlot.Morning ||
             Object.values(roomQuantities).every((qty) => Number(qty) === 0)
           );
         } else if (selectedService.service_id === "COOKING") {
@@ -563,7 +568,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
           );
         }
         return (
-          serviceSchedules[selectedService._id].days.length === 0 || 
+          serviceSchedules[selectedService._id].days.length === 0 ||
           serviceSchedules[selectedService._id].timeSlot === TimeSlot.Morning
         );
       default:
@@ -830,9 +835,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                 <button
                   key={day}
                   className={`${styles.modal__dayPill} ${
-                    serviceSchedules[selectedService._id]?.days.includes(
-                      day
-                    )
+                    serviceSchedules[selectedService._id]?.days.includes(day)
                       ? styles.modal__dayPillSelected
                       : ""
                   }`}
@@ -870,8 +873,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                 <button
                   key={slot.id}
                   className={`${styles.modal__timeSlotPill} ${
-                    serviceSchedules[selectedService._id]?.timeSlot ===
-                    slot.id
+                    serviceSchedules[selectedService._id]?.timeSlot === slot.id
                       ? styles.modal__timeSlotPillSelected
                       : ""
                   }`}
@@ -1077,35 +1079,32 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                 Meals Per Day
               </label>
               <div className={styles.modal__mealsPerDayContainer}>
-                {serviceSchedules[selectedService._id]?.days.length >
-                0 ? (
-                  serviceSchedules[selectedService._id].days.map(
-                    (day) => (
-                      <div key={day} className={styles.modal__counterGroup}>
-                        <span className={styles.modal__counterGroupLabel}>
-                          {day.charAt(0).toUpperCase() + day.slice(1)}
+                {serviceSchedules[selectedService._id]?.days.length > 0 ? (
+                  serviceSchedules[selectedService._id].days.map((day) => (
+                    <div key={day} className={styles.modal__counterGroup}>
+                      <span className={styles.modal__counterGroupLabel}>
+                        {day.charAt(0).toUpperCase() + day.slice(1)}
+                      </span>
+                      <div className={styles.modal__counterGroupControl}>
+                        <button
+                          className={styles.modal__counterGroupButton}
+                          onClick={() => handleMealsPerDayChange(day, false)}
+                          disabled={mealsPerDay[day] <= 1}
+                        >
+                          <Icon name="minus" />
+                        </button>
+                        <span className={styles.modal__counterGroupValue}>
+                          {mealsPerDay[day] || 1}
                         </span>
-                        <div className={styles.modal__counterGroupControl}>
-                          <button
-                            className={styles.modal__counterGroupButton}
-                            onClick={() => handleMealsPerDayChange(day, false)}
-                            disabled={mealsPerDay[day] <= 1}
-                          >
-                            <Icon name="minus" />
-                          </button>
-                          <span className={styles.modal__counterGroupValue}>
-                            {mealsPerDay[day] || 1}
-                          </span>
-                          <button
-                            className={styles.modal__counterGroupButton}
-                            onClick={() => handleMealsPerDayChange(day, true)}
-                          >
-                            <Icon name="plus" />
-                          </button>
-                        </div>
+                        <button
+                          className={styles.modal__counterGroupButton}
+                          onClick={() => handleMealsPerDayChange(day, true)}
+                        >
+                          <Icon name="plus" />
+                        </button>
                       </div>
-                    )
-                  )
+                    </div>
+                  ))
                 ) : (
                   <p className={styles.modal__noSelectedDays}>
                     Please select at least one delivery day above.
@@ -1327,8 +1326,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                       Service Days
                     </div>
                     <div className={styles.modal__bookingDetailValue}>
-                      {serviceSchedules[selectedService._id]?.days
-                        .length > 0
+                      {serviceSchedules[selectedService._id]?.days.length > 0
                         ? serviceSchedules[selectedService._id].days
                             .map(
                               (day) =>
@@ -1348,8 +1346,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                         const timeSlotOption = TIME_SLOT_OPTIONS.find(
                           (option) =>
                             option.id ===
-                            serviceSchedules[selectedService._id]
-                              .timeSlot
+                            serviceSchedules[selectedService._id].timeSlot
                         );
                         return (
                           timeSlotOption?.label ||
@@ -1366,14 +1363,12 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                     <div className={styles.modal__bookingDetailValue}>
                       <span
                         className={`${styles.modal__frequencyBadge} ${
-                          serviceSchedules[selectedService._id]?.days
-                            .length > 1
+                          serviceSchedules[selectedService._id]?.days.length > 1
                             ? styles["modal__frequencyBadge--weekly"]
                             : styles["modal__frequencyBadge--one-off"]
                         }`}
                       >
-                        {serviceSchedules[selectedService._id]?.days
-                          .length > 1
+                        {serviceSchedules[selectedService._id]?.days.length > 1
                           ? "Recurring"
                           : "One-time"}
                       </span>
@@ -1393,8 +1388,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                 </div>
 
                 {/* Recurring service info */}
-                {serviceSchedules[selectedService._id]?.days.length >
-                  1 && (
+                {serviceSchedules[selectedService._id]?.days.length > 1 && (
                   <div className={styles.modal__recurringInfo}>
                     <div className={styles.modal__recurringInfoIcon}>
                       <Icon name="repeat" size={18} />
@@ -1405,10 +1399,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                       </div>
                       <p className={styles.modal__recurringInfoText}>
                         This is a recurring booking scheduled for{" "}
-                        {
-                          serviceSchedules[selectedService._id]?.days
-                            .length
-                        }{" "}
+                        {serviceSchedules[selectedService._id]?.days.length}{" "}
                         days each week.
                         {selectedService.service_id === ServiceId.Laundry &&
                           " A 10% discount has been applied."}
@@ -1759,10 +1750,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                         <span>Recurring Service Discount</span>
                         <span>
                           Recurring booking (
-                          {
-                            serviceSchedules[selectedService._id]?.days
-                              .length
-                          }{" "}
+                          {serviceSchedules[selectedService._id]?.days.length}{" "}
                           days per week)
                         </span>
                         <span style={{ color: "#28c76f" }}>-10%</span>
@@ -1816,8 +1804,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                 )}
 
                 {selectedService.service_id === ServiceId.Laundry &&
-                  serviceSchedules[selectedService._id]?.days.length >
-                    1 &&
+                  serviceSchedules[selectedService._id]?.days.length > 1 &&
                   selectedOption && (
                     <div className={styles.modal__priceCalcRow}>
                       <span>- Recurring Discount (10%)</span>
