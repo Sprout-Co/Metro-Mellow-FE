@@ -257,16 +257,8 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
     {}
   );
   const [editServiceModal, setEditServiceModal] = useState(false);
-  // const [_, __] = useState<CreateSubscriptionInput>(createSubscriptionInput);
-  // const [_, __] = useState<SubscriptionServicesInput>({
-  //   serviceId: "",
-  //   frequency: SubscriptionFrequency.Monthly,
-  //   scheduledDays: [ScheduleDays.Monday],
-  //   preferredTimeSlot: TimeSlot.Morning,
-  //   serviceDetails: {
-
-  //   }
-  // });
+  const [subscriptionInput, setSubscriptionInput] =
+    useState<CreateSubscriptionInput | null>(null);
 
   // Access the UI store to handle modals
   const { openModal } = useUIStore();
@@ -543,83 +535,13 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
       setIsSubmitting(true);
       setSubmissionError(null);
 
-      // Map subscription services
-      const subscriptionServices = extendedServices.map((service) => {
-        // Prepare service details based on service type
-        let serviceDetails: any = {};
-        let scheduledDays: string[] = [];
-
-        switch (service.type) {
-          case "cleaning": {
-            const details = service.details as CleaningDetails;
-            serviceDetails = {
-              cleaning: {
-                cleaningType: details.cleaningType.toUpperCase(),
-                houseType: details.houseType.toUpperCase(),
-                rooms: details.rooms,
-              },
-            };
-            scheduledDays = [details.day.toUpperCase()];
-            break;
-          }
-          case "food": {
-            const details = service.details as FoodDetails;
-            serviceDetails = {
-              cooking: {
-                mealType: details.foodPlanType.toUpperCase(),
-                mealDeliveries: details.deliveryDays.map((day) => ({
-                  day: day.toUpperCase(),
-                  count: details.mealsPerDay[day],
-                })),
-              },
-            };
-            scheduledDays = details.deliveryDays.map((day) =>
-              day.toUpperCase()
-            );
-            break;
-          }
-          case "laundry": {
-            const details = service.details as LaundryDetails;
-            serviceDetails = {
-              laundry: {
-                laundryType: details.laundryType.toUpperCase(),
-                bags: details.bags,
-              },
-            };
-            scheduledDays = details.pickupDays.map((day) => day.toUpperCase());
-            break;
-          }
-          default:
-            console.warn(`Unknown service type: ${service.type}`);
-            break;
-        }
-
-        return {
-          serviceId: service._id,
-          frequency: "WEEKLY", // All services are weekly for now
-          scheduledDays,
-          preferredTimeSlot:
-            service.type === "cleaning"
-              ? (service.details as CleaningDetails).time.toUpperCase()
-              : "MORNING",
-          serviceDetails,
-        };
-      });
-
-      // Create subscription input using only user-selected data
-      const subscriptionInput = {
-        input: {
-          customerId: "customer123", // This should come from auth context in a real app
-          billingCycle: planType.toUpperCase(),
-          duration,
-          startDate: new Date().toISOString(),
-          autoRenew: true,
-          services: subscriptionServices,
-        },
-      };
-
-      // Log the subscription input
-      console.log("Subscription Input:", subscriptionInput);
+      if (subscriptionInput) {
+        console.log("Creating subscription with input:", subscriptionInput);
+        // Here you would typically call your API to create the subscription
+        // await handleCreateSubscription(subscriptionInput);
+      } else {
+        setSubmissionError("No subscription input available");
+      }
     } catch (error) {
       console.error("Failed to create subscription:", error);
       setSubmissionError(
@@ -847,6 +769,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
         selectedServices={selectedServices}
         isOpen={editServiceModal}
         onUpdateService={onUpdateService}
+        onSubscriptionInputChange={(input) => setSubscriptionInput(input)}
       />
     </Fragment>
   );

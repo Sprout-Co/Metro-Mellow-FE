@@ -116,6 +116,7 @@ interface EditServiceModalProps {
   startDate?: Date;
   autoRenew?: boolean;
   onUpdateService?: (service: ExtendedService) => void;
+  onSubscriptionInputChange?: (input: CreateSubscriptionInput) => void;
 }
 
 const EditServiceModal: React.FC<EditServiceModalProps> = ({
@@ -128,6 +129,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
   startDate = new Date(),
   autoRenew = true,
   onUpdateService,
+  onSubscriptionInputChange,
 }) => {
   // API data state
   const [services, setServices] = useState<Service[]>([]);
@@ -514,10 +516,8 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
         }),
       };
 
-      console.log("Subscription input:", subscriptionInput);
-
-      // Here you would typically call your API to create the subscription
-      // await handleCreateSubscription(subscriptionInput);
+      // Call the callback with the subscription input
+      onSubscriptionInputChange?.(subscriptionInput);
 
       // Close the modal on success
       onClose();
