@@ -3,12 +3,27 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./PlanSummary.module.scss";
-import { BillingCycle, CleaningType, CreateSubscriptionInput, HouseType, LaundryType, ScheduleDays, Service, ServiceDetailsInput, Severity, SubscriptionFrequency, TimeSlot, TreatmentType } from "@/graphql/api";
+import {
+  BillingCycle,
+  CleaningType,
+  CreateSubscriptionInput,
+  HouseType,
+  LaundryType,
+  ScheduleDays,
+  Service,
+  ServiceDetailsInput,
+  Severity,
+  SubscriptionFrequency,
+  TimeSlot,
+  TreatmentType,
+  ServiceId,
+  ServiceCategory,
+} from "@/graphql/api";
 import { PlanType, DurationType } from "../SubscriptionModule";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { useUIStore } from "@/store";
-import { ServiceId, ServiceCategory } from "@/graphql/api";
 import EditServiceModal from "../EditServiceModal/EditServiceModal";
+import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
 
 // Define our extended service types
 export type CleaningDetails = {
@@ -215,9 +230,7 @@ const createSubscriptionInput: CreateSubscriptionInput = {
     {
       serviceId: "pest_control_service_id_789",
       frequency: SubscriptionFrequency.BiWeekly,
-      scheduledDays: [
-        ScheduleDays.Sunday
-      ],
+      scheduledDays: [ScheduleDays.Sunday],
       preferredTimeSlot: TimeSlot.Afternoon,
       serviceDetails: {
         pestControl: {
@@ -243,7 +256,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
   const [servicePrices, setServicePrices] = useState<{ [key: string]: number }>(
     {}
   );
-  const [editServiceModal, setEditServiceModal] = useState(false)
+  const [editServiceModal, setEditServiceModal] = useState(false);
   const [_, __] = useState<CreateSubscriptionInput>(createSubscriptionInput);
   // const [_, __] = useState<SubscriptionServicesInput>({
   //   serviceId: "",
@@ -257,6 +270,13 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
 
   // Access the UI store to handle modals
   const { openModal } = useUIStore();
+
+  // Add state for submission
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+
+  // Get subscription operations hook
+  const { handleCreateSubscription } = useSubscriptionOperations();
 
   // Extend base services with details
   useEffect(() => {
@@ -512,6 +532,106 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
     return service.category === ServiceCategory.Cooking;
   };
 
+  // Handle subscription creation
+  const handleCreateSubscriptionPlan = async () => {
+    if (extendedServices.length === 0) {
+      setSubmissionError("Please select at least one service");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      setSubmissionError(null);
+
+      // Map subscription services
+      const subscriptionServices = extendedServices.map((service) => {
+        // Prepare service details based on service type
+        let serviceDetails: any = {};
+        let scheduledDays: string[] = [];
+
+        if (service.type === "cleaning") {
+          const details = service.details as CleaningDetails;
+          serviceDetails = {
+            cleaning: {
+              cleaningType: details.cleaningType,
+              houseType: details.houseType,
+              rooms: details.rooms,
+            },
+          };
+          scheduledDays = [details.day];
+        } else if (service.type === "food") {
+          const details = service.details as FoodDetails;
+          serviceDetails = {
+            cooking: {
+              mealType: details.foodPlanType,
+              mealDeliveries: details.deliveryDays.map((day) => ({
+                day: day.toUpperCase(),
+                count: details.mealsPerDay[day],
+              })),
+            },
+          };
+          scheduledDays = details.deliveryDays;
+        } else if (service.type === "laundry") {
+          const details = service.details as LaundryDetails;
+          serviceDetails = {
+            laundry: {
+              laundryType: details.laundryType,
+              bags: details.bags,
+            },
+          };
+          scheduledDays = details.pickupDays;
+        }
+
+        return {
+          serviceId: service._id,
+          frequency: SubscriptionFrequency.Weekly,
+          scheduledDays: scheduledDays.map(
+            (day) => day.toUpperCase() as ScheduleDays
+          ),
+          preferredTimeSlot:
+            service.type === "cleaning"
+              ? ((service.details as CleaningDetails).time as TimeSlot)
+              : TimeSlot.Morning,
+          serviceDetails,
+        };
+      });
+
+      // Create subscription input
+      const subscriptionInput = {
+        customerId: "demo-customer-id", // This should come from auth context
+        startDate: new Date().toISOString(),
+        endDate: new Date(
+          Date.now() +
+            duration * (planType === "weekly" ? 7 : 30) * 24 * 60 * 60 * 1000
+        ).toISOString(),
+        billingCycle:
+          planType === "weekly" ? BillingCycle.Weekly : BillingCycle.Monthly,
+        duration,
+        autoRenew: true,
+        services: subscriptionServices,
+      };
+
+      // Call the API to create subscription
+      const result = await handleCreateSubscription(subscriptionInput);
+
+      // Show success modal
+      openModal("subscription-success", {
+        planType,
+        duration,
+        services: extendedServices,
+      });
+    } catch (error) {
+      console.error("Failed to create subscription:", error);
+      setSubmissionError(
+        error instanceof Error
+          ? error.message
+          : "Failed to create subscription. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <Fragment>
       <div className={styles.plan_summary}>
@@ -522,8 +642,9 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
           {extendedServices.length > 0 && (
             <motion.button
               className={styles.plan_summary__edit_button}
-              // onClick={handleEditAllServices}
-              onClick={() => {setEditServiceModal(true)}}
+              onClick={() => {
+                setEditServiceModal(true);
+              }}
               whileHover={{ y: -2 }}
               whileTap={{ y: 0 }}
             >
@@ -680,8 +801,54 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
             </div>
           </motion.div>
         )}
+
+        {/* Action Buttons */}
+        {extendedServices.length > 0 && (
+          <div className={styles.summary__actions}>
+          
+
+            <button
+              className={styles.summary__createButton}
+              onClick={handleCreateSubscriptionPlan}
+              disabled={isSubmitting || extendedServices.length === 0}
+            >
+              {isSubmitting ? (
+                <>
+                  <motion.span
+                    animate={{ rotate: 360 }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                  >
+                    <Icon name="loader" />
+                  </motion.span>
+                  Creating...
+                </>
+              ) : (
+                <>
+                  Create Subscription
+                  <Icon name="arrow-right" />
+                </>
+              )}
+            </button>
+          </div>
+        )}
+
+        {submissionError && (
+          <div className={styles.summary__error}>
+            <Icon name="alert-circle" />
+            <span>{submissionError}</span>
+          </div>
+        )}
       </div>
-      <EditServiceModal onClose={() => setEditServiceModal(false)} selectedServices={selectedServices} isOpen={editServiceModal} />
+
+      <EditServiceModal
+        onClose={() => setEditServiceModal(false)}
+        selectedServices={selectedServices}
+        isOpen={editServiceModal}
+      />
     </Fragment>
   );
 };

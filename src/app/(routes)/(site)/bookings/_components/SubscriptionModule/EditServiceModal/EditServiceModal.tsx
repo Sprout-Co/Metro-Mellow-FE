@@ -98,6 +98,10 @@ interface EditServiceModalProps {
   onClose: () => void;
   selectedServices: Service[];
   existingSubscriptionServices?: SubscriptionServiceInput[];
+  billingCycle?: "WEEKLY" | "MONTHLY";
+  duration?: number;
+  startDate?: Date;
+  autoRenew?: boolean;
 }
 
 const EditServiceModal: React.FC<EditServiceModalProps> = ({
@@ -105,6 +109,10 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
   onClose,
   selectedServices,
   existingSubscriptionServices = [],
+  billingCycle = "MONTHLY",
+  duration = 12,
+  startDate = new Date(),
+  autoRenew = true,
 }) => {
   // API data state
   const [services, setServices] = useState<Service[]>([]);
@@ -383,7 +391,72 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
   /**
    * Handle final booking submission
    */
-  const handleSubmit = async () => {};
+  const handleSubmit = async () => {
+    try {
+      // Transform the data into the required format
+      const subscriptionInput = {
+        customerId: "customer123", // This should come from auth context in a real app
+        billingCycle,
+        duration,
+        startDate: startDate.toISOString(),
+        autoRenew,
+        services: services.map((service) => {
+          // Get the selected option for this service
+          const option = service.options?.find(
+            (opt) => opt.id === selectedOption?.id
+          );
+
+          // Get the service type
+          const serviceType = service.service_id?.includes("CLEANING")
+            ? "cleaning"
+            : service.service_id?.includes("COOKING")
+              ? "cooking"
+              : "laundry";
+
+          // Prepare service details based on type
+          let serviceDetails = {};
+          if (serviceType === "cleaning") {
+            serviceDetails = {
+              cleaning: {
+                cleaningType: option?.id || "STANDARD",
+                houseType: propertyType.toUpperCase(),
+                rooms: roomQuantities,
+              },
+            };
+          } else if (serviceType === "cooking") {
+            serviceDetails = {
+              cooking: {
+                mealType,
+                mealDeliveries: selectedDays.map((day) => ({
+                  day: day.toUpperCase(),
+                  count: mealsPerDay[day],
+                })),
+              },
+            };
+          }
+
+          return {
+            serviceId: service._id,
+            frequency: "WEEKLY", // This should be configurable
+            scheduledDays: selectedDays.map((day) => day.toUpperCase()),
+            preferredTimeSlot: selectedTimeSlot,
+            serviceDetails,
+          };
+        }),
+      };
+
+      console.log("Subscription input:", subscriptionInput);
+
+      // Here you would typically call your API to create the subscription
+      // await handleCreateSubscription(subscriptionInput);
+
+      // Close the modal on success
+      onClose();
+    } catch (error) {
+      console.error("Failed to create subscription:", error);
+      // Handle error appropriately
+    }
+  };
 
   /**
    * Check if the next button should be disabled
