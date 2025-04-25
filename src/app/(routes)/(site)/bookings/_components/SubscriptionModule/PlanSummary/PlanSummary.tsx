@@ -248,8 +248,8 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
     return {
       subtotal,
       discount: 0, // No discount
-      total: final,
-      perPeriod: planType === "weekly" ? final / 4 : final, // Assuming 4 weeks per month for weekly plans
+      total: subtotal * duration,
+      perPeriod: planType === "monthly" ? final / 4 : final, // Assuming 4 weeks per month for weekly plans
     };
   };
 

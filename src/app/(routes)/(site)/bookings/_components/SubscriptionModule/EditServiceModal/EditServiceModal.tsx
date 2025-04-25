@@ -163,7 +163,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
     other: 0,
     studyRoom: 0,
     lobby: 1,
-    outdoor: 0
+    outdoor: 0,
   });
   const [laundryBags, setLaundryBags] = useState<number>(1);
   const [mealType, setMealType] = useState<MealType>(MealType.Standard);
@@ -390,7 +390,15 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                 (total, [room, quantity]) => {
                   const roomPrice =
                     roomPrices[room as keyof typeof roomPrices] || 0;
-                  console.log(room, "roomPrice => ", roomPrice, "quantity => ", quantity, "total => ", total);
+                  console.log(
+                    room,
+                    "roomPrice => ",
+                    roomPrice,
+                    "quantity => ",
+                    quantity,
+                    "total => ",
+                    total
+                  );
                   return total + roomPrice * (quantity as number);
                 },
                 0
@@ -438,13 +446,15 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
               break;
             }
             case ServiceCategory.Laundry: {
-              // Calculate total price based on number of bags and items per bag
+              // Calculate total price based on number of bags, items per bag, and selected days
               const itemsPerBag = 30;
-              const totalItems = laundryBags * itemsPerBag;
               const basePrice = selectedOption?.price || service.price;
+              const totalItems = laundryBags * basePrice;
+              const selectedDays =
+                serviceSchedules[service._id]?.days.length || 1;
 
               // Calculate total price
-              totalPrice = basePrice * totalItems;
+              totalPrice = totalItems * selectedDays;
 
               serviceDetails = {
                 laundry: {
@@ -513,7 +523,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
           };
           console.log(data);
 
-          return data
+          return data;
         }),
       };
 
@@ -1195,11 +1205,11 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                         const timeSlotOption = TIME_SLOT_OPTIONS.find(
                           (option) =>
                             option.id ===
-                            serviceSchedules[selectedService._id].timeSlot
+                            serviceSchedules[selectedService._id]?.timeSlot
                         );
                         return (
                           timeSlotOption?.label ||
-                          serviceSchedules[selectedService._id].timeSlot
+                          serviceSchedules[selectedService._id]?.timeSlot
                         );
                       })()}
                     </div>
