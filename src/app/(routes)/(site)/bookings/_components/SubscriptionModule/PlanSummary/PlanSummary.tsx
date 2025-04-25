@@ -158,8 +158,17 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
 
   // Calculate individual service prices
   const calculateServicePrice = (service: ExtendedService): number => {
-    // Use the price from the service object
-    // Use a reasonable default (5000) if price is missing or 0
+    // If we have subscription input with updated prices, use those
+    if (subscriptionInput?.services) {
+      const updatedService = subscriptionInput.services.find(
+        (s) => s.serviceId === service._id
+      );
+      if (updatedService) {
+        return updatedService.price;
+      }
+    }
+
+    // Fallback to calculating price from service details
     const basePrice = service.price && service.price > 0 ? service.price : 5000;
 
     if (!service.details) return basePrice;
@@ -169,9 +178,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
     let frequency = 1;
 
     // Check if there's a selected option price to use instead of base price
-    // This applies when a specific service option has been selected
     if (service.options && service.options.length > 0) {
-      // If there's a selected option in the service details, use its price
       const selectedOptionId =
         type === "cleaning"
           ? (details as CleaningDetails).cleaningType
@@ -182,19 +189,13 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
               : undefined;
 
       if (selectedOptionId) {
-        // Find the matching option
         const selectedOption = service.options.find(
           (opt) =>
             opt.id === selectedOptionId ||
             opt.label.toLowerCase().includes(String(selectedOptionId))
         );
 
-        if (
-          selectedOption &&
-          selectedOption.price &&
-          selectedOption.price > 0
-        ) {
-          // Use the option price instead of base price
+        if (selectedOption?.price && selectedOption.price > 0) {
           price = selectedOption.price;
         }
       }
@@ -219,18 +220,17 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
       }
     }
 
-    // Multiply base price by frequency (without any discount)
     return Math.round(price * frequency);
   };
 
-  // Update service prices whenever services or their details change
+  // Update service prices whenever services, their details, or subscription input changes
   useEffect(() => {
     const newPrices: { [key: string]: number } = {};
     extendedServices.forEach((service) => {
       newPrices[service._id] = calculateServicePrice(service);
     });
     setServicePrices(newPrices);
-  }, [extendedServices]);
+  }, [extendedServices, subscriptionInput]);
 
   // Calculate subscription totals based on plan type and duration
   const calculateTotals = () => {
@@ -259,19 +259,6 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
   const formatPrice = (price: number) => {
     return `₦${price.toLocaleString()}`;
   };
-
-  // Handle Edit All Services button click
-  const handleEditAllServices = () => {
-    // Get the service types that are currently selected
-    const serviceTypes = extendedServices.map((service) => ({
-      type: service.type,
-      id: service._id,
-    }));
-
-    // Open the subscription editor modal with the selected service types
-    openModal("craft-subscription", { selectedServices: serviceTypes });
-  };
-
   // Get frequency text based on service type and frequency value
   const getFrequencyText = (service: ExtendedService) => {
     if (service.type === "cleaning") {

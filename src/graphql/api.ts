@@ -737,19 +737,23 @@ export type RefundPaymentInput = {
 
 export type RoomPrices = {
   __typename?: 'RoomPrices';
-  bathrooms: Scalars['Float']['output'];
-  bedrooms: Scalars['Float']['output'];
+  balcony: Scalars['Float']['output'];
+  bathroom: Scalars['Float']['output'];
+  bedroom: Scalars['Float']['output'];
   kitchen: Scalars['Float']['output'];
-  livingRooms: Scalars['Float']['output'];
+  livingRoom: Scalars['Float']['output'];
+  lobby: Scalars['Float']['output'];
   outdoor: Scalars['Float']['output'];
   study: Scalars['Float']['output'];
 };
 
 export type RoomPricesInput = {
-  bathrooms: Scalars['Float']['input'];
-  bedrooms: Scalars['Float']['input'];
+  balcony: Scalars['Float']['input'];
+  bathroom: Scalars['Float']['input'];
+  bedroom: Scalars['Float']['input'];
   kitchen: Scalars['Float']['input'];
-  livingRooms: Scalars['Float']['input'];
+  livingRoom: Scalars['Float']['input'];
+  lobby: Scalars['Float']['input'];
   outdoor: Scalars['Float']['input'];
   study: Scalars['Float']['input'];
 };
@@ -761,7 +765,9 @@ export type RoomQuantities = {
   bedroom: Scalars['Int']['output'];
   kitchen: Scalars['Int']['output'];
   livingRoom: Scalars['Int']['output'];
+  lobby: Scalars['Int']['output'];
   other: Scalars['Int']['output'];
+  outdoor: Scalars['Int']['output'];
   studyRoom: Scalars['Int']['output'];
 };
 
@@ -771,7 +777,9 @@ export type RoomQuantitiesInput = {
   bedroom: Scalars['Int']['input'];
   kitchen: Scalars['Int']['input'];
   livingRoom: Scalars['Int']['input'];
+  lobby: Scalars['Int']['input'];
   other: Scalars['Int']['input'];
+  outdoor: Scalars['Int']['input'];
   studyRoom: Scalars['Int']['input'];
 };
 
@@ -990,6 +998,7 @@ export type SubscriptionService = {
 export type SubscriptionServiceInput = {
   frequency: SubscriptionFrequency;
   preferredTimeSlot: TimeSlot;
+  price: Scalars['Float']['input'];
   scheduledDays: Array<ScheduleDays>;
   serviceDetails: ServiceDetailsInput;
   serviceId: Scalars['ID']['input'];
@@ -1061,6 +1070,7 @@ export type UpdateSubscriptionInput = {
 export type UpdateSubscriptionServiceInput = {
   frequency?: InputMaybe<SubscriptionFrequency>;
   preferredTimeSlot?: InputMaybe<TimeSlot>;
+  price?: InputMaybe<Scalars['Float']['input']>;
   scheduledDays?: InputMaybe<Array<ScheduleDays>>;
   serviceDetails?: InputMaybe<ServiceDetailsInput>;
 };
@@ -1424,24 +1434,24 @@ export type GetBookingsQueryVariables = Exact<{
 }>;
 
 
-export type GetBookingsQuery = { __typename?: 'Query', bookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> };
+export type GetBookingsQuery = { __typename?: 'Query', bookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> };
 
 export type GetBookingByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetBookingByIdQuery = { __typename?: 'Query', booking?: { __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } } | null };
+export type GetBookingByIdQuery = { __typename?: 'Query', booking?: { __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } } | null };
 
 export type GetCustomerBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCustomerBookingsQuery = { __typename?: 'Query', customerBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> };
+export type GetCustomerBookingsQuery = { __typename?: 'Query', customerBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> };
 
 export type GetStaffBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetStaffBookingsQuery = { __typename?: 'Query', staffBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> };
+export type GetStaffBookingsQuery = { __typename?: 'Query', staffBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> };
 
 export type GetPaymentByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1485,14 +1495,14 @@ export type GetServicesQueryVariables = Exact<{
 }>;
 
 
-export type GetServicesQuery = { __typename?: 'Query', services: Array<{ __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null, roomPrices?: { __typename?: 'RoomPrices', bedrooms: number, livingRooms: number, bathrooms: number, kitchen: number, study: number, outdoor: number } | null }> };
+export type GetServicesQuery = { __typename?: 'Query', services: Array<{ __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null, roomPrices?: { __typename?: 'RoomPrices', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, study: number, outdoor: number, lobby: number, balcony: number } | null }> };
 
 export type GetServiceByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetServiceByIdQuery = { __typename?: 'Query', service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null, roomPrices?: { __typename?: 'RoomPrices', bedrooms: number, livingRooms: number, bathrooms: number, kitchen: number, study: number, outdoor: number } | null } | null };
+export type GetServiceByIdQuery = { __typename?: 'Query', service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null, roomPrices?: { __typename?: 'RoomPrices', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, study: number, outdoor: number, lobby: number, balcony: number } | null } | null };
 
 export type GetStaffProfilesQueryVariables = Exact<{
   status?: InputMaybe<StaffStatus>;
@@ -4547,6 +4557,8 @@ export const GetBookingsDocument = gql`
           balcony
           studyRoom
           other
+          lobby
+          outdoor
         }
       }
       laundry {
@@ -4697,6 +4709,8 @@ export const GetBookingByIdDocument = gql`
           balcony
           studyRoom
           other
+          lobby
+          outdoor
         }
       }
       laundry {
@@ -4847,6 +4861,8 @@ export const GetCustomerBookingsDocument = gql`
           balcony
           studyRoom
           other
+          lobby
+          outdoor
         }
       }
       laundry {
@@ -4996,6 +5012,8 @@ export const GetStaffBookingsDocument = gql`
           balcony
           studyRoom
           other
+          lobby
+          outdoor
         }
       }
       laundry {
@@ -5443,12 +5461,14 @@ export const GetServicesDocument = gql`
       }
     }
     roomPrices {
-      bedrooms
-      livingRooms
-      bathrooms
+      bedroom
+      livingRoom
+      bathroom
       kitchen
       study
       outdoor
+      lobby
+      balcony
     }
   }
 }
@@ -5517,12 +5537,14 @@ export const GetServiceByIdDocument = gql`
       }
     }
     roomPrices {
-      bedrooms
-      livingRooms
-      bathrooms
+      bedroom
+      livingRoom
+      bathroom
       kitchen
       study
       outdoor
+      lobby
+      balcony
     }
   }
 }

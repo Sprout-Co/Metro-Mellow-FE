@@ -85,6 +85,8 @@ query GetBookings($status: BookingStatus) {
           balcony
           studyRoom
           other
+          lobby
+          outdoor
         }
       }
       laundry {
@@ -201,6 +203,8 @@ query GetBookingById($id: ID!) {
           balcony
           studyRoom
           other
+          lobby
+          outdoor
         }
       }
       laundry {
@@ -317,6 +321,8 @@ query GetCustomerBookings {
           balcony
           studyRoom
           other
+          lobby
+          outdoor
         }
       }
       laundry {
@@ -433,6 +439,8 @@ query GetStaffBookings {
           balcony
           studyRoom
           other
+          lobby
+          outdoor
         }
       }
       laundry {

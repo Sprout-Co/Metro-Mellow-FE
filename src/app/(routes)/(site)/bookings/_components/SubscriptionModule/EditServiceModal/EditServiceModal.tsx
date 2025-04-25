@@ -162,6 +162,8 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
     livingRoom: 1,
     other: 0,
     studyRoom: 0,
+    lobby: 1,
+    outdoor: 0
   });
   const [laundryBags, setLaundryBags] = useState<number>(1);
   const [mealType, setMealType] = useState<MealType>(MealType.Standard);
@@ -379,16 +381,21 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
               const selectedDays =
                 serviceSchedules[service._id]?.days.length || 1;
               const roomPrices = service.roomPrices || {};
+              console.log("selectedDays => ", selectedDays);
+              console.log("roomPrices => ", roomPrices);
+              console.log("roomQuantities => ", roomQuantities);
 
               // Calculate total price for each room type
               const roomTotal = Object.entries(roomQuantities).reduce(
                 (total, [room, quantity]) => {
                   const roomPrice =
                     roomPrices[room as keyof typeof roomPrices] || 0;
+                  console.log(room, "roomPrice => ", roomPrice, "quantity => ", quantity, "total => ", total);
                   return total + roomPrice * (quantity as number);
                 },
                 0
               );
+              console.log("roomTotal => ", roomTotal);
 
               // Multiply by number of days selected
               totalPrice = roomTotal * selectedDays;
@@ -403,6 +410,20 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
               break;
             }
             case ServiceCategory.Cooking: {
+              // Calculate total price based on meals per day and number of days
+              const selectedDays =
+                serviceSchedules[service._id]?.days.length || 1;
+              const basePrice = selectedOption?.price || service.price;
+
+              // Calculate total meals across all selected days
+              const totalMeals = serviceSchedules[service._id].days.reduce(
+                (total, day) => total + (mealsPerDay[day] || 1),
+                0
+              );
+
+              // Calculate total price
+              totalPrice = basePrice * totalMeals;
+
               serviceDetails = {
                 cooking: {
                   mealType,
@@ -417,6 +438,14 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
               break;
             }
             case ServiceCategory.Laundry: {
+              // Calculate total price based on number of bags and items per bag
+              const itemsPerBag = 30;
+              const totalItems = laundryBags * itemsPerBag;
+              const basePrice = selectedOption?.price || service.price;
+
+              // Calculate total price
+              totalPrice = basePrice * totalItems;
+
               serviceDetails = {
                 laundry: {
                   laundryType: selectedOption?.service_id,
@@ -433,6 +462,17 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
               break;
             }
             case ServiceCategory.PestControl: {
+              // Calculate total price based on property type and severity
+              const basePrice = selectedOption?.price || service.price;
+              const severityMultiplier = {
+                [Severity.Low]: 1,
+                [Severity.Medium]: 1.2,
+                [Severity.High]: 1.5,
+              };
+
+              // Calculate total price
+              totalPrice = basePrice * severityMultiplier[Severity.Medium];
+
               serviceDetails = {
                 pestControl: {
                   treatmentType:
@@ -459,7 +499,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
               break;
           }
 
-          return {
+          const data = {
             serviceId: service._id,
             frequency: SubscriptionFrequency.Weekly,
             scheduledDays: serviceSchedules[service._id].days.map((day) => {
@@ -469,8 +509,11 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
             }) as ScheduleDays[],
             preferredTimeSlot: serviceSchedules[service._id].timeSlot,
             serviceDetails,
-            totalPrice,
+            price: totalPrice,
           };
+          console.log(data);
+
+          return data
         }),
       };
 
@@ -1177,8 +1220,6 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                         This is a recurring booking scheduled for{" "}
                         {serviceSchedules[selectedService._id]?.days.length}{" "}
                         days each week.
-                        {selectedService.service_id === ServiceId.Laundry &&
-                          " A 10% discount has been applied."}
                       </p>
                     </div>
                   </div>

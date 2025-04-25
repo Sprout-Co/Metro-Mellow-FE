@@ -27,12 +27,14 @@ query GetServices($category: ServiceCategory, $status: ServiceStatus) {
       }
     }
     roomPrices {
-      bedrooms
-      livingRooms
-      bathrooms
+      bedroom
+      livingRoom
+      bathroom
       kitchen
       study
       outdoor
+      lobby
+      balcony
     }
   }
 }
@@ -66,12 +68,14 @@ query GetServiceById($id: ID!) {
       }
     }
     roomPrices {
-      bedrooms
-      livingRooms
-      bathrooms
+      bedroom
+      livingRoom
+      bathroom
       kitchen
       study
       outdoor
+      lobby
+      balcony
     }
   }
 }
