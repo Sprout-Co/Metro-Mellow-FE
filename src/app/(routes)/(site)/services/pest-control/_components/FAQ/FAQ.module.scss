@@ -1,0 +1,147 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.faq {
+  padding: spacing("6xl") 0;
+  background-color: color("neutral", "white");
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("/images/patterns/dots-pattern.svg");
+    background-repeat: repeat;
+    opacity: 0.03;
+    z-index: 0;
+  }
+
+  &__container {
+    @include container;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto spacing("4xl");
+  }
+
+  &__badge {
+    display: inline-block;
+    background-color: rgba(color("primary", "base"), 0.1);
+    color: color("primary", "base");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "semibold");
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("full");
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: spacing("sm");
+  }
+
+  &__title {
+    @include heading-2;
+    color: color("neutral", "black");
+    margin-bottom: spacing("md");
+  }
+
+  &__subtitle {
+    @include paragraph;
+    color: color("neutral", "dark");
+  }
+
+  &__list {
+    max-width: 800px;
+    margin: 0 auto spacing("4xl");
+  }
+
+  &__item {
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    &:first-child {
+      border-top: 1px solid color("neutral", "lighter");
+    }
+  }
+
+  &__question {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("xl") spacing("md");
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      color: color("primary", "base");
+    }
+
+    &_active {
+      color: color("primary", "base");
+    }
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-left: spacing("md");
+    color: currentColor;
+    transition: transform 0.3s ease;
+
+    .faq__question_active & {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__answer {
+    overflow: hidden;
+  }
+
+  &__answer_content {
+    padding: 0 spacing("md") spacing("xl");
+    color: color("neutral", "dark");
+    font-size: map-get($font-sizes, "md");
+    line-height: map-get($line-heights, "relaxed");
+  }
+
+  &__cta {
+    text-align: center;
+
+    p {
+      font-size: map-get($font-sizes, "lg");
+      font-weight: map-get($font-weights, "medium");
+      color: color("neutral", "black");
+      margin-bottom: spacing("md");
+    }
+  }
+
+  &__button {
+    display: inline-block;
+    padding: spacing("sm") spacing("xl");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    font-size: map-get($font-sizes, "md");
+    font-weight: map-get($font-weights, "medium");
+    border-radius: border-radius("md");
+    text-decoration: none;
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color("primary", "dark");
+    }
+  }
+}
