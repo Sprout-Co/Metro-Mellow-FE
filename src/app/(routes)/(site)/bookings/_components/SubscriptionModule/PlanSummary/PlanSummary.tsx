@@ -227,7 +227,9 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
   useEffect(() => {
     const newPrices: { [key: string]: number } = {};
     extendedServices.forEach((service) => {
-      newPrices[service._id] = calculateServicePrice(service);
+      newPrices[service._id] = subscriptionInput?.services.find(
+        (s) => s.serviceId === service._id
+      )?.price || 0 //calculateServicePrice(service);
     });
     setServicePrices(newPrices);
   }, [extendedServices, subscriptionInput]);

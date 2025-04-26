@@ -521,11 +521,14 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
             serviceDetails,
             price: totalPrice,
           };
-          console.log(data);
+          setShowServiceOptions(false);
+          setCurrentStep(BookingStep.SERVICE);
+
 
           return data;
         }),
       };
+      console.log("subscriptionInput => ", subscriptionInput);
 
       // Call the callback with the subscription input
       onSubscriptionInputChange?.(subscriptionInput);
