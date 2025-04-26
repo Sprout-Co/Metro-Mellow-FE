@@ -22,7 +22,6 @@ import {
   useGetCustomerBookingsLazyQuery,
   useGetStaffBookingsLazyQuery,
   BookingStatus,
-  ServiceType,
   AddressInput,
   RoomQuantitiesInput,
   PropertyType,

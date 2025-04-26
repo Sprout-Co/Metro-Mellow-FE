@@ -66,11 +66,11 @@
   font-weight: map-get($font-weights, "bold"); // 700
   line-height: map-get($line-heights, "tight"); // 1.25
 
-  @include respond-to(md) {
+  @include breakpoint-up("md") {
     font-size: map-get($font-sizes, "4xl"); // 36px
   }
 
-  @include respond-to(xs) {
+  @include breakpoint-up("xs") {
     font-size: map-get($font-sizes, "3xl"); // 30px
   }
 }
@@ -80,7 +80,7 @@
   font-weight: map-get($font-weights, "bold"); // 700
   line-height: map-get($line-heights, "snug"); // 1.375
 
-  @include respond-to(xs) {
+  @include breakpoint-up("xs") {
     font-size: map-get($font-sizes, "2xl"); // 24px
   }
 }
@@ -230,7 +230,7 @@
   padding: map-get($spacing, "2xl") 0; // 40px 0
   border-bottom: 1px solid color("neutral", "medium");
 
-  @include respond-to(md) {
+  @include breakpoint-up("md") {
     padding: map-get($spacing, "2xl") 0; // 64px 0
   }
 }

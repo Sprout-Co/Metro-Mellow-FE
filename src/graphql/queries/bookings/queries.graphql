@@ -1,5 +1,5 @@
 query GetBookings($status: BookingStatus) {
-  bookings(status: $status) {
+  bookings {
     id
     customer {
       id
@@ -8,6 +8,8 @@ query GetBookings($status: BookingStatus) {
       lastName
       role
       phone
+      createdAt
+      updatedAt
       address {
         street
         city
@@ -15,8 +17,6 @@ query GetBookings($status: BookingStatus) {
         zipCode
         country
       }
-      createdAt
-      updatedAt
     }
     service {
       _id
@@ -53,13 +53,6 @@ query GetBookings($status: BookingStatus) {
       lastName
       role
       phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
       createdAt
       updatedAt
     }
@@ -80,17 +73,46 @@ query GetBookings($status: BookingStatus) {
     updatedAt
     serviceType
     serviceOption
-    propertyType
-    roomQuantities {
-      bedrooms
-      livingRooms
-      bathrooms
-      kitchen
-      study
-      outdoor
+    serviceDetails {
+      cleaning {
+        cleaningType
+        houseType
+        rooms {
+          bedroom
+          livingRoom
+          bathroom
+          kitchen
+          balcony
+          studyRoom
+          other
+          lobby
+          outdoor
+        }
+      }
+      laundry {
+        laundryType
+        bags
+        items {
+          shirts
+          pants
+          dresses
+          suits
+          others
+        }
+      }
+      pestControl {
+        treatmentType
+        areas
+        severity
+      }
+      cooking {
+        mealType
+        mealsPerDelivery {
+          day
+          count
+        }
+      }
     }
-    laundryBags
-    recurringDiscount
   }
 }
 
@@ -151,13 +173,6 @@ query GetBookingById($id: ID!) {
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     date
     timeSlot
@@ -176,17 +191,46 @@ query GetBookingById($id: ID!) {
     updatedAt
     serviceType
     serviceOption
-    propertyType
-    roomQuantities {
-      bedrooms
-      livingRooms
-      bathrooms
-      kitchen
-      study
-      outdoor
+    serviceDetails {
+      cleaning {
+        cleaningType
+        houseType
+        rooms {
+          bedroom
+          livingRoom
+          bathroom
+          kitchen
+          balcony
+          studyRoom
+          other
+          lobby
+          outdoor
+        }
+      }
+      laundry {
+        laundryType
+        bags
+        items {
+          shirts
+          pants
+          dresses
+          suits
+          others
+        }
+      }
+      pestControl {
+        treatmentType
+        areas
+        severity
+      }
+      cooking {
+        mealType
+        mealsPerDelivery {
+          day
+          count
+        }
+      }
     }
-    laundryBags
-    recurringDiscount
   }
 }
 
@@ -247,13 +291,6 @@ query GetCustomerBookings {
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     date
     timeSlot
@@ -272,17 +309,46 @@ query GetCustomerBookings {
     updatedAt
     serviceType
     serviceOption
-    propertyType
-    roomQuantities {
-      bedrooms
-      livingRooms
-      bathrooms
-      kitchen
-      study
-      outdoor
+    serviceDetails {
+      cleaning {
+        cleaningType
+        houseType
+        rooms {
+          bedroom
+          livingRoom
+          bathroom
+          kitchen
+          balcony
+          studyRoom
+          other
+          lobby
+          outdoor
+        }
+      }
+      laundry {
+        laundryType
+        bags
+        items {
+          shirts
+          pants
+          dresses
+          suits
+          others
+        }
+      }
+      pestControl {
+        treatmentType
+        areas
+        severity
+      }
+      cooking {
+        mealType
+        mealsPerDelivery {
+          day
+          count
+        }
+      }
     }
-    laundryBags
-    recurringDiscount
   }
 }
 
@@ -343,13 +409,6 @@ query GetStaffBookings {
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     date
     timeSlot
@@ -368,16 +427,45 @@ query GetStaffBookings {
     updatedAt
     serviceType
     serviceOption
-    propertyType
-    roomQuantities {
-      bedrooms
-      livingRooms
-      bathrooms
-      kitchen
-      study
-      outdoor
+    serviceDetails {
+      cleaning {
+        cleaningType
+        houseType
+        rooms {
+          bedroom
+          livingRoom
+          bathroom
+          kitchen
+          balcony
+          studyRoom
+          other
+          lobby
+          outdoor
+        }
+      }
+      laundry {
+        laundryType
+        bags
+        items {
+          shirts
+          pants
+          dresses
+          suits
+          others
+        }
+      }
+      pestControl {
+        treatmentType
+        areas
+        severity
+      }
+      cooking {
+        mealType
+        mealsPerDelivery {
+          day
+          count
+        }
+      }
     }
-    laundryBags
-    recurringDiscount
   }
 }

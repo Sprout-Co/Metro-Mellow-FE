@@ -9,25 +9,37 @@ import {
   useCreateSubscriptionMutation,
   useUpdateSubscriptionMutation,
   useCancelSubscriptionMutation,
-  useReactivateSubscriptionMutation,
+  usePauseSubscriptionMutation,
+  useResumeSubscriptionMutation,
   useUpdateSubscriptionStatusMutation,
+  useAddServiceToSubscriptionMutation,
+  useRemoveServiceFromSubscriptionMutation,
+  useUpdateSubscriptionServiceMutation,
   useGetSubscriptionByIdQuery,
   useGetSubscriptionsQuery,
   useGetCustomerSubscriptionsQuery,
+  CreateSubscriptionInput,
+  UpdateSubscriptionInput,
+  UpdateSubscriptionServiceInput,
+  SubscriptionServiceInput,
 } from "@/graphql/api";
-import {
-  SubscriptionStatus,
-  SubscriptionPlan,
-  SubscriptionFrequency,
-} from "@/graphql/api";
+import { SubscriptionStatus, BillingCycle } from "@/graphql/api";
 
 export const useSubscriptionOperations = () => {
   const [createSubscriptionMutation] = useCreateSubscriptionMutation();
   const [updateSubscriptionMutation] = useUpdateSubscriptionMutation();
   const [cancelSubscriptionMutation] = useCancelSubscriptionMutation();
-  const [reactivateSubscriptionMutation] = useReactivateSubscriptionMutation();
+  const [pauseSubscriptionMutation] = usePauseSubscriptionMutation();
+  const [resumeSubscriptionMutation] = useResumeSubscriptionMutation();
   const [updateSubscriptionStatusMutation] =
     useUpdateSubscriptionStatusMutation();
+  const [addServiceToSubscriptionMutation] =
+    useAddServiceToSubscriptionMutation();
+  const [removeServiceFromSubscriptionMutation] =
+    useRemoveServiceFromSubscriptionMutation();
+  const [updateSubscriptionServiceMutation] =
+    useUpdateSubscriptionServiceMutation();
+
   const { refetch: getSubscriptionById } = useGetSubscriptionByIdQuery({
     skip: true,
   });
@@ -35,7 +47,9 @@ export const useSubscriptionOperations = () => {
     skip: true,
   });
   const { refetch: getCustomerSubscriptions } =
-    useGetCustomerSubscriptionsQuery({ skip: true });
+    useGetCustomerSubscriptionsQuery({
+      skip: true,
+    });
 
   /**
    * Creates a new subscription
@@ -44,13 +58,7 @@ export const useSubscriptionOperations = () => {
    * @throws Error if creation fails
    */
   const handleCreateSubscription = useCallback(
-    async (input: {
-      serviceId: string;
-      plan: SubscriptionPlan;
-      frequency: SubscriptionFrequency;
-      startDate: Date;
-      autoRenew: boolean;
-    }) => {
+    async (input: CreateSubscriptionInput) => {
       try {
         const { data, errors } = await createSubscriptionMutation({
           variables: { input },
@@ -80,15 +88,7 @@ export const useSubscriptionOperations = () => {
    * @throws Error if update fails
    */
   const handleUpdateSubscription = useCallback(
-    async (
-      id: string,
-      input: {
-        plan?: SubscriptionPlan;
-        frequency?: SubscriptionFrequency;
-        autoRenew?: boolean;
-        endDate?: Date;
-      }
-    ) => {
+    async (id: string, input: UpdateSubscriptionInput) => {
       try {
         const { data, errors } = await updateSubscriptionMutation({
           variables: { id, input },
@@ -140,32 +140,61 @@ export const useSubscriptionOperations = () => {
   );
 
   /**
-   * Reactivates a cancelled subscription
+   * Pauses a subscription
    * @param id - Subscription ID
-   * @returns Reactivated subscription
-   * @throws Error if reactivation fails
+   * @returns Paused subscription
+   * @throws Error if pause fails
    */
-  const handleReactivateSubscription = useCallback(
+  const handlePauseSubscription = useCallback(
     async (id: string) => {
       try {
-        const { data, errors } = await reactivateSubscriptionMutation({
-          variables: { id },
+        const { data, errors } = await pauseSubscriptionMutation({
+          variables: { pauseSubscriptionId: id },
         });
 
         if (errors) {
           throw new Error(errors[0].message);
         }
 
-        return data?.reactivateSubscription;
+        return data?.pauseSubscription;
       } catch (error) {
-        console.error("Subscription reactivation error:", error);
+        console.error("Subscription pause error:", error);
         if (error instanceof Error) {
           throw new Error(error.message);
         }
         throw new Error("An unexpected error occurred");
       }
     },
-    [reactivateSubscriptionMutation]
+    [pauseSubscriptionMutation]
+  );
+
+  /**
+   * Resumes a paused subscription
+   * @param id - Subscription ID
+   * @returns Resumed subscription
+   * @throws Error if resume fails
+   */
+  const handleResumeSubscription = useCallback(
+    async (id: string) => {
+      try {
+        const { data, errors } = await resumeSubscriptionMutation({
+          variables: { resumeSubscriptionId: id },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.resumeSubscription;
+      } catch (error) {
+        console.error("Subscription resume error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [resumeSubscriptionMutation]
   );
 
   /**
@@ -179,7 +208,7 @@ export const useSubscriptionOperations = () => {
     async (id: string, status: SubscriptionStatus) => {
       try {
         const { data, errors } = await updateSubscriptionStatusMutation({
-          variables: { id, status },
+          variables: { updateSubscriptionStatusId: id, status },
         });
 
         if (errors) {
@@ -199,36 +228,98 @@ export const useSubscriptionOperations = () => {
   );
 
   /**
-   * Updates subscription plan
-   * @param id - Subscription ID
-   * @param plan - New plan
+   * Adds a service to a subscription
+   * @param subscriptionId - Subscription ID
+   * @param service - Service input object
    * @returns Updated subscription
-   * @throws Error if update fails
+   * @throws Error if addition fails
    */
-  const handleUpdateSubscriptionPlan = useCallback(
-    async (id: string, plan: SubscriptionPlan) => {
+  const handleAddServiceToSubscription = useCallback(
+    async (subscriptionId: string, service: SubscriptionServiceInput) => {
       try {
-        const { data, errors } = await updateSubscriptionMutation({
-          variables: {
-            id,
-            input: { plan },
-          },
+        const { data, errors } = await addServiceToSubscriptionMutation({
+          variables: { subscriptionId, service },
         });
 
         if (errors) {
           throw new Error(errors[0].message);
         }
 
-        return data?.updateSubscription;
+        return data?.addServiceToSubscription;
       } catch (error) {
-        console.error("Subscription plan update error:", error);
+        console.error("Add service to subscription error:", error);
         if (error instanceof Error) {
           throw new Error(error.message);
         }
         throw new Error("An unexpected error occurred");
       }
     },
-    [updateSubscriptionMutation]
+    [addServiceToSubscriptionMutation]
+  );
+
+  /**
+   * Removes a service from a subscription
+   * @param subscriptionId - Subscription ID
+   * @param subscriptionServiceId - Subscription service ID
+   * @returns Updated subscription
+   * @throws Error if removal fails
+   */
+  const handleRemoveServiceFromSubscription = useCallback(
+    async (subscriptionId: string, subscriptionServiceId: string) => {
+      try {
+        const { data, errors } = await removeServiceFromSubscriptionMutation({
+          variables: { subscriptionId, subscriptionServiceId },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.removeServiceFromSubscription;
+      } catch (error) {
+        console.error("Remove service from subscription error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [removeServiceFromSubscriptionMutation]
+  );
+
+  /**
+   * Updates a subscription service
+   * @param subscriptionId - Subscription ID
+   * @param subscriptionServiceId - Subscription service ID
+   * @param input - Update input object
+   * @returns Updated subscription service
+   * @throws Error if update fails
+   */
+  const handleUpdateSubscriptionService = useCallback(
+    async (
+      subscriptionId: string,
+      subscriptionServiceId: string,
+      input: UpdateSubscriptionServiceInput
+    ) => {
+      try {
+        const { data, errors } = await updateSubscriptionServiceMutation({
+          variables: { subscriptionId, subscriptionServiceId, input },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.updateSubscriptionService;
+      } catch (error) {
+        console.error("Update subscription service error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [updateSubscriptionServiceMutation]
   );
 
   /**
@@ -312,9 +403,12 @@ export const useSubscriptionOperations = () => {
     handleCreateSubscription,
     handleUpdateSubscription,
     handleCancelSubscription,
-    handleReactivateSubscription,
+    handlePauseSubscription,
+    handleResumeSubscription,
     handleUpdateSubscriptionStatus,
-    handleUpdateSubscriptionPlan,
+    handleAddServiceToSubscription,
+    handleRemoveServiceFromSubscription,
+    handleUpdateSubscriptionService,
     handleGetSubscription,
     handleGetSubscriptions,
     handleGetCustomerSubscriptions,
