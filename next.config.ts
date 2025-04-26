@@ -21,6 +21,14 @@ const nextConfig: NextConfig = {
   },
   images: {
     formats: ["image/avif", "image/webp"],
+    domains: [], // Add your image domains here if needed
+    minimumCacheTTL: 60,
+  },
+  compress: true,
+  poweredByHeader: false,
+  swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
   },
 };
 
