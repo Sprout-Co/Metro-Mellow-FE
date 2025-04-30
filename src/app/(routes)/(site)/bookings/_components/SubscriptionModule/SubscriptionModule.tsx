@@ -21,13 +21,12 @@ import { useUIStore } from "@/store";
 import { Icon } from "@/components/ui/Icon/Icon";
 
 // Types
-export type PlanType = "weekly" | "monthly";
 export type DurationType = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
 const SubscriptionModule: React.FC = () => {
 
   // State management
-  const [planType, setPlanType] = useState<PlanType>("weekly");
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>(BillingCycle.Weekly);
   const [duration, setDuration] = useState<DurationType>(2);
   const [services, setServices] = useState<Service[]>([]);
   const [selectedServices, setSelectedServices] = useState<Set<string>>(
@@ -146,8 +145,8 @@ const SubscriptionModule: React.FC = () => {
         <div className={styles.subscription__selection}>
           <motion.div variants={itemVariants}>
             <PlanTypeSelector
-              planType={planType}
-              setPlanType={setPlanType}
+              billingCycle={billingCycle}
+              setBillingCycle={setBillingCycle}
               duration={duration}
               setDuration={setDuration}
             />
@@ -165,7 +164,7 @@ const SubscriptionModule: React.FC = () => {
         {/* Right Panel - Summary Area */}
         <div className={styles.subscription__summary}>
           <EnhancedPlanSummary
-            planType={planType}
+            billingCycle={billingCycle}
             duration={duration}
             selectedServices={services.filter((service) =>
               selectedServices.has(service._id)

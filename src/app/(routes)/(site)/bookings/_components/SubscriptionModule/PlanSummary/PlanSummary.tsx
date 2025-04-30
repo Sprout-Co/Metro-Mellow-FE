@@ -9,7 +9,7 @@ import {
   ServiceId,
   ServiceCategory,
 } from "@/graphql/api";
-import { PlanType, DurationType } from "../SubscriptionModule";
+import { DurationType } from "../SubscriptionModule";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { useUIStore } from "@/store";
 import EditServiceModal from "../EditServiceModal/EditServiceModal";
@@ -91,14 +91,14 @@ const DEFAULT_SERVICE_DETAILS = {
 
 type PlanSummaryProps = {
   selectedServices: Service[];
-  planType: PlanType;
+  billingCycle: BillingCycle;
   duration: DurationType;
   onUpdateService?: (service: ExtendedService) => void;
 };
 
 const PlanSummary: React.FC<PlanSummaryProps> = ({
   selectedServices,
-  planType = "weekly",
+  billingCycle = BillingCycle.Weekly,
   duration = 2,
   onUpdateService,
 }) => {
@@ -112,12 +112,12 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
   const [editServiceModal, setEditServiceModal] = useState(false);
   const [subscriptionInput, setSubscriptionInput] =
     useState<CreateSubscriptionInput>({
-      billingCycle: planType.toUpperCase() as BillingCycle,
+      billingCycle: billingCycle.toUpperCase() as BillingCycle,
       duration: Number(duration),
       startDate: new Date().toISOString(),
       autoRenew: true,
       customerId: "",
-      services: []
+      services: [],
     });
 
   // Add state for submission
@@ -185,7 +185,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
     return {
       subtotal,
       total: subtotal * duration,
-      perPeriod: planType === "monthly" ? final / 4 : final, // Assuming 4 weeks per month for weekly plans
+      perPeriod: billingCycle === BillingCycle.Monthly ? final / 4 : final, // Assuming 4 weeks per month for weekly plans
     };
   };
 
@@ -283,7 +283,6 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
       setIsSubmitting(true);
       setSubmissionError(null);
 
-
       if (subscriptionInput) {
         // Log the subscription input from the modal
         console.log("Creating subscription with input:", subscriptionInput);
@@ -291,7 +290,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
         // Apply any additional properties from plan summary
         const finalSubscriptionInput = {
           ...subscriptionInput,
-          billingCycle: planType.toUpperCase() as BillingCycle,
+          billingCycle: billingCycle,
           duration: Number(duration),
           startDate: new Date().toISOString(),
           autoRenew: true,
@@ -576,10 +575,10 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
               <span>
                 Total ({duration}{" "}
                 {duration === 1
-                  ? planType === "weekly"
+                  ? billingCycle === BillingCycle.Weekly
                     ? "week"
                     : "month"
-                  : planType === "weekly"
+                  : billingCycle === BillingCycle.Weekly
                     ? "weeks"
                     : "months"}
                 )
@@ -589,7 +588,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
 
             <div className={styles.plan_summary__per_period}>
               <span>
-                {planType === "weekly"
+                {billingCycle === BillingCycle.Weekly
                   ? "Weekly payment: "
                   : "Monthly payment: "}
                 {formatPrice(perPeriod)}
@@ -614,10 +613,10 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
               <span className={styles.plan_summary__total_period}>
                 {duration}{" "}
                 {duration === 1
-                  ? planType === "weekly"
+                  ? billingCycle === BillingCycle.Weekly
                     ? "week"
                     : "month"
-                  : planType === "weekly"
+                  : billingCycle === BillingCycle.Weekly
                     ? "weeks"
                     : "months"}
               </span>
