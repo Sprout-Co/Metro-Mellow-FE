@@ -14,6 +14,7 @@ import { Icon } from "@/components/ui/Icon/Icon";
 import { useUIStore } from "@/store";
 import EditServiceModal from "../EditServiceModal/EditServiceModal";
 import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
+import { useAuthStore } from "@/store/slices/auth";
 
 // Define our extended service types
 export type CleaningDetails = {
@@ -102,6 +103,8 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
   duration = 2,
   onUpdateService,
 }) => {
+  const { user } = useAuthStore();
+
   // State to track extended services with details
   const [extendedServices, setExtendedServices] = useState<ExtendedService[]>(
     []
@@ -116,8 +119,14 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
       duration: Number(duration),
       startDate: new Date().toISOString(),
       autoRenew: true,
-      customerId: "",
       services: [],
+      address: {
+        street: "broadway street",
+        city: "lagos",
+        state: "lagos",
+        zipCode: "10001",
+        country: "nigeria",
+      },
     });
 
   // Add state for submission
@@ -299,7 +308,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
         console.log("Final subscription input:", finalSubscriptionInput);
 
         // Here you would typically call your API to create the subscription
-        // await handleCreateSubscription(finalSubscriptionInput);
+        await handleCreateSubscription(finalSubscriptionInput);
 
         // Show success message or redirect
         setTimeout(() => {

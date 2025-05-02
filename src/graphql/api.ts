@@ -108,7 +108,7 @@ export type CookingDetails = {
   __typename?: 'CookingDetails';
   mealDeliveries: Array<MealDelivery>;
   mealType: MealType;
-  mealsPerDelivery: Array<MealDelivery>;
+  mealsPerDelivery?: Maybe<Array<MealDelivery>>;
 };
 
 export type CookingDetailsInput = {
@@ -160,9 +160,9 @@ export type CreateStaffProfileInput = {
 };
 
 export type CreateSubscriptionInput = {
+  address: AddressInput;
   autoRenew: Scalars['Boolean']['input'];
   billingCycle: BillingCycle;
-  customerId: Scalars['ID']['input'];
   duration: Scalars['Int']['input'];
   services: Array<SubscriptionServiceInput>;
   startDate: Scalars['DateTime']['input'];
@@ -261,8 +261,9 @@ export type LaundryItemsInput = {
 
 export enum LaundryType {
   DryCleaning = 'DRY_CLEANING',
-  Premium = 'PREMIUM',
-  Standard = 'STANDARD'
+  PremiumLaundry = 'PREMIUM_LAUNDRY',
+  StandardLaundry = 'STANDARD_LAUNDRY',
+  WashAndFold = 'WASH_AND_FOLD'
 }
 
 export type MealDelivery = {
@@ -285,31 +286,31 @@ export type Mutation = {
   __typename?: 'Mutation';
   _?: Maybe<Scalars['Boolean']['output']>;
   addPaymentMethod: PaymentMethod;
-  addServiceToSubscription: Subscription;
+  addServiceToSubscription: Scalars['Boolean']['output'];
   assignStaff: Booking;
   cancelBooking: Booking;
   cancelInvoice: Invoice;
-  cancelSubscription: Subscription;
+  cancelSubscription: Scalars['Boolean']['output'];
   changePassword: Scalars['Boolean']['output'];
   completeBooking: Booking;
   createBooking: Scalars['Boolean']['output'];
   createPayment: Payment;
   createService: Service;
   createStaffProfile: StaffProfile;
-  createSubscription: Subscription;
+  createSubscription: Scalars['Boolean']['output'];
   deleteService: Scalars['Boolean']['output'];
   deleteStaffDocument: Scalars['Boolean']['output'];
   forgotPassword: Scalars['Boolean']['output'];
   generateInvoice: Invoice;
   login: AuthPayload;
   markInvoiceAsPaid: Invoice;
-  pauseSubscription: Subscription;
+  pauseSubscription: Scalars['Boolean']['output'];
   refundPayment: Payment;
   register: AuthPayload;
   removePaymentMethod: Scalars['Boolean']['output'];
-  removeServiceFromSubscription: Subscription;
+  removeServiceFromSubscription: Scalars['Boolean']['output'];
   resetPassword: Scalars['Boolean']['output'];
-  resumeSubscription: Subscription;
+  resumeSubscription: Scalars['Boolean']['output'];
   setDefaultPaymentMethod: PaymentMethod;
   updateBooking: Booking;
   updateBookingStatus: Booking;
@@ -319,9 +320,9 @@ export type Mutation = {
   updateStaffAvailability: StaffProfile;
   updateStaffProfile: StaffProfile;
   updateStaffStatus: StaffProfile;
-  updateSubscription: Subscription;
-  updateSubscriptionService: Subscription;
-  updateSubscriptionStatus: Subscription;
+  updateSubscription: Scalars['Boolean']['output'];
+  updateSubscriptionService: Scalars['Boolean']['output'];
+  updateSubscriptionStatus: Scalars['Boolean']['output'];
   updateUserRole: User;
   uploadStaffDocument: StaffDocument;
   verifyStaffDocument: StaffDocument;
@@ -765,9 +766,9 @@ export type RoomQuantities = {
   bedroom: Scalars['Int']['output'];
   kitchen: Scalars['Int']['output'];
   livingRoom: Scalars['Int']['output'];
-  lobby: Scalars['Int']['output'];
+  lobby?: Maybe<Scalars['Int']['output']>;
   other: Scalars['Int']['output'];
-  outdoor: Scalars['Int']['output'];
+  outdoor?: Maybe<Scalars['Int']['output']>;
   studyRoom: Scalars['Int']['output'];
 };
 
@@ -826,6 +827,7 @@ export type ServiceDetails = {
   cooking?: Maybe<CookingDetails>;
   laundry?: Maybe<LaundryDetails>;
   pestControl?: Maybe<PestControlDetails>;
+  serviceOption: Scalars['String']['output'];
 };
 
 export type ServiceDetailsInput = {
@@ -833,6 +835,7 @@ export type ServiceDetailsInput = {
   cooking?: InputMaybe<CookingDetailsInput>;
   laundry?: InputMaybe<LaundryDetailsInput>;
   pestControl?: InputMaybe<PestControlDetailsInput>;
+  serviceOption: Scalars['String']['input'];
 };
 
 export enum ServiceId {
@@ -957,6 +960,7 @@ export enum StaffStatus {
 export type Subscription = {
   __typename?: 'Subscription';
   _?: Maybe<Scalars['Boolean']['output']>;
+  address: Address;
   autoRenew: Scalars['Boolean']['output'];
   billingCycle: BillingCycle;
   createdAt: Scalars['DateTime']['output'];
@@ -983,6 +987,7 @@ export enum SubscriptionFrequency {
 
 export type SubscriptionService = {
   __typename?: 'SubscriptionService';
+  address: Address;
   createdAt: Scalars['DateTime']['output'];
   frequency: SubscriptionFrequency;
   id: Scalars['ID']['output'];
@@ -996,6 +1001,7 @@ export type SubscriptionService = {
 };
 
 export type SubscriptionServiceInput = {
+  address: AddressInput;
   frequency: SubscriptionFrequency;
   preferredTimeSlot: TimeSlot;
   price: Scalars['Float']['input'];
@@ -1060,6 +1066,7 @@ export type UpdateStaffProfileInput = {
 };
 
 export type UpdateSubscriptionInput = {
+  address?: InputMaybe<AddressInput>;
   autoRenew?: InputMaybe<Scalars['Boolean']['input']>;
   billingCycle?: InputMaybe<BillingCycle>;
   customerId: Scalars['ID']['input'];
@@ -1068,6 +1075,7 @@ export type UpdateSubscriptionInput = {
 };
 
 export type UpdateSubscriptionServiceInput = {
+  address?: InputMaybe<AddressInput>;
   frequency?: InputMaybe<SubscriptionFrequency>;
   preferredTimeSlot?: InputMaybe<TimeSlot>;
   price?: InputMaybe<Scalars['Float']['input']>;
@@ -1346,7 +1354,7 @@ export type CreateSubscriptionMutationVariables = Exact<{
 }>;
 
 
-export type CreateSubscriptionMutation = { __typename?: 'Mutation', createSubscription: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null } }> } };
+export type CreateSubscriptionMutation = { __typename?: 'Mutation', createSubscription: boolean };
 
 export type UpdateSubscriptionMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1354,28 +1362,28 @@ export type UpdateSubscriptionMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSubscriptionMutation = { __typename?: 'Mutation', updateSubscription: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null } }> } };
+export type UpdateSubscriptionMutation = { __typename?: 'Mutation', updateSubscription: boolean };
 
 export type CancelSubscriptionMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type CancelSubscriptionMutation = { __typename?: 'Mutation', cancelSubscription: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null } }> } };
+export type CancelSubscriptionMutation = { __typename?: 'Mutation', cancelSubscription: boolean };
 
 export type PauseSubscriptionMutationVariables = Exact<{
   pauseSubscriptionId: Scalars['ID']['input'];
 }>;
 
 
-export type PauseSubscriptionMutation = { __typename?: 'Mutation', pauseSubscription: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null } }> } };
+export type PauseSubscriptionMutation = { __typename?: 'Mutation', pauseSubscription: boolean };
 
 export type ResumeSubscriptionMutationVariables = Exact<{
   resumeSubscriptionId: Scalars['ID']['input'];
 }>;
 
 
-export type ResumeSubscriptionMutation = { __typename?: 'Mutation', resumeSubscription: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null } }> } };
+export type ResumeSubscriptionMutation = { __typename?: 'Mutation', resumeSubscription: boolean };
 
 export type UpdateSubscriptionStatusMutationVariables = Exact<{
   updateSubscriptionStatusId: Scalars['ID']['input'];
@@ -1383,7 +1391,7 @@ export type UpdateSubscriptionStatusMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSubscriptionStatusMutation = { __typename?: 'Mutation', updateSubscriptionStatus: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null } }> } };
+export type UpdateSubscriptionStatusMutation = { __typename?: 'Mutation', updateSubscriptionStatus: boolean };
 
 export type AddServiceToSubscriptionMutationVariables = Exact<{
   subscriptionId: Scalars['ID']['input'];
@@ -1391,7 +1399,7 @@ export type AddServiceToSubscriptionMutationVariables = Exact<{
 }>;
 
 
-export type AddServiceToSubscriptionMutation = { __typename?: 'Mutation', addServiceToSubscription: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null } }> } };
+export type AddServiceToSubscriptionMutation = { __typename?: 'Mutation', addServiceToSubscription: boolean };
 
 export type RemoveServiceFromSubscriptionMutationVariables = Exact<{
   subscriptionId: Scalars['ID']['input'];
@@ -1399,7 +1407,7 @@ export type RemoveServiceFromSubscriptionMutationVariables = Exact<{
 }>;
 
 
-export type RemoveServiceFromSubscriptionMutation = { __typename?: 'Mutation', removeServiceFromSubscription: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null } }> } };
+export type RemoveServiceFromSubscriptionMutation = { __typename?: 'Mutation', removeServiceFromSubscription: boolean };
 
 export type UpdateSubscriptionServiceMutationVariables = Exact<{
   subscriptionId: Scalars['ID']['input'];
@@ -1408,7 +1416,7 @@ export type UpdateSubscriptionServiceMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSubscriptionServiceMutation = { __typename?: 'Mutation', updateSubscriptionService: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null } }> } };
+export type UpdateSubscriptionServiceMutation = { __typename?: 'Mutation', updateSubscriptionService: boolean };
 
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1434,24 +1442,24 @@ export type GetBookingsQueryVariables = Exact<{
 }>;
 
 
-export type GetBookingsQuery = { __typename?: 'Query', bookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> };
+export type GetBookingsQuery = { __typename?: 'Query', bookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby?: number | null, outdoor?: number | null } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> };
 
 export type GetBookingByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetBookingByIdQuery = { __typename?: 'Query', booking?: { __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } } | null };
+export type GetBookingByIdQuery = { __typename?: 'Query', booking?: { __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby?: number | null, outdoor?: number | null } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } } | null };
 
 export type GetCustomerBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCustomerBookingsQuery = { __typename?: 'Query', customerBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> };
+export type GetCustomerBookingsQuery = { __typename?: 'Query', customerBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby?: number | null, outdoor?: number | null } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> };
 
 export type GetStaffBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetStaffBookingsQuery = { __typename?: 'Query', staffBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> };
+export type GetStaffBookingsQuery = { __typename?: 'Query', staffBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby?: number | null, outdoor?: number | null } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> };
 
 export type GetPaymentByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1538,19 +1546,19 @@ export type GetSubscriptionByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetSubscriptionByIdQuery = { __typename?: 'Query', subscription?: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> } | null };
+export type GetSubscriptionByIdQuery = { __typename?: 'Query', subscription?: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> } | null };
 
 export type GetSubscriptionsQueryVariables = Exact<{
   status?: InputMaybe<SubscriptionStatus>;
 }>;
 
 
-export type GetSubscriptionsQuery = { __typename?: 'Query', subscriptions: Array<{ __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> }> };
+export type GetSubscriptionsQuery = { __typename?: 'Query', subscriptions: Array<{ __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> }> };
 
 export type GetCustomerSubscriptionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCustomerSubscriptionsQuery = { __typename?: 'Query', customerSubscriptions: Array<{ __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> }> };
+export type GetCustomerSubscriptionsQuery = { __typename?: 'Query', customerSubscriptions: Array<{ __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> }> };
 
 
 export const RegisterDocument = gql`
@@ -2929,128 +2937,7 @@ export type DeleteStaffDocumentMutationResult = Apollo.MutationResult<DeleteStaf
 export type DeleteStaffDocumentMutationOptions = Apollo.BaseMutationOptions<DeleteStaffDocumentMutation, DeleteStaffDocumentMutationVariables>;
 export const CreateSubscriptionDocument = gql`
     mutation CreateSubscription($input: CreateSubscriptionInput!) {
-  createSubscription(input: $input) {
-    _
-    id
-    customer {
-      id
-      email
-      firstName
-      lastName
-      role
-      phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
-      createdAt
-      updatedAt
-    }
-    startDate
-    endDate
-    status
-    billingCycle
-    duration
-    totalPrice
-    nextBillingDate
-    lastBillingDate
-    autoRenew
-    paymentMethod {
-      id
-      user {
-        id
-        email
-        firstName
-        lastName
-        role
-        phone
-        createdAt
-        updatedAt
-      }
-      type
-      last4
-      expiryMonth
-      expiryYear
-      brand
-      isDefault
-      createdAt
-      updatedAt
-    }
-    subscriptionServices {
-      service {
-        _id
-        service_id
-        name
-        label
-        description
-        category
-        icon
-        price
-        displayPrice
-        status
-        imageUrl
-        features
-        inclusions
-        options {
-          id
-          service_id
-          label
-          description
-          price
-          inclusions
-          extraItems {
-            name
-            items
-            cost
-          }
-        }
-      }
-      serviceType
-      frequency
-      price
-      serviceDetails {
-        cleaning {
-          cleaningType
-          houseType
-          rooms {
-            bedroom
-            livingRoom
-            bathroom
-            kitchen
-            balcony
-            studyRoom
-            other
-          }
-        }
-        laundry {
-          laundryType
-          bags
-          items {
-            shirts
-            pants
-            dresses
-            suits
-            others
-          }
-        }
-        pestControl {
-          treatmentType
-          areas
-          severity
-        }
-      }
-      scheduledDays
-      preferredTimeSlot
-      createdAt
-      updatedAt
-      id
-    }
-    createdAt
-    updatedAt
-  }
+  createSubscription(input: $input)
 }
     `;
 export type CreateSubscriptionMutationFn = Apollo.MutationFunction<CreateSubscriptionMutation, CreateSubscriptionMutationVariables>;
@@ -3081,128 +2968,7 @@ export type CreateSubscriptionMutationResult = Apollo.MutationResult<CreateSubsc
 export type CreateSubscriptionMutationOptions = Apollo.BaseMutationOptions<CreateSubscriptionMutation, CreateSubscriptionMutationVariables>;
 export const UpdateSubscriptionDocument = gql`
     mutation UpdateSubscription($id: ID!, $input: UpdateSubscriptionInput!) {
-  updateSubscription(id: $id, input: $input) {
-    _
-    id
-    customer {
-      id
-      email
-      firstName
-      lastName
-      role
-      phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
-      createdAt
-      updatedAt
-    }
-    startDate
-    endDate
-    status
-    billingCycle
-    duration
-    totalPrice
-    nextBillingDate
-    lastBillingDate
-    autoRenew
-    paymentMethod {
-      id
-      user {
-        id
-        email
-        firstName
-        lastName
-        role
-        phone
-        createdAt
-        updatedAt
-      }
-      type
-      last4
-      expiryMonth
-      expiryYear
-      brand
-      isDefault
-      createdAt
-      updatedAt
-    }
-    subscriptionServices {
-      service {
-        _id
-        service_id
-        name
-        label
-        description
-        category
-        icon
-        price
-        displayPrice
-        status
-        imageUrl
-        features
-        inclusions
-        options {
-          id
-          service_id
-          label
-          description
-          price
-          inclusions
-          extraItems {
-            name
-            items
-            cost
-          }
-        }
-      }
-      serviceType
-      frequency
-      price
-      serviceDetails {
-        cleaning {
-          cleaningType
-          houseType
-          rooms {
-            bedroom
-            livingRoom
-            bathroom
-            kitchen
-            balcony
-            studyRoom
-            other
-          }
-        }
-        laundry {
-          laundryType
-          bags
-          items {
-            shirts
-            pants
-            dresses
-            suits
-            others
-          }
-        }
-        pestControl {
-          treatmentType
-          areas
-          severity
-        }
-      }
-      scheduledDays
-      preferredTimeSlot
-      createdAt
-      updatedAt
-      id
-    }
-    createdAt
-    updatedAt
-  }
+  updateSubscription(id: $id, input: $input)
 }
     `;
 export type UpdateSubscriptionMutationFn = Apollo.MutationFunction<UpdateSubscriptionMutation, UpdateSubscriptionMutationVariables>;
@@ -3234,128 +3000,7 @@ export type UpdateSubscriptionMutationResult = Apollo.MutationResult<UpdateSubsc
 export type UpdateSubscriptionMutationOptions = Apollo.BaseMutationOptions<UpdateSubscriptionMutation, UpdateSubscriptionMutationVariables>;
 export const CancelSubscriptionDocument = gql`
     mutation CancelSubscription($id: ID!) {
-  cancelSubscription(id: $id) {
-    _
-    id
-    customer {
-      id
-      email
-      firstName
-      lastName
-      role
-      phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
-      createdAt
-      updatedAt
-    }
-    startDate
-    endDate
-    status
-    billingCycle
-    duration
-    totalPrice
-    nextBillingDate
-    lastBillingDate
-    autoRenew
-    paymentMethod {
-      id
-      user {
-        id
-        email
-        firstName
-        lastName
-        role
-        phone
-        createdAt
-        updatedAt
-      }
-      type
-      last4
-      expiryMonth
-      expiryYear
-      brand
-      isDefault
-      createdAt
-      updatedAt
-    }
-    subscriptionServices {
-      service {
-        _id
-        service_id
-        name
-        label
-        description
-        category
-        icon
-        price
-        displayPrice
-        status
-        imageUrl
-        features
-        inclusions
-        options {
-          id
-          service_id
-          label
-          description
-          price
-          inclusions
-          extraItems {
-            name
-            items
-            cost
-          }
-        }
-      }
-      serviceType
-      frequency
-      price
-      serviceDetails {
-        cleaning {
-          cleaningType
-          houseType
-          rooms {
-            bedroom
-            livingRoom
-            bathroom
-            kitchen
-            balcony
-            studyRoom
-            other
-          }
-        }
-        laundry {
-          laundryType
-          bags
-          items {
-            shirts
-            pants
-            dresses
-            suits
-            others
-          }
-        }
-        pestControl {
-          treatmentType
-          areas
-          severity
-        }
-      }
-      scheduledDays
-      preferredTimeSlot
-      createdAt
-      updatedAt
-      id
-    }
-    createdAt
-    updatedAt
-  }
+  cancelSubscription(id: $id)
 }
     `;
 export type CancelSubscriptionMutationFn = Apollo.MutationFunction<CancelSubscriptionMutation, CancelSubscriptionMutationVariables>;
@@ -3386,128 +3031,7 @@ export type CancelSubscriptionMutationResult = Apollo.MutationResult<CancelSubsc
 export type CancelSubscriptionMutationOptions = Apollo.BaseMutationOptions<CancelSubscriptionMutation, CancelSubscriptionMutationVariables>;
 export const PauseSubscriptionDocument = gql`
     mutation PauseSubscription($pauseSubscriptionId: ID!) {
-  pauseSubscription(id: $pauseSubscriptionId) {
-    _
-    id
-    customer {
-      id
-      email
-      firstName
-      lastName
-      role
-      phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
-      createdAt
-      updatedAt
-    }
-    startDate
-    endDate
-    status
-    billingCycle
-    duration
-    totalPrice
-    nextBillingDate
-    lastBillingDate
-    autoRenew
-    paymentMethod {
-      id
-      user {
-        id
-        email
-        firstName
-        lastName
-        role
-        phone
-        createdAt
-        updatedAt
-      }
-      type
-      last4
-      expiryMonth
-      expiryYear
-      brand
-      isDefault
-      createdAt
-      updatedAt
-    }
-    subscriptionServices {
-      service {
-        _id
-        service_id
-        name
-        label
-        description
-        category
-        icon
-        price
-        displayPrice
-        status
-        imageUrl
-        features
-        inclusions
-        options {
-          id
-          service_id
-          label
-          description
-          price
-          inclusions
-          extraItems {
-            name
-            items
-            cost
-          }
-        }
-      }
-      serviceType
-      frequency
-      price
-      serviceDetails {
-        cleaning {
-          cleaningType
-          houseType
-          rooms {
-            bedroom
-            livingRoom
-            bathroom
-            kitchen
-            balcony
-            studyRoom
-            other
-          }
-        }
-        laundry {
-          laundryType
-          bags
-          items {
-            shirts
-            pants
-            dresses
-            suits
-            others
-          }
-        }
-        pestControl {
-          treatmentType
-          areas
-          severity
-        }
-      }
-      scheduledDays
-      preferredTimeSlot
-      createdAt
-      updatedAt
-      id
-    }
-    createdAt
-    updatedAt
-  }
+  pauseSubscription(id: $pauseSubscriptionId)
 }
     `;
 export type PauseSubscriptionMutationFn = Apollo.MutationFunction<PauseSubscriptionMutation, PauseSubscriptionMutationVariables>;
@@ -3538,128 +3062,7 @@ export type PauseSubscriptionMutationResult = Apollo.MutationResult<PauseSubscri
 export type PauseSubscriptionMutationOptions = Apollo.BaseMutationOptions<PauseSubscriptionMutation, PauseSubscriptionMutationVariables>;
 export const ResumeSubscriptionDocument = gql`
     mutation ResumeSubscription($resumeSubscriptionId: ID!) {
-  resumeSubscription(id: $resumeSubscriptionId) {
-    _
-    id
-    customer {
-      id
-      email
-      firstName
-      lastName
-      role
-      phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
-      createdAt
-      updatedAt
-    }
-    startDate
-    endDate
-    status
-    billingCycle
-    duration
-    totalPrice
-    nextBillingDate
-    lastBillingDate
-    autoRenew
-    paymentMethod {
-      id
-      user {
-        id
-        email
-        firstName
-        lastName
-        role
-        phone
-        createdAt
-        updatedAt
-      }
-      type
-      last4
-      expiryMonth
-      expiryYear
-      brand
-      isDefault
-      createdAt
-      updatedAt
-    }
-    subscriptionServices {
-      service {
-        _id
-        service_id
-        name
-        label
-        description
-        category
-        icon
-        price
-        displayPrice
-        status
-        imageUrl
-        features
-        inclusions
-        options {
-          id
-          service_id
-          label
-          description
-          price
-          inclusions
-          extraItems {
-            name
-            items
-            cost
-          }
-        }
-      }
-      serviceType
-      frequency
-      price
-      serviceDetails {
-        cleaning {
-          cleaningType
-          houseType
-          rooms {
-            bedroom
-            livingRoom
-            bathroom
-            kitchen
-            balcony
-            studyRoom
-            other
-          }
-        }
-        laundry {
-          laundryType
-          bags
-          items {
-            shirts
-            pants
-            dresses
-            suits
-            others
-          }
-        }
-        pestControl {
-          treatmentType
-          areas
-          severity
-        }
-      }
-      scheduledDays
-      preferredTimeSlot
-      createdAt
-      updatedAt
-      id
-    }
-    createdAt
-    updatedAt
-  }
+  resumeSubscription(id: $resumeSubscriptionId)
 }
     `;
 export type ResumeSubscriptionMutationFn = Apollo.MutationFunction<ResumeSubscriptionMutation, ResumeSubscriptionMutationVariables>;
@@ -3690,128 +3093,7 @@ export type ResumeSubscriptionMutationResult = Apollo.MutationResult<ResumeSubsc
 export type ResumeSubscriptionMutationOptions = Apollo.BaseMutationOptions<ResumeSubscriptionMutation, ResumeSubscriptionMutationVariables>;
 export const UpdateSubscriptionStatusDocument = gql`
     mutation UpdateSubscriptionStatus($updateSubscriptionStatusId: ID!, $status: SubscriptionStatus!) {
-  updateSubscriptionStatus(id: $updateSubscriptionStatusId, status: $status) {
-    _
-    id
-    customer {
-      id
-      email
-      firstName
-      lastName
-      role
-      phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
-      createdAt
-      updatedAt
-    }
-    startDate
-    endDate
-    status
-    billingCycle
-    duration
-    totalPrice
-    nextBillingDate
-    lastBillingDate
-    autoRenew
-    paymentMethod {
-      id
-      user {
-        id
-        email
-        firstName
-        lastName
-        role
-        phone
-        createdAt
-        updatedAt
-      }
-      type
-      last4
-      expiryMonth
-      expiryYear
-      brand
-      isDefault
-      createdAt
-      updatedAt
-    }
-    subscriptionServices {
-      service {
-        _id
-        service_id
-        name
-        label
-        description
-        category
-        icon
-        price
-        displayPrice
-        status
-        imageUrl
-        features
-        inclusions
-        options {
-          id
-          service_id
-          label
-          description
-          price
-          inclusions
-          extraItems {
-            name
-            items
-            cost
-          }
-        }
-      }
-      serviceType
-      frequency
-      price
-      serviceDetails {
-        cleaning {
-          cleaningType
-          houseType
-          rooms {
-            bedroom
-            livingRoom
-            bathroom
-            kitchen
-            balcony
-            studyRoom
-            other
-          }
-        }
-        laundry {
-          laundryType
-          bags
-          items {
-            shirts
-            pants
-            dresses
-            suits
-            others
-          }
-        }
-        pestControl {
-          treatmentType
-          areas
-          severity
-        }
-      }
-      scheduledDays
-      preferredTimeSlot
-      createdAt
-      updatedAt
-      id
-    }
-    createdAt
-    updatedAt
-  }
+  updateSubscriptionStatus(id: $updateSubscriptionStatusId, status: $status)
 }
     `;
 export type UpdateSubscriptionStatusMutationFn = Apollo.MutationFunction<UpdateSubscriptionStatusMutation, UpdateSubscriptionStatusMutationVariables>;
@@ -3843,128 +3125,7 @@ export type UpdateSubscriptionStatusMutationResult = Apollo.MutationResult<Updat
 export type UpdateSubscriptionStatusMutationOptions = Apollo.BaseMutationOptions<UpdateSubscriptionStatusMutation, UpdateSubscriptionStatusMutationVariables>;
 export const AddServiceToSubscriptionDocument = gql`
     mutation AddServiceToSubscription($subscriptionId: ID!, $service: SubscriptionServiceInput!) {
-  addServiceToSubscription(subscriptionId: $subscriptionId, service: $service) {
-    _
-    id
-    customer {
-      id
-      email
-      firstName
-      lastName
-      role
-      phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
-      createdAt
-      updatedAt
-    }
-    startDate
-    endDate
-    status
-    billingCycle
-    duration
-    totalPrice
-    nextBillingDate
-    lastBillingDate
-    autoRenew
-    paymentMethod {
-      id
-      user {
-        id
-        email
-        firstName
-        lastName
-        role
-        phone
-        createdAt
-        updatedAt
-      }
-      type
-      last4
-      expiryMonth
-      expiryYear
-      brand
-      isDefault
-      createdAt
-      updatedAt
-    }
-    subscriptionServices {
-      service {
-        _id
-        service_id
-        name
-        label
-        description
-        category
-        icon
-        price
-        displayPrice
-        status
-        imageUrl
-        features
-        inclusions
-        options {
-          id
-          service_id
-          label
-          description
-          price
-          inclusions
-          extraItems {
-            name
-            items
-            cost
-          }
-        }
-      }
-      serviceType
-      frequency
-      price
-      serviceDetails {
-        cleaning {
-          cleaningType
-          houseType
-          rooms {
-            bedroom
-            livingRoom
-            bathroom
-            kitchen
-            balcony
-            studyRoom
-            other
-          }
-        }
-        laundry {
-          laundryType
-          bags
-          items {
-            shirts
-            pants
-            dresses
-            suits
-            others
-          }
-        }
-        pestControl {
-          treatmentType
-          areas
-          severity
-        }
-      }
-      scheduledDays
-      preferredTimeSlot
-      createdAt
-      updatedAt
-      id
-    }
-    createdAt
-    updatedAt
-  }
+  addServiceToSubscription(subscriptionId: $subscriptionId, service: $service)
 }
     `;
 export type AddServiceToSubscriptionMutationFn = Apollo.MutationFunction<AddServiceToSubscriptionMutation, AddServiceToSubscriptionMutationVariables>;
@@ -3999,128 +3160,7 @@ export const RemoveServiceFromSubscriptionDocument = gql`
   removeServiceFromSubscription(
     subscriptionId: $subscriptionId
     subscriptionServiceId: $subscriptionServiceId
-  ) {
-    _
-    id
-    customer {
-      id
-      email
-      firstName
-      lastName
-      role
-      phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
-      createdAt
-      updatedAt
-    }
-    startDate
-    endDate
-    status
-    billingCycle
-    duration
-    totalPrice
-    nextBillingDate
-    lastBillingDate
-    autoRenew
-    paymentMethod {
-      id
-      user {
-        id
-        email
-        firstName
-        lastName
-        role
-        phone
-        createdAt
-        updatedAt
-      }
-      type
-      last4
-      expiryMonth
-      expiryYear
-      brand
-      isDefault
-      createdAt
-      updatedAt
-    }
-    subscriptionServices {
-      service {
-        _id
-        service_id
-        name
-        label
-        description
-        category
-        icon
-        price
-        displayPrice
-        status
-        imageUrl
-        features
-        inclusions
-        options {
-          id
-          service_id
-          label
-          description
-          price
-          inclusions
-          extraItems {
-            name
-            items
-            cost
-          }
-        }
-      }
-      serviceType
-      frequency
-      price
-      serviceDetails {
-        cleaning {
-          cleaningType
-          houseType
-          rooms {
-            bedroom
-            livingRoom
-            bathroom
-            kitchen
-            balcony
-            studyRoom
-            other
-          }
-        }
-        laundry {
-          laundryType
-          bags
-          items {
-            shirts
-            pants
-            dresses
-            suits
-            others
-          }
-        }
-        pestControl {
-          treatmentType
-          areas
-          severity
-        }
-      }
-      scheduledDays
-      preferredTimeSlot
-      createdAt
-      updatedAt
-      id
-    }
-    createdAt
-    updatedAt
-  }
+  )
 }
     `;
 export type RemoveServiceFromSubscriptionMutationFn = Apollo.MutationFunction<RemoveServiceFromSubscriptionMutation, RemoveServiceFromSubscriptionMutationVariables>;
@@ -4156,128 +3196,7 @@ export const UpdateSubscriptionServiceDocument = gql`
     subscriptionId: $subscriptionId
     subscriptionServiceId: $subscriptionServiceId
     input: $input
-  ) {
-    _
-    id
-    customer {
-      id
-      email
-      firstName
-      lastName
-      role
-      phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
-      createdAt
-      updatedAt
-    }
-    startDate
-    endDate
-    status
-    billingCycle
-    duration
-    totalPrice
-    nextBillingDate
-    lastBillingDate
-    autoRenew
-    paymentMethod {
-      id
-      user {
-        id
-        email
-        firstName
-        lastName
-        role
-        phone
-        createdAt
-        updatedAt
-      }
-      type
-      last4
-      expiryMonth
-      expiryYear
-      brand
-      isDefault
-      createdAt
-      updatedAt
-    }
-    subscriptionServices {
-      service {
-        _id
-        service_id
-        name
-        label
-        description
-        category
-        icon
-        price
-        displayPrice
-        status
-        imageUrl
-        features
-        inclusions
-        options {
-          id
-          service_id
-          label
-          description
-          price
-          inclusions
-          extraItems {
-            name
-            items
-            cost
-          }
-        }
-      }
-      serviceType
-      frequency
-      price
-      serviceDetails {
-        cleaning {
-          cleaningType
-          houseType
-          rooms {
-            bedroom
-            livingRoom
-            bathroom
-            kitchen
-            balcony
-            studyRoom
-            other
-          }
-        }
-        laundry {
-          laundryType
-          bags
-          items {
-            shirts
-            pants
-            dresses
-            suits
-            others
-          }
-        }
-        pestControl {
-          treatmentType
-          areas
-          severity
-        }
-      }
-      scheduledDays
-      preferredTimeSlot
-      createdAt
-      updatedAt
-      id
-    }
-    createdAt
-    updatedAt
-  }
+  )
 }
     `;
 export type UpdateSubscriptionServiceMutationFn = Apollo.MutationFunction<UpdateSubscriptionServiceMutation, UpdateSubscriptionServiceMutationVariables>;

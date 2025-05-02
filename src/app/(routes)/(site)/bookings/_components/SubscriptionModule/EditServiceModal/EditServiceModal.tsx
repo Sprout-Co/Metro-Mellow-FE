@@ -501,17 +501,25 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
           return ScheduleDays[dayKey as keyof typeof ScheduleDays];
         }) as ScheduleDays[],
         preferredTimeSlot: serviceSchedules[selectedService._id].timeSlot,
-        serviceDetails,
+        serviceDetails: {
+          ...serviceDetails,
+          serviceOption: selectedOption?.id || "",
+        },
         price: totalPrice,
       };
 
       // Update the subscription input
       setSubscriptionInput((prev) => {
+        const serviceWithAddress = {
+          ...updatedService,
+          address: prev.address,
+        };
+
         // If there are no existing services, create a new array with the updated service
         if (!prev.services || prev.services.length === 0) {
           return {
             ...prev,
-            services: [updatedService],
+            services: [serviceWithAddress],
           };
         }
 
@@ -525,14 +533,14 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
             ...prev,
             services: prev.services.map((service) =>
               service.serviceId === selectedService._id
-                ? updatedService
+                ? serviceWithAddress
                 : service
             ),
           };
         } else {
           return {
             ...prev,
-            services: [...prev.services, updatedService],
+            services: [...prev.services, serviceWithAddress],
           };
         }
       });
