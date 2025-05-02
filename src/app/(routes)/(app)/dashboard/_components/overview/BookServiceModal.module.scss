@@ -1150,22 +1150,22 @@
     font-size: map-get($font-sizes, "xs");
     font-weight: map-get($font-weights, "medium");
     text-transform: capitalize;
-    
+
     &--one-off {
       background-color: rgba(map-get($colors, "info"), 0.1);
       color: map-get($colors, "info");
     }
-    
+
     &--weekly {
       background-color: rgba(map-get($colors, "success"), 0.1);
       color: map-get($colors, "success");
     }
-    
+
     &--bi-weekly {
       background-color: rgba(map-get($colors, "warning"), 0.1);
       color: map-get($colors, "warning");
     }
-    
+
     &--monthly {
       background-color: rgba(map-get($colors, "primary", "light"), 0.1);
       color: color("primary", "light");
@@ -1292,7 +1292,7 @@
     display: inline-block;
   }
 
-  &__laundryDetail, 
+  &__laundryDetail,
   &__pestControlInfo {
     margin-top: 20px;
   }

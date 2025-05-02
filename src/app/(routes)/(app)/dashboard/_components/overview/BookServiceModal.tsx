@@ -257,83 +257,67 @@ export default function BookServiceModal() {
   const calculateTotalPrice = () => {
     if (!selectedService) return 0;
 
-    let basePrice = 0;
+    let totalPrice = selectedService.price;
 
-    // Get base price from service option or service
-    if (selectedService.service_id === ServiceId.Cleaning && selectedOption) {
-      basePrice = selectedOption.price;
+    switch (selectedService.category) {
+      case ServiceCategory.Cleaning: {
+        // Calculate total price based on room prices and number of days
+        const selectedDays = 1; // Default to 1 day for one-off bookings
+        const roomPrices = selectedService.roomPrices || {};
 
-      // Add price per room for cleaning service
-      const roomPrices = {
-        bedrooms: 20,
-        livingRooms: 15,
-        bathrooms: 25,
-        kitchen: 30,
-        study: 15,
-        outdoor: 20,
-      };
+        // Calculate total price for each room type
+        const roomTotal = Object.entries(roomQuantities).reduce(
+          (total, [room, quantity]) => {
+            const roomPrice = roomPrices[room as keyof typeof roomPrices] || 0;
+            return total + roomPrice * (quantity as number);
+          },
+          0
+        );
 
-      const roomTotal = Object.entries(roomQuantities).reduce(
-        (total, [room, quantity]) => {
-          return (
-            total +
-            (roomPrices[room as keyof typeof roomPrices] as number) *
-              (quantity as number)
-          );
-        },
-        0
-      );
-
-      return basePrice + roomTotal;
-    } else if (
-      selectedService.service_id === ServiceId.Laundry &&
-      selectedOption
-    ) {
-      // For laundry, calculate based on bags
-      const itemsPerBag = 30;
-      const totalItems = laundryBags * itemsPerBag;
-      basePrice = totalItems * selectedOption.price;
-
-      // Apply recurring discount if applicable
-      if (serviceFrequency !== "one-off") {
-        basePrice = Math.round(basePrice * 0.9); // 10% discount for recurring
+        // Multiply by number of days selected
+        totalPrice = roomTotal * selectedDays;
+        break;
       }
-    } else if (
-      (selectedService.service_id === ServiceId.PestControl ||
-        selectedService.service_id === ServiceId.PestControlResidential ||
-        selectedService.service_id === ServiceId.PestControlCommercial) &&
-      selectedOption
-    ) {
-      // For pest control, calculate based on severity and treatment type
-      basePrice = selectedOption.price;
+      case ServiceCategory.Laundry: {
+        // Calculate total price based on number of bags, items per bag, and selected days
+        const itemsPerBag = 30;
+        const basePrice = selectedOption?.price || selectedService.price;
+        const totalItems = laundryBags * basePrice;
+        const selectedDays = 1; // Default to 1 day for one-off bookings
 
-      // Apply severity multiplier
-      const severityMultiplier = {
-        [Severity.Low]: 1,
-        [Severity.Medium]: 1.2,
-        [Severity.High]: 1.5,
-      };
-
-      // Apply treatment type multiplier
-      const treatmentMultiplier = {
-        [TreatmentType.Residential]: 1,
-        [TreatmentType.Commercial]: 1.5,
-      };
-
-      basePrice =
-        basePrice *
-        severityMultiplier[severity] *
-        treatmentMultiplier[treatmentType];
-
-      // Apply recurring discount if applicable
-      if (serviceFrequency !== "one-off") {
-        basePrice = Math.round(basePrice * 0.9); // 10% discount for recurring
+        // Calculate total price
+        totalPrice = totalItems //* basePrice * selectedDays;
+        break;
       }
-    } else {
-      basePrice = selectedService.price;
+      case ServiceCategory.PestControl: {
+        // Calculate total price based on property type and severity
+        const basePrice = selectedOption?.price || selectedService.price;
+        const severityMultiplier = {
+          [Severity.Low]: 1,
+          [Severity.Medium]: 1.2,
+          [Severity.High]: 1.5,
+        };
+
+        // Apply treatment type multiplier
+        const treatmentMultiplier = {
+          [TreatmentType.Residential]: 1,
+          [TreatmentType.Commercial]: 1.5,
+        };
+
+        // Calculate total price
+        totalPrice =
+          basePrice *
+          severityMultiplier[severity] *
+          treatmentMultiplier[treatmentType];
+        break;
+      }
+      default:
+        // For unknown service types, use the base price
+        totalPrice = selectedService.price;
+        break;
     }
 
-    return basePrice;
+    return totalPrice;
   };
 
   /**
@@ -374,9 +358,6 @@ export default function BookServiceModal() {
     if (!selectedService || !selectedDate || !selectedTime) return;
 
     try {
-      // Determine the service option
-      const serviceOption =
-        selectedOption?.service_id || selectedService.service_id;
 
       // Determine the service type based on service ID
       const getServiceType = (serviceId: string): ServiceCategory => {
@@ -1114,8 +1095,6 @@ export default function BookServiceModal() {
                             : serviceFrequency === "monthly"
                               ? " Your service will be scheduled once a month on the same day and time."
                               : ""}
-                        {selectedService.service_id === ServiceId.Laundry &&
-                          " A 10% discount has been applied."}
                       </p>
                     </div>
                   </div>
@@ -1331,451 +1310,13 @@ export default function BookServiceModal() {
               <div className={styles.modal__priceSectionTitle}>
                 Service Base Price
               </div>
-              <div className={styles.modal__invoicePriceTable}>
-                <div
-                  className={
-                    styles.modal__invoicePriceRow +
-                    " " +
-                    styles.modal__invoicePriceHeader
-                  }
-                >
-                  <span>Service</span>
-                  <span>Price</span>
-                </div>
-                <div className={styles.modal__invoicePriceRow}>
-                  <span>
-                    {selectedService.label}
-                    {selectedOption ? ` - ${selectedOption.label}` : ""}
-                  </span>
-                  <span>
-                    {selectedOption
-                      ? `From $${selectedOption.price}`
-                      : selectedService.displayPrice}
-                  </span>
-                </div>
-              </div>
-
-              {/* Room charges breakdown for cleaning */}
-              {selectedService.service_id === ServiceId.Cleaning && (
-                <>
-                  <div className={styles.modal__priceSectionTitle}>
-                    Room Charges
-                  </div>
-                  <div className={styles.modal__invoicePriceTable}>
-                    <div
-                      className={
-                        styles.modal__invoicePriceRow +
-                        " " +
-                        styles.modal__invoicePriceHeader
-                      }
-                    >
-                      <span>Room Type</span>
-                      <span>Quantity</span>
-                      <span>Price/Room</span>
-                      <span>Subtotal</span>
-                    </div>
-                    {Object.entries(roomQuantities)
-                      .filter(([_, quantity]) => Number(quantity) > 0)
-                      .map(([room, quantity]) => {
-                        const roomPrices = {
-                          bedrooms: 20,
-                          livingRooms: 15,
-                          bathrooms: 25,
-                          kitchen: 30,
-                          study: 15,
-                          outdoor: 20,
-                        };
-                        const pricePerRoom = roomPrices[
-                          room as keyof typeof roomPrices
-                        ] as number;
-                        const subtotal = pricePerRoom * (quantity as number);
-
-                        return (
-                          <div
-                            key={room}
-                            className={styles.modal__invoicePriceRow}
-                          >
-                            <span>
-                              {room
-                                .replace(/([A-Z])/g, " $1")
-                                .replace(/^./, (str) => str.toUpperCase())}
-                            </span>
-                            <span>{quantity}</span>
-                            <span>${pricePerRoom}</span>
-                            <span>${subtotal}</span>
-                          </div>
-                        );
-                      })}
-                    <div
-                      className={
-                        styles.modal__invoicePriceRow +
-                        " " +
-                        styles.modal__invoicePriceSubtotal
-                      }
-                    >
-                      <span>Room Charges Subtotal</span>
-                      <span></span>
-                      <span></span>
-                      <span>
-                        $
-                        {Object.entries(roomQuantities).reduce(
-                          (total, [room, quantity]) => {
-                            const roomPrices = {
-                              bedrooms: 20,
-                              livingRooms: 15,
-                              bathrooms: 25,
-                              kitchen: 30,
-                              study: 15,
-                              outdoor: 20,
-                            };
-                            return (
-                              total +
-                              (roomPrices[
-                                room as keyof typeof roomPrices
-                              ] as number) *
-                                (quantity as number)
-                            );
-                          },
-                          0
-                        )}
-                      </span>
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {/* Laundry calculation breakdown */}
-              {selectedService.service_id === ServiceId.Laundry &&
-                selectedOption && (
-                  <>
-                    <div className={styles.modal__priceSectionTitle}>
-                      Laundry Calculation
-                    </div>
-                    <div className={styles.modal__invoicePriceTable}>
-                      <div
-                        className={
-                          styles.modal__invoicePriceRow +
-                          " " +
-                          styles.modal__invoicePriceHeader
-                        }
-                      >
-                        <span>Item</span>
-                        <span>Calculation</span>
-                        <span>Price</span>
-                      </div>
-                      <div className={styles.modal__invoicePriceRow}>
-                        <span>Base Price Per Item</span>
-                        <span></span>
-                        <span>₦{selectedOption.price}</span>
-                      </div>
-                      <div className={styles.modal__invoicePriceRow}>
-                        <span>Laundry Items</span>
-                        <span>
-                          {laundryBags} bags × 30 items = {laundryBags * 30}{" "}
-                          items
-                        </span>
-                        <span></span>
-                      </div>
-                      <div
-                        className={
-                          styles.modal__invoicePriceRow +
-                          " " +
-                          styles.modal__invoicePriceSubtotal
-                        }
-                      >
-                        <span>Laundry Subtotal</span>
-                        <span>
-                          {laundryBags * 30} items × ₦{selectedOption.price}
-                        </span>
-                        <span>
-                          ₦
-                          {(
-                            laundryBags *
-                            30 *
-                            selectedOption.price
-                          ).toLocaleString()}
-                        </span>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-              {/* Pest Control calculation breakdown */}
-              {(selectedService.service_id === ServiceId.PestControl ||
-                selectedService.service_id ===
-                  ServiceId.PestControlResidential ||
-                selectedService.service_id ===
-                  ServiceId.PestControlCommercial) &&
-                selectedOption && (
-                  <>
-                    <div className={styles.modal__priceSectionTitle}>
-                      Pest Control Calculation
-                    </div>
-                    <div className={styles.modal__invoicePriceTable}>
-                      <div
-                        className={
-                          styles.modal__invoicePriceRow +
-                          " " +
-                          styles.modal__invoicePriceHeader
-                        }
-                      >
-                        <span>Factor</span>
-                        <span>Rate</span>
-                        <span>Multiplier</span>
-                      </div>
-                      <div className={styles.modal__invoicePriceRow}>
-                        <span>Base Price</span>
-                        <span></span>
-                        <span>${selectedOption.price}</span>
-                      </div>
-                      <div className={styles.modal__invoicePriceRow}>
-                        <span>
-                          Severity Level (
-                          {severity === Severity.Low
-                            ? "Low"
-                            : severity === Severity.Medium
-                              ? "Medium"
-                              : "High"}
-                          )
-                        </span>
-                        <span></span>
-                        <span>
-                          {severity === Severity.Low
-                            ? "1.0x"
-                            : severity === Severity.Medium
-                              ? "1.2x"
-                              : "1.5x"}
-                        </span>
-                      </div>
-                      <div className={styles.modal__invoicePriceRow}>
-                        <span>
-                          Treatment Type (
-                          {treatmentType === TreatmentType.Residential
-                            ? "Residential"
-                            : "Commercial"}
-                          )
-                        </span>
-                        <span></span>
-                        <span>
-                          {treatmentType === TreatmentType.Residential
-                            ? "1.0x"
-                            : "1.5x"}
-                        </span>
-                      </div>
-                      <div
-                        className={
-                          styles.modal__invoicePriceRow +
-                          " " +
-                          styles.modal__invoicePriceSubtotal
-                        }
-                      >
-                        <span>Pest Control Subtotal</span>
-                        <span></span>
-                        <span>
-                          $
-                          {(
-                            selectedOption.price *
-                            (severity === Severity.Low
-                              ? 1
-                              : severity === Severity.Medium
-                                ? 1.2
-                                : 1.5) *
-                            (treatmentType === TreatmentType.Residential
-                              ? 1
-                              : 1.5)
-                          ).toFixed(2)}
-                        </span>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-              {/* Discounts */}
-              {serviceFrequency !== "one-off" &&
-                selectedService.service_id === ServiceId.Laundry && (
-                  <>
-                    <div className={styles.modal__priceSectionTitle}>
-                      Discounts
-                    </div>
-                    <div className={styles.modal__invoicePriceTable}>
-                      <div
-                        className={
-                          styles.modal__invoicePriceRow +
-                          " " +
-                          styles.modal__invoicePriceHeader
-                        }
-                      >
-                        <span>Type</span>
-                        <span>Details</span>
-                        <span>Amount</span>
-                      </div>
-                      <div className={styles.modal__invoicePriceRow}>
-                        <span>Recurring Service Discount</span>
-                        <span>
-                          {serviceFrequency.replace("-", " ")} booking (applied
-                          to laundry services)
-                        </span>
-                        <span style={{ color: "#28c76f" }}>-10%</span>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-              {/* Final calculation */}
-              <div className={styles.modal__priceCalculation}>
-                <div className={styles.modal__priceCalcRow}>
-                  <span>Base Price</span>
-                  <span>
-                    {selectedService.service_id === ServiceId.Cleaning &&
-                    selectedOption
-                      ? `$${selectedOption.price}`
-                      : selectedService.service_id === ServiceId.Laundry &&
-                          selectedOption
-                        ? `₦${selectedOption.price * laundryBags * 30}`
-                        : selectedService.displayPrice}
-                  </span>
-                </div>
-
-                {selectedService.service_id === ServiceId.Cleaning && (
-                  <div className={styles.modal__priceCalcRow}>
-                    <span>+ Room Charges</span>
-                    <span>
-                      $
-                      {Object.entries(roomQuantities).reduce(
-                        (total, [room, quantity]) => {
-                          const roomPrices = {
-                            bedrooms: 20,
-                            livingRooms: 15,
-                            bathrooms: 25,
-                            kitchen: 30,
-                            study: 15,
-                            outdoor: 20,
-                          };
-                          return (
-                            total +
-                            (roomPrices[
-                              room as keyof typeof roomPrices
-                            ] as number) *
-                              (quantity as number)
-                          );
-                        },
-                        0
-                      )}
-                    </span>
-                  </div>
-                )}
-
-                {(selectedService.service_id === ServiceId.PestControl ||
-                  selectedService.service_id ===
-                    ServiceId.PestControlResidential ||
-                  selectedService.service_id ===
-                    ServiceId.PestControlCommercial) &&
-                  selectedOption && (
-                    <>
-                      <div className={styles.modal__priceCalcRow}>
-                        <span>× Severity Level Multiplier</span>
-                        <span>
-                          {severity === Severity.Low
-                            ? "1.0x"
-                            : severity === Severity.Medium
-                              ? "1.2x"
-                              : "1.5x"}
-                        </span>
-                      </div>
-                      <div className={styles.modal__priceCalcRow}>
-                        <span>× Treatment Type Multiplier</span>
-                        <span>
-                          {treatmentType === TreatmentType.Residential
-                            ? "1.0x"
-                            : "1.5x"}
-                        </span>
-                      </div>
-                      {serviceFrequency !== "one-off" && (
-                        <div className={styles.modal__priceCalcRow}>
-                          <span>- Recurring Discount (10%)</span>
-                          <span style={{ color: "#28c76f" }}>
-                            -$
-                            {(
-                              selectedOption.price *
-                              (severity === Severity.Low
-                                ? 1
-                                : severity === Severity.Medium
-                                  ? 1.2
-                                  : 1.5) *
-                              (treatmentType === TreatmentType.Residential
-                                ? 1
-                                : 1.5) *
-                              0.1
-                            ).toFixed(2)}
-                          </span>
-                        </div>
-                      )}
-                    </>
-                  )}
-
-                {selectedService.service_id === ServiceId.Laundry &&
-                  serviceFrequency !== "one-off" &&
-                  selectedOption && (
-                    <div className={styles.modal__priceCalcRow}>
-                      <span>- Recurring Discount (10%)</span>
-                      <span style={{ color: "#28c76f" }}>
-                        -₦
-                        {Math.round(
-                          laundryBags * 30 * selectedOption.price * 0.1
-                        ).toLocaleString()}
-                      </span>
-                    </div>
-                  )}
-              </div>
 
               <div className={styles.modal__invoiceTotal}>
                 <span>Final Total</span>
                 <span>₦{calculateTotalPrice().toLocaleString()}</span>
               </div>
-
-              <div className={styles.modal__priceInfoNote}>
-                <Icon name="info" size={16} />
-                <span>
-                  {serviceFrequency !== "one-off"
-                    ? "Recurring bookings receive a 10% discount on laundry and pest control services."
-                    : "No discounts applied for one-time bookings."}
-                  {selectedService.service_id === ServiceId.Cleaning &&
-                    " Room charges are based on size and cleaning requirements."}
-                  {(selectedService.service_id === ServiceId.PestControl ||
-                    selectedService.service_id ===
-                      ServiceId.PestControlResidential ||
-                    selectedService.service_id ===
-                      ServiceId.PestControlCommercial) &&
-                    " Pricing is adjusted based on severity level and treatment type."}
-                </span>
-              </div>
             </div>
           </div>
-
-          {/* Inclusions */}
-          {selectedService.inclusions &&
-            selectedService.inclusions.length > 0 && (
-              <div className={styles.modal__invoiceSection}>
-                <h3 className={styles.modal__invoiceSectionTitle}>
-                  <Icon name="check" />
-                  Service Includes
-                </h3>
-
-                <div className={styles.modal__invoiceInclusions}>
-                  {selectedService.inclusions
-                    .slice(0, 3)
-                    .map((inclusion, index) => (
-                      <div
-                        key={index}
-                        className={styles.modal__invoiceInclusion}
-                      >
-                        <Icon name="check-circle" size={16} />
-                        <span>{inclusion}</span>
-                      </div>
-                    ))}
-                </div>
-              </div>
-            )}
         </motion.div>
       </motion.div>
     );
