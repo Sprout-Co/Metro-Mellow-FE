@@ -15,7 +15,10 @@ import {
   HouseType,
   LaundryType,
   RoomQuantities,
+  RoomQuantitiesInput,
   ServiceId,
+  Severity,
+  TreatmentType,
 } from "@/graphql/api";
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
 import Modal from "@/components/ui/Modal/Modal";
@@ -80,16 +83,22 @@ export default function BookServiceModal() {
   const [serviceFrequency, setServiceFrequency] =
     useState<ServiceFrequency>("one-off");
   const [propertyType, setPropertyType] = useState<"flat" | "duplex">("flat");
-  const [roomQuantities, setRoomQuantities] = useState<RoomQuantities>({
+  const [roomQuantities, setRoomQuantities] = useState<RoomQuantitiesInput>({
     balcony: 0,
     bathroom: 0,
     bedroom: 0,
     kitchen: 0,
     livingRoom: 0,
+    lobby: 0,
     other: 0,
+    outdoor: 0,
     studyRoom: 0,
   });
   const [laundryBags, setLaundryBags] = useState<number>(1);
+  const [severity, setSeverity] = useState<Severity>(Severity.Medium);
+  const [treatmentType, setTreatmentType] = useState<TreatmentType>(
+    TreatmentType.Residential
+  );
 
   // Schedule state
   const [selectedDate, setSelectedDate] = useState<string>("");
@@ -114,7 +123,11 @@ export default function BookServiceModal() {
           throw new Error("No services returned from API");
         }
 
-        setServices(services);
+        setServices(
+          services.filter(
+            (service) => service.category !== ServiceCategory.Cooking
+          )
+        );
         setIsLoading(false);
       } catch (err) {
         console.error("Error fetching services:", err);
@@ -154,7 +167,9 @@ export default function BookServiceModal() {
       case BookingStep.DETAILS:
         if (
           (selectedService?.service_id === ServiceId.Cleaning ||
-            selectedService?.service_id === ServiceId.Laundry) && selectedService.options && selectedService?.options?.length > 0
+            selectedService?.service_id === ServiceId.Laundry) &&
+          selectedService.options &&
+          selectedService?.options?.length > 0
         ) {
           return !!selectedOption;
         }
@@ -220,7 +235,7 @@ export default function BookServiceModal() {
    * Handle room quantity changes for cleaning service
    */
   const handleQuantityChange = (
-    room: keyof RoomQuantities,
+    room: keyof RoomQuantitiesInput,
     increment: boolean
   ) => {
     setRoomQuantities((prev) => ({
@@ -283,6 +298,37 @@ export default function BookServiceModal() {
       if (serviceFrequency !== "one-off") {
         basePrice = Math.round(basePrice * 0.9); // 10% discount for recurring
       }
+    } else if (
+      (selectedService.service_id === ServiceId.PestControl ||
+        selectedService.service_id === ServiceId.PestControlResidential ||
+        selectedService.service_id === ServiceId.PestControlCommercial) &&
+      selectedOption
+    ) {
+      // For pest control, calculate based on severity and treatment type
+      basePrice = selectedOption.price;
+
+      // Apply severity multiplier
+      const severityMultiplier = {
+        [Severity.Low]: 1,
+        [Severity.Medium]: 1.2,
+        [Severity.High]: 1.5,
+      };
+
+      // Apply treatment type multiplier
+      const treatmentMultiplier = {
+        [TreatmentType.Residential]: 1,
+        [TreatmentType.Commercial]: 1.5,
+      };
+
+      basePrice =
+        basePrice *
+        severityMultiplier[severity] *
+        treatmentMultiplier[treatmentType];
+
+      // Apply recurring discount if applicable
+      if (serviceFrequency !== "one-off") {
+        basePrice = Math.round(basePrice * 0.9); // 10% discount for recurring
+      }
     } else {
       basePrice = selectedService.price;
     }
@@ -339,7 +385,9 @@ export default function BookServiceModal() {
             return ServiceCategory.Cleaning;
           case ServiceId.Laundry:
             return ServiceCategory.Laundry;
-          case "PEST_CONTROL":
+          case ServiceId.PestControl:
+          case ServiceId.PestControlResidential:
+          case ServiceId.PestControlCommercial:
             return ServiceCategory.PestControl;
           default:
             return ServiceCategory.Cleaning;
@@ -362,6 +410,7 @@ export default function BookServiceModal() {
         },
         notes: `Frequency: ${serviceFrequency}`,
         serviceDetails: {
+          serviceOption: selectedOption?.id || "",
           cleaning:
             selectedService.service_id === ServiceId.Cleaning
               ? {
@@ -375,7 +424,17 @@ export default function BookServiceModal() {
             selectedService.service_id === ServiceId.Laundry
               ? {
                   bags: laundryBags,
-                  laundryType: LaundryType.Standard,
+                  laundryType: LaundryType.StandardLaundry,
+                }
+              : undefined,
+          pestControl:
+            selectedService.service_id === ServiceId.PestControl ||
+            selectedService.service_id === ServiceId.PestControlResidential ||
+            selectedService.service_id === ServiceId.PestControlCommercial
+              ? {
+                  areas: ["living room", "kitchen", "bathroom"],
+                  severity: severity,
+                  treatmentType: treatmentType,
                 }
               : undefined,
         },
@@ -400,7 +459,8 @@ export default function BookServiceModal() {
       case BookingStep.SERVICE:
         if (
           (selectedService?.service_id === ServiceId.Cleaning ||
-            selectedService?.service_id === ServiceId.Laundry) && selectedService.options &&
+            selectedService?.service_id === ServiceId.Laundry) &&
+          selectedService.options &&
           selectedService?.options?.length > 0
         ) {
           return !selectedOption;
@@ -610,7 +670,8 @@ export default function BookServiceModal() {
 
                   {/* Show "View extra items" button for laundry options */}
                   {selectedService.service_id === ServiceId.Laundry &&
-                    option.extraItems && option.extraItems?.length > 0 && (
+                    option.extraItems &&
+                    option.extraItems?.length > 0 && (
                       <div
                         className={styles.modal__optionCardInfoLink}
                         onClick={(e) => {
@@ -663,36 +724,6 @@ export default function BookServiceModal() {
         </motion.h2>
 
         <motion.div className={styles.modal__form} variants={containerVariants}>
-          {/* Service Frequency */}
-          <motion.div
-            variants={itemVariants}
-            className={styles.modal__formGroup}
-          >
-            <label>
-              <Icon name="repeat" />
-              Service Frequency
-            </label>
-            <div className={styles.modal__toggleGroup}>
-              {["one-off", "weekly", "bi-weekly", "monthly"].map(
-                (frequency) => (
-                  <button
-                    key={frequency}
-                    className={`${styles.modal__toggleButton} ${
-                      serviceFrequency === frequency
-                        ? styles.modal__toggleButtonSelected
-                        : ""
-                    }`}
-                    onClick={() =>
-                      setServiceFrequency(frequency as ServiceFrequency)
-                    }
-                  >
-                    {frequency.replace("-", " ")}
-                  </button>
-                )
-              )}
-            </div>
-          </motion.div>
-
           {/* Schedule */}
           <motion.div
             variants={itemVariants}
@@ -790,7 +821,7 @@ export default function BookServiceModal() {
                         className={styles.modal__counterGroupButton}
                         onClick={() =>
                           handleQuantityChange(
-                            room as keyof RoomQuantities,
+                            room as keyof RoomQuantitiesInput,
                             false
                           )
                         }
@@ -805,7 +836,7 @@ export default function BookServiceModal() {
                         className={styles.modal__counterGroupButton}
                         onClick={() =>
                           handleQuantityChange(
-                            room as keyof RoomQuantities,
+                            room as keyof RoomQuantitiesInput,
                             true
                           )
                         }
@@ -815,6 +846,107 @@ export default function BookServiceModal() {
                     </div>
                   </div>
                 ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Pest Control Specific Fields */}
+          {(selectedService.service_id === ServiceId.PestControl ||
+            selectedService.service_id === ServiceId.PestControlResidential ||
+            selectedService.service_id === ServiceId.PestControlCommercial) && (
+            <motion.div
+              variants={itemVariants}
+              className={styles.modal__formGroup}
+            >
+              <label>
+                <Icon name="bug-off" />
+                Pest Control Details
+              </label>
+              <div className={styles.modal__toggleGroup}>
+                <button
+                  className={`${styles.modal__toggleButton} ${
+                    propertyType === "flat"
+                      ? styles.modal__toggleButtonSelected
+                      : ""
+                  }`}
+                  onClick={() => setPropertyType("flat")}
+                >
+                  Residential
+                </button>
+                <button
+                  className={`${styles.modal__toggleButton} ${
+                    propertyType === "duplex"
+                      ? styles.modal__toggleButtonSelected
+                      : ""
+                  }`}
+                  onClick={() => setPropertyType("duplex")}
+                >
+                  Commercial
+                </button>
+              </div>
+
+              <label style={{ marginTop: "20px" }}>
+                <Icon name="alert-triangle" />
+                Severity Level
+              </label>
+              <div className={styles.modal__toggleGroup}>
+                <button
+                  className={`${styles.modal__toggleButton} ${
+                    severity === Severity.Low
+                      ? styles.modal__toggleButtonSelected
+                      : ""
+                  }`}
+                  onClick={() => setSeverity(Severity.Low)}
+                >
+                  Low
+                </button>
+                <button
+                  className={`${styles.modal__toggleButton} ${
+                    severity === Severity.Medium
+                      ? styles.modal__toggleButtonSelected
+                      : ""
+                  }`}
+                  onClick={() => setSeverity(Severity.Medium)}
+                >
+                  Medium
+                </button>
+                <button
+                  className={`${styles.modal__toggleButton} ${
+                    severity === Severity.High
+                      ? styles.modal__toggleButtonSelected
+                      : ""
+                  }`}
+                  onClick={() => setSeverity(Severity.High)}
+                >
+                  High
+                </button>
+              </div>
+
+              <label style={{ marginTop: "20px" }}>
+                <Icon name="spray" />
+                Treatment Type
+              </label>
+              <div className={styles.modal__toggleGroup}>
+                <button
+                  className={`${styles.modal__toggleButton} ${
+                    treatmentType === TreatmentType.Residential
+                      ? styles.modal__toggleButtonSelected
+                      : ""
+                  }`}
+                  onClick={() => setTreatmentType(TreatmentType.Residential)}
+                >
+                  Residential
+                </button>
+                <button
+                  className={`${styles.modal__toggleButton} ${
+                    treatmentType === TreatmentType.Commercial
+                      ? styles.modal__toggleButtonSelected
+                      : ""
+                  }`}
+                  onClick={() => setTreatmentType(TreatmentType.Commercial)}
+                >
+                  Commercial
+                </button>
               </div>
             </motion.div>
           )}
@@ -857,142 +989,6 @@ export default function BookServiceModal() {
               </p>
             </motion.div>
           )}
-
-          {/* Service Inclusions */}
-          {selectedService.inclusions && selectedService.inclusions?.length > 0 && (
-            <motion.div
-              variants={itemVariants}
-              className={styles.modal__formGroup}
-            >
-              <label>
-                <Icon name="check-circle" />
-                Service Inclusions
-              </label>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-                  gap: "10px",
-                }}
-              >
-                {selectedService.inclusions
-                  .slice(0, 4)
-                  .map((inclusion, index) => (
-                    <div key={index} className={styles.modal__inclusion}>
-                      <Icon name="check" />
-                      <span className={styles.modal__inclusionText}>
-                        {inclusion}
-                      </span>
-                    </div>
-                  ))}
-              </div>
-            </motion.div>
-          )}
-
-          {/* Price Summary */}
-          <motion.div
-            variants={itemVariants}
-            className={styles.modal__formGroup}
-          >
-            <label>
-              <Icon name="dollar-sign" />
-              Price Summary
-            </label>
-            <div className={styles.modal__summaryItem}>
-              <span className={styles.modal__summaryItemLabel}>Service</span>
-              <span className={styles.modal__summaryItemValue}>
-                {selectedService.label}
-                {selectedOption ? ` - ${selectedOption.label}` : ""}
-              </span>
-            </div>
-
-            {selectedService.service_id === ServiceId.Cleaning && (
-              <div className={styles.modal__summaryItem}>
-                <span className={styles.modal__summaryItemLabel}>
-                  Room Charges
-                </span>
-                <span className={styles.modal__summaryItemValue}>
-                  $
-                  {Object.entries(roomQuantities).reduce(
-                    (total, [room, quantity]) => {
-                      const roomPrices = {
-                        bedrooms: 20,
-                        livingRooms: 15,
-                        bathrooms: 25,
-                        kitchen: 30,
-                        study: 15,
-                        outdoor: 20,
-                      };
-                      return (
-                        total +
-                        (roomPrices[
-                          room as keyof typeof roomPrices
-                        ] as number) *
-                          (quantity as number)
-                      );
-                    },
-                    0
-                  )}
-                </span>
-              </div>
-            )}
-
-            {selectedService.service_id === ServiceId.Laundry && (
-              <div className={styles.modal__summaryItem}>
-                <span className={styles.modal__summaryItemLabel}>Laundry</span>
-                <span className={styles.modal__summaryItemValue}>
-                  {laundryBags} bag{laundryBags > 1 ? "s" : ""} (approx.{" "}
-                  {laundryBags * 30} items)
-                </span>
-              </div>
-            )}
-
-            <div className={styles.modal__summaryItem}>
-              <span className={styles.modal__summaryItemLabel}>Frequency</span>
-              <span
-                className={styles.modal__summaryItemValue}
-                style={{ textTransform: "capitalize" }}
-              >
-                {serviceFrequency.replace("-", " ")}
-              </span>
-            </div>
-
-            {serviceFrequency !== "one-off" &&
-              selectedService.service_id === ServiceId.Laundry && (
-                <div className={styles.modal__summaryItem}>
-                  <span className={styles.modal__summaryItemLabel}>
-                    Recurring Discount
-                  </span>
-                  <span
-                    className={styles.modal__summaryItemValue}
-                    style={{ color: "#28c76f" }}
-                  >
-                    -10%
-                  </span>
-                </div>
-              )}
-
-            <div className={styles.modal__summaryItem}>
-              <span
-                className={
-                  styles.modal__summaryItemLabel +
-                  " " +
-                  styles.modal__summaryItemTotal
-                }
-              >
-                Total Price
-              </span>
-              <span
-                className={
-                  styles.modal__summaryItemValue +
-                  " " +
-                  styles.modal__summaryItemTotal
-                }
-              >
-                ₦{calculateTotalPrice().toLocaleString()}
-              </span>
-            </div>
-          </motion.div>
         </motion.div>
       </motion.div>
     );
@@ -1237,6 +1233,66 @@ export default function BookServiceModal() {
                     </div>
                   </div>
                 )}
+
+                {/* Pest Control details */}
+                {(selectedService.service_id === ServiceId.PestControl ||
+                  selectedService.service_id ===
+                    ServiceId.PestControlResidential ||
+                  selectedService.service_id ===
+                    ServiceId.PestControlCommercial) && (
+                  <div className={styles.modal__laundryDetail}>
+                    <div className={styles.modal__laundryDetailTitle}>
+                      Pest Control Details
+                    </div>
+                    <div className={styles.modal__pestControlInfo}>
+                      <div className={styles.modal__pestControlDetail}>
+                        <div className={styles.modal__pestControlDetailIcon}>
+                          <Icon name="bug-off" size={20} />
+                        </div>
+                        <div className={styles.modal__pestControlDetailInfo}>
+                          <div className={styles.modal__pestControlDetailTitle}>
+                            Treatment Type
+                          </div>
+                          <div className={styles.modal__pestControlDetailValue}>
+                            {treatmentType === TreatmentType.Residential
+                              ? "Residential"
+                              : "Commercial"}
+                          </div>
+                        </div>
+                      </div>
+                      <div className={styles.modal__pestControlDetail}>
+                        <div className={styles.modal__pestControlDetailIcon}>
+                          <Icon name="alert-triangle" size={20} />
+                        </div>
+                        <div className={styles.modal__pestControlDetailInfo}>
+                          <div className={styles.modal__pestControlDetailTitle}>
+                            Infestation Severity
+                          </div>
+                          <div className={styles.modal__pestControlDetailValue}>
+                            {severity === Severity.Low
+                              ? "Low"
+                              : severity === Severity.Medium
+                                ? "Medium"
+                                : "High"}
+                          </div>
+                        </div>
+                      </div>
+                      <div className={styles.modal__pestControlDetail}>
+                        <div className={styles.modal__pestControlDetailIcon}>
+                          <Icon name="check-circle" size={20} />
+                        </div>
+                        <div className={styles.modal__pestControlDetailInfo}>
+                          <div className={styles.modal__pestControlDetailTitle}>
+                            Treatment Areas
+                          </div>
+                          <div className={styles.modal__pestControlDetailValue}>
+                            Living Room, Kitchen, Bathroom
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Service Address */}
@@ -1444,6 +1500,96 @@ export default function BookServiceModal() {
                   </>
                 )}
 
+              {/* Pest Control calculation breakdown */}
+              {(selectedService.service_id === ServiceId.PestControl ||
+                selectedService.service_id ===
+                  ServiceId.PestControlResidential ||
+                selectedService.service_id ===
+                  ServiceId.PestControlCommercial) &&
+                selectedOption && (
+                  <>
+                    <div className={styles.modal__priceSectionTitle}>
+                      Pest Control Calculation
+                    </div>
+                    <div className={styles.modal__invoicePriceTable}>
+                      <div
+                        className={
+                          styles.modal__invoicePriceRow +
+                          " " +
+                          styles.modal__invoicePriceHeader
+                        }
+                      >
+                        <span>Factor</span>
+                        <span>Rate</span>
+                        <span>Multiplier</span>
+                      </div>
+                      <div className={styles.modal__invoicePriceRow}>
+                        <span>Base Price</span>
+                        <span></span>
+                        <span>${selectedOption.price}</span>
+                      </div>
+                      <div className={styles.modal__invoicePriceRow}>
+                        <span>
+                          Severity Level (
+                          {severity === Severity.Low
+                            ? "Low"
+                            : severity === Severity.Medium
+                              ? "Medium"
+                              : "High"}
+                          )
+                        </span>
+                        <span></span>
+                        <span>
+                          {severity === Severity.Low
+                            ? "1.0x"
+                            : severity === Severity.Medium
+                              ? "1.2x"
+                              : "1.5x"}
+                        </span>
+                      </div>
+                      <div className={styles.modal__invoicePriceRow}>
+                        <span>
+                          Treatment Type (
+                          {treatmentType === TreatmentType.Residential
+                            ? "Residential"
+                            : "Commercial"}
+                          )
+                        </span>
+                        <span></span>
+                        <span>
+                          {treatmentType === TreatmentType.Residential
+                            ? "1.0x"
+                            : "1.5x"}
+                        </span>
+                      </div>
+                      <div
+                        className={
+                          styles.modal__invoicePriceRow +
+                          " " +
+                          styles.modal__invoicePriceSubtotal
+                        }
+                      >
+                        <span>Pest Control Subtotal</span>
+                        <span></span>
+                        <span>
+                          $
+                          {(
+                            selectedOption.price *
+                            (severity === Severity.Low
+                              ? 1
+                              : severity === Severity.Medium
+                                ? 1.2
+                                : 1.5) *
+                            (treatmentType === TreatmentType.Residential
+                              ? 1
+                              : 1.5)
+                          ).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                )}
+
               {/* Discounts */}
               {serviceFrequency !== "one-off" &&
                 selectedService.service_id === ServiceId.Laundry && (
@@ -1519,6 +1665,54 @@ export default function BookServiceModal() {
                   </div>
                 )}
 
+                {(selectedService.service_id === ServiceId.PestControl ||
+                  selectedService.service_id ===
+                    ServiceId.PestControlResidential ||
+                  selectedService.service_id ===
+                    ServiceId.PestControlCommercial) &&
+                  selectedOption && (
+                    <>
+                      <div className={styles.modal__priceCalcRow}>
+                        <span>× Severity Level Multiplier</span>
+                        <span>
+                          {severity === Severity.Low
+                            ? "1.0x"
+                            : severity === Severity.Medium
+                              ? "1.2x"
+                              : "1.5x"}
+                        </span>
+                      </div>
+                      <div className={styles.modal__priceCalcRow}>
+                        <span>× Treatment Type Multiplier</span>
+                        <span>
+                          {treatmentType === TreatmentType.Residential
+                            ? "1.0x"
+                            : "1.5x"}
+                        </span>
+                      </div>
+                      {serviceFrequency !== "one-off" && (
+                        <div className={styles.modal__priceCalcRow}>
+                          <span>- Recurring Discount (10%)</span>
+                          <span style={{ color: "#28c76f" }}>
+                            -$
+                            {(
+                              selectedOption.price *
+                              (severity === Severity.Low
+                                ? 1
+                                : severity === Severity.Medium
+                                  ? 1.2
+                                  : 1.5) *
+                              (treatmentType === TreatmentType.Residential
+                                ? 1
+                                : 1.5) *
+                              0.1
+                            ).toFixed(2)}
+                          </span>
+                        </div>
+                      )}
+                    </>
+                  )}
+
                 {selectedService.service_id === ServiceId.Laundry &&
                   serviceFrequency !== "one-off" &&
                   selectedOption && (
@@ -1543,10 +1737,16 @@ export default function BookServiceModal() {
                 <Icon name="info" size={16} />
                 <span>
                   {serviceFrequency !== "one-off"
-                    ? "Recurring bookings receive a 10% discount on laundry services."
+                    ? "Recurring bookings receive a 10% discount on laundry and pest control services."
                     : "No discounts applied for one-time bookings."}
                   {selectedService.service_id === ServiceId.Cleaning &&
                     " Room charges are based on size and cleaning requirements."}
+                  {(selectedService.service_id === ServiceId.PestControl ||
+                    selectedService.service_id ===
+                      ServiceId.PestControlResidential ||
+                    selectedService.service_id ===
+                      ServiceId.PestControlCommercial) &&
+                    " Pricing is adjusted based on severity level and treatment type."}
                 </span>
               </div>
             </div>
@@ -1637,27 +1837,28 @@ export default function BookServiceModal() {
               </motion.div>
             ))}
 
-            {selectedService && selectedService.service_id === "DRY_CLEANING" && (
-              <motion.div
-                className={styles.modal__extraNotes}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                <h4 className={styles.modal__extraNotesTitle}>
-                  Additional Information
-                </h4>
-                <p className={styles.modal__extraNotesItem}>
-                  Logistics charge for items on a hanger
-                </p>
-                <p className={styles.modal__extraNotesItem}>
-                  This also applies when you have more than 1 laundry bag
-                </p>
-                <p className={styles.modal__extraNotesItem}>
-                  Hanging clothes attracts an additional ₦300 per hanger
-                </p>
-              </motion.div>
-            )}
+            {selectedService &&
+              selectedService.service_id === "DRY_CLEANING" && (
+                <motion.div
+                  className={styles.modal__extraNotes}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <h4 className={styles.modal__extraNotesTitle}>
+                    Additional Information
+                  </h4>
+                  <p className={styles.modal__extraNotesItem}>
+                    Logistics charge for items on a hanger
+                  </p>
+                  <p className={styles.modal__extraNotesItem}>
+                    This also applies when you have more than 1 laundry bag
+                  </p>
+                  <p className={styles.modal__extraNotesItem}>
+                    Hanging clothes attracts an additional ₦300 per hanger
+                  </p>
+                </motion.div>
+              )}
           </div>
 
           <div className={styles.modal__extraItemsFooter}>
