@@ -53,3 +53,7 @@ mutation UpdateSubscriptionService(
     input: $input
   )
 }
+
+mutation ReactivateSubscription($reactivateSubscriptionId: ID!) {
+  reactivateSubscription(id: $reactivateSubscriptionId)
+}

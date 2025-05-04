@@ -92,10 +92,10 @@ export default function DashboardOverview() {
       <div className={styles.overview__main}>
         <div className={`${styles.overview__column} ${styles['overview__column--primary']}`}>
           <motion.section variants={itemVariants} className={styles.overview__section}>
-            <h2 className={styles.overview__sectionTitle}>
+            {/* <h2 className={styles.overview__sectionTitle}>
               <Icon name="calendar" className={styles.overview__sectionIcon} />
               Upcoming Appointments
-            </h2>
+            </h2> */}
             <UpcomingAppointments />
           </motion.section>
           
