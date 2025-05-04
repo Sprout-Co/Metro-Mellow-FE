@@ -313,12 +313,12 @@ export type Mutation = {
   _?: Maybe<Scalars['Boolean']['output']>;
   addPaymentMethod: PaymentMethod;
   addServiceToSubscription: Scalars['Boolean']['output'];
-  assignStaff: Booking;
-  cancelBooking: Booking;
+  assignStaff: Scalars['Boolean']['output'];
+  cancelBooking: Scalars['Boolean']['output'];
   cancelInvoice: Invoice;
   cancelSubscription: Scalars['Boolean']['output'];
   changePassword: Scalars['Boolean']['output'];
-  completeBooking: Booking;
+  completeBooking: Scalars['Boolean']['output'];
   createBooking: Scalars['Boolean']['output'];
   createPayment: Payment;
   createService: Service;
@@ -336,11 +336,12 @@ export type Mutation = {
   register: AuthPayload;
   removePaymentMethod: Scalars['Boolean']['output'];
   removeServiceFromSubscription: Scalars['Boolean']['output'];
+  rescheduleBooking: Scalars['Boolean']['output'];
   resetPassword: Scalars['Boolean']['output'];
   resumeSubscription: Scalars['Boolean']['output'];
   setDefaultPaymentMethod: PaymentMethod;
-  updateBooking: Booking;
-  updateBookingStatus: Booking;
+  updateBooking: Scalars['Boolean']['output'];
+  updateBookingStatus: Scalars['Boolean']['output'];
   updateProfile: User;
   updateService: Service;
   updateServiceStatus: Service;
@@ -484,6 +485,13 @@ export type MutationRemovePaymentMethodArgs = {
 export type MutationRemoveServiceFromSubscriptionArgs = {
   subscriptionId: Scalars['ID']['input'];
   subscriptionServiceId: Scalars['ID']['input'];
+};
+
+
+export type MutationRescheduleBookingArgs = {
+  id: Scalars['ID']['input'];
+  newDate: Scalars['DateTime']['input'];
+  newTimeSlot: TimeSlot;
 };
 
 
@@ -1210,21 +1218,21 @@ export type UpdateBookingMutationVariables = Exact<{
 }>;
 
 
-export type UpdateBookingMutation = { __typename?: 'Mutation', updateBooking: { __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, description: string } | null, staff?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } } };
+export type UpdateBookingMutation = { __typename?: 'Mutation', updateBooking: boolean };
 
 export type CancelBookingMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type CancelBookingMutation = { __typename?: 'Mutation', cancelBooking: { __typename?: 'Booking', id: string, status: BookingStatus, updatedAt: any } };
+export type CancelBookingMutation = { __typename?: 'Mutation', cancelBooking: boolean };
 
 export type CompleteBookingMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type CompleteBookingMutation = { __typename?: 'Mutation', completeBooking: { __typename?: 'Booking', id: string, status: BookingStatus, updatedAt: any } };
+export type CompleteBookingMutation = { __typename?: 'Mutation', completeBooking: boolean };
 
 export type AssignStaffMutationVariables = Exact<{
   bookingId: Scalars['ID']['input'];
@@ -1232,7 +1240,7 @@ export type AssignStaffMutationVariables = Exact<{
 }>;
 
 
-export type AssignStaffMutation = { __typename?: 'Mutation', assignStaff: { __typename?: 'Booking', id: string, status: BookingStatus, updatedAt: any, staff?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null } };
+export type AssignStaffMutation = { __typename?: 'Mutation', assignStaff: boolean };
 
 export type UpdateBookingStatusMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1240,7 +1248,16 @@ export type UpdateBookingStatusMutationVariables = Exact<{
 }>;
 
 
-export type UpdateBookingStatusMutation = { __typename?: 'Mutation', updateBookingStatus: { __typename?: 'Booking', id: string, status: BookingStatus, updatedAt: any } };
+export type UpdateBookingStatusMutation = { __typename?: 'Mutation', updateBookingStatus: boolean };
+
+export type RescheduleBookingMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  newDate: Scalars['DateTime']['input'];
+  newTimeSlot: TimeSlot;
+}>;
+
+
+export type RescheduleBookingMutation = { __typename?: 'Mutation', rescheduleBooking: boolean };
 
 export type CreatePaymentMutationVariables = Exact<{
   input: CreatePaymentInput;
@@ -1918,41 +1935,7 @@ export type CreateBookingMutationResult = Apollo.MutationResult<CreateBookingMut
 export type CreateBookingMutationOptions = Apollo.BaseMutationOptions<CreateBookingMutation, CreateBookingMutationVariables>;
 export const UpdateBookingDocument = gql`
     mutation UpdateBooking($id: ID!, $input: UpdateBookingInput!) {
-  updateBooking(id: $id, input: $input) {
-    id
-    customer {
-      id
-      firstName
-      lastName
-      email
-    }
-    service {
-      _id
-      service_id
-      name
-      description
-    }
-    staff {
-      id
-      firstName
-      lastName
-    }
-    date
-    timeSlot
-    status
-    notes
-    address {
-      street
-      city
-      state
-      zipCode
-      country
-    }
-    totalPrice
-    paymentStatus
-    createdAt
-    updatedAt
-  }
+  updateBooking(id: $id, input: $input)
 }
     `;
 export type UpdateBookingMutationFn = Apollo.MutationFunction<UpdateBookingMutation, UpdateBookingMutationVariables>;
@@ -1984,11 +1967,7 @@ export type UpdateBookingMutationResult = Apollo.MutationResult<UpdateBookingMut
 export type UpdateBookingMutationOptions = Apollo.BaseMutationOptions<UpdateBookingMutation, UpdateBookingMutationVariables>;
 export const CancelBookingDocument = gql`
     mutation CancelBooking($id: ID!) {
-  cancelBooking(id: $id) {
-    id
-    status
-    updatedAt
-  }
+  cancelBooking(id: $id)
 }
     `;
 export type CancelBookingMutationFn = Apollo.MutationFunction<CancelBookingMutation, CancelBookingMutationVariables>;
@@ -2019,11 +1998,7 @@ export type CancelBookingMutationResult = Apollo.MutationResult<CancelBookingMut
 export type CancelBookingMutationOptions = Apollo.BaseMutationOptions<CancelBookingMutation, CancelBookingMutationVariables>;
 export const CompleteBookingDocument = gql`
     mutation CompleteBooking($id: ID!) {
-  completeBooking(id: $id) {
-    id
-    status
-    updatedAt
-  }
+  completeBooking(id: $id)
 }
     `;
 export type CompleteBookingMutationFn = Apollo.MutationFunction<CompleteBookingMutation, CompleteBookingMutationVariables>;
@@ -2054,16 +2029,7 @@ export type CompleteBookingMutationResult = Apollo.MutationResult<CompleteBookin
 export type CompleteBookingMutationOptions = Apollo.BaseMutationOptions<CompleteBookingMutation, CompleteBookingMutationVariables>;
 export const AssignStaffDocument = gql`
     mutation AssignStaff($bookingId: ID!, $staffId: ID!) {
-  assignStaff(bookingId: $bookingId, staffId: $staffId) {
-    id
-    staff {
-      id
-      firstName
-      lastName
-    }
-    status
-    updatedAt
-  }
+  assignStaff(bookingId: $bookingId, staffId: $staffId)
 }
     `;
 export type AssignStaffMutationFn = Apollo.MutationFunction<AssignStaffMutation, AssignStaffMutationVariables>;
@@ -2095,11 +2061,7 @@ export type AssignStaffMutationResult = Apollo.MutationResult<AssignStaffMutatio
 export type AssignStaffMutationOptions = Apollo.BaseMutationOptions<AssignStaffMutation, AssignStaffMutationVariables>;
 export const UpdateBookingStatusDocument = gql`
     mutation UpdateBookingStatus($id: ID!, $status: BookingStatus!) {
-  updateBookingStatus(id: $id, status: $status) {
-    id
-    status
-    updatedAt
-  }
+  updateBookingStatus(id: $id, status: $status)
 }
     `;
 export type UpdateBookingStatusMutationFn = Apollo.MutationFunction<UpdateBookingStatusMutation, UpdateBookingStatusMutationVariables>;
@@ -2129,6 +2091,39 @@ export function useUpdateBookingStatusMutation(baseOptions?: ApolloReactHooks.Mu
 export type UpdateBookingStatusMutationHookResult = ReturnType<typeof useUpdateBookingStatusMutation>;
 export type UpdateBookingStatusMutationResult = Apollo.MutationResult<UpdateBookingStatusMutation>;
 export type UpdateBookingStatusMutationOptions = Apollo.BaseMutationOptions<UpdateBookingStatusMutation, UpdateBookingStatusMutationVariables>;
+export const RescheduleBookingDocument = gql`
+    mutation RescheduleBooking($id: ID!, $newDate: DateTime!, $newTimeSlot: TimeSlot!) {
+  rescheduleBooking(id: $id, newDate: $newDate, newTimeSlot: $newTimeSlot)
+}
+    `;
+export type RescheduleBookingMutationFn = Apollo.MutationFunction<RescheduleBookingMutation, RescheduleBookingMutationVariables>;
+
+/**
+ * __useRescheduleBookingMutation__
+ *
+ * To run a mutation, you first call `useRescheduleBookingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRescheduleBookingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [rescheduleBookingMutation, { data, loading, error }] = useRescheduleBookingMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      newDate: // value for 'newDate'
+ *      newTimeSlot: // value for 'newTimeSlot'
+ *   },
+ * });
+ */
+export function useRescheduleBookingMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RescheduleBookingMutation, RescheduleBookingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<RescheduleBookingMutation, RescheduleBookingMutationVariables>(RescheduleBookingDocument, options);
+      }
+export type RescheduleBookingMutationHookResult = ReturnType<typeof useRescheduleBookingMutation>;
+export type RescheduleBookingMutationResult = Apollo.MutationResult<RescheduleBookingMutation>;
+export type RescheduleBookingMutationOptions = Apollo.BaseMutationOptions<RescheduleBookingMutation, RescheduleBookingMutationVariables>;
 export const CreatePaymentDocument = gql`
     mutation CreatePayment($input: CreatePaymentInput!) {
   createPayment(input: $input) {

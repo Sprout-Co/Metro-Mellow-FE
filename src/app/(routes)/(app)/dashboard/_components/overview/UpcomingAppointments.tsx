@@ -28,7 +28,9 @@ export default function UpcomingAppointments() {
   );
   const [showAll, setShowAll] = useState(false);
   // Add filter state
-  const [filter, setFilter] = useState<'upcoming' | 'past' | 'all'>('upcoming');
+  const [filter, setFilter] = useState<
+    "upcoming" | "past" | "cancelled" | "all"
+  >("upcoming");
   const { currentCustomerBookings, handleGetCustomerBookings } =
     useBookingOperations();
   const [isLoading, setIsLoading] = useState(true);
@@ -175,29 +177,36 @@ export default function UpcomingAppointments() {
   );
 
   // Filter appointments based on status and time
-  const filteredAppointments = sortedAppointments.filter(
-    (appointment) => {
-      // Base status check (exclude cancelled for all views)
-      const baseStatusCheck = appointment.status !== BookingStatus.Cancelled;
-      
-      // Get time status
-      const { status: timeStatus } = getTimeLeft(appointment.date, appointment.timeSlot);
-      
-      if (filter === 'upcoming') {
-        // For upcoming: not completed, not cancelled, and not past
-        return baseStatusCheck && 
-               appointment.status !== BookingStatus.Completed &&
-               timeStatus !== "COMPLETED";
-      } else if (filter === 'past') {
-        // For past: either completed status or time has passed
-        return baseStatusCheck && 
-               (appointment.status === BookingStatus.Completed || timeStatus === "COMPLETED");
-      } else {
-        // For all: just exclude cancelled
-        return baseStatusCheck;
-      }
+  const filterAppointments = (appointment: Booking) => {
+    // Get time status
+    const { status: timeStatus } = getTimeLeft(
+      appointment.date,
+      appointment.timeSlot
+    );
+
+    if (filter === "upcoming") {
+      // For upcoming: not completed, not cancelled, and not past
+      return (
+        appointment.status !== BookingStatus.Completed &&
+        appointment.status !== BookingStatus.Cancelled &&
+        timeStatus !== "COMPLETED"
+      );
+    } else if (filter === "past") {
+      // For past: completed status or time has passed (but not cancelled)
+      return (
+        appointment.status === BookingStatus.Completed ||
+        timeStatus === "COMPLETED"
+      );
+    } else if (filter === "cancelled") {
+      // For cancelled: only show cancelled appointments
+      return appointment.status === BookingStatus.Cancelled;
+    } else {
+      // For all: show everything
+      return true;
     }
-  );
+  };
+
+  const filteredAppointments = sortedAppointments.filter(filterAppointments);
 
   // Display either all appointments or just the 5 most imminent ones
   const displayedAppointments = showAll
@@ -240,50 +249,71 @@ export default function UpcomingAppointments() {
       <div className={styles.appointments}>
         <div className={styles.appointments__header}>
           <h2 className={styles.appointments__title}>
-            {filter === 'upcoming' ? 'Upcoming' : filter === 'past' ? 'Past' : 'All'} Appointments
-            <span className={styles.appointments__count}>
-              0
-            </span>
+            {filter === "upcoming"
+              ? "Upcoming"
+              : filter === "past"
+                ? "Past"
+                : filter === "cancelled"
+                  ? "Cancelled"
+                  : "All"}{" "}
+            Appointments
+            <span className={styles.appointments__count}>0</span>
           </h2>
-          
+
           {/* Add filter tabs */}
           <div className={styles.appointments__filters}>
-            <button 
-              className={`${styles.appointments__filterBtn} ${filter === 'upcoming' ? styles.appointments__filterBtn_active : ''}`}
-              onClick={() => setFilter('upcoming')}
+            <button
+              className={`${styles.appointments__filterBtn} ${filter === "upcoming" ? styles.appointments__filterBtn_active : ""}`}
+              onClick={() => setFilter("upcoming")}
             >
               Upcoming
             </button>
-            <button 
-              className={`${styles.appointments__filterBtn} ${filter === 'past' ? styles.appointments__filterBtn_active : ''}`}
-              onClick={() => setFilter('past')}
+            <button
+              className={`${styles.appointments__filterBtn} ${filter === "past" ? styles.appointments__filterBtn_active : ""}`}
+              onClick={() => setFilter("past")}
             >
               Past
             </button>
-            <button 
-              className={`${styles.appointments__filterBtn} ${filter === 'all' ? styles.appointments__filterBtn_active : ''}`}
-              onClick={() => setFilter('all')}
+            <button
+              className={`${styles.appointments__filterBtn} ${filter === "cancelled" ? styles.appointments__filterBtn_active : ""}`}
+              onClick={() => setFilter("cancelled")}
+            >
+              Cancelled
+            </button>
+            <button
+              className={`${styles.appointments__filterBtn} ${filter === "all" ? styles.appointments__filterBtn_active : ""}`}
+              onClick={() => setFilter("all")}
             >
               All
             </button>
           </div>
         </div>
-        
+
         <div className={styles.appointments__empty}>
           <div className={styles.appointments__emptyIcon}>
             <Icon name="calendar" />
           </div>
           <h3 className={styles.appointments__emptyTitle}>
-            No {filter === 'upcoming' ? 'Upcoming' : filter === 'past' ? 'Past' : ''} Appointments
+            No{" "}
+            {filter === "upcoming"
+              ? "Upcoming"
+              : filter === "past"
+                ? "Past"
+                : filter === "cancelled"
+                  ? "Cancelled"
+                  : ""}{" "}
+            Appointments
           </h3>
           <p className={styles.appointments__emptyText}>
-            {filter === 'upcoming' 
+            {filter === "upcoming"
               ? "You don't have any scheduled appointments at the moment."
-              : filter === 'past'
-              ? "You don't have any past appointments."
-              : "You don't have any appointments."}
+              : filter === "past"
+                ? "You don't have any past appointments."
+                : filter === "cancelled"
+                  ? "You don't have any cancelled appointments."
+                  : "You don't have any appointments."}
           </p>
-          {filter === 'upcoming' && (
+          {filter === "upcoming" && (
             <button
               className={styles.appointments__scheduleBtn}
               onClick={() => router.push("/dashboard/book-service")}
@@ -301,29 +331,52 @@ export default function UpcomingAppointments() {
     <div className={styles.appointments}>
       <div className={styles.appointments__header}>
         <h2 className={styles.appointments__title}>
-          {filter === 'upcoming' ? 'Upcoming' : filter === 'past' ? 'Past' : 'All'} Appointments
+          {filter === "upcoming"
+            ? "Upcoming"
+            : filter === "past"
+              ? "Past"
+              : filter === "cancelled"
+                ? "Cancelled"
+                : "All"}{" "}
+          Appointments
           <span className={styles.appointments__count}>
             {filteredAppointments.length}
           </span>
         </h2>
-        
+
         {/* Add filter tabs */}
         <div className={styles.appointments__filters}>
-          <button 
-            className={`${styles.appointments__filterBtn} ${filter === 'upcoming' ? styles.appointments__filterBtn_active : ''}`}
-            onClick={() => setFilter('upcoming')}
+          <button
+            className={`${styles.appointments__filterBtn} ${
+              filter === "upcoming" ? styles.appointments__filterBtn_active : ""
+            }`}
+            onClick={() => setFilter("upcoming")}
           >
             Upcoming
           </button>
-          <button 
-            className={`${styles.appointments__filterBtn} ${filter === 'past' ? styles.appointments__filterBtn_active : ''}`}
-            onClick={() => setFilter('past')}
+          <button
+            className={`${styles.appointments__filterBtn} ${
+              filter === "past" ? styles.appointments__filterBtn_active : ""
+            }`}
+            onClick={() => setFilter("past")}
           >
             Past
           </button>
-          <button 
-            className={`${styles.appointments__filterBtn} ${filter === 'all' ? styles.appointments__filterBtn_active : ''}`}
-            onClick={() => setFilter('all')}
+          <button
+            className={`${styles.appointments__filterBtn} ${
+              filter === "cancelled"
+                ? styles.appointments__filterBtn_active
+                : ""
+            }`}
+            onClick={() => setFilter("cancelled")}
+          >
+            Cancelled
+          </button>
+          <button
+            className={`${styles.appointments__filterBtn} ${
+              filter === "all" ? styles.appointments__filterBtn_active : ""
+            }`}
+            onClick={() => setFilter("all")}
           >
             All
           </button>

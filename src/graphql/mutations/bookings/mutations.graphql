@@ -3,76 +3,29 @@ mutation CreateBooking($input: CreateBookingInput!) {
 }
 
 mutation UpdateBooking($id: ID!, $input: UpdateBookingInput!) {
-  updateBooking(id: $id, input: $input) {
-    id
-    customer {
-      id
-      firstName
-      lastName
-      email
-    }
-    service {
-      _id
-      service_id
-      name
-      description
-    }
-    staff {
-      id
-      firstName
-      lastName
-    }
-    date
-    timeSlot
-    status
-    notes
-    address {
-      street
-      city
-      state
-      zipCode
-      country
-    }
-    totalPrice
-    paymentStatus
-    createdAt
-    updatedAt
-  }
+  updateBooking(id: $id, input: $input) 
 }
 
 mutation CancelBooking($id: ID!) {
-  cancelBooking(id: $id) {
-    id
-    status
-    updatedAt
-  }
+  cancelBooking(id: $id) 
 }
 
 mutation CompleteBooking($id: ID!) {
-  completeBooking(id: $id) {
-    id
-    status
-    updatedAt
-  }
+  completeBooking(id: $id)
 }
 
 mutation AssignStaff($bookingId: ID!, $staffId: ID!) {
-  assignStaff(bookingId: $bookingId, staffId: $staffId) {
-    id
-    staff {
-      id
-      firstName
-      lastName
-    }
-    status
-    updatedAt
-  }
+  assignStaff(bookingId: $bookingId, staffId: $staffId) 
 }
 
 mutation UpdateBookingStatus($id: ID!, $status: BookingStatus!) {
-  updateBookingStatus(id: $id, status: $status) {
-    id
-    status
-    updatedAt
-  }
+  updateBookingStatus(id: $id, status: $status)
+}
+
+mutation RescheduleBooking(
+  $id: ID!
+  $newDate: DateTime!
+  $newTimeSlot: TimeSlot!
+) {
+  rescheduleBooking(id: $id, newDate: $newDate, newTimeSlot: $newTimeSlot)
 }
