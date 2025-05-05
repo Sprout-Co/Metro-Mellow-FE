@@ -4,20 +4,20 @@
 
 .appointments {
   position: relative;
-  
+
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: spacing("lg");
-    
+
     @include breakpoint-down("md") {
       flex-direction: column;
       align-items: flex-start;
       gap: spacing("md");
     }
   }
-  
+
   &__title {
     font-size: map-get($font-sizes, "xl");
     font-weight: map-get($font-weights, "semibold");
@@ -26,7 +26,7 @@
     align-items: center;
     gap: spacing("xs");
   }
-  
+
   &__count {
     display: inline-flex;
     align-items: center;
@@ -40,7 +40,7 @@
     min-width: 22px;
     padding: 0 spacing("xs");
   }
-  
+
   &__filters {
     display: flex;
     align-items: center;
@@ -48,13 +48,13 @@
     background-color: rgba(color("neutral", "lighter"), 0.5);
     border-radius: border-radius("md");
     padding: spacing("xxs");
-    
+
     @include breakpoint-down("md") {
       width: 100%;
       justify-content: center;
     }
   }
-  
+
   &__filterBtn {
     border: none;
     background: none;
@@ -65,25 +65,25 @@
     color: color("neutral", "dark");
     cursor: pointer;
     transition: $transition-base;
-    
+
     &:hover {
       background-color: rgba(color("primary", "base"), 0.05);
       color: color("primary", "base");
     }
-    
+
     &_active {
       background-color: color("neutral", "white");
       color: color("primary", "base");
       box-shadow: map-get($box-shadows, "xs");
     }
   }
-  
+
   &__list {
     display: flex;
     flex-direction: column;
     gap: spacing("md");
   }
-  
+
   &__card {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
@@ -91,32 +91,32 @@
     overflow: hidden;
     box-shadow: map-get($box-shadows, "sm");
     transition: $transition-base;
-    
+
     &:hover {
       box-shadow: map-get($box-shadows, "md");
     }
   }
-  
+
   &__cardContent {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: spacing("md") spacing("lg");
   }
-  
+
   &__mainInfo {
     display: flex;
     align-items: center;
     flex: 1;
     min-width: 0;
-    
+
     @include breakpoint-down("sm") {
       flex-direction: column;
       align-items: flex-start;
       gap: spacing("sm");
     }
   }
-  
+
   &__serviceIcon {
     display: flex;
     align-items: center;
@@ -129,54 +129,54 @@
     margin-right: spacing("md");
     flex-shrink: 0;
     transition: $transition-base;
-    
+
     svg {
       width: 24px;
       height: 24px;
     }
-    
+
     &--imminent {
       background-color: rgba(color("warning"), 0.1);
       color: color("warning");
     }
-    
+
     @include breakpoint-down("sm") {
       margin-right: 0;
       width: 40px;
       height: 40px;
-      
+
       svg {
         width: 20px;
         height: 20px;
       }
     }
   }
-  
+
   &__infoContainer {
     flex: 1;
     min-width: 0;
-    
+
     @include breakpoint-down("sm") {
       width: 100%;
     }
   }
-  
+
   &__infoRow {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: spacing("xs");
-    
+
     &:last-child {
       margin-bottom: 0;
     }
-    
+
     @include breakpoint-down("sm") {
       flex-wrap: wrap;
       gap: spacing("xs");
     }
   }
-  
+
   &__service {
     font-size: map-get($font-sizes, "lg");
     font-weight: map-get($font-weights, "semibold");
@@ -184,17 +184,17 @@
     margin: 0;
     @include truncate;
     max-width: 200px;
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "base");
       max-width: 150px;
     }
-    
+
     @include breakpoint-down("sm") {
       max-width: none;
     }
   }
-  
+
   &__status {
     display: inline-flex;
     align-items: center;
@@ -204,58 +204,59 @@
     font-weight: map-get($font-weights, "medium");
     text-transform: capitalize;
     flex-shrink: 0;
-    
+
     &--confirmed {
       background-color: rgba(color("success"), 0.1);
       color: color("success");
     }
-    
+
     &--pending {
       background-color: rgba(color("warning"), 0.1);
       color: color("warning");
     }
-    
+
     &--in_progress {
       background-color: rgba(color("primary", "base"), 0.1);
       color: color("primary", "base");
     }
-    
+
     &--cancelled {
       background-color: rgba(color("error"), 0.1);
       color: color("error");
     }
-    
+
     &--completed {
       background-color: rgba(color("neutral", "dark"), 0.1);
       color: color("neutral", "dark");
     }
   }
-  
+
   &__dateTime {
     display: flex;
     align-items: center;
-    
+
     @include breakpoint-down("xs") {
       flex-direction: column;
       align-items: flex-start;
       gap: spacing("xxs");
     }
   }
-  
-  &__date, &__time {
+
+  &__date,
+  &__time {
     display: flex;
     align-items: center;
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "dark");
-    
+
     &:first-child {
       margin-right: spacing("md");
-      
+
       @include breakpoint-down("xs") {
         margin-right: 0;
       }
     }
-    
+
     svg {
       margin-right: spacing("xxs");
       color: color("neutral", "darker");
@@ -263,7 +264,7 @@
       height: 14px;
     }
   }
-  
+
   &__countdown {
     display: inline-flex;
     align-items: center;
@@ -273,13 +274,13 @@
     font-weight: map-get($font-weights, "medium");
     background-color: rgba(color("primary", "base"), 0.1);
     color: color("primary", "base");
-    
+
     &--imminent {
       background-color: rgba(color("warning"), 0.1);
       color: color("warning");
     }
   }
-  
+
   &__expandBtn {
     display: flex;
     align-items: center;
@@ -293,44 +294,44 @@
     cursor: pointer;
     transition: $transition-base;
     flex-shrink: 0;
-    
+
     &:hover {
       background-color: color("neutral", "lighter");
       color: color("primary", "base");
     }
-    
+
     svg {
       width: 18px;
       height: 18px;
     }
   }
-  
+
   &__details {
     padding: spacing("lg");
     border-top: 1px solid color("neutral", "lighter");
     background-color: color("neutral", "lighter");
   }
-  
+
   &__detailsGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: spacing("xl");
     margin-bottom: spacing("lg");
-    
+
     @include breakpoint-down("sm") {
       grid-template-columns: 1fr;
       gap: spacing("lg");
     }
   }
-  
+
   &__detailsSection {
     margin-bottom: spacing("lg");
-    
+
     &:last-child {
       margin-bottom: 0;
     }
   }
-  
+
   &__detailsTitle {
     display: flex;
     align-items: center;
@@ -339,19 +340,19 @@
     font-weight: map-get($font-weights, "medium");
     color: color("neutral", "darker");
     margin: 0 0 spacing("sm") 0;
-    
+
     svg {
       color: color("primary", "base");
       width: 16px;
       height: 16px;
     }
   }
-  
+
   &__provider {
     display: flex;
     align-items: center;
   }
-  
+
   &__providerAvatar {
     width: 40px;
     height: 40px;
@@ -366,11 +367,11 @@
     margin-right: spacing("sm");
     flex-shrink: 0;
   }
-  
+
   &__providerInfo {
     min-width: 0;
   }
-  
+
   &__providerName {
     display: block;
     font-weight: map-get($font-weights, "medium");
@@ -378,33 +379,33 @@
     font-size: map-get($font-sizes, "base");
     @include truncate;
   }
-  
+
   &__providerRole {
     display: block;
     font-size: map-get($font-sizes, "xs");
     color: color("neutral", "dark");
   }
-  
+
   &__unassigned {
     display: flex;
     align-items: center;
     gap: spacing("xs");
     color: color("warning");
     font-size: map-get($font-sizes, "sm");
-    
+
     svg {
       width: 16px;
       height: 16px;
     }
   }
-  
+
   &__address {
     font-style: normal;
     color: color("neutral", "darker");
     font-size: map-get($font-sizes, "sm");
     line-height: map-get($line-heights, "relaxed");
   }
-  
+
   &__notes {
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "darker");
@@ -414,17 +415,17 @@
     padding: spacing("sm") spacing("md");
     border: 1px solid color("neutral", "medium");
   }
-  
+
   &__actions {
     display: flex;
     flex-wrap: wrap;
     gap: spacing("sm");
-    
+
     @include breakpoint-down("sm") {
       flex-direction: column;
     }
   }
-  
+
   &__actionBtn {
     display: inline-flex;
     align-items: center;
@@ -438,53 +439,78 @@
     transition: $transition-base;
     flex: 1;
     text-align: center;
-    
+
     @include breakpoint-down("sm") {
       width: 100%;
     }
-    
+
     svg {
       width: 16px;
       height: 16px;
     }
-    
+
     &--reschedule {
       background-color: rgba(color("primary", "base"), 0.1);
       color: color("primary", "base");
       border: none;
-      
+
       &:hover {
         background-color: rgba(color("primary", "base"), 0.2);
       }
     }
-    
+
     &--cancel {
       background-color: transparent;
       color: color("error");
       border: 1px solid rgba(color("error"), 0.3);
-      
+
       &:hover {
         background-color: rgba(color("error"), 0.05);
       }
     }
-    
+
     &--details {
       background-color: color("primary", "base");
       color: color("neutral", "white");
       border: none;
-      
+
+      &:hover {
+        background-color: color("primary", "dark");
+      }
+    }
+
+    &--confirm {
+      background-color: color("error");
+      color: color("neutral", "white");
+      border: none;
+
+      &:hover {
+        background-color: darken(color("error"), 10%);
+      }
+
+      &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+    }
+
+    &--primary {
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
+      border: none;
+
       &:hover {
         background-color: color("primary", "dark");
       }
     }
   }
-  
+
   &__footer {
     margin-top: spacing("lg");
     display: flex;
     justify-content: center;
   }
-  
+
   &__viewAllBtn {
     display: inline-flex;
     align-items: center;
@@ -498,18 +524,18 @@
     transition: $transition-base;
     padding: spacing("sm") spacing("lg");
     border-radius: border-radius("md");
-    
+
     &:hover {
       background-color: rgba(color("primary", "base"), 0.05);
     }
-    
+
     svg {
       width: 16px;
       height: 16px;
       transition: $transition-base;
     }
   }
-  
+
   // Empty state
   &__empty {
     display: flex;
@@ -521,7 +547,7 @@
     border-radius: border-radius("lg");
     border: 1px dashed color("neutral", "medium");
   }
-  
+
   &__emptyIcon {
     width: 80px;
     height: 80px;
@@ -531,27 +557,27 @@
     background-color: rgba(color("primary", "base"), 0.1);
     border-radius: 50%;
     margin-bottom: spacing("xl");
-    
+
     svg {
       width: 40px;
       height: 40px;
       color: color("primary", "base");
     }
   }
-  
+
   &__emptyTitle {
     font-size: map-get($font-sizes, "2xl");
     font-weight: map-get($font-weights, "bold");
     color: color("neutral", "black");
     margin-bottom: spacing("md");
   }
-  
+
   &__emptyText {
     color: color("neutral", "dark");
     max-width: 400px;
     margin-bottom: spacing("xl");
   }
-  
+
   &__scheduleBtn {
     display: inline-flex;
     align-items: center;
@@ -564,17 +590,17 @@
     font-weight: map-get($font-weights, "medium");
     cursor: pointer;
     transition: $transition-base;
-    
+
     &:hover {
       background-color: color("primary", "dark");
     }
-    
+
     svg {
       width: 16px;
       height: 16px;
     }
   }
-  
+
   // Loading state
   &__loading {
     display: flex;
@@ -584,7 +610,7 @@
     min-height: 200px;
     color: color("neutral", "dark");
   }
-  
+
   &__spinner {
     width: 48px;
     height: 48px;
@@ -594,11 +620,13 @@
     animation: spinner 1s linear infinite;
     margin-bottom: spacing("md");
   }
-  
+
   @keyframes spinner {
-    to { transform: rotate(360deg); }
+    to {
+      transform: rotate(360deg);
+    }
   }
-  
+
   // Error state
   &__error {
     display: flex;
@@ -610,17 +638,17 @@
     border-radius: border-radius("lg");
     color: color("neutral", "darker");
   }
-  
+
   &__errorIcon {
     color: color("error");
     margin-bottom: spacing("md");
-    
+
     svg {
       width: 48px;
       height: 48px;
     }
   }
-  
+
   &__retryBtn {
     display: inline-flex;
     align-items: center;
@@ -634,9 +662,38 @@
     font-weight: map-get($font-weights, "medium");
     cursor: pointer;
     transition: $transition-base;
-    
+
     &:hover {
       background-color: darken(color("error"), 10%);
+    }
+  }
+
+  &__modalContent {
+    padding: spacing("lg");
+    text-align: center;
+
+    p {
+      margin-bottom: spacing("lg");
+      color: color("neutral", "darker");
+      font-size: map-get($font-sizes, "base");
+    }
+  }
+
+  &__modalActions {
+    display: flex;
+    gap: spacing("sm");
+    justify-content: center;
+  }
+
+  &__successIcon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto spacing("lg");
+    color: color("success");
+
+    svg {
+      width: 100%;
+      height: 100%;
     }
   }
 }

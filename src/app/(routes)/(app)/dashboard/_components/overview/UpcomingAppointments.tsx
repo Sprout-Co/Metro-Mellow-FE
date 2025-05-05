@@ -6,6 +6,8 @@ import styles from "./UpcomingAppointments.module.scss";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { BookingStatus, Booking, TimeSlot } from "@/graphql/api";
 import { useRouter } from "next/navigation"; // Import router
+import Modal from "@/components/ui/Modal/Modal";
+import RescheduleServiceModal from "./RescheduleServiceModal";
 
 // Helper function to get time slot hours and minutes
 const getTimeSlotTime = (timeSlot: TimeSlot) => {
@@ -31,10 +33,20 @@ export default function UpcomingAppointments() {
   const [filter, setFilter] = useState<
     "upcoming" | "past" | "cancelled" | "all"
   >("upcoming");
-  const { currentCustomerBookings, handleGetCustomerBookings } =
-    useBookingOperations();
+  const {
+    currentCustomerBookings,
+    handleGetCustomerBookings,
+    handleCancelBooking,
+  } = useBookingOperations();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState<
+    string | null
+  >(null);
+  const [showRescheduleModal, setShowRescheduleModal] = useState(false);
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -62,18 +74,18 @@ export default function UpcomingAppointments() {
     });
   };
 
-  const formatTime = (dateStr: string, timeSlot: string) => {
+  const formatTime = (dateStr: string, timeSlot: TimeSlot) => {
     // Convert timeSlot enum to approximate time range
     let timeRange = "";
     switch (timeSlot) {
-      case "MORNING":
-        timeRange = "8:00 AM - 12:00 PM";
+      case TimeSlot.Morning:
+        timeRange = "8:00 AM - 12:00 PM (Morning)";
         break;
-      case "AFTERNOON":
-        timeRange = "12:00 PM - 4:00 PM";
+      case TimeSlot.Afternoon:
+        timeRange = "12:00 PM - 4:00 PM (Afternoon)";
         break;
-      case "EVENING":
-        timeRange = "4:00 PM - 8:00 PM";
+      case TimeSlot.Evening:
+        timeRange = "4:00 PM - 8:00 PM (Evening)";
         break;
       default:
         timeRange = "Time not specified";
@@ -213,6 +225,28 @@ export default function UpcomingAppointments() {
     ? filteredAppointments
     : filteredAppointments.slice(0, 5);
 
+  const handleCancelClick = (appointmentId: string) => {
+    setSelectedAppointmentId(appointmentId);
+    setShowCancelModal(true);
+  };
+
+  const handleConfirmCancel = async () => {
+    if (!selectedAppointmentId) return;
+
+    try {
+      setIsCancelling(true);
+      await handleCancelBooking(selectedAppointmentId);
+      setShowCancelModal(false);
+      setShowSuccessModal(true);
+      // Refresh the bookings list
+      await handleGetCustomerBookings();
+    } catch (error) {
+      console.error("Error cancelling booking:", error);
+    } finally {
+      setIsCancelling(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className={styles.appointments}>
@@ -328,301 +362,354 @@ export default function UpcomingAppointments() {
   }
 
   return (
-    <div className={styles.appointments}>
-      <div className={styles.appointments__header}>
-        <h2 className={styles.appointments__title}>
-          {filter === "upcoming"
-            ? "Upcoming"
-            : filter === "past"
-              ? "Past"
-              : filter === "cancelled"
-                ? "Cancelled"
-                : "All"}{" "}
-          Appointments
-          <span className={styles.appointments__count}>
-            {filteredAppointments.length}
-          </span>
-        </h2>
+    <>
+      <div className={styles.appointments}>
+        <div className={styles.appointments__header}>
+          <h2 className={styles.appointments__title}>
+            {filter === "upcoming"
+              ? "Upcoming"
+              : filter === "past"
+                ? "Past"
+                : filter === "cancelled"
+                  ? "Cancelled"
+                  : "All"}{" "}
+            Appointments
+            <span className={styles.appointments__count}>
+              {filteredAppointments.length}
+            </span>
+          </h2>
 
-        {/* Add filter tabs */}
-        <div className={styles.appointments__filters}>
-          <button
-            className={`${styles.appointments__filterBtn} ${
-              filter === "upcoming" ? styles.appointments__filterBtn_active : ""
-            }`}
-            onClick={() => setFilter("upcoming")}
-          >
-            Upcoming
-          </button>
-          <button
-            className={`${styles.appointments__filterBtn} ${
-              filter === "past" ? styles.appointments__filterBtn_active : ""
-            }`}
-            onClick={() => setFilter("past")}
-          >
-            Past
-          </button>
-          <button
-            className={`${styles.appointments__filterBtn} ${
-              filter === "cancelled"
-                ? styles.appointments__filterBtn_active
-                : ""
-            }`}
-            onClick={() => setFilter("cancelled")}
-          >
-            Cancelled
-          </button>
-          <button
-            className={`${styles.appointments__filterBtn} ${
-              filter === "all" ? styles.appointments__filterBtn_active : ""
-            }`}
-            onClick={() => setFilter("all")}
-          >
-            All
-          </button>
-        </div>
-      </div>
-
-      <div className={styles.appointments__list}>
-        {displayedAppointments.map((appointment: Booking) => {
-          const {
-            label: timeLeftLabel,
-            isImminent,
-            status,
-          } = getTimeLeft(appointment.date, appointment.timeSlot);
-
-          // Override the appointment status if it's completed based on time
-          const displayStatus =
-            status === "COMPLETED" ? "COMPLETED" : appointment.status;
-
-          return (
-            <motion.div
-              key={appointment.id}
-              className={styles.appointments__card}
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{
-                type: "spring",
-                stiffness: 260,
-                damping: 20,
-                delay:
-                  displayedAppointments.findIndex(
-                    (a: Booking) => a.id === appointment.id
-                  ) * 0.1,
-              }}
+          {/* Add filter tabs */}
+          <div className={styles.appointments__filters}>
+            <button
+              className={`${styles.appointments__filterBtn} ${
+                filter === "upcoming"
+                  ? styles.appointments__filterBtn_active
+                  : ""
+              }`}
+              onClick={() => setFilter("upcoming")}
             >
-              <div className={styles.appointments__cardContent}>
-                <div className={styles.appointments__mainInfo}>
-                  <div
-                    className={`${styles.appointments__serviceIcon} ${isImminent ? styles["appointments__serviceIcon--imminent"] : ""}`}
-                  >
-                    <Icon name={getServiceIcon(appointment.service?.name)} />
-                  </div>
+              Upcoming
+            </button>
+            <button
+              className={`${styles.appointments__filterBtn} ${
+                filter === "past" ? styles.appointments__filterBtn_active : ""
+              }`}
+              onClick={() => setFilter("past")}
+            >
+              Past
+            </button>
+            <button
+              className={`${styles.appointments__filterBtn} ${
+                filter === "cancelled"
+                  ? styles.appointments__filterBtn_active
+                  : ""
+              }`}
+              onClick={() => setFilter("cancelled")}
+            >
+              Cancelled
+            </button>
+            <button
+              className={`${styles.appointments__filterBtn} ${
+                filter === "all" ? styles.appointments__filterBtn_active : ""
+              }`}
+              onClick={() => setFilter("all")}
+            >
+              All
+            </button>
+          </div>
+        </div>
 
-                  <div className={styles.appointments__infoContainer}>
-                    <div className={styles.appointments__infoRow}>
-                      <h3 className={styles.appointments__service}>
-                        {appointment.service?.name || "Service"}
-                      </h3>
-                      <span
-                        className={`${styles.appointments__status} ${
-                          styles[
-                            `appointments__status--${displayStatus.toLowerCase()}`
-                          ]
-                        }`}
-                      >
-                        {displayStatus.replace(/_/g, " ")}
-                      </span>
+        <div className={styles.appointments__list}>
+          {displayedAppointments.map((appointment: Booking) => {
+            const {
+              label: timeLeftLabel,
+              isImminent,
+              status,
+            } = getTimeLeft(appointment.date, appointment.timeSlot);
+
+            // Override the appointment status if it's completed based on time
+            const displayStatus =
+              status === "COMPLETED" ? "COMPLETED" : appointment.status;
+
+            return (
+              <motion.div
+                key={appointment.id}
+                className={styles.appointments__card}
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 260,
+                  damping: 20,
+                  delay:
+                    displayedAppointments.findIndex(
+                      (a: Booking) => a.id === appointment.id
+                    ) * 0.1,
+                }}
+              >
+                <div className={styles.appointments__cardContent}>
+                  <div className={styles.appointments__mainInfo}>
+                    <div
+                      className={`${styles.appointments__serviceIcon} ${isImminent ? styles["appointments__serviceIcon--imminent"] : ""}`}
+                    >
+                      <Icon name={getServiceIcon(appointment.service?.name)} />
                     </div>
 
-                    <div className={styles.appointments__infoRow}>
-                      <div className={styles.appointments__dateTime}>
-                        <span className={styles.appointments__date}>
-                          <Icon name="calendar" />
-                          {formatDate(appointment.date)}
-                        </span>
-                        <span className={styles.appointments__time}>
-                          <Icon name="clock" />
-                          {formatTime(appointment.date, appointment.timeSlot)}
+                    <div className={styles.appointments__infoContainer}>
+                      <div className={styles.appointments__infoRow}>
+                        <h3 className={styles.appointments__service}>
+                          {appointment.service?.name || "Service"}
+                        </h3>
+                        <span
+                          className={`${styles.appointments__status} ${
+                            styles[
+                              `appointments__status--${displayStatus.toLowerCase()}`
+                            ]
+                          }`}
+                        >
+                          {displayStatus.replace(/_/g, " ")}
                         </span>
                       </div>
 
-                      <span
-                        className={`${styles.appointments__countdown} ${
-                          isImminent
-                            ? styles["appointments__countdown--imminent"]
-                            : ""
-                        } ${
-                          displayStatus === "COMPLETED"
-                            ? styles["appointments__countdown--completed"]
-                            : ""
-                        }`}
-                      >
-                        {timeLeftLabel}
-                      </span>
+                      <div className={styles.appointments__infoRow}>
+                        <div className={styles.appointments__dateTime}>
+                          <span className={styles.appointments__date}>
+                            <Icon name="calendar" />
+                            {formatDate(appointment.date)}
+                          </span>
+                          <span className={styles.appointments__time}>
+                            <Icon name="clock" />
+                            {formatTime(appointment.date, appointment.timeSlot)}
+                          </span>
+                        </div>
+
+                        <span
+                          className={`${styles.appointments__countdown} ${
+                            isImminent
+                              ? styles["appointments__countdown--imminent"]
+                              : ""
+                          } ${
+                            displayStatus === "COMPLETED"
+                              ? styles["appointments__countdown--completed"]
+                              : ""
+                          }`}
+                        >
+                          {timeLeftLabel}
+                        </span>
+                      </div>
                     </div>
                   </div>
+
+                  <button
+                    className={styles.appointments__expandBtn}
+                    onClick={() => toggleAppointment(appointment.id)}
+                    aria-label={
+                      expandedAppointment === appointment.id
+                        ? "Hide details"
+                        : "Show details"
+                    }
+                  >
+                    <Icon
+                      name={
+                        expandedAppointment === appointment.id
+                          ? "chevron-up"
+                          : "chevron-down"
+                      }
+                    />
+                  </button>
                 </div>
 
-                <button
-                  className={styles.appointments__expandBtn}
-                  onClick={() => toggleAppointment(appointment.id)}
-                  aria-label={
-                    expandedAppointment === appointment.id
-                      ? "Hide details"
-                      : "Show details"
-                  }
-                >
-                  <Icon
-                    name={
-                      expandedAppointment === appointment.id
-                        ? "chevron-up"
-                        : "chevron-down"
-                    }
-                  />
-                </button>
-              </div>
+                <AnimatePresence>
+                  {expandedAppointment === appointment.id && (
+                    <motion.div
+                      className={styles.appointments__details}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className={styles.appointments__detailsGrid}>
+                        <div className={styles.appointments__detailsColumn}>
+                          <div className={styles.appointments__detailsSection}>
+                            <h4 className={styles.appointments__detailsTitle}>
+                              <Icon name="user" />
+                              Service Provider
+                            </h4>
+                            {appointment.staff ? (
+                              <div className={styles.appointments__provider}>
+                                <div
+                                  className={
+                                    styles.appointments__providerAvatar
+                                  }
+                                >
+                                  <span>
+                                    {appointment.staff.firstName?.[0]}
+                                    {appointment.staff.lastName?.[0]}
+                                  </span>
+                                </div>
+                                <div
+                                  className={styles.appointments__providerInfo}
+                                >
+                                  <span
+                                    className={
+                                      styles.appointments__providerName
+                                    }
+                                  >
+                                    {`${appointment.staff.firstName} ${appointment.staff.lastName}`}
+                                  </span>
+                                  <span
+                                    className={
+                                      styles.appointments__providerRole
+                                    }
+                                  >
+                                    Professional {appointment.serviceType}{" "}
+                                    Specialist
+                                  </span>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className={styles.appointments__unassigned}>
+                                <Icon name="alert-circle" />
+                                Provider will be assigned soon
+                              </div>
+                            )}
+                          </div>
 
-              <AnimatePresence>
-                {expandedAppointment === appointment.id && (
-                  <motion.div
-                    className={styles.appointments__details}
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className={styles.appointments__detailsGrid}>
-                      <div className={styles.appointments__detailsColumn}>
-                        <div className={styles.appointments__detailsSection}>
-                          <h4 className={styles.appointments__detailsTitle}>
-                            <Icon name="user" />
-                            Service Provider
-                          </h4>
-                          {appointment.staff ? (
-                            <div className={styles.appointments__provider}>
-                              <div
-                                className={styles.appointments__providerAvatar}
-                              >
-                                <span>
-                                  {appointment.staff.firstName?.[0]}
-                                  {appointment.staff.lastName?.[0]}
-                                </span>
-                              </div>
-                              <div
-                                className={styles.appointments__providerInfo}
-                              >
-                                <span
-                                  className={styles.appointments__providerName}
-                                >
-                                  {`${appointment.staff.firstName} ${appointment.staff.lastName}`}
-                                </span>
-                                <span
-                                  className={styles.appointments__providerRole}
-                                >
-                                  Professional {appointment.serviceType}{" "}
-                                  Specialist
-                                </span>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className={styles.appointments__unassigned}>
-                              <Icon name="alert-circle" />
-                              Provider will be assigned soon
-                            </div>
-                          )}
+                          <div className={styles.appointments__detailsSection}>
+                            <h4 className={styles.appointments__detailsTitle}>
+                              <Icon name="map-pin" />
+                              Service Location
+                            </h4>
+                            <address className={styles.appointments__address}>
+                              {`${appointment.address.street}, ${appointment.address.city}, ${appointment.address.state} ${appointment.address.zipCode}`}
+                            </address>
+                          </div>
                         </div>
 
-                        <div className={styles.appointments__detailsSection}>
-                          <h4 className={styles.appointments__detailsTitle}>
-                            <Icon name="map-pin" />
-                            Service Location
-                          </h4>
-                          <address className={styles.appointments__address}>
-                            {`${appointment.address.street}, ${appointment.address.city}, ${appointment.address.state} ${appointment.address.zipCode}`}
-                          </address>
-                        </div>
-                      </div>
-
-                      <div className={styles.appointments__detailsColumn}>
-                        <div className={styles.appointments__detailsSection}>
-                          <h4 className={styles.appointments__detailsTitle}>
-                            <Icon name="info" />
-                            Additional Information
-                          </h4>
-                          <div className={styles.appointments__notes}>
-                            {appointment.notes ||
-                              "No additional notes for this service."}
+                        <div className={styles.appointments__detailsColumn}>
+                          <div className={styles.appointments__detailsSection}>
+                            <h4 className={styles.appointments__detailsTitle}>
+                              <Icon name="info" />
+                              Additional Information
+                            </h4>
+                            <div className={styles.appointments__notes}>
+                              {appointment.notes ||
+                                "No additional notes for this service."}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className={styles.appointments__actions}>
-                      {appointment.status === BookingStatus.Confirmed && (
-                        <>
-                          <button
-                            className={`${styles.appointments__actionBtn} ${styles["appointments__actionBtn--reschedule"]}`}
-                            onClick={() =>
-                              router.push(
-                                `/dashboard/appointments/${appointment.id}/reschedule`
-                              )
-                            }
-                          >
-                            <Icon name="calendar" />
-                            Reschedule
-                          </button>
-                          <button
-                            className={`${styles.appointments__actionBtn} ${styles["appointments__actionBtn--cancel"]}`}
-                            onClick={() =>
-                              router.push(
-                                `/dashboard/appointments/${appointment.id}/cancel`
-                              )
-                            }
-                          >
-                            <Icon name="x" />
-                            Cancel
-                          </button>
-                        </>
-                      )}
-                      <button
-                        className={`${styles.appointments__actionBtn} ${styles["appointments__actionBtn--details"]}`}
-                        onClick={() =>
-                          navigateToAppointmentDetails(appointment.id)
-                        }
-                      >
-                        <Icon name="file-text" />
-                        View Full Details
-                      </button>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          );
-        })}
+                      <div className={styles.appointments__actions}>
+                        {appointment.status === BookingStatus.Pending ||
+                        appointment.status === BookingStatus.Confirmed ? (
+                          <>
+                            <button
+                              className={`${styles.appointments__actionBtn} ${styles["appointments__actionBtn--reschedule"]}`}
+                              onClick={() => {
+                                setSelectedAppointmentId(appointment.id);
+                                setShowRescheduleModal(true);
+                              }}
+                            >
+                              <Icon name="calendar" />
+                              Reschedule
+                            </button>
+                            <button
+                              className={`${styles.appointments__actionBtn} ${styles["appointments__actionBtn--cancel"]}`}
+                              onClick={() => handleCancelClick(appointment.id)}
+                            >
+                              <Icon name="x" />
+                              Cancel
+                            </button>
+                          </>
+                        ) : null}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {filteredAppointments.length > 5 && (
+          <div className={styles.appointments__footer}>
+            <button
+              className={styles.appointments__viewAllBtn}
+              onClick={toggleShowAll}
+            >
+              {showAll ? (
+                <>
+                  Show Less
+                  <Icon name="chevron-up" />
+                </>
+              ) : (
+                <>
+                  Show All Appointments ({filteredAppointments.length})
+                  <Icon name="chevron-down" />
+                </>
+              )}
+            </button>
+          </div>
+        )}
       </div>
 
-      {filteredAppointments.length > 5 && (
-        <div className={styles.appointments__footer}>
+      {/* Cancel Confirmation Modal */}
+      <Modal
+        isOpen={showCancelModal}
+        onClose={() => setShowCancelModal(false)}
+        title="Cancel Appointment"
+        maxWidth="400px"
+      >
+        <div className={styles.appointments__modalContent}>
+          <p>Are you sure you want to cancel this appointment?</p>
+          <div className={styles.appointments__modalActions}>
+            <button
+              className={`${styles.appointments__actionBtn} ${styles["appointments__actionBtn--cancel"]}`}
+              onClick={() => setShowCancelModal(false)}
+              disabled={isCancelling}
+            >
+              No, Keep It
+            </button>
+            <button
+              className={`${styles.appointments__actionBtn} ${styles["appointments__actionBtn--confirm"]}`}
+              onClick={handleConfirmCancel}
+              disabled={isCancelling}
+            >
+              {isCancelling ? "Cancelling..." : "Yes, Cancel It"}
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Success Modal */}
+      <Modal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        title="Appointment Cancelled"
+        maxWidth="400px"
+      >
+        <div className={styles.appointments__modalContent}>
+          <div className={styles.appointments__successIcon}>
+            <Icon name="check-circle" />
+          </div>
+          <p>Your appointment has been successfully cancelled.</p>
           <button
-            className={styles.appointments__viewAllBtn}
-            onClick={toggleShowAll}
+            className={`${styles.appointments__actionBtn} ${styles["appointments__actionBtn--primary"]}`}
+            onClick={() => setShowSuccessModal(false)}
           >
-            {showAll ? (
-              <>
-                Show Less
-                <Icon name="chevron-up" />
-              </>
-            ) : (
-              <>
-                Show All Appointments ({filteredAppointments.length})
-                <Icon name="chevron-down" />
-              </>
-            )}
+            Close
           </button>
         </div>
-      )}
-    </div>
+      </Modal>
+
+      {/* Reschedule Modal */}
+      <RescheduleServiceModal 
+        isOpen={showRescheduleModal}
+        onClose={() => setShowRescheduleModal(false)}
+        bookingId={selectedAppointmentId || undefined}
+      />
+    </>
   );
 }
