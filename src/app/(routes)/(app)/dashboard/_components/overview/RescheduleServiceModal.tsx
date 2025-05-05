@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Icon, { IconName } from "../common/Icon";
 import Modal from "@/components/ui/Modal/Modal";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
-import { TimeSlot, Booking } from "@/graphql/api";
+import { TimeSlot, Booking, BookingStatus } from "@/graphql/api";
 import styles from "./RescheduleServiceModal.module.scss";
 
 interface RescheduleServiceModalProps {
@@ -50,10 +50,12 @@ const RescheduleServiceModal = ({ isOpen, onClose, bookingId }: RescheduleServic
       const bookings = await handleGetCustomerBookings();
       // Filter for pending bookings and sort by date
       const pendingBookings = (bookings || [])
-        .filter((booking) => booking.status === "PENDING")
+        .filter((booking) => booking.status === BookingStatus.Pending)
         .sort(
           (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-        );
+      );
+      console.log("pendingBookings", pendingBookings);
+      console.log("bookings", bookings);
       setCustomerBookingsData(pendingBookings as Booking[]);
       setIsLoading(false);
     } catch (error) {
@@ -196,9 +198,9 @@ const RescheduleServiceModal = ({ isOpen, onClose, bookingId }: RescheduleServic
             <option value="">Select a booking to reschedule</option>
             {customerBookingsData.map((booking) => (
               <option key={booking.id} value={booking.id}>
-                {booking.service?.label || "Unknown Service"} -{" "}
-                {new Date(booking.date).toDateString()} -{" "}
-                {booking.timeSlot.toLowerCase()}
+                {booking.service?.name || "Unknown Service"} -{" "}
+                {new Date(booking.date).toDateString()} - {" "}
+                {booking.timeSlot.toLowerCase()} - {" "} {booking.status}
               </option>
             ))}
           </select>

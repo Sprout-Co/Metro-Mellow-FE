@@ -9,6 +9,7 @@ import {
   SubscriptionFrequency,
   Subscription,
 } from "@/graphql/api";
+import SubscriptionModule from "@/app/(routes)/(site)/bookings/_components/SubscriptionModule/SubscriptionModule";
 
 type SubscriptionFilterType = "all" | "active" | "cancelled" | "suspended";
 type SubscriptionSortType = "name" | "date" | "price";
@@ -28,6 +29,7 @@ export default function SubscriptionManagement() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showSubscriptionForm, setShowSubscriptionForm] = useState(false);
 
   // Confirmation dialog state
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -316,6 +318,31 @@ export default function SubscriptionManagement() {
   const confirmationContent = getConfirmationContent();
   const filteredSubscriptions = filterSubscriptions();
 
+  if (showSubscriptionForm) {
+    return (
+      <div className={styles.subscriptions}>
+        <header className={styles.subscriptions__header}>
+          <div>
+            {/* <h1 className={styles.subscriptions__title}>
+              Create New Subscription
+            </h1>
+            <p className={styles.subscriptions__subtitle}>
+              Customize your service subscription
+            </p> */}
+          </div>
+          <button
+            className={styles.subscriptions__backBtn}
+            onClick={() => setShowSubscriptionForm(false)}
+          >
+            <Icon name="arrow-left" />
+            Back to Subscriptions
+          </button>
+        </header>
+        <SubscriptionModule />
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className={styles.subscriptions__loading}>
@@ -400,7 +427,10 @@ export default function SubscriptionManagement() {
           </p>
         </div>
 
-        <button className={styles.subscriptions__addBtn}>
+        <button
+          className={styles.subscriptions__addBtn}
+          onClick={() => setShowSubscriptionForm(true)}
+        >
           <Icon name="plus" />
           Add Subscription
         </button>
@@ -715,7 +745,8 @@ export default function SubscriptionManagement() {
                             Cancel Subscription
                           </button>
                         </>
-                      ) : subscription.status === "SUSPENDED" ? (
+                      ) : subscription.status === "SUSPENDED" ||
+                        subscription.status === "PAUSED" ? (
                         <>
                           <button
                             className={`${styles.subscriptions__actionBtn} ${styles["subscriptions__actionBtn--success"]}`}

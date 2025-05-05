@@ -187,6 +187,7 @@ export default function UpcomingAppointments() {
       return dateA - dateB;
     }
   );
+  console.log("sortedAppointments", sortedAppointments);
 
   // Filter appointments based on status and time
   const filterAppointments = (appointment: Booking) => {
@@ -223,6 +224,7 @@ export default function UpcomingAppointments() {
   };
 
   const filteredAppointments = sortedAppointments.filter(filterAppointments);
+  console.log("filteredAppointments", filteredAppointments);
 
   // Display either all appointments or just the 5 most imminent ones
   const displayedAppointments = showAll
@@ -633,7 +635,7 @@ export default function UpcomingAppointments() {
 
                       <div className={styles.appointments__actions}>
                         {appointment.status === BookingStatus.Pending ||
-                        appointment.status === BookingStatus.Confirmed ? (
+                        appointment.status === BookingStatus.Paused ? (
                           <>
                             <button
                               className={`${styles.appointments__actionBtn} ${styles["appointments__actionBtn--reschedule"]}`}
