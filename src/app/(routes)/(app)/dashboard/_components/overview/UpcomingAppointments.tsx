@@ -31,7 +31,7 @@ export default function UpcomingAppointments() {
   const [showAll, setShowAll] = useState(false);
   // Add filter state
   const [filter, setFilter] = useState<
-    "upcoming" | "past" | "cancelled" | "all"
+    "upcoming" | "past" | "cancelled" | "paused" | "all"
   >("upcoming");
   const {
     currentCustomerBookings,
@@ -201,17 +201,21 @@ export default function UpcomingAppointments() {
       return (
         appointment.status !== BookingStatus.Completed &&
         appointment.status !== BookingStatus.Cancelled &&
-        timeStatus !== "COMPLETED"
+        appointment.status !== BookingStatus.Paused &&
+        timeStatus !== BookingStatus.Completed
       );
     } else if (filter === "past") {
       // For past: completed status or time has passed (but not cancelled)
       return (
         appointment.status === BookingStatus.Completed ||
-        timeStatus === "COMPLETED"
+        timeStatus === BookingStatus.Completed
       );
     } else if (filter === "cancelled") {
       // For cancelled: only show cancelled appointments
       return appointment.status === BookingStatus.Cancelled;
+    } else if (filter === "paused") {
+      // For paused: only show paused appointments
+      return appointment.status === BookingStatus.Paused;
     } else {
       // For all: show everything
       return true;
@@ -289,7 +293,9 @@ export default function UpcomingAppointments() {
                 ? "Past"
                 : filter === "cancelled"
                   ? "Cancelled"
-                  : "All"}{" "}
+                  : filter === "paused"
+                    ? "Paused"
+                    : "All"}{" "}
             Appointments
             <span className={styles.appointments__count}>0</span>
           </h2>
@@ -312,7 +318,13 @@ export default function UpcomingAppointments() {
               className={`${styles.appointments__filterBtn} ${filter === "cancelled" ? styles.appointments__filterBtn_active : ""}`}
               onClick={() => setFilter("cancelled")}
             >
-              Cancelled
+                Cancelled
+            </button>
+            <button
+              className={`${styles.appointments__filterBtn} ${filter === "paused" ? styles.appointments__filterBtn_active : ""}`}
+              onClick={() => setFilter("paused")}
+            >
+              Paused
             </button>
             <button
               className={`${styles.appointments__filterBtn} ${filter === "all" ? styles.appointments__filterBtn_active : ""}`}
@@ -335,7 +347,9 @@ export default function UpcomingAppointments() {
                 ? "Past"
                 : filter === "cancelled"
                   ? "Cancelled"
-                  : ""}{" "}
+                  : filter === "paused"
+                    ? "Paused"
+                    : "All"}{" "}
             Appointments
           </h3>
           <p className={styles.appointments__emptyText}>
@@ -345,7 +359,9 @@ export default function UpcomingAppointments() {
                 ? "You don't have any past appointments."
                 : filter === "cancelled"
                   ? "You don't have any cancelled appointments."
-                  : "You don't have any appointments."}
+                  : filter === "paused"
+                    ? "You don't have any paused appointments."
+                    : "You don't have any appointments."}
           </p>
           {filter === "upcoming" && (
             <button
@@ -372,7 +388,9 @@ export default function UpcomingAppointments() {
                 ? "Past"
                 : filter === "cancelled"
                   ? "Cancelled"
-                  : "All"}{" "}
+                  : filter === "paused"
+                    ? "Paused"
+                    : "All"}{" "}
             Appointments
             <span className={styles.appointments__count}>
               {filteredAppointments.length}
@@ -411,7 +429,19 @@ export default function UpcomingAppointments() {
             </button>
             <button
               className={`${styles.appointments__filterBtn} ${
-                filter === "all" ? styles.appointments__filterBtn_active : ""
+                filter === "paused"
+                  ? styles.appointments__filterBtn_active
+                  : ""
+              }`}
+              onClick={() => setFilter("paused")}
+            >
+              Paused
+            </button>
+            <button
+              className={`${styles.appointments__filterBtn} ${
+                filter === "all"
+                  ? styles.appointments__filterBtn_active
+                  : ""
               }`}
               onClick={() => setFilter("all")}
             >
