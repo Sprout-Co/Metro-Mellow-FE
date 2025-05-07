@@ -389,8 +389,30 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
             0
           );
 
+          let cleaningTypeMultiplier = 1;
+
+          switch (selectedOption?.service_id) {
+            case ServiceId.StandardCleaning:
+              cleaningTypeMultiplier = 1;
+              break;
+            case ServiceId.DeepCleaning:
+              cleaningTypeMultiplier = 2.5;
+              break;
+            case ServiceId.PostConstructionCleaning:
+              cleaningTypeMultiplier = 4;
+              break;
+            case ServiceId.MoveInMoveOutCleaning:
+              cleaningTypeMultiplier = 2.5;
+              break;
+            default:
+              break;
+          }
+
           // Multiply by number of days selected
-          totalPrice = roomTotal * selectedDays;
+          totalPrice = roomTotal * selectedDays * cleaningTypeMultiplier;
+          if (propertyType === PropertyType.Duplex) {
+            totalPrice *= 1.5;
+          }
 
           serviceDetails = {
             cleaning: {
@@ -419,7 +441,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
           serviceDetails = {
             cooking: {
               mealType,
-              mealDeliveries: serviceSchedules[selectedService._id].days.map(
+              mealsPerDelivery: serviceSchedules[selectedService._id].days.map(
                 (day) => ({
                   day: day.toUpperCase(),
                   count: mealsPerDay[day],

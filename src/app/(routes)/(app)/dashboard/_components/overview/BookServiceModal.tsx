@@ -84,7 +84,7 @@ export default function BookServiceModal() {
   // Service details state
   const [serviceFrequency, setServiceFrequency] =
     useState<ServiceFrequency>("one-off");
-  const [propertyType, setPropertyType] = useState<"flat" | "duplex">("flat");
+  const [propertyType, setPropertyType] = useState<HouseType>(HouseType.Flat);
   const [roomQuantities, setRoomQuantities] = useState<RoomQuantitiesInput>({
     balcony: 0,
     bathroom: 1,
@@ -291,8 +291,30 @@ export default function BookServiceModal() {
           0
         );
 
+        let cleaningTypeMultiplier = 1;
+
+        switch (selectedOption?.service_id) {
+          case ServiceId.StandardCleaning:
+            cleaningTypeMultiplier = 1;
+            break;
+          case ServiceId.DeepCleaning:
+            cleaningTypeMultiplier = 2.5;
+            break;
+          case ServiceId.PostConstructionCleaning:
+            cleaningTypeMultiplier = 4;
+            break;
+          case ServiceId.MoveInMoveOutCleaning:
+            cleaningTypeMultiplier = 2.5;
+            break;
+          default:
+            break;
+        }
+
         // Multiply by number of days selected
-        totalPrice = roomTotal * selectedDays;
+        totalPrice = roomTotal * selectedDays * cleaningTypeMultiplier;
+        if (propertyType === HouseType.Duplex) {
+          totalPrice *= 1.5;
+        }
         break;
       }
       case ServiceCategory.Laundry: {
@@ -412,8 +434,7 @@ export default function BookServiceModal() {
             selectedService.service_id === ServiceId.Cleaning
               ? {
                   cleaningType: selectedOption?.service_id as unknown as CleaningType,
-                  houseType:
-                    propertyType === "flat" ? HouseType.Flat : HouseType.Duplex,
+                  houseType: propertyType,
                   rooms: roomQuantities,
                 }
               : undefined,
@@ -602,7 +623,8 @@ export default function BookServiceModal() {
                   onClick={() => handleServiceSelect(service)}
                 >
                   <div className={styles.modal__serviceCardIcon}>
-                    <Icon name={service.icon as IconName} />
+                    {/* <Icon name={service.icon as IconName} /> */}
+                    {service.icon}
                   </div>
                   <h3 className={styles.modal__serviceCardTitle}>
                     {service.label}
@@ -662,7 +684,7 @@ export default function BookServiceModal() {
                     {option.description}
                   </p>
                   <span className={styles.modal__optionCardPrice}>
-                    {`From $${option.price}`}
+                    {`From ₦${option.price.toLocaleString()}`}
                   </span>
 
                   {/* Show "View extra items" button for laundry options */}
@@ -775,21 +797,21 @@ export default function BookServiceModal() {
               <div className={styles.modal__toggleGroup}>
                 <button
                   className={`${styles.modal__toggleButton} ${
-                    propertyType === "flat"
+                    propertyType === HouseType.Flat
                       ? styles.modal__toggleButtonSelected
                       : ""
                   }`}
-                  onClick={() => setPropertyType("flat")}
+                  onClick={() => setPropertyType(HouseType.Flat)}
                 >
                   Flat / Apartment
                 </button>
                 <button
                   className={`${styles.modal__toggleButton} ${
-                    propertyType === "duplex"
+                    propertyType === HouseType.Duplex
                       ? styles.modal__toggleButtonSelected
                       : ""
                   }`}
-                  onClick={() => setPropertyType("duplex")}
+                  onClick={() => setPropertyType(HouseType.Duplex)}
                 >
                   Duplex / House
                 </button>
@@ -862,21 +884,21 @@ export default function BookServiceModal() {
               <div className={styles.modal__toggleGroup}>
                 <button
                   className={`${styles.modal__toggleButton} ${
-                    propertyType === "flat"
+                    propertyType === HouseType.Flat
                       ? styles.modal__toggleButtonSelected
                       : ""
                   }`}
-                  onClick={() => setPropertyType("flat")}
+                  onClick={() => setPropertyType(HouseType.Flat)}
                 >
                   Residential
                 </button>
                 <button
                   className={`${styles.modal__toggleButton} ${
-                    propertyType === "duplex"
+                    propertyType === HouseType.Duplex
                       ? styles.modal__toggleButtonSelected
                       : ""
                   }`}
-                  onClick={() => setPropertyType("duplex")}
+                  onClick={() => setPropertyType(HouseType.Duplex)}
                 >
                   Commercial
                 </button>
@@ -1168,7 +1190,7 @@ export default function BookServiceModal() {
                           Property Type
                         </div>
                         <div className={styles.modal__bookingDetailValue}>
-                          {propertyType === "flat"
+                          {propertyType === HouseType.Flat
                             ? "Flat / Apartment"
                             : "Duplex / House"}
                         </div>
