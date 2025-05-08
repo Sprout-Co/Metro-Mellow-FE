@@ -3,7 +3,9 @@ import { motion } from "framer-motion";
 import Icon from "../common/Icon";
 import { useUIStore } from "@/store/slices/ui";
 import BookServiceModal from "./BookServiceModal";
+import RescheduleServiceModal from "./RescheduleServiceModal";
 import styles from "./QuickActions.module.scss";
+import { useState } from "react";
 
 const quickActions = [
   {
@@ -52,7 +54,7 @@ const quickActions = [
 
 export default function QuickActions() {
   const { openModal } = useUIStore();
-
+  const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
   const itemVariants = {
     hidden: { opacity: 0, scale: 0.9 },
     visible: (i: number) => ({
@@ -71,6 +73,8 @@ export default function QuickActions() {
   const handleActionClick = (actionId: string) => {
     if (actionId === "book") {
       openModal("book-service");
+    } else if (actionId === "reschedule") {
+      setIsRescheduleModalOpen(true);
     }
     // Handle other actions here
   };
@@ -103,7 +107,7 @@ export default function QuickActions() {
         ))}
       </div>
 
-      {/* <motion.div 
+      <motion.div
         className={styles.actions__bookService}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -120,12 +124,20 @@ export default function QuickActions() {
             </p>
           </div>
         </div>
-        <button className={styles.actions__bookButton}>
+        <button
+          className={styles.actions__bookButton}
+          onClick={() => handleActionClick("book")}
+        >
           Book Now
           <Icon name="arrow-right" />
         </button>
-      </motion.div> */}
+      </motion.div>
       <BookServiceModal />
+      <RescheduleServiceModal
+        isOpen={isRescheduleModalOpen}
+        onClose={() => setIsRescheduleModalOpen(false)}
+        bookingId={""}
+      />
     </div>
   );
 }

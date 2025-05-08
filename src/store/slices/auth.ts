@@ -61,8 +61,9 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         console.log("Auth store: Logging out");
         // Remove token from cookie
-        cookieStorage.removeItem("auth-token");
         set({ user: null, token: null, isAuthenticated: false });
+        cookieStorage.removeItem("auth-token");
+        cookieStorage.removeItem("auth-storage");
       },
       get isAdmin() {
         const user = get().user;

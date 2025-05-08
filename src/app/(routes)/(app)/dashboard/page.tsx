@@ -11,7 +11,7 @@ import AccountSettings from './_components/settings/AccountSettings';
 import RewardsLoyalty from './_components/rewards/RewardsLoyalty';
 import HelpSupport from './_components/support/HelpSupport';
 import styles from './Dashboard.module.scss';
-import SubscriptionManagement from './_components/services/SubscriptionManagement';
+import SubscriptionManagement from './_components/subscriptions/SubscriptionManagement';
 
 // Tab type definition
 type TabType = {
@@ -23,7 +23,7 @@ type TabType = {
 // Dashboard tabs configuration
 const dashboardTabs: TabType[] = [
   { id: 'overview', label: 'Overview', icon: 'home' },
-  { id: 'services', label: 'Services', icon: 'calendar' },
+  { id: 'subscription', label: 'Subscription', icon: 'calendar' },
   // { id: 'properties', label: 'Properties', icon: 'building' },
   // { id: 'billing', label: 'Billing', icon: 'credit-card' },
   // { id: 'providers', label: 'Providers', icon: 'users' },
@@ -78,7 +78,7 @@ export default function Dashboard() {
               className={styles.dashboard__tabContent}
             >
               {activeTab === 'overview' && <DashboardOverview />}
-              {activeTab === 'services' && <SubscriptionManagement />}
+              {activeTab === 'subscription' && <SubscriptionManagement />}
               {activeTab === 'properties' && <PropertyManagement />}
               {activeTab === 'billing' && <PaymentBilling />}
               {activeTab === 'providers' && <ProviderInteraction />}

@@ -1,7 +1,7 @@
 // src/app/(routes)/(site)/bookings/_components/SubscriptionModule/EditServiceModal/EditServiceModal.tsx
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, SetStateAction, Dispatch } from "react";
 import styles from "./EditServiceModal.module.scss";
 import Modal from "@/components/ui/Modal/Modal";
 import { Icon, IconName } from "@/components/ui/Icon/Icon";
@@ -117,6 +117,7 @@ interface EditServiceModalProps {
   autoRenew?: boolean;
   onUpdateService?: (service: ExtendedService) => void;
   onSubscriptionInputChange?: (input: CreateSubscriptionInput) => void;
+  setSubscriptionInput: Dispatch<SetStateAction<CreateSubscriptionInput>>;
 }
 
 const EditServiceModal: React.FC<EditServiceModalProps> = ({
@@ -130,6 +131,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
   autoRenew = true,
   onUpdateService,
   onSubscriptionInputChange,
+  setSubscriptionInput,
 }) => {
   // API data state
   const [services, setServices] = useState<Service[]>([]);
@@ -364,179 +366,214 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
    */
   const handleSubmit = async () => {
     try {
-      // Transform the data into the required format
-      const subscriptionInput: CreateSubscriptionInput = {
-        customerId: "customer123", // This should come from auth context in a real app
-        billingCycle,
-        duration,
-        startDate: startDate.toISOString(),
-        autoRenew,
-        services: services.map((service) => {
-          let serviceDetails = {};
-          let totalPrice = service.price;
+      if (!selectedService) return;
 
-          switch (service.category) {
-            case ServiceCategory.Cleaning: {
-              // Calculate total price based on room prices and number of days
-              const selectedDays =
-                serviceSchedules[service._id]?.days.length || 1;
-              const roomPrices = service.roomPrices || {};
-              console.log("selectedDays => ", selectedDays);
-              console.log("roomPrices => ", roomPrices);
-              console.log("roomQuantities => ", roomQuantities);
+      // Create the updated service data
+      let serviceDetails = {};
+      let totalPrice = selectedService.price;
 
-              // Calculate total price for each room type
-              const roomTotal = Object.entries(roomQuantities).reduce(
-                (total, [room, quantity]) => {
-                  const roomPrice =
-                    roomPrices[room as keyof typeof roomPrices] || 0;
-                  console.log(
-                    room,
-                    "roomPrice => ",
-                    roomPrice,
-                    "quantity => ",
-                    quantity,
-                    "total => ",
-                    total
-                  );
-                  return total + roomPrice * (quantity as number);
-                },
-                0
-              );
-              console.log("roomTotal => ", roomTotal);
+      switch (selectedService.category) {
+        case ServiceCategory.Cleaning: {
+          // Calculate total price based on room prices and number of days
+          const selectedDays =
+            serviceSchedules[selectedService._id]?.days.length || 1;
+          const roomPrices = selectedService.roomPrices || {};
 
-              // Multiply by number of days selected
-              totalPrice = roomTotal * selectedDays;
+          // Calculate total price for each room type
+          const roomTotal = Object.entries(roomQuantities).reduce(
+            (total, [room, quantity]) => {
+              const roomPrice =
+                roomPrices[room as keyof typeof roomPrices] || 0;
+              return total + roomPrice * (quantity as number);
+            },
+            0
+          );
 
-              serviceDetails = {
-                cleaning: {
-                  cleaningType: selectedOption?.service_id,
-                  houseType: propertyType.toUpperCase(),
-                  rooms: roomQuantities,
-                },
-              };
+          let cleaningTypeMultiplier = 1;
+
+          switch (selectedOption?.service_id) {
+            case ServiceId.StandardCleaning:
+              cleaningTypeMultiplier = 1;
               break;
-            }
-            case ServiceCategory.Cooking: {
-              // Calculate total price based on meals per day and number of days
-              const selectedDays =
-                serviceSchedules[service._id]?.days.length || 1;
-              const basePrice = selectedOption?.price || service.price;
-
-              // Calculate total meals across all selected days
-              const totalMeals = serviceSchedules[service._id].days.reduce(
-                (total, day) => total + (mealsPerDay[day] || 1),
-                0
-              );
-
-              // Calculate total price
-              totalPrice = basePrice * totalMeals;
-
-              serviceDetails = {
-                cooking: {
-                  mealType,
-                  mealDeliveries: serviceSchedules[service._id].days.map(
-                    (day) => ({
-                      day: day.toUpperCase(),
-                      count: mealsPerDay[day],
-                    })
-                  ),
-                },
-              };
+            case ServiceId.DeepCleaning:
+              cleaningTypeMultiplier = 2.5;
               break;
-            }
-            case ServiceCategory.Laundry: {
-              // Calculate total price based on number of bags, items per bag, and selected days
-              const itemsPerBag = 30;
-              const basePrice = selectedOption?.price || service.price;
-              const totalItems = laundryBags * basePrice;
-              const selectedDays =
-                serviceSchedules[service._id]?.days.length || 1;
-
-              // Calculate total price
-              totalPrice = totalItems * selectedDays;
-
-              serviceDetails = {
-                laundry: {
-                  laundryType: selectedOption?.service_id,
-                  bags: laundryBags,
-                  items: {
-                    shirts: 0,
-                    pants: 0,
-                    dresses: 0,
-                    suits: 0,
-                    others: 0,
-                  },
-                },
-              };
+            case ServiceId.PostConstructionCleaning:
+              cleaningTypeMultiplier = 4;
               break;
-            }
-            case ServiceCategory.PestControl: {
-              // Calculate total price based on property type and severity
-              const basePrice = selectedOption?.price || service.price;
-              const severityMultiplier = {
-                [Severity.Low]: 1,
-                [Severity.Medium]: 1.2,
-                [Severity.High]: 1.5,
-              };
-
-              // Calculate total price
-              totalPrice = basePrice * severityMultiplier[Severity.Medium];
-
-              serviceDetails = {
-                pestControl: {
-                  treatmentType:
-                    selectedOption?.service_id || TreatmentType.Residential,
-                  propertyType: propertyType.toUpperCase(),
-                  rooms: roomQuantities,
-                  severity: Severity.Medium, // Default severity
-                },
-              };
+            case ServiceId.MoveInMoveOutCleaning:
+              cleaningTypeMultiplier = 2.5;
               break;
-            }
             default:
-              // For unknown service types, provide a generic empty structure
-              // This allows the subscription to proceed with basic information
-              serviceDetails = {
-                genericService: {
-                  serviceId: service._id,
-                  name: service.label || "Service",
-                },
-              };
-              console.warn(
-                `Using generic structure for unknown service category: ${service.category}`
-              );
               break;
           }
 
-          const data = {
-            serviceId: service._id,
-            frequency: SubscriptionFrequency.Weekly,
-            scheduledDays: serviceSchedules[service._id].days.map((day) => {
-              const dayKey =
-                day.charAt(0).toUpperCase() + day.slice(1).toLowerCase();
-              return ScheduleDays[dayKey as keyof typeof ScheduleDays];
-            }) as ScheduleDays[],
-            preferredTimeSlot: serviceSchedules[service._id].timeSlot,
-            serviceDetails,
-            price: totalPrice,
+          // Multiply by number of days selected
+          totalPrice = roomTotal * selectedDays * cleaningTypeMultiplier;
+          if (propertyType === PropertyType.Duplex) {
+            totalPrice *= 1.5;
+          }
+
+          serviceDetails = {
+            cleaning: {
+              cleaningType: selectedOption?.service_id,
+              houseType: propertyType.toUpperCase(),
+              rooms: roomQuantities,
+            },
           };
-          setShowServiceOptions(false);
-          setCurrentStep(BookingStep.SERVICE);
+          break;
+        }
+        case ServiceCategory.Cooking: {
+          // Calculate total price based on meals per day and number of days
+          const selectedDays =
+            serviceSchedules[selectedService._id]?.days.length || 1;
+          const basePrice = selectedOption?.price || selectedService.price;
 
+          // Calculate total meals across all selected days
+          const totalMeals = serviceSchedules[selectedService._id].days.reduce(
+            (total, day) => total + (mealsPerDay[day] || 1),
+            0
+          );
 
-          return data;
-        }),
+          // Calculate total price
+          totalPrice = basePrice * totalMeals;
+
+          serviceDetails = {
+            cooking: {
+              mealType,
+              mealsPerDelivery: serviceSchedules[selectedService._id].days.map(
+                (day) => ({
+                  day: day.toUpperCase(),
+                  count: mealsPerDay[day],
+                })
+              ),
+            },
+          };
+          break;
+        }
+        case ServiceCategory.Laundry: {
+          // Calculate total price based on number of bags, items per bag, and selected days
+          const itemsPerBag = 30;
+          const basePrice = selectedOption?.price || selectedService.price;
+          const totalItems = laundryBags * basePrice;
+          const selectedDays =
+            serviceSchedules[selectedService._id]?.days.length || 1;
+
+          // Calculate total price
+          totalPrice = totalItems * selectedDays;
+
+          serviceDetails = {
+            laundry: {
+              laundryType: selectedOption?.service_id,
+              bags: laundryBags,
+              items: {
+                shirts: 0,
+                pants: 0,
+                dresses: 0,
+                suits: 0,
+                others: 0,
+              },
+            },
+          };
+          break;
+        }
+        case ServiceCategory.PestControl: {
+          // Calculate total price based on property type and severity
+          const basePrice = selectedOption?.price || selectedService.price;
+          const severityMultiplier = {
+            [Severity.Low]: 1,
+            [Severity.Medium]: 1.2,
+            [Severity.High]: 1.5,
+          };
+
+          // Calculate total price
+          totalPrice = basePrice * severityMultiplier[Severity.Medium];
+
+          serviceDetails = {
+            pestControl: {
+              treatmentType:
+                selectedOption?.service_id || TreatmentType.Residential,
+              propertyType: propertyType.toUpperCase(),
+              rooms: roomQuantities,
+              severity: Severity.Medium, // Default severity
+            },
+          };
+          break;
+        }
+        default:
+          // For unknown service types, provide a generic empty structure
+          serviceDetails = {
+            genericService: {
+              serviceId: selectedService._id,
+              name: selectedService.label || "Service",
+            },
+          };
+          console.warn(
+            `Using generic structure for unknown service category: ${selectedService.category}`
+          );
+          break;
+      }
+
+      const updatedService = {
+        serviceId: selectedService._id,
+        frequency: SubscriptionFrequency.Weekly,
+        scheduledDays: serviceSchedules[selectedService._id].days.map((day) => {
+          const dayKey =
+            day.charAt(0).toUpperCase() + day.slice(1).toLowerCase();
+          return ScheduleDays[dayKey as keyof typeof ScheduleDays];
+        }) as ScheduleDays[],
+        preferredTimeSlot: serviceSchedules[selectedService._id].timeSlot,
+        serviceDetails: {
+          ...serviceDetails,
+          serviceOption: selectedOption?.id || "",
+        },
+        price: totalPrice,
       };
-      console.log("subscriptionInput => ", subscriptionInput);
 
-      // Call the callback with the subscription input
-      onSubscriptionInputChange?.(subscriptionInput);
+      // Update the subscription input
+      setSubscriptionInput((prev) => {
+        const serviceWithAddress = {
+          ...updatedService,
+          address: prev.address,
+        };
+
+        // If there are no existing services, create a new array with the updated service
+        if (!prev.services || prev.services.length === 0) {
+          return {
+            ...prev,
+            services: [serviceWithAddress],
+          };
+        }
+
+        // If the service already exists, update it, otherwise add it
+        const serviceExists = prev.services.some(
+          (service) => service.serviceId === selectedService._id
+        );
+
+        if (serviceExists) {
+          return {
+            ...prev,
+            services: prev.services.map((service) =>
+              service.serviceId === selectedService._id
+                ? serviceWithAddress
+                : service
+            ),
+          };
+        } else {
+          return {
+            ...prev,
+            services: [...prev.services, serviceWithAddress],
+          };
+        }
+      });
+
+      setShowServiceOptions(false);
+      setCurrentStep(BookingStep.SERVICE);
 
       // Close the modal on success
       onClose();
     } catch (error) {
-      console.error("Failed to create subscription:", error);
+      console.error("Failed to update service:", error);
       // Handle error appropriately
     }
   };

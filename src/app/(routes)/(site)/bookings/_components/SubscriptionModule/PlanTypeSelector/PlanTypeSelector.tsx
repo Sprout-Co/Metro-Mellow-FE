@@ -1,31 +1,32 @@
 // PlanTypeSelector.tsx
 import React from "react";
 import { motion } from "framer-motion";
-import { PlanType, DurationType } from "../SubscriptionModule";
+import {  DurationType } from "../SubscriptionModule";
 import styles from "./PlanTypeSelector.module.scss";
+import { BillingCycle } from "@/graphql/api";
 
 interface PlanTypeSelectorProps {
-  planType: PlanType;
-  setPlanType: (type: PlanType) => void;
+  billingCycle: BillingCycle;
+  setBillingCycle: (type: BillingCycle) => void;
   duration: DurationType;
   setDuration: React.Dispatch<React.SetStateAction<DurationType>>;
 }
 
 const PlanTypeSelector: React.FC<PlanTypeSelectorProps> = ({
-  planType,
-  setPlanType,
+  billingCycle,
+  setBillingCycle,
   duration,
   setDuration,
 }) => {
-  const maxDuration = planType === "weekly" ? 3 : 12;
-  const durationLabel = planType === "weekly" ? "Weeks" : "Months";
+  const maxDuration = billingCycle === BillingCycle.Weekly ? 3 : 12;
+  const durationLabel = billingCycle === BillingCycle.Weekly ? "Weeks" : "Months";
   const WeeklyDurations: DurationType[] = [1, 2, 3];
   const MonthlyDurations: DurationType[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
   const handleDurationChange = (change: number) => {
     const newValue = duration + change;
     // For weekly plans, keep the 3-week limit
-    if (planType === "weekly") {
+    if (billingCycle === BillingCycle.Weekly) {
       if (newValue <= 1) setDuration(1);
       else if (newValue <= 2) setDuration(2);
       else setDuration(3); // Max 3 weeks for weekly plans
@@ -40,19 +41,19 @@ const PlanTypeSelector: React.FC<PlanTypeSelectorProps> = ({
   return (
     <>
       <div className={styles.plan_selector}>
-        <h2 className={styles.plan_selector__title}>Plan Type</h2>
+        <h2 className={styles.plan_selector__title}>Billing Cycle</h2>
 
         <div className={styles.plan_selector__toggle}>
           <button
-            className={`${styles.plan_selector__option} ${planType === "weekly" ? styles.plan_selector__option_active : ""}`}
-            onClick={() => setPlanType("weekly")}
+            className={`${styles.plan_selector__option} ${billingCycle === BillingCycle.Weekly ? styles.plan_selector__option_active : ""}`}
+            onClick={() => setBillingCycle(BillingCycle.Weekly)}
           >
             Weekly
           </button>
 
           <button
-            className={`${styles.plan_selector__option} ${planType === "monthly" ? styles.plan_selector__option_active : ""}`}
-            onClick={() => setPlanType("monthly")}
+            className={`${styles.plan_selector__option} ${billingCycle === BillingCycle.Monthly ? styles.plan_selector__option_active : ""}`}
+            onClick={() => setBillingCycle(BillingCycle.Monthly)}
           >
             Monthly
           </button>
@@ -61,7 +62,7 @@ const PlanTypeSelector: React.FC<PlanTypeSelectorProps> = ({
             className={styles.plan_selector__slider}
             initial={false}
             animate={{
-              x: planType === "weekly" ? 0 : "100%",
+              x: billingCycle === BillingCycle.Weekly ? 0 : "100%",
             }}
             transition={{
               type: "spring",
@@ -74,7 +75,7 @@ const PlanTypeSelector: React.FC<PlanTypeSelectorProps> = ({
       <div className={styles.duration_selector}>
         <h2 className={styles.duration_selector__title}>Duration</h2>
         <div className={styles.duration_selector__container}>
-          {(planType === "weekly" ? WeeklyDurations : MonthlyDurations).map(
+          {(billingCycle === BillingCycle.Weekly ? WeeklyDurations : MonthlyDurations).map(
             (value) => (
               <motion.button
                 key={value}
@@ -90,10 +91,10 @@ const PlanTypeSelector: React.FC<PlanTypeSelectorProps> = ({
               >
                 {value}{" "}
                 {value === 1
-                  ? planType === "weekly"
+                  ? billingCycle === BillingCycle.Weekly
                     ? "Week"
                     : "Month"
-                  : planType === "weekly"
+                  : billingCycle === BillingCycle.Weekly
                     ? "Weeks"
                     : "Months"}
               </motion.button>

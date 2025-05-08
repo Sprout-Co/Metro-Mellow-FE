@@ -986,767 +986,889 @@
     border-radius: 16px;
     padding: 0;
     border: 1px solid color("neutral", "lighter");
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
     overflow: hidden;
+    margin-bottom: 32px;
 
-    &Header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .modal__invoiceSection {
+      .modal__bookingSummaryBox {
+        .modal__bookingSection {
+          .modal__bookingSectionTitle {
+            @include flex-between;
+            padding: 1rem 1.25rem;
+            background: linear-gradient(
+              to right,
+              rgba(color("primary", "base"), 0.08),
+              rgba(color("primary", "light"), 0.05)
+            );
+            border-radius: border-radius("md");
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0;
+            font-weight: map-get($font-weights, "semibold");
+
+            .modal__bookingSectionTitleContent {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+
+              svg {
+                background: rgba(color("primary", "base"), 0.1);
+                padding: 5px;
+                border-radius: 50%;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                transition: all 0.3s ease;
+              }
+            }
+
+            &:hover {
+              background: linear-gradient(
+                to right,
+                rgba(color("primary", "base"), 0.12),
+                rgba(color("primary", "light"), 0.08)
+              );
+              transform: translateY(-1px);
+              box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+
+              .modal__bookingSectionTitleContent svg {
+                background: rgba(color("primary", "base"), 0.15);
+                transform: scale(1.05);
+              }
+
+              .modal__accordionIcon {
+                background: rgba(color("primary", "base"), 0.15);
+              }
+            }
+
+            .modal__accordionIcon {
+              transition: all 0.3s ease;
+              background: rgba(color("primary", "base"), 0.1);
+              padding: 5px;
+              border-radius: 50%;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            &.modal__accordionOpen {
+              background: linear-gradient(
+                to right,
+                rgba(color("primary", "base"), 0.12),
+                rgba(color("primary", "light"), 0.08)
+              );
+              border-bottom-left-radius: 0;
+              border-bottom-right-radius: 0;
+              box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+
+              .modal__accordionIcon {
+                transform: rotate(180deg);
+                background: rgba(color("primary", "base"), 0.2);
+              }
+            }
+          }
+
+          .modal__bookingSectionContent {
+            max-height: 0;
+            overflow: hidden;
+            transition:
+              max-height 0.4s cubic-bezier(0, 1, 0, 1),
+              padding 0.3s ease,
+              opacity 0.3s ease,
+              transform 0.3s ease;
+            padding: 0;
+            opacity: 0;
+            transform: translateY(-10px);
+            background: rgba(color("neutral", "white"), 0.8);
+            border-bottom-left-radius: border-radius("md");
+            border-bottom-right-radius: border-radius("md");
+
+            &.modal__accordionContentOpen {
+              max-height: 2000px;
+              padding: 1.25rem;
+              opacity: 1;
+              transform: translateY(0);
+              transition:
+                max-height 0.4s ease-in-out,
+                padding 0.3s ease,
+                opacity 0.3s ease,
+                transform 0.3s ease;
+              box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+            }
+          }
+        }
+      }
+    }
+
+    .modal__priceSummaryBox {
+      background-color: rgba(color("neutral", "lighter"), 0.5);
+      border-radius: 16px;
       padding: 24px;
-      background: linear-gradient(
-        to right,
-        rgba(color("primary", "base"), 0.03),
-        rgba(color("primary", "light"), 0.05)
-      );
-      border-bottom: 1px solid color("neutral", "lighter");
-    }
+      border: 1px solid color("neutral", "lighter");
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 
-    &Logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: map-get($font-sizes, "lg");
-      font-weight: map-get($font-weights, "bold");
-      color: color("primary", "dark");
-
-      svg {
-        color: color("primary", "base");
-      }
-    }
-
-    &Id {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-
-      span {
-        &:first-child {
-          font-size: map-get($font-sizes, "xs");
-          color: color("neutral", "dark");
-        }
-
-        &:last-child {
-          font-size: map-get($font-sizes, "base");
-          font-weight: map-get($font-weights, "semibold");
-          color: color("primary", "base");
-        }
-      }
-    }
-
-    &Section {
-      padding: 20px 24px;
-      border-bottom: 1px solid color("neutral", "lighter");
-
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-
-    &SectionTitle {
-      font-size: map-get($font-sizes, "base");
-      font-weight: map-get($font-weights, "semibold");
-      color: color("neutral", "darker");
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-
-      svg {
-        color: color("primary", "base");
-      }
-    }
-
-    &Item {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-
-      &Icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background-color: rgba(color("primary", "base"), 0.1);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: color("primary", "base");
-        flex-shrink: 0;
-      }
-
-      &Content {
-        h3 {
-          font-size: map-get($font-sizes, "lg");
-          font-weight: map-get($font-weights, "semibold");
-          color: color("neutral", "black");
-          margin-bottom: 4px;
-        }
-
-        p {
-          font-size: map-get($font-sizes, "sm");
-          color: color("neutral", "dark");
-        }
-      }
-    }
-
-    &Grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    &DetailItem {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-
-      &Label {
-        font-size: map-get($font-sizes, "xs");
-        color: color("neutral", "dark");
-        display: flex;
-        align-items: center;
-        gap: 6px;
-
-        svg {
-          color: color("primary", "base");
-        }
-      }
-
-      &Value {
-        font-size: map-get($font-sizes, "sm");
-        color: color("neutral", "black");
-        font-weight: map-get($font-weights, "medium");
-      }
-    }
-
-    &RoomList {
-      margin-top: 16px;
-
-      h4 {
+      .modal__priceSectionTitle {
         font-size: map-get($font-sizes, "sm");
         font-weight: map-get($font-weights, "semibold");
-        color: color("neutral", "darker");
-        margin-bottom: 12px;
-      }
-    }
+        color: color("primary", "dark");
+        margin-bottom: 16px;
+        margin-top: 24px;
+        border-bottom: 1px solid rgba(color("primary", "base"), 0.1);
+        padding-bottom: 8px;
 
-    &Rooms {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 8px;
-    }
-
-    &Room {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 12px;
-      background-color: rgba(color("neutral", "lighter"), 0.5);
-      border-radius: 8px;
-      font-size: map-get($font-sizes, "sm");
-
-      span {
         &:first-child {
+          margin-top: 0;
+        }
+      }
+
+      .modal__priceBreakdown {
+        margin-bottom: 1.5rem;
+
+        .modal__priceBreakdownTitle {
+          font-size: 0.9rem;
           color: color("neutral", "dark");
+          margin-bottom: 0.5rem;
         }
 
-        &:last-child {
-          font-weight: map-get($font-weights, "medium");
-          color: color("neutral", "black");
+        .modal__priceBreakdownItem {
+          @include flex-between;
+          padding: 0.5rem 0;
+          border-bottom: 1px solid rgba(color("neutral", "medium"), 0.1);
+
+          &:last-child {
+            border-bottom: none;
+          }
         }
       }
-    }
 
-    &PriceTable {
-      margin-bottom: 16px;
-    }
+      .modal__priceTotal {
+        padding: 20px;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(
+          to right,
+          color("primary", "base"),
+          color("primary", "dark")
+        );
+        color: color("neutral", "white");
+        box-shadow: 0 4px 15px rgba(color("primary", "base"), 0.2);
+        transition: all 0.3s ease;
+        margin-top: 1rem;
 
-    &PriceRow {
-      display: flex;
-      justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid color("neutral", "lighter");
-      font-size: map-get($font-sizes, "sm");
-
-      &:last-child {
-        border-bottom: none;
-      }
-
-      span {
-        &:first-child {
-          color: color("neutral", "dark");
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(color("primary", "base"), 0.3);
         }
 
-        &:last-child {
-          font-weight: map-get($font-weights, "medium");
-          color: color("neutral", "black");
-        }
-      }
-    }
+        span {
+          &:first-child {
+            font-size: map-get($font-sizes, "base");
+            font-weight: map-get($font-weights, "medium");
+          }
 
-    &PriceHeader {
-      font-weight: map-get($font-weights, "semibold");
-      color: color("neutral", "darker");
-      border-bottom: 2px solid color("neutral", "lighter");
-
-      span {
-        &:first-child,
-        &:last-child {
-          color: color("neutral", "darker");
-        }
-      }
-    }
-
-    &Total {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px;
-      background-color: rgba(color("primary", "base"), 0.05);
-      border-radius: 8px;
-      margin-top: 16px;
-
-      span {
-        &:first-child {
-          font-size: map-get($font-sizes, "base");
-          font-weight: map-get($font-weights, "semibold");
-          color: color("neutral", "darker");
-        }
-
-        &:last-child {
-          font-size: map-get($font-sizes, "xl");
-          font-weight: map-get($font-weights, "bold");
-          color: color("primary", "base");
-        }
-      }
-    }
-
-    &Inclusions {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
-    }
-
-    &Inclusion {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      padding: 10px 12px;
-      background-color: rgba(color("success"), 0.05);
-      border-radius: 8px;
-
-      svg {
-        color: color("success");
-        flex-shrink: 0;
-      }
-
-      span {
-        font-size: map-get($font-sizes, "sm");
-        color: color("neutral", "darker");
-      }
-    }
-  }
-  // Add these styles to your BookServiceModal.module.scss file
-
-  .modal {
-    // ... existing styles ...
-
-    &__priceSummaryBox {
-      background-color: rgba(color("neutral", "lighter"), 0.5);
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 8px;
-      border: 1px solid color("neutral", "lighter");
-    }
-
-    &__priceSectionTitle {
-      font-size: map-get($font-sizes, "sm");
-      font-weight: map-get($font-weights, "semibold");
-      color: color("primary", "dark");
-      margin-bottom: 12px;
-      margin-top: 20px;
-      border-bottom: 1px solid rgba(color("primary", "base"), 0.1);
-      padding-bottom: 6px;
-
-      &:first-child {
-        margin-top: 0;
-      }
-    }
-
-    &__invoicePriceSubtotal {
-      background-color: rgba(color("neutral", "medium"), 0.08);
-      font-weight: map-get($font-weights, "semibold");
-      border-top: 1px dashed color("neutral", "medium");
-
-      span {
-        color: color("neutral", "darker") !important;
-
-        &:last-child {
-          color: color("primary", "dark") !important;
-        }
-      }
-    }
-
-    &__priceCalculation {
-      margin-top: 20px;
-      padding: 16px;
-      background-color: rgba(color("primary", "base"), 0.05);
-      border-radius: 12px 12px 0 0;
-      border: 1px solid rgba(color("primary", "base"), 0.1);
-      border-bottom: none;
-    }
-
-    &__priceCalcRow {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      font-size: map-get($font-sizes, "sm");
-
-      &:last-child {
-        margin-bottom: 0;
-        padding-top: 6px;
-        border-top: 1px dashed rgba(color("neutral", "dark"), 0.2);
-      }
-
-      span {
-        &:first-child {
-          color: color("neutral", "dark");
-        }
-
-        &:last-child {
-          font-weight: map-get($font-weights, "semibold");
-          color: color("neutral", "darker");
-        }
-      }
-    }
-
-    &__priceInfoNote {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      margin-top: 16px;
-      padding: 12px;
-      background-color: rgba(color("info"), 0.05);
-      border-radius: 8px;
-      border-left: 3px solid color("info");
-
-      svg {
-        color: color("info");
-        flex-shrink: 0;
-        margin-top: 2px;
-      }
-
-      span {
-        font-size: map-get($font-sizes, "xs");
-        color: color("neutral", "darker");
-        line-height: map-get($line-heights, "relaxed");
-      }
-    }
-
-    &__invoiceTotal {
-      border-radius: 0 0 12px 12px;
-      margin-top: 0;
-      border: 1px solid rgba(color("primary", "base"), 0.1);
-      border-top: none;
-    }
-
-    // Update the invoicePriceTable for better column display
-    &__invoicePriceTable {
-      margin-bottom: 0;
-
-      .modal__invoicePriceRow {
-        display: grid;
-
-        &:has(~ .modal__invoicePriceRow:nth-child(4)) {
-          // For tables with 4 columns
-          grid-template-columns: 1.5fr 0.8fr 0.8fr 1fr;
-        }
-
-        &:has(~ .modal__invoicePriceRow:nth-child(3)) {
-          // For tables with 3 columns
-          grid-template-columns: 1.5fr 1.5fr 1fr;
-        }
-
-        &:not(:has(~ .modal__invoicePriceRow:nth-child(3))):not(
-            :has(~ .modal__invoicePriceRow:nth-child(4))
-          ) {
-          // Default 2 columns
-          grid-template-columns: 1.5fr 1fr;
+          &:last-child {
+            font-size: map-get($font-sizes, "xl");
+            font-weight: map-get($font-weights, "bold");
+          }
         }
       }
     }
   }
-  // Add these styles to your BookServiceModal.module.scss file
 
-  .modal {
-    // ... existing styles ...
-
-    // Booking Details Styles
-    &__bookingSummaryBox {
-      background-color: rgba(color("neutral", "lighter"), 0.5);
-      border-radius: 12px;
-      margin-top: 8px;
-      border: 1px solid color("neutral", "lighter");
-      overflow: hidden;
-    }
-
-    &__bookingSection {
-      padding: 20px;
-      border-bottom: 1px solid color("neutral", "lighter");
-
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-
-    &__bookingSectionTitle {
-      font-size: map-get($font-sizes, "sm");
-      font-weight: map-get($font-weights, "semibold");
-      color: color("primary", "dark");
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-
-      svg {
-        color: color("primary", "base");
-      }
-    }
-
-    &__bookingDetailsGrid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 16px;
-    }
-
-    &__bookingDetailItem {
-      background-color: color("neutral", "white");
-      border-radius: 8px;
-      padding: 12px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-      transition: all 0.2s ease;
-
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
-      }
-    }
-
-    &__bookingDetailLabel {
-      font-size: map-get($font-sizes, "xs");
-      color: color("neutral", "dark");
-      margin-bottom: 4px;
-    }
-
-    &__bookingDetailValue {
-      font-size: map-get($font-sizes, "sm");
-      color: color("neutral", "black");
-      font-weight: map-get($font-weights, "medium");
-    }
-
-    &__frequencyBadge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: map-get($font-sizes, "xs");
-      text-transform: capitalize;
-
-      &--one-off {
-        background-color: rgba(color("neutral", "medium"), 0.2);
-        color: color("neutral", "darker");
-      }
-
-      &--weekly {
-        background-color: rgba(color("success"), 0.1);
-        color: color("success");
-      }
-
-      &--bi-weekly {
-        background-color: rgba(color("primary", "base"), 0.1);
-        color: color("primary", "base");
-      }
-
-      &--monthly {
-        background-color: rgba(color("info"), 0.1);
-        color: color("info");
-      }
-    }
-
-    &__recurringInfo {
-      margin-top: 20px;
-      display: flex;
-      gap: 16px;
-      background: linear-gradient(
-        to right,
-        rgba(color("primary", "base"), 0.05),
-        rgba(color("primary", "light"), 0.02)
-      );
-      border-radius: 8px;
-      padding: 16px;
-      border-left: 3px solid color("primary", "base");
-    }
-
-    &__recurringInfoIcon {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background-color: rgba(color("primary", "base"), 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: color("primary", "base");
-      flex-shrink: 0;
-    }
-
-    &__recurringInfoContent {
-      flex: 1;
-    }
-
-    &__recurringInfoTitle {
-      font-size: map-get($font-sizes, "sm");
-      font-weight: map-get($font-weights, "semibold");
-      color: color("primary", "dark");
-      margin-bottom: 6px;
-    }
-
-    &__recurringInfoText {
-      font-size: map-get($font-sizes, "xs");
-      color: color("neutral", "darker");
-      line-height: map-get($line-heights, "relaxed");
-      margin: 0;
-    }
-
-    &__roomsDetail {
-      margin-top: 20px;
-    }
-
-    &__roomsDetailTitle {
-      font-size: map-get($font-sizes, "sm");
-      color: color("neutral", "darker");
-      margin-bottom: 12px;
-      font-weight: map-get($font-weights, "medium");
-    }
-
-    &__roomsGrid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 12px;
-    }
-
-    &__roomItem {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background-color: color("neutral", "white");
-      border-radius: 8px;
-      padding: 12px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-      transition: all 0.2s ease;
-
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
-      }
-    }
-
-    &__roomIcon {
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
-      background-color: rgba(color("primary", "base"), 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: color("primary", "base");
-      flex-shrink: 0;
-    }
-
-    &__roomInfo {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex: 1;
-    }
-
-    &__roomName {
-      font-size: map-get($font-sizes, "xs");
-      color: color("neutral", "dark");
-    }
-
-    &__roomQuantity {
-      font-size: map-get($font-sizes, "sm");
-      font-weight: map-get($font-weights, "semibold");
-      color: color("neutral", "black");
-      display: inline-block;
-      min-width: 24px;
-      height: 24px;
-      line-height: 24px;
-      text-align: center;
-      background-color: rgba(color("primary", "base"), 0.1);
-      border-radius: 4px;
-      color: color("primary", "dark");
-    }
-
-    &__laundryDetail {
-      margin-top: 20px;
-    }
-
-    &__laundryDetailTitle {
-      font-size: map-get($font-sizes, "sm");
-      color: color("neutral", "darker");
-      margin-bottom: 12px;
-      font-weight: map-get($font-weights, "medium");
-    }
-
-    &__laundryInfo {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    &__laundryBags {
-      background-color: color("primary", "base");
-      color: color("neutral", "white");
-      width: 80px;
-      height: 80px;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 10px rgba(color("primary", "base"), 0.3);
-      flex-shrink: 0;
-    }
-
-    &__laundryBagsCount {
-      font-size: map-get($font-sizes, "3xl");
-      font-weight: map-get($font-weights, "bold");
-      line-height: 1;
-    }
-
-    &__laundryBagsLabel {
-      font-size: map-get($font-sizes, "xs");
-      margin-top: 4px;
-    }
-
-    &__laundryItems {
-      background-color: color("neutral", "white");
-      border-radius: 8px;
-      padding: 12px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex: 1;
-    }
-
-    &__laundryItemsIcon {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-      background-color: rgba(color("primary", "base"), 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: color("primary", "base");
-      flex-shrink: 0;
-    }
-
-    &__laundryItemsInfo {
-      flex: 1;
-    }
-
-    &__laundryItemsCount {
-      font-size: map-get($font-sizes, "sm");
-      font-weight: map-get($font-weights, "semibold");
-      color: color("neutral", "black");
-    }
-
-    &__laundryItemsNote {
-      font-size: map-get($font-sizes, "xs");
-      color: color("neutral", "dark");
-    }
-
-    &__addressBox {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      background-color: color("neutral", "white");
-      border-radius: 8px;
-      padding: 16px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    }
-
-    &__addressIcon {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-      background-color: rgba(color("primary", "base"), 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: color("primary", "base");
-      flex-shrink: 0;
-    }
-
-    &__addressDetails {
-      flex: 1;
-    }
-
-    &__addressLine {
-      font-size: map-get($font-sizes, "sm");
-      color: color("neutral", "darker");
-      line-height: 1.5;
-
-      &:first-child {
-        font-weight: map-get($font-weights, "medium");
-      }
-    }
-  }
-
-  // Add to your BookServiceModal.module.scss
-
-.modal {
-  // ... existing styles ...
-  
   &__simpleHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 20px;
+    padding: 20px 24px;
+    background: linear-gradient(
+      to right,
+      rgba(color("primary", "base"), 0.03),
+      rgba(color("primary", "light"), 0.05)
+    );
     border-bottom: 1px solid color("neutral", "lighter");
   }
-  
+
   &__companyInfo {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
   }
-  
+
   &__companyLogo {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    background-color: color("primary", "base");
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(
+      135deg,
+      color("primary", "base"),
+      color("primary", "light")
+    );
     display: flex;
     align-items: center;
     justify-content: center;
     color: color("neutral", "white");
+    box-shadow: 0 3px 8px rgba(color("primary", "base"), 0.2);
   }
-  
+
   &__companyName {
+    font-weight: map-get($font-weights, "bold");
     font-size: map-get($font-sizes, "lg");
+    color: color("primary", "dark");
+    margin: 0;
+  }
+
+  &__bookingNumber {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "darker");
+    padding: 6px 12px;
+    background-color: rgba(color("neutral", "lighter"), 0.8);
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  &__invoiceSection {
+    padding: 24px;
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__invoiceSectionTitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("primary", "dark");
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(color("primary", "base"), 0.1);
+
+    svg {
+      color: color("primary", "base");
+    }
+  }
+
+  &__bookingSummaryBox {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background-color: color("neutral", "lighter");
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  &__bookingSection {
+    background-color: color("neutral", "white");
+    padding: 20px 24px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba(color("neutral", "white"), 0.8);
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid color("neutral", "lighter");
+    }
+  }
+
+  &__bookingSectionTitle {
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("primary", "dark");
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    svg {
+      color: color("primary", "base");
+    }
+  }
+
+  &__bookingDetailsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  &__bookingDetailItem {
+    background-color: rgba(color("neutral", "lighter"), 0.5);
+    border-radius: 12px;
+    padding: 14px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+
+    &:hover {
+      border-color: rgba(color("primary", "base"), 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  &__bookingDetailLabel {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__bookingDetailValue {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+  }
+
+  &__frequencyBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    text-transform: capitalize;
+
+    &--one-off {
+      background-color: rgba(map-get($colors, "info"), 0.1);
+      color: map-get($colors, "info");
+    }
+
+    &--weekly {
+      background-color: rgba(map-get($colors, "success"), 0.1);
+      color: map-get($colors, "success");
+    }
+
+    &--bi-weekly {
+      background-color: rgba(map-get($colors, "warning"), 0.1);
+      color: map-get($colors, "warning");
+    }
+
+    &--monthly {
+      background-color: rgba(map-get($colors, "primary", "light"), 0.1);
+      color: color("primary", "light");
+    }
+  }
+
+  &__recurringInfo {
+    margin-top: 20px;
+    display: flex;
+    gap: 16px;
+    background: linear-gradient(
+      to right,
+      rgba(map-get($colors, "success"), 0.05),
+      rgba(map-get($colors, "success"), 0.02)
+    );
+    border-radius: 12px;
+    padding: 16px;
+    border-left: 3px solid map-get($colors, "success");
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(map-get($colors, "success"), 0.1);
+    }
+  }
+
+  &__recurringInfoIcon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(map-get($colors, "success"), 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: map-get($colors, "success");
+    flex-shrink: 0;
+  }
+
+  &__recurringInfoContent {
+    flex: 1;
+  }
+
+  &__recurringInfoTitle {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "darker");
+    margin-bottom: 6px;
+  }
+
+  &__recurringInfoText {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  &__roomsDetail {
+    margin-top: 20px;
+  }
+
+  &__roomsDetailTitle {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "darker");
+    margin-bottom: 12px;
+  }
+
+  &__roomsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  &__roomItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background-color: color("neutral", "white");
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  &__roomIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: 12px;
+    background: linear-gradient(
+      135deg,
+      rgba(color("primary", "base"), 0.1),
+      rgba(color("primary", "light"), 0.1)
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("primary", "base");
+    flex-shrink: 0;
+  }
+
+  &__roomInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__roomName {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+  }
+
+  &__roomQuantity {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("primary", "dark");
+    background-color: rgba(color("primary", "base"), 0.05);
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  &__laundryDetail,
+  &__pestControlInfo {
+    margin-top: 20px;
+  }
+
+  &__laundryDetailTitle {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "darker");
+    margin-bottom: 12px;
+  }
+
+  &__laundryInfo {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: color("neutral", "white");
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  &__laundryBags {
+    background: linear-gradient(
+      135deg,
+      map-get($colors, "warning"),
+      adjust-color(map-get($colors, "warning"), $lightness: 10%)
+    );
+    color: color("neutral", "white");
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(map-get($colors, "warning"), 0.3);
+    flex-shrink: 0;
+  }
+
+  &__laundryBagsCount {
+    font-size: map-get($font-sizes, "3xl");
+    font-weight: map-get($font-weights, "bold");
+    line-height: 1;
+  }
+
+  &__laundryBagsLabel {
+    font-size: map-get($font-sizes, "xs");
+    margin-top: 4px;
+  }
+
+  &__laundryItems {
+    padding: 16px;
+    background-color: rgba(color("neutral", "lighter"), 0.5);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+  }
+
+  &__laundryItemsIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(
+      135deg,
+      rgba(color("primary", "base"), 0.1),
+      rgba(color("primary", "light"), 0.1)
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("primary", "base");
+    flex-shrink: 0;
+  }
+
+  &__laundryItemsInfo {
+    flex: 1;
+  }
+
+  &__laundryItemsCount {
+    font-size: map-get($font-sizes, "sm");
     font-weight: map-get($font-weights, "semibold");
     color: color("neutral", "black");
   }
-  
-  &__bookingNumber {
+
+  &__laundryItemsNote {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    margin-top: 2px;
+  }
+
+  &__pestControlDetail {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background-color: color("neutral", "white");
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    margin-bottom: 12px;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__pestControlDetailIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(
+      135deg,
+      rgba(map-get($colors, "info"), 0.15),
+      rgba(map-get($colors, "info"), 0.05)
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: map-get($colors, "info");
+    flex-shrink: 0;
+  }
+
+  &__pestControlDetailInfo {
+    flex: 1;
+  }
+
+  &__pestControlDetailTitle {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    margin-bottom: 4px;
+  }
+
+  &__pestControlDetailValue {
     font-size: map-get($font-sizes, "base");
     font-weight: map-get($font-weights, "medium");
     color: color("neutral", "darker");
-    padding: 6px 12px;
-    background-color: color("neutral", "lighter");
-    border-radius: 6px;
   }
-}
+
+  &__addressBox {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background-color: color("neutral", "white");
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  &__addressIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(
+      135deg,
+      rgba(color("primary", "base"), 0.1),
+      rgba(color("primary", "light"), 0.05)
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("primary", "base");
+    flex-shrink: 0;
+  }
+
+  &__addressDetails {
+    flex: 1;
+  }
+
+  &__addressLine {
+    font-size: map-get($font-sizes, "sm");
+    line-height: 1.6;
+    color: color("neutral", "darker");
+
+    &:first-child {
+      font-weight: map-get($font-weights, "medium");
+    }
+  }
+
+  &__priceSummaryBox {
+    background-color: rgba(color("neutral", "lighter"), 0.5);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid color("neutral", "lighter");
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  }
+
+  &__priceSectionTitle {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("primary", "dark");
+    margin-bottom: 16px;
+    margin-top: 24px;
+    border-bottom: 1px solid rgba(color("primary", "base"), 0.1);
+    padding-bottom: 8px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  &__invoicePriceTable {
+    @include flex-column;
+    width: 100%;
+    gap: 2px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  }
+
+  &__invoicePriceRow {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background-color: color("neutral", "white");
+    font-size: map-get($font-sizes, "sm");
+    transition: all 0.2s ease;
+
+    &:hover:not(&Header) {
+      background-color: rgba(color("neutral", "lighter"), 0.3);
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid color("neutral", "lighter");
+    }
+  }
+
+  &__invoicePriceHeader {
+    background: linear-gradient(
+      to right,
+      color("primary", "dark"),
+      color("primary", "base")
+    );
+    color: color("neutral", "white");
+    font-weight: map-get($font-weights, "semibold");
+  }
+
+  &__invoicePriceSubtotal {
+    background-color: rgba(color("neutral", "lighter"), 0.6);
+    font-weight: map-get($font-weights, "semibold");
+    border-top: 1px dashed color("neutral", "medium");
+
+    span {
+      &:last-child {
+        color: color("primary", "dark");
+      }
+    }
+  }
+
+  &__priceCalculation {
+    margin: 24px 0 20px;
+    padding: 20px;
+    background-color: color("neutral", "white");
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  &__priceCalcRow {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: map-get($font-sizes, "sm");
+
+    &:last-child {
+      margin-bottom: 0;
+      padding-top: 8px;
+      border-top: 1px dashed color("neutral", "lighter");
+    }
+
+    span {
+      &:first-child {
+        color: color("neutral", "dark");
+      }
+
+      &:last-child {
+        font-weight: map-get($font-weights, "semibold");
+        color: color("neutral", "darker");
+      }
+    }
+  }
+
+  &__invoiceTotal {
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(
+      to right,
+      color("primary", "base"),
+      color("primary", "dark")
+    );
+    color: color("neutral", "white");
+    box-shadow: 0 4px 15px rgba(color("primary", "base"), 0.2);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(color("primary", "base"), 0.3);
+    }
+
+    span {
+      &:first-child {
+        font-size: map-get($font-sizes, "base");
+        font-weight: map-get($font-weights, "medium");
+      }
+
+      &:last-child {
+        font-size: map-get($font-sizes, "xl");
+        font-weight: map-get($font-weights, "bold");
+      }
+    }
+  }
+
+  &__priceInfoNote {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 16px;
+    background-color: rgba(map-get($colors, "info"), 0.05);
+    border-radius: 12px;
+    border-left: 3px solid map-get($colors, "info");
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba(map-get($colors, "info"), 0.08);
+    }
+
+    svg {
+      color: map-get($colors, "info");
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    span {
+      font-size: map-get($font-sizes, "xs");
+      color: color("neutral", "darker");
+      line-height: 1.6;
+    }
+  }
+
+  &__invoiceInclusions {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  &__invoiceInclusion {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 16px;
+    background-color: rgba(map-get($colors, "success"), 0.05);
+    border-radius: 12px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      background-color: rgba(map-get($colors, "success"), 0.08);
+      box-shadow: 0 4px 12px rgba(map-get($colors, "success"), 0.1);
+    }
+
+    svg {
+      color: map-get($colors, "success");
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    span {
+      font-size: map-get($font-sizes, "sm");
+      color: color("neutral", "darker");
+      line-height: 1.5;
+    }
+  }
 }

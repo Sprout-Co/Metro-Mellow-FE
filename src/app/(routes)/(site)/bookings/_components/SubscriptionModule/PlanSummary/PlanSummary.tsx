@@ -9,11 +9,12 @@ import {
   ServiceId,
   ServiceCategory,
 } from "@/graphql/api";
-import { PlanType, DurationType } from "../SubscriptionModule";
+import { DurationType } from "../SubscriptionModule";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { useUIStore } from "@/store";
 import EditServiceModal from "../EditServiceModal/EditServiceModal";
 import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
+import { useAuthStore } from "@/store/slices/auth";
 
 // Define our extended service types
 export type CleaningDetails = {
@@ -91,17 +92,19 @@ const DEFAULT_SERVICE_DETAILS = {
 
 type PlanSummaryProps = {
   selectedServices: Service[];
-  planType: PlanType;
+  billingCycle: BillingCycle;
   duration: DurationType;
   onUpdateService?: (service: ExtendedService) => void;
 };
 
 const PlanSummary: React.FC<PlanSummaryProps> = ({
   selectedServices,
-  planType = "weekly",
+  billingCycle = BillingCycle.Weekly,
   duration = 2,
   onUpdateService,
 }) => {
+  const { user } = useAuthStore();
+
   // State to track extended services with details
   const [extendedServices, setExtendedServices] = useState<ExtendedService[]>(
     []
@@ -111,10 +114,20 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
   );
   const [editServiceModal, setEditServiceModal] = useState(false);
   const [subscriptionInput, setSubscriptionInput] =
-    useState<CreateSubscriptionInput | null>(null);
-
-  // Access the UI store to handle modals
-  const { openModal } = useUIStore();
+    useState<CreateSubscriptionInput>({
+      billingCycle: billingCycle.toUpperCase() as BillingCycle,
+      duration: Number(duration),
+      startDate: new Date().toISOString(),
+      autoRenew: true,
+      services: [],
+      address: {
+        street: "broadway street",
+        city: "lagos",
+        state: "lagos",
+        zipCode: "10001",
+        country: "nigeria",
+      },
+    });
 
   // Add state for submission
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -156,73 +169,6 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
     setExtendedServices(extended);
   }, [selectedServices]);
 
-  // Calculate individual service prices
-  const calculateServicePrice = (service: ExtendedService): number => {
-    // If we have subscription input with updated prices, use those
-    if (subscriptionInput?.services) {
-      const updatedService = subscriptionInput.services.find(
-        (s) => s.serviceId === service._id
-      );
-      if (updatedService) {
-        return updatedService.price;
-      }
-    }
-
-    // Fallback to calculating price from service details
-    const basePrice = service.price && service.price > 0 ? service.price : 5000;
-
-    if (!service.details) return basePrice;
-
-    const { type, details } = service;
-    let price = basePrice;
-    let frequency = 1;
-
-    // Check if there's a selected option price to use instead of base price
-    if (service.options && service.options.length > 0) {
-      const selectedOptionId =
-        type === "cleaning"
-          ? (details as CleaningDetails).cleaningType
-          : type === "food"
-            ? (details as FoodDetails).foodPlanType
-            : type === "laundry"
-              ? (details as LaundryDetails).laundryType
-              : undefined;
-
-      if (selectedOptionId) {
-        const selectedOption = service.options.find(
-          (opt) =>
-            opt.id === selectedOptionId ||
-            opt.label.toLowerCase().includes(String(selectedOptionId))
-        );
-
-        if (selectedOption?.price && selectedOption.price > 0) {
-          price = selectedOption.price;
-        }
-      }
-    }
-
-    // Get frequency based on service type
-    switch (type) {
-      case "cleaning": {
-        const cleaningDetails = details as CleaningDetails;
-        frequency = cleaningDetails.frequency;
-        break;
-      }
-      case "food": {
-        const foodDetails = details as FoodDetails;
-        frequency = foodDetails.deliveryFrequency;
-        break;
-      }
-      case "laundry": {
-        const laundryDetails = details as LaundryDetails;
-        frequency = laundryDetails.pickupFrequency;
-        break;
-      }
-    }
-
-    return Math.round(price * frequency);
-  };
-
   // Update service prices whenever services, their details, or subscription input changes
   useEffect(() => {
     const newPrices: { [key: string]: number } = {};
@@ -242,20 +188,17 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
       0
     );
 
-    // No duration discount is applied
-
     // Calculate final total
     const final = subtotal;
 
     return {
       subtotal,
-      discount: 0, // No discount
       total: subtotal * duration,
-      perPeriod: planType === "monthly" ? final / 4 : final, // Assuming 4 weeks per month for weekly plans
+      perPeriod: billingCycle === BillingCycle.Monthly ? final / 4 : final, // Assuming 4 weeks per month for weekly plans
     };
   };
 
-  const { subtotal, discount, total, perPeriod } = calculateTotals();
+  const { subtotal, total, perPeriod } = calculateTotals();
 
   // Format price to currency
   const formatPrice = (price: number) => {
@@ -356,7 +299,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
         // Apply any additional properties from plan summary
         const finalSubscriptionInput = {
           ...subscriptionInput,
-          billingCycle: planType.toUpperCase() as BillingCycle,
+          billingCycle: billingCycle,
           duration: Number(duration),
           startDate: new Date().toISOString(),
           autoRenew: true,
@@ -365,7 +308,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
         console.log("Final subscription input:", finalSubscriptionInput);
 
         // Here you would typically call your API to create the subscription
-        // await handleCreateSubscription(finalSubscriptionInput);
+        await handleCreateSubscription(finalSubscriptionInput);
 
         // Show success message or redirect
         setTimeout(() => {
@@ -641,10 +584,10 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
               <span>
                 Total ({duration}{" "}
                 {duration === 1
-                  ? planType === "weekly"
+                  ? billingCycle === BillingCycle.Weekly
                     ? "week"
                     : "month"
-                  : planType === "weekly"
+                  : billingCycle === BillingCycle.Weekly
                     ? "weeks"
                     : "months"}
                 )
@@ -654,7 +597,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
 
             <div className={styles.plan_summary__per_period}>
               <span>
-                {planType === "weekly"
+                {billingCycle === BillingCycle.Weekly
                   ? "Weekly payment: "
                   : "Monthly payment: "}
                 {formatPrice(perPeriod)}
@@ -679,10 +622,10 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
               <span className={styles.plan_summary__total_period}>
                 {duration}{" "}
                 {duration === 1
-                  ? planType === "weekly"
+                  ? billingCycle === BillingCycle.Weekly
                     ? "week"
                     : "month"
-                  : planType === "weekly"
+                  : billingCycle === BillingCycle.Weekly
                     ? "weeks"
                     : "months"}
               </span>
@@ -698,26 +641,8 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
               onClick={handleCreateSubscriptionPlan}
               disabled={isSubmitting || extendedServices.length === 0}
             >
-              {isSubmitting ? (
-                <>
-                  <motion.span
-                    animate={{ rotate: 360 }}
-                    transition={{
-                      duration: 1,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                  >
-                    <Icon name="loader" />
-                  </motion.span>
-                  Creating...
-                </>
-              ) : (
-                <>
-                  Create Subscription
-                  <Icon name="arrow-right" />
-                </>
-              )}
+              Proceed
+              <Icon name="arrow-right" />
             </button>
           </div>
         )}
@@ -737,6 +662,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
         onUpdateService={onUpdateService}
         duration={duration}
         onSubscriptionInputChange={(input) => setSubscriptionInput(input)}
+        setSubscriptionInput={setSubscriptionInput}
       />
     </Fragment>
   );

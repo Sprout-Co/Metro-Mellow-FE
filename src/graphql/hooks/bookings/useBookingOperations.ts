@@ -21,6 +21,7 @@ import {
   useGetBookingsLazyQuery,
   useGetCustomerBookingsLazyQuery,
   useGetStaffBookingsLazyQuery,
+  useRescheduleBookingMutation,
   BookingStatus,
   AddressInput,
   RoomQuantitiesInput,
@@ -28,6 +29,7 @@ import {
   CreateBookingMutationVariables,
   UpdateBookingMutationVariables,
   CreateBookingInput,
+  TimeSlot,
 } from "@/graphql/api";
 
 export const useBookingOperations = () => {
@@ -37,6 +39,7 @@ export const useBookingOperations = () => {
   const [completeBookingMutation] = useCompleteBookingMutation();
   const [assignStaffMutation] = useAssignStaffMutation();
   const [updateBookingStatusMutation] = useUpdateBookingStatusMutation();
+  const [rescheduleBookingMutation] = useRescheduleBookingMutation();
 
   // Use lazy query hooks
   const [getBookingById] = useGetBookingByIdLazyQuery();
@@ -61,7 +64,7 @@ export const useBookingOperations = () => {
       try {
         const { data, errors } = await createBookingMutation({
           variables: {
-            input: {...input}
+            input: { ...input },
           },
         });
 
@@ -89,12 +92,10 @@ export const useBookingOperations = () => {
    * @throws Error if update fails
    */
   const handleUpdateBooking = useCallback(
-    async (
-      input: UpdateBookingMutationVariables
-    ) => {
+    async (input: UpdateBookingMutationVariables) => {
       try {
         const { data, errors } = await updateBookingMutation({
-          variables: {...input},
+          variables: { ...input },
         });
 
         if (errors) {
@@ -169,6 +170,41 @@ export const useBookingOperations = () => {
       }
     },
     [completeBookingMutation]
+  );
+
+  /**
+   * Reschedules a booking to a new date and time
+   * @param id - Booking ID
+   * @param newDate - New date for the booking
+   * @param newTimeSlot - New time slot for the booking
+   * @returns Updated booking
+   * @throws Error if rescheduling fails
+   */
+  const handleRescheduleBooking = useCallback(
+    async (id: string, newDate: string, newTimeSlot: TimeSlot) => {
+      try {
+        const { data, errors } = await rescheduleBookingMutation({
+          variables: {
+            id,
+            newDate,
+            newTimeSlot,
+          },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.rescheduleBooking;
+      } catch (error) {
+        console.error("Booking reschedule error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [rescheduleBookingMutation]
   );
 
   /**
@@ -340,6 +376,7 @@ export const useBookingOperations = () => {
     handleUpdateBooking,
     handleCancelBooking,
     handleCompleteBooking,
+    handleRescheduleBooking,
     handleAssignStaff,
     handleUpdateBookingStatus,
     handleGetBooking,

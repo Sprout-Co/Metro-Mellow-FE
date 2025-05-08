@@ -22,6 +22,7 @@ import {
   UpdateSubscriptionInput,
   UpdateSubscriptionServiceInput,
   SubscriptionServiceInput,
+  useReactivateSubscriptionMutation,
 } from "@/graphql/api";
 import { SubscriptionStatus, BillingCycle } from "@/graphql/api";
 
@@ -39,6 +40,7 @@ export const useSubscriptionOperations = () => {
     useRemoveServiceFromSubscriptionMutation();
   const [updateSubscriptionServiceMutation] =
     useUpdateSubscriptionServiceMutation();
+  const [reactivateSubscriptionMutation] = useReactivateSubscriptionMutation();
 
   const { refetch: getSubscriptionById } = useGetSubscriptionByIdQuery({
     skip: true,
@@ -195,6 +197,37 @@ export const useSubscriptionOperations = () => {
       }
     },
     [resumeSubscriptionMutation]
+  );
+
+  /**
+   * Reactivates a cancelled subscription
+   * @param id - Subscription ID
+   * @returns Reactivated subscription
+   * @throws Error if reactivation fails
+   */
+  const handleReactivateSubscription = useCallback(
+    async (id: string) => {
+      try {
+        const { data, errors } = await reactivateSubscriptionMutation({
+          variables: {
+            reactivateSubscriptionId: id,
+          },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.reactivateSubscription;
+      } catch (error) {
+        console.error("Subscription reactivation error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [reactivateSubscriptionMutation]
   );
 
   /**
@@ -405,6 +438,7 @@ export const useSubscriptionOperations = () => {
     handleCancelSubscription,
     handlePauseSubscription,
     handleResumeSubscription,
+    handleReactivateSubscription,
     handleUpdateSubscriptionStatus,
     handleAddServiceToSubscription,
     handleRemoveServiceFromSubscription,
