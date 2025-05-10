@@ -1,0 +1,315 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.profileSettings {
+  &__header {
+    margin-bottom: spacing("xl");
+  }
+
+  &__title {
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+  }
+
+  &__content {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    box-shadow: map-get($box-shadows, "sm");
+    transition: box-shadow $transition-base;
+
+    &:hover {
+      box-shadow: map-get($box-shadows, "md");
+    }
+  }
+
+  &__main {
+    padding: spacing("xl");
+  }
+
+  &__sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: spacing("xl");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+    }
+  }
+
+  &__sectionTitle {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+  }
+
+  &__editBtn {
+    @include button-primary;
+    padding: spacing("xs") spacing("md");
+    font-size: map-get($font-sizes, "sm");
+    transition: transform $transition-fast;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &__profile {
+    &Header {
+      display: flex;
+      align-items: center;
+      margin-bottom: spacing("xl");
+
+      @include breakpoint-down("md") {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  }
+
+  &__avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: border-radius("full");
+    overflow: hidden;
+    margin-right: spacing("xl");
+    position: relative;
+    transition: transform $transition-base;
+
+    &:hover {
+      transform: scale(1.02);
+    }
+
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("md");
+    }
+  }
+
+  &__avatarPlaceholder {
+    width: 100%;
+    height: 100%;
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: map-get($font-weights, "bold");
+    font-size: map-get($font-sizes, "2xl");
+    transition: background-color $transition-base;
+
+    &:hover {
+      background-color: color("primary", "dark");
+    }
+  }
+
+  &__avatarEdit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: border-radius("full");
+    background-color: color("neutral", "white");
+    color: color("primary", "base");
+    border: 1px solid color("neutral", "lighter");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all $transition-base;
+    transform: translateY(100%);
+    opacity: 0;
+
+    .profileSettings__avatar:hover & {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    &:hover {
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
+      transform: translateY(0) scale(1.1);
+    }
+  }
+
+  &__profileInfo {
+    flex: 1;
+  }
+
+  &__profileName {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__profileEmail {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+  }
+
+  &__form {
+    max-width: 800px;
+  }
+
+  &__formGroup {
+    margin-bottom: spacing("md");
+    position: relative;
+  }
+
+  &__formLabel {
+    display: block;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xs");
+    transition: color $transition-base;
+  }
+
+  &__formInput {
+    width: 100%;
+    padding: spacing("sm") spacing("md");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "black");
+    transition: all $transition-base;
+    background-color: color("neutral", "white");
+
+    &:hover {
+      border-color: color("primary", "light");
+    }
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
+    }
+
+    &:disabled {
+      background-color: color("neutral", "lighter");
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    &.error {
+      border-color: color("error");
+
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(color("error"), 0.1);
+      }
+    }
+  }
+
+  &__formRow {
+    display: flex;
+    gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+    }
+  }
+
+  &__formSubtitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: spacing("lg") 0 spacing("md");
+  }
+
+  &__formActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: spacing("md");
+    margin-top: spacing("xl");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+    }
+  }
+
+  &__formSubmit {
+    @include button-primary;
+    padding: spacing("sm") spacing("md");
+    transition: transform $transition-fast;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &__formCancel {
+    @include button-secondary;
+    padding: spacing("sm") spacing("md");
+    transition: transform $transition-fast;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &__profileDetails {
+    max-width: 800px;
+  }
+
+  &__profileSection {
+    margin-bottom: spacing("xl");
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__profileSectionTitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("md");
+  }
+
+  &__profileDetail {
+    display: flex;
+    margin-bottom: spacing("sm");
+    transition: transform $transition-fast;
+
+    &:hover {
+      transform: translateX(spacing("xs"));
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__profileLabel {
+    width: 120px;
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+  }
+
+  &__profileValue {
+    color: color("neutral", "black");
+  }
+}
