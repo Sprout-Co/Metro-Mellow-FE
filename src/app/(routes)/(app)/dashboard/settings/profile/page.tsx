@@ -1,4 +1,6 @@
 import { Metadata } from "next";
+import ProfileSettings from "./ProfileSettings";
+import DashboardHeader from "../../_components/header/DashboardHeader";
 
 export const metadata: Metadata = {
   title: "My Profile | Metro Mellow",
@@ -7,9 +9,9 @@ export const metadata: Metadata = {
 
 export default function ProfilePage() {
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">My Profile</h1>
-      <p>Hello World - Profile Settings Page</p>
-    </div>
+    <>
+      <DashboardHeader />
+      <ProfileSettings />
+    </>
   );
 }
