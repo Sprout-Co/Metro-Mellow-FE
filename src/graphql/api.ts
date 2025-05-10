@@ -139,7 +139,6 @@ export type CookingDetails = {
 };
 
 export type CookingDetailsInput = {
-  mealDeliveries: Array<MealDeliveryInput>;
   mealType: MealType;
   mealsPerDelivery: Array<MealDeliveryInput>;
 };

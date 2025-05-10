@@ -219,7 +219,7 @@ export default function LoginForm({
                   Password<span className={styles.loginForm__required}>*</span>
                 </label>
                 <Link
-                  href="/forgot-password"
+                  href="/get-started/forgot-password"
                   className={styles.loginForm__forgotPassword}
                 >
                   Forgot Password?
