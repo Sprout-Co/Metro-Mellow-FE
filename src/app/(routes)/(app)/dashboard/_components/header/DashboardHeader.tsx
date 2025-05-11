@@ -8,6 +8,8 @@ import ProfileMenu from "./ProfileMenu";
 import styles from "./DashboardHeader.module.scss";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import { useAuthStore } from "@/store/slices/auth";
+import Link from "next/link";
+import { Routes } from "@/constants/routes";
 
 export default function DashboardHeader() {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -50,7 +52,9 @@ export default function DashboardHeader() {
             width={40} 
             height={40} 
           /> */}
-          <span className={styles.header__logoText}>Metro Mellow</span>
+          <span className={styles.header__logoText}>
+            <Link href={Routes.DASHBOARD}>Metro Mellow</Link>
+          </span>
         </div>
 
         {/* <div className={styles.header__search}>
