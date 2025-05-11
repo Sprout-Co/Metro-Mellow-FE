@@ -3,31 +3,9 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import styles from "./SettingsOverview.module.scss";
-
+import { Routes } from "@/constants/routes";
 // Settings categories with their pages
 const settingsCategories = [
-  {
-    id: "account",
-    title: "Account Settings",
-    description: "Manage your account preferences and language settings",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-        <polyline points="22,6 12,13 2,6"></polyline>
-      </svg>
-    ),
-    link: "/dashboard/settings/account",
-  },
   {
     id: "profile",
     title: "Profile Settings",
@@ -48,29 +26,7 @@ const settingsCategories = [
         <circle cx="12" cy="7" r="4"></circle>
       </svg>
     ),
-    link: "/dashboard/settings/profile",
-  },
-  {
-    id: "security",
-    title: "Security",
-    description: "Manage your password and two-factor authentication",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-      </svg>
-    ),
-    link: "/dashboard/settings/security",
+    link: Routes.DASHBOARD_SETTINGS_PROFILE,
   },
   {
     id: "notifications",
@@ -92,7 +48,7 @@ const settingsCategories = [
         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
       </svg>
     ),
-    link: "/dashboard/settings/notifications",
+    link: Routes.DASHBOARD_SETTINGS_NOTIFICATIONS,
   },
   {
     id: "billing",
@@ -114,7 +70,7 @@ const settingsCategories = [
         <line x1="1" y1="10" x2="23" y2="10"></line>
       </svg>
     ),
-    link: "/dashboard/settings/billing",
+    link: Routes.DASHBOARD_SETTINGS_BILLING,
   },
   {
     id: "help",
@@ -137,7 +93,7 @@ const settingsCategories = [
         <line x1="12" y1="17" x2="12.01" y2="17"></line>
       </svg>
     ),
-    link: "/dashboard/settings/help",
+    link: Routes.DASHBOARD_SETTINGS_HELP,
   },
 ];
 

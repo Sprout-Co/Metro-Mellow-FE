@@ -8,8 +8,11 @@ export enum Routes {
   // App routes
   DASHBOARD = "/dashboard",
   PROFILE = "/profile",
-  SETTINGS = "/settings",
-
+  DASHBOARD_SETTINGS = "/dashboard/settings",
+  DASHBOARD_SETTINGS_PROFILE = "/dashboard/settings/profile",
+  DASHBOARD_SETTINGS_NOTIFICATIONS = "/dashboard/settings/notifications",
+  DASHBOARD_SETTINGS_BILLING = "/dashboard/settings/billing",
+  DASHBOARD_SETTINGS_HELP = "/dashboard/settings/help",
   // Service routes
   SERVICES = "/services",
   BOOKINGS = "/bookings",
