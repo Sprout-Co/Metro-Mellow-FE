@@ -1,47 +1,67 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SettingsLayout from "../SettingsLayout";
 import styles from "./ProfileSettings.module.scss";
-
-interface ProfileFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  avatar: string | null;
-  bio: string;
-  address: {
-    street: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
-  };
-}
+import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
+import { useAuthStore } from "@/store/slices/auth";
+import { UpdateUserInput } from "@/graphql/api";
 
 export default function ProfileSettings() {
   const [isEditing, setIsEditing] = useState(false);
   const [formSuccess, setFormSuccess] = useState(false);
-  const [formData, setFormData] = useState<ProfileFormData>({
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    phone: "+1 (555) 123-4567",
-    avatar: null,
-    bio: "Professional home service enthusiast with a passion for clean spaces and organized environments.",
+  const [formError, setFormError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const { handleUpdateProfile, handleGetCurrentUser } = useAuthOperations();
+  const currentUser = useAuthStore((state) => state.user);
+  const [email, setEmail] = useState("");
+
+  const [formData, setFormData] = useState<UpdateUserInput>({
+    firstName: "",
+    lastName: "",
+    phone: "",
     address: {
-      street: "123 Main St",
-      city: "New York",
-      state: "NY",
-      zipCode: "10001",
-      country: "United States",
+      street: "",
+      city: "",
+      state: "Lagos",
+      zipCode: "",
+      country: "Nigeria",
     },
   });
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userData = await handleGetCurrentUser();
+        if (userData) {
+          setEmail(userData.email || "");
+          setFormData({
+            firstName: userData.firstName || "",
+            lastName: userData.lastName || "",
+            phone: userData.phone || "",
+            address: {
+              street: userData.address?.street || "",
+              city: userData.address?.city || "",
+              state: userData.address?.state || "",
+              zipCode: userData.address?.zipCode || "",
+              country: userData.address?.country || "",
+            },
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setFormError("Failed to load profile data");
+      }
+    };
+
+    fetchUserData();
+  }, [handleGetCurrentUser]);
+
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     if (name.includes(".")) {
@@ -49,7 +69,7 @@ export default function ProfileSettings() {
       setFormData((prev) => ({
         ...prev,
         [parent]: {
-          ...prev[parent as keyof ProfileFormData],
+          ...(prev[parent as keyof UpdateUserInput] as any),
           [child]: value,
         },
       }));
@@ -61,26 +81,62 @@ export default function ProfileSettings() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate API call
-    setTimeout(() => {
+    setIsLoading(true);
+    setFormError(null);
+
+    try {
+      const updateData = {
+        firstName: formData.firstName || undefined,
+        lastName: formData.lastName || undefined,
+        phone: formData.phone || undefined,
+        address: formData.address
+          ? {
+              street: formData.address.street || "",
+              city: formData.address.city || "",
+              state: formData.address.state || "",
+              zipCode: formData.address.zipCode || "",
+              country: formData.address.country || "",
+            }
+          : undefined,
+      } as {
+        firstName?: string;
+        lastName?: string;
+        phone?: string;
+        address?: {
+          street: string;
+          city: string;
+          state: string;
+          zipCode: string;
+          country: string;
+        };
+      };
+
+      await handleUpdateProfile(updateData);
       setIsEditing(false);
       setFormSuccess(true);
 
       setTimeout(() => {
         setFormSuccess(false);
       }, 3000);
-    }, 500);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      setFormError(
+        error instanceof Error ? error.message : "Failed to update profile"
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const countries = [
+    { value: "Nigeria", label: "Nigeria" },
     { value: "United States", label: "United States" },
     { value: "Canada", label: "Canada" },
     { value: "United Kingdom", label: "United Kingdom" },
     { value: "Australia", label: "Australia" },
     { value: "Germany", label: "Germany" },
-    { value: "Nigeria", label: "Nigeria" },
     { value: "France", label: "France" },
     { value: "Japan", label: "Japan" },
   ];
@@ -140,14 +196,13 @@ export default function ProfileSettings() {
                 <h2 className={styles.profileSettings__profileName}>
                   {formData.firstName} {formData.lastName}
                 </h2>
-                <p className={styles.profileSettings__profileEmail}>
-                  {formData.email}
-                </p>
+                <p className={styles.profileSettings__profileEmail}>{email}</p>
               </div>
 
               <button
                 className={styles.profileSettings__editBtn}
                 onClick={() => setIsEditing(!isEditing)}
+                disabled={isLoading}
               >
                 {isEditing ? "Cancel" : "Edit Profile"}
               </button>
@@ -166,6 +221,12 @@ export default function ProfileSettings() {
                   animate="visible"
                   exit="hidden"
                 >
+                  {formError && (
+                    <div className={styles.profileSettings__errorMessage}>
+                      {formError}
+                    </div>
+                  )}
+
                   <div className={styles.profileSettings__formSection}>
                     <h3 className={styles.profileSettings__formSectionTitle}>
                       Personal Information
@@ -182,10 +243,11 @@ export default function ProfileSettings() {
                           type="text"
                           id="firstName"
                           name="firstName"
-                          value={formData.firstName}
+                          value={formData.firstName || ""}
                           onChange={handleChange}
                           className={styles.profileSettings__formInput}
                           required
+                          disabled={isLoading}
                         />
                       </div>
 
@@ -200,10 +262,11 @@ export default function ProfileSettings() {
                           type="text"
                           id="lastName"
                           name="lastName"
-                          value={formData.lastName}
+                          value={formData.lastName || ""}
                           onChange={handleChange}
                           className={styles.profileSettings__formInput}
                           required
+                          disabled={isLoading}
                         />
                       </div>
                     </div>
@@ -219,10 +282,9 @@ export default function ProfileSettings() {
                         type="email"
                         id="email"
                         name="email"
-                        value={formData.email}
-                        onChange={handleChange}
+                        value={email}
                         className={styles.profileSettings__formInput}
-                        required
+                        disabled
                       />
                     </div>
 
@@ -237,26 +299,10 @@ export default function ProfileSettings() {
                         type="tel"
                         id="phone"
                         name="phone"
-                        value={formData.phone}
+                        value={formData.phone || ""}
                         onChange={handleChange}
                         className={styles.profileSettings__formInput}
-                      />
-                    </div>
-
-                    <div className={styles.profileSettings__formGroup}>
-                      <label
-                        htmlFor="bio"
-                        className={styles.profileSettings__formLabel}
-                      >
-                        Bio
-                      </label>
-                      <textarea
-                        id="bio"
-                        name="bio"
-                        value={formData.bio}
-                        onChange={handleChange}
-                        className={styles.profileSettings__formTextarea}
-                        rows={4}
+                        disabled={isLoading}
                       />
                     </div>
                   </div>
@@ -276,9 +322,10 @@ export default function ProfileSettings() {
                         type="text"
                         id="street"
                         name="address.street"
-                        value={formData.address.street}
+                        value={formData.address?.street || ""}
                         onChange={handleChange}
                         className={styles.profileSettings__formInput}
+                        disabled={isLoading}
                       />
                     </div>
 
@@ -294,9 +341,10 @@ export default function ProfileSettings() {
                           type="text"
                           id="city"
                           name="address.city"
-                          value={formData.address.city}
+                          value={formData.address?.city || ""}
                           onChange={handleChange}
                           className={styles.profileSettings__formInput}
+                          disabled={isLoading}
                         />
                       </div>
 
@@ -311,9 +359,10 @@ export default function ProfileSettings() {
                           type="text"
                           id="state"
                           name="address.state"
-                          value={formData.address.state}
-                          onChange={handleChange}
+                          value={formData.address?.state || ""}
                           className={styles.profileSettings__formInput}
+                          disabled
+                          readOnly
                         />
                       </div>
                     </div>
@@ -330,9 +379,10 @@ export default function ProfileSettings() {
                           type="text"
                           id="zipCode"
                           name="address.zipCode"
-                          value={formData.address.zipCode}
+                          value={formData.address?.zipCode || ""}
                           onChange={handleChange}
                           className={styles.profileSettings__formInput}
+                          disabled={isLoading}
                         />
                       </div>
 
@@ -346,9 +396,9 @@ export default function ProfileSettings() {
                         <select
                           id="country"
                           name="address.country"
-                          value={formData.address.country}
-                          onChange={handleChange as any}
+                          value={formData.address?.country || ""}
                           className={styles.profileSettings__formSelect}
+                          disabled
                         >
                           {countries.map((country) => (
                             <option key={country.value} value={country.value}>
@@ -365,14 +415,16 @@ export default function ProfileSettings() {
                       type="button"
                       className={styles.profileSettings__cancelBtn}
                       onClick={() => setIsEditing(false)}
+                      disabled={isLoading}
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       className={styles.profileSettings__submitBtn}
+                      disabled={isLoading}
                     >
-                      Save Changes
+                      {isLoading ? "Saving..." : "Save Changes"}
                     </button>
                   </div>
                 </motion.form>
@@ -404,7 +456,7 @@ export default function ProfileSettings() {
                           Email
                         </h4>
                         <p className={styles.profileSettings__infoValue}>
-                          {formData.email}
+                          {email}
                         </p>
                       </div>
 
@@ -413,16 +465,9 @@ export default function ProfileSettings() {
                           Phone
                         </h4>
                         <p className={styles.profileSettings__infoValue}>
-                          {formData.phone}
+                          {formData.phone || <em>Not provided</em>}
                         </p>
                       </div>
-                    </div>
-
-                    <div className={styles.profileSettings__infoGroup}>
-                      <h4 className={styles.profileSettings__infoLabel}>Bio</h4>
-                      <p className={styles.profileSettings__infoValue}>
-                        {formData.bio || <em>No bio provided</em>}
-                      </p>
                     </div>
                   </div>
 
@@ -431,12 +476,20 @@ export default function ProfileSettings() {
                       Address
                     </h3>
                     <div className={styles.profileSettings__infoAddress}>
-                      <p>{formData.address.street}</p>
-                      <p>
-                        {formData.address.city}, {formData.address.state}{" "}
-                        {formData.address.zipCode}
-                      </p>
-                      <p>{formData.address.country}</p>
+                      {formData.address?.street ? (
+                        <>
+                          <p>{formData.address.street}</p>
+                          <p>
+                            {formData.address.city}, {formData.address.state}{" "}
+                            {formData.address.zipCode}
+                          </p>
+                          <p>{formData.address.country}</p>
+                        </>
+                      ) : (
+                        <p className={styles.profileSettings__infoValue}>
+                          <em>No address provided</em>
+                        </p>
+                      )}
                     </div>
                   </div>
                 </motion.div>
