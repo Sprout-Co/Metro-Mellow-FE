@@ -25,6 +25,8 @@ export const usePaymentOperations = () => {
   const [removePaymentMethodMutation] = useRemovePaymentMethodMutation();
   const [setDefaultPaymentMethodMutation] =
     useSetDefaultPaymentMethodMutation();
+  const { data: paymentMethodsData, refetch: refetchPaymentMethods } =
+    useGetPaymentMethodsQuery();
 
   /**
    * Creates a new payment
@@ -111,6 +113,9 @@ export const usePaymentOperations = () => {
           throw new Error(errors[0].message);
         }
 
+        // Refetch payment methods after adding a new one
+        await refetchPaymentMethods();
+
         return data?.addPaymentMethod;
       } catch (error) {
         console.error("Payment method creation error:", error);
@@ -120,7 +125,7 @@ export const usePaymentOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [addPaymentMethodMutation]
+    [addPaymentMethodMutation, refetchPaymentMethods]
   );
 
   /**
@@ -140,6 +145,9 @@ export const usePaymentOperations = () => {
           throw new Error(errors[0].message);
         }
 
+        // Refetch payment methods after removing one
+        await refetchPaymentMethods();
+
         return data?.removePaymentMethod;
       } catch (error) {
         console.error("Payment method removal error:", error);
@@ -149,7 +157,7 @@ export const usePaymentOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [removePaymentMethodMutation]
+    [removePaymentMethodMutation, refetchPaymentMethods]
   );
 
   /**
@@ -169,6 +177,9 @@ export const usePaymentOperations = () => {
           throw new Error(errors[0].message);
         }
 
+        // Refetch payment methods after setting default
+        await refetchPaymentMethods();
+
         return data?.setDefaultPaymentMethod;
       } catch (error) {
         console.error("Default payment method update error:", error);
@@ -178,7 +189,7 @@ export const usePaymentOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [setDefaultPaymentMethodMutation]
+    [setDefaultPaymentMethodMutation, refetchPaymentMethods]
   );
 
   /**
@@ -280,6 +291,7 @@ export const usePaymentOperations = () => {
   }, []);
 
   return {
+    paymentMethods: paymentMethodsData?.paymentMethods || [],
     handleCreatePayment,
     handleRefundPayment,
     handleAddPaymentMethod,

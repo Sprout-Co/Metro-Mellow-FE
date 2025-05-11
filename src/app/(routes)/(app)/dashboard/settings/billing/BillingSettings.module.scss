@@ -9,7 +9,7 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    
+
     &::-webkit-scrollbar {
       display: none;
     }
@@ -33,9 +33,9 @@
 
     &Active {
       color: color("primary", "base");
-      
+
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: -1px;
         left: 0;
@@ -159,11 +159,11 @@
   }
 
   &__visaIcon {
-    color: #1A1F71;
+    color: #1a1f71;
   }
 
   &__mastercardIcon {
-    color: #EB001B;
+    color: #eb001b;
   }
 
   &__paypalIcon {
@@ -226,7 +226,7 @@
 
   &__removeBtn {
     color: color("error");
-    
+
     &:hover {
       background-color: rgba(color("error"), 0.05);
     }
@@ -423,7 +423,8 @@
     width: 100%;
     border-collapse: collapse;
 
-    th, td {
+    th,
+    td {
       padding: spacing("md");
       text-align: left;
       border-bottom: 1px solid color("neutral", "lighter");
@@ -671,5 +672,85 @@
     svg {
       stroke-width: 3;
     }
+  }
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+  }
+
+  &__spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+
+  &__errorMessage {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: var(--error-bg);
+    color: var(--error-text);
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-width: 400px;
+
+    svg {
+      flex-shrink: 0;
+      color: var(--error-text);
+    }
+
+    span {
+      flex-grow: 1;
+    }
+  }
+
+  &__errorClose {
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    cursor: pointer;
+    color: var(--error-text);
+    opacity: 0.7;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  // Update button styles to handle disabled state
+  &__submitBtn,
+  &__setDefaultBtn,
+  &__removeBtn {
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
