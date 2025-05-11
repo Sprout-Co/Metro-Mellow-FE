@@ -1,15 +1,17 @@
 import { Metadata } from "next";
+import DashboardHeader from "../_components/header/DashboardHeader";
+import SettingsOverview from "./SettingsOverview";
 
 export const metadata: Metadata = {
-  title: "Account Settings | Metro Mellow",
-  description: "Manage your Metro Mellow account settings.",
+  title: "Settings | Metro Mellow",
+  description: "Manage your Metro Mellow account settings and preferences.",
 };
 
-export default function AccountSettingsPage() {
+export default function SettingsPage() {
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">Account Settings</h1>
-      <p>Hello World - Account Settings Page</p>
-    </div>
+    <>
+      <DashboardHeader />
+      <SettingsOverview />
+    </>
   );
 }

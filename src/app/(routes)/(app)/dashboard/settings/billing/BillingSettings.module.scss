@@ -1,236 +1,675 @@
-@import "@/styles/variables";
-@import "@/styles/mixins";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .billingSettings {
-  padding: 2rem;
-  max-width: 800px;
-  margin: 0 auto;
-
-  &__header {
-    margin-bottom: 2rem;
+  &__tabs {
+    display: flex;
+    border-bottom: 1px solid color("neutral", "lighter");
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
-  &__title {
-    font-size: 1.875rem;
-    font-weight: 600;
-    color: $text-primary;
-    margin-bottom: 0.5rem;
-  }
+  &__tab {
+    padding: spacing("md") spacing("lg");
+    color: color("neutral", "dark");
+    background: none;
+    border: none;
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "medium");
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+    transition: $transition-base;
 
-  &__subtitle {
-    font-size: 1rem;
-    color: $text-secondary;
+    &:hover {
+      color: color("primary", "base");
+    }
+
+    &Active {
+      color: color("primary", "base");
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: color("primary", "base");
+      }
+    }
   }
 
   &__content {
-    background: $background-secondary;
-    border-radius: $border-radius-lg;
-    padding: 2rem;
-  }
-
-  &__section {
-    margin-bottom: 2rem;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
+    padding: spacing("xl");
+    position: relative;
   }
 
   &__sectionHeader {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    justify-content: space-between;
+    margin-bottom: spacing("xl");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+    }
   }
 
   &__sectionTitle {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: $text-primary;
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
   }
 
-  &__changePlanBtn,
-  &__editBtn {
-    @include button-reset;
-    color: $primary;
-    font-weight: 500;
-    cursor: pointer;
-    transition: color 0.2s;
+  &__editBtn,
+  &__addBtn,
+  &__downloadAllBtn {
+    @include button-primary;
+    padding: spacing("xs") spacing("md");
+    font-size: map-get($font-sizes, "sm");
+    transition: transform $transition-fast;
 
     &:hover {
-      color: darken($primary, 10%);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
     }
   }
 
-  &__planInfo {
-    background: $background-primary;
-    border-radius: $border-radius;
-    padding: 1.5rem;
-  }
-
-  &__planDetails {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  &__planName {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: $text-primary;
-  }
-
-  &__planStatus {
-    font-size: 0.875rem;
-    color: $text-secondary;
-  }
-
-  &__statusActive {
-    color: $success;
-    font-weight: 500;
-  }
-
-  &__nextBilling {
-    font-size: 0.875rem;
-    color: $text-secondary;
-  }
-
-  &__form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  &__formGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  &__formLabel {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: $text-primary;
-  }
-
-  &__formInput {
-    padding: 0.75rem;
-    border: 1px solid $border-color;
-    border-radius: $border-radius;
-    background: $background-primary;
-    color: $text-primary;
-    font-size: 0.875rem;
-    transition: border-color 0.2s;
-
-    &:focus {
-      outline: none;
-      border-color: $primary;
-    }
-  }
-
-  &__formRow {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-
-  &__formSubtitle {
-    font-size: 1rem;
-    font-weight: 600;
-    color: $text-primary;
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  &__cardInput {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-
-  &__cardIcon {
-    position: absolute;
-    right: 1rem;
-    color: $text-secondary;
-  }
-
-  &__formActions {
-    margin-top: 1rem;
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  &__submitBtn {
+  &__addBtnLarge {
     @include button-primary;
-    padding: 0.75rem 1.5rem;
+    padding: spacing("sm") spacing("lg");
+    font-size: map-get($font-sizes, "base");
+    transition: transform $transition-fast;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
   }
 
-  &__paymentInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+  // Payment Methods
+  &__addCard {
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    padding: spacing("lg");
+    margin-bottom: spacing("xl");
+    overflow: hidden;
   }
 
-  &__card {
+  &__paymentMethodsList {
+    display: grid;
+    gap: spacing("md");
+  }
+
+  &__paymentMethod {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    background: $background-primary;
-    border-radius: $border-radius;
-    padding: 1.5rem;
-  }
+    justify-content: space-between;
+    padding: spacing("lg");
+    background-color: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    transition: $transition-base;
 
-  &__cardIcon {
-    width: 2.5rem;
-    height: 2.5rem;
-    color: $primary;
+    &:hover {
+      box-shadow: map-get($box-shadows, "md");
+      transform: translateY(-2px);
+    }
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+    }
   }
 
   &__cardDetails {
     display: flex;
+    align-items: center;
+    gap: spacing("md");
+  }
+
+  &__cardIcon {
+    width: 48px;
+    height: 32px;
+    border-radius: border-radius("sm");
+    background-color: color("neutral", "lighter");
+    color: color("neutral", "darker");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: map-get($font-weights, "bold");
+    font-size: map-get($font-sizes, "xs");
+  }
+
+  &__visaIcon {
+    color: #1A1F71;
+  }
+
+  &__mastercardIcon {
+    color: #EB001B;
+  }
+
+  &__paypalIcon {
+    color: #003087;
+  }
+
+  &__cardInfo {
+    display: flex;
     flex-direction: column;
-    gap: 0.25rem;
   }
 
-  &__cardType {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: $text-primary;
+  &__cardTitle {
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
   }
 
-  &__cardNumber {
-    font-size: 0.875rem;
-    color: $text-secondary;
+  &__cardMeta {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
   }
 
-  &__cardExpiry {
-    font-size: 0.875rem;
-    color: $text-secondary;
+  &__cardActions {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+
+    @include breakpoint-down("md") {
+      width: 100%;
+      justify-content: flex-end;
+    }
   }
 
-  &__billingAddress {
-    background: $background-primary;
-    border-radius: $border-radius;
-    padding: 1.5rem;
+  &__defaultBadge {
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    color: color("primary", "base");
+    background-color: rgba(color("primary", "base"), 0.1);
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("full");
   }
 
-  &__addressTitle {
-    font-size: 1rem;
-    font-weight: 600;
-    color: $text-primary;
-    margin-bottom: 1rem;
+  &__setDefaultBtn,
+  &__removeBtn {
+    background: none;
+    border: none;
+    color: color("primary", "base");
+    font-size: map-get($font-sizes, "sm");
+    cursor: pointer;
+    transition: $transition-base;
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("sm");
+
+    &:hover {
+      text-decoration: underline;
+      background-color: rgba(color("primary", "base"), 0.05);
+    }
   }
 
-  &__addressName,
-  &__addressStreet,
-  &__addressCity,
-  &__addressCountry {
-    font-size: 0.875rem;
-    color: $text-secondary;
-    margin-bottom: 0.25rem;
+  &__removeBtn {
+    color: color("error");
+    
+    &:hover {
+      background-color: rgba(color("error"), 0.05);
+    }
+  }
+
+  &__emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: spacing("2xl") spacing("xl");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("lg");
+  }
+
+  &__emptyIcon {
+    color: color("neutral", "medium");
+    margin-bottom: spacing("md");
+  }
+
+  &__emptyTitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+  }
+
+  &__emptyText {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("lg");
+    max-width: 300px;
+  }
+
+  // Form Styles
+  &__form {
+    margin-bottom: spacing("xl");
+  }
+
+  &__formGroup {
+    margin-bottom: spacing("md");
 
     &:last-child {
       margin-bottom: 0;
+    }
+  }
+
+  &__formLabel {
+    display: block;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xs");
+  }
+
+  &__formInput {
+    width: 100%;
+    padding: spacing("sm") spacing("md");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    background-color: color("neutral", "white");
+    color: color("neutral", "black");
+    font-size: map-get($font-sizes, "base");
+    transition: $transition-base;
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
+    }
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+  }
+
+  &__cardNumberWrapper {
+    position: relative;
+  }
+
+  &__cardBrandIcon {
+    position: absolute;
+    right: spacing("md");
+    top: 50%;
+    transform: translateY(-50%);
+    color: color("neutral", "dark");
+  }
+
+  &__formRow {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__formActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: spacing("md");
+    margin-top: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+    }
+  }
+
+  &__submitBtn {
+    @include button-primary;
+    padding: spacing("sm") spacing("lg");
+    min-width: 120px;
+    transition: transform $transition-fast;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &__cancelBtn {
+    @include button-secondary;
+    padding: spacing("sm") spacing("lg");
+    min-width: 120px;
+    transition: transform $transition-fast;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &__checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "black");
+    cursor: pointer;
+  }
+
+  &__checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: color("primary", "base");
+  }
+
+  // Billing Address Display
+  &__addressDisplay {
+    padding: spacing("lg");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("lg");
+  }
+
+  &__addressCard {
+    background-color: color("neutral", "white");
+    padding: spacing("lg");
+    border-radius: border-radius("md");
+    border: 1px solid color("neutral", "lighter");
+  }
+
+  &__addressName {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
+  }
+
+  &__addressLine {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xs");
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // Invoice History
+  &__tableContainer {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      padding: spacing("md");
+      text-align: left;
+      border-bottom: 1px solid color("neutral", "lighter");
+    }
+
+    th {
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "darker");
+      font-size: map-get($font-sizes, "sm");
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      color: color("neutral", "black");
+      font-size: map-get($font-sizes, "sm");
+    }
+
+    tbody tr {
+      transition: $transition-base;
+
+      &:hover {
+        background-color: color("neutral", "lighter");
+      }
+    }
+  }
+
+  &__status {
+    display: inline-flex;
+    align-items: center;
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("full");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+
+    &Paid {
+      background-color: rgba(color("success"), 0.1);
+      color: color("success");
+    }
+
+    &Pending {
+      background-color: rgba(color("warning"), 0.1);
+      color: color("warning");
+    }
+
+    &Failed {
+      background-color: rgba(color("error"), 0.1);
+      color: color("error");
+    }
+  }
+
+  &__invoiceActions {
+    display: flex;
+    gap: spacing("xs");
+  }
+
+  &__invoiceAction {
+    color: color("primary", "base");
+    font-size: map-get($font-sizes, "sm");
+    text-decoration: none;
+    transition: $transition-base;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // Billing Preferences
+  &__preferenceForm {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xl");
+  }
+
+  &__preferenceGroup {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("lg");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("lg");
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+    }
+  }
+
+  &__preferenceHeader {
+    flex: 1;
+  }
+
+  &__preferenceTitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__preferenceDescription {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+  }
+
+  // Toggle Switch
+  &__switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+    margin: 0;
+
+    input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+
+      &:checked + .billingSettings__slider {
+        background-color: color("primary", "base");
+      }
+
+      &:checked + .billingSettings__slider:before {
+        transform: translateX(24px);
+      }
+    }
+  }
+
+  &__slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: color("neutral", "medium");
+    transition: 0.4s;
+    border-radius: 34px;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 4px;
+      background-color: color("neutral", "white");
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+  }
+
+  // Receipt Emails
+  &__emailList {
+    width: 100%;
+    margin-top: spacing("md");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__emailItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("xs") spacing("md");
+    background-color: color("neutral", "white");
+    border-radius: border-radius("md");
+    border: 1px solid color("neutral", "lighter");
+  }
+
+  &__removeEmailBtn {
+    background: none;
+    border: none;
+    color: color("neutral", "dark");
+    cursor: pointer;
+    padding: spacing("xxs");
+    border-radius: border-radius("full");
+    transition: $transition-base;
+
+    &:hover {
+      color: color("error");
+      background-color: rgba(color("error"), 0.1);
+    }
+  }
+
+  &__addEmail {
+    display: flex;
+    align-items: center;
+    background-color: color("neutral", "white");
+    border-radius: border-radius("md");
+    border: 1px solid color("neutral", "lighter");
+    padding: spacing("xs") spacing("md");
+  }
+
+  &__addEmailInput {
+    flex: 1;
+    border: none;
+    background: none;
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "black");
+
+    &:focus {
+      outline: none;
+    }
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+  }
+
+  &__addEmailBtn {
+    background: none;
+    border: none;
+    color: color("primary", "base");
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xxs");
+    border-radius: border-radius("full");
+    transition: $transition-base;
+
+    &:hover {
+      background-color: rgba(color("primary", "base"), 0.1);
+    }
+  }
+
+  // Success Message
+  &__successMessage {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    position: fixed;
+    bottom: spacing("xl");
+    left: 50%;
+    transform: translateX(-50%);
+    padding: spacing("sm") spacing("lg");
+    background-color: color("success");
+    color: color("neutral", "white");
+    border-radius: border-radius("full");
+    box-shadow: map-get($box-shadows, "md");
+    z-index: z-index("tooltip");
+
+    svg {
+      stroke-width: 3;
     }
   }
 }

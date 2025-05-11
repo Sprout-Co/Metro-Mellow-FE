@@ -1,0 +1,37 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.settingsLayout {
+  padding: spacing("xl") 0;
+  max-width: 800px;
+  margin: 0 auto;
+
+  &__header {
+    margin-bottom: spacing("xl");
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+
+    @include breakpoint-up("md") {
+      font-size: map-get($font-sizes, "3xl");
+    }
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+  }
+
+  &__content {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    box-shadow: map-get($box-shadows, "sm");
+    overflow: hidden;
+  }
+}

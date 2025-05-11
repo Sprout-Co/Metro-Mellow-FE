@@ -1,146 +1,314 @@
-@import "@/styles/variables";
-@import "@/styles/mixins";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .accountSettings {
-  padding: 2rem;
-  max-width: 800px;
-  margin: 0 auto;
-
-  &__header {
-    margin-bottom: 2rem;
-  }
-
-  &__title {
-    font-size: 1.875rem;
-    font-weight: 600;
-    color: $text-primary;
-    margin-bottom: 0.5rem;
-  }
-
-  &__subtitle {
-    font-size: 1rem;
-    color: $text-secondary;
-  }
-
-  &__content {
-    background: $background-secondary;
-    border-radius: $border-radius-lg;
-    padding: 2rem;
+  &__main {
+    padding: spacing("xl");
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    box-shadow: map-get($box-shadows, "sm");
   }
 
   &__sectionHeader {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    justify-content: space-between;
+    margin-bottom: spacing("2xl");
+    padding-bottom: spacing("md");
+    border-bottom: 2px solid color("neutral", "lighter");
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 60px;
+      height: 2px;
+      background-color: color("primary", "base");
+    }
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+    }
   }
 
   &__sectionTitle {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: $text-primary;
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    position: relative;
   }
 
   &__editBtn {
-    @include button-reset;
-    color: $primary;
-    font-weight: 500;
-    cursor: pointer;
-    transition: color 0.2s;
+    @include button-primary;
+    padding: spacing("sm") spacing("lg");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "semibold");
+    transition: all 0.3s ease;
+    box-shadow: map-get($box-shadows, "sm");
 
     &:hover {
-      color: darken($primary, 10%);
+      transform: translateY(-3px);
+      box-shadow: map-get($box-shadows, "md");
+    }
+
+    &:active {
+      transform: translateY(0);
     }
   }
 
+  // Form Styles
   &__form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: spacing("3xl");
   }
 
-  &__formGroup {
+  &__formSection {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  &__formLabel {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: $text-primary;
-  }
-
-  &__formSelect {
-    padding: 0.75rem;
-    border: 1px solid $border-color;
-    border-radius: $border-radius;
-    background: $background-primary;
-    color: $text-primary;
-    font-size: 0.875rem;
-    transition: border-color 0.2s;
-
-    &:focus {
-      outline: none;
-      border-color: $primary;
+    gap: spacing("lg");
+    padding: spacing("lg");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+    transition: all 0.3s ease;
+    
+    &:hover {
+      box-shadow: map-get($box-shadows, "sm");
+      border-color: rgba(color("primary", "base"), 0.2);
+      transform: translateY(-2px);
     }
   }
 
-  &__formSubtitle {
-    font-size: 1rem;
-    font-weight: 600;
-    color: $text-primary;
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
+  &__formSectionTitle {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("md");
+    padding-bottom: spacing("xs");
+    border-bottom: 1px solid rgba(color("primary", "base"), 0.2);
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    
+    &::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 24px;
+      background-color: color("primary", "base");
+      border-radius: border-radius("sm");
+    }
+  }
+
+  &__formGroup {
+    position: relative;
+    margin-bottom: spacing("lg");
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateX(2px);
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__formLabel {
+    display: block;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("sm");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__formSelect {
+    width: 100%;
+    padding: spacing("md");
+    border: 2px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    background-color: color("neutral", "white");
+    color: color("neutral", "black");
+    font-size: map-get($font-sizes, "base");
+    transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23717d92' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
+    }
+    
+    &:hover {
+      border-color: color("primary", "light");
+    }
   }
 
   &__checkboxLabel {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    color: $text-primary;
+    gap: spacing("sm");
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "black");
     cursor: pointer;
+    user-select: none;
+    padding: spacing("sm");
+    border-radius: border-radius("md");
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+      background-color: rgba(color("primary", "base"), 0.05);
+    }
   }
 
   &__checkbox {
-    width: 1rem;
-    height: 1rem;
+    width: 1.25rem;
+    height: 1.25rem;
     cursor: pointer;
+    accent-color: color("primary", "base");
+  }
+
+  &__checkboxDescription {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin-top: spacing("xs");
+    margin-left: calc(1.25rem + #{spacing("sm")});
+    padding: spacing("xs") spacing("sm");
+    background-color: color("neutral", "white");
+    border-radius: border-radius("sm");
+    border-left: 2px solid color("primary", "light");
   }
 
   &__formActions {
-    margin-top: 1rem;
     display: flex;
     justify-content: flex-end;
+    gap: spacing("md");
+    margin-top: spacing("2xl");
+    padding-top: spacing("lg");
+    border-top: 1px solid color("neutral", "lighter");
+    
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+    }
   }
 
   &__submitBtn {
     @include button-primary;
-    padding: 0.75rem 1.5rem;
+    padding: spacing("md") spacing("xl");
+    min-width: 150px;
+    font-weight: map-get($font-weights, "semibold");
+    transition: all 0.3s ease;
+    box-shadow: map-get($box-shadows, "sm");
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: map-get($box-shadows, "md");
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
   }
 
+  // Info display styles
   &__info {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: spacing("2xl");
+    padding: spacing("lg");
+  }
+
+  &__infoSection {
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    padding: spacing("xl");
+    margin-bottom: spacing("xl");
+    border: 1px solid color("neutral", "lighter");
+    transition: all 0.3s ease;
+    
+    &:hover {
+      box-shadow: map-get($box-shadows, "sm");
+      transform: translateY(-2px);
+      border-color: rgba(color("primary", "base"), 0.2);
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__infoSectionTitle {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("lg");
+    padding-bottom: spacing("sm");
+    border-bottom: 1px solid rgba(color("primary", "base"), 0.2);
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    
+    &::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 24px;
+      background-color: color("primary", "base");
+      border-radius: border-radius("sm");
+    }
+  }
+
+  &__infoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: spacing("lg");
   }
 
   &__infoGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    background-color: color("neutral", "white");
+    padding: spacing("md");
+    border-radius: border-radius("md");
+    margin-bottom: spacing("md");
+    border-left: 3px solid color("primary", "base");
+    transition: all 0.2s ease;
+    
+    &:hover {
+      transform: translateX(5px);
+      box-shadow: map-get($box-shadows, "sm");
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 
   &__infoLabel {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: $text-primary;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("xs");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 
   &__infoValue {
-    font-size: 0.875rem;
-    color: $text-secondary;
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "black");
+    font-weight: map-get($font-weights, "medium");
   }
 
   &__infoList {
@@ -149,20 +317,60 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: spacing("md");
 
     li {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 0.875rem;
-      color: $text-secondary;
+      gap: spacing("sm");
+      font-size: map-get($font-sizes, "base");
+      color: color("neutral", "black");
+      background-color: color("neutral", "white");
+      padding: spacing("sm") spacing("md");
+      border-radius: border-radius("md");
+      transition: all 0.2s ease;
+      
+      &:hover {
+        transform: translateX(5px);
+        box-shadow: map-get($box-shadows, "sm");
+      }
 
       svg {
-        width: 1rem;
-        height: 1rem;
-        color: $text-secondary;
+        flex-shrink: 0;
+        
+        &[name="check"] {
+          color: color("success");
+          background-color: rgba(color("success"), 0.1);
+          padding: 2px;
+          border-radius: 50%;
+        }
+        
+        &[name="x"] {
+          color: color("error");
+          background-color: rgba(color("error"), 0.1);
+          padding: 2px;
+          border-radius: 50%;
+        }
       }
+    }
+  }
+
+  &__successMessage {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    margin-top: spacing("lg");
+    padding: spacing("md") spacing("lg");
+    background-color: rgba(color("success"), 0.1);
+    color: color("success");
+    border-radius: border-radius("lg");
+    border-left: 3px solid color("success");
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "medium");
+    box-shadow: map-get($box-shadows, "sm");
+
+    svg {
+      stroke-width: 3;
     }
   }
 }
