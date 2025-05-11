@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-
+import DashboardHeader from "../_components/header/DashboardHeader";
 export const metadata: Metadata = {
   title: "Help & Support | Metro Mellow",
   description: "Get help and support for your Metro Mellow account.",
@@ -7,9 +7,12 @@ export const metadata: Metadata = {
 
 export default function HelpPage() {
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">Help & Support</h1>
-      <p>Hello World - Help & Support Page</p>
-    </div>
+    <>
+      <DashboardHeader />
+      <div className="p-6">
+        <h1 className="text-2xl font-semibold mb-4">Help & Support</h1>
+        <p>Hello World - Help & Support Page</p>
+      </div>
+    </>
   );
 }
