@@ -26,6 +26,7 @@ import {
   MealType,
   CreateSubscriptionInput,
   BillingCycle,
+  AddressInput,
 } from "@/graphql/api";
 import { ExtendedService } from "../PlanSummary/PlanSummary";
 
@@ -177,6 +178,16 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
     friday: 1,
     saturday: 1,
     sunday: 1,
+  });
+
+  // Address state
+  const [isEditingAddress, setIsEditingAddress] = useState(false);
+  const [address, setAddress] = useState<AddressInput>({
+    street: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    country: "",
   });
 
   // UI state
@@ -1184,7 +1195,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        exit="exit"
+        className={styles.modal__content}
       >
         <div className={styles.modal__backLink} onClick={handleBack}>
           <Icon name="arrow-left" />
@@ -1394,21 +1405,124 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
                 <div className={styles.modal__bookingSectionTitle}>
                   <Icon name="map-pin" size={16} />
                   Service Address
+                  <button
+                    className={styles.modal__addressEditButton}
+                    onClick={() => setIsEditingAddress(!isEditingAddress)}
+                  >
+                    <Icon
+                      name={isEditingAddress ? "check" : "edit"}
+                      size={14}
+                    />
+                    {isEditingAddress ? "Save" : "Edit"}
+                  </button>
                 </div>
-                <div className={styles.modal__addressBox}>
-                  <div className={styles.modal__addressIcon}>
-                    <Icon name="home" size={20} />
-                  </div>
-                  <div className={styles.modal__addressDetails}>
-                    <div className={styles.modal__addressLine}>
-                      123 Main Street
+                {isEditingAddress ? (
+                  <div className={styles.modal__addressForm}>
+                    <div className={styles.modal__addressFormGroup}>
+                      <label htmlFor="street">Street Address</label>
+                      <input
+                        type="text"
+                        id="street"
+                        value={address.street}
+                        onChange={(e) =>
+                          setAddress((prev) => ({
+                            ...prev,
+                            street: e.target.value,
+                          }))
+                        }
+                        className={styles.modal__addressInput}
+                        placeholder="Enter street address"
+                      />
                     </div>
-                    <div className={styles.modal__addressLine}>
-                      City, State 12345
+                    <div className={styles.modal__addressFormRow}>
+                      <div className={styles.modal__addressFormGroup}>
+                        <label htmlFor="city">City</label>
+                        <input
+                          type="text"
+                          id="city"
+                          value={address.city}
+                          onChange={(e) =>
+                            setAddress((prev) => ({
+                              ...prev,
+                              city: e.target.value,
+                            }))
+                          }
+                          className={styles.modal__addressInput}
+                          placeholder="Enter city"
+                        />
+                      </div>
+                      <div className={styles.modal__addressFormGroup}>
+                        <label htmlFor="state">State</label>
+                        <input
+                          type="text"
+                          id="state"
+                          value={address.state}
+                          onChange={(e) =>
+                            setAddress((prev) => ({
+                              ...prev,
+                              state: e.target.value,
+                            }))
+                          }
+                          className={styles.modal__addressInput}
+                          placeholder="Enter state"
+                        />
+                      </div>
                     </div>
-                    <div className={styles.modal__addressLine}>Country</div>
+                    <div className={styles.modal__addressFormRow}>
+                      <div className={styles.modal__addressFormGroup}>
+                        <label htmlFor="zipCode">ZIP Code</label>
+                        <input
+                          type="text"
+                          id="zipCode"
+                          value={address.zipCode}
+                          onChange={(e) =>
+                            setAddress((prev) => ({
+                              ...prev,
+                              zipCode: e.target.value,
+                            }))
+                          }
+                          className={styles.modal__addressInput}
+                          placeholder="Enter ZIP code"
+                        />
+                      </div>
+                      <div className={styles.modal__addressFormGroup}>
+                        <label htmlFor="country">Country</label>
+                        <input
+                          type="text"
+                          id="country"
+                          value={address.country}
+                          onChange={(e) =>
+                            setAddress((prev) => ({
+                              ...prev,
+                              country: e.target.value,
+                            }))
+                          }
+                          className={styles.modal__addressInput}
+                          placeholder="Enter country"
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className={styles.modal__addressBox}>
+                    <div className={styles.modal__addressIcon}>
+                      <Icon name="home" size={20} />
+                    </div>
+                    <div className={styles.modal__addressDetails}>
+                      <div className={styles.modal__addressLine}>
+                        {address.street || "No street address provided"}
+                      </div>
+                      <div className={styles.modal__addressLine}>
+                        {address.city && address.state
+                          ? `${address.city}, ${address.state} ${address.zipCode}`
+                          : "No city/state provided"}
+                      </div>
+                      <div className={styles.modal__addressLine}>
+                        {address.country || "No country provided"}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

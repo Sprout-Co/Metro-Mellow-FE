@@ -2,9 +2,13 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUIStore } from "@/store/slices/ui";
+import { useAuthStore } from "@/store/slices/auth";
 import Icon, { IconName } from "../common/Icon";
 import styles from "./BookServiceModal.module.scss";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
+import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
+import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
+import Modal from "@/components/ui/Modal/Modal";
 import {
   ServiceCategory,
   ServiceStatus,
@@ -21,9 +25,8 @@ import {
   TreatmentType,
   RoomPrices,
   CreateBookingInput,
+  AddressInput,
 } from "@/graphql/api";
-import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
-import Modal from "@/components/ui/Modal/Modal";
 
 /**
  * Service frequency options
@@ -64,10 +67,22 @@ export default function BookServiceModal() {
   const { isModalOpen, modalType, closeModal } = useUIStore();
   const { handleCreateBooking } = useBookingOperations();
   const { handleGetServices } = useServiceOperations();
+  const { handleGetCurrentUser } = useAuthOperations();
+  const currentUser = useAuthStore((state) => state.user);
 
   // API data state
   const [services, setServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Address state
+  const [isEditingAddress, setIsEditingAddress] = useState(false);
+  const [address, setAddress] = useState<AddressInput>({
+    street: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    country: "",
+  });
 
   // Current step in the booking process
   const [currentStep, setCurrentStep] = useState<BookingStep>(
@@ -124,36 +139,44 @@ export default function BookServiceModal() {
     }));
   };
 
-  /**
-   * Fetch services from API
-   */
+  // Fetch user data and services on mount
   useEffect(() => {
-    const fetchServices = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true);
-        const services = await handleGetServices(
-          undefined,
-          ServiceStatus.Active
-        );
+        const [userData, servicesData] = await Promise.all([
+          handleGetCurrentUser(),
+          handleGetServices(undefined, ServiceStatus.Active),
+        ]);
 
-        if (!services) {
+        if (userData?.address) {
+          setAddress({
+            street: userData.address.street || "",
+            city: userData.address.city || "",
+            state: userData.address.state || "",
+            zipCode: userData.address.zipCode || "",
+            country: userData.address.country || "",
+          });
+        }
+
+        if (!servicesData) {
           throw new Error("No services returned from API");
         }
 
         setServices(
-          services.filter(
+          servicesData.filter(
             (service) => service.category !== ServiceCategory.Cooking
           )
         );
         setIsLoading(false);
       } catch (err) {
-        console.error("Error fetching services:", err);
+        console.error("Error fetching data:", err);
         setIsLoading(false);
       }
     };
 
-    fetchServices();
-  }, [handleGetServices]);
+    fetchData();
+  }, [handleGetCurrentUser, handleGetServices]);
 
   // Don't render if modal is closed or not for booking service
   if (!isModalOpen || modalType !== "book-service") return null;
@@ -417,23 +440,24 @@ export default function BookServiceModal() {
       const bookingData: CreateBookingInput = {
         serviceId: selectedService._id,
         serviceType: getServiceType(selectedService.service_id),
-        serviceOption: selectedOption?.service_id || "" as string,
+        serviceOption: selectedOption?.service_id || ("" as string),
         date: new Date(selectedDate),
         timeSlot: selectedTime,
         address: {
-          street: "123 Main St",
-          city: "City",
-          state: "State",
-          zipCode: "12345",
-          country: "Country",
+          street: address.street,
+          city: address.city,
+          state: address.state,
+          zipCode: address.zipCode,
+          country: address.country,
         },
         notes: `Frequency: ${serviceFrequency}`,
         serviceDetails: {
-          serviceOption: selectedOption?.service_id || "" as string,
+          serviceOption: selectedOption?.service_id || ("" as string),
           cleaning:
             selectedService.service_id === ServiceId.Cleaning
               ? {
-                  cleaningType: selectedOption?.service_id as unknown as CleaningType,
+                  cleaningType:
+                    selectedOption?.service_id as unknown as CleaningType,
                   houseType: propertyType,
                   rooms: roomQuantities,
                 }
@@ -1362,21 +1386,124 @@ export default function BookServiceModal() {
                 <div className={styles.modal__bookingSectionTitle}>
                   <Icon name="map-pin" size={16} />
                   Service Address
+                  <button
+                    className={styles.modal__editButton}
+                    onClick={() => setIsEditingAddress(!isEditingAddress)}
+                  >
+                    <Icon
+                      name={isEditingAddress ? "check" : "edit"}
+                      size={14}
+                    />
+                    {isEditingAddress ? "Save" : "Edit"}
+                  </button>
                 </div>
-                <div className={styles.modal__addressBox}>
-                  <div className={styles.modal__addressIcon}>
-                    <Icon name="home" size={20} />
-                  </div>
-                  <div className={styles.modal__addressDetails}>
-                    <div className={styles.modal__addressLine}>
-                      123 Main Street
+                {isEditingAddress ? (
+                  <div className={styles.modal__addressForm}>
+                    <div className={styles.modal__formGroup}>
+                      <label htmlFor="street">Street Address</label>
+                      <input
+                        type="text"
+                        id="street"
+                        value={address.street}
+                        onChange={(e) =>
+                          setAddress((prev) => ({
+                            ...prev,
+                            street: e.target.value,
+                          }))
+                        }
+                        className={styles.modal__input_address}
+                        placeholder="Enter street address"
+                      />
                     </div>
-                    <div className={styles.modal__addressLine}>
-                      City, State 12345
+                    <div className={styles.modal__formRow}>
+                      <div className={styles.modal__formGroup}>
+                        <label htmlFor="city">City</label>
+                        <input
+                          type="text"
+                          id="city"
+                          value={address.city}
+                          onChange={(e) =>
+                            setAddress((prev) => ({
+                              ...prev,
+                              city: e.target.value,
+                            }))
+                          }
+                          className={styles.modal__input_address}
+                          placeholder="Enter city"
+                        />
+                      </div>
+                      <div className={styles.modal__formGroup}>
+                        <label htmlFor="state">State</label>
+                        <input
+                          type="text"
+                          id="state"
+                          value={address.state}
+                          onChange={(e) =>
+                            setAddress((prev) => ({
+                              ...prev,
+                              state: e.target.value,
+                            }))
+                          }
+                          className={styles.modal__input_address}
+                          placeholder="Enter state"
+                        />
+                      </div>
                     </div>
-                    <div className={styles.modal__addressLine}>Country</div>
+                    <div className={styles.modal__formRow}>
+                      <div className={styles.modal__formGroup}>
+                        <label htmlFor="zipCode">ZIP Code</label>
+                        <input
+                          type="text"
+                          id="zipCode"
+                          value={address.zipCode}
+                          onChange={(e) =>
+                            setAddress((prev) => ({
+                              ...prev,
+                              zipCode: e.target.value,
+                            }))
+                          }
+                          className={styles.modal__input_address}
+                          placeholder="Enter ZIP code"
+                        />
+                      </div>
+                      <div className={styles.modal__formGroup}>
+                        <label htmlFor="country">Country</label>
+                        <input
+                          type="text"
+                          id="country"
+                          value={address.country}
+                          onChange={(e) =>
+                            setAddress((prev) => ({
+                              ...prev,
+                              country: e.target.value,
+                            }))
+                          }
+                          className={styles.modal__input_address}
+                          placeholder="Enter country"
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className={styles.modal__addressBox}>
+                    <div className={styles.modal__addressIcon}>
+                      <Icon name="home" size={20} />
+                    </div>
+                    <div className={styles.modal__addressDetails}>
+                      <div className={styles.modal__addressLine}>
+                        {address.street || "No street address provided"}
+                      </div>
+                      <div className={styles.modal__addressLine}>
+                        {address.city && address.state
+                          ? `${address.city}, ${address.state} ${address.zipCode}`
+                          : "No city/state provided"}
+                      </div>
+                      <div className={styles.modal__addressLine}>
+                        {address.country || "No country provided"}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
