@@ -639,7 +639,7 @@ export default function UpcomingAppointments() {
                               }}
                             >
                               <Icon name="calendar" />
-                              Reschedule {appointment.status}
+                              Reschedule 
                             </button>
                             <button
                               className={`${styles.appointments__actionBtn} ${styles["appointments__actionBtn--cancel"]}`}
