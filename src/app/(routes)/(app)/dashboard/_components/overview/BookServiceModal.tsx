@@ -252,7 +252,8 @@ export default function BookServiceModal() {
 
     if (
       (service.service_id === ServiceId.Cleaning ||
-        service.service_id === ServiceId.Laundry) &&
+        service.service_id === ServiceId.Laundry ||
+        service.service_id === ServiceId.PestControl) &&
       service.options &&
       service.options.length > 0
     ) {

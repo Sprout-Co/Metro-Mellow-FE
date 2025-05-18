@@ -187,7 +187,6 @@ export default function UpcomingAppointments() {
       return dateA - dateB;
     }
   );
-  console.log("sortedAppointments", sortedAppointments);
 
   // Filter appointments based on status and time
   const filterAppointments = (appointment: Booking) => {
@@ -224,7 +223,6 @@ export default function UpcomingAppointments() {
   };
 
   const filteredAppointments = sortedAppointments.filter(filterAppointments);
-  console.log("filteredAppointments", filteredAppointments);
 
   // Display either all appointments or just the 5 most imminent ones
   const displayedAppointments = showAll
@@ -320,7 +318,7 @@ export default function UpcomingAppointments() {
               className={`${styles.appointments__filterBtn} ${filter === "cancelled" ? styles.appointments__filterBtn_active : ""}`}
               onClick={() => setFilter("cancelled")}
             >
-                Cancelled
+              Cancelled
             </button>
             <button
               className={`${styles.appointments__filterBtn} ${filter === "paused" ? styles.appointments__filterBtn_active : ""}`}
@@ -431,9 +429,7 @@ export default function UpcomingAppointments() {
             </button>
             <button
               className={`${styles.appointments__filterBtn} ${
-                filter === "paused"
-                  ? styles.appointments__filterBtn_active
-                  : ""
+                filter === "paused" ? styles.appointments__filterBtn_active : ""
               }`}
               onClick={() => setFilter("paused")}
             >
@@ -441,9 +437,7 @@ export default function UpcomingAppointments() {
             </button>
             <button
               className={`${styles.appointments__filterBtn} ${
-                filter === "all"
-                  ? styles.appointments__filterBtn_active
-                  : ""
+                filter === "all" ? styles.appointments__filterBtn_active : ""
               }`}
               onClick={() => setFilter("all")}
             >
@@ -645,7 +639,7 @@ export default function UpcomingAppointments() {
                               }}
                             >
                               <Icon name="calendar" />
-                              Reschedule
+                              Reschedule {appointment.status}
                             </button>
                             <button
                               className={`${styles.appointments__actionBtn} ${styles["appointments__actionBtn--cancel"]}`}
@@ -737,7 +731,7 @@ export default function UpcomingAppointments() {
       </Modal>
 
       {/* Reschedule Modal */}
-      <RescheduleServiceModal 
+      <RescheduleServiceModal
         isOpen={showRescheduleModal}
         onClose={() => setShowRescheduleModal(false)}
         bookingId={selectedAppointmentId || undefined}
