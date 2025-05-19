@@ -12,7 +12,7 @@ export enum Routes {
   DASHBOARD_SETTINGS_PROFILE = "/dashboard/settings/profile",
   DASHBOARD_SETTINGS_NOTIFICATIONS = "/dashboard/settings/notifications",
   DASHBOARD_SETTINGS_BILLING = "/dashboard/settings/billing",
-  DASHBOARD_SETTINGS_HELP = "/dashboard/settings/help",
+  DASHBOARD_SETTINGS_HELP = "/dashboard/help",
   // Service routes
   SERVICES = "/services",
   BOOKINGS = "/bookings",

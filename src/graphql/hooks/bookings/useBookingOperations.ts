@@ -30,10 +30,14 @@ import {
   UpdateBookingMutationVariables,
   CreateBookingInput,
   TimeSlot,
+  GetCustomerBookingsDocument,
+  GetStaffBookingsDocument,
 } from "@/graphql/api";
 
 export const useBookingOperations = () => {
-  const [createBookingMutation] = useCreateBookingMutation();
+  const [createBookingMutation] = useCreateBookingMutation({
+    refetchQueries: [{ query: GetCustomerBookingsDocument }],
+  });
   const [updateBookingMutation] = useUpdateBookingMutation();
   const [cancelBookingMutation] = useCancelBookingMutation();
   const [completeBookingMutation] = useCompleteBookingMutation();
