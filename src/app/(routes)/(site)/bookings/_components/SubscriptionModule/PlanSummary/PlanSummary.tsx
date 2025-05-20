@@ -95,6 +95,7 @@ type PlanSummaryProps = {
   billingCycle: BillingCycle;
   duration: DurationType;
   onUpdateService?: (service: ExtendedService) => void;
+  setShowSubscriptionForm?: (show: boolean) => void;
 };
 
 const PlanSummary: React.FC<PlanSummaryProps> = ({

@@ -1,8 +1,9 @@
-'use client';
-import { useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import Icon from '../common/Icon';
-import styles from './TabNavigation.module.scss';
+"use client";
+import { useRef, useEffect } from "react";
+import { motion } from "framer-motion";
+import { useRouter, useSearchParams } from "next/navigation";
+import Icon from "../common/Icon";
+import styles from "./TabNavigation.module.scss";
 
 type TabType = {
   id: string;
@@ -16,36 +17,53 @@ type TabNavigationProps = {
   onTabChange: (tabId: string) => void;
 };
 
-export default function TabNavigation({ 
-  tabs, 
-  activeTab, 
-  onTabChange 
+export default function TabNavigation({
+  tabs,
+  activeTab,
+  onTabChange,
 }: TabNavigationProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const tabsRef = useRef<HTMLDivElement>(null);
   const activeTabRef = useRef<HTMLButtonElement>(null);
+
+  // Initialize tab from URL on page load
+  useEffect(() => {
+    const tabFromUrl = searchParams.get("tab");
+    if (tabFromUrl && tabs.some((tab) => tab.id === tabFromUrl)) {
+      onTabChange(tabFromUrl);
+    }
+  }, []); // Only run on mount
+
+  // Update URL when activeTab changes
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", activeTab);
+    router.push(`?${params.toString()}`);
+  }, [activeTab, router, searchParams]);
 
   // Scroll active tab into view on mobile
   useEffect(() => {
     if (tabsRef.current && activeTabRef.current) {
       const tabsEl = tabsRef.current;
       const activeTabEl = activeTabRef.current;
-      
+
       const tabsRect = tabsEl.getBoundingClientRect();
       const activeTabRect = activeTabEl.getBoundingClientRect();
-      
-      const isVisible = 
+
+      const isVisible =
         activeTabRect.left >= tabsRect.left &&
         activeTabRect.right <= tabsRect.right;
-      
+
       if (!isVisible) {
-        const scrollLeft = 
-          activeTabEl.offsetLeft - 
-          tabsEl.offsetWidth / 2 + 
+        const scrollLeft =
+          activeTabEl.offsetLeft -
+          tabsEl.offsetWidth / 2 +
           activeTabEl.offsetWidth / 2;
-        
+
         tabsEl.scrollTo({
           left: scrollLeft,
-          behavior: 'smooth'
+          behavior: "smooth",
         });
       }
     }
@@ -59,19 +77,19 @@ export default function TabNavigation({
             key={tab.id}
             ref={tab.id === activeTab ? activeTabRef : null}
             className={`${styles.tabs__tab} ${
-              tab.id === activeTab ? styles['tabs__tab--active'] : ''
+              tab.id === activeTab ? styles["tabs__tab--active"] : ""
             }`}
             onClick={() => onTabChange(tab.id)}
             aria-selected={tab.id === activeTab}
           >
             <Icon name={tab.icon} className={styles.tabs__tabIcon} />
             <span className={styles.tabs__tabLabel}>{tab.label}</span>
-            
+
             {tab.id === activeTab && (
               <motion.div
                 className={styles.tabs__tabIndicator}
                 layoutId="tab-indicator"
-                transition={{ type: 'spring', duration: 0.5, bounce: 0.2 }}
+                transition={{ type: "spring", duration: 0.5, bounce: 0.2 }}
               />
             )}
           </button>
