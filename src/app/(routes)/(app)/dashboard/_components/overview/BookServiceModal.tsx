@@ -118,11 +118,14 @@ export default function BookServiceModal() {
   );
 
   // Schedule state
-  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedDate, setSelectedDate] = useState<string>(
+    new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split("T")[0]
+  );
   const [selectedTime, setSelectedTime] = useState<TimeSlot>(TimeSlot.Morning);
 
   // UI state
   const [showExtraItems, setShowExtraItems] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [expandedSections, setExpandedSections] = useState<{
     booking: boolean;
@@ -421,6 +424,7 @@ export default function BookServiceModal() {
     if (!selectedService || !selectedDate || !selectedTime) return;
 
     try {
+      setIsSubmitting(true);
       // Determine the service type based on service ID
       const getServiceType = (serviceId: string): ServiceCategory => {
         switch (serviceId) {
@@ -491,6 +495,8 @@ export default function BookServiceModal() {
       closeModal();
     } catch (error) {
       console.error("Failed to create booking:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -531,7 +537,7 @@ export default function BookServiceModal() {
       case BookingStep.DETAILS:
         return "Review Booking";
       case BookingStep.REVIEW:
-        return "Confirm & Book";
+        return isSubmitting ? "Booking..." : "Confirm & Book";
       default:
         return "Continue";
     }
@@ -1662,10 +1668,13 @@ export default function BookServiceModal() {
             <button
               className={`${styles.modal__button} ${styles.modal__buttonPrimary}`}
               onClick={handleNext}
-              disabled={isNextDisabled()}
+              disabled={isNextDisabled() || isSubmitting}
             >
               {getNextButtonText()}
-              <Icon name="arrow-right" />
+              {!isSubmitting && <Icon name="arrow-right" />}
+              {isSubmitting && (
+                <Icon name="loader" className={styles.modal__buttonLoader} />
+              )}
             </button>
           </div>
         )}

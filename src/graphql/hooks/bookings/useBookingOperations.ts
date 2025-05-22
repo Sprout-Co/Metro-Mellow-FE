@@ -36,8 +36,8 @@ import {
 
 export const useBookingOperations = () => {
   const [createBookingMutation] = useCreateBookingMutation({
-    refetchQueries: [{ query: GetCustomerBookingsDocument }],
-    awaitRefetchQueries: true,
+    // refetchQueries: [{ query: GetCustomerBookingsDocument }],
+    // awaitRefetchQueries: true,
   });
   const [updateBookingMutation] = useUpdateBookingMutation();
   const [cancelBookingMutation] = useCancelBookingMutation();
