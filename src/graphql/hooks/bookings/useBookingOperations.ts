@@ -217,6 +217,9 @@ export const useBookingOperations = () => {
           throw new Error(errors[0].message);
         }
 
+        // Force a refetch of customer bookings to update the UI
+        await handleGetCustomerBookings();
+
         return data?.rescheduleBooking;
       } catch (error) {
         console.error("Booking reschedule error:", error);
@@ -226,7 +229,7 @@ export const useBookingOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [rescheduleBookingMutation]
+    [rescheduleBookingMutation, handleGetCustomerBookings]
   );
 
   /**
