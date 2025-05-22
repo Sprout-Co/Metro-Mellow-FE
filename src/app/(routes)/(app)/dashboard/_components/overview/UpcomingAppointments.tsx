@@ -4,7 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import Icon from "../common/Icon";
 import styles from "./UpcomingAppointments.module.scss";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
-import { BookingStatus, Booking, TimeSlot } from "@/graphql/api";
+import {
+  BookingStatus,
+  TimeSlot,
+  GetCustomerBookingsQuery,
+} from "@/graphql/api";
 import { useRouter } from "next/navigation"; // Import router
 import Modal from "@/components/ui/Modal/Modal";
 import RescheduleServiceModal from "./RescheduleServiceModal";
@@ -22,6 +26,10 @@ const getTimeSlotTime = (timeSlot: TimeSlot) => {
       return { hours: 9, minutes: 0 };
   }
 };
+
+type CustomerBooking = NonNullable<
+  GetCustomerBookingsQuery["customerBookings"]
+>[number];
 
 export default function UpcomingAppointments() {
   const router = useRouter(); // Initialize router
@@ -181,7 +189,7 @@ export default function UpcomingAppointments() {
 
   // Sort appointments by date (closest first)
   const sortedAppointments = [...(currentCustomerBookings || [])].sort(
-    (a, b) => {
+    (a: CustomerBooking, b: CustomerBooking) => {
       const dateA = new Date(a.date).getTime();
       const dateB = new Date(b.date).getTime();
       return dateA - dateB;
@@ -189,7 +197,7 @@ export default function UpcomingAppointments() {
   );
 
   // Filter appointments based on status and time
-  const filterAppointments = (appointment: Booking) => {
+  const filterAppointments = (appointment: CustomerBooking) => {
     // Get time status
     const { status: timeStatus } = getTimeLeft(
       appointment.date,
@@ -447,7 +455,7 @@ export default function UpcomingAppointments() {
         </div>
 
         <div className={styles.appointments__list}>
-          {displayedAppointments.map((appointment: Booking) => {
+          {displayedAppointments.map((appointment: CustomerBooking) => {
             const {
               label: timeLeftLabel,
               isImminent,
@@ -470,7 +478,7 @@ export default function UpcomingAppointments() {
                   damping: 20,
                   delay:
                     displayedAppointments.findIndex(
-                      (a: Booking) => a.id === appointment.id
+                      (a: CustomerBooking) => a.id === appointment.id
                     ) * 0.1,
                 }}
               >
@@ -639,7 +647,7 @@ export default function UpcomingAppointments() {
                               }}
                             >
                               <Icon name="calendar" />
-                              Reschedule 
+                              Reschedule
                             </button>
                             <button
                               className={`${styles.appointments__actionBtn} ${styles["appointments__actionBtn--cancel"]}`}
