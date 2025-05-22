@@ -33,25 +33,5 @@ export default function Home() {
       </main>
       <Footer />
     </>
-    // <main>
-    //   <Hero
-    //     title="Professional Home Services for Your Comfort"
-    //     subtitle="We take care of the details, so you can focus on what matters most. Our comprehensive home services provide peace of mind and more time for you."
-    //     ctaPrimary={{
-    //       text: "Book a Service",
-    //       href: "/booking"
-    //     }}
-    //     ctaSecondary={{
-    //       text: "Explore Services",
-    //       href: "/services"
-    //     }}
-    //     imageSrc="/images/hero-home.jpg"
-    //     imageAlt="Professional home services"
-    //     backgroundPattern="/images/patterns/dots.svg"
-    //   />
-    //   <Services />
-    //   <Testimonials />
-    //   <CTA />
-    // </main>
   );
 }

@@ -795,6 +795,19 @@
     }
   }
 
+  &__buttonLoader {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
   &__backLink {
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "dark");
@@ -1869,6 +1882,67 @@
       font-size: map-get($font-sizes, "sm");
       color: color("neutral", "darker");
       line-height: 1.5;
+    }
+  }
+
+  &__editButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+    padding: 4px 8px;
+    border: none;
+    background: none;
+    color: var(--color-primary);
+    font-size: 14px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--color-primary-dark);
+    }
+  }
+
+  &__addressForm {
+    padding: 16px;
+    background: var(--color-background-alt);
+    border-radius: 8px;
+    margin-top: 12px;
+  }
+
+  &__formRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  &__formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    label {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+    }
+  }
+
+  &__input_address {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary);
+    }
+
+    &::placeholder {
+      color: var(--color-text-tertiary);
     }
   }
 }

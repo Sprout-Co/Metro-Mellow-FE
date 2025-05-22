@@ -1,0 +1,756 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.billingSettings {
+  &__tabs {
+    display: flex;
+    border-bottom: 1px solid color("neutral", "lighter");
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__tab {
+    padding: spacing("md") spacing("lg");
+    color: color("neutral", "dark");
+    background: none;
+    border: none;
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "medium");
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+    transition: $transition-base;
+
+    &:hover {
+      color: color("primary", "base");
+    }
+
+    &Active {
+      color: color("primary", "base");
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: color("primary", "base");
+      }
+    }
+  }
+
+  &__content {
+    padding: spacing("xl");
+    position: relative;
+  }
+
+  &__sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: spacing("xl");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+    }
+  }
+
+  &__sectionTitle {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+  }
+
+  &__editBtn,
+  &__addBtn,
+  &__downloadAllBtn {
+    @include button-primary;
+    padding: spacing("xs") spacing("md");
+    font-size: map-get($font-sizes, "sm");
+    transition: transform $transition-fast;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &__addBtnLarge {
+    @include button-primary;
+    padding: spacing("sm") spacing("lg");
+    font-size: map-get($font-sizes, "base");
+    transition: transform $transition-fast;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  // Payment Methods
+  &__addCard {
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    padding: spacing("lg");
+    margin-bottom: spacing("xl");
+    overflow: hidden;
+  }
+
+  &__paymentMethodsList {
+    display: grid;
+    gap: spacing("md");
+  }
+
+  &__paymentMethod {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("lg");
+    background-color: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    transition: $transition-base;
+
+    &:hover {
+      box-shadow: map-get($box-shadows, "md");
+      transform: translateY(-2px);
+    }
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+    }
+  }
+
+  &__cardDetails {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+  }
+
+  &__cardIcon {
+    width: 48px;
+    height: 32px;
+    border-radius: border-radius("sm");
+    background-color: color("neutral", "lighter");
+    color: color("neutral", "darker");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: map-get($font-weights, "bold");
+    font-size: map-get($font-sizes, "xs");
+  }
+
+  &__visaIcon {
+    color: #1a1f71;
+  }
+
+  &__mastercardIcon {
+    color: #eb001b;
+  }
+
+  &__paypalIcon {
+    color: #003087;
+  }
+
+  &__cardInfo {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__cardTitle {
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__cardMeta {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+  }
+
+  &__cardActions {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+
+    @include breakpoint-down("md") {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }
+
+  &__defaultBadge {
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    color: color("primary", "base");
+    background-color: rgba(color("primary", "base"), 0.1);
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("full");
+  }
+
+  &__setDefaultBtn,
+  &__removeBtn {
+    background: none;
+    border: none;
+    color: color("primary", "base");
+    font-size: map-get($font-sizes, "sm");
+    cursor: pointer;
+    transition: $transition-base;
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("sm");
+
+    &:hover {
+      text-decoration: underline;
+      background-color: rgba(color("primary", "base"), 0.05);
+    }
+  }
+
+  &__removeBtn {
+    color: color("error");
+
+    &:hover {
+      background-color: rgba(color("error"), 0.05);
+    }
+  }
+
+  &__emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: spacing("2xl") spacing("xl");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("lg");
+  }
+
+  &__emptyIcon {
+    color: color("neutral", "medium");
+    margin-bottom: spacing("md");
+  }
+
+  &__emptyTitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+  }
+
+  &__emptyText {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("lg");
+    max-width: 300px;
+  }
+
+  // Form Styles
+  &__form {
+    margin-bottom: spacing("xl");
+  }
+
+  &__formGroup {
+    margin-bottom: spacing("md");
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__formLabel {
+    display: block;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xs");
+  }
+
+  &__formInput {
+    width: 100%;
+    padding: spacing("sm") spacing("md");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    background-color: color("neutral", "white");
+    color: color("neutral", "black");
+    font-size: map-get($font-sizes, "base");
+    transition: $transition-base;
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
+    }
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+  }
+
+  &__cardNumberWrapper {
+    position: relative;
+  }
+
+  &__cardBrandIcon {
+    position: absolute;
+    right: spacing("md");
+    top: 50%;
+    transform: translateY(-50%);
+    color: color("neutral", "dark");
+  }
+
+  &__formRow {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__formActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: spacing("md");
+    margin-top: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+    }
+  }
+
+  &__submitBtn {
+    @include button-primary;
+    padding: spacing("sm") spacing("lg");
+    min-width: 120px;
+    transition: transform $transition-fast;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &__cancelBtn {
+    @include button-secondary;
+    padding: spacing("sm") spacing("lg");
+    min-width: 120px;
+    transition: transform $transition-fast;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &__checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "black");
+    cursor: pointer;
+  }
+
+  &__checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: color("primary", "base");
+  }
+
+  // Billing Address Display
+  &__addressDisplay {
+    padding: spacing("lg");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("lg");
+  }
+
+  &__addressCard {
+    background-color: color("neutral", "white");
+    padding: spacing("lg");
+    border-radius: border-radius("md");
+    border: 1px solid color("neutral", "lighter");
+  }
+
+  &__addressName {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
+  }
+
+  &__addressLine {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xs");
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // Invoice History
+  &__tableContainer {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+      padding: spacing("md");
+      text-align: left;
+      border-bottom: 1px solid color("neutral", "lighter");
+    }
+
+    th {
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "darker");
+      font-size: map-get($font-sizes, "sm");
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      color: color("neutral", "black");
+      font-size: map-get($font-sizes, "sm");
+    }
+
+    tbody tr {
+      transition: $transition-base;
+
+      &:hover {
+        background-color: color("neutral", "lighter");
+      }
+    }
+  }
+
+  &__status {
+    display: inline-flex;
+    align-items: center;
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("full");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+
+    &Paid {
+      background-color: rgba(color("success"), 0.1);
+      color: color("success");
+    }
+
+    &Pending {
+      background-color: rgba(color("warning"), 0.1);
+      color: color("warning");
+    }
+
+    &Failed {
+      background-color: rgba(color("error"), 0.1);
+      color: color("error");
+    }
+  }
+
+  &__invoiceActions {
+    display: flex;
+    gap: spacing("xs");
+  }
+
+  &__invoiceAction {
+    color: color("primary", "base");
+    font-size: map-get($font-sizes, "sm");
+    text-decoration: none;
+    transition: $transition-base;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // Billing Preferences
+  &__preferenceForm {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xl");
+  }
+
+  &__preferenceGroup {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("lg");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("lg");
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+    }
+  }
+
+  &__preferenceHeader {
+    flex: 1;
+  }
+
+  &__preferenceTitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__preferenceDescription {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+  }
+
+  // Toggle Switch
+  &__switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+    margin: 0;
+
+    input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+
+      &:checked + .billingSettings__slider {
+        background-color: color("primary", "base");
+      }
+
+      &:checked + .billingSettings__slider:before {
+        transform: translateX(24px);
+      }
+    }
+  }
+
+  &__slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: color("neutral", "medium");
+    transition: 0.4s;
+    border-radius: 34px;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 4px;
+      background-color: color("neutral", "white");
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+  }
+
+  // Receipt Emails
+  &__emailList {
+    width: 100%;
+    margin-top: spacing("md");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__emailItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("xs") spacing("md");
+    background-color: color("neutral", "white");
+    border-radius: border-radius("md");
+    border: 1px solid color("neutral", "lighter");
+  }
+
+  &__removeEmailBtn {
+    background: none;
+    border: none;
+    color: color("neutral", "dark");
+    cursor: pointer;
+    padding: spacing("xxs");
+    border-radius: border-radius("full");
+    transition: $transition-base;
+
+    &:hover {
+      color: color("error");
+      background-color: rgba(color("error"), 0.1);
+    }
+  }
+
+  &__addEmail {
+    display: flex;
+    align-items: center;
+    background-color: color("neutral", "white");
+    border-radius: border-radius("md");
+    border: 1px solid color("neutral", "lighter");
+    padding: spacing("xs") spacing("md");
+  }
+
+  &__addEmailInput {
+    flex: 1;
+    border: none;
+    background: none;
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "black");
+
+    &:focus {
+      outline: none;
+    }
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+  }
+
+  &__addEmailBtn {
+    background: none;
+    border: none;
+    color: color("primary", "base");
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xxs");
+    border-radius: border-radius("full");
+    transition: $transition-base;
+
+    &:hover {
+      background-color: rgba(color("primary", "base"), 0.1);
+    }
+  }
+
+  // Success Message
+  &__successMessage {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    position: fixed;
+    bottom: spacing("xl");
+    left: 50%;
+    transform: translateX(-50%);
+    padding: spacing("sm") spacing("lg");
+    background-color: color("success");
+    color: color("neutral", "white");
+    border-radius: border-radius("full");
+    box-shadow: map-get($box-shadows, "md");
+    z-index: z-index("tooltip");
+
+    svg {
+      stroke-width: 3;
+    }
+  }
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+  }
+
+  &__spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+
+  &__errorMessage {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: var(--error-bg);
+    color: var(--error-text);
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-width: 400px;
+
+    svg {
+      flex-shrink: 0;
+      color: var(--error-text);
+    }
+
+    span {
+      flex-grow: 1;
+    }
+  }
+
+  &__errorClose {
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    cursor: pointer;
+    color: var(--error-text);
+    opacity: 0.7;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  // Update button styles to handle disabled state
+  &__submitBtn,
+  &__setDefaultBtn,
+  &__removeBtn {
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

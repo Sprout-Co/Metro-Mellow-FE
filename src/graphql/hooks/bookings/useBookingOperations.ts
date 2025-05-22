@@ -30,10 +30,15 @@ import {
   UpdateBookingMutationVariables,
   CreateBookingInput,
   TimeSlot,
+  GetCustomerBookingsDocument,
+  GetStaffBookingsDocument,
 } from "@/graphql/api";
 
 export const useBookingOperations = () => {
-  const [createBookingMutation] = useCreateBookingMutation();
+  const [createBookingMutation] = useCreateBookingMutation({
+    // refetchQueries: [{ query: GetCustomerBookingsDocument }],
+    // awaitRefetchQueries: true,
+  });
   const [updateBookingMutation] = useUpdateBookingMutation();
   const [cancelBookingMutation] = useCancelBookingMutation();
   const [completeBookingMutation] = useCompleteBookingMutation();
@@ -41,17 +46,31 @@ export const useBookingOperations = () => {
   const [updateBookingStatusMutation] = useUpdateBookingStatusMutation();
   const [rescheduleBookingMutation] = useRescheduleBookingMutation();
 
-  // Use lazy query hooks
-  const [getBookingById] = useGetBookingByIdLazyQuery();
-  const [getBookings] = useGetBookingsLazyQuery();
-  const [getCustomerBookings] = useGetCustomerBookingsLazyQuery();
-  const [getStaffBookings] = useGetStaffBookingsLazyQuery();
+  // Use lazy query hooks with data destructuring
+  const [getBookingById, { data: bookingData }] = useGetBookingByIdLazyQuery();
+  const [getBookings, { data: bookingsData }] = useGetBookingsLazyQuery();
+  const [getCustomerBookings, { data: customerBookingsData }] =
+    useGetCustomerBookingsLazyQuery();
+  const [getStaffBookings, { data: staffBookingsData }] =
+    useGetStaffBookingsLazyQuery();
 
-  // State for storing query results
-  const [bookingData, setBookingData] = useState<any>(null);
-  const [bookingsData, setBookingsData] = useState<any>(null);
-  const [customerBookingsData, setCustomerBookingsData] = useState<any>(null);
-  const [staffBookingsData, setStaffBookingsData] = useState<any>(null);
+  const handleGetCustomerBookings = useCallback(async () => {
+    try {
+      const { data, errors } = await getCustomerBookings();
+
+      if (errors) {
+        throw new Error(errors[0].message);
+      }
+
+      return data?.customerBookings;
+    } catch (error) {
+      console.error("Customer bookings fetch error:", error);
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+      throw new Error("An unexpected error occurred");
+    }
+  }, [getCustomerBookings]);
 
   /**
    * Creates a new booking
@@ -72,6 +91,9 @@ export const useBookingOperations = () => {
           throw new Error(errors[0].message);
         }
 
+        // Force a refetch of customer bookings
+        await handleGetCustomerBookings();
+
         return data?.createBooking;
       } catch (error) {
         console.error("Booking creation error:", error);
@@ -81,7 +103,7 @@ export const useBookingOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [createBookingMutation]
+    [createBookingMutation, handleGetCustomerBookings]
   );
 
   /**
@@ -195,6 +217,9 @@ export const useBookingOperations = () => {
           throw new Error(errors[0].message);
         }
 
+        // Force a refetch of customer bookings to update the UI
+        await handleGetCustomerBookings();
+
         return data?.rescheduleBooking;
       } catch (error) {
         console.error("Booking reschedule error:", error);
@@ -204,7 +229,7 @@ export const useBookingOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [rescheduleBookingMutation]
+    [rescheduleBookingMutation, handleGetCustomerBookings]
   );
 
   /**
@@ -282,7 +307,6 @@ export const useBookingOperations = () => {
           throw new Error(errors[0].message);
         }
 
-        setBookingData(data?.booking);
         return data?.booking;
       } catch (error) {
         console.error("Booking fetch error:", error);
@@ -310,7 +334,6 @@ export const useBookingOperations = () => {
           throw new Error(errors[0].message);
         }
 
-        setBookingsData(data?.bookings);
         return data?.bookings;
       } catch (error) {
         console.error("Bookings fetch error:", error);
@@ -322,30 +345,6 @@ export const useBookingOperations = () => {
     },
     [getBookings]
   );
-
-  /**
-   * Fetches bookings for the current customer
-   * @returns Array of customer's bookings
-   * @throws Error if fetch fails
-   */
-  const handleGetCustomerBookings = useCallback(async () => {
-    try {
-      const { data, errors } = await getCustomerBookings();
-
-      if (errors) {
-        throw new Error(errors[0].message);
-      }
-
-      setCustomerBookingsData(data?.customerBookings);
-      return data?.customerBookings;
-    } catch (error) {
-      console.error("Customer bookings fetch error:", error);
-      if (error instanceof Error) {
-        throw new Error(error.message);
-      }
-      throw new Error("An unexpected error occurred");
-    }
-  }, [getCustomerBookings]);
 
   /**
    * Fetches bookings for the current staff member
@@ -360,7 +359,6 @@ export const useBookingOperations = () => {
         throw new Error(errors[0].message);
       }
 
-      setStaffBookingsData(data?.staffBookings);
       return data?.staffBookings;
     } catch (error) {
       console.error("Staff bookings fetch error:", error);
@@ -384,9 +382,9 @@ export const useBookingOperations = () => {
     handleGetCustomerBookings,
     handleGetStaffBookings,
     // Return the current data
-    currentBookings: bookingsData,
-    currentCustomerBookings: customerBookingsData,
-    currentStaffBookings: staffBookingsData,
-    currentBooking: bookingData,
+    currentBookings: bookingsData?.bookings,
+    currentCustomerBookings: customerBookingsData?.customerBookings,
+    currentStaffBookings: staffBookingsData?.staffBookings,
+    currentBooking: bookingData?.booking,
   };
 };

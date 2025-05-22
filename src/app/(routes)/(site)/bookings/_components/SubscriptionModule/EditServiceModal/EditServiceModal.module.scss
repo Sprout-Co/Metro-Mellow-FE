@@ -1698,6 +1698,69 @@
     }
   }
 
+  // Address form styles
+  &__addressForm {
+    padding: 16px;
+    background: color("neutral", "white");
+    border-radius: 8px;
+    margin-top: 12px;
+    border: 1px solid color("neutral", "lighter");
+  }
+
+  &__addressFormRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  &__addressFormGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    label {
+      font-size: map-get($font-sizes, "sm");
+      color: color("neutral", "dark");
+    }
+  }
+
+  &__addressInput {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid color("neutral", "medium");
+    border-radius: 4px;
+    font-size: map-get($font-sizes, "sm");
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+    }
+
+    &::placeholder {
+      color: color("neutral", "dark");
+    }
+  }
+
+  &__addressEditButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+    padding: 4px 8px;
+    border: none;
+    background: none;
+    color: color("primary", "base");
+    font-size: map-get($font-sizes, "sm");
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: color("primary", "dark");
+    }
+  }
+
   // Header styles
   &__simpleHeader {
     display: flex;
@@ -2012,6 +2075,24 @@
       margin-right: 8px;
       min-width: 16px;
       color: #0057ff;
+    }
+  }
+
+  &__editButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+    padding: 4px 8px;
+    border: none;
+    background: none;
+    color: color("primary", "base");
+    font-size: map-get($font-sizes, "sm");
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: color("primary", "dark");
     }
   }
 }

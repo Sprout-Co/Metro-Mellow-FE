@@ -1,0 +1,421 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.billing {
+  min-height: 100vh;
+  background-color: color("neutral", "lighter");
+
+  &__container {
+    @include container;
+    padding-top: spacing("xl");
+    padding-bottom: spacing("3xl");
+    max-width: 1200px;
+  }
+
+  &__header {
+    margin-bottom: spacing("xl");
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+
+    @include breakpoint-up("md") {
+      font-size: map-get($font-sizes, "3xl");
+    }
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+  }
+
+  &__tabs {
+    display: flex;
+    border-bottom: 1px solid color("neutral", "medium");
+    margin-bottom: spacing("xl");
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    @include breakpoint-down("sm") {
+      padding-bottom: spacing("xs");
+    }
+  }
+
+  &__tab {
+    padding: spacing("md") spacing("lg");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+    border: none;
+    background: transparent;
+    position: relative;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: $transition-base;
+
+    &:hover {
+      color: color("primary", "base");
+    }
+
+    &Active {
+      color: color("primary", "base");
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: color("primary", "base");
+      }
+    }
+  }
+
+  &__content {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    box-shadow: map-get($box-shadows, "sm");
+    min-height: 400px;
+  }
+
+  &__contentHeader {
+    padding: spacing("lg");
+    border-bottom: 1px solid color("neutral", "lighter");
+    @include flex-between;
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+    }
+  }
+
+  &__contentTitle {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+  }
+
+  &__button {
+    @include button-primary;
+    padding: spacing("xs") spacing("lg");
+    font-size: map-get($font-sizes, "sm");
+    transition: transform $transition-fast;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  // Table styles
+  &__tableContainer {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+      padding: spacing("md");
+      text-align: left;
+      border-bottom: 1px solid color("neutral", "lighter");
+    }
+
+    th {
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "darker");
+      font-size: map-get($font-sizes, "sm");
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      color: color("neutral", "black");
+      font-size: map-get($font-sizes, "sm");
+    }
+
+    tbody tr {
+      transition: $transition-base;
+
+      &:hover {
+        background-color: color("neutral", "lighter");
+      }
+    }
+  }
+
+  &__status {
+    display: inline-flex;
+    align-items: center;
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("full");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+
+    &Paid {
+      background-color: rgba(map-get($colors, "success"), 0.1);
+      color: color("success");
+    }
+
+    &Pending {
+      background-color: rgba(map-get($colors, "warning"), 0.1);
+      color: color("warning");
+    }
+
+    &Failed {
+      background-color: rgba(map-get($colors, "error"), 0.1);
+      color: color("error");
+    }
+
+    &Active {
+      background-color: rgba(map-get($colors, "success"), 0.1);
+      color: color("success");
+    }
+
+    &Inactive {
+      background-color: rgba(color("neutral", "medium"), 0.1);
+      color: color("neutral", "dark");
+    }
+
+    &Cancelled {
+      background-color: rgba(map-get($colors, "error"), 0.1);
+      color: color("error");
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: spacing("xs");
+  }
+
+  &__actionButton {
+    background: none;
+    border: none;
+    padding: spacing("xxs") spacing("xs");
+    font-size: map-get($font-sizes, "xs");
+    color: color("primary", "base");
+    cursor: pointer;
+    transition: $transition-base;
+    border-radius: border-radius("md");
+
+    &:hover {
+      background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+    }
+  }
+
+  // Subscription cards
+  &__subscriptionCards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: spacing("lg");
+    padding: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__subscriptionCard {
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+    padding: spacing("lg");
+    transition: $transition-base;
+
+    &:hover {
+      box-shadow: map-get($box-shadows, "md");
+      transform: translateY(-3px);
+    }
+  }
+
+  &__subscriptionHeader {
+    @include flex-between;
+    margin-bottom: spacing("md");
+  }
+
+  &__subscriptionTitle {
+    font-weight: map-get($font-weights, "semibold");
+    font-size: map-get($font-sizes, "lg");
+    color: color("neutral", "black");
+  }
+
+  &__subscriptionDetails {
+    margin-bottom: spacing("md");
+  }
+
+  &__subscriptionDetail {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: spacing("xs");
+  }
+
+  &__subscriptionLabel {
+    color: color("neutral", "dark");
+    font-size: map-get($font-sizes, "sm");
+  }
+
+  &__subscriptionValue {
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+  }
+
+  &__subscriptionFrequency {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+  }
+
+  &__subscriptionServices {
+    margin-bottom: spacing("lg");
+  }
+
+  &__subscriptionSubtitle {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xs");
+  }
+
+  &__subscriptionServiceList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__subscriptionService {
+    font-size: map-get($font-sizes, "sm");
+    padding: spacing("xs") 0;
+    position: relative;
+    padding-left: spacing("md");
+
+    &:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 6px;
+      height: 6px;
+      border-radius: border-radius("full");
+      background-color: color("primary", "light");
+    }
+  }
+
+  &__subscriptionActions {
+    display: flex;
+    gap: spacing("md");
+  }
+
+  &__subscriptionButton {
+    flex: 1;
+    @include button-primary;
+    padding: spacing("xs") spacing("md");
+    font-size: map-get($font-sizes, "sm");
+
+    &Secondary {
+      @include button-secondary;
+    }
+  }
+
+  // Payment method cards
+  &__paymentMethodCards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: spacing("lg");
+    padding: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__paymentMethodCard {
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+    padding: spacing("lg");
+    transition: $transition-base;
+
+    &:hover {
+      box-shadow: map-get($box-shadows, "md");
+      transform: translateY(-3px);
+    }
+  }
+
+  &__paymentMethodHeader {
+    @include flex-between;
+    margin-bottom: spacing("lg");
+  }
+
+  &__paymentMethodInfo {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+  }
+
+  &__paymentMethodIcon {
+    width: 40px;
+    height: 30px;
+    border-radius: border-radius("sm");
+    background-color: color("neutral", "lighter");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__paymentMethodBrand {
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "darker");
+  }
+
+  &__paymentMethodTitle {
+    font-weight: map-get($font-weights, "medium");
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__paymentMethodExpiry {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+  }
+
+  &__paymentMethodDefault {
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    color: color("primary", "base");
+    background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("full");
+  }
+
+  &__paymentMethodActions {
+    display: flex;
+    gap: spacing("md");
+  }
+
+  &__paymentMethodButton {
+    flex: 1;
+    @include button-primary;
+    padding: spacing("xs") spacing("md");
+    font-size: map-get($font-sizes, "sm");
+
+    &Secondary {
+      @include button-secondary;
+    }
+  }
+}

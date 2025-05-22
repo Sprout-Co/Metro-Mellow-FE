@@ -19,6 +19,8 @@ export const useInvoiceOperations = () => {
   const [generateInvoiceMutation] = useGenerateInvoiceMutation();
   const [markInvoiceAsPaidMutation] = useMarkInvoiceAsPaidMutation();
   const [cancelInvoiceMutation] = useCancelInvoiceMutation();
+  const { data: invoicesData, refetch: refetchInvoices } =
+    useGetCustomerInvoicesQuery();
 
   /**
    * Generates a new invoice for a payment
@@ -133,34 +135,12 @@ export const useInvoiceOperations = () => {
     }
   }, []);
 
-  /**
-   * Fetches all invoices for the current customer
-   * @returns Array of customer invoices
-   * @throws Error if fetch fails
-   */
-  const handleGetCustomerInvoices = useCallback(async () => {
-    try {
-      const { data, errors } = await useGetCustomerInvoicesQuery();
-
-      if (errors) {
-        throw new Error(errors[0].message);
-      }
-
-      return data?.customerInvoices;
-    } catch (error) {
-      console.error("Customer invoices fetch error:", error);
-      if (error instanceof Error) {
-        throw new Error(error.message);
-      }
-      throw new Error("An unexpected error occurred");
-    }
-  }, []);
-
   return {
     handleGenerateInvoice,
     handleMarkInvoiceAsPaid,
     handleCancelInvoice,
     handleGetInvoice,
-    handleGetCustomerInvoices,
+    invoices: invoicesData?.customerInvoices || [],
+    refetchInvoices,
   };
 };

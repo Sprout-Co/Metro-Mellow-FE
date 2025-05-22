@@ -13,7 +13,11 @@ interface RescheduleServiceModalProps {
   bookingId?: string; // Optional: pre-selected booking ID
 }
 
-const RescheduleServiceModal = ({ isOpen, onClose, bookingId }: RescheduleServiceModalProps) => {
+const RescheduleServiceModal = ({
+  isOpen,
+  onClose,
+  bookingId,
+}: RescheduleServiceModalProps) => {
   const {
     handleRescheduleBooking,
     handleGetCustomerBookings,
@@ -21,7 +25,9 @@ const RescheduleServiceModal = ({ isOpen, onClose, bookingId }: RescheduleServic
   } = useBookingOperations();
 
   // State for selected booking and new schedule
-  const [selectedBookingId, setSelectedBookingId] = useState<string>(bookingId || "");
+  const [selectedBookingId, setSelectedBookingId] = useState<string>(
+    bookingId || ""
+  );
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedTime, setSelectedTime] = useState<TimeSlot>(TimeSlot.Morning);
   const [isLoading, setIsLoading] = useState(false);
@@ -36,12 +42,27 @@ const RescheduleServiceModal = ({ isOpen, onClose, bookingId }: RescheduleServic
     if (isOpen) {
       loadBookings();
     }
-    
+
     // Set the bookingId if provided as prop
     if (bookingId) {
       setSelectedBookingId(bookingId);
     }
   }, [isOpen, bookingId]);
+
+  // Set default date when booking is selected
+  useEffect(() => {
+    if (selectedBookingId) {
+      const selectedBooking = customerBookingsData.find(
+        (booking) => booking.id === selectedBookingId
+      );
+      if (selectedBooking) {
+        const bookingDate = new Date(selectedBooking.date);
+        const nextDay = new Date(bookingDate);
+        nextDay.setDate(bookingDate.getDate() + 1);
+        setSelectedDate(nextDay.toISOString().split("T")[0]);
+      }
+    }
+  }, [selectedBookingId, customerBookingsData]);
 
   // Load customer bookings
   const loadBookings = async () => {
@@ -53,7 +74,7 @@ const RescheduleServiceModal = ({ isOpen, onClose, bookingId }: RescheduleServic
         .filter((booking) => booking.status === BookingStatus.Pending)
         .sort(
           (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-      );
+        );
       console.log("pendingBookings", pendingBookings);
       console.log("bookings", bookings);
       setCustomerBookingsData(pendingBookings as Booking[]);
@@ -152,7 +173,8 @@ const RescheduleServiceModal = ({ isOpen, onClose, bookingId }: RescheduleServic
             </div>
             <h3 className={styles.modal__emptyTitle}>No Active Bookings</h3>
             <p className={styles.modal__emptyMessage}>
-              You don't have any active bookings to reschedule. Book a service first.
+              You don't have any active bookings to reschedule. Book a service
+              first.
             </p>
             <button
               className={`${styles.modal__button} ${styles.modal__buttonPrimary}`}
@@ -199,8 +221,8 @@ const RescheduleServiceModal = ({ isOpen, onClose, bookingId }: RescheduleServic
             {customerBookingsData.map((booking) => (
               <option key={booking.id} value={booking.id}>
                 {booking.service?.name || "Unknown Service"} -{" "}
-                {new Date(booking.date).toDateString()} - {" "}
-                {booking.timeSlot.toLowerCase()} - {" "} {booking.status}
+                {new Date(booking.date).toDateString()} -{" "}
+                {booking.timeSlot.toLowerCase()} - {booking.status}
               </option>
             ))}
           </select>

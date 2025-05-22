@@ -1,0 +1,372 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.help {
+  min-height: 100vh;
+  background-color: color("neutral", "lighter");
+
+  &__container {
+    @include container;
+    padding-top: spacing("xl");
+    padding-bottom: spacing("3xl");
+    max-width: 1200px;
+  }
+
+  &__header {
+    margin-bottom: spacing("lg");
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+
+    @include breakpoint-up("md") {
+      font-size: map-get($font-sizes, "3xl");
+    }
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+  }
+
+  &__searchSection {
+    margin-bottom: spacing("xl");
+  }
+
+  &__searchContainer {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  &__searchInput {
+    width: 100%;
+    padding: spacing("md") spacing("lg");
+    padding-left: spacing("3xl");
+    border-radius: border-radius("full");
+    border: 1px solid color("neutral", "medium");
+    background-color: color("neutral", "white");
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "black");
+    transition: $transition-base;
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
+    }
+
+    &::placeholder {
+      color: color("neutral", "dark");
+    }
+  }
+
+  &__searchIcon {
+    position: absolute;
+    top: 50%;
+    left: spacing("lg");
+    transform: translateY(-50%);
+    color: color("neutral", "dark");
+  }
+
+  &__sections {
+    display: grid;
+    gap: spacing("2xl");
+  }
+
+  &__sectionHeader {
+    margin-bottom: spacing("lg");
+  }
+
+  &__sectionTitle {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+  }
+
+  &__categoryTabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing("xs");
+    margin-bottom: spacing("lg");
+  }
+
+  &__categoryTab {
+    padding: spacing("xs") spacing("md");
+    border-radius: border-radius("full");
+    background-color: color("neutral", "lighter");
+    color: color("neutral", "dark");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    border: none;
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      background-color: rgba(color("primary", "base"), 0.1);
+      color: color("primary", "base");
+    }
+
+    &Active {
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
+
+      &:hover {
+        background-color: color("primary", "dark");
+        color: color("neutral", "white");
+      }
+    }
+  }
+
+  /* FAQ Styles */
+  &__faqSection {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    padding: spacing("xl");
+    box-shadow: map-get($box-shadows, "sm");
+  }
+
+  &__faqList {
+    display: grid;
+    gap: spacing("md");
+  }
+
+  &__faqItem {
+    border-radius: border-radius("md");
+    border: 1px solid color("neutral", "lighter");
+    overflow: hidden;
+    transition: $transition-base;
+    cursor: pointer;
+
+    &:hover {
+      border-color: color("neutral", "medium");
+      box-shadow: map-get($box-shadows, "sm");
+    }
+
+    &Open {
+      background-color: rgba(color("primary", "base"), 0.03);
+      border-color: rgba(color("primary", "base"), 0.2);
+    }
+  }
+
+  &__faqQuestion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("md") spacing("lg");
+
+    h3 {
+      font-size: map-get($font-sizes, "base");
+      font-weight: map-get($font-weights, "medium");
+      color: color("neutral", "black");
+      flex: 1;
+    }
+  }
+
+  &__faqIcon {
+    color: color("primary", "base");
+    transition: transform 0.3s ease;
+
+    .help__faqItemOpen & {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__faqAnswer {
+    padding: 0 spacing("lg") spacing("lg") spacing("lg");
+    border-top: 1px solid color("neutral", "lighter");
+
+    p {
+      font-size: map-get($font-sizes, "base");
+      color: color("neutral", "dark");
+      line-height: map-get($line-heights, "relaxed");
+    }
+  }
+
+  &__noResults {
+    text-align: center;
+    padding: spacing("xl") 0;
+
+    h3 {
+      font-size: map-get($font-sizes, "lg");
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "black");
+      margin-bottom: spacing("xs");
+    }
+
+    p {
+      color: color("neutral", "dark");
+    }
+  }
+
+  &__noResultsIcon {
+    color: color("neutral", "medium");
+    margin-bottom: spacing("md");
+  }
+
+  /* Support Section Styles */
+  &__supportSection {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    padding: spacing("xl");
+    box-shadow: map-get($box-shadows, "sm");
+  }
+
+  &__supportChannels {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__supportChannel {
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+    padding: spacing("lg");
+    transition: $transition-base;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    &:hover {
+      border-color: color("primary", "light");
+      box-shadow: map-get($box-shadows, "md");
+      transform: translateY(-3px);
+    }
+  }
+
+  &__supportChannelIcon {
+    width: 50px;
+    height: 50px;
+    border-radius: border-radius("full");
+    background-color: rgba(color("primary", "base"), 0.1);
+    color: color("primary", "base");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: spacing("md");
+  }
+
+  &__supportChannelInfo {
+    margin-bottom: spacing("lg");
+  }
+
+  &__supportChannelTitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+  }
+
+  &__supportChannelDescription {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xs");
+  }
+
+  &__supportChannelAvailability {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    display: block;
+  }
+
+  &__supportChannelButton {
+    @include button-primary;
+    width: 100%;
+  }
+
+  /* Resources Section Styles */
+  &__resourcesSection {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    padding: spacing("xl");
+    box-shadow: map-get($box-shadows, "sm");
+  }
+
+  &__resourcesList {
+    display: grid;
+    gap: spacing("md");
+  }
+
+  &__resourceItem {
+    display: flex;
+    align-items: center;
+    padding: spacing("md") spacing("lg");
+    border-radius: border-radius("md");
+    border: 1px solid color("neutral", "lighter");
+    text-decoration: none;
+    transition: $transition-base;
+
+    &:hover {
+      border-color: color("primary", "light");
+      background-color: rgba(color("primary", "base"), 0.03);
+      transform: translateX(5px);
+    }
+  }
+
+  &__resourceIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: border-radius("md");
+    background-color: rgba(color("primary", "base"), 0.1);
+    color: color("primary", "base");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: spacing("md");
+    flex-shrink: 0;
+  }
+
+  &__resourceInfo {
+    flex: 1;
+  }
+
+  &__resourceHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: spacing("xs");
+  }
+
+  &__resourceTitle {
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    margin-right: spacing("xs");
+  }
+
+  &__resourceBadge {
+    font-size: map-get($font-sizes, "xxs");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "white");
+    background-color: color("success");
+    padding: 2px 6px;
+    border-radius: border-radius("full");
+    text-transform: uppercase;
+  }
+
+  &__resourceDescription {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+  }
+
+  &__resourceArrow {
+    color: color("primary", "base");
+    margin-left: spacing("md");
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+
+    .help__resourceItem:hover & {
+      transform: translateX(5px);
+    }
+  }
+}

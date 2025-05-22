@@ -338,7 +338,7 @@ export default function SubscriptionManagement() {
             Back to Subscriptions
           </button>
         </header>
-        <SubscriptionModule />
+        <SubscriptionModule setShowSubscriptionForm={setShowSubscriptionForm} />
       </div>
     );
   }

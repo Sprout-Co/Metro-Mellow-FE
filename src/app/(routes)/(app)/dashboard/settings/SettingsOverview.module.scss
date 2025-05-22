@@ -1,0 +1,167 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.settingsOverview {
+  padding: spacing("xl") 0;
+  max-width: 1000px;
+  margin: 0 auto;
+
+  &__header {
+    margin-bottom: spacing("xl");
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+
+    @include breakpoint-up("md") {
+      font-size: map-get($font-sizes, "3xl");
+    }
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: spacing("lg");
+    margin-bottom: spacing("2xl");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__card {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+    box-shadow: map-get($box-shadows, "sm");
+    overflow: hidden;
+    transition: $transition-base;
+
+    &:hover {
+      box-shadow: map-get($box-shadows, "md");
+      transform: translateY(-4px);
+      border-color: color("primary", "light");
+
+      .settingsOverview__cardArrow {
+        transform: translateX(4px);
+        opacity: 1;
+      }
+    }
+  }
+
+  &__cardLink {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: spacing("lg");
+    color: inherit;
+    height: 100%;
+  }
+
+  &__cardIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("md");
+    background-color: rgba(color("primary", "base"), 0.1);
+    color: color("primary", "base");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: spacing("lg");
+    flex-shrink: 0;
+  }
+
+  &__cardContent {
+    flex: 1;
+  }
+
+  &__cardTitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+  }
+
+  &__cardDescription {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+  }
+
+  &__cardArrow {
+    color: color("primary", "base");
+    margin-left: spacing("md");
+    opacity: 0.5;
+    transition: $transition-base;
+  }
+
+  &__dangerZone {
+    margin-top: spacing("3xl");
+    padding-top: spacing("xl");
+    border-top: 1px solid color("neutral", "lighter");
+  }
+
+  &__dangerTitle {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("error");
+    margin-bottom: spacing("lg");
+  }
+
+  &__dangerCard {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    border: 1px solid rgba(color("error"), 0.3);
+    padding: spacing("lg");
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("lg");
+    }
+  }
+
+  &__dangerInfo {
+    flex: 1;
+  }
+
+  &__dangerActionTitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+  }
+
+  &__dangerActionDescription {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+  }
+
+  &__dangerButton {
+    background-color: rgba(color("error"), 0.1);
+    color: color("error");
+    border: 1px solid color("error");
+    padding: spacing("sm") spacing("lg");
+    border-radius: border-radius("md");
+    font-weight: map-get($font-weights, "medium");
+    transition: $transition-base;
+    cursor: pointer;
+
+    &:hover {
+      background-color: color("error");
+      color: color("neutral", "white");
+    }
+  }
+}

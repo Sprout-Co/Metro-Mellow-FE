@@ -23,10 +23,13 @@ import { Icon } from "@/components/ui/Icon/Icon";
 // Types
 export type DurationType = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
-const SubscriptionModule: React.FC = () => {
-
+const SubscriptionModule: React.FC<{
+  setShowSubscriptionForm?: (show: boolean) => void;
+}> = ({ setShowSubscriptionForm }) => {
   // State management
-  const [billingCycle, setBillingCycle] = useState<BillingCycle>(BillingCycle.Weekly);
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>(
+    BillingCycle.Weekly
+  );
   const [duration, setDuration] = useState<DurationType>(2);
   const [services, setServices] = useState<Service[]>([]);
   const [selectedServices, setSelectedServices] = useState<Set<string>>(
@@ -169,6 +172,7 @@ const SubscriptionModule: React.FC = () => {
             selectedServices={services.filter((service) =>
               selectedServices.has(service._id)
             )}
+            setShowSubscriptionForm={setShowSubscriptionForm}
           />
         </div>
       </motion.div>

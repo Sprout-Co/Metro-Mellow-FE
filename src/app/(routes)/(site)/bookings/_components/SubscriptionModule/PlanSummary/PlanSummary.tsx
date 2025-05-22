@@ -1,6 +1,7 @@
 "use client";
 import React, { Fragment, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 import styles from "./PlanSummary.module.scss";
 import {
   BillingCycle,
@@ -95,6 +96,7 @@ type PlanSummaryProps = {
   billingCycle: BillingCycle;
   duration: DurationType;
   onUpdateService?: (service: ExtendedService) => void;
+  setShowSubscriptionForm?: (show: boolean) => void;
 };
 
 const PlanSummary: React.FC<PlanSummaryProps> = ({
@@ -102,7 +104,9 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
   billingCycle = BillingCycle.Weekly,
   duration = 2,
   onUpdateService,
+  setShowSubscriptionForm,
 }) => {
+  const router = useRouter();
   const { user } = useAuthStore();
 
   // State to track extended services with details
@@ -313,6 +317,8 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
         // Show success message or redirect
         setTimeout(() => {
           setIsSubmitting(false);
+          //redirect back to the dashboard with ?tab=subscription
+          setShowSubscriptionForm?.(false);
           // You could add a success message here
         }, 1000);
       } else {
