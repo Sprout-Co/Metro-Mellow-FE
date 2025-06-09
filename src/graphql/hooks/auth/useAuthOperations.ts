@@ -19,6 +19,7 @@ import {
   useGetUserByIdQuery,
   useGetUsersQuery,
   useSendVerificationEmailMutation,
+  useVerifyEmailMutation,
 } from "@/graphql/api";
 import { useAuthStore } from "@/store/slices/auth";
 import { UserRole } from "@/graphql/api";
@@ -37,6 +38,7 @@ export const useAuthOperations = () => {
   const { refetch: getUserById } = useGetUserByIdQuery({ skip: true });
   const { refetch: getUsers } = useGetUsersQuery({ skip: true });
   const [sendVerificationEmailMutation] = useSendVerificationEmailMutation();
+  const [verifyEmailMutation] = useVerifyEmailMutation();
   const {
     login,
     logout,
@@ -452,6 +454,12 @@ export const useAuthOperations = () => {
     [currentToken, currentUser, getUsers]
   );
 
+  /**
+   * Sends a verification email to the user
+   * @param email - User's email address
+   * @returns Boolean indicating success
+   * @throws Error if email sending fails
+   */
   const handleSendVerificationEmail = useCallback(
     async (email: string) => {
       try {
@@ -476,6 +484,35 @@ export const useAuthOperations = () => {
     [sendVerificationEmailMutation]
   );
 
+  /**
+   * Verifies user's email using a verification token
+   * @param token - Verification token received via email
+   * @returns Boolean indicating success
+   * @throws Error if verification fails
+   */ 
+  const handleVerifyEmail = useCallback(
+    async (token: string) => {
+      try {
+        const { data, errors } = await verifyEmailMutation({
+          variables: { token },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.verifyEmail;
+      } catch (error) {
+        console.error("Verify email error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [verifyEmailMutation]
+  );
+
   return {
     handleLogin,
     handleRegister,
@@ -488,5 +525,7 @@ export const useAuthOperations = () => {
     handleGetCurrentUser,
     handleGetUserById,
     handleGetUsers,
+    handleSendVerificationEmail,
+    handleVerifyEmail,
   };
 };
