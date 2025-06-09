@@ -10,10 +10,10 @@
   background-color: color("neutral", "lighter");
   position: relative;
   overflow: hidden;
-  
+
   // Background pattern
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -23,26 +23,26 @@
     opacity: 0.5;
     z-index: 0;
   }
-  
+
   &__container {
     @include container;
     position: relative;
     z-index: 1;
   }
-  
+
   &__wrapper {
     display: grid;
     grid-template-columns: minmax(350px, 450px) 1fr;
     gap: spacing("3xl");
     max-width: 1100px;
     margin: 0 auto;
-    
+
     @include breakpoint-down("lg") {
       grid-template-columns: 1fr;
       max-width: 500px;
     }
   }
-  
+
   &__card {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
@@ -50,64 +50,76 @@
     padding: spacing("2xl") spacing("xl");
     position: relative;
     overflow: hidden;
-    
+
     // Decorative circle
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: -120px;
       right: -120px;
       width: 240px;
       height: 240px;
       border-radius: 50%;
-      background: linear-gradient(135deg, rgba(color("primary", "light"), 0.08), rgba(color("primary", "base"), 0.05));
+      background: linear-gradient(
+        135deg,
+        rgba(color("primary", "light"), 0.08),
+        rgba(color("primary", "base"), 0.05)
+      );
       z-index: 0;
     }
-    
+
     // Second decorative circle
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       bottom: -80px;
       left: -80px;
       width: 160px;
       height: 160px;
       border-radius: 50%;
-      background: linear-gradient(135deg, rgba(color("secondary", "light"), 0.04), rgba(color("primary", "light"), 0.02));
+      background: linear-gradient(
+        135deg,
+        rgba(color("secondary", "light"), 0.04),
+        rgba(color("primary", "light"), 0.02)
+      );
       z-index: 0;
     }
-    
+
     @include breakpoint-down("sm") {
       padding: spacing("xl") spacing("md");
     }
   }
-  
+
   &__logo {
     display: block;
     margin-bottom: spacing("xl");
     position: relative;
     z-index: 1;
   }
-  
+
   &__imageWrapper {
     @include breakpoint-down("lg") {
       display: none;
     }
   }
-  
+
   &__image {
     position: relative;
     height: 100%;
-    background: linear-gradient(135deg, color("primary", "dark"), color("primary", "base"));
+    background: linear-gradient(
+      135deg,
+      color("primary", "dark"),
+      color("primary", "base")
+    );
     border-radius: border-radius("lg");
     padding: spacing("3xl") spacing("2xl");
     color: color("neutral", "white");
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    
+
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
@@ -116,7 +128,7 @@
       background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1' fill-rule='nonzero'%3E%3Cpath d='M29 58.58l7.38-7.39A30.95 30.95 0 0 0 58.58 29h-2.09a28.9 28.9 0 0 1-20.2 19.52l-6.69 6.69a.99.99 0 0 0 0 1.39.97.97 0 0 0 1.39 0l7.39-7.38A30.95 30.95 0 0 0 58.58 29h-2.09a28.9 28.9 0 0 1-20.2 19.52l-6.69 6.69a.99.99 0 0 0 0 1.39.97.97 0 0 0 1.39 0zM29 1.41l-7.39 7.38A30.95 30.95 0 0 0 1.41 29h2.1a28.9 28.9 0 0 1 20.2-19.53l6.68-6.68a.99.99 0 0 0 0-1.39.97.97 0 0 0-1.39 0L21.62 8.8A30.95 30.95 0 0 0 1.41 29h2.09a28.9 28.9 0 0 1 20.2-19.52l6.68-6.68a.99.99 0 0 0 0-1.39.97.97 0 0 0-1.39 0z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     }
   }
-  
+
   &__imageTitle {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "3xl");
@@ -125,7 +137,7 @@
     position: relative;
     z-index: 1;
   }
-  
+
   &__imageText {
     font-size: map-get($font-sizes, "lg");
     margin-bottom: spacing("3xl");
@@ -133,7 +145,7 @@
     position: relative;
     z-index: 1;
   }
-  
+
   &__stats {
     display: flex;
     justify-content: space-between;
@@ -141,42 +153,42 @@
     position: relative;
     z-index: 1;
   }
-  
+
   &__statItem {
     text-align: center;
   }
-  
+
   &__statNumber {
     font-size: map-get($font-sizes, "3xl");
     font-weight: map-get($font-weights, "bold");
     margin-bottom: spacing("xs");
   }
-  
+
   &__statLabel {
     font-size: map-get($font-sizes, "sm");
     opacity: 0.8;
   }
-  
+
   &__testimonials {
     margin-top: auto;
     position: relative;
     z-index: 1;
   }
-  
+
   &__testimonial {
     background-color: rgba(color("neutral", "white"), 0.1);
     border-radius: border-radius("md");
     padding: spacing("lg");
   }
-  
+
   &__testimonialText {
     font-size: map-get($font-sizes, "base");
     font-style: italic;
     margin-bottom: spacing("md");
     position: relative;
-    
+
     &::before {
-      content: '\201C';
+      content: "\201C";
       font-size: 40px;
       position: absolute;
       top: -20px;
@@ -184,17 +196,17 @@
       opacity: 0.3;
     }
   }
-  
+
   &__testimonialAuthor {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  
+
   &__testimonialName {
     font-weight: map-get($font-weights, "semibold");
   }
-  
+
   &__testimonialStars {
     color: color("warning");
   }
@@ -204,7 +216,7 @@
 .formInput {
   margin-bottom: spacing("md");
   position: relative;
-  
+
   &__label {
     display: block;
     font-size: map-get($font-sizes, "sm");
@@ -212,12 +224,12 @@
     color: color("neutral", "darker");
     margin-bottom: spacing("xs");
   }
-  
+
   &__required {
     color: color("error");
     margin-left: 2px;
   }
-  
+
   &__wrapper {
     position: relative;
     display: flex;
@@ -226,21 +238,21 @@
     border-radius: border-radius("md");
     background-color: color("neutral", "white");
     transition: all 0.2s ease;
-    
+
     &--focused {
       border-color: color("primary", "base");
       box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
     }
-    
+
     &--error {
       border-color: color("error");
-      
+
       &.formInput__wrapper--focused {
         box-shadow: 0 0 0 3px rgba(color("error"), 0.1);
       }
     }
   }
-  
+
   &__icon {
     display: flex;
     align-items: center;
@@ -248,7 +260,7 @@
     color: color("neutral", "dark");
     padding-left: spacing("sm");
   }
-  
+
   &__input {
     flex: 1;
     height: 46px;
@@ -258,12 +270,12 @@
     background: transparent;
     border: none;
     outline: none;
-    
+
     &::placeholder {
       color: color("neutral", "medium");
     }
   }
-  
+
   &__passwordToggle {
     background: none;
     border: none;
@@ -274,12 +286,12 @@
     align-items: center;
     justify-content: center;
     transition: color 0.2s ease;
-    
+
     &:hover {
       color: color("neutral", "darker");
     }
   }
-  
+
   &__error {
     font-size: map-get($font-sizes, "xs");
     color: color("error");
@@ -287,7 +299,7 @@
     display: flex;
     align-items: center;
     gap: spacing("xxs");
-    
+
     svg {
       flex-shrink: 0;
     }
@@ -297,7 +309,7 @@
 // components/auth/SocialAuth.module.scss
 .socialAuth {
   margin-bottom: spacing("lg");
-  
+
   &__button {
     width: 100%;
     padding: spacing("md");
@@ -314,30 +326,30 @@
     cursor: pointer;
     transition: all 0.2s ease;
     margin-bottom: spacing("md");
-    
+
     &:hover:not(:disabled) {
       background-color: color("neutral", "lighter");
     }
-    
+
     &:disabled {
       opacity: 0.7;
       cursor: not-allowed;
     }
-    
+
     svg {
       flex-shrink: 0;
     }
-    
+
     &--loading {
       position: relative;
       color: transparent;
-      
+
       svg {
         opacity: 0;
       }
     }
   }
-  
+
   &__spinner {
     position: absolute;
     top: 50%;
@@ -350,14 +362,14 @@
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
-  
+
   &__divider {
     position: relative;
     text-align: center;
     margin: spacing("lg") 0;
-    
+
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 50%;
       left: 0;
@@ -366,7 +378,7 @@
       background-color: color("neutral", "medium");
     }
   }
-  
+
   &__dividerText {
     position: relative;
     background-color: color("neutral", "white");
@@ -380,63 +392,63 @@
 .loginForm {
   position: relative;
   z-index: 1;
-  
+
   &__title {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "3xl");
     font-weight: map-get($font-weights, "bold");
     color: color("neutral", "darker");
     margin-bottom: spacing("xs");
-    
+
     @include breakpoint-down("sm") {
       font-size: map-get($font-sizes, "2xl");
     }
   }
-  
+
   &__subtitle {
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "dark");
     margin-bottom: spacing("lg");
   }
-  
+
   &__passwordGroup {
     margin-bottom: spacing("md");
   }
-  
+
   &__passwordHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: spacing("xs");
   }
-  
+
   &__label {
     font-size: map-get($font-sizes, "sm");
     font-weight: map-get($font-weights, "medium");
     color: color("neutral", "darker");
   }
-  
+
   &__required {
     color: color("error");
     margin-left: 2px;
   }
-  
+
   &__forgotPassword {
     font-size: map-get($font-sizes, "xs");
     color: color("primary", "base");
     text-decoration: none;
     transition: color 0.2s ease;
-    
+
     &:hover {
       color: color("primary", "dark");
       text-decoration: underline;
     }
   }
-  
+
   &__checkGroup {
     margin-bottom: spacing("lg");
   }
-  
+
   &__checkbox {
     display: flex;
     align-items: center;
@@ -444,25 +456,25 @@
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "dark");
     cursor: pointer;
-    
+
     input {
       position: absolute;
       opacity: 0;
       cursor: pointer;
       height: 0;
       width: 0;
-      
+
       &:checked ~ .loginForm__checkmark {
         background-color: color("primary", "base");
         border-color: color("primary", "base");
-        
+
         &::after {
           display: block;
         }
       }
     }
   }
-  
+
   &__checkmark {
     height: 18px;
     width: 18px;
@@ -473,9 +485,9 @@
     position: relative;
     transition: all 0.2s ease;
     flex-shrink: 0;
-    
+
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       display: none;
       left: 6px;
@@ -487,7 +499,7 @@
       transform: rotate(45deg);
     }
   }
-  
+
   &__error {
     margin: spacing("sm") 0;
     padding: spacing("sm") spacing("md");
@@ -499,13 +511,17 @@
     align-items: center;
     gap: spacing("xs");
   }
-  
+
   &__button {
     width: 100%;
     padding: spacing("md");
     border: none;
     border-radius: border-radius("md");
-    background: linear-gradient(to right, color("primary", "base"), color("primary", "light"));
+    background: linear-gradient(
+      to right,
+      color("primary", "base"),
+      color("primary", "light")
+    );
     color: color("neutral", "white");
     font-size: map-get($font-sizes, "base");
     font-weight: map-get($font-weights, "semibold");
@@ -516,17 +532,21 @@
     justify-content: center;
     gap: spacing("sm");
     box-shadow: 0 4px 6px rgba(color("primary", "base"), 0.2);
-    
+
     &:hover:not(:disabled) {
-      background: linear-gradient(to right, color("primary", "dark"), color("primary", "base"));
+      background: linear-gradient(
+        to right,
+        color("primary", "dark"),
+        color("primary", "base")
+      );
     }
-    
+
     &:disabled {
       opacity: 0.7;
       cursor: not-allowed;
     }
   }
-  
+
   &__buttonSpinner {
     width: 20px;
     height: 20px;
@@ -535,14 +555,14 @@
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
-  
+
   &__switch {
     text-align: center;
     margin-top: spacing("lg");
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "dark");
   }
-  
+
   &__switchLink {
     color: color("primary", "base");
     font-weight: map-get($font-weights, "semibold");
@@ -551,7 +571,7 @@
     border: none;
     cursor: pointer;
     transition: color 0.2s ease;
-    
+
     &:hover {
       color: color("primary", "dark");
       text-decoration: underline;
@@ -563,29 +583,29 @@
 .registerForm {
   position: relative;
   z-index: 1;
-  
+
   &__title {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "3xl");
     font-weight: map-get($font-weights, "bold");
     color: color("neutral", "darker");
     margin-bottom: spacing("xs");
-    
+
     @include breakpoint-down("sm") {
       font-size: map-get($font-sizes, "2xl");
     }
   }
-  
+
   &__subtitle {
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "dark");
     margin-bottom: spacing("lg");
   }
-  
+
   &__passwordStrength {
     margin-bottom: spacing("md");
   }
-  
+
   &__passwordStrengthBar {
     height: 4px;
     background-color: color("neutral", "lighter");
@@ -593,52 +613,52 @@
     margin-bottom: spacing("xs");
     overflow: hidden;
   }
-  
+
   &__passwordStrengthIndicator {
     height: 100%;
     border-radius: 2px;
     transition: width 0.3s ease;
-    
+
     &--weak {
       background-color: color("error");
     }
-    
+
     &--medium {
       background-color: color("warning");
     }
-    
+
     &--strong {
       background-color: color("success");
     }
   }
-  
+
   &__passwordStrengthText {
     font-size: map-get($font-sizes, "xs");
     color: color("neutral", "dark");
     display: flex;
     justify-content: space-between;
   }
-  
+
   &__passwordStrengthLabel {
     font-weight: map-get($font-weights, "medium");
-    
+
     &--weak {
       color: color("error");
     }
-    
+
     &--medium {
       color: color("warning");
     }
-    
+
     &--strong {
       color: color("success");
     }
   }
-  
+
   &__checkGroup {
     margin-bottom: spacing("lg");
   }
-  
+
   &__checkbox {
     display: flex;
     align-items: flex-start;
@@ -647,25 +667,25 @@
     color: color("neutral", "dark");
     cursor: pointer;
     line-height: 1.5;
-    
+
     input {
       position: absolute;
       opacity: 0;
       cursor: pointer;
       height: 0;
       width: 0;
-      
+
       &:checked ~ .registerForm__checkmark {
         background-color: color("primary", "base");
         border-color: color("primary", "base");
-        
+
         &::after {
           display: block;
         }
       }
     }
   }
-  
+
   &__checkmark {
     height: 18px;
     width: 18px;
@@ -677,9 +697,9 @@
     position: relative;
     transition: all 0.2s ease;
     flex-shrink: 0;
-    
+
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       display: none;
       left: 6px;
@@ -691,25 +711,25 @@
       transform: rotate(45deg);
     }
   }
-  
+
   &__link {
     color: color("primary", "base");
     text-decoration: none;
     transition: color 0.2s ease;
-    
+
     &:hover {
       color: color("primary", "dark");
       text-decoration: underline;
     }
   }
-  
+
   &__checkError {
     font-size: map-get($font-sizes, "xs");
     color: color("error");
     margin-top: spacing("xs");
     margin-left: spacing("lg");
   }
-  
+
   &__error {
     margin: spacing("sm") 0;
     padding: spacing("sm") spacing("md");
@@ -721,13 +741,58 @@
     align-items: center;
     gap: spacing("xs");
   }
-  
+
+  &__verificationGroup {
+    margin-bottom: spacing("xl");
+    text-align: center;
+  }
+
+  &__message {
+    background-color: rgba(color("primary", "light"), 0.1);
+    border-radius: border-radius("md");
+    padding: spacing("lg");
+    margin-bottom: spacing("xl");
+    color: color("neutral", "darker");
+    font-size: map-get($font-sizes, "base");
+    line-height: 1.6;
+
+    svg {
+      display: block;
+      width: 48px;
+      height: 48px;
+      margin: 0 auto spacing("md");
+      color: color("primary", "base");
+    }
+  }
+
+  &__emailHighlight {
+    display: inline-block;
+    background-color: color("neutral", "white");
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("sm");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("primary", "base");
+    margin: spacing("xs") 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+    margin-top: spacing("xl");
+  }
+
   &__button {
     width: 100%;
     padding: spacing("md");
     border: none;
     border-radius: border-radius("md");
-    background: linear-gradient(to right, color("primary", "base"), color("primary", "light"));
+    background: linear-gradient(
+      to right,
+      color("primary", "base"),
+      color("primary", "light")
+    );
     color: color("neutral", "white");
     font-size: map-get($font-sizes, "base");
     font-weight: map-get($font-weights, "semibold");
@@ -738,45 +803,105 @@
     justify-content: center;
     gap: spacing("sm");
     box-shadow: 0 4px 6px rgba(color("primary", "base"), 0.2);
-    
+
     &:hover:not(:disabled) {
-      background: linear-gradient(to right, color("primary", "dark"), color("primary", "base"));
+      background: linear-gradient(
+        to right,
+        color("primary", "dark"),
+        color("primary", "base")
+      );
+      transform: translateY(-1px);
+      box-shadow: 0 6px 8px rgba(color("primary", "base"), 0.25);
     }
-    
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(color("primary", "base"), 0.2);
+    }
+
     &:disabled {
       opacity: 0.7;
       cursor: not-allowed;
     }
   }
-  
-  &__buttonSpinner {
-    width: 20px;
-    height: 20px;
-    border: 2px solid rgba(color("neutral", "white"), 0.3);
-    border-top-color: color("neutral", "white");
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-  
-  &__switch {
+
+  &__resend {
     text-align: center;
-    margin-top: spacing("lg");
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "dark");
+    padding: spacing("md");
+    background-color: color("neutral", "white");
+    border-radius: border-radius("md");
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
-  
-  &__switchLink {
+
+  &__resendLink {
     color: color("primary", "base");
     font-weight: map-get($font-weights, "semibold");
-    margin-left: spacing("xs");
     background: none;
     border: none;
     cursor: pointer;
-    transition: color 0.2s ease;
-    
-    &:hover {
+    transition: $transition-base;
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("sm");
+
+    &:hover:not(:disabled) {
       color: color("primary", "dark");
-      text-decoration: underline;
+      background-color: rgba(color("primary", "base"), 0.1);
+    }
+
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__back {
+    text-align: center;
+    margin-top: spacing("md");
+  }
+
+  &__backLink {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xs");
+    color: color("neutral", "dark");
+    font-size: map-get($font-sizes, "sm");
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: $transition-base;
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("sm");
+
+    &:hover {
+      color: color("neutral", "darker");
+      background-color: rgba(color("neutral", "dark"), 0.1);
+    }
+
+    svg {
+      transition: transform 0.2s ease;
+    }
+
+    &:hover svg {
+      transform: translateX(-2px);
+    }
+  }
+
+  &__error {
+    margin: spacing("sm") 0;
+    padding: spacing("sm") spacing("md");
+    background-color: rgba(color("error"), 0.1);
+    border-radius: border-radius("md");
+    color: color("error");
+    font-size: map-get($font-sizes, "sm");
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+
+    &--success {
+      background-color: rgba(color("success"), 0.1);
+      color: color("success");
     }
   }
 }
@@ -785,29 +910,29 @@
 .verificationForm {
   position: relative;
   z-index: 1;
-  
+
   &__title {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "3xl");
     font-weight: map-get($font-weights, "bold");
     color: color("neutral", "darker");
     margin-bottom: spacing("xs");
-    
+
     @include breakpoint-down("sm") {
       font-size: map-get($font-sizes, "2xl");
     }
   }
-  
+
   &__subtitle {
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "dark");
     margin-bottom: spacing("lg");
-    
+
     strong {
       color: color("neutral", "darker");
     }
   }
-  
+
   &__message {
     margin: spacing("sm") 0;
     padding: spacing("sm") spacing("md");
@@ -816,22 +941,22 @@
     display: flex;
     align-items: center;
     gap: spacing("xs");
-    
+
     &--error {
       background-color: rgba(color("error"), 0.1);
       color: color("error");
     }
-    
+
     &--success {
       background-color: rgba(color("success"), 0.1);
       color: color("success");
     }
   }
-  
+
   &__inputGroup {
     margin-bottom: spacing("xl");
   }
-  
+
   &__label {
     display: block;
     font-size: map-get($font-sizes, "sm");
@@ -839,13 +964,13 @@
     color: color("neutral", "darker");
     margin-bottom: spacing("md");
   }
-  
+
   &__inputs {
     display: flex;
     justify-content: space-between;
     gap: spacing("xs");
   }
-  
+
   &__input {
     width: 100%;
     height: 60px;
@@ -857,38 +982,42 @@
     border: 1px solid color("neutral", "medium");
     border-radius: border-radius("md");
     transition: all 0.2s ease;
-    
+
     &:focus {
       outline: none;
     }
-    
+
     &--active {
       border-color: color("primary", "base");
       box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
     }
-    
+
     &--error {
       border-color: color("error");
-      
+
       &:focus {
         box-shadow: 0 0 0 3px rgba(color("error"), 0.1);
       }
     }
   }
-  
+
   &__actions {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: spacing("md");
   }
-  
+
   &__button {
     width: 100%;
     padding: spacing("md");
     border: none;
     border-radius: border-radius("md");
-    background: linear-gradient(to right, color("primary", "base"), color("primary", "light"));
+    background: linear-gradient(
+      to right,
+      color("primary", "base"),
+      color("primary", "light")
+    );
     color: color("neutral", "white");
     font-size: map-get($font-sizes, "base");
     font-weight: map-get($font-weights, "semibold");
@@ -899,17 +1028,21 @@
     justify-content: center;
     gap: spacing("sm");
     box-shadow: 0 4px 6px rgba(color("primary", "base"), 0.2);
-    
+
     &:hover:not(:disabled) {
-      background: linear-gradient(to right, color("primary", "dark"), color("primary", "base"));
+      background: linear-gradient(
+        to right,
+        color("primary", "dark"),
+        color("primary", "base")
+      );
     }
-    
+
     &:disabled {
       opacity: 0.7;
       cursor: not-allowed;
     }
   }
-  
+
   &__buttonSpinner {
     width: 20px;
     height: 20px;
@@ -918,12 +1051,12 @@
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
-  
+
   &__resend {
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "dark");
   }
-  
+
   &__resendLink {
     color: color("primary", "base");
     font-weight: map-get($font-weights, "semibold");
@@ -931,22 +1064,22 @@
     border: none;
     cursor: pointer;
     transition: color 0.2s ease;
-    
+
     &:hover:not(:disabled) {
       color: color("primary", "dark");
       text-decoration: underline;
     }
-    
+
     &--disabled {
       color: color("neutral", "dark");
       cursor: not-allowed;
     }
   }
-  
+
   &__back {
     margin-top: spacing("md");
   }
-  
+
   &__backLink {
     display: flex;
     align-items: center;
@@ -957,7 +1090,7 @@
     border: none;
     cursor: pointer;
     transition: color 0.2s ease;
-    
+
     &:hover {
       color: color("primary", "base");
     }

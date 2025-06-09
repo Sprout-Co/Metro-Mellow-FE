@@ -153,9 +153,9 @@ export const useAuthOperations = () => {
           login(user as any, token);
 
           // Use a direct browser redirect
-          if (typeof window !== "undefined") {
-            window.location.href = Routes.DASHBOARD;
-          }
+          // if (typeof window !== "undefined") {
+          //   window.location.href = Routes.DASHBOARD;
+          // }
         }
       } catch (error) {
         console.error("Registration error:", error);
