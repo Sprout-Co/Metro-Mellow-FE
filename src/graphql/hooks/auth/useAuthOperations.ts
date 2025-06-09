@@ -18,6 +18,7 @@ import {
   useGetCurrentUserQuery,
   useGetUserByIdQuery,
   useGetUsersQuery,
+  useSendVerificationEmailMutation,
 } from "@/graphql/api";
 import { useAuthStore } from "@/store/slices/auth";
 import { UserRole } from "@/graphql/api";
@@ -35,6 +36,7 @@ export const useAuthOperations = () => {
   const { refetch: getCurrentUser } = useGetCurrentUserQuery({ skip: true });
   const { refetch: getUserById } = useGetUserByIdQuery({ skip: true });
   const { refetch: getUsers } = useGetUsersQuery({ skip: true });
+  const [sendVerificationEmailMutation] = useSendVerificationEmailMutation();
   const {
     login,
     logout,
@@ -448,6 +450,30 @@ export const useAuthOperations = () => {
       }
     },
     [currentToken, currentUser, getUsers]
+  );
+
+  const handleSendVerificationEmail = useCallback(
+    async (email: string) => {
+      try {
+        const { data, errors } = await sendVerificationEmailMutation({
+          variables: { email },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.sendVerificationEmail;
+      } catch (error) {
+
+        console.error("Send verification email error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [sendVerificationEmailMutation]
   );
 
   return {

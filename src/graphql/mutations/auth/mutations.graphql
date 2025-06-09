@@ -1,5 +1,6 @@
 mutation Register($input: CreateUserInput!) {
   register(input: $input) {
+    message
     token
     user {
       id
@@ -7,14 +8,8 @@ mutation Register($input: CreateUserInput!) {
       firstName
       lastName
       role
-      phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
+      emailVerified
+      accountStatus
     }
   }
 }
@@ -29,13 +24,6 @@ mutation Login($email: String!, $password: String!) {
       lastName
       role
       phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
   }
 }
@@ -48,13 +36,6 @@ mutation UpdateProfile($input: UpdateUserInput!) {
     lastName
     role
     phone
-    address {
-      street
-      city
-      state
-      zipCode
-      country
-    }
   }
 }
 
@@ -78,12 +59,21 @@ mutation UpdateUserRole($userId: ID!, $role: UserRole!) {
     lastName
     role
     phone
-    address {
-      street
-      city
-      state
-      zipCode
-      country
-    }
   }
+}
+
+mutation SendVerificationEmail($email: String!) {
+  sendVerificationEmail(email: $email)
+}
+
+mutation VerifyEmail($token: String!) {
+  verifyEmail(token: $token)
+}
+
+mutation UpdateAccountStatus(
+  $userId: ID!
+  $status: AccountStatus!
+  $reason: String
+) {
+  updateAccountStatus(userId: $userId, status: $status, reason: $reason)
 }
