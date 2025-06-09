@@ -219,7 +219,7 @@ export type CreateStaffProfileInput = {
 };
 
 export type CreateSubscriptionInput = {
-  address: AddressInput;
+  address: Scalars['ID']['input'];
   autoRenew: Scalars['Boolean']['input'];
   billingCycle: BillingCycle;
   duration: Scalars['Int']['input'];
@@ -1457,6 +1457,20 @@ export type UpdateAccountStatusMutationVariables = Exact<{
 
 export type UpdateAccountStatusMutation = { __typename?: 'Mutation', updateAccountStatus: boolean };
 
+export type AddAddressMutationVariables = Exact<{
+  input: AddressInput;
+}>;
+
+
+export type AddAddressMutation = { __typename?: 'Mutation', addAddress: boolean };
+
+export type SetDefaultAddressMutationVariables = Exact<{
+  addressId: Scalars['ID']['input'];
+}>;
+
+
+export type SetDefaultAddressMutation = { __typename?: 'Mutation', setDefaultAddress: boolean };
+
 export type CreateBookingMutationVariables = Exact<{
   input: CreateBookingInput;
 }>;
@@ -1774,7 +1788,7 @@ export type ReactivateSubscriptionMutation = { __typename?: 'Mutation', reactiva
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null };
+export type GetCurrentUserQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', id: string, street: string, city: string, state: string, zipCode: string, country: string } | null } | null };
 
 export type GetUserByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2293,6 +2307,68 @@ export function useUpdateAccountStatusMutation(baseOptions?: ApolloReactHooks.Mu
 export type UpdateAccountStatusMutationHookResult = ReturnType<typeof useUpdateAccountStatusMutation>;
 export type UpdateAccountStatusMutationResult = Apollo.MutationResult<UpdateAccountStatusMutation>;
 export type UpdateAccountStatusMutationOptions = Apollo.BaseMutationOptions<UpdateAccountStatusMutation, UpdateAccountStatusMutationVariables>;
+export const AddAddressDocument = gql`
+    mutation AddAddress($input: AddressInput!) {
+  addAddress(input: $input)
+}
+    `;
+export type AddAddressMutationFn = Apollo.MutationFunction<AddAddressMutation, AddAddressMutationVariables>;
+
+/**
+ * __useAddAddressMutation__
+ *
+ * To run a mutation, you first call `useAddAddressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddAddressMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addAddressMutation, { data, loading, error }] = useAddAddressMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddAddressMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddAddressMutation, AddAddressMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<AddAddressMutation, AddAddressMutationVariables>(AddAddressDocument, options);
+      }
+export type AddAddressMutationHookResult = ReturnType<typeof useAddAddressMutation>;
+export type AddAddressMutationResult = Apollo.MutationResult<AddAddressMutation>;
+export type AddAddressMutationOptions = Apollo.BaseMutationOptions<AddAddressMutation, AddAddressMutationVariables>;
+export const SetDefaultAddressDocument = gql`
+    mutation SetDefaultAddress($addressId: ID!) {
+  setDefaultAddress(addressId: $addressId)
+}
+    `;
+export type SetDefaultAddressMutationFn = Apollo.MutationFunction<SetDefaultAddressMutation, SetDefaultAddressMutationVariables>;
+
+/**
+ * __useSetDefaultAddressMutation__
+ *
+ * To run a mutation, you first call `useSetDefaultAddressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetDefaultAddressMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setDefaultAddressMutation, { data, loading, error }] = useSetDefaultAddressMutation({
+ *   variables: {
+ *      addressId: // value for 'addressId'
+ *   },
+ * });
+ */
+export function useSetDefaultAddressMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetDefaultAddressMutation, SetDefaultAddressMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<SetDefaultAddressMutation, SetDefaultAddressMutationVariables>(SetDefaultAddressDocument, options);
+      }
+export type SetDefaultAddressMutationHookResult = ReturnType<typeof useSetDefaultAddressMutation>;
+export type SetDefaultAddressMutationResult = Apollo.MutationResult<SetDefaultAddressMutation>;
+export type SetDefaultAddressMutationOptions = Apollo.BaseMutationOptions<SetDefaultAddressMutation, SetDefaultAddressMutationVariables>;
 export const CreateBookingDocument = gql`
     mutation CreateBooking($input: CreateBookingInput!) {
   createBooking(input: $input)
@@ -3897,6 +3973,14 @@ export const GetCurrentUserDocument = gql`
     phone
     createdAt
     updatedAt
+    defaultAddress {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+    }
   }
 }
     `;

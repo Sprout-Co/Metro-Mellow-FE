@@ -8,6 +8,14 @@ query GetCurrentUser {
     phone
     createdAt
     updatedAt
+    defaultAddress {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+    }
   }
 }
 

@@ -448,13 +448,7 @@ export default function BookServiceModal() {
         serviceOption: selectedOption?.service_id || ("" as string),
         date: new Date(selectedDate),
         timeSlot: selectedTime,
-        address: {
-          street: address.street,
-          city: address.city,
-          state: address.state,
-          zipCode: address.zipCode,
-          country: address.country,
-        },
+        address: "6846ce4923c7d1dafbdea59f",
         notes: `Frequency: ${serviceFrequency}`,
         serviceDetails: {
           serviceOption: selectedOption?.service_id || ("" as string),

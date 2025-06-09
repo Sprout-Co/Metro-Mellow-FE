@@ -20,6 +20,9 @@ import {
   useGetUsersQuery,
   useSendVerificationEmailMutation,
   useVerifyEmailMutation,
+  useAddAddressMutation,
+  useSetDefaultAddressMutation,
+  AddressInput,
 } from "@/graphql/api";
 import { useAuthStore } from "@/store/slices/auth";
 import { UserRole } from "@/graphql/api";
@@ -39,6 +42,7 @@ export const useAuthOperations = () => {
   const { refetch: getUsers } = useGetUsersQuery({ skip: true });
   const [sendVerificationEmailMutation] = useSendVerificationEmailMutation();
   const [verifyEmailMutation] = useVerifyEmailMutation();
+  const [addAddressMutation] = useAddAddressMutation();
   const {
     login,
     logout,
@@ -473,7 +477,6 @@ export const useAuthOperations = () => {
 
         return data?.sendVerificationEmail;
       } catch (error) {
-
         console.error("Send verification email error:", error);
         if (error instanceof Error) {
           throw new Error(error.message);
@@ -489,7 +492,7 @@ export const useAuthOperations = () => {
    * @param token - Verification token received via email
    * @returns Boolean indicating success
    * @throws Error if verification fails
-   */ 
+   */
   const handleVerifyEmail = useCallback(
     async (token: string) => {
       try {
@@ -513,6 +516,35 @@ export const useAuthOperations = () => {
     [verifyEmailMutation]
   );
 
+  /**
+   * Adds a new address for the current user
+   * @param input - Address input object
+   * @returns Created address
+   * @throws Error if creation fails
+   */
+  const handleAddAddress = useCallback(
+    async (input: AddressInput) => {
+      try {
+        const { data, errors } = await addAddressMutation({
+          variables: { input },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.addAddress;
+      } catch (error) {
+        console.error("Address creation error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [addAddressMutation]
+  );
+
   return {
     handleLogin,
     handleRegister,
@@ -527,5 +559,6 @@ export const useAuthOperations = () => {
     handleGetUsers,
     handleSendVerificationEmail,
     handleVerifyEmail,
+    handleAddAddress,
   };
 };

@@ -77,3 +77,11 @@ mutation UpdateAccountStatus(
 ) {
   updateAccountStatus(userId: $userId, status: $status, reason: $reason)
 }
+
+mutation AddAddress($input: AddressInput!) {
+  addAddress(input: $input)
+}
+
+mutation SetDefaultAddress($addressId: ID!) {
+  setDefaultAddress(addressId: $addressId)
+}

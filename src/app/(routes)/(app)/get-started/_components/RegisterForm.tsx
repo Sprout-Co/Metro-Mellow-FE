@@ -43,7 +43,7 @@ export default function RegisterForm({
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
-  const [showVerification, setShowVerification] = useState(true);
+  const [showVerification, setShowVerification] = useState(false);
 
   const { handleRegister } = useAuthOperations();
 
