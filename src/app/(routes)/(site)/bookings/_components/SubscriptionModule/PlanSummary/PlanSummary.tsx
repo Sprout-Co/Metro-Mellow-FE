@@ -307,6 +307,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
           duration: Number(duration),
           startDate: new Date().toISOString(),
           autoRenew: true,
+          address: "6846ce4923c7d1dafbdea59f",
         };
 
         console.log("Final subscription input:", finalSubscriptionInput);

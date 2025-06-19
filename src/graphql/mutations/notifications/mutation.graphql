@@ -1,0 +1,40 @@
+mutation CreateNotification($input: CreateNotificationInput!) {
+  createNotification(input: $input) {
+    id
+    userId
+    type
+    priority
+    title
+    message
+    data
+    isRead
+    createdAt
+  }
+}
+
+mutation MarkNotificationAsRead($id: ID!) {
+  markNotificationAsRead(id: $id) {
+    id
+    isRead
+    readAt
+  }
+}
+
+mutation MarkNotificationsAsRead($ids: [ID!]!) {
+  markNotificationsAsRead(ids: $ids)
+}
+
+mutation DeleteNotification($id: ID!) {
+  deleteNotification(id: $id)
+}
+
+mutation BroadcastNotification($input: BroadcastNotificationInput!) {
+  broadcastNotification(input: $input)
+}
+
+mutation SendNotificationToRole(
+  $role: UserRole!
+  $input: BroadcastNotificationInput!
+) {
+  sendNotificationToRole(role: $role, input: $input)
+}

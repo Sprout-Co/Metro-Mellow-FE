@@ -6,15 +6,16 @@ query GetCurrentUser {
     lastName
     role
     phone
-    address {
+    createdAt
+    updatedAt
+    defaultAddress {
+      id
       street
       city
       state
       zipCode
       country
     }
-    createdAt
-    updatedAt
   }
 }
 
@@ -26,13 +27,6 @@ query GetUserById($id: ID!) {
     lastName
     role
     phone
-    address {
-      street
-      city
-      state
-      zipCode
-      country
-    }
     createdAt
     updatedAt
   }
@@ -46,13 +40,6 @@ query GetUsers($role: UserRole) {
     lastName
     role
     phone
-    address {
-      street
-      city
-      state
-      zipCode
-      country
-    }
     createdAt
     updatedAt
   }

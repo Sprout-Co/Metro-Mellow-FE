@@ -1,0 +1,64 @@
+query GetNotifications(
+  $filters: NotificationFilters
+  $pagination: PaginationInput
+) {
+  notifications(filters: $filters, pagination: $pagination) {
+    notifications {
+      id
+      userId
+      type
+      priority
+      title
+      message
+      data
+      isRead
+      isDeleted
+      readAt
+      expiresAt
+      createdAt
+      updatedAt
+    }
+    total
+    page
+    totalPages
+    hasNextPage
+    hasPreviousPage
+  }
+}
+
+query GetNotificationById($id: ID!) {
+  notification(id: $id) {
+    id
+    userId
+    type
+    priority
+    title
+    message
+    data
+    isRead
+    isDeleted
+    readAt
+    expiresAt
+    createdAt
+    updatedAt
+  }
+}
+
+query GetUnreadNotificationCount {
+  unreadNotificationCount
+}
+
+query GetNotificationStats($userId: ID) {
+  notificationStats(userId: $userId) {
+    total
+    unread
+    byType {
+      type
+      count
+    }
+    byPriority {
+      priority
+      count
+    }
+  }
+}

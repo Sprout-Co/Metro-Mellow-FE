@@ -10,13 +10,6 @@ query GetBookings($status: BookingStatus) {
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     service {
       _id
@@ -128,13 +121,6 @@ query GetBookingById($id: ID!) {
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     service {
       _id
@@ -246,13 +232,6 @@ query GetCustomerBookings {
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     service {
       _id
@@ -364,13 +343,6 @@ query GetStaffBookings {
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     service {
       _id
