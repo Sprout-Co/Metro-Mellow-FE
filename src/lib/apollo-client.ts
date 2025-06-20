@@ -1,28 +1,30 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { isTokenValid } from "@/utils/jwt";
 
 const httpLink = createHttpLink({
   uri: "http://localhost:4000/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
-  // Get the authentication token from the auth-storage cookie
-  const authStorage =
-    typeof window !== "undefined"
-      ? document.cookie
-          .split("; ")
-          .find((row) => row.startsWith("auth-storage="))
-      : null;
-
+  // Get the JWT token from the auth-token cookie
   let token = null;
-  if (authStorage) {
-    try {
-      const authData = JSON.parse(
-        decodeURIComponent(authStorage.split("=")[1])
-      );
-      token = authData.state.token;
-    } catch (e) {
-      console.error("Error parsing auth storage:", e);
+  
+  if (typeof window !== "undefined") {
+    const authTokenCookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("auth-token="));
+    
+    if (authTokenCookie) {
+      token = decodeURIComponent(authTokenCookie.split("=")[1]);
+      
+      // Validate the token before using it
+      if (!isTokenValid(token)) {
+        console.warn("Invalid or expired JWT token, removing from cookie");
+        // Remove the invalid token
+        document.cookie = "auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        token = null;
+      }
     }
   }
 

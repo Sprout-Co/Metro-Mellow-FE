@@ -9,13 +9,6 @@ query GetSubscriptionById($id: ID!) {
       lastName
       role
       phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
       createdAt
       updatedAt
     }
@@ -141,13 +134,6 @@ query GetSubscriptions($status: SubscriptionStatus) {
       lastName
       role
       phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
       createdAt
       updatedAt
     }
@@ -273,13 +259,6 @@ query GetCustomerSubscriptions {
       lastName
       role
       phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
       createdAt
       updatedAt
     }

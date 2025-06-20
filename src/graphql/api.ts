@@ -20,6 +20,28 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
+export type AcceptAdminInvitationInput = {
+  invitationToken: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  phone?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type AcceptInvitationResponse = {
+  __typename?: 'AcceptInvitationResponse';
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+  token?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<User>;
+};
+
+export enum AccountStatus {
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE',
+  Locked = 'LOCKED',
+  PendingVerification = 'PENDING_VERIFICATION',
+  Suspended = 'SUSPENDED'
+}
+
 export type AddPaymentMethodInput = {
   isDefault?: InputMaybe<Scalars['Boolean']['input']>;
   token: Scalars['String']['input'];
@@ -30,6 +52,9 @@ export type Address = {
   __typename?: 'Address';
   city: Scalars['String']['output'];
   country: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  isDefault: Scalars['Boolean']['output'];
+  label: Scalars['String']['output'];
   state: Scalars['String']['output'];
   street: Scalars['String']['output'];
   zipCode: Scalars['String']['output'];
@@ -38,14 +63,41 @@ export type Address = {
 export type AddressInput = {
   city: Scalars['String']['input'];
   country: Scalars['String']['input'];
+  isDefault?: InputMaybe<Scalars['Boolean']['input']>;
+  label: Scalars['String']['input'];
   state: Scalars['String']['input'];
   street: Scalars['String']['input'];
   zipCode: Scalars['String']['input'];
 };
 
+export type AdminInvitation = {
+  __typename?: 'AdminInvitation';
+  createdAt: Scalars['DateTime']['output'];
+  email: Scalars['String']['output'];
+  expiresAt: Scalars['DateTime']['output'];
+  firstName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  invitationToken: Scalars['String']['output'];
+  invitedBy: User;
+  invitedByName: Scalars['String']['output'];
+  isUsed: Scalars['Boolean']['output'];
+  lastName: Scalars['String']['output'];
+  permissions: Array<Scalars['String']['output']>;
+  role: UserRole;
+  usedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type AdminInvitationResponse = {
+  __typename?: 'AdminInvitationResponse';
+  invitation?: Maybe<AdminInvitation>;
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
 export type AuthPayload = {
   __typename?: 'AuthPayload';
-  token: Scalars['String']['output'];
+  message?: Maybe<Scalars['String']['output']>;
+  token?: Maybe<Scalars['String']['output']>;
   user: User;
 };
 
@@ -111,6 +163,15 @@ export enum BookingStatus {
   Pending = 'PENDING'
 }
 
+export type BroadcastNotificationInput = {
+  data?: InputMaybe<Scalars['JSON']['input']>;
+  expiresAt?: InputMaybe<Scalars['DateTime']['input']>;
+  message: Scalars['String']['input'];
+  priority?: InputMaybe<NotificationPriority>;
+  title: Scalars['String']['input'];
+  type: NotificationType;
+};
+
 export type CleaningDetails = {
   __typename?: 'CleaningDetails';
   cleaningType: CleaningType;
@@ -127,7 +188,7 @@ export type CleaningDetailsInput = {
 export enum CleaningType {
   DeepCleaning = 'DEEP_CLEANING',
   MoveInMoveOutCleaning = 'MOVE_IN_MOVE_OUT_CLEANING',
-  PostConstruction = 'POST_CONSTRUCTION',
+  PostConstructionCleaning = 'POST_CONSTRUCTION_CLEANING',
   StandardCleaning = 'STANDARD_CLEANING'
 }
 
@@ -143,8 +204,17 @@ export type CookingDetailsInput = {
   mealsPerDelivery: Array<MealDeliveryInput>;
 };
 
+export type CreateAdminInvitationInput = {
+  email: Scalars['String']['input'];
+  expiresIn?: InputMaybe<Scalars['Int']['input']>;
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
+  permissions?: InputMaybe<Array<Scalars['String']['input']>>;
+  role: UserRole;
+};
+
 export type CreateBookingInput = {
-  address: AddressInput;
+  address: Scalars['ID']['input'];
   date: Scalars['DateTime']['input'];
   notes?: InputMaybe<Scalars['String']['input']>;
   serviceDetails: ServiceDetailsInput;
@@ -153,6 +223,16 @@ export type CreateBookingInput = {
   serviceType: ServiceCategory;
   timeSlot: TimeSlot;
   totalPrice: Scalars['Float']['input'];
+};
+
+export type CreateNotificationInput = {
+  data?: InputMaybe<Scalars['JSON']['input']>;
+  expiresAt?: InputMaybe<Scalars['DateTime']['input']>;
+  message: Scalars['String']['input'];
+  priority?: InputMaybe<NotificationPriority>;
+  title: Scalars['String']['input'];
+  type: NotificationType;
+  user: Scalars['ID']['input'];
 };
 
 export type CreatePaymentInput = {
@@ -186,7 +266,7 @@ export type CreateStaffProfileInput = {
 };
 
 export type CreateSubscriptionInput = {
-  address: AddressInput;
+  address: Scalars['String']['input'];
   autoRenew: Scalars['Boolean']['input'];
   billingCycle: BillingCycle;
   duration: Scalars['Int']['input'];
@@ -195,7 +275,6 @@ export type CreateSubscriptionInput = {
 };
 
 export type CreateUserInput = {
-  address?: InputMaybe<AddressInput>;
   email: Scalars['String']['input'];
   firstName: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
@@ -310,35 +389,52 @@ export enum MealType {
 export type Mutation = {
   __typename?: 'Mutation';
   _?: Maybe<Scalars['Boolean']['output']>;
+  acceptAdminInvitation: AcceptInvitationResponse;
+  addAddress: Scalars['Boolean']['output'];
   addPaymentMethod: PaymentMethod;
   addServiceToSubscription: Scalars['Boolean']['output'];
   assignStaff: Scalars['Boolean']['output'];
+  broadcastNotification: Scalars['Boolean']['output'];
+  cancelAdminInvitation: Scalars['Boolean']['output'];
   cancelBooking: Scalars['Boolean']['output'];
   cancelInvoice: Invoice;
   cancelSubscription: Scalars['Boolean']['output'];
   changePassword: Scalars['Boolean']['output'];
+  cleanupExpiredInvitations: Scalars['Int']['output'];
   completeBooking: Scalars['Boolean']['output'];
+  createAdminInvitation: AdminInvitationResponse;
   createBooking: Scalars['Boolean']['output'];
+  createNotification: Notification;
   createPayment: Payment;
   createService: Service;
   createStaffProfile: StaffProfile;
   createSubscription: Scalars['Boolean']['output'];
+  deleteNotification: Scalars['Boolean']['output'];
   deleteService: Scalars['Boolean']['output'];
   deleteStaffDocument: Scalars['Boolean']['output'];
   forgotPassword: Scalars['Boolean']['output'];
   generateInvoice: Invoice;
   login: AuthPayload;
   markInvoiceAsPaid: Invoice;
+  markNotificationAsRead?: Maybe<Notification>;
+  markNotificationsAsRead: Scalars['Int']['output'];
   pauseSubscription: Scalars['Boolean']['output'];
   reactivateSubscription: Scalars['Boolean']['output'];
   refundPayment: Payment;
   register: AuthPayload;
+  removeAddress: Scalars['Boolean']['output'];
   removePaymentMethod: Scalars['Boolean']['output'];
   removeServiceFromSubscription: Scalars['Boolean']['output'];
   rescheduleBooking: Scalars['Boolean']['output'];
+  resendAdminInvitation: Scalars['Boolean']['output'];
   resetPassword: Scalars['Boolean']['output'];
   resumeSubscription: Scalars['Boolean']['output'];
+  sendNotificationToRole: Scalars['Boolean']['output'];
+  sendVerificationEmail: Scalars['Boolean']['output'];
+  setDefaultAddress: Scalars['Boolean']['output'];
   setDefaultPaymentMethod: PaymentMethod;
+  updateAccountStatus: Scalars['Boolean']['output'];
+  updateAddress: Scalars['Boolean']['output'];
   updateBooking: Scalars['Boolean']['output'];
   updateBookingStatus: Scalars['Boolean']['output'];
   updateProfile: User;
@@ -352,7 +448,18 @@ export type Mutation = {
   updateSubscriptionStatus: Scalars['Boolean']['output'];
   updateUserRole: User;
   uploadStaffDocument: StaffDocument;
+  verifyEmail: Scalars['Boolean']['output'];
   verifyStaffDocument: StaffDocument;
+};
+
+
+export type MutationAcceptAdminInvitationArgs = {
+  input: AcceptAdminInvitationInput;
+};
+
+
+export type MutationAddAddressArgs = {
+  input: AddressInput;
 };
 
 
@@ -370,6 +477,16 @@ export type MutationAddServiceToSubscriptionArgs = {
 export type MutationAssignStaffArgs = {
   bookingId: Scalars['ID']['input'];
   staffId: Scalars['ID']['input'];
+};
+
+
+export type MutationBroadcastNotificationArgs = {
+  input: BroadcastNotificationInput;
+};
+
+
+export type MutationCancelAdminInvitationArgs = {
+  invitationId: Scalars['ID']['input'];
 };
 
 
@@ -399,8 +516,18 @@ export type MutationCompleteBookingArgs = {
 };
 
 
+export type MutationCreateAdminInvitationArgs = {
+  input: CreateAdminInvitationInput;
+};
+
+
 export type MutationCreateBookingArgs = {
   input: CreateBookingInput;
+};
+
+
+export type MutationCreateNotificationArgs = {
+  input: CreateNotificationInput;
 };
 
 
@@ -421,6 +548,11 @@ export type MutationCreateStaffProfileArgs = {
 
 export type MutationCreateSubscriptionArgs = {
   input: CreateSubscriptionInput;
+};
+
+
+export type MutationDeleteNotificationArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -456,6 +588,16 @@ export type MutationMarkInvoiceAsPaidArgs = {
 };
 
 
+export type MutationMarkNotificationAsReadArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationMarkNotificationsAsReadArgs = {
+  ids: Array<Scalars['ID']['input']>;
+};
+
+
 export type MutationPauseSubscriptionArgs = {
   id: Scalars['ID']['input'];
 };
@@ -473,6 +615,11 @@ export type MutationRefundPaymentArgs = {
 
 export type MutationRegisterArgs = {
   input: CreateUserInput;
+};
+
+
+export type MutationRemoveAddressArgs = {
+  addressId: Scalars['ID']['input'];
 };
 
 
@@ -494,6 +641,11 @@ export type MutationRescheduleBookingArgs = {
 };
 
 
+export type MutationResendAdminInvitationArgs = {
+  invitationId: Scalars['ID']['input'];
+};
+
+
 export type MutationResetPasswordArgs = {
   newPassword: Scalars['String']['input'];
   token: Scalars['String']['input'];
@@ -505,8 +657,37 @@ export type MutationResumeSubscriptionArgs = {
 };
 
 
+export type MutationSendNotificationToRoleArgs = {
+  input: BroadcastNotificationInput;
+  role: UserRole;
+};
+
+
+export type MutationSendVerificationEmailArgs = {
+  email: Scalars['String']['input'];
+};
+
+
+export type MutationSetDefaultAddressArgs = {
+  addressId: Scalars['ID']['input'];
+};
+
+
 export type MutationSetDefaultPaymentMethodArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationUpdateAccountStatusArgs = {
+  reason?: InputMaybe<Scalars['String']['input']>;
+  status: AccountStatus;
+  userId: Scalars['ID']['input'];
+};
+
+
+export type MutationUpdateAddressArgs = {
+  addressId: Scalars['ID']['input'];
+  input: AddressInput;
 };
 
 
@@ -588,9 +769,99 @@ export type MutationUploadStaffDocumentArgs = {
 };
 
 
+export type MutationVerifyEmailArgs = {
+  token: Scalars['String']['input'];
+};
+
+
 export type MutationVerifyStaffDocumentArgs = {
   documentId: Scalars['ID']['input'];
   id: Scalars['ID']['input'];
+};
+
+export type Notification = {
+  __typename?: 'Notification';
+  createdAt: Scalars['DateTime']['output'];
+  data?: Maybe<Scalars['JSON']['output']>;
+  expiresAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  isDeleted: Scalars['Boolean']['output'];
+  isRead: Scalars['Boolean']['output'];
+  message: Scalars['String']['output'];
+  priority: NotificationPriority;
+  readAt?: Maybe<Scalars['DateTime']['output']>;
+  title: Scalars['String']['output'];
+  type: NotificationType;
+  updatedAt: Scalars['DateTime']['output'];
+  user?: Maybe<User>;
+};
+
+export type NotificationConnection = {
+  __typename?: 'NotificationConnection';
+  hasNextPage: Scalars['Boolean']['output'];
+  hasPreviousPage: Scalars['Boolean']['output'];
+  notifications: Array<Notification>;
+  page: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
+  totalPages: Scalars['Int']['output'];
+};
+
+export type NotificationFilters = {
+  endDate?: InputMaybe<Scalars['DateTime']['input']>;
+  isRead?: InputMaybe<Scalars['Boolean']['input']>;
+  priority?: InputMaybe<NotificationPriority>;
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
+  type?: InputMaybe<NotificationType>;
+};
+
+export enum NotificationPriority {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM',
+  Urgent = 'URGENT'
+}
+
+export type NotificationPriorityCount = {
+  __typename?: 'NotificationPriorityCount';
+  count: Scalars['Int']['output'];
+  priority: NotificationPriority;
+};
+
+export type NotificationStats = {
+  __typename?: 'NotificationStats';
+  byPriority: Array<NotificationPriorityCount>;
+  byType: Array<NotificationTypeCount>;
+  total: Scalars['Int']['output'];
+  unread: Scalars['Int']['output'];
+};
+
+export enum NotificationType {
+  BookingCancellation = 'BOOKING_CANCELLATION',
+  BookingConfirmation = 'BOOKING_CONFIRMATION',
+  BookingReminder = 'BOOKING_REMINDER',
+  PaymentFailed = 'PAYMENT_FAILED',
+  PaymentSuccess = 'PAYMENT_SUCCESS',
+  RewardEarned = 'REWARD_EARNED',
+  RewardRedeemed = 'REWARD_REDEEMED',
+  ServiceUpdate = 'SERVICE_UPDATE',
+  StaffAssignment = 'STAFF_ASSIGNMENT',
+  SubscriptionCancellation = 'SUBSCRIPTION_CANCELLATION',
+  SubscriptionRenewal = 'SUBSCRIPTION_RENEWAL',
+  SystemAlert = 'SYSTEM_ALERT',
+  UserMessage = 'USER_MESSAGE'
+}
+
+export type NotificationTypeCount = {
+  __typename?: 'NotificationTypeCount';
+  count: Scalars['Int']['output'];
+  type: NotificationType;
+};
+
+export type PaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  sortBy?: InputMaybe<Scalars['String']['input']>;
+  sortOrder?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Payment = {
@@ -662,6 +933,7 @@ export enum PropertyType {
 export type Query = {
   __typename?: 'Query';
   _?: Maybe<Scalars['Boolean']['output']>;
+  adminInvitation?: Maybe<AdminInvitation>;
   availableStaff: Array<StaffProfile>;
   booking?: Maybe<Booking>;
   bookings: Array<Booking>;
@@ -670,10 +942,15 @@ export type Query = {
   customerPayments: Array<Payment>;
   customerSubscriptions: Array<Subscription>;
   invoice: Invoice;
+  isUserOnline: Scalars['Boolean']['output'];
   me?: Maybe<User>;
+  notification?: Maybe<Notification>;
+  notificationStats: NotificationStats;
+  notifications: NotificationConnection;
   payment: Payment;
   paymentMethods: Array<PaymentMethod>;
   payments: Array<Payment>;
+  pendingAdminInvitations: Array<AdminInvitation>;
   service?: Maybe<Service>;
   services: Array<Service>;
   staffBookings: Array<Booking>;
@@ -683,8 +960,14 @@ export type Query = {
   subscription?: Maybe<Subscription>;
   subscriptionService?: Maybe<SubscriptionService>;
   subscriptions: Array<Subscription>;
+  unreadNotificationCount: Scalars['Int']['output'];
   user?: Maybe<User>;
   users: Array<User>;
+};
+
+
+export type QueryAdminInvitationArgs = {
+  token: Scalars['String']['input'];
 };
 
 
@@ -706,6 +989,27 @@ export type QueryBookingsArgs = {
 
 export type QueryInvoiceArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryIsUserOnlineArgs = {
+  userId: Scalars['ID']['input'];
+};
+
+
+export type QueryNotificationArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryNotificationStatsArgs = {
+  userId?: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type QueryNotificationsArgs = {
+  filters?: InputMaybe<NotificationFilters>;
+  pagination?: InputMaybe<PaginationInput>;
 };
 
 
@@ -805,9 +1109,9 @@ export type RoomQuantities = {
   bedroom: Scalars['Int']['output'];
   kitchen: Scalars['Int']['output'];
   livingRoom: Scalars['Int']['output'];
-  lobby?: Maybe<Scalars['Int']['output']>;
+  lobby: Scalars['Int']['output'];
   other: Scalars['Int']['output'];
-  outdoor?: Maybe<Scalars['Int']['output']>;
+  outdoor: Scalars['Int']['output'];
   studyRoom: Scalars['Int']['output'];
 };
 
@@ -1021,6 +1325,7 @@ export type Subscription = {
 
 export enum SubscriptionFrequency {
   BiWeekly = 'BI_WEEKLY',
+  Daily = 'DAILY',
   Monthly = 'MONTHLY',
   Quarterly = 'QUARTERLY',
   Weekly = 'WEEKLY'
@@ -1028,7 +1333,6 @@ export enum SubscriptionFrequency {
 
 export type SubscriptionService = {
   __typename?: 'SubscriptionService';
-  address: Address;
   createdAt: Scalars['DateTime']['output'];
   frequency: SubscriptionFrequency;
   id: Scalars['ID']['output'];
@@ -1042,13 +1346,13 @@ export type SubscriptionService = {
 };
 
 export type SubscriptionServiceInput = {
-  address: AddressInput;
+  category: ServiceCategory;
   frequency: SubscriptionFrequency;
   preferredTimeSlot: TimeSlot;
   price: Scalars['Float']['input'];
   scheduledDays: Array<ScheduleDays>;
   serviceDetails: ServiceDetailsInput;
-  serviceId: Scalars['ID']['input'];
+  serviceId: Scalars['String']['input'];
 };
 
 export enum SubscriptionStatus {
@@ -1072,7 +1376,7 @@ export enum TreatmentType {
 }
 
 export type UpdateBookingInput = {
-  address: AddressInput;
+  address: Scalars['ID']['input'];
   date: Scalars['DateTime']['input'];
   notes?: InputMaybe<Scalars['String']['input']>;
   serviceDetails: ServiceDetailsInput;
@@ -1125,7 +1429,6 @@ export type UpdateSubscriptionServiceInput = {
 };
 
 export type UpdateUserInput = {
-  address?: InputMaybe<AddressInput>;
   firstName?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   phone?: InputMaybe<Scalars['String']['input']>;
@@ -1133,9 +1436,13 @@ export type UpdateUserInput = {
 
 export type User = {
   __typename?: 'User';
-  address?: Maybe<Address>;
+  accountStatus?: Maybe<AccountStatus>;
+  addresses: Array<Address>;
   createdAt: Scalars['DateTime']['output'];
+  defaultAddress?: Maybe<Address>;
   email: Scalars['String']['output'];
+  emailVerified?: Maybe<Scalars['Boolean']['output']>;
+  emailVerifiedAt?: Maybe<Scalars['DateTime']['output']>;
   firstName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   lastName: Scalars['String']['output'];
@@ -1151,12 +1458,45 @@ export enum UserRole {
   SuperAdmin = 'SUPER_ADMIN'
 }
 
+export type CreateAdminInvitationMutationVariables = Exact<{
+  input: CreateAdminInvitationInput;
+}>;
+
+
+export type CreateAdminInvitationMutation = { __typename?: 'Mutation', createAdminInvitation: { __typename?: 'AdminInvitationResponse', success: boolean, message: string, invitation?: { __typename?: 'AdminInvitation', id: string, email: string, firstName: string, lastName: string, role: UserRole, invitedByName: string, invitationToken: string, expiresAt: any, isUsed: boolean, usedAt?: any | null, createdAt: any, permissions: Array<string>, invitedBy: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null } } | null } };
+
+export type AcceptAdminInvitationMutationVariables = Exact<{
+  input: AcceptAdminInvitationInput;
+}>;
+
+
+export type AcceptAdminInvitationMutation = { __typename?: 'Mutation', acceptAdminInvitation: { __typename?: 'AcceptInvitationResponse', success: boolean, message: string, token?: string | null, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any } | null } };
+
+export type ResendAdminInvitationMutationVariables = Exact<{
+  invitationId: Scalars['ID']['input'];
+}>;
+
+
+export type ResendAdminInvitationMutation = { __typename?: 'Mutation', resendAdminInvitation: boolean };
+
+export type CancelAdminInvitationMutationVariables = Exact<{
+  invitationId: Scalars['ID']['input'];
+}>;
+
+
+export type CancelAdminInvitationMutation = { __typename?: 'Mutation', cancelAdminInvitation: boolean };
+
+export type CleanupExpiredInvitationsMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CleanupExpiredInvitationsMutation = { __typename?: 'Mutation', cleanupExpiredInvitations: number };
+
 export type RegisterMutationVariables = Exact<{
   input: CreateUserInput;
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'AuthPayload', token: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'AuthPayload', message?: string | null, token?: string | null, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, emailVerified?: boolean | null, accountStatus?: AccountStatus | null } } };
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -1164,14 +1504,14 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'AuthPayload', token: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'AuthPayload', token?: string | null, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null } } };
 
 export type UpdateProfileMutationVariables = Exact<{
   input: UpdateUserInput;
 }>;
 
 
-export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } };
+export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null } };
 
 export type ChangePasswordMutationVariables = Exact<{
   currentPassword: Scalars['String']['input'];
@@ -1202,7 +1542,44 @@ export type UpdateUserRoleMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserRoleMutation = { __typename?: 'Mutation', updateUserRole: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } };
+export type UpdateUserRoleMutation = { __typename?: 'Mutation', updateUserRole: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null } };
+
+export type SendVerificationEmailMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+}>;
+
+
+export type SendVerificationEmailMutation = { __typename?: 'Mutation', sendVerificationEmail: boolean };
+
+export type VerifyEmailMutationVariables = Exact<{
+  token: Scalars['String']['input'];
+}>;
+
+
+export type VerifyEmailMutation = { __typename?: 'Mutation', verifyEmail: boolean };
+
+export type UpdateAccountStatusMutationVariables = Exact<{
+  userId: Scalars['ID']['input'];
+  status: AccountStatus;
+  reason?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type UpdateAccountStatusMutation = { __typename?: 'Mutation', updateAccountStatus: boolean };
+
+export type AddAddressMutationVariables = Exact<{
+  input: AddressInput;
+}>;
+
+
+export type AddAddressMutation = { __typename?: 'Mutation', addAddress: boolean };
+
+export type SetDefaultAddressMutationVariables = Exact<{
+  addressId: Scalars['ID']['input'];
+}>;
+
+
+export type SetDefaultAddressMutation = { __typename?: 'Mutation', setDefaultAddress: boolean };
 
 export type CreateBookingMutationVariables = Exact<{
   input: CreateBookingInput;
@@ -1257,6 +1634,49 @@ export type RescheduleBookingMutationVariables = Exact<{
 
 
 export type RescheduleBookingMutation = { __typename?: 'Mutation', rescheduleBooking: boolean };
+
+export type CreateNotificationMutationVariables = Exact<{
+  input: CreateNotificationInput;
+}>;
+
+
+export type CreateNotificationMutation = { __typename?: 'Mutation', createNotification: { __typename?: 'Notification', id: string, type: NotificationType, priority: NotificationPriority, title: string, message: string, data?: any | null, isRead: boolean, createdAt: any, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null } | null } };
+
+export type MarkNotificationAsReadMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type MarkNotificationAsReadMutation = { __typename?: 'Mutation', markNotificationAsRead?: { __typename?: 'Notification', id: string, isRead: boolean, readAt?: any | null } | null };
+
+export type MarkNotificationsAsReadMutationVariables = Exact<{
+  ids: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+}>;
+
+
+export type MarkNotificationsAsReadMutation = { __typename?: 'Mutation', markNotificationsAsRead: number };
+
+export type DeleteNotificationMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteNotificationMutation = { __typename?: 'Mutation', deleteNotification: boolean };
+
+export type BroadcastNotificationMutationVariables = Exact<{
+  input: BroadcastNotificationInput;
+}>;
+
+
+export type BroadcastNotificationMutation = { __typename?: 'Mutation', broadcastNotification: boolean };
+
+export type SendNotificationToRoleMutationVariables = Exact<{
+  role: UserRole;
+  input: BroadcastNotificationInput;
+}>;
+
+
+export type SendNotificationToRoleMutation = { __typename?: 'Mutation', sendNotificationToRole: boolean };
 
 export type CreatePaymentMutationVariables = Exact<{
   input: CreatePaymentInput;
@@ -1475,48 +1895,87 @@ export type ReactivateSubscriptionMutationVariables = Exact<{
 
 export type ReactivateSubscriptionMutation = { __typename?: 'Mutation', reactivateSubscription: boolean };
 
+export type PendingAdminInvitationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PendingAdminInvitationsQuery = { __typename?: 'Query', pendingAdminInvitations: Array<{ __typename?: 'AdminInvitation', id: string, email: string, firstName: string, lastName: string, role: UserRole, invitedByName: string, invitationToken: string, expiresAt: any, isUsed: boolean, usedAt?: any | null, createdAt: any, permissions: Array<string>, invitedBy: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any } }> };
+
+export type AdminInvitationQueryVariables = Exact<{
+  token: Scalars['String']['input'];
+}>;
+
+
+export type AdminInvitationQuery = { __typename?: 'Query', adminInvitation?: { __typename?: 'AdminInvitation', id: string, email: string, firstName: string, lastName: string, role: UserRole, invitedByName: string, invitationToken: string, expiresAt: any, isUsed: boolean, usedAt?: any | null, createdAt: any, permissions: Array<string>, invitedBy: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any } } | null };
+
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } | null };
+export type GetCurrentUserQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', id: string, street: string, city: string, state: string, zipCode: string, country: string } | null } | null };
 
 export type GetUserByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null } | null };
+export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null };
 
 export type GetUsersQueryVariables = Exact<{
   role?: InputMaybe<UserRole>;
 }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }> };
+export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }> };
 
 export type GetBookingsQueryVariables = Exact<{
   status?: InputMaybe<BookingStatus>;
 }>;
 
 
-export type GetBookingsQuery = { __typename?: 'Query', bookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby?: number | null, outdoor?: number | null } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> };
+export type GetBookingsQuery = { __typename?: 'Query', bookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> };
 
 export type GetBookingByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetBookingByIdQuery = { __typename?: 'Query', booking?: { __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby?: number | null, outdoor?: number | null } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } } | null };
+export type GetBookingByIdQuery = { __typename?: 'Query', booking?: { __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } } | null };
 
 export type GetCustomerBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCustomerBookingsQuery = { __typename?: 'Query', customerBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby?: number | null, outdoor?: number | null } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> };
+export type GetCustomerBookingsQuery = { __typename?: 'Query', customerBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> };
 
 export type GetStaffBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetStaffBookingsQuery = { __typename?: 'Query', staffBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby?: number | null, outdoor?: number | null } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> };
+export type GetStaffBookingsQuery = { __typename?: 'Query', staffBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, serviceType: ServiceCategory, serviceOption: string, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, service?: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null } | null, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> };
+
+export type GetNotificationsQueryVariables = Exact<{
+  filters?: InputMaybe<NotificationFilters>;
+  pagination?: InputMaybe<PaginationInput>;
+}>;
+
+
+export type GetNotificationsQuery = { __typename?: 'Query', notifications: { __typename?: 'NotificationConnection', total: number, page: number, totalPages: number, hasNextPage: boolean, hasPreviousPage: boolean, notifications: Array<{ __typename?: 'Notification', id: string, type: NotificationType, priority: NotificationPriority, title: string, message: string, data?: any | null, isRead: boolean, isDeleted: boolean, readAt?: any | null, expiresAt?: any | null, createdAt: any, updatedAt: any, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null } | null }> } };
+
+export type GetNotificationByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetNotificationByIdQuery = { __typename?: 'Query', notification?: { __typename?: 'Notification', id: string, type: NotificationType, priority: NotificationPriority, title: string, message: string, data?: any | null, isRead: boolean, isDeleted: boolean, readAt?: any | null, expiresAt?: any | null, createdAt: any, updatedAt: any, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null } | null } | null };
+
+export type GetUnreadNotificationCountQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUnreadNotificationCountQuery = { __typename?: 'Query', unreadNotificationCount: number };
+
+export type GetNotificationStatsQueryVariables = Exact<{
+  userId?: InputMaybe<Scalars['ID']['input']>;
+}>;
+
+
+export type GetNotificationStatsQuery = { __typename?: 'Query', notificationStats: { __typename?: 'NotificationStats', total: number, unread: number, byType: Array<{ __typename?: 'NotificationTypeCount', type: NotificationType, count: number }>, byPriority: Array<{ __typename?: 'NotificationPriorityCount', priority: NotificationPriority, count: number }> } };
 
 export type GetPaymentByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1603,24 +2062,85 @@ export type GetSubscriptionByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetSubscriptionByIdQuery = { __typename?: 'Query', subscription?: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> } | null };
+export type GetSubscriptionByIdQuery = { __typename?: 'Query', subscription?: { __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> } | null };
 
 export type GetSubscriptionsQueryVariables = Exact<{
   status?: InputMaybe<SubscriptionStatus>;
 }>;
 
 
-export type GetSubscriptionsQuery = { __typename?: 'Query', subscriptions: Array<{ __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> }> };
+export type GetSubscriptionsQuery = { __typename?: 'Query', subscriptions: Array<{ __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> }> };
 
 export type GetCustomerSubscriptionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCustomerSubscriptionsQuery = { __typename?: 'Query', customerSubscriptions: Array<{ __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, address?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string } | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> }> };
+export type GetCustomerSubscriptionsQuery = { __typename?: 'Query', customerSubscriptions: Array<{ __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> }> };
 
 
-export const RegisterDocument = gql`
-    mutation Register($input: CreateUserInput!) {
-  register(input: $input) {
+export const CreateAdminInvitationDocument = gql`
+    mutation CreateAdminInvitation($input: CreateAdminInvitationInput!) {
+  createAdminInvitation(input: $input) {
+    success
+    message
+    invitation {
+      id
+      email
+      firstName
+      lastName
+      role
+      invitedBy {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        emailVerified
+        emailVerifiedAt
+        accountStatus
+      }
+      invitedByName
+      invitationToken
+      expiresAt
+      isUsed
+      usedAt
+      createdAt
+      permissions
+    }
+  }
+}
+    `;
+export type CreateAdminInvitationMutationFn = Apollo.MutationFunction<CreateAdminInvitationMutation, CreateAdminInvitationMutationVariables>;
+
+/**
+ * __useCreateAdminInvitationMutation__
+ *
+ * To run a mutation, you first call `useCreateAdminInvitationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAdminInvitationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAdminInvitationMutation, { data, loading, error }] = useCreateAdminInvitationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateAdminInvitationMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateAdminInvitationMutation, CreateAdminInvitationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<CreateAdminInvitationMutation, CreateAdminInvitationMutationVariables>(CreateAdminInvitationDocument, options);
+      }
+export type CreateAdminInvitationMutationHookResult = ReturnType<typeof useCreateAdminInvitationMutation>;
+export type CreateAdminInvitationMutationResult = Apollo.MutationResult<CreateAdminInvitationMutation>;
+export type CreateAdminInvitationMutationOptions = Apollo.BaseMutationOptions<CreateAdminInvitationMutation, CreateAdminInvitationMutationVariables>;
+export const AcceptAdminInvitationDocument = gql`
+    mutation AcceptAdminInvitation($input: AcceptAdminInvitationInput!) {
+  acceptAdminInvitation(input: $input) {
+    success
+    message
     token
     user {
       id
@@ -1629,13 +2149,146 @@ export const RegisterDocument = gql`
       lastName
       role
       phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export type AcceptAdminInvitationMutationFn = Apollo.MutationFunction<AcceptAdminInvitationMutation, AcceptAdminInvitationMutationVariables>;
+
+/**
+ * __useAcceptAdminInvitationMutation__
+ *
+ * To run a mutation, you first call `useAcceptAdminInvitationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptAdminInvitationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [acceptAdminInvitationMutation, { data, loading, error }] = useAcceptAdminInvitationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAcceptAdminInvitationMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AcceptAdminInvitationMutation, AcceptAdminInvitationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<AcceptAdminInvitationMutation, AcceptAdminInvitationMutationVariables>(AcceptAdminInvitationDocument, options);
       }
+export type AcceptAdminInvitationMutationHookResult = ReturnType<typeof useAcceptAdminInvitationMutation>;
+export type AcceptAdminInvitationMutationResult = Apollo.MutationResult<AcceptAdminInvitationMutation>;
+export type AcceptAdminInvitationMutationOptions = Apollo.BaseMutationOptions<AcceptAdminInvitationMutation, AcceptAdminInvitationMutationVariables>;
+export const ResendAdminInvitationDocument = gql`
+    mutation ResendAdminInvitation($invitationId: ID!) {
+  resendAdminInvitation(invitationId: $invitationId)
+}
+    `;
+export type ResendAdminInvitationMutationFn = Apollo.MutationFunction<ResendAdminInvitationMutation, ResendAdminInvitationMutationVariables>;
+
+/**
+ * __useResendAdminInvitationMutation__
+ *
+ * To run a mutation, you first call `useResendAdminInvitationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResendAdminInvitationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resendAdminInvitationMutation, { data, loading, error }] = useResendAdminInvitationMutation({
+ *   variables: {
+ *      invitationId: // value for 'invitationId'
+ *   },
+ * });
+ */
+export function useResendAdminInvitationMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ResendAdminInvitationMutation, ResendAdminInvitationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<ResendAdminInvitationMutation, ResendAdminInvitationMutationVariables>(ResendAdminInvitationDocument, options);
+      }
+export type ResendAdminInvitationMutationHookResult = ReturnType<typeof useResendAdminInvitationMutation>;
+export type ResendAdminInvitationMutationResult = Apollo.MutationResult<ResendAdminInvitationMutation>;
+export type ResendAdminInvitationMutationOptions = Apollo.BaseMutationOptions<ResendAdminInvitationMutation, ResendAdminInvitationMutationVariables>;
+export const CancelAdminInvitationDocument = gql`
+    mutation CancelAdminInvitation($invitationId: ID!) {
+  cancelAdminInvitation(invitationId: $invitationId)
+}
+    `;
+export type CancelAdminInvitationMutationFn = Apollo.MutationFunction<CancelAdminInvitationMutation, CancelAdminInvitationMutationVariables>;
+
+/**
+ * __useCancelAdminInvitationMutation__
+ *
+ * To run a mutation, you first call `useCancelAdminInvitationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancelAdminInvitationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancelAdminInvitationMutation, { data, loading, error }] = useCancelAdminInvitationMutation({
+ *   variables: {
+ *      invitationId: // value for 'invitationId'
+ *   },
+ * });
+ */
+export function useCancelAdminInvitationMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CancelAdminInvitationMutation, CancelAdminInvitationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<CancelAdminInvitationMutation, CancelAdminInvitationMutationVariables>(CancelAdminInvitationDocument, options);
+      }
+export type CancelAdminInvitationMutationHookResult = ReturnType<typeof useCancelAdminInvitationMutation>;
+export type CancelAdminInvitationMutationResult = Apollo.MutationResult<CancelAdminInvitationMutation>;
+export type CancelAdminInvitationMutationOptions = Apollo.BaseMutationOptions<CancelAdminInvitationMutation, CancelAdminInvitationMutationVariables>;
+export const CleanupExpiredInvitationsDocument = gql`
+    mutation CleanupExpiredInvitations {
+  cleanupExpiredInvitations
+}
+    `;
+export type CleanupExpiredInvitationsMutationFn = Apollo.MutationFunction<CleanupExpiredInvitationsMutation, CleanupExpiredInvitationsMutationVariables>;
+
+/**
+ * __useCleanupExpiredInvitationsMutation__
+ *
+ * To run a mutation, you first call `useCleanupExpiredInvitationsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCleanupExpiredInvitationsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cleanupExpiredInvitationsMutation, { data, loading, error }] = useCleanupExpiredInvitationsMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCleanupExpiredInvitationsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CleanupExpiredInvitationsMutation, CleanupExpiredInvitationsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<CleanupExpiredInvitationsMutation, CleanupExpiredInvitationsMutationVariables>(CleanupExpiredInvitationsDocument, options);
+      }
+export type CleanupExpiredInvitationsMutationHookResult = ReturnType<typeof useCleanupExpiredInvitationsMutation>;
+export type CleanupExpiredInvitationsMutationResult = Apollo.MutationResult<CleanupExpiredInvitationsMutation>;
+export type CleanupExpiredInvitationsMutationOptions = Apollo.BaseMutationOptions<CleanupExpiredInvitationsMutation, CleanupExpiredInvitationsMutationVariables>;
+export const RegisterDocument = gql`
+    mutation Register($input: CreateUserInput!) {
+  register(input: $input) {
+    message
+    token
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      emailVerified
+      accountStatus
     }
   }
 }
@@ -1677,13 +2330,6 @@ export const LoginDocument = gql`
       lastName
       role
       phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
   }
 }
@@ -1724,13 +2370,6 @@ export const UpdateProfileDocument = gql`
     lastName
     role
     phone
-    address {
-      street
-      city
-      state
-      zipCode
-      country
-    }
   }
 }
     `;
@@ -1864,13 +2503,6 @@ export const UpdateUserRoleDocument = gql`
     lastName
     role
     phone
-    address {
-      street
-      city
-      state
-      zipCode
-      country
-    }
   }
 }
     `;
@@ -1901,6 +2533,163 @@ export function useUpdateUserRoleMutation(baseOptions?: ApolloReactHooks.Mutatio
 export type UpdateUserRoleMutationHookResult = ReturnType<typeof useUpdateUserRoleMutation>;
 export type UpdateUserRoleMutationResult = Apollo.MutationResult<UpdateUserRoleMutation>;
 export type UpdateUserRoleMutationOptions = Apollo.BaseMutationOptions<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>;
+export const SendVerificationEmailDocument = gql`
+    mutation SendVerificationEmail($email: String!) {
+  sendVerificationEmail(email: $email)
+}
+    `;
+export type SendVerificationEmailMutationFn = Apollo.MutationFunction<SendVerificationEmailMutation, SendVerificationEmailMutationVariables>;
+
+/**
+ * __useSendVerificationEmailMutation__
+ *
+ * To run a mutation, you first call `useSendVerificationEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendVerificationEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendVerificationEmailMutation, { data, loading, error }] = useSendVerificationEmailMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useSendVerificationEmailMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SendVerificationEmailMutation, SendVerificationEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<SendVerificationEmailMutation, SendVerificationEmailMutationVariables>(SendVerificationEmailDocument, options);
+      }
+export type SendVerificationEmailMutationHookResult = ReturnType<typeof useSendVerificationEmailMutation>;
+export type SendVerificationEmailMutationResult = Apollo.MutationResult<SendVerificationEmailMutation>;
+export type SendVerificationEmailMutationOptions = Apollo.BaseMutationOptions<SendVerificationEmailMutation, SendVerificationEmailMutationVariables>;
+export const VerifyEmailDocument = gql`
+    mutation VerifyEmail($token: String!) {
+  verifyEmail(token: $token)
+}
+    `;
+export type VerifyEmailMutationFn = Apollo.MutationFunction<VerifyEmailMutation, VerifyEmailMutationVariables>;
+
+/**
+ * __useVerifyEmailMutation__
+ *
+ * To run a mutation, you first call `useVerifyEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVerifyEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [verifyEmailMutation, { data, loading, error }] = useVerifyEmailMutation({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useVerifyEmailMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<VerifyEmailMutation, VerifyEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<VerifyEmailMutation, VerifyEmailMutationVariables>(VerifyEmailDocument, options);
+      }
+export type VerifyEmailMutationHookResult = ReturnType<typeof useVerifyEmailMutation>;
+export type VerifyEmailMutationResult = Apollo.MutationResult<VerifyEmailMutation>;
+export type VerifyEmailMutationOptions = Apollo.BaseMutationOptions<VerifyEmailMutation, VerifyEmailMutationVariables>;
+export const UpdateAccountStatusDocument = gql`
+    mutation UpdateAccountStatus($userId: ID!, $status: AccountStatus!, $reason: String) {
+  updateAccountStatus(userId: $userId, status: $status, reason: $reason)
+}
+    `;
+export type UpdateAccountStatusMutationFn = Apollo.MutationFunction<UpdateAccountStatusMutation, UpdateAccountStatusMutationVariables>;
+
+/**
+ * __useUpdateAccountStatusMutation__
+ *
+ * To run a mutation, you first call `useUpdateAccountStatusMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAccountStatusMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAccountStatusMutation, { data, loading, error }] = useUpdateAccountStatusMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      status: // value for 'status'
+ *      reason: // value for 'reason'
+ *   },
+ * });
+ */
+export function useUpdateAccountStatusMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateAccountStatusMutation, UpdateAccountStatusMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<UpdateAccountStatusMutation, UpdateAccountStatusMutationVariables>(UpdateAccountStatusDocument, options);
+      }
+export type UpdateAccountStatusMutationHookResult = ReturnType<typeof useUpdateAccountStatusMutation>;
+export type UpdateAccountStatusMutationResult = Apollo.MutationResult<UpdateAccountStatusMutation>;
+export type UpdateAccountStatusMutationOptions = Apollo.BaseMutationOptions<UpdateAccountStatusMutation, UpdateAccountStatusMutationVariables>;
+export const AddAddressDocument = gql`
+    mutation AddAddress($input: AddressInput!) {
+  addAddress(input: $input)
+}
+    `;
+export type AddAddressMutationFn = Apollo.MutationFunction<AddAddressMutation, AddAddressMutationVariables>;
+
+/**
+ * __useAddAddressMutation__
+ *
+ * To run a mutation, you first call `useAddAddressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddAddressMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addAddressMutation, { data, loading, error }] = useAddAddressMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddAddressMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddAddressMutation, AddAddressMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<AddAddressMutation, AddAddressMutationVariables>(AddAddressDocument, options);
+      }
+export type AddAddressMutationHookResult = ReturnType<typeof useAddAddressMutation>;
+export type AddAddressMutationResult = Apollo.MutationResult<AddAddressMutation>;
+export type AddAddressMutationOptions = Apollo.BaseMutationOptions<AddAddressMutation, AddAddressMutationVariables>;
+export const SetDefaultAddressDocument = gql`
+    mutation SetDefaultAddress($addressId: ID!) {
+  setDefaultAddress(addressId: $addressId)
+}
+    `;
+export type SetDefaultAddressMutationFn = Apollo.MutationFunction<SetDefaultAddressMutation, SetDefaultAddressMutationVariables>;
+
+/**
+ * __useSetDefaultAddressMutation__
+ *
+ * To run a mutation, you first call `useSetDefaultAddressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetDefaultAddressMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setDefaultAddressMutation, { data, loading, error }] = useSetDefaultAddressMutation({
+ *   variables: {
+ *      addressId: // value for 'addressId'
+ *   },
+ * });
+ */
+export function useSetDefaultAddressMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetDefaultAddressMutation, SetDefaultAddressMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<SetDefaultAddressMutation, SetDefaultAddressMutationVariables>(SetDefaultAddressDocument, options);
+      }
+export type SetDefaultAddressMutationHookResult = ReturnType<typeof useSetDefaultAddressMutation>;
+export type SetDefaultAddressMutationResult = Apollo.MutationResult<SetDefaultAddressMutation>;
+export type SetDefaultAddressMutationOptions = Apollo.BaseMutationOptions<SetDefaultAddressMutation, SetDefaultAddressMutationVariables>;
 export const CreateBookingDocument = gql`
     mutation CreateBooking($input: CreateBookingInput!) {
   createBooking(input: $input)
@@ -2123,6 +2912,216 @@ export function useRescheduleBookingMutation(baseOptions?: ApolloReactHooks.Muta
 export type RescheduleBookingMutationHookResult = ReturnType<typeof useRescheduleBookingMutation>;
 export type RescheduleBookingMutationResult = Apollo.MutationResult<RescheduleBookingMutation>;
 export type RescheduleBookingMutationOptions = Apollo.BaseMutationOptions<RescheduleBookingMutation, RescheduleBookingMutationVariables>;
+export const CreateNotificationDocument = gql`
+    mutation CreateNotification($input: CreateNotificationInput!) {
+  createNotification(input: $input) {
+    id
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+    }
+    type
+    priority
+    title
+    message
+    data
+    isRead
+    createdAt
+  }
+}
+    `;
+export type CreateNotificationMutationFn = Apollo.MutationFunction<CreateNotificationMutation, CreateNotificationMutationVariables>;
+
+/**
+ * __useCreateNotificationMutation__
+ *
+ * To run a mutation, you first call `useCreateNotificationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateNotificationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createNotificationMutation, { data, loading, error }] = useCreateNotificationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateNotificationMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateNotificationMutation, CreateNotificationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<CreateNotificationMutation, CreateNotificationMutationVariables>(CreateNotificationDocument, options);
+      }
+export type CreateNotificationMutationHookResult = ReturnType<typeof useCreateNotificationMutation>;
+export type CreateNotificationMutationResult = Apollo.MutationResult<CreateNotificationMutation>;
+export type CreateNotificationMutationOptions = Apollo.BaseMutationOptions<CreateNotificationMutation, CreateNotificationMutationVariables>;
+export const MarkNotificationAsReadDocument = gql`
+    mutation MarkNotificationAsRead($id: ID!) {
+  markNotificationAsRead(id: $id) {
+    id
+    isRead
+    readAt
+  }
+}
+    `;
+export type MarkNotificationAsReadMutationFn = Apollo.MutationFunction<MarkNotificationAsReadMutation, MarkNotificationAsReadMutationVariables>;
+
+/**
+ * __useMarkNotificationAsReadMutation__
+ *
+ * To run a mutation, you first call `useMarkNotificationAsReadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMarkNotificationAsReadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [markNotificationAsReadMutation, { data, loading, error }] = useMarkNotificationAsReadMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useMarkNotificationAsReadMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<MarkNotificationAsReadMutation, MarkNotificationAsReadMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<MarkNotificationAsReadMutation, MarkNotificationAsReadMutationVariables>(MarkNotificationAsReadDocument, options);
+      }
+export type MarkNotificationAsReadMutationHookResult = ReturnType<typeof useMarkNotificationAsReadMutation>;
+export type MarkNotificationAsReadMutationResult = Apollo.MutationResult<MarkNotificationAsReadMutation>;
+export type MarkNotificationAsReadMutationOptions = Apollo.BaseMutationOptions<MarkNotificationAsReadMutation, MarkNotificationAsReadMutationVariables>;
+export const MarkNotificationsAsReadDocument = gql`
+    mutation MarkNotificationsAsRead($ids: [ID!]!) {
+  markNotificationsAsRead(ids: $ids)
+}
+    `;
+export type MarkNotificationsAsReadMutationFn = Apollo.MutationFunction<MarkNotificationsAsReadMutation, MarkNotificationsAsReadMutationVariables>;
+
+/**
+ * __useMarkNotificationsAsReadMutation__
+ *
+ * To run a mutation, you first call `useMarkNotificationsAsReadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMarkNotificationsAsReadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [markNotificationsAsReadMutation, { data, loading, error }] = useMarkNotificationsAsReadMutation({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useMarkNotificationsAsReadMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<MarkNotificationsAsReadMutation, MarkNotificationsAsReadMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<MarkNotificationsAsReadMutation, MarkNotificationsAsReadMutationVariables>(MarkNotificationsAsReadDocument, options);
+      }
+export type MarkNotificationsAsReadMutationHookResult = ReturnType<typeof useMarkNotificationsAsReadMutation>;
+export type MarkNotificationsAsReadMutationResult = Apollo.MutationResult<MarkNotificationsAsReadMutation>;
+export type MarkNotificationsAsReadMutationOptions = Apollo.BaseMutationOptions<MarkNotificationsAsReadMutation, MarkNotificationsAsReadMutationVariables>;
+export const DeleteNotificationDocument = gql`
+    mutation DeleteNotification($id: ID!) {
+  deleteNotification(id: $id)
+}
+    `;
+export type DeleteNotificationMutationFn = Apollo.MutationFunction<DeleteNotificationMutation, DeleteNotificationMutationVariables>;
+
+/**
+ * __useDeleteNotificationMutation__
+ *
+ * To run a mutation, you first call `useDeleteNotificationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteNotificationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteNotificationMutation, { data, loading, error }] = useDeleteNotificationMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteNotificationMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteNotificationMutation, DeleteNotificationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<DeleteNotificationMutation, DeleteNotificationMutationVariables>(DeleteNotificationDocument, options);
+      }
+export type DeleteNotificationMutationHookResult = ReturnType<typeof useDeleteNotificationMutation>;
+export type DeleteNotificationMutationResult = Apollo.MutationResult<DeleteNotificationMutation>;
+export type DeleteNotificationMutationOptions = Apollo.BaseMutationOptions<DeleteNotificationMutation, DeleteNotificationMutationVariables>;
+export const BroadcastNotificationDocument = gql`
+    mutation BroadcastNotification($input: BroadcastNotificationInput!) {
+  broadcastNotification(input: $input)
+}
+    `;
+export type BroadcastNotificationMutationFn = Apollo.MutationFunction<BroadcastNotificationMutation, BroadcastNotificationMutationVariables>;
+
+/**
+ * __useBroadcastNotificationMutation__
+ *
+ * To run a mutation, you first call `useBroadcastNotificationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBroadcastNotificationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [broadcastNotificationMutation, { data, loading, error }] = useBroadcastNotificationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useBroadcastNotificationMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<BroadcastNotificationMutation, BroadcastNotificationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<BroadcastNotificationMutation, BroadcastNotificationMutationVariables>(BroadcastNotificationDocument, options);
+      }
+export type BroadcastNotificationMutationHookResult = ReturnType<typeof useBroadcastNotificationMutation>;
+export type BroadcastNotificationMutationResult = Apollo.MutationResult<BroadcastNotificationMutation>;
+export type BroadcastNotificationMutationOptions = Apollo.BaseMutationOptions<BroadcastNotificationMutation, BroadcastNotificationMutationVariables>;
+export const SendNotificationToRoleDocument = gql`
+    mutation SendNotificationToRole($role: UserRole!, $input: BroadcastNotificationInput!) {
+  sendNotificationToRole(role: $role, input: $input)
+}
+    `;
+export type SendNotificationToRoleMutationFn = Apollo.MutationFunction<SendNotificationToRoleMutation, SendNotificationToRoleMutationVariables>;
+
+/**
+ * __useSendNotificationToRoleMutation__
+ *
+ * To run a mutation, you first call `useSendNotificationToRoleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendNotificationToRoleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendNotificationToRoleMutation, { data, loading, error }] = useSendNotificationToRoleMutation({
+ *   variables: {
+ *      role: // value for 'role'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSendNotificationToRoleMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SendNotificationToRoleMutation, SendNotificationToRoleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<SendNotificationToRoleMutation, SendNotificationToRoleMutationVariables>(SendNotificationToRoleDocument, options);
+      }
+export type SendNotificationToRoleMutationHookResult = ReturnType<typeof useSendNotificationToRoleMutation>;
+export type SendNotificationToRoleMutationResult = Apollo.MutationResult<SendNotificationToRoleMutation>;
+export type SendNotificationToRoleMutationOptions = Apollo.BaseMutationOptions<SendNotificationToRoleMutation, SendNotificationToRoleMutationVariables>;
 export const CreatePaymentDocument = gql`
     mutation CreatePayment($input: CreatePaymentInput!) {
   createPayment(input: $input) {
@@ -3293,6 +4292,133 @@ export function useReactivateSubscriptionMutation(baseOptions?: ApolloReactHooks
 export type ReactivateSubscriptionMutationHookResult = ReturnType<typeof useReactivateSubscriptionMutation>;
 export type ReactivateSubscriptionMutationResult = Apollo.MutationResult<ReactivateSubscriptionMutation>;
 export type ReactivateSubscriptionMutationOptions = Apollo.BaseMutationOptions<ReactivateSubscriptionMutation, ReactivateSubscriptionMutationVariables>;
+export const PendingAdminInvitationsDocument = gql`
+    query PendingAdminInvitations {
+  pendingAdminInvitations {
+    id
+    email
+    firstName
+    lastName
+    role
+    invitedBy {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+      createdAt
+      updatedAt
+    }
+    invitedByName
+    invitationToken
+    expiresAt
+    isUsed
+    usedAt
+    createdAt
+    permissions
+  }
+}
+    `;
+
+/**
+ * __usePendingAdminInvitationsQuery__
+ *
+ * To run a query within a React component, call `usePendingAdminInvitationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePendingAdminInvitationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePendingAdminInvitationsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePendingAdminInvitationsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<PendingAdminInvitationsQuery, PendingAdminInvitationsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<PendingAdminInvitationsQuery, PendingAdminInvitationsQueryVariables>(PendingAdminInvitationsDocument, options);
+      }
+export function usePendingAdminInvitationsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<PendingAdminInvitationsQuery, PendingAdminInvitationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<PendingAdminInvitationsQuery, PendingAdminInvitationsQueryVariables>(PendingAdminInvitationsDocument, options);
+        }
+export function usePendingAdminInvitationsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<PendingAdminInvitationsQuery, PendingAdminInvitationsQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<PendingAdminInvitationsQuery, PendingAdminInvitationsQueryVariables>(PendingAdminInvitationsDocument, options);
+        }
+export type PendingAdminInvitationsQueryHookResult = ReturnType<typeof usePendingAdminInvitationsQuery>;
+export type PendingAdminInvitationsLazyQueryHookResult = ReturnType<typeof usePendingAdminInvitationsLazyQuery>;
+export type PendingAdminInvitationsSuspenseQueryHookResult = ReturnType<typeof usePendingAdminInvitationsSuspenseQuery>;
+export type PendingAdminInvitationsQueryResult = Apollo.QueryResult<PendingAdminInvitationsQuery, PendingAdminInvitationsQueryVariables>;
+export const AdminInvitationDocument = gql`
+    query AdminInvitation($token: String!) {
+  adminInvitation(token: $token) {
+    id
+    email
+    firstName
+    lastName
+    role
+    invitedBy {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+      createdAt
+      updatedAt
+    }
+    invitedByName
+    invitationToken
+    expiresAt
+    isUsed
+    usedAt
+    createdAt
+    permissions
+  }
+}
+    `;
+
+/**
+ * __useAdminInvitationQuery__
+ *
+ * To run a query within a React component, call `useAdminInvitationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminInvitationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminInvitationQuery({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useAdminInvitationQuery(baseOptions: ApolloReactHooks.QueryHookOptions<AdminInvitationQuery, AdminInvitationQueryVariables> & ({ variables: AdminInvitationQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<AdminInvitationQuery, AdminInvitationQueryVariables>(AdminInvitationDocument, options);
+      }
+export function useAdminInvitationLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AdminInvitationQuery, AdminInvitationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<AdminInvitationQuery, AdminInvitationQueryVariables>(AdminInvitationDocument, options);
+        }
+export function useAdminInvitationSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<AdminInvitationQuery, AdminInvitationQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<AdminInvitationQuery, AdminInvitationQueryVariables>(AdminInvitationDocument, options);
+        }
+export type AdminInvitationQueryHookResult = ReturnType<typeof useAdminInvitationQuery>;
+export type AdminInvitationLazyQueryHookResult = ReturnType<typeof useAdminInvitationLazyQuery>;
+export type AdminInvitationSuspenseQueryHookResult = ReturnType<typeof useAdminInvitationSuspenseQuery>;
+export type AdminInvitationQueryResult = Apollo.QueryResult<AdminInvitationQuery, AdminInvitationQueryVariables>;
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
   me {
@@ -3302,15 +4428,16 @@ export const GetCurrentUserDocument = gql`
     lastName
     role
     phone
-    address {
+    createdAt
+    updatedAt
+    defaultAddress {
+      id
       street
       city
       state
       zipCode
       country
     }
-    createdAt
-    updatedAt
   }
 }
     `;
@@ -3355,13 +4482,6 @@ export const GetUserByIdDocument = gql`
     lastName
     role
     phone
-    address {
-      street
-      city
-      state
-      zipCode
-      country
-    }
     createdAt
     updatedAt
   }
@@ -3409,13 +4529,6 @@ export const GetUsersDocument = gql`
     lastName
     role
     phone
-    address {
-      street
-      city
-      state
-      zipCode
-      country
-    }
     createdAt
     updatedAt
   }
@@ -3467,13 +4580,6 @@ export const GetBookingsDocument = gql`
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     service {
       _id
@@ -3619,13 +4725,6 @@ export const GetBookingByIdDocument = gql`
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     service {
       _id
@@ -3771,13 +4870,6 @@ export const GetCustomerBookingsDocument = gql`
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     service {
       _id
@@ -3922,13 +5014,6 @@ export const GetStaffBookingsDocument = gql`
       phone
       createdAt
       updatedAt
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
     }
     service {
       _id
@@ -4060,6 +5145,222 @@ export type GetStaffBookingsQueryHookResult = ReturnType<typeof useGetStaffBooki
 export type GetStaffBookingsLazyQueryHookResult = ReturnType<typeof useGetStaffBookingsLazyQuery>;
 export type GetStaffBookingsSuspenseQueryHookResult = ReturnType<typeof useGetStaffBookingsSuspenseQuery>;
 export type GetStaffBookingsQueryResult = Apollo.QueryResult<GetStaffBookingsQuery, GetStaffBookingsQueryVariables>;
+export const GetNotificationsDocument = gql`
+    query GetNotifications($filters: NotificationFilters, $pagination: PaginationInput) {
+  notifications(filters: $filters, pagination: $pagination) {
+    notifications {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        emailVerified
+        emailVerifiedAt
+        accountStatus
+      }
+      type
+      priority
+      title
+      message
+      data
+      isRead
+      isDeleted
+      readAt
+      expiresAt
+      createdAt
+      updatedAt
+    }
+    total
+    page
+    totalPages
+    hasNextPage
+    hasPreviousPage
+  }
+}
+    `;
+
+/**
+ * __useGetNotificationsQuery__
+ *
+ * To run a query within a React component, call `useGetNotificationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNotificationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNotificationsQuery({
+ *   variables: {
+ *      filters: // value for 'filters'
+ *      pagination: // value for 'pagination'
+ *   },
+ * });
+ */
+export function useGetNotificationsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetNotificationsQuery, GetNotificationsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetNotificationsQuery, GetNotificationsQueryVariables>(GetNotificationsDocument, options);
+      }
+export function useGetNotificationsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetNotificationsQuery, GetNotificationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetNotificationsQuery, GetNotificationsQueryVariables>(GetNotificationsDocument, options);
+        }
+export function useGetNotificationsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetNotificationsQuery, GetNotificationsQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetNotificationsQuery, GetNotificationsQueryVariables>(GetNotificationsDocument, options);
+        }
+export type GetNotificationsQueryHookResult = ReturnType<typeof useGetNotificationsQuery>;
+export type GetNotificationsLazyQueryHookResult = ReturnType<typeof useGetNotificationsLazyQuery>;
+export type GetNotificationsSuspenseQueryHookResult = ReturnType<typeof useGetNotificationsSuspenseQuery>;
+export type GetNotificationsQueryResult = Apollo.QueryResult<GetNotificationsQuery, GetNotificationsQueryVariables>;
+export const GetNotificationByIdDocument = gql`
+    query GetNotificationById($id: ID!) {
+  notification(id: $id) {
+    id
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+    }
+    type
+    priority
+    title
+    message
+    data
+    isRead
+    isDeleted
+    readAt
+    expiresAt
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useGetNotificationByIdQuery__
+ *
+ * To run a query within a React component, call `useGetNotificationByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNotificationByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNotificationByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetNotificationByIdQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetNotificationByIdQuery, GetNotificationByIdQueryVariables> & ({ variables: GetNotificationByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetNotificationByIdQuery, GetNotificationByIdQueryVariables>(GetNotificationByIdDocument, options);
+      }
+export function useGetNotificationByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetNotificationByIdQuery, GetNotificationByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetNotificationByIdQuery, GetNotificationByIdQueryVariables>(GetNotificationByIdDocument, options);
+        }
+export function useGetNotificationByIdSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetNotificationByIdQuery, GetNotificationByIdQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetNotificationByIdQuery, GetNotificationByIdQueryVariables>(GetNotificationByIdDocument, options);
+        }
+export type GetNotificationByIdQueryHookResult = ReturnType<typeof useGetNotificationByIdQuery>;
+export type GetNotificationByIdLazyQueryHookResult = ReturnType<typeof useGetNotificationByIdLazyQuery>;
+export type GetNotificationByIdSuspenseQueryHookResult = ReturnType<typeof useGetNotificationByIdSuspenseQuery>;
+export type GetNotificationByIdQueryResult = Apollo.QueryResult<GetNotificationByIdQuery, GetNotificationByIdQueryVariables>;
+export const GetUnreadNotificationCountDocument = gql`
+    query GetUnreadNotificationCount {
+  unreadNotificationCount
+}
+    `;
+
+/**
+ * __useGetUnreadNotificationCountQuery__
+ *
+ * To run a query within a React component, call `useGetUnreadNotificationCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUnreadNotificationCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUnreadNotificationCountQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUnreadNotificationCountQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetUnreadNotificationCountQuery, GetUnreadNotificationCountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetUnreadNotificationCountQuery, GetUnreadNotificationCountQueryVariables>(GetUnreadNotificationCountDocument, options);
+      }
+export function useGetUnreadNotificationCountLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetUnreadNotificationCountQuery, GetUnreadNotificationCountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetUnreadNotificationCountQuery, GetUnreadNotificationCountQueryVariables>(GetUnreadNotificationCountDocument, options);
+        }
+export function useGetUnreadNotificationCountSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetUnreadNotificationCountQuery, GetUnreadNotificationCountQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetUnreadNotificationCountQuery, GetUnreadNotificationCountQueryVariables>(GetUnreadNotificationCountDocument, options);
+        }
+export type GetUnreadNotificationCountQueryHookResult = ReturnType<typeof useGetUnreadNotificationCountQuery>;
+export type GetUnreadNotificationCountLazyQueryHookResult = ReturnType<typeof useGetUnreadNotificationCountLazyQuery>;
+export type GetUnreadNotificationCountSuspenseQueryHookResult = ReturnType<typeof useGetUnreadNotificationCountSuspenseQuery>;
+export type GetUnreadNotificationCountQueryResult = Apollo.QueryResult<GetUnreadNotificationCountQuery, GetUnreadNotificationCountQueryVariables>;
+export const GetNotificationStatsDocument = gql`
+    query GetNotificationStats($userId: ID) {
+  notificationStats(userId: $userId) {
+    total
+    unread
+    byType {
+      type
+      count
+    }
+    byPriority {
+      priority
+      count
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetNotificationStatsQuery__
+ *
+ * To run a query within a React component, call `useGetNotificationStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNotificationStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNotificationStatsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetNotificationStatsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetNotificationStatsQuery, GetNotificationStatsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetNotificationStatsQuery, GetNotificationStatsQueryVariables>(GetNotificationStatsDocument, options);
+      }
+export function useGetNotificationStatsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetNotificationStatsQuery, GetNotificationStatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetNotificationStatsQuery, GetNotificationStatsQueryVariables>(GetNotificationStatsDocument, options);
+        }
+export function useGetNotificationStatsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetNotificationStatsQuery, GetNotificationStatsQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetNotificationStatsQuery, GetNotificationStatsQueryVariables>(GetNotificationStatsDocument, options);
+        }
+export type GetNotificationStatsQueryHookResult = ReturnType<typeof useGetNotificationStatsQuery>;
+export type GetNotificationStatsLazyQueryHookResult = ReturnType<typeof useGetNotificationStatsLazyQuery>;
+export type GetNotificationStatsSuspenseQueryHookResult = ReturnType<typeof useGetNotificationStatsSuspenseQuery>;
+export type GetNotificationStatsQueryResult = Apollo.QueryResult<GetNotificationStatsQuery, GetNotificationStatsQueryVariables>;
 export const GetPaymentByIdDocument = gql`
     query GetPaymentById($id: ID!) {
   payment(id: $id) {
@@ -4810,13 +6111,6 @@ export const GetSubscriptionByIdDocument = gql`
       lastName
       role
       phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
       createdAt
       updatedAt
     }
@@ -4976,13 +6270,6 @@ export const GetSubscriptionsDocument = gql`
       lastName
       role
       phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
       createdAt
       updatedAt
     }
@@ -5142,13 +6429,6 @@ export const GetCustomerSubscriptionsDocument = gql`
       lastName
       role
       phone
-      address {
-        street
-        city
-        state
-        zipCode
-        country
-      }
       createdAt
       updatedAt
     }

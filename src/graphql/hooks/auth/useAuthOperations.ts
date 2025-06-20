@@ -18,6 +18,11 @@ import {
   useGetCurrentUserQuery,
   useGetUserByIdQuery,
   useGetUsersQuery,
+  useSendVerificationEmailMutation,
+  useVerifyEmailMutation,
+  useAddAddressMutation,
+  useSetDefaultAddressMutation,
+  AddressInput,
 } from "@/graphql/api";
 import { useAuthStore } from "@/store/slices/auth";
 import { UserRole } from "@/graphql/api";
@@ -35,6 +40,9 @@ export const useAuthOperations = () => {
   const { refetch: getCurrentUser } = useGetCurrentUserQuery({ skip: true });
   const { refetch: getUserById } = useGetUserByIdQuery({ skip: true });
   const { refetch: getUsers } = useGetUsersQuery({ skip: true });
+  const [sendVerificationEmailMutation] = useSendVerificationEmailMutation();
+  const [verifyEmailMutation] = useVerifyEmailMutation();
+  const [addAddressMutation] = useAddAddressMutation();
   const {
     login,
     logout,
@@ -151,9 +159,9 @@ export const useAuthOperations = () => {
           login(user as any, token);
 
           // Use a direct browser redirect
-          if (typeof window !== "undefined") {
-            window.location.href = Routes.DASHBOARD;
-          }
+          // if (typeof window !== "undefined") {
+          //   window.location.href = Routes.DASHBOARD;
+          // }
         }
       } catch (error) {
         console.error("Registration error:", error);
@@ -450,6 +458,93 @@ export const useAuthOperations = () => {
     [currentToken, currentUser, getUsers]
   );
 
+  /**
+   * Sends a verification email to the user
+   * @param email - User's email address
+   * @returns Boolean indicating success
+   * @throws Error if email sending fails
+   */
+  const handleSendVerificationEmail = useCallback(
+    async (email: string) => {
+      try {
+        const { data, errors } = await sendVerificationEmailMutation({
+          variables: { email },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.sendVerificationEmail;
+      } catch (error) {
+        console.error("Send verification email error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [sendVerificationEmailMutation]
+  );
+
+  /**
+   * Verifies user's email using a verification token
+   * @param token - Verification token received via email
+   * @returns Boolean indicating success
+   * @throws Error if verification fails
+   */
+  const handleVerifyEmail = useCallback(
+    async (token: string) => {
+      try {
+        const { data, errors } = await verifyEmailMutation({
+          variables: { token },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.verifyEmail;
+      } catch (error) {
+        console.error("Verify email error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [verifyEmailMutation]
+  );
+
+  /**
+   * Adds a new address for the current user
+   * @param input - Address input object
+   * @returns Created address
+   * @throws Error if creation fails
+   */
+  const handleAddAddress = useCallback(
+    async (input: AddressInput) => {
+      try {
+        const { data, errors } = await addAddressMutation({
+          variables: { input },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.addAddress;
+      } catch (error) {
+        console.error("Address creation error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [addAddressMutation]
+  );
+
   return {
     handleLogin,
     handleRegister,
@@ -462,5 +557,8 @@ export const useAuthOperations = () => {
     handleGetCurrentUser,
     handleGetUserById,
     handleGetUsers,
+    handleSendVerificationEmail,
+    handleVerifyEmail,
+    handleAddAddress,
   };
 };
