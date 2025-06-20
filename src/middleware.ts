@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { Routes } from "@/constants/routes";
+import {
+  decodeAndValidateToken,
+  getUserRoleFromToken,
+  isTokenValid,
+} from "./utils/jwt";
 
 // Define protected routes that require authentication
 const protectedRoutes = [
@@ -32,44 +37,44 @@ interface JWTPayload {
   exp: number;
 }
 
-/**
- * Decodes a JWT token (base64 decode only, no signature verification)
- * @param token - The JWT token to decode
- * @returns The decoded payload if valid, null if invalid or expired
- */
-function decodeAndValidateToken(token: string): JWTPayload | null {
-  try {
-    // Split the token and get the payload part
-    const parts = token.split(".");
-    if (parts.length !== 3) {
-      return null;
-    }
+// /**
+//  * Decodes a JWT token (base64 decode only, no signature verification)
+//  * @param token - The JWT token to decode
+//  * @returns The decoded payload if valid, null if invalid or expired
+//  */
+// function decodeAndValidateToken(token: string): JWTPayload | null {
+//   try {
+//     // Split the token and get the payload part
+//     const parts = token.split(".");
+//     if (parts.length !== 3) {
+//       return null;
+//     }
 
-    // Decode the payload (second part)
-    const payload = parts[1];
-    // Add padding if needed
-    const paddedPayload = payload + "=".repeat((4 - (payload.length % 4)) % 4);
-    const decodedPayload = atob(
-      paddedPayload.replace(/-/g, "+").replace(/_/g, "/")
-    );
-    const parsedPayload = JSON.parse(decodedPayload) as JWTPayload;
+//     // Decode the payload (second part)
+//     const payload = parts[1];
+//     // Add padding if needed
+//     const paddedPayload = payload + "=".repeat((4 - (payload.length % 4)) % 4);
+//     const decodedPayload = atob(
+//       paddedPayload.replace(/-/g, "+").replace(/_/g, "/")
+//     );
+//     const parsedPayload = JSON.parse(decodedPayload) as JWTPayload;
 
-    // Check if token has expired
-    const currentTime = Math.floor(Date.now() / 1000);
-    if (parsedPayload.exp && parsedPayload.exp < currentTime) {
-      return null;
-    }
+//     // Check if token has expired
+//     const currentTime = Math.floor(Date.now() / 1000);
+//     if (parsedPayload.exp && parsedPayload.exp < currentTime) {
+//       return null;
+//     }
 
-    // Validate required fields
-    if (!parsedPayload.id || !parsedPayload.email || !parsedPayload.role) {
-      return null;
-    }
+//     // Validate required fields
+//     if (!parsedPayload.id || !parsedPayload.email || !parsedPayload.role) {
+//       return null;
+//     }
 
-    return parsedPayload;
-  } catch (error) {
-    return null;
-  }
-}
+//     return parsedPayload;
+//   } catch (error) {
+//     return null;
+//   }
+// }
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -97,9 +102,29 @@ export function middleware(request: NextRequest) {
   // Check if the route is admin-only
   const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route));
 
+  // Check if the route is the dashboard
+  const isDashboardRoute = pathname.startsWith(Routes.DASHBOARD);
+
   // If it's a protected route and there's no valid token, redirect to login
   if (isProtectedRoute && (!authToken || !isTokenValid)) {
     return NextResponse.redirect(new URL(Routes.GET_STARTED, request.url));
+  }
+
+  // If it's the dashboard route and user is not a customer, redirect based on role
+  if (
+    isDashboardRoute &&
+    authToken &&
+    isTokenValid &&
+    userRole !== UserRole.Customer
+  ) {
+    if (userRole === UserRole.Admin || userRole === UserRole.SuperAdmin) {
+      return NextResponse.redirect(
+        new URL(Routes.ADMIN_DASHBOARD, request.url)
+      );
+    } else if (userRole === UserRole.Staff) {
+      // Redirect staff to a staff-specific route or home page
+      return NextResponse.redirect(new URL(Routes.HOME, request.url));
+    }
   }
 
   // If it's an admin route and user is not an admin, redirect to dashboard
@@ -119,7 +144,19 @@ export function middleware(request: NextRequest) {
       pathname === Routes.LOGIN ||
       pathname === Routes.REGISTER)
   ) {
-    return NextResponse.redirect(new URL(Routes.DASHBOARD, request.url));
+    // Redirect based on user role
+    if (userRole === UserRole.Customer) {
+      return NextResponse.redirect(new URL(Routes.DASHBOARD, request.url));
+    } else if (
+      userRole === UserRole.Admin ||
+      userRole === UserRole.SuperAdmin
+    ) {
+      return NextResponse.redirect(
+        new URL(Routes.ADMIN_DASHBOARD, request.url)
+      );
+    } else {
+      return NextResponse.redirect(new URL(Routes.HOME, request.url));
+    }
   }
 
   return NextResponse.next();

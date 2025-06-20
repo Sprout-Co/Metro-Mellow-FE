@@ -2,7 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import { UserRole } from "@/graphql/api";
 
 export interface JWTPayload {
-  id: string;
+  _id: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -19,6 +19,7 @@ export interface JWTPayload {
 export function decodeAndValidateToken(token: string): JWTPayload | null {
   try {
     const decoded = jwtDecode<JWTPayload>(token);
+    console.log("decoded", decoded);
 
     // Check if token has expired
     const currentTime = Math.floor(Date.now() / 1000);
@@ -28,7 +29,7 @@ export function decodeAndValidateToken(token: string): JWTPayload | null {
     }
 
     // Validate required fields
-    if (!decoded.id || !decoded.email || !decoded.role) {
+    if (!decoded._id || !decoded.email || !decoded.role) {
       console.warn("JWT token missing required fields");
       return null;
     }
