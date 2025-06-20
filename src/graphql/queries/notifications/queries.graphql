@@ -5,7 +5,16 @@ query GetNotifications(
   notifications(filters: $filters, pagination: $pagination) {
     notifications {
       id
-      userId
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        emailVerified
+        emailVerifiedAt
+        accountStatus
+      }
       type
       priority
       title
@@ -29,7 +38,16 @@ query GetNotifications(
 query GetNotificationById($id: ID!) {
   notification(id: $id) {
     id
-    userId
+    user {
+        id
+        email
+        firstName
+        lastName
+        role
+        emailVerified
+        emailVerifiedAt
+        accountStatus
+      }
     type
     priority
     title

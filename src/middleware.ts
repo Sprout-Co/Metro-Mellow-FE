@@ -7,7 +7,6 @@ import { UserRole } from "@/graphql/api";
 const protectedRoutes = [
   Routes.DASHBOARD,
   Routes.PROFILE,
-  Routes.SETTINGS,
   Routes.SERVICES,
   Routes.BOOKINGS,
   Routes.PAYMENTS,
@@ -40,18 +39,18 @@ export function middleware(request: NextRequest) {
   const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route));
 
   // If it's a protected route and there's no token, redirect to login
-  if (isProtectedRoute && !authCookie) {
-    return NextResponse.redirect(new URL(Routes.GET_STARTED, request.url));
-  }
+  // if (isProtectedRoute && !authCookie) {
+  //   return NextResponse.redirect(new URL(Routes.GET_STARTED, request.url));
+  // }
 
   // If it's an admin route and user is not an admin, redirect to dashboard
-  if (
-    isAdminRoute &&
-    userRole !== UserRole.Admin &&
-    userRole !== UserRole.SuperAdmin
-  ) {
-    return NextResponse.redirect(new URL(Routes.DASHBOARD, request.url));
-  }
+  // if (
+  //   isAdminRoute &&
+  //   userRole !== UserRole.Admin &&
+  //   userRole !== UserRole.SuperAdmin
+  // ) {
+  //   return NextResponse.redirect(new URL(Routes.DASHBOARD, request.url));
+  // }
 
   // If user is logged in and tries to access auth pages, redirect to dashboard
   if (

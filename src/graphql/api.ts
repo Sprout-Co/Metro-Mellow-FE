@@ -20,6 +20,20 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
+export type AcceptAdminInvitationInput = {
+  invitationToken: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  phone?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type AcceptInvitationResponse = {
+  __typename?: 'AcceptInvitationResponse';
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+  token?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<User>;
+};
+
 export enum AccountStatus {
   Active = 'ACTIVE',
   Inactive = 'INACTIVE',
@@ -54,6 +68,30 @@ export type AddressInput = {
   state: Scalars['String']['input'];
   street: Scalars['String']['input'];
   zipCode: Scalars['String']['input'];
+};
+
+export type AdminInvitation = {
+  __typename?: 'AdminInvitation';
+  createdAt: Scalars['DateTime']['output'];
+  email: Scalars['String']['output'];
+  expiresAt: Scalars['DateTime']['output'];
+  firstName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  invitationToken: Scalars['String']['output'];
+  invitedBy: User;
+  invitedByName: Scalars['String']['output'];
+  isUsed: Scalars['Boolean']['output'];
+  lastName: Scalars['String']['output'];
+  permissions: Array<Scalars['String']['output']>;
+  role: UserRole;
+  usedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type AdminInvitationResponse = {
+  __typename?: 'AdminInvitationResponse';
+  invitation?: Maybe<AdminInvitation>;
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
 };
 
 export type AuthPayload = {
@@ -166,6 +204,15 @@ export type CookingDetailsInput = {
   mealsPerDelivery: Array<MealDeliveryInput>;
 };
 
+export type CreateAdminInvitationInput = {
+  email: Scalars['String']['input'];
+  expiresIn?: InputMaybe<Scalars['Int']['input']>;
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
+  permissions?: InputMaybe<Array<Scalars['String']['input']>>;
+  role: UserRole;
+};
+
 export type CreateBookingInput = {
   address: Scalars['ID']['input'];
   date: Scalars['DateTime']['input'];
@@ -185,7 +232,7 @@ export type CreateNotificationInput = {
   priority?: InputMaybe<NotificationPriority>;
   title: Scalars['String']['input'];
   type: NotificationType;
-  userId: Scalars['ID']['input'];
+  user: Scalars['ID']['input'];
 };
 
 export type CreatePaymentInput = {
@@ -219,7 +266,7 @@ export type CreateStaffProfileInput = {
 };
 
 export type CreateSubscriptionInput = {
-  address: Scalars['ID']['input'];
+  address: Scalars['String']['input'];
   autoRenew: Scalars['Boolean']['input'];
   billingCycle: BillingCycle;
   duration: Scalars['Int']['input'];
@@ -342,16 +389,20 @@ export enum MealType {
 export type Mutation = {
   __typename?: 'Mutation';
   _?: Maybe<Scalars['Boolean']['output']>;
+  acceptAdminInvitation: AcceptInvitationResponse;
   addAddress: Scalars['Boolean']['output'];
   addPaymentMethod: PaymentMethod;
   addServiceToSubscription: Scalars['Boolean']['output'];
   assignStaff: Scalars['Boolean']['output'];
   broadcastNotification: Scalars['Boolean']['output'];
+  cancelAdminInvitation: Scalars['Boolean']['output'];
   cancelBooking: Scalars['Boolean']['output'];
   cancelInvoice: Invoice;
   cancelSubscription: Scalars['Boolean']['output'];
   changePassword: Scalars['Boolean']['output'];
+  cleanupExpiredInvitations: Scalars['Int']['output'];
   completeBooking: Scalars['Boolean']['output'];
+  createAdminInvitation: AdminInvitationResponse;
   createBooking: Scalars['Boolean']['output'];
   createNotification: Notification;
   createPayment: Payment;
@@ -375,6 +426,7 @@ export type Mutation = {
   removePaymentMethod: Scalars['Boolean']['output'];
   removeServiceFromSubscription: Scalars['Boolean']['output'];
   rescheduleBooking: Scalars['Boolean']['output'];
+  resendAdminInvitation: Scalars['Boolean']['output'];
   resetPassword: Scalars['Boolean']['output'];
   resumeSubscription: Scalars['Boolean']['output'];
   sendNotificationToRole: Scalars['Boolean']['output'];
@@ -398,6 +450,11 @@ export type Mutation = {
   uploadStaffDocument: StaffDocument;
   verifyEmail: Scalars['Boolean']['output'];
   verifyStaffDocument: StaffDocument;
+};
+
+
+export type MutationAcceptAdminInvitationArgs = {
+  input: AcceptAdminInvitationInput;
 };
 
 
@@ -428,6 +485,11 @@ export type MutationBroadcastNotificationArgs = {
 };
 
 
+export type MutationCancelAdminInvitationArgs = {
+  invitationId: Scalars['ID']['input'];
+};
+
+
 export type MutationCancelBookingArgs = {
   id: Scalars['ID']['input'];
 };
@@ -451,6 +513,11 @@ export type MutationChangePasswordArgs = {
 
 export type MutationCompleteBookingArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationCreateAdminInvitationArgs = {
+  input: CreateAdminInvitationInput;
 };
 
 
@@ -571,6 +638,11 @@ export type MutationRescheduleBookingArgs = {
   id: Scalars['ID']['input'];
   newDate: Scalars['DateTime']['input'];
   newTimeSlot: TimeSlot;
+};
+
+
+export type MutationResendAdminInvitationArgs = {
+  invitationId: Scalars['ID']['input'];
 };
 
 
@@ -722,7 +794,6 @@ export type Notification = {
   type: NotificationType;
   updatedAt: Scalars['DateTime']['output'];
   user?: Maybe<User>;
-  userId: Scalars['ID']['output'];
 };
 
 export type NotificationConnection = {
@@ -862,6 +933,7 @@ export enum PropertyType {
 export type Query = {
   __typename?: 'Query';
   _?: Maybe<Scalars['Boolean']['output']>;
+  adminInvitation?: Maybe<AdminInvitation>;
   availableStaff: Array<StaffProfile>;
   booking?: Maybe<Booking>;
   bookings: Array<Booking>;
@@ -878,6 +950,7 @@ export type Query = {
   payment: Payment;
   paymentMethods: Array<PaymentMethod>;
   payments: Array<Payment>;
+  pendingAdminInvitations: Array<AdminInvitation>;
   service?: Maybe<Service>;
   services: Array<Service>;
   staffBookings: Array<Booking>;
@@ -890,6 +963,11 @@ export type Query = {
   unreadNotificationCount: Scalars['Int']['output'];
   user?: Maybe<User>;
   users: Array<User>;
+};
+
+
+export type QueryAdminInvitationArgs = {
+  token: Scalars['String']['input'];
 };
 
 
@@ -1268,14 +1346,13 @@ export type SubscriptionService = {
 };
 
 export type SubscriptionServiceInput = {
-  address: AddressInput;
   category: ServiceCategory;
   frequency: SubscriptionFrequency;
   preferredTimeSlot: TimeSlot;
   price: Scalars['Float']['input'];
   scheduledDays: Array<ScheduleDays>;
   serviceDetails: ServiceDetailsInput;
-  serviceId: Scalars['ID']['input'];
+  serviceId: Scalars['String']['input'];
 };
 
 export enum SubscriptionStatus {
@@ -1380,6 +1457,39 @@ export enum UserRole {
   Staff = 'STAFF',
   SuperAdmin = 'SUPER_ADMIN'
 }
+
+export type CreateAdminInvitationMutationVariables = Exact<{
+  input: CreateAdminInvitationInput;
+}>;
+
+
+export type CreateAdminInvitationMutation = { __typename?: 'Mutation', createAdminInvitation: { __typename?: 'AdminInvitationResponse', success: boolean, message: string, invitation?: { __typename?: 'AdminInvitation', id: string, email: string, firstName: string, lastName: string, role: UserRole, invitedByName: string, invitationToken: string, expiresAt: any, isUsed: boolean, usedAt?: any | null, createdAt: any, permissions: Array<string>, invitedBy: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null } } | null } };
+
+export type AcceptAdminInvitationMutationVariables = Exact<{
+  input: AcceptAdminInvitationInput;
+}>;
+
+
+export type AcceptAdminInvitationMutation = { __typename?: 'Mutation', acceptAdminInvitation: { __typename?: 'AcceptInvitationResponse', success: boolean, message: string, token?: string | null, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any } | null } };
+
+export type ResendAdminInvitationMutationVariables = Exact<{
+  invitationId: Scalars['ID']['input'];
+}>;
+
+
+export type ResendAdminInvitationMutation = { __typename?: 'Mutation', resendAdminInvitation: boolean };
+
+export type CancelAdminInvitationMutationVariables = Exact<{
+  invitationId: Scalars['ID']['input'];
+}>;
+
+
+export type CancelAdminInvitationMutation = { __typename?: 'Mutation', cancelAdminInvitation: boolean };
+
+export type CleanupExpiredInvitationsMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CleanupExpiredInvitationsMutation = { __typename?: 'Mutation', cleanupExpiredInvitations: number };
 
 export type RegisterMutationVariables = Exact<{
   input: CreateUserInput;
@@ -1530,7 +1640,7 @@ export type CreateNotificationMutationVariables = Exact<{
 }>;
 
 
-export type CreateNotificationMutation = { __typename?: 'Mutation', createNotification: { __typename?: 'Notification', id: string, userId: string, type: NotificationType, priority: NotificationPriority, title: string, message: string, data?: any | null, isRead: boolean, createdAt: any } };
+export type CreateNotificationMutation = { __typename?: 'Mutation', createNotification: { __typename?: 'Notification', id: string, type: NotificationType, priority: NotificationPriority, title: string, message: string, data?: any | null, isRead: boolean, createdAt: any, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null } | null } };
 
 export type MarkNotificationAsReadMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1785,6 +1895,18 @@ export type ReactivateSubscriptionMutationVariables = Exact<{
 
 export type ReactivateSubscriptionMutation = { __typename?: 'Mutation', reactivateSubscription: boolean };
 
+export type PendingAdminInvitationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PendingAdminInvitationsQuery = { __typename?: 'Query', pendingAdminInvitations: Array<{ __typename?: 'AdminInvitation', id: string, email: string, firstName: string, lastName: string, role: UserRole, invitedByName: string, invitationToken: string, expiresAt: any, isUsed: boolean, usedAt?: any | null, createdAt: any, permissions: Array<string>, invitedBy: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any } }> };
+
+export type AdminInvitationQueryVariables = Exact<{
+  token: Scalars['String']['input'];
+}>;
+
+
+export type AdminInvitationQuery = { __typename?: 'Query', adminInvitation?: { __typename?: 'AdminInvitation', id: string, email: string, firstName: string, lastName: string, role: UserRole, invitedByName: string, invitationToken: string, expiresAt: any, isUsed: boolean, usedAt?: any | null, createdAt: any, permissions: Array<string>, invitedBy: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any } } | null };
+
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1834,14 +1956,14 @@ export type GetNotificationsQueryVariables = Exact<{
 }>;
 
 
-export type GetNotificationsQuery = { __typename?: 'Query', notifications: { __typename?: 'NotificationConnection', total: number, page: number, totalPages: number, hasNextPage: boolean, hasPreviousPage: boolean, notifications: Array<{ __typename?: 'Notification', id: string, userId: string, type: NotificationType, priority: NotificationPriority, title: string, message: string, data?: any | null, isRead: boolean, isDeleted: boolean, readAt?: any | null, expiresAt?: any | null, createdAt: any, updatedAt: any }> } };
+export type GetNotificationsQuery = { __typename?: 'Query', notifications: { __typename?: 'NotificationConnection', total: number, page: number, totalPages: number, hasNextPage: boolean, hasPreviousPage: boolean, notifications: Array<{ __typename?: 'Notification', id: string, type: NotificationType, priority: NotificationPriority, title: string, message: string, data?: any | null, isRead: boolean, isDeleted: boolean, readAt?: any | null, expiresAt?: any | null, createdAt: any, updatedAt: any, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null } | null }> } };
 
 export type GetNotificationByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetNotificationByIdQuery = { __typename?: 'Query', notification?: { __typename?: 'Notification', id: string, userId: string, type: NotificationType, priority: NotificationPriority, title: string, message: string, data?: any | null, isRead: boolean, isDeleted: boolean, readAt?: any | null, expiresAt?: any | null, createdAt: any, updatedAt: any } | null };
+export type GetNotificationByIdQuery = { __typename?: 'Query', notification?: { __typename?: 'Notification', id: string, type: NotificationType, priority: NotificationPriority, title: string, message: string, data?: any | null, isRead: boolean, isDeleted: boolean, readAt?: any | null, expiresAt?: any | null, createdAt: any, updatedAt: any, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null } | null } | null };
 
 export type GetUnreadNotificationCountQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1955,6 +2077,205 @@ export type GetCustomerSubscriptionsQueryVariables = Exact<{ [key: string]: neve
 export type GetCustomerSubscriptionsQuery = { __typename?: 'Query', customerSubscriptions: Array<{ __typename?: 'Subscription', _?: boolean | null, id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', serviceType: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery?: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> | null } | null } }> }> };
 
 
+export const CreateAdminInvitationDocument = gql`
+    mutation CreateAdminInvitation($input: CreateAdminInvitationInput!) {
+  createAdminInvitation(input: $input) {
+    success
+    message
+    invitation {
+      id
+      email
+      firstName
+      lastName
+      role
+      invitedBy {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        emailVerified
+        emailVerifiedAt
+        accountStatus
+      }
+      invitedByName
+      invitationToken
+      expiresAt
+      isUsed
+      usedAt
+      createdAt
+      permissions
+    }
+  }
+}
+    `;
+export type CreateAdminInvitationMutationFn = Apollo.MutationFunction<CreateAdminInvitationMutation, CreateAdminInvitationMutationVariables>;
+
+/**
+ * __useCreateAdminInvitationMutation__
+ *
+ * To run a mutation, you first call `useCreateAdminInvitationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAdminInvitationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAdminInvitationMutation, { data, loading, error }] = useCreateAdminInvitationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateAdminInvitationMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateAdminInvitationMutation, CreateAdminInvitationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<CreateAdminInvitationMutation, CreateAdminInvitationMutationVariables>(CreateAdminInvitationDocument, options);
+      }
+export type CreateAdminInvitationMutationHookResult = ReturnType<typeof useCreateAdminInvitationMutation>;
+export type CreateAdminInvitationMutationResult = Apollo.MutationResult<CreateAdminInvitationMutation>;
+export type CreateAdminInvitationMutationOptions = Apollo.BaseMutationOptions<CreateAdminInvitationMutation, CreateAdminInvitationMutationVariables>;
+export const AcceptAdminInvitationDocument = gql`
+    mutation AcceptAdminInvitation($input: AcceptAdminInvitationInput!) {
+  acceptAdminInvitation(input: $input) {
+    success
+    message
+    token
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export type AcceptAdminInvitationMutationFn = Apollo.MutationFunction<AcceptAdminInvitationMutation, AcceptAdminInvitationMutationVariables>;
+
+/**
+ * __useAcceptAdminInvitationMutation__
+ *
+ * To run a mutation, you first call `useAcceptAdminInvitationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptAdminInvitationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [acceptAdminInvitationMutation, { data, loading, error }] = useAcceptAdminInvitationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAcceptAdminInvitationMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AcceptAdminInvitationMutation, AcceptAdminInvitationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<AcceptAdminInvitationMutation, AcceptAdminInvitationMutationVariables>(AcceptAdminInvitationDocument, options);
+      }
+export type AcceptAdminInvitationMutationHookResult = ReturnType<typeof useAcceptAdminInvitationMutation>;
+export type AcceptAdminInvitationMutationResult = Apollo.MutationResult<AcceptAdminInvitationMutation>;
+export type AcceptAdminInvitationMutationOptions = Apollo.BaseMutationOptions<AcceptAdminInvitationMutation, AcceptAdminInvitationMutationVariables>;
+export const ResendAdminInvitationDocument = gql`
+    mutation ResendAdminInvitation($invitationId: ID!) {
+  resendAdminInvitation(invitationId: $invitationId)
+}
+    `;
+export type ResendAdminInvitationMutationFn = Apollo.MutationFunction<ResendAdminInvitationMutation, ResendAdminInvitationMutationVariables>;
+
+/**
+ * __useResendAdminInvitationMutation__
+ *
+ * To run a mutation, you first call `useResendAdminInvitationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResendAdminInvitationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resendAdminInvitationMutation, { data, loading, error }] = useResendAdminInvitationMutation({
+ *   variables: {
+ *      invitationId: // value for 'invitationId'
+ *   },
+ * });
+ */
+export function useResendAdminInvitationMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ResendAdminInvitationMutation, ResendAdminInvitationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<ResendAdminInvitationMutation, ResendAdminInvitationMutationVariables>(ResendAdminInvitationDocument, options);
+      }
+export type ResendAdminInvitationMutationHookResult = ReturnType<typeof useResendAdminInvitationMutation>;
+export type ResendAdminInvitationMutationResult = Apollo.MutationResult<ResendAdminInvitationMutation>;
+export type ResendAdminInvitationMutationOptions = Apollo.BaseMutationOptions<ResendAdminInvitationMutation, ResendAdminInvitationMutationVariables>;
+export const CancelAdminInvitationDocument = gql`
+    mutation CancelAdminInvitation($invitationId: ID!) {
+  cancelAdminInvitation(invitationId: $invitationId)
+}
+    `;
+export type CancelAdminInvitationMutationFn = Apollo.MutationFunction<CancelAdminInvitationMutation, CancelAdminInvitationMutationVariables>;
+
+/**
+ * __useCancelAdminInvitationMutation__
+ *
+ * To run a mutation, you first call `useCancelAdminInvitationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancelAdminInvitationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancelAdminInvitationMutation, { data, loading, error }] = useCancelAdminInvitationMutation({
+ *   variables: {
+ *      invitationId: // value for 'invitationId'
+ *   },
+ * });
+ */
+export function useCancelAdminInvitationMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CancelAdminInvitationMutation, CancelAdminInvitationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<CancelAdminInvitationMutation, CancelAdminInvitationMutationVariables>(CancelAdminInvitationDocument, options);
+      }
+export type CancelAdminInvitationMutationHookResult = ReturnType<typeof useCancelAdminInvitationMutation>;
+export type CancelAdminInvitationMutationResult = Apollo.MutationResult<CancelAdminInvitationMutation>;
+export type CancelAdminInvitationMutationOptions = Apollo.BaseMutationOptions<CancelAdminInvitationMutation, CancelAdminInvitationMutationVariables>;
+export const CleanupExpiredInvitationsDocument = gql`
+    mutation CleanupExpiredInvitations {
+  cleanupExpiredInvitations
+}
+    `;
+export type CleanupExpiredInvitationsMutationFn = Apollo.MutationFunction<CleanupExpiredInvitationsMutation, CleanupExpiredInvitationsMutationVariables>;
+
+/**
+ * __useCleanupExpiredInvitationsMutation__
+ *
+ * To run a mutation, you first call `useCleanupExpiredInvitationsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCleanupExpiredInvitationsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cleanupExpiredInvitationsMutation, { data, loading, error }] = useCleanupExpiredInvitationsMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCleanupExpiredInvitationsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CleanupExpiredInvitationsMutation, CleanupExpiredInvitationsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<CleanupExpiredInvitationsMutation, CleanupExpiredInvitationsMutationVariables>(CleanupExpiredInvitationsDocument, options);
+      }
+export type CleanupExpiredInvitationsMutationHookResult = ReturnType<typeof useCleanupExpiredInvitationsMutation>;
+export type CleanupExpiredInvitationsMutationResult = Apollo.MutationResult<CleanupExpiredInvitationsMutation>;
+export type CleanupExpiredInvitationsMutationOptions = Apollo.BaseMutationOptions<CleanupExpiredInvitationsMutation, CleanupExpiredInvitationsMutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($input: CreateUserInput!) {
   register(input: $input) {
@@ -2595,7 +2916,16 @@ export const CreateNotificationDocument = gql`
     mutation CreateNotification($input: CreateNotificationInput!) {
   createNotification(input: $input) {
     id
-    userId
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+    }
     type
     priority
     title
@@ -3962,6 +4292,133 @@ export function useReactivateSubscriptionMutation(baseOptions?: ApolloReactHooks
 export type ReactivateSubscriptionMutationHookResult = ReturnType<typeof useReactivateSubscriptionMutation>;
 export type ReactivateSubscriptionMutationResult = Apollo.MutationResult<ReactivateSubscriptionMutation>;
 export type ReactivateSubscriptionMutationOptions = Apollo.BaseMutationOptions<ReactivateSubscriptionMutation, ReactivateSubscriptionMutationVariables>;
+export const PendingAdminInvitationsDocument = gql`
+    query PendingAdminInvitations {
+  pendingAdminInvitations {
+    id
+    email
+    firstName
+    lastName
+    role
+    invitedBy {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+      createdAt
+      updatedAt
+    }
+    invitedByName
+    invitationToken
+    expiresAt
+    isUsed
+    usedAt
+    createdAt
+    permissions
+  }
+}
+    `;
+
+/**
+ * __usePendingAdminInvitationsQuery__
+ *
+ * To run a query within a React component, call `usePendingAdminInvitationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePendingAdminInvitationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePendingAdminInvitationsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePendingAdminInvitationsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<PendingAdminInvitationsQuery, PendingAdminInvitationsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<PendingAdminInvitationsQuery, PendingAdminInvitationsQueryVariables>(PendingAdminInvitationsDocument, options);
+      }
+export function usePendingAdminInvitationsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<PendingAdminInvitationsQuery, PendingAdminInvitationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<PendingAdminInvitationsQuery, PendingAdminInvitationsQueryVariables>(PendingAdminInvitationsDocument, options);
+        }
+export function usePendingAdminInvitationsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<PendingAdminInvitationsQuery, PendingAdminInvitationsQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<PendingAdminInvitationsQuery, PendingAdminInvitationsQueryVariables>(PendingAdminInvitationsDocument, options);
+        }
+export type PendingAdminInvitationsQueryHookResult = ReturnType<typeof usePendingAdminInvitationsQuery>;
+export type PendingAdminInvitationsLazyQueryHookResult = ReturnType<typeof usePendingAdminInvitationsLazyQuery>;
+export type PendingAdminInvitationsSuspenseQueryHookResult = ReturnType<typeof usePendingAdminInvitationsSuspenseQuery>;
+export type PendingAdminInvitationsQueryResult = Apollo.QueryResult<PendingAdminInvitationsQuery, PendingAdminInvitationsQueryVariables>;
+export const AdminInvitationDocument = gql`
+    query AdminInvitation($token: String!) {
+  adminInvitation(token: $token) {
+    id
+    email
+    firstName
+    lastName
+    role
+    invitedBy {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+      createdAt
+      updatedAt
+    }
+    invitedByName
+    invitationToken
+    expiresAt
+    isUsed
+    usedAt
+    createdAt
+    permissions
+  }
+}
+    `;
+
+/**
+ * __useAdminInvitationQuery__
+ *
+ * To run a query within a React component, call `useAdminInvitationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminInvitationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminInvitationQuery({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useAdminInvitationQuery(baseOptions: ApolloReactHooks.QueryHookOptions<AdminInvitationQuery, AdminInvitationQueryVariables> & ({ variables: AdminInvitationQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<AdminInvitationQuery, AdminInvitationQueryVariables>(AdminInvitationDocument, options);
+      }
+export function useAdminInvitationLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AdminInvitationQuery, AdminInvitationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<AdminInvitationQuery, AdminInvitationQueryVariables>(AdminInvitationDocument, options);
+        }
+export function useAdminInvitationSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<AdminInvitationQuery, AdminInvitationQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<AdminInvitationQuery, AdminInvitationQueryVariables>(AdminInvitationDocument, options);
+        }
+export type AdminInvitationQueryHookResult = ReturnType<typeof useAdminInvitationQuery>;
+export type AdminInvitationLazyQueryHookResult = ReturnType<typeof useAdminInvitationLazyQuery>;
+export type AdminInvitationSuspenseQueryHookResult = ReturnType<typeof useAdminInvitationSuspenseQuery>;
+export type AdminInvitationQueryResult = Apollo.QueryResult<AdminInvitationQuery, AdminInvitationQueryVariables>;
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
   me {
@@ -4693,7 +5150,16 @@ export const GetNotificationsDocument = gql`
   notifications(filters: $filters, pagination: $pagination) {
     notifications {
       id
-      userId
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        emailVerified
+        emailVerifiedAt
+        accountStatus
+      }
       type
       priority
       title
@@ -4752,7 +5218,16 @@ export const GetNotificationByIdDocument = gql`
     query GetNotificationById($id: ID!) {
   notification(id: $id) {
     id
-    userId
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+    }
     type
     priority
     title

@@ -1,7 +1,16 @@
 mutation CreateNotification($input: CreateNotificationInput!) {
   createNotification(input: $input) {
     id
-    userId
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+    }
     type
     priority
     title
