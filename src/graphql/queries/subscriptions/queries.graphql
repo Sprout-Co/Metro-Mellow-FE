@@ -1,6 +1,5 @@
 query GetSubscriptionById($id: ID!) {
   subscription(id: $id) {
-    _
     id
     customer {
       id
@@ -125,7 +124,6 @@ query GetSubscriptionById($id: ID!) {
 
 query GetSubscriptions($status: SubscriptionStatus) {
   subscriptions(status: $status) {
-    _
     id
     customer {
       id
@@ -250,7 +248,6 @@ query GetSubscriptions($status: SubscriptionStatus) {
 
 query GetCustomerSubscriptions {
   customerSubscriptions {
-    _
     id
     customer {
       id

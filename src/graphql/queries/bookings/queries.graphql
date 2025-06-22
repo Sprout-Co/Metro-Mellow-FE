@@ -1,5 +1,5 @@
 query GetBookings($status: BookingStatus) {
-  bookings {
+  bookings(status: $status) {
     id
     customer {
       id

@@ -19,10 +19,12 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
 
   const navigationItems: NavItem[] = [
     { label: "Dashboard", path: "/admin/dashboard", icon: "📊" },
+    { label: "Bookings", path: "/admin/bookings", icon: "📅" },
+    { label: "Subscriptions", path: "/admin/subscriptions", icon: "💳" },
+    { label: "Customers", path: "/admin/customers", icon: "👥" },
+    { label: "Services", path: "/admin/services", icon: "🧹" },
     { label: "Reports", path: "/admin/reports", icon: "📑" },
     { label: "Scheduling", path: "/admin/scheduling", icon: "📅" },
-    { label: "Services", path: "/admin/services", icon: "🧹" },
-    { label: "Customers", path: "/admin/customers", icon: "👥" },
     { label: "Staff", path: "/admin/staff", icon: "👨‍💼" },
     { label: "Analytics", path: "/admin/analytics", icon: "📈" },
   ];

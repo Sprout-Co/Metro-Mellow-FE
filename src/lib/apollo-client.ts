@@ -19,12 +19,12 @@ const authLink = setContext((_, { headers }) => {
       token = decodeURIComponent(authTokenCookie.split("=")[1]);
       
       // Validate the token before using it
-      if (!isTokenValid(token)) {
-        console.warn("Invalid or expired JWT token, removing from cookie");
-        // Remove the invalid token
-        document.cookie = "auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        token = null;
-      }
+      // if (!isTokenValid(token)) {
+      //   console.warn("Invalid or expired JWT token, removing from cookie");
+      //   // Remove the invalid token
+      //   document.cookie = "auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      //   token = null;
+      // }
     }
   }
 

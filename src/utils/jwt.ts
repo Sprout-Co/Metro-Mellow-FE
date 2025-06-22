@@ -2,7 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import { UserRole } from "@/graphql/api";
 
 export interface JWTPayload {
-  _id: string;
+  id: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -29,11 +29,10 @@ export function decodeAndValidateToken(token: string): JWTPayload | null {
     }
 
     // Validate required fields
-    if (!decoded._id || !decoded.email || !decoded.role) {
+    if (!decoded.id || !decoded.email || !decoded.role) {
       console.warn("JWT token missing required fields");
       return null;
     }
-
     return decoded;
   } catch (error) {
     console.error("Error decoding JWT token:", error);
