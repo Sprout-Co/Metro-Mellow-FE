@@ -6,16 +6,6 @@ query GetCurrentUser {
     lastName
     role
     phone
-    addresses {
-      street
-      city
-      state
-      zipCode
-      country
-      id
-      isDefault
-      label
-    }
     defaultAddress {
       street
       city
@@ -42,16 +32,6 @@ query GetUserById($id: ID!) {
     lastName
     role
     phone
-    addresses {
-      street
-      city
-      state
-      zipCode
-      country
-      id
-      isDefault
-      label
-    }
     defaultAddress {
       street
       city
@@ -78,16 +58,6 @@ query GetUsers($role: UserRole) {
     lastName
     role
     phone
-    addresses {
-      street
-      city
-      state
-      zipCode
-      country
-      id
-      isDefault
-      label
-    }
     defaultAddress {
       street
       city

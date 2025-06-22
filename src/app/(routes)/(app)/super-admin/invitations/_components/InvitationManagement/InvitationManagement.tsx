@@ -4,12 +4,13 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import styles from "./InvitationManagement.module.scss";
 import { useAdminOperations } from "@/graphql/hooks/admin/useAdminOperations";
-import { useAuthStore } from "@/store/slices/auth";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { selectUser } from "@/lib/redux";
 import CreateInvitationModal from "../CreateInvitationModal/CreateInvitationModal";
 import InvitationTable from "../InvitationTable/InvitationTable";
 
 const InvitationManagement: React.FC = () => {
-  const { user } = useAuthStore();
+  const user = useAppSelector(selectUser);
   const {
     handleGetPendingAdminInvitations,
     handleResendAdminInvitation,

@@ -4,7 +4,8 @@ import Link from "next/link";
 import Icon from "../common/Icon";
 import styles from "./ProfileMenu.module.scss";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
-import { useAuthStore } from "@/store/slices/auth";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { selectUser } from "@/lib/redux";
 
 type ProfileMenuProps = {
   onClose: () => void;
@@ -45,7 +46,7 @@ const menuItems = [
 
 export default function ProfileMenu({ onClose }: ProfileMenuProps) {
   const { handleLogout } = useAuthOperations();
-  const { user: currentUser } = useAuthStore();
+  const currentUser = useAppSelector(selectUser);
 
   // Get user initials for avatar
   const getUserInitials = () => {

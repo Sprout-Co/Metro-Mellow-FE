@@ -12,10 +12,10 @@ import {
 } from "@/graphql/api";
 import { DurationType } from "../SubscriptionModule";
 import { Icon } from "@/components/ui/Icon/Icon";
-import { useUIStore } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import { openModal, selectUser } from "@/lib/redux";
 import EditServiceModal from "../EditServiceModal/EditServiceModal";
 import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
-import { useAuthStore } from "@/store/slices/auth";
 
 // Define our extended service types
 export type CleaningDetails = {
@@ -107,7 +107,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
   setShowSubscriptionForm,
 }) => {
   const router = useRouter();
-  const { user } = useAuthStore();
+  const user = useAppSelector(selectUser);
 
   // State to track extended services with details
   const [extendedServices, setExtendedServices] = useState<ExtendedService[]>(

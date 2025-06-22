@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { useAuthStore } from "@/store/slices/auth";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { selectIsAuthenticated } from "@/lib/redux";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 
 interface AuthInitializerProps {
@@ -9,7 +10,7 @@ interface AuthInitializerProps {
 }
 
 export function AuthInitializer({ children }: AuthInitializerProps) {
-  const { isAuthenticated } = useAuthStore();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const { handleGetCurrentUser } = useAuthOperations();
 
   useEffect(() => {

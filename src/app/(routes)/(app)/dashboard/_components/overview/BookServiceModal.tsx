@@ -1,8 +1,8 @@
 // src/components/booking/BookServiceModal.tsx
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useUIStore } from "@/store/slices/ui";
-import { useAuthStore } from "@/store/slices/auth";
+import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks";
+import { selectIsModalOpen, selectModalType, closeModal, selectUser } from "@/lib/redux";
 import Icon, { IconName } from "../common/Icon";
 import styles from "./BookServiceModal.module.scss";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
@@ -64,11 +64,13 @@ const steps: Step[] = [
  */
 export default function BookServiceModal() {
   // Get modal state and operations from store
-  const { isModalOpen, modalType, closeModal } = useUIStore();
+  const dispatch = useAppDispatch();
+  const isModalOpen = useAppSelector(selectIsModalOpen);
+  const modalType = useAppSelector(selectModalType);
+  const currentUser = useAppSelector(selectUser);
   const { handleCreateBooking } = useBookingOperations();
   const { handleGetServices } = useServiceOperations();
   const { handleGetCurrentUser } = useAuthOperations();
-  const currentUser = useAuthStore((state) => state.user);
 
   // API data state
   const [services, setServices] = useState<Service[]>([]);
@@ -486,7 +488,7 @@ export default function BookServiceModal() {
       await handleCreateBooking(bookingData);
 
       // Close the modal after successful submission
-      closeModal();
+      dispatch(closeModal());
     } catch (error) {
       console.error("Failed to create booking:", error);
     } finally {

@@ -1,7 +1,8 @@
 "use client";
 import { motion } from "framer-motion";
 import Icon from "../common/Icon";
-import { useUIStore } from "@/store/slices/ui";
+import { useAppDispatch } from "@/lib/redux/hooks";
+import { openModal } from "@/lib/redux";
 import BookServiceModal from "./BookServiceModal";
 import RescheduleServiceModal from "./RescheduleServiceModal";
 import styles from "./QuickActions.module.scss";
@@ -53,7 +54,7 @@ const quickActions = [
 ];
 
 export default function QuickActions() {
-  const { openModal } = useUIStore();
+  const dispatch = useAppDispatch();
   const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
   const itemVariants = {
     hidden: { opacity: 0, scale: 0.9 },
@@ -72,7 +73,7 @@ export default function QuickActions() {
 
   const handleActionClick = (actionId: string) => {
     if (actionId === "book") {
-      openModal("book-service");
+      dispatch(openModal({ type: "book-service" }));
     } else if (actionId === "reschedule") {
       setIsRescheduleModalOpen(true);
     }

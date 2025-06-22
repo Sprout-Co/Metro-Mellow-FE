@@ -10,7 +10,8 @@ import { motion } from "framer-motion";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import { User, UserRole, AccountStatus } from "@/graphql/api";
 import { formatToNaira } from "@/utils/string";
-import { useAuthStore } from "@/store/slices/auth";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { selectUser } from "@/lib/redux";
 
 export default function CustomersPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,8 +23,7 @@ export default function CustomersPage() {
   const [error, setError] = useState<string | null>(null);
 
   const { handleGetUsers } = useAuthOperations();
-  const { user } = useAuthStore();
-  console.log("user", user);
+  const user = useAppSelector(selectUser);
 
   useEffect(() => {
     fetchCustomers();
@@ -90,11 +90,11 @@ export default function CustomersPage() {
   // Table columns configuration
   const columns = [
     {
-      key: "customer",
+      key: "firstName",
       header: "Customer",
       width: "25%",
-      render: (value: unknown) => {
-        const customer = value as User;
+      render: (value: unknown, row: unknown) => {
+        const customer = row as User;
         const fullName =
           `${customer.firstName || ""} ${customer.lastName || ""}`.trim() ||
           "N/A";

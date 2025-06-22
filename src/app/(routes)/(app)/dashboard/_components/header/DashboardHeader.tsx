@@ -7,7 +7,8 @@ import NotificationsMenu from "./NotificationsMenu";
 import ProfileMenu from "./ProfileMenu";
 import styles from "./DashboardHeader.module.scss";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
-import { useAuthStore } from "@/store/slices/auth";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { selectUser } from "@/lib/redux";
 import Link from "next/link";
 import { Routes } from "@/constants/routes";
 
@@ -15,7 +16,7 @@ export default function DashboardHeader() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const { handleGetCurrentUser } = useAuthOperations();
-  const { user: currentUser } = useAuthStore();
+  const currentUser = useAppSelector(selectUser);
 
   // Fetch current user data on component mount
   useEffect(() => {

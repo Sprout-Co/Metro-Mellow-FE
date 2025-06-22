@@ -6,7 +6,6 @@
  * @returns Object containing all auth operation handlers
  */
 import { useCallback } from "react";
-import { useRouter } from "next/navigation";
 import {
   useLoginMutation,
   useRegisterMutation,
@@ -21,15 +20,24 @@ import {
   useSendVerificationEmailMutation,
   useVerifyEmailMutation,
   useAddAddressMutation,
-  useSetDefaultAddressMutation,
   AddressInput,
 } from "@/graphql/api";
-import { useAuthStore } from "@/store/slices/auth";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import { 
+  login as loginAction, 
+  logout as logoutAction, 
+  setUser,
+  selectToken,
+  selectUser 
+} from "@/lib/redux";
 import { UserRole } from "@/graphql/api";
 import { Routes } from "@/constants/routes";
 
 export const useAuthOperations = () => {
-  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const currentToken = useAppSelector(selectToken);
+  const currentUser = useAppSelector(selectUser);
+  
   const [loginMutation] = useLoginMutation();
   const [registerMutation] = useRegisterMutation();
   const [updateProfileMutation] = useUpdateProfileMutation();
@@ -43,14 +51,6 @@ export const useAuthOperations = () => {
   const [sendVerificationEmailMutation] = useSendVerificationEmailMutation();
   const [verifyEmailMutation] = useVerifyEmailMutation();
   const [addAddressMutation] = useAddAddressMutation();
-  const {
-    login,
-    logout,
-    token: currentToken,
-    user: currentUser,
-    setUser,
-  } = useAuthStore();
-  const t = useAuthStore((state) => state);
 
   /**
    * Handles user login with email and password
@@ -96,7 +96,7 @@ export const useAuthOperations = () => {
 
         // Store auth data
         console.log("Storing auth data...");
-        login(user as any, token);
+        dispatch(loginAction({ user: user as any, token }));
 
         // Use a direct browser redirect for client-side navigation
         console.log("Redirecting to dashboard...");
@@ -111,7 +111,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [loginMutation, login]
+    [loginMutation, dispatch]
   );
 
   /**
@@ -156,7 +156,7 @@ export const useAuthOperations = () => {
             throw new Error("Registration failed: Invalid role");
           }
 
-          login(user as any, token || "");
+          dispatch(loginAction({ user: user as any, token: token || "" }));
 
           // Use a direct browser redirect
           // if (typeof window !== "undefined") {
@@ -171,7 +171,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [registerMutation, login]
+    [registerMutation, dispatch]
   );
 
   /**
@@ -204,7 +204,7 @@ export const useAuthOperations = () => {
 
         if (data?.updateProfile) {
           // Update the user in the auth store while preserving the current token
-          login(data.updateProfile as any, currentToken || "");
+          dispatch(loginAction({ user: data.updateProfile as any, token: currentToken || "" }));
           return data.updateProfile;
         }
       } catch (error) {
@@ -215,7 +215,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [updateProfileMutation, login, currentToken]
+    [updateProfileMutation, dispatch, currentToken]
   );
 
   /**
@@ -343,7 +343,7 @@ export const useAuthOperations = () => {
    */
   const handleLogout = useCallback(async () => {
     try {
-      logout();
+      dispatch(logoutAction());
 
       // Use a direct browser redirect
       if (typeof window !== "undefined") {
@@ -353,7 +353,7 @@ export const useAuthOperations = () => {
       console.error("Logout error:", error);
       throw new Error("Failed to logout");
     }
-  }, [logout]);
+  }, [dispatch]);
 
   /**
    * Fetches the current authenticated user and updates the auth store
@@ -375,7 +375,7 @@ export const useAuthOperations = () => {
       if (data?.me) {
         // Update the auth store with the latest user data
         console.log("Setting user in auth store:", data.me);
-        setUser(data.me);
+        dispatch(setUser(data.me));
       }
 
       return data?.me;
@@ -386,7 +386,7 @@ export const useAuthOperations = () => {
       }
       throw new Error("An unexpected error occurred");
     }
-  }, [currentToken, setUser, getCurrentUser]);
+  }, [currentToken, dispatch, getCurrentUser]);
 
   /**
    * Fetches a user by ID

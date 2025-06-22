@@ -6,7 +6,8 @@ import { motion } from 'framer-motion';
 import FormInput from '../../../get-started/_components/FormInput';
 import styles from '../../../get-started/_components/AuthLayout.module.scss';
 import { useAdminOperations } from '@/graphql/hooks/admin/useAdminOperations';
-import { useAuthStore } from '@/store/slices/auth';
+import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks';
+import { selectUser, login } from '@/lib/redux';
 import { Routes } from '@/constants/routes';
 
 interface AdminSetupFormState {
@@ -36,7 +37,7 @@ export default function AdminSetupForm() {
   const token = searchParams.get('token');
 
   const { handleGetAdminInvitation, handleAcceptAdminInvitation } = useAdminOperations();
-  const { login } = useAuthStore();
+  const dispatch = useAppDispatch();
 
   // Validate token on component mount
   useEffect(() => {
@@ -145,7 +146,7 @@ export default function AdminSetupForm() {
 
       if (result?.success && result.user && result.token) {
         // Store auth data
-        login(result.user as any, result.token);
+        dispatch(login({ user: result.user as any, token: result.token }));
 
         // Redirect to admin dashboard
         if (typeof window !== 'undefined') {
