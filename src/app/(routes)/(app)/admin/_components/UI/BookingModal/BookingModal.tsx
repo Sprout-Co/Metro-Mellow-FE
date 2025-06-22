@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "../Button/Button";
 //  import StatusBadge from "../StatusBadge/StatusBadge";
-import { Booking, BookingStatus } from "@/graphql/api";
+import { Booking, BookingStatus, TimeSlot } from "@/graphql/api";
 import { Icon } from "@/components/ui/Icon/Icon";
 import styles from "./BookingModal.module.scss";
 import { formatToNaira } from "@/utils/string";
@@ -25,10 +25,14 @@ export default function BookingModal({
   onStatusUpdate,
   onReschedule,
 }: BookingModalProps) {
-  const [activeTab, setActiveTab] = useState("details");
-  const [showRescheduleForm, setShowRescheduleForm] = useState(false);
+  const [activeTab, setActiveTab] = useState(
+    mode === "edit" ? "reschedule" : "details"
+  );
   const [rescheduleDate, setRescheduleDate] = useState("");
-  const [rescheduleTime, setRescheduleTime] = useState("");
+  const [rescheduleTimeSlot, setRescheduleTimeSlot] = useState<TimeSlot>(
+    TimeSlot.Morning
+  );
+  const [isRescheduling, setIsRescheduling] = useState(false);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -48,18 +52,57 @@ export default function BookingModal({
     };
   }, [isOpen, onClose]);
 
+  // Reset active tab when modal opens or mode changes
+  useEffect(() => {
+    if (isOpen) {
+      setActiveTab(mode === "edit" ? "reschedule" : "details");
+
+      // Prefill reschedule date with current booking date
+      if (mode === "edit" && booking) {
+        const currentDate = new Date(booking.date);
+        const formattedDate = currentDate.toISOString().split("T")[0];
+        setRescheduleDate(formattedDate);
+      }
+    }
+  }, [isOpen, mode, booking]);
+
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
   };
 
-  const handleReschedule = () => {
-    if (booking && onReschedule && rescheduleDate && rescheduleTime) {
-      onReschedule(booking.id, rescheduleDate, rescheduleTime);
-      setShowRescheduleForm(false);
-      setRescheduleDate("");
-      setRescheduleTime("");
+  const handleReschedule = async () => {
+    if (booking && onReschedule && rescheduleDate && rescheduleTimeSlot) {
+      try {
+        setIsRescheduling(true);
+
+        // Convert TimeSlot to a time string for the API
+        let timeString = "09:00"; // Default to 9 AM
+        switch (rescheduleTimeSlot) {
+          case TimeSlot.Morning:
+            timeString = "09:00";
+            break;
+          case TimeSlot.Afternoon:
+            timeString = "14:00";
+            break;
+          case TimeSlot.Evening:
+            timeString = "18:00";
+            break;
+        }
+
+        await onReschedule(booking.id, rescheduleDate, timeString);
+
+        // Reset form and close modal
+        setRescheduleDate("");
+        setRescheduleTimeSlot(TimeSlot.Morning);
+        setActiveTab("details");
+        onClose();
+      } catch (error) {
+        console.error("Reschedule error:", error);
+      } finally {
+        setIsRescheduling(false);
+      }
     }
   };
 
@@ -148,6 +191,12 @@ export default function BookingModal({
     },
   ];
 
+  const timeSlotOptions = [
+    { value: TimeSlot.Morning, label: "Morning (6 AM - 12 PM)" },
+    { value: TimeSlot.Afternoon, label: "Afternoon (12 PM - 6 PM)" },
+    { value: TimeSlot.Evening, label: "Evening (6 PM - 12 AM)" },
+  ];
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -222,6 +271,20 @@ export default function BookingModal({
               >
                 Notes
               </button>
+              {mode === "edit" &&
+                booking.status !== BookingStatus.Completed &&
+                booking.status !== BookingStatus.Cancelled && (
+                  <button
+                    className={`${styles.booking_modal__tab} ${
+                      activeTab === "reschedule"
+                        ? styles["booking_modal__tab--active"]
+                        : ""
+                    }`}
+                    onClick={() => setActiveTab("reschedule")}
+                  >
+                    Reschedule
+                  </button>
+                )}
             </div>
 
             <div className={styles.booking_modal__body}>
@@ -344,86 +407,6 @@ export default function BookingModal({
                           </span>
                         </div>
                       </div>
-                      {mode === "edit" &&
-                        booking.status !== BookingStatus.Completed &&
-                        booking.status !== BookingStatus.Cancelled && (
-                          <div
-                            className={styles.booking_modal__reschedule_form}
-                          >
-                            {!showRescheduleForm ? (
-                              <Button
-                                variant="outline"
-                                size="small"
-                                onClick={() => setShowRescheduleForm(true)}
-                              >
-                                Reschedule Booking
-                              </Button>
-                            ) : (
-                              <>
-                                <div
-                                  className={styles.booking_modal__form_group}
-                                >
-                                  <label
-                                    className={styles.booking_modal__form_label}
-                                  >
-                                    New Date
-                                  </label>
-                                  <input
-                                    type="date"
-                                    className={styles.booking_modal__form_input}
-                                    value={rescheduleDate}
-                                    onChange={(e) =>
-                                      setRescheduleDate(e.target.value)
-                                    }
-                                    min={new Date().toISOString().split("T")[0]}
-                                  />
-                                </div>
-                                <div
-                                  className={styles.booking_modal__form_group}
-                                >
-                                  <label
-                                    className={styles.booking_modal__form_label}
-                                  >
-                                    New Time
-                                  </label>
-                                  <input
-                                    type="time"
-                                    className={styles.booking_modal__form_input}
-                                    value={rescheduleTime}
-                                    onChange={(e) =>
-                                      setRescheduleTime(e.target.value)
-                                    }
-                                  />
-                                </div>
-                                <div
-                                  className={styles.booking_modal__form_actions}
-                                >
-                                  <Button
-                                    variant="primary"
-                                    size="small"
-                                    onClick={handleReschedule}
-                                    disabled={
-                                      !rescheduleDate || !rescheduleTime
-                                    }
-                                  >
-                                    Confirm Reschedule
-                                  </Button>
-                                  <Button
-                                    variant="outline"
-                                    size="small"
-                                    onClick={() => {
-                                      setShowRescheduleForm(false);
-                                      setRescheduleDate("");
-                                      setRescheduleTime("");
-                                    }}
-                                  >
-                                    Cancel
-                                  </Button>
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        )}
                     </div>
 
                     <div className={styles.booking_modal__section}>
@@ -521,9 +504,93 @@ export default function BookingModal({
                     </div>
                     <div className={styles.booking_modal__info_list}>
                       <p className={styles.booking_modal__value}>
-                        {booking.notes ||
-                          "No special instructions provided"}
+                        {booking.notes || "No special instructions provided"}
                       </p>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {activeTab === "reschedule" && mode === "edit" && (
+                <motion.div
+                  className={styles.booking_modal__content}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className={styles.booking_modal__section}>
+                    <div className={styles.booking_modal__section_header}>
+                      <div className={styles.booking_modal__section_icon}>
+                        <Icon name="calendar" size={20} />
+                      </div>
+                      <h3 className={styles.booking_modal__section_title}>
+                        Reschedule Booking
+                      </h3>
+                    </div>
+                    <div className={styles.booking_modal__reschedule_info}>
+                      <div className={styles.booking_modal__current_schedule}>
+                        <h4>Current Schedule</h4>
+                        <p>Date: {formatDate(booking.date)}</p>
+                        <p>Time: {formatTime(booking.timeSlot)}</p>
+                      </div>
+
+                      <div className={styles.booking_modal__reschedule_form}>
+                        <div className={styles.booking_modal__form_group}>
+                          <label className={styles.booking_modal__form_label}>
+                            New Date
+                          </label>
+                          <input
+                            type="date"
+                            className={styles.booking_modal__form_input}
+                            value={rescheduleDate}
+                            onChange={(e) => setRescheduleDate(e.target.value)}
+                            min={new Date().toISOString().split("T")[0]}
+                          />
+                        </div>
+
+                        <div className={styles.booking_modal__form_group}>
+                          <label className={styles.booking_modal__form_label}>
+                            New Time Slot
+                          </label>
+                          <select
+                            className={styles.booking_modal__form_input}
+                            value={rescheduleTimeSlot}
+                            onChange={(e) =>
+                              setRescheduleTimeSlot(e.target.value as TimeSlot)
+                            }
+                          >
+                            {timeSlotOptions.map((option) => (
+                              <option key={option.value} value={option.value}>
+                                {option.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <div className={styles.booking_modal__form_actions}>
+                          <Button
+                            variant="primary"
+                            size="medium"
+                            onClick={handleReschedule}
+                            disabled={!rescheduleDate || isRescheduling}
+                          >
+                            {isRescheduling
+                              ? "Rescheduling..."
+                              : "Confirm Reschedule"}
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="medium"
+                            onClick={() => {
+                              setRescheduleDate("");
+                              setRescheduleTimeSlot(TimeSlot.Morning);
+                            }}
+                            disabled={isRescheduling}
+                          >
+                            Reset Form
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </motion.div>

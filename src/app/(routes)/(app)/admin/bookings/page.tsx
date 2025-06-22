@@ -46,6 +46,7 @@ export default function BookingsPage() {
     handleCancelBooking,
     handleCompleteBooking,
     handleUpdateBookingStatus,
+    handleRescheduleBooking,
   } = useBookingOperations();
 
   useEffect(() => {
@@ -157,6 +158,40 @@ export default function BookingsPage() {
       );
     } finally {
       setIsActionLoading(false);
+    }
+  };
+
+  const handleBookingReschedule = async (
+    bookingId: string,
+    newDate: string,
+    newTime: string
+  ) => {
+    try {
+      setError(null);
+
+      // Convert time string to TimeSlot enum
+      let timeSlot: TimeSlot;
+      const hour = parseInt(newTime.split(":")[0]);
+
+      if (hour >= 6 && hour < 12) {
+        timeSlot = TimeSlot.Morning;
+      } else if (hour >= 12 && hour < 18) {
+        timeSlot = TimeSlot.Afternoon;
+      } else {
+        timeSlot = TimeSlot.Evening;
+      }
+
+      await handleRescheduleBooking(bookingId, newDate, timeSlot);
+      await fetchBookings();
+
+      // Close the booking modal after successful reschedule
+      setShowBookingModal(false);
+      setSelectedBooking(null);
+    } catch (error) {
+      console.error("Error rescheduling booking:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to reschedule booking"
+      );
     }
   };
 
@@ -275,9 +310,7 @@ export default function BookingsPage() {
       header: "Time",
       width: "8%",
       render: (value: TimeSlot) => (
-        <div className={styles.bookings_page__time_cell}>
-          {value}
-        </div>
+        <div className={styles.bookings_page__time_cell}>{value}</div>
       ),
     },
     {
@@ -464,7 +497,11 @@ export default function BookingsPage() {
         {error && (
           <div className={styles.bookings_page__error}>
             <div className={styles.bookings_page__error_content}>
-              <Icon name="alert-triangle" size={16} className={styles.bookings_page__error_icon} />
+              <Icon
+                name="alert-triangle"
+                size={16}
+                className={styles.bookings_page__error_icon}
+              />
               <span className={styles.bookings_page__error_message}>
                 {error}
               </span>
@@ -547,6 +584,7 @@ export default function BookingsPage() {
           booking={selectedBooking}
           mode={bookingModalMode}
           onStatusUpdate={openStatusConfirmation}
+          onReschedule={handleBookingReschedule}
         />
 
         {/* Confirmation Modal */}
