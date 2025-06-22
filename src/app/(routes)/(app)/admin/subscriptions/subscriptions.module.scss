@@ -7,75 +7,116 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: spacing('lg');
+    margin-bottom: spacing("lg");
     
-    @include breakpoint-down('md') {
+    @include breakpoint-down("md") {
       flex-direction: column;
-      gap: spacing('md');
+      gap: spacing("md");
     }
   }
   
   &__title_area {
-    margin-bottom: spacing('md');
+    margin-bottom: spacing("md");
   }
   
   &__title {
-    font-size: map-get($font-sizes, '2xl');
-    font-weight: map-get($font-weights, 'bold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
   }
   
   &__subtitle {
-    font-size: map-get($font-sizes, 'base');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
     margin: 0;
+  }
+
+  &__error {
+    background-color: rgba(color("error"), 0.1);
+    border: 1px solid rgba(color("error"), 0.2);
+    border-radius: border-radius("md");
+    padding: spacing("md");
+    margin-bottom: spacing("lg");
+  }
+
+  &__error_content {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+  }
+
+  &__error_icon {
+    font-size: map-get($font-sizes, "lg");
+    flex-shrink: 0;
+  }
+
+  &__error_message {
+    flex: 1;
+    color: color("error");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+  }
+
+  &__error_dismiss {
+    background: none;
+    border: none;
+    color: color("error");
+    font-size: map-get($font-sizes, "lg");
+    cursor: pointer;
+    padding: spacing("xxs");
+    border-radius: border-radius("sm");
+    line-height: 1;
+
+    &:hover {
+      background-color: rgba(color("error"), 0.1);
+    }
   }
   
   &__stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: spacing('md');
-    margin-bottom: spacing('lg');
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
     
-    @include breakpoint-down('sm') {
+    @include breakpoint-down("sm") {
       grid-template-columns: 1fr 1fr;
     }
   }
   
   &__stat_card {
-    padding: spacing('md');
+    padding: spacing("md");
     text-align: center;
   }
   
   &__stat_label {
-    font-size: map-get($font-sizes, 'sm');
-    font-weight: map-get($font-weights, 'medium');
-    color: color('neutral', 'dark');
-    margin: 0 0 spacing('sm') 0;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("sm") 0;
   }
   
   &__stat_value {
-    font-size: map-get($font-sizes, '2xl');
-    font-weight: map-get($font-weights, 'bold');
-    color: color('primary', 'base');
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("primary", "base");
     margin: 0;
   }
   
   &__content {
-    padding: spacing('lg');
+    padding: spacing("lg");
   }
   
   &__filters {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: spacing('lg');
+    margin-bottom: spacing("lg");
     
-    @include breakpoint-down('md') {
+    @include breakpoint-down("md") {
       flex-direction: column;
       align-items: flex-start;
-      gap: spacing('md');
+      gap: spacing("md");
     }
   }
   
@@ -83,7 +124,7 @@
     flex: 1;
     max-width: 300px;
     
-    @include breakpoint-down('md') {
+    @include breakpoint-down("md") {
       max-width: 100%;
       width: 100%;
     }
@@ -91,57 +132,57 @@
   
   &__search_input {
     width: 100%;
-    padding: spacing('sm') spacing('md');
-    border: 1px solid color('neutral', 'medium');
-    border-radius: border-radius('md');
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'black');
+    padding: spacing("sm") spacing("md");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "black");
     
     &:focus {
       outline: none;
-      border-color: color('primary', 'base');
-      box-shadow: 0 0 0 2px rgba(color('primary', 'base'), 0.1);
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 2px rgba(color("primary", "base"), 0.1);
     }
     
     &::placeholder {
-      color: color('neutral', 'dark');
+      color: color("neutral", "dark");
     }
   }
   
   &__filter_buttons {
     display: flex;
-    gap: spacing('xs');
+    gap: spacing("xs");
     flex-wrap: wrap;
   }
   
   &__filter_button {
-    padding: spacing('xs') spacing('md');
-    background-color: color('neutral', 'lighter');
+    padding: spacing("xs") spacing("md");
+    background-color: color("neutral", "lighter");
     border: none;
-    border-radius: border-radius('md');
-    font-size: map-get($font-sizes, 'xs');
-    font-weight: map-get($font-weights, 'medium');
-    color: color('neutral', 'dark');
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
     cursor: pointer;
     
     &:hover {
-      background-color: darken(color('neutral', 'lighter'), 5%);
+      background-color: darken(color("neutral", "lighter"), 5%);
     }
     
     &--active {
-      background-color: color('primary', 'base');
-      color: color('neutral', 'white');
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
       
       &:hover {
-        background-color: darken(color('primary', 'base'), 5%);
+        background-color: darken(color("primary", "base"), 5%);
       }
     }
   }
   
   &__subscription_id {
     font-family: monospace;
-    font-weight: map-get($font-weights, 'medium');
-    color: color('primary', 'base');
+    font-weight: map-get($font-weights, "medium");
+    color: color("primary", "base");
   }
   
   &__customer_cell {
@@ -153,13 +194,13 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background-color: color('primary', 'base');
-    color: color('neutral', 'white');
-    font-weight: map-get($font-weights, 'semibold');
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    font-weight: map-get($font-weights, "semibold");
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: spacing('sm');
+    margin-right: spacing("sm");
   }
   
   &__customer_info {
@@ -168,13 +209,19 @@
   }
   
   &__customer_name {
-    font-weight: map-get($font-weights, 'medium');
-    color: color('neutral', 'black');
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
   }
   
   &__customer_email {
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+  }
+
+  &__customer_phone {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    margin-top: spacing("xxs");
   }
   
   &__services_cell {
@@ -183,64 +230,118 @@
   }
   
   &__services_list {
-    font-weight: map-get($font-weights, 'medium');
-    color: color('neutral', 'black');
-    margin-bottom: spacing('xxs');
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
     @include truncate;
     max-width: 150px;
   }
   
   &__services_count {
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+  }
+
+  &__services_price {
+    font-size: map-get($font-sizes, "xs");
+    color: color("success");
+    font-weight: map-get($font-weights, "semibold");
+    margin-top: spacing("xxs");
+  }
+
+  &__billing_cell {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__billing_cycle {
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__billing_frequency {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+  }
+
+  &__date_cell {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__date_main {
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__date_elapsed {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+  }
+
+  &__next_billing {
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    
+    &.subscriptions_page__overdue {
+      color: color("error");
+    }
+  }
+
+  &__no_billing {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    font-style: italic;
   }
   
   &__price {
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('success');
+    font-weight: map-get($font-weights, "semibold");
+    color: color("success");
   }
   
   &__actions_cell {
     display: flex;
-    gap: spacing('xs');
+    gap: spacing("xs");
     align-items: center;
     flex-wrap: wrap;
   }
   
   &__action_button {
-    padding: spacing('xxs') spacing('xs');
-    background-color: color('neutral', 'lighter');
+    padding: spacing("xxs") spacing("xs");
+    background-color: color("neutral", "lighter");
     border: none;
-    border-radius: border-radius('sm');
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'darker');
+    border-radius: border-radius("sm");
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "darker");
     cursor: pointer;
     
     &:hover {
-      background-color: color('primary', 'light');
-      color: color('neutral', 'white');
+      background-color: color("primary", "light");
+      color: color("neutral", "white");
     }
   }
   
   &__status_select {
-    padding: spacing('xxs') spacing('xs');
-    border: 1px solid color('neutral', 'medium');
-    border-radius: border-radius('sm');
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'darker');
-    background-color: color('neutral', 'white');
+    padding: spacing("xxs") spacing("xs");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("sm");
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "darker");
+    background-color: color("neutral", "white");
     cursor: pointer;
     
     &:focus {
       outline: none;
-      border-color: color('primary', 'base');
+      border-color: color("primary", "base");
     }
   }
   
   &__loading {
     text-align: center;
-    padding: spacing('4xl');
-    color: color('neutral', 'dark');
-    font-size: map-get($font-sizes, 'lg');
+    padding: spacing("4xl");
+    color: color("neutral", "dark");
+    font-size: map-get($font-sizes, "lg");
   }
 }

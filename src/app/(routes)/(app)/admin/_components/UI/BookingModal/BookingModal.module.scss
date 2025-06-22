@@ -1,0 +1,194 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.booking_modal {
+  position: relative;
+  background: color('neutral', 'white');
+  border-radius: border-radius('lg');
+  box-shadow: map-get($box-shadows, 'xl');
+  max-width: 800px;
+  width: 95vw;
+  max-height: 90vh;
+  margin: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  
+  &__backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(color('neutral', 'black'), 0.5);
+    backdrop-filter: blur(4px);
+    z-index: z-index('modal');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing('md');
+  }
+  
+  &__header {
+    padding: spacing('lg') spacing('lg') spacing('md');
+    border-bottom: 1px solid color('neutral', 'lighter');
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: spacing('md');
+  }
+  
+  &__title_section {
+    display: flex;
+    align-items: center;
+    gap: spacing('md');
+    flex: 1;
+  }
+  
+  &__title {
+    font-size: map-get($font-sizes, 'xl');
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('neutral', 'black');
+    margin: 0;
+    font-family: monospace;
+  }
+  
+  &__close {
+    background: none;
+    border: none;
+    font-size: map-get($font-sizes, '2xl');
+    color: color('neutral', 'dark');
+    cursor: pointer;
+    padding: spacing('xs');
+    border-radius: border-radius('sm');
+    line-height: 1;
+    
+    &:hover {
+      background-color: color('neutral', 'lighter');
+      color: color('neutral', 'black');
+    }
+  }
+  
+  &__body {
+    padding: spacing('lg');
+    overflow-y: auto;
+    flex: 1;
+  }
+  
+  &__section {
+    margin-bottom: spacing('xl');
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  &__section_title {
+    font-size: map-get($font-sizes, 'lg');
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('neutral', 'black');
+    margin: 0 0 spacing('md') 0;
+    padding-bottom: spacing('sm');
+    border-bottom: 2px solid color('primary', 'base');
+  }
+  
+  &__info_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: spacing('md');
+    
+    @include breakpoint-down('sm') {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &__info_item {
+    display: flex;
+    flex-direction: column;
+    gap: spacing('xs');
+  }
+  
+  &__label {
+    font-size: map-get($font-sizes, 'sm');
+    font-weight: map-get($font-weights, 'medium');
+    color: color('neutral', 'dark');
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  &__value {
+    font-size: map-get($font-sizes, 'base');
+    color: color('neutral', 'black');
+    font-weight: map-get($font-weights, 'medium');
+  }
+  
+  &__price {
+    color: color('success');
+    font-weight: map-get($font-weights, 'semibold');
+    font-size: map-get($font-sizes, 'lg');
+  }
+  
+  &__address {
+    background-color: color('neutral', 'lighter');
+    border-radius: border-radius('md');
+    padding: spacing('md');
+    font-size: map-get($font-sizes, 'base');
+    color: color('neutral', 'black');
+    line-height: map-get($line-heights, 'relaxed');
+  }
+  
+  &__instructions {
+    background-color: color('neutral', 'lighter');
+    border-radius: border-radius('md');
+    padding: spacing('md');
+    font-size: map-get($font-sizes, 'base');
+    color: color('neutral', 'black');
+    line-height: map-get($line-heights, 'relaxed');
+    font-style: italic;
+  }
+  
+  &__staff {
+    display: flex;
+    align-items: center;
+    gap: spacing('md');
+    padding: spacing('md');
+    background-color: color('neutral', 'lighter');
+    border-radius: border-radius('md');
+  }
+  
+  &__staff_name {
+    font-size: map-get($font-sizes, 'base');
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('neutral', 'black');
+  }
+  
+  &__staff_email {
+    font-size: map-get($font-sizes, 'sm');
+    color: color('neutral', 'dark');
+  }
+  
+  &__footer {
+    padding: spacing('md') spacing('lg') spacing('lg');
+    border-top: 1px solid color('neutral', 'lighter');
+    display: flex;
+    gap: spacing('md');
+    justify-content: space-between;
+    align-items: center;
+    
+    @include breakpoint-down('md') {
+      flex-direction: column;
+      gap: spacing('md');
+    }
+  }
+  
+  &__actions {
+    display: flex;
+    gap: spacing('sm');
+    
+    @include breakpoint-down('sm') {
+      flex-direction: column;
+      width: 100%;
+    }
+  }
+}

@@ -6,6 +6,8 @@ import Card from "../_components/UI/Card/Card";
 import Button from "../_components/UI/Button/Button";
 import Table from "../_components/UI/Table/Table";
 import StatusBadge from "../_components/UI/StatusBadge/StatusBadge";
+import ConfirmationModal from "../_components/UI/ConfirmationModal/ConfirmationModal";
+import BookingModal from "../_components/UI/BookingModal/BookingModal";
 import { motion } from "framer-motion";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { BookingStatus, Booking } from "@/graphql/api";
@@ -18,10 +20,24 @@ export default function BookingsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [error, setError] = useState<string | null>(null);
-  // Modal state for future implementation
-  // const [selectedBooking, setSelectedBooking] = useState<unknown>(null);
-  // const [showModal, setShowModal] = useState(false);
-  // const [modalType, setModalType] = useState<"create" | "edit" | "view">("view");
+
+  // Modal states
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [bookingModalMode, setBookingModalMode] = useState<"view" | "edit">(
+    "view"
+  );
+
+  // Confirmation modal states
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmAction, setConfirmAction] = useState<{
+    type: "status_change";
+    bookingId: string;
+    newStatus: BookingStatus;
+    title: string;
+    message: string;
+  } | null>(null);
+  const [isActionLoading, setIsActionLoading] = useState(false);
 
   const {
     handleGetBookings,
@@ -66,12 +82,59 @@ export default function BookingsPage() {
     return matchesSearch && matchesFilter;
   });
 
-  const handleStatusUpdate = async (
+  const openStatusConfirmation = (
     bookingId: string,
     newStatus: BookingStatus
   ) => {
+    const booking = bookings.find((b) => b.id === bookingId);
+    const customerName = booking?.customer
+      ? `${booking.customer.firstName || ""} ${booking.customer.lastName || ""}`.trim()
+      : "Unknown";
+
+    let title = "";
+    let message = "";
+
+    switch (newStatus) {
+      case BookingStatus.Cancelled:
+        title = "Cancel Booking";
+        message = `Are you sure you want to cancel the booking for ${customerName}? This action cannot be undone.`;
+        break;
+      case BookingStatus.Completed:
+        title = "Complete Booking";
+        message = `Mark the booking for ${customerName} as completed?`;
+        break;
+      case BookingStatus.Confirmed:
+        title = "Confirm Booking";
+        message = `Confirm the booking for ${customerName}?`;
+        break;
+      case BookingStatus.InProgress:
+        title = "Start Booking";
+        message = `Mark the booking for ${customerName} as in progress?`;
+        break;
+      default:
+        title = "Update Status";
+        message = `Update the booking status for ${customerName}?`;
+    }
+
+    setConfirmAction({
+      type: "status_change",
+      bookingId,
+      newStatus,
+      title,
+      message,
+    });
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmedStatusUpdate = async () => {
+    if (!confirmAction) return;
+
     try {
+      setIsActionLoading(true);
       setError(null);
+
+      const { bookingId, newStatus } = confirmAction;
+
       if (newStatus === BookingStatus.Cancelled) {
         await handleCancelBooking(bookingId);
       } else if (newStatus === BookingStatus.Completed) {
@@ -79,7 +142,10 @@ export default function BookingsPage() {
       } else {
         await handleUpdateBookingStatus(bookingId, newStatus);
       }
+
       await fetchBookings();
+      setShowConfirmModal(false);
+      setConfirmAction(null);
     } catch (error) {
       console.error("Error updating booking status:", error);
       setError(
@@ -87,12 +153,20 @@ export default function BookingsPage() {
           ? error.message
           : "Failed to update booking status"
       );
+    } finally {
+      setIsActionLoading(false);
     }
   };
 
-  const openModal = (_type: "create" | "edit" | "view", _booking?: unknown) => {
-    // Modal functionality to be implemented
-    console.log("Modal functionality to be implemented");
+  const openBookingModal = (mode: "view" | "edit", booking: Booking) => {
+    setSelectedBooking(booking);
+    setBookingModalMode(mode);
+    setShowBookingModal(true);
+  };
+
+  const closeBookingModal = () => {
+    setShowBookingModal(false);
+    setSelectedBooking(null);
   };
 
   const getStatusColor = (status: string) => {
@@ -128,24 +202,15 @@ export default function BookingsPage() {
 
   const columns = [
     {
-      key: "id",
-      header: "Booking ID",
-      width: "10%",
-      render: (value: string) => (
-        <span className={styles.bookings_page__booking_id}>
-          #{value.slice(-8)}
-        </span>
-      ),
-    },
-    {
       key: "customer",
       header: "Customer",
-      width: "20%",
+      width: "18%",
       render: (value: unknown) => {
         const customer = value as {
           firstName?: string;
           lastName?: string;
           email?: string;
+          phoneNumber?: string;
         };
         const fullName =
           `${customer?.firstName || ""} ${customer?.lastName || ""}`.trim() ||
@@ -162,6 +227,9 @@ export default function BookingsPage() {
               <div className={styles.bookings_page__customer_email}>
                 {customer?.email || "N/A"}
               </div>
+              <div className={styles.bookings_page__customer_phone}>
+                {customer?.phoneNumber || "N/A"}
+              </div>
             </div>
           </div>
         );
@@ -170,30 +238,78 @@ export default function BookingsPage() {
     {
       key: "service",
       header: "Service",
-      width: "15%",
-      render: (value: unknown) => (value as { name?: string })?.name || "N/A",
+      width: "12%",
+      render: (value: unknown) => {
+        const service = value as { name?: string; category?: string };
+        return (
+          <div className={styles.bookings_page__service_cell}>
+            <div className={styles.bookings_page__service_name}>
+              {service?.name || "N/A"}
+            </div>
+            <div className={styles.bookings_page__service_category}>
+              {service?.category || ""}
+            </div>
+          </div>
+        );
+      },
     },
     {
       key: "date",
       header: "Date",
       width: "10%",
-      render: (value: string) => formatDate(value),
+      render: (value: string) => (
+        <div className={styles.bookings_page__date_cell}>
+          <div className={styles.bookings_page__date_main}>
+            {formatDate(value)}
+          </div>
+          <div className={styles.bookings_page__date_day}>
+            {new Date(value).toLocaleDateString("en-US", { weekday: "short" })}
+          </div>
+        </div>
+      ),
     },
     {
       key: "timeSlot",
       header: "Time",
-      width: "10%",
-      render: (value: unknown) => formatTime(value),
+      width: "8%",
+      render: (value: unknown) => (
+        <div className={styles.bookings_page__time_cell}>
+          {formatTime(value)}
+        </div>
+      ),
     },
     {
       key: "totalPrice",
       header: "Price",
-      width: "10%",
+      width: "8%",
       render: (value: number) => (
         <span className={styles.bookings_page__price}>
           ${value?.toFixed(2) || "0.00"}
         </span>
       ),
+    },
+    {
+      key: "assignedStaff",
+      header: "Staff",
+      width: "12%",
+      render: (value: unknown) => {
+        const staff = value as { firstName?: string; lastName?: string };
+        if (!staff?.firstName) {
+          return (
+            <span className={styles.bookings_page__no_staff}>Unassigned</span>
+          );
+        }
+        return (
+          <div className={styles.bookings_page__staff_cell}>
+            <div className={styles.bookings_page__staff_initial}>
+              {staff.firstName.charAt(0)}
+            </div>
+            <div className={styles.bookings_page__staff_name}>
+              {`${staff.firstName} ${staff.lastName || ""}`.trim()}
+            </div>
+          </div>
+        );
+      },
     },
     {
       key: "status",
@@ -209,34 +325,38 @@ export default function BookingsPage() {
     {
       key: "actions",
       header: "Actions",
-      width: "15%",
+      width: "14%",
       render: (_value: unknown, row: unknown) => {
-        const booking = row as { id: string; status: BookingStatus };
+        const booking = row as Booking;
         return (
           <div className={styles.bookings_page__actions_cell}>
             <button
               className={styles.bookings_page__action_button}
-              onClick={() => openModal("view", row)}
+              onClick={() => openBookingModal("view", booking)}
+              title="View details"
             >
-              View
+              👁️
             </button>
             <button
               className={styles.bookings_page__action_button}
-              onClick={() => openModal("edit", row)}
+              onClick={() => openBookingModal("edit", booking)}
+              title="Edit booking"
             >
-              Edit
+              ✏️
             </button>
             {booking.status !== BookingStatus.Completed &&
               booking.status !== BookingStatus.Cancelled && (
                 <select
                   className={styles.bookings_page__status_select}
                   value={booking.status}
-                  onChange={(e) =>
-                    handleStatusUpdate(
+                  onChange={(e) => {
+                    e.stopPropagation();
+                    openStatusConfirmation(
                       booking.id,
                       e.target.value as BookingStatus
-                    )
-                  }
+                    );
+                  }}
+                  title="Change status"
                 >
                   <option value={BookingStatus.Pending}>Pending</option>
                   <option value={BookingStatus.Confirmed}>Confirmed</option>
@@ -302,7 +422,9 @@ export default function BookingsPage() {
               variant="primary"
               size="medium"
               icon="+"
-              onClick={() => openModal("create")}
+              onClick={() =>
+                console.log("Create booking functionality to be implemented")
+              }
             >
               Add Booking
             </Button>
@@ -379,11 +501,43 @@ export default function BookingsPage() {
               <Table
                 columns={columns}
                 data={filteredBookings}
-                onRowClick={(booking) => openModal("view", booking)}
+                onRowClick={(booking) => {
+                  console.log("booking", booking);
+                  //openBookingModal("view", booking as Booking);
+                }}
               />
             )}
           </motion.div>
         </Card>
+
+        {/* Booking Details Modal */}
+        <BookingModal
+          isOpen={showBookingModal}
+          onClose={closeBookingModal}
+          booking={selectedBooking}
+          mode={bookingModalMode}
+          onStatusUpdate={openStatusConfirmation}
+        />
+
+        {/* Confirmation Modal */}
+        <ConfirmationModal
+          isOpen={showConfirmModal}
+          onClose={() => {
+            setShowConfirmModal(false);
+            setConfirmAction(null);
+          }}
+          onConfirm={handleConfirmedStatusUpdate}
+          title={confirmAction?.title || ""}
+          message={confirmAction?.message || ""}
+          confirmText="Confirm"
+          cancelText="Cancel"
+          variant={
+            confirmAction?.newStatus === BookingStatus.Cancelled
+              ? "danger"
+              : "warning"
+          }
+          isLoading={isActionLoading}
+        />
       </div>
     </AdminDashboardLayout>
   );

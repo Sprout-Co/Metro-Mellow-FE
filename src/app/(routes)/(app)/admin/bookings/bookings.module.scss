@@ -218,6 +218,12 @@
     color: color("neutral", "dark");
   }
 
+  &__customer_phone {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    margin-top: spacing("xxs");
+  }
+
   &__price {
     font-weight: map-get($font-weights, "semibold");
     color: color("success");
@@ -265,5 +271,83 @@
     padding: spacing("4xl");
     color: color("neutral", "dark");
     font-size: map-get($font-sizes, "lg");
+  }
+
+  // New table cell styles
+  &__service_cell {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__service_name {
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__service_category {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__date_cell {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__date_main {
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__date_day {
+    font-size: map-get($font-sizes, "xs");
+    color: color("primary", "base");
+    text-transform: uppercase;
+    font-weight: map-get($font-weights, "semibold");
+  }
+
+  &__time_cell {
+    font-family: monospace;
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    font-size: map-get($font-sizes, "sm");
+  }
+
+  &__staff_cell {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+  }
+
+  &__staff_initial {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: color("secondary", "base");
+    color: color("neutral", "white");
+    font-weight: map-get($font-weights, "semibold");
+    font-size: map-get($font-sizes, "xs");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__staff_name {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+  }
+
+  &__no_staff {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    font-style: italic;
+    padding: spacing("xs") spacing("sm");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("sm");
   }
 }

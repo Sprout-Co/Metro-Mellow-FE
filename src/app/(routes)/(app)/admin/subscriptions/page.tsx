@@ -6,19 +6,28 @@ import Card from "../_components/UI/Card/Card";
 import Button from "../_components/UI/Button/Button";
 import Table from "../_components/UI/Table/Table";
 import StatusBadge from "../_components/UI/StatusBadge/StatusBadge";
+import ConfirmationModal from "../_components/UI/ConfirmationModal/ConfirmationModal";
 import { motion } from "framer-motion";
 import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
-import { SubscriptionStatus } from "@/graphql/api";
+import { SubscriptionStatus, Subscription } from "@/graphql/api";
 
 export default function SubscriptionsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<SubscriptionStatus | "all">("all");
   const [isLoading, setIsLoading] = useState(true);
-  const [subscriptions, setSubscriptions] = useState<unknown[]>([]);
-  // Modal state for future implementation
-  // const [selectedSubscription, setSelectedSubscription] = useState<unknown>(null);
-  // const [showModal, setShowModal] = useState(false);
-  // const [modalType, setModalType] = useState<"create" | "edit" | "view">("view");
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Confirmation modal states
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmAction, setConfirmAction] = useState<{
+    type: "status_change";
+    subscriptionId: string;
+    newStatus: SubscriptionStatus;
+    title: string;
+    message: string;
+  } | null>(null);
+  const [isActionLoading, setIsActionLoading] = useState(false);
 
   const {
     handleGetSubscriptions,
@@ -37,10 +46,14 @@ export default function SubscriptionsPage() {
   const fetchSubscriptions = async () => {
     try {
       setIsLoading(true);
+      setError(null);
       const data = await handleGetSubscriptions();
-      setSubscriptions(data || []);
+      setSubscriptions((data as Subscription[]) || []);
     } catch (error) {
       console.error("Error fetching subscriptions:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to fetch subscriptions"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -60,22 +73,84 @@ export default function SubscriptionsPage() {
     return matchesSearch && matchesFilter;
   });
 
-  const handleStatusUpdate = async (subscriptionId: string, newStatus: SubscriptionStatus) => {
+  const openStatusConfirmation = (subscriptionId: string, newStatus: SubscriptionStatus) => {
+    const subscription = subscriptions.find(s => s.id === subscriptionId);
+    const customerName = subscription?.customer ? `${subscription.customer.firstName || ""} ${subscription.customer.lastName || ""}`.trim() : "Unknown";
+    
+    let title = "";
+    let message = "";
+    
+    switch (newStatus) {
+      case SubscriptionStatus.Cancelled:
+        title = "Cancel Subscription";
+        message = `Are you sure you want to cancel the subscription for ${customerName}? This will stop all future billing and services.`;
+        break;
+      case SubscriptionStatus.Paused:
+        title = "Pause Subscription";
+        message = `Pause the subscription for ${customerName}? Services will be temporarily suspended.`;
+        break;
+      case SubscriptionStatus.Active:
+        const currentStatus = subscription?.status;
+        if (currentStatus === SubscriptionStatus.Paused) {
+          title = "Resume Subscription";
+          message = `Resume the subscription for ${customerName}? Services will restart.`;
+        } else if (currentStatus === SubscriptionStatus.Cancelled) {
+          title = "Reactivate Subscription";
+          message = `Reactivate the subscription for ${customerName}? Billing and services will resume.`;
+        } else {
+          title = "Activate Subscription";
+          message = `Activate the subscription for ${customerName}?`;
+        }
+        break;
+      default:
+        title = "Update Status";
+        message = `Update the subscription status for ${customerName}?`;
+    }
+    
+    setConfirmAction({
+      type: "status_change",
+      subscriptionId,
+      newStatus,
+      title,
+      message,
+    });
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmedStatusUpdate = async () => {
+    if (!confirmAction) return;
+    
     try {
+      setIsActionLoading(true);
+      setError(null);
+      
+      const { subscriptionId, newStatus } = confirmAction;
+      const subscription = subscriptions.find(s => s.id === subscriptionId);
+      
       if (newStatus === SubscriptionStatus.Cancelled) {
         await handleCancelSubscription(subscriptionId);
       } else if (newStatus === SubscriptionStatus.Paused) {
         await handlePauseSubscription(subscriptionId);
-      } else if (newStatus === SubscriptionStatus.Active && subscriptions.find(s => s.id === subscriptionId)?.status === SubscriptionStatus.Paused) {
+      } else if (newStatus === SubscriptionStatus.Active && subscription?.status === SubscriptionStatus.Paused) {
         await handleResumeSubscription(subscriptionId);
-      } else if (newStatus === SubscriptionStatus.Active && subscriptions.find(s => s.id === subscriptionId)?.status === SubscriptionStatus.Cancelled) {
+      } else if (newStatus === SubscriptionStatus.Active && subscription?.status === SubscriptionStatus.Cancelled) {
         await handleReactivateSubscription(subscriptionId);
       } else {
         await handleUpdateSubscriptionStatus(subscriptionId, newStatus);
       }
+      
       await fetchSubscriptions();
+      setShowConfirmModal(false);
+      setConfirmAction(null);
     } catch (error) {
       console.error("Error updating subscription status:", error);
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Failed to update subscription status"
+      );
+    } finally {
+      setIsActionLoading(false);
     }
   };
 
@@ -128,8 +203,8 @@ export default function SubscriptionsPage() {
   const columns = [
     {
       key: "id",
-      header: "Subscription ID",
-      width: "10%",
+      header: "ID",
+      width: "8%",
       render: (value: string) => (
         <span className={styles.subscriptions_page__subscription_id}>#{value.slice(-8)}</span>
       ),
@@ -137,20 +212,29 @@ export default function SubscriptionsPage() {
     {
       key: "customer",
       header: "Customer",
-      width: "20%",
+      width: "18%",
       render: (value: unknown) => {
-        const customer = value as { name?: string; email?: string };
+        const customer = value as { 
+          firstName?: string; 
+          lastName?: string; 
+          email?: string;
+          phoneNumber?: string;
+        };
+        const fullName = `${customer?.firstName || ""} ${customer?.lastName || ""}`.trim() || "N/A";
         return (
           <div className={styles.subscriptions_page__customer_cell}>
             <div className={styles.subscriptions_page__customer_initial}>
-              {customer?.name?.charAt(0) || 'N'}
+              {customer?.firstName?.charAt(0) || 'N'}
             </div>
             <div className={styles.subscriptions_page__customer_info}>
               <div className={styles.subscriptions_page__customer_name}>
-                {customer?.name || 'N/A'}
+                {fullName}
               </div>
               <div className={styles.subscriptions_page__customer_email}>
                 {customer?.email || 'N/A'}
+              </div>
+              <div className={styles.subscriptions_page__customer_phone}>
+                {customer?.phoneNumber || 'N/A'}
               </div>
             </div>
           </div>
@@ -160,7 +244,7 @@ export default function SubscriptionsPage() {
     {
       key: "services",
       header: "Services",
-      width: "20%",
+      width: "18%",
       render: (value: unknown) => {
         const services = value as unknown[];
         return (
@@ -171,6 +255,9 @@ export default function SubscriptionsPage() {
             <div className={styles.subscriptions_page__services_count}>
               {services?.length || 0} service{(services?.length || 0) !== 1 ? 's' : ''}
             </div>
+            <div className={styles.subscriptions_page__services_price}>
+              ${calculateTotalPrice(services).toFixed(2)}/month
+            </div>
           </div>
         );
       },
@@ -179,24 +266,43 @@ export default function SubscriptionsPage() {
       key: "billingCycle",
       header: "Billing",
       width: "10%",
-      render: (value: string) => formatBillingCycle(value),
+      render: (value: string) => (
+        <div className={styles.subscriptions_page__billing_cell}>
+          <div className={styles.subscriptions_page__billing_cycle}>
+            {formatBillingCycle(value)}
+          </div>
+          <div className={styles.subscriptions_page__billing_frequency}>
+            Every {value === "MONTHLY" ? "month" : value === "WEEKLY" ? "week" : "year"}
+          </div>
+        </div>
+      ),
     },
     {
       key: "startDate",
       header: "Start Date",
       width: "10%",
-      render: (value: string) => formatDate(value),
+      render: (value: string) => (
+        <div className={styles.subscriptions_page__date_cell}>
+          <div className={styles.subscriptions_page__date_main}>
+            {formatDate(value)}
+          </div>
+          <div className={styles.subscriptions_page__date_elapsed}>
+            {Math.floor((Date.now() - new Date(value).getTime()) / (1000 * 60 * 60 * 24))} days ago
+          </div>
+        </div>
+      ),
     },
     {
-      key: "services",
-      header: "Price",
+      key: "nextBillingDate",
+      header: "Next Billing",
       width: "10%",
-      render: (value: unknown) => {
-        const services = value as unknown[];
+      render: (value: string) => {
+        if (!value) return <span className={styles.subscriptions_page__no_billing}>N/A</span>;
+        const isOverdue = new Date(value) < new Date();
         return (
-          <span className={styles.subscriptions_page__price}>
-            ${calculateTotalPrice(services).toFixed(2)}
-          </span>
+          <div className={`${styles.subscriptions_page__next_billing} ${isOverdue ? styles.subscriptions_page__overdue : ''}`}>
+            {formatDate(value)}
+          </div>
         );
       },
     },
@@ -214,27 +320,30 @@ export default function SubscriptionsPage() {
     {
       key: "actions",
       header: "Actions",
-      width: "10%",
+      width: "16%",
       render: (_value: unknown, row: unknown) => {
-        const subscription = row as { id: string; status: SubscriptionStatus };
+        const subscription = row as Subscription;
         return (
           <div className={styles.subscriptions_page__actions_cell}>
             <button
               className={styles.subscriptions_page__action_button}
-              onClick={() => openModal("view", row)}
+              onClick={() => console.log("View subscription:", subscription.id)}
+              title="View details"
             >
-              View
+              👁️
             </button>
             <button
               className={styles.subscriptions_page__action_button}
-              onClick={() => openModal("edit", row)}
+              onClick={() => console.log("Edit subscription:", subscription.id)}
+              title="Edit subscription"
             >
-              Edit
+              ✏️
             </button>
             <select
               className={styles.subscriptions_page__status_select}
               value={subscription.status}
-              onChange={(e) => handleStatusUpdate(subscription.id, e.target.value as SubscriptionStatus)}
+              onChange={(e) => openStatusConfirmation(subscription.id, e.target.value as SubscriptionStatus)}
+              title="Change status"
             >
               <option value={SubscriptionStatus.Active}>Active</option>
               <option value={SubscriptionStatus.Paused}>Paused</option>
@@ -296,12 +405,29 @@ export default function SubscriptionsPage() {
               variant="primary"
               size="medium"
               icon="+"
-              onClick={() => openModal("create")}
+              onClick={() => console.log("Create subscription functionality to be implemented")}
             >
               Add Subscription
             </Button>
           </div>
         </div>
+
+        {error && (
+          <div className={styles.subscriptions_page__error}>
+            <div className={styles.subscriptions_page__error_content}>
+              <span className={styles.subscriptions_page__error_icon}>⚠️</span>
+              <span className={styles.subscriptions_page__error_message}>
+                {error}
+              </span>
+              <button
+                className={styles.subscriptions_page__error_dismiss}
+                onClick={() => setError(null)}
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
 
         <div className={styles.subscriptions_page__stats}>
           {subscriptionStats.map((stat, index) => (
@@ -352,11 +478,27 @@ export default function SubscriptionsPage() {
               <Table
                 columns={columns}
                 data={filteredSubscriptions}
-                onRowClick={(subscription) => openModal("view", subscription)}
+                onRowClick={(subscription) => console.log("View subscription:", subscription)}
               />
             )}
           </motion.div>
         </Card>
+
+        {/* Confirmation Modal */}
+        <ConfirmationModal
+          isOpen={showConfirmModal}
+          onClose={() => {
+            setShowConfirmModal(false);
+            setConfirmAction(null);
+          }}
+          onConfirm={handleConfirmedStatusUpdate}
+          title={confirmAction?.title || ""}
+          message={confirmAction?.message || ""}
+          confirmText="Confirm"
+          cancelText="Cancel"
+          variant={confirmAction?.newStatus === SubscriptionStatus.Cancelled ? "danger" : "warning"}
+          isLoading={isActionLoading}
+        />
       </div>
     </AdminDashboardLayout>
   );
