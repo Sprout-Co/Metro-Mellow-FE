@@ -1,0 +1,199 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.table_container {
+  background-color: map-get(map-get($colors, "neutral"), "white");
+}
+
+.table_wrapper {
+  overflow-x: auto;
+  border-radius: map-get($border-radius, "lg");
+}
+
+.invitation_table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: map-get($font-sizes, "sm");
+
+  th {
+    background-color: map-get(map-get($colors, "neutral"), "light");
+    color: map-get(map-get($colors, "neutral"), "darker");
+    font-weight: map-get($font-weights, "semibold");
+    padding: map-get($spacing, "md") map-get($spacing, "lg");
+    text-align: left;
+    border-bottom: 1px solid map-get(map-get($colors, "neutral"), "lighter");
+    font-size: map-get($font-sizes, "xs");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    padding: map-get($spacing, "md") map-get($spacing, "lg");
+    border-bottom: 1px solid map-get(map-get($colors, "neutral"), "lighter");
+    vertical-align: middle;
+  }
+
+  tr:hover {
+    background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.02);
+  }
+}
+
+.invitee_info {
+  display: flex;
+  align-items: center;
+  gap: map-get($spacing, "sm");
+}
+
+.invitee_avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: map-get(map-get($colors, "primary"), "base");
+  color: map-get(map-get($colors, "neutral"), "white");
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: map-get($font-sizes, "xs");
+  font-weight: map-get($font-weights, "semibold");
+  text-transform: uppercase;
+}
+
+.invitee_name {
+  font-weight: map-get($font-weights, "medium");
+  color: map-get(map-get($colors, "neutral"), "black");
+}
+
+.role_badge {
+  display: inline-block;
+  padding: map-get($spacing, "xxs") map-get($spacing, "sm");
+  background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+  color: map-get(map-get($colors, "primary"), "base");
+  border-radius: map-get($border-radius, "sm");
+  font-size: map-get($font-sizes, "xs");
+  font-weight: map-get($font-weights, "medium");
+  text-transform: capitalize;
+}
+
+.status_badge {
+  display: inline-block;
+  padding: map-get($spacing, "xxs") map-get($spacing, "sm");
+  border-radius: map-get($border-radius, "sm");
+  font-size: map-get($font-sizes, "xs");
+  font-weight: map-get($font-weights, "medium");
+  text-transform: uppercase;
+
+  &__pending {
+    background-color: rgba(map-get($colors, "warning"), 0.1);
+    color: map-get($colors, "warning");
+  }
+
+  &__used {
+    background-color: rgba(map-get($colors, "success"), 0.1);
+    color: map-get($colors, "success");
+  }
+
+  &__expired {
+    background-color: rgba(map-get($colors, "error"), 0.1);
+    color: map-get($colors, "error");
+  }
+}
+
+.expired_date {
+  color: map-get($colors, "error");
+  font-weight: map-get($font-weights, "medium");
+}
+
+.action_buttons {
+  display: flex;
+  gap: map-get($spacing, "xs");
+}
+
+.action_btn_resend,
+.action_btn_cancel {
+  padding: map-get($spacing, "xxs") map-get($spacing, "sm");
+  border: none;
+  border-radius: map-get($border-radius, "sm");
+  font-size: map-get($font-sizes, "xs");
+  font-weight: map-get($font-weights, "medium");
+  cursor: pointer;
+  transition: $transition-fast;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.action_btn_resend {
+  background-color: rgba(map-get($colors, "info"), 0.1);
+  color: map-get($colors, "info");
+
+  &:hover {
+    background-color: rgba(map-get($colors, "info"), 0.2);
+  }
+}
+
+.action_btn_cancel {
+  background-color: rgba(map-get($colors, "error"), 0.1);
+  color: map-get($colors, "error");
+
+  &:hover {
+    background-color: rgba(map-get($colors, "error"), 0.2);
+  }
+}
+
+.table_loading {
+  text-align: center;
+  padding: map-get($spacing, "4xl");
+  color: map-get(map-get($colors, "neutral"), "dark");
+
+  .loading_spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid map-get(map-get($colors, "neutral"), "lighter");
+    border-top: 3px solid map-get(map-get($colors, "primary"), "base");
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto map-get($spacing, "md") auto;
+  }
+
+  p {
+    margin: 0;
+    font-size: map-get($font-sizes, "sm");
+  }
+}
+
+.table_empty {
+  text-align: center;
+  padding: map-get($spacing, "4xl");
+
+  h3 {
+    @include heading-3;
+    color: map-get(map-get($colors, "neutral"), "darker");
+    margin-bottom: map-get($spacing, "sm");
+  }
+
+  p {
+    @include paragraph;
+    margin: 0;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@include breakpoint-down("md") {
+  .invitation_table {
+    font-size: map-get($font-sizes, "xs");
+    
+    th,
+    td {
+      padding: map-get($spacing, "sm");
+    }
+  }
+
+  .action_buttons {
+    flex-direction: column;
+    gap: map-get($spacing, "xxs");
+  }
+}

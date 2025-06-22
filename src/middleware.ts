@@ -17,7 +17,11 @@ const protectedRoutes = [
 ];
 
 // Define admin-only routes
-const adminRoutes = [Routes.ADMIN_DASHBOARD, Routes.USERS, Routes.STAFF];
+const adminRoutes = [
+  Routes.ADMIN_DASHBOARD,
+  Routes.ADMIN_USERS,
+  Routes.ADMIN_STAFF,
+];
 
 // UserRole enum values (since we can't import from GraphQL in middleware)
 const UserRole = {
@@ -26,55 +30,6 @@ const UserRole = {
   Admin: "ADMIN",
   SuperAdmin: "SUPER_ADMIN",
 } as const;
-
-interface JWTPayload {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: string;
-  iat: number;
-  exp: number;
-}
-
-// /**
-//  * Decodes a JWT token (base64 decode only, no signature verification)
-//  * @param token - The JWT token to decode
-//  * @returns The decoded payload if valid, null if invalid or expired
-//  */
-// function decodeAndValidateToken(token: string): JWTPayload | null {
-//   try {
-//     // Split the token and get the payload part
-//     const parts = token.split(".");
-//     if (parts.length !== 3) {
-//       return null;
-//     }
-
-//     // Decode the payload (second part)
-//     const payload = parts[1];
-//     // Add padding if needed
-//     const paddedPayload = payload + "=".repeat((4 - (payload.length % 4)) % 4);
-//     const decodedPayload = atob(
-//       paddedPayload.replace(/-/g, "+").replace(/_/g, "/")
-//     );
-//     const parsedPayload = JSON.parse(decodedPayload) as JWTPayload;
-
-//     // Check if token has expired
-//     const currentTime = Math.floor(Date.now() / 1000);
-//     if (parsedPayload.exp && parsedPayload.exp < currentTime) {
-//       return null;
-//     }
-
-//     // Validate required fields
-//     if (!parsedPayload.id || !parsedPayload.email || !parsedPayload.role) {
-//       return null;
-//     }
-
-//     return parsedPayload;
-//   } catch (error) {
-//     return null;
-//   }
-// }
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

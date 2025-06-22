@@ -1,10 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AdminDashboardLayout from "../_components/AdminDashboardLayout/AdminDashboardLayout";
 import styles from "./services.module.scss";
 import Card from "../_components/UI/Card/Card";
 import Button from "../_components/UI/Button/Button";
 import { motion } from "framer-motion";
+import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
+import ServiceModal from "./_components/ServiceModal/ServiceModal";
 
 export default function ServicesPage() {
   const services = [

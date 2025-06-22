@@ -1,124 +1,79 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AdminDashboardLayout from "../_components/AdminDashboardLayout/AdminDashboardLayout";
 import styles from "./staff.module.scss";
 import Card from "../_components/UI/Card/Card";
 import Button from "../_components/UI/Button/Button";
 import { motion } from "framer-motion";
+import { useStaffOperations } from "@/graphql/hooks/staff/useStaffOperations";
+import { StaffStatus } from "@/graphql/api";
+import StaffProfileModal from "./_components/StaffProfileModal/StaffProfileModal";
 
 export default function StaffPage() {
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState<"all" | "active" | "inactive">("all");
+  const [staffProfiles, setStaffProfiles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null);
 
-  // Mock staff data
-  const staffMembers = [
-    {
-      id: 1,
-      name: "Michael Rodriguez",
-      role: "Cleaning Specialist",
-      email: "michael.rodriguez@metromellow.com",
-      phone: "(555) 123-4567",
-      hireDate: "Jan 15, 2023",
-      services: ["House Cleaning", "Office Cleaning"],
-      averageRating: 4.8,
-      completedJobs: 156,
-      status: "active",
-      availability: "Full-time",
-      image: "👨‍💼",
-    },
-    {
-      id: 2,
-      name: "Emma Davis",
-      role: "Laundry & Household Specialist",
-      email: "emma.davis@metromellow.com",
-      phone: "(555) 234-5678",
-      hireDate: "Mar 22, 2023",
-      services: ["Laundry Service", "Grocery Shopping"],
-      averageRating: 4.9,
-      completedJobs: 143,
-      status: "active",
-      availability: "Part-time",
-      image: "👩‍💼",
-    },
-    {
-      id: 3,
-      name: "James Garcia",
-      role: "Chef & Cooking Expert",
-      email: "james.garcia@metromellow.com",
-      phone: "(555) 345-6789",
-      hireDate: "Apr 10, 2023",
-      services: ["Cooking Service", "Meal Preparation"],
-      averageRating: 4.7,
-      completedJobs: 98,
-      status: "active",
-      availability: "Full-time",
-      image: "👨‍🍳",
-    },
-    {
-      id: 4,
-      name: "Sophia Martinez",
-      role: "Pest Control Specialist",
-      email: "sophia.martinez@metromellow.com",
-      phone: "(555) 456-7890",
-      hireDate: "Jun 5, 2023",
-      services: ["Pest Control", "Preventative Treatment"],
-      averageRating: 4.6,
-      completedJobs: 87,
-      status: "active",
-      availability: "Full-time",
-      image: "👩‍🔧",
-    },
-    {
-      id: 5,
-      name: "William Johnson",
-      role: "Cleaning Specialist",
-      email: "william.johnson@metromellow.com",
-      phone: "(555) 567-8901",
-      hireDate: "Aug 15, 2023",
-      services: ["House Cleaning", "Deep Cleaning"],
-      averageRating: 4.5,
-      completedJobs: 76,
-      status: "inactive",
-      availability: "On Leave",
-      image: "👨‍💼",
-    },
-    {
-      id: 6,
-      name: "Olivia Thompson",
-      role: "Errands Specialist",
-      email: "olivia.thompson@metromellow.com",
-      phone: "(555) 678-9012",
-      hireDate: "Oct 12, 2023",
-      services: ["Grocery Shopping", "General Errands"],
-      averageRating: 4.7,
-      completedJobs: 65,
-      status: "active",
-      availability: "Part-time",
-      image: "👩‍💼",
-    },
-  ];
+  const { handleGetStaffProfiles, handleUpdateStaffStatus } = useStaffOperations();
+
+  useEffect(() => {
+    fetchStaffProfiles();
+  }, []);
+
+  const fetchStaffProfiles = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const profiles = await handleGetStaffProfiles();
+      setStaffProfiles(profiles || []);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to fetch staff profiles");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStatusUpdate = async (staffId: string, newStatus: StaffStatus) => {
+    try {
+      await handleUpdateStaffStatus(staffId, newStatus);
+      await fetchStaffProfiles();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update staff status");
+    }
+  };
+
+  const handleViewProfile = (staffId: string) => {
+    setSelectedStaffId(staffId);
+    setIsProfileModalOpen(true);
+  };
 
   // Filter staff based on active tab
-  const filteredStaff = staffMembers.filter((staff) => {
+  const filteredStaff = staffProfiles.filter((staff) => {
     if (activeTab === "all") return true;
-    if (activeTab === "active") return staff.status === "active";
-    if (activeTab === "inactive") return staff.status === "inactive";
+    if (activeTab === "active") return staff.status === "ACTIVE";
+    if (activeTab === "inactive") return staff.status === "INACTIVE";
     return true;
   });
 
   // Staff statistics
   const staffStats = [
-    { label: "Total Staff", value: staffMembers.length },
+    { label: "Total Staff", value: staffProfiles.length },
     {
       label: "Active Staff",
-      value: staffMembers.filter((s) => s.status === "active").length,
+      value: staffProfiles.filter((s) => s.status === "ACTIVE").length,
     },
     {
-      label: "Full-time",
-      value: staffMembers.filter((s) => s.availability === "Full-time").length,
+      label: "Completed Jobs",
+      value: staffProfiles.reduce((total, s) => total + (s.completedJobs || 0), 0),
     },
     {
-      label: "Part-time",
-      value: staffMembers.filter((s) => s.availability === "Part-time").length,
+      label: "Avg Rating",
+      value: staffProfiles.length > 0 
+        ? (staffProfiles.reduce((total, s) => total + (s.rating || 0), 0) / staffProfiles.length).toFixed(1)
+        : "0.0",
     },
   ];
 
@@ -140,7 +95,12 @@ export default function StaffPage() {
           </div>
 
           <div className={styles.staff_page__actions}>
-            <Button variant="primary" size="medium" icon="+">
+            <Button 
+              variant="primary" 
+              size="medium" 
+              icon="+"
+              onClick={() => setIsProfileModalOpen(true)}
+            >
               Add Staff Member
             </Button>
           </div>
@@ -154,6 +114,15 @@ export default function StaffPage() {
             </Card>
           ))}
         </div>
+
+        {error && (
+          <div className={styles.staff_page__error}>
+            <p>{error}</p>
+            <Button variant="outline" size="small" onClick={fetchStaffProfiles}>
+              Retry
+            </Button>
+          </div>
+        )}
 
         <div className={styles.staff_page__tabs}>
           <button
@@ -177,119 +146,154 @@ export default function StaffPage() {
         </div>
 
         <div className={styles.staff_page__grid}>
-          {filteredStaff.map((staffMember) => (
-            <motion.div
-              key={staffMember.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Card className={styles.staff_page__staff_card}>
-                <div className={styles.staff_page__staff_header}>
-                  <div className={styles.staff_page__staff_avatar}>
-                    {staffMember.image}
+          {loading ? (
+            <div className={styles.staff_page__loading}>
+              <div className={styles.loading_spinner}></div>
+              <p>Loading staff members...</p>
+            </div>
+          ) : filteredStaff.length === 0 ? (
+            <div className={styles.staff_page__empty}>
+              <h3>No Staff Members Found</h3>
+              <p>No staff members match the current filter criteria.</p>
+            </div>
+          ) : (
+            filteredStaff.map((staffMember, index) => (
+              <motion.div
+                key={staffMember.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+              >
+                <Card className={styles.staff_page__staff_card}>
+                  <div className={styles.staff_page__staff_header}>
+                    <div className={styles.staff_page__staff_avatar}>
+                      {staffMember.user?.firstName?.[0] || "S"}
+                      {staffMember.user?.lastName?.[0] || "M"}
+                    </div>
+
+                    <div className={styles.staff_page__staff_info}>
+                      <h3 className={styles.staff_page__staff_name}>
+                        {staffMember.user?.firstName} {staffMember.user?.lastName}
+                      </h3>
+                      <p className={styles.staff_page__staff_role}>
+                        {staffMember.serviceCategories?.join(", ") || "Service Provider"}
+                      </p>
+                    </div>
+
+                    <div className={styles.staff_page__staff_status}>
+                      <span
+                        className={`${styles.staff_page__status_indicator} ${
+                          staffMember.status === "ACTIVE" 
+                            ? styles["staff_page__status_indicator--active"] 
+                            : styles["staff_page__status_indicator--inactive"]
+                        }`}
+                      >
+                        {staffMember.status === "ACTIVE" ? "Active" : "Inactive"}
+                      </span>
+                    </div>
                   </div>
 
-                  <div className={styles.staff_page__staff_info}>
-                    <h3 className={styles.staff_page__staff_name}>
-                      {staffMember.name}
-                    </h3>
-                    <p className={styles.staff_page__staff_role}>
-                      {staffMember.role}
-                    </p>
+                  <div className={styles.staff_page__staff_details}>
+                    <div className={styles.staff_page__detail_item}>
+                      <span className={styles.staff_page__detail_label}>
+                        Email:
+                      </span>
+                      <span className={styles.staff_page__detail_value}>
+                        {staffMember.user?.email || "N/A"}
+                      </span>
+                    </div>
+
+                    <div className={styles.staff_page__detail_item}>
+                      <span className={styles.staff_page__detail_label}>
+                        Services:
+                      </span>
+                      <span className={styles.staff_page__detail_value}>
+                        {staffMember.serviceCategories?.join(", ") || "None assigned"}
+                      </span>
+                    </div>
+
+                    <div className={styles.staff_page__detail_item}>
+                      <span className={styles.staff_page__detail_label}>
+                        Documents:
+                      </span>
+                      <span className={styles.staff_page__detail_value}>
+                        {staffMember.documents?.length || 0} uploaded
+                      </span>
+                    </div>
                   </div>
 
-                  <div className={styles.staff_page__staff_status}>
-                    <span
-                      className={`${styles.staff_page__status_indicator} ${staffMember.status === "active" ? styles["staff_page__status_indicator--active"] : styles["staff_page__status_indicator--inactive"]}`}
+                  <div className={styles.staff_page__staff_metrics}>
+                    <div className={styles.staff_page__metric}>
+                      <span className={styles.staff_page__metric_value}>
+                        {staffMember.completedJobs || 0}
+                      </span>
+                      <span className={styles.staff_page__metric_label}>
+                        Jobs
+                      </span>
+                    </div>
+
+                    <div className={styles.staff_page__metric}>
+                      <span className={styles.staff_page__metric_value}>
+                        {staffMember.rating ? staffMember.rating.toFixed(1) : "N/A"}
+                      </span>
+                      <span className={styles.staff_page__metric_label}>
+                        Rating
+                      </span>
+                    </div>
+
+                    <div className={styles.staff_page__metric}>
+                      <span className={styles.staff_page__metric_value}>
+                        {new Date(staffMember.createdAt).toLocaleDateString(
+                          "en-US",
+                          { year: "numeric", month: "short" }
+                        )}
+                      </span>
+                      <span className={styles.staff_page__metric_label}>
+                        Since
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className={styles.staff_page__staff_actions}>
+                    <Button 
+                      variant="outline" 
+                      size="small"
+                      onClick={() => handleViewProfile(staffMember.id)}
                     >
-                      {staffMember.status === "active" ? "Active" : "Inactive"}
-                    </span>
-                  </div>
-                </div>
-
-                <div className={styles.staff_page__staff_details}>
-                  <div className={styles.staff_page__detail_item}>
-                    <span className={styles.staff_page__detail_label}>
-                      Email:
-                    </span>
-                    <span className={styles.staff_page__detail_value}>
-                      {staffMember.email}
-                    </span>
-                  </div>
-
-                  <div className={styles.staff_page__detail_item}>
-                    <span className={styles.staff_page__detail_label}>
-                      Phone:
-                    </span>
-                    <span className={styles.staff_page__detail_value}>
-                      {staffMember.phone}
-                    </span>
-                  </div>
-
-                  <div className={styles.staff_page__detail_item}>
-                    <span className={styles.staff_page__detail_label}>
-                      Services:
-                    </span>
-                    <span className={styles.staff_page__detail_value}>
-                      {staffMember.services.join(", ")}
-                    </span>
-                  </div>
-
-                  <div className={styles.staff_page__detail_item}>
-                    <span className={styles.staff_page__detail_label}>
-                      Availability:
-                    </span>
-                    <span className={styles.staff_page__detail_value}>
-                      {staffMember.availability}
-                    </span>
-                  </div>
-                </div>
-
-                <div className={styles.staff_page__staff_metrics}>
-                  <div className={styles.staff_page__metric}>
-                    <span className={styles.staff_page__metric_value}>
-                      {staffMember.completedJobs}
-                    </span>
-                    <span className={styles.staff_page__metric_label}>
-                      Jobs
-                    </span>
-                  </div>
-
-                  <div className={styles.staff_page__metric}>
-                    <span className={styles.staff_page__metric_value}>
-                      {staffMember.averageRating}
-                    </span>
-                    <span className={styles.staff_page__metric_label}>
-                      Rating
-                    </span>
-                  </div>
-
-                  <div className={styles.staff_page__metric}>
-                    <span className={styles.staff_page__metric_value}>
-                      {new Date(staffMember.hireDate).toLocaleDateString(
-                        "en-US",
-                        { year: "numeric", month: "short" }
+                      View Profile
+                    </Button>
+                    <Button 
+                      variant="tertiary" 
+                      size="small"
+                      onClick={() => handleStatusUpdate(
+                        staffMember.id, 
+                        staffMember.status === "ACTIVE" ? StaffStatus.Inactive : StaffStatus.Active
                       )}
-                    </span>
-                    <span className={styles.staff_page__metric_label}>
-                      Since
-                    </span>
+                    >
+                      {staffMember.status === "ACTIVE" ? "Deactivate" : "Activate"}
+                    </Button>
                   </div>
-                </div>
-
-                <div className={styles.staff_page__staff_actions}>
-                  <Button variant="outline" size="small">
-                    View Profile
-                  </Button>
-                  <Button variant="tertiary" size="small">
-                    Schedule
-                  </Button>
-                </div>
-              </Card>
-            </motion.div>
-          ))}
+                </Card>
+              </motion.div>
+            ))
+          )}
         </div>
+
+        {isProfileModalOpen && (
+          <StaffProfileModal
+            isOpen={isProfileModalOpen}
+            onClose={() => {
+              setIsProfileModalOpen(false);
+              setSelectedStaffId(null);
+            }}
+            staffId={selectedStaffId}
+            onSuccess={() => {
+              setIsProfileModalOpen(false);
+              setSelectedStaffId(null);
+              fetchStaffProfiles();
+            }}
+          />
+        )}
       </div>
     </AdminDashboardLayout>
   );
