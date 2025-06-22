@@ -12,6 +12,7 @@ import { User, UserRole, AccountStatus } from "@/graphql/api";
 import { formatToNaira } from "@/utils/string";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { selectUser } from "@/lib/redux";
+import { Icon } from "@/components/ui/Icon/Icon";
 
 export default function CustomersPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -234,7 +235,7 @@ export default function CustomersPage() {
         {error && (
           <div className={styles.customers_page__error}>
             <div className={styles.customers_page__error_content}>
-              <span className={styles.customers_page__error_icon}>⚠️</span>
+              <Icon name="alert-triangle" size={16} className={styles.customers_page__error_icon} />
               <span className={styles.customers_page__error_message}>
                 {error}
               </span>

@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "../Button/Button";
+import { Icon } from "@/components/ui/Icon/Icon";
 import styles from "./ConfirmationModal.module.scss";
 
 interface ConfirmationModalProps {
@@ -54,13 +55,13 @@ export default function ConfirmationModal({
   const getIconForVariant = () => {
     switch (variant) {
       case "danger":
-        return "🚨";
+        return "alert-circle";
       case "warning":
-        return "⚠️";
+        return "alert-triangle";
       case "info":
-        return "ℹ️";
+        return "info";
       default:
-        return "⚠️";
+        return "alert-triangle";
     }
   };
 
@@ -83,7 +84,7 @@ export default function ConfirmationModal({
           >
             <div className={styles.confirmation_modal__header}>
               <div className={styles.confirmation_modal__icon}>
-                {getIconForVariant()}
+                <Icon name={getIconForVariant() as any} size={24} />
               </div>
               <h3 className={styles.confirmation_modal__title}>{title}</h3>
             </div>

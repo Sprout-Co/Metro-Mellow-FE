@@ -10,6 +10,7 @@ import ConfirmationModal from "../_components/UI/ConfirmationModal/ConfirmationM
 import { motion } from "framer-motion";
 import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
 import { SubscriptionStatus, Subscription } from "@/graphql/api";
+import { Icon } from "@/components/ui/Icon/Icon";
 
 export default function SubscriptionsPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -202,14 +203,6 @@ export default function SubscriptionsPage() {
 
   const columns = [
     {
-      key: "id",
-      header: "ID",
-      width: "8%",
-      render: (value: string) => (
-        <span className={styles.subscriptions_page__subscription_id}>#{value.slice(-8)}</span>
-      ),
-    },
-    {
       key: "customer",
       header: "Customer",
       width: "18%",
@@ -218,14 +211,14 @@ export default function SubscriptionsPage() {
           firstName?: string; 
           lastName?: string; 
           email?: string;
-          phoneNumber?: string;
+          phone?: string; 
         };
         const fullName = `${customer?.firstName || ""} ${customer?.lastName || ""}`.trim() || "N/A";
         return (
           <div className={styles.subscriptions_page__customer_cell}>
-            <div className={styles.subscriptions_page__customer_initial}>
+            {/* <div className={styles.subscriptions_page__customer_initial}>
               {customer?.firstName?.charAt(0) || 'N'}
-            </div>
+            </div> */}
             <div className={styles.subscriptions_page__customer_info}>
               <div className={styles.subscriptions_page__customer_name}>
                 {fullName}
@@ -234,7 +227,7 @@ export default function SubscriptionsPage() {
                 {customer?.email || 'N/A'}
               </div>
               <div className={styles.subscriptions_page__customer_phone}>
-                {customer?.phoneNumber || 'N/A'}
+                {customer?.phone || 'N/A'}
               </div>
             </div>
           </div>
@@ -330,14 +323,14 @@ export default function SubscriptionsPage() {
               onClick={() => console.log("View subscription:", subscription.id)}
               title="View details"
             >
-              👁️
+              View
             </button>
             <button
               className={styles.subscriptions_page__action_button}
               onClick={() => console.log("Edit subscription:", subscription.id)}
               title="Edit subscription"
             >
-              ✏️
+              Edit
             </button>
             <select
               className={styles.subscriptions_page__status_select}
@@ -415,7 +408,7 @@ export default function SubscriptionsPage() {
         {error && (
           <div className={styles.subscriptions_page__error}>
             <div className={styles.subscriptions_page__error_content}>
-              <span className={styles.subscriptions_page__error_icon}>⚠️</span>
+              <Icon name="alert-triangle" size={16} className={styles.subscriptions_page__error_icon} />
               <span className={styles.subscriptions_page__error_message}>
                 {error}
               </span>

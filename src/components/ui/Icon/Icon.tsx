@@ -38,6 +38,12 @@ import {
   Coffee,
   Package,
   Users,
+  AlertTriangle,
+  Info,
+  AlertCircle,
+  FileText,
+  BarChart3,
+  TrendingUp,
 } from "lucide-react";
 
 // Map of icon names to components
@@ -74,6 +80,12 @@ const icons = {
   coffee: Coffee,
   package: Package,
   users: Users,
+  "alert-triangle": AlertTriangle,
+  info: Info,
+  "alert-circle": AlertCircle,
+  "file-text": FileText,
+  "bar-chart": BarChart3,
+  "trending-up": TrendingUp,
   "help-circle": dynamic(() =>
     import("lucide-react").then((mod) => mod.HelpCircle)
   ),

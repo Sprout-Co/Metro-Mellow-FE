@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Button from "../Button/Button";
 //  import StatusBadge from "../StatusBadge/StatusBadge";
 import { Booking, BookingStatus } from "@/graphql/api";
+import { Icon } from "@/components/ui/Icon/Icon";
 import styles from "./BookingModal.module.scss";
 import { formatToNaira } from "@/utils/string";
 
@@ -235,7 +236,7 @@ export default function BookingModal({
                     <div className={styles.booking_modal__section}>
                       <div className={styles.booking_modal__section_header}>
                         <div className={styles.booking_modal__section_icon}>
-                          👤
+                          <Icon name="user" size={20} />
                         </div>
                         <h3 className={styles.booking_modal__section_title}>
                           Customer Information
@@ -319,7 +320,7 @@ export default function BookingModal({
                     <div className={styles.booking_modal__section}>
                       <div className={styles.booking_modal__section_header}>
                         <div className={styles.booking_modal__section_icon}>
-                          📅
+                          <Icon name="calendar" size={20} />
                         </div>
                         <h3 className={styles.booking_modal__section_title}>
                           Schedule
@@ -512,7 +513,7 @@ export default function BookingModal({
                   <div className={styles.booking_modal__section}>
                     <div className={styles.booking_modal__section_header}>
                       <div className={styles.booking_modal__section_icon}>
-                        📝
+                        <Icon name="file-text" size={20} />
                       </div>
                       <h3 className={styles.booking_modal__section_title}>
                         Special Instructions

@@ -1,5 +1,6 @@
 import React, { ReactNode, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Icon } from "@/components/ui/Icon/Icon";
 import styles from "./Table.module.scss";
 
 interface TableColumn {
@@ -41,7 +42,7 @@ const Table: React.FC<TableProps> = ({
   onSelectionChange,
   pagination = { enabled: false, pageSize: 10 },
   emptyState = {
-    icon: "📋",
+    icon: "file-text",
     message: "No data available",
     submessage: "Try adjusting your filters or search criteria",
   },
@@ -223,7 +224,7 @@ const Table: React.FC<TableProps> = ({
                     className={styles.table__empty}
                   >
                     <div className={styles.table__empty_icon}>
-                      {emptyState.icon}
+                      <Icon name={emptyState.icon as any} size={24} />
                     </div>
                     <p className={styles.table__empty_message}>
                       {emptyState.message}

@@ -12,6 +12,7 @@ import { motion } from "framer-motion";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { BookingStatus, Booking, PaymentStatus, TimeSlot } from "@/graphql/api";
 import { formatToNaira } from "@/utils/string";
+import { Icon } from "@/components/ui/Icon/Icon";
 
 export default function BookingsPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -354,43 +355,47 @@ export default function BookingsPage() {
       render: (_value: unknown, row: unknown) => {
         const booking = row as Booking;
         return (
-          <div className={styles.bookings_page__actions_cell}>
-            <button
-              className={styles.bookings_page__action_button}
-              onClick={() => openBookingModal("view", booking)}
-              title="View details"
-            >
-              👁️
-            </button>
-            <button
-              className={styles.bookings_page__action_button}
-              onClick={() => openBookingModal("edit", booking)}
-              title="Edit booking"
-            >
-              ✏️
-            </button>
-            {booking.status !== BookingStatus.Completed &&
-              booking.status !== BookingStatus.Cancelled && (
-                <select
-                  className={styles.bookings_page__status_select}
-                  value={booking.status}
-                  onChange={(e) => {
-                    e.stopPropagation();
-                    openStatusConfirmation(
-                      booking.id,
-                      e.target.value as BookingStatus
-                    );
-                  }}
-                  title="Change status"
-                >
-                  <option value={BookingStatus.Pending}>Pending</option>
-                  <option value={BookingStatus.Confirmed}>Confirmed</option>
-                  <option value={BookingStatus.InProgress}>In Progress</option>
-                  <option value={BookingStatus.Completed}>Completed</option>
-                  <option value={BookingStatus.Cancelled}>Cancelled</option>
-                </select>
-              )}
-          </div>
+          <>
+            <div className={styles.bookings_page__actions_cell}>
+              <button
+                className={styles.bookings_page__action_button}
+                onClick={() => openBookingModal("view", booking)}
+                title="View details"
+              >
+                View
+              </button>
+              <button
+                className={styles.bookings_page__action_button}
+                onClick={() => openBookingModal("edit", booking)}
+                title="Edit booking"
+              >
+                Edit
+              </button>
+              {booking.status !== BookingStatus.Completed &&
+                booking.status !== BookingStatus.Cancelled && (
+                  <select
+                    className={styles.bookings_page__status_select}
+                    value={booking.status}
+                    onChange={(e) => {
+                      e.stopPropagation();
+                      openStatusConfirmation(
+                        booking.id,
+                        e.target.value as BookingStatus
+                      );
+                    }}
+                    title="Change status"
+                  >
+                    <option value={BookingStatus.Pending}>Pending</option>
+                    <option value={BookingStatus.Confirmed}>Confirmed</option>
+                    <option value={BookingStatus.InProgress}>
+                      In Progress
+                    </option>
+                    <option value={BookingStatus.Completed}>Completed</option>
+                    <option value={BookingStatus.Cancelled}>Cancelled</option>
+                  </select>
+                )}
+            </div>
+          </>
         );
       },
     },
@@ -459,7 +464,7 @@ export default function BookingsPage() {
         {error && (
           <div className={styles.bookings_page__error}>
             <div className={styles.bookings_page__error_content}>
-              <span className={styles.bookings_page__error_icon}>⚠️</span>
+              <Icon name="alert-triangle" size={16} className={styles.bookings_page__error_icon} />
               <span className={styles.bookings_page__error_message}>
                 {error}
               </span>

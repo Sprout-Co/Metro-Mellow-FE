@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Icon } from "@/components/ui/Icon/Icon";
 import styles from "./TopNavigation.module.scss";
 
 interface TopNavigationProps {
@@ -47,14 +48,18 @@ const TopNavigation: React.FC<TopNavigationProps> = ({ toggleSidebar }) => {
             className={styles.top_nav__icon_button}
             aria-label="Notifications"
           >
-            <span className={styles.icon}>🔔</span>
+            <span className={styles.icon}>
+              <Icon name="bell" size={18} />
+            </span>
             <span className={styles.top_nav__notification_badge}>2</span>
           </button>
         </div>
 
         <div className={styles.top_nav__search}>
           <button className={styles.top_nav__icon_button} aria-label="Search">
-            <span className={styles.icon}>🔍</span>
+            <span className={styles.icon}>
+              <Icon name="search" size={18} />
+            </span>
           </button>
         </div>
 
