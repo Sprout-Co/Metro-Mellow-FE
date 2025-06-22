@@ -156,7 +156,7 @@ export const useAuthOperations = () => {
             throw new Error("Registration failed: Invalid role");
           }
 
-          login(user as any, token);
+          login(user as any, token || "");
 
           // Use a direct browser redirect
           // if (typeof window !== "undefined") {
@@ -374,6 +374,7 @@ export const useAuthOperations = () => {
 
       if (data?.me) {
         // Update the auth store with the latest user data
+        console.log("Setting user in auth store:", data.me);
         setUser(data.me);
       }
 
@@ -426,6 +427,7 @@ export const useAuthOperations = () => {
    */
   const handleGetUsers = useCallback(
     async (role?: UserRole) => {
+      console.log("currentUser", currentUser);
       try {
         if (!currentToken) {
           throw new Error("Not authenticated");

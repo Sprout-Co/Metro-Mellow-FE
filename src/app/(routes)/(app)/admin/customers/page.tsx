@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AdminDashboardLayout from "../_components/AdminDashboardLayout/AdminDashboardLayout";
 import styles from "./customers.module.scss";
 import Card from "../_components/UI/Card/Card";
@@ -7,156 +7,171 @@ import Button from "../_components/UI/Button/Button";
 import Table from "../_components/UI/Table/Table";
 import StatusBadge from "../_components/UI/StatusBadge/StatusBadge";
 import { motion } from "framer-motion";
+import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
+import { User, UserRole, AccountStatus } from "@/graphql/api";
+import { formatToNaira } from "@/utils/string";
+import { useAuthStore } from "@/store/slices/auth";
 
 export default function CustomersPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [activeFilter, setActiveFilter] = useState<AccountStatus | "all">(
+    "all"
+  );
+  const [isLoading, setIsLoading] = useState(true);
+  const [customers, setCustomers] = useState<User[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock customer data
-  const customers = [
-    {
-      id: "1",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      phone: "(555) 123-4567",
-      address: "123 Main St, Anytown",
-      joinDate: "Jan 15, 2024",
-      totalSpent: 1250,
-      lastService: "House Cleaning",
-      status: "active",
-    },
-    {
-      id: "2",
-      name: "Michael Davis",
-      email: "michael.davis@example.com",
-      phone: "(555) 234-5678",
-      address: "456 Oak Ave, Somewhere",
-      joinDate: "Feb 3, 2024",
-      totalSpent: 780,
-      lastService: "Laundry Service",
-      status: "active",
-    },
-    {
-      id: "3",
-      name: "Emily Wilson",
-      email: "emily.wilson@example.com",
-      phone: "(555) 345-6789",
-      address: "789 Pine St, Elsewhere",
-      joinDate: "Mar 12, 2024",
-      totalSpent: 1720,
-      lastService: "Cooking Service",
-      status: "active",
-    },
-    {
-      id: "4",
-      name: "David Thompson",
-      email: "david.thompson@example.com",
-      phone: "(555) 456-7890",
-      address: "101 Cedar Rd, Nowhere",
-      joinDate: "Dec 5, 2023",
-      totalSpent: 350,
-      lastService: "Grocery Shopping",
-      status: "inactive",
-    },
-    {
-      id: "5",
-      name: "Jennifer Martinez",
-      email: "jennifer.martinez@example.com",
-      phone: "(555) 567-8901",
-      address: "202 Birch Ln, Anywhere",
-      joinDate: "Apr 22, 2024",
-      totalSpent: 420,
-      lastService: "Pest Control",
-      status: "active",
-    },
-    {
-      id: "6",
-      name: "Robert Garcia",
-      email: "robert.garcia@example.com",
-      phone: "(555) 678-9012",
-      address: "303 Elm Blvd, Someplace",
-      joinDate: "Feb 18, 2024",
-      totalSpent: 890,
-      lastService: "House Cleaning",
-      status: "inactive",
-    },
-  ];
+  const { handleGetUsers } = useAuthOperations();
+  const { user } = useAuthStore();
+  console.log("user", user);
+
+  useEffect(() => {
+    fetchCustomers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchCustomers = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const data = await handleGetUsers(UserRole.Customer);
+      setCustomers((data as User[]) || []);
+    } catch (error) {
+      console.error("Error fetching customers:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to fetch customers"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Filter customers based on search and status filter
   const filteredCustomers = customers.filter((customer) => {
     const matchesSearch =
       searchQuery === "" ||
-      customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      `${customer.firstName || ""} ${customer.lastName || ""}`
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
       customer.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      customer.phone.includes(searchQuery);
+      (customer.phone || "").includes(searchQuery);
 
     const matchesFilter =
-      activeFilter === "all" || customer.status === activeFilter;
+      activeFilter === "all" || customer.accountStatus === activeFilter;
 
     return matchesSearch && matchesFilter;
   });
 
+  const getStatusColor = (status: AccountStatus) => {
+    switch (status) {
+      case AccountStatus.Active:
+        return "active";
+      case AccountStatus.Inactive:
+        return "inactive";
+      case AccountStatus.Locked:
+        return "cancelled";
+      case AccountStatus.PendingVerification:
+        return "pending";
+      case AccountStatus.Suspended:
+        return "cancelled";
+      default:
+        return "pending";
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   // Table columns configuration
   const columns = [
     {
-      key: "name",
+      key: "customer",
       header: "Customer",
-      width: "20%",
-      render: (value: string, row: any) => (
-        <div className={styles.customers_page__customer_cell}>
-          <div className={styles.customers_page__customer_initial}>
-            {value.charAt(0)}
-          </div>
-          <div className={styles.customers_page__customer_info}>
-            <div className={styles.customers_page__customer_name}>{value}</div>
-            <div className={styles.customers_page__customer_email}>
-              {row.email}
+      width: "25%",
+      render: (value: unknown) => {
+        const customer = value as User;
+        const fullName =
+          `${customer.firstName || ""} ${customer.lastName || ""}`.trim() ||
+          "N/A";
+        return (
+          <div className={styles.customers_page__customer_cell}>
+            <div className={styles.customers_page__customer_initial}>
+              {customer.firstName?.charAt(0) || "N"}
+            </div>
+            <div className={styles.customers_page__customer_info}>
+              <div className={styles.customers_page__customer_name}>
+                {fullName}
+              </div>
+              <div className={styles.customers_page__customer_email}>
+                {customer.email}
+              </div>
             </div>
           </div>
-        </div>
-      ),
+        );
+      },
     },
-    { key: "phone", header: "Phone", width: "15%" },
-    { key: "joinDate", header: "Customer Since", width: "15%" },
     {
-      key: "totalSpent",
-      header: "Total Spent",
-      width: "10%",
-      render: (value: number) => (
-        <span className={styles.customers_page__total_spent}>
-          ${value.toLocaleString()}
-        </span>
-      ),
+      key: "phone",
+      header: "Phone",
+      width: "15%",
+      render: (value: string) => value || "N/A",
     },
-    { key: "lastService", header: "Last Service", width: "15%" },
     {
-      key: "status",
+      key: "createdAt",
+      header: "Customer Since",
+      width: "15%",
+      render: (value: string) => formatDate(value),
+    },
+    {
+      key: "accountStatus",
       header: "Status",
-      width: "10%",
-      render: (value: string) => (
+      width: "15%",
+      render: (value: AccountStatus) => (
         <StatusBadge
-          status={
-            value as
-              | "active"
-              | "inactive"
-              | "pending"
-              | "completed"
-              | "cancelled"
-          }
-          label={value === "active" ? "Active" : "Inactive"}
+          status={getStatusColor(value)}
+          label={value.replace(/([A-Z])/g, " $1").trim()}
+        />
+      ),
+    },
+    {
+      key: "emailVerified",
+      header: "Verified",
+      width: "10%",
+      render: (value: boolean) => (
+        <StatusBadge
+          status={value ? "completed" : "pending"}
+          label={value ? "Verified" : "Pending"}
         />
       ),
     },
     {
       key: "actions",
       header: "Actions",
-      width: "15%",
-      render: () => (
-        <div className={styles.customers_page__actions_cell}>
-          <button className={styles.customers_page__action_button}>View</button>
-          <button className={styles.customers_page__action_button}>Edit</button>
-        </div>
-      ),
+      width: "20%",
+      render: (_value: unknown, row: unknown) => {
+        const customer = row as User;
+        return (
+          <div className={styles.customers_page__actions_cell}>
+            <button
+              className={styles.customers_page__action_button}
+              onClick={() => console.log("View customer:", customer.id)}
+            >
+              View
+            </button>
+            <button
+              className={styles.customers_page__action_button}
+              onClick={() => console.log("Edit customer:", customer.id)}
+            >
+              Edit
+            </button>
+          </div>
+        );
+      },
     },
   ];
 
@@ -165,13 +180,29 @@ export default function CustomersPage() {
     { label: "Total Customers", value: customers.length },
     {
       label: "Active Customers",
-      value: customers.filter((c) => c.status === "active").length,
+      value: customers.filter((c) => c.accountStatus === AccountStatus.Active)
+        .length,
+    },
+    {
+      label: "Pending Verification",
+      value: customers.filter(
+        (c) => c.accountStatus === AccountStatus.PendingVerification
+      ).length,
     },
     {
       label: "Inactive Customers",
-      value: customers.filter((c) => c.status === "inactive").length,
+      value: customers.filter((c) => c.accountStatus === AccountStatus.Inactive)
+        .length,
     },
-    { label: "New This Month", value: 3 },
+  ];
+
+  const filterOptions = [
+    { value: "all", label: "All" },
+    { value: AccountStatus.Active, label: "Active" },
+    { value: AccountStatus.PendingVerification, label: "Pending Verification" },
+    { value: AccountStatus.Inactive, label: "Inactive" },
+    { value: AccountStatus.Locked, label: "Locked" },
+    { value: AccountStatus.Suspended, label: "Suspended" },
   ];
 
   return (
@@ -200,6 +231,23 @@ export default function CustomersPage() {
           </div>
         </div>
 
+        {error && (
+          <div className={styles.customers_page__error}>
+            <div className={styles.customers_page__error_content}>
+              <span className={styles.customers_page__error_icon}>⚠️</span>
+              <span className={styles.customers_page__error_message}>
+                {error}
+              </span>
+              <button
+                className={styles.customers_page__error_dismiss}
+                onClick={() => setError(null)}
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className={styles.customers_page__stats}>
           {customerStats.map((stat, index) => (
             <Card key={index} className={styles.customers_page__stat_card}>
@@ -224,24 +272,17 @@ export default function CustomersPage() {
             </div>
 
             <div className={styles.customers_page__filter_buttons}>
-              <button
-                className={`${styles.customers_page__filter_button} ${activeFilter === "all" ? styles["customers_page__filter_button--active"] : ""}`}
-                onClick={() => setActiveFilter("all")}
-              >
-                All
-              </button>
-              <button
-                className={`${styles.customers_page__filter_button} ${activeFilter === "active" ? styles["customers_page__filter_button--active"] : ""}`}
-                onClick={() => setActiveFilter("active")}
-              >
-                Active
-              </button>
-              <button
-                className={`${styles.customers_page__filter_button} ${activeFilter === "inactive" ? styles["customers_page__filter_button--active"] : ""}`}
-                onClick={() => setActiveFilter("inactive")}
-              >
-                Inactive
-              </button>
+              {filterOptions.map((option) => (
+                <button
+                  key={option.value}
+                  className={`${styles.customers_page__filter_button} ${activeFilter === option.value ? styles["customers_page__filter_button--active"] : ""}`}
+                  onClick={() =>
+                    setActiveFilter(option.value as AccountStatus | "all")
+                  }
+                >
+                  {option.label}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -250,13 +291,19 @@ export default function CustomersPage() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
           >
-            <Table
-              columns={columns}
-              data={filteredCustomers}
-              onRowClick={(customer) =>
-                console.log("Customer selected:", customer)
-              }
-            />
+            {isLoading ? (
+              <div className={styles.customers_page__loading}>
+                Loading customers...
+              </div>
+            ) : (
+              <Table
+                columns={columns}
+                data={filteredCustomers}
+                onRowClick={(customer) =>
+                  console.log("Customer selected:", customer)
+                }
+              />
+            )}
           </motion.div>
         </Card>
       </div>

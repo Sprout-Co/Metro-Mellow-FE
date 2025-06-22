@@ -1910,21 +1910,21 @@ export type AdminInvitationQuery = { __typename?: 'Query', adminInvitation?: { _
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', id: string, street: string, city: string, state: string, zipCode: string, country: string } | null } | null };
+export type GetCurrentUserQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, addresses: Array<{ __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string, id: string, isDefault: boolean, label: string }>, defaultAddress?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string, id: string, isDefault: boolean, label: string } | null } | null };
 
 export type GetUserByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null };
+export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, addresses: Array<{ __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string, id: string, isDefault: boolean, label: string }>, defaultAddress?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string, id: string, isDefault: boolean, label: string } | null } | null };
 
 export type GetUsersQueryVariables = Exact<{
   role?: InputMaybe<UserRole>;
 }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }> };
+export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, addresses: Array<{ __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string, id: string, isDefault: boolean, label: string }>, defaultAddress?: { __typename?: 'Address', street: string, city: string, state: string, zipCode: string, country: string, id: string, isDefault: boolean, label: string } | null }> };
 
 export type GetBookingsQueryVariables = Exact<{
   status?: InputMaybe<BookingStatus>;
@@ -4428,16 +4428,31 @@ export const GetCurrentUserDocument = gql`
     lastName
     role
     phone
-    createdAt
-    updatedAt
-    defaultAddress {
-      id
+    addresses {
       street
       city
       state
       zipCode
       country
+      id
+      isDefault
+      label
     }
+    defaultAddress {
+      street
+      city
+      state
+      zipCode
+      country
+      id
+      isDefault
+      label
+    }
+    emailVerified
+    emailVerifiedAt
+    accountStatus
+    createdAt
+    updatedAt
   }
 }
     `;
@@ -4482,6 +4497,29 @@ export const GetUserByIdDocument = gql`
     lastName
     role
     phone
+    addresses {
+      street
+      city
+      state
+      zipCode
+      country
+      id
+      isDefault
+      label
+    }
+    defaultAddress {
+      street
+      city
+      state
+      zipCode
+      country
+      id
+      isDefault
+      label
+    }
+    emailVerified
+    emailVerifiedAt
+    accountStatus
     createdAt
     updatedAt
   }
@@ -4529,6 +4567,29 @@ export const GetUsersDocument = gql`
     lastName
     role
     phone
+    addresses {
+      street
+      city
+      state
+      zipCode
+      country
+      id
+      isDefault
+      label
+    }
+    defaultAddress {
+      street
+      city
+      state
+      zipCode
+      country
+      id
+      isDefault
+      label
+    }
+    emailVerified
+    emailVerifiedAt
+    accountStatus
     createdAt
     updatedAt
   }

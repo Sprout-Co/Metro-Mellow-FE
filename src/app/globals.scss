@@ -1,4 +1,4 @@
-@import '../styles/main.scss';
+@import "../styles/main.scss";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -19,4 +19,42 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+// Auth Loading Styles
+.auth-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f8fafc;
+
+  &__default {
+    text-align: center;
+
+    p {
+      margin-top: 1rem;
+      color: #64748b;
+      font-size: 0.875rem;
+    }
+  }
+
+  &__spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e2e8f0;
+    border-top: 3px solid #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

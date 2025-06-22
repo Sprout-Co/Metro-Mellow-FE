@@ -6,16 +6,31 @@ query GetCurrentUser {
     lastName
     role
     phone
-    createdAt
-    updatedAt
-    defaultAddress {
-      id
+    addresses {
       street
       city
       state
       zipCode
       country
+      id
+      isDefault
+      label
     }
+    defaultAddress {
+      street
+      city
+      state
+      zipCode
+      country
+      id
+      isDefault
+      label
+    }
+    emailVerified
+    emailVerifiedAt
+    accountStatus
+    createdAt
+    updatedAt
   }
 }
 
@@ -27,6 +42,29 @@ query GetUserById($id: ID!) {
     lastName
     role
     phone
+    addresses {
+      street
+      city
+      state
+      zipCode
+      country
+      id
+      isDefault
+      label
+    }
+    defaultAddress {
+      street
+      city
+      state
+      zipCode
+      country
+      id
+      isDefault
+      label
+    }
+    emailVerified
+    emailVerifiedAt
+    accountStatus
     createdAt
     updatedAt
   }
@@ -40,6 +78,29 @@ query GetUsers($role: UserRole) {
     lastName
     role
     phone
+    addresses {
+      street
+      city
+      state
+      zipCode
+      country
+      id
+      isDefault
+      label
+    }
+    defaultAddress {
+      street
+      city
+      state
+      zipCode
+      country
+      id
+      isDefault
+      label
+    }
+    emailVerified
+    emailVerifiedAt
+    accountStatus
     createdAt
     updatedAt
   }

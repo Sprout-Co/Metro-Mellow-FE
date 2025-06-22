@@ -77,6 +77,9 @@ export const useAuthStore = create<AuthState>()(
       get isCustomer() {
         return get().user?.role === UserRole.Customer;
       },
+      get currentUser() {
+        return get().user;
+      },
     }),
     {
       name: "auth-storage",

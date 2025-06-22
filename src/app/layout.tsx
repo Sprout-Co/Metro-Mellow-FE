@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.scss";
 import "@/styles/main.scss";
 import ApolloWrapper from "@/components/providers/ApolloWrapper";
+import { AuthInitializer } from "@/components/providers/AuthInitializer";
 import ModalProvider from "./_components/ModalProvider";
 
 const geistSans = Geist({
@@ -31,8 +32,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ApolloWrapper>
-          {children}
-          {/* <ModalProvider /> */}
+          <AuthInitializer>
+            {children}
+            {/* <ModalProvider /> */}
+          </AuthInitializer>
         </ApolloWrapper>
       </body>
     </html>
