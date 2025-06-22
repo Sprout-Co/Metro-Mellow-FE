@@ -2,9 +2,10 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "../Button/Button";
-import StatusBadge from "../StatusBadge/StatusBadge";
+//  import StatusBadge from "../StatusBadge/StatusBadge";
 import { Booking, BookingStatus } from "@/graphql/api";
 import styles from "./BookingModal.module.scss";
+import { formatToNaira } from "@/utils/string";
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -262,7 +263,7 @@ export default function BookingModal({
                             Phone
                           </span>
                           <span className={styles.booking_modal__value}>
-                            {booking.customer?.phoneNumber || "N/A"}
+                            {booking.customer.phone || "N/A"}
                           </span>
                         </div>
                       </div>
@@ -299,7 +300,7 @@ export default function BookingModal({
                             Duration
                           </span>
                           <span className={styles.booking_modal__value}>
-                            {booking.service?.duration || "N/A"} minutes
+                            {booking.timeSlot || "N/A"}
                           </span>
                         </div>
                         <div className={styles.booking_modal__info_item}>
@@ -309,7 +310,7 @@ export default function BookingModal({
                           <span
                             className={`${styles.booking_modal__value} ${styles["booking_modal__value--price"]}`}
                           >
-                            ${booking.totalPrice?.toFixed(2) || "0.00"}
+                            {formatToNaira(booking.totalPrice)}
                           </span>
                         </div>
                       </div>
@@ -424,38 +425,6 @@ export default function BookingModal({
                         )}
                     </div>
 
-                    {booking.assignedStaff && (
-                      <div className={styles.booking_modal__section}>
-                        <div className={styles.booking_modal__section_header}>
-                          <div className={styles.booking_modal__section_icon}>
-                            👨‍💼
-                          </div>
-                          <h3 className={styles.booking_modal__section_title}>
-                            Assigned Staff
-                          </h3>
-                        </div>
-                        <div className={styles.booking_modal__info_list}>
-                          <div className={styles.booking_modal__info_item}>
-                            <span className={styles.booking_modal__label}>
-                              Name
-                            </span>
-                            <span className={styles.booking_modal__value}>
-                              {booking.assignedStaff.firstName}{" "}
-                              {booking.assignedStaff.lastName}
-                            </span>
-                          </div>
-                          <div className={styles.booking_modal__info_item}>
-                            <span className={styles.booking_modal__label}>
-                              Email
-                            </span>
-                            <span className={styles.booking_modal__value}>
-                              {booking.assignedStaff.email}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
                     <div className={styles.booking_modal__section}>
                       <div className={styles.booking_modal__section_header}>
                         <div className={styles.booking_modal__section_icon}>
@@ -551,7 +520,7 @@ export default function BookingModal({
                     </div>
                     <div className={styles.booking_modal__info_list}>
                       <p className={styles.booking_modal__value}>
-                        {booking.specialInstructions ||
+                        {booking.notes ||
                           "No special instructions provided"}
                       </p>
                     </div>

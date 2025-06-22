@@ -4,106 +4,50 @@
 
 .bookings_page {
   &__header {
-    background: linear-gradient(135deg, 
-      rgba(color('primary', 'base'), 0.05) 0%, 
-      rgba(color('primary', 'light'), 0.02) 100%
-    );
-    border-radius: border-radius('xl');
-    padding: spacing('xl');
-    margin-bottom: spacing('xl');
-    position: relative;
-    overflow: hidden;
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -20%;
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(color('primary', 'base'), 0.1) 0%, transparent 70%);
-      animation: float 6s ease-in-out infinite;
-    }
-    
-    @include breakpoint-down("md") {
-      padding: spacing('lg');
-    }
-  }
-  
-  &__header_content {
-    position: relative;
-    z-index: 1;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    
+    margin-bottom: spacing("lg");
+
     @include breakpoint-down("md") {
       flex-direction: column;
       gap: spacing("md");
     }
   }
-  
+
   &__title_area {
-    flex: 1;
+    margin-bottom: spacing("md");
   }
-  
+
   &__title {
-    font-size: map-get($font-sizes, "3xl");
+    font-size: map-get($font-sizes, "2xl");
     font-weight: map-get($font-weights, "bold");
     color: color("neutral", "black");
-    margin: 0 0 spacing("sm") 0;
-    font-family: $font-family-heading;
+    margin: 0 0 spacing("xs") 0;
   }
-  
+
   &__subtitle {
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "dark");
     margin: 0;
-    max-width: 600px;
-    line-height: map-get($line-heights, 'relaxed');
-  }
-  
-  &__actions {
-    display: flex;
-    gap: spacing('sm');
-    
-    @include breakpoint-down("sm") {
-      width: 100%;
-      flex-direction: column;
-    }
   }
 
   &__error {
-    background: linear-gradient(135deg, 
-      rgba(color("error"), 0.1) 0%, 
-      rgba(color("error"), 0.05) 100%
-    );
+    background-color: rgba(color("error"), 0.1);
     border: 1px solid rgba(color("error"), 0.2);
-    border-radius: border-radius("lg");
-    padding: spacing("lg");
+    border-radius: border-radius("md");
+    padding: spacing("md");
     margin-bottom: spacing("lg");
-    position: relative;
-    overflow: hidden;
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      width: 4px;
-      background: color("error");
-    }
   }
 
   &__error_content {
     display: flex;
     align-items: center;
-    gap: spacing("md");
+    gap: spacing("sm");
   }
 
   &__error_icon {
-    font-size: map-get($font-sizes, "2xl");
+    font-size: map-get($font-sizes, "lg");
     flex-shrink: 0;
   }
 
@@ -115,465 +59,295 @@
   }
 
   &__error_dismiss {
-    background: rgba(color("error"), 0.1);
+    background: none;
     border: none;
     color: color("error");
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     font-size: map-get($font-sizes, "lg");
     cursor: pointer;
-    transition: all 0.2s ease;
+    padding: spacing("xxs");
+    border-radius: border-radius("sm");
+    line-height: 1;
 
     &:hover {
-      background-color: rgba(color("error"), 0.2);
-      transform: rotate(90deg);
+      background-color: rgba(color("error"), 0.1);
     }
   }
-  
-  &__stats_container {
-    margin-bottom: spacing('xl');
-  }
-  
+
   &__stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: spacing("lg");
-    
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
+
     @include breakpoint-down("sm") {
       grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  &__stat_card {
+    padding: spacing("md");
+    text-align: center;
+  }
+
+  &__stat_label {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("sm") 0;
+  }
+
+  &__stat_value {
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("primary", "base");
+    margin: 0;
+  }
+
+  &__content {
+    padding: spacing("lg");
+  }
+
+  &__filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      align-items: flex-start;
       gap: spacing("md");
     }
   }
-  
-  &__stat_card {
-    background: color('neutral', 'white');
-    border-radius: border-radius('lg');
-    padding: spacing("lg");
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    border: 1px solid transparent;
-    
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-      border-color: color('primary', 'base');
-      
-      .bookings_page__stat_icon {
-        transform: scale(1.1);
-      }
-    }
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 100px;
-      height: 100px;
-      background: radial-gradient(circle, rgba(color('primary', 'base'), 0.05) 0%, transparent 70%);
-      transform: translate(30%, -30%);
-    }
-  }
-  
-  &__stat_header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: spacing('md');
-  }
-  
-  &__stat_icon {
-    width: 48px;
-    height: 48px;
-    border-radius: border-radius('lg');
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: map-get($font-sizes, 'xl');
-    transition: transform 0.3s ease;
-    
-    &--total {
-      background: rgba(color('primary', 'base'), 0.1);
-      color: color('primary', 'base');
-    }
-    
-    &--pending {
-      background: rgba(color('warning'), 0.1);
-      color: color('warning');
-    }
-    
-    &--completed {
-      background: rgba(color('success'), 0.1);
-      color: color('success');
-    }
-    
-    &--revenue {
-      background: rgba(color('info'), 0.1);
-      color: color('info');
-    }
-  }
-  
-  &__stat_trend {
-    font-size: map-get($font-sizes, 'xs');
-    font-weight: map-get($font-weights, 'semibold');
-    padding: spacing('xxs') spacing('xs');
-    border-radius: border-radius('full');
-    
-    &--up {
-      background: rgba(color('success'), 0.1);
-      color: color('success');
-    }
-    
-    &--down {
-      background: rgba(color('error'), 0.1);
-      color: color('error');
-    }
-  }
-  
-  &__stat_value {
-    font-size: map-get($font-sizes, "3xl");
-    font-weight: map-get($font-weights, "bold");
-    color: color("neutral", "black");
-    margin: 0 0 spacing('xs') 0;
-    line-height: 1;
-  }
-  
-  &__stat_label {
-    font-size: map-get($font-sizes, "sm");
-    color: color("neutral", "dark");
-    margin: 0;
-  }
-  
-  &__content {
-    background: color('neutral', 'white');
-    border-radius: border-radius('xl');
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-  }
-  
-  &__filters {
-    padding: spacing('lg');
-    border-bottom: 1px solid color('neutral', 'lighter');
-    background: rgba(color('neutral', 'lighter'), 0.3);
-  }
-  
-  &__filters_row {
-    display: flex;
-    gap: spacing('md');
-    align-items: center;
-    
-    @include breakpoint-down("md") {
-      flex-direction: column;
-      align-items: stretch;
-    }
-  }
-  
+
   &__search {
     flex: 1;
-    position: relative;
+    max-width: 300px;
+
+    @include breakpoint-down("md") {
+      max-width: 100%;
+      width: 100%;
+    }
   }
-  
-  &__search_icon {
-    position: absolute;
-    left: spacing('md');
-    top: 50%;
-    transform: translateY(-50%);
-    color: color('neutral', 'dark');
-    pointer-events: none;
-  }
-  
+
   &__search_input {
     width: 100%;
-    padding: spacing("sm") spacing("md") spacing("sm") spacing("3xl");
-    border: 2px solid transparent;
-    background: color('neutral', 'white');
-    border-radius: border-radius("lg");
+    padding: spacing("sm") spacing("md");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "black");
-    transition: all 0.2s ease;
-    
+
     &:focus {
       outline: none;
       border-color: color("primary", "base");
-      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
+      box-shadow: 0 0 0 2px rgba(color("primary", "base"), 0.1);
     }
-    
+
     &::placeholder {
       color: color("neutral", "dark");
     }
   }
-  
-  &__filter_group {
-    display: flex;
-    gap: spacing('sm');
-    align-items: center;
-  }
-  
-  &__filter_dropdown {
-    position: relative;
-  }
-  
-  &__filter_select {
-    appearance: none;
-    padding: spacing("sm") spacing("2xl") spacing("sm") spacing("md");
-    background: color('neutral', 'white');
-    border: 1px solid color('neutral', 'medium');
-    border-radius: border-radius("md");
-    font-size: map-get($font-sizes, "sm");
-    color: color("neutral", "darker");
-    cursor: pointer;
-    transition: all 0.2s ease;
-    
-    &:hover {
-      border-color: color('primary', 'base');
-    }
-    
-    &:focus {
-      outline: none;
-      border-color: color("primary", "base");
-      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
-    }
-  }
-  
-  &__filter_icon {
-    position: absolute;
-    right: spacing('sm');
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    color: color('neutral', 'dark');
-  }
-  
-  &__filter_chips {
+
+  &__filter_buttons {
     display: flex;
     gap: spacing("xs");
     flex-wrap: wrap;
-    margin-top: spacing('md');
   }
-  
-  &__filter_chip {
-    display: inline-flex;
-    align-items: center;
-    gap: spacing('xs');
+
+  &__filter_button {
     padding: spacing("xs") spacing("md");
-    background: color('primary', 'base');
-    color: color('neutral', 'white');
+    background-color: color("neutral", "lighter");
     border: none;
-    border-radius: border-radius("full");
+    border-radius: border-radius("md");
     font-size: map-get($font-sizes, "xs");
     font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
     cursor: pointer;
-    transition: all 0.2s ease;
-    
+
     &:hover {
-      background: color('primary', 'dark');
+      background-color: darken(color("neutral", "lighter"), 5%);
+    }
+
+    &--active {
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
+
+      &:hover {
+        background-color: darken(color("primary", "base"), 5%);
+      }
     }
   }
-  
-  &__table_container {
-    position: relative;
-  }
-  
-  // Enhanced cell styles for the new table
+
   &__booking_id {
     font-family: monospace;
-    font-weight: map-get($font-weights, "semibold");
+    font-weight: map-get($font-weights, "medium");
     color: color("primary", "base");
-    font-size: map-get($font-sizes, 'sm');
   }
-  
+
   &__customer_cell {
     display: flex;
     align-items: center;
-    gap: spacing('sm');
   }
-  
-  &__customer_avatar {
-    width: 40px;
-    height: 40px;
+
+  &__customer_initial {
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    background: linear-gradient(135deg, color('primary', 'base'), color('primary', 'light'));
+    background-color: color("primary", "base");
     color: color("neutral", "white");
     font-weight: map-get($font-weights, "semibold");
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: map-get($font-sizes, 'base');
-    flex-shrink: 0;
+    margin-right: spacing("sm");
   }
-  
-  &__customer_details {
-    flex: 1;
-    min-width: 0;
+
+  &__customer_info {
+    display: flex;
+    flex-direction: column;
   }
-  
+
   &__customer_name {
     font-weight: map-get($font-weights, "medium");
     color: color("neutral", "black");
-    margin-bottom: spacing('xxs');
-    @include truncate;
   }
-  
-  &__customer_contact {
-    display: flex;
-    flex-direction: column;
-    gap: spacing('xxs');
+
+  &__customer_email {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
   }
-  
-  &__customer_email,
+
   &__customer_phone {
     font-size: map-get($font-sizes, "xs");
     color: color("neutral", "dark");
-    @include truncate;
+    margin-top: spacing("xxs");
   }
-  
+
+  &__price {
+    font-weight: map-get($font-weights, "semibold");
+    color: color("success");
+  }
+
+  &__actions_cell {
+    display: flex;
+    gap: spacing("xs");
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  &__action_button {
+    padding: spacing("xxs") spacing("xs");
+    background-color: color("neutral", "lighter");
+    border: none;
+    border-radius: border-radius("sm");
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "darker");
+    cursor: pointer;
+
+    &:hover {
+      background-color: color("primary", "light");
+      color: color("neutral", "white");
+    }
+  }
+
+  &__status_select {
+    padding: spacing("xxs") spacing("xs");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("sm");
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "darker");
+    background-color: color("neutral", "white");
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+    }
+  }
+
+  &__loading {
+    text-align: center;
+    padding: spacing("4xl");
+    color: color("neutral", "dark");
+    font-size: map-get($font-sizes, "lg");
+  }
+
+  // New table cell styles
   &__service_cell {
     display: flex;
     flex-direction: column;
-    gap: spacing('xxs');
   }
-  
+
   &__service_name {
     font-weight: map-get($font-weights, "medium");
     color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
   }
-  
+
   &__service_category {
     font-size: map-get($font-sizes, "xs");
     color: color("neutral", "dark");
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
-  
-  &__schedule_cell {
-    display: flex;
-    align-items: center;
-    gap: spacing('sm');
-  }
-  
-  &__schedule_icon {
-    width: 36px;
-    height: 36px;
-    border-radius: border-radius('md');
-    background: rgba(color('primary', 'base'), 0.1);
-    color: color('primary', 'base');
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: map-get($font-sizes, 'base');
-    flex-shrink: 0;
-  }
-  
-  &__schedule_details {
+
+  &__date_cell {
     display: flex;
     flex-direction: column;
-    gap: spacing('xxs');
   }
-  
-  &__schedule_date {
+
+  &__date_main {
     font-weight: map-get($font-weights, "medium");
     color: color("neutral", "black");
-    font-size: map-get($font-sizes, 'sm');
+    margin-bottom: spacing("xxs");
   }
-  
-  &__schedule_time {
+
+  &__date_day {
     font-size: map-get($font-sizes, "xs");
     color: color("primary", "base");
+    text-transform: uppercase;
+    font-weight: map-get($font-weights, "semibold");
+  }
+
+  &__time_cell {
+    font-family: monospace;
     font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    font-size: map-get($font-sizes, "sm");
   }
-  
-  &__price {
-    font-weight: map-get($font-weights, "bold");
-    color: color("success");
-    font-size: map-get($font-sizes, 'base');
-  }
-  
+
   &__staff_cell {
     display: flex;
     align-items: center;
     gap: spacing("xs");
   }
-  
-  &__staff_avatar {
-    width: 28px;
-    height: 28px;
+
+  &__staff_initial {
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
-    background: color("secondary", "base");
+    background-color: color("secondary", "base");
     color: color("neutral", "white");
     font-weight: map-get($font-weights, "semibold");
     font-size: map-get($font-sizes, "xs");
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
   }
-  
+
   &__staff_name {
     font-size: map-get($font-sizes, "sm");
     font-weight: map-get($font-weights, "medium");
     color: color("neutral", "black");
   }
-  
+
   &__no_staff {
     font-size: map-get($font-sizes, "xs");
     color: color("neutral", "dark");
     font-style: italic;
     padding: spacing("xs") spacing("sm");
-    background: color("neutral", "lighter");
+    background-color: color("neutral", "lighter");
     border-radius: border-radius("sm");
-  }
-  
-  &__actions_cell {
-    display: flex;
-    gap: spacing("xs");
-    align-items: center;
-    justify-content: center;
-  }
-  
-  &__action_button {
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    background: color("neutral", "lighter");
-    border: none;
-    border-radius: border-radius("md");
-    color: color("neutral", "darker");
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    
-    &:hover {
-      background: color("primary", "base");
-      color: color("neutral", "white");
-      transform: translateY(-2px);
-    }
-    
-    &--view:hover {
-      background: color('info');
-    }
-    
-    &--edit:hover {
-      background: color('warning');
-    }
-    
-    &--delete:hover {
-      background: color('error');
-    }
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-20px) rotate(10deg);
   }
 }
