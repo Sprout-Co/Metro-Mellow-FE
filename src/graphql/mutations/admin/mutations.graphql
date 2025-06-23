@@ -73,26 +73,6 @@ mutation CreateCustomer($input: CreateUserInput!) {
       lastName
       role
       phone
-      addresses {
-        id
-        street
-        city
-        state
-        zipCode
-        country
-        isDefault
-        label
-      }
-      defaultAddress {
-        id
-        street
-        city
-        state
-        zipCode
-        country
-        isDefault
-        label
-      }
       emailVerified
       emailVerifiedAt
       accountStatus

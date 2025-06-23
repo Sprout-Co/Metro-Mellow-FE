@@ -13,8 +13,10 @@ import { formatToNaira } from "@/utils/string";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { selectUser } from "@/lib/redux";
 import { Icon } from "@/components/ui/Icon/Icon";
+import AddCustomerModal from "./AddCustomerModal/AddCustomerModal";
 
 export default function CustomersPage() {
+  const [isAddCustomerModalOpen, setIsAddCustomerModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<AccountStatus | "all">(
     "all"
@@ -226,7 +228,7 @@ export default function CustomersPage() {
           </div>
 
           <div className={styles.customers_page__actions}>
-            <Button variant="primary" size="medium" icon="+">
+            <Button variant="primary" size="medium" icon="+" onClick={() => setIsAddCustomerModalOpen(true)}>
               Add Customer
             </Button>
           </div>
@@ -308,6 +310,12 @@ export default function CustomersPage() {
           </motion.div>
         </Card>
       </div>
+
+      <AddCustomerModal
+        isOpen={isAddCustomerModalOpen}
+        onClose={() => setIsAddCustomerModalOpen(false)}
+        onSuccess={() => fetchCustomers()}
+      />
     </AdminDashboardLayout>
   );
 }
