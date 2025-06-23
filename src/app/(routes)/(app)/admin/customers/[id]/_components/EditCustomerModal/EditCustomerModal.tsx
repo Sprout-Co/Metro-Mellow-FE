@@ -68,10 +68,9 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
     });
   }, [customer, isOpen]);
 
-  const validateForm = () => {
+  const validatePersonalInfo = () => {
     const newErrors: Record<string, string> = {};
 
-    // Validate personal information
     if (!formData.personal.firstName.trim()) {
       newErrors.firstName = "First name is required";
     }
@@ -97,6 +96,21 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
     return Object.keys(newErrors).length === 0;
   };
 
+  const validateAddress = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.address.street.trim()) {
+      newErrors.street = "Street address is required";
+    }
+
+    if (!formData.address.city.trim()) {
+      newErrors.city = "City is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleChange = (
     section: string,
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -114,61 +128,90 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
+  const handleUpdatePersonalInfo = async () => {
+    if (!validatePersonalInfo()) {
       return;
     }
 
     setIsLoading(true);
 
     try {
-      // Prepare data for API call
-      const updateData = {
-        id: customer.id,
-        firstName: formData.personal.firstName,
-        lastName: formData.personal.lastName,
-        phone: formData.personal.phone,
-        address: {
-          street: formData.address.street,
-          city: formData.address.city,
-          state: formData.address.state,
-          zipCode: formData.address.zipCode,
-          country: formData.address.country,
-          isDefault: true,
-        },
-      };
-
-      // Update profile
       await handleUpdateProfile({
         firstName: formData.personal.firstName,
         lastName: formData.personal.lastName,
         phone: formData.personal.phone,
         id: customer.id,
       });
-      if (customer.defaultAddress?.id) {
-        await handleUpdateAddress(customer.defaultAddress?.id, {
-          ...updateData.address,
-          userId: customer.id,
-        });
+
+      onSuccess();
+      setErrors({});
+    } catch (error) {
+      console.error("Error updating personal info:", error);
+      if (error instanceof Error) {
+        setErrors({ personal: error.message });
       } else {
-        await handleAddAddress({ ...updateData.address, userId: customer.id });
+        setErrors({ personal: "An unknown error occurred" });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUpdateAddressInfo = async () => {
+    if (!validateAddress()) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const addressData = {
+        street: formData.address.street,
+        city: formData.address.city,
+        state: formData.address.state,
+        zipCode: formData.address.zipCode,
+        country: formData.address.country,
+        isDefault: true,
+        userId: customer.id,
+      };
+
+      if (customer.defaultAddress?.id) {
+        await handleUpdateAddress(customer.defaultAddress.id, addressData);
+      } else {
+        await handleAddAddress(addressData);
       }
 
+      onSuccess();
+      setErrors({});
+    } catch (error) {
+      console.error("Error updating address:", error);
+      if (error instanceof Error) {
+        setErrors({ address: error.message });
+      } else {
+        setErrors({ address: "An unknown error occurred" });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUpdateAccountInfo = async () => {
+    setIsLoading(true);
+
+    try {
       await handleUpdateAccountStatus(
         customer.id,
         formData.personal.accountStatus
       );
 
       onSuccess();
-      onClose();
+      setErrors({});
     } catch (error) {
-      console.error("Error updating customer:", error);
+      console.error("Error updating account status:", error);
       if (error instanceof Error) {
-        setErrors({ form: error.message });
+        setErrors({ account: error.message });
       } else {
-        setErrors({ form: "An unknown error occurred" });
+        setErrors({ account: "An unknown error occurred" });
       }
     } finally {
       setIsLoading(false);
@@ -190,21 +233,21 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
       maxWidth="600px"
     >
       <div className={styles.edit_customer_modal}>
-        {errors.form && (
+        {(errors.form ||
+          errors.personal ||
+          errors.address ||
+          errors.account) && (
           <motion.div
             className={styles.edit_customer_modal__error}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {errors.form}
+            {errors.form || errors.personal || errors.address || errors.account}
           </motion.div>
         )}
 
-        <form
-          onSubmit={handleSubmit}
-          className={styles.edit_customer_modal__form}
-        >
+        <div className={styles.edit_customer_modal__form}>
           <div className={styles.edit_customer_modal__tabs}>
             <button
               type="button"
@@ -363,6 +406,23 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                       </span>
                     )}
                   </div>
+
+                  <div className={styles.edit_customer_modal__section_actions}>
+                    <button
+                      type="button"
+                      className={styles.edit_customer_modal__section_submit}
+                      onClick={handleUpdatePersonalInfo}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <span
+                          className={styles.edit_customer_modal__spinner}
+                        ></span>
+                      ) : (
+                        "Update Personal Info"
+                      )}
+                    </button>
+                  </div>
                 </motion.div>
               )}
 
@@ -388,9 +448,18 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                       name="street"
                       value={formData.address.street}
                       onChange={(e) => handleChange("address", e)}
-                      className={styles.edit_customer_modal__input}
+                      className={`${styles.edit_customer_modal__input} ${
+                        errors.street
+                          ? styles["edit_customer_modal__input--error"]
+                          : ""
+                      }`}
                       placeholder="10 Carter street, Idimu, Lagos"
                     />
+                    {errors.street && (
+                      <span className={styles.edit_customer_modal__error_text}>
+                        {errors.street}
+                      </span>
+                    )}
                   </div>
 
                   <div className={styles.edit_customer_modal__row}>
@@ -403,9 +472,20 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                         name="city"
                         value={formData.address.city}
                         onChange={(e) => handleChange("address", e)}
-                        className={styles.edit_customer_modal__input}
+                        className={`${styles.edit_customer_modal__input} ${
+                          errors.city
+                            ? styles["edit_customer_modal__input--error"]
+                            : ""
+                        }`}
                         placeholder="Egbeda"
                       />
+                      {errors.city && (
+                        <span
+                          className={styles.edit_customer_modal__error_text}
+                        >
+                          {errors.city}
+                        </span>
+                      )}
                     </div>
 
                     <div className={styles.edit_customer_modal__field}>
@@ -464,6 +544,23 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                       primary address for deliveries and billing.
                     </p>
                   </div>
+
+                  <div className={styles.edit_customer_modal__section_actions}>
+                    <button
+                      type="button"
+                      className={styles.edit_customer_modal__section_submit}
+                      onClick={handleUpdateAddressInfo}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <span
+                          className={styles.edit_customer_modal__spinner}
+                        ></span>
+                      ) : (
+                        "Update Address"
+                      )}
+                    </button>
+                  </div>
                 </motion.div>
               )}
 
@@ -505,6 +602,23 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                       <strong>Note:</strong> Changing account status may affect
                       the customer's ability to log in or access services.
                     </p>
+                  </div>
+
+                  <div className={styles.edit_customer_modal__section_actions}>
+                    <button
+                      type="button"
+                      className={styles.edit_customer_modal__section_submit}
+                      onClick={handleUpdateAccountInfo}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <span
+                          className={styles.edit_customer_modal__spinner}
+                        ></span>
+                      ) : (
+                        "Update Account Status"
+                      )}
+                    </button>
                   </div>
 
                   <div className={styles.edit_customer_modal__danger_zone}>
@@ -566,21 +680,10 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
               onClick={onClose}
               disabled={isLoading}
             >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className={styles.edit_customer_modal__submit}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <span className={styles.edit_customer_modal__spinner}></span>
-              ) : (
-                "Save Changes"
-              )}
+              Close
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </Modal>
   );
