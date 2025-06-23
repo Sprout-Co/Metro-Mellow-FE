@@ -1,0 +1,504 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.booking_details {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xl");
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: spacing("md");
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      gap: spacing("md");
+    }
+  }
+
+  &__title_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__title {
+    font-size: map-get($font-sizes, "3xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
+
+  &__id {
+    font-family: monospace;
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    background-color: color("neutral", "lighter");
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("md");
+    margin-left: spacing("sm");
+  }
+
+  &__actions {
+    display: flex;
+    gap: spacing("sm");
+    
+    @include breakpoint-down("sm") {
+      flex-wrap: wrap;
+    }
+  }
+
+  &__section {
+    margin-bottom: spacing("xl");
+  }
+
+  &__section_title {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("md") 0;
+    padding-bottom: spacing("xs");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+
+  &__timeline {
+    margin-top: spacing("xl");
+    padding-left: spacing("md");
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 2px;
+      background-color: color("neutral", "medium");
+    }
+  }
+
+  &__timeline_event {
+    position: relative;
+    padding-bottom: spacing("lg");
+    padding-left: spacing("xl");
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: -4px;
+      top: 0;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: color("primary", "base");
+    }
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  &__timeline_date {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__timeline_title {
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
+  }
+
+  &__timeline_description {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: spacing("xl");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__info_card {
+    border-radius: border-radius("lg");
+    overflow: hidden;
+    box-shadow: map-get($box-shadows, "sm");
+    background-color: color("neutral", "white");
+    height: 100%;
+  }
+
+  &__card_header {
+    background-color: color("neutral", "lighter");
+    padding: spacing("md");
+    border-bottom: 1px solid color("neutral", "medium");
+  }
+
+  &__card_title {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+  }
+
+  &__card_content {
+    padding: spacing("md");
+  }
+
+  &__info_group {
+    margin-bottom: spacing("md");
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__info_label {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("xxs") 0;
+  }
+
+  &__info_value {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "black");
+    margin: 0;
+  }
+
+  &__info_row {
+    display: flex;
+    justify-content: space-between;
+    padding: spacing("sm") 0;
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__status_badge {
+    display: inline-flex;
+    align-items: center;
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+
+    &--pending {
+      background-color: rgba(color("warning"), 0.1);
+      color: color("warning");
+    }
+
+    &--confirmed {
+      background-color: rgba(color("info"), 0.1);
+      color: color("info");
+    }
+
+    &--in-progress {
+      background-color: rgba(color("info"), 0.2);
+      color: darken(color("info"), 10%);
+    }
+
+    &--completed {
+      background-color: rgba(color("success"), 0.1);
+      color: color("success");
+    }
+
+    &--cancelled {
+      background-color: rgba(color("error"), 0.1);
+      color: color("error");
+    }
+
+    &--paid {
+      background-color: rgba(color("success"), 0.1);
+      color: color("success");
+    }
+
+    &--unpaid {
+      background-color: rgba(color("warning"), 0.1);
+      color: color("warning");
+    }
+  }
+
+  &__customer {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    margin-bottom: spacing("md");
+  }
+
+  &__customer_avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: color("primary", "light");
+    color: color("neutral", "white");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "bold");
+  }
+
+  &__customer_info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__customer_name {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xxs") 0;
+  }
+
+  &__customer_email {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("xxs") 0;
+  }
+
+  &__customer_phone {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
+
+  &__address {
+    background-color: color("neutral", "lighter");
+    padding: spacing("md");
+    border-radius: border-radius("md");
+    margin-top: spacing("md");
+  }
+
+  &__address_title {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("sm") 0;
+  }
+
+  &__address_content {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "black");
+    margin: 0;
+  }
+
+  &__service_details {
+    background-color: color("neutral", "lighter");
+    padding: spacing("md");
+    border-radius: border-radius("md");
+    margin-top: spacing("md");
+  }
+
+  &__service_icon {
+    width: 24px;
+    height: 24px;
+    color: color("primary", "base");
+  }
+
+  &__service_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: spacing("md");
+  }
+
+  &__service_name {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xxs") 0;
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+  }
+
+  &__service_category {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__service_price {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "bold");
+    color: color("primary", "base");
+  }
+
+  &__rooms_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: spacing("md");
+    margin-top: spacing("md");
+  }
+
+  &__room_item {
+    background-color: color("neutral", "white");
+    padding: spacing("sm");
+    border-radius: border-radius("md");
+    text-align: center;
+    box-shadow: map-get($box-shadows, "sm");
+  }
+
+  &__room_count {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("primary", "base");
+    margin: 0 0 spacing("xxs") 0;
+  }
+
+  &__room_label {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
+
+  &__notes {
+    background-color: color("neutral", "lighter");
+    padding: spacing("md");
+    border-radius: border-radius("md");
+    font-style: italic;
+    color: color("neutral", "dark");
+    margin-top: spacing("md");
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  &__staff {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    margin-top: spacing("md");
+    padding: spacing("md");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
+  }
+
+  &__staff_avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: color("secondary", "base");
+    color: color("neutral", "white");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "bold");
+  }
+
+  &__staff_info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__staff_name {
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xxs") 0;
+  }
+
+  &__staff_role {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
+
+  &__no_staff {
+    padding: spacing("md");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
+    margin-top: spacing("md");
+    font-style: italic;
+    color: color("neutral", "dark");
+    text-align: center;
+  }
+
+  &__status_select_wrapper {
+    margin-top: spacing("md");
+  }
+
+  &__status_select {
+    width: 100%;
+    padding: spacing("sm") spacing("md");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    background-color: color("neutral", "white");
+    color: color("neutral", "black");
+    font-size: map-get($font-sizes, "base");
+    
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 2px rgba(color("primary", "base"), 0.1);
+    }
+  }
+
+  &__confirmation_box {
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
+    padding: spacing("md");
+    margin-top: spacing("md");
+    border: 1px solid color("neutral", "medium");
+  }
+
+  &__confirmation_title {
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("sm") 0;
+  }
+
+  &__confirmation_actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: spacing("sm");
+    margin-top: spacing("md");
+  }
+
+  &__loading {
+    text-align: center;
+    padding: spacing("4xl");
+    color: color("neutral", "dark");
+    font-size: map-get($font-sizes, "lg");
+  }
+
+  &__error {
+    background-color: rgba(color("error"), 0.1);
+    border: 1px solid rgba(color("error"), 0.2);
+    border-radius: border-radius("md");
+    padding: spacing("md");
+    margin-bottom: spacing("lg");
+    color: color("error");
+  }
+}

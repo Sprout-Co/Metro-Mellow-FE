@@ -14,8 +14,10 @@ import { BookingStatus, Booking, PaymentStatus, TimeSlot } from "@/graphql/api";
 import { formatToNaira } from "@/utils/string";
 import { Icon } from "@/components/ui/Icon/Icon";
 import BookServiceModal from "../../dashboard/_components/overview/BookServiceModal";
+import { useRouter } from "next/navigation";
 
 export default function BookingsPage() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<BookingStatus | "all">(
     "all"
@@ -238,6 +240,10 @@ export default function BookingsPage() {
     return `${slot.startTime || ""} - ${slot.endTime || ""}`;
   };
 
+  const viewBooking = (booking: Booking) => {
+    router.push(`/admin/bookings/${booking.id}`);
+  };
+
   const columns = [
     {
       key: "customer",
@@ -393,7 +399,7 @@ export default function BookingsPage() {
             <div className={styles.bookings_page__actions_cell}>
               <button
                 className={styles.bookings_page__action_button}
-                onClick={() => openBookingModal("view", booking)}
+                onClick={() => viewBooking(booking)}
                 title="View details"
               >
                 View
@@ -567,10 +573,7 @@ export default function BookingsPage() {
               <Table
                 columns={columns}
                 data={filteredBookings}
-                onRowClick={(booking) => {
-                  console.log("booking", booking);
-                  //openBookingModal("view", booking as Booking);
-                }}
+                onRowClick={viewBooking}
               />
             )}
           </motion.div>
