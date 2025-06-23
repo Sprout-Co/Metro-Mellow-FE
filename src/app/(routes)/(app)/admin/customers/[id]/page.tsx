@@ -325,9 +325,6 @@ export default function CustomerDetailsPage() {
               >
                 Edit Customer
               </button>
-              <button className={styles.customer_details__danger_button}>
-                Deactivate Account
-              </button>
             </div>
           </motion.div>
 

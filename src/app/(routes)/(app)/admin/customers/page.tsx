@@ -168,12 +168,6 @@ export default function CustomersPage() {
             >
               View
             </button>
-            <button
-              className={styles.customers_page__action_button}
-              onClick={() => console.log("Edit customer:", customer.id)}
-            >
-              Edit
-            </button>
           </div>
         );
       },
@@ -305,7 +299,7 @@ export default function CustomersPage() {
                 columns={columns}
                 data={filteredCustomers}
                 onRowClick={(customer) =>
-                  console.log("Customer selected:", customer)
+                  router.push(`/admin/customers/${customer.id}`)
                 }
               />
             )}
