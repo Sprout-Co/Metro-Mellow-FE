@@ -273,7 +273,10 @@ export default function CustomerOverview({
               </tr>
             </thead>
             <tbody>
-              {bookings.slice(0, 3).map((booking: Booking) => {
+              {bookings
+                .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                .slice(0, 5)
+                .map((booking: Booking) => {
                 const { label, status } = formatBookingStatus(booking.status);
                 return (
                   <tr key={booking.id}>
