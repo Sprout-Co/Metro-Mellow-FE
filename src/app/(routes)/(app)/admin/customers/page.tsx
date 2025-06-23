@@ -14,8 +14,10 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { selectUser } from "@/lib/redux";
 import { Icon } from "@/components/ui/Icon/Icon";
 import AddCustomerModal from "./AddCustomerModal/AddCustomerModal";
+import { useRouter } from "next/navigation";
 
 export default function CustomersPage() {
+  const router = useRouter();
   const [isAddCustomerModalOpen, setIsAddCustomerModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<AccountStatus | "all">(
@@ -162,7 +164,7 @@ export default function CustomersPage() {
           <div className={styles.customers_page__actions_cell}>
             <button
               className={styles.customers_page__action_button}
-              onClick={() => console.log("View customer:", customer.id)}
+              onClick={() => router.push(`/admin/customers/${customer.id}`)}
             >
               View
             </button>
