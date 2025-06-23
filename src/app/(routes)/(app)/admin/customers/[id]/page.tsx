@@ -8,11 +8,25 @@ import styles from "./CustomerDetails.module.scss";
 import AdminDashboardLayout from "../../_components/AdminDashboardLayout/AdminDashboardLayout";
 import Card from "../../_components/UI/Card/Card";
 import StatusBadge from "../../_components/UI/StatusBadge/StatusBadge";
+import CustomerOverview from "./_components/CustomerOverview";
+import CustomerBookings from "./_components/CustomerBookings";
+import CustomerSubscriptions from "./_components/CustomerSubscriptions";
+import CustomerPayments from "./_components/CustomerPayments";
+import CustomerInvoices from "./_components/CustomerInvoices";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
 import { usePaymentOperations } from "@/graphql/hooks/payments/usePaymentOperations";
-import { User, AccountStatus, BookingStatus } from "@/graphql/api";
+import { useInvoiceOperations } from "@/graphql/hooks/invoices/useInvoiceOperations";
+import {
+  User,
+  AccountStatus,
+  BookingStatus,
+  Booking,
+  Subscription,
+  Payment,
+  Invoice,
+} from "@/graphql/api";
 import { formatToNaira } from "@/utils/string";
 
 export default function CustomerDetailsPage() {
@@ -22,16 +36,23 @@ export default function CustomerDetailsPage() {
 
   const [activeTab, setActiveTab] = useState("overview");
   const [customer, setCustomer] = useState<User | null>(null);
-  const [bookings, setBookings] = useState([]);
-  const [subscriptions, setSubscriptions] = useState([]);
-  const [payments, setPayments] = useState([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [loadingStates, setLoadingStates] = useState({
+    customer: true,
+    bookings: true,
+    subscriptions: true,
+    payments: true,
+  });
 
   const { handleGetUserById } = useAuthOperations();
-  const { handleGetCustomerBookings } = useBookingOperations();
-  const { handleGetCustomerSubscriptions } = useSubscriptionOperations();
-  const { handleGetCustomerPayments } = usePaymentOperations();
+  const { handleGetBookings } = useBookingOperations();
+  const { handleGetSubscriptions } = useSubscriptionOperations();
+  const { handleGetPayments } = usePaymentOperations();
+  const { invoices } = useInvoiceOperations();
 
   // Animation variants for smooth transitions
   const fadeInVariants = {
@@ -44,85 +65,109 @@ export default function CustomerDetailsPage() {
       try {
         setIsLoading(true);
         setError(null);
+        setLoadingStates({
+          customer: true,
+          bookings: true,
+          subscriptions: true,
+          payments: true,
+        });
 
         // Fetch customer details
-        const customerData = await handleGetUserById(customerId);
-        setCustomer(customerData as User);
+        try {
+          const customerData = await handleGetUserById(customerId);
+          setCustomer(customerData as User);
+          setLoadingStates((prev) => ({ ...prev, customer: false }));
+        } catch (err) {
+          console.error("Failed to fetch customer:", err);
+          setLoadingStates((prev) => ({ ...prev, customer: false }));
+          throw new Error("Failed to fetch customer details");
+        }
 
-        // For demo purposes, we'll just simulate these other API calls
-        // In a real implementation, you would uncomment these and use the actual data
-        /*
-        // Fetch customer bookings
-        const bookingsData = await handleGetCustomerBookings();
-        setBookings(bookingsData || []);
-        
-        // Fetch customer subscriptions
-        const subscriptionsData = await handleGetCustomerSubscriptions();
-        setSubscriptions(subscriptionsData || []);
-        
-        // Fetch customer payments
-        const paymentsData = await handleGetCustomerPayments();
-        setPayments(paymentsData || []);
-        */
+        // Fetch all data and filter by customer ID
+        // Note: Current GraphQL schema doesn't support customer ID parameters
+        // These queries return all data for admin context, filtered client-side
 
-        // Mock data for demonstration
-        setBookings([
-          {
-            id: "b1",
-            service: "Cleaning Service",
-            date: "2025-06-15",
-            status: BookingStatus.Completed,
-            amount: 12000,
-          },
-          {
-            id: "b2",
-            service: "Laundry Service",
-            date: "2025-06-22",
-            status: BookingStatus.Scheduled,
-            amount: 8500,
-          },
-          {
-            id: "b3",
-            service: "Pest Control",
-            date: "2025-07-01",
-            status: BookingStatus.Pending,
-            amount: 15000,
-          },
-        ]);
+        const fetchBookings = async () => {
+          try {
+            const allBookings = await handleGetBookings();
+            const customerBookings =
+              allBookings?.filter(
+                (booking) => booking.customer?.id === customerId
+              ) || [];
+            setBookings(customerBookings as Booking[]);
+            setLoadingStates((prev) => ({ ...prev, bookings: false }));
+            return customerBookings;
+          } catch (err) {
+            console.warn("Failed to fetch bookings:", err);
+            setLoadingStates((prev) => ({ ...prev, bookings: false }));
+            return [];
+          }
+        };
 
-        setSubscriptions([
-          {
-            id: "s1",
-            service: "Weekly Cleaning",
-            status: "Active",
-            nextBilling: "2025-07-01",
-            amount: 25000,
-          },
-        ]);
+        const fetchSubscriptions = async () => {
+          try {
+            const allSubscriptions = await handleGetSubscriptions();
+            const customerSubscriptions =
+              allSubscriptions?.filter(
+                (subscription) => subscription.customer?.id === customerId
+              ) || [];
+            setSubscriptions(customerSubscriptions as Subscription[]);
+            setLoadingStates((prev) => ({ ...prev, subscriptions: false }));
+            return customerSubscriptions;
+          } catch (err) {
+            console.warn("Failed to fetch subscriptions:", err);
+            setLoadingStates((prev) => ({ ...prev, subscriptions: false }));
+            return [];
+          }
+        };
 
-        setPayments([
-          {
-            id: "p1",
-            date: "2025-06-15",
-            amount: 12000,
-            status: "Completed",
-            method: "Credit Card",
-          },
-          {
-            id: "p2",
-            date: "2025-05-18",
-            amount: 12000,
-            status: "Completed",
-            method: "Credit Card",
-          },
-          {
-            id: "p3",
-            date: "2025-04-17",
-            amount: 12000,
-            status: "Completed",
-            method: "Credit Card",
-          },
-        ]);
+        const fetchPayments = async () => {
+          try {
+            const allPayments = await handleGetPayments();
+            const customerPayments =
+              allPayments?.filter(
+                (payment) => payment.customer?.id === customerId
+              ) || [];
+            setPayments(customerPayments as Payment[]);
+            setLoadingStates((prev) => ({ ...prev, payments: false }));
+            return customerPayments;
+          } catch (err) {
+            console.warn("Failed to fetch payments:", err);
+            setLoadingStates((prev) => ({ ...prev, payments: false }));
+            return [];
+          }
+        };
+
+        // Fetch all data in parallel
+        const [customerBookings, customerSubscriptions, customerPayments] =
+          await Promise.all([
+            fetchBookings(),
+            fetchSubscriptions(),
+            fetchPayments(),
+          ]);
+
+        // Fallback to mock data if no real data is available
+        // Use mock data as fallback if no real data was fetched
+        if (customerBookings.length === 0) {
+          // Create mock booking data that matches the GraphQL Booking type structure
+          setBookings([
+            // Mock bookings will be added when GraphQL schema is properly connected
+          ] as Booking[]);
+        }
+
+        if (customerSubscriptions.length === 0) {
+          // Create mock subscription data that matches the GraphQL Subscription type structure
+          setSubscriptions([
+            // Mock subscriptions will be added when GraphQL schema is properly connected
+          ] as Subscription[]);
+        }
+
+        if (customerPayments.length === 0) {
+          // Create mock payment data that matches the GraphQL Payment type structure
+          setPayments([
+            // Mock payments will be added when GraphQL schema is properly connected
+          ] as Payment[]);
+        }
       } catch (error) {
         console.error("Error fetching customer data:", error);
         setError(
@@ -136,9 +181,16 @@ export default function CustomerDetailsPage() {
     };
 
     fetchCustomerData();
-  }, [customerId, handleGetUserById]);
+  }, [
+    customerId,
+    handleGetUserById,
+    handleGetBookings,
+    handleGetSubscriptions,
+    handleGetPayments,
+  ]);
 
-  const getStatusColor = (status: AccountStatus) => {
+  const getStatusColor = (status: AccountStatus | undefined) => {
+    if (!status) return "pending";
     switch (status) {
       case AccountStatus.Active:
         return "active";
@@ -181,16 +233,26 @@ export default function CustomerDetailsPage() {
   };
 
   // Calculate summary statistics
-  const totalSpent = payments.reduce(
-    (sum, payment) => sum + (payment.amount || 0),
+  const totalSpent = bookings.reduce(
+    (sum, booking) => sum + (booking.totalPrice || 0),
     0
   );
   const completedBookings = bookings.filter(
     (b) => b.status === BookingStatus.Completed
   ).length;
   const activeSubscriptions = subscriptions.filter(
-    (s) => s.status === "Active"
+    (s) => s.status === "ACTIVE"
   ).length;
+
+  // Filter invoices by customer ID (invoices from hook include all customer invoices)
+  const customerInvoices: any[] =
+    invoices.filter(
+      (invoice: any) => invoice.payment?.customer?.id === customerId
+    ) || [];
+  const totalInvoiced = customerInvoices.reduce(
+    (sum, invoice) => sum + (invoice.total || 0),
+    0
+  );
 
   return (
     <AdminDashboardLayout
@@ -209,7 +271,17 @@ export default function CustomerDetailsPage() {
       {isLoading ? (
         <div className="loading-spinner">Loading customer data...</div>
       ) : error ? (
-        <div className="error-message">{error}</div>
+        <motion.div className={styles.customer_details__error}>
+          <i className="fas fa-exclamation-triangle"></i>
+          <h3>Error Loading Customer Data</h3>
+          <p>{error}</p>
+          <button
+            className={styles.customer_details__edit_button}
+            onClick={() => window.location.reload()}
+          >
+            Retry
+          </button>
+        </motion.div>
       ) : customer ? (
         <motion.div
           className={styles.customer_details}
@@ -282,10 +354,10 @@ export default function CustomerDetailsPage() {
               Payments
             </button>
             <button
-              className={`${styles.customer_details__tab} ${activeTab === "notes" ? styles["customer_details__tab--active"] : ""}`}
-              onClick={() => setActiveTab("notes")}
+              className={`${styles.customer_details__tab} ${activeTab === "invoices" ? styles["customer_details__tab--active"] : ""}`}
+              onClick={() => setActiveTab("invoices")}
             >
-              Notes
+              Invoices
             </button>
           </div>
 
@@ -294,469 +366,54 @@ export default function CustomerDetailsPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
-            key={activeTab}
           >
             {activeTab === "overview" && (
-              <div className={styles.customer_details__tab_content}>
-                <motion.div
-                  className={styles.customer_details__card}
-                  variants={fadeInVariants}
-                >
-                  <div className={styles.customer_details__card_header}>
-                    <h3 className={styles.customer_details__card_title}>
-                      <i className="fas fa-user"></i> Personal Information
-                    </h3>
-                    <div className={styles.customer_details__card_actions}>
-                      <button className={styles.customer_details__icon_button}>
-                        <i className="fas fa-pen"></i>
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className={styles.customer_details__avatar}>
-                    {customer.firstName?.charAt(0) || ""}
-                    {customer.lastName?.charAt(0) || ""}
-                  </div>
-
-                  <div className={styles.customer_details__info_grid}>
-                    <div className={styles.customer_details__info_item}>
-                      <p className={styles.customer_details__info_label}>
-                        First Name
-                      </p>
-                      <p className={styles.customer_details__info_value}>
-                        {customer.firstName || "N/A"}
-                      </p>
-                    </div>
-
-                    <div className={styles.customer_details__info_item}>
-                      <p className={styles.customer_details__info_label}>
-                        Last Name
-                      </p>
-                      <p className={styles.customer_details__info_value}>
-                        {customer.lastName || "N/A"}
-                      </p>
-                    </div>
-
-                    <div className={styles.customer_details__info_item}>
-                      <p className={styles.customer_details__info_label}>
-                        Email
-                      </p>
-                      <p className={styles.customer_details__info_value}>
-                        {customer.email || "N/A"}
-                      </p>
-                    </div>
-
-                    <div className={styles.customer_details__info_item}>
-                      <p className={styles.customer_details__info_label}>
-                        Phone
-                      </p>
-                      <p className={styles.customer_details__info_value}>
-                        {customer.phone || "N/A"}
-                      </p>
-                    </div>
-
-                    <div className={styles.customer_details__info_item}>
-                      <p className={styles.customer_details__info_label}>
-                        Status
-                      </p>
-                      <p className={styles.customer_details__info_value}>
-                        <span
-                          className={`${styles.customer_details__status} ${styles[`customer_details__status--${getStatusColor(customer.accountStatus)}`]}`}
-                        >
-                          {customer.accountStatus
-                            ?.replace(/([A-Z])/g, " $1")
-                            .trim() || "N/A"}
-                        </span>
-                      </p>
-                    </div>
-
-                    <div className={styles.customer_details__info_item}>
-                      <p className={styles.customer_details__info_label}>
-                        Email Verified
-                      </p>
-                      <p className={styles.customer_details__info_value}>
-                        <span
-                          className={`${styles.customer_details__status} ${styles[`customer_details__status--${customer.emailVerified ? "active" : "pending"}`]}`}
-                        >
-                          {customer.emailVerified ? "Verified" : "Not Verified"}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  className={styles.customer_details__card}
-                  variants={fadeInVariants}
-                >
-                  <div className={styles.customer_details__card_header}>
-                    <h3 className={styles.customer_details__card_title}>
-                      <i className="fas fa-home"></i> Address Information
-                    </h3>
-                    <div className={styles.customer_details__card_actions}>
-                      <button className={styles.customer_details__icon_button}>
-                        <i className="fas fa-pen"></i>
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className={styles.customer_details__info_grid}>
-                    <div className={styles.customer_details__info_item}>
-                      <p className={styles.customer_details__info_label}>
-                        Street
-                      </p>
-                      <p className={styles.customer_details__info_value}>
-                        {customer.address?.street || "N/A"}
-                      </p>
-                    </div>
-
-                    <div className={styles.customer_details__info_item}>
-                      <p className={styles.customer_details__info_label}>
-                        City
-                      </p>
-                      <p className={styles.customer_details__info_value}>
-                        {customer.address?.city || "N/A"}
-                      </p>
-                    </div>
-
-                    <div className={styles.customer_details__info_item}>
-                      <p className={styles.customer_details__info_label}>
-                        State
-                      </p>
-                      <p className={styles.customer_details__info_value}>
-                        {customer.address?.state || "N/A"}
-                      </p>
-                    </div>
-
-                    <div className={styles.customer_details__info_item}>
-                      <p className={styles.customer_details__info_label}>
-                        Zip Code
-                      </p>
-                      <p className={styles.customer_details__info_value}>
-                        {customer.address?.zipCode || "N/A"}
-                      </p>
-                    </div>
-
-                    <div className={styles.customer_details__info_item}>
-                      <p className={styles.customer_details__info_label}>
-                        Country
-                      </p>
-                      <p className={styles.customer_details__info_value}>
-                        {customer.address?.country || "N/A"}
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  className={`${styles.customer_details__card} ${styles["customer_details__card--full"]}`}
-                  variants={fadeInVariants}
-                >
-                  <div className={styles.customer_details__card_header}>
-                    <h3 className={styles.customer_details__card_title}>
-                      <i className="fas fa-chart-line"></i> Customer Summary
-                    </h3>
-                  </div>
-
-                  <div className={styles.customer_details__bookings_summary}>
-                    <div className={styles.customer_details__summary_card}>
-                      <p className={styles.customer_details__summary_value}>
-                        {formatToNaira(totalSpent)}
-                      </p>
-                      <p className={styles.customer_details__summary_label}>
-                        Total Spent
-                      </p>
-                    </div>
-
-                    <div className={styles.customer_details__summary_card}>
-                      <p className={styles.customer_details__summary_value}>
-                        {bookings.length}
-                      </p>
-                      <p className={styles.customer_details__summary_label}>
-                        Total Bookings
-                      </p>
-                    </div>
-
-                    <div className={styles.customer_details__summary_card}>
-                      <p className={styles.customer_details__summary_value}>
-                        {completedBookings}
-                      </p>
-                      <p className={styles.customer_details__summary_label}>
-                        Completed Bookings
-                      </p>
-                    </div>
-
-                    <div className={styles.customer_details__summary_card}>
-                      <p className={styles.customer_details__summary_value}>
-                        {activeSubscriptions}
-                      </p>
-                      <p className={styles.customer_details__summary_label}>
-                        Active Subscriptions
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className={styles.customer_details__chart}>
-                    Spending Graph (Placeholder)
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  className={`${styles.customer_details__card} ${styles["customer_details__card--full"]}`}
-                  variants={fadeInVariants}
-                >
-                  <div className={styles.customer_details__card_header}>
-                    <h3 className={styles.customer_details__card_title}>
-                      <i className="fas fa-calendar-alt"></i> Recent Bookings
-                    </h3>
-                    <div className={styles.customer_details__card_actions}>
-                      <button
-                        className={styles.customer_details__icon_button}
-                        onClick={() => setActiveTab("bookings")}
-                      >
-                        View All
-                      </button>
-                    </div>
-                  </div>
-
-                  {bookings.length > 0 ? (
-                    <table className={styles.customer_details__table}>
-                      <thead>
-                        <tr>
-                          <th>Service</th>
-                          <th>Date</th>
-                          <th>Status</th>
-                          <th>Amount</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {bookings.slice(0, 3).map((booking) => {
-                          const { label, status } = formatBookingStatus(
-                            booking.status
-                          );
-                          return (
-                            <tr key={booking.id}>
-                              <td>{booking.service}</td>
-                              <td>{formatDate(booking.date)}</td>
-                              <td>
-                                <StatusBadge status={status} label={label} />
-                              </td>
-                              <td>{formatToNaira(booking.amount)}</td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  ) : (
-                    <p className={styles.customer_details__empty}>
-                      No bookings found
-                    </p>
-                  )}
-                </motion.div>
-              </div>
+              <CustomerOverview
+                customer={customer}
+                bookings={bookings}
+                totalSpent={totalSpent}
+                completedBookings={completedBookings}
+                activeSubscriptions={activeSubscriptions}
+                customerInvoices={customerInvoices}
+                totalInvoiced={totalInvoiced}
+                loadingStates={loadingStates}
+                onTabChange={setActiveTab}
+                formatDate={formatDate}
+                formatBookingStatus={formatBookingStatus}
+                getStatusColor={getStatusColor}
+              />
             )}
 
             {activeTab === "bookings" && (
-              <motion.div
-                className={`${styles.customer_details__card} ${styles["customer_details__card--full"]}`}
-                variants={fadeInVariants}
-              >
-                <div className={styles.customer_details__card_header}>
-                  <h3 className={styles.customer_details__card_title}>
-                    <i className="fas fa-calendar-alt"></i> All Bookings
-                  </h3>
-                </div>
-
-                {bookings.length > 0 ? (
-                  <table className={styles.customer_details__table}>
-                    <thead>
-                      <tr>
-                        <th>Service</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                        <th>Amount</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {bookings.map((booking) => {
-                        const { label, status } = formatBookingStatus(
-                          booking.status
-                        );
-                        return (
-                          <tr key={booking.id}>
-                            <td>{booking.service}</td>
-                            <td>{formatDate(booking.date)}</td>
-                            <td>
-                              <StatusBadge status={status} label={label} />
-                            </td>
-                            <td>{formatToNaira(booking.amount)}</td>
-                            <td>
-                              <button
-                                className={styles.customer_details__icon_button}
-                              >
-                                View
-                              </button>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                ) : (
-                  <p className={styles.customer_details__empty}>
-                    No bookings found
-                  </p>
-                )}
-              </motion.div>
+              <CustomerBookings
+                bookings={bookings}
+                loadingStates={loadingStates}
+                formatDate={formatDate}
+                formatBookingStatus={formatBookingStatus}
+              />
             )}
 
             {activeTab === "subscriptions" && (
-              <motion.div
-                className={`${styles.customer_details__card} ${styles["customer_details__card--full"]}`}
-                variants={fadeInVariants}
-              >
-                <div className={styles.customer_details__card_header}>
-                  <h3 className={styles.customer_details__card_title}>
-                    <i className="fas fa-sync-alt"></i> Subscriptions
-                  </h3>
-                </div>
-
-                {subscriptions.length > 0 ? (
-                  <table className={styles.customer_details__table}>
-                    <thead>
-                      <tr>
-                        <th>Service</th>
-                        <th>Status</th>
-                        <th>Next Billing</th>
-                        <th>Amount</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {subscriptions.map((subscription) => (
-                        <tr key={subscription.id}>
-                          <td>{subscription.service}</td>
-                          <td>
-                            <StatusBadge
-                              status={
-                                subscription.status === "Active"
-                                  ? "active"
-                                  : "inactive"
-                              }
-                              label={subscription.status}
-                            />
-                          </td>
-                          <td>{formatDate(subscription.nextBilling)}</td>
-                          <td>{formatToNaira(subscription.amount)}</td>
-                          <td>
-                            <button
-                              className={styles.customer_details__icon_button}
-                            >
-                              Manage
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                ) : (
-                  <p className={styles.customer_details__empty}>
-                    No subscriptions found
-                  </p>
-                )}
-              </motion.div>
+              <CustomerSubscriptions
+                subscriptions={subscriptions}
+                loadingStates={loadingStates}
+                formatDate={formatDate}
+              />
             )}
 
             {activeTab === "payments" && (
-              <motion.div
-                className={`${styles.customer_details__card} ${styles["customer_details__card--full"]}`}
-                variants={fadeInVariants}
-              >
-                <div className={styles.customer_details__card_header}>
-                  <h3 className={styles.customer_details__card_title}>
-                    <i className="fas fa-credit-card"></i> Payment History
-                  </h3>
-                </div>
-
-                {payments.length > 0 ? (
-                  <table className={styles.customer_details__table}>
-                    <thead>
-                      <tr>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Payment Method</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {payments.map((payment) => (
-                        <tr key={payment.id}>
-                          <td>{formatDate(payment.date)}</td>
-                          <td>{formatToNaira(payment.amount)}</td>
-                          <td>
-                            <StatusBadge
-                              status={
-                                payment.status === "Completed"
-                                  ? "active"
-                                  : "pending"
-                              }
-                              label={payment.status}
-                            />
-                          </td>
-                          <td>{payment.method}</td>
-                          <td>
-                            <button
-                              className={styles.customer_details__icon_button}
-                            >
-                              Receipt
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                ) : (
-                  <p className={styles.customer_details__empty}>
-                    No payment history found
-                  </p>
-                )}
-              </motion.div>
+              <CustomerPayments
+                payments={payments}
+                loadingStates={loadingStates}
+                formatDate={formatDate}
+              />
             )}
 
-            {activeTab === "notes" && (
-              <motion.div
-                className={`${styles.customer_details__card} ${styles["customer_details__card--full"]}`}
-                variants={fadeInVariants}
-              >
-                <div className={styles.customer_details__card_header}>
-                  <h3 className={styles.customer_details__card_title}>
-                    <i className="fas fa-sticky-note"></i> Customer Notes
-                  </h3>
-                </div>
-
-                <div className={styles.customer_details__notes}>
-                  <textarea
-                    placeholder="Add notes about this customer here..."
-                    rows={6}
-                    className={styles.customer_details__notes_input}
-                    style={{
-                      width: "100%",
-                      padding: "12px",
-                      borderRadius: "4px",
-                      border: "1px solid #c4cad4",
-                      resize: "vertical",
-                    }}
-                  />
-
-                  <div style={{ marginTop: "12px", textAlign: "right" }}>
-                    <button className={styles.customer_details__edit_button}>
-                      Save Notes
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
+            {activeTab === "invoices" && (
+              <CustomerInvoices
+                customerInvoices={customerInvoices}
+                formatDate={formatDate}
+              />
             )}
           </motion.div>
         </motion.div>

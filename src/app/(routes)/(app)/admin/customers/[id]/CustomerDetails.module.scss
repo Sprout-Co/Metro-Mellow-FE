@@ -7,348 +7,374 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: spacing('lg');
-    
-    @include breakpoint-down('md') {
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("md") {
       flex-direction: column;
-      gap: spacing('md');
+      gap: spacing("md");
     }
   }
-  
+
   &__title_area {
-    margin-bottom: spacing('md');
+    margin-bottom: spacing("md");
   }
-  
+
   &__title {
-    font-size: map-get($font-sizes, '3xl');
-    font-weight: map-get($font-weights, 'bold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, "3xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
     display: flex;
     align-items: center;
-    gap: spacing('md');
+    gap: spacing("md");
   }
-  
+
   &__customer_badge {
     display: inline-block;
-    padding: spacing('xxs') spacing('sm');
-    border-radius: border-radius('full');
-    font-size: map-get($font-sizes, 'xs');
-    font-weight: map-get($font-weights, 'medium');
-    background-color: color('primary', 'base');
-    color: color('neutral', 'white');
+    padding: spacing("xxs") spacing("sm");
+    border-radius: border-radius("full");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
   }
-  
+
   &__subtitle {
-    font-size: map-get($font-sizes, 'base');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
     margin: 0;
   }
 
   &__actions {
     display: flex;
-    gap: spacing('sm');
+    gap: spacing("sm");
   }
-  
+
   &__back_button {
     display: flex;
     align-items: center;
-    gap: spacing('xs');
-    padding: spacing('xs') spacing('sm');
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
+    gap: spacing("xs");
+    padding: spacing("xs") spacing("sm");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
     background: none;
     border: none;
     cursor: pointer;
     transition: $transition-base;
-    
+
     &:hover {
-      color: color('primary', 'base');
+      color: color("primary", "base");
     }
   }
-  
+
   &__content {
-    margin-top: spacing('lg');
+    margin-top: spacing("lg");
   }
-  
+
   &__tabs {
     display: flex;
-    gap: spacing('md');
-    border-bottom: 1px solid color('neutral', 'medium');
-    margin-bottom: spacing('xl');
+    gap: spacing("md");
+    border-bottom: 1px solid color("neutral", "medium");
+    margin-bottom: spacing("xl");
     overflow-x: auto;
-    padding-bottom: spacing('xs');
-    
-    @include breakpoint-down('sm') {
-      gap: spacing('sm');
+    padding-bottom: spacing("xs");
+
+    @include breakpoint-down("sm") {
+      gap: spacing("sm");
     }
   }
-  
+
   &__tab {
-    padding: spacing('sm') spacing('md');
-    font-size: map-get($font-sizes, 'sm');
-    font-weight: map-get($font-weights, 'medium');
-    color: color('neutral', 'dark');
+    padding: spacing("sm") spacing("md");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
     background: none;
     border: none;
     border-bottom: 2px solid transparent;
     cursor: pointer;
     transition: $transition-base;
     white-space: nowrap;
-    
+
     &:hover {
-      color: color('primary', 'base');
+      color: color("primary", "base");
     }
-    
+
     &--active {
-      color: color('primary', 'base');
-      border-bottom: 2px solid color('primary', 'base');
+      color: color("primary", "base");
+      border-bottom: 2px solid color("primary", "base");
     }
   }
-  
+
   &__tab_content {
     display: grid;
     grid-template-columns: 1fr;
-    gap: spacing('xl');
-    
-    @include breakpoint-up('lg') {
+    gap: spacing("xl");
+
+    @include breakpoint-up("lg") {
       grid-template-columns: 1fr 1fr;
     }
   }
-  
+
   &__card {
-    background-color: color('neutral', 'white');
-    border-radius: border-radius('lg');
-    box-shadow: map-get($box-shadows, 'sm');
-    padding: spacing('lg');
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    box-shadow: map-get($box-shadows, "sm");
+    padding: spacing("lg");
     height: fit-content;
     transition: $transition-base;
-    
+
     &:hover {
-      box-shadow: map-get($box-shadows, 'md');
+      box-shadow: map-get($box-shadows, "md");
     }
-    
+
     &--full {
-      @include breakpoint-up('lg') {
+      @include breakpoint-up("lg") {
         grid-column: span 2;
       }
     }
   }
-  
+
   &__card_header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: spacing('md');
-    padding-bottom: spacing('sm');
-    border-bottom: 1px solid color('neutral', 'lighter');
+    margin-bottom: spacing("md");
+    padding-bottom: spacing("sm");
+    border-bottom: 1px solid color("neutral", "lighter");
   }
-  
+
   &__card_title {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('primary', 'dark');
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("primary", "dark");
     margin: 0;
     display: flex;
     align-items: center;
-    gap: spacing('sm');
+    gap: spacing("sm");
   }
-  
+
   &__card_actions {
     display: flex;
-    gap: spacing('xs');
+    gap: spacing("xs");
   }
-  
+
   &__icon_button {
     background: none;
     border: none;
-    padding: spacing('xs');
-    color: color('neutral', 'dark');
+    padding: spacing("xs");
+    color: color("neutral", "dark");
     cursor: pointer;
     transition: $transition-base;
-    
+
     &:hover {
-      color: color('primary', 'base');
+      color: color("primary", "base");
     }
   }
-  
+
   &__info_grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: spacing('md');
+    gap: spacing("md");
   }
-  
+
   &__info_item {
-    margin-bottom: spacing('md');
+    margin-bottom: spacing("md");
   }
-  
+
   &__info_label {
-    font-size: map-get($font-sizes, 'xs');
-    font-weight: map-get($font-weights, 'medium');
-    color: color('neutral', 'dark');
-    margin: 0 0 spacing('xxs') 0;
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("xxs") 0;
   }
-  
+
   &__info_value {
-    font-size: map-get($font-sizes, 'sm');
-    font-weight: map-get($font-weights, 'regular');
-    color: color('neutral', 'black');
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "regular");
+    color: color("neutral", "black");
     margin: 0;
   }
-  
+
   &__empty {
-    color: color('neutral', 'dark');
+    color: color("neutral", "dark");
     font-style: italic;
     text-align: center;
-    padding: spacing('xl');
+    padding: spacing("xl");
   }
-  
+
   &__table {
     width: 100%;
     border-collapse: collapse;
-    
+
     th {
       text-align: left;
-      padding: spacing('sm');
-      font-size: map-get($font-sizes, 'xs');
-      font-weight: map-get($font-weights, 'semibold');
-      color: color('neutral', 'dark');
-      border-bottom: 1px solid color('neutral', 'medium');
+      padding: spacing("sm");
+      font-size: map-get($font-sizes, "xs");
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "dark");
+      border-bottom: 1px solid color("neutral", "medium");
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    
+
     td {
-      padding: spacing('sm');
-      font-size: map-get($font-sizes, 'sm');
-      border-bottom: 1px solid color('neutral', 'lighter');
+      padding: spacing("sm");
+      font-size: map-get($font-sizes, "sm");
+      border-bottom: 1px solid color("neutral", "lighter");
     }
-    
+
     tr:last-child td {
       border-bottom: none;
     }
-    
+
     tr:hover td {
-      background-color: color('neutral', 'lighter');
+      background-color: color("neutral", "lighter");
     }
   }
-  
+
   &__avatar {
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background-color: color('primary', 'light');
-    color: color('neutral', 'white');
+    background-color: color("primary", "light");
+    color: color("neutral", "white");
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: map-get($font-sizes, '2xl');
-    font-weight: map-get($font-weights, 'bold');
-    margin-bottom: spacing('md');
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    margin-bottom: spacing("md");
   }
-  
+
   &__status {
     display: inline-flex;
     align-items: center;
-    padding: spacing('xxs') spacing('sm');
-    border-radius: border-radius('full');
-    font-size: map-get($font-sizes, 'xs');
-    font-weight: map-get($font-weights, 'medium');
-    
+    padding: spacing("xxs") spacing("sm");
+    border-radius: border-radius("full");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+
     &--active {
-      background-color: rgba(color('success'), 0.1);
-      color: color('success');
+      background-color: rgba(color("success"), 0.1);
+      color: color("success");
     }
-    
+
     &--inactive {
-      background-color: rgba(color('neutral', 'dark'), 0.1);
-      color: color('neutral', 'dark');
+      background-color: rgba(color("neutral", "dark"), 0.1);
+      color: color("neutral", "dark");
     }
-    
+
     &--pending {
-      background-color: rgba(color('warning'), 0.1);
-      color: color('warning');
+      background-color: rgba(color("warning"), 0.1);
+      color: color("warning");
     }
-    
+
     &--cancelled {
-      background-color: rgba(color('error'), 0.1);
-      color: color('error');
+      background-color: rgba(color("error"), 0.1);
+      color: color("error");
     }
   }
-  
+
   &__edit_button {
     display: inline-flex;
     align-items: center;
-    gap: spacing('xs');
-    padding: spacing('sm') spacing('md');
-    background-color: color('primary', 'base');
-    color: color('neutral', 'white');
+    gap: spacing("xs");
+    padding: spacing("sm") spacing("md");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
     border: none;
-    border-radius: border-radius('md');
-    font-size: map-get($font-sizes, 'sm');
-    font-weight: map-get($font-weights, 'medium');
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
     cursor: pointer;
     transition: $transition-base;
-    
+
     &:hover {
-      background-color: color('primary', 'dark');
+      background-color: color("primary", "dark");
     }
   }
-  
+
   &__danger_button {
     display: inline-flex;
     align-items: center;
-    gap: spacing('xs');
-    padding: spacing('sm') spacing('md');
+    gap: spacing("xs");
+    padding: spacing("sm") spacing("md");
     background-color: transparent;
-    color: color('error');
-    border: 1px solid color('error');
-    border-radius: border-radius('md');
-    font-size: map-get($font-sizes, 'sm');
-    font-weight: map-get($font-weights, 'medium');
+    color: color("error");
+    border: 1px solid color("error");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
     cursor: pointer;
     transition: $transition-base;
-    
+
     &:hover {
-      background-color: rgba(color('error'), 0.1);
+      background-color: rgba(color("error"), 0.1);
     }
   }
-  
+
   &__chart {
     height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px dashed color('neutral', 'medium');
-    border-radius: border-radius('md');
-    margin-top: spacing('lg');
+    border: 1px dashed color("neutral", "medium");
+    border-radius: border-radius("md");
+    margin-top: spacing("lg");
   }
-  
+
   &__bookings_summary {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: spacing('md');
-    margin-bottom: spacing('lg');
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
   }
-  
+
   &__summary_card {
-    background-color: color('neutral', 'lighter');
-    padding: spacing('md');
-    border-radius: border-radius('md');
+    background-color: color("neutral", "lighter");
+    padding: spacing("md");
+    border-radius: border-radius("md");
     text-align: center;
   }
-  
+
   &__summary_value {
-    font-size: map-get($font-sizes, '2xl');
-    font-weight: map-get($font-weights, 'bold');
-    color: color('primary', 'base');
-    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("primary", "base");
+    margin: 0 0 spacing("xs") 0;
   }
-  
+
   &__summary_label {
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
     margin: 0;
+  }
+
+  &__notes {
+    margin-top: spacing("md");
+  }
+
+  &__notes_input {
+    width: 100%;
+    padding: spacing("sm");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    font-family: inherit;
+    resize: vertical;
+    min-height: 120px;
+    transition: $transition-base;
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 2px rgba(color("primary", "base"), 0.1);
+    }
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
   }
 }
 

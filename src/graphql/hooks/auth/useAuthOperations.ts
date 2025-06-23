@@ -427,7 +427,6 @@ export const useAuthOperations = () => {
    */
   const handleGetUsers = useCallback(
     async (role?: UserRole) => {
-      console.log("currentUser", currentUser);
       try {
         if (!currentToken) {
           throw new Error("Not authenticated");
