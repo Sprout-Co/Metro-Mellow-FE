@@ -6,7 +6,6 @@ import styles from "./BookingDetails.module.scss";
 import Card from "../../_components/UI/Card/Card";
 import Button from "../../_components/UI/Button/Button";
 import ConfirmationModal from "../../_components/UI/ConfirmationModal/ConfirmationModal";
-import StatusBadge from "../../_components/UI/StatusBadge/StatusBadge";
 import { motion, AnimatePresence } from "framer-motion";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import {
@@ -21,7 +20,6 @@ import {
 } from "@/graphql/api";
 import { formatToNaira } from "@/utils/string";
 import { Icon } from "@/components/ui/Icon/Icon";
-import BookServiceModal from "../../../dashboard/_components/overview/BookServiceModal";
 
 // Animation variants for Framer Motion
 const fadeIn = {
@@ -705,8 +703,7 @@ export default function BookingDetailsPage() {
                         </span>
                         <span className={styles.booking_details__info_value}>
                           {getPropertyTypeLabel(
-                            booking.serviceDetails.cleaning
-                              .houseType as PropertyType
+                            booking.serviceDetails.cleaning.houseType
                           )}
                         </span>
                       </div>
@@ -1167,19 +1164,6 @@ export default function BookingDetailsPage() {
           variant="danger"
           isLoading={isActionLoading}
         />
-
-        {/* Edit Booking Modal */}
-        {showEditModal && (
-          <BookServiceModal
-            isOpen={showEditModal}
-            onClose={() => setShowEditModal(false)}
-            addressId={booking.address?.id}
-            bookingId={booking.id}
-            initialData={booking}
-          />
-        )}
-
-        {/* TODO: Add Staff Assignment Modal when component is available */}
       </motion.div>
     </AdminDashboardLayout>
   );
