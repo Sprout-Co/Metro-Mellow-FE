@@ -137,35 +137,35 @@ export default function CustomerOverview({
           <div className={styles.customer_details__info_item}>
             <p className={styles.customer_details__info_label}>Street</p>
             <p className={styles.customer_details__info_value}>
-              {customer.addresses?.[0]?.street || "N/A"}
+              {customer.defaultAddress?.street || "N/A"}
             </p>
           </div>
 
           <div className={styles.customer_details__info_item}>
             <p className={styles.customer_details__info_label}>City</p>
             <p className={styles.customer_details__info_value}>
-              {customer.addresses?.[0]?.city || "N/A"}
+              {customer.defaultAddress?.city || "N/A"}
             </p>
           </div>
 
           <div className={styles.customer_details__info_item}>
             <p className={styles.customer_details__info_label}>State</p>
             <p className={styles.customer_details__info_value}>
-              {customer.addresses?.[0]?.state || "N/A"}
+              {customer.defaultAddress?.state || "N/A"}
             </p>
           </div>
 
           <div className={styles.customer_details__info_item}>
             <p className={styles.customer_details__info_label}>Zip Code</p>
             <p className={styles.customer_details__info_value}>
-              {customer.addresses?.[0]?.zipCode || "N/A"}
+              {customer.defaultAddress?.zipCode || "N/A"}
             </p>
           </div>
 
           <div className={styles.customer_details__info_item}>
             <p className={styles.customer_details__info_label}>Country</p>
             <p className={styles.customer_details__info_value}>
-              {customer.addresses?.[0]?.country || "N/A"}
+              {customer.defaultAddress?.country || "N/A"}
             </p>
           </div>
         </div>

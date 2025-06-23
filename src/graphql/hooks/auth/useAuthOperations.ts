@@ -21,6 +21,11 @@ import {
   useVerifyEmailMutation,
   useAddAddressMutation,
   AddressInput,
+  useUpdateAddressMutation,
+  useSetDefaultAddressMutation,
+  UpdateUserInput,
+  AccountStatus,
+  useUpdateAccountStatusMutation,
 } from "@/graphql/api";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { 
@@ -51,7 +56,9 @@ export const useAuthOperations = () => {
   const [sendVerificationEmailMutation] = useSendVerificationEmailMutation();
   const [verifyEmailMutation] = useVerifyEmailMutation();
   const [addAddressMutation] = useAddAddressMutation();
-
+  const [updateAddressMutation] = useUpdateAddressMutation();
+  const [setDefaultAddressMutation] = useSetDefaultAddressMutation();
+  const [updateAccountStatusMutation] = useUpdateAccountStatusMutation();
   /**
    * Handles user login with email and password
    * @param email - User's email address
@@ -181,18 +188,7 @@ export const useAuthOperations = () => {
    * @throws Error if update fails
    */
   const handleUpdateProfile = useCallback(
-    async (input: {
-      firstName?: string;
-      lastName?: string;
-      phone?: string;
-      address?: {
-        street: string;
-        city: string;
-        state: string;
-        zipCode: string;
-        country: string;
-      };
-    }) => {
+    async (input: UpdateUserInput) => {
       try {
         const { data, errors } = await updateProfileMutation({
           variables: { input },
@@ -202,7 +198,7 @@ export const useAuthOperations = () => {
           throw new Error(errors[0].message);
         }
 
-        if (data?.updateProfile) {
+        if (data?.updateProfile && data.updateProfile.role === UserRole.Customer) {
           // Update the user in the auth store while preserving the current token
           dispatch(loginAction({ user: data.updateProfile as any, token: currentToken || "" }));
           return data.updateProfile;
@@ -371,7 +367,6 @@ export const useAuthOperations = () => {
       if (errors) {
         throw new Error(errors[0].message);
       }
-
       if (data?.me) {
         // Update the auth store with the latest user data
         console.log("Setting user in auth store:", data.me);
@@ -546,6 +541,96 @@ export const useAuthOperations = () => {
     [addAddressMutation]
   );
 
+  /**
+   * Updates an existing address for the current user
+   * @param id - Address ID
+   * @param input - Address input object
+   * @returns Updated address
+   * @throws Error if update fails
+   */
+  const handleUpdateAddress = useCallback(
+    async (id: string, input: AddressInput) => {
+      try {
+        const { data, errors } = await updateAddressMutation({
+          variables: { addressId: id, input },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.updateAddress;
+      } catch (error) {
+        console.error("Address update error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [updateAddressMutation]
+  );
+
+  /**
+   * Sets an address as default for the current user
+   * @param id - Address ID to set as default
+   * @returns Updated address
+   * @throws Error if update fails
+   */
+  const handleSetDefaultAddress = useCallback(
+    async (id: string) => {
+      try {
+        const { data, errors } = await setDefaultAddressMutation({
+          variables: { addressId: id },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.setDefaultAddress;
+      } catch (error) {
+        console.error("Set default address error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [setDefaultAddressMutation]
+  );
+
+  /**
+   * Updates account status for a user
+   * @param userId - User ID to update status for
+   * @param status - New account status
+   * @param reason - Optional reason for status change
+   * @returns Boolean indicating success
+   * @throws Error if update fails
+   */
+  const handleUpdateAccountStatus = useCallback(
+    async (userId: string, status: AccountStatus, reason?: string) => {
+      try {
+        const { data, errors } = await updateAccountStatusMutation({
+          variables: { userId, status, reason },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.updateAccountStatus;
+      } catch (error) {
+        console.error("Account status update error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [updateAccountStatusMutation]
+  );
+
   return {
     handleLogin,
     handleRegister,
@@ -561,5 +646,8 @@ export const useAuthOperations = () => {
     handleSendVerificationEmail,
     handleVerifyEmail,
     handleAddAddress,
+    handleUpdateAddress,
+    handleSetDefaultAddress,
+    handleUpdateAccountStatus,
   };
 };

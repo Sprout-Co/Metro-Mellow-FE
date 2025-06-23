@@ -85,3 +85,7 @@ mutation AddAddress($input: AddressInput!) {
 mutation SetDefaultAddress($addressId: ID!) {
   setDefaultAddress(addressId: $addressId)
 }
+
+mutation UpdateAddress($addressId: ID!, $input: AddressInput!) {
+  updateAddress(addressId: $addressId, input: $input)
+}

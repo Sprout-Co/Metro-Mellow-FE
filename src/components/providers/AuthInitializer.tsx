@@ -14,9 +14,7 @@ export function AuthInitializer({ children }: AuthInitializerProps) {
   const { handleGetCurrentUser } = useAuthOperations();
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      handleGetCurrentUser();
-    }
+    handleGetCurrentUser();
   }, [isAuthenticated]);
 
   return <>{children}</>;

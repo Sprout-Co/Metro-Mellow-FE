@@ -26,8 +26,10 @@ import {
   Subscription,
   Payment,
   Invoice,
+  SubscriptionStatus,
 } from "@/graphql/api";
 import { formatToNaira } from "@/utils/string";
+import EditCustomerModal from "./_components/EditCustomerModal/EditCustomerModal";
 
 export default function CustomerDetailsPage() {
   const params = useParams();
@@ -47,7 +49,7 @@ export default function CustomerDetailsPage() {
     subscriptions: true,
     payments: true,
   });
-
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { handleGetUserById } = useAuthOperations();
   const { handleGetBookings } = useBookingOperations();
   const { handleGetSubscriptions } = useSubscriptionOperations();
@@ -60,126 +62,124 @@ export default function CustomerDetailsPage() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   };
 
-  useEffect(() => {
-    const fetchCustomerData = async () => {
+  const fetchCustomerData = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      setLoadingStates({
+        customer: true,
+        bookings: true,
+        subscriptions: true,
+        payments: true,
+      });
+
+      // Fetch customer details
       try {
-        setIsLoading(true);
-        setError(null);
-        setLoadingStates({
-          customer: true,
-          bookings: true,
-          subscriptions: true,
-          payments: true,
-        });
-
-        // Fetch customer details
-        try {
-          const customerData = await handleGetUserById(customerId);
-          setCustomer(customerData as User);
-          setLoadingStates((prev) => ({ ...prev, customer: false }));
-        } catch (err) {
-          console.error("Failed to fetch customer:", err);
-          setLoadingStates((prev) => ({ ...prev, customer: false }));
-          throw new Error("Failed to fetch customer details");
-        }
-
-        // Fetch all data and filter by customer ID
-        // Note: Current GraphQL schema doesn't support customer ID parameters
-        // These queries return all data for admin context, filtered client-side
-
-        const fetchBookings = async () => {
-          try {
-            const allBookings = await handleGetBookings();
-            const customerBookings =
-              allBookings?.filter(
-                (booking) => booking.customer?.id === customerId
-              ) || [];
-            setBookings(customerBookings as Booking[]);
-            setLoadingStates((prev) => ({ ...prev, bookings: false }));
-            return customerBookings;
-          } catch (err) {
-            console.warn("Failed to fetch bookings:", err);
-            setLoadingStates((prev) => ({ ...prev, bookings: false }));
-            return [];
-          }
-        };
-
-        const fetchSubscriptions = async () => {
-          try {
-            const allSubscriptions = await handleGetSubscriptions();
-            const customerSubscriptions =
-              allSubscriptions?.filter(
-                (subscription) => subscription.customer?.id === customerId
-              ) || [];
-            setSubscriptions(customerSubscriptions as Subscription[]);
-            setLoadingStates((prev) => ({ ...prev, subscriptions: false }));
-            return customerSubscriptions;
-          } catch (err) {
-            console.warn("Failed to fetch subscriptions:", err);
-            setLoadingStates((prev) => ({ ...prev, subscriptions: false }));
-            return [];
-          }
-        };
-
-        const fetchPayments = async () => {
-          try {
-            const allPayments = await handleGetPayments();
-            const customerPayments =
-              allPayments?.filter(
-                (payment) => payment.customer?.id === customerId
-              ) || [];
-            setPayments(customerPayments as Payment[]);
-            setLoadingStates((prev) => ({ ...prev, payments: false }));
-            return customerPayments;
-          } catch (err) {
-            console.warn("Failed to fetch payments:", err);
-            setLoadingStates((prev) => ({ ...prev, payments: false }));
-            return [];
-          }
-        };
-
-        // Fetch all data in parallel
-        const [customerBookings, customerSubscriptions, customerPayments] =
-          await Promise.all([
-            fetchBookings(),
-            fetchSubscriptions(),
-            fetchPayments(),
-          ]);
-
-        // Fallback to mock data if no real data is available
-        // Use mock data as fallback if no real data was fetched
-        if (customerBookings.length === 0) {
-          // Create mock booking data that matches the GraphQL Booking type structure
-          setBookings([
-            // Mock bookings will be added when GraphQL schema is properly connected
-          ] as Booking[]);
-        }
-
-        if (customerSubscriptions.length === 0) {
-          // Create mock subscription data that matches the GraphQL Subscription type structure
-          setSubscriptions([
-            // Mock subscriptions will be added when GraphQL schema is properly connected
-          ] as Subscription[]);
-        }
-
-        if (customerPayments.length === 0) {
-          // Create mock payment data that matches the GraphQL Payment type structure
-          setPayments([
-            // Mock payments will be added when GraphQL schema is properly connected
-          ] as Payment[]);
-        }
-      } catch (error) {
-        console.error("Error fetching customer data:", error);
-        setError(
-          error instanceof Error
-            ? error.message
-            : "Failed to fetch customer data"
-        );
-      } finally {
-        setIsLoading(false);
+        const customerData = await handleGetUserById(customerId);
+        setCustomer(customerData as User);
+        setLoadingStates((prev) => ({ ...prev, customer: false }));
+      } catch (err) {
+        console.error("Failed to fetch customer:", err);
+        setLoadingStates((prev) => ({ ...prev, customer: false }));
+        throw new Error("Failed to fetch customer details");
       }
-    };
 
+      // Fetch all data and filter by customer ID
+      // Note: Current GraphQL schema doesn't support customer ID parameters
+      // These queries return all data for admin context, filtered client-side
+
+      const fetchBookings = async () => {
+        try {
+          const allBookings = await handleGetBookings();
+          const customerBookings =
+            allBookings?.filter(
+              (booking) => booking.customer?.id === customerId
+            ) || [];
+          setBookings(customerBookings as Booking[]);
+          setLoadingStates((prev) => ({ ...prev, bookings: false }));
+          return customerBookings;
+        } catch (err) {
+          console.warn("Failed to fetch bookings:", err);
+          setLoadingStates((prev) => ({ ...prev, bookings: false }));
+          return [];
+        }
+      };
+
+      const fetchSubscriptions = async () => {
+        try {
+          const allSubscriptions = await handleGetSubscriptions();
+          const customerSubscriptions =
+            allSubscriptions?.filter(
+              (subscription) => subscription.customer?.id === customerId
+            ) || [];
+          setSubscriptions(customerSubscriptions as Subscription[]);
+          setLoadingStates((prev) => ({ ...prev, subscriptions: false }));
+          return customerSubscriptions;
+        } catch (err) {
+          console.warn("Failed to fetch subscriptions:", err);
+          setLoadingStates((prev) => ({ ...prev, subscriptions: false }));
+          return [];
+        }
+      };
+
+      const fetchPayments = async () => {
+        try {
+          const allPayments = await handleGetPayments();
+          const customerPayments =
+            allPayments?.filter(
+              (payment) => payment.customer?.id === customerId
+            ) || [];
+          setPayments(customerPayments as Payment[]);
+          setLoadingStates((prev) => ({ ...prev, payments: false }));
+          return customerPayments;
+        } catch (err) {
+          console.warn("Failed to fetch payments:", err);
+          setLoadingStates((prev) => ({ ...prev, payments: false }));
+          return [];
+        }
+      };
+
+      // Fetch all data in parallel
+      const [customerBookings, customerSubscriptions, customerPayments] =
+        await Promise.all([
+          fetchBookings(),
+          fetchSubscriptions(),
+          fetchPayments(),
+        ]);
+
+      // Fallback to mock data if no real data is available
+      // Use mock data as fallback if no real data was fetched
+      if (customerBookings.length === 0) {
+        // Create mock booking data that matches the GraphQL Booking type structure
+        setBookings([
+          // Mock bookings will be added when GraphQL schema is properly connected
+        ] as Booking[]);
+      }
+
+      if (customerSubscriptions.length === 0) {
+        // Create mock subscription data that matches the GraphQL Subscription type structure
+        setSubscriptions([
+          // Mock subscriptions will be added when GraphQL schema is properly connected
+        ] as Subscription[]);
+      }
+
+      if (customerPayments.length === 0) {
+        // Create mock payment data that matches the GraphQL Payment type structure
+        setPayments([
+          // Mock payments will be added when GraphQL schema is properly connected
+        ] as Payment[]);
+      }
+    } catch (error) {
+      console.error("Error fetching customer data:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to fetch customer data"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchCustomerData();
   }, [
     customerId,
@@ -241,7 +241,7 @@ export default function CustomerDetailsPage() {
     (b) => b.status === BookingStatus.Completed
   ).length;
   const activeSubscriptions = subscriptions.filter(
-    (s) => s.status === "ACTIVE"
+    (s) => s.status === SubscriptionStatus.Active
   ).length;
 
   // Filter invoices by customer ID (invoices from hook include all customer invoices)
@@ -319,7 +319,10 @@ export default function CustomerDetailsPage() {
             </div>
 
             <div className={styles.customer_details__actions}>
-              <button className={styles.customer_details__edit_button}>
+              <button
+                className={styles.customer_details__edit_button}
+                onClick={() => setIsEditModalOpen(true)}
+              >
                 Edit Customer
               </button>
               <button className={styles.customer_details__danger_button}>
@@ -419,6 +422,17 @@ export default function CustomerDetailsPage() {
         </motion.div>
       ) : (
         <div className="error-message">Customer not found</div>
+      )}
+      {customer && (
+        <EditCustomerModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          onSuccess={() => {
+            // Refresh customer data after successful edit
+            fetchCustomerData();
+          }}
+          customer={customer}
+        />
       )}
     </AdminDashboardLayout>
   );
