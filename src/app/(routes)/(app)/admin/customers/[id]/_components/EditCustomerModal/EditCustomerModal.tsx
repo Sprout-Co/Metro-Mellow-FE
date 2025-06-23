@@ -28,6 +28,7 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
   const [activeTab, setActiveTab] = useState("personal");
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showAccountConfirmation, setShowAccountConfirmation] = useState(false);
 
   const [formData, setFormData] = useState({
     personal: {
@@ -67,6 +68,13 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
       },
     });
   }, [customer, isOpen]);
+
+  // Reset confirmation dialog when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      setShowAccountConfirmation(false);
+    }
+  }, [isOpen]);
 
   const validatePersonalInfo = () => {
     const newErrors: Record<string, string> = {};
@@ -196,7 +204,12 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
   };
 
   const handleUpdateAccountInfo = async () => {
+    setShowAccountConfirmation(true);
+  };
+
+  const handleConfirmAccountUpdate = async () => {
     setIsLoading(true);
+    setShowAccountConfirmation(false);
 
     try {
       await handleUpdateAccountStatus(
@@ -216,6 +229,10 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleCancelAccountUpdate = () => {
+    setShowAccountConfirmation(false);
   };
 
   // Tab content animation variants
@@ -685,6 +702,54 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Account Status Update Confirmation Dialog */}
+      <Modal
+        isOpen={showAccountConfirmation}
+        onClose={handleCancelAccountUpdate}
+        title="Confirm Account Status Update"
+        maxWidth="400px"
+      >
+        <div className={styles.edit_customer_modal__confirmation}>
+          <div className={styles.edit_customer_modal__confirmation_content}>
+            <p className={styles.edit_customer_modal__confirmation_text}>
+              Are you sure you want to update the account status to{" "}
+              <strong>{formData.personal.accountStatus}</strong> for{" "}
+              <strong>
+                {formData.personal.firstName} {formData.personal.lastName}
+              </strong>
+              ?
+            </p>
+            <p className={styles.edit_customer_modal__confirmation_warning}>
+              This action may affect the customer's ability to log in or access
+              services.
+            </p>
+          </div>
+
+          <div className={styles.edit_customer_modal__confirmation_actions}>
+            <button
+              type="button"
+              className={styles.edit_customer_modal__confirmation_cancel}
+              onClick={handleCancelAccountUpdate}
+              disabled={isLoading}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className={styles.edit_customer_modal__confirmation_confirm}
+              onClick={handleConfirmAccountUpdate}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <span className={styles.edit_customer_modal__spinner}></span>
+              ) : (
+                "Update Status"
+              )}
+            </button>
+          </div>
+        </div>
+      </Modal>
     </Modal>
   );
 };

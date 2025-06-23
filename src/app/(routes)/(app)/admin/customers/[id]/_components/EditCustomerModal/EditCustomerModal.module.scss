@@ -383,6 +383,93 @@
     border-top-color: color("neutral", "white");
     animation: spinner 0.8s linear infinite;
   }
+
+  &__confirmation {
+    padding: spacing("md");
+  }
+
+  &__confirmation_content {
+    margin-bottom: spacing("lg");
+  }
+
+  &__confirmation_text {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "darker");
+    margin: 0 0 spacing("md") 0;
+    line-height: 1.5;
+  }
+
+  &__confirmation_warning {
+    font-size: map-get($font-sizes, "sm");
+    color: color("warning");
+    background-color: rgba(color("warning"), 0.1);
+    padding: spacing("sm");
+    border-radius: border-radius("md");
+    margin: 0;
+    border-left: 3px solid color("warning");
+  }
+
+  &__confirmation_actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: spacing("md");
+  }
+
+  &__confirmation_cancel {
+    padding: spacing("sm") spacing("lg");
+    background-color: color("neutral", "light");
+    border: none;
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "darker");
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: color("neutral", "medium");
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(color("neutral", "medium"), 0.3);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__confirmation_confirm {
+    padding: spacing("sm") spacing("lg");
+    background-color: color("warning");
+    border: none;
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "white");
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+
+    &:hover {
+      background-color: darken(color("warning"), 10%);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(color("warning"), 0.3);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
 }
 
 @keyframes spinner {
