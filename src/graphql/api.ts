@@ -64,7 +64,7 @@ export type AddressInput = {
   city: Scalars['String']['input'];
   country: Scalars['String']['input'];
   isDefault?: InputMaybe<Scalars['Boolean']['input']>;
-  label: Scalars['String']['input'];
+  label?: InputMaybe<Scalars['String']['input']>;
   state: Scalars['String']['input'];
   street: Scalars['String']['input'];
   zipCode: Scalars['String']['input'];
@@ -225,6 +225,11 @@ export type CreateBookingInput = {
   totalPrice: Scalars['Float']['input'];
 };
 
+export type CreateCustomerAddressInput = {
+  city: Scalars['String']['input'];
+  street: Scalars['String']['input'];
+};
+
 export type CreateNotificationInput = {
   data?: InputMaybe<Scalars['JSON']['input']>;
   expiresAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -275,6 +280,7 @@ export type CreateSubscriptionInput = {
 };
 
 export type CreateUserInput = {
+  address?: InputMaybe<CreateCustomerAddressInput>;
   email: Scalars['String']['input'];
   firstName: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
@@ -402,11 +408,14 @@ export type Mutation = {
   changePassword: Scalars['Boolean']['output'];
   cleanupExpiredInvitations: Scalars['Int']['output'];
   completeBooking: Scalars['Boolean']['output'];
+  createAdmin: AuthPayload;
   createAdminInvitation: AdminInvitationResponse;
   createBooking: Scalars['Boolean']['output'];
+  createCustomer: AuthPayload;
   createNotification: Notification;
   createPayment: Payment;
   createService: Service;
+  createStaff: AuthPayload;
   createStaffProfile: StaffProfile;
   createSubscription: Scalars['Boolean']['output'];
   deleteNotification: Scalars['Boolean']['output'];
@@ -516,6 +525,11 @@ export type MutationCompleteBookingArgs = {
 };
 
 
+export type MutationCreateAdminArgs = {
+  input: CreateUserInput;
+};
+
+
 export type MutationCreateAdminInvitationArgs = {
   input: CreateAdminInvitationInput;
 };
@@ -523,6 +537,11 @@ export type MutationCreateAdminInvitationArgs = {
 
 export type MutationCreateBookingArgs = {
   input: CreateBookingInput;
+};
+
+
+export type MutationCreateCustomerArgs = {
+  input: CreateUserInput;
 };
 
 
@@ -538,6 +557,11 @@ export type MutationCreatePaymentArgs = {
 
 export type MutationCreateServiceArgs = {
   input: CreateServiceInput;
+};
+
+
+export type MutationCreateStaffArgs = {
+  input: CreateUserInput;
 };
 
 
@@ -1491,6 +1515,20 @@ export type CleanupExpiredInvitationsMutationVariables = Exact<{ [key: string]: 
 
 export type CleanupExpiredInvitationsMutation = { __typename?: 'Mutation', cleanupExpiredInvitations: number };
 
+export type CreateCustomerMutationVariables = Exact<{
+  input: CreateUserInput;
+}>;
+
+
+export type CreateCustomerMutation = { __typename?: 'Mutation', createCustomer: { __typename?: 'AuthPayload', token?: string | null, message?: string | null, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null> | null, defaultAddress?: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null } } };
+
+export type CreateStaffMutationVariables = Exact<{
+  input: CreateUserInput;
+}>;
+
+
+export type CreateStaffMutation = { __typename?: 'Mutation', createStaff: { __typename?: 'AuthPayload', token?: string | null, message?: string | null, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null> | null, defaultAddress?: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null } } };
+
 export type RegisterMutationVariables = Exact<{
   input: CreateUserInput;
 }>;
@@ -2276,6 +2314,140 @@ export function useCleanupExpiredInvitationsMutation(baseOptions?: ApolloReactHo
 export type CleanupExpiredInvitationsMutationHookResult = ReturnType<typeof useCleanupExpiredInvitationsMutation>;
 export type CleanupExpiredInvitationsMutationResult = Apollo.MutationResult<CleanupExpiredInvitationsMutation>;
 export type CleanupExpiredInvitationsMutationOptions = Apollo.BaseMutationOptions<CleanupExpiredInvitationsMutation, CleanupExpiredInvitationsMutationVariables>;
+export const CreateCustomerDocument = gql`
+    mutation CreateCustomer($input: CreateUserInput!) {
+  createCustomer(input: $input) {
+    token
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      addresses {
+        id
+        street
+        city
+        state
+        zipCode
+        country
+        isDefault
+        label
+      }
+      defaultAddress {
+        id
+        street
+        city
+        state
+        zipCode
+        country
+        isDefault
+        label
+      }
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+      createdAt
+      updatedAt
+    }
+    message
+  }
+}
+    `;
+export type CreateCustomerMutationFn = Apollo.MutationFunction<CreateCustomerMutation, CreateCustomerMutationVariables>;
+
+/**
+ * __useCreateCustomerMutation__
+ *
+ * To run a mutation, you first call `useCreateCustomerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCustomerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCustomerMutation, { data, loading, error }] = useCreateCustomerMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateCustomerMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCustomerMutation, CreateCustomerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<CreateCustomerMutation, CreateCustomerMutationVariables>(CreateCustomerDocument, options);
+      }
+export type CreateCustomerMutationHookResult = ReturnType<typeof useCreateCustomerMutation>;
+export type CreateCustomerMutationResult = Apollo.MutationResult<CreateCustomerMutation>;
+export type CreateCustomerMutationOptions = Apollo.BaseMutationOptions<CreateCustomerMutation, CreateCustomerMutationVariables>;
+export const CreateStaffDocument = gql`
+    mutation CreateStaff($input: CreateUserInput!) {
+  createStaff(input: $input) {
+    token
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      addresses {
+        id
+        street
+        city
+        state
+        zipCode
+        country
+        isDefault
+        label
+      }
+      defaultAddress {
+        id
+        street
+        city
+        state
+        zipCode
+        country
+        isDefault
+        label
+      }
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+      createdAt
+      updatedAt
+    }
+    message
+  }
+}
+    `;
+export type CreateStaffMutationFn = Apollo.MutationFunction<CreateStaffMutation, CreateStaffMutationVariables>;
+
+/**
+ * __useCreateStaffMutation__
+ *
+ * To run a mutation, you first call `useCreateStaffMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateStaffMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createStaffMutation, { data, loading, error }] = useCreateStaffMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateStaffMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateStaffMutation, CreateStaffMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<CreateStaffMutation, CreateStaffMutationVariables>(CreateStaffDocument, options);
+      }
+export type CreateStaffMutationHookResult = ReturnType<typeof useCreateStaffMutation>;
+export type CreateStaffMutationResult = Apollo.MutationResult<CreateStaffMutation>;
+export type CreateStaffMutationOptions = Apollo.BaseMutationOptions<CreateStaffMutation, CreateStaffMutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($input: CreateUserInput!) {
   register(input: $input) {

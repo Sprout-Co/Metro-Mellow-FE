@@ -18,9 +18,12 @@ import {
   useAdminInvitationLazyQuery,
   CreateAdminInvitationInput,
   AcceptAdminInvitationInput,
+  useCreateCustomerMutation,
+  CreateUserInput,
 } from "@/graphql/api";
 
 export const useAdminOperations = () => {
+  const [createCustomerMutation] = useCreateCustomerMutation();
   const [createAdminInvitationMutation] = useCreateAdminInvitationMutation();
   const [acceptAdminInvitationMutation] = useAcceptAdminInvitationMutation();
   const [resendAdminInvitationMutation] = useResendAdminInvitationMutation();
@@ -229,6 +232,37 @@ export const useAdminOperations = () => {
     [getAdminInvitation]
   );
 
+  /**
+   * Creates a new customer
+   * @param input - Customer creation input object
+   * @returns Created customer with token
+   * @throws Error if creation fails
+   */
+  const handleCreateCustomer = useCallback(
+    async (input: CreateUserInput) => {
+      try {
+        const { data, errors } = await createCustomerMutation({
+          variables: {
+            input: { ...input },
+          },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.createCustomer;
+      } catch (error) {
+        console.error("Customer creation error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [createCustomerMutation]
+  );
+
   return {
     handleCreateAdminInvitation,
     handleAcceptAdminInvitation,
@@ -240,5 +274,6 @@ export const useAdminOperations = () => {
     // Return the current data
     currentPendingInvitations: pendingInvitationsData?.pendingAdminInvitations,
     currentAdminInvitation: adminInvitationData?.adminInvitation,
+    handleCreateCustomer,
   };
 };

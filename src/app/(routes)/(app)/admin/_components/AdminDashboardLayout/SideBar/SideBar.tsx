@@ -23,16 +23,16 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     { label: "Bookings", path: "/admin/bookings", icon: "calendar" },
     { label: "Subscriptions", path: "/admin/subscriptions", icon: "credit-card" },
     { label: "Customers", path: "/admin/customers", icon: "users" },
-    { label: "Services", path: "/admin/services", icon: "package" },
-    { label: "Reports", path: "/admin/reports", icon: "file-text" },
     { label: "Scheduling", path: "/admin/scheduling", icon: "calendar-plus" },
-    { label: "Staff", path: "/admin/staff", icon: "user" },
-    { label: "Analytics", path: "/admin/analytics", icon: "trending-up" },
+    // { label: "Services", path: "/admin/services", icon: "package" },
+    // { label: "Reports", path: "/admin/reports", icon: "file-text" },
+    // { label: "Staff", path: "/admin/staff", icon: "user" },
+    // { label: "Analytics", path: "/admin/analytics", icon: "trending-up" },
   ];
 
   const settingsItems: NavItem[] = [
-    { label: "Settings", path: "/admin/settings", icon: "settings" },
-    { label: "Help Center", path: "/admin/help", icon: "help-circle" },
+    // { label: "Settings", path: "/admin/settings", icon: "settings" },
+    // { label: "Help Center", path: "/admin/help", icon: "help-circle" },
   ];
 
   const isActive = (path: string) => {

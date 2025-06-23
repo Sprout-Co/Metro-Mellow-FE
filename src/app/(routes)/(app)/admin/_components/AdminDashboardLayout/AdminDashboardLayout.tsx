@@ -51,16 +51,6 @@ const AdminDashboardLayout: React.FC<DashboardLayoutProps> = ({
               ))}
             </div>
           )}
-
-          <div className={styles.dashboard__controls}>
-            <div className={styles.dashboard__date_picker}>
-              <span>APR 17, 24 - MAY 16, 24</span>
-            </div>
-            <button className={styles.dashboard__filter_btn}>
-              <span className={styles.icon}>⚑</span>
-              <span>FILTER</span>
-            </button>
-          </div>
         </div>
 
         <motion.div

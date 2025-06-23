@@ -13,6 +13,7 @@ import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperati
 import { BookingStatus, Booking, PaymentStatus, TimeSlot } from "@/graphql/api";
 import { formatToNaira } from "@/utils/string";
 import { Icon } from "@/components/ui/Icon/Icon";
+import BookServiceModal from "../../dashboard/_components/overview/BookServiceModal";
 
 export default function BookingsPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,7 +30,7 @@ export default function BookingsPage() {
   const [bookingModalMode, setBookingModalMode] = useState<"view" | "edit">(
     "view"
   );
-
+  const [showBookServiceModal, setShowBookServiceModal] = useState(false);
   // Confirmation modal states
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [confirmAction, setConfirmAction] = useState<{
@@ -485,9 +486,7 @@ export default function BookingsPage() {
               variant="primary"
               size="medium"
               icon="+"
-              onClick={() =>
-                console.log("Create booking functionality to be implemented")
-              }
+              onClick={() => setShowBookServiceModal(true)}
             >
               Add Booking
             </Button>
@@ -605,6 +604,13 @@ export default function BookingsPage() {
               : "warning"
           }
           isLoading={isActionLoading}
+        />
+
+        {/* {BookServiceModal} */}
+        <BookServiceModal
+          isOpen={showBookServiceModal}
+          onClose={() => setShowBookServiceModal(false)}
+          addressId={selectedBooking?.address?.id}
         />
       </div>
     </AdminDashboardLayout>
