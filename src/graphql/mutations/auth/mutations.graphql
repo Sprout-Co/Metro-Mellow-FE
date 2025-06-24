@@ -89,3 +89,13 @@ mutation SetDefaultAddress($addressId: ID!) {
 mutation UpdateAddress($addressId: ID!, $input: AddressInput!) {
   updateAddress(addressId: $addressId, input: $input)
 }
+
+mutation UpdateBookingPaymentStatus(
+  $updateBookingPaymentStatusId: ID!
+  $paymentStatus: PaymentStatus!
+) {
+  updateBookingPaymentStatus(
+    id: $updateBookingPaymentStatusId
+    paymentStatus: $paymentStatus
+  )
+}

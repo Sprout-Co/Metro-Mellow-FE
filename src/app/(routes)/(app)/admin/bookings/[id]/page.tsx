@@ -3,10 +3,9 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import AdminDashboardLayout from "../../_components/AdminDashboardLayout/AdminDashboardLayout";
 import styles from "./BookingDetails.module.scss";
-import Card from "../../_components/UI/Card/Card";
 import Button from "../../_components/UI/Button/Button";
 import ConfirmationModal from "../../_components/UI/ConfirmationModal/ConfirmationModal";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import {
   BookingStatus,
@@ -15,28 +14,17 @@ import {
   TimeSlot,
   ServiceCategory,
   CleaningType,
-  PropertyType,
   LaundryType,
+  HouseType,
 } from "@/graphql/api";
 import { formatToNaira } from "@/utils/string";
 import { Icon } from "@/components/ui/Icon/Icon";
+import { useAdminOperations } from "@/graphql/hooks/admin/useAdminOperations";
 
 // Animation variants for Framer Motion
 const fadeIn = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { duration: 0.4 } },
-};
-
-const slideUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: "easeOut",
-    },
-  },
 };
 
 export default function BookingDetailsPage() {
@@ -53,29 +41,30 @@ export default function BookingDetailsPage() {
   const [selectedStatus, setSelectedStatus] = useState<BookingStatus | null>(
     null
   );
-
-  // Edit booking modal state
-  const [showEditModal, setShowEditModal] = useState(false);
-
+  const [showPaymentStatusModal, setShowPaymentStatusModal] = useState(false);
+  const [selectedPaymentStatus, setSelectedPaymentStatus] = useState<PaymentStatus | null>(
+    booking?.paymentStatus as PaymentStatus || null
+  );
   // Cancel booking confirmation modal state
   const [showCancelModal, setShowCancelModal] = useState(false);
 
-  // Staff assignment modal state
-  const [showAssignStaffModal, setShowAssignStaffModal] = useState(false);
-
   // Action loading state
   const [isActionLoading, setIsActionLoading] = useState(false);
+
+  const [rescheduleDate, setRescheduleDate] = useState(booking?.date || new Date().toISOString());
+  const [rescheduleTimeSlot, setRescheduleTimeSlot] = useState<TimeSlot>(
+    booking?.timeSlot as TimeSlot || TimeSlot.Morning
+  );
+  const [isRescheduling, setIsRescheduling] = useState(false);
 
   const {
     handleGetBooking,
     handleCancelBooking: handleCancelBookingOperation,
     handleCompleteBooking,
     handleUpdateBookingStatus,
+    handleRescheduleBooking,
   } = useBookingOperations();
-
-  useEffect(() => {
-    fetchBookingDetails();
-  }, [bookingId]);
+  const { handleUpdateBookingPaymentStatus } = useAdminOperations();
 
   const fetchBookingDetails = async () => {
     try {
@@ -95,9 +84,18 @@ export default function BookingDetailsPage() {
     }
   };
 
+  useEffect(() => {
+    fetchBookingDetails();
+  }, [bookingId]);
+
   const handleStatusChange = (status: BookingStatus) => {
     setSelectedStatus(status);
     setShowStatusModal(true);
+  };
+
+  const handlePaymentStatusChange = (paymentStatus: PaymentStatus) => {
+    setSelectedPaymentStatus(paymentStatus);
+    setShowPaymentStatusModal(true);
   };
 
   const confirmStatusChange = async () => {
@@ -182,64 +180,32 @@ export default function BookingDetailsPage() {
   const getStatusBadgeClass = (status: BookingStatus) => {
     switch (status) {
       case BookingStatus.Pending:
-        return (
-          styles.booking_details__status_badge +
-          " " +
-          styles["booking_details__status_badge--pending"]
-        );
+        return `${styles.booking_details__badge} ${styles["booking_details__badge--pending"]}`;
       case BookingStatus.Confirmed:
-        return (
-          styles.booking_details__status_badge +
-          " " +
-          styles["booking_details__status_badge--confirmed"]
-        );
+        return `${styles.booking_details__badge} ${styles["booking_details__badge--confirmed"]}`;
       case BookingStatus.InProgress:
-        return (
-          styles.booking_details__status_badge +
-          " " +
-          styles["booking_details__status_badge--in-progress"]
-        );
+        return `${styles.booking_details__badge} ${styles["booking_details__badge--in-progress"]}`;
       case BookingStatus.Completed:
-        return (
-          styles.booking_details__status_badge +
-          " " +
-          styles["booking_details__status_badge--completed"]
-        );
+        return `${styles.booking_details__badge} ${styles["booking_details__badge--completed"]}`;
       case BookingStatus.Cancelled:
-        return (
-          styles.booking_details__status_badge +
-          " " +
-          styles["booking_details__status_badge--cancelled"]
-        );
+        return `${styles.booking_details__badge} ${styles["booking_details__badge--cancelled"]}`;
       default:
-        return styles.booking_details__status_badge;
+        return styles.booking_details__badge;
     }
   };
 
   const getPaymentStatusBadgeClass = (status: PaymentStatus) => {
     switch (status) {
       case PaymentStatus.Paid:
-        return (
-          styles.booking_details__status_badge +
-          " " +
-          styles["booking_details__status_badge--paid"]
-        );
+        return `${styles.booking_details__badge} ${styles["booking_details__badge--paid"]}`;
       case PaymentStatus.Pending:
       case PaymentStatus.Failed:
-        return (
-          styles.booking_details__status_badge +
-          " " +
-          styles["booking_details__status_badge--unpaid"]
-        );
+        return `${styles.booking_details__badge} ${styles["booking_details__badge--unpaid"]}`;
       case PaymentStatus.PartiallyRefunded:
       case PaymentStatus.Refunded:
-        return (
-          styles.booking_details__status_badge +
-          " " +
-          styles["booking_details__status_badge--cancelled"]
-        );
+        return `${styles.booking_details__badge} ${styles["booking_details__badge--refunded"]}`;
       default:
-        return styles.booking_details__status_badge;
+        return styles.booking_details__badge;
     }
   };
 
@@ -258,56 +224,113 @@ export default function BookingDetailsPage() {
       case ServiceCategory.PestControl:
         return "Pest Control";
       default:
-        return category.replace(/([A-Z])/g, " $1").trim();
+        return String(category)
+          .replace(/([A-Z])/g, " $1")
+          .trim();
     }
   };
 
   const getCleaningTypeLabel = (type?: CleaningType) => {
     if (!type) return "N/A";
-
     switch (type) {
-      case CleaningType.Regular:
-        return "Regular Cleaning";
+      case CleaningType.StandardCleaning:
+        return "Standard Cleaning";
+      case CleaningType.MoveInMoveOutCleaning:
+        return "Move-in/Move-out Cleaning";
+      case CleaningType.PostConstructionCleaning:
+        return "Post-construction Cleaning";
       case CleaningType.DeepCleaning:
         return "Deep Cleaning";
-      case CleaningType.MovingIn:
-        return "Move-in Cleaning";
-      case CleaningType.MovingOut:
-        return "Move-out Cleaning";
       default:
-        return type.replace(/([A-Z])/g, " $1").trim();
+        return String(type)
+          .replace(/([A-Z])/g, " $1")
+          .trim();
     }
   };
 
-  const getPropertyTypeLabel = (type?: PropertyType) => {
+  const getPropertyTypeLabel = (type?: HouseType) => {
     if (!type) return "N/A";
-
     switch (type) {
-      case PropertyType.Apartment:
-        return "Apartment";
-      case PropertyType.House:
-        return "House";
-      case PropertyType.Office:
-        return "Office";
-      case PropertyType.Studio:
-        return "Studio";
+      case HouseType.Duplex:
+        return "Duplex";
+      case HouseType.Flat:
+        return "Flat";
       default:
-        return type;
+        return String(type)
+          .replace(/([A-Z])/g, " $1")
+          .trim();
     }
   };
 
   const getLaundryTypeLabel = (type?: LaundryType) => {
     if (!type) return "N/A";
-
     switch (type) {
-      case LaundryType.WashAndFold:
+      case LaundryType.StandardLaundry:
         return "Wash & Fold";
-      case LaundryType.WashAndIron:
+      case LaundryType.PremiumLaundry:
         return "Wash & Iron";
-      case LaundryType.DryClean:
+      case LaundryType.DryCleaning:
         return "Dry Cleaning";
       default:
-        return type.replace(/([A-Z])/g, " $1").trim();
+        return String(type)
+          .replace(/([A-Z])/g, " $1")
+          .trim();
+    }
+  };
+
+
+  const timeSlotOptions = [
+    { value: TimeSlot.Morning, label: "Morning (6 AM - 12 PM)" },
+    { value: TimeSlot.Afternoon, label: "Afternoon (12 PM - 6 PM)" },
+    { value: TimeSlot.Evening, label: "Evening (6 PM - 12 AM)" },
+  ];
+
+   const handleReschedule = async () => {
+     if (booking && rescheduleDate && rescheduleTimeSlot) {
+       try {
+         setIsRescheduling(true);
+
+         // Convert TimeSlot to a time string for the API
+         let timeSlot = TimeSlot.Morning; // Default to 9 AM
+         switch (rescheduleTimeSlot) {
+           case TimeSlot.Morning:
+             timeSlot = TimeSlot.Morning;
+             break;
+           case TimeSlot.Afternoon:
+              timeSlot = TimeSlot.Afternoon;
+             break;
+           case TimeSlot.Evening:
+             timeSlot = TimeSlot.Evening;
+             break;
+         }
+
+         await handleRescheduleBooking(booking.id, rescheduleDate, timeSlot);
+
+         // Reset form and close modal
+         setRescheduleDate("");
+         setRescheduleTimeSlot(TimeSlot.Morning);
+       } catch (error) {
+         console.error("Reschedule error:", error);
+       } finally {
+         setIsRescheduling(false);
+       }
+     }
+   };
+
+  const confirmPaymentStatusChange = async () => {
+    if (!booking) return;
+    try {
+      setIsActionLoading(true);
+      await handleUpdateBookingPaymentStatus(booking.id, selectedPaymentStatus as PaymentStatus);
+      await fetchBookingDetails();
+      setShowPaymentStatusModal(false);
+    } catch (error) {
+      console.error("Error updating payment status:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to update payment status"
+      );
+    } finally {
+      setIsActionLoading(false);
     }
   };
 
@@ -427,711 +450,406 @@ export default function BookingDetailsPage() {
       breadcrumbs={[
         { label: "Home", path: "/admin" },
         { label: "Bookings", path: "/admin/bookings" },
-        { label: `Booking #${booking.id.slice(-8)}`, path: "" },
+        { label: `#${booking.id.slice(-8)}`, path: "" },
       ]}
     >
       <motion.div
-        className={styles.booking_details__container}
+        className={styles.booking_details}
         initial="hidden"
         animate="visible"
         variants={fadeIn}
       >
-        {/* Header Section */}
+        {/* Navigation */}
+        <button
+          onClick={() => router.push("/admin/bookings")}
+          className={styles.booking_details__back}
+        >
+          <Icon name="arrow-left" size={16} />
+          Back to Bookings
+        </button>
+
+        {/* Header */}
         <div className={styles.booking_details__header}>
-          <motion.div
-            className={styles.booking_details__title_wrapper}
-            variants={slideUp}
-          >
+          <div className={styles.booking_details__header_left}>
+            <div className={styles.booking_details__booking_number}>
+              Booking #{booking.id.slice(-8)}
+            </div>
             <h1 className={styles.booking_details__title}>
-              Booking Details
-              <span className={styles.booking_details__id}>
-                #{booking.id.slice(-8)}
-              </span>
+              {booking.service?.name || "Service Booking"}
             </h1>
-            <p className={styles.booking_details__subtitle}>
-              Created on {formatDateTime(booking.createdAt || "")}
-            </p>
-          </motion.div>
+            <div className={styles.booking_details__subtitle}>
+              {getServiceCategoryLabel(
+                booking.service?.category as ServiceCategory
+              )}
+            </div>
 
-          <motion.div
-            className={styles.booking_details__actions}
-            variants={slideUp}
-          >
-            <Button
-              variant="outline"
-              size="small"
-              onClick={() => router.push("/admin/bookings")}
-              icon={<Icon name="arrow-left" />}
-            >
-              Back
-            </Button>
+            <div className={styles.booking_details__meta_line}>
+              <span className={styles.booking_details__date}>
+                <Icon name="calendar" size={16} />
+                {formatDate(booking.date || "")}
+              </span>
+              <span className={styles.booking_details__time}>
+                <Icon name="clock" size={16} />
+                {getTimeSlotLabel(booking.timeSlot as TimeSlot)}
+              </span>
+              <span
+                className={getStatusBadgeClass(booking.status as BookingStatus)}
+              >
+                {booking.status?.replace(/([A-Z])/g, " $1").trim()}
+              </span>
+            </div>
+          </div>
 
-            {booking.status !== BookingStatus.Completed &&
-              booking.status !== BookingStatus.Cancelled && (
+          <div className={styles.booking_details__header_right}>
+            <div className={styles.booking_details__price}>
+              {formatToNaira(booking.totalPrice || 0)}
+            </div>
+
+            {/* <div className={styles.booking_details__actions}>
+              {booking.status !== BookingStatus.Completed &&
+                booking.status !== BookingStatus.Cancelled && (
+                  <Button
+                    variant="primary"
+                    size="small"
+                    onClick={() => handleStatusChange(BookingStatus.Completed)}
+                  >
+                    <Icon name="check" size={16} />
+                    Complete
+                  </Button>
+                )}
+
+              {booking.status !== BookingStatus.Cancelled && (
                 <Button
-                  variant="primary"
+                  variant="outline"
                   size="small"
-                  onClick={() => handleStatusChange(BookingStatus.Completed)}
-                  icon={<Icon name="check-circle" />}
+                  onClick={() => setShowCancelModal(true)}
                 >
-                  Mark Complete
+                  <Icon name="x" size={16} />
+                  Cancel
                 </Button>
               )}
-
-            {booking.status !== BookingStatus.Cancelled && (
-              <Button
-                variant="secondary"
-                size="small"
-                onClick={() => setShowCancelModal(true)}
-                icon={<Icon name="x-circle" />}
-              >
-                Cancel
-              </Button>
-            )}
-          </motion.div>
+            </div> */}
+          </div>
         </div>
 
         {/* Main Content */}
-        <div className={styles.booking_details__grid}>
-          {/* Left Column */}
-          <motion.div variants={slideUp} custom={1} transition={{ delay: 0.1 }}>
-            <Card className={styles.booking_details__info_card}>
-              <div className={styles.booking_details__card_header}>
-                <h2 className={styles.booking_details__card_title}>
-                  <Icon
-                    name="info"
-                    className={styles.booking_details__service_icon}
-                  />
-                  Booking Information
-                </h2>
+        <div className={styles.booking_details__content}>
+          {/* Customer Information */}
+          <section className={styles.booking_details__section}>
+            <h2 className={styles.booking_details__section_title}>
+              <Icon name="user" size={20} />
+              Customer
+            </h2>
+
+            <div className={styles.booking_details__customer}>
+              <div className={styles.booking_details__customer_avatar}>
+                {customerInitials}
+              </div>
+              <div className={styles.booking_details__customer_info}>
+                <h3 className={styles.booking_details__customer_name}>
+                  {customerName}
+                </h3>
+                <div className={styles.booking_details__customer_contact}>
+                  <span>
+                    <Icon name="mail" size={14} />
+                    {booking.customer?.email || "No email"}
+                  </span>
+                  <span>
+                    <Icon name="phone" size={14} />
+                    {booking.customer?.phone || "No phone"}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.booking_details__address}>
+              <h4>
+                <Icon name="map-pin" size={16} />
+                Service Address
+              </h4>
+              <p>{formattedAddress}</p>
+            </div>
+          </section>
+
+          {/* Service Details */}
+          <section className={styles.booking_details__section}>
+            <h2 className={styles.booking_details__section_title}>
+              <Icon name="package" size={20} />
+              Service Details
+            </h2>
+
+            {/* Service Specific Details */}
+            {booking.service?.category === ServiceCategory.Cleaning &&
+              booking.serviceDetails?.cleaning && (
+                <div className={styles.booking_details__service_info}>
+                  <div className={styles.booking_details__detail_row}>
+                    <span>Cleaning Type</span>
+                    <span>
+                      {getCleaningTypeLabel(
+                        booking.serviceDetails.cleaning
+                          .cleaningType as CleaningType
+                      )}
+                    </span>
+                  </div>
+                  <div className={styles.booking_details__detail_row}>
+                    <span>Property Type</span>
+                    <span>
+                      {getPropertyTypeLabel(
+                        booking.serviceDetails.cleaning.houseType
+                      )}
+                    </span>
+                  </div>
+
+                  {booking.serviceDetails.cleaning.rooms && (
+                    <div className={styles.booking_details__rooms}>
+                      <h4>Rooms to Clean</h4>
+                      <div className={styles.booking_details__room_list}>
+                        {booking.serviceDetails.cleaning.rooms.bedroom > 0 && (
+                          <span className={styles.booking_details__room_item}>
+                            {booking.serviceDetails.cleaning.rooms.bedroom}{" "}
+                            Bedroom
+                            {booking.serviceDetails.cleaning.rooms.bedroom > 1
+                              ? "s"
+                              : ""}
+                          </span>
+                        )}
+                        {booking.serviceDetails.cleaning.rooms.bathroom > 0 && (
+                          <span className={styles.booking_details__room_item}>
+                            {booking.serviceDetails.cleaning.rooms.bathroom}{" "}
+                            Bathroom
+                            {booking.serviceDetails.cleaning.rooms.bathroom > 1
+                              ? "s"
+                              : ""}
+                          </span>
+                        )}
+                        {booking.serviceDetails.cleaning.rooms.livingRoom >
+                          0 && (
+                          <span className={styles.booking_details__room_item}>
+                            {booking.serviceDetails.cleaning.rooms.livingRoom}{" "}
+                            Living Room
+                            {booking.serviceDetails.cleaning.rooms.livingRoom >
+                            1
+                              ? "s"
+                              : ""}
+                          </span>
+                        )}
+                        {booking.serviceDetails.cleaning.rooms.kitchen > 0 && (
+                          <span className={styles.booking_details__room_item}>
+                            {booking.serviceDetails.cleaning.rooms.kitchen}{" "}
+                            Kitchen
+                            {booking.serviceDetails.cleaning.rooms.kitchen > 1
+                              ? "s"
+                              : ""}
+                          </span>
+                        )}
+                        {booking.serviceDetails.cleaning.rooms.balcony > 0 && (
+                          <span className={styles.booking_details__room_item}>
+                            {booking.serviceDetails.cleaning.rooms.balcony}{" "}
+                            Balcony
+                          </span>
+                        )}
+                        {booking.serviceDetails.cleaning.rooms.studyRoom >
+                          0 && (
+                          <span className={styles.booking_details__room_item}>
+                            {booking.serviceDetails.cleaning.rooms.studyRoom}{" "}
+                            Study Room
+                            {booking.serviceDetails.cleaning.rooms.studyRoom > 1
+                              ? "s"
+                              : ""}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+            {booking.service?.category === ServiceCategory.Laundry &&
+              booking.serviceDetails?.laundry && (
+                <div className={styles.booking_details__service_info}>
+                  <div className={styles.booking_details__detail_row}>
+                    <span>Laundry Type</span>
+                    <span>
+                      {getLaundryTypeLabel(
+                        booking.serviceDetails.laundry
+                          .laundryType as LaundryType
+                      )}
+                    </span>
+                  </div>
+                  <div className={styles.booking_details__detail_row}>
+                    <span>Bags</span>
+                    <span>
+                      {booking.serviceDetails.laundry.bags || 0} bag
+                      {booking.serviceDetails.laundry.bags !== 1 ? "s" : ""}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+            {booking.notes && (
+              <div className={styles.booking_details__notes}>
+                <h4>
+                  <Icon name="file-text" size={16} />
+                  Special Instructions
+                </h4>
+                <p>{booking.notes}</p>
+              </div>
+            )}
+          </section>
+
+          {/* Staff & Status */}
+          <section className={styles.booking_details__section}>
+            <h2 className={styles.booking_details__section_title}>
+              <Icon name="users" size={20} />
+              Assignment & Status
+            </h2>
+
+            <div className={styles.booking_details__status_grid}>
+              <div className={styles.booking_details__status_item}>
+                <label>Booking Status</label>
+                <span
+                  className={getStatusBadgeClass(
+                    booking.status as BookingStatus
+                  )}
+                >
+                  {booking.status?.replace(/([A-Z])/g, " $1").trim()}
+                </span>
               </div>
 
-              <div className={styles.booking_details__card_content}>
-                <div className={styles.booking_details__info_row}>
-                  <span className={styles.booking_details__info_label}>
-                    Status
-                  </span>
-                  <span
-                    className={getStatusBadgeClass(
-                      booking.status as BookingStatus
-                    )}
+              <div className={styles.booking_details__status_item}>
+                <label>Payment Status</label>
+                <span
+                  className={getPaymentStatusBadgeClass(
+                    booking.paymentStatus as PaymentStatus
+                  )}
+                >
+                  {booking.paymentStatus?.replace(/([A-Z])/g, " $1").trim()}
+                </span>
+              </div>
+
+              <div className={styles.booking_details__status_item}>
+                <label>Created</label>
+                <span>{formatDateTime(booking.createdAt || "")}</span>
+              </div>
+
+              <div className={styles.booking_details__status_item}>
+                <label>Last Updated</label>
+                <span>{formatDateTime(booking.updatedAt || "")}</span>
+              </div>
+            </div>
+
+            <div className={styles.booking_details__status_update_container}>
+            {booking.status !== BookingStatus.Completed &&
+              booking.status !== BookingStatus.Cancelled && (
+                <div className={styles.booking_details__status_update}>
+                  <label htmlFor="status-select">Update Status</label>
+                  <select
+                    id="status-select"
+                    value={booking.status || ""}
+                    onChange={(e) =>
+                      handleStatusChange(e.target.value as BookingStatus)
+                    }
                   >
-                    {booking.status?.replace(/([A-Z])/g, " $1").trim() ||
-                      "Unknown"}
-                  </span>
-                </div>
+                    <option value={BookingStatus.Pending}>Pending</option>
+                    <option value={BookingStatus.Confirmed}>Confirmed</option>
+                    <option value={BookingStatus.InProgress}>
+                      In Progress
+                    </option>
 
-                <div className={styles.booking_details__info_row}>
-                  <span className={styles.booking_details__info_label}>
-                    Payment Status
-                  </span>
-                  <span
-                    className={getPaymentStatusBadgeClass(
-                      booking.paymentStatus as PaymentStatus
-                    )}
-                  >
-                    {booking.paymentStatus?.replace(/([A-Z])/g, " $1").trim() ||
-                      "Unknown"}
-                  </span>
+                    <option value={BookingStatus.Completed}>Completed</option>
+                    <option value={BookingStatus.Cancelled}>Cancelled</option>
+                  </select>
                 </div>
+              )}
 
-                <div className={styles.booking_details__info_row}>
-                  <span className={styles.booking_details__info_label}>
-                    Date
-                  </span>
-                  <span className={styles.booking_details__info_value}>
-                    {formatDate(booking.date || "")}
-                  </span>
+            
+              <div className={styles.booking_details__status_update}>
+                <label htmlFor="payment-status-select">Update Payment Status</label>
+                <select
+                  id="payment-status-select"
+                  value={booking.paymentStatus || ""}
+                  onChange={(e) =>
+                    handlePaymentStatusChange(e.target.value as PaymentStatus)
+                  }
+                >
+                  <option value={PaymentStatus.Pending}>Pending</option>
+                  <option value={PaymentStatus.Paid}>Paid</option>
+                  <option value={PaymentStatus.Failed}>Failed</option>
+                </select>
+              </div>
+            </div>
+            <motion.div
+              className={styles.booking_modal__content}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className={styles.booking_modal__section}>
+                <div className={styles.booking_modal__section_header}>
+                  <div className={styles.booking_modal__section_icon}>
+                    <Icon name="calendar" size={20} />
+                  </div>
+                  <h3 className={styles.booking_modal__section_title}>
+                    Reschedule Booking
+                  </h3>
                 </div>
+                <div className={styles.booking_modal__reschedule_info}>
+                  <div className={styles.booking_modal__current_schedule}>
+                    <h4>Current Schedule</h4>
+                    <p>Date: {formatDate(booking.date)}</p>
+                    <p>Time: {getTimeSlotLabel(booking.timeSlot as TimeSlot)}</p>
+                  </div>
 
-                <div className={styles.booking_details__info_row}>
-                  <span className={styles.booking_details__info_label}>
-                    Time Slot
-                  </span>
-                  <span className={styles.booking_details__info_value}>
-                    {getTimeSlotLabel(booking.timeSlot as TimeSlot)}
-                  </span>
-                </div>
+                  <div className={styles.booking_modal__reschedule_form}>
+                    <div className={styles.booking_modal__form_group}>
+                      <label className={styles.booking_modal__form_label}>
+                        New Date
+                      </label>
+                      <input
+                        type="date"
+                        className={styles.booking_modal__form_input}
+                        value={rescheduleDate}
+                        onChange={(e) => setRescheduleDate(e.target.value)}
+                        min={new Date().toISOString().split("T")[0]}
+                      />
+                    </div>
 
-                <div className={styles.booking_details__info_row}>
-                  <span className={styles.booking_details__info_label}>
-                    Total Price
-                  </span>
-                  <span
-                    className={styles.booking_details__info_value}
-                    style={{ fontWeight: 600, color: "#28c76f" }}
-                  >
-                    {formatToNaira(booking.totalPrice || 0)}
-                  </span>
-                </div>
-
-                {booking.status !== BookingStatus.Completed &&
-                  booking.status !== BookingStatus.Cancelled && (
-                    <div
-                      className={styles.booking_details__status_select_wrapper}
-                    >
-                      <label
-                        htmlFor="status-select"
-                        className={styles.booking_details__info_label}
-                      >
-                        Update Status
+                    <div className={styles.booking_modal__form_group}>
+                      <label className={styles.booking_modal__form_label}>
+                        New Time Slot
                       </label>
                       <select
-                        id="status-select"
-                        className={styles.booking_details__status_select}
-                        value={booking.status || ""}
+                        className={styles.booking_modal__form_input}
+                        value={rescheduleTimeSlot}
                         onChange={(e) =>
-                          handleStatusChange(e.target.value as BookingStatus)
+                          setRescheduleTimeSlot(e.target.value as TimeSlot)
                         }
                       >
-                        <option value={BookingStatus.Pending}>Pending</option>
-                        <option value={BookingStatus.Confirmed}>
-                          Confirmed
-                        </option>
-                        <option value={BookingStatus.InProgress}>
-                          In Progress
-                        </option>
-                        <option value={BookingStatus.Completed}>
-                          Completed
-                        </option>
-                        <option value={BookingStatus.Cancelled}>
-                          Cancelled
-                        </option>
+                        {timeSlotOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
                       </select>
                     </div>
-                  )}
-              </div>
-            </Card>
 
-            <motion.div
-              variants={slideUp}
-              custom={2}
-              transition={{ delay: 0.2 }}
-              style={{ marginTop: "24px" }}
-            >
-              <Card className={styles.booking_details__info_card}>
-                <div className={styles.booking_details__card_header}>
-                  <h2 className={styles.booking_details__card_title}>
-                    <Icon
-                      name="user"
-                      className={styles.booking_details__service_icon}
-                    />
-                    Customer Information
-                  </h2>
-                </div>
-
-                <div className={styles.booking_details__card_content}>
-                  <div className={styles.booking_details__customer}>
-                    <div className={styles.booking_details__customer_avatar}>
-                      {customerInitials}
-                    </div>
-                    <div className={styles.booking_details__customer_info}>
-                      <h3 className={styles.booking_details__customer_name}>
-                        {customerName}
-                      </h3>
-                      <p className={styles.booking_details__customer_email}>
-                        {booking.customer?.email || "No email provided"}
-                      </p>
-                      <p className={styles.booking_details__customer_phone}>
-                        {booking.customer?.phone || "No phone provided"}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className={styles.booking_details__address}>
-                    <h4 className={styles.booking_details__address_title}>
-                      Service Address
-                    </h4>
-                    <p className={styles.booking_details__address_content}>
-                      {formattedAddress}
-                    </p>
-                  </div>
-                </div>
-              </Card>
-            </motion.div>
-          </motion.div>
-
-          {/* Right Column */}
-          <motion.div variants={slideUp} custom={3} transition={{ delay: 0.3 }}>
-            <Card className={styles.booking_details__info_card}>
-              <div className={styles.booking_details__card_header}>
-                <h2 className={styles.booking_details__card_title}>
-                  <Icon
-                    name="package"
-                    className={styles.booking_details__service_icon}
-                  />
-                  Service Details
-                </h2>
-              </div>
-
-              <div className={styles.booking_details__card_content}>
-                <div className={styles.booking_details__service_header}>
-                  <div>
-                    <h3 className={styles.booking_details__service_name}>
-                      {booking.service?.name || "Unknown Service"}
-                    </h3>
-                    <p className={styles.booking_details__service_category}>
-                      {getServiceCategoryLabel(
-                        booking.service?.category as ServiceCategory
-                      )}
-                    </p>
-                  </div>
-                  <span className={styles.booking_details__service_price}>
-                    {formatToNaira(booking.totalPrice || 0)}
-                  </span>
-                </div>
-
-                {/* Service Specific Details */}
-                {booking.service?.category === ServiceCategory.Cleaning &&
-                  booking.serviceDetails?.cleaning && (
-                    <div className={styles.booking_details__service_details}>
-                      <div className={styles.booking_details__info_row}>
-                        <span className={styles.booking_details__info_label}>
-                          Cleaning Type
-                        </span>
-                        <span className={styles.booking_details__info_value}>
-                          {getCleaningTypeLabel(
-                            booking.serviceDetails.cleaning
-                              .cleaningType as CleaningType
-                          )}
-                        </span>
-                      </div>
-
-                      <div className={styles.booking_details__info_row}>
-                        <span className={styles.booking_details__info_label}>
-                          Property Type
-                        </span>
-                        <span className={styles.booking_details__info_value}>
-                          {getPropertyTypeLabel(
-                            booking.serviceDetails.cleaning.houseType
-                          )}
-                        </span>
-                      </div>
-
-                      {booking.serviceDetails.cleaning.rooms && (
-                        <>
-                          <h4
-                            className={styles.booking_details__info_label}
-                            style={{ marginTop: "16px", marginBottom: "8px" }}
-                          >
-                            Rooms to Clean
-                          </h4>
-                          <div className={styles.booking_details__rooms_grid}>
-                            {booking.serviceDetails.cleaning.rooms.bedroom >
-                              0 && (
-                              <div
-                                className={styles.booking_details__room_item}
-                              >
-                                <p
-                                  className={styles.booking_details__room_count}
-                                >
-                                  {
-                                    booking.serviceDetails.cleaning.rooms
-                                      .bedroom
-                                  }
-                                </p>
-                                <p
-                                  className={styles.booking_details__room_label}
-                                >
-                                  Bedroom
-                                  {booking.serviceDetails.cleaning.rooms
-                                    .bedroom > 1
-                                    ? "s"
-                                    : ""}
-                                </p>
-                              </div>
-                            )}
-                            {booking.serviceDetails.cleaning.rooms.bathroom >
-                              0 && (
-                              <div
-                                className={styles.booking_details__room_item}
-                              >
-                                <p
-                                  className={styles.booking_details__room_count}
-                                >
-                                  {
-                                    booking.serviceDetails.cleaning.rooms
-                                      .bathroom
-                                  }
-                                </p>
-                                <p
-                                  className={styles.booking_details__room_label}
-                                >
-                                  Bathroom
-                                  {booking.serviceDetails.cleaning.rooms
-                                    .bathroom > 1
-                                    ? "s"
-                                    : ""}
-                                </p>
-                              </div>
-                            )}
-                            {booking.serviceDetails.cleaning.rooms.livingRoom >
-                              0 && (
-                              <div
-                                className={styles.booking_details__room_item}
-                              >
-                                <p
-                                  className={styles.booking_details__room_count}
-                                >
-                                  {
-                                    booking.serviceDetails.cleaning.rooms
-                                      .livingRoom
-                                  }
-                                </p>
-                                <p
-                                  className={styles.booking_details__room_label}
-                                >
-                                  Living Room
-                                  {booking.serviceDetails.cleaning.rooms
-                                    .livingRoom > 1
-                                    ? "s"
-                                    : ""}
-                                </p>
-                              </div>
-                            )}
-                            {booking.serviceDetails.cleaning.rooms.kitchen >
-                              0 && (
-                              <div
-                                className={styles.booking_details__room_item}
-                              >
-                                <p
-                                  className={styles.booking_details__room_count}
-                                >
-                                  {
-                                    booking.serviceDetails.cleaning.rooms
-                                      .kitchen
-                                  }
-                                </p>
-                                <p
-                                  className={styles.booking_details__room_label}
-                                >
-                                  Kitchen
-                                  {booking.serviceDetails.cleaning.rooms
-                                    .kitchen > 1
-                                    ? "s"
-                                    : ""}
-                                </p>
-                              </div>
-                            )}
-                            {booking.serviceDetails.cleaning.rooms.balcony >
-                              0 && (
-                              <div
-                                className={styles.booking_details__room_item}
-                              >
-                                <p
-                                  className={styles.booking_details__room_count}
-                                >
-                                  {
-                                    booking.serviceDetails.cleaning.rooms
-                                      .balcony
-                                  }
-                                </p>
-                                <p
-                                  className={styles.booking_details__room_label}
-                                >
-                                  Balcony
-                                </p>
-                              </div>
-                            )}
-                            {booking.serviceDetails.cleaning.rooms.studyRoom >
-                              0 && (
-                              <div
-                                className={styles.booking_details__room_item}
-                              >
-                                <p
-                                  className={styles.booking_details__room_count}
-                                >
-                                  {
-                                    booking.serviceDetails.cleaning.rooms
-                                      .studyRoom
-                                  }
-                                </p>
-                                <p
-                                  className={styles.booking_details__room_label}
-                                >
-                                  Study Room
-                                  {booking.serviceDetails.cleaning.rooms
-                                    .studyRoom > 1
-                                    ? "s"
-                                    : ""}
-                                </p>
-                              </div>
-                            )}
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  )}
-
-                {booking.service?.category === ServiceCategory.Laundry &&
-                  booking.serviceDetails?.laundry && (
-                    <div className={styles.booking_details__service_details}>
-                      <div className={styles.booking_details__info_row}>
-                        <span className={styles.booking_details__info_label}>
-                          Laundry Type
-                        </span>
-                        <span className={styles.booking_details__info_value}>
-                          {getLaundryTypeLabel(
-                            booking.serviceDetails.laundry
-                              .laundryType as LaundryType
-                          )}
-                        </span>
-                      </div>
-
-                      <div className={styles.booking_details__info_row}>
-                        <span className={styles.booking_details__info_label}>
-                          Bags
-                        </span>
-                        <span className={styles.booking_details__info_value}>
-                          {booking.serviceDetails.laundry.bags || 0} bag
-                          {booking.serviceDetails.laundry.bags !== 1 ? "s" : ""}
-                        </span>
-                      </div>
-
-                      {booking.serviceDetails.laundry.items && (
-                        <>
-                          <h4
-                            className={styles.booking_details__info_label}
-                            style={{ marginTop: "16px", marginBottom: "8px" }}
-                          >
-                            Items
-                          </h4>
-                          <div className={styles.booking_details__rooms_grid}>
-                            {booking.serviceDetails.laundry.items.shirts >
-                              0 && (
-                              <div
-                                className={styles.booking_details__room_item}
-                              >
-                                <p
-                                  className={styles.booking_details__room_count}
-                                >
-                                  {booking.serviceDetails.laundry.items.shirts}
-                                </p>
-                                <p
-                                  className={styles.booking_details__room_label}
-                                >
-                                  Shirt
-                                  {booking.serviceDetails.laundry.items.shirts >
-                                  1
-                                    ? "s"
-                                    : ""}
-                                </p>
-                              </div>
-                            )}
-                            {booking.serviceDetails.laundry.items.pants > 0 && (
-                              <div
-                                className={styles.booking_details__room_item}
-                              >
-                                <p
-                                  className={styles.booking_details__room_count}
-                                >
-                                  {booking.serviceDetails.laundry.items.pants}
-                                </p>
-                                <p
-                                  className={styles.booking_details__room_label}
-                                >
-                                  Pant
-                                  {booking.serviceDetails.laundry.items.pants >
-                                  1
-                                    ? "s"
-                                    : ""}
-                                </p>
-                              </div>
-                            )}
-                            {booking.serviceDetails.laundry.items.dresses >
-                              0 && (
-                              <div
-                                className={styles.booking_details__room_item}
-                              >
-                                <p
-                                  className={styles.booking_details__room_count}
-                                >
-                                  {booking.serviceDetails.laundry.items.dresses}
-                                </p>
-                                <p
-                                  className={styles.booking_details__room_label}
-                                >
-                                  Dress
-                                  {booking.serviceDetails.laundry.items
-                                    .dresses > 1
-                                    ? "es"
-                                    : ""}
-                                </p>
-                              </div>
-                            )}
-                            {booking.serviceDetails.laundry.items.suits > 0 && (
-                              <div
-                                className={styles.booking_details__room_item}
-                              >
-                                <p
-                                  className={styles.booking_details__room_count}
-                                >
-                                  {booking.serviceDetails.laundry.items.suits}
-                                </p>
-                                <p
-                                  className={styles.booking_details__room_label}
-                                >
-                                  Suit
-                                  {booking.serviceDetails.laundry.items.suits >
-                                  1
-                                    ? "s"
-                                    : ""}
-                                </p>
-                              </div>
-                            )}
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  )}
-
-                {/* Notes */}
-                {booking.notes && (
-                  <div className={styles.booking_details__notes}>
-                    <strong>Notes:</strong> {booking.notes}
-                  </div>
-                )}
-
-                {/* Staff Assignment */}
-                {staffName ? (
-                  <div className={styles.booking_details__staff}>
-                    <div className={styles.booking_details__staff_avatar}>
-                      {staffInitials}
-                    </div>
-                    <div className={styles.booking_details__staff_info}>
-                      <h3 className={styles.booking_details__staff_name}>
-                        {staffName}
-                      </h3>
-                      <p className={styles.booking_details__staff_role}>
-                        Assigned Staff
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className={styles.booking_details__no_staff}>
-                    <p>No staff member assigned to this booking yet.</p>
-                    <Button
-                      variant="outline"
-                      size="small"
-                      onClick={() => setShowAssignStaffModal(true)}
-                      style={{ marginTop: "8px" }}
-                    >
-                      Assign Staff
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </Card>
-
-            <motion.div
-              variants={slideUp}
-              custom={4}
-              transition={{ delay: 0.4 }}
-              style={{ marginTop: "24px" }}
-            >
-              <Card className={styles.booking_details__info_card}>
-                <div className={styles.booking_details__card_header}>
-                  <h2 className={styles.booking_details__card_title}>
-                    <Icon
-                      name="clock"
-                      className={styles.booking_details__service_icon}
-                    />
-                    Booking Timeline
-                  </h2>
-                </div>
-
-                <div className={styles.booking_details__card_content}>
-                  <div className={styles.booking_details__timeline}>
-                    <div className={styles.booking_details__timeline_event}>
-                      <p className={styles.booking_details__timeline_date}>
-                        {formatDateTime(booking.createdAt || "")}
-                      </p>
-                      <h4 className={styles.booking_details__timeline_title}>
-                        Booking Created
-                      </h4>
-                      <p
-                        className={styles.booking_details__timeline_description}
+                    <div className={styles.booking_modal__form_actions}>
+                      <Button
+                        variant="primary"
+                        size="medium"
+                        onClick={handleReschedule}
+                        disabled={!rescheduleDate || isRescheduling}
                       >
-                        Booking was created and payment was initialized.
-                      </p>
+                        {isRescheduling
+                          ? "Rescheduling..."
+                          : "Confirm Reschedule"}
+                      </Button>
                     </div>
-
-                    {booking.status === BookingStatus.Confirmed && (
-                      <div className={styles.booking_details__timeline_event}>
-                        <p className={styles.booking_details__timeline_date}>
-                          {formatDateTime(booking.updatedAt || "")}
-                        </p>
-                        <h4 className={styles.booking_details__timeline_title}>
-                          Booking Confirmed
-                        </h4>
-                        <p
-                          className={
-                            styles.booking_details__timeline_description
-                          }
-                        >
-                          Booking was confirmed and scheduled.
-                        </p>
-                      </div>
-                    )}
-
-                    {booking.status === BookingStatus.InProgress && (
-                      <div className={styles.booking_details__timeline_event}>
-                        <p className={styles.booking_details__timeline_date}>
-                          {formatDateTime(booking.updatedAt || "")}
-                        </p>
-                        <h4 className={styles.booking_details__timeline_title}>
-                          Service In Progress
-                        </h4>
-                        <p
-                          className={
-                            styles.booking_details__timeline_description
-                          }
-                        >
-                          Service is currently being performed.
-                        </p>
-                      </div>
-                    )}
-
-                    {booking.status === BookingStatus.Completed && (
-                      <div className={styles.booking_details__timeline_event}>
-                        <p className={styles.booking_details__timeline_date}>
-                          {formatDateTime(booking.updatedAt || "")}
-                        </p>
-                        <h4 className={styles.booking_details__timeline_title}>
-                          Service Completed
-                        </h4>
-                        <p
-                          className={
-                            styles.booking_details__timeline_description
-                          }
-                        >
-                          Service was successfully completed.
-                        </p>
-                      </div>
-                    )}
-
-                    {booking.status === BookingStatus.Cancelled && (
-                      <div className={styles.booking_details__timeline_event}>
-                        <p className={styles.booking_details__timeline_date}>
-                          {formatDateTime(booking.updatedAt || "")}
-                        </p>
-                        <h4 className={styles.booking_details__timeline_title}>
-                          Booking Cancelled
-                        </h4>
-                        <p
-                          className={
-                            styles.booking_details__timeline_description
-                          }
-                        >
-                          Booking was cancelled.
-                        </p>
-                      </div>
-                    )}
                   </div>
                 </div>
-              </Card>
+              </div>
             </motion.div>
-          </motion.div>
+          </section>
         </div>
 
         {/* Status Update Confirmation Modal */}
@@ -1142,13 +860,26 @@ export default function BookingDetailsPage() {
             setSelectedStatus(null);
           }}
           onConfirm={confirmStatusChange}
-          title={`Update Booking Status`}
+          title="Update Booking Status"
           message={`Are you sure you want to change the status of this booking to "${selectedStatus?.replace(/([A-Z])/g, " $1").trim()}"?`}
           confirmText="Update Status"
           cancelText="Cancel"
           variant={
             selectedStatus === BookingStatus.Cancelled ? "danger" : "warning"
           }
+          isLoading={isActionLoading}
+        />
+
+        <ConfirmationModal
+
+          isOpen={showPaymentStatusModal}
+          onClose={() => setShowPaymentStatusModal(false)}
+          onConfirm={confirmPaymentStatusChange}
+          title="Update Payment Status"
+          message={`Are you sure you want to change the payment status of this booking to "${selectedPaymentStatus?.replace(/([A-Z])/g, " $1").trim()}"?`}
+          confirmText="Update Payment Status"
+          cancelText="Cancel"
+          variant="warning"
           isLoading={isActionLoading}
         />
 

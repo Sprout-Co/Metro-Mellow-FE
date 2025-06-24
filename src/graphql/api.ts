@@ -446,6 +446,7 @@ export type Mutation = {
   updateAccountStatus: Scalars['Boolean']['output'];
   updateAddress: Scalars['Boolean']['output'];
   updateBooking: Scalars['Boolean']['output'];
+  updateBookingPaymentStatus: Scalars['Boolean']['output'];
   updateBookingStatus: Scalars['Boolean']['output'];
   updateProfile?: Maybe<User>;
   updateService: Service;
@@ -719,6 +720,12 @@ export type MutationUpdateAddressArgs = {
 export type MutationUpdateBookingArgs = {
   id: Scalars['ID']['input'];
   input: UpdateBookingInput;
+};
+
+
+export type MutationUpdateBookingPaymentStatusArgs = {
+  id: Scalars['ID']['input'];
+  paymentStatus: PaymentStatus;
 };
 
 
@@ -1628,6 +1635,14 @@ export type UpdateAddressMutationVariables = Exact<{
 
 
 export type UpdateAddressMutation = { __typename?: 'Mutation', updateAddress: boolean };
+
+export type UpdateBookingPaymentStatusMutationVariables = Exact<{
+  updateBookingPaymentStatusId: Scalars['ID']['input'];
+  paymentStatus: PaymentStatus;
+}>;
+
+
+export type UpdateBookingPaymentStatusMutation = { __typename?: 'Mutation', updateBookingPaymentStatus: boolean };
 
 export type CreateBookingMutationVariables = Exact<{
   input: CreateBookingInput;
@@ -2884,6 +2899,41 @@ export function useUpdateAddressMutation(baseOptions?: ApolloReactHooks.Mutation
 export type UpdateAddressMutationHookResult = ReturnType<typeof useUpdateAddressMutation>;
 export type UpdateAddressMutationResult = Apollo.MutationResult<UpdateAddressMutation>;
 export type UpdateAddressMutationOptions = Apollo.BaseMutationOptions<UpdateAddressMutation, UpdateAddressMutationVariables>;
+export const UpdateBookingPaymentStatusDocument = gql`
+    mutation UpdateBookingPaymentStatus($updateBookingPaymentStatusId: ID!, $paymentStatus: PaymentStatus!) {
+  updateBookingPaymentStatus(
+    id: $updateBookingPaymentStatusId
+    paymentStatus: $paymentStatus
+  )
+}
+    `;
+export type UpdateBookingPaymentStatusMutationFn = Apollo.MutationFunction<UpdateBookingPaymentStatusMutation, UpdateBookingPaymentStatusMutationVariables>;
+
+/**
+ * __useUpdateBookingPaymentStatusMutation__
+ *
+ * To run a mutation, you first call `useUpdateBookingPaymentStatusMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBookingPaymentStatusMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBookingPaymentStatusMutation, { data, loading, error }] = useUpdateBookingPaymentStatusMutation({
+ *   variables: {
+ *      updateBookingPaymentStatusId: // value for 'updateBookingPaymentStatusId'
+ *      paymentStatus: // value for 'paymentStatus'
+ *   },
+ * });
+ */
+export function useUpdateBookingPaymentStatusMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateBookingPaymentStatusMutation, UpdateBookingPaymentStatusMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<UpdateBookingPaymentStatusMutation, UpdateBookingPaymentStatusMutationVariables>(UpdateBookingPaymentStatusDocument, options);
+      }
+export type UpdateBookingPaymentStatusMutationHookResult = ReturnType<typeof useUpdateBookingPaymentStatusMutation>;
+export type UpdateBookingPaymentStatusMutationResult = Apollo.MutationResult<UpdateBookingPaymentStatusMutation>;
+export type UpdateBookingPaymentStatusMutationOptions = Apollo.BaseMutationOptions<UpdateBookingPaymentStatusMutation, UpdateBookingPaymentStatusMutationVariables>;
 export const CreateBookingDocument = gql`
     mutation CreateBooking($input: CreateBookingInput!) {
   createBooking(input: $input)
