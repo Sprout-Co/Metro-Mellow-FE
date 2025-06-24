@@ -217,6 +217,92 @@
     }
   }
 
+  &__address_display {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: spacing("md");
+
+    p {
+      flex: 1;
+    }
+  }
+
+  &__address_form {
+    background: rgba(color("primary", "base"), 0.02);
+    border: 1px solid rgba(color("primary", "base"), 0.1);
+    border-radius: border-radius("lg");
+    padding: spacing("lg");
+    margin-top: spacing("md");
+  }
+
+  &__form_row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("md");
+    margin-bottom: spacing("md");
+
+    &:first-child {
+      grid-template-columns: 1fr;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__form_group {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+
+    label {
+      font-size: map-get($font-sizes, "sm");
+      font-weight: map-get($font-weights, "medium");
+      color: color("neutral", "dark");
+    }
+
+    input {
+      padding: spacing("sm") spacing("md");
+      border: 1px solid color("neutral", "medium");
+      border-radius: border-radius("md");
+      font-size: map-get($font-sizes, "sm");
+      font-family: $font-family-base;
+      background: color("neutral", "white");
+      transition: all 0.2s ease;
+
+      &:focus {
+        outline: none;
+        border-color: color("primary", "base");
+        box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
+      }
+
+      &:hover {
+        border-color: color("primary", "light");
+      }
+
+      &::placeholder {
+        color: color("neutral", "medium");
+      }
+    }
+  }
+
+  &__address_actions {
+    display: flex;
+    gap: spacing("sm");
+    margin-top: spacing("lg");
+    padding-top: spacing("md");
+    border-top: 1px solid rgba(color("neutral", "medium"), 0.2);
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+    }
+  }
+
   // Service details - clean typography
   &__service_info {
     display: flex;
@@ -403,8 +489,8 @@
   }
 
   &__status_update_container {
-   display: grid;
-   grid-template-columns: 1fr 1fr;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: spacing("xl");
   }
 

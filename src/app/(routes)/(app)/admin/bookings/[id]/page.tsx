@@ -20,6 +20,7 @@ import {
 import { formatToNaira } from "@/utils/string";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { useAdminOperations } from "@/graphql/hooks/admin/useAdminOperations";
+import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 
 // Animation variants for Framer Motion
 const fadeIn = {
@@ -42,18 +43,31 @@ export default function BookingDetailsPage() {
     null
   );
   const [showPaymentStatusModal, setShowPaymentStatusModal] = useState(false);
-  const [selectedPaymentStatus, setSelectedPaymentStatus] = useState<PaymentStatus | null>(
-    booking?.paymentStatus as PaymentStatus || null
-  );
+  const [selectedPaymentStatus, setSelectedPaymentStatus] =
+    useState<PaymentStatus | null>(
+      (booking?.paymentStatus as PaymentStatus) || null
+    );
   // Cancel booking confirmation modal state
   const [showCancelModal, setShowCancelModal] = useState(false);
 
   // Action loading state
   const [isActionLoading, setIsActionLoading] = useState(false);
 
-  const [rescheduleDate, setRescheduleDate] = useState(booking?.date || new Date().toISOString());
+  // Address editing states
+  const [isEditingAddress, setIsEditingAddress] = useState(false);
+  const [addressForm, setAddressForm] = useState({
+    street: booking?.address?.street || "",
+    city: booking?.address?.city || "",
+    state: booking?.address?.state || "",
+    zipCode: booking?.address?.zipCode || "",
+    country: booking?.address?.country || "",
+  });
+
+  const [rescheduleDate, setRescheduleDate] = useState(
+    booking?.date || new Date().toISOString()
+  );
   const [rescheduleTimeSlot, setRescheduleTimeSlot] = useState<TimeSlot>(
-    booking?.timeSlot as TimeSlot || TimeSlot.Morning
+    (booking?.timeSlot as TimeSlot) || TimeSlot.Morning
   );
   const [isRescheduling, setIsRescheduling] = useState(false);
 
@@ -65,6 +79,7 @@ export default function BookingDetailsPage() {
     handleRescheduleBooking,
   } = useBookingOperations();
   const { handleUpdateBookingPaymentStatus } = useAdminOperations();
+  const { handleUpdateAddress } = useAuthOperations();
 
   const fetchBookingDetails = async () => {
     try {
@@ -72,6 +87,16 @@ export default function BookingDetailsPage() {
       setError(null);
       const data = await handleGetBooking(bookingId);
       setBooking(data as Booking);
+      // Update address form when booking data is loaded
+      if (data?.address) {
+        setAddressForm({
+          street: data.address.street || "",
+          city: data.address.city || "",
+          state: data.address.state || "",
+          zipCode: data.address.zipCode || "",
+          country: data.address.country || "",
+        });
+      }
     } catch (error) {
       console.error("Error fetching booking details:", error);
       setError(
@@ -278,60 +303,103 @@ export default function BookingDetailsPage() {
     }
   };
 
-
   const timeSlotOptions = [
     { value: TimeSlot.Morning, label: "Morning (6 AM - 12 PM)" },
     { value: TimeSlot.Afternoon, label: "Afternoon (12 PM - 6 PM)" },
     { value: TimeSlot.Evening, label: "Evening (6 PM - 12 AM)" },
   ];
 
-   const handleReschedule = async () => {
-     if (booking && rescheduleDate && rescheduleTimeSlot) {
-       try {
-         setIsRescheduling(true);
+  const handleReschedule = async () => {
+    if (booking && rescheduleDate && rescheduleTimeSlot) {
+      try {
+        setIsRescheduling(true);
 
-         // Convert TimeSlot to a time string for the API
-         let timeSlot = TimeSlot.Morning; // Default to 9 AM
-         switch (rescheduleTimeSlot) {
-           case TimeSlot.Morning:
-             timeSlot = TimeSlot.Morning;
-             break;
-           case TimeSlot.Afternoon:
-              timeSlot = TimeSlot.Afternoon;
-             break;
-           case TimeSlot.Evening:
-             timeSlot = TimeSlot.Evening;
-             break;
-         }
+        // Convert TimeSlot to a time string for the API
+        let timeSlot = TimeSlot.Morning; // Default to 9 AM
+        switch (rescheduleTimeSlot) {
+          case TimeSlot.Morning:
+            timeSlot = TimeSlot.Morning;
+            break;
+          case TimeSlot.Afternoon:
+            timeSlot = TimeSlot.Afternoon;
+            break;
+          case TimeSlot.Evening:
+            timeSlot = TimeSlot.Evening;
+            break;
+        }
 
-         await handleRescheduleBooking(booking.id, rescheduleDate, timeSlot);
+        await handleRescheduleBooking(booking.id, rescheduleDate, timeSlot);
 
-         // Reset form and close modal
-         setRescheduleDate("");
-         setRescheduleTimeSlot(TimeSlot.Morning);
-       } catch (error) {
-         console.error("Reschedule error:", error);
-       } finally {
-         setIsRescheduling(false);
-       }
-     }
-   };
+        // Reset form and close modal
+        setRescheduleDate("");
+        setRescheduleTimeSlot(TimeSlot.Morning);
+      } catch (error) {
+        console.error("Reschedule error:", error);
+      } finally {
+        setIsRescheduling(false);
+      }
+    }
+  };
 
   const confirmPaymentStatusChange = async () => {
     if (!booking) return;
     try {
       setIsActionLoading(true);
-      await handleUpdateBookingPaymentStatus(booking.id, selectedPaymentStatus as PaymentStatus);
+      await handleUpdateBookingPaymentStatus(
+        booking.id,
+        selectedPaymentStatus as PaymentStatus
+      );
       await fetchBookingDetails();
       setShowPaymentStatusModal(false);
     } catch (error) {
       console.error("Error updating payment status:", error);
       setError(
-        error instanceof Error ? error.message : "Failed to update payment status"
+        error instanceof Error
+          ? error.message
+          : "Failed to update payment status"
       );
     } finally {
       setIsActionLoading(false);
     }
+  };
+
+  const handleAddressUpdate = async () => {
+    if (!booking) return;
+
+    try {
+      setIsActionLoading(true);
+      // You'll need to implement this function in your admin operations
+      // await handleUpdateBookingAddress(booking.id, addressForm);
+      console.log(booking.address.id);
+      await handleUpdateAddress(booking.address.id, {
+        ...addressForm,
+        userId: booking.customer?.id,
+      });
+      // For now, we'll just update the local state
+      await fetchBookingDetails();
+      setIsEditingAddress(false);
+    } catch (error) {
+      console.error("Error updating address:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to update address"
+      );
+    } finally {
+      setIsActionLoading(false);
+    }
+  };
+
+  const handleAddressCancel = () => {
+    // Reset form to original values
+    if (booking?.address) {
+      setAddressForm({
+        street: booking.address.street || "",
+        city: booking.address.city || "",
+        state: booking.address.state || "",
+        zipCode: booking.address.zipCode || "",
+        country: booking.address.country || "",
+      });
+    }
+    setIsEditingAddress(false);
   };
 
   if (isLoading) {
@@ -567,7 +635,116 @@ export default function BookingDetailsPage() {
                 <Icon name="map-pin" size={16} />
                 Service Address
               </h4>
-              <p>{formattedAddress}</p>
+              {isEditingAddress ? (
+                <div className={styles.booking_details__address_form}>
+                  <div className={styles.booking_details__form_row}>
+                    <div className={styles.booking_details__form_group}>
+                      <label>Street Address</label>
+                      <input
+                        type="text"
+                        value={addressForm.street}
+                        onChange={(e) =>
+                          setAddressForm({
+                            ...addressForm,
+                            street: e.target.value,
+                          })
+                        }
+                        placeholder="Enter street address"
+                      />
+                    </div>
+                  </div>
+                  <div className={styles.booking_details__form_row}>
+                    <div className={styles.booking_details__form_group}>
+                      <label>City</label>
+                      <input
+                        type="text"
+                        value={addressForm.city}
+                        onChange={(e) =>
+                          setAddressForm({
+                            ...addressForm,
+                            city: e.target.value,
+                          })
+                        }
+                        placeholder="Enter city"
+                      />
+                    </div>
+                    <div className={styles.booking_details__form_group}>
+                      <label>State</label>
+                      <input
+                        type="text"
+                        value={addressForm.state}
+                        onChange={(e) =>
+                          setAddressForm({
+                            ...addressForm,
+                            state: e.target.value,
+                          })
+                        }
+                        placeholder="Enter state"
+                      />
+                    </div>
+                  </div>
+                  <div className={styles.booking_details__form_row}>
+                    <div className={styles.booking_details__form_group}>
+                      <label>ZIP Code</label>
+                      <input
+                        type="text"
+                        value={addressForm.zipCode}
+                        onChange={(e) =>
+                          setAddressForm({
+                            ...addressForm,
+                            zipCode: e.target.value,
+                          })
+                        }
+                        placeholder="Enter ZIP code"
+                      />
+                    </div>
+                    <div className={styles.booking_details__form_group}>
+                      <label>Country</label>
+                      <input
+                        type="text"
+                        value={addressForm.country}
+                        onChange={(e) =>
+                          setAddressForm({
+                            ...addressForm,
+                            country: e.target.value,
+                          })
+                        }
+                        placeholder="Enter country"
+                      />
+                    </div>
+                  </div>
+                  <div className={styles.booking_details__address_actions}>
+                    <Button
+                      variant="primary"
+                      size="small"
+                      onClick={handleAddressUpdate}
+                      disabled={isActionLoading}
+                    >
+                      {isActionLoading ? "Updating..." : "Save Address"}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="small"
+                      onClick={handleAddressCancel}
+                      disabled={isActionLoading}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.booking_details__address_display}>
+                  <p>{formattedAddress}</p>
+                  <Button
+                    variant="outline"
+                    size="small"
+                    onClick={() => setIsEditingAddress(true)}
+                  >
+                    <Icon name="edit" size={14} />
+                    Edit Address
+                  </Button>
+                </div>
+              )}
             </div>
           </section>
 
@@ -739,32 +916,33 @@ export default function BookingDetailsPage() {
             </div>
 
             <div className={styles.booking_details__status_update_container}>
-            {booking.status !== BookingStatus.Completed &&
-              booking.status !== BookingStatus.Cancelled && (
-                <div className={styles.booking_details__status_update}>
-                  <label htmlFor="status-select">Update Status</label>
-                  <select
-                    id="status-select"
-                    value={booking.status || ""}
-                    onChange={(e) =>
-                      handleStatusChange(e.target.value as BookingStatus)
-                    }
-                  >
-                    <option value={BookingStatus.Pending}>Pending</option>
-                    <option value={BookingStatus.Confirmed}>Confirmed</option>
-                    <option value={BookingStatus.InProgress}>
-                      In Progress
-                    </option>
+              {booking.status !== BookingStatus.Completed &&
+                booking.status !== BookingStatus.Cancelled && (
+                  <div className={styles.booking_details__status_update}>
+                    <label htmlFor="status-select">Update Status</label>
+                    <select
+                      id="status-select"
+                      value={booking.status || ""}
+                      onChange={(e) =>
+                        handleStatusChange(e.target.value as BookingStatus)
+                      }
+                    >
+                      <option value={BookingStatus.Pending}>Pending</option>
+                      <option value={BookingStatus.Confirmed}>Confirmed</option>
+                      <option value={BookingStatus.InProgress}>
+                        In Progress
+                      </option>
 
-                    <option value={BookingStatus.Completed}>Completed</option>
-                    <option value={BookingStatus.Cancelled}>Cancelled</option>
-                  </select>
-                </div>
-              )}
+                      <option value={BookingStatus.Completed}>Completed</option>
+                      <option value={BookingStatus.Cancelled}>Cancelled</option>
+                    </select>
+                  </div>
+                )}
 
-            
               <div className={styles.booking_details__status_update}>
-                <label htmlFor="payment-status-select">Update Payment Status</label>
+                <label htmlFor="payment-status-select">
+                  Update Payment Status
+                </label>
                 <select
                   id="payment-status-select"
                   value={booking.paymentStatus || ""}
@@ -797,7 +975,9 @@ export default function BookingDetailsPage() {
                   <div className={styles.booking_modal__current_schedule}>
                     <h4>Current Schedule</h4>
                     <p>Date: {formatDate(booking.date)}</p>
-                    <p>Time: {getTimeSlotLabel(booking.timeSlot as TimeSlot)}</p>
+                    <p>
+                      Time: {getTimeSlotLabel(booking.timeSlot as TimeSlot)}
+                    </p>
                   </div>
 
                   <div className={styles.booking_modal__reschedule_form}>
@@ -871,7 +1051,6 @@ export default function BookingDetailsPage() {
         />
 
         <ConfirmationModal
-
           isOpen={showPaymentStatusModal}
           onClose={() => setShowPaymentStatusModal(false)}
           onConfirm={confirmPaymentStatusChange}

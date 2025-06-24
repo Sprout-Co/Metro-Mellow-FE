@@ -54,6 +54,7 @@ query GetBookings($status: BookingStatus) {
     status
     notes
     address {
+      id
       street
       city
       state
@@ -165,6 +166,7 @@ query GetBookingById($id: ID!) {
     status
     notes
     address {
+      id
       street
       city
       state
@@ -276,6 +278,7 @@ query GetCustomerBookings {
     status
     notes
     address {
+      id
       street
       city
       state
@@ -387,6 +390,7 @@ query GetStaffBookings {
     status
     notes
     address {
+      id
       street
       city
       state
