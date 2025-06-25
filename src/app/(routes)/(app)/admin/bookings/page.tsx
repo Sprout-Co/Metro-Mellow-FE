@@ -580,14 +580,14 @@ export default function BookingsPage() {
         </Card>
 
         {/* Booking Details Modal */}
-        <BookingModal
+        {/* <BookingModal
           isOpen={showBookingModal}
           onClose={closeBookingModal}
           booking={selectedBooking}
           mode={bookingModalMode}
           onStatusUpdate={openStatusConfirmation}
           onReschedule={handleBookingReschedule}
-        />
+        /> */}
 
         {/* Confirmation Modal */}
         <ConfirmationModal

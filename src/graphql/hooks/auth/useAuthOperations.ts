@@ -198,11 +198,11 @@ export const useAuthOperations = () => {
           throw new Error(errors[0].message);
         }
 
-        if (data?.updateProfile && data.updateProfile.role === UserRole.Customer) {
-          // Update the user in the auth store while preserving the current token
-          dispatch(loginAction({ user: data.updateProfile as any, token: currentToken || "" }));
-          return data.updateProfile;
-        }
+        // if (data?.updateProfile && data.updateProfile.role === UserRole.Customer) {
+        //   // Update the user in the auth store while preserving the current token
+        //   dispatch(loginAction({ user: data.updateProfile as any, token: currentToken || "" }));
+        //   return data.updateProfile;
+        // }
       } catch (error) {
         console.error("Profile update error:", error);
         if (error instanceof Error) {

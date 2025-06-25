@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import AdminDashboardLayout from "../_components/AdminDashboardLayout/AdminDashboardLayout";
 import styles from "./subscriptions.module.scss";
 import Card from "../_components/UI/Card/Card";
@@ -13,6 +14,7 @@ import { SubscriptionStatus, Subscription } from "@/graphql/api";
 import { Icon } from "@/components/ui/Icon/Icon";
 
 export default function SubscriptionsPage() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<SubscriptionStatus | "all">("all");
   const [isLoading, setIsLoading] = useState(true);
@@ -320,7 +322,7 @@ export default function SubscriptionsPage() {
           <div className={styles.subscriptions_page__actions_cell}>
             <button
               className={styles.subscriptions_page__action_button}
-              onClick={() => console.log("View subscription:", subscription.id)}
+              onClick={() => router.push(`/admin/subscriptions/${subscription.id}`)}
               title="View details"
             >
               View
@@ -471,7 +473,7 @@ export default function SubscriptionsPage() {
               <Table
                 columns={columns}
                 data={filteredSubscriptions}
-                onRowClick={(subscription) => console.log("View subscription:", subscription)}
+                onRowClick={(subscription) => router.push(`/admin/subscriptions/${subscription.id}`)}
               />
             )}
           </motion.div>
