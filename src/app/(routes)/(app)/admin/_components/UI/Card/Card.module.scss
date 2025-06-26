@@ -1,16 +1,16 @@
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .card {
-  background-color: color('neutral', 'white');
-  border-radius: border-radius('lg');
-  box-shadow: map-get($box-shadows, 'sm');
+  background-color: color("neutral", "white");
+  border-radius: border-radius("lg");
+  box-shadow: map-get($box-shadows, "sm");
   overflow: hidden;
-  padding: spacing('lg');
+  padding: spacing("lg");
   height: 100%;
-  
+
   &:hover {
-    box-shadow: map-get($box-shadows, 'md');
+    box-shadow: map-get($box-shadows, "md");
   }
 }

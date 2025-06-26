@@ -1,34 +1,37 @@
 // components/contact/ContactForm.module.scss
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .contactForm {
   padding: spacing("5xl") 0;
   position: relative;
   background-color: color("neutral", "white");
-  
+
   // Add a subtle pattern background
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: radial-gradient(color("neutral", "medium") 1px, transparent 1px);
+    background-image: radial-gradient(
+      color("neutral", "medium") 1px,
+      transparent 1px
+    );
     background-size: 30px 30px;
     opacity: 0.05;
     pointer-events: none;
   }
-  
+
   &__container {
     @include container;
     position: relative;
     display: flex;
     justify-content: center;
   }
-  
+
   &__content {
     max-width: 650px;
     width: 100%;
@@ -38,44 +41,52 @@
     padding: spacing("2xl") spacing("2xl");
     position: relative;
     overflow: hidden;
-    
+
     // Add decorative circles for visual interest
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: -100px;
       right: -100px;
       width: 200px;
       height: 200px;
       border-radius: 50%;
-      background: linear-gradient(135deg, rgba(color("primary", "light"), 0.1), rgba(color("primary", "base"), 0.05));
+      background: linear-gradient(
+        135deg,
+        rgba(color("primary", "light"), 0.1),
+        rgba(color("primary", "base"), 0.05)
+      );
       z-index: 0;
     }
-    
+
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       bottom: -80px;
       left: -80px;
       width: 180px;
       height: 180px;
       border-radius: 50%;
-      background: linear-gradient(135deg, rgba(color("secondary", "light"), 0.05), rgba(color("primary", "light"), 0.05));
+      background: linear-gradient(
+        135deg,
+        rgba(color("secondary", "light"), 0.05),
+        rgba(color("primary", "light"), 0.05)
+      );
       z-index: 0;
     }
-    
+
     @include breakpoint-down("sm") {
       padding: spacing("xl") spacing("md");
     }
   }
-  
+
   &__header {
     position: relative;
     z-index: 1;
     text-align: center;
     margin-bottom: spacing("2xl");
   }
-  
+
   &__title {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "4xl");
@@ -84,52 +95,56 @@
     margin-bottom: spacing("xs");
     position: relative;
     display: inline-block;
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "3xl");
     }
   }
-  
+
   &__titleAccent {
     width: 40px;
     height: 4px;
-    background: linear-gradient(to right, color("primary", "base"), color("primary", "light"));
+    background: linear-gradient(
+      to right,
+      color("primary", "base"),
+      color("primary", "light")
+    );
     margin: spacing("xs") auto spacing("md");
     border-radius: 2px;
   }
-  
+
   &__description {
     font-size: map-get($font-sizes, "lg");
     color: color("neutral", "dark");
     max-width: 500px;
     margin: 0 auto;
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "base");
     }
   }
-  
+
   &__form {
     position: relative;
     z-index: 1;
     width: 100%;
   }
-  
+
   &__row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: spacing("md");
     margin-bottom: spacing("md");
-    
+
     @include breakpoint-down("sm") {
       grid-template-columns: 1fr;
     }
   }
-  
+
   &__formGroup {
     margin-bottom: spacing("md");
   }
-  
+
   &__label {
     display: block;
     font-size: map-get($font-sizes, "sm");
@@ -138,14 +153,14 @@
     margin-bottom: spacing("xs");
     transition: all 0.3s ease;
   }
-  
+
   &__required {
     color: color("error");
     font-size: map-get($font-sizes, "xxs");
     vertical-align: top;
     margin-left: 2px;
   }
-  
+
   &__inputContainer,
   &__textareaContainer {
     position: relative;
@@ -154,22 +169,22 @@
     padding: spacing("md") spacing("md") spacing("md") spacing("xl");
     background-color: color("neutral", "white");
     transition: all 0.3s ease;
-    
+
     &--active {
       border-color: color("primary", "base");
       box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
-      
+
       .contactForm__inputIcon,
       .contactForm__textareaIcon {
         color: color("primary", "base");
       }
     }
-    
+
     &:hover:not(&--active) {
       border-color: color("neutral", "dark");
     }
   }
-  
+
   &__inputIcon {
     position: absolute;
     left: spacing("sm");
@@ -181,7 +196,7 @@
     align-items: center;
     justify-content: center;
   }
-  
+
   &__input,
   &__textarea {
     width: 100%;
@@ -189,39 +204,39 @@
     background: transparent;
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "darker");
-    
+
     &:focus {
       outline: none;
     }
-    
+
     &::placeholder {
       color: color("neutral", "medium");
     }
   }
-  
+
   &__textarea {
     resize: vertical;
     min-height: 120px;
   }
-  
+
   &__selectHidden {
     position: absolute;
     opacity: 0;
     width: 0;
     height: 0;
   }
-  
+
   &__serviceOptions {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: spacing("md");
     margin-top: spacing("xs");
-    
+
     @include breakpoint-down("sm") {
       grid-template-columns: repeat(2, 1fr);
     }
   }
-  
+
   &__serviceOption {
     display: flex;
     flex-direction: column;
@@ -234,39 +249,43 @@
     transition: all 0.3s ease;
     text-align: center;
     border: 2px solid transparent;
-    
+
     &:hover {
       background-color: rgba(color("primary", "light"), 0.1);
     }
-    
+
     &--selected {
       background-color: rgba(color("primary", "base"), 0.1);
       border-color: color("primary", "base");
     }
   }
-  
+
   &__serviceIcon {
     font-size: 24px;
     margin-bottom: spacing("xs");
   }
-  
+
   &__serviceLabel {
     font-size: map-get($font-sizes, "sm");
     font-weight: map-get($font-weights, "medium");
     color: color("neutral", "darker");
   }
-  
+
   &__actions {
     margin-top: spacing("lg");
   }
-  
+
   &__button {
     @include button-base;
     width: 100%;
     padding: spacing("md") spacing("lg");
     font-size: map-get($font-sizes, "base");
     font-weight: map-get($font-weights, "semibold");
-    background: linear-gradient(to right, color("primary", "base"), color("primary", "light"));
+    background: linear-gradient(
+      to right,
+      color("primary", "base"),
+      color("primary", "light")
+    );
     color: color("neutral", "white");
     border-radius: border-radius("lg");
     display: flex;
@@ -274,49 +293,53 @@
     justify-content: center;
     gap: spacing("xs");
     box-shadow: 0 4px 10px rgba(color("primary", "base"), 0.2);
-    
+
     &:hover {
-      background: linear-gradient(to right, color("primary", "dark"), color("primary", "base"));
+      background: linear-gradient(
+        to right,
+        color("primary", "dark"),
+        color("primary", "base")
+      );
       transform: translateY(-2px);
       box-shadow: 0 6px 15px rgba(color("primary", "base"), 0.25);
     }
-    
+
     &:active {
       transform: translateY(0);
       box-shadow: 0 4px 8px rgba(color("primary", "base"), 0.2);
     }
-    
+
     &:disabled {
       opacity: 0.7;
       cursor: not-allowed;
       transform: none !important;
     }
   }
-  
+
   &__buttonIcon {
     margin-left: spacing("xs");
   }
-  
+
   &__spinner {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: spacing("xs");
   }
-  
+
   &__spinnerIcon {
     width: 20px;
     height: 20px;
     animation: spin 1s linear infinite;
   }
-  
+
   &__spinnerPath {
     stroke: currentColor;
     stroke-dasharray: 60;
     stroke-dashoffset: 50;
     stroke-linecap: round;
   }
-  
+
   &__success,
   &__error {
     margin-top: spacing("lg");
@@ -326,17 +349,17 @@
     align-items: flex-start;
     gap: spacing("md");
   }
-  
+
   &__success {
     background-color: rgba(color("success"), 0.1);
     border: 1px solid rgba(color("success"), 0.3);
   }
-  
+
   &__error {
     background-color: rgba(color("error"), 0.1);
     border: 1px solid rgba(color("error"), 0.3);
   }
-  
+
   &__successIcon,
   &__errorIcon {
     width: 40px;
@@ -345,28 +368,28 @@
     @include flex-center;
     flex-shrink: 0;
   }
-  
+
   &__successIcon {
     background-color: rgba(color("success"), 0.2);
     color: color("success");
   }
-  
+
   &__errorIcon {
     background-color: rgba(color("error"), 0.2);
     color: color("error");
   }
-  
+
   &__messageContent {
     flex: 1;
   }
-  
+
   &__messageTitle {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "lg");
     font-weight: map-get($font-weights, "semibold");
     margin-bottom: spacing("xxs");
   }
-  
+
   &__messageText {
     font-size: map-get($font-sizes, "sm");
   }

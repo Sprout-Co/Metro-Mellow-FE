@@ -1,73 +1,73 @@
 // components/about/TeamSection.module.scss
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .team {
   padding: spacing("6xl") 0;
   background-color: color("neutral", "white");
-  
+
   &__container {
     @include container;
   }
-  
+
   &__header {
     text-align: center;
     max-width: 700px;
     margin: 0 auto spacing("3xl");
   }
-  
+
   &__title {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "4xl");
     font-weight: map-get($font-weights, "bold");
     color: color("neutral", "darker");
     margin-bottom: spacing("md");
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "3xl");
     }
   }
-  
+
   &__subtitle {
     font-size: map-get($font-sizes, "lg");
     color: color("neutral", "dark");
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "base");
     }
   }
-  
+
   &__grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: spacing("xl");
-    
+
     @include breakpoint-down("lg") {
       grid-template-columns: repeat(2, 1fr);
     }
-    
+
     @include breakpoint-down("sm") {
       grid-template-columns: 1fr;
       max-width: 350px;
       margin: 0 auto;
     }
   }
-  
+
   &__member {
     transition: $transition-base;
-    
+
     &:hover {
       .team__overlay {
         opacity: 1;
       }
-      
+
       .team__image {
         transform: scale(1.05);
       }
     }
   }
-  
+
   &__imageWrapper {
     position: relative;
     border-radius: border-radius("lg");
@@ -75,21 +75,25 @@
     margin-bottom: spacing("md");
     box-shadow: map-get($box-shadows, "md");
   }
-  
+
   &__image {
     width: 100%;
     height: auto;
     object-fit: cover;
     transition: transform 0.5s ease;
   }
-  
+
   &__overlay {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(to top, rgba(color("primary", "dark"), 0.8), transparent 70%);
+    background: linear-gradient(
+      to top,
+      rgba(color("primary", "dark"), 0.8),
+      transparent 70%
+    );
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -97,12 +101,12 @@
     opacity: 0;
     transition: opacity 0.3s ease;
   }
-  
+
   &__social {
     display: flex;
     gap: spacing("md");
   }
-  
+
   &__socialLink {
     width: 40px;
     height: 40px;
@@ -111,17 +115,17 @@
     @include flex-center;
     color: color("neutral", "white");
     transition: $transition-base;
-    
+
     &:hover {
       background-color: color("neutral", "white");
       color: color("primary", "base");
     }
   }
-  
+
   &__info {
     text-align: center;
   }
-  
+
   &__name {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "xl");
@@ -129,14 +133,14 @@
     color: color("neutral", "darker");
     margin-bottom: spacing("xxs");
   }
-  
+
   &__position {
     font-size: map-get($font-sizes, "sm");
     color: color("primary", "base");
     font-weight: map-get($font-weights, "medium");
     margin-bottom: spacing("sm");
   }
-  
+
   &__bio {
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "dark");

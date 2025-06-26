@@ -1,100 +1,100 @@
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .recent_bookings {
   &__title {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('lg') 0;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("lg") 0;
   }
-  
+
   &__list {
     display: flex;
     flex-direction: column;
-    gap: spacing('sm');
+    gap: spacing("sm");
   }
-  
+
   &__item {
     display: flex;
     align-items: center;
-    padding: spacing('sm');
-    border-radius: border-radius('md');
-    background-color: color('neutral', 'lighter');
-    
+    padding: spacing("sm");
+    border-radius: border-radius("md");
+    background-color: color("neutral", "lighter");
+
     &:hover {
-      background-color: darken(color('neutral', 'lighter'), 3%);
+      background-color: darken(color("neutral", "lighter"), 3%);
     }
   }
-  
+
   &__service_icon {
     width: 40px;
     height: 40px;
-    border-radius: border-radius('md');
+    border-radius: border-radius("md");
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: map-get($font-weights, 'semibold');
-    margin-right: spacing('md');
-    
+    font-weight: map-get($font-weights, "semibold");
+    margin-right: spacing("md");
+
     &--primary {
-      background-color: rgba(color('primary', 'base'), 0.1);
-      color: color('primary', 'base');
+      background-color: rgba(color("primary", "base"), 0.1);
+      color: color("primary", "base");
     }
-    
+
     &--secondary {
-      background-color: rgba(color('secondary', 'base'), 0.1);
-      color: color('secondary', 'base');
+      background-color: rgba(color("secondary", "base"), 0.1);
+      color: color("secondary", "base");
     }
-    
+
     &--success {
-      background-color: rgba(color('success'), 0.1);
-      color: color('success');
+      background-color: rgba(color("success"), 0.1);
+      color: color("success");
     }
-    
+
     &--info {
-      background-color: rgba(color('info'), 0.1);
-      color: color('info');
+      background-color: rgba(color("info"), 0.1);
+      color: color("info");
     }
-    
+
     &--warning {
-      background-color: rgba(color('warning'), 0.1);
-      color: color('warning');
+      background-color: rgba(color("warning"), 0.1);
+      color: color("warning");
     }
   }
-  
+
   &__details {
     flex: 1;
   }
-  
+
   &__service_name {
-    font-size: map-get($font-sizes, 'base');
-    font-weight: map-get($font-weights, 'medium');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xxs') 0;
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xxs") 0;
   }
-  
+
   &__customer_name {
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
     margin: 0;
   }
-  
+
   &__info {
     text-align: right;
   }
-  
+
   &__price {
-    font-size: map-get($font-sizes, 'base');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xxs') 0;
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xxs") 0;
   }
-  
+
   &__time {
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
     margin: 0;
   }
 }

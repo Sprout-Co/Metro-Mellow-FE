@@ -1,64 +1,68 @@
 // components/about/Statistics.module.scss
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .stats {
   padding: spacing("5xl") 0;
-  background: linear-gradient(to right, color("primary", "dark"), color("primary", "base"));
+  background: linear-gradient(
+    to right,
+    color("primary", "dark"),
+    color("primary", "base")
+  );
   color: color("neutral", "white");
-  
+
   &__container {
     @include container;
   }
-  
+
   &__grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: spacing("xl");
-    
+
     @include breakpoint-down("lg") {
       grid-template-columns: repeat(2, 1fr);
     }
-    
+
     @include breakpoint-down("sm") {
       grid-template-columns: 1fr;
       gap: spacing("3xl");
     }
   }
-  
+
   &__item {
     text-align: center;
     padding: spacing("lg");
   }
-  
+
   &__value {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "5xl");
     font-weight: map-get($font-weights, "bold");
     margin-bottom: spacing("xs");
     line-height: 1;
-    
+
     @include breakpoint-down("xl") {
       font-size: map-get($font-sizes, "4xl");
     }
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "3xl");
     }
   }
-  
+
   &__suffix {
     font-size: map-get($font-sizes, "2xl");
     font-weight: map-get($font-weights, "bold");
     margin-left: 2px;
   }
-  
+
   &__label {
     font-size: map-get($font-sizes, "lg");
     font-weight: map-get($font-weights, "medium");
     opacity: 0.9;
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "base");
     }

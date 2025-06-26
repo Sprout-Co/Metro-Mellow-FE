@@ -1,6 +1,6 @@
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .status {
   &__list {
@@ -8,21 +8,21 @@
     flex-direction: column;
     gap: spacing("md");
   }
-  
+
   &__card {
     background-color: color("neutral", "white");
     border: 1px solid color("neutral", "lighter");
     border-radius: border-radius("lg");
     overflow: hidden;
   }
-  
+
   &__header {
     display: flex;
     align-items: center;
     padding: spacing("md");
     border-bottom: 1px solid color("neutral", "lighter");
   }
-  
+
   &__iconWrapper {
     display: flex;
     align-items: center;
@@ -33,118 +33,118 @@
     background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
     margin-right: spacing("md");
   }
-  
+
   &__icon {
     color: color("primary", "base");
   }
-  
+
   &__details {
     flex: 1;
   }
-  
+
   &__name {
     font-size: map-get($font-sizes, "lg");
     font-weight: map-get($font-weights, "semibold");
     color: color("neutral", "black");
     margin-bottom: spacing("xxs");
   }
-  
+
   &__schedule {
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "dark");
   }
-  
+
   &__badge {
     margin-left: spacing("md");
   }
-  
+
   &__badgeText {
     display: inline-block;
     padding: spacing("xxs") spacing("xs");
     border-radius: border-radius("full");
     font-size: map-get($font-sizes, "xs");
     font-weight: map-get($font-weights, "medium");
-    
+
     &--active {
       background-color: rgba(map-get($colors, "success"), 0.1);
       color: color("success");
     }
-    
+
     &--paused {
       background-color: rgba(map-get($colors, "warning"), 0.1);
       color: color("warning");
     }
   }
-  
+
   &__content {
     display: flex;
     padding: spacing("md");
-    
+
     @include breakpoint-down("sm") {
       flex-direction: column;
     }
   }
-  
+
   &__info {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: spacing("xs");
   }
-  
+
   &__infoItem {
     display: flex;
     font-size: map-get($font-sizes, "sm");
   }
-  
+
   &__infoLabel {
     color: color("neutral", "dark");
     min-width: 100px;
   }
-  
+
   &__infoValue {
     font-weight: map-get($font-weights, "medium");
     color: color("neutral", "darker");
   }
-  
+
   &__price {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     justify-content: center;
     padding-left: spacing("md");
-    
+
     @include breakpoint-down("sm") {
       align-items: flex-start;
       margin-top: spacing("sm");
       padding-left: 0;
     }
   }
-  
+
   &__priceValue {
     font-size: map-get($font-sizes, "xl");
     font-weight: map-get($font-weights, "bold");
     color: color("primary", "base");
     line-height: 1;
   }
-  
+
   &__priceLabel {
     font-size: map-get($font-sizes, "xs");
     color: color("neutral", "dark");
     margin-top: spacing("xxs");
   }
-  
+
   &__actions {
     display: flex;
     padding: spacing("sm") spacing("md");
     border-top: 1px solid color("neutral", "lighter");
     gap: spacing("sm");
-    
+
     @include breakpoint-down("sm") {
       flex-direction: column;
     }
   }
-  
+
   &__actionBtn {
     display: flex;
     align-items: center;
@@ -158,25 +158,28 @@
     font-weight: map-get($font-weights, "medium");
     cursor: pointer;
     transition: $transition-base;
-    
+
     svg {
       margin-right: spacing("xs");
     }
-    
+
     &:hover {
       background-color: color("neutral", "lighter");
     }
-    
+
     &--resume {
       border-color: color("primary", "base");
       color: color("primary", "base");
-      
+
       &:hover {
-        background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.05);
+        background-color: rgba(
+          map-get(map-get($colors, "primary"), "base"),
+          0.05
+        );
       }
     }
   }
-  
+
   &__empty {
     display: flex;
     flex-direction: column;
@@ -185,27 +188,27 @@
     padding: spacing("xl");
     text-align: center;
   }
-  
+
   &__emptyIcon {
     font-size: 3rem;
     color: color("neutral", "medium");
     margin-bottom: spacing("md");
   }
-  
+
   &__emptyTitle {
     font-size: map-get($font-sizes, "xl");
     font-weight: map-get($font-weights, "medium");
     color: color("neutral", "darker");
     margin-bottom: spacing("xs");
   }
-  
+
   &__emptyText {
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "dark");
     margin-bottom: spacing("lg");
     max-width: 300px;
   }
-  
+
   &__emptyBtn {
     display: flex;
     align-items: center;
@@ -218,27 +221,27 @@
     border: none;
     cursor: pointer;
     transition: $transition-base;
-    
+
     svg {
       margin-left: spacing("xs");
       transition: $transition-base;
     }
-    
+
     &:hover {
       background-color: color("primary", "dark");
-      
+
       svg {
         transform: translateX(4px);
       }
     }
   }
-  
+
   &__footer {
     display: flex;
     justify-content: center;
     margin-top: spacing("lg");
   }
-  
+
   &__footerBtn {
     display: flex;
     align-items: center;
@@ -250,15 +253,15 @@
     font-size: map-get($font-sizes, "base");
     cursor: pointer;
     transition: $transition-base;
-    
+
     svg {
       margin-left: spacing("xs");
       transition: $transition-base;
     }
-    
+
     &:hover {
       color: color("primary", "dark");
-      
+
       svg {
         transform: translateX(4px);
       }

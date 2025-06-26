@@ -1,19 +1,19 @@
 // components/layout/Footer.module.scss
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .footer {
   background-color: color("neutral", "darker");
   color: color("neutral", "white");
-  
+
   &__top {
     padding: spacing("4xl") 0;
     position: relative;
-    
+
     // Add a subtle pattern overlay
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
@@ -23,69 +23,69 @@
       pointer-events: none;
     }
   }
-  
+
   &__container {
     @include container;
     position: relative; // For proper positioning relative to the pattern
   }
-  
+
   &__grid {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 2fr;
     gap: spacing("3xl");
-    
+
     @include breakpoint-down("lg") {
       grid-template-columns: 1fr 1fr;
       gap: spacing("2xl");
     }
-    
+
     @include breakpoint-down("md") {
       grid-template-columns: 1fr;
       gap: spacing("xl");
     }
   }
-  
+
   &__brand {
     @include breakpoint-down("md") {
       text-align: center;
     }
   }
-  
+
   &__logo {
     display: inline-block;
     margin-bottom: spacing("md");
     transition: $transition-base;
-    
+
     &:hover {
       opacity: 0.9;
     }
   }
-  
+
   &__logoImage {
     height: auto;
   }
-  
+
   &__tagline {
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "medium");
     margin-bottom: spacing("lg");
     max-width: 280px;
     line-height: map-get($line-heights, "relaxed");
-    
+
     @include breakpoint-down("md") {
       margin: 0 auto spacing("lg");
     }
   }
-  
+
   &__social {
     display: flex;
     gap: spacing("sm");
-    
+
     @include breakpoint-down("md") {
       justify-content: center;
     }
   }
-  
+
   &__socialLink {
     width: 36px;
     height: 36px;
@@ -94,19 +94,19 @@
     @include flex-center;
     color: color("neutral", "white");
     transition: $transition-base;
-    
+
     &:hover {
       background-color: color("primary", "base");
       transform: translateY(-2px);
     }
   }
-  
+
   &__linksGroup {
     @include breakpoint-down("md") {
       text-align: center;
     }
   }
-  
+
   &__heading {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "lg");
@@ -116,33 +116,33 @@
     position: relative;
     display: inline-block;
     padding-bottom: spacing("xs");
-    
+
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       bottom: 0;
       left: 0;
       width: 40px;
       height: 2px;
       background-color: color("primary", "base");
-      
+
       @include breakpoint-down("md") {
         left: 50%;
         transform: translateX(-50%);
       }
     }
   }
-  
+
   &__links {
     list-style-type: none;
     padding: 0;
     margin: 0;
-    
+
     li {
       margin-bottom: spacing("sm");
     }
   }
-  
+
   &__link {
     color: color("neutral", "light");
     text-decoration: none;
@@ -150,9 +150,9 @@
     transition: $transition-base;
     position: relative;
     padding-left: spacing("xs");
-    
+
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       left: 0;
       top: 50%;
@@ -164,56 +164,56 @@
       opacity: 0;
       transition: $transition-base;
     }
-    
+
     &:hover {
       color: color("neutral", "white");
       padding-left: spacing("sm");
-      
+
       &::before {
         opacity: 1;
       }
     }
-    
+
     @include breakpoint-down("md") {
       padding-left: 0;
-      
+
       &::before {
         display: none;
       }
-      
+
       &:hover {
         padding-left: 0;
       }
     }
   }
-  
+
   &__newsletter {
     @include breakpoint-down("md") {
       text-align: center;
     }
   }
-  
+
   &__newsletterText {
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "medium");
     margin-bottom: spacing("md");
     line-height: map-get($line-heights, "relaxed");
   }
-  
+
   &__form {
     margin-bottom: spacing("xs");
   }
-  
+
   &__inputWrapper {
     display: flex;
     position: relative;
-    
+
     @include breakpoint-down("md") {
       max-width: 320px;
       margin: 0 auto;
     }
   }
-  
+
   &__input {
     width: 100%;
     padding: spacing("sm") spacing("md");
@@ -224,18 +224,18 @@
     border-radius: border-radius("lg");
     color: color("neutral", "white");
     transition: $transition-base;
-    
+
     &:focus {
       outline: none;
       background-color: rgba(color("neutral", "white"), 0.15);
       border-color: color("primary", "base");
     }
-    
+
     &::placeholder {
       color: color("neutral", "medium");
     }
   }
-  
+
   &__button {
     position: absolute;
     right: 0;
@@ -249,12 +249,12 @@
     @include flex-center;
     cursor: pointer;
     transition: $transition-base;
-    
+
     &:hover {
       background-color: color("primary", "dark");
     }
   }
-  
+
   &__subscribed {
     padding: spacing("sm") spacing("md");
     background-color: rgba(color("success"), 0.1);
@@ -262,63 +262,63 @@
     color: color("success");
     margin-bottom: spacing("xs");
   }
-  
+
   &__privacy {
     font-size: map-get($font-sizes, "xs");
     color: color("neutral", "medium");
   }
-  
+
   &__privacyLink {
     color: color("neutral", "light");
     text-decoration: none;
     transition: $transition-base;
-    
+
     &:hover {
       color: color("primary", "light");
       text-decoration: underline;
     }
   }
-  
+
   &__bottom {
     background-color: darken(color("neutral", "darker"), 5%);
     padding: spacing("md") 0;
     border-top: 1px solid rgba(color("neutral", "white"), 0.05);
   }
-  
+
   &__bottomContent {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
+
     @include breakpoint-down("md") {
       flex-direction: column;
       gap: spacing("md");
       text-align: center;
     }
   }
-  
+
   &__copyright {
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "medium");
     margin: 0;
   }
-  
+
   &__legal {
     display: flex;
     gap: spacing("lg");
-    
+
     @include breakpoint-down("sm") {
       flex-direction: column;
       gap: spacing("xs");
     }
   }
-  
+
   &__legalLink {
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "medium");
     text-decoration: none;
     transition: $transition-base;
-    
+
     &:hover {
       color: color("neutral", "white");
     }

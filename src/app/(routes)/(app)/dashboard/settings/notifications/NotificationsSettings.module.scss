@@ -1,6 +1,6 @@
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .notificationsSettings {
   padding: spacing("xl") 0;
@@ -44,7 +44,7 @@
     gap: spacing("xs");
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    
+
     &::-webkit-scrollbar {
       display: none;
     }
@@ -110,7 +110,7 @@
 
   &__notificationColumn {
     width: 50%;
-    
+
     @include breakpoint-down("md") {
       width: 40%;
     }
@@ -119,7 +119,7 @@
   &__channelColumn {
     width: calc(50% / 3);
     text-align: center;
-    
+
     @include breakpoint-down("md") {
       width: 20%;
     }
@@ -147,7 +147,7 @@
 
   &__row {
     transition: $transition-base;
-    
+
     &:hover {
       background-color: color("neutral", "lighter");
     }

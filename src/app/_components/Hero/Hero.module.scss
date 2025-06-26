@@ -1,20 +1,20 @@
 // components/home/Hero.module.scss
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .hero {
   position: relative;
   overflow: hidden;
   background-color: color("neutral", "lighter");
-  
+
   &__container {
     @include container;
     @include flex-between;
     padding-top: spacing("4xl");
     padding-bottom: spacing("4xl");
     gap: spacing("xl");
-    
+
     @include breakpoint-down("lg") {
       flex-direction: column;
       text-align: center;
@@ -22,17 +22,17 @@
       padding-bottom: spacing("3xl");
     }
   }
-  
+
   &__content {
     flex: 1;
     max-width: 580px;
-    
+
     @include breakpoint-down("lg") {
       max-width: 100%;
       margin-bottom: spacing("xl");
     }
   }
-  
+
   &__title {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "5xl");
@@ -40,64 +40,64 @@
     line-height: map-get($line-heights, "tight");
     color: color("neutral", "darker");
     margin-bottom: spacing("md");
-    
+
     &--highlight {
       color: color("primary", "base");
     }
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "4xl");
     }
-    
+
     @include breakpoint-down("sm") {
       font-size: map-get($font-sizes, "3xl");
     }
   }
-  
+
   &__description {
     @include paragraph;
     font-size: map-get($font-sizes, "lg");
     margin-bottom: spacing("xl");
     color: color("neutral", "dark");
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "base");
     }
   }
-  
+
   &__cta {
     display: flex;
     gap: spacing("md");
-    
+
     @include breakpoint-down("md") {
       justify-content: center;
       flex-wrap: wrap;
     }
   }
-  
+
   &__button {
     @include button-primary;
     padding: spacing("md") spacing("xl");
-    
+
     &--secondary {
       @include button-secondary;
       padding: spacing("md") spacing("xl");
     }
   }
-  
+
   &__image {
     flex: 1;
     position: relative;
-    
+
     img {
       border-radius: border-radius("lg");
       box-shadow: map-get($box-shadows, "lg");
       object-fit: cover;
     }
-    
+
     @include breakpoint-down("lg") {
       width: 100%;
-      
+
       img {
         width: 100%;
         height: auto;
@@ -105,7 +105,7 @@
       }
     }
   }
-  
+
   &__trust {
     @include container;
     padding-top: spacing("xl");
@@ -113,33 +113,33 @@
     border-top: 1px solid color("neutral", "medium");
     text-align: center;
   }
-  
+
   &__trustText {
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "dark");
     margin-bottom: spacing("md");
-    
+
     &--bold {
       font-weight: map-get($font-weights, "bold");
     }
   }
-  
+
   &__trustIcons {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: spacing("xl");
-    
+
     @include breakpoint-down("sm") {
       flex-wrap: wrap;
       gap: spacing("md");
     }
   }
-  
+
   &__trustIcon {
     opacity: 0.8;
     transition: $transition-base;
-    
+
     &:hover {
       opacity: 1;
     }

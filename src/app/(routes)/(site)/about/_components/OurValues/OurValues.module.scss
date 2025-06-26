@@ -1,57 +1,57 @@
 // components/about/OurValues.module.scss
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .values {
   padding: spacing("6xl") 0;
   background-color: color("neutral", "lighter");
-  
+
   &__container {
     @include container;
   }
-  
+
   &__header {
     text-align: center;
     max-width: 700px;
     margin: 0 auto spacing("3xl");
   }
-  
+
   &__title {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "4xl");
     font-weight: map-get($font-weights, "bold");
     color: color("neutral", "darker");
     margin-bottom: spacing("md");
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "3xl");
     }
   }
-  
+
   &__subtitle {
     font-size: map-get($font-sizes, "lg");
     color: color("neutral", "dark");
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "base");
     }
   }
-  
+
   &__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: spacing("xl");
-    
+
     @include breakpoint-down("lg") {
       grid-template-columns: repeat(2, 1fr);
     }
-    
+
     @include breakpoint-down("md") {
       grid-template-columns: 1fr;
     }
   }
-  
+
   &__card {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
@@ -60,17 +60,17 @@
     height: 100%;
     box-shadow: map-get($box-shadows, "sm");
     border: 1px solid color("neutral", "medium");
-    
+
     &:hover {
       box-shadow: map-get($box-shadows, "md");
-      
+
       .values__iconWrapper {
         background-color: color("primary", "base");
         color: color("neutral", "white");
       }
     }
   }
-  
+
   &__iconWrapper {
     width: 80px;
     height: 80px;
@@ -81,7 +81,7 @@
     margin-bottom: spacing("md");
     transition: $transition-base;
   }
-  
+
   &__cardTitle {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "xl");
@@ -89,7 +89,7 @@
     color: color("neutral", "darker");
     margin-bottom: spacing("sm");
   }
-  
+
   &__cardDescription {
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "dark");

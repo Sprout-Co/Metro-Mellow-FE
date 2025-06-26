@@ -1,6 +1,6 @@
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .management {
   &__header {
@@ -8,35 +8,35 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: spacing("xl");
-    
+
     @include breakpoint-down("sm") {
       flex-direction: column;
       align-items: flex-start;
       gap: spacing("md");
     }
   }
-  
+
   &__title {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "3xl");
     font-weight: map-get($font-weights, "bold");
     color: color("neutral", "black");
     margin-bottom: spacing("xs");
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "2xl");
     }
   }
-  
+
   &__subtitle {
     font-size: map-get($font-sizes, "lg");
     color: color("neutral", "dark");
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "base");
     }
   }
-  
+
   &__addBtn {
     display: flex;
     align-items: center;
@@ -49,26 +49,26 @@
     border: none;
     cursor: pointer;
     transition: $transition-base;
-    
+
     svg {
       margin-right: spacing("xs");
     }
-    
+
     &:hover {
       background-color: color("primary", "dark");
     }
   }
-  
+
   &__list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: spacing("lg");
   }
-  
+
   &__cardWrapper {
     height: 100%;
   }
-  
+
   &__addCard {
     background-color: color("neutral", "white");
     border: 2px dashed color("neutral", "medium");
@@ -80,43 +80,46 @@
     justify-content: center;
     cursor: pointer;
     transition: $transition-base;
-    
+
     &:hover {
       border-color: color("primary", "base");
-      background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.02);
+      background-color: rgba(
+        map-get(map-get($colors, "primary"), "base"),
+        0.02
+      );
     }
   }
-  
+
   &__addCardContent {
     text-align: center;
     padding: spacing("lg");
   }
-  
+
   &__addCardIcon {
     font-size: map-get($font-sizes, "4xl");
     color: color("primary", "base");
     margin-bottom: spacing("md");
   }
-  
+
   &__addCardTitle {
     font-size: map-get($font-sizes, "xl");
     font-weight: map-get($font-weights, "semibold");
     color: color("neutral", "black");
     margin-bottom: spacing("sm");
   }
-  
+
   &__addCardDescription {
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "dark");
   }
-  
+
   &__detailsView {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
     box-shadow: map-get($box-shadows, "sm");
     overflow: hidden;
   }
-  
+
   &__backBtn {
     display: flex;
     align-items: center;
@@ -127,11 +130,11 @@
     font-weight: map-get($font-weights, "medium");
     cursor: pointer;
     transition: $transition-base;
-    
+
     svg {
       margin-right: spacing("xs");
     }
-    
+
     &:hover {
       color: color("primary", "base");
     }

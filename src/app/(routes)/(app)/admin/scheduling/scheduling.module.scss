@@ -1,156 +1,156 @@
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .scheduling_page {
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: spacing('lg');
-    
-    @include breakpoint-down('md') {
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("md") {
       flex-direction: column;
-      gap: spacing('md');
+      gap: spacing("md");
     }
   }
-  
+
   &__title_area {
-    margin-bottom: spacing('md');
+    margin-bottom: spacing("md");
   }
-  
+
   &__title {
-    font-size: map-get($font-sizes, '2xl');
-    font-weight: map-get($font-weights, 'bold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
   }
-  
+
   &__subtitle {
-    font-size: map-get($font-sizes, 'base');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
     margin: 0;
   }
-  
+
   &__view_toggle {
     display: flex;
-    margin-bottom: spacing('md');
-    border-bottom: 1px solid color('neutral', 'lighter');
+    margin-bottom: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
   }
-  
+
   &__view_button {
-    padding: spacing('sm') spacing('lg');
+    padding: spacing("sm") spacing("lg");
     background: none;
     border: none;
-    font-size: map-get($font-sizes, 'sm');
-    font-weight: map-get($font-weights, 'medium');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
     cursor: pointer;
     position: relative;
-    
+
     &:hover {
-      color: color('primary', 'base');
+      color: color("primary", "base");
     }
-    
+
     &--active {
-      color: color('primary', 'base');
-      
+      color: color("primary", "base");
+
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: -1px;
         left: 0;
         width: 100%;
         height: 2px;
-        background-color: color('primary', 'base');
+        background-color: color("primary", "base");
       }
     }
   }
-  
+
   &__calendar {
-    padding: spacing('lg');
+    padding: spacing("lg");
   }
-  
+
   &__calendar_header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: spacing('lg');
+    margin-bottom: spacing("lg");
   }
-  
+
   &__calendar_title {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
     margin: 0;
   }
-  
+
   &__calendar_nav {
     display: flex;
-    gap: spacing('sm');
+    gap: spacing("sm");
   }
-  
+
   &__calendar_nav_button {
-    padding: spacing('xs') spacing('sm');
-    background-color: color('neutral', 'lighter');
+    padding: spacing("xs") spacing("sm");
+    background-color: color("neutral", "lighter");
     border: none;
-    border-radius: border-radius('md');
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
     cursor: pointer;
-    
+
     &:hover {
-      background-color: darken(color('neutral', 'lighter'), 5%);
+      background-color: darken(color("neutral", "lighter"), 5%);
     }
   }
-  
+
   &__calendar_days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: spacing('sm');
-    
-    @include breakpoint-down('md') {
+    gap: spacing("sm");
+
+    @include breakpoint-down("md") {
       grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     }
   }
-  
+
   &__calendar_day {
-    border: 1px solid color('neutral', 'lighter');
-    border-radius: border-radius('md');
-    padding: spacing('sm');
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    padding: spacing("sm");
     min-height: 100px;
-    
+
     &--today {
-      background-color: rgba(color('primary', 'base'), 0.05);
-      border-color: rgba(color('primary', 'base'), 0.2);
+      background-color: rgba(color("primary", "base"), 0.05);
+      border-color: rgba(color("primary", "base"), 0.2);
     }
   }
-  
+
   &__calendar_date {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
-    margin-bottom: spacing('sm');
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
   }
-  
+
   &__calendar_appointments {
-    font-size: map-get($font-sizes, 'xs');
+    font-size: map-get($font-sizes, "xs");
   }
-  
+
   &__calendar_count {
-    background-color: rgba(color('primary', 'base'), 0.1);
-    color: color('primary', 'base');
-    padding: spacing('xxs') spacing('xs');
-    border-radius: border-radius('sm');
+    background-color: rgba(color("primary", "base"), 0.1);
+    color: color("primary", "base");
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("sm");
     display: inline-block;
   }
-  
+
   &__calendar_empty {
-    color: color('neutral', 'dark');
+    color: color("neutral", "dark");
     font-style: italic;
   }
-  
+
   &__list {
-    padding: spacing('lg');
+    padding: spacing("lg");
   }
 }

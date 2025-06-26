@@ -1,16 +1,16 @@
 // components/contact/ContactInfo.module.scss
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .contactInfo {
   padding: spacing("5xl") 0;
   background-color: color("neutral", "lighter");
-  
+
   &__container {
     @include container;
   }
-  
+
   &__card {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
@@ -19,36 +19,36 @@
     max-width: 500px;
     margin: 0 auto;
   }
-  
+
   &__title {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "3xl");
     font-weight: map-get($font-weights, "bold");
     color: color("neutral", "darker");
     margin-bottom: spacing("md");
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "2xl");
     }
   }
-  
+
   &__divider {
     width: 60px;
     height: 4px;
     background-color: color("primary", "base");
     margin-bottom: spacing("xl");
   }
-  
+
   &__item {
     display: flex;
     align-items: flex-start;
     margin-bottom: spacing("lg");
-    
+
     &:last-of-type {
       margin-bottom: spacing("2xl");
     }
   }
-  
+
   &__iconWrapper {
     width: 48px;
     height: 48px;
@@ -59,11 +59,11 @@
     margin-right: spacing("md");
     flex-shrink: 0;
   }
-  
+
   &__content {
     flex: 1;
   }
-  
+
   &__subtitle {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "lg");
@@ -71,29 +71,29 @@
     color: color("neutral", "darker");
     margin-bottom: spacing("xs");
   }
-  
+
   &__text {
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "dark");
     line-height: map-get($line-heights, "relaxed");
   }
-  
+
   &__link {
     color: color("primary", "base");
     text-decoration: none;
     transition: $transition-base;
-    
+
     &:hover {
       color: color("primary", "dark");
       text-decoration: underline;
     }
   }
-  
+
   &__social {
     border-top: 1px solid color("neutral", "medium");
     padding-top: spacing("lg");
   }
-  
+
   &__socialTitle {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "base");
@@ -101,12 +101,12 @@
     color: color("neutral", "darker");
     margin-bottom: spacing("md");
   }
-  
+
   &__socialLinks {
     display: flex;
     gap: spacing("md");
   }
-  
+
   &__socialLink {
     width: 40px;
     height: 40px;
@@ -115,7 +115,7 @@
     color: color("primary", "base");
     @include flex-center;
     transition: $transition-base;
-    
+
     &:hover {
       background-color: color("primary", "base");
       color: color("neutral", "white");
