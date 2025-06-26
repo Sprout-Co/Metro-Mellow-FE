@@ -10,7 +10,7 @@ import StatusBadge from "../_components/UI/StatusBadge/StatusBadge";
 import ConfirmationModal from "../_components/UI/ConfirmationModal/ConfirmationModal";
 import { motion } from "framer-motion";
 import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
-import { SubscriptionStatus, Subscription } from "@/graphql/api";
+import { SubscriptionStatus, Subscription, SubscriptionService } from "@/graphql/api";
 import { Icon } from "@/components/ui/Icon/Icon";
 
 export default function SubscriptionsPage() {
@@ -65,9 +65,10 @@ export default function SubscriptionsPage() {
   const filteredSubscriptions = subscriptions.filter((subscription) => {
     const matchesSearch =
       searchQuery === "" ||
-      subscription.customer?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      subscription.customer?.firstName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      subscription.customer?.lastName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       subscription.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      subscription.services?.some((service: any) =>
+      subscription.subscriptionServices?.some((service: SubscriptionService) =>
         service.service?.name?.toLowerCase().includes(searchQuery.toLowerCase())
       );
 
@@ -327,24 +328,6 @@ export default function SubscriptionsPage() {
             >
               View
             </button>
-            <button
-              className={styles.subscriptions_page__action_button}
-              onClick={() => console.log("Edit subscription:", subscription.id)}
-              title="Edit subscription"
-            >
-              Edit
-            </button>
-            <select
-              className={styles.subscriptions_page__status_select}
-              value={subscription.status}
-              onChange={(e) => openStatusConfirmation(subscription.id, e.target.value as SubscriptionStatus)}
-              title="Change status"
-            >
-              <option value={SubscriptionStatus.Active}>Active</option>
-              <option value={SubscriptionStatus.Paused}>Paused</option>
-              <option value={SubscriptionStatus.Cancelled}>Cancelled</option>
-              <option value={SubscriptionStatus.Expired}>Expired</option>
-            </select>
           </div>
         );
       },
@@ -360,14 +343,7 @@ export default function SubscriptionsPage() {
     {
       label: "Paused",
       value: subscriptions.filter((s) => s.status === SubscriptionStatus.Paused).length,
-    },
-    {
-      label: "Monthly Revenue",
-      value: `$${subscriptions
-        .filter((s) => s.status === SubscriptionStatus.Active)
-        .reduce((sum, s) => sum + calculateTotalPrice(s.services || []), 0)
-        .toFixed(2)}`,
-    },
+    }
   ];
 
   const filterOptions = [
