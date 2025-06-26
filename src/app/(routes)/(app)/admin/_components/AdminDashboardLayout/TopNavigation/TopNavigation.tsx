@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Icon } from "@/components/ui/Icon/Icon";
 import styles from "./TopNavigation.module.scss";
 
 interface TopNavigationProps {
@@ -19,42 +20,20 @@ const TopNavigation: React.FC<TopNavigationProps> = ({ toggleSidebar }) => {
           <span></span>
           <span></span>
         </button>
-
-        <motion.button
-          className={styles.top_nav__add_button}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          aria-label="Add new"
-        >
-          <span>+</span>
-        </motion.button>
-
-        <div className={styles.top_nav__mega_menu}>MEGA MENU</div>
       </div>
 
       <div className={styles.top_nav__right}>
-        <div className={styles.top_nav__theme_toggle}>
-          <button
-            className={styles.top_nav__icon_button}
-            aria-label="Toggle theme"
-          >
-            <span className={styles.icon}>☀️</span>
-          </button>
-        </div>
+
 
         <div className={styles.top_nav__notifications}>
           <button
             className={styles.top_nav__icon_button}
             aria-label="Notifications"
           >
-            <span className={styles.icon}>🔔</span>
+            <span className={styles.icon}>
+              <Icon name="bell" size={18} />
+            </span>
             <span className={styles.top_nav__notification_badge}>2</span>
-          </button>
-        </div>
-
-        <div className={styles.top_nav__search}>
-          <button className={styles.top_nav__icon_button} aria-label="Search">
-            <span className={styles.icon}>🔍</span>
           </button>
         </div>
 

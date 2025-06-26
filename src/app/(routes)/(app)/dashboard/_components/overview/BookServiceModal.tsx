@@ -1,8 +1,13 @@
 // src/components/booking/BookServiceModal.tsx
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useUIStore } from "@/store/slices/ui";
-import { useAuthStore } from "@/store/slices/auth";
+import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks";
+import {
+  selectIsModalOpen,
+  selectModalType,
+  closeModal,
+  selectUser,
+} from "@/lib/redux";
 import Icon, { IconName } from "../common/Icon";
 import styles from "./BookServiceModal.module.scss";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
@@ -62,13 +67,23 @@ const steps: Step[] = [
 /**
  * BookServiceModal: Component for booking home services
  */
-export default function BookServiceModal() {
+export default function BookServiceModal({
+  isOpen,
+  onClose,
+  addressId,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  addressId?: string;
+}) {
   // Get modal state and operations from store
-  const { isModalOpen, modalType, closeModal } = useUIStore();
+  const dispatch = useAppDispatch();
+  // const isModalOpen = useAppSelector(selectIsModalOpen);
+  // const modalType = useAppSelector(selectModalType);
+  const currentUser = useAppSelector(selectUser);
   const { handleCreateBooking } = useBookingOperations();
   const { handleGetServices } = useServiceOperations();
   const { handleGetCurrentUser } = useAuthOperations();
-  const currentUser = useAuthStore((state) => state.user);
 
   // API data state
   const [services, setServices] = useState<Service[]>([]);
@@ -82,6 +97,7 @@ export default function BookServiceModal() {
     state: "",
     zipCode: "",
     country: "",
+    label: "",
   });
 
   // Current step in the booking process
@@ -152,13 +168,14 @@ export default function BookServiceModal() {
           handleGetServices(undefined, ServiceStatus.Active),
         ]);
 
-        if (userData?.address) {
+        if (userData?.defaultAddress) {
           setAddress({
-            street: userData.address.street || "",
-            city: userData.address.city || "",
-            state: userData.address.state || "",
-            zipCode: userData.address.zipCode || "",
-            country: userData.address.country || "",
+            street: userData.defaultAddress.street || "",
+            city: userData.defaultAddress.city || "",
+            state: userData.defaultAddress.state || "",
+            zipCode: userData.defaultAddress.zipCode || "",
+            country: userData.defaultAddress.country || "",
+            label: userData.defaultAddress.label || "",
           });
         }
 
@@ -182,14 +199,14 @@ export default function BookServiceModal() {
   }, [handleGetCurrentUser, handleGetServices]);
 
   // Don't render if modal is closed or not for booking service
-  if (!isModalOpen || modalType !== "book-service") return null;
+  if (!isOpen) return null;
 
   // Show loading state
   if (isLoading) {
     return (
       <Modal
-        isOpen={isModalOpen}
-        onClose={closeModal}
+        isOpen={isOpen}
+        onClose={onClose}
         title="Book a Service"
         maxWidth="800px"
       >
@@ -448,7 +465,7 @@ export default function BookServiceModal() {
         serviceOption: selectedOption?.service_id || ("" as string),
         date: new Date(selectedDate),
         timeSlot: selectedTime,
-        address: "6846ce4923c7d1dafbdea59f",
+        address: addressId || currentUser?.defaultAddress?.id || "",
         notes: `Frequency: ${serviceFrequency}`,
         serviceDetails: {
           serviceOption: selectedOption?.service_id || ("" as string),
@@ -486,7 +503,7 @@ export default function BookServiceModal() {
       await handleCreateBooking(bookingData);
 
       // Close the modal after successful submission
-      closeModal();
+      dispatch(closeModal());
     } catch (error) {
       console.error("Failed to create booking:", error);
     } finally {
@@ -1635,8 +1652,8 @@ export default function BookServiceModal() {
    */
   return (
     <Modal
-      isOpen={isModalOpen}
-      onClose={closeModal}
+      isOpen={isOpen}
+      onClose={onClose}
       title="Book a Service"
       maxWidth="800px"
     >

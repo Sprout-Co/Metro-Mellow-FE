@@ -14,10 +14,10 @@ import {
   useUploadStaffDocumentMutation,
   useVerifyStaffDocumentMutation,
   useDeleteStaffDocumentMutation,
-  useGetStaffProfileByIdQuery,
-  useGetStaffProfilesQuery,
-  useGetAvailableStaffQuery,
-  useGetStaffPerformanceQuery,
+  useGetStaffProfileByIdLazyQuery,
+  useGetStaffProfilesLazyQuery,
+  useGetAvailableStaffLazyQuery,
+  useGetStaffPerformanceLazyQuery,
 } from "@/graphql/api";
 import {
   ServiceCategory,
@@ -35,6 +35,12 @@ export const useStaffOperations = () => {
   const [uploadStaffDocumentMutation] = useUploadStaffDocumentMutation();
   const [verifyStaffDocumentMutation] = useVerifyStaffDocumentMutation();
   const [deleteStaffDocumentMutation] = useDeleteStaffDocumentMutation();
+
+  // Use lazy query hooks
+  const [getStaffProfileById] = useGetStaffProfileByIdLazyQuery();
+  const [getStaffProfiles] = useGetStaffProfilesLazyQuery();
+  const [getAvailableStaff] = useGetAvailableStaffLazyQuery();
+  const [getStaffPerformance] = useGetStaffPerformanceLazyQuery();
 
   /**
    * Creates a new staff profile
@@ -285,7 +291,7 @@ export const useStaffOperations = () => {
    */
   const handleGetStaffProfile = useCallback(async (id: string) => {
     try {
-      const { data, errors } = await useGetStaffProfileByIdQuery({
+      const { data, errors } = await getStaffProfileById({
         variables: { id },
       });
 
@@ -301,7 +307,7 @@ export const useStaffOperations = () => {
       }
       throw new Error("An unexpected error occurred");
     }
-  }, []);
+  }, [getStaffProfileById]);
 
   /**
    * Fetches staff profiles with optional status filter
@@ -311,7 +317,7 @@ export const useStaffOperations = () => {
    */
   const handleGetStaffProfiles = useCallback(async (status?: StaffStatus) => {
     try {
-      const { data, errors } = await useGetStaffProfilesQuery({
+      const { data, errors } = await getStaffProfiles({
         variables: { status },
       });
 
@@ -327,7 +333,7 @@ export const useStaffOperations = () => {
       }
       throw new Error("An unexpected error occurred");
     }
-  }, []);
+  }, [getStaffProfiles]);
 
   /**
    * Fetches available staff for a service category and date
@@ -339,7 +345,7 @@ export const useStaffOperations = () => {
   const handleGetAvailableStaff = useCallback(
     async (serviceCategory: ServiceCategory, date: Date) => {
       try {
-        const { data, errors } = await useGetAvailableStaffQuery({
+        const { data, errors } = await getAvailableStaff({
           variables: { serviceCategory, date },
         });
 
@@ -356,7 +362,7 @@ export const useStaffOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    []
+    [getAvailableStaff]
   );
 
   /**
@@ -367,7 +373,7 @@ export const useStaffOperations = () => {
    */
   const handleGetStaffPerformance = useCallback(async (id: string) => {
     try {
-      const { data, errors } = await useGetStaffPerformanceQuery({
+      const { data, errors } = await getStaffPerformance({
         variables: { id },
       });
 
@@ -383,7 +389,7 @@ export const useStaffOperations = () => {
       }
       throw new Error("An unexpected error occurred");
     }
-  }, []);
+  }, [getStaffPerformance]);
 
   return {
     handleCreateStaffProfile,

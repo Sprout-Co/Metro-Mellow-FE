@@ -6,7 +6,6 @@
  * @returns Object containing all auth operation handlers
  */
 import { useCallback } from "react";
-import { useRouter } from "next/navigation";
 import {
   useLoginMutation,
   useRegisterMutation,
@@ -21,15 +20,29 @@ import {
   useSendVerificationEmailMutation,
   useVerifyEmailMutation,
   useAddAddressMutation,
-  useSetDefaultAddressMutation,
   AddressInput,
+  useUpdateAddressMutation,
+  useSetDefaultAddressMutation,
+  UpdateUserInput,
+  AccountStatus,
+  useUpdateAccountStatusMutation,
 } from "@/graphql/api";
-import { useAuthStore } from "@/store/slices/auth";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import { 
+  login as loginAction, 
+  logout as logoutAction, 
+  setUser,
+  selectToken,
+  selectUser 
+} from "@/lib/redux";
 import { UserRole } from "@/graphql/api";
 import { Routes } from "@/constants/routes";
 
 export const useAuthOperations = () => {
-  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const currentToken = useAppSelector(selectToken);
+  const currentUser = useAppSelector(selectUser);
+  
   const [loginMutation] = useLoginMutation();
   const [registerMutation] = useRegisterMutation();
   const [updateProfileMutation] = useUpdateProfileMutation();
@@ -43,15 +56,9 @@ export const useAuthOperations = () => {
   const [sendVerificationEmailMutation] = useSendVerificationEmailMutation();
   const [verifyEmailMutation] = useVerifyEmailMutation();
   const [addAddressMutation] = useAddAddressMutation();
-  const {
-    login,
-    logout,
-    token: currentToken,
-    user: currentUser,
-    setUser,
-  } = useAuthStore();
-  const t = useAuthStore((state) => state);
-
+  const [updateAddressMutation] = useUpdateAddressMutation();
+  const [setDefaultAddressMutation] = useSetDefaultAddressMutation();
+  const [updateAccountStatusMutation] = useUpdateAccountStatusMutation();
   /**
    * Handles user login with email and password
    * @param email - User's email address
@@ -96,7 +103,7 @@ export const useAuthOperations = () => {
 
         // Store auth data
         console.log("Storing auth data...");
-        login(user as any, token);
+        dispatch(loginAction({ user: user as any, token }));
 
         // Use a direct browser redirect for client-side navigation
         console.log("Redirecting to dashboard...");
@@ -111,7 +118,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [loginMutation, login]
+    [loginMutation, dispatch]
   );
 
   /**
@@ -156,7 +163,7 @@ export const useAuthOperations = () => {
             throw new Error("Registration failed: Invalid role");
           }
 
-          login(user as any, token);
+          dispatch(loginAction({ user: user as any, token: token || "" }));
 
           // Use a direct browser redirect
           // if (typeof window !== "undefined") {
@@ -171,7 +178,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [registerMutation, login]
+    [registerMutation, dispatch]
   );
 
   /**
@@ -181,18 +188,7 @@ export const useAuthOperations = () => {
    * @throws Error if update fails
    */
   const handleUpdateProfile = useCallback(
-    async (input: {
-      firstName?: string;
-      lastName?: string;
-      phone?: string;
-      address?: {
-        street: string;
-        city: string;
-        state: string;
-        zipCode: string;
-        country: string;
-      };
-    }) => {
+    async (input: UpdateUserInput) => {
       try {
         const { data, errors } = await updateProfileMutation({
           variables: { input },
@@ -202,11 +198,11 @@ export const useAuthOperations = () => {
           throw new Error(errors[0].message);
         }
 
-        if (data?.updateProfile) {
-          // Update the user in the auth store while preserving the current token
-          login(data.updateProfile as any, currentToken || "");
-          return data.updateProfile;
-        }
+        // if (data?.updateProfile && data.updateProfile.role === UserRole.Customer) {
+        //   // Update the user in the auth store while preserving the current token
+        //   dispatch(loginAction({ user: data.updateProfile as any, token: currentToken || "" }));
+        //   return data.updateProfile;
+        // }
       } catch (error) {
         console.error("Profile update error:", error);
         if (error instanceof Error) {
@@ -215,7 +211,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [updateProfileMutation, login, currentToken]
+    [updateProfileMutation, dispatch, currentToken]
   );
 
   /**
@@ -343,7 +339,7 @@ export const useAuthOperations = () => {
    */
   const handleLogout = useCallback(async () => {
     try {
-      logout();
+      dispatch(logoutAction());
 
       // Use a direct browser redirect
       if (typeof window !== "undefined") {
@@ -353,7 +349,7 @@ export const useAuthOperations = () => {
       console.error("Logout error:", error);
       throw new Error("Failed to logout");
     }
-  }, [logout]);
+  }, [dispatch]);
 
   /**
    * Fetches the current authenticated user and updates the auth store
@@ -371,10 +367,10 @@ export const useAuthOperations = () => {
       if (errors) {
         throw new Error(errors[0].message);
       }
-
       if (data?.me) {
         // Update the auth store with the latest user data
-        setUser(data.me);
+        console.log("Setting user in auth store:", data.me);
+        dispatch(setUser(data.me));
       }
 
       return data?.me;
@@ -385,7 +381,7 @@ export const useAuthOperations = () => {
       }
       throw new Error("An unexpected error occurred");
     }
-  }, [currentToken, setUser, getCurrentUser]);
+  }, [currentToken, dispatch, getCurrentUser]);
 
   /**
    * Fetches a user by ID
@@ -545,6 +541,96 @@ export const useAuthOperations = () => {
     [addAddressMutation]
   );
 
+  /**
+   * Updates an existing address for the current user
+   * @param id - Address ID
+   * @param input - Address input object
+   * @returns Updated address
+   * @throws Error if update fails
+   */
+  const handleUpdateAddress = useCallback(
+    async (id: string, input: AddressInput) => {
+      try {
+        const { data, errors } = await updateAddressMutation({
+          variables: { addressId: id, input },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.updateAddress;
+      } catch (error) {
+        console.error("Address update error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [updateAddressMutation]
+  );
+
+  /**
+   * Sets an address as default for the current user
+   * @param id - Address ID to set as default
+   * @returns Updated address
+   * @throws Error if update fails
+   */
+  const handleSetDefaultAddress = useCallback(
+    async (id: string) => {
+      try {
+        const { data, errors } = await setDefaultAddressMutation({
+          variables: { addressId: id },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.setDefaultAddress;
+      } catch (error) {
+        console.error("Set default address error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [setDefaultAddressMutation]
+  );
+
+  /**
+   * Updates account status for a user
+   * @param userId - User ID to update status for
+   * @param status - New account status
+   * @param reason - Optional reason for status change
+   * @returns Boolean indicating success
+   * @throws Error if update fails
+   */
+  const handleUpdateAccountStatus = useCallback(
+    async (userId: string, status: AccountStatus, reason?: string) => {
+      try {
+        const { data, errors } = await updateAccountStatusMutation({
+          variables: { userId, status, reason },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.updateAccountStatus;
+      } catch (error) {
+        console.error("Account status update error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [updateAccountStatusMutation]
+  );
+
   return {
     handleLogin,
     handleRegister,
@@ -560,5 +646,8 @@ export const useAuthOperations = () => {
     handleSendVerificationEmail,
     handleVerifyEmail,
     handleAddAddress,
+    handleUpdateAddress,
+    handleSetDefaultAddress,
+    handleUpdateAccountStatus,
   };
 };

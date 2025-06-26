@@ -62,3 +62,63 @@ mutation CancelAdminInvitation($invitationId: ID!) {
 mutation CleanupExpiredInvitations {
   cleanupExpiredInvitations
 }
+
+mutation CreateCustomer($input: CreateUserInput!) {
+  createCustomer(input: $input) {
+    token
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+      createdAt
+      updatedAt
+    }
+    message
+  }
+}
+
+mutation CreateStaff($input: CreateUserInput!) {
+  createStaff(input: $input) {
+    token
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      addresses {
+        id
+        street
+        city
+        state
+        zipCode
+        country
+        isDefault
+        label
+      }
+      defaultAddress {
+        id
+        street
+        city
+        state
+        zipCode
+        country
+        isDefault
+        label
+      }
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+      createdAt
+      updatedAt
+    }
+    message
+  }
+}

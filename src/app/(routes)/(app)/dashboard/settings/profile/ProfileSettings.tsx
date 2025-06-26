@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import SettingsLayout from "../SettingsLayout";
 import styles from "./ProfileSettings.module.scss";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
-import { useAuthStore } from "@/store/slices/auth";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { selectUser } from "@/lib/redux";
 import { UpdateUserInput } from "@/graphql/api";
 
 export default function ProfileSettings() {
@@ -14,7 +15,7 @@ export default function ProfileSettings() {
   const [formError, setFormError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { handleUpdateProfile, handleGetCurrentUser } = useAuthOperations();
-  const currentUser = useAuthStore((state) => state.user);
+  const currentUser = useAppSelector(selectUser);
   const [email, setEmail] = useState("");
 
   const [formData, setFormData] = useState<UpdateUserInput>({

@@ -17,7 +17,8 @@ import {
 } from "@/graphql/api";
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
 import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
-import { useUIStore } from "@/store";
+import { useAppDispatch } from "@/lib/redux/hooks";
+import { openModal } from "@/lib/redux";
 import { Icon } from "@/components/ui/Icon/Icon";
 
 // Types

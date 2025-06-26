@@ -18,16 +18,22 @@ import {
   useAdminInvitationLazyQuery,
   CreateAdminInvitationInput,
   AcceptAdminInvitationInput,
+  useCreateCustomerMutation,
+  CreateUserInput,
+  useUpdateBookingPaymentStatusMutation,
+  PaymentStatus,
 } from "@/graphql/api";
 
 export const useAdminOperations = () => {
+  const [createCustomerMutation] = useCreateCustomerMutation();
   const [createAdminInvitationMutation] = useCreateAdminInvitationMutation();
   const [acceptAdminInvitationMutation] = useAcceptAdminInvitationMutation();
   const [resendAdminInvitationMutation] = useResendAdminInvitationMutation();
   const [cancelAdminInvitationMutation] = useCancelAdminInvitationMutation();
   const [cleanupExpiredInvitationsMutation] =
     useCleanupExpiredInvitationsMutation();
-
+  const [updateBookingPaymentStatusMutation] =
+    useUpdateBookingPaymentStatusMutation();
   // Use lazy query hooks with data destructuring
   const [getPendingAdminInvitations, { data: pendingInvitationsData }] =
     usePendingAdminInvitationsLazyQuery();
@@ -229,6 +235,70 @@ export const useAdminOperations = () => {
     [getAdminInvitation]
   );
 
+  /**
+   * Creates a new customer
+   * @param input - Customer creation input object
+   * @returns Created customer with token
+   * @throws Error if creation fails
+   */
+  const handleCreateCustomer = useCallback(
+    async (input: CreateUserInput) => {
+      try {
+        const { data, errors } = await createCustomerMutation({
+          variables: {
+            input: { ...input },
+          },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.createCustomer;
+      } catch (error) {
+        console.error("Customer creation error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [createCustomerMutation]
+  );
+
+  /**
+   * Updates the payment status of a booking
+   * @param bookingId - The ID of the booking to update
+   * @param paymentStatus - The new payment status
+   * @returns Updated booking
+   * @throws Error if update fails
+   */
+  const handleUpdateBookingPaymentStatus = useCallback(
+    async (bookingId: string, paymentStatus: PaymentStatus) => {
+      try {
+        const { data, errors } = await updateBookingPaymentStatusMutation({
+          variables: {
+            updateBookingPaymentStatusId: bookingId,
+            paymentStatus: paymentStatus,
+          },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.updateBookingPaymentStatus;
+      } catch (error) {
+        console.error("Booking payment status update error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [updateBookingPaymentStatusMutation]
+  );
+
   return {
     handleCreateAdminInvitation,
     handleAcceptAdminInvitation,
@@ -237,8 +307,10 @@ export const useAdminOperations = () => {
     handleCleanupExpiredInvitations,
     handleGetPendingAdminInvitations,
     handleGetAdminInvitation,
+    handleUpdateBookingPaymentStatus,
     // Return the current data
     currentPendingInvitations: pendingInvitationsData?.pendingAdminInvitations,
     currentAdminInvitation: adminInvitationData?.adminInvitation,
+    handleCreateCustomer,
   };
 };

@@ -19,10 +19,12 @@ export enum Routes {
   PAYMENTS = "/payments",
 
   // Admin routes
-  ADMIN_DASHBOARD = "/admin",
-  USERS = "/admin/users",
-  STAFF = "/admin/staff",
-
+  ADMIN_DASHBOARD = "/admin/dashboard",
+  ADMIN_USERS = "/admin/users",
+  ADMIN_STAFF = "/admin/staff",
+  ADMIN_SETUP = "/admin/setup",
+  ADMIN_CUSTOMERS = "/admin/customers",
+  ADMIN_CUSTOMERS_DETAILS = "/admin/customers/[id]",
   // Public routes
   HOME = "/",
   ABOUT = "/about",

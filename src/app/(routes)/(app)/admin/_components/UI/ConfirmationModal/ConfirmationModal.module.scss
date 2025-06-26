@@ -1,0 +1,102 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.confirmation_modal {
+  position: relative;
+  background: color('neutral', 'white');
+  border-radius: border-radius('lg');
+  box-shadow: map-get($box-shadows, 'xl');
+  max-width: 480px;
+  width: 90vw;
+  margin: auto;
+  overflow: hidden;
+  
+  &__backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(color('neutral', 'black'), 0.5);
+    backdrop-filter: blur(4px);
+    z-index: z-index('modal');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing('md');
+  }
+  
+  &__header {
+    padding: spacing('lg') spacing('lg') spacing('md');
+    text-align: center;
+    border-bottom: 1px solid color('neutral', 'lighter');
+  }
+  
+  &__icon {
+    font-size: map-get($font-sizes, '3xl');
+    margin-bottom: spacing('sm');
+    line-height: 1;
+  }
+  
+  &__title {
+    font-size: map-get($font-sizes, 'xl');
+    font-weight: map-get($font-weights, 'semibold');
+    color: color('neutral', 'black');
+    margin: 0;
+  }
+  
+  &__body {
+    padding: spacing('lg');
+  }
+  
+  &__message {
+    font-size: map-get($font-sizes, 'base');
+    color: color('neutral', 'dark');
+    line-height: map-get($line-heights, 'relaxed');
+    margin: 0;
+    text-align: center;
+  }
+  
+  &__footer {
+    padding: spacing('md') spacing('lg') spacing('lg');
+    display: flex;
+    gap: spacing('md');
+    justify-content: center;
+    
+    @include breakpoint-down('sm') {
+      flex-direction: column-reverse;
+    }
+  }
+  
+  // Variant styles
+  &--danger {
+    .confirmation_modal__icon {
+      color: color('error');
+    }
+    
+    .confirmation_modal__title {
+      color: color('error');
+    }
+  }
+  
+  &--warning {
+    .confirmation_modal__icon {
+      color: color('warning');
+    }
+    
+    .confirmation_modal__title {
+      color: color('warning');
+    }
+  }
+  
+  &--info {
+    .confirmation_modal__icon {
+      color: color('info');
+    }
+    
+    .confirmation_modal__title {
+      color: color('info');
+    }
+  }
+}

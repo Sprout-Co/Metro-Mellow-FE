@@ -1,0 +1,153 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.modal_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: map-get($z-index, "modal");
+  padding: map-get($spacing, "md");
+}
+
+.modal_content {
+  background-color: map-get(map-get($colors, "neutral"), "white");
+  border-radius: map-get($border-radius, "lg");
+  box-shadow: map-get($box-shadows, "xl");
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+.modal_header {
+  @include flex-between;
+  padding: map-get($spacing, "lg");
+  border-bottom: 1px solid map-get(map-get($colors, "neutral"), "lighter");
+}
+
+.modal_title {
+  @include heading-3;
+  color: map-get(map-get($colors, "neutral"), "black");
+  margin: 0;
+}
+
+.modal_close {
+  background: none;
+  border: none;
+  font-size: map-get($font-sizes, "2xl");
+  color: map-get(map-get($colors, "neutral"), "dark");
+  cursor: pointer;
+  padding: map-get($spacing, "xs");
+  line-height: 1;
+  transition: $transition-fast;
+
+  &:hover {
+    color: map-get(map-get($colors, "neutral"), "darker");
+  }
+}
+
+.modal_form {
+  padding: map-get($spacing, "lg");
+  overflow-y: auto;
+  max-height: calc(90vh - 140px);
+}
+
+.modal_error {
+  background-color: rgba(map-get($colors, "error"), 0.1);
+  color: map-get($colors, "error");
+  padding: map-get($spacing, "md");
+  border-radius: map-get($border-radius, "md");
+  margin-bottom: map-get($spacing, "lg");
+  border: 1px solid rgba(map-get($colors, "error"), 0.2);
+  font-size: map-get($font-sizes, "sm");
+}
+
+.form_row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: map-get($spacing, "md");
+  margin-bottom: map-get($spacing, "lg");
+
+  @include breakpoint-down("sm") {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form_group {
+  margin-bottom: map-get($spacing, "lg");
+}
+
+.form_label {
+  display: block;
+  font-weight: map-get($font-weights, "medium");
+  color: map-get(map-get($colors, "neutral"), "darker");
+  margin-bottom: map-get($spacing, "xs");
+  font-size: map-get($font-sizes, "sm");
+}
+
+.form_input,
+.form_select {
+  width: 100%;
+  padding: map-get($spacing, "sm") map-get($spacing, "md");
+  border: 1px solid map-get(map-get($colors, "neutral"), "medium");
+  border-radius: map-get($border-radius, "md");
+  font-size: map-get($font-sizes, "base");
+  transition: $transition-fast;
+  background-color: map-get(map-get($colors, "neutral"), "white");
+
+  &:focus {
+    outline: none;
+    border-color: map-get(map-get($colors, "primary"), "base");
+    box-shadow: 0 0 0 3px
+      rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+  }
+
+  &:disabled {
+    background-color: map-get(map-get($colors, "neutral"), "light");
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.form_select {
+  cursor: pointer;
+}
+
+.modal_footer {
+  @include flex-between;
+  padding-top: map-get($spacing, "lg");
+  border-top: 1px solid map-get(map-get($colors, "neutral"), "lighter");
+  gap: map-get($spacing, "md");
+}
+
+.modal_cancel_btn {
+  @include button-base;
+  background-color: transparent;
+  color: map-get(map-get($colors, "neutral"), "darker");
+  border: 1px solid map-get(map-get($colors, "neutral"), "medium");
+
+  &:hover {
+    background-color: map-get(map-get($colors, "neutral"), "light");
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.modal_submit_btn {
+  @include button-primary;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
