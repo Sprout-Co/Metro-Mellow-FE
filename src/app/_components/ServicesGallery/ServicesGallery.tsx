@@ -53,19 +53,20 @@ const serviceProfessionals = [
     position: 'bottom-center'
   },
   {
+    id: 'delivery2',
+    image: '/images/home/hero3.png',
+    role: 'Courier',
+    bgColor: 'primary',
+    size: 'medium',
+    position: 'bottom-center-right'
+  },
+  {
     id: 'support1',
     image: '/images/home/hero2.png',
     role: 'Support',
     bgColor: 'primary',
     size: 'medium',
     position: 'bottom-right'
-  },
-  {
-    id: 'laughing1',
-    image: '/images/home/hero2.png',
-    bgColor: 'primary',
-    size: 'small',
-    position: 'bottom-right-small'
   }
 ];
 
