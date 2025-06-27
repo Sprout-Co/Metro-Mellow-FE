@@ -60,9 +60,10 @@
     }
     
     @include breakpoint-down('sm') {
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(28, 1fr);
-      gap: spacing('sm');
+      display: flex;
+      flex-direction: column;
+      gap: spacing('md');
+      min-height: auto;
     }
   }
   
@@ -81,8 +82,7 @@
       }
       
       @include breakpoint-down('sm') {
-        grid-column: 1 / span 4;
-        grid-row: 1 / span 5;
+        // Remove grid positioning for mobile
       }
     }
     
@@ -102,8 +102,7 @@
       }
       
       @include breakpoint-down('sm') {
-        grid-column: 1 / span 4;
-        grid-row: 6 / span 5;
+        // Remove grid positioning for mobile
       }
     }
     
@@ -118,8 +117,7 @@
       }
       
       @include breakpoint-down('sm') {
-        grid-column: 1 / span 4;
-        grid-row: 11 / span 5;
+        // Remove grid positioning for mobile
       }
     }
     
@@ -139,8 +137,7 @@
       }
       
       @include breakpoint-down('sm') {
-        grid-column: 1 / span 4;
-        grid-row: 16 / span 5;
+        // Remove grid positioning for mobile
       }
     }
     
@@ -160,8 +157,7 @@
       }
       
       @include breakpoint-down('sm') {
-        grid-column: 1 / span 4;
-        grid-row: 21 / span 5;
+        // Remove grid positioning for mobile
       }
     }
     
@@ -181,8 +177,7 @@
       }
       
       @include breakpoint-down('sm') {
-        grid-column: 1 / span 4;
-        grid-row: 26 / span 5;
+        // Remove grid positioning for mobile
       }
     }
     
@@ -202,8 +197,7 @@
       }
       
       @include breakpoint-down('sm') {
-        grid-column: 1 / span 4;
-        grid-row: 31 / span 5;
+        // Remove grid positioning for mobile
       }
     }
     
@@ -223,8 +217,7 @@
       }
       
       @include breakpoint-down('sm') {
-        grid-column: 1 / span 4;
-        grid-row: 36 / span 5;
+        // Remove grid positioning for mobile
       }
     }
   }
@@ -241,6 +234,11 @@
     
     // Uniform card size - all cards are square (1:1 aspect ratio)
     aspect-ratio: 1 / 1;
+    
+    @include breakpoint-down('sm') {
+      height: 200px;
+      aspect-ratio: auto;
+    }
     
     // Card colors
     &--primary {
