@@ -197,16 +197,16 @@
     
     &--bottom-right {
       grid-column: 12 / span 1;
-      grid-row: 6 / span 5;
+      grid-row: 7 / span 6;
       
       @include breakpoint-down('lg') {
         grid-column: 8 / span 1;
-        grid-row: 11 / span 5;
+        grid-row: 7 / span 6;
       }
       
       @include breakpoint-down('md') {
         grid-column: 7 / span 1;
-        grid-row: 13 / span 4;
+        grid-row: 6 / span 4;
       }
       
       @include breakpoint-down('sm') {

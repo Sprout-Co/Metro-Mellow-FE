@@ -62,7 +62,7 @@ const serviceProfessionals = [
   },
   {
     id: 'support1',
-    image: '/images/cleaning/c2.jpeg',
+    image: '/images/cleaning/c3.jpeg',
     role: 'Support',
     bgColor: 'primary',
     size: 'medium',
