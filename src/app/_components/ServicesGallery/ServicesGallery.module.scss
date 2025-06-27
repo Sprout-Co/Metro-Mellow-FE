@@ -19,8 +19,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
     pointer-events: none;
+    z-index: 3;
   }
   
   // WhatsApp button
@@ -290,5 +290,64 @@
       right: spacing('sm');
       bottom: spacing('3xl');
     }
+  }
+}
+
+.servicesGallery__whatsappIcon {
+  position: absolute;
+  top: spacing('lg');
+  right: spacing('lg');
+  z-index: 4;
+  pointer-events: auto;
+  // Responsive tweak
+  @include breakpoint-down('md') {
+    top: spacing('md');
+    right: spacing('md');
+  }
+}
+
+.servicesGallery__starburst {
+  position: absolute;
+  right: 4vw;
+  top: 28%;
+  width: 91px;
+  height: 92px;
+  pointer-events: none;
+  z-index: 3;
+  @include breakpoint-down('md') {
+    right: 2vw;
+    top: 32%;
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.servicesGallery__dottedLineTop {
+  position: absolute;
+  left: 2vw;
+  right: 2vw;
+  top: 1vw;
+  width: calc(100% - 4vw);
+  height: 125px;
+  pointer-events: none;
+  z-index: 2;
+  @include breakpoint-down('md') {
+    top: 0.5vw;
+    height: 80px;
+  }
+}
+
+.servicesGallery__dottedArrowBottom {
+  position: absolute;
+  left: 0;
+  bottom: 2vw;
+  width: 166px;
+  height: 193px;
+  pointer-events: none;
+  z-index: 2;
+  @include breakpoint-down('md') {
+    width: 100px;
+    height: 120px;
+    bottom: 0.5vw;
   }
 }
