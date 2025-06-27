@@ -80,16 +80,16 @@ const serviceItems = [
 
 // Main navigation items
 const navItems = [
-    { label: 'Home', href: '/' },
-    { label: 'Bookings', href: '/bookings' },
+    { label: 'HOME', href: '/' },
+    { label: 'ABOUT', href: '/about' },
     {
-        label: 'Services',
+        label: 'SERVICES',
         href: '/services',
         hasDropdown: true,
         dropdownItems: serviceItems
     },
-    { label: 'About', href: '/about' },
-    { label: 'Contact', href: '/contact' },
+    { label: 'BOOKINGS', href: '/bookings' },
+    { label: 'CONTACT', href: '/contact' },
 ];
 
 export default function Navbar() {
@@ -154,13 +154,20 @@ export default function Navbar() {
             <div className={styles.navbar__container}>
                 {/* Brand Logo */}
                 <Link href="/" className={styles.navbar__brand}>
-                    <Image
+                    <div className={styles.navbar__logo}>
+                        {/* Logo placeholder - can be replaced with actual logo */}
+                   
+                        {/* <div className={styles.navbar__logoMark}>
+
+                        </div> */}
+                             <Image
                         src="/images/brand/cover.png"
                         alt="Urban Serve"
                         width={140}
                         height={40}
                         className={styles.navbar__logo}
                     />
+                    </div>
                 </Link>
 
                 {/* Main Navigation - Desktop */}
@@ -178,8 +185,7 @@ export default function Navbar() {
                                             onClick={() => toggleDropdown(item.label)}
                                             aria-expanded={activeDropdown === item.label}
                                         >
-                                            <span> {item.label}</span>
-
+                                            <span>{item.label}</span>
                                             <svg
                                                 className={styles.navbar__dropdownIcon}
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -212,7 +218,6 @@ export default function Navbar() {
                                                                 Explore our range of professional cleaning services
                                                             </p>
                                                         </div>
-
                                                         <div className={styles.navbar__dropdownGrid}>
                                                             {item.dropdownItems?.map((dropdownItem) => (
                                                                 <Link
@@ -220,38 +225,23 @@ export default function Navbar() {
                                                                     href={dropdownItem.href}
                                                                     className={styles.navbar__dropdownItem}
                                                                 >
+                                                                    <div className={styles.navbar__dropdownContent}>
+                                                                        <h4 className={styles.navbar__dropdownItemTitle}>
+                                                                            {dropdownItem.title}
+                                                                        </h4>
+                                                                        <p className={styles.navbar__dropdownItemDesc}>
+                                                                            {dropdownItem.description}
+                                                                        </p>
+                                                                    </div>
                                                                     <div className={styles.navbar__dropdownIcon}>
                                                                         {dropdownItem.icon}
-                                                                    </div>
-                                                                    <div className={styles.navbar__dropdownContent}>
-                                                                        <span className={styles.navbar__dropdownItemTitle}>
-                                                                            {dropdownItem.title}
-                                                                        </span>
-                                                                        <span className={styles.navbar__dropdownItemDesc}>
-                                                                            {dropdownItem.description}
-                                                                        </span>
                                                                     </div>
                                                                 </Link>
                                                             ))}
                                                         </div>
-
                                                         <div className={styles.navbar__dropdownFooter}>
-                                                            <Link href="/services" className={styles.navbar__dropdownLink}>
-                                                                View all services
-                                                                <svg
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    width="16"
-                                                                    height="16"
-                                                                    viewBox="0 0 24 24"
-                                                                    fill="none"
-                                                                    stroke="currentColor"
-                                                                    strokeWidth="2"
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"
-                                                                >
-                                                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                                    <polyline points="12 5 19 12 12 19"></polyline>
-                                                                </svg>
+                                                            <Link href="/services" className={styles.navbar__dropdownFooterLink}>
+                                                                View All Services →
                                                             </Link>
                                                         </div>
                                                     </div>
@@ -260,10 +250,7 @@ export default function Navbar() {
                                         </AnimatePresence>
                                     </>
                                 ) : (
-                                    <Link
-                                        href={item.href}
-                                        className={styles.navbar__link}
-                                    >
+                                    <Link href={item.href} className={styles.navbar__link}>
                                         {item.label}
                                     </Link>
                                 )}
@@ -272,28 +259,14 @@ export default function Navbar() {
                     </ul>
                 </nav>
 
-                {/* Call-to-Action Buttons */}
+                {/* Action Button */}
                 <div className={styles.navbar__actions}>
-                    <div className={styles.navbar__phone}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                        </svg>
-                        <a href="tel:+12345678900" className={styles.navbar__phoneLink}>
-                            (234) 567-8900
-                        </a>
-                    </div>
-
-                    <Button
-                        variant="primary"
-                        size="sm"
-                        href="/get-started"
-                        className={styles.navbar__button}
-                    >
-                        Get Started
-                    </Button>
+                    <Link href="/login" className={styles.navbar__loginBtn}>
+                        LOGIN
+                    </Link>
                 </div>
 
-                {/* Mobile Menu Button */}
+                {/* Mobile Menu Toggle */}
                 <button
                     className={styles.navbar__mobileToggle}
                     onClick={toggleMobileMenu}
@@ -316,13 +289,9 @@ export default function Navbar() {
                             transition={{ duration: 0.3, ease: "easeInOut" }}
                         >
                             <div className={styles.navbar__mobileHeader}>
-                                <Image
-                                    src="/images/cover.png"
-                                    alt="Urban Serve"
-                                    width={120}
-                                    height={35}
-                                    className={styles.navbar__mobileLogo}
-                                />
+                                <div className={styles.navbar__mobileLogo}>
+                                    <div className={styles.navbar__logoMark}></div>
+                                </div>
                                 <button
                                     className={styles.navbar__mobileClose}
                                     onClick={toggleMobileMenu}
@@ -373,16 +342,26 @@ export default function Navbar() {
                                                                 initial={{ height: 0, opacity: 0 }}
                                                                 animate={{ height: 'auto', opacity: 1 }}
                                                                 exit={{ height: 0, opacity: 0 }}
-                                                                transition={{ duration: 0.3 }}
+                                                                transition={{ duration: 0.3, ease: "easeInOut" }}
                                                             >
                                                                 <ul className={styles.navbar__mobileSubmenuList}>
                                                                     {item.dropdownItems?.map((dropdownItem) => (
                                                                         <li key={dropdownItem.href} className={styles.navbar__mobileSubmenuItem}>
-                                                                            <Link href={dropdownItem.href} className={styles.navbar__mobileSubmenuLink}>
-                                                                                <span className={styles.navbar__mobileSubmenuIcon}>
+                                                                            <Link
+                                                                                href={dropdownItem.href}
+                                                                                className={styles.navbar__mobileSubmenuLink}
+                                                                            >
+                                                                                <div className={styles.navbar__mobileSubmenuIcon}>
                                                                                     {dropdownItem.icon}
-                                                                                </span>
-                                                                                {dropdownItem.title}
+                                                                                </div>
+                                                                                <div>
+                                                                                    <div className={styles.navbar__mobileSubmenuTitle}>
+                                                                                        {dropdownItem.title}
+                                                                                    </div>
+                                                                                    <div className={styles.navbar__mobileSubmenuDesc}>
+                                                                                        {dropdownItem.description}
+                                                                                    </div>
+                                                                                </div>
                                                                             </Link>
                                                                         </li>
                                                                     ))}
@@ -392,10 +371,7 @@ export default function Navbar() {
                                                     </AnimatePresence>
                                                 </>
                                             ) : (
-                                                <Link
-                                                    href={item.href}
-                                                    className={styles.navbar__mobileLink}
-                                                >
+                                                <Link href={item.href} className={styles.navbar__mobileLink}>
                                                     {item.label}
                                                 </Link>
                                             )}
@@ -405,23 +381,9 @@ export default function Navbar() {
                             </nav>
 
                             <div className={styles.navbar__mobileFooter}>
-                                <Button
-                                    variant="primary"
-                                    size="md"
-                                    href="/get-started"
-                                    className={styles.navbar__mobileButton}
-                                >
-                                    Get Started
-                                </Button>
-
-                                <div className={styles.navbar__mobileContact}>
-                                    <a href="tel:+12345678900" className={styles.navbar__mobilePhone}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                                        </svg>
-                                        (234) 567-8900
-                                    </a>
-                                </div>
+                                <Link href="/login" className={styles.navbar__mobileButton}>
+                                    LOGIN
+                                </Link>
                             </div>
                         </motion.div>
                     )}
