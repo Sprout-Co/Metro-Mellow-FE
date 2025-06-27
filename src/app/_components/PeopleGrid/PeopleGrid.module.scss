@@ -1,0 +1,83 @@
+@import '../../styles/abstracts/variables';
+@import '../../styles/abstracts/functions';
+@import '../../styles/abstracts/mixins';
+
+.peopleGrid {
+  width: 100%;
+  background: color('neutral', 'lightest');
+  padding: spacing('5xl') 0;
+  position: relative;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: spacing('3xl');
+  max-width: 1200px;
+  margin: 0 auto;
+  z-index: 1;
+
+  @include breakpoint-down('md') {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+    gap: spacing('xl');
+  }
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: border-radius('2xl');
+  overflow: hidden;
+  min-height: 320px;
+  box-shadow: map-get($shadows, 'md');
+  transition: box-shadow 0.3s;
+
+  @include breakpoint-down('md') {
+    min-height: 200px;
+  }
+}
+
+.img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+// Background color classes using abstract variables
+.bg__accent {
+  background: color('accent', 'base');
+}
+.bg__primary {
+  background: color('primary', 'base');
+}
+.bg__secondary {
+  background: color('secondary', 'base');
+}
+.bg__accent-light {
+  background: color('accent', 'light');
+}
+.bg__primary-dark {
+  background: color('primary', 'dark');
+}
+
+// Decorative elements (placeholders)
+.decorTop {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  width: 80px;
+  height: 40px;
+  // Add SVG or background-image as needed
+}
+
+.decorBottom {
+  position: absolute;
+  bottom: 0;
+  right: 10%;
+  width: 80px;
+  height: 40px;
+  // Add SVG or background-image as needed
+} 
