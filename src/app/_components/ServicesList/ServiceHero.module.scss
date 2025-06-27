@@ -1,6 +1,8 @@
-@import 'src/styles/abstracts/variables';
-@import 'src/styles/abstracts/functions';
-@import 'src/styles/abstracts/mixins';
+// src/app/_components/Hero/Hero.module.scss
+@import '../../../styles/abstracts/variables';
+@import '../../../styles/abstracts/functions';
+@import '../../../styles/abstracts/mixins';
+@import '../../../styles/abstracts/animations';
 
 .service-hero {
   background-color: map-get(map-get($colors, "primary"), "base");
@@ -68,22 +70,23 @@
   }
 
   &__heading {
-    font-size: map-get($font-sizes, "5xl");
-    font-weight: map-get($font-weights, "bold");
+    font-size: font-size('h1') * 1;
+    font-weight: map-get($font-weights, 'bold');
     font-family: $font-family-heading;
-    line-height: map-get($line-heights, "tight");
-    color: map-get($colors, "neutral", "white");
-    margin-bottom: map-get($spacing, "2xl");
+    line-height: map-get($line-heights, 'tight');
+    color: color('neutral', 'white');
+    margin-bottom: spacing('3xl');
     letter-spacing: -0.065em;
-    @media (max-width: map-get($breakpoints, "xl")) {
-      font-size: map-get($font-sizes, "4xl");
+
+    @include breakpoint-down('xl') {
+      font-size: font-size('h2') * 1;
     }
-    @media (max-width: map-get($breakpoints, "md")) {
-      font-size: map-get($font-sizes, "3xl");
-      margin-bottom: map-get($spacing, "xl");
+    @include breakpoint-down('md') {
+      font-size: font-size('h3') * 1;
+      margin-bottom: spacing('xl');
     }
-    @media (max-width: map-get($breakpoints, "sm")) {
-      font-size: map-get($font-sizes, "2xl");
+    @include breakpoint-down('sm') {
+      font-size: font-size('h4') * 1;
     }
   }
 
@@ -92,7 +95,7 @@
     align-items: center;
     justify-content: center;
     font-family: $font-family-base;
-    font-size: map-get($font-sizes, "lg");
+    font-size: map-get($font-sizes, "xl");
     font-weight: map-get($font-weights, "bold");
     text-decoration: none;
     text-transform: uppercase;
@@ -104,8 +107,9 @@
     white-space: nowrap;
     user-select: none;
     outline: none;
+    min-width: 320px;
     height: 3rem;
-    padding: 1rem 2rem;
+    padding: 1rem map-get($spacing, "2xl");
     background-color: map-get($colors, "neutral", "white");
     color: map-get(map-get($colors, "primary"), "base");
     border-color: map-get($colors, "neutral", "white");
@@ -118,8 +122,9 @@
       box-shadow: 0 0 0 3px rgba(96, 108, 56, 0.1);
     }
     @media (max-width: map-get($breakpoints, "md")) {
+      min-width: 200px;
       height: 2.5rem;
-      padding: 0.75rem 1.5rem;
+      padding: 0.75rem map-get($spacing, "xl");
       font-size: map-get($font-sizes, "base");
     }
   }
@@ -192,10 +197,10 @@
   }
   &:nth-child(even) {
     align-self: flex-start;
-    margin-left: map-get($spacing, "7xl"); // large step, adjust as needed
+    margin-left: map-get($spacing, "10xl");
     margin-right: 0;
     @media (max-width: map-get($breakpoints, "md")) {
-      margin-left: map-get($spacing, "3xl");
+      margin-left: map-get($spacing, "md");
     }
   }
 }
