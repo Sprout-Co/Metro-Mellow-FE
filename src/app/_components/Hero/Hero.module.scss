@@ -9,10 +9,19 @@
   width: 100%;
   height: 100vh;
   min-height: spacing('9xl');
-  background-image: url('/images/home/hero5.png');
-  background-size: cover;
-  background-position: center;
   overflow: hidden;
+  
+  // Sliding background images
+  &__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;
+    background-position: unset;
+    background-repeat: no-repeat;
+  }
   
   // Dark overlay for better text contrast
   &__overlay {
@@ -121,6 +130,12 @@
     height: spacing('xs');
     background-color: color('neutral', 'medium');
     border-radius: border-radius('full');
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background-color: color('neutral', 'light');
+      transform: scale(1.1);
+    }
     
     &--active {
       background-color: color('accent', 'base');

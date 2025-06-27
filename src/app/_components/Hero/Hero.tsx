@@ -1,11 +1,30 @@
 "use client"
 
-import { FC } from 'react';
-import { motion } from 'framer-motion';
+import { FC, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import styles from './Hero.module.scss';
 
 const Hero: FC = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  
+  // Hero images array
+  const heroImages = [
+    '/images/home/hero4.png',
+    '/images/home/hero2.png',
+    '/images/home/hero3.png',
+    '/images/home/hero5.png',
+  ];
+
+  // Auto-slide effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [heroImages.length]);
+
   // Animation variants
   const textVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -52,8 +71,43 @@ const Hero: FC = () => {
     }),
   };
 
+  const slideVariants = {
+    enter: {
+      opacity: 0,
+    },
+    center: {
+      opacity: 1,
+    },
+    exit: {
+      opacity: 0,
+    },
+  };
+
+  const handleIndicatorClick = (index: number) => {
+    setCurrentSlide(index);
+  };
+
   return (
     <section className={styles.hero}>
+      {/* Sliding background images */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentSlide}
+          className={styles.hero__background}
+          style={{
+            backgroundImage: `url(${heroImages[currentSlide]})`,
+          }}
+          variants={slideVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{
+            duration: 1,
+            ease: "easeInOut",
+          }}
+        />
+      </AnimatePresence>
+      
       <div className={styles.hero__overlay}></div>
       <div className={styles.hero__container}>
         <div className={styles.hero__content}>
@@ -83,14 +137,16 @@ const Hero: FC = () => {
       </div>
       
       <div className={styles.hero__indicators}>
-        {[0, 1, 2, 3].map((_, index) => (
+        {heroImages.map((_, index) => (
           <motion.span 
             key={index}
-            className={`${styles.hero__indicator} ${index === 0 ? styles['hero__indicator--active'] : ''}`}
+            className={`${styles.hero__indicator} ${index === currentSlide ? styles['hero__indicator--active'] : ''}`}
             initial="hidden"
             animate="visible"
             custom={index}
             variants={indicatorVariants}
+            onClick={() => handleIndicatorClick(index)}
+            style={{ cursor: 'pointer' }}
           />
         ))}
       </div>
