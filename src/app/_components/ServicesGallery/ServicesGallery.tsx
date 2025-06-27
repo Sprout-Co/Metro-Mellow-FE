@@ -14,7 +14,7 @@ const serviceProfessionals = [
   },
   {
     id: 'cleaner1',
-    image: '/images/home/hero3.png',
+    image: '/images/home/hero2.png',
     role: 'Cleaner',
     bgColor: 'secondary',
     size: 'medium',
@@ -22,7 +22,7 @@ const serviceProfessionals = [
   },
   {
     id: 'chef2',
-    image: '/images/home/hero4.png',
+    image: '/images/home/hero2.png',
     role: 'Cook',
     bgColor: 'primary',
     size: 'medium',
@@ -30,7 +30,7 @@ const serviceProfessionals = [
   },
   {
     id: 'assistant1',
-    image: '/images/home/hero5.png',
+    image: '/images/home/hero2.png',
     role: 'Assistant',
     bgColor: 'secondary',
     size: 'large',
@@ -38,7 +38,7 @@ const serviceProfessionals = [
   },
   {
     id: 'delivery1',
-    image: '/images/home/hero6.png',
+    image: '/images/home/hero2.png',
     role: 'Delivery',
     bgColor: 'secondary',
     size: 'medium',
@@ -46,7 +46,7 @@ const serviceProfessionals = [
   },
   {
     id: 'support1',
-    image: '/images/cleaning/c1.jpeg',
+    image: '/images/home/hero2.png',
     role: 'Support',
     bgColor: 'primary',
     size: 'medium',
@@ -54,7 +54,7 @@ const serviceProfessionals = [
   },
   {
     id: 'laughing1',
-    image: '/images/cleaning/c2.jpeg',
+    image: '/images/home/hero2.png',
     bgColor: 'primary',
     size: 'small',
     position: 'bottom-right-small'
