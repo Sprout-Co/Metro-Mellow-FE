@@ -66,13 +66,14 @@
     }
   }
   
-  // Grid items positioning
+  // Grid items positioning - Updated to match exact specifications
   &__item {
     position: relative;
     
+    // Top Left Card (Chef in white)
     &--top-left {
       grid-column: 1 / span 3;
-      grid-row: 1 / span 5;
+      grid-row: 1 / span 4;
       
       @include breakpoint-down('md') {
         grid-column: 1 / span 3;
@@ -85,138 +86,150 @@
       }
     }
     
-    &--bottom-left {
-      grid-column: 1 / span 3;
-      grid-row: 7 / span 6;
-      
-      @include breakpoint-down('md') {
-        grid-column: 1 / span 2;
-        grid-row: 6 / span 4;
-      }
-      
-      @include breakpoint-down('sm') {
-        grid-column: 1 / span 4;
-        grid-row: 7 / span 4;
-      }
-    }
-    
-    &--middle-center {
-      grid-column: 5 / span 3;
-      grid-row: 3 / span 5;
-      
-      @include breakpoint-down('md') {
-        grid-column: 4 / span 3;
-        grid-row: 3 / span 4;
-      }
-      
-      @include breakpoint-down('sm') {
-        grid-column: 1 / span 4;
-        grid-row: 12 / span 5;
-      }
-    }
-    
-    &--middle-center-right {
-      grid-column: 8 / span 3;
-      grid-row: 3 / span 5;
+    // Top Right Card (Chef in white) - Adjusted to align with center cards
+    &--top-right {
+      grid-column: 10 / span 3;
+      grid-row: 1 / span 4;
       
       @include breakpoint-down('lg') {
-        grid-column: 7 / span 3;
-        grid-row: 3 / span 5;
-      }
-      
-      @include breakpoint-down('md') {
-        grid-column: 7 / span 3;
-        grid-row: 3 / span 4;
-      }
-      
-      @include breakpoint-down('sm') {
-        grid-column: 1 / span 4;
-        grid-row: 17 / span 5;
-      }
-    }
-    
-    &--middle-right {
-      grid-column: 11 / span 2;
-      grid-row: 1 / span 5;
-      
-      @include breakpoint-down('lg') {
-        grid-column: 5 / span 4;
-        grid-row: 1 / span 5;
+        grid-column: 6 / span 3;
+        grid-row: 1 / span 4;
       }
       
       @include breakpoint-down('md') {
         grid-column: 4 / span 3;
-        grid-row: 8 / span 4;
+        grid-row: 1 / span 4;
       }
       
       @include breakpoint-down('sm') {
         grid-column: 1 / span 4;
-        grid-row: 18 / span 5;
-      }
-    }
-    
-    &--bottom-center {
-      grid-column: 5 / span 3;
-      grid-row: 8 / span 5;
-      
-      @include breakpoint-down('lg') {
-        grid-column: 5 / span 3;
         grid-row: 6 / span 5;
+      }
+    }
+    
+    // Middle Left Card (Cleaner with yellow gloves)
+    &--middle-left {
+      grid-column: 1 / span 3;
+      grid-row: 5 / span 4;
+      
+      @include breakpoint-down('md') {
+        grid-column: 1 / span 3;
+        grid-row: 5 / span 4;
+      }
+      
+      @include breakpoint-down('sm') {
+        grid-column: 1 / span 4;
+        grid-row: 11 / span 5;
+      }
+    }
+    
+    // Middle Center-Left Card (Man cooking)
+    &--middle-center-left {
+      grid-column: 4 / span 3;
+      grid-row: 3 / span 4;
+      
+      @include breakpoint-down('lg') {
+        grid-column: 4 / span 3;
+        grid-row: 3 / span 4;
       }
       
       @include breakpoint-down('md') {
         grid-column: 1 / span 3;
-        grid-row: 11 / span 4;
+        grid-row: 9 / span 4;
       }
       
       @include breakpoint-down('sm') {
         grid-column: 1 / span 4;
-        grid-row: 24 / span 5;
+        grid-row: 16 / span 5;
       }
     }
     
-    &--bottom-center-right {
-      grid-column: 8 / span 3;
-      grid-row: 8 / span 5;
+    // Middle Center-Right Card (Woman in pink suit)
+    &--middle-center-right {
+      grid-column: 7 / span 3;
+      grid-row: 3 / span 4;
       
       @include breakpoint-down('lg') {
-        grid-column: 8 / span 3;
-        grid-row: 6 / span 5;
+        grid-column: 1 / span 3;
+        grid-row: 7 / span 4;
       }
       
       @include breakpoint-down('md') {
         grid-column: 4 / span 3;
-        grid-row: 11 / span 4;
+        grid-row: 9 / span 4;
       }
       
       @include breakpoint-down('sm') {
         grid-column: 1 / span 4;
-        grid-row: 29 / span 5;
+        grid-row: 21 / span 5;
       }
     }
     
-    &--bottom-right {
-      grid-column: 12 / span 1;
-      grid-row: 7 / span 6;
+    // Bottom Left Card (Man with laptop)
+    &--bottom-left {
+      grid-column: 4 / span 3;
+      grid-row: 7 / span 4;
       
       @include breakpoint-down('lg') {
-        grid-column: 8 / span 1;
-        grid-row: 7 / span 6;
+        grid-column: 4 / span 3;
+        grid-row: 7 / span 4;
       }
       
       @include breakpoint-down('md') {
-        grid-column: 7 / span 1;
-        grid-row: 6 / span 4;
+        grid-column: 1 / span 3;
+        grid-row: 13 / span 4;
       }
       
       @include breakpoint-down('sm') {
         grid-column: 1 / span 4;
-        grid-row: 34 / span 5;
+        grid-row: 26 / span 5;
+      }
+    }
+    
+    // Bottom Center Card (Woman laughing)
+    &--bottom-center {
+      grid-column: 7 / span 3;
+      grid-row: 7 / span 4;
+      
+      @include breakpoint-down('lg') {
+        grid-column: 6 / span 3;
+        grid-row: 7 / span 4;
+      }
+      
+      @include breakpoint-down('md') {
+        grid-column: 4 / span 3;
+        grid-row: 13 / span 4;
+      }
+      
+      @include breakpoint-down('sm') {
+        grid-column: 1 / span 4;
+        grid-row: 31 / span 5;
+      }
+    }
+    
+    // Bottom Right Card (Man on phone) - Positioned at far right
+    &--bottom-right {
+      grid-column: 10 / span 4;
+      grid-row: 5 / span 4;
+      
+      @include breakpoint-down('lg') {
+        grid-column: 6 / span 3;
+        grid-row: 7 / span 4;
+      }
+      
+      @include breakpoint-down('md') {
+        grid-column: 4 / span 3;
+        grid-row: 13 / span 4;
+      }
+      
+      @include breakpoint-down('sm') {
+        grid-column: 1 / span 4;
+        grid-row: 36 / span 5;
       }
     }
   }
   
-  // Card styles
+  // Card styles - Updated for uniform sizing
   &__card {
     position: relative;
     width: 100%;
@@ -225,7 +238,9 @@
     overflow: hidden;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     transition: $transition-base;
-    border: 1px solid green;
+    
+    // Uniform card size - all cards are square (1:1 aspect ratio)
+    aspect-ratio: 1 / 1;
     
     // Card colors
     &--primary {
@@ -238,23 +253,6 @@
     
     &--accent {
       background-color: color('accent', 'base');
-    }
-    
-    // Card sizes (aspect ratios)
-    &--large {
-      aspect-ratio: 1 / 1.2;
-      
-      @include breakpoint-down('md') {
-        aspect-ratio: 1 / 1.1;
-      }
-    }
-    
-    &--medium {
-      aspect-ratio: 1 / 1;
-    }
-    
-    &--small {
-      aspect-ratio: 1 / 0.8;
     }
     
     // Hover effect

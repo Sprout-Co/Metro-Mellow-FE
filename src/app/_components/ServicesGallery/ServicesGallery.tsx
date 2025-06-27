@@ -2,70 +2,62 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import styles from './ServicesGallery.module.scss';
 
-// Define the service professionals data
+// Define the service professionals data with exact positioning
 const serviceProfessionals = [
   {
     id: 'chef1',
     image: '/images/food/f1.png',
     role: 'Chef',
     bgColor: 'primary',
-    size: 'large',
     position: 'top-left'
+  },
+  {
+    id: 'chef2',
+    image: '/images/food/f10.jpeg',
+    role: 'Chef',
+    bgColor: 'primary',
+    position: 'top-right'
   },
   {
     id: 'cleaner1',
     image: '/images/cleaning/c1.jpeg',
     role: 'Cleaner',
     bgColor: 'secondary',
-    size: 'medium',
-    position: 'bottom-left'
+    position: 'middle-left'
   },
   {
-    id: 'chef2',
-    image: '/images/food/f10.jpeg',
+    id: 'cook1',
+    image: '/images/food/f3.jpeg',
     role: 'Cook',
     bgColor: 'primary',
-    size: 'medium',
-    position: 'middle-center'
-  },
-  {
-    id: 'chef3',
-    image: '/images/food/f3.jpeg',
-    role: 'Baker',
-    bgColor: 'secondary',
-    size: 'medium',
-    position: 'middle-center-right'
+    position: 'middle-center-left'
   },
   {
     id: 'assistant1',
     image: '/images/errand/e1.jpeg',
     role: 'Assistant',
     bgColor: 'secondary',
-    size: 'large',
-    position: 'middle-right'
-  },
-  {
-    id: 'delivery1',
-    image: '/images/food/f3.jpeg',
-    role: 'Delivery',
-    bgColor: 'secondary',
-    size: 'medium',
-    position: 'bottom-center'
-  },
-  {
-    id: 'delivery2',
-    image: '/images/food/f4.jpeg',
-    role: 'Courier',
-    bgColor: 'primary',
-    size: 'medium',
-    position: 'bottom-center-right'
+    position: 'middle-center-right'
   },
   {
     id: 'support1',
     image: '/images/cleaning/c3.jpeg',
     role: 'Support',
     bgColor: 'primary',
-    size: 'medium',
+    position: 'bottom-left'
+  },
+  {
+    id: 'delivery1',
+    image: '/images/food/f4.jpeg',
+    role: 'Delivery',
+    bgColor: 'secondary',
+    position: 'bottom-center'
+  },
+  {
+    id: 'delivery2',
+    image: '/images/food/f3.jpeg',
+    role: 'Courier',
+    bgColor: 'primary',
     position: 'bottom-right'
   }
 ];
@@ -79,7 +71,7 @@ const ServicesGallery = () => {
             key={idx}
             className={`${styles.servicesGallery__item} ${styles[`servicesGallery__item--${professional.position}`]}`}
           >
-            <div className={`${styles.servicesGallery__card} ${styles[`servicesGallery__card--${professional.bgColor}`]} ${styles[`servicesGallery__card--${professional.size}`]}`}>
+            <div className={`${styles.servicesGallery__card} ${styles[`servicesGallery__card--${professional.bgColor}`]}`}>
               <img 
                 src={professional.image} 
                 alt={`${professional.role} professional`} 
