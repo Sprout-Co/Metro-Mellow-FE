@@ -93,7 +93,7 @@
     &--active {
       .navbar__link {
         color: color("primary", "base");
-        font-weight: font-weight("semibold");
+        font-weight: font-weight("bold");
       }
     }
   }
@@ -110,8 +110,27 @@
     transition: all 0.3s ease;
     letter-spacing: letter-spacing("normal");
 
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: border-width("medium");
+      background-color: color("primary", "base");
+      border-radius: border-radius("pill");
+      opacity: 0;
+      transform: scaleX(0.5);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
     &:hover {
       color: color("primary", "dark");
+      &::after {
+        opacity: 1;
+        transform: scaleX(1);
+      }
     }
 
     &--hasDropdown {
@@ -128,6 +147,11 @@
         transform: rotate(180deg);
       }
     }
+  }
+
+  &__item--active .navbar__link::after {
+    opacity: 1;
+    transform: scaleX(1);
   }
 
   &__dropdownIcon {
