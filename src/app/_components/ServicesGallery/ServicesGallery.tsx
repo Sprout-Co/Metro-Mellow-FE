@@ -6,7 +6,7 @@ import styles from './ServicesGallery.module.scss';
 const serviceProfessionals = [
   {
     id: 'chef1',
-    image: '/images/home/hero2.png',
+    image: '/images/food/f1.png',
     role: 'Chef',
     bgColor: 'primary',
     size: 'large',
@@ -14,7 +14,7 @@ const serviceProfessionals = [
   },
   {
     id: 'cleaner1',
-    image: '/images/home/hero2.png',
+    image: '/images/cleaning/c1.jpeg',
     role: 'Cleaner',
     bgColor: 'secondary',
     size: 'medium',
@@ -22,7 +22,7 @@ const serviceProfessionals = [
   },
   {
     id: 'chef2',
-    image: '/images/home/hero3.png',
+    image: '/images/food/f10.jpeg',
     role: 'Cook',
     bgColor: 'primary',
     size: 'medium',
@@ -30,7 +30,7 @@ const serviceProfessionals = [
   },
   {
     id: 'chef3',
-    image: '/images/home/hero2.png',
+    image: '/images/food/f3.jpeg',
     role: 'Baker',
     bgColor: 'secondary',
     size: 'medium',
@@ -38,7 +38,7 @@ const serviceProfessionals = [
   },
   {
     id: 'assistant1',
-    image: '/images/home/hero2.png',
+    image: '/images/errand/e1.jpeg',
     role: 'Assistant',
     bgColor: 'secondary',
     size: 'large',
@@ -46,7 +46,7 @@ const serviceProfessionals = [
   },
   {
     id: 'delivery1',
-    image: '/images/home/hero2.png',
+    image: '/images/food/f3.jpeg',
     role: 'Delivery',
     bgColor: 'secondary',
     size: 'medium',
@@ -54,7 +54,7 @@ const serviceProfessionals = [
   },
   {
     id: 'delivery2',
-    image: '/images/home/hero3.png',
+    image: '/images/food/f4.jpeg',
     role: 'Courier',
     bgColor: 'primary',
     size: 'medium',
@@ -62,7 +62,7 @@ const serviceProfessionals = [
   },
   {
     id: 'support1',
-    image: '/images/home/hero2.png',
+    image: '/images/cleaning/c2.jpeg',
     role: 'Support',
     bgColor: 'primary',
     size: 'medium',
