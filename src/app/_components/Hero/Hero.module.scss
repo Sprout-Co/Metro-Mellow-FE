@@ -40,7 +40,7 @@
   }
   
   &__content {
-    max-width: 650px;
+    max-width: 655px;
     margin-left: spacing('lg');
     
     @include breakpoint-down('md') {
@@ -50,6 +50,7 @@
   
   &__title {
     @include heading-1;
+    font-size: font-size('h1') * 1.2;
     color: color('neutral', 'white');
     margin-bottom: spacing('lg');
     line-height: 1;
@@ -67,11 +68,11 @@
     }
     
     @include breakpoint-down('md') {
-      font-size: font-size('h3');
+      font-size: font-size('h2') * 1.2;
     }
     
     @include breakpoint-down('sm') {
-      font-size: font-size('h4');
+      font-size: font-size('h3') * 1.2;
     }
   }
   
