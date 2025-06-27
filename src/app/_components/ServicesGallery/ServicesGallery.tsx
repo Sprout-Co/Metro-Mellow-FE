@@ -22,11 +22,19 @@ const serviceProfessionals = [
   },
   {
     id: 'chef2',
-    image: '/images/home/hero2.png',
+    image: '/images/home/hero3.png',
     role: 'Cook',
     bgColor: 'primary',
     size: 'medium',
     position: 'middle-center'
+  },
+  {
+    id: 'chef3',
+    image: '/images/home/hero2.png',
+    role: 'Baker',
+    bgColor: 'secondary',
+    size: 'medium',
+    position: 'middle-center-right'
   },
   {
     id: 'assistant1',
