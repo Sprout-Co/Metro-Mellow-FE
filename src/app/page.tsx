@@ -1,6 +1,7 @@
 import React from "react";
 import Hero from "./_components/Hero/Hero";
 import ServicesGallery from "./_components/ServicesGallery/ServicesGallery";
+import ServiceHero from "./_components/ServicesList/ServiceHero";
 import Services from "./_components/Services/Services";
 import Testimonials from "./_components/Testimonials/Testimonials";
 import CTA from "./_components/CTA/CTA";
@@ -24,6 +25,7 @@ export default function Home() {
       <main>
         <Hero />
         <ServicesGallery />
+        <ServiceHero />
         <Services />
         {/* <ServiceCards /> */}
 

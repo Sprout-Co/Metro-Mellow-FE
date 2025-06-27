@@ -1,0 +1,218 @@
+@import 'src/styles/abstracts/variables';
+@import 'src/styles/abstracts/functions';
+@import 'src/styles/abstracts/mixins';
+
+.service-hero {
+  background-color: map-get(map-get($colors, "primary"), "base");
+  width: 100%;
+  min-height: 600px;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+
+  @media (max-width: map-get($breakpoints, "md")) {
+    min-height: 500px;
+  }
+
+  &__wrapper {
+    display: flex;
+    width: 100%;
+    max-width: map-get($container-max-widths, "3xl");
+    margin: 0 auto;
+    align-items: stretch;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 map-get($spacing, "3xl");
+    box-sizing: border-box;
+    position: relative;
+    @media (max-width: map-get($breakpoints, "lg")) {
+      flex-direction: column;
+      gap: map-get($spacing, "3xl");
+      padding: 0 map-get($spacing, "md");
+    }
+  }
+
+  &__left {
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    min-width: 0;
+    height: 100%;
+    min-height: 500px;
+    @media (max-width: map-get($breakpoints, "lg")) {
+      align-items: center;
+      min-height: unset;
+    }
+  }
+
+  &__cta-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-left: map-get($spacing, "2xl");
+    margin-right: map-get($spacing, "xl");
+    width: 100%;
+    max-width: 480px;
+    @media (max-width: map-get($breakpoints, "lg")) {
+      align-items: center;
+      text-align: center;
+      margin-left: 0;
+      margin-right: 0;
+      max-width: 100%;
+    }
+  }
+
+  &__heading {
+    font-size: map-get($font-sizes, "5xl");
+    font-weight: map-get($font-weights, "bold");
+    font-family: $font-family-heading;
+    line-height: map-get($line-heights, "tight");
+    color: map-get($colors, "neutral", "white");
+    margin-bottom: map-get($spacing, "2xl");
+    letter-spacing: -0.065em;
+    @media (max-width: map-get($breakpoints, "xl")) {
+      font-size: map-get($font-sizes, "4xl");
+    }
+    @media (max-width: map-get($breakpoints, "md")) {
+      font-size: map-get($font-sizes, "3xl");
+      margin-bottom: map-get($spacing, "xl");
+    }
+    @media (max-width: map-get($breakpoints, "sm")) {
+      font-size: map-get($font-sizes, "2xl");
+    }
+  }
+
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-family-base;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "bold");
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.115em;
+    border: 1px solid transparent;
+    border-radius: map-get($border-radius, "full");
+    cursor: pointer;
+    transition: $transition-base;
+    white-space: nowrap;
+    user-select: none;
+    outline: none;
+    height: 3rem;
+    padding: 1rem 2rem;
+    background-color: map-get($colors, "neutral", "white");
+    color: map-get(map-get($colors, "primary"), "base");
+    border-color: map-get($colors, "neutral", "white");
+    &:hover:not(:disabled) {
+      background-color: map-get($colors, "neutral", "light");
+      transform: translateY(-1px);
+      box-shadow: map-get($box-shadows, "md");
+    }
+    &:focus:not(:disabled) {
+      box-shadow: 0 0 0 3px rgba(96, 108, 56, 0.1);
+    }
+    @media (max-width: map-get($breakpoints, "md")) {
+      height: 2.5rem;
+      padding: 0.75rem 1.5rem;
+      font-size: map-get($font-sizes, "base");
+    }
+  }
+
+  &__right {
+    flex: 1 1 50%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    min-width: 0;
+    height: 100%;
+    position: relative;
+    @media (max-width: map-get($breakpoints, "lg")) {
+      justify-content: center;
+      margin-top: map-get($spacing, "xl");
+    }
+  }
+
+  &__badges {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    max-width: 700px;
+    gap: map-get($spacing, "xl");
+    margin-top: map-get($spacing, "2xl");
+    margin-bottom: map-get($spacing, "2xl");
+    @media (max-width: map-get($breakpoints, "md")) {
+      gap: map-get($spacing, "md");
+      margin-top: map-get($spacing, "xl");
+      margin-bottom: map-get($spacing, "xl");
+    }
+  }
+}
+
+.service-badge {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 340px;
+  max-width: 480px;
+  height: 70px;
+  padding: 0 map-get($spacing, "3xl");
+  transform: skewX(-25deg);
+  box-shadow: map-get($box-shadows, "md");
+  transition: box-shadow 0.2s, transform 0.2s;
+  z-index: 1;
+  @media (max-width: map-get($breakpoints, "md")) {
+    min-width: 180px;
+    max-width: 100%;
+    height: 44px;
+    padding: 0 map-get($spacing, "xl");
+  }
+  &__text {
+    font-size: map-get($font-sizes, "3xl");
+    font-weight: map-get($font-weights, "medium");
+    font-family: $font-family-base;
+    color: map-get($colors, "neutral", "black");
+    transform: skewX(25deg);
+    @media (max-width: map-get($breakpoints, "md")) {
+      font-size: map-get($font-sizes, "xl");
+    }
+  }
+  // Zigzag/stepped effect
+  &:nth-child(odd) {
+    align-self: flex-end;
+    margin-right: 0;
+    margin-left: 0;
+  }
+  &:nth-child(even) {
+    align-self: flex-start;
+    margin-left: map-get($spacing, "7xl"); // large step, adjust as needed
+    margin-right: 0;
+    @media (max-width: map-get($breakpoints, "md")) {
+      margin-left: map-get($spacing, "3xl");
+    }
+  }
+}
+
+// Service-specific colors (all from abstracts)
+.service-badge--laundromat {
+  background-color: map-get(map-get($colors, "accent"), "base");
+}
+.service-badge--cleaning {
+  background-color: map-get(map-get($colors, "secondary"), "light");
+}
+.service-badge--cooking {
+  background-color: map-get($colors, "neutral", "lighter");
+}
+.service-badge--errands {
+  background-color: map-get($colors, "neutral", "white");
+}
+.service-badge--pests {
+  background-color: map-get(map-get($colors, "accent"), "base");
+}
