@@ -34,6 +34,10 @@
       gap: map-get($spacing, "3xl");
       padding: 0 map-get($spacing, "md");
     }
+    @media (max-width: map-get($breakpoints, "sm")) {
+      padding: 0 spacing('xs');
+      gap: spacing('lg');
+    }
   }
 
   &__left {
@@ -49,23 +53,32 @@
       align-items: center;
       min-height: unset;
     }
+    @media (max-width: map-get($breakpoints, "sm")) {
+      align-items: center;
+      width: 100%;
+      min-height: unset;
+    }
   }
 
   &__cta-block {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    text-align: left;
     justify-content: center;
-    margin-left: map-get($spacing, "2xl");
-    margin-right: map-get($spacing, "xl");
+    margin-left: spacing('3xl');
+    margin-right: 0;
     width: 100%;
     max-width: 480px;
-    @media (max-width: map-get($breakpoints, "lg")) {
+    padding-top: spacing('2xl');
+    padding-bottom: spacing('2xl');
+    @media (max-width: map-get($breakpoints, 'lg')) {
       align-items: center;
       text-align: center;
       margin-left: 0;
-      margin-right: 0;
       max-width: 100%;
+      padding-top: spacing('xl');
+      padding-bottom: spacing('xl');
     }
   }
 
@@ -75,7 +88,7 @@
     font-family: $font-family-heading;
     line-height: map-get($line-heights, 'tight');
     color: color('neutral', 'white');
-    margin-bottom: spacing('3xl');
+    margin-bottom: spacing('xl');
     letter-spacing: -0.065em;
 
     @include breakpoint-down('xl') {
@@ -95,37 +108,41 @@
     align-items: center;
     justify-content: center;
     font-family: $font-family-base;
-    font-size: map-get($font-sizes, "xl");
-    font-weight: map-get($font-weights, "bold");
+    font-size: font-size('button') * 1.1;
+    font-weight: map-get($font-weights, 'bold');
     text-decoration: none;
     text-transform: uppercase;
-    letter-spacing: 0.115em;
+    letter-spacing: letter-spacing('wider');
     border: 1px solid transparent;
-    border-radius: map-get($border-radius, "full");
+    border-radius: map-get($border-radius, 'full');
     cursor: pointer;
     transition: $transition-base;
     white-space: nowrap;
     user-select: none;
     outline: none;
-    min-width: 320px;
+    min-width: 260px;
+    max-width: 340px;
+    width: auto;
     height: 3rem;
-    padding: 1rem map-get($spacing, "2xl");
-    background-color: map-get($colors, "neutral", "white");
-    color: map-get(map-get($colors, "primary"), "base");
-    border-color: map-get($colors, "neutral", "white");
-    &:hover:not(:disabled) {
-      background-color: map-get($colors, "neutral", "light");
-      transform: translateY(-1px);
-      box-shadow: map-get($box-shadows, "md");
-    }
-    &:focus:not(:disabled) {
-      box-shadow: 0 0 0 3px rgba(96, 108, 56, 0.1);
-    }
-    @media (max-width: map-get($breakpoints, "md")) {
-      min-width: 200px;
+    padding: spacing('md') spacing('3xl');
+    background-color: color('neutral', 'white');
+    color: map-get(map-get($colors, 'primary'), 'base');
+    border-color: color('neutral', 'white');
+    margin-top: 0;
+    @media (max-width: map-get($breakpoints, 'md')) {
+      min-width: 180px;
+      max-width: 100%;
       height: 2.5rem;
-      padding: 0.75rem map-get($spacing, "xl");
-      font-size: map-get($font-sizes, "base");
+      padding: spacing('sm') spacing('xl');
+      font-size: font-size('button');
+    }
+    @media (max-width: map-get($breakpoints, 'sm')) {
+      min-width: 0;
+      width: 100%;
+      max-width: 100%;
+      height: 2.25rem;
+      padding: spacing('xs') spacing('md');
+      font-size: font-size('small');
     }
   }
 
@@ -140,6 +157,10 @@
     @media (max-width: map-get($breakpoints, "lg")) {
       justify-content: center;
       margin-top: map-get($spacing, "xl");
+    }
+    @media (max-width: map-get($breakpoints, "sm")) {
+      width: 100%;
+      margin-top: spacing('md');
     }
   }
 
@@ -157,6 +178,11 @@
       gap: map-get($spacing, "md");
       margin-top: map-get($spacing, "xl");
       margin-bottom: map-get($spacing, "xl");
+    }
+    @media (max-width: map-get($breakpoints, "sm")) {
+      gap: spacing('xs');
+      margin-top: spacing('md');
+      margin-bottom: spacing('md');
     }
   }
 }
@@ -179,6 +205,12 @@
     height: 44px;
     padding: 0 map-get($spacing, "xl");
   }
+  @media (max-width: map-get($breakpoints, "sm")) {
+    min-width: 120px;
+    max-width: 100%;
+    height: 32px;
+    padding: 0 spacing('sm');
+  }
   &__text {
     font-size: map-get($font-sizes, "3xl");
     font-weight: map-get($font-weights, "medium");
@@ -187,6 +219,9 @@
     transform: skewX(25deg);
     @media (max-width: map-get($breakpoints, "md")) {
       font-size: map-get($font-sizes, "xl");
+    }
+    @media (max-width: map-get($breakpoints, "sm")) {
+      font-size: map-get($font-sizes, 'small');
     }
   }
   // Zigzag/stepped effect
@@ -201,6 +236,9 @@
     margin-right: 0;
     @media (max-width: map-get($breakpoints, "md")) {
       margin-left: map-get($spacing, "md");
+    }
+    @media (max-width: map-get($breakpoints, "sm")) {
+      margin-left: spacing('xs');
     }
   }
 }
