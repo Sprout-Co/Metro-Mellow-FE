@@ -11,7 +11,7 @@ const Hero: FC = () => {
   // Hero images array
   const heroImages = [
     '/images/home/hero4.png',
-    '/images/home/hero2.png',
+    '/images/home/hero6.png',
     '/images/home/hero3.png',
     '/images/home/hero5.png',
   ];
