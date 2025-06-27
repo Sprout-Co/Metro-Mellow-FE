@@ -1,0 +1,276 @@
+// src/app/_components/ServicesGallery/ServicesGallery.module.scss
+@import '../../../styles/abstracts/variables';
+@import '../../../styles/abstracts/functions';
+@import '../../../styles/abstracts/mixins';
+@import '../../../styles/abstracts/animations';
+
+.servicesGallery {
+  position: relative;
+  width: 100%;
+  background-color: color('accent', 'lighter');
+  padding: spacing('4xl') spacing('lg');
+  overflow: hidden;
+  min-height: 100vh;
+  
+  // Decorative elements
+  &__decorations {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+  
+  // WhatsApp button
+  &__whatsapp {
+    position: absolute;
+    top: spacing('lg');
+    right: spacing('lg');
+    z-index: z-index('docked');
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    
+    @include breakpoint-down('md') {
+      top: spacing('md');
+      right: spacing('md');
+    }
+  }
+  
+  // Main grid layout
+  &__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(12, 1fr);
+    gap: spacing('md');
+    max-width: container-width('xl');
+    margin: 0 auto;
+    min-height: 80vh;
+    z-index: 2;
+    
+    @include breakpoint-down('lg') {
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(16, 1fr);
+    }
+    
+    @include breakpoint-down('md') {
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(20, 1fr);
+    }
+    
+    @include breakpoint-down('sm') {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(28, 1fr);
+      gap: spacing('sm');
+    }
+  }
+  
+  // Grid items positioning
+  &__item {
+    position: relative;
+    
+    &--top-left {
+      grid-column: 1 / span 4;
+      grid-row: 1 / span 5;
+      
+      @include breakpoint-down('md') {
+        grid-column: 1 / span 3;
+        grid-row: 1 / span 4;
+      }
+      
+      @include breakpoint-down('sm') {
+        grid-column: 1 / span 4;
+        grid-row: 1 / span 5;
+      }
+    }
+    
+    &--bottom-left {
+      grid-column: 1 / span 3;
+      grid-row: 7 / span 6;
+      
+      @include breakpoint-down('md') {
+        grid-column: 1 / span 2;
+        grid-row: 6 / span 4;
+      }
+      
+      @include breakpoint-down('sm') {
+        grid-column: 1 / span 4;
+        grid-row: 7 / span 4;
+      }
+    }
+    
+    &--middle-center {
+      grid-column: 5 / span 4;
+      grid-row: 3 / span 5;
+      
+      @include breakpoint-down('md') {
+        grid-column: 4 / span 3;
+        grid-row: 3 / span 4;
+      }
+      
+      @include breakpoint-down('sm') {
+        grid-column: 1 / span 4;
+        grid-row: 12 / span 5;
+      }
+    }
+    
+    &--middle-right {
+      grid-column: 9 / span 4;
+      grid-row: 1 / span 5;
+      
+      @include breakpoint-down('lg') {
+        grid-column: 5 / span 4;
+        grid-row: 1 / span 5;
+      }
+      
+      @include breakpoint-down('md') {
+        grid-column: 4 / span 3;
+        grid-row: 8 / span 4;
+      }
+      
+      @include breakpoint-down('sm') {
+        grid-column: 1 / span 4;
+        grid-row: 18 / span 5;
+      }
+    }
+    
+    &--bottom-center {
+      grid-column: 5 / span 4;
+      grid-row: 8 / span 5;
+      
+      @include breakpoint-down('lg') {
+        grid-column: 5 / span 4;
+        grid-row: 6 / span 5;
+      }
+      
+      @include breakpoint-down('md') {
+        grid-column: 1 / span 3;
+        grid-row: 11 / span 4;
+      }
+      
+      @include breakpoint-down('sm') {
+        grid-column: 1 / span 4;
+        grid-row: 24 / span 5;
+      }
+    }
+    
+    &--bottom-right {
+      grid-column: 9 / span 3;
+      grid-row: 6 / span 5;
+      
+      @include breakpoint-down('lg') {
+        grid-column: 5 / span 4;
+        grid-row: 11 / span 5;
+      }
+      
+      @include breakpoint-down('md') {
+        grid-column: 4 / span 3;
+        grid-row: 13 / span 4;
+      }
+      
+      @include breakpoint-down('sm') {
+        grid-column: 1 / span 4;
+        grid-row: 30 / span 5;
+      }
+    }
+    
+    &--bottom-right-small {
+      grid-column: 10 / span 2;
+      grid-row: 11 / span 2;
+      
+      @include breakpoint-down('lg') {
+        grid-column: 7 / span 2;
+        grid-row: 8 / span 2;
+      }
+      
+      @include breakpoint-down('md') {
+        grid-column: 5 / span 2;
+        grid-row: 19 / span 2;
+      }
+      
+      @include breakpoint-down('sm') {
+        grid-column: 2 / span 2;
+        grid-row: 35 / span 2;
+      }
+    }
+  }
+  
+  // Card styles
+  &__card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: border-radius('xl');
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: $transition-base;
+    border: 1px solid green;
+    
+    // Card colors
+    &--primary {
+      background-color: color('primary', 'base');
+    }
+    
+    &--secondary {
+      background-color: color('secondary', 'base');
+    }
+    
+    &--accent {
+      background-color: color('accent', 'base');
+    }
+    
+    // Card sizes (aspect ratios)
+    &--large {
+      aspect-ratio: 1 / 1.2;
+      
+      @include breakpoint-down('md') {
+        aspect-ratio: 1 / 1.1;
+      }
+    }
+    
+    &--medium {
+      aspect-ratio: 1 / 1;
+    }
+    
+    &--small {
+      aspect-ratio: 1 / 0.8;
+    }
+    
+    // Hover effect
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+  }
+  
+  // Image styles
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+  
+  // Decorative star
+  &__star {
+    position: absolute;
+    right: spacing('xl');
+    bottom: spacing('6xl');
+    z-index: 1;
+    
+    @include breakpoint-down('lg') {
+      right: spacing('md');
+      bottom: spacing('4xl');
+    }
+    
+    @include breakpoint-down('md') {
+      right: spacing('sm');
+      bottom: spacing('3xl');
+    }
+  }
+}

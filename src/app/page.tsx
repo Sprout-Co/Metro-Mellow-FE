@@ -1,5 +1,6 @@
 import React from "react";
 import Hero from "./_components/Hero/Hero";
+import ServicesGallery from "./_components/ServicesGallery/ServicesGallery";
 import Services from "./_components/Services/Services";
 import Testimonials from "./_components/Testimonials/Testimonials";
 import CTA from "./_components/CTA/CTA";
@@ -22,6 +23,7 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <ServicesGallery />
         <Services />
         {/* <ServiceCards /> */}
 
