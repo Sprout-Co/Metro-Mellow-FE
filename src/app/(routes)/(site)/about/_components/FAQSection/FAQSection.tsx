@@ -49,10 +49,10 @@ const FAQSection: React.FC = () => {
         <div className={styles.faq__content}>
           <div className={styles.faq__heading}>
             <h2 className={styles.faq__title}>
-              Questions?<br />
-              Here are<br />
-              some<br />
-              answers
+              <span className={styles['faq__title-line']}>Questions?</span><br />
+              <span className={styles['faq__title-line']}>Here are</span><br />
+              <span className={styles['faq__title-line']}>some</span><br />
+              <span className={styles['faq__title-line']}>answers</span>
             </h2>
           </div>
           
