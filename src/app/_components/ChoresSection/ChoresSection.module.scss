@@ -1,41 +1,47 @@
 @import '../../../styles/abstracts/variables';
 @import '../../../styles/abstracts/functions';
 @import '../../../styles/abstracts/mixins';
+@import '../../../styles/abstracts/animations';
 
 .chores-section {
   width: 100%;
   background: color('neutral', 'white');
   padding: spacing('4xl') 0;
   text-align: center;
+  overflow: hidden;
+  color: color('neutral', 'black');
 
   &__container {
-    max-width: map-get($container-max-widths, '3xl');
+    max-width: map-get($container-max-widths, '2xl');
     margin: 0 auto;
     padding: 0 spacing('md');
   }
 
   &__heading {
-    font-size: font-size('h1') * 1;
+    font-size: font-size('h2');
     font-family: $font-family-heading;
     font-weight: map-get($font-weights, 'bold');
-    color: color('neutral', 'darkest');
-    margin-bottom: spacing('lg');
-    line-height: 1.1;
+    color: color('neutral', 'black');
+    margin-bottom: spacing('md');
+    line-height: map-get($line-heights, 'tight');
+    
     @include breakpoint-down('md') {
-      font-size: font-size('h2') * 1.1;
+      font-size: font-size('h3');
     }
+    
     @include breakpoint-down('sm') {
-      font-size: font-size('h3') * 1.1;
+      font-size: font-size('h4');
     }
   }
 
   &__subheading {
     font-size: font-size('body-1');
-    color: color('neutral', 'darkest');
+    color: color('neutral', 'black');
     margin-bottom: spacing('2xl');
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
+    
     @include breakpoint-down('md') {
       font-size: font-size('body-2');
       max-width: 100%;
@@ -45,16 +51,18 @@
   &__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: spacing('xl');
+    gap: spacing('lg');
     justify-content: center;
     margin-top: spacing('xl');
+    
     @include breakpoint-down('md') {
       grid-template-columns: repeat(2, 1fr);
-      gap: spacing('lg');
+      gap: spacing('md');
     }
+    
     @include breakpoint-down('sm') {
       grid-template-columns: 1fr;
-      gap: spacing('md');
+      gap: spacing('sm');
     }
   }
 }
@@ -65,33 +73,49 @@
   align-items: flex-start;
   border-radius: border-radius('xl');
   box-shadow: map-get($shadows, 'md');
-  padding: spacing('2xl') spacing('xl') spacing('xl') spacing('xl');
-  min-height: 340px;
+  padding: spacing('2xl') spacing('xl');
+  min-height: 320px;
   background: color('neutral', 'lightest');
   position: relative;
+  text-align: left;
+  transition: $transition-base;
+  
   @include breakpoint-down('md') {
-    min-height: 260px;
+    min-height: 280px;
     padding: spacing('xl') spacing('md');
   }
+  
   @include breakpoint-down('sm') {
-    min-height: 200px;
-    padding: spacing('lg') spacing('sm');
+    min-height: 240px;
+    padding: spacing('lg') spacing('md');
     align-items: center;
     text-align: center;
   }
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: map-get($shadows, 'lg');
+  }
 
   &__icon {
-    width: 64px;
-    height: 64px;
+    width: 72px;
+    height: 72px;
     margin-bottom: spacing('lg');
+    
     img {
       width: 100%;
       height: 100%;
       object-fit: contain;
     }
+    
+    @include breakpoint-down('md') {
+      width: 60px;
+      height: 60px;
+    }
+    
     @include breakpoint-down('sm') {
-      width: 48px;
-      height: 48px;
+      width: 50px;
+      height: 50px;
       margin-bottom: spacing('md');
     }
   }
@@ -101,23 +125,30 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    
     @include breakpoint-down('sm') {
       align-items: center;
     }
   }
 
   &__title {
-    font-size: font-size('h4');
+    font-size: font-size('h5');
     font-family: $font-family-heading;
     font-weight: map-get($font-weights, 'bold');
-    color: color('neutral', 'darkest');
+    color: color('neutral', 'black');
     margin-bottom: spacing('sm');
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('h6');
+    }
   }
 
   &__desc {
     font-size: font-size('body-2');
-    color: color('neutral', 'darkest');
+    color: color('neutral', 'black');
     margin-bottom: spacing('lg');
+    line-height: map-get($line-heights, 'normal');
+    
     @include breakpoint-down('sm') {
       margin-bottom: spacing('md');
     }
@@ -133,18 +164,20 @@
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: letter-spacing('wider');
-    border: border-width('thin') solid color('primary', 'base');
+    border: border-width('thin') solid color('neutral', 'black');
     border-radius: border-radius('full');
     cursor: pointer;
     transition: $transition-base;
     background: color('neutral', 'white');
-    color: color('primary', 'base');
+    color: color('neutral', 'black');
     padding: spacing('xs') spacing('lg');
-    box-shadow: none;
+    margin-top: auto;
+    
     &:hover {
-      background: color('primary', 'base');
+      background: color('neutral', 'black');
       color: color('neutral', 'white');
     }
+    
     @include breakpoint-down('sm') {
       width: 100%;
       padding: spacing('xs') spacing('md');
@@ -153,10 +186,11 @@
   }
 
   &__btn--secondary {
-    border-color: color('neutral', 'darkest');
-    color: color('neutral', 'darkest');
+    border-color: color('neutral', 'black');
+    color: color('neutral', 'black');
+    
     &:hover {
-      background: color('neutral', 'darkest');
+      background: color('neutral', 'black');
       color: color('neutral', 'white');
     }
   }
@@ -166,15 +200,40 @@
 .chores-card--errand {
   background: color('accent', 'light');
 }
+
 .chores-card--food {
   background: color('primary', 'lighter');
 }
+
 .chores-card--pest {
   background: color('secondary', 'light');
 }
+
 .chores-card--cleaning {
   background: color('primary', 'light');
 }
+
 .chores-card--laundry {
   background: color('neutral', 'light');
-} 
+}
+
+// Add a subtle sparkle decoration near the cards
+.chores-section__container {
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 15%;
+    right: 5%;
+    width: 40px;
+    height: 40px;
+    background-image: url('/images/sparkle.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    
+    @include breakpoint-down('md') {
+      display: none;
+    }
+  }
+}

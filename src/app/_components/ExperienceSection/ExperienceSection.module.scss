@@ -6,6 +6,7 @@
   width: 100%;
   background: color('neutral', 'white');
   padding: spacing('4xl') 0;
+  color: color('neutral', 'black');
 
   &__container {
     display: flex;
@@ -99,7 +100,7 @@
     font-size: font-size('h1') * 1.1;
     font-family: $font-family-heading;
     font-weight: map-get($font-weights, 'bold');
-    color: color('neutral', 'darkest');
+    color: color('neutral', 'black');
     margin-bottom: spacing('lg');
     line-height: 1.05;
     @include breakpoint-down('md') {
@@ -112,7 +113,7 @@
 
   &__subtext {
     font-size: font-size('body-1');
-    color: color('neutral', 'darkest');
+    color: color('neutral', 'black');
     margin-bottom: spacing('xl');
     max-width: 420px;
     @include breakpoint-down('md') {
@@ -135,12 +136,14 @@
     cursor: pointer;
     transition: $transition-base;
     background: color('primary', 'base');
-    color: color('neutral', 'white');
+    color: color('neutral', 'black');
     min-width: 180px;
     padding: spacing('sm') spacing('2xl');
     box-shadow: map-get($shadows, 'md');
+    border-color: color('neutral', 'black');
     &:hover {
-      background: color('primary', 'dark');
+      background: color('neutral', 'black');
+      color: color('neutral', 'white');
     }
     @include breakpoint-down('sm') {
       width: 100%;
