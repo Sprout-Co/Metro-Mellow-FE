@@ -9,13 +9,13 @@
   width: 100vw;
   min-width: 0;
   z-index: 1000;
-  padding: spacing("lg") 0;
+  padding: spacing("md") 0;
   background-color: color("neutral", "white");
   border-bottom: 1px solid rgba(color("neutral", "lighter"), 0.2);
   transition: all 0.3s ease-in-out;
 
   &--scrolled {
-    padding: spacing("md") 0;
+    padding: spacing("sm") 0;
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
     background-color: rgba(color("neutral", "white"), 0.98);
     backdrop-filter: blur(10px);
@@ -44,8 +44,8 @@
   }
 
   &__logoMark {
-    width: 160px;
-    height: 40px;
+    width: 140px;
+    height: 35px;
     background-color: color("primary", "base");
     border-radius: border-radius("sm");
     transition: transform 0.3s ease;
@@ -60,7 +60,7 @@
       transform: translate(-50%, -50%);
       color: color("neutral", "white");
       font-weight: font-weight("bold");
-      font-size: font-size("small");
+      font-size: font-size("caption");
       letter-spacing: letter-spacing("wide");
     }
   }
@@ -101,11 +101,11 @@
   &__link {
     display: flex;
     align-items: center;
-    font-size: font-size("body-2");
+    font-size: font-size("small");
     font-weight: font-weight("bold");
     color: color("primary", "base");
     text-decoration: none;
-    padding: spacing("sm") 0;
+    padding: spacing("xs") 0;
     position: relative;
     transition: all 0.3s ease;
     letter-spacing: letter-spacing("normal");
@@ -196,13 +196,13 @@
 
   &__dropdownTitle {
     font-weight: font-weight("semibold");
-    font-size: font-size("title");
+    font-size: font-size("body-1");
     color: color("neutral", "darkest");
     margin-bottom: spacing("xs");
   }
 
   &__dropdownDesc {
-    font-size: font-size("body-2");
+    font-size: font-size("small");
     color: color("neutral", "dark");
     margin: 0;
   }
@@ -243,7 +243,7 @@
 
   &__dropdownItemTitle {
     font-weight: font-weight("medium");
-    font-size: font-size("body-1");
+    font-size: font-size("body-2");
     color: color("neutral", "darkest");
     margin-bottom: spacing("xs");
     transition: color 0.3s ease;
@@ -280,7 +280,7 @@
     font-weight: font-weight("medium");
     color: color("primary", "base");
     text-decoration: none;
-    font-size: font-size("body-2");
+    font-size: font-size("small");
     transition: color 0.3s ease;
 
     &:hover {
@@ -303,10 +303,10 @@
     background-color: color("primary", "base");
     color: color("neutral", "white");
     text-decoration: none;
-    padding: spacing("md") spacing("xl");
+    padding: spacing("sm") spacing("lg");
     border-radius: border-radius("full");
     font-weight: font-weight("semibold");
-    font-size: font-size("body-2");
+    font-size: font-size("small");
     letter-spacing: letter-spacing("wide");
     transition: all 0.3s ease;
     border: 2px solid color("primary", "base");
@@ -382,14 +382,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: spacing("xl");
+    padding: spacing("lg");
     border-bottom: 1px solid color("neutral", "lighter");
   }
 
   &__mobileLogo {
     .navbar__logoMark {
-      width: 120px;
-      height: 30px;
+      width: 100px;
+      height: 25px;
     }
   }
 
@@ -415,7 +415,7 @@
   &__mobileNav {
     flex: 1;
     overflow-y: auto;
-    padding: spacing("lg");
+    padding: spacing("md");
   }
 
   &__mobileList {
@@ -440,11 +440,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: font-size("body-1");
+    font-size: font-size("body-2");
     font-weight: font-weight("medium");
     color: color("neutral", "darkest");
     text-decoration: none;
-    padding: spacing("lg") spacing("sm");
+    padding: spacing("md") spacing("sm");
     transition: color 0.3s ease;
 
     &:hover {
@@ -472,7 +472,7 @@
   &__mobileSubmenuList {
     list-style: none;
     margin: 0;
-    padding: spacing("md");
+    padding: spacing("sm");
     background-color: rgba(color("neutral", "lighter"), 0.3);
     border-radius: border-radius("lg");
   }
@@ -488,7 +488,7 @@
   &__mobileSubmenuLink {
     display: flex;
     align-items: flex-start;
-    font-size: font-size("body-2");
+    font-size: font-size("small");
     color: color("neutral", "dark");
     text-decoration: none;
     transition: color 0.3s ease;
@@ -515,16 +515,17 @@
     font-weight: font-weight("medium");
     color: color("neutral", "darkest");
     margin-bottom: spacing("xs");
+    font-size: font-size("body-2");
   }
 
   &__mobileSubmenuDesc {
-    font-size: font-size("small");
+    font-size: font-size("caption");
     color: color("neutral", "dark");
   }
 
   &__mobileFooter {
     border-top: 1px solid color("neutral", "lighter");
-    padding: spacing("xl");
+    padding: spacing("lg");
   }
 
   &__mobileButton {
@@ -533,10 +534,10 @@
     background-color: color("primary", "base");
     color: color("neutral", "white");
     text-decoration: none;
-    padding: spacing("lg");
+    padding: spacing("md");
     border-radius: border-radius("lg");
     font-weight: font-weight("semibold");
-    font-size: font-size("body-1");
+    font-size: font-size("body-2");
     text-align: center;
     letter-spacing: letter-spacing("wide");
     transition: all 0.3s ease;
