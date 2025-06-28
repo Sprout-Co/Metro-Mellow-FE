@@ -9,6 +9,7 @@ import StorySection from './_components/StorySection/StorySection';
 import VideoSection from './_components/VideoSection/VideoSection';
 import ImpactSection from './_components/ImpactSection/ImpactSection';
 import MagicHandsSection from './_components/MagicHandsSection/MagicHandsSection';
+import FAQSection from './_components/FAQSection/FAQSection';
 
 export const metadata: Metadata = {
   title: 'About Metro Mellow | Our Story and Values',
@@ -22,6 +23,7 @@ export default function AboutPage() {
       <VideoSection />
       <ImpactSection />
       <MagicHandsSection />
+      <FAQSection />
       {/* <AboutHero />
       <OurStory />
       <OurValues />
