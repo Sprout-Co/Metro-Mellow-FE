@@ -1,0 +1,116 @@
+@import "../../../../../../styles/abstracts/_variables.scss";
+@import "../../../../../../styles/abstracts/_mixins.scss";
+@import "../../../../../../styles/abstracts/_functions.scss";
+
+.impact-section {
+  position: relative;
+  padding: map-get($spacing, "6xl") 0;
+  background-color: map-get(map-get($colors, "accent"), "lighter");
+  overflow: hidden;
+
+  &__container {
+    max-width: map-get($container-max-widths, "xl");
+    margin: 0 auto;
+    padding: 0 map-get($spacing, "lg");
+    position: relative;
+    z-index: 2;
+  }
+
+  &__heading {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "h2");
+    font-weight: map-get($font-weights, "bold");
+    color: map-get(map-get($colors, "neutral"), "black");
+    margin-bottom: map-get($spacing, "lg");
+    line-height: map-get($line-heights, "tight");
+  }
+
+  &__description {
+    font-family: $font-family-base;
+    font-size: map-get($font-sizes, "subtitle-1");
+    font-weight: map-get($font-weights, "regular");
+    color: map-get(map-get($colors, "neutral"), "black");
+    max-width: 60%;
+    margin-bottom: map-get($spacing, "4xl");
+    line-height: map-get($line-heights, "normal");
+  }
+
+  &__stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: map-get($spacing, "5xl");
+
+    @media (max-width: map-get($breakpoints, "md")) {
+      flex-direction: column;
+      gap: map-get($spacing, "3xl");
+    }
+  }
+
+  &__stat-item {
+    text-align: left;
+  }
+
+  &__stat-number {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "h3");
+    font-weight: map-get($font-weights, "bold");
+    color: map-get(map-get($colors, "neutral"), "black");
+    margin-bottom: map-get($spacing, "xs");
+  }
+
+  &__stat-label {
+    font-family: $font-family-base;
+    font-size: map-get($font-sizes, "body-1");
+    font-weight: map-get($font-weights, "regular");
+    color: map-get(map-get($colors, "neutral"), "black");
+  }
+
+  &__map {
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin-bottom: map-get($spacing, "5xl");
+    
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+
+  &__cta {
+    display: flex;
+    justify-content: center;
+
+    button {
+      background-color: map-get(map-get($colors, "primary"), "base");
+      color: map-get(map-get($colors, "neutral"), "white");
+      padding: map-get($spacing, "md") map-get($spacing, "2xl");
+      border-radius: map-get($border-radius, "lg");
+      font-family: $font-family-base;
+      font-size: map-get($font-sizes, "button");
+      font-weight: map-get($font-weights, "medium");
+      letter-spacing: map-get($letter-spacing, "wider");
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: map-get(map-get($colors, "primary"), "dark");
+      }
+    }
+  }
+
+  @media (max-width: map-get($breakpoints, "md")) {
+    padding: map-get($spacing, "4xl") 0;
+
+    &__description {
+      max-width: 100%;
+    }
+
+    &__heading {
+      font-size: map-get($font-sizes, "h3");
+    }
+  }
+} 
