@@ -19,8 +19,19 @@
     right: 0;
     bottom: 0;
     background-size: cover;
-    background-position: unset;
+    background-position: center;
     background-repeat: no-repeat;
+    
+    // Mobile optimizations
+    @include breakpoint-down('md') {
+      background-size: cover;
+      background-position: center 20%;
+    }
+    
+    @include breakpoint-down('sm') {
+      background-size: cover;
+      background-position: center 30%;
+    }
   }
   
   // Dark overlay for better text contrast
@@ -37,6 +48,25 @@
       color-alpha('neutral', 'black', 0.4) 100%
     );
     z-index: 1;
+    
+    // Enhanced overlay for mobile
+    @include breakpoint-down('md') {
+      background: linear-gradient(
+        to bottom,
+        color-alpha('neutral', 'black', 0.7) 0%,
+        color-alpha('neutral', 'black', 0.5) 50%,
+        color-alpha('neutral', 'black', 0.8) 100%
+      );
+    }
+    
+    @include breakpoint-down('sm') {
+      background: linear-gradient(
+        to bottom,
+        color-alpha('neutral', 'black', 0.6) 0%,
+        color-alpha('neutral', 'black', 0.4) 40%,
+        color-alpha('neutral', 'black', 0.7) 100%
+      );
+    }
   }
   
   &__container {
@@ -46,6 +76,15 @@
     z-index: 2;
     display: flex;
     align-items: center;
+    
+    @include breakpoint-down('md') {
+      align-items: flex-start;
+      padding-top: spacing('3xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      padding-top: spacing('2xl');
+    }
   }
   
   &__content {
@@ -54,6 +93,12 @@
     
     @include breakpoint-down('md') {
       margin-left: 0;
+      text-align: center;
+      max-width: 100%;
+    }
+    
+    @include breakpoint-down('sm') {
+      padding: 0 spacing('sm');
     }
   }
   
@@ -82,11 +127,20 @@
     
     @include breakpoint-down('sm') {
       font-size: font-size('h3') * 1.2;
+      line-height: 1.1;
     }
   }
   
   &__cta {
     margin-top: spacing('2xl');
+    
+    @include breakpoint-down('md') {
+      margin-top: spacing('xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      margin-top: spacing('lg');
+    }
   }
   
   &__button {
@@ -106,8 +160,15 @@
       box-shadow: map-get($shadows, 'md');
     }
     
-    @include breakpoint-down('sm') {
+    @include breakpoint-down('md') {
       padding: spacing('md') spacing('xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      min-width: 100%;
+      width: 100%;
+      padding: spacing('xl') 0;
+      font-size: font-size('body-2');
     }
   }
   
@@ -122,6 +183,11 @@
     @include breakpoint-down('md') {
       right: spacing('xl');
       bottom: spacing('xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      right: spacing('md');
+      bottom: spacing('lg');
     }
   }
   
@@ -140,6 +206,15 @@
     &--active {
       background-color: color('accent', 'base');
       width: spacing('xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      width: spacing('sm');
+      height: spacing('xxs');
+      
+      &--active {
+        width: spacing('lg');
+      }
     }
   }
 }
