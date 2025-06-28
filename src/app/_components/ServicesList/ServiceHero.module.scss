@@ -212,10 +212,10 @@
     padding: 0 spacing('sm');
   }
   &__text {
-    font-size: map-get($font-sizes, "3xl");
+    font-size: font-size('h6');
     font-weight: map-get($font-weights, "medium");
     font-family: $font-family-base;
-    color: map-get($colors, "neutral", "black");
+    color: map-get($colors, "neutral", "darkest");
     transform: skewX(25deg);
     @media (max-width: map-get($breakpoints, "md")) {
       font-size: map-get($font-sizes, "xl");
