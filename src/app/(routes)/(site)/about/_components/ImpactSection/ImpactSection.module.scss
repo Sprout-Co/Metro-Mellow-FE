@@ -121,7 +121,7 @@
     position: relative;
     width: 100%;
     height: auto;
-    margin-bottom: map-get($spacing, "5xl");
+    margin-bottom: map-get($spacing, "2xl");
     display: flex;
     justify-content: center;
     align-items: center;
@@ -130,9 +130,12 @@
     }
     img {
       width: 100%;
-      max-width: 600px;
+      max-width: 1200px;
       height: auto;
       display: block;
+      @include breakpoint-down('md') {
+        max-width: 900px;
+      }
       @include breakpoint-down('sm') {
         max-width: 100%;
       }
