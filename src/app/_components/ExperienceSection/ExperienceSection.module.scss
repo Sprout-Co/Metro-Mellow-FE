@@ -125,33 +125,14 @@
   }
 
   &__cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-family: $font-family-base;
-    font-size: font-size('button');
-    font-weight: map-get($font-weights, 'bold');
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: letter-spacing('wider');
-    border: none;
-    border-radius: border-radius('full');
-    cursor: pointer;
-    transition: $transition-base;
-    background: color('primary', 'base');
-    color: color('neutral', 'black');
-    min-width: 180px;
-    padding: spacing('sm') spacing('2xl');
-    box-shadow: map-get($shadows, 'md');
-    border-color: color('neutral', 'black');
-    &:hover {
-      background: color('neutral', 'black');
-      color: color('neutral', 'white');
-    }
+    @include button-primary('md');
+    padding: spacing('xl') spacing('3xl');
+    min-width: 200px;
+    text-align: center;
     @include breakpoint-down('sm') {
+      min-width: 100%;
       width: 100%;
-      min-width: 0;
-      padding: spacing('md') 0;
+      padding: spacing('xl') 0;
       font-size: font-size('body-2');
     }
   }
