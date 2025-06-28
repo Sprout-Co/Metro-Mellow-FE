@@ -76,23 +76,41 @@
     border-radius: rem(15);
     outline: none;
 
+    &::-webkit-media-controls {
+      display: flex !important;
+      opacity: 1 !important;
+    }
+
     &::-webkit-media-controls-panel {
       background-color: rgba(color('neutral', 'black'), 0.8);
+      display: flex !important;
+      opacity: 1 !important;
     }
 
     &::-webkit-media-controls-play-button,
     &::-webkit-media-controls-mute-button,
     &::-webkit-media-controls-fullscreen-button {
       filter: invert(1);
+      display: block !important;
+      opacity: 1 !important;
     }
 
     &::-webkit-media-controls-timeline {
       background-color: rgba(color('primary', 'base'), 0.3);
+      display: block !important;
+      opacity: 1 !important;
     }
 
     &::-webkit-media-controls-current-time-display,
     &::-webkit-media-controls-time-remaining-display {
       color: color('neutral', 'white');
+      display: block !important;
+      opacity: 1 !important;
+    }
+
+    &::-webkit-media-controls-volume-slider {
+      display: block !important;
+      opacity: 1 !important;
     }
   }
   
