@@ -2,6 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import styles from './ExperienceSection.module.scss';
 
 const ExperienceSection: React.FC = () => {
@@ -11,10 +12,10 @@ const ExperienceSection: React.FC = () => {
 
   // Replace this with your actual video URL
   const VIDEO_URL = "https://www.w3schools.com/html/mov_bbb.mp4"; // Example video - replace with your video
+  const THUMBNAIL_URL = "/images/cleaning/hero-cleaning.png";
 
   const handlePlayVideo = () => {
     setIsPlaying(true);
-    // Auto-play the video when it's shown
     setTimeout(() => {
       if (videoRef.current) {
         videoRef.current.play();
@@ -32,22 +33,32 @@ const ExperienceSection: React.FC = () => {
         <div className={styles['experience-section__media']}>
           <div className={styles['experience-section__video-box']}>
             {!isPlaying ? (
-              // Show play button when video is not playing
-              <motion.button 
-                className={styles['experience-section__play-button']}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onHoverStart={() => setIsHovered(true)}
-                onHoverEnd={() => setIsHovered(false)}
-                onClick={handlePlayVideo}
-                aria-label="Play video"
-              >
-                <motion.span 
-                  className={styles['experience-section__play-icon']}
-                  animate={{ scale: isHovered ? 1.1 : 1 }}
-                  transition={{ duration: 0.2 }}
+              // Show thumbnail with play button overlay
+              <div className={styles['experience-section__thumbnail-wrapper']}>
+                <Image
+                  src={THUMBNAIL_URL}
+                  alt="Video thumbnail"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  className={styles['experience-section__thumbnail']}
+                  priority
                 />
-              </motion.button>
+                <motion.button 
+                  className={styles['experience-section__play-button']}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  onHoverStart={() => setIsHovered(true)}
+                  onHoverEnd={() => setIsHovered(false)}
+                  onClick={handlePlayVideo}
+                  aria-label="Play video"
+                >
+                  <motion.span 
+                    className={styles['experience-section__play-icon']}
+                    animate={{ scale: isHovered ? 1.1 : 1 }}
+                    transition={{ duration: 0.2 }}
+                  />
+                </motion.button>
+              </div>
             ) : (
               // Show video when playing
               <video
