@@ -147,7 +147,7 @@
   &__whatsappLink {
     position: absolute;
     top: spacing('2xl');
-    right: -spacing('4xl');
+    right: - spacing('10xl') * 1.5;
     z-index: 3;
     transition: transform 0.3s ease;
     
