@@ -15,6 +15,7 @@ import ExperienceSection from "./_components/ExperienceSection/ExperienceSection
 import ChoresSection from "./_components/ChoresSection/ChoresSection";
 import MobileAppPromoSection from "./_components/MobileAppPromoSection/MobileAppPromoSection";
 import ToDoToTaDaSection from "./_components/ToDoToTaDaSection/ToDoToTaDaSection";
+import TestimonialCarouselSection from "./_components/TestimonialCarouselSection/TestimonialCarouselSection";
 
 export const metadata = {
   title: "Home Services - Professional Cleaning, Laundry, Cooking & More",
@@ -34,6 +35,7 @@ export default function Home() {
         <ChoresSection />
         <MobileAppPromoSection />
         <ToDoToTaDaSection />
+        <TestimonialCarouselSection />
         <Services />
         {/* <ServiceCards /> */}
 

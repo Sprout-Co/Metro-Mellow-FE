@@ -1,0 +1,114 @@
+@import "../../../styles/abstracts/_variables.scss";
+
+.section {
+  background: map-get(map-get($colors, "neutral"), "black");
+  padding: map-get($spacing, "4xl") 0;
+  text-align: center;
+}
+
+.heading {
+  color: map-get(map-get($colors, "neutral"), "white");
+  font-size: map-get($font-sizes, "h2");
+  font-weight: map-get($font-weights, "bold");
+  margin-bottom: map-get($spacing, "3xl");
+  line-height: map-get($line-heights, "tight");
+}
+
+.carousel {
+  display: flex;
+  justify-content: center;
+  gap: map-get($spacing, "lg");
+  margin-bottom: map-get($spacing, "xl");
+}
+
+.card {
+  background: map-get(map-get($colors, "neutral"), "darker");
+  border-radius: map-get($spacing, "lg");
+  padding: map-get($spacing, "2xl");
+  min-width: 340px;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  color: map-get(map-get($colors, "neutral"), "white");
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.text {
+  font-size: map-get($font-sizes, "body-1");
+  margin-bottom: map-get($spacing, "xl");
+  text-align: left;
+}
+
+.quote {
+  font-size: map-get($font-sizes, "h1");
+  color: map-get(map-get($colors, "neutral"), "light");
+  align-self: flex-end;
+  margin-bottom: map-get($spacing, "md");
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: map-get($spacing, "sm");
+  margin-top: auto;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid map-get(map-get($colors, "primary"), "base");
+}
+
+.name {
+  font-size: map-get($font-sizes, "body-2");
+  font-weight: map-get($font-weights, "bold");
+}
+
+.stars {
+  color: map-get(map-get($colors, "accent"), "base");
+  font-size: map-get($font-sizes, "body-2");
+  margin-left: map-get($spacing, "xs");
+}
+
+.navButtons {
+  display: flex;
+  justify-content: center;
+  gap: map-get($spacing, "md");
+}
+
+.navBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: map-get(map-get($colors, "neutral"), "darker");
+  color: map-get(map-get($colors, "neutral"), "white");
+  font-size: map-get($font-sizes, "h5");
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+
+  &.active,
+  &:hover,
+  &:focus {
+    background: map-get(map-get($colors, "secondary"), "base");
+    color: map-get(map-get($colors, "neutral"), "white");
+  }
+}
+
+@media (max-width: 900px) {
+  .carousel {
+    flex-direction: column;
+    align-items: center;
+  }
+  .card {
+    min-width: 260px;
+    max-width: 95vw;
+  }
+} 
