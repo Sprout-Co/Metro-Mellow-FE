@@ -1,0 +1,180 @@
+@import '../../../styles/abstracts/variables';
+@import '../../../styles/abstracts/functions';
+@import '../../../styles/abstracts/mixins';
+
+.chores-section {
+  width: 100%;
+  background: color('neutral', 'white');
+  padding: spacing('4xl') 0;
+  text-align: center;
+
+  &__container {
+    max-width: map-get($container-max-widths, '3xl');
+    margin: 0 auto;
+    padding: 0 spacing('md');
+  }
+
+  &__heading {
+    font-size: font-size('h1') * 1;
+    font-family: $font-family-heading;
+    font-weight: map-get($font-weights, 'bold');
+    color: color('neutral', 'darkest');
+    margin-bottom: spacing('lg');
+    line-height: 1.1;
+    @include breakpoint-down('md') {
+      font-size: font-size('h2') * 1.1;
+    }
+    @include breakpoint-down('sm') {
+      font-size: font-size('h3') * 1.1;
+    }
+  }
+
+  &__subheading {
+    font-size: font-size('body-1');
+    color: color('neutral', 'darkest');
+    margin-bottom: spacing('2xl');
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    @include breakpoint-down('md') {
+      font-size: font-size('body-2');
+      max-width: 100%;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: spacing('xl');
+    justify-content: center;
+    margin-top: spacing('xl');
+    @include breakpoint-down('md') {
+      grid-template-columns: repeat(2, 1fr);
+      gap: spacing('lg');
+    }
+    @include breakpoint-down('sm') {
+      grid-template-columns: 1fr;
+      gap: spacing('md');
+    }
+  }
+}
+
+.chores-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: border-radius('xl');
+  box-shadow: map-get($shadows, 'md');
+  padding: spacing('2xl') spacing('xl') spacing('xl') spacing('xl');
+  min-height: 340px;
+  background: color('neutral', 'lightest');
+  position: relative;
+  @include breakpoint-down('md') {
+    min-height: 260px;
+    padding: spacing('xl') spacing('md');
+  }
+  @include breakpoint-down('sm') {
+    min-height: 200px;
+    padding: spacing('lg') spacing('sm');
+    align-items: center;
+    text-align: center;
+  }
+
+  &__icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: spacing('lg');
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    @include breakpoint-down('sm') {
+      width: 48px;
+      height: 48px;
+      margin-bottom: spacing('md');
+    }
+  }
+
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    @include breakpoint-down('sm') {
+      align-items: center;
+    }
+  }
+
+  &__title {
+    font-size: font-size('h4');
+    font-family: $font-family-heading;
+    font-weight: map-get($font-weights, 'bold');
+    color: color('neutral', 'darkest');
+    margin-bottom: spacing('sm');
+  }
+
+  &__desc {
+    font-size: font-size('body-2');
+    color: color('neutral', 'darkest');
+    margin-bottom: spacing('lg');
+    @include breakpoint-down('sm') {
+      margin-bottom: spacing('md');
+    }
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-family-base;
+    font-size: font-size('button');
+    font-weight: map-get($font-weights, 'bold');
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: letter-spacing('wider');
+    border: border-width('thin') solid color('primary', 'base');
+    border-radius: border-radius('full');
+    cursor: pointer;
+    transition: $transition-base;
+    background: color('neutral', 'white');
+    color: color('primary', 'base');
+    padding: spacing('xs') spacing('lg');
+    box-shadow: none;
+    &:hover {
+      background: color('primary', 'base');
+      color: color('neutral', 'white');
+    }
+    @include breakpoint-down('sm') {
+      width: 100%;
+      padding: spacing('xs') spacing('md');
+      font-size: font-size('small');
+    }
+  }
+
+  &__btn--secondary {
+    border-color: color('neutral', 'darkest');
+    color: color('neutral', 'darkest');
+    &:hover {
+      background: color('neutral', 'darkest');
+      color: color('neutral', 'white');
+    }
+  }
+}
+
+// Card background color modifiers
+.chores-card--errand {
+  background: color('accent', 'light');
+}
+.chores-card--food {
+  background: color('primary', 'lighter');
+}
+.chores-card--pest {
+  background: color('secondary', 'light');
+}
+.chores-card--cleaning {
+  background: color('primary', 'light');
+}
+.chores-card--laundry {
+  background: color('neutral', 'light');
+} 
