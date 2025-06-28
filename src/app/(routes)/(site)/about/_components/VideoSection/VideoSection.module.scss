@@ -142,33 +142,35 @@
     }
   }
   
-  &__playButton {
-    width: spacing('4xl');
-    height: spacing('4xl');
-    border-radius: border-radius('full');
-    background-color: color('neutral', 'black');
-    border: none;
+  &__thumbnailWrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: $transition-base;
-    z-index: 2;
-    box-shadow: shadow('sm');
-    
-    &:hover {
-      background-color: color('neutral', 'darkest');
-    }
-    
-    @include breakpoint-down('md') {
-      width: spacing('3xl');
-      height: spacing('3xl');
-    }
-    
+    overflow: hidden;
+  }
+
+  &__thumbnail {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    z-index: 1;
+    border-radius: rem(15);
+    transition: filter 0.3s;
+    filter: brightness(0.92);
     @include breakpoint-down('sm') {
-      width: spacing('2xl');
-      height: spacing('2xl');
+      border-radius: rem(10);
     }
+  }
+
+  &__playButton {
+    position: relative;
+    z-index: 2;
   }
   
   &__playIcon {
