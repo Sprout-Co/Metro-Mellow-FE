@@ -1,5 +1,7 @@
 import React from "react";
 import Hero from "./_components/Hero/Hero";
+import ServicesGallery from "./_components/ServicesGallery/ServicesGallery";
+import ServiceHero from "./_components/ServicesList/ServiceHero";
 import Services from "./_components/Services/Services";
 import Testimonials from "./_components/Testimonials/Testimonials";
 import CTA from "./_components/CTA/CTA";
@@ -9,6 +11,11 @@ import WhyChooseUs from "./_components/WhyChooseUs/WhyChooseUs";
 import Hero2 from "./_components/Hero/Hero2";
 import Navbar from "@/components/layout/Navbar/Navbar";
 import Footer from "@/components/layout/Footer/Footer";
+import ExperienceSection from "./_components/ExperienceSection/ExperienceSection";
+import ChoresSection from "./_components/ChoresSection/ChoresSection";
+import MobileAppPromoSection from "./_components/MobileAppPromoSection/MobileAppPromoSection";
+import ToDoToTaDaSection from "./_components/ToDoToTaDaSection/ToDoToTaDaSection";
+import TestimonialCarouselSection from "./_components/TestimonialCarouselSection/TestimonialCarouselSection";
 
 export const metadata = {
   title: "Home Services - Professional Cleaning, Laundry, Cooking & More",
@@ -22,14 +29,22 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <Services />
-        {/* <ServiceCards /> */}
+        <ServicesGallery />
+        <ServiceHero />
+        <ExperienceSection />
+        <ChoresSection />
+        <MobileAppPromoSection />
+        <ToDoToTaDaSection />
+        <TestimonialCarouselSection />
+        
+        {/* <Services />
+        <ServiceCards />
 
         <HowItWorks />
 
         <WhyChooseUs />
         <Testimonials />
-        <CTA />
+        <CTA /> */}
       </main>
       <Footer />
     </>
