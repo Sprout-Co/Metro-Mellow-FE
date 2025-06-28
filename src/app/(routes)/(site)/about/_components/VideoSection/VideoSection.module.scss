@@ -102,10 +102,10 @@
     position: absolute;
     width: spacing('7xl');
     height: auto;
-    top: spacing('2xl');
-    right: spacing('3xl');
+    top: spacing('6xl');
+    right: spacing('4xl');
     z-index: 1;
-    transform: scaleX(-1);
+    transform: scaleX(-1) rotate(-90deg); // Adjust the angle as needed
     
     @include breakpoint-down('md') {
       width: spacing('6xl');
@@ -123,12 +123,12 @@
   // Black arrow positioning at bottom-left
   &__blackArrow {
     position: absolute;
-    width: spacing('8xl');
+    width: spacing('10xl');
     height: auto;
-    bottom: spacing('2xl');
+    bottom: - spacing('5xl');
     left: spacing('3xl');
     z-index: 1;
-    transform: rotate(35deg);
+    transform: rotate(10deg);
     
     @include breakpoint-down('md') {
       width: spacing('7xl');
