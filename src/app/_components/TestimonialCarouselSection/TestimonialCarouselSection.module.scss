@@ -111,4 +111,41 @@
     min-width: 260px;
     max-width: 95vw;
   }
+}
+
+@media (max-width: 600px) {
+  .heading {
+    font-size: map-get($font-sizes, "h6");
+    margin-bottom: map-get($spacing, "lg");
+  }
+  .carousel {
+    flex-direction: column;
+    align-items: center;
+    gap: map-get($spacing, "md");
+  }
+  .card {
+    min-width: 0;
+    max-width: 100vw;
+    padding: map-get($spacing, "lg");
+    font-size: map-get($font-sizes, "body-2");
+  }
+  .text {
+    font-size: map-get($font-sizes, "body-2");
+  }
+  .quote {
+    font-size: map-get($font-sizes, "h6");
+  }
+  .userInfo, .name, .stars {
+    font-size: map-get($font-sizes, "xs");
+  }
+  .navButtons {
+    flex-direction: row;
+    gap: map-get($spacing, "sm");
+    margin-top: map-get($spacing, "md");
+  }
+  .navBtn {
+    width: 44px;
+    height: 44px;
+    font-size: map-get($font-sizes, "body-2");
+  }
 } 

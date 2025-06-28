@@ -80,4 +80,28 @@
     background: map-get(map-get($colors, "primary"), "base");
     color: map-get(map-get($colors, "neutral"), "lightest");
   }
+}
+
+@media (max-width: 600px) {
+  .section {
+    min-height: unset;
+    padding: map-get($spacing, "xl") map-get($spacing, "md");
+  }
+  .contentWrapper {
+    max-width: 100%;
+    padding: 0;
+  }
+  .heading {
+    font-size: map-get($font-sizes, "h6");
+    margin-bottom: map-get($spacing, "lg");
+  }
+  .steps li {
+    font-size: map-get($font-sizes, "body-2");
+    margin-bottom: map-get($spacing, "xs");
+  }
+  .ctaButton {
+    width: 100%;
+    font-size: map-get($font-sizes, "body-2");
+    padding: map-get($spacing, "md") 0;
+  }
 } 

@@ -104,10 +104,10 @@
     margin-bottom: spacing('lg');
     line-height: 1.05;
     @include breakpoint-down('md') {
-      font-size: font-size('h2') * 1.1;
+      font-size: font-size('h3');
     }
     @include breakpoint-down('sm') {
-      font-size: font-size('h3') * 1.1;
+      font-size: font-size('h4');
     }
   }
 
@@ -118,6 +118,9 @@
     max-width: 520px;
     @include breakpoint-down('md') {
       max-width: 100%;
+    }
+    @include breakpoint-down('sm') {
+      font-size: font-size('body-2');
     }
   }
 
@@ -148,8 +151,8 @@
     @include breakpoint-down('sm') {
       width: 100%;
       min-width: 0;
-      padding: spacing('xs') spacing('md');
-      font-size: font-size('small');
+      padding: spacing('md') 0;
+      font-size: font-size('body-2');
     }
   }
 } 
