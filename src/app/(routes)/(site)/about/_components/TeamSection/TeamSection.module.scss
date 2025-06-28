@@ -1,11 +1,19 @@
 // components/about/TeamSection.module.scss
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import '../../../../../../styles/abstracts/variables';
+@import '../../../../../../styles/abstracts/functions';
+@import '../../../../../../styles/abstracts/mixins';
 
 .team {
-  padding: spacing("6xl") 0;
-  background-color: color("neutral", "white");
+  padding: spacing('5xl') 0;
+  background-color: color('neutral', 'white');
+  
+  @include breakpoint-down('md') {
+    padding: spacing('3xl') 0;
+  }
+  
+  @include breakpoint-down('sm') {
+    padding: spacing('2xl') 0;
+  }
 
   &__container {
     @include container;
@@ -14,66 +22,114 @@
   &__header {
     text-align: center;
     max-width: 700px;
-    margin: 0 auto spacing("3xl");
+    margin: 0 auto spacing('3xl');
+    
+    @include breakpoint-down('md') {
+      margin-bottom: spacing('2xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      margin-bottom: spacing('xl');
+      padding: 0 spacing('md');
+    }
   }
 
   &__title {
-    font-family: $font-family-heading;
-    font-size: map-get($font-sizes, "4xl");
-    font-weight: map-get($font-weights, "bold");
-    color: color("neutral", "darker");
-    margin-bottom: spacing("md");
-
-    @include breakpoint-down("md") {
-      font-size: map-get($font-sizes, "3xl");
+    font-size: font-size('h2');
+    font-weight: font-weight('bold');
+    color: color('neutral', 'black');
+    margin-bottom: spacing('md');
+    
+    @include breakpoint-down('lg') {
+      font-size: font-size('h3');
+    }
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('h4');
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('h5');
+      margin-bottom: spacing('sm');
     }
   }
 
   &__subtitle {
-    font-size: map-get($font-sizes, "lg");
-    color: color("neutral", "dark");
-
-    @include breakpoint-down("md") {
-      font-size: map-get($font-sizes, "base");
+    font-size: font-size('subtitle-1');
+    color: color('neutral', 'dark');
+    line-height: line-height('normal');
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('body-1');
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('body-2');
+      line-height: 1.5;
     }
   }
 
   &__grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: spacing("xl");
-
-    @include breakpoint-down("lg") {
+    gap: spacing('xl');
+    
+    @include breakpoint-down('lg') {
       grid-template-columns: repeat(2, 1fr);
+      gap: spacing('lg');
     }
-
-    @include breakpoint-down("sm") {
+    
+    @include breakpoint-down('md') {
+      gap: spacing('md');
+    }
+    
+    @include breakpoint-down('sm') {
       grid-template-columns: 1fr;
-      max-width: 350px;
+      gap: spacing('lg');
+      max-width: rem(350);
       margin: 0 auto;
     }
   }
 
   &__member {
     transition: $transition-base;
+    
+    @include breakpoint-down('sm') {
+      &:hover {
+        .team__overlay {
+          opacity: 1;
+        }
 
-    &:hover {
-      .team__overlay {
-        opacity: 1;
+        .team__image {
+          transform: scale(1.02); // Reduced scale for mobile
+        }
       }
+    }
+    
+    @include breakpoint-up('md') {
+      &:hover {
+        .team__overlay {
+          opacity: 1;
+        }
 
-      .team__image {
-        transform: scale(1.05);
+        .team__image {
+          transform: scale(1.05);
+        }
       }
     }
   }
 
   &__imageWrapper {
     position: relative;
-    border-radius: border-radius("lg");
+    border-radius: border-radius('lg');
     overflow: hidden;
-    margin-bottom: spacing("md");
-    box-shadow: map-get($box-shadows, "md");
+    margin-bottom: spacing('md');
+    box-shadow: shadow('md');
+    
+    @include breakpoint-down('sm') {
+      margin-bottom: spacing('sm');
+      border-radius: border-radius('md');
+    }
   }
 
   &__image {
@@ -91,59 +147,114 @@
     bottom: 0;
     background: linear-gradient(
       to top,
-      rgba(color("primary", "dark"), 0.8),
+      rgba(color('primary', 'dark'), 0.8),
       transparent 70%
     );
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    padding-bottom: spacing("md");
+    padding-bottom: spacing('md');
     opacity: 0;
     transition: opacity 0.3s ease;
+    
+    @include breakpoint-down('sm') {
+      padding-bottom: spacing('sm');
+    }
   }
 
   &__social {
     display: flex;
-    gap: spacing("md");
+    gap: spacing('md');
+    
+    @include breakpoint-down('sm') {
+      gap: spacing('sm');
+    }
   }
 
   &__socialLink {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: rgba(color("neutral", "white"), 0.2);
-    @include flex-center;
-    color: color("neutral", "white");
+    width: spacing('2xl');
+    height: spacing('2xl');
+    border-radius: border-radius('full');
+    background-color: rgba(color('neutral', 'white'), 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color('neutral', 'white');
     transition: $transition-base;
 
     &:hover {
-      background-color: color("neutral", "white");
-      color: color("primary", "base");
+      background-color: color('neutral', 'white');
+      color: color('primary', 'base');
+    }
+    
+    @include breakpoint-down('sm') {
+      width: spacing('xl');
+      height: spacing('xl');
+    }
+    
+    svg {
+      width: 20px;
+      height: 20px;
+      
+      @include breakpoint-down('sm') {
+        width: 16px;
+        height: 16px;
+      }
     }
   }
 
   &__info {
     text-align: center;
+    
+    @include breakpoint-down('sm') {
+      padding: 0 spacing('xs');
+    }
   }
 
   &__name {
-    font-family: $font-family-heading;
-    font-size: map-get($font-sizes, "xl");
-    font-weight: map-get($font-weights, "semibold");
-    color: color("neutral", "darker");
-    margin-bottom: spacing("xxs");
+    font-size: font-size('h4');
+    font-weight: font-weight('semibold');
+    color: color('neutral', 'black');
+    margin-bottom: spacing('2xs');
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('h5');
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('body-1');
+      margin-bottom: spacing('3xs');
+    }
   }
 
   &__position {
-    font-size: map-get($font-sizes, "sm");
-    color: color("primary", "base");
-    font-weight: map-get($font-weights, "medium");
-    margin-bottom: spacing("sm");
+    font-size: font-size('body-2');
+    color: color('primary', 'base');
+    font-weight: font-weight('medium');
+    margin-bottom: spacing('sm');
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('small');
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('caption');
+      margin-bottom: spacing('xs');
+    }
   }
 
   &__bio {
-    font-size: map-get($font-sizes, "base");
-    color: color("neutral", "dark");
-    line-height: map-get($line-heights, "relaxed");
+    font-size: font-size('body-1');
+    color: color('neutral', 'dark');
+    line-height: line-height('relaxed');
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('body-2');
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('small');
+      line-height: 1.5;
+    }
   }
 }

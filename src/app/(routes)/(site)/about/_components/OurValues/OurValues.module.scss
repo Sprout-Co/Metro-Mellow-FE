@@ -1,11 +1,19 @@
 // components/about/OurValues.module.scss
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import '../../../../../../styles/abstracts/variables';
+@import '../../../../../../styles/abstracts/functions';
+@import '../../../../../../styles/abstracts/mixins';
 
 .values {
-  padding: spacing("6xl") 0;
-  background-color: color("neutral", "lighter");
+  padding: spacing('5xl') 0;
+  background-color: color('neutral', 'lighter');
+  
+  @include breakpoint-down('md') {
+    padding: spacing('3xl') 0;
+  }
+  
+  @include breakpoint-down('sm') {
+    padding: spacing('2xl') 0;
+  }
 
   &__container {
     @include container;
@@ -14,85 +22,177 @@
   &__header {
     text-align: center;
     max-width: 700px;
-    margin: 0 auto spacing("3xl");
+    margin: 0 auto spacing('3xl');
+    
+    @include breakpoint-down('md') {
+      margin-bottom: spacing('2xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      margin-bottom: spacing('xl');
+      padding: 0 spacing('md');
+    }
   }
 
   &__title {
-    font-family: $font-family-heading;
-    font-size: map-get($font-sizes, "4xl");
-    font-weight: map-get($font-weights, "bold");
-    color: color("neutral", "darker");
-    margin-bottom: spacing("md");
-
-    @include breakpoint-down("md") {
-      font-size: map-get($font-sizes, "3xl");
+    font-size: font-size('h2');
+    font-weight: font-weight('bold');
+    color: color('neutral', 'black');
+    margin-bottom: spacing('md');
+    
+    @include breakpoint-down('lg') {
+      font-size: font-size('h3');
+    }
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('h4');
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('h5');
+      margin-bottom: spacing('sm');
     }
   }
 
   &__subtitle {
-    font-size: map-get($font-sizes, "lg");
-    color: color("neutral", "dark");
-
-    @include breakpoint-down("md") {
-      font-size: map-get($font-sizes, "base");
+    font-size: font-size('subtitle-1');
+    color: color('neutral', 'dark');
+    line-height: line-height('normal');
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('body-1');
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('body-2');
+      line-height: 1.5;
     }
   }
 
   &__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: spacing("xl");
-
-    @include breakpoint-down("lg") {
+    gap: spacing('xl');
+    
+    @include breakpoint-down('lg') {
       grid-template-columns: repeat(2, 1fr);
+      gap: spacing('lg');
     }
-
-    @include breakpoint-down("md") {
+    
+    @include breakpoint-down('md') {
       grid-template-columns: 1fr;
+      gap: spacing('md');
+    }
+    
+    @include breakpoint-down('sm') {
+      gap: spacing('sm');
     }
   }
 
   &__card {
-    background-color: color("neutral", "white");
-    border-radius: border-radius("lg");
-    padding: spacing("xl");
+    background-color: color('neutral', 'white');
+    border-radius: border-radius('lg');
+    padding: spacing('xl');
     transition: $transition-base;
     height: 100%;
-    box-shadow: map-get($box-shadows, "sm");
-    border: 1px solid color("neutral", "medium");
+    box-shadow: shadow('sm');
+    border: 1px solid color('neutral', 'light');
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 
     &:hover {
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: shadow('md');
+      transform: translateY(-2px);
+      
+      @include breakpoint-down('sm') {
+        transform: none; // Disable hover transform on mobile
+      }
 
       .values__iconWrapper {
-        background-color: color("primary", "base");
-        color: color("neutral", "white");
+        background-color: color('primary', 'base');
+        color: color('neutral', 'white');
       }
+    }
+    
+    @include breakpoint-down('md') {
+      padding: spacing('lg');
+    }
+    
+    @include breakpoint-down('sm') {
+      padding: spacing('md');
     }
   }
 
   &__iconWrapper {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background-color: rgba(color("primary", "base"), 0.1);
-    color: color("primary", "base");
-    @include flex-center;
-    margin-bottom: spacing("md");
+    width: spacing('5xl');
+    height: spacing('5xl');
+    border-radius: border-radius('full');
+    background-color: rgba(color('primary', 'base'), 0.1);
+    color: color('primary', 'base');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: spacing('md');
     transition: $transition-base;
+    
+    @include breakpoint-down('md') {
+      width: spacing('4xl');
+      height: spacing('4xl');
+      margin-bottom: spacing('sm');
+    }
+    
+    @include breakpoint-down('sm') {
+      width: spacing('3xl');
+      height: spacing('3xl');
+      margin-bottom: spacing('xs');
+    }
+    
+    svg {
+      width: 40px;
+      height: 40px;
+      
+      @include breakpoint-down('md') {
+        width: 32px;
+        height: 32px;
+      }
+      
+      @include breakpoint-down('sm') {
+        width: 24px;
+        height: 24px;
+      }
+    }
   }
 
   &__cardTitle {
-    font-family: $font-family-heading;
-    font-size: map-get($font-sizes, "xl");
-    font-weight: map-get($font-weights, "semibold");
-    color: color("neutral", "darker");
-    margin-bottom: spacing("sm");
+    font-size: font-size('h4');
+    font-weight: font-weight('semibold');
+    color: color('neutral', 'black');
+    margin-bottom: spacing('sm');
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('h5');
+      margin-bottom: spacing('xs');
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('body-1');
+    }
   }
 
   &__cardDescription {
-    font-size: map-get($font-sizes, "base");
-    color: color("neutral", "dark");
-    line-height: map-get($line-heights, "relaxed");
+    font-size: font-size('body-1');
+    color: color('neutral', 'dark');
+    line-height: line-height('relaxed');
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('body-2');
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('small');
+      line-height: 1.5;
+    }
   }
 }

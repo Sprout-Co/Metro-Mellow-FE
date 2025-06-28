@@ -7,6 +7,14 @@
   background-color: color('accent', 'lighter');
   padding: spacing('5xl') 0;
   
+  @include breakpoint-down('md') {
+    padding: spacing('3xl') 0;
+  }
+  
+  @include breakpoint-down('sm') {
+    padding: spacing('2xl') 0;
+  }
+  
   &__container {
     @include container;
     display: flex;
@@ -37,7 +45,8 @@
     }
     
     @include breakpoint-down('sm') {
-      max-width: 300px;
+      max-width: 280px;
+      aspect-ratio: 16 / 9; // Better aspect ratio for mobile
     }
   }
   
@@ -56,6 +65,10 @@
 
     &:hover {
       transform: translateY(rem(-5));
+      
+      @include breakpoint-down('sm') {
+        transform: none; // Disable hover effect on mobile
+      }
     }
 
     @include breakpoint-down('md') {
@@ -64,8 +77,9 @@
     }
 
     @include breakpoint-down('sm') {
-      width: rem(320);
-      height: rem(260);
+      width: 100%;
+      height: rem(200);
+      border-radius: rem(10);
     }
   }
   
@@ -75,6 +89,10 @@
     object-fit: cover;
     border-radius: rem(15);
     outline: none;
+
+    @include breakpoint-down('sm') {
+      border-radius: rem(10);
+    }
 
     &::-webkit-media-controls {
       display: flex !important;
@@ -155,6 +173,12 @@
       width: spacing('lg');
       height: spacing('lg');
     }
+    
+    @include breakpoint-down('sm') {
+      width: spacing('md');
+      height: spacing('md');
+      margin-left: spacing('xs');
+    }
   }
   
   // Red arrow positioning at top-right
@@ -165,7 +189,7 @@
     top: spacing('6xl');
     right: spacing('4xl');
     z-index: 1;
-    transform: scaleX(-1) rotate(-90deg); // Adjust the angle as needed
+    transform: scaleX(-1) rotate(-90deg);
     
     @include breakpoint-down('md') {
       width: spacing('6xl');
@@ -174,8 +198,13 @@
     }
     
     @include breakpoint-down('sm') {
-      width: spacing('5xl');
-      right: spacing('xl');
+      width: spacing('4xl');
+      top: spacing('lg');
+      right: spacing('md');
+      opacity: 0.6; // Make it more subtle on mobile
+    }
+    
+    @include breakpoint-down('xs') {
       display: none; // Hide on very small screens
     }
   }
@@ -197,8 +226,13 @@
     }
     
     @include breakpoint-down('sm') {
-      width: spacing('6xl');
-      left: spacing('lg');
+      width: spacing('5xl');
+      bottom: spacing('lg');
+      left: spacing('md');
+      opacity: 0.6; // Make it more subtle on mobile
+    }
+    
+    @include breakpoint-down('xs') {
       display: none; // Hide on very small screens
     }
   }
@@ -221,8 +255,12 @@
     }
     
     @include breakpoint-down('sm') {
-      right: -spacing('2xl');
+      right: spacing('md');
       top: spacing('lg');
+      position: fixed; // Make it fixed on mobile for better accessibility
+      bottom: spacing('xl');
+      top: auto;
+      z-index: 1000; // Ensure it's above other content
     }
   }
   
@@ -239,6 +277,7 @@
     @include breakpoint-down('sm') {
       width: spacing('2xl');
       height: spacing('2xl');
+      filter: drop-shadow(0 spacing('xs') spacing('xs') rgba(0, 0, 0, 0.3));
     }
   }
 } 
