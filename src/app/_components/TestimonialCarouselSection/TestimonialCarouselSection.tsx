@@ -23,7 +23,7 @@ const testimonials = [
   },
 ];
 
-const CARDS_PER_VIEW = 2;
+const CARDS_PER_VIEW = 3;
 
 const TestimonialCarouselSection = () => {
   const [index, setIndex] = useState(0);
@@ -42,7 +42,13 @@ const TestimonialCarouselSection = () => {
         {testimonials.slice(index, index + CARDS_PER_VIEW).map((t, i) => (
           <div className={styles.card} key={i}>
             <p className={styles.text}>{t.text}</p>
-            <div className={styles.quote}>&ldquo;&rdquo;</div>
+            <div className={styles.quote}>
+              <svg width="117" height="83" viewBox="0 0 117 83" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="55.2765" y="82.9141" width="55.2764" height="82.9147" transform="rotate(180 55.2765 82.9141)" fill="currentColor"/>
+                <rect x="116.476" y="82.9141" width="55.2764" height="82.9147" transform="rotate(180 116.476 82.9141)" fill="currentColor"/>
+              </svg>
+              
+            </div>
             <div className={styles.userInfo}>
               <img className={styles.avatar} src={t.avatar} alt={t.name} />
               <span className={styles.name}>{t.name}</span>
