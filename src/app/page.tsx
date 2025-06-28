@@ -11,6 +11,7 @@ import WhyChooseUs from "./_components/WhyChooseUs/WhyChooseUs";
 import Hero2 from "./_components/Hero/Hero2";
 import Navbar from "@/components/layout/Navbar/Navbar";
 import Footer from "@/components/layout/Footer/Footer";
+import ExperienceSection from "./_components/ExperienceSection/ExperienceSection";
 
 export const metadata = {
   title: "Home Services - Professional Cleaning, Laundry, Cooking & More",
@@ -26,6 +27,7 @@ export default function Home() {
         <Hero />
         <ServicesGallery />
         <ServiceHero />
+        <ExperienceSection />
         <Services />
         {/* <ServiceCards /> */}
 

@@ -1,0 +1,152 @@
+@import '../../../styles/abstracts/variables';
+@import '../../../styles/abstracts/functions';
+@import '../../../styles/abstracts/mixins';
+
+.experience-section {
+  width: 100%;
+  background: color('neutral', 'white');
+  padding: spacing('4xl') 0;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: map-get($container-max-widths, '3xl');
+    margin: 0 auto;
+    gap: spacing('4xl');
+    @include breakpoint-down('md') {
+      flex-direction: column;
+      gap: spacing('2xl');
+      padding: 0 spacing('md');
+    }
+  }
+
+  &__media {
+    flex: 1 1 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include breakpoint-down('md') {
+      width: 100%;
+      margin-bottom: spacing('xl');
+    }
+  }
+
+  &__video-box {
+    width: 340px;
+    height: 340px;
+    background: color('neutral', 'white');
+    border: border-width('medium') solid color('neutral', 'darkest');
+    border-radius: border-radius('xl');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    @include breakpoint-down('sm') {
+      width: 220px;
+      height: 220px;
+    }
+  }
+
+  &__play-button {
+    width: 56px;
+    height: 56px;
+    background: color('primary', 'base');
+    border: none;
+    border-radius: border-radius('full');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: $transition-base;
+    box-shadow: map-get($shadows, 'md');
+    &:hover {
+      background: color('primary', 'dark');
+    }
+    @include breakpoint-down('sm') {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  &__play-icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+    background: none;
+    mask: url('data:image/svg+xml;utf8,<svg fill="white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>') center/contain no-repeat;
+    background-color: color('neutral', 'white');
+    @include breakpoint-down('sm') {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  &__content {
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    @include breakpoint-down('md') {
+      align-items: center;
+      text-align: center;
+      width: 100%;
+    }
+  }
+
+  &__heading {
+    font-size: font-size('h1') * 1.1;
+    font-family: $font-family-heading;
+    font-weight: map-get($font-weights, 'bold');
+    color: color('neutral', 'darkest');
+    margin-bottom: spacing('lg');
+    line-height: 1.05;
+    @include breakpoint-down('md') {
+      font-size: font-size('h2') * 1.1;
+    }
+    @include breakpoint-down('sm') {
+      font-size: font-size('h3') * 1.1;
+    }
+  }
+
+  &__subtext {
+    font-size: font-size('body-1');
+    color: color('neutral', 'darkest');
+    margin-bottom: spacing('xl');
+    max-width: 420px;
+    @include breakpoint-down('md') {
+      max-width: 100%;
+    }
+  }
+
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-family-base;
+    font-size: font-size('button');
+    font-weight: map-get($font-weights, 'bold');
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: letter-spacing('wider');
+    border: none;
+    border-radius: border-radius('full');
+    cursor: pointer;
+    transition: $transition-base;
+    background: color('primary', 'base');
+    color: color('neutral', 'white');
+    min-width: 180px;
+    padding: spacing('sm') spacing('2xl');
+    box-shadow: map-get($shadows, 'md');
+    &:hover {
+      background: color('primary', 'dark');
+    }
+    @include breakpoint-down('sm') {
+      width: 100%;
+      min-width: 0;
+      padding: spacing('xs') spacing('md');
+      font-size: font-size('small');
+    }
+  }
+} 
