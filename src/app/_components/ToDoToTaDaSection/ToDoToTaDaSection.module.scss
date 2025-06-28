@@ -1,11 +1,11 @@
 @import "../../../styles/abstracts/_variables.scss";
 
 .section {
-  background: map-get(map-get($colors, "neutral"), "lightest");
+    background-color: color('accent', 'lighter');
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: 70vh;
 }
 
 .contentWrapper {
