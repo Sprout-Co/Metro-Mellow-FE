@@ -163,8 +163,8 @@
   }
 
   &__phone {
-    max-width: 800px;
-    width: 800px;
+    max-width: 650px;
+    width: 650px;
     height: auto;
     transform: perspective(1000px) rotateY(-10deg) rotateX(5deg);
     transition: $transition-base;
@@ -174,8 +174,8 @@
     }
 
     @include breakpoint-down('md') {
-      width: 600px;
-      max-width: 600px;
+      width: 500px;
+      max-width: 500px;
       transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
       &:hover {
         transform: perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(-5px);
