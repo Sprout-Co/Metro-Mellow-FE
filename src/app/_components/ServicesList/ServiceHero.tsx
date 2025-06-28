@@ -28,7 +28,7 @@ const ServiceHero: React.FC<ServiceHeroProps> = ({ onBookServices }) => {
               onClick={onBookServices}
               type="button"
             >
-              BOOK A SERVICES
+              BOOK A SERVICE
             </button>
           </div>
         </div>

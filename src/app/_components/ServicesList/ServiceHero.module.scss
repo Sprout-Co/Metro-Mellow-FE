@@ -124,7 +124,7 @@
     max-width: 340px;
     width: auto;
     height: 3rem;
-    padding: spacing('md') spacing('3xl');
+    padding: spacing('lg') spacing('3xl');
     background-color: color('neutral', 'white');
     color: map-get(map-get($colors, 'primary'), 'base');
     border-color: color('neutral', 'white');
