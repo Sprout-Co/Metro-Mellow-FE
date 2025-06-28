@@ -42,8 +42,8 @@
   }
   
   &__videoBox {
-    width: rem(400);
-    height: rem(300);
+    width: rem(500);
+    height: rem(400);
     background: color('neutral', 'white');
     border-radius: rem(15);
     display: flex;
@@ -59,13 +59,13 @@
     }
 
     @include breakpoint-down('md') {
-      width: rem(320);
-      height: rem(240);
+      width: rem(420);
+      height: rem(340);
     }
 
     @include breakpoint-down('sm') {
-      width: rem(280);
-      height: rem(210);
+      width: rem(320);
+      height: rem(260);
     }
   }
   
