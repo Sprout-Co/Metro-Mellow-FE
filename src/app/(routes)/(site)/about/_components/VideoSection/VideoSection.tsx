@@ -112,15 +112,6 @@ const VideoSection: React.FC = () => {
                   src={VIDEO_URL}
                   controls
                   onEnded={handleVideoEnd}
-                  onClick={() => {
-                    if (videoRef.current) {
-                      if (videoRef.current.paused) {
-                        videoRef.current.play();
-                      } else {
-                        videoRef.current.pause();
-                      }
-                    }
-                  }}
                 />
               )}
             </div>

@@ -59,6 +59,7 @@
     height: rem(400);
     background: color('neutral', 'white');
     border-radius: rem(15);
+    border: border-width('medium') solid color('neutral', 'darkest');
     display: flex;
     align-items: center;
     justify-content: center;
@@ -163,6 +164,7 @@
     border-radius: rem(15);
     transition: filter 0.3s;
     filter: brightness(0.92);
+    box-shadow: map-get($shadows, 'md');
     @include breakpoint-down('sm') {
       border-radius: rem(10);
     }
