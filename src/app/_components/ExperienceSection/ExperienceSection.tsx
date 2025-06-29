@@ -10,8 +10,8 @@ const ExperienceSection: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Replace this with your actual video URL
-  const VIDEO_URL = "https://www.w3schools.com/html/mov_bbb.mp4"; // Example video - replace with your video
+  // Place your video file (e.g., my-video.mp4) in public/videos/ and use the path below
+  const VIDEO_URL = "/videos/metromellow_animation.mp4"; // Example: /videos/my-video.mp4
   const THUMBNAIL_URL = "/images/cleaning/hero-cleaning.png";
 
   const handlePlayVideo = () => {
