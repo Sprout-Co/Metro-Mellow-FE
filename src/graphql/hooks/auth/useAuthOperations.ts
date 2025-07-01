@@ -35,7 +35,7 @@ import {
   selectToken,
   selectUser 
 } from "@/lib/redux";
-import { UserRole } from "@/graphql/api";
+import { UserRole, User } from "@/graphql/api";
 import { Routes } from "@/constants/routes";
 
 export const useAuthOperations = () => {
@@ -103,7 +103,7 @@ export const useAuthOperations = () => {
 
         // Store auth data
         console.log("Storing auth data...");
-        dispatch(loginAction({ user: user as any, token }));
+        dispatch(loginAction({ user: user as User, token }));
 
         // Use a direct browser redirect for client-side navigation
         console.log("Redirecting to dashboard...");
@@ -163,7 +163,7 @@ export const useAuthOperations = () => {
             throw new Error("Registration failed: Invalid role");
           }
 
-          dispatch(loginAction({ user: user as any, token: token || "" }));
+          dispatch(loginAction({ user: user as User, token: token || "" }));
 
           // Use a direct browser redirect
           // if (typeof window !== "undefined") {
@@ -198,11 +198,7 @@ export const useAuthOperations = () => {
           throw new Error(errors[0].message);
         }
 
-        // if (data?.updateProfile && data.updateProfile.role === UserRole.Customer) {
-        //   // Update the user in the auth store while preserving the current token
-        //   dispatch(loginAction({ user: data.updateProfile as any, token: currentToken || "" }));
-        //   return data.updateProfile;
-        // }
+        return data?.updateProfile;
       } catch (error) {
         console.error("Profile update error:", error);
         if (error instanceof Error) {
@@ -211,7 +207,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [updateProfileMutation, dispatch, currentToken]
+    [updateProfileMutation]
   );
 
   /**

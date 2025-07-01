@@ -12,8 +12,6 @@ import {
   useResendAdminInvitationMutation,
   useCancelAdminInvitationMutation,
   useCleanupExpiredInvitationsMutation,
-  usePendingAdminInvitationsQuery,
-  useAdminInvitationQuery,
   usePendingAdminInvitationsLazyQuery,
   useAdminInvitationLazyQuery,
   CreateAdminInvitationInput,

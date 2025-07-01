@@ -17,7 +17,13 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   sassOptions: {
     includePaths: ["./src/styles"],
-    prependData: `@import "@/styles/abstracts-old/variables"; @import "@/styles/abstracts-old/mixins"; @import "@/styles/abstracts-old/functions";`,
+    additionalData: (content, loaderContext) => {
+      // Only add imports for component module files
+      if (loaderContext.resourcePath.includes('.module.scss')) {
+        return `@use "@/styles/abstracts/mixins" as *;\n${content}`;
+      }
+      return content;
+    },
   },
   images: {
     formats: ["image/avif", "image/webp"],
@@ -26,7 +32,6 @@ const nextConfig: NextConfig = {
   },
   compress: true,
   poweredByHeader: false,
-  swcMinify: true,
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },

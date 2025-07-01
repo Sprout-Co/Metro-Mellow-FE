@@ -10,17 +10,16 @@ import {
   useGenerateInvoiceMutation,
   useMarkInvoiceAsPaidMutation,
   useCancelInvoiceMutation,
-  useGetInvoiceByIdQuery,
-  useGetCustomerInvoicesQuery,
+  useGetInvoiceByIdLazyQuery,
+  useGetCustomerInvoicesLazyQuery,
 } from "@/graphql/api";
-import { InvoiceStatus } from "@/graphql/api";
 
 export const useInvoiceOperations = () => {
   const [generateInvoiceMutation] = useGenerateInvoiceMutation();
   const [markInvoiceAsPaidMutation] = useMarkInvoiceAsPaidMutation();
   const [cancelInvoiceMutation] = useCancelInvoiceMutation();
-  const { data: invoicesData, refetch: refetchInvoices } =
-    useGetCustomerInvoicesQuery();
+  const [getInvoiceById] = useGetInvoiceByIdLazyQuery();
+  const [getCustomerInvoices] = useGetCustomerInvoicesLazyQuery();
 
   /**
    * Generates a new invoice for a payment
@@ -117,7 +116,7 @@ export const useInvoiceOperations = () => {
    */
   const handleGetInvoice = useCallback(async (id: string) => {
     try {
-      const { data, errors } = await useGetInvoiceByIdQuery({
+      const { data, errors } = await getInvoiceById({
         variables: { id },
       });
 
@@ -133,14 +132,13 @@ export const useInvoiceOperations = () => {
       }
       throw new Error("An unexpected error occurred");
     }
-  }, []);
+  }, [getInvoiceById]);
 
   return {
     handleGenerateInvoice,
     handleMarkInvoiceAsPaid,
     handleCancelInvoice,
     handleGetInvoice,
-    invoices: invoicesData?.customerInvoices || [],
-    refetchInvoices,
+    getCustomerInvoices,
   };
 };

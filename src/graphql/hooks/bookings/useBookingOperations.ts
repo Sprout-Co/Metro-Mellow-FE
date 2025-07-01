@@ -5,7 +5,7 @@
  *
  * @returns Object containing all booking operation handlers
  */
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import {
   useCreateBookingMutation,
   useUpdateBookingMutation,
@@ -13,25 +13,15 @@ import {
   useCompleteBookingMutation,
   useAssignStaffMutation,
   useUpdateBookingStatusMutation,
-  useGetBookingByIdQuery,
-  useGetBookingsQuery,
-  useGetCustomerBookingsQuery,
-  useGetStaffBookingsQuery,
   useGetBookingByIdLazyQuery,
   useGetBookingsLazyQuery,
   useGetCustomerBookingsLazyQuery,
   useGetStaffBookingsLazyQuery,
   useRescheduleBookingMutation,
   BookingStatus,
-  AddressInput,
-  RoomQuantitiesInput,
-  PropertyType,
-  CreateBookingMutationVariables,
   UpdateBookingMutationVariables,
   CreateBookingInput,
   TimeSlot,
-  GetCustomerBookingsDocument,
-  GetStaffBookingsDocument,
 } from "@/graphql/api";
 
 export const useBookingOperations = () => {
