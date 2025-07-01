@@ -1,25 +1,25 @@
 // styles/components/cooking/CookingAbout.module.scss
-@import '@/styles/abstracts/variables';
-@import '@/styles/abstracts/mixins';
-@import '@/styles/abstracts/functions';
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .about {
-  padding: spacing('3xl') 0;
-  background-color: color('neutral', 'light');
+  padding: spacing("3xl") 0;
+  background-color: color("neutral", "light");
   position: relative;
   overflow: hidden;
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     right: 0;
     width: 30%;
     height: 30%;
-    background-color: rgba(color('secondary', 'light'), 0.2);
+    background-color: rgba(color("secondary", "light"), 0.2);
     opacity: 0.3;
     border-bottom-left-radius: 100px;
-    z-index: z-index('negative');
+    z-index: z-index("negative");
   }
 
   &__container {
@@ -27,11 +27,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: spacing('3xl');
+    gap: spacing("3xl");
     position: relative;
-    z-index: z-index('default');
-    
-    @include breakpoint-down('md') {
+    z-index: z-index("default");
+
+    @include breakpoint-down("md") {
       flex-direction: column;
     }
   }
@@ -39,135 +39,135 @@
   &__content {
     flex: 1;
     max-width: 600px;
-    
-    @include breakpoint-down('md') {
+
+    @include breakpoint-down("md") {
       max-width: 100%;
     }
   }
 
   &__heading {
-    margin-bottom: spacing('lg');
+    margin-bottom: spacing("lg");
   }
 
   &__subheading {
-    font-size: map-get($font-sizes, 'sm');
-    font-weight: map-get($font-weights, 'medium');
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: color('secondary', 'base');
-    margin-bottom: spacing('xs');
+    color: color("secondary", "base");
+    margin-bottom: spacing("xs");
     display: block;
   }
 
   &__title {
     @include heading-2;
-    color: color('neutral', 'black');
+    color: color("neutral", "black");
   }
 
   &__text {
     @include paragraph;
-    color: color('neutral', 'dark');
-    margin-bottom: spacing('md');
+    color: color("neutral", "dark");
+    margin-bottom: spacing("md");
   }
 
   &__features {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: spacing('lg');
-    margin-top: spacing('xl');
-    
-    @include breakpoint-down('md') {
+    gap: spacing("lg");
+    margin-top: spacing("xl");
+
+    @include breakpoint-down("md") {
       grid-template-columns: repeat(2, 1fr);
     }
-    
-    @include breakpoint-down('sm') {
+
+    @include breakpoint-down("sm") {
       grid-template-columns: 1fr;
     }
   }
 
   &__feature {
-    padding: spacing('md');
-    background-color: color('neutral', 'white');
-    border-radius: border-radius('md');
-    box-shadow: map-get($box-shadows, 'sm');
+    padding: spacing("md");
+    background-color: color("neutral", "white");
+    border-radius: border-radius("md");
+    box-shadow: map-get($box-shadows, "sm");
     transition: $transition-base;
-    
+
     &:hover {
       transform: translateY(-5px);
-      box-shadow: map-get($box-shadows, 'md');
+      box-shadow: map-get($box-shadows, "md");
     }
-    
+
     &-icon {
       @include flex-center;
       width: 50px;
       height: 50px;
-      background-color: rgba(color('secondary', 'light'), 0.2);
-      color: color('secondary', 'base');
-      border-radius: border-radius('full');
-      margin-bottom: spacing('sm');
+      background-color: rgba(color("secondary", "light"), 0.2);
+      color: color("secondary", "base");
+      border-radius: border-radius("full");
+      margin-bottom: spacing("sm");
     }
-    
+
     &-title {
-      font-size: map-get($font-sizes, 'lg');
-      font-weight: map-get($font-weights, 'semibold');
-      color: color('neutral', 'black');
-      margin-bottom: spacing('xs');
+      font-size: map-get($font-sizes, "lg");
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "black");
+      margin-bottom: spacing("xs");
     }
-    
+
     &-text {
-      font-size: map-get($font-sizes, 'sm');
-      line-height: map-get($line-heights, 'normal');
-      color: color('neutral', 'dark');
+      font-size: map-get($font-sizes, "sm");
+      line-height: map-get($line-heights, "normal");
+      color: color("neutral", "dark");
     }
   }
 
   &__image {
     flex: 1;
     position: relative;
-    
+
     &-container {
       position: relative;
       width: 100%;
       max-width: 500px;
       margin-left: auto;
-      
-      @include breakpoint-down('md') {
+
+      @include breakpoint-down("md") {
         margin: 0 auto;
       }
     }
-    
+
     &-main {
-      border-radius: border-radius('lg');
-      box-shadow: map-get($box-shadows, 'lg');
+      border-radius: border-radius("lg");
+      box-shadow: map-get($box-shadows, "lg");
       position: relative;
-      z-index: z-index('default');
+      z-index: z-index("default");
       width: 100%;
       height: auto;
       object-fit: cover;
     }
-    
+
     &-accent {
       position: absolute;
-      bottom: spacing('md');
-      left: spacing('md');
+      bottom: spacing("md");
+      left: spacing("md");
       width: 60%;
       height: 60%;
-      background-color: color('primary', 'base');
-      border-radius: border-radius('lg');
-      z-index: z-index('negative');
+      background-color: color("primary", "base");
+      border-radius: border-radius("lg");
+      z-index: z-index("negative");
     }
   }
 
   &__stats {
     display: flex;
-    gap: spacing('xl');
-    margin-top: spacing('lg');
-    
-    @include breakpoint-down('md') {
+    gap: spacing("xl");
+    margin-top: spacing("lg");
+
+    @include breakpoint-down("md") {
       justify-content: center;
     }
-    
-    @include breakpoint-down('sm') {
+
+    @include breakpoint-down("sm") {
       flex-direction: column;
       align-items: center;
     }
@@ -176,17 +176,17 @@
   &__stat {
     display: flex;
     flex-direction: column;
-    
+
     &-number {
       @include heading-2;
-      color: color('secondary', 'base');
-      font-weight: map-get($font-weights, 'bold');
+      color: color("secondary", "base");
+      font-weight: map-get($font-weights, "bold");
     }
-    
+
     &-text {
-      font-size: map-get($font-sizes, 'sm');
-      line-height: map-get($line-heights, 'normal');
-      color: color('neutral', 'dark');
+      font-size: map-get($font-sizes, "sm");
+      line-height: map-get($line-heights, "normal");
+      color: color("neutral", "dark");
     }
   }
 }

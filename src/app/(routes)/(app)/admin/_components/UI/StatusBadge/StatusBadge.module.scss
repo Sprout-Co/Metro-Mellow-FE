@@ -1,45 +1,44 @@
-
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: spacing('xxs') spacing('xs');
-  border-radius: border-radius('md');
-  font-size: map-get($font-sizes, 'xs');
-  font-weight: map-get($font-weights, 'medium');
+  padding: spacing("xxs") spacing("xs");
+  border-radius: border-radius("md");
+  font-size: map-get($font-sizes, "xs");
+  font-weight: map-get($font-weights, "medium");
   line-height: 1;
-  
+
   &--primary {
-    background-color: rgba(color('primary', 'base'), 0.1);
-    color: color('primary', 'base');
+    background-color: rgba(color("primary", "base"), 0.1);
+    color: color("primary", "base");
   }
-  
+
   &--secondary {
-    background-color: rgba(color('secondary', 'base'), 0.1);
-    color: color('secondary', 'base');
+    background-color: rgba(color("secondary", "base"), 0.1);
+    color: color("secondary", "base");
   }
-  
+
   &--success {
-    background-color: rgba(color('success'), 0.1);
-    color: color('success');
+    background-color: rgba(color("success"), 0.1);
+    color: color("success");
   }
-  
+
   &--warning {
-    background-color: rgba(color('warning'), 0.1);
-    color: color('warning');
+    background-color: rgba(color("warning"), 0.1);
+    color: color("warning");
   }
-  
+
   &--error {
-    background-color: rgba(color('error'), 0.1);
-    color: color('error');
+    background-color: rgba(color("error"), 0.1);
+    color: color("error");
   }
-  
+
   &--info {
-    background-color: rgba(color('info'), 0.1);
-    color: color('info');
+    background-color: rgba(color("info"), 0.1);
+    color: color("info");
   }
 }

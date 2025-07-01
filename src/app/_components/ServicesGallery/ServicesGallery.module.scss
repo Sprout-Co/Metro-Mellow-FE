@@ -1,0 +1,351 @@
+// src/app/_components/ServicesGallery/ServicesGallery.module.scss
+@import '../../../styles/abstracts/variables';
+@import '../../../styles/abstracts/functions';
+@import '../../../styles/abstracts/mixins';
+@import '../../../styles/abstracts/animations';
+
+.servicesGallery {
+  position: relative;
+  width: 100%;
+  background-color: color('accent', 'lighter');
+  padding: spacing('6xl') spacing('lg');
+  overflow: hidden;
+  min-height: 100vh;
+  
+  // Decorative elements
+  &__decorations {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+  }
+  
+  // WhatsApp button
+  &__whatsapp {
+    position: absolute;
+    top: spacing('lg');
+    right: spacing('lg');
+    z-index: z-index('docked');
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    
+    @include breakpoint-down('md') {
+      top: spacing('md');
+      right: spacing('md');
+    }
+  }
+  
+  // Main grid layout
+  &__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(12, 1fr);
+    gap: spacing('md');
+    max-width: container-width('xl');
+    margin: 0 auto;
+    min-height: 80vh;
+    z-index: 2;
+    
+    @include breakpoint-down('lg') {
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(16, 1fr);
+    }
+    
+    @include breakpoint-down('md') {
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(20, 1fr);
+    }
+    
+    @include breakpoint-down('sm') {
+      display: flex;
+      flex-direction: column;
+      gap: spacing('md');
+      min-height: auto;
+    }
+  }
+  
+  // Grid items positioning - Updated to match exact specifications
+  &__item {
+    position: relative;
+    
+    // Top Left Card (Chef in white)
+    &--top-left {
+      grid-column: 1 / span 3;
+      grid-row: 1 / span 4;
+      
+      @include breakpoint-down('md') {
+        grid-column: 1 / span 3;
+        grid-row: 1 / span 4;
+      }
+      
+      @include breakpoint-down('sm') {
+        // Remove grid positioning for mobile
+      }
+    }
+    
+    // Top Right Card (Chef in white) - Adjusted to align with center cards
+    &--top-right {
+      grid-column: 10 / span 3;
+      grid-row: 1 / span 4;
+      
+      @include breakpoint-down('lg') {
+        grid-column: 6 / span 3;
+        grid-row: 1 / span 4;
+      }
+      
+      @include breakpoint-down('md') {
+        grid-column: 4 / span 3;
+        grid-row: 1 / span 4;
+      }
+      
+      @include breakpoint-down('sm') {
+        // Remove grid positioning for mobile
+      }
+    }
+    
+    // Middle Left Card (Cleaner with yellow gloves)
+    &--middle-left {
+      grid-column: 1 / span 3;
+      grid-row: 5 / span 4;
+      
+      @include breakpoint-down('md') {
+        grid-column: 1 / span 3;
+        grid-row: 5 / span 4;
+      }
+      
+      @include breakpoint-down('sm') {
+        // Remove grid positioning for mobile
+      }
+    }
+    
+    // Middle Center-Left Card (Man cooking)
+    &--middle-center-left {
+      grid-column: 4 / span 3;
+      grid-row: 3 / span 4;
+      
+      @include breakpoint-down('lg') {
+        grid-column: 4 / span 3;
+        grid-row: 3 / span 4;
+      }
+      
+      @include breakpoint-down('md') {
+        grid-column: 1 / span 3;
+        grid-row: 9 / span 4;
+      }
+      
+      @include breakpoint-down('sm') {
+        // Remove grid positioning for mobile
+      }
+    }
+    
+    // Middle Center-Right Card (Woman in pink suit)
+    &--middle-center-right {
+      grid-column: 7 / span 3;
+      grid-row: 3 / span 4;
+      
+      @include breakpoint-down('lg') {
+        grid-column: 1 / span 3;
+        grid-row: 7 / span 4;
+      }
+      
+      @include breakpoint-down('md') {
+        grid-column: 4 / span 3;
+        grid-row: 9 / span 4;
+      }
+      
+      @include breakpoint-down('sm') {
+        // Remove grid positioning for mobile
+      }
+    }
+    
+    // Bottom Left Card (Man with laptop)
+    &--bottom-left {
+      grid-column: 4 / span 3;
+      grid-row: 7 / span 4;
+      
+      @include breakpoint-down('lg') {
+        grid-column: 4 / span 3;
+        grid-row: 7 / span 4;
+      }
+      
+      @include breakpoint-down('md') {
+        grid-column: 1 / span 3;
+        grid-row: 13 / span 4;
+      }
+      
+      @include breakpoint-down('sm') {
+        // Remove grid positioning for mobile
+      }
+    }
+    
+    // Bottom Center Card (Woman laughing)
+    &--bottom-center {
+      grid-column: 7 / span 3;
+      grid-row: 7 / span 4;
+      
+      @include breakpoint-down('lg') {
+        grid-column: 6 / span 3;
+        grid-row: 7 / span 4;
+      }
+      
+      @include breakpoint-down('md') {
+        grid-column: 4 / span 3;
+        grid-row: 13 / span 4;
+      }
+      
+      @include breakpoint-down('sm') {
+        // Remove grid positioning for mobile
+      }
+    }
+    
+    // Bottom Right Card (Man on phone) - Positioned at far right
+    &--bottom-right {
+      grid-column: 10 / span 4;
+      grid-row: 5 / span 4;
+      
+      @include breakpoint-down('lg') {
+        grid-column: 6 / span 3;
+        grid-row: 7 / span 4;
+      }
+      
+      @include breakpoint-down('md') {
+        grid-column: 4 / span 3;
+        grid-row: 13 / span 4;
+      }
+      
+      @include breakpoint-down('sm') {
+        // Remove grid positioning for mobile
+      }
+    }
+  }
+  
+  // Card styles - Updated for uniform sizing
+  &__card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: border-radius('xl');
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: $transition-base;
+    
+    // Uniform card size - all cards are square (1:1 aspect ratio)
+    aspect-ratio: 1 / 1;
+    
+    @include breakpoint-down('sm') {
+      height: 200px;
+      aspect-ratio: auto;
+    }
+    
+    // Card colors
+    &--primary {
+      background-color: color('primary', 'base');
+    }
+    
+    &--secondary {
+      background-color: color('secondary', 'base');
+    }
+    
+    &--accent {
+      background-color: color('accent', 'base');
+    }
+    
+    // Hover effect
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+  }
+  
+  // Image styles
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+  
+  // Decorative star
+  &__star {
+    position: absolute;
+    right: spacing('xl');
+    bottom: spacing('6xl');
+    z-index: 1;
+    
+    @include breakpoint-down('lg') {
+      right: spacing('md');
+      bottom: spacing('4xl');
+    }
+    
+    @include breakpoint-down('md') {
+      right: spacing('sm');
+      bottom: spacing('3xl');
+    }
+  }
+}
+
+.servicesGallery__whatsappIcon {
+  position: absolute;
+  top: spacing('lg');
+  right: spacing('lg');
+  z-index: 4;
+  pointer-events: auto;
+  // Responsive tweak
+  @include breakpoint-down('md') {
+    top: spacing('md');
+    right: spacing('md');
+  }
+}
+
+.servicesGallery__starburst {
+  position: absolute;
+  right: spacing('xl');
+  top: 25%;
+  width: 91px;
+  height: 92px;
+  pointer-events: none;
+  z-index: 3;
+  @include breakpoint-down('md') {
+    right: spacing('md');
+    top: 18%;
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.servicesGallery__dottedLineTop {
+  position: absolute;
+  left: 20vw;
+  right: 2vw;
+  top: 1vw;
+  width: calc(100% - 4vw);
+  height: 155px;
+  pointer-events: none;
+  z-index: 2;
+  @include breakpoint-down('md') {
+    top: 0.5vw;
+    height: 80px;
+  }
+}
+
+.servicesGallery__dottedArrowBottom {
+  position: absolute;
+  left: 3%;
+  bottom: 2vw;
+  width: 166px;
+  height: 255px;
+  pointer-events: none;
+  z-index: 2;
+  @include breakpoint-down('md') {
+    width: 100px;
+    height: 120px;
+    bottom: 0.5vw;
+  }
+}

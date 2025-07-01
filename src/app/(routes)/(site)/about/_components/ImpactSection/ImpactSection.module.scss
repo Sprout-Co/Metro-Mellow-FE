@@ -1,0 +1,172 @@
+@import "../../../../../../styles/abstracts/_variables.scss";
+@import "../../../../../../styles/abstracts/_mixins.scss";
+@import "../../../../../../styles/abstracts/_functions.scss";
+
+.impact-section {
+  position: relative;
+  padding: map-get($spacing, "6xl") 0;
+  background-color: map-get(map-get($colors, "accent"), "lighter");
+  overflow: hidden;
+
+  @include breakpoint-down('md') {
+    padding: map-get($spacing, "4xl") 0;
+  }
+  @include breakpoint-down('sm') {
+    padding: map-get($spacing, "2xl") 0;
+  }
+
+  &__container {
+    max-width: map-get($container-max-widths, "xl");
+    margin: 0 auto;
+    padding: 0 map-get($spacing, "lg");
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    @include breakpoint-down('md') {
+      padding: 0 map-get($spacing, "md");
+    }
+    @include breakpoint-down('sm') {
+      padding: 0 map-get($spacing, "sm");
+      align-items: center;
+    }
+  }
+
+  &__heading {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "h2");
+    font-weight: map-get($font-weights, "bold");
+    color: map-get(map-get($colors, "neutral"), "black");
+    margin-bottom: map-get($spacing, "lg");
+    line-height: map-get($line-heights, "tight");
+    text-align: left;
+    @include breakpoint-down('sm') {
+      font-size: map-get($font-sizes, "h4");
+      text-align: center;
+      width: 100%;
+    }
+  }
+
+  &__description {
+    font-family: $font-family-base;
+    font-size: map-get($font-sizes, "subtitle-1");
+    font-weight: map-get($font-weights, "regular");
+    color: map-get(map-get($colors, "neutral"), "black");
+    max-width: 60%;
+    margin-bottom: map-get($spacing, "4xl");
+    line-height: map-get($line-heights, "normal");
+    text-align: left;
+    @include breakpoint-down('md') {
+      max-width: 100%;
+    }
+    @include breakpoint-down('sm') {
+      font-size: map-get($font-sizes, "body-2");
+      text-align: center;
+      margin-bottom: map-get($spacing, "2xl");
+    }
+  }
+
+  &__stats {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: map-get($spacing, "5xl");
+    gap: map-get($spacing, "3xl");
+
+    @include breakpoint-down('md') {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: map-get($spacing, "xl");
+    }
+    @include breakpoint-down('sm') {
+      align-items: center;
+      text-align: center;
+      gap: map-get($spacing, "lg");
+      margin-bottom: map-get($spacing, "2xl");
+    }
+  }
+
+  &__stat-item {
+    text-align: left;
+    @include breakpoint-down('sm') {
+      text-align: center;
+      width: 100%;
+    }
+  }
+
+  &__stat-number {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "h3");
+    font-weight: map-get($font-weights, "bold");
+    color: map-get(map-get($colors, "neutral"), "black");
+    margin-bottom: map-get($spacing, "xs");
+    @include breakpoint-down('sm') {
+      font-size: map-get($font-sizes, "h5");
+    }
+  }
+
+  &__stat-label {
+    font-family: $font-family-base;
+    font-size: map-get($font-sizes, "body-1");
+    font-weight: map-get($font-weights, "regular");
+    color: map-get(map-get($colors, "neutral"), "black");
+    @include breakpoint-down('sm') {
+      font-size: map-get($font-sizes, "body-2");
+    }
+  }
+
+  &__map {
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin-bottom: map-get($spacing, "2xl");
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include breakpoint-down('sm') {
+      margin-bottom: map-get($spacing, "xl");
+    }
+    img {
+      width: 100%;
+      max-width: 1200px;
+      height: auto;
+      display: block;
+      @include breakpoint-down('md') {
+        max-width: 900px;
+      }
+      @include breakpoint-down('sm') {
+        max-width: 100%;
+      }
+    }
+  }
+
+  &__cta {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    button {
+      background-color: map-get(map-get($colors, "primary"), "base");
+      color: map-get(map-get($colors, "neutral"), "white");
+      padding: map-get($spacing, "md") map-get($spacing, "2xl");
+      border-radius: map-get($border-radius, "lg");
+      font-family: $font-family-base;
+      font-size: map-get($font-sizes, "button");
+      font-weight: map-get($font-weights, "medium");
+      letter-spacing: map-get($letter-spacing, "wider");
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      @include breakpoint-down('sm') {
+        width: 100%;
+        font-size: map-get($font-sizes, "body-2");
+        padding: map-get($spacing, "sm") map-get($spacing, "lg");
+      }
+      &:hover {
+        background-color: map-get(map-get($colors, "primary"), "dark");
+      }
+    }
+  }
+} 

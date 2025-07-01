@@ -1,0 +1,260 @@
+// src/app/_components/Hero/Hero.module.scss
+@import '../../../styles/abstracts/variables';
+@import '../../../styles/abstracts/functions';
+@import '../../../styles/abstracts/mixins';
+@import '../../../styles/abstracts/animations';
+
+.service-hero {
+  background-color: map-get(map-get($colors, "primary"), "base");
+  width: 100%;
+  min-height: 600px;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+
+  @media (max-width: map-get($breakpoints, "md")) {
+    min-height: 500px;
+  }
+
+  &__wrapper {
+    display: flex;
+    width: 100%;
+    max-width: map-get($container-max-widths, "3xl");
+    margin: 0 auto;
+    align-items: stretch;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 map-get($spacing, "3xl");
+    box-sizing: border-box;
+    position: relative;
+    @media (max-width: map-get($breakpoints, "lg")) {
+      flex-direction: column;
+      gap: map-get($spacing, "3xl");
+      padding: 0 map-get($spacing, "md");
+    }
+    @media (max-width: map-get($breakpoints, "sm")) {
+      padding: 0 spacing('xs');
+      gap: spacing('lg');
+    }
+  }
+
+  &__left {
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    min-width: 0;
+    height: 100%;
+    min-height: 500px;
+    @media (max-width: map-get($breakpoints, "lg")) {
+      align-items: center;
+      min-height: unset;
+    }
+    @media (max-width: map-get($breakpoints, "sm")) {
+      align-items: center;
+      width: 100%;
+      min-height: unset;
+    }
+  }
+
+  &__cta-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    justify-content: center;
+    margin-left: spacing('3xl');
+    margin-right: 0;
+    width: 100%;
+    max-width: 480px;
+    padding-top: spacing('2xl');
+    padding-bottom: spacing('2xl');
+    @media (max-width: map-get($breakpoints, 'lg')) {
+      align-items: center;
+      text-align: center;
+      margin-left: 0;
+      max-width: 100%;
+      padding-top: spacing('xl');
+      padding-bottom: spacing('xl');
+    }
+  }
+
+  &__heading {
+    font-size: font-size('h1') * 1;
+    font-weight: map-get($font-weights, 'bold');
+    font-family: $font-family-heading;
+    line-height: map-get($line-heights, 'tight');
+    color: color('neutral', 'white');
+    margin-bottom: spacing('xl');
+    letter-spacing: -0.065em;
+
+    @include breakpoint-down('xl') {
+      font-size: font-size('h2') * 1;
+    }
+    @include breakpoint-down('md') {
+      font-size: font-size('h3') * 1;
+      margin-bottom: spacing('xl');
+    }
+    @include breakpoint-down('sm') {
+      font-size: font-size('h4') * 1;
+    }
+  }
+
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-family-base;
+    font-size: font-size('button') * 1.1;
+    font-weight: map-get($font-weights, 'bold');
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: letter-spacing('wider');
+    border: 1px solid transparent;
+    border-radius: map-get($border-radius, 'full');
+    cursor: pointer;
+    transition: $transition-base;
+    white-space: nowrap;
+    user-select: none;
+    outline: none;
+    min-width: 260px;
+    max-width: 340px;
+    width: auto;
+    height: 3rem;
+    padding: spacing('lg') spacing('3xl');
+    background-color: color('neutral', 'white');
+    color: map-get(map-get($colors, 'primary'), 'base');
+    border-color: color('neutral', 'white');
+    margin-top: 0;
+    @media (max-width: map-get($breakpoints, 'md')) {
+      min-width: 180px;
+      max-width: 100%;
+      height: 2.5rem;
+      padding: spacing('sm') spacing('xl');
+      font-size: font-size('button');
+    }
+    @media (max-width: map-get($breakpoints, 'sm')) {
+      min-width: 100%;
+      width: 100%;
+      max-width: 100%;
+      padding: spacing('xl') 0;
+      font-size: font-size('body-2');
+    }
+  }
+
+  &__right {
+    flex: 1 1 50%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    min-width: 0;
+    height: 100%;
+    position: relative;
+    @media (max-width: map-get($breakpoints, "lg")) {
+      justify-content: center;
+      margin-top: map-get($spacing, "xl");
+    }
+    @media (max-width: map-get($breakpoints, "sm")) {
+      width: 100%;
+      margin-top: spacing('md');
+    }
+  }
+
+  &__badges {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    max-width: 700px;
+    gap: map-get($spacing, "xl");
+    margin-top: map-get($spacing, "2xl");
+    margin-bottom: map-get($spacing, "2xl");
+    @media (max-width: map-get($breakpoints, "md")) {
+      gap: map-get($spacing, "md");
+      margin-top: map-get($spacing, "xl");
+      margin-bottom: map-get($spacing, "xl");
+    }
+    @media (max-width: map-get($breakpoints, "sm")) {
+      gap: spacing('xs');
+      margin-top: spacing('md');
+      margin-bottom: spacing('md');
+    }
+  }
+}
+
+.service-badge {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 340px;
+  max-width: 480px;
+  height: 70px;
+  padding: 0 map-get($spacing, "3xl");
+  transform: skewX(-25deg);
+  box-shadow: map-get($box-shadows, "md");
+  transition: box-shadow 0.2s, transform 0.2s;
+  z-index: 1;
+  @media (max-width: map-get($breakpoints, "md")) {
+    min-width: 180px;
+    max-width: 100%;
+    height: 44px;
+    padding: 0 map-get($spacing, "xl");
+  }
+  @media (max-width: map-get($breakpoints, "sm")) {
+    min-width: 120px;
+    max-width: 100%;
+    height: 32px;
+    padding: 0 spacing('sm');
+  }
+  &__text {
+    font-size: font-size('h6');
+    font-weight: map-get($font-weights, "medium");
+    font-family: $font-family-base;
+    color: map-get($colors, "neutral", "darkest");
+    transform: skewX(25deg);
+    @media (max-width: map-get($breakpoints, "md")) {
+      font-size: map-get($font-sizes, "xl");
+    }
+    @media (max-width: map-get($breakpoints, "sm")) {
+      font-size: map-get($font-sizes, 'small');
+    }
+  }
+  // Zigzag/stepped effect
+  &:nth-child(odd) {
+    align-self: flex-end;
+    margin-right: 0;
+    margin-left: 0;
+  }
+  &:nth-child(even) {
+    align-self: flex-start;
+    margin-left: map-get($spacing, "10xl");
+    margin-right: 0;
+    @media (max-width: map-get($breakpoints, "md")) {
+      margin-left: map-get($spacing, "md");
+    }
+    @media (max-width: map-get($breakpoints, "sm")) {
+      margin-left: spacing('xs');
+    }
+  }
+}
+
+// Service-specific colors (all from abstracts)
+.service-badge--laundromat {
+  background-color: map-get(map-get($colors, "accent"), "base");
+}
+.service-badge--cleaning {
+  background-color: map-get(map-get($colors, "secondary"), "light");
+}
+.service-badge--cooking {
+  background-color: map-get($colors, "neutral", "lighter");
+}
+.service-badge--errands {
+  background-color: map-get($colors, "neutral", "white");
+}
+.service-badge--pests {
+  background-color: map-get(map-get($colors, "accent"), "base");
+}

@@ -1,6 +1,6 @@
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .property-card {
   position: relative;
@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  
+
   &__image {
     height: 160px;
     background-size: cover;
@@ -20,7 +20,7 @@
     background-repeat: no-repeat;
     position: relative;
   }
-  
+
   &__default-badge {
     position: absolute;
     top: spacing("sm");
@@ -33,83 +33,83 @@
     border-radius: border-radius("md");
     font-size: map-get($font-sizes, "xs");
     font-weight: map-get($font-weights, "medium");
-    
+
     svg {
       margin-right: spacing("xxs");
       font-size: map-get($font-sizes, "sm");
     }
   }
-  
+
   &__content {
     padding: spacing("md");
     flex: 1;
   }
-  
+
   &__name {
     font-size: map-get($font-sizes, "lg");
     font-weight: map-get($font-weights, "semibold");
     color: color("neutral", "black");
     margin-bottom: spacing("xs");
   }
-  
+
   &__address {
     display: flex;
     align-items: flex-start;
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "dark");
     margin-bottom: spacing("md");
-    
+
     svg {
       margin-right: spacing("xxs");
       margin-top: 3px;
       flex-shrink: 0;
     }
   }
-  
+
   &__details {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: spacing("xs");
   }
-  
+
   &__detail {
     display: flex;
     align-items: center;
     font-size: map-get($font-sizes, "xs");
     color: color("neutral", "darker");
-    
+
     svg {
       margin-right: spacing("xxs");
       font-size: map-get($font-sizes, "sm");
       color: color("neutral", "dark");
     }
   }
-  
+
   &__footer {
     display: flex;
     justify-content: space-between;
     padding: spacing("sm") spacing("md");
     border-top: 1px solid color("neutral", "lighter");
   }
-  
+
   &__stat {
     display: flex;
     align-items: center;
     font-size: map-get($font-sizes, "xs");
     color: color("neutral", "darker");
-    
+
     svg {
       margin-right: spacing("xxs");
       color: color("primary", "base");
     }
   }
-  
+
   &__action {
     position: absolute;
     bottom: spacing("md");
     right: spacing("md");
   }
-  
+
   &__action-btn {
     display: flex;
     align-items: center;
@@ -122,7 +122,7 @@
     border: none;
     cursor: pointer;
     transition: $transition-base;
-    
+
     &:hover {
       background-color: color("primary", "dark");
       transform: translateX(3px);

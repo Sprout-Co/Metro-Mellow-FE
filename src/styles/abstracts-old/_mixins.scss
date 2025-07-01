@@ -1,0 +1,236 @@
+// Media queries
+@mixin breakpoint-up($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @media (min-width: $breakpoint) {
+      @content;
+    }
+  }
+}
+
+@mixin breakpoint-down($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (max-width: #{map-get($breakpoints, $breakpoint) - 0.02}) {
+      @content;
+    }
+  } @else {
+    @media (max-width: #{$breakpoint - 0.02}) {
+      @content;
+    }
+  }
+}
+
+// Container
+@mixin container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: map-get($spacing, "md");
+  padding-right: map-get($spacing, "md");
+
+  @include breakpoint-up("sm") {
+    max-width: map-get($container-max-widths, "sm");
+  }
+
+  @include breakpoint-up("md") {
+    max-width: map-get($container-max-widths, "md");
+  }
+
+  @include breakpoint-up("lg") {
+    max-width: map-get($container-max-widths, "lg");
+  }
+
+  @include breakpoint-up("xl") {
+    max-width: map-get($container-max-widths, "xl");
+  }
+
+  @include breakpoint-up("2xl") {
+    max-width: map-get($container-max-widths, "2xl");
+  }
+}
+
+// Typography
+@mixin font-size($size) {
+  @if map-has-key($font-sizes, $size) {
+    font-size: map-get($font-sizes, $size);
+  } @else {
+    font-size: $size;
+  }
+}
+
+@mixin heading-1 {
+  font-size: map-get($font-sizes, "5xl"); // 48px
+  font-weight: map-get($font-weights, "bold"); // 700
+  line-height: map-get($line-heights, "tight"); // 1.25
+
+  @include breakpoint-up("md") {
+    font-size: map-get($font-sizes, "4xl"); // 36px
+  }
+
+  @include breakpoint-up("xs") {
+    font-size: map-get($font-sizes, "3xl"); // 30px
+  }
+}
+
+@mixin heading-2 {
+  font-size: map-get($font-sizes, "3xl"); // 30px
+  font-weight: map-get($font-weights, "bold"); // 700
+  line-height: map-get($line-heights, "snug"); // 1.375
+
+  @include breakpoint-up("xs") {
+    font-size: map-get($font-sizes, "2xl"); // 24px
+  }
+}
+
+@mixin heading-3 {
+  font-size: map-get($font-sizes, "2xl"); // 24px
+  font-weight: map-get($font-weights, "semibold"); // 600
+  line-height: map-get($line-heights, "normal"); // 1.5
+}
+
+@mixin paragraph {
+  font-size: map-get($font-sizes, "base"); // 16px
+  line-height: map-get($line-heights, "relaxed"); // 1.625
+  color: map-get(map-get($colors, "neutral"), "dark"); // #717D92 (Medium Gray)
+}
+
+// Flexbox helpers
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Grid helpers
+@mixin grid-cols($cols) {
+  display: grid;
+  grid-template-columns: repeat($cols, 1fr);
+}
+
+// Button style
+@mixin button-variant(
+  $bg-color,
+  $text-color,
+  $hover-bg-color,
+  $hover-text-color
+) {
+  background-color: $bg-color;
+  color: $text-color;
+  transition: $transition-base;
+
+  &:hover,
+  &:focus {
+    background-color: $hover-bg-color;
+    color: $hover-text-color;
+  }
+}
+
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: map-get($font-weights, "medium"); // 500
+  text-decoration: none;
+  border-radius: map-get($border-radius, "md"); // 4px
+  padding: map-get($spacing, "sm") map-get($spacing, "lg"); // 8px 24px
+  transition: $transition-fast; // 0.1s ease-in-out
+  cursor: pointer;
+  border: none;
+  font-size: map-get($font-sizes, "base"); // 16px
+  line-height: 1.5;
+  text-align: center;
+}
+
+@mixin button-primary {
+  @include button-base;
+  background-color: map-get(map-get($colors, "primary"), "base"); // #4A6FFF
+  color: map-get(map-get($colors, "neutral"), "white"); // #FFFFFF
+
+  &:hover {
+    background-color: map-get(map-get($colors, "primary"), "dark"); // #2651DB
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px
+      rgba(map-get(map-get($colors, "primary"), "base"), 0.3);
+  }
+}
+
+@mixin button-secondary {
+  @include button-base;
+  background-color: transparent;
+  color: map-get(map-get($colors, "primary"), "base"); // #4A6FFF
+  border: 1px solid map-get(map-get($colors, "primary"), "base"); // #4A6FFF
+
+  &:hover {
+    background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px
+      rgba(map-get(map-get($colors, "primary"), "base"), 0.2);
+  }
+}
+
+@mixin button-white {
+  @include button-base;
+  background-color: map-get(map-get($colors, "neutral"), "light"); // #F5F7FA
+  color: map-get(map-get($colors, "primary"), "base"); // #4A6FFF
+
+  &:hover {
+    background-color: darken(map-get(map-get($colors, "neutral"), "light"), 5%);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px
+      rgba(map-get(map-get($colors, "neutral"), "light"), 0.3);
+  }
+}
+
+// Truncate text
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// sr-only (screen reader only)
+@mixin sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+// Sections
+@mixin section-container {
+  @include container;
+  padding: map-get($spacing, "2xl") 0; // 40px 0
+  border-bottom: 1px solid color("neutral", "medium");
+
+  @include breakpoint-up("md") {
+    padding: map-get($spacing, "2xl") 0; // 64px 0
+  }
+}

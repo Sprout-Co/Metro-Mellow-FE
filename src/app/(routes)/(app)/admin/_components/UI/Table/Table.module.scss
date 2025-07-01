@@ -1,125 +1,126 @@
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .table {
   width: 100%;
-  background: color('neutral', 'white');
-  border-radius: border-radius('xl');
+  background: color("neutral", "white");
+  border-radius: border-radius("xl");
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  
+
   &__wrapper {
     width: 100%;
     overflow-x: auto;
-    
+
     &::-webkit-scrollbar {
       height: 8px;
     }
-    
+
     &::-webkit-scrollbar-track {
-      background: color('neutral', 'lighter');
-      border-radius: border-radius('full');
+      background: color("neutral", "lighter");
+      border-radius: border-radius("full");
     }
-    
+
     &::-webkit-scrollbar-thumb {
-      background: color('neutral', 'medium');
-      border-radius: border-radius('full');
-      
+      background: color("neutral", "medium");
+      border-radius: border-radius("full");
+
       &:hover {
-        background: color('neutral', 'dark');
+        background: color("neutral", "dark");
       }
     }
   }
-  
+
   &__container {
     min-width: 100%;
     border-collapse: separate;
     border-spacing: 0;
   }
-  
+
   &__head {
-    background: linear-gradient(180deg, 
-      color('neutral', 'white') 0%, 
-      rgba(color('neutral', 'lighter'), 0.5) 100%
+    background: linear-gradient(
+      180deg,
+      color("neutral", "white") 0%,
+      rgba(color("neutral", "lighter"), 0.5) 100%
     );
-    border-bottom: 2px solid color('neutral', 'lighter');
+    border-bottom: 2px solid color("neutral", "lighter");
   }
-  
+
   &__header_row {
     position: relative;
   }
-  
+
   &__header {
-    padding: spacing('md') spacing('lg');
+    padding: spacing("md") spacing("lg");
     text-align: left;
-    font-size: map-get($font-sizes, 'xs');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "dark");
     text-transform: uppercase;
     letter-spacing: 1px;
     white-space: nowrap;
     position: relative;
-    
+
     &--sortable {
       cursor: pointer;
       user-select: none;
       transition: all 0.2s ease;
-      
+
       &:hover {
-        color: color('primary', 'base');
-        
+        color: color("primary", "base");
+
         .table__sort_icon {
           opacity: 1;
         }
       }
     }
-    
+
     &--sorted {
-      color: color('primary', 'base');
-      
+      color: color("primary", "base");
+
       .table__sort_icon {
         opacity: 1;
-        color: color('primary', 'base');
+        color: color("primary", "base");
       }
     }
-    
+
     &--actions {
       text-align: center;
     }
   }
-  
+
   &__sort_icon {
     display: inline-flex;
-    margin-left: spacing('xs');
+    margin-left: spacing("xs");
     opacity: 0.3;
     transition: all 0.2s ease;
     vertical-align: middle;
-    font-size: map-get($font-sizes, 'xs');
+    font-size: map-get($font-sizes, "xs");
   }
-  
+
   &__body {
     position: relative;
   }
-  
+
   &__row {
     position: relative;
-    background-color: color('neutral', 'white');
-    border-bottom: 1px solid rgba(color('neutral', 'lighter'), 0.7);
+    background-color: color("neutral", "white");
+    border-bottom: 1px solid rgba(color("neutral", "lighter"), 0.7);
     transition: all 0.2s ease;
-    
+
     &:last-child {
       border-bottom: none;
     }
-    
+
     &--clickable {
       cursor: pointer;
-      
+
       &:hover {
-        background-color: rgba(color('primary', 'light'), 0.04);
+        background-color: rgba(color("primary", "light"), 0.04);
         transform: translateX(2px);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        
+
         .table__cell {
           &:first-child::before {
             opacity: 1;
@@ -128,172 +129,172 @@
         }
       }
     }
-    
+
     &--selected {
-      background-color: rgba(color('primary', 'light'), 0.08);
-      
+      background-color: rgba(color("primary", "light"), 0.08);
+
       .table__cell:first-child::before {
-        background-color: color('primary', 'base');
+        background-color: color("primary", "base");
         opacity: 1;
         transform: scaleY(1);
       }
     }
   }
-  
+
   &__cell {
-    padding: spacing('lg');
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'darker');
+    padding: spacing("lg");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "darker");
     vertical-align: middle;
     position: relative;
-    
+
     &:first-child {
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         left: 0;
         top: 0;
         bottom: 0;
         width: 3px;
-        background-color: color('primary', 'base');
+        background-color: color("primary", "base");
         opacity: 0;
         transform: scaleY(0);
         transition: all 0.2s ease;
       }
     }
-    
+
     &--actions {
       text-align: center;
     }
-    
+
     &--highlight {
-      font-weight: map-get($font-weights, 'medium');
-      color: color('neutral', 'black');
+      font-weight: map-get($font-weights, "medium");
+      color: color("neutral", "black");
     }
   }
-  
+
   &__empty {
-    padding: spacing('4xl') spacing('xl');
+    padding: spacing("4xl") spacing("xl");
     text-align: center;
   }
-  
+
   &__empty_icon {
-    font-size: map-get($font-sizes, '5xl');
+    font-size: map-get($font-sizes, "5xl");
     opacity: 0.2;
-    margin-bottom: spacing('md');
+    margin-bottom: spacing("md");
   }
-  
+
   &__empty_message {
-    font-size: map-get($font-sizes, 'base');
-    color: color('neutral', 'dark');
-    margin: 0 0 spacing('sm') 0;
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("sm") 0;
   }
-  
+
   &__empty_submessage {
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
     opacity: 0.7;
     margin: 0;
   }
-  
+
   &__loading {
-    padding: spacing('4xl') spacing('xl');
+    padding: spacing("4xl") spacing("xl");
     text-align: center;
   }
-  
+
   &__loader {
     display: inline-block;
     width: 40px;
     height: 40px;
-    margin-bottom: spacing('md');
-    
+    margin-bottom: spacing("md");
+
     &::after {
-      content: '';
+      content: "";
       display: block;
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      border: 3px solid color('neutral', 'lighter');
-      border-top-color: color('primary', 'base');
+      border: 3px solid color("neutral", "lighter");
+      border-top-color: color("primary", "base");
       animation: spin 0.8s linear infinite;
     }
   }
-  
+
   &__loading_text {
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
   }
-  
+
   // Pagination
   &__pagination {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: spacing('md') spacing('lg');
-    border-top: 1px solid color('neutral', 'lighter');
-    background-color: rgba(color('neutral', 'lighter'), 0.3);
-    
-    @include breakpoint-down('sm') {
+    padding: spacing("md") spacing("lg");
+    border-top: 1px solid color("neutral", "lighter");
+    background-color: rgba(color("neutral", "lighter"), 0.3);
+
+    @include breakpoint-down("sm") {
       flex-direction: column;
-      gap: spacing('md');
+      gap: spacing("md");
     }
   }
-  
+
   &__pagination_info {
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
   }
-  
+
   &__pagination_controls {
     display: flex;
     align-items: center;
-    gap: spacing('xs');
+    gap: spacing("xs");
   }
-  
+
   &__pagination_button {
-    padding: spacing('xs') spacing('sm');
-    background-color: color('neutral', 'white');
-    border: 1px solid color('neutral', 'medium');
-    border-radius: border-radius('md');
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'darker');
+    padding: spacing("xs") spacing("sm");
+    background-color: color("neutral", "white");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "darker");
     cursor: pointer;
     transition: all 0.2s ease;
-    
+
     &:hover:not(:disabled) {
-      background-color: color('primary', 'base');
-      border-color: color('primary', 'base');
-      color: color('neutral', 'white');
+      background-color: color("primary", "base");
+      border-color: color("primary", "base");
+      color: color("neutral", "white");
     }
-    
+
     &:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
-    
+
     &--active {
-      background-color: color('primary', 'base');
-      border-color: color('primary', 'base');
-      color: color('neutral', 'white');
+      background-color: color("primary", "base");
+      border-color: color("primary", "base");
+      color: color("neutral", "white");
     }
   }
-  
+
   // Checkbox
   &__checkbox {
     width: 18px;
     height: 18px;
     position: relative;
     cursor: pointer;
-    
+
     input {
       position: absolute;
       opacity: 0;
       cursor: pointer;
-      
+
       &:checked ~ .table__checkbox_mark {
-        background-color: color('primary', 'base');
-        border-color: color('primary', 'base');
-        
+        background-color: color("primary", "base");
+        border-color: color("primary", "base");
+
         &::after {
           opacity: 1;
           transform: scale(1);
@@ -301,33 +302,33 @@
       }
     }
   }
-  
+
   &__checkbox_mark {
     position: absolute;
     top: 0;
     left: 0;
     width: 18px;
     height: 18px;
-    background-color: color('neutral', 'white');
-    border: 2px solid color('neutral', 'medium');
-    border-radius: border-radius('sm');
+    background-color: color("neutral", "white");
+    border: 2px solid color("neutral", "medium");
+    border-radius: border-radius("sm");
     transition: all 0.2s ease;
-    
+
     &::after {
-      content: '✓';
+      content: "✓";
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0);
-      color: color('neutral', 'white');
-      font-size: map-get($font-sizes, 'xs');
-      font-weight: map-get($font-weights, 'bold');
+      color: color("neutral", "white");
+      font-size: map-get($font-sizes, "xs");
+      font-weight: map-get($font-weights, "bold");
       opacity: 0;
       transition: all 0.2s ease;
     }
-    
+
     &:hover {
-      border-color: color('primary', 'base');
+      border-color: color("primary", "base");
     }
   }
 }

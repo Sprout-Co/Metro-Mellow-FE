@@ -1,219 +1,219 @@
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .marketing_page {
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: spacing('lg');
-    
-    @include breakpoint-down('md') {
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("md") {
       flex-direction: column;
-      gap: spacing('md');
+      gap: spacing("md");
     }
   }
-  
+
   &__title {
-    font-size: map-get($font-sizes, '2xl');
-    font-weight: map-get($font-weights, 'bold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
   }
-  
+
   &__description {
-    font-size: map-get($font-sizes, 'base');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
     margin: 0;
   }
-  
+
   &__actions {
     display: flex;
-    gap: spacing('sm');
-    
-    @include breakpoint-down('sm') {
+    gap: spacing("sm");
+
+    @include breakpoint-down("sm") {
       width: 100%;
     }
   }
-  
+
   &__tabs {
     display: flex;
-    margin-bottom: spacing('lg');
-    border-bottom: 1px solid color('neutral', 'lighter');
-    
-    @include breakpoint-down('sm') {
+    margin-bottom: spacing("lg");
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    @include breakpoint-down("sm") {
       overflow-x: auto;
       white-space: nowrap;
-      padding-bottom: spacing('xs');
+      padding-bottom: spacing("xs");
     }
   }
-  
+
   &__tab {
-    padding: spacing('sm') spacing('lg');
+    padding: spacing("sm") spacing("lg");
     background: none;
     border: none;
-    font-size: map-get($font-sizes, 'sm');
-    font-weight: map-get($font-weights, 'medium');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
     cursor: pointer;
     position: relative;
-    
+
     &:hover {
-      color: color('secondary', 'base');
+      color: color("secondary", "base");
     }
-    
+
     &--active {
-      color: color('secondary', 'base');
-      
+      color: color("secondary", "base");
+
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: -1px;
         left: 0;
         width: 100%;
         height: 2px;
-        background-color: color('secondary', 'base');
+        background-color: color("secondary", "base");
       }
     }
   }
-  
+
   // Campaigns tab
   &__active_campaigns {
-    margin-bottom: spacing('xl');
+    margin-bottom: spacing("xl");
   }
-  
+
   &__campaigns_header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: spacing('md');
-    
-    @include breakpoint-down('md') {
+    margin-bottom: spacing("md");
+
+    @include breakpoint-down("md") {
       flex-direction: column;
       align-items: flex-start;
-      gap: spacing('sm');
+      gap: spacing("sm");
     }
   }
-  
+
   &__campaigns_title {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
     margin: 0;
   }
-  
+
   &__campaigns_grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: spacing('lg');
+    gap: spacing("lg");
   }
-  
+
   &__campaign_card {
-    padding: spacing('lg');
+    padding: spacing("lg");
     display: flex;
     flex-direction: column;
     height: 100%;
   }
-  
+
   &__campaign_header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: spacing('md');
+    margin-bottom: spacing("md");
   }
-  
+
   &__campaign_title {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
   }
-  
+
   &__campaign_badge {
-    font-size: map-get($font-sizes, 'xs');
-    font-weight: map-get($font-weights, 'semibold');
-    padding: spacing('xxs') spacing('xs');
-    border-radius: border-radius('sm');
-    
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "semibold");
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("sm");
+
     &--active {
-      background-color: rgba(color('success'), 0.1);
-      color: color('success');
+      background-color: rgba(color("success"), 0.1);
+      color: color("success");
     }
-    
+
     &--draft {
-      background-color: rgba(color('neutral', 'dark'), 0.1);
-      color: color('neutral', 'dark');
+      background-color: rgba(color("neutral", "dark"), 0.1);
+      color: color("neutral", "dark");
     }
-    
+
     &--scheduled {
-      background-color: rgba(color('info'), 0.1);
-      color: color('info');
+      background-color: rgba(color("info"), 0.1);
+      color: color("info");
     }
-    
+
     &--completed {
-      background-color: rgba(color('secondary', 'base'), 0.1);
-      color: color('secondary', 'base');
+      background-color: rgba(color("secondary", "base"), 0.1);
+      color: color("secondary", "base");
     }
   }
-  
+
   &__campaign_description {
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
-    margin: 0 0 spacing('md') 0;
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("md") 0;
     flex-grow: 1;
   }
-  
+
   &__campaign_stats {
     display: flex;
-    gap: spacing('md');
-    margin-bottom: spacing('md');
+    gap: spacing("md");
+    margin-bottom: spacing("md");
   }
-  
+
   &__stat {
     flex: 1;
     text-align: center;
-    background-color: color('neutral', 'lighter');
-    padding: spacing('sm');
-    border-radius: border-radius('md');
+    background-color: color("neutral", "lighter");
+    padding: spacing("sm");
+    border-radius: border-radius("md");
   }
-  
+
   &__stat_value {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'bold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xxs') 0;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xxs") 0;
   }
-  
+
   &__stat_label {
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
     margin: 0;
   }
-  
+
   &__campaign_time {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'dark');
-    margin-bottom: spacing('md');
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("md");
   }
-  
+
   &__time_label {
-    font-weight: map-get($font-weights, 'medium');
+    font-weight: map-get($font-weights, "medium");
   }
-  
+
   &__campaign_actions {
     display: flex;
-    gap: spacing('sm');
+    gap: spacing("sm");
     margin-top: auto;
   }
-  
+
   &__new_campaign_card {
-    background-color: rgba(color('neutral', 'lighter'), 0.5);
-    border: 2px dashed color('neutral', 'medium');
-    padding: spacing('lg');
+    background-color: rgba(color("neutral", "lighter"), 0.5);
+    border: 2px dashed color("neutral", "medium");
+    padding: spacing("lg");
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -221,310 +221,310 @@
     text-align: center;
     height: 100%;
     cursor: pointer;
-    
+
     &:hover {
-      border-color: color('secondary', 'base');
-      background-color: rgba(color('secondary', 'base'), 0.05);
+      border-color: color("secondary", "base");
+      background-color: rgba(color("secondary", "base"), 0.05);
     }
   }
-  
+
   &__new_campaign_icon {
-    font-size: map-get($font-sizes, '3xl');
-    color: color('neutral', 'medium');
-    margin-bottom: spacing('md');
+    font-size: map-get($font-sizes, "3xl");
+    color: color("neutral", "medium");
+    margin-bottom: spacing("md");
   }
-  
+
   &__new_campaign_title {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
   }
-  
+
   &__new_campaign_text {
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
     margin: 0;
   }
-  
+
   // Performance tab
   &__performance_metrics {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: spacing('lg');
-    margin-bottom: spacing('xl');
+    gap: spacing("lg");
+    margin-bottom: spacing("xl");
   }
-  
+
   &__metric_card {
-    padding: spacing('lg');
+    padding: spacing("lg");
   }
-  
+
   &__metric_header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: spacing('md');
+    margin-bottom: spacing("md");
   }
-  
+
   &__metric_title {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
     margin: 0;
   }
-  
+
   &__metric_icon {
     width: 36px;
     height: 36px;
-    background-color: rgba(color('secondary', 'base'), 0.1);
+    background-color: rgba(color("secondary", "base"), 0.1);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: map-get($font-sizes, 'xl');
+    font-size: map-get($font-sizes, "xl");
   }
-  
+
   &__metric_value {
-    font-size: map-get($font-sizes, '3xl');
-    font-weight: map-get($font-weights, 'bold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, "3xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
   }
-  
+
   &__metric_comparison {
     display: flex;
     align-items: center;
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
   }
-  
+
   &__comparison_value {
-    margin-left: spacing('xs');
-    font-weight: map-get($font-weights, 'semibold');
-    
+    margin-left: spacing("xs");
+    font-weight: map-get($font-weights, "semibold");
+
     &--positive {
-      color: color('success');
+      color: color("success");
     }
-    
+
     &--negative {
-      color: color('error');
+      color: color("error");
     }
   }
-  
+
   &__performance_charts {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: spacing('lg');
-    margin-bottom: spacing('xl');
-    
-    @include breakpoint-down('lg') {
+    gap: spacing("lg");
+    margin-bottom: spacing("xl");
+
+    @include breakpoint-down("lg") {
       grid-template-columns: 1fr;
     }
   }
-  
+
   &__chart_card {
-    padding: spacing('lg');
+    padding: spacing("lg");
   }
-  
+
   &__chart_header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: spacing('md');
-    
-    @include breakpoint-down('sm') {
+    margin-bottom: spacing("md");
+
+    @include breakpoint-down("sm") {
       flex-direction: column;
       align-items: flex-start;
-      gap: spacing('xs');
+      gap: spacing("xs");
     }
   }
-  
+
   &__chart_title {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
     margin: 0;
   }
-  
+
   &__chart_time_selector {
     display: flex;
-    background-color: color('neutral', 'lighter');
-    padding: spacing('xxs');
-    border-radius: border-radius('md');
+    background-color: color("neutral", "lighter");
+    padding: spacing("xxs");
+    border-radius: border-radius("md");
   }
-  
+
   &__time_option {
-    padding: spacing('xxs') spacing('xs');
-    font-size: map-get($font-sizes, 'xs');
+    padding: spacing("xxs") spacing("xs");
+    font-size: map-get($font-sizes, "xs");
     background: none;
     border: none;
-    border-radius: border-radius('sm');
+    border-radius: border-radius("sm");
     cursor: pointer;
-    
+
     &--active {
-      background-color: color('neutral', 'white');
-      font-weight: map-get($font-weights, 'semibold');
+      background-color: color("neutral", "white");
+      font-weight: map-get($font-weights, "semibold");
     }
   }
-  
+
   &__chart {
     height: 300px;
   }
-  
+
   &__sources_card {
-    padding: spacing('lg');
+    padding: spacing("lg");
     grid-column: 1 / -1;
   }
-  
+
   &__sources_title {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('md') 0;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("md") 0;
   }
-  
+
   &__sources_container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: spacing('md');
+    gap: spacing("md");
   }
-  
+
   &__source_item {
-    background-color: color('neutral', 'lighter');
-    border-radius: border-radius('md');
-    padding: spacing('md');
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
+    padding: spacing("md");
   }
-  
+
   &__source_header {
     display: flex;
     align-items: center;
-    margin-bottom: spacing('xs');
+    margin-bottom: spacing("xs");
   }
-  
+
   &__source_icon {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background-color: rgba(color('neutral', 'black'), 0.1);
+    background-color: rgba(color("neutral", "black"), 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: map-get($font-sizes, 'sm');
-    margin-right: spacing('sm');
+    font-size: map-get($font-sizes, "sm");
+    margin-right: spacing("sm");
   }
-  
+
   &__source_name {
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
   }
-  
+
   &__source_stats {
     display: flex;
     flex-direction: column;
-    gap: spacing('xs');
+    gap: spacing("xs");
   }
-  
+
   &__source_stat {
     display: flex;
     justify-content: space-between;
-    font-size: map-get($font-sizes, 'xs');
+    font-size: map-get($font-sizes, "xs");
   }
-  
+
   &__source_stat_label {
-    color: color('neutral', 'dark');
+    color: color("neutral", "dark");
   }
-  
+
   &__source_stat_value {
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
   }
-  
+
   // Content tab
   &__content_library {
-    margin-bottom: spacing('xl');
+    margin-bottom: spacing("xl");
   }
-  
+
   &__content_header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: spacing('lg');
-    
-    @include breakpoint-down('md') {
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("md") {
       flex-direction: column;
       align-items: flex-start;
-      gap: spacing('md');
+      gap: spacing("md");
     }
   }
-  
+
   &__content_actions {
     display: flex;
-    gap: spacing('sm');
-    
-    @include breakpoint-down('sm') {
+    gap: spacing("sm");
+
+    @include breakpoint-down("sm") {
       width: 100%;
     }
   }
-  
+
   &__content_filter {
-    padding: spacing('xs') spacing('sm');
-    border: 1px solid color('neutral', 'medium');
-    border-radius: border-radius('md');
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
-    background-color: color('neutral', 'white');
-    
+    padding: spacing("xs") spacing("sm");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    background-color: color("neutral", "white");
+
     &:focus {
       outline: none;
-      border-color: color('secondary', 'base');
+      border-color: color("secondary", "base");
     }
-    
-    @include breakpoint-down('sm') {
+
+    @include breakpoint-down("sm") {
       flex: 1;
     }
   }
-  
+
   &__content_search {
     position: relative;
-    
-    @include breakpoint-down('sm') {
+
+    @include breakpoint-down("sm") {
       width: 100%;
     }
   }
-  
+
   &__search_input {
-    padding: spacing('xs') spacing('md') spacing('xs') spacing('xl');
-    border: 1px solid color('neutral', 'medium');
-    border-radius: border-radius('md');
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
+    padding: spacing("xs") spacing("md") spacing("xs") spacing("xl");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
     width: 200px;
-    
+
     &:focus {
       outline: none;
-      border-color: color('secondary', 'base');
+      border-color: color("secondary", "base");
     }
-    
-    @include breakpoint-down('sm') {
+
+    @include breakpoint-down("sm") {
       width: 100%;
     }
   }
-  
+
   &__search_icon {
     position: absolute;
-    left: spacing('xs');
+    left: spacing("xs");
     top: 50%;
     transform: translateY(-50%);
-    font-size: map-get($font-sizes, 'base');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
   }
-  
+
   &__content_grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: spacing('lg');
+    gap: spacing("lg");
   }
-  
+
   &__content_card {
     padding: 0;
     overflow: hidden;
@@ -533,305 +533,305 @@
     height: 100%;
     cursor: pointer;
     transition: transform 0.2s;
-    
+
     &:hover {
       transform: translateY(-4px);
     }
   }
-  
+
   &__content_image {
     width: 100%;
     aspect-ratio: 16 / 9;
-    background-color: color('neutral', 'lighter');
+    background-color: color("neutral", "lighter");
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  
+
   &__content_details {
-    padding: spacing('md');
+    padding: spacing("md");
     flex: 1;
     display: flex;
     flex-direction: column;
   }
-  
+
   &__content_type {
-    font-size: map-get($font-sizes, 'xs');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('secondary', 'base');
-    margin: 0 0 spacing('xxs') 0;
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("secondary", "base");
+    margin: 0 0 spacing("xxs") 0;
     text-transform: uppercase;
   }
-  
+
   &__content_title {
-    font-size: map-get($font-sizes, 'base');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
   }
-  
+
   &__content_description {
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
-    margin: 0 0 spacing('md') 0;
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("md") 0;
     flex-grow: 1;
   }
-  
+
   &__content_meta {
     display: flex;
     justify-content: space-between;
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'dark');
-    padding-top: spacing('sm');
-    border-top: 1px solid color('neutral', 'lighter');
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    padding-top: spacing("sm");
+    border-top: 1px solid color("neutral", "lighter");
   }
-  
+
   &__content_date {
-    font-weight: map-get($font-weights, 'medium');
+    font-weight: map-get($font-weights, "medium");
   }
-  
+
   &__new_content_card {
-    padding: spacing('lg');
+    padding: spacing("lg");
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     height: 100%;
-    border: 2px dashed color('neutral', 'medium');
-    background-color: rgba(color('neutral', 'lighter'), 0.5);
+    border: 2px dashed color("neutral", "medium");
+    background-color: rgba(color("neutral", "lighter"), 0.5);
     cursor: pointer;
-    
+
     &:hover {
-      border-color: color('secondary', 'base');
-      background-color: rgba(color('secondary', 'base'), 0.05);
+      border-color: color("secondary", "base");
+      background-color: rgba(color("secondary", "base"), 0.05);
     }
   }
-  
+
   &__new_content_icon {
-    font-size: map-get($font-sizes, '3xl');
-    color: color('neutral', 'medium');
-    margin-bottom: spacing('md');
+    font-size: map-get($font-sizes, "3xl");
+    color: color("neutral", "medium");
+    margin-bottom: spacing("md");
   }
-  
+
   &__new_content_title {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
   }
-  
+
   &__new_content_text {
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
     margin: 0;
   }
-  
+
   // Email tab
   &__email_dashboard {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: spacing('lg');
-    margin-bottom: spacing('xl');
-    
-    @include breakpoint-down('lg') {
+    gap: spacing("lg");
+    margin-bottom: spacing("xl");
+
+    @include breakpoint-down("lg") {
       grid-template-columns: 1fr;
     }
   }
-  
+
   &__email_stats {
-    padding: spacing('lg');
+    padding: spacing("lg");
   }
-  
+
   &__email_stats_header {
-    margin-bottom: spacing('lg');
+    margin-bottom: spacing("lg");
   }
-  
+
   &__email_stats_title {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
   }
-  
+
   &__email_stats_description {
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
     margin: 0;
   }
-  
+
   &__email_metrics {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: spacing('md');
+    gap: spacing("md");
   }
-  
+
   &__email_metric {
-    padding: spacing('md');
-    background-color: color('neutral', 'lighter');
-    border-radius: border-radius('md');
+    padding: spacing("md");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
     text-align: center;
   }
-  
+
   &__email_metric_value {
-    font-size: map-get($font-sizes, '2xl');
-    font-weight: map-get($font-weights, 'bold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xxs') 0;
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xxs") 0;
   }
-  
+
   &__email_metric_label {
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
     margin: 0;
   }
-  
+
   &__email_chart {
-    padding: spacing('lg');
+    padding: spacing("lg");
   }
-  
+
   &__recent_emails {
     grid-column: 1 / -1;
-    padding: spacing('lg');
+    padding: spacing("lg");
   }
-  
+
   &__recent_emails_header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: spacing('lg');
-    
-    @include breakpoint-down('sm') {
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("sm") {
       flex-direction: column;
       align-items: flex-start;
-      gap: spacing('sm');
+      gap: spacing("sm");
     }
   }
-  
+
   &__recent_emails_title {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
     margin: 0;
   }
-  
+
   &__emails_table {
     width: 100%;
     border-collapse: collapse;
   }
-  
+
   &__emails_header {
     text-align: left;
-    padding: spacing('sm');
-    font-size: map-get($font-sizes, 'xs');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'dark');
+    padding: spacing("sm");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "dark");
     text-transform: uppercase;
-    border-bottom: 1px solid color('neutral', 'lighter');
+    border-bottom: 1px solid color("neutral", "lighter");
     white-space: nowrap;
   }
-  
+
   &__emails_row {
-    border-bottom: 1px solid color('neutral', 'lighter');
-    
+    border-bottom: 1px solid color("neutral", "lighter");
+
     &:last-child {
       border-bottom: none;
     }
-    
+
     &:hover {
-      background-color: rgba(color('neutral', 'lighter'), 0.5);
+      background-color: rgba(color("neutral", "lighter"), 0.5);
     }
   }
-  
+
   &__emails_cell {
-    padding: spacing('sm');
+    padding: spacing("sm");
     vertical-align: middle;
-    font-size: map-get($font-sizes, 'sm');
+    font-size: map-get($font-sizes, "sm");
   }
-  
+
   &__email_subject {
-    font-weight: map-get($font-weights, 'medium');
-    color: color('neutral', 'black');
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
   }
-  
+
   &__email_status {
     display: inline-block;
-    padding: spacing('xxs') spacing('xs');
-    border-radius: border-radius('sm');
-    font-size: map-get($font-sizes, 'xs');
-    font-weight: map-get($font-weights, 'semibold');
-    
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("sm");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "semibold");
+
     &--sent {
-      background-color: rgba(color('success'), 0.1);
-      color: color('success');
+      background-color: rgba(color("success"), 0.1);
+      color: color("success");
     }
-    
+
     &--draft {
-      background-color: rgba(color('neutral', 'dark'), 0.1);
-      color: color('neutral', 'dark');
+      background-color: rgba(color("neutral", "dark"), 0.1);
+      color: color("neutral", "dark");
     }
-    
+
     &--scheduled {
-      background-color: rgba(color('info'), 0.1);
-      color: color('info');
+      background-color: rgba(color("info"), 0.1);
+      color: color("info");
     }
   }
-  
+
   &__email_stats {
     display: flex;
     align-items: center;
-    gap: spacing('xs');
-    font-size: map-get($font-sizes, 'xs');
-    
+    gap: spacing("xs");
+    font-size: map-get($font-sizes, "xs");
+
     span {
       display: flex;
       align-items: center;
-      
+
       &:before {
-        content: '';
+        content: "";
         display: inline-block;
         width: 6px;
         height: 6px;
         border-radius: 50%;
         margin-right: 4px;
       }
-      
+
       &.opens:before {
-        background-color: color('success');
+        background-color: color("success");
       }
-      
+
       &.clicks:before {
-        background-color: color('secondary', 'base');
+        background-color: color("secondary", "base");
       }
     }
   }
-  
+
   &__email_date {
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
     white-space: nowrap;
   }
-  
+
   &__email_actions {
     white-space: nowrap;
   }
-  
+
   &__email_action {
-    padding: spacing('xxs') spacing('xs');
-    font-size: map-get($font-sizes, 'xs');
-    background-color: color('neutral', 'lighter');
+    padding: spacing("xxs") spacing("xs");
+    font-size: map-get($font-sizes, "xs");
+    background-color: color("neutral", "lighter");
     border: none;
-    border-radius: border-radius('sm');
-    margin-right: spacing('xxs');
+    border-radius: border-radius("sm");
+    margin-right: spacing("xxs");
     cursor: pointer;
-    
+
     &:last-child {
       margin-right: 0;
     }
-    
+
     &:hover {
-      background-color: rgba(color('secondary', 'base'), 0.1);
-      color: color('secondary', 'base');
+      background-color: rgba(color("secondary", "base"), 0.1);
+      color: color("secondary", "base");
     }
   }
 }

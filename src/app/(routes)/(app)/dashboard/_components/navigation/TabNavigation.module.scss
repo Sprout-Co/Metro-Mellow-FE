@@ -1,6 +1,6 @@
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .tabs {
   background-color: color("neutral", "white");
@@ -10,17 +10,17 @@
   position: sticky;
   top: spacing("lg");
   z-index: z-index("sticky");
-  
+
   &__container {
     display: flex;
     overflow-x: auto;
     scrollbar-width: none; // Hide scrollbar for Firefox
-    
+
     &::-webkit-scrollbar {
       display: none; // Hide scrollbar for Chrome, Safari, and Opera
     }
   }
-  
+
   &__tab {
     display: flex;
     align-items: center;
@@ -34,40 +34,40 @@
     cursor: pointer;
     transition: $transition-base;
     white-space: nowrap;
-    
+
     @include breakpoint-up("md") {
       flex-direction: row;
       padding: spacing("md") spacing("xl");
-      
+
       .tabs__tabIcon {
         margin-right: spacing("xs");
         margin-bottom: 0;
       }
     }
-    
+
     &:hover {
       background-color: color("neutral", "lighter");
     }
-    
+
     &--active {
       color: color("primary", "base");
       font-weight: map-get($font-weights, "medium");
     }
   }
-  
+
   &__tabIcon {
     margin-bottom: spacing("xxs");
     font-size: map-get($font-sizes, "lg");
   }
-  
+
   &__tabLabel {
     font-size: map-get($font-sizes, "sm");
-    
+
     @include breakpoint-up("md") {
       font-size: map-get($font-sizes, "base");
     }
   }
-  
+
   &__tabIndicator {
     position: absolute;
     bottom: 0;

@@ -1,37 +1,37 @@
 // components/about/OurStory.module.scss
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .story {
   padding: spacing("6xl") 0;
   background-color: color("neutral", "white");
-  
+
   &__container {
     @include container;
   }
-  
+
   &__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: spacing("3xl");
     align-items: center;
-    
+
     @include breakpoint-down("lg") {
       grid-template-columns: 1fr;
       gap: spacing("2xl");
     }
   }
-  
+
   &__image {
     position: relative;
-    
+
     @include breakpoint-down("lg") {
       max-width: 500px;
       margin: 0 auto;
     }
   }
-  
+
   &__imageMain {
     border-radius: border-radius("lg");
     object-fit: cover;
@@ -39,7 +39,7 @@
     position: relative;
     box-shadow: map-get($box-shadows, "lg");
   }
-  
+
   &__imageAccent {
     position: absolute;
     top: -20px;
@@ -49,58 +49,58 @@
     background-color: color("primary", "light");
     border-radius: border-radius("lg");
     z-index: 1;
-    
+
     @include breakpoint-down("md") {
       top: -10px;
       left: -10px;
     }
   }
-  
+
   &__content {
     max-width: 600px;
-    
+
     @include breakpoint-down("lg") {
       max-width: 100%;
     }
   }
-  
+
   &__title {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "4xl");
     font-weight: map-get($font-weights, "bold");
     color: color("neutral", "darker");
     margin-bottom: spacing("md");
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "3xl");
     }
   }
-  
+
   &__divider {
     width: 80px;
     height: 4px;
     background-color: color("primary", "base");
     margin-bottom: spacing("xl");
   }
-  
+
   &__paragraph {
     font-size: map-get($font-sizes, "lg");
     line-height: map-get($line-heights, "relaxed");
     color: color("neutral", "dark");
     margin-bottom: spacing("lg");
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "base");
     }
   }
-  
+
   &__signature {
     margin-top: spacing("xl");
     display: flex;
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   &__founders {
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "darker");

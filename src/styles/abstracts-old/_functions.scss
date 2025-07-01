@@ -1,0 +1,55 @@
+@function color($color-name, $shade: 'base') {
+    @if map-has-key($colors, $color-name) {
+        $color: map-get($colors, $color-name);
+
+        @if type-of($color)=='map' {
+            @if map-has-key($color, $shade) {
+                @return map-get($color, $shade);
+            }
+
+            @else {
+                @error "Invalid shade: '#{$shade}' in the '#{$color-name}' color map.";
+            }
+        }
+
+        @else {
+            @return $color;
+        }
+    }
+
+    @else {
+        @error "Invalid color name: '#{$color-name}'.";
+    }
+}
+
+// Get spacing value
+@function spacing($key) {
+    @if map-has-key($spacing, $key) {
+        @return map-get($spacing, $key);
+    }
+
+    @error "Invalid spacing key: '#{$key}'.";
+}
+
+// Get z-index value
+@function z-index($key) {
+    @if map-has-key($z-index, $key) {
+        @return map-get($z-index, $key);
+    }
+
+    @error "Invalid z-index key: '#{$key}'.";
+}
+
+// Get border-radius value
+@function border-radius($key) {
+    @if map-has-key($border-radius, $key) {
+        @return map-get($border-radius, $key);
+    }
+
+    @error "Invalid border-radius key: '#{$key}'.";
+}
+
+// Rem conversion (px to rem)
+@function rem($pixels) {
+    @return $pixels / 16 * 1rem;
+}

@@ -1,121 +1,121 @@
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .sidebar {
   width: 220px;
-  background-color: color('secondary', 'base');
+  background-color: color("secondary", "base");
   position: fixed;
   height: 100vh;
   z-index: 10;
   transition: all 0.3s ease;
-  color: color('neutral', 'white');
-  
+  color: color("neutral", "white");
+
   &--collapsed {
     width: 80px;
-    
+
     .sidebar__logo_container {
-      font-size: map-get($font-sizes, 'xs');
+      font-size: map-get($font-sizes, "xs");
     }
-    
+
     .sidebar__nav_label,
     .sidebar__heading {
       display: none;
     }
-    
+
     .sidebar__nav_item {
       justify-content: center;
     }
-    
+
     .sidebar__nav_icon {
       margin-right: 0;
     }
   }
-  
+
   &__logo {
-    padding: spacing('md');
+    padding: spacing("md");
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
-  
+
   &__logo_container {
-    background-color: darken(color('secondary', 'base'), 10%);
-    color: color('neutral', 'white');
+    background-color: darken(color("secondary", "base"), 10%);
+    color: color("neutral", "white");
     font-family: $font-family-heading;
-    font-weight: map-get($font-weights, 'bold');
-    font-size: map-get($font-sizes, 'sm');
+    font-weight: map-get($font-weights, "bold");
+    font-size: map-get($font-sizes, "sm");
     text-align: center;
-    padding: spacing('sm') spacing('md');
-    border-radius: border-radius('sm');
+    padding: spacing("sm") spacing("md");
+    border-radius: border-radius("sm");
   }
-  
+
   &__navigation {
-    padding: spacing('md') spacing('sm');
+    padding: spacing("md") spacing("sm");
   }
-  
+
   &__heading {
     display: block;
-    font-size: map-get($font-sizes, 'xxs');
-    font-weight: map-get($font-weights, 'semibold');
+    font-size: map-get($font-sizes, "xxs");
+    font-weight: map-get($font-weights, "semibold");
     color: rgba(255, 255, 255, 0.5);
-    margin-bottom: spacing('sm');
-    padding-left: spacing('sm');
+    margin-bottom: spacing("sm");
+    padding-left: spacing("sm");
     letter-spacing: 1px;
   }
-  
+
   &__nav {
     display: flex;
     flex-direction: column;
   }
-  
+
   &__nav_item {
     display: flex;
     align-items: center;
-    padding: spacing('sm');
-    margin-bottom: spacing('xs');
-    border-radius: border-radius('md');
+    padding: spacing("sm");
+    margin-bottom: spacing("xs");
+    border-radius: border-radius("md");
     color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
     position: relative;
-    
+
     &:hover {
       background-color: rgba(255, 255, 255, 0.1);
-      color: color('neutral', 'white');
+      color: color("neutral", "white");
     }
-    
+
     &--active {
       background-color: rgba(255, 255, 255, 0.15);
-      color: color('neutral', 'white');
-      font-weight: map-get($font-weights, 'semibold');
+      color: color("neutral", "white");
+      font-weight: map-get($font-weights, "semibold");
     }
   }
-  
+
   &__nav_icon {
-    margin-right: spacing('sm');
+    margin-right: spacing("sm");
     width: 24px;
     height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: map-get($font-sizes, 'lg');
+    font-size: map-get($font-sizes, "lg");
   }
-  
+
   &__nav_label {
-    font-size: map-get($font-sizes, 'base');
+    font-size: map-get($font-sizes, "base");
   }
-  
+
   &__nav_active_indicator {
     position: absolute;
     left: 0;
     top: 0;
     width: 4px;
     height: 100%;
-    background-color: color('secondary', 'light');
-    border-top-right-radius: border-radius('sm');
-    border-bottom-right-radius: border-radius('sm');
+    background-color: color("secondary", "light");
+    border-top-right-radius: border-radius("sm");
+    border-bottom-right-radius: border-radius("sm");
   }
-  
+
   &__settings {
-    padding: spacing('md') spacing('sm');
+    padding: spacing("md") spacing("sm");
     margin-top: auto;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
   }

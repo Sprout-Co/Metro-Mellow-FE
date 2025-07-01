@@ -1,33 +1,33 @@
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .rewards {
   &__header {
     margin-bottom: spacing("xl");
   }
-  
+
   &__title {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "3xl");
     font-weight: map-get($font-weights, "bold");
     color: color("neutral", "black");
     margin-bottom: spacing("xs");
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "2xl");
     }
   }
-  
+
   &__subtitle {
     font-size: map-get($font-sizes, "lg");
     color: color("neutral", "dark");
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "base");
     }
   }
-  
+
   &__summary {
     display: flex;
     background-color: color("neutral", "white");
@@ -35,12 +35,12 @@
     box-shadow: map-get($box-shadows, "sm");
     padding: spacing("xl");
     margin-bottom: spacing("xl");
-    
+
     @include breakpoint-down("md") {
       flex-direction: column;
     }
   }
-  
+
   &__points {
     display: flex;
     flex-direction: column;
@@ -49,7 +49,7 @@
     padding-right: spacing("xl");
     border-right: 1px solid color("neutral", "lighter");
     min-width: 200px;
-    
+
     @include breakpoint-down("md") {
       padding-right: 0;
       padding-bottom: spacing("lg");
@@ -58,7 +58,7 @@
       margin-bottom: spacing("lg");
     }
   }
-  
+
   &__pointsValue {
     font-size: map-get($font-sizes, "5xl");
     font-weight: map-get($font-weights, "bold");
@@ -66,42 +66,43 @@
     line-height: 1;
     margin-bottom: spacing("xs");
   }
-  
+
   &__pointsLabel {
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "dark");
   }
-  
+
   &__tier {
     flex: 1;
     padding-left: spacing("xl");
-    
+
     @include breakpoint-down("md") {
       padding-left: 0;
     }
   }
-  
+
   &__tierInfo {
     display: flex;
     margin-bottom: spacing("lg");
-    
+
     @include breakpoint-down("sm") {
       flex-direction: column;
       gap: spacing("md");
     }
   }
-  
-  &__currentTier, &__nextTier {
+
+  &__currentTier,
+  &__nextTier {
     flex: 1;
   }
-  
+
   &__tierTitle {
     font-size: map-get($font-sizes, "base");
     font-weight: map-get($font-weights, "medium");
     color: color("neutral", "dark");
     margin-bottom: spacing("sm");
   }
-  
+
   &__tierBadge {
     display: inline-flex;
     align-items: center;
@@ -110,16 +111,15 @@
     color: color("warning");
     border-radius: border-radius("full");
     font-weight: map-get($font-weights, "semibold");
-    
+
     svg {
       margin-right: spacing("xs");
     }
   }
-  
+
   &__progress {
-    
   }
-  
+
   &__progressText {
     display: flex;
     justify-content: space-between;
@@ -127,7 +127,7 @@
     color: color("neutral", "dark");
     margin-bottom: spacing("xs");
   }
-  
+
   &__progressBar {
     width: 100%;
     height: 8px;
@@ -135,37 +135,37 @@
     border-radius: border-radius("full");
     overflow: hidden;
   }
-  
+
   &__progressFill {
     height: 100%;
     background-color: color("primary", "base");
     border-radius: border-radius("full");
     transition: width 0.3s ease;
   }
-  
+
   &__content {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: spacing("xl");
-    
+
     @include breakpoint-down("lg") {
       grid-template-columns: 1fr;
     }
   }
-  
+
   &__column {
     display: flex;
     flex-direction: column;
     gap: spacing("xl");
   }
-  
+
   &__section {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
     box-shadow: map-get($box-shadows, "sm");
     padding: spacing("xl");
   }
-  
+
   &__sectionTitle {
     display: flex;
     align-items: center;
@@ -173,43 +173,43 @@
     font-weight: map-get($font-weights, "semibold");
     color: color("neutral", "black");
     margin-bottom: spacing("lg");
-    
+
     svg {
       margin-right: spacing("sm");
       color: color("primary", "base");
     }
   }
-  
+
   &__rewardsList {
     display: grid;
     gap: spacing("md");
   }
-  
+
   &__rewardCard {
     border: 1px solid color("neutral", "lighter");
     border-radius: border-radius("md");
     padding: spacing("md");
     transition: $transition-base;
-    
+
     &:hover {
       box-shadow: map-get($box-shadows, "sm");
       transform: translateY(-2px);
     }
   }
-  
+
   &__rewardHeader {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: spacing("sm");
   }
-  
+
   &__rewardTitle {
     font-size: map-get($font-sizes, "lg");
     font-weight: map-get($font-weights, "semibold");
     color: color("neutral", "black");
   }
-  
+
   &__rewardPoints {
     display: flex;
     align-items: center;
@@ -219,18 +219,18 @@
     border-radius: border-radius("full");
     font-size: map-get($font-sizes, "xs");
     font-weight: map-get($font-weights, "medium");
-    
+
     svg {
       margin-right: spacing("xxs");
     }
   }
-  
+
   &__rewardDescription {
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "dark");
     margin-bottom: spacing("md");
   }
-  
+
   &__rewardBtn {
     width: 100%;
     padding: spacing("sm") spacing("md");
@@ -241,55 +241,54 @@
     font-weight: map-get($font-weights, "medium");
     cursor: pointer;
     transition: $transition-base;
-    
+
     &:hover:not(:disabled) {
       background-color: color("primary", "dark");
     }
-    
+
     &:disabled {
       opacity: 0.5;
       cursor: not-allowed;
       background-color: color("neutral", "medium");
     }
   }
-  
+
   &__referral {
-    
   }
-  
+
   &__referralInfo {
     margin-bottom: spacing("xl");
   }
-  
+
   &__referralDescription {
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "darker");
     margin-bottom: spacing("lg");
   }
-  
+
   &__referralCode {
     margin-bottom: spacing("lg");
   }
-  
+
   &__referralCodeLabel {
     display: block;
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "dark");
     margin-bottom: spacing("xs");
   }
-  
+
   &__referralCodeValue {
     display: flex;
     align-items: center;
     font-size: map-get($font-sizes, "xl");
     font-weight: map-get($font-weights, "bold");
     color: color("primary", "base");
-    
+
     span {
       margin-right: spacing("sm");
     }
   }
-  
+
   &__copyBtn {
     display: flex;
     align-items: center;
@@ -301,59 +300,58 @@
     color: color("neutral", "dark");
     cursor: pointer;
     transition: $transition-base;
-    
+
     &:hover {
       color: color("primary", "base");
     }
   }
-  
+
   &__referralStats {
     display: flex;
     gap: spacing("xl");
-    
+
     @include breakpoint-down("sm") {
       flex-direction: column;
       gap: spacing("md");
     }
   }
-  
+
   &__referralStat {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   &__referralStatValue {
     font-size: map-get($font-sizes, "2xl");
     font-weight: map-get($font-weights, "bold");
     color: color("neutral", "black");
   }
-  
+
   &__referralStatLabel {
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "dark");
   }
-  
+
   &__referralShare {
-    
   }
-  
+
   &__referralShareTitle {
     font-size: map-get($font-sizes, "lg");
     font-weight: map-get($font-weights, "semibold");
     color: color("neutral", "black");
     margin-bottom: spacing("md");
   }
-  
+
   &__referralButtons {
     display: flex;
     gap: spacing("md");
-    
+
     @include breakpoint-down("sm") {
       flex-direction: column;
     }
   }
-  
+
   &__shareBtn {
     display: flex;
     align-items: center;
@@ -366,84 +364,84 @@
     font-weight: map-get($font-weights, "medium");
     cursor: pointer;
     transition: $transition-base;
-    
+
     svg {
       margin-right: spacing("xs");
     }
-    
+
     &:hover {
       background-color: color("neutral", "medium");
     }
-    
+
     @include breakpoint-down("sm") {
       width: 100%;
     }
   }
-  
+
   &__historyList {
     margin-bottom: spacing("lg");
   }
-  
+
   &__historyItem {
     display: flex;
     align-items: flex-start;
     padding: spacing("md");
     border-bottom: 1px solid color("neutral", "lighter");
-    
+
     &:last-child {
       border-bottom: none;
     }
-    
+
     &--redeemed {
       .rewards__historyIcon {
         color: color("error");
       }
-      
+
       .rewards__historyPoints {
         color: color("error");
       }
     }
   }
-  
+
   &__historyIcon {
     margin-right: spacing("md");
     color: color("success");
     font-size: map-get($font-sizes, "xl");
     flex-shrink: 0;
   }
-  
+
   &__historyContent {
     flex: 1;
   }
-  
+
   &__historyHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: spacing("xxs");
-    
+
     @include breakpoint-down("sm") {
       flex-direction: column;
       align-items: flex-start;
     }
   }
-  
+
   &__historyTitle {
     font-size: map-get($font-sizes, "base");
     font-weight: map-get($font-weights, "semibold");
     color: color("neutral", "black");
   }
-  
+
   &__historyDate {
     font-size: map-get($font-sizes, "xs");
     color: color("neutral", "dark");
   }
-  
+
   &__historyDescription {
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "darker");
   }
-  
+
   &__historyPoints {
     font-size: map-get($font-sizes, "lg");
     font-weight: map-get($font-weights, "bold");
@@ -451,7 +449,7 @@
     margin-left: spacing("md");
     flex-shrink: 0;
   }
-  
+
   &__viewBtn {
     display: flex;
     align-items: center;
@@ -464,27 +462,27 @@
     font-weight: map-get($font-weights, "medium");
     cursor: pointer;
     transition: $transition-base;
-    
+
     svg {
       margin-left: spacing("xs");
       transition: $transition-base;
     }
-    
+
     &:hover {
       color: color("primary", "dark");
-      
+
       svg {
         transform: translateX(4px);
       }
     }
   }
-  
+
   &__earnList {
     display: flex;
     flex-direction: column;
     gap: spacing("md");
   }
-  
+
   &__earnItem {
     display: flex;
     align-items: flex-start;
@@ -492,7 +490,7 @@
     background-color: color("neutral", "lighter");
     border-radius: border-radius("md");
   }
-  
+
   &__earnIcon {
     display: flex;
     align-items: center;
@@ -505,18 +503,18 @@
     margin-right: spacing("md");
     flex-shrink: 0;
   }
-  
+
   &__earnContent {
     flex: 1;
   }
-  
+
   &__earnTitle {
     font-size: map-get($font-sizes, "base");
     font-weight: map-get($font-weights, "semibold");
     color: color("neutral", "black");
     margin-bottom: spacing("xxs");
   }
-  
+
   &__earnDescription {
     font-size: map-get($font-sizes, "sm");
     color: color("neutral", "darker");

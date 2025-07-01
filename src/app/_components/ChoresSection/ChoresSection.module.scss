@@ -1,0 +1,242 @@
+@import '../../../styles/abstracts/variables';
+@import '../../../styles/abstracts/functions';
+@import '../../../styles/abstracts/mixins';
+@import '../../../styles/abstracts/animations';
+
+.chores-section {
+  width: 100%;
+  background: color('neutral', 'white');
+  padding: spacing('4xl') 0;
+  text-align: center;
+  overflow: hidden;
+  color: color('neutral', 'black');
+
+  &__container {
+    max-width: map-get($container-max-widths, '2xl');
+    margin: 0 auto;
+    padding: 0 spacing('md');
+  }
+
+  &__heading {
+    font-size: font-size('h1') * 1.1;
+    font-family: $font-family-heading;
+    font-weight: map-get($font-weights, 'bold');
+    color: color('neutral', 'black');
+    margin-bottom: spacing('md');
+    line-height: map-get($line-heights, 'tight');
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('h3');
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('h4');
+    }
+  }
+
+  &__subheading {
+    font-size: font-size('body-1') * 1.3;
+    color: color('neutral', 'black');
+    margin-bottom: spacing('2xl');
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('body-2');
+      max-width: 100%;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: spacing('lg');
+    justify-content: center;
+    margin-top: spacing('xl');
+    
+    @include breakpoint-down('md') {
+      grid-template-columns: repeat(2, 1fr);
+      gap: spacing('md');
+    }
+    
+    @include breakpoint-down('sm') {
+      grid-template-columns: 1fr;
+      gap: spacing('sm');
+    }
+  }
+}
+
+.chores-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: border-radius('xl');
+  box-shadow: map-get($shadows, 'md');
+  padding: spacing('2xl') spacing('xl');
+  min-height: 320px;
+  background: color('neutral', 'lightest');
+  position: relative;
+  text-align: left;
+  transition: $transition-base;
+  padding-top: calc(#{spacing('2xl')} + 6rem);
+  padding-right: spacing('2xl');
+  
+  @include breakpoint-down('md') {
+    min-height: 280px;
+    padding: spacing('xl') spacing('md');
+  }
+  
+  @include breakpoint-down('sm') {
+    min-height: 240px;
+    padding: spacing('lg') spacing('md');
+    align-items: center;
+    text-align: center;
+  }
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: map-get($shadows, 'lg');
+  }
+
+  &__icon {
+    position: absolute;
+    top: spacing('md');
+    right: spacing('md');
+    width: 96px;
+    height: 96px;
+    z-index: 1;
+    pointer-events: none;
+    @include breakpoint-down('sm') {
+      position: static;
+      display: block;
+      margin: 0 auto spacing('md') auto;
+      width: 64px;
+      height: 64px;
+    }
+    svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  }
+
+  &__content {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    
+    @include breakpoint-down('sm') {
+      align-items: center;
+    }
+  }
+
+  &__title {
+    font-size: font-size('h5');
+    font-family: $font-family-heading;
+    font-weight: map-get($font-weights, 'bold');
+    color: color('neutral', 'black');
+    margin-bottom: spacing('sm');
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('h6');
+    }
+  }
+
+  &__desc {
+    font-size: font-size('body-2');
+    color: color('neutral', 'darker');
+    margin-bottom: spacing('lg');
+    line-height: map-get($line-heights, 'normal');
+    
+    @include breakpoint-down('sm') {
+      margin-bottom: spacing('md');
+    }
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-family-base;
+    font-size: font-size('button');
+    font-weight: map-get($font-weights, 'bold');
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: letter-spacing('wider');
+    border: border-width('thin') solid color('neutral', 'black');
+    border-radius: border-radius('full');
+    cursor: pointer;
+    transition: $transition-base;
+    background: color('neutral', 'white');
+    color: color('neutral', 'black');
+    padding: spacing('xs') spacing('lg');
+    margin-top: auto;
+    
+    &:hover {
+      background: color('neutral', 'black');
+      color: color('neutral', 'white');
+    }
+    
+    @include breakpoint-down('sm') {
+      width: 100%;
+      padding: spacing('md') 0;
+      font-size: font-size('body-2');
+    }
+  }
+
+  &__btn--secondary {
+    border-color: color('neutral', 'black');
+    color: color('neutral', 'black');
+    
+    &:hover {
+      background: color('neutral', 'black');
+      color: color('neutral', 'white');
+    }
+  }
+}
+
+// Card background color modifiers
+.chores-card--errand {
+  background: color('accent', 'light');
+}
+
+.chores-card--food {
+  background: color('primary', 'lighter');
+}
+
+.chores-card--pest {
+  background: color('secondary', 'light');
+}
+
+.chores-card--cleaning {
+  background: color('primary', 'light');
+}
+
+.chores-card--laundry {
+  background: color('neutral', 'light');
+}
+
+// Add a subtle sparkle decoration near the cards
+.chores-section__container {
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 15%;
+    right: 5%;
+    width: 40px;
+    height: 40px;
+    background-image: url('/images/sparkle.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    
+    @include breakpoint-down('md') {
+      display: none;
+    }
+  }
+}

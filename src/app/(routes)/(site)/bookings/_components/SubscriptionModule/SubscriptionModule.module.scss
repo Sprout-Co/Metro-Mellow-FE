@@ -1,117 +1,121 @@
-@import '@/styles/abstracts/variables';
-@import '@/styles/abstracts/mixins';
-@import '@/styles/abstracts/functions';
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .subscription {
-  padding: spacing('2xl');
+  padding: spacing("2xl");
   min-height: 100vh;
-  background-color: color('neutral', 'light');
-  background-image: radial-gradient(circle at 10% 20%, rgba(color('primary', 'base'), 0.03) 0%, rgba(color('primary', 'dark'), 0.01) 90%);
-  
+  background-color: color("neutral", "light");
+  background-image: radial-gradient(
+    circle at 10% 20%,
+    rgba(color("primary", "base"), 0.03) 0%,
+    rgba(color("primary", "dark"), 0.01) 90%
+  );
+
   &__header {
     text-align: center;
-    margin-bottom: spacing('2xl');
+    margin-bottom: spacing("2xl");
   }
-  
+
   &__title {
     font-family: $font-family-heading;
-    font-size: map-get($font-sizes, '4xl');
-    font-weight: map-get($font-weights, 'bold');
-    color: color('primary', 'dark');
-    margin-bottom: spacing('xs');
-    
-    @include breakpoint-down('md') {
-      font-size: map-get($font-sizes, '3xl');
+    font-size: map-get($font-sizes, "4xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("primary", "dark");
+    margin-bottom: spacing("xs");
+
+    @include breakpoint-down("md") {
+      font-size: map-get($font-sizes, "3xl");
     }
   }
-  
+
   &__subtitle {
-    font-size: map-get($font-sizes, 'lg');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "lg");
+    color: color("neutral", "dark");
   }
-  
+
   &__container {
     display: flex;
     background-color: rgba(#ffffff, 0.8);
     backdrop-filter: blur(10px);
-    border-radius: border-radius('xl');
+    border-radius: border-radius("xl");
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    border: 1px solid color('neutral', 'lighter');
+    border: 1px solid color("neutral", "lighter");
     max-width: 1200px;
     margin: 0 auto;
-    
-    @include breakpoint-down('lg') {
+
+    @include breakpoint-down("lg") {
       flex-direction: column;
     }
   }
-  
+
   &__selection {
     flex: 1;
-    padding: spacing('3xl');
+    padding: spacing("3xl");
     display: flex;
     flex-direction: column;
-    gap: spacing('3xl');
+    gap: spacing("3xl");
     position: relative;
-    
+
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       right: 0;
       top: 0;
       height: 100%;
       width: 1px;
-      background-color: color('neutral', 'lighter');
-      
-      @include breakpoint-down('lg') {
+      background-color: color("neutral", "lighter");
+
+      @include breakpoint-down("lg") {
         display: none;
       }
     }
   }
-  
+
   &__summary {
     width: 40%;
-    background-color: rgba(color('neutral', 'lighter'), 0.3);
+    background-color: rgba(color("neutral", "lighter"), 0.3);
     backdrop-filter: blur(8px);
-    padding: spacing('3xl');
-    
-    @include breakpoint-down('lg') {
+    padding: spacing("3xl");
+
+    @include breakpoint-down("lg") {
       width: 100%;
     }
   }
-  
+
   &__create_button {
-    padding: spacing('md') spacing('xl');
+    padding: spacing("md") spacing("xl");
     background: linear-gradient(
       to right,
-      color('primary', 'base'),
-      color('primary', 'dark')
+      color("primary", "base"),
+      color("primary", "dark")
     );
-    color: color('neutral', 'white');
+    color: color("neutral", "white");
     border: none;
-    border-radius: border-radius('lg');
-    font-size: map-get($font-sizes, 'base');
-    font-weight: map-get($font-weights, 'semibold');
+    border-radius: border-radius("lg");
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "semibold");
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: spacing('sm');
+    gap: spacing("sm");
     cursor: pointer;
     transition: $transition-base;
-    box-shadow: 0 4px 10px rgba(color('primary', 'base'), 0.2);
+    box-shadow: 0 4px 10px rgba(color("primary", "base"), 0.2);
     align-self: center;
-    margin-top: spacing('xl');
-    
+    margin-top: spacing("xl");
+
     &:hover:not(:disabled) {
       transform: translateY(-3px);
-      box-shadow: 0 8px 15px rgba(color('primary', 'base'), 0.3);
+      box-shadow: 0 8px 15px rgba(color("primary", "base"), 0.3);
     }
-    
+
     &:disabled {
       background: linear-gradient(
         to right,
-        rgba(color('primary', 'base'), 0.6),
-        rgba(color('primary', 'dark'), 0.6)
+        rgba(color("primary", "base"), 0.6),
+        rgba(color("primary", "dark"), 0.6)
       );
       cursor: not-allowed;
       opacity: 0.7;
@@ -121,23 +125,23 @@
       font-size: 20px;
     }
   }
-  
+
   &__loading {
     min-height: 70vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: color('neutral', 'dark');
-    gap: spacing('md');
+    color: color("neutral", "dark");
+    gap: spacing("md");
 
     &_spinner {
       font-size: 40px;
-      color: color('primary', 'base');
+      color: color("primary", "base");
     }
 
     p {
-      font-size: map-get($font-sizes, 'lg');
+      font-size: map-get($font-sizes, "lg");
     }
   }
 
@@ -147,41 +151,41 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: color('neutral', 'dark');
-    gap: spacing('md');
+    color: color("neutral", "dark");
+    gap: spacing("md");
     text-align: center;
     max-width: 500px;
     margin: 0 auto;
 
     svg {
       font-size: 48px;
-      color: color('error');
+      color: color("error");
     }
 
     h3 {
-      font-size: map-get($font-sizes, 'xl');
-      font-weight: map-get($font-weights, 'semibold');
-      color: color('neutral', 'black');
+      font-size: map-get($font-sizes, "xl");
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "black");
     }
 
     p {
-      font-size: map-get($font-sizes, 'base');
-      margin-bottom: spacing('lg');
+      font-size: map-get($font-sizes, "base");
+      margin-bottom: spacing("lg");
     }
 
     button {
-      padding: spacing('sm') spacing('lg');
-      background-color: color('primary', 'base');
-      color: color('neutral', 'white');
+      padding: spacing("sm") spacing("lg");
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
       border: none;
-      border-radius: border-radius('md');
-      font-size: map-get($font-sizes, 'base');
-      font-weight: map-get($font-weights, 'medium');
+      border-radius: border-radius("md");
+      font-size: map-get($font-sizes, "base");
+      font-weight: map-get($font-weights, "medium");
       cursor: pointer;
       transition: $transition-base;
 
       &:hover {
-        background-color: color('primary', 'dark');
+        background-color: color("primary", "dark");
       }
     }
   }
@@ -189,13 +193,13 @@
   &__error_message {
     display: flex;
     align-items: center;
-    padding: spacing('md');
-    background-color: rgba(color('error'), 0.1);
-    border-left: 3px solid color('error');
-    border-radius: border-radius('sm');
-    color: color('error');
-    gap: spacing('sm');
-    font-size: map-get($font-sizes, 'sm');
+    padding: spacing("md");
+    background-color: rgba(color("error"), 0.1);
+    border-left: 3px solid color("error");
+    border-radius: border-radius("sm");
+    color: color("error");
+    gap: spacing("sm");
+    font-size: map-get($font-sizes, "sm");
 
     svg {
       flex-shrink: 0;

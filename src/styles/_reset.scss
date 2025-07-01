@@ -1,0 +1,442 @@
+// ===================================
+// METRO MELLOW DESIGN SYSTEM
+// CSS Reset & Normalize
+// ===================================
+
+@import 'abstracts/variables';
+@import 'abstracts/functions';
+
+// ===================================
+// MODERN CSS RESET
+// ===================================
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin and padding */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role */
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+}
+
+/* Set core root defaults */
+html {
+  font-size: 16px; // 1rem = 16px
+  line-height: 1.15; // Correct line height in all browsers
+  -webkit-text-size-adjust: 100%; // Prevent adjustments of font size after orientation changes in iOS
+  -webkit-tap-highlight-color: transparent; // Remove tap highlight on iOS
+  scroll-behavior: smooth;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  line-height: line-height("relaxed");
+  font-family: $font-family-base;
+  font-size: font-size("body-2");
+  font-weight: font-weight("regular");
+  color: color("neutral", "darkest");
+  background-color: color("neutral", "white");
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Remove list styles on ul, ol elements with a class attribute */
+ul,
+ol {
+  list-style: none;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+  color: color("primary", "base");
+  text-decoration: underline;
+  
+  &:hover,
+  &:focus {
+    color: color("primary", "dark");
+  }
+}
+
+/* Make images easier to work with */
+img,
+picture,
+svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Make sure images with a width and height attribute aren't stretched oddly */
+img[width][height] {
+  height: auto;
+}
+
+/* SVG's without a fill attribute */
+svg:not([fill]) {
+  fill: currentColor;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Remove default button styles */
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  
+  &:focus-visible {
+    outline: 2px solid color("primary", "base");
+    outline-offset: 2px;
+  }
+}
+
+/* Remove default input styles */
+input,
+textarea,
+select {
+  border: none;
+  outline: none;
+  background: transparent;
+  
+  &:focus {
+    outline: none;
+  }
+}
+
+/* Remove default fieldset styles */
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Remove default legend styles */
+legend {
+  padding: 0;
+  display: table;
+  max-width: 100%;
+  white-space: normal;
+  color: inherit;
+}
+
+/* Remove default table styles */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+th,
+td {
+  text-align: left;
+  vertical-align: top;
+}
+
+/* Remove default form styles */
+form {
+  margin: 0;
+}
+
+/* Normalize hr element */
+hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+  border: none;
+  border-top: border-width("thin") solid color("neutral", "light");
+  margin: spacing("lg") 0;
+}
+
+/* Normalize heading elements */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  margin: 0;
+}
+
+/* Normalize paragraph elements */
+p {
+  margin: 0;
+}
+
+/* Normalize blockquote */
+blockquote {
+  margin: 0;
+  padding: 0;
+}
+
+/* Normalize code elements */
+code,
+kbd,
+samp,
+pre {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 1em;
+}
+
+/* Normalize abbreviation */
+abbr[title] {
+  border-bottom: none;
+  text-decoration: underline;
+  text-decoration: underline dotted;
+}
+
+/* Normalize bold and strong */
+b,
+strong {
+  font-weight: font-weight("bold");
+}
+
+/* Normalize mark */
+mark {
+  background-color: color("accent", "lighter");
+  color: color("neutral", "darkest");
+}
+
+/* Normalize small */
+small {
+  font-size: font-size("small");
+}
+
+/* Normalize subscript and superscript */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/* Remove the gray background on active links in IE 10 */
+a {
+  background-color: transparent;
+}
+
+/* Remove the outline on focused links when they are also hovered in all browsers */
+a:hover {
+  outline-width: 0;
+}
+
+/* Remove the inner border and padding in Firefox */
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+/* Restore the focus styles unset by the previous rule */
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+
+/* Correct the cursor style of increment and decrement buttons in Chrome */
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/* Remove the default vertical scrollbar in IE 10+ */
+textarea {
+  overflow: auto;
+  resize: vertical;
+}
+
+/* Remove the inner padding in Chrome and Safari on macOS */
+[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/* Correct the inability to style clickable types in iOS and Safari */
+[type="search"] {
+  -webkit-appearance: textfield;
+  outline-offset: -2px;
+}
+
+/* Remove the inner padding and cancel buttons in Chrome and Safari on macOS */
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit;
+}
+
+/* Add the correct display in Edge, IE 10+, and Firefox */
+details {
+  display: block;
+}
+
+/* Add the correct display in all browsers */
+summary {
+  display: list-item;
+  cursor: pointer;
+}
+
+/* Add the correct display in IE 10+ */
+template {
+  display: none;
+}
+
+/* Add the correct display in IE 10 */
+[hidden] {
+  display: none;
+}
+
+// ===================================
+// ACCESSIBILITY IMPROVEMENTS
+// ===================================
+
+/* Improve focus styles for better accessibility */
+:focus-visible {
+  outline: 2px solid color("primary", "base");
+  outline-offset: 2px;
+}
+
+/* Hide elements from screen readers when they shouldn't be announced */
+[aria-hidden="true"] {
+  display: none !important;
+}
+
+/* Ensure interactive elements have sufficient contrast */
+button,
+[role="button"],
+input,
+select,
+textarea {
+  &:focus-visible {
+    outline: 2px solid color("primary", "base");
+    outline-offset: 2px;
+  }
+}
+
+/* Improve readability for users with reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  * {
+    border-color: currentColor;
+  }
+}
+
+/* Dark mode support preparation */
+@media (prefers-color-scheme: dark) {
+  // Base styles for dark mode
+  // Note: Specific dark mode styles should be implemented based on design requirements
+}
+
+// ===================================
+// PRINT STYLES
+// ===================================
+
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+    color: #000 !important;
+  }
+
+  abbr[title]::after {
+    content: " (" attr(title) ")";
+  }
+
+  pre {
+    white-space: pre-wrap !important;
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+}

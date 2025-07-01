@@ -1,53 +1,53 @@
 // components/home/HowItWorks.module.scss
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .process {
   background-color: color("neutral", "lighter");
   padding: spacing("5xl") 0;
-  
+
   &__container {
     @include container;
   }
-  
+
   &__header {
     text-align: center;
     max-width: 700px;
     margin: 0 auto spacing("3xl");
   }
-  
+
   &__title {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "4xl");
     font-weight: map-get($font-weights, "bold");
     color: color("neutral", "darker");
     margin-bottom: spacing("md");
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "3xl");
     }
   }
-  
+
   &__subtitle {
     font-size: map-get($font-sizes, "lg");
     color: color("neutral", "dark");
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "base");
     }
   }
-  
+
   &__steps {
     display: flex;
     margin-bottom: spacing("3xl");
     position: relative;
-    
+
     @include breakpoint-down("md") {
       flex-direction: column;
     }
   }
-  
+
   &__step {
     flex: 1;
     display: flex;
@@ -55,18 +55,18 @@
     align-items: center;
     position: relative;
     padding: 0 spacing("md");
-    
+
     @include breakpoint-down("md") {
       flex-direction: row;
       margin-bottom: spacing("xl");
       padding: 0;
-      
+
       &:last-child {
         margin-bottom: 0;
       }
     }
   }
-  
+
   &__stepNumber {
     width: 48px;
     height: 48px;
@@ -78,13 +78,13 @@
     margin-bottom: spacing("md");
     position: relative;
     z-index: 2;
-    
+
     @include breakpoint-down("md") {
       margin-bottom: 0;
       margin-right: spacing("lg");
     }
   }
-  
+
   &__connector {
     position: absolute;
     top: 24px;
@@ -93,7 +93,7 @@
     height: 2px;
     background-color: color("primary", "light");
     z-index: 1;
-    
+
     @include breakpoint-down("md") {
       top: 48px;
       right: auto;
@@ -102,15 +102,15 @@
       height: calc(100% + #{spacing("xl")});
     }
   }
-  
+
   &__stepContent {
     text-align: center;
-    
+
     @include breakpoint-down("md") {
       text-align: left;
     }
   }
-  
+
   &__iconWrapper {
     background-color: rgba(color("primary", "light"), 0.1);
     width: 60px;
@@ -118,12 +118,12 @@
     border-radius: border-radius("lg");
     @include flex-center;
     margin: 0 auto spacing("md");
-    
+
     @include breakpoint-down("md") {
       margin: 0 0 spacing("sm");
     }
   }
-  
+
   &__stepTitle {
     font-family: $font-family-heading;
     font-size: map-get($font-sizes, "xl");
@@ -131,17 +131,17 @@
     color: color("neutral", "darker");
     margin-bottom: spacing("xs");
   }
-  
+
   &__stepDescription {
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "dark");
   }
-  
+
   &__illustration {
     text-align: center;
     margin-top: spacing("4xl");
   }
-  
+
   &__image {
     border-radius: border-radius("lg");
     box-shadow: map-get($box-shadows, "md");

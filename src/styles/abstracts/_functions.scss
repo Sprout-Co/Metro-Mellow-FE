@@ -1,55 +1,416 @@
+// ===================================
+// METRO MELLOW DESIGN SYSTEM
+// Functions
+// ===================================
+
+@import 'variables';
+
+// ===================================
+// COLOR FUNCTIONS
+// ===================================
+
+/// Get color from the color palette
+/// @param {String} $color-name - The color category (primary, secondary, neutral, etc.)
+/// @param {String} $shade - The shade of the color (base, light, dark, etc.)
+/// @return {Color} - The color value
 @function color($color-name, $shade: 'base') {
-    @if map-has-key($colors, $color-name) {
-        $color: map-get($colors, $color-name);
-
-        @if type-of($color)=='map' {
-            @if map-has-key($color, $shade) {
-                @return map-get($color, $shade);
-            }
-
-            @else {
-                @error "Invalid shade: '#{$shade}' in the '#{$color-name}' color map.";
-            }
-        }
-
-        @else {
-            @return $color;
-        }
+  @if map-has-key($colors, $color-name) {
+    $color: map-get($colors, $color-name);
+    
+    @if type-of($color) == 'map' {
+      @if map-has-key($color, $shade) {
+        @return map-get($color, $shade);
+      } @else {
+        @error "Invalid shade: '#{$shade}' in the '#{$color-name}' color map. Available shades: #{map-keys($color)}";
+      }
+    } @else {
+      @return $color;
     }
-
-    @else {
-        @error "Invalid color name: '#{$color-name}'.";
-    }
+  } @else {
+    @error "Invalid color name: '#{$color-name}'. Available colors: #{map-keys($colors)}";
+  }
 }
 
-// Get spacing value
+/// Create a rgba version of a color with opacity
+/// @param {String} $color-name - The color category
+/// @param {String} $shade - The shade of the color
+/// @param {Number} $alpha - The opacity value (0-1)
+/// @return {Color} - The rgba color value
+@function color-alpha($color-name, $shade: 'base', $alpha: 1) {
+  $color: color($color-name, $shade);
+  @return rgba($color, $alpha);
+}
+
+/// Lighten a color from the palette
+/// @param {String} $color-name - The color category
+/// @param {String} $shade - The shade of the color
+/// @param {Number} $amount - The amount to lighten (0-100%)
+/// @return {Color} - The lightened color
+@function color-lighten($color-name, $shade: 'base', $amount: 10%) {
+  $color: color($color-name, $shade);
+  @return lighten($color, $amount);
+}
+
+/// Darken a color from the palette
+/// @param {String} $color-name - The color category
+/// @param {String} $shade - The shade of the color
+/// @param {Number} $amount - The amount to darken (0-100%)
+/// @return {Color} - The darkened color
+@function color-darken($color-name, $shade: 'base', $amount: 10%) {
+  $color: color($color-name, $shade);
+  @return darken($color, $amount);
+}
+
+/// Mix two colors from the palette
+/// @param {String} $color1-name - First color category
+/// @param {String} $color1-shade - First color shade
+/// @param {String} $color2-name - Second color category
+/// @param {String} $color2-shade - Second color shade
+/// @param {Number} $weight - The weight of the first color (0-100%)
+/// @return {Color} - The mixed color
+@function color-mix($color1-name, $color1-shade: 'base', $color2-name, $color2-shade: 'base', $weight: 50%) {
+  $color1: color($color1-name, $color1-shade);
+  $color2: color($color2-name, $color2-shade);
+  @return mix($color1, $color2, $weight);
+}
+
+// ===================================
+// SPACING FUNCTIONS
+// ===================================
+
+/// Get spacing value from the spacing scale
+/// @param {String} $key - The spacing key
+/// @return {Length} - The spacing value
 @function spacing($key) {
-    @if map-has-key($spacing, $key) {
-        @return map-get($spacing, $key);
-    }
-
-    @error "Invalid spacing key: '#{$key}'.";
+  @if map-has-key($spacing, $key) {
+    @return map-get($spacing, $key);
+  } @else {
+    @error "Invalid spacing key: '#{$key}'. Available spacing: #{map-keys($spacing)}";
+  }
 }
 
-// Get z-index value
-@function z-index($key) {
-    @if map-has-key($z-index, $key) {
-        @return map-get($z-index, $key);
-    }
-
-    @error "Invalid z-index key: '#{$key}'.";
+/// Get multiple spacing values
+/// @param {List} $keys - List of spacing keys
+/// @return {List} - List of spacing values
+@function spacing-multiple($keys...) {
+  $values: ();
+  @each $key in $keys {
+    $values: append($values, spacing($key));
+  }
+  @return $values;
 }
 
-// Get border-radius value
+/// Calculate spacing with multiplier
+/// @param {String} $key - The spacing key
+/// @param {Number} $multiplier - The multiplier
+/// @return {Length} - The calculated spacing value
+@function spacing-calc($key, $multiplier: 1) {
+  @return spacing($key) * $multiplier;
+}
+
+// ===================================
+// TYPOGRAPHY FUNCTIONS
+// ===================================
+
+/// Get font size from the font scale
+/// @param {String} $key - The font size key
+/// @return {Length} - The font size value
+@function font-size($key) {
+  @if map-has-key($font-sizes, $key) {
+    @return map-get($font-sizes, $key);
+  } @else {
+    @error "Invalid font size key: '#{$key}'. Available sizes: #{map-keys($font-sizes)}";
+  }
+}
+
+/// Get font weight from the font weights map
+/// @param {String} $key - The font weight key
+/// @return {Number} - The font weight value
+@function font-weight($key) {
+  @if map-has-key($font-weights, $key) {
+    @return map-get($font-weights, $key);
+  } @else {
+    @error "Invalid font weight key: '#{$key}'. Available weights: #{map-keys($font-weights)}";
+  }
+}
+
+/// Get line height from the line heights map
+/// @param {String} $key - The line height key
+/// @return {Number} - The line height value
+@function line-height($key) {
+  @if map-has-key($line-heights, $key) {
+    @return map-get($line-heights, $key);
+  } @else {
+    @error "Invalid line height key: '#{$key}'. Available line heights: #{map-keys($line-heights)}";
+  }
+}
+
+/// Get letter spacing from the letter spacing map
+/// @param {String} $key - The letter spacing key
+/// @return {Length} - The letter spacing value
+@function letter-spacing($key) {
+  @if map-has-key($letter-spacing, $key) {
+    @return map-get($letter-spacing, $key);
+  } @else {
+    @error "Invalid letter spacing key: '#{$key}'. Available letter spacings: #{map-keys($letter-spacing)}";
+  }
+}
+
+// ===================================
+// BORDER FUNCTIONS
+// ===================================
+
+/// Get border radius from the border radius scale
+/// @param {String} $key - The border radius key
+/// @return {Length} - The border radius value
 @function border-radius($key) {
-    @if map-has-key($border-radius, $key) {
-        @return map-get($border-radius, $key);
-    }
-
-    @error "Invalid border-radius key: '#{$key}'.";
+  @if map-has-key($border-radius, $key) {
+    @return map-get($border-radius, $key);
+  } @else {
+    @error "Invalid border radius key: '#{$key}'. Available border radius: #{map-keys($border-radius)}";
+  }
 }
 
-// Rem conversion (px to rem)
-@function rem($pixels) {
-    @return $pixels / 16 * 1rem;
+/// Get border width from the border width scale
+/// @param {String} $key - The border width key
+/// @return {Length} - The border width value
+@function border-width($key) {
+  @if map-has-key($border-width, $key) {
+    @return map-get($border-width, $key);
+  } @else {
+    @error "Invalid border width key: '#{$key}'. Available border widths: #{map-keys($border-width)}";
+  }
+}
+
+// ===================================
+// SHADOW FUNCTIONS
+// ===================================
+
+/// Get box shadow from the shadows scale
+/// @param {String} $key - The shadow key
+/// @return {String} - The box shadow value
+@function shadow($key) {
+  @if map-has-key($shadows, $key) {
+    @return map-get($shadows, $key);
+  } @else {
+    @error "Invalid shadow key: '#{$key}'. Available shadows: #{map-keys($shadows)}";
+  }
+}
+
+// ===================================
+// Z-INDEX FUNCTIONS
+// ===================================
+
+/// Get z-index value from the z-index scale
+/// @param {String} $key - The z-index key
+/// @return {Number} - The z-index value
+@function z-index($key) {
+  @if map-has-key($z-index, $key) {
+    @return map-get($z-index, $key);
+  } @else {
+    @error "Invalid z-index key: '#{$key}'. Available z-index: #{map-keys($z-index)}";
+  }
+}
+
+// ===================================
+// BREAKPOINT FUNCTIONS
+// ===================================
+
+/// Get breakpoint value from the breakpoints scale
+/// @param {String} $key - The breakpoint key
+/// @return {Length} - The breakpoint value
+@function breakpoint($key) {
+  @if map-has-key($breakpoints, $key) {
+    @return map-get($breakpoints, $key);
+  } @else {
+    @error "Invalid breakpoint key: '#{$key}'. Available breakpoints: #{map-keys($breakpoints)}";
+  }
+}
+
+// ===================================
+// UNIT CONVERSION FUNCTIONS
+// ===================================
+
+/// Convert px to rem
+/// @param {Number} $pixels - The pixel value
+/// @param {Number} $base-font-size - The base font size (default: 16px)
+/// @return {Length} - The rem value
+@function rem($pixels, $base-font-size: 16px) {
+  @if unitless($pixels) {
+    $pixels: $pixels * 1px;
+  }
+  @return $pixels / $base-font-size * 1rem;
+}
+
+/// Convert px to em
+/// @param {Number} $pixels - The pixel value
+/// @param {Number} $context - The context font size (default: 16px)
+/// @return {Length} - The em value
+@function em($pixels, $context: 16px) {
+  @if unitless($pixels) {
+    $pixels: $pixels * 1px;
+  }
+  @return $pixels / $context * 1em;
+}
+
+/// Strip unit from a number
+/// @param {Number} $number - The number with unit
+/// @return {Number} - The unitless number
+@function strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+  @return $number;
+}
+
+// ===================================
+// MATH FUNCTIONS
+// ===================================
+
+/// Power function
+/// @param {Number} $base - The base number
+/// @param {Number} $exponent - The exponent
+/// @return {Number} - The result of base^exponent
+@function pow($base, $exponent) {
+  $result: 1;
+  @if $exponent > 0 {
+    @for $i from 1 through $exponent {
+      $result: $result * $base;
+    }
+  } @else if $exponent < 0 {
+    @for $i from 1 through -$exponent {
+      $result: $result / $base;
+    }
+  }
+  @return $result;
+}
+
+/// Calculate modular scale
+/// @param {Number} $step - The step in the scale
+/// @param {Number} $base - The base size (default: 1rem)
+/// @param {Number} $ratio - The scale ratio (default: 1.25)
+/// @return {Length} - The calculated size
+@function modular-scale($step, $base: 1rem, $ratio: 1.25) {
+  @return $base * pow($ratio, $step);
+}
+
+// ===================================
+// CONTAINER FUNCTIONS
+// ===================================
+
+/// Get container max width
+/// @param {String} $key - The container key
+/// @return {Length} - The container max width
+@function container-width($key) {
+  @if map-has-key($container-max-widths, $key) {
+    @return map-get($container-max-widths, $key);
+  } @else {
+    @error "Invalid container width key: '#{$key}'. Available widths: #{map-keys($container-max-widths)}";
+  }
+}
+
+// ===================================
+// COMPONENT FUNCTIONS
+// ===================================
+
+/// Get button height
+/// @param {String} $size - The button size
+/// @return {Length} - The button height
+@function button-height($size: "md") {
+  @if map-has-key($button-height, $size) {
+    @return map-get($button-height, $size);
+  } @else {
+    @error "Invalid button size: '#{$size}'. Available sizes: #{map-keys($button-height)}";
+  }
+}
+
+/// Get input height
+/// @param {String} $size - The input size
+/// @return {Length} - The input height
+@function input-height($size: "md") {
+  @if map-has-key($input-height, $size) {
+    @return map-get($input-height, $size);
+  } @else {
+    @error "Invalid input size: '#{$size}'. Available sizes: #{map-keys($input-height)}";
+  }
+}
+
+// ===================================
+// TRANSITION FUNCTIONS
+// ===================================
+
+/// Get transition duration
+/// @param {String} $key - The duration key
+/// @return {Time} - The duration value
+@function transition-duration($key) {
+  @if map-has-key($transition-duration, $key) {
+    @return map-get($transition-duration, $key);
+  } @else {
+    @error "Invalid transition duration key: '#{$key}'. Available durations: #{map-keys($transition-duration)}";
+  }
+}
+
+/// Get transition timing function
+/// @param {String} $key - The timing function key
+/// @return {String} - The timing function value
+@function transition-timing($key) {
+  @if map-has-key($transition-timing, $key) {
+    @return map-get($transition-timing, $key);
+  } @else {
+    @error "Invalid transition timing key: '#{$key}'. Available timings: #{map-keys($transition-timing)}";
+  }
+}
+
+/// Create custom transition
+/// @param {String} $property - The CSS property to transition
+/// @param {String} $duration - The duration key
+/// @param {String} $timing - The timing function key
+/// @param {Time} $delay - The delay (optional)
+/// @return {String} - The transition value
+@function transition($property: all, $duration: "base", $timing: "ease-in-out", $delay: 0s) {
+  $duration-value: transition-duration($duration);
+  $timing-value: transition-timing($timing);
+  @return $property $duration-value $timing-value $delay;
+}
+
+// ===================================
+// UTILITY FUNCTIONS
+// ===================================
+
+/// Check if a list contains a value
+/// @param {List} $list - The list to search
+/// @param {*} $value - The value to find
+/// @return {Boolean} - True if found, false otherwise
+@function list-contains($list, $value) {
+  @return index($list, $value) != null;
+}
+
+/// Get a deep map value
+/// @param {Map} $map - The map to search
+/// @param {List} $keys - The keys to traverse
+/// @return {*} - The found value or null
+@function map-deep-get($map, $keys...) {
+  @each $key in $keys {
+    @if type-of($map) != 'map' or not map-has-key($map, $key) {
+      @return null;
+    }
+    $map: map-get($map, $key);
+  }
+  @return $map;
+}
+
+/// Merge two maps deeply
+/// @param {Map} $parent-map - The parent map
+/// @param {Map} $child-map - The child map
+/// @return {Map} - The merged map
+@function map-deep-merge($parent-map, $child-map) {
+  $result: $parent-map;
+  @each $key, $value in $child-map {
+    @if type-of($value) == 'map' and type-of(map-get($result, $key)) == 'map' {
+      $result: map-merge($result, ($key: map-deep-merge(map-get($result, $key), $value)));
+    } @else {
+      $result: map-merge($result, ($key: $value));
+    }
+  }
+  @return $result;
 }

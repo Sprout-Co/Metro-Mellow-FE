@@ -1,168 +1,170 @@
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .add_customer_modal {
   &__form {
     display: flex;
     flex-direction: column;
-    gap: spacing('md');
+    gap: spacing("md");
   }
 
   &__section {
-    background-color: color('neutral', 'lighter');
-    border-radius: border-radius('lg');
-    padding: spacing('md');
-    margin-bottom: spacing('md');
-    box-shadow: map-get($box-shadows, 'sm');
-    
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    padding: spacing("md");
+    margin-bottom: spacing("md");
+    box-shadow: map-get($box-shadows, "sm");
+
     &:hover {
-      box-shadow: map-get($box-shadows, 'md');
+      box-shadow: map-get($box-shadows, "md");
       transition: box-shadow 0.3s ease;
     }
   }
 
   &__section_title {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('primary', 'dark');
-    margin: 0 0 spacing('md') 0;
-    padding-bottom: spacing('sm');
-    border-bottom: 1px solid color('neutral', 'medium');
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("primary", "dark");
+    margin: 0 0 spacing("md") 0;
+    padding-bottom: spacing("sm");
+    border-bottom: 1px solid color("neutral", "medium");
   }
 
   &__row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: spacing('md');
-    
-    @include breakpoint-down('sm') {
+    gap: spacing("md");
+
+    @include breakpoint-down("sm") {
       grid-template-columns: 1fr;
     }
   }
 
   &__field {
-    margin-bottom: spacing('md');
+    margin-bottom: spacing("md");
     position: relative;
   }
 
   &__label {
     display: block;
-    font-size: map-get($font-sizes, 'sm');
-    font-weight: map-get($font-weights, 'medium');
-    color: color('neutral', 'darker');
-    margin-bottom: spacing('xs');
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("xs");
   }
 
   &__required {
-    color: color('error');
-    margin-left: spacing('xxs');
+    color: color("error");
+    margin-left: spacing("xxs");
   }
 
   &__input {
     width: 100%;
-    padding: spacing('sm') spacing('md');
-    font-size: map-get($font-sizes, 'base');
-    border: 1px solid color('neutral', 'medium');
-    border-radius: border-radius('md');
-    background-color: color('neutral', 'white');
-    transition: border 0.2s ease, box-shadow 0.2s ease;
-    
+    padding: spacing("sm") spacing("md");
+    font-size: map-get($font-sizes, "base");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    background-color: color("neutral", "white");
+    transition:
+      border 0.2s ease,
+      box-shadow 0.2s ease;
+
     &:focus {
       outline: none;
-      border-color: color('primary', 'base');
-      box-shadow: 0 0 0 3px rgba(color('primary', 'base'), 0.1);
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
     }
-    
+
     &--error {
-      border-color: color('error');
-      
+      border-color: color("error");
+
       &:focus {
-        box-shadow: 0 0 0 3px rgba(color('error'), 0.1);
+        box-shadow: 0 0 0 3px rgba(color("error"), 0.1);
       }
     }
-    
+
     &::placeholder {
-      color: color('neutral', 'dark');
+      color: color("neutral", "dark");
       opacity: 0.6;
     }
   }
 
   &__password_field {
     position: relative;
-    
+
     .add_customer_modal__input {
-      padding-right: spacing('xl') * 2;
+      padding-right: spacing("xl") * 2;
     }
   }
 
   &__password_toggle {
     position: absolute;
-    right: spacing('sm');
+    right: spacing("sm");
     top: 50%;
     transform: translateY(-50%);
     background: none;
     border: none;
-    font-size: map-get($font-sizes, 'xs');
-    font-weight: map-get($font-weights, 'medium');
-    color: color('primary', 'base');
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    color: color("primary", "base");
     cursor: pointer;
-    padding: spacing('xs') spacing('sm');
-    
+    padding: spacing("xs") spacing("sm");
+
     &:hover {
-      color: color('primary', 'dark');
+      color: color("primary", "dark");
     }
-    
+
     &:focus {
       outline: none;
     }
   }
 
   &__error {
-    background-color: rgba(color('error'), 0.1);
-    color: color('error');
-    padding: spacing('sm') spacing('md');
-    border-radius: border-radius('md');
-    margin-bottom: spacing('md');
-    font-size: map-get($font-sizes, 'sm');
-    font-weight: map-get($font-weights, 'medium');
-    border-left: 3px solid color('error');
+    background-color: rgba(color("error"), 0.1);
+    color: color("error");
+    padding: spacing("sm") spacing("md");
+    border-radius: border-radius("md");
+    margin-bottom: spacing("md");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    border-left: 3px solid color("error");
   }
 
   &__error_text {
-    color: color('error');
-    font-size: map-get($font-sizes, 'xs');
-    margin-top: spacing('xxs');
+    color: color("error");
+    font-size: map-get($font-sizes, "xs");
+    margin-top: spacing("xxs");
     display: block;
   }
 
   &__actions {
     display: flex;
     justify-content: flex-end;
-    gap: spacing('md');
-    margin-top: spacing('md');
+    gap: spacing("md");
+    margin-top: spacing("md");
   }
 
   &__cancel {
-    padding: spacing('sm') spacing('lg');
-    background-color: color('neutral', 'light');
+    padding: spacing("sm") spacing("lg");
+    background-color: color("neutral", "light");
     border: none;
-    border-radius: border-radius('md');
-    font-size: map-get($font-sizes, 'sm');
-    font-weight: map-get($font-weights, 'medium');
-    color: color('neutral', 'darker');
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "darker");
     cursor: pointer;
     transition: background-color 0.2s ease;
-    
+
     &:hover {
-      background-color: color('neutral', 'medium');
+      background-color: color("neutral", "medium");
     }
-    
+
     &:focus {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(color('neutral', 'medium'), 0.3);
+      box-shadow: 0 0 0 3px rgba(color("neutral", "medium"), 0.3);
     }
-    
+
     &:disabled {
       opacity: 0.6;
       cursor: not-allowed;
@@ -170,29 +172,29 @@
   }
 
   &__submit {
-    padding: spacing('sm') spacing('lg');
-    background-color: color('primary', 'base');
+    padding: spacing("sm") spacing("lg");
+    background-color: color("primary", "base");
     border: none;
-    border-radius: border-radius('md');
-    font-size: map-get($font-sizes, 'sm');
-    font-weight: map-get($font-weights, 'medium');
-    color: color('neutral', 'white');
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "white");
     cursor: pointer;
     transition: background-color 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     min-width: 120px;
-    
+
     &:hover {
-      background-color: color('primary', 'dark');
+      background-color: color("primary", "dark");
     }
-    
+
     &:focus {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(color('primary', 'base'), 0.3);
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.3);
     }
-    
+
     &:disabled {
       opacity: 0.6;
       cursor: not-allowed;
@@ -203,9 +205,9 @@
     display: inline-block;
     width: 16px;
     height: 16px;
-    border: 2px solid rgba(color('neutral', 'white'), 0.3);
+    border: 2px solid rgba(color("neutral", "white"), 0.3);
     border-radius: 50%;
-    border-top-color: color('neutral', 'white');
+    border-top-color: color("neutral", "white");
     animation: spinner 0.8s linear infinite;
   }
 }

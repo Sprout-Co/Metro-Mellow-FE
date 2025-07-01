@@ -1,166 +1,166 @@
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts-old/variables";
+@import "@/styles/abstracts-old/mixins";
+@import "@/styles/abstracts-old/functions";
 
 .services_page {
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: spacing('lg');
-    
-    @include breakpoint-down('md') {
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("md") {
       flex-direction: column;
-      gap: spacing('md');
+      gap: spacing("md");
     }
   }
-  
+
   &__title {
-    font-size: map-get($font-sizes, '2xl');
-    font-weight: map-get($font-weights, 'bold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
   }
-  
+
   &__description {
-    font-size: map-get($font-sizes, 'base');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
     margin: 0;
   }
-  
+
   &__tabs {
     display: flex;
-    margin-bottom: spacing('lg');
-    border-bottom: 1px solid color('neutral', 'lighter');
-    
-    @include breakpoint-down('sm') {
+    margin-bottom: spacing("lg");
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    @include breakpoint-down("sm") {
       overflow-x: auto;
       white-space: nowrap;
-      padding-bottom: spacing('xs');
+      padding-bottom: spacing("xs");
     }
   }
-  
+
   &__tab {
-    padding: spacing('sm') spacing('lg');
+    padding: spacing("sm") spacing("lg");
     background: none;
     border: none;
-    font-size: map-get($font-sizes, 'sm');
-    font-weight: map-get($font-weights, 'medium');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
     cursor: pointer;
     position: relative;
-    
+
     &:hover {
-      color: color('secondary', 'base');
+      color: color("secondary", "base");
     }
-    
+
     &--active {
-      color: color('secondary', 'base');
-      
+      color: color("secondary", "base");
+
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: -1px;
         left: 0;
         width: 100%;
         height: 2px;
-        background-color: color('secondary', 'base');
+        background-color: color("secondary", "base");
       }
     }
   }
-  
+
   &__search {
-    margin-bottom: spacing('lg');
+    margin-bottom: spacing("lg");
   }
-  
+
   &__search_input {
     width: 100%;
-    padding: spacing('sm') spacing('md');
-    border: 1px solid color('neutral', 'medium');
-    border-radius: border-radius('md');
-    font-size: map-get($font-sizes, 'sm');
-    
+    padding: spacing("sm") spacing("md");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+
     &:focus {
       outline: none;
-      border-color: color('secondary', 'base');
-      box-shadow: 0 0 0 2px rgba(color('secondary', 'base'), 0.1);
+      border-color: color("secondary", "base");
+      box-shadow: 0 0 0 2px rgba(color("secondary", "base"), 0.1);
     }
   }
-  
+
   // Categories section
   &__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: spacing('lg');
+    gap: spacing("lg");
   }
-  
+
   &__category_card {
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: spacing('lg');
-    
+    padding: spacing("lg");
+
     &--new {
-      background-color: rgba(color('neutral', 'lighter'), 0.5);
-      border: 2px dashed color('neutral', 'medium');
+      background-color: rgba(color("neutral", "lighter"), 0.5);
+      border: 2px dashed color("neutral", "medium");
       cursor: pointer;
-      
+
       &:hover {
-        border-color: color('secondary', 'base');
-        background-color: rgba(color('secondary', 'base'), 0.05);
+        border-color: color("secondary", "base");
+        background-color: rgba(color("secondary", "base"), 0.05);
       }
     }
   }
-  
+
   &__category_header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: spacing('md');
+    margin-bottom: spacing("md");
   }
-  
+
   &__category_icon {
     width: 50px;
     height: 50px;
-    background-color: color('neutral', 'lighter');
-    border-radius: border-radius('lg');
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("lg");
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: map-get($font-sizes, '2xl');
+    font-size: map-get($font-sizes, "2xl");
   }
-  
+
   &__category_status {
     display: flex;
     align-items: center;
   }
-  
+
   &__status_toggle {
     position: relative;
     display: inline-block;
     width: 40px;
     height: 24px;
-    margin-right: spacing('xs');
+    margin-right: spacing("xs");
   }
-  
+
   &__toggle_input {
     opacity: 0;
     width: 0;
     height: 0;
-    
+
     &:checked + .services_page__toggle_label {
-      background-color: color('secondary', 'base');
+      background-color: color("secondary", "base");
     }
-    
+
     &:checked + .services_page__toggle_label .services_page__toggle_button {
       transform: translateX(16px);
     }
-    
+
     &:focus + .services_page__toggle_label {
-      box-shadow: 0 0 1px color('secondary', 'base');
+      box-shadow: 0 0 1px color("secondary", "base");
     }
   }
-  
+
   &__toggle_label {
     position: absolute;
     cursor: pointer;
@@ -168,11 +168,11 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: color('neutral', 'medium');
-    transition: .4s;
+    background-color: color("neutral", "medium");
+    transition: 0.4s;
     border-radius: 34px;
   }
-  
+
   &__toggle_button {
     position: absolute;
     content: "";
@@ -181,64 +181,64 @@
     left: 4px;
     bottom: 4px;
     background-color: white;
-    transition: .4s;
+    transition: 0.4s;
     border-radius: 50%;
   }
-  
+
   &__status_text {
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
   }
-  
+
   &__category_name {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
   }
-  
+
   &__category_description {
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
-    margin: 0 0 spacing('md') 0;
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("md") 0;
     flex-grow: 1;
   }
-  
+
   &__category_meta {
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'dark');
-    margin-bottom: spacing('md');
-    padding-bottom: spacing('md');
-    border-bottom: 1px solid color('neutral', 'lighter');
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("md");
+    padding-bottom: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
   }
-  
+
   &__services_count {
-    background-color: color('neutral', 'lighter');
-    padding: spacing('xxs') spacing('xs');
-    border-radius: border-radius('sm');
+    background-color: color("neutral", "lighter");
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("sm");
   }
-  
+
   &__category_actions {
     display: flex;
-    gap: spacing('sm');
+    gap: spacing("sm");
   }
-  
+
   &__action_button {
     flex: 1;
-    padding: spacing('xs') spacing('sm');
-    background-color: color('neutral', 'lighter');
+    padding: spacing("xs") spacing("sm");
+    background-color: color("neutral", "lighter");
     border: none;
-    border-radius: border-radius('sm');
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'dark');
+    border-radius: border-radius("sm");
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
     cursor: pointer;
-    
+
     &:hover {
-      background-color: color('secondary', 'base');
-      color: color('neutral', 'white');
+      background-color: color("secondary", "base");
+      color: color("neutral", "white");
     }
   }
-  
+
   &__new_category,
   &__new_discount {
     display: flex;
@@ -247,349 +247,349 @@
     justify-content: center;
     text-align: center;
     height: 100%;
-    padding: spacing('lg');
+    padding: spacing("lg");
   }
-  
+
   &__new_icon {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background-color: rgba(color('neutral', 'dark'), 0.1);
+    background-color: rgba(color("neutral", "dark"), 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: map-get($font-sizes, '2xl');
-    color: color('neutral', 'dark');
-    margin-bottom: spacing('md');
+    font-size: map-get($font-sizes, "2xl");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("md");
   }
-  
+
   &__new_title {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
   }
-  
+
   &__new_description {
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
     margin: 0;
   }
-  
+
   // Pricing section
   &__pricing_container {
-    margin-bottom: spacing('lg');
+    margin-bottom: spacing("lg");
   }
-  
+
   &__pricing_card {
-    padding: spacing('lg');
+    padding: spacing("lg");
   }
-  
+
   &__pricing_header {
-    margin-bottom: spacing('lg');
+    margin-bottom: spacing("lg");
   }
-  
+
   &__pricing_title {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
   }
-  
+
   &__pricing_description {
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
     margin: 0;
   }
-  
+
   &__pricing_list {
     width: 100%;
-    border: 1px solid color('neutral', 'lighter');
-    border-radius: border-radius('md');
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
     overflow: hidden;
   }
-  
+
   &__pricing_header_row {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
-    background-color: color('neutral', 'lighter');
-    padding: spacing('sm');
-    font-weight: map-get($font-weights, 'semibold');
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'dark');
+    background-color: color("neutral", "lighter");
+    padding: spacing("sm");
+    font-weight: map-get($font-weights, "semibold");
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
     text-transform: uppercase;
-    
-    @include breakpoint-down('md') {
+
+    @include breakpoint-down("md") {
       display: none;
     }
   }
-  
+
   &__pricing_row {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
-    border-bottom: 1px solid color('neutral', 'lighter');
+    border-bottom: 1px solid color("neutral", "lighter");
     align-items: center;
-    
+
     &:last-child {
       border-bottom: none;
     }
-    
-    @include breakpoint-down('md') {
+
+    @include breakpoint-down("md") {
       grid-template-columns: 1fr;
-      padding: spacing('md');
+      padding: spacing("md");
     }
   }
-  
+
   &__pricing_column {
-    padding: spacing('sm');
-    
-    @include breakpoint-down('md') {
-      padding: spacing('xs') 0;
+    padding: spacing("sm");
+
+    @include breakpoint-down("md") {
+      padding: spacing("xs") 0;
       display: flex;
       justify-content: space-between;
-      
+
       &::before {
         content: attr(data-label);
-        font-weight: map-get($font-weights, 'semibold');
+        font-weight: map-get($font-weights, "semibold");
       }
     }
   }
-  
+
   &__pricing_name {
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
   }
-  
+
   &__pricing_desc {
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
   }
-  
+
   &__multiplier {
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('secondary', 'base');
+    font-weight: map-get($font-weights, "semibold");
+    color: color("secondary", "base");
   }
-  
+
   &__default_badge {
     display: inline-block;
-    padding: spacing('xxs') spacing('xs');
-    background-color: rgba(color('secondary', 'base'), 0.1);
-    color: color('secondary', 'base');
-    border-radius: border-radius('sm');
-    font-size: map-get($font-sizes, 'xs');
-    font-weight: map-get($font-weights, 'semibold');
+    padding: spacing("xxs") spacing("xs");
+    background-color: rgba(color("secondary", "base"), 0.1);
+    color: color("secondary", "base");
+    border-radius: border-radius("sm");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "semibold");
   }
-  
+
   &__pricing_actions {
     display: flex;
-    gap: spacing('xs');
+    gap: spacing("xs");
   }
-  
+
   &__pricing_action {
-    padding: spacing('xxs') spacing('xs');
-    background-color: color('neutral', 'lighter');
+    padding: spacing("xxs") spacing("xs");
+    background-color: color("neutral", "lighter");
     border: none;
-    border-radius: border-radius('sm');
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'dark');
+    border-radius: border-radius("sm");
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
     cursor: pointer;
-    
+
     &:hover {
-      background-color: color('secondary', 'base');
-      color: color('neutral', 'white');
+      background-color: color("secondary", "base");
+      color: color("neutral", "white");
     }
   }
-  
+
   &__pricing_footer {
-    margin-top: spacing('lg');
+    margin-top: spacing("lg");
     display: flex;
     justify-content: flex-end;
   }
-  
+
   // Discounts section
   &__discount_card {
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: spacing('lg');
-    
+    padding: spacing("lg");
+
     &--new {
-      background-color: rgba(color('neutral', 'lighter'), 0.5);
-      border: 2px dashed color('neutral', 'medium');
+      background-color: rgba(color("neutral", "lighter"), 0.5);
+      border: 2px dashed color("neutral", "medium");
       cursor: pointer;
-      
+
       &:hover {
-        border-color: color('secondary', 'base');
-        background-color: rgba(color('secondary', 'base'), 0.05);
+        border-color: color("secondary", "base");
+        background-color: rgba(color("secondary", "base"), 0.05);
       }
     }
   }
-  
+
   &__discount_header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: spacing('md');
+    margin-bottom: spacing("md");
   }
-  
+
   &__discount_name {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
     margin: 0;
   }
-  
+
   &__discount_description {
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
-    margin: 0 0 spacing('md') 0;
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("md") 0;
     flex-grow: 1;
   }
-  
+
   &__discount_details {
-    margin-bottom: spacing('md');
-    padding-bottom: spacing('md');
-    border-bottom: 1px solid color('neutral', 'lighter');
+    margin-bottom: spacing("md");
+    padding-bottom: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
   }
-  
+
   &__discount_detail {
     display: flex;
-    margin-bottom: spacing('xs');
-    
+    margin-bottom: spacing("xs");
+
     &:last-child {
       margin-bottom: 0;
     }
   }
-  
+
   &__detail_label {
-    font-size: map-get($font-sizes, 'xs');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "dark");
     width: 80px;
   }
-  
+
   &__detail_value {
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'black');
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "black");
   }
-  
+
   &__discount_code {
-    font-size: map-get($font-sizes, 'xs');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('secondary', 'base');
-    background-color: rgba(color('secondary', 'base'), 0.1);
-    padding: spacing('xxs') spacing('xs');
-    border-radius: border-radius('sm');
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("secondary", "base");
+    background-color: rgba(color("secondary", "base"), 0.1);
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("sm");
   }
-  
+
   &__discount_actions {
     display: flex;
-    gap: spacing('sm');
+    gap: spacing("sm");
   }
-  
+
   // Standards section
   &__standards_card {
-    padding: spacing('lg');
+    padding: spacing("lg");
   }
-  
+
   &__standards_header {
-    margin-bottom: spacing('lg');
+    margin-bottom: spacing("lg");
   }
-  
+
   &__standards_title {
-    font-size: map-get($font-sizes, 'lg');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
   }
-  
+
   &__standards_description {
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
     margin: 0;
   }
-  
+
   &__standards_list {
     display: flex;
     flex-direction: column;
-    gap: spacing('md');
+    gap: spacing("md");
   }
-  
+
   &__standard_item {
-    border: 1px solid color('neutral', 'lighter');
-    border-radius: border-radius('md');
-    padding: spacing('md');
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    padding: spacing("md");
   }
-  
+
   &__standard_content {
-    margin-bottom: spacing('md');
+    margin-bottom: spacing("md");
   }
-  
+
   &__standard_name {
-    font-size: map-get($font-sizes, 'base');
-    font-weight: map-get($font-weights, 'semibold');
-    color: color('neutral', 'black');
-    margin: 0 0 spacing('xs') 0;
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
   }
-  
+
   &__standard_description {
-    font-size: map-get($font-sizes, 'sm');
-    color: color('neutral', 'dark');
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
     margin: 0;
   }
-  
+
   &__standard_meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: map-get($font-sizes, 'xs');
-    padding-top: spacing('sm');
-    border-top: 1px solid color('neutral', 'lighter');
-    
-    @include breakpoint-down('md') {
+    font-size: map-get($font-sizes, "xs");
+    padding-top: spacing("sm");
+    border-top: 1px solid color("neutral", "lighter");
+
+    @include breakpoint-down("md") {
       flex-direction: column;
       align-items: flex-start;
-      gap: spacing('sm');
+      gap: spacing("sm");
     }
   }
-  
+
   &__meta_label {
-    color: color('neutral', 'dark');
-    margin-right: spacing('xs');
+    color: color("neutral", "dark");
+    margin-right: spacing("xs");
   }
-  
+
   &__meta_value {
-    color: color('neutral', 'black');
-    font-weight: map-get($font-weights, 'semibold');
+    color: color("neutral", "black");
+    font-weight: map-get($font-weights, "semibold");
   }
-  
+
   &__standard_actions {
     display: flex;
-    gap: spacing('xs');
-    
-    @include breakpoint-down('md') {
+    gap: spacing("xs");
+
+    @include breakpoint-down("md") {
       width: 100%;
       justify-content: flex-end;
     }
   }
-  
+
   &__standard_button {
-    padding: spacing('xxs') spacing('sm');
-    background-color: color('neutral', 'lighter');
+    padding: spacing("xxs") spacing("sm");
+    background-color: color("neutral", "lighter");
     border: none;
-    border-radius: border-radius('sm');
-    font-size: map-get($font-sizes, 'xs');
-    color: color('neutral', 'dark');
+    border-radius: border-radius("sm");
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
     cursor: pointer;
-    
+
     &:hover {
-      background-color: color('secondary', 'base');
-      color: color('neutral', 'white');
+      background-color: color("secondary", "base");
+      color: color("neutral", "white");
     }
   }
-  
+
   &__standards_footer {
-    margin-top: spacing('lg');
+    margin-top: spacing("lg");
     display: flex;
     justify-content: flex-end;
   }
