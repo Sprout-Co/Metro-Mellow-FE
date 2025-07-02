@@ -19,6 +19,9 @@ Metro Mellow is a comprehensive home services platform built with Next.js 15, of
 - `npm start` - Start production server
 - `npm run lint` - Run ESLint code quality checks
 - `npm run codegen` - Generate GraphQL types from backend schema (watch mode)
+- `npm test` - Run unit tests with Jest
+- `npm run test:watch` - Run tests in watch mode
+- `npm run test:coverage` - Run tests with coverage report
 
 ### GraphQL Development
 - Backend GraphQL endpoint: `http://localhost:4000/graphql`
@@ -119,8 +122,17 @@ The backend provides comprehensive GraphQL schema with:
 ### Testing & Quality
 - Run `npm run lint` before committing changes
 - Ensure TypeScript compilation passes with `npm run build`
+- Run `npm test` to execute unit tests for components and hooks
 - Test authentication flows across different user roles
 - Verify responsive design on multiple screen sizes
+
+### Testing Framework
+- **Jest** with React Testing Library for unit tests
+- Tests located in `__tests__` directories alongside components
+- Mock configurations for GraphQL, Redux, and Next.js features
+- Coverage reports available with `npm run test:coverage`
+- Working test suites for admin components (AdminDashboardLayout, StatusBadge, MetricCard, Dashboard page)
+- Utility functions and helper tests for admin functionality
 
 ## Key Files & Directories
 

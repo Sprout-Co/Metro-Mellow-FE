@@ -133,7 +133,7 @@ export default function QuickActions() {
           <Icon name="arrow-right" />
         </button>
       </motion.div>
-      <BookServiceModal />
+      <BookServiceModal isOpen={true} onClose={() => {}} />
       <RescheduleServiceModal
         isOpen={isRescheduleModalOpen}
         onClose={() => setIsRescheduleModalOpen(false)}
