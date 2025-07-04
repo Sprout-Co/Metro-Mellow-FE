@@ -36,15 +36,6 @@ export default function Home() {
         <MobileAppPromoSection />
         <ToDoToTaDaSection />
         <TestimonialCarouselSection />
-        
-        {/* <Services />
-        <ServiceCards />
-
-        <HowItWorks />
-
-        <WhyChooseUs />
-        <Testimonials />
-        <CTA /> */}
       </main>
       <Footer />
     </>

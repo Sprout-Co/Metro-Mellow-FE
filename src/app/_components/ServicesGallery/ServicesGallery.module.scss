@@ -11,6 +11,10 @@
   padding: spacing('6xl') spacing('lg');
   overflow: hidden;
   min-height: 100vh;
+
+  &__container {
+    @include container;
+  }
   
   // Decorative elements
   &__decorations {

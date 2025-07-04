@@ -1,7 +1,7 @@
 // components/about/AboutHero.module.scss
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import '../../../../../../styles/abstracts/variables';
+@import '../../../../../../styles/abstracts/functions';
+@import '../../../../../../styles/abstracts/mixins';
 
 .aboutHero {
   position: relative;
@@ -12,8 +12,7 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  display: flex;
-  align-items: center;
+  @include flex(row, nowrap, center, center);
 
   &__overlay {
     position: absolute;
@@ -42,12 +41,10 @@
   }
 
   &__title {
-    font-family: $font-family-heading;
-    font-size: map-get($font-sizes, "6xl");
-    font-weight: map-get($font-weights, "bold");
-    color: color("neutral", "white");
-    margin-bottom: spacing("lg");
-    line-height: map-get($line-heights, "tight");
+    @include heading-1;
+    @include font-size('h1');
+    color: color('neutral', 'white');
+    margin-bottom: spacing('lg');
 
     &--highlight {
       position: relative;
@@ -60,17 +57,17 @@
         left: 0;
         width: 100%;
         height: 12px;
-        background-color: rgba(color("secondary", "light"), 0.3);
+        background-color: color-alpha('secondary', 'light', 0.3);
         z-index: -1;
       }
     }
 
-    @include breakpoint-down("lg") {
-      font-size: map-get($font-sizes, "5xl");
+    @include breakpoint-down('lg') {
+      @include font-size('h2');
     }
 
-    @include breakpoint-down("md") {
-      font-size: map-get($font-sizes, "4xl");
+    @include breakpoint-down('md') {
+      @include font-size('h3');
 
       &--highlight::after {
         height: 8px;
@@ -78,8 +75,8 @@
       }
     }
 
-    @include breakpoint-down("sm") {
-      font-size: map-get($font-sizes, "3xl");
+    @include breakpoint-down('sm') {
+      @include font-size('h4');
 
       &--highlight::after {
         height: 6px;
@@ -89,18 +86,17 @@
   }
 
   &__subtitle {
-    font-size: map-get($font-sizes, "xl");
-    color: color("neutral", "white");
+    @include body-1;
+    color: color('neutral', 'white');
     max-width: 600px;
     margin: 0 auto;
-    line-height: map-get($line-heights, "relaxed");
 
-    @include breakpoint-down("md") {
-      font-size: map-get($font-sizes, "lg");
+    @include breakpoint-down('md') {
+      @include font-size('body-1');
     }
 
-    @include breakpoint-down("sm") {
-      font-size: map-get($font-sizes, "base");
+    @include breakpoint-down('sm') {
+      @include font-size('body-2');
     }
   }
 }

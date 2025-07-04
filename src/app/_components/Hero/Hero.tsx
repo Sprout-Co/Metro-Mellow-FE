@@ -118,8 +118,8 @@ const Hero: FC = () => {
             custom={1}
             variants={textVariants}
           >
-            <span className={styles['hero__title--accent']}>comfort</span>
-            <span className={styles['hero__title--main']}>delivered to<br />your doorstep</span>
+            <span className={styles['hero__title--accent']}>Comfort</span>
+            <span className={styles['hero__title--main']}>Delivered To<br />Your Doorstep</span>
           </motion.h1>
           
           <motion.div

@@ -4,7 +4,7 @@
 
 .faq {
   position: relative;
-  padding: spacing('6xl') 0;
+  @include section-spacing('6xl');
   background-color: color('neutral', 'black');
   color: color('neutral', 'lighter');
   overflow: hidden;
@@ -22,7 +22,7 @@
   }
 
   &__content {
-    display: flex;
+    @include flex(row, nowrap, flex-start, flex-start);
     gap: spacing('4xl');
 
     @include breakpoint-down('lg') {
@@ -30,7 +30,7 @@
     }
 
     @include breakpoint-down('md') {
-      flex-direction: column;
+      @include flex-column;
       gap: spacing('2xl');
     }
   }
@@ -44,25 +44,23 @@
   }
 
   &__title {
-    font-size: font-size('h2');
-    font-weight: font-weight('bold');
-    line-height: line-height('tight');
+    @include heading-2;
     letter-spacing: letter-spacing('tight');
     
     @include breakpoint-down('xl') {
-      font-size: font-size('h3');
+      @include font-size('h3');
     }
     
     @include breakpoint-down('lg') {
-      font-size: font-size('h3');
+      @include font-size('h3');
     }
     
     @include breakpoint-down('md') {
-      font-size: font-size('h4');
+      @include font-size('h4');
     }
     
     @include breakpoint-down('sm') {
-      font-size: font-size('h5');
+      @include font-size('h5');
       text-align: center;
       br {
         display: none;
@@ -84,8 +82,7 @@
 
   &__questions {
     flex: 1;
-    display: flex;
-    flex-direction: column;
+    @include flex-column;
     justify-content: center;
   }
 
@@ -118,25 +115,23 @@
   }
 
   &__question {
-    display: flex;
-    align-items: center;
-    font-size: font-size('subtitle-1');
-    line-height: line-height('normal');
+    @include flex(row, nowrap, flex-start, center);
+    @include subtitle-1;
     cursor: pointer;
     transition: color 0.3s ease;
     position: relative;
     padding-right: spacing('3xl');
     
     @include breakpoint-down('lg') {
-      font-size: font-size('subtitle-2');
+      @include subtitle-2;
     }
     
     @include breakpoint-down('md') {
-      font-size: font-size('body-1');
+      @include body-1;
     }
     
     @include breakpoint-down('sm') {
-      font-size: font-size('body-2');
+      @include body-2;
     }
 
     &:hover {
@@ -147,35 +142,34 @@
   &__dash {
     color: color('secondary', 'base');
     margin-right: spacing('md');
-    font-weight: font-weight('bold');
+    @include font-weight('bold');
   }
 
   &__toggle {
     position: absolute;
     right: 0;
-    font-size: font-size('subtitle-1');
+    @include font-size('subtitle-1');
     color: color('secondary', 'base');
-    font-weight: font-weight('bold');
+    @include font-weight('bold');
     
     @include breakpoint-down('lg') {
-      font-size: font-size('subtitle-2');
+      @include font-size('subtitle-2');
     }
     
     @include breakpoint-down('md') {
-      font-size: font-size('body-1');
+      @include font-size('body-1');
     }
   }
 
   &__answer {
     margin-top: spacing('md');
     padding-left: spacing('4xl');
-    font-size: font-size('body-1');
-    line-height: line-height('relaxed');
+    @include body-1;
     color: color('neutral', 'light');
     max-width: 95%;
     
     @include breakpoint-down('lg') {
-      font-size: font-size('body-2');
+      @include body-2;
       padding-left: spacing('3xl');
     }
     
@@ -184,7 +178,7 @@
     }
     
     @include breakpoint-down('sm') {
-      font-size: font-size('small');
+      @include font-size('small');
       padding-left: spacing('xl');
     }
   }
