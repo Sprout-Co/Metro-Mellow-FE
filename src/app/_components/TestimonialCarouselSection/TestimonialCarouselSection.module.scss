@@ -1,8 +1,11 @@
-@import "../../../styles/abstracts/_variables.scss";
+@import '../../../styles/abstracts/variables';
+@import '../../../styles/abstracts/functions';
+@import '../../../styles/abstracts/mixins';
+@import '../../../styles/abstracts/animations';
 
 .section {
   background: map-get(map-get($colors, "neutral"), "black");
-  padding: map-get($spacing, "4xl") 0;
+  @include section-spacing("6xl");
   text-align: center;
 }
 
@@ -32,7 +35,7 @@
   justify-content: space-between;
   align-items: flex-start;
   color: map-get(map-get($colors, "neutral"), "white");
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .text {
@@ -92,7 +95,9 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 
   &.active,
   &:hover,
@@ -135,7 +140,9 @@
   .quote {
     font-size: map-get($font-sizes, "h6");
   }
-  .userInfo, .name, .stars {
+  .userInfo,
+  .name,
+  .stars {
     font-size: map-get($font-sizes, "xs");
   }
   .navButtons {
@@ -148,4 +155,4 @@
     height: 44px;
     font-size: map-get($font-sizes, "body-2");
   }
-} 
+}

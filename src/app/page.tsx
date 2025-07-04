@@ -29,9 +29,9 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <ExperienceSection />
         <ServicesGallery />
         <ServiceHero />
-        <ExperienceSection />
         <ChoresSection />
         <MobileAppPromoSection />
         <ToDoToTaDaSection />

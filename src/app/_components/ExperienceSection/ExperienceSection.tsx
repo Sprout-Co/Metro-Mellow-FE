@@ -72,9 +72,9 @@ const ExperienceSection: React.FC = () => {
           </div>
         </div>
         <div className={styles['experience-section__content']}>
-          <h2 className={styles['experience-section__heading']}>
+          <h1 className={styles['experience-section__heading']}>
             Experience a<br />life without<br />hassle
-          </h2>
+          </h1>
           <p className={styles['experience-section__subtext']}>
             We're the spark that turns your chaos into calm, the groove that gets your life back in tune.
           </p>
