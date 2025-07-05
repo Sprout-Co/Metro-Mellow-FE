@@ -4,6 +4,8 @@ import { FC, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import styles from './Hero.module.scss';
+import { Button } from '@/components/ui/Button';
+import { ArrowRight, Mail, Plus } from 'lucide-react';
 
 const Hero: FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -50,13 +52,13 @@ const Hero: FC = () => {
         ease: "easeOut",
       },
     },
-    hover: {
-      scale: 1.05,
-      transition: {
-        duration: 0.2,
-        ease: "easeInOut",
-      },
-    },
+    // hover: {
+    //   scale: 1.05,
+    //   transition: {
+    //     duration: 0.2,
+    //     ease: "easeInOut",
+    //   },
+    // },
   };
 
   const indicatorVariants = {
@@ -107,21 +109,25 @@ const Hero: FC = () => {
           }}
         />
       </AnimatePresence>
-      
+
       <div className={styles.hero__overlay}></div>
       <div className={styles.hero__container}>
         <div className={styles.hero__content}>
-          <motion.h1 
+          <motion.h1
             className={styles.hero__title}
             initial="hidden"
             animate="visible"
             custom={1}
             variants={textVariants}
           >
-            <span className={styles['hero__title--accent']}>Comfort</span>
-            <span className={styles['hero__title--main']}>Delivered To<br />Your Doorstep</span>
+            <span className={styles["hero__title--accent"]}>Comfort</span>
+            <span className={styles["hero__title--main"]}>
+              Delivered To
+              <br />
+              Your Doorstep
+            </span>
           </motion.h1>
-          
+
           <motion.div
             className={styles.hero__cta}
             initial="hidden"
@@ -129,24 +135,25 @@ const Hero: FC = () => {
             variants={buttonVariants}
             whileHover="hover"
           >
-            <Link href="/get-started" className={styles.hero__button}>
+            {/* <Link href="/get-started" className={styles.hero__button}>
               BOOK A SERVICE
-            </Link>
+            </Link> */}
+            <Button variant="white" size='lg' fullWidth={false}>Book a service</Button>
           </motion.div>
         </div>
       </div>
-      
+
       <div className={styles.hero__indicators}>
         {heroImages.map((_, index) => (
-          <motion.span 
+          <motion.span
             key={index}
-            className={`${styles.hero__indicator} ${index === currentSlide ? styles['hero__indicator--active'] : ''}`}
+            className={`${styles.hero__indicator} ${index === currentSlide ? styles["hero__indicator--active"] : ""}`}
             initial="hidden"
             animate="visible"
             custom={index}
             variants={indicatorVariants}
             onClick={() => handleIndicatorClick(index)}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: "pointer" }}
           />
         ))}
       </div>

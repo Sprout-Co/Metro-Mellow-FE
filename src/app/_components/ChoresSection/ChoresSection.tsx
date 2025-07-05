@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import styles from './ChoresSection.module.scss';
 
@@ -75,7 +76,7 @@ const LaundryIcon = () => (
 </svg>
 
 );
-
+import { Button } from '@/components/ui/Button/Button';
 const services = [
   {
     name: 'Errand',
@@ -133,9 +134,10 @@ const ChoresSection: React.FC = () => {
               <div className={styles['chores-card__content']}>
                 <h3 className={styles['chores-card__title']}>{service.name}</h3>
                 <p className={styles['chores-card__desc']}>{service.desc}</p>
-                <button className={`${styles['chores-card__btn']} ${styles[service.btn]}`}>
+                {/* <button className={`${styles['chores-card__btn']} ${styles[service.btn]}`}>
                   START HIRING
-                </button>
+                </button> */}
+                <Button variant="white" size='md' fullWidth={false}>Start Hiring</Button>
               </div>
             </div>
           ))}

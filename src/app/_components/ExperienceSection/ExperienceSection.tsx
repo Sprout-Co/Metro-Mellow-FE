@@ -4,6 +4,7 @@ import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import styles from './ExperienceSection.module.scss';
+import { Button } from '@/components/ui/Button';
 
 const ExperienceSection: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -28,23 +29,23 @@ const ExperienceSection: React.FC = () => {
   };
 
   return (
-    <section className={styles['experience-section']}>
-      <div className={styles['experience-section__container']}>
-        <div className={styles['experience-section__media']}>
-          <div className={styles['experience-section__video-box']}>
+    <section className={styles["experience-section"]}>
+      <div className={styles["experience-section__container"]}>
+        <div className={styles["experience-section__media"]}>
+          <div className={styles["experience-section__video-box"]}>
             {!isPlaying ? (
               // Show thumbnail with play button overlay
-              <div className={styles['experience-section__thumbnail-wrapper']}>
+              <div className={styles["experience-section__thumbnail-wrapper"]}>
                 <Image
                   src={THUMBNAIL_URL}
                   alt="Video thumbnail"
                   fill
-                  style={{ objectFit: 'cover' }}
-                  className={styles['experience-section__thumbnail']}
+                  style={{ objectFit: "cover" }}
+                  className={styles["experience-section__thumbnail"]}
                   priority
                 />
-                <motion.button 
-                  className={styles['experience-section__play-button']}
+                <motion.button
+                  className={styles["experience-section__play-button"]}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                   onHoverStart={() => setIsHovered(true)}
@@ -52,8 +53,8 @@ const ExperienceSection: React.FC = () => {
                   onClick={handlePlayVideo}
                   aria-label="Play video"
                 >
-                  <motion.span 
-                    className={styles['experience-section__play-icon']}
+                  <motion.span
+                    className={styles["experience-section__play-icon"]}
                     animate={{ scale: isHovered ? 1.1 : 1 }}
                     transition={{ duration: 0.2 }}
                   />
@@ -63,7 +64,7 @@ const ExperienceSection: React.FC = () => {
               // Show video when playing
               <video
                 ref={videoRef}
-                className={styles['experience-section__video']}
+                className={styles["experience-section__video"]}
                 src={VIDEO_URL}
                 controls
                 onEnded={handleVideoEnd}
@@ -71,16 +72,21 @@ const ExperienceSection: React.FC = () => {
             )}
           </div>
         </div>
-        <div className={styles['experience-section__content']}>
-          <h1 className={styles['experience-section__heading']}>
-            Experience a<br />life without<br />hassle
+        <div className={styles["experience-section__content"]}>
+          <h1 className={styles["experience-section__heading"]}>
+            Experience a<br />
+            life without
+            <br />
+            hassle
           </h1>
-          <p className={styles['experience-section__subtext']}>
-            We're the spark that turns your chaos into calm, the groove that gets your life back in tune.
+          <p className={styles["experience-section__subtext"]}>
+            We're the spark that turns your chaos into calm, the groove that
+            gets your life back in tune.
           </p>
-          <button className={styles['experience-section__cta']} type="button">
+          {/* <button className={styles["experience-section__cta"]} type="button">
             BOOK A SERVICE
-          </button>
+          </button> */}
+          <Button variant="primary" size='lg' >Book a service</Button>
         </div>
       </div>
     </section>

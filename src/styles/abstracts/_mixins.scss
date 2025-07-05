@@ -345,30 +345,30 @@
   @include font-size("button");
   @include font-weight("bold");
   text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: map-get($letter-spacing, "wider");
+  text-transform: capitalize;
   border: map-get($border-width, "thin") solid transparent;
-  border-radius: border-radius("full");
+  border-radius: border-radius("pill");
   cursor: pointer;
   transition: $transition-fast;
   white-space: nowrap;
   user-select: none;
   outline: none;
+  padding: map-get($button-padding, "xl");
 
   // Size variations
-  @if $size == "sm" {
-    height: map-get($button-height, "sm");
-    padding: map-get($button-padding, "sm");
-  } @else if $size == "lg" {
-    height: map-get($button-height, "lg");
-    padding: map-get($button-padding, "lg");
-  } @else if $size == "xl" {
-    height: map-get($button-height, "xl");
-    padding: map-get($button-padding, "xl");
-  } @else {
-    height: map-get($button-height, "md");
-    padding: map-get($button-padding, "md");
-  }
+  // @if $size == "sm" {
+  //   height: map-get($button-height, "sm");
+  //   padding: map-get($button-padding, "sm");
+  // } @else if $size == "lg" {
+  //   height: map-get($button-height, "lg");
+  //   padding: map-get($button-padding, "lg");
+  // } @else if $size == "xl" {
+  //   height: map-get($button-height, "xl");
+  //   padding: map-get($button-padding, "xl");
+  // } @else {
+  //   height: map-get($button-height, "md");
+  //   padding: map-get($button-padding, "md");
+  // }
 
   &:disabled {
     opacity: 0.6;
@@ -384,8 +384,9 @@
   border-color: color("primary", "base");
 
   &:hover:not(:disabled) {
-    background-color: color("primary", "dark");
-    border-color: color("primary", "dark");
+    background-color: color("neutral", "white");
+    border-color: color("primary", "base");
+    color: color("primary", "base");
     transform: translateY(-1px);
     box-shadow: map-get($shadows, "md");
   }
@@ -409,12 +410,13 @@
   &:hover:not(:disabled) {
     background-color: color("secondary", "base");
     color: color("neutral", "white");
+    border-color: color("primary", "base");
     transform: translateY(-1px);
     box-shadow: map-get($shadows, "md");
   }
 
   &:focus:not(:disabled) {
-    box-shadow: 0 0 0 3px rgba(254, 91, 4, 0.1);
+    box-shadow: map-get($shadows, "focus");
   }
 
   &:active:not(:disabled) {
@@ -430,8 +432,9 @@
   border-color: transparent;
 
   &:hover:not(:disabled) {
-    background-color: color("neutral", "lighter");
-    transform: translateY(-1px);
+    background-color: color("neutral", "lightest");
+    // transform: translateY(-1px);
+    box-shadow: map-get($shadows, "md");
   }
 
   &:focus:not(:disabled) {
@@ -443,11 +446,13 @@
   @include button-base($size);
   background-color: color("neutral", "white");
   color: color("primary", "base");
-  border-color: color("neutral", "white");
+  border-color: color("primary", "base");
 
   &:hover:not(:disabled) {
-    background-color: color("neutral", "lightest");
-    transform: translateY(-1px);
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border-color: color("primary", "base");
+    // transform: translateY(-1px);
     box-shadow: map-get($shadows, "md");
   }
 

@@ -40,8 +40,10 @@
 
 
 
+"use client"
 import React from 'react';
 import styles from './MobileAppPromoSection.module.scss';
+import { Button } from '@/components/ui/Button/Button';
 
 const MobileAppPromoSection = () => {
   return (
@@ -55,12 +57,14 @@ const MobileAppPromoSection = () => {
             We're the spark that turns your chaos into calm, the groove that gets your life back in tune.
           </p>
           <div className={styles['app-promo__buttons']}>
-            <button className={styles['app-promo__button-primary']}>
+            {/* <button className={styles['app-promo__button-primary']}>
               DOWNLOAD THE APP
-            </button>
-            <button className={styles['app-promo__button-secondary']}>
+            </button> */}
+            {/* <button className={styles['app-promo__button-secondary']}>
               IOS DOWNLOAD
-            </button>
+            </button> */}
+            <Button variant="primary" size='lg' fullWidth={false}>Download the app</Button>
+            <Button variant="white" size='lg' fullWidth={false}>IOS DOWNLOAD</Button>
           </div>
         </div>
         <div className={styles['app-promo__image']}>
