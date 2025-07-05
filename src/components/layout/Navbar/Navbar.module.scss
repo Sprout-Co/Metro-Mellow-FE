@@ -3,16 +3,19 @@
 @import "@/styles/abstracts/functions";
 
 .navbar {
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 100vw;
+  position: fixed;
+  top: spacing("md");
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  border-radius: 55px;
+  border: 5px solid color("neutral", "darkest");
   min-width: 0;
   z-index: 1000;
   padding: spacing("md") 0;
   background-color: color("neutral", "white");
-  border-bottom: 1px solid rgba(color("neutral", "lighter"), 0.2);
   transition: all 0.3s ease-in-out;
+  @include container;
 
   &--scrolled {
     padding: spacing("sm") 0;
@@ -50,7 +53,7 @@
     border-radius: border-radius("sm");
     transition: transform 0.3s ease;
     position: relative;
-    
+
     // Simple logo placeholder - can be replaced with actual logo/image
     &::after {
       content: "METRO MELLOW";
@@ -122,7 +125,9 @@
       border-radius: border-radius("pill");
       opacity: 0;
       transform: scaleX(0.5);
-      transition: opacity 0.3s, transform 0.3s;
+      transition:
+        opacity 0.3s,
+        transform 0.3s;
     }
 
     &:hover {

@@ -1,5 +1,7 @@
+"use client"
 import React from 'react';
 import styles from './ServiceHero.module.scss';
+import { Button } from '@/components/ui/Button/Button';
 
 interface ServiceHeroProps {
   onBookServices?: () => void;
@@ -23,13 +25,7 @@ const ServiceHero: React.FC<ServiceHeroProps> = ({ onBookServices }) => {
             <h1 className={styles['service-hero__heading']}>
               Unburden<br />yourself!
             </h1>
-            <button
-              className={styles['service-hero__cta']}
-              onClick={onBookServices}
-              type="button"
-            >
-              BOOK A SERVICE
-            </button>
+            <Button variant="white" size='lg' fullWidth={false}>Book a service</Button>
           </div>
         </div>
         {/* Right: Service Cards */}

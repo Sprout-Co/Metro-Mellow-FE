@@ -1,114 +1,191 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+// src/components/ui/Button/Button.module.scss
+@import "@/styles/abstracts/_variables.scss";
+@import "@/styles/abstracts/_functions.scss";
+@import "@/styles/abstracts/_mixins.scss";
+@import "@/styles/abstracts/_animations.scss";
 
 .button {
+  // Base button styles
+  @include button-base("lg");
+  position: relative;
+  overflow: hidden;
+  transition: $transition-base;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: $font-family-base;
-  font-weight: map-get($font-weights, "medium");
-  border-radius: border-radius("lg");
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  transition: $transition-base;
-  outline: none;
+  gap: spacing("xs");
+  border-radius: border-radius("pill");
+  font-weight: font-weight("semibold");
+  width: fit-content;
+
+  // Disable default button styling
+  -webkit-appearance: none;
+  appearance: none;
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px color("primary", "light");
+    outline: 2px solid color("primary", "base");
+    outline-offset: 2px;
   }
 
+  // Variants
   &--primary {
-    background-color: color("primary", "base");
-    color: color("neutral", "white");
-
-    &:hover,
-    &:focus {
-      background-color: color("primary", "dark");
-    }
+    @include button-primary;
   }
 
   &--secondary {
-    background-color: color("secondary", "base");
-    color: color("neutral", "white");
-
-    &:hover,
-    &:focus {
-      background-color: color("secondary", "dark");
-    }
+    @include button-secondary;
   }
 
-  &--outline {
-    background-color: transparent;
-    color: color("primary", "base");
-    border: 1px solid color("primary", "base");
-
-    &:hover,
-    &:focus {
-      background-color: rgba(color("primary", "base"), 0.05);
-    }
+  &--ghost {
+    @include button-ghost;
   }
 
-  &--text {
-    background-color: transparent;
-    color: color("primary", "base");
-    padding-left: 0;
-    padding-right: 0;
-
-    &:hover,
-    &:focus {
-      color: color("primary", "dark");
-      text-decoration: underline;
-    }
+  &--white {
+    @include button-white;
   }
 
+  // Sizes
   &--sm {
-    padding: spacing("xs") spacing("md");
-    font-size: map-get($font-sizes, "sm");
-    height: 2rem;
+    height: button-height("sm");
+    padding: 0 spacing("md");
+    font-size: font-size("small");
+
+    .button__icon {
+      width: 16px;
+      height: 16px;
+    }
   }
 
   &--md {
-    padding: spacing("sm") spacing("lg");
-    font-size: map-get($font-sizes, "base");
-    height: 2.5rem;
+    height: button-height("md");
+    padding: 0 spacing("lg");
+    font-size: font-size("button");
+
+    .button__icon {
+      width: 20px;
+      height: 20px;
+    }
   }
 
   &--lg {
-    padding: spacing("md") spacing("xl");
-    font-size: map-get($font-sizes, "lg");
-    height: 3rem;
+    height: button-height("lg");
+    padding: 0 spacing("xl");
+    font-size: font-size("body-2");
+
+    .button__icon {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  // States
+  &--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &--loading {
+    cursor: wait;
+
+    .button__content {
+      visibility: hidden;
+    }
+
+    .button__loader {
+      visibility: visible;
+    }
   }
 
   &--full-width {
     width: 100%;
   }
 
-  &--with-icon {
-    .button__icon {
-      display: flex;
-      align-items: center;
+  &--icon-only {
+    &.button--sm {
+      width: button-height("sm");
+      padding: 0;
     }
 
-    .button__text + .button__icon,
-    .button__icon + .button__text {
-      margin-left: spacing("xs");
+    &.button--md {
+      width: button-height("md");
+      padding: 0;
     }
-  }
 
-  &--icon-right {
-    flex-direction: row-reverse;
-
-    .button__text + .button__icon {
-      margin-left: 0;
-      margin-right: spacing("xs");
+    &.button--lg {
+      width: button-height("lg");
+      padding: 0;
     }
   }
 
-  &--disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+  // Elements
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    &--left {
+      margin-right: spacing("xxs");
+    }
+
+    &--right {
+      margin-left: spacing("xxs");
+    }
+  }
+
+  &__loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::after {
+      content: "";
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid transparent;
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+  }
+
+  // Animation states
+  &__ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    background-color: rgba(255, 255, 255, 0.4);
     pointer-events: none;
+
+    &--active {
+      animation: ripple 0.6s linear;
+    }
+  }
+}
+
+// Animation keyframes
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }

@@ -6,15 +6,14 @@
 .chores-section {
   width: 100%;
   background: color('neutral', 'white');
-  padding: spacing('4xl') 0;
+  @include section-spacing('6xl');
   text-align: center;
   overflow: hidden;
   color: color('neutral', 'black');
 
   &__container {
-    max-width: map-get($container-max-widths, '2xl');
-    margin: 0 auto;
-    padding: 0 spacing('md');
+    @include container;
+    padding: 0;
   }
 
   &__heading {

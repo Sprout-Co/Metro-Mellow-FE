@@ -29,22 +29,13 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <ExperienceSection />
         <ServicesGallery />
         <ServiceHero />
-        <ExperienceSection />
         <ChoresSection />
         <MobileAppPromoSection />
         <ToDoToTaDaSection />
         <TestimonialCarouselSection />
-        
-        {/* <Services />
-        <ServiceCards />
-
-        <HowItWorks />
-
-        <WhyChooseUs />
-        <Testimonials />
-        <CTA /> */}
       </main>
       <Footer />
     </>
