@@ -1,5 +1,6 @@
 import React from 'react';
 import FoodHero from './_components/FoodHero/FoodHero';
+import MealPromoSection from './_components/MealPromoSection/MealPromoSection';
 
 export const metadata = {
     title: 'Food Delivery Services | MetroMellow',
@@ -10,6 +11,7 @@ export default function FoodPage() {
     return (
         <main>
            <FoodHero />
+           <MealPromoSection />
            {/* <CookingAbout />
            <CookingPlans />
            <CookingProcess />
