@@ -11,7 +11,6 @@ import {
 const protectedRoutes = [
   Routes.DASHBOARD,
   Routes.PROFILE,
-  Routes.SERVICES,
   Routes.BOOKINGS,
   Routes.PAYMENTS,
 ];
