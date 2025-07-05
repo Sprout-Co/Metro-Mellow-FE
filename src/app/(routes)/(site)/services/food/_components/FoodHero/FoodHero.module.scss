@@ -1,0 +1,155 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/animations";
+
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('/images/food/f12.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to right,
+      color-alpha('neutral', 'black', 0.7) 0%,
+      color-alpha('neutral', 'black', 0.5) 50%,
+      color-alpha('neutral', 'black', 0.7) 100%
+    );
+    z-index: 1;
+  }
+
+  &__container {
+    @include container;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 0;
+    @include breakpoint-down('md') {
+      height: auto;
+      padding-top: spacing('3xl');
+      padding-bottom: spacing('3xl');
+    }
+    @include breakpoint-down('sm') {
+      padding-top: spacing('2xl');
+      padding-bottom: spacing('2xl');
+    }
+  }
+
+  &__content {
+    max-width: 655px;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+    color: color('neutral', 'white');
+    padding: 0;
+    @include breakpoint-down('md') {
+      max-width: 100%;
+      padding: 0 spacing('md');
+    }
+    @include breakpoint-down('sm') {
+      padding: 0 spacing('sm');
+    }
+  }
+
+  &__title {
+    @include heading-1;
+    font-size: font-size('h1') * 1.2;
+    color: color('neutral', 'white');
+    margin-bottom: spacing('lg');
+    line-height: 1;
+    
+    &--accent {
+      color: color('primary', 'light');
+      font-weight: map-get($font-weights, 'bold');
+      margin-bottom: spacing('sm');
+      display: inline;
+    }
+    &--main {
+      display: inline;
+      font-weight: map-get($font-weights, 'bold');
+      color: color('neutral', 'white');
+      font-size: inherit;
+      white-space: nowrap;
+      @include breakpoint-down('sm') {
+        white-space: normal;
+      }
+    }
+    @include breakpoint-down('md') {
+      font-size: font-size('h2') * 1.2;
+    }
+    @include breakpoint-down('sm') {
+      font-size: font-size('h3') * 1.2;
+      line-height: 1.1;
+    }
+  }
+
+  &__description {
+    @include paragraph;
+    color: color('neutral', 'white');
+    font-size: font-size('body-1');
+    margin-bottom: spacing('2xl');
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('body-2');
+      margin-bottom: spacing('xl');
+    }
+
+    @include breakpoint-down('sm') {
+      font-size: font-size('body-2');
+      margin-bottom: spacing('lg');
+    }
+  }
+
+  &__cta {
+    margin-top: spacing('2xl');
+    @include breakpoint-down('md') {
+      margin-top: spacing('xl');
+    }
+    @include breakpoint-down('sm') {
+      margin-top: spacing('lg');
+    }
+    button {
+      text-transform: uppercase;
+      letter-spacing: letter-spacing('wider');
+      font-weight: map-get($font-weights, 'semibold');
+      background-color: color('primary', 'base');
+      color: color('neutral', 'white');
+      padding: spacing('lg') spacing('2xl');
+      border-radius: border-radius('full');
+      font-size: font-size('body-2');
+      transition: $transition-base;
+      &:hover {
+        background-color: color-darken('primary', 'base', 10%);
+      }
+      @include breakpoint-down('md') {
+        padding: spacing('md') spacing('xl');
+      }
+      @include breakpoint-down('sm') {
+        min-width: 100%;
+        width: 100%;
+        padding: spacing('xl') 0;
+        font-size: font-size('body-2');
+      }
+    }
+  }
+} 
