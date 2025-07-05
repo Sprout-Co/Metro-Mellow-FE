@@ -1,6 +1,7 @@
 // src/components/ui/Button/Button.tsx
 import React, { useState, useRef, forwardRef } from "react";
 import { motion, useAnimation, Variants } from "framer-motion";
+import Link from "next/link";
 import styles from "./Button.module.scss";
 
 // Button props interface
@@ -25,7 +26,17 @@ export interface ButtonProps
   /** Animation variant */
   animation?: "none" | "scale" | "bounce";
   /** Click handler */
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (
+    event: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>
+  ) => void;
+  /** Link href - if provided, renders as a link */
+  href?: string;
+  /** External link - if true, opens in new tab */
+  external?: boolean;
+  /** Link target */
+  target?: string;
+  /** Link rel attribute */
+  rel?: string;
 }
 
 // Animation variants
@@ -43,7 +54,10 @@ const buttonVariants: Record<string, Variants> = {
   },
 };
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = forwardRef<
+  HTMLButtonElement | HTMLAnchorElement,
+  ButtonProps
+>(
   (
     {
       variant = "primary",
@@ -58,6 +72,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       disabled,
       onClick,
+      href,
+      external = false,
+      target,
+      rel,
       onDrag,
       onDragStart,
       onDragEnd,
@@ -68,6 +86,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const buttonRef = useRef<HTMLButtonElement>(null);
+    const linkRef = useRef<HTMLAnchorElement>(null);
     const controls = useAnimation();
     const [ripple, setRipple] = useState({
       active: false,
@@ -76,8 +95,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       size: 0,
     });
 
+    // Determine if this should be a link
+    const isLink = Boolean(href);
+    const isExternal = external || target === "_blank";
+
     // Combine refs
-    const combinedRef = (node: HTMLButtonElement) => {
+    const combineButtonRef = (node: HTMLButtonElement | null) => {
       if (ref) {
         if (typeof ref === "function") {
           ref(node);
@@ -86,6 +109,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         }
       }
       buttonRef.current = node;
+    };
+
+    const combineLinkRef = (node: HTMLAnchorElement | null) => {
+      if (ref) {
+        if (typeof ref === "function") {
+          ref(node);
+        } else {
+          ref.current = node;
+        }
+      }
+      linkRef.current = node;
     };
 
     // Generate CSS classes
@@ -103,9 +137,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       .join(" ");
 
     // Handle ripple effect
-    const handleRipple = (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (buttonRef.current) {
-        const rect = buttonRef.current.getBoundingClientRect();
+    const handleRipple = (
+      e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>
+    ) => {
+      const currentRef = buttonRef.current || linkRef.current;
+      if (currentRef) {
+        const rect = currentRef.getBoundingClientRect();
         const size = Math.max(rect.width, rect.height);
         setRipple({
           active: true,
@@ -122,26 +159,46 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     // Handle click with ripple
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (
+      e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>
+    ) => {
       if (!disabled && !loading) {
         handleRipple(e);
         onClick?.(e);
       }
     };
 
-    return (
-      <motion.button
-        ref={combinedRef}
-        className={buttonClasses}
-        onClick={handleClick}
-        disabled={disabled || loading}
-        initial="initial"
-        whileHover="hover"
-        whileTap="tap"
-        animate={controls}
-        variants={buttonVariants[animation]}
-        {...rest}
-      >
+    // Common motion props
+    const motionProps = {
+      initial: "initial",
+      whileHover: "hover",
+      whileTap: "tap",
+      animate: controls,
+      variants: buttonVariants[animation],
+    };
+
+    // Link props
+    const linkProps = {
+      className: buttonClasses,
+      onClick: handleClick,
+      href,
+      target: isExternal ? "_blank" : target,
+      rel: isExternal ? "noopener noreferrer" : rel,
+      ...motionProps,
+    };
+
+    // Button props
+    const buttonProps = {
+      className: buttonClasses,
+      onClick: handleClick,
+      disabled: disabled || loading,
+      ...motionProps,
+      ...rest,
+    };
+
+    // Common content
+    const content = (
+      <>
         <span className={styles.button__content}>
           {leftIcon && (
             <span
@@ -175,6 +232,32 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             }}
           />
         )}
+      </>
+    );
+
+    // Render as link or button
+    if (isLink && href) {
+      // Use Next.js Link for internal links, regular anchor for external
+      if (href.startsWith("/") || href.startsWith("#") || !isExternal) {
+        const { href: _, ...linkPropsWithoutHref } = linkProps;
+        return (
+          <Link href={href} {...linkPropsWithoutHref}>
+            {content}
+          </Link>
+        );
+      } else {
+        return (
+          <motion.a ref={combineLinkRef} {...linkProps}>
+            {content}
+          </motion.a>
+        );
+      }
+    }
+
+    // Render as button
+    return (
+      <motion.button ref={combineButtonRef} {...buttonProps}>
+        {content}
       </motion.button>
     );
   }
