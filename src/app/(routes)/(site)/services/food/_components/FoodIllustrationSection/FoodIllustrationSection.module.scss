@@ -9,6 +9,7 @@
   @include section-spacing('4xl');
   overflow: hidden;
   position: relative;
+  z-index: 0;
 
   &__container {
     @include container;

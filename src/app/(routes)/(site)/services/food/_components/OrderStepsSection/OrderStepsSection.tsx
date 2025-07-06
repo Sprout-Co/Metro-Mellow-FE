@@ -62,6 +62,7 @@ const OrderStepsSection = () => {
             height={600}
             className={styles.orderSteps__image}
             priority
+            style={{ position: 'relative', zIndex: 2 }}
           />
           
           <motion.ul 

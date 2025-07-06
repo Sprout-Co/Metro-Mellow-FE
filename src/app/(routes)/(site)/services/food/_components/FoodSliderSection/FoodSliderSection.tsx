@@ -29,13 +29,13 @@ const foodCategories: FoodCategory[] = [
         id: 'cc1',
         name: 'Jollof Rice',
         description: 'Aromatic rice cooked in rich tomato sauce with spices and vegetables',
-        image: '/images/food/f1.png'
+        image: '/images/food/jollof-rice.png'
       },
       {
         id: 'cc2',
         name: 'Pounded Yam & Efo Riro',
         description: 'Smooth pounded yam served with spinach stew and assorted meat',
-        image: '/images/food/f2.png'
+        image: '/images/food/f14.jpeg'
       },
       {
         id: 'cc3',
