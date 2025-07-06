@@ -3,6 +3,7 @@ import FoodHero from './_components/FoodHero/FoodHero';
 import MealPromoSection from './_components/MealPromoSection/MealPromoSection';
 import FruitBowlSection from './_components/FruitBowlSection/FruitBowlSection';
 import FoodIllustrationSection from './_components/FoodIllustrationSection/FoodIllustrationSection';
+import OrderStepsSection from './_components/OrderStepsSection/OrderStepsSection';
 
 export const metadata = {
     title: 'Food Delivery Services | MetroMellow',
@@ -16,6 +17,7 @@ export default function FoodPage() {
            <MealPromoSection />
            <FruitBowlSection />
            <FoodIllustrationSection />
+           <OrderStepsSection />
            {/* <CookingAbout />
            <CookingPlans />
            <CookingProcess />

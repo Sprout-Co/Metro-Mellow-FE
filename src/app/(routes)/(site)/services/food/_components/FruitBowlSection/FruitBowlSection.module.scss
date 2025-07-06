@@ -6,7 +6,7 @@
 .fruitBowlSection {
   width: 100%;
   background-color: color-alpha('primary', 'lighter', 0.5);
-  @include section-spacing('7xl');
+  @include section-spacing('4xl');
   display: flex;
   align-items: center;
   justify-content: center;
