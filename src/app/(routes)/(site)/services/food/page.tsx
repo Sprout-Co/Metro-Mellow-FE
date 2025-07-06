@@ -1,47 +1,35 @@
 import React from 'react';
-import CookingHero from './_components/CookingHero/CookingHero';
-import CookingAbout from './_components/CookingAbout/CookingAbout';
-import CookingPlans from './_components/CookingPlans/CookingPlans';
-import CookingProcess from './_components/CookingProcess/CookingProcess';
-import CookingMenu from './_components/CookingMenu/CookingMenu';
-import CookingBenefits from './_components/CookingBenefits/CookingBenefits';
-import CookingChefs from './_components/CookingChefs/CookingChefs';
-import CookingTestimonials from './_components/CookingTestimonials/CookingTestimonials';
-import CookingFAQ from './_components/CookingFAQ/CookingFAQ';
-import CookingCTA from './_components/CookingCTA/CookingCTA';
-import CookingContact from './_components/CookingContact/CookingContact';
-// import CookingHero from './components/CookingHero';
-// import CookingAbout from './components/CookingAbout';
-// import CookingPlans from './components/CookingPlans';
-// import CookingProcess from './components/CookingProcess';
-// import CookingMenu from './components/CookingMenu';
-// import CookingBenefits from './components/CookingBenefits';
-// import CookingChefs from './components/CookingChefs';
-// import CookingTestimonials from './components/CookingTestimonials';
-// import CookingFAQ from './components/CookingFAQ';
-// import CookingCTA from './components/CookingCTA';
-// import CookingContact from './components/CookingContact';
-
+import FoodHero from './_components/FoodHero/FoodHero';
+import MealPromoSection from './_components/MealPromoSection/MealPromoSection';
+import FruitBowlSection from './_components/FruitBowlSection/FruitBowlSection';
+import FoodIllustrationSection from './_components/FoodIllustrationSection/FoodIllustrationSection';
+import OrderStepsSection from './_components/OrderStepsSection/OrderStepsSection';
+import FoodSliderSection from './_components/FoodSliderSection/FoodSliderSection';
 
 export const metadata = {
-    title: 'Professional Cleaning Services | Urban Serve',
-    description: 'Experience sparkling clean spaces with our professional cleaning services. Residential, commercial and deep cleaning options available.',
+    title: 'Food Delivery Services | MetroMellow',
+    description: 'Delicious meals delivered to your doorstep. From comfort food to gourmet dishes, enjoy hassle-free eating with MetroMellow food delivery.',
 }
 
 export default function FoodPage() {
     return (
         <main>
-           <CookingHero />
-           <CookingAbout />
+           <FoodHero />
+           <MealPromoSection />
+           <FoodSliderSection />
+           {/* <FruitBowlSection /> */}
+           <FoodIllustrationSection />
+           <OrderStepsSection />
+           {/* <CookingAbout />
            <CookingPlans />
-      <CookingProcess />
-      <CookingMenu />
-      <CookingBenefits />
-      <CookingChefs />
-      <CookingTestimonials />
-      <CookingFAQ />
-      <CookingCTA />
-      <CookingContact />
+           <CookingProcess />
+           <CookingMenu />
+           <CookingBenefits />
+           <CookingChefs />
+           <CookingTestimonials />
+           <CookingFAQ />
+           <CookingCTA />
+           <CookingContact /> */}
         </main>
     );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 // src/components/ui/Button/Button.tsx
 import React, { useState, useRef, forwardRef } from "react";
 import { motion, useAnimation, Variants } from "framer-motion";
