@@ -115,16 +115,17 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     margin-top: 0;
+    padding-left: spacing('xl');
 
     li {
       display: flex;
       align-items: center;
       margin-bottom: spacing('md');
       justify-content: flex-start;
-      width: auto;
+      width: 100%;
     }
   }
 
@@ -148,7 +149,6 @@
     font-size: font-size('body-1');
     font-weight: map-get($font-weights, 'medium');
     color: color('neutral', 'black');
-    white-space: nowrap;
 
     @include breakpoint-down('md') {
       font-size: font-size('body-2');
