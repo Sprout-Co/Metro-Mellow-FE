@@ -1,7 +1,7 @@
-@import '../../../../../../../styles/abstracts/variables';
-@import '../../../../../../../styles/abstracts/functions';
-@import '../../../../../../../styles/abstracts/mixins';
-@import '../../../../../../../styles/abstracts/animations';
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/animations";
 
 .illustration {
   width: 100%;
@@ -23,6 +23,9 @@
     }
 
     @include breakpoint-down('md') {
+      padding: 0 spacing('md');
+    }
+    @include breakpoint-down('sm') {
       padding: 0 spacing('sm');
     }
   }
@@ -97,6 +100,26 @@
     @include breakpoint-down('lg') {
       display: flex;
       justify-content: center;
+    }
+    
+    button {
+      text-transform: uppercase;
+      letter-spacing: letter-spacing('wider');
+      font-weight: map-get($font-weights, 'semibold');
+      padding: spacing('lg') spacing('2xl');
+      border-radius: border-radius('full');
+      font-size: font-size('body-2');
+      transition: $transition-base;
+      
+      @include breakpoint-down('md') {
+        padding: spacing('md') spacing('xl');
+      }
+      @include breakpoint-down('sm') {
+        min-width: 100%;
+        width: 100%;
+        padding: spacing('xl') 0;
+        font-size: font-size('body-2');
+      }
     }
   }
 } 

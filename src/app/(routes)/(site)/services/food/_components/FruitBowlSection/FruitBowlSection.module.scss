@@ -19,6 +19,16 @@
     align-items: center;
     justify-content: center;
     min-height: 60vh;
+    padding: 0 spacing('md');
+    
+    @include breakpoint-down('md') {
+      min-height: 50vh;
+      padding: 0 spacing('md');
+    }
+    @include breakpoint-down('sm') {
+      min-height: 40vh;
+      padding: 0 spacing('sm');
+    }
   }
 
   &__image {
@@ -28,11 +38,15 @@
     opacity: 1;
     display: block;
     object-fit: contain;
+    
     @include breakpoint-up('xl') {
       max-width: 1200px;
     }
     @include breakpoint-up('3xl') {
       max-width: 1440px;
+    }
+    @include breakpoint-down('lg') {
+      max-width: 800px;
     }
     @include breakpoint-down('md') {
       max-width: 600px;

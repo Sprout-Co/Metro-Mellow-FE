@@ -53,10 +53,10 @@
 
   &__title {
     @include heading-1;
-    font-size: font-size('h1') * 1.2;
+    font-size: font-size('h1');
     color: color('neutral', 'black');
-    margin-bottom: spacing('lg');
-    line-height: 1;
+    margin-bottom: spacing('md');
+    line-height: line-height('tight');
     
     &--accent {
       display: inline;
@@ -69,11 +69,11 @@
       }
     }
     @include breakpoint-down('md') {
-      font-size: font-size('h2');
+      font-size: font-size('h3');
     }
     @include breakpoint-down('sm') {
-      font-size: font-size('h3');
-      line-height: 1.1;
+      font-size: font-size('h4');
+      line-height: line-height('tight');
     }
   }
 
