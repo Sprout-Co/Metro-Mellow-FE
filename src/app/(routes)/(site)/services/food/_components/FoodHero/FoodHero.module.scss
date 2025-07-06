@@ -131,31 +131,25 @@
   }
   
   &__button {
-    @include button-base;
-    background-color: color('neutral', 'white');
-    color: color('neutral', 'darkest');
-    border-radius: border-radius('full');
-    padding: spacing('lg') spacing('2xl');
-    font-weight: map-get($font-weights, 'medium');
-    letter-spacing: letter-spacing('wider');
-    transition: $transition-base;
-    
-    &:hover {
-      background-color: color('primary', 'base');
-      color: color('neutral', 'white');
-      transform: translateY(-2px);
-      box-shadow: map-get($shadows, 'md');
-    }
+    @include button-primary('lg');
+    min-width: 260px;
+    max-width: 340px;
     
     @include breakpoint-down('md') {
-      padding: spacing('md') spacing('xl');
+      min-width: 180px;
+      max-width: 100%;
+      height: button-height('md');
+      padding: spacing('sm') spacing('xl');
+      @include font-size('button');
     }
     
     @include breakpoint-down('sm') {
       min-width: 100%;
       width: 100%;
-      padding: spacing('xl') 0;
+      max-width: 100%;
+      padding: 0 spacing('xl');
       font-size: font-size('body-2');
+      height: button-height('lg');
     }
   }
 } 

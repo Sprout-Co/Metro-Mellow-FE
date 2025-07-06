@@ -104,18 +104,25 @@
   }
   
   &__button {
-    @include button-primary('md');
-    padding: spacing('lg') spacing('2xl');
+    @include button-primary('lg');
+    min-width: 260px;
+    max-width: 340px;
     
     @include breakpoint-down('md') {
-      padding: spacing('md') spacing('xl');
+      min-width: 180px;
+      max-width: 100%;
+      height: button-height('md');
+      padding: spacing('sm') spacing('xl');
+      @include font-size('button');
     }
     
     @include breakpoint-down('sm') {
       min-width: 100%;
       width: 100%;
-      padding: spacing('xl') 0;
+      max-width: 100%;
+      padding: 0 spacing('xl');
       font-size: font-size('body-2');
+      height: button-height('lg');
     }
   }
 } 
