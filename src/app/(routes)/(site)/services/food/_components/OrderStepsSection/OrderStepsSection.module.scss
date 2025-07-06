@@ -32,6 +32,10 @@
       gap: spacing('xl');
       padding: 0 spacing('sm');
     }
+    
+    @include breakpoint-down('sm') {
+      padding: 0 spacing('sm');
+    }
   }
 
   &__illustration {
@@ -184,7 +188,6 @@
     display: flex;
     justify-content: center;
     width: 100%;
-    padding: 0 spacing('sm');
     @include breakpoint-down('md') {
       margin-top: spacing('2xl');
     }
