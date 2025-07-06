@@ -53,9 +53,23 @@ const OrderStepsSection = () => {
           >
             Tap into tasty with just a few clicks.
           </motion.p>
-
+        </motion.div>
+        
+        <div className={styles.orderSteps__illustration}>
+          <Image
+            src="/images/food/plate-svg.png"
+            alt="Plate with fork and knife"
+            width={600}
+            height={600}
+            className={styles.orderSteps__image}
+            priority
+          />
+          
           <motion.ul 
             className={styles.orderSteps__steps}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
             variants={staggerContainer}
           >
             <motion.li variants={fadeIn}>
@@ -71,17 +85,6 @@ const OrderStepsSection = () => {
               <span className={styles.orderSteps__stepText}>Enjoy every bite.</span>
             </motion.li>
           </motion.ul>
-        </motion.div>
-        
-        <div className={styles.orderSteps__illustration}>
-          <Image
-            src="/images/food/plate-svg.png"
-            alt="Plate with fork and knife"
-            width={600}
-            height={600}
-            className={styles.orderSteps__image}
-            priority
-          />
         </div>
       </div>
       

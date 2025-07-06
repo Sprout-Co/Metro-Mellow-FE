@@ -7,12 +7,12 @@
   position: relative;
   width: 100%;
   background-color: color('neutral', 'white');
-  @include section-spacing('4xl');
+  @include section-spacing('2xl');
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: spacing('9xl');
+  padding-top: spacing('lg');
   overflow: visible;
 
   &__container {
@@ -20,15 +20,16 @@
     @include container(map-get($container-max-widths, '2xl'));
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: spacing('4xl');
+    gap: spacing('3xl');
     position: relative;
     z-index: 1;
 
     @include breakpoint-down('lg') {
       flex-direction: column;
-      gap: spacing('3xl');
+      align-items: center;
+      gap: spacing('2xl');
     }
   }
 
@@ -36,13 +37,14 @@
     position: relative;
     width: 45%;
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
+    margin-top: 0;
 
     @include breakpoint-down('lg') {
       width: 100%;
-      justify-content: center;
-      margin-top: spacing('2xl');
+      margin-top: spacing('lg');
     }
   }
 
@@ -50,27 +52,35 @@
     position: relative;
     width: 100%;
     height: auto;
-    max-width: 600px;
-    transform: translateY(-25%); // Move up to create overlap with previous section
-    
+    max-width: 500px;
+    transform: translateY(-15%);
+    margin-bottom: -#{spacing('xl')};
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
     @include breakpoint-down('md') {
-      max-width: 400px;
+      max-width: 350px;
+      margin-bottom: -#{spacing('md')};
     }
     
     @include breakpoint-down('sm') {
-      max-width: 300px;
-      transform: translateY(-15%);
+      max-width: 220px;
+      transform: translateY(-8%);
+      margin-bottom: -#{spacing('sm')};
     }
   }
 
   &__content {
     width: 50%;
-    padding-right: spacing('2xl');
+    padding-right: spacing('xl');
+    margin-top: spacing('2xl');
 
     @include breakpoint-down('lg') {
       width: 100%;
       padding-right: 0;
       text-align: center;
+      margin-top: 0;
     }
   }
 
@@ -79,7 +89,7 @@
     font-weight: map-get($font-weights, 'bold');
     line-height: line-height('tight');
     color: color('neutral', 'black');
-    margin-bottom: spacing('lg');
+    margin-bottom: spacing('md');
 
     @include breakpoint-down('md') {
       font-size: font-size('h3');
@@ -91,7 +101,7 @@
     font-weight: map-get($font-weights, 'medium');
     line-height: line-height('normal');
     color: color('neutral', 'darkest');
-    margin-bottom: spacing('3xl');
+    margin-bottom: spacing('lg');
 
     @include breakpoint-down('md') {
       font-size: font-size('body-1');
@@ -102,16 +112,17 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    margin-bottom: spacing('4xl');
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     
     li {
       display: flex;
       align-items: center;
-      margin-bottom: spacing('xl');
-      
-      @include breakpoint-down('lg') {
-        justify-content: center;
-      }
+      margin-bottom: spacing('md');
+      justify-content: center;
     }
   }
 
@@ -119,20 +130,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: spacing('3xl');
-    height: spacing('3xl');
+    width: spacing('2xl');
+    height: spacing('2xl');
     border-radius: 50%;
     background-color: color('primary', 'base');
     color: color('neutral', 'white');
-    font-size: font-size('subtitle-2');
+    font-size: font-size('body-2');
     font-weight: map-get($font-weights, 'bold');
-    margin-right: spacing('md');
-    
-    @include breakpoint-down('md') {
-      width: spacing('2xl');
-      height: spacing('2xl');
-      font-size: font-size('body-2');
-    }
+    margin-right: spacing('sm');
   }
 
   &__stepText {
@@ -146,7 +151,7 @@
   }
 
   &__cta {
-    margin-top: spacing('2xl');
+    margin-top: spacing('xl');
     display: flex;
     justify-content: center;
     width: 100%;
