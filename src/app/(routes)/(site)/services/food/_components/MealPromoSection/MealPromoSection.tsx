@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import Button from '@/components/ui/Button/Button';
 import styles from './MealPromoSection.module.scss';
 
 const MealPromoSection = () => {
@@ -59,12 +58,9 @@ const MealPromoSection = () => {
             className={styles.promo__cta}
             variants={fadeIn}
           >
-            <Button 
-              variant="primary" 
-              size="lg"
-            >
+            <button className={styles.promo__button}>
               PLACE AN ORDER
-            </Button>
+            </button>
           </motion.div>
         </motion.div>
       </div>

@@ -3,7 +3,6 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import Button from '@/components/ui/Button/Button';
 import styles from './OrderStepsSection.module.scss';
 
 const OrderStepsSection = () => {
@@ -95,12 +94,9 @@ const OrderStepsSection = () => {
         viewport={{ once: true }}
         transition={{ delay: 0.6 }}
       >
-        <Button 
-          variant="primary" 
-          size="lg"
-        >
+        <button className={styles.orderSteps__button}>
           ORDER NOW
-        </Button>
+        </button>
       </motion.div>
     </section>
   );

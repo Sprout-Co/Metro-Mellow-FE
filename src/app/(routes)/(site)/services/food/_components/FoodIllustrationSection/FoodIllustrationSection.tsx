@@ -2,7 +2,6 @@
 
 import React from 'react';
 import styles from './FoodIllustrationSection.module.scss';
-import { Button } from '@/components/ui/Button/Button';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
@@ -52,7 +51,7 @@ const FoodIllustrationSection = () => {
             Whether it's lunch or late-night, we deliver flavors that make your taste buds sing.
           </p>
           <div className={styles.illustration__action}>
-            <Button variant="primary" size="lg" fullWidth={false}>JOIN OUR MISSION</Button>
+            <button className={styles.illustration__button}>JOIN OUR MISSION</button>
           </div>
         </motion.div>
       </div>

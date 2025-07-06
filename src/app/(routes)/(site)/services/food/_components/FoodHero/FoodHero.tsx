@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Button from '@/components/ui/Button/Button';
 import styles from './FoodHero.module.scss';
 
 const FoodHero = () => {
@@ -58,12 +57,9 @@ const FoodHero = () => {
             className={styles.hero__cta}
             variants={fadeIn}
           >
-            <Button 
-              variant="primary" 
-              size="lg"
-            >
+            <button className={styles.hero__button}>
               ORDER A MEAL
-            </Button>
+            </button>
           </motion.div>
         </motion.div>
       </div>

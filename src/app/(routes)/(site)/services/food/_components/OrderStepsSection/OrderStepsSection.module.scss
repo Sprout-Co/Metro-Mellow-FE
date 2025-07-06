@@ -190,28 +190,27 @@
     @include breakpoint-down('sm') {
       margin-top: spacing('xl');
     }
-    button {
-      text-transform: uppercase;
-      letter-spacing: letter-spacing('wider');
-      font-weight: map-get($font-weights, 'semibold');
-      background-color: color('primary', 'base');
-      color: color('neutral', 'white');
-      padding: spacing('lg') spacing('2xl');
-      border-radius: border-radius('full');
-      font-size: font-size('body-2');
-      transition: $transition-base;
-      &:hover {
-        background-color: color-darken('primary', 'base', 10%);
-      }
-      @include breakpoint-down('md') {
-        padding: spacing('md') spacing('xl');
-      }
-      @include breakpoint-down('sm') {
-        min-width: 100%;
-        width: 100%;
-        padding: spacing('xl') 0;
-        font-size: font-size('body-2');
-      }
+  }
+  
+  &__button {
+    @include button-primary('lg');
+    min-width: 260px;
+    max-width: 340px;
+    
+    @include breakpoint-down('md') {
+      min-width: 180px;
+      max-width: 100%;
+      height: 2.5rem;
+      padding: spacing('sm') spacing('xl');
+      @include font-size('button');
+    }
+    
+    @include breakpoint-down('sm') {
+      min-width: 100%;
+      width: 100%;
+      max-width: 100%;
+      padding: spacing('xl') 0;
+      @include font-size('body-2');
     }
   }
 } 

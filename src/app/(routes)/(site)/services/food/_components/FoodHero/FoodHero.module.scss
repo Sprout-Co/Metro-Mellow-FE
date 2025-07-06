@@ -128,28 +128,34 @@
     @include breakpoint-down('sm') {
       margin-top: spacing('lg');
     }
-    button {
-      text-transform: uppercase;
-      letter-spacing: letter-spacing('wider');
-      font-weight: map-get($font-weights, 'semibold');
+  }
+  
+  &__button {
+    @include button-base;
+    background-color: color('neutral', 'white');
+    color: color('neutral', 'darkest');
+    border-radius: border-radius('full');
+    padding: spacing('lg') spacing('2xl');
+    font-weight: map-get($font-weights, 'medium');
+    letter-spacing: letter-spacing('wider');
+    transition: $transition-base;
+    
+    &:hover {
       background-color: color('primary', 'base');
       color: color('neutral', 'white');
-      padding: spacing('lg') spacing('2xl');
-      border-radius: border-radius('full');
+      transform: translateY(-2px);
+      box-shadow: map-get($shadows, 'md');
+    }
+    
+    @include breakpoint-down('md') {
+      padding: spacing('md') spacing('xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      min-width: 100%;
+      width: 100%;
+      padding: spacing('xl') 0;
       font-size: font-size('body-2');
-      transition: $transition-base;
-      &:hover {
-        background-color: color-darken('primary', 'base', 10%);
-      }
-      @include breakpoint-down('md') {
-        padding: spacing('md') spacing('xl');
-      }
-      @include breakpoint-down('sm') {
-        min-width: 100%;
-        width: 100%;
-        padding: spacing('xl') 0;
-        font-size: font-size('body-2');
-      }
     }
   }
 } 

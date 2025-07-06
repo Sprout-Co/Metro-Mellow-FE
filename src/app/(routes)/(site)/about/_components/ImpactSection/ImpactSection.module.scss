@@ -146,23 +146,33 @@
     display: flex;
     justify-content: center;
     width: 100%;
+    @include breakpoint-down('sm') {
+      padding-left: 0;
+      padding-right: 0;
+      margin-left: 0;
+      margin-right: 0;
+    }
     button {
       background-color: map-get(map-get($colors, "primary"), "base");
       color: map-get(map-get($colors, "neutral"), "white");
-      padding: map-get($spacing, "md") map-get($spacing, "2xl");
-      border-radius: map-get($border-radius, "lg");
+      padding: spacing('lg') spacing('2xl');
+      border-radius: border-radius('full');
       font-family: $font-family-base;
-      font-size: map-get($font-sizes, "button");
-      font-weight: map-get($font-weights, "medium");
-      letter-spacing: map-get($letter-spacing, "wider");
+      font-size: font-size('body-2');
+      font-weight: map-get($font-weights, 'semibold');
+      letter-spacing: letter-spacing('wider');
       text-transform: uppercase;
       border: none;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      display: block;
+      text-align: center;
       @include breakpoint-down('sm') {
         width: 100%;
-        font-size: map-get($font-sizes, "body-2");
-        padding: map-get($spacing, "sm") map-get($spacing, "lg");
+        min-width: 0;
+        font-size: font-size('body-2');
+        padding: spacing('xl') 0;
+        margin: 0 auto;
       }
       &:hover {
         background-color: map-get(map-get($colors, "primary"), "dark");

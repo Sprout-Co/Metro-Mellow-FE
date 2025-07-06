@@ -101,25 +101,21 @@
       display: flex;
       justify-content: center;
     }
+  }
+  
+  &__button {
+    @include button-primary('md');
+    padding: spacing('lg') spacing('2xl');
     
-    button {
-      text-transform: uppercase;
-      letter-spacing: letter-spacing('wider');
-      font-weight: map-get($font-weights, 'semibold');
-      padding: spacing('lg') spacing('2xl');
-      border-radius: border-radius('full');
+    @include breakpoint-down('md') {
+      padding: spacing('md') spacing('xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      min-width: 100%;
+      width: 100%;
+      padding: spacing('xl') 0;
       font-size: font-size('body-2');
-      transition: $transition-base;
-      
-      @include breakpoint-down('md') {
-        padding: spacing('md') spacing('xl');
-      }
-      @include breakpoint-down('sm') {
-        min-width: 100%;
-        width: 100%;
-        padding: spacing('xl') 0;
-        font-size: font-size('body-2');
-      }
     }
   }
 } 
