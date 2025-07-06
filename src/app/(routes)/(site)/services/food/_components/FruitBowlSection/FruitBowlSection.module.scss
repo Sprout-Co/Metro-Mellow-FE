@@ -6,7 +6,7 @@
 .fruitBowlSection {
   width: 100%;
   background-color: color-alpha('primary', 'lighter', 0.5);
-  @include section-spacing('4xl');
+  @include section-spacing('7xl');
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,22 +14,31 @@
 
   &__container {
     width: 100%;
+    @include container(map-get($container-max-widths, '3xl'));
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 40vh;
+    min-height: 60vh;
   }
 
   &__image {
-    max-width: 500px;
     width: 100%;
+    max-width: 90vw;
     height: auto;
+    opacity: 1;
     display: block;
+    object-fit: contain;
+    @include breakpoint-up('xl') {
+      max-width: 1200px;
+    }
+    @include breakpoint-up('3xl') {
+      max-width: 1440px;
+    }
     @include breakpoint-down('md') {
-      max-width: 350px;
+      max-width: 600px;
     }
     @include breakpoint-down('sm') {
-      max-width: 220px;
+      max-width: 320px;
     }
   }
 } 
