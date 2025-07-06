@@ -10,7 +10,6 @@ interface Dish {
   id: string;
   name: string;
   description: string;
-  price: string;
   image: string;
 }
 
@@ -30,28 +29,24 @@ const foodCategories: FoodCategory[] = [
         id: 'cc1',
         name: 'Homestyle Mac & Cheese',
         description: 'Creamy three-cheese blend with a crispy breadcrumb topping',
-        price: '$12.99',
         image: '/images/food/f1.png'
       },
       {
         id: 'cc2',
         name: 'Classic Beef Burger',
         description: 'Juicy beef patty with lettuce, tomato, and special sauce',
-        price: '$14.99',
         image: '/images/food/f2.png'
       },
       {
         id: 'cc3',
         name: 'Chicken Pot Pie',
         description: 'Tender chicken and vegetables in a flaky crust',
-        price: '$13.99',
         image: '/images/food/f3.jpeg'
       },
       {
         id: 'cc4',
         name: 'Meatloaf & Mashed Potatoes',
         description: 'Savory meatloaf with creamy mashed potatoes and gravy',
-        price: '$15.99',
         image: '/images/food/f4.jpeg'
       }
     ]
@@ -64,28 +59,24 @@ const foodCategories: FoodCategory[] = [
         id: 'gd1',
         name: 'Truffle Risotto',
         description: 'Creamy arborio rice with wild mushrooms and truffle oil',
-        price: '$18.99',
         image: '/images/food/f5.jpeg'
       },
       {
         id: 'gd2',
         name: 'Seared Scallops',
         description: 'Pan-seared scallops with citrus beurre blanc',
-        price: '$24.99',
         image: '/images/food/f6.jpeg'
       },
       {
         id: 'gd3',
         name: 'Beef Wellington',
         description: 'Tender filet mignon wrapped in puff pastry',
-        price: '$29.99',
         image: '/images/food/f7.jpeg'
       },
       {
         id: 'gd4',
         name: 'Duck Confit',
         description: 'Slow-cooked duck leg with cherry reduction',
-        price: '$26.99',
         image: '/images/food/f8.jpeg'
       }
     ]
@@ -98,28 +89,24 @@ const foodCategories: FoodCategory[] = [
         id: 'hb1',
         name: 'Mediterranean Bowl',
         description: 'Quinoa, hummus, falafel, and fresh vegetables',
-        price: '$14.99',
         image: '/images/food/f9.jpeg'
       },
       {
         id: 'hb2',
         name: 'Poke Bowl',
         description: 'Fresh tuna, avocado, edamame, and sushi rice',
-        price: '$16.99',
         image: '/images/food/f10.jpeg'
       },
       {
         id: 'hb3',
         name: 'Buddha Bowl',
         description: 'Roasted sweet potatoes, chickpeas, kale, and tahini dressing',
-        price: '$13.99',
         image: '/images/food/f11.jpeg'
       },
       {
         id: 'hb4',
         name: 'Protein Power Bowl',
         description: 'Grilled chicken, quinoa, black beans, and avocado',
-        price: '$15.99',
         image: '/images/food/f12.jpeg'
       }
     ]
@@ -132,28 +119,24 @@ const foodCategories: FoodCategory[] = [
         id: 'st1',
         name: 'Chocolate Lava Cake',
         description: 'Warm chocolate cake with a molten center',
-        price: '$8.99',
         image: '/images/food/f13.jpeg'
       },
       {
         id: 'st2',
         name: 'New York Cheesecake',
         description: 'Classic creamy cheesecake with berry compote',
-        price: '$7.99',
         image: '/images/food/f14.jpeg'
       },
       {
         id: 'st3',
         name: 'Tiramisu',
         description: 'Coffee-soaked ladyfingers with mascarpone cream',
-        price: '$9.99',
         image: '/images/food/f15.jpeg'
       },
       {
         id: 'st4',
         name: 'Crème Brûlée',
         description: 'Vanilla custard with a caramelized sugar top',
-        price: '$8.99',
         image: '/images/food/f16.jpeg'
       }
     ]
@@ -172,17 +155,18 @@ const DishCard: React.FC<DishCardProps> = ({ dish }) => {
         <Image 
           src={dish.image} 
           alt={dish.name} 
-          width={300} 
-          height={200}
+          width={600} 
+          height={600}
           style={{ objectFit: 'cover' }}
         />
       </div>
-      <div className={styles.dish__content}>
+      <div className={styles["dish__name-overlay"]}>
         <h3 className={styles.dish__name}>{dish.name}</h3>
-        <p className={styles.dish__description}>{dish.description}</p>
-        <div className={styles.dish__footer}>
-          <span className={styles.dish__price}>{dish.price}</span>
-          <button className={styles.dish__button}>Add to Cart</button>
+      </div>
+      <div className={styles.dish__panel}>
+        <div className={styles["dish__panel-content"]}>
+          <h3 className={styles["dish__panel-name"]}>{dish.name}</h3>
+          <p className={styles.dish__description}>{dish.description}</p>
         </div>
       </div>
     </div>
