@@ -5,7 +5,7 @@
 
 .illustration {
   width: 100%;
-  background-color: color('neutral', 'lightest');
+  background-color: color-alpha('primary', 'lighter', 0.5);
   @include section-spacing('4xl');
   overflow: hidden;
   position: relative;

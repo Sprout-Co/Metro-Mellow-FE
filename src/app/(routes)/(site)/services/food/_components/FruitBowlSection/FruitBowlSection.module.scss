@@ -1,0 +1,35 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/animations";
+
+.fruitBowlSection {
+  width: 100%;
+  background-color: color-alpha('primary', 'lighter', 0.5);
+  @include section-spacing('4xl');
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  &__container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40vh;
+  }
+
+  &__image {
+    max-width: 500px;
+    width: 100%;
+    height: auto;
+    display: block;
+    @include breakpoint-down('md') {
+      max-width: 350px;
+    }
+    @include breakpoint-down('sm') {
+      max-width: 220px;
+    }
+  }
+} 

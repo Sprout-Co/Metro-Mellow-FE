@@ -1,6 +1,7 @@
 import React from 'react';
 import FoodHero from './_components/FoodHero/FoodHero';
 import MealPromoSection from './_components/MealPromoSection/MealPromoSection';
+import FruitBowlSection from './_components/FruitBowlSection/FruitBowlSection';
 import FoodIllustrationSection from './_components/FoodIllustrationSection/FoodIllustrationSection';
 
 export const metadata = {
@@ -13,6 +14,7 @@ export default function FoodPage() {
         <main>
            <FoodHero />
            <MealPromoSection />
+           <FruitBowlSection />
            <FoodIllustrationSection />
            {/* <CookingAbout />
            <CookingPlans />
