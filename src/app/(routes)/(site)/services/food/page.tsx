@@ -17,7 +17,7 @@ export default function FoodPage() {
            <FoodHero />
            <MealPromoSection />
            <FoodSliderSection />
-           <FruitBowlSection />
+           {/* <FruitBowlSection /> */}
            <FoodIllustrationSection />
            <OrderStepsSection />
            {/* <CookingAbout />

@@ -48,6 +48,18 @@ const foodCategories: FoodCategory[] = [
         name: 'Meatloaf & Mashed Potatoes',
         description: 'Savory meatloaf with creamy mashed potatoes and gravy',
         image: '/images/food/f4.jpeg'
+      },
+      {
+        id: 'cc5',
+        name: 'Grilled Cheese & Tomato Soup',
+        description: 'Classic comfort duo with melted cheddar and rich tomato soup',
+        image: '/images/food/f1.png'
+      },
+      {
+        id: 'cc6',
+        name: 'Shepherd\'s Pie',
+        description: 'Ground beef and vegetables topped with creamy mashed potatoes',
+        image: '/images/food/f2.png'
       }
     ]
   },
@@ -78,6 +90,18 @@ const foodCategories: FoodCategory[] = [
         name: 'Duck Confit',
         description: 'Slow-cooked duck leg with cherry reduction',
         image: '/images/food/f8.jpeg'
+      },
+      {
+        id: 'gd5',
+        name: 'Lobster Thermidor',
+        description: 'Classic French lobster dish with cognac cream sauce',
+        image: '/images/food/f5.jpeg'
+      },
+      {
+        id: 'gd6',
+        name: 'Wagyu Beef Steak',
+        description: 'Premium Japanese beef with truffle mashed potatoes',
+        image: '/images/food/f6.jpeg'
       }
     ]
   },
@@ -108,6 +132,18 @@ const foodCategories: FoodCategory[] = [
         name: 'Protein Power Bowl',
         description: 'Grilled chicken, quinoa, black beans, and avocado',
         image: '/images/food/f12.jpeg'
+      },
+      {
+        id: 'hb5',
+        name: 'Garden Fresh Bowl',
+        description: 'Mixed greens, cherry tomatoes, cucumber, and balsamic vinaigrette',
+        image: '/images/food/f9.jpeg'
+      },
+      {
+        id: 'hb6',
+        name: 'Superfood Smoothie Bowl',
+        description: 'Acai, berries, granola, and coconut with honey drizzle',
+        image: '/images/food/f10.jpeg'
       }
     ]
   },
@@ -138,6 +174,18 @@ const foodCategories: FoodCategory[] = [
         name: 'Crème Brûlée',
         description: 'Vanilla custard with a caramelized sugar top',
         image: '/images/food/f16.jpeg'
+      },
+      {
+        id: 'st5',
+        name: 'Apple Pie à la Mode',
+        description: 'Warm apple pie with vanilla ice cream and caramel drizzle',
+        image: '/images/food/f13.jpeg'
+      },
+      {
+        id: 'st6',
+        name: 'Chocolate Mousse',
+        description: 'Silky smooth chocolate mousse with fresh berries',
+        image: '/images/food/f14.jpeg'
       }
     ]
   }
