@@ -12,6 +12,10 @@
   justify-content: center;
   overflow: hidden;
 
+  @include breakpoint-down('sm') {
+    @include section-spacing('md');
+  }
+
   &__container {
     width: 100%;
     @include container(map-get($container-max-widths, '3xl'));

@@ -191,15 +191,25 @@
       margin-top: spacing('xl');
     }
     button {
-      padding: spacing('md') spacing('2xl');
-      border-radius: spacing('sm');
-      background-color: color('primary', 'base');
-      font-weight: map-get($font-weights, 'semibold');
-      letter-spacing: letter-spacing('wider');
       text-transform: uppercase;
-      font-size: font-size('button');
+      letter-spacing: letter-spacing('wider');
+      font-weight: map-get($font-weights, 'semibold');
+      background-color: color('primary', 'base');
+      color: color('neutral', 'white');
+      padding: spacing('lg') spacing('2xl');
+      border-radius: border-radius('full');
+      font-size: font-size('body-2');
+      transition: $transition-base;
+      &:hover {
+        background-color: color-darken('primary', 'base', 10%);
+      }
+      @include breakpoint-down('md') {
+        padding: spacing('md') spacing('xl');
+      }
       @include breakpoint-down('sm') {
-        padding: spacing('sm') spacing('lg');
+        min-width: 100%;
+        width: 100%;
+        padding: spacing('xl') 0;
         font-size: font-size('body-2');
       }
     }

@@ -31,7 +31,7 @@
     @include breakpoint-down('sm') {
       min-height: 40vh;
       padding-top: spacing('xl');
-      padding-bottom: spacing('xl');
+      padding-bottom: spacing('sm');
     }
   }
 
@@ -93,7 +93,7 @@
 
     @include breakpoint-down('sm') {
       font-size: font-size('body-2');
-      margin-bottom: spacing('lg');
+      margin-bottom: spacing('sm');
     }
   }
 
