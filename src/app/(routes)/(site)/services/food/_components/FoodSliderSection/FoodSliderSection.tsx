@@ -224,6 +224,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish }) => {
 const FoodSliderSection = () => {
   const [activeCategory, setActiveCategory] = useState(foodCategories[0].id);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
 
   // Get current category
   const currentCategory = foodCategories.find(cat => cat.id === activeCategory);
@@ -236,6 +237,8 @@ const FoodSliderSection = () => {
 
   // Auto-play functionality
   useEffect(() => {
+    if (isHovering) return; // Pause auto-play when hovering
+
     const interval = setInterval(() => {
       const currentIndex = foodCategories.findIndex(cat => cat.id === activeCategory);
       const nextIndex = (currentIndex + 1) % foodCategories.length;
@@ -243,7 +246,11 @@ const FoodSliderSection = () => {
     }, 6000);
 
     return () => clearInterval(interval);
-  }, [activeCategory]);
+  }, [activeCategory, isHovering]);
+
+  // Handle hover events
+  const handleMouseEnter = () => setIsHovering(true);
+  const handleMouseLeave = () => setIsHovering(false);
 
   return (
     <section className={styles.slider}>
@@ -269,7 +276,11 @@ const FoodSliderSection = () => {
           ))}
         </div>
 
-        <div className={styles.slider__content}>
+        <div 
+          className={styles.slider__content}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={activeCategory}
