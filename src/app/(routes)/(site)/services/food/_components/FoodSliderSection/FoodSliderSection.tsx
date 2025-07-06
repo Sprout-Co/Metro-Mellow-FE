@@ -23,168 +23,168 @@ interface FoodCategory {
 const foodCategories: FoodCategory[] = [
   {
     id: 'comfort',
-    name: 'Comfort Classics',
+    name: 'Nigerian Classics',
     dishes: [
       {
         id: 'cc1',
-        name: 'Homestyle Mac & Cheese',
-        description: 'Creamy three-cheese blend with a crispy breadcrumb topping',
+        name: 'Jollof Rice',
+        description: 'Aromatic rice cooked in rich tomato sauce with spices and vegetables',
         image: '/images/food/f1.png'
       },
       {
         id: 'cc2',
-        name: 'Classic Beef Burger',
-        description: 'Juicy beef patty with lettuce, tomato, and special sauce',
+        name: 'Pounded Yam & Efo Riro',
+        description: 'Smooth pounded yam served with spinach stew and assorted meat',
         image: '/images/food/f2.png'
       },
       {
         id: 'cc3',
-        name: 'Chicken Pot Pie',
-        description: 'Tender chicken and vegetables in a flaky crust',
+        name: 'Amala & Ewedu',
+        description: 'Yam flour swallow with jute leaves soup and beef',
         image: '/images/food/f3.jpeg'
       },
       {
         id: 'cc4',
-        name: 'Meatloaf & Mashed Potatoes',
-        description: 'Savory meatloaf with creamy mashed potatoes and gravy',
+        name: 'Egusi Soup & Fufu',
+        description: 'Ground melon seed soup with cassava fufu and fish',
         image: '/images/food/f4.jpeg'
       },
       {
         id: 'cc5',
-        name: 'Grilled Cheese & Tomato Soup',
-        description: 'Classic comfort duo with melted cheddar and rich tomato soup',
+        name: 'Banga Soup & Starch',
+        description: 'Palm nut soup with cassava starch and fresh fish',
         image: '/images/food/f1.png'
       },
       {
         id: 'cc6',
-        name: 'Shepherd\'s Pie',
-        description: 'Ground beef and vegetables topped with creamy mashed potatoes',
+        name: 'Okro Soup & Eba',
+        description: 'Fresh okra soup with garri and prawns',
         image: '/images/food/f2.png'
       }
     ]
   },
   {
     id: 'gourmet',
-    name: 'Gourmet Delights',
+    name: 'Premium Dishes',
     dishes: [
       {
         id: 'gd1',
-        name: 'Truffle Risotto',
-        description: 'Creamy arborio rice with wild mushrooms and truffle oil',
+        name: 'Pepper Soup',
+        description: 'Spicy hot soup with goat meat, fish, or chicken and herbs',
         image: '/images/food/f5.jpeg'
       },
       {
         id: 'gd2',
-        name: 'Seared Scallops',
-        description: 'Pan-seared scallops with citrus beurre blanc',
+        name: 'Suya',
+        description: 'Grilled spicy beef skewers with groundnut powder and spices',
         image: '/images/food/f6.jpeg'
       },
       {
         id: 'gd3',
-        name: 'Beef Wellington',
-        description: 'Tender filet mignon wrapped in puff pastry',
+        name: 'Nkwobi',
+        description: 'Spicy cow foot served with palm oil and utazi leaves',
         image: '/images/food/f7.jpeg'
       },
       {
         id: 'gd4',
-        name: 'Duck Confit',
-        description: 'Slow-cooked duck leg with cherry reduction',
+        name: 'Abacha & Ugba',
+        description: 'African salad with cassava flakes, oil bean seeds, and fish',
         image: '/images/food/f8.jpeg'
       },
       {
         id: 'gd5',
-        name: 'Lobster Thermidor',
-        description: 'Classic French lobster dish with cognac cream sauce',
+        name: 'Isi Ewu',
+        description: 'Goat head pepper soup with palm oil and spices',
         image: '/images/food/f5.jpeg'
       },
       {
         id: 'gd6',
-        name: 'Wagyu Beef Steak',
-        description: 'Premium Japanese beef with truffle mashed potatoes',
+        name: 'Ofada Rice & Ayamase',
+        description: 'Local rice with green pepper sauce and assorted meat',
         image: '/images/food/f6.jpeg'
       }
     ]
   },
   {
     id: 'healthy',
-    name: 'Healthy Bowls',
+    name: 'Light & Fresh',
     dishes: [
       {
         id: 'hb1',
-        name: 'Mediterranean Bowl',
-        description: 'Quinoa, hummus, falafel, and fresh vegetables',
+        name: 'Efo Riro Salad',
+        description: 'Fresh spinach with tomatoes, peppers, and grilled fish',
         image: '/images/food/f9.jpeg'
       },
       {
         id: 'hb2',
-        name: 'Poke Bowl',
-        description: 'Fresh tuna, avocado, edamame, and sushi rice',
+        name: 'Bitter Leaf Soup',
+        description: 'Light bitter leaf soup with fish and minimal palm oil',
         image: '/images/food/f10.jpeg'
       },
       {
         id: 'hb3',
-        name: 'Buddha Bowl',
-        description: 'Roasted sweet potatoes, chickpeas, kale, and tahini dressing',
+        name: 'Vegetable Okro',
+        description: 'Fresh okra soup with vegetables and light seasoning',
         image: '/images/food/f11.jpeg'
       },
       {
         id: 'hb4',
-        name: 'Protein Power Bowl',
-        description: 'Grilled chicken, quinoa, black beans, and avocado',
+        name: 'Grilled Fish & Plantain',
+        description: 'Fresh grilled fish with ripe plantain and vegetables',
         image: '/images/food/f12.jpeg'
       },
       {
         id: 'hb5',
-        name: 'Garden Fresh Bowl',
-        description: 'Mixed greens, cherry tomatoes, cucumber, and balsamic vinaigrette',
+        name: 'Yam & Egg Sauce',
+        description: 'Boiled yam with light tomato and egg sauce',
         image: '/images/food/f9.jpeg'
       },
       {
         id: 'hb6',
-        name: 'Superfood Smoothie Bowl',
-        description: 'Acai, berries, granola, and coconut with honey drizzle',
+        name: 'Coconut Rice',
+        description: 'Light coconut rice with vegetables and grilled chicken',
         image: '/images/food/f10.jpeg'
       }
     ]
   },
   {
     id: 'desserts',
-    name: 'Sweet Treats',
+    name: 'Sweet Delights',
     dishes: [
       {
         id: 'st1',
-        name: 'Chocolate Lava Cake',
-        description: 'Warm chocolate cake with a molten center',
+        name: 'Puff Puff',
+        description: 'Deep-fried sweet dough balls dusted with powdered sugar',
         image: '/images/food/f13.jpeg'
       },
       {
         id: 'st2',
-        name: 'New York Cheesecake',
-        description: 'Classic creamy cheesecake with berry compote',
+        name: 'Chin Chin',
+        description: 'Crispy fried pastry squares with a hint of nutmeg',
         image: '/images/food/f14.jpeg'
       },
       {
         id: 'st3',
-        name: 'Tiramisu',
-        description: 'Coffee-soaked ladyfingers with mascarpone cream',
+        name: 'Boli & Fish',
+        description: 'Roasted plantain with grilled fish and pepper sauce',
         image: '/images/food/f15.jpeg'
       },
       {
         id: 'st4',
-        name: 'Crème Brûlée',
-        description: 'Vanilla custard with a caramelized sugar top',
+        name: 'Akara',
+        description: 'Bean cakes made from ground beans and spices',
         image: '/images/food/f16.jpeg'
       },
       {
         id: 'st5',
-        name: 'Apple Pie à la Mode',
-        description: 'Warm apple pie with vanilla ice cream and caramel drizzle',
+        name: 'Moi Moi',
+        description: 'Steamed bean pudding with fish and vegetables',
         image: '/images/food/f13.jpeg'
       },
       {
         id: 'st6',
-        name: 'Chocolate Mousse',
-        description: 'Silky smooth chocolate mousse with fresh berries',
+        name: 'Zobo Drink',
+        description: 'Refreshing hibiscus drink with ginger and pineapple',
         image: '/images/food/f14.jpeg'
       }
     ]
@@ -258,7 +258,7 @@ const FoodSliderSection = () => {
         <div className={styles.slider__header}>
           <h2 className={styles.slider__title}>Taste the Rainbow</h2>
           <p className={styles.slider__subtitle}>
-            Explore our diverse menu categories, from comfort classics to gourmet delights
+            Taste 50+ authentic dishes. New menu every week to select from!
           </p>
         </div>
 
