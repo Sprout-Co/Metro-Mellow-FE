@@ -105,7 +105,7 @@
     width: 100%;
     position: relative;
     overflow: hidden;
-    min-height: 500px; // Add minimum height for larger cards
+    min-height: 600px; // Increased minimum height for bigger cards
   }
 
   &__slides {
@@ -122,11 +122,12 @@
   &__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: spacing('xl');
+    gap: spacing('2xl');
     width: 100%;
 
     @include breakpoint-down('lg') {
       grid-template-columns: repeat(2, 1fr);
+      gap: spacing('xl');
     }
 
     @include breakpoint-down('md') {
@@ -197,7 +198,7 @@
   position: relative;
   background-color: color('neutral', 'white');
   // Make cards bigger
-  aspect-ratio: 1 / 1.2;
+  aspect-ratio: 1 / 1.4;
 
   &:hover {
     transform: translateY(-4px);
@@ -301,7 +302,7 @@
   }
 
   @include breakpoint-down('md') {
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 1 / 1.2;
 
     &__panel {
       width: 80%;
