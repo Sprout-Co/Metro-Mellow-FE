@@ -118,12 +118,13 @@
     align-items: center;
     justify-content: center;
     margin-top: 0;
-    
+
     li {
       display: flex;
       align-items: center;
       margin-bottom: spacing('md');
-      justify-content: center;
+      justify-content: flex-start;
+      width: auto;
     }
   }
 
@@ -139,13 +140,16 @@
     font-size: font-size('body-2');
     font-weight: map-get($font-weights, 'bold');
     margin-right: spacing('sm');
+    line-height: 1;
+    flex-shrink: 0;
   }
 
   &__stepText {
     font-size: font-size('body-1');
     font-weight: map-get($font-weights, 'medium');
     color: color('neutral', 'black');
-    
+    white-space: nowrap;
+
     @include breakpoint-down('md') {
       font-size: font-size('body-2');
     }
