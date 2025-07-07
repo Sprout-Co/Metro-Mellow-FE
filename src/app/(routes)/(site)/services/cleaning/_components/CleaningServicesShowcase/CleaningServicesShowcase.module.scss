@@ -1,0 +1,207 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/animations";
+
+.showcase {
+  width: 100%;
+  background-color: color('neutral', 'white');
+  @include section-spacing('4xl');
+  overflow: hidden;
+  position: relative;
+
+  &__container {
+    @include container;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: spacing('3xl');
+
+    @include breakpoint-down('md') {
+      margin-bottom: spacing('2xl');
+    }
+  }
+
+  &__title {
+    @include heading-1;
+    font-size: font-size('h2');
+    color: color('neutral', 'black');
+    margin-bottom: spacing('md');
+    line-height: line-height('tight');
+
+    @include breakpoint-down('md') {
+      font-size: font-size('h3');
+    }
+
+    @include breakpoint-down('sm') {
+      font-size: font-size('h4');
+    }
+  }
+
+  &__subtitle {
+    @include paragraph;
+    font-size: font-size('body-1');
+    color: color('neutral', 'darker');
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: line-height('relaxed');
+
+    @include breakpoint-down('sm') {
+      font-size: font-size('body-2');
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: spacing('xl');
+    width: 100%;
+
+    @include breakpoint-down('lg') {
+      grid-template-columns: repeat(2, 1fr);
+      gap: spacing('lg');
+    }
+
+    @include breakpoint-down('sm') {
+      grid-template-columns: 1fr;
+      gap: spacing('md');
+    }
+  }
+
+  &__card {
+    background-color: color('neutral', 'white');
+    border-radius: border-radius('lg');
+    padding: spacing('xl');
+    box-shadow: map-get($shadows, 'sm');
+    border: 1px solid color('neutral', 'lightest');
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+      box-shadow: map-get($shadows, 'md');
+      border-color: color('primary', 'light');
+    }
+
+    @include breakpoint-down('md') {
+      padding: spacing('lg');
+    }
+
+    @include breakpoint-down('sm') {
+      padding: spacing('md');
+    }
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background-color: color-alpha('primary', 'lighter', 0.2);
+    border-radius: border-radius('full');
+    margin-bottom: spacing('lg');
+    align-self: center;
+
+    @include breakpoint-down('sm') {
+      width: 50px;
+      height: 50px;
+      margin-bottom: spacing('md');
+    }
+  }
+
+  &__emoji {
+    font-size: font-size('h3');
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('h4');
+    }
+  }
+
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  &__name {
+    @include heading-3;
+    font-size: font-size('subtitle-1');
+    font-weight: map-get($font-weights, 'bold');
+    color: color('neutral', 'black');
+    margin-bottom: spacing('sm');
+    line-height: line-height('tight');
+
+    @include breakpoint-down('sm') {
+      font-size: font-size('body-1');
+    }
+  }
+
+  &__description {
+    @include paragraph;
+    font-size: font-size('body-2');
+    color: color('neutral', 'darker');
+    margin-bottom: spacing('lg');
+    line-height: line-height('relaxed');
+    flex: 1;
+
+    @include breakpoint-down('sm') {
+      font-size: font-size('small');
+      margin-bottom: spacing('md');
+    }
+  }
+
+
+
+  &__features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 spacing('lg') 0;
+    flex: 1;
+
+    @include breakpoint-down('sm') {
+      margin-bottom: spacing('md');
+    }
+  }
+
+  &__feature {
+    font-size: font-size('small');
+    color: color('neutral', 'dark');
+    margin-bottom: spacing('xs');
+    position: relative;
+    padding-left: spacing('md');
+    line-height: line-height('relaxed');
+
+    &:before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: color('primary', 'base');
+      font-weight: map-get($font-weights, 'bold');
+      font-size: font-size('small');
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__action {
+    margin-top: auto;
+    
+    .button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+} 
