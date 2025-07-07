@@ -86,7 +86,6 @@
       font-weight: map-get($font-weights, 'bold');
       color: color('neutral', 'white');
       font-size: inherit;
-      white-space: nowrap;
       @include breakpoint-down('sm') {
         white-space: normal;
       }
