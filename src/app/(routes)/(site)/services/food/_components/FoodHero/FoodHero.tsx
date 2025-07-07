@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion';
 import styles from './FoodHero.module.scss';
+import { Button } from '@/components/ui/Button/Button';
+import { Routes } from '@/constants/routes';
 
 const FoodHero = () => {
   const fadeIn = {
@@ -57,9 +59,9 @@ const FoodHero = () => {
             className={styles.hero__cta}
             variants={fadeIn}
           >
-            <button className={styles.hero__button}>
+            <Button href={Routes.GET_STARTED} size="lg">
               ORDER A MEAL
-            </button>
+            </Button>
           </motion.div>
         </motion.div>
       </div>

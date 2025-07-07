@@ -4,6 +4,8 @@ import React from 'react';
 import styles from './FoodIllustrationSection.module.scss';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { Button } from '@/components/ui/Button/Button';
+import { Routes } from '@/constants/routes';
 
 const FoodIllustrationSection = () => {
   const [sectionRef, inView] = useInView({
@@ -51,7 +53,9 @@ const FoodIllustrationSection = () => {
             Whether it's lunch or late-night, we deliver flavors that make your taste buds sing.
           </p>
           <div className={styles.illustration__action}>
-            <button className={styles.illustration__button}>JOIN OUR MISSION</button>
+            <Button href={Routes.GET_STARTED} size="lg">
+              JOIN OUR MISSION
+            </Button>
           </div>
         </motion.div>
       </div>

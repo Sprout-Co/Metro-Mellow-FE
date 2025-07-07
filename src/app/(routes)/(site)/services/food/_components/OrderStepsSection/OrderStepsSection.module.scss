@@ -7,19 +7,19 @@
   position: relative;
   width: 100%;
   background-color: color('neutral', 'white');
-  @include section-spacing('2xl');
+  @include section-spacing('6xl');
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: spacing('lg');
   overflow: visible;
   z-index: 1;
+  padding-top: 0;
 
   &__container {
     width: 100%;
-    @include container(map-get($container-max-widths, '2xl'));
-    display: flex;
+    @include container;
+    // display: flex;
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
@@ -41,10 +41,8 @@
 
   &__illustration {
     position: relative;
-    width: 45%;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     margin-top: 0;
 
@@ -64,7 +62,7 @@
     margin-bottom: 0;
     display: block;
     margin-left: auto;
-    margin-right: auto;
+    // margin-right: auto;
     margin-top: -70px;
     z-index: 2;
 
@@ -81,7 +79,6 @@
   &__content {
     width: 50%;
     padding-right: spacing('xl');
-    margin-top: spacing('2xl');
 
     @include breakpoint-down('md') {
       width: 100%;
@@ -93,18 +90,19 @@
   }
 
   &__title {
-    font-size: font-size('h1');
-    font-weight: map-get($font-weights, 'bold');
-    line-height: line-height('tight');
-    color: color('neutral', 'black');
+    // font-size: font-size('h1');
+    // font-weight: map-get($font-weights, 'bold');
+    // line-height: line-height('tight');
+    // color: color('neutral', 'black');
     margin-bottom: spacing('md');
+    @include heading-1;
 
-    @include breakpoint-down('md') {
-      font-size: font-size('h3');
-    }
-    @include breakpoint-down('sm') {
-      font-size: font-size('h4');
-    }
+    // @include breakpoint-down('md') {
+    //   font-size: font-size('h3');
+    // }
+    // @include breakpoint-down('sm') {
+    //   font-size: font-size('h4');
+    // }
   }
 
   &__subtitle {
@@ -126,7 +124,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    width: 100%;
+    width: 50%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
