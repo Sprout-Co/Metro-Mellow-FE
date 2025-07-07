@@ -35,13 +35,6 @@ const services: ServiceCardData[] = [
         link: '/services/cooking'
     },
     {
-        id: 'errands',
-        title: 'Errand Services',
-        description: 'We take care of time-consuming errands so you can focus on your priorities.',
-        icon: '/images/icons/errands-icon.svg',
-        link: '/services/errands'
-    },
-    {
         id: 'pest-control',
         title: 'Pest Control',
         description: 'Effective and eco-friendly pest control to keep your home pest-free.',
@@ -109,10 +102,10 @@ export const ServiceCards = () => {
                         ref={textRef}
                         className={`${styles.serviceCards__subtitle} ${styles.fadeIn} ${styles.fadeIn__delay1}`}
                     >
-                        Guaranteed & Exceptional Home Care, Laundry, Mobile Car Wash, and Errand Services - Delivered with Excellence
+                        Guaranteed & Exceptional Home Care, Laundry, and Mobile Car Wash Services - Delivered with Excellence
                     </p>
                     <p className={`${styles.serviceCards__description} ${styles.fadeIn} ${styles.fadeIn__delay2}`}>
-                        From cleaning and laundry to cooking, errands, mobile car washing, pest control, and more - we handle it all so you can focus on what matters most.
+                        From cleaning and laundry to cooking, mobile car washing, pest control, and more - we handle it all so you can focus on what matters most.
                     </p>
                     <div
                         ref={buttonRef}

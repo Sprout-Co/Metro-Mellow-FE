@@ -20,7 +20,7 @@ import TestimonialCarouselSection from "./_components/TestimonialCarouselSection
 export const metadata = {
   title: "Home Services - Professional Cleaning, Laundry, Cooking & More",
   description:
-    "Professional home services including cleaning, laundry, cooking, errands, and pest control tailored to your needs. Book your service today!",
+    "Professional home services including cleaning, laundry, cooking, and pest control tailored to your needs. Book your service today!",
 };
 
 export default function Home() {

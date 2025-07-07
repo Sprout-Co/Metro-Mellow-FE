@@ -11,7 +11,6 @@ const services = [
   { name: 'Laundromat', colorClass: styles['service-badge--laundromat'] },
   { name: 'Cleaning', colorClass: styles['service-badge--cleaning'] },
   { name: 'Cooking', colorClass: styles['service-badge--cooking'] },
-  { name: 'Errands', colorClass: styles['service-badge--errands'] },
   { name: 'Pests', colorClass: styles['service-badge--pests'] },
 ];
 

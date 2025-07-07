@@ -30,13 +30,6 @@ const services = [
     image: '/images/food/f21.jpeg',
   },
   {
-    id: 'errands',
-    title: 'Errand Running',
-    description: 'Save time with our personal assistant services handling grocery shopping, package delivery, and more.',
-    icon: '/images/icons/errands.svg',
-    image: '/images/errand/e1.jpeg',
-  },
-  {
     id: 'pest-control',
     title: 'Pest Control',
     description: 'Effective and eco-friendly solutions to keep your home free from unwanted pests and insects.',
