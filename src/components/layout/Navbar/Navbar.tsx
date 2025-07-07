@@ -11,7 +11,7 @@ import Button from '@/components/ui/Button/Button';
 // Define service dropdown items
 const serviceItems = [
     {
-        title: 'Cleaning Services',
+        title: 'Cleaning',
         href: '/services/cleaning',
         description: 'Professional home cleaning services',
         icon: (
@@ -24,40 +24,7 @@ const serviceItems = [
     {
         title: 'Laundry',
         href: '/services/laundry',
-        description: 'Professional Laundry services',
-        icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            </svg>
-        )
-    },
-    {
-        title: 'Residential Cleaning',
-        href: '/services/residential-cleaning',
-        description: 'Professional home cleaning services',
-        icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            </svg>
-        )
-    },
-    {
-        title: 'Food services',
-        href: '/services/food',
-        description: 'Office and workspace sanitization',
-        icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-            </svg>
-        )
-    },
-    {
-        title: 'Deep Cleaning',
-        href: '/services/deep-cleaning',
-        description: 'End-to-end thorough cleaning',
+        description: 'Professional laundry and dry cleaning services',
         icon: (
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
@@ -67,12 +34,16 @@ const serviceItems = [
         )
     },
     {
-        title: 'Specialized Services',
-        href: '/services/specialized',
-        description: 'Customized cleaning solutions',
+        title: 'Food',
+        href: '/services/food',
+        description: 'Delicious home-cooked meals prepared fresh',
         icon: (
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                <line x1="6" y1="1" x2="6" y2="4"></line>
+                <line x1="10" y1="1" x2="10" y2="4"></line>
+                <line x1="14" y1="1" x2="14" y2="4"></line>
             </svg>
         )
     }
@@ -155,18 +126,13 @@ export default function Navbar() {
                 {/* Brand Logo */}
                 <Link href="/" className={styles.navbar__brand}>
                     <div className={styles.navbar__logo}>
-                        {/* Logo placeholder - can be replaced with actual logo */}
-                   
-                        {/* <div className={styles.navbar__logoMark}>
-
-                        </div> */}
-                             <Image
-                        src="/images/brand/cover.png"
-                        alt="Urban Serve"
-                        width={140}
-                        height={40}
-                        className={styles.navbar__logo}
-                    />
+                        <Image
+                            src="/images/brand/logo.jpeg"
+                            alt="Metro Mellow"
+                            width={140}
+                            height={40}
+                            className={styles.navbar__logo}
+                        />
                     </div>
                 </Link>
 
@@ -239,11 +205,6 @@ export default function Navbar() {
                                                                 </Link>
                                                             ))}
                                                         </div>
-                                                        <div className={styles.navbar__dropdownFooter}>
-                                                            <Link href="/services" className={styles.navbar__dropdownFooterLink}>
-                                                                View All Services →
-                                                            </Link>
-                                                        </div>
                                                     </div>
                                                 </motion.div>
                                             )}
@@ -290,7 +251,13 @@ export default function Navbar() {
                         >
                             <div className={styles.navbar__mobileHeader}>
                                 <div className={styles.navbar__mobileLogo}>
-                                    <div className={styles.navbar__logoMark}></div>
+                                    <Image
+                                        src="/images/brand/logo.jpeg"
+                                        alt="Metro Mellow"
+                                        width={100}
+                                        height={30}
+                                        className={styles.navbar__logo}
+                                    />
                                 </div>
                                 <button
                                     className={styles.navbar__mobileClose}

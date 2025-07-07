@@ -2,15 +2,7 @@
 import React from 'react';
 import styles from './ChoresSection.module.scss';
 
-const ErrandIcon = () => (
-  <svg width="72" height="72" viewBox="0 0 241 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M159.833 148.352L141.354 152.859L164.241 251.952L103.45 163.742L42.6351 181.748L65.5466 109.103L4.98047 24.4302L79.8165 67.6135L86.939 44.4778L93.8374 22.0644L103.45 -9.11523L113.063 33.1466L127.084 94.9081L192.208 132.538L201.895 138.116L193.951 140.059L159.833 148.352Z" fill="#F4D47D" stroke="#FDF6E5" strokeWidth="2.49038" />
-    <path d="M251.703 113.211L201.896 138.115L192.209 132.536L127.085 94.9068L176.893 70.0029L251.703 113.211Z" fill="#F8E5B1" stroke="#FDF6E5" strokeWidth="2.49038" />
-    <path d="M93.8374 22.0634L86.939 44.4768L79.8165 67.6125L4.98047 24.4292L54.7882 -0.474609L93.8374 22.0634Z" fill="#F8E5B1" stroke="#FDF6E5" strokeWidth="2.49038" />
-    <path d="M214.048 227.049L164.24 251.953L141.354 152.86L159.832 148.353L193.95 140.06L214.048 227.049Z" fill="#F8E5B1" stroke="#FDF6E5" strokeWidth="2.49038" />
-    <path d="M176.892 70.0038L127.084 94.9077L113.063 33.1461L103.45 -9.11568L153.258 -34.0195L176.892 70.0038Z" fill="#F8E5B1" stroke="#FDF6E5" strokeWidth="2.49038" />
-  </svg>
-);
+
 
 const FoodIcon = () => (
   <svg width="72" height="72" viewBox="0 0 230 265" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -78,13 +70,6 @@ const LaundryIcon = () => (
 );
 import { Button } from '@/components/ui/Button/Button';
 const services = [
-  {
-    name: 'Errand',
-    desc: 'Enjoy work without the pressure of wondering what would happen to you if you lose your job.',
-    icon: <ErrandIcon />,
-    bg: 'chores-card--errand',
-    btn: 'chores-card__btn--primary',
-  },
   {
     name: 'Food',
     desc: 'Enjoy your work without the pressure of wondering what would happen to you if you lose.',
