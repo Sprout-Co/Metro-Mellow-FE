@@ -13,8 +13,16 @@
   &__container {
     @include container;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: spacing('3xl');
+  }
+
+  &__main {
+    display: flex;
     align-items: center;
     gap: spacing('4xl');
+    width: 100%;
 
     @include breakpoint-down('lg') {
       flex-direction: column;
@@ -23,8 +31,8 @@
   }
 
   &__wrapper {
-    flex: 1;
-    max-width: 650px;
+    flex: 1.2;
+    max-width: 800px;
 
     @include breakpoint-down('lg') {
       max-width: 100%;
@@ -39,7 +47,7 @@
     overflow: hidden;
     box-shadow: map-get($shadows, 'md');
     background-color: color('neutral', 'black');
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 4 / 3;
   }
 
   &__thumbnail {
@@ -128,8 +136,8 @@
   }
 
   &__content {
-    flex: 1;
-    max-width: 550px;
+    flex: 0.8;
+    max-width: 500px;
 
     @include breakpoint-down('lg') {
       max-width: 100%;
@@ -141,8 +149,9 @@
   &__title {
     @include heading-2;
     color: color('neutral', 'black');
-    margin-bottom: spacing('lg');
+    margin-bottom: spacing('xl');
     font-weight: map-get($font-weights, 'bold');
+    text-align: center;
 
     @include breakpoint-down('md') {
       font-size: font-size('h3');

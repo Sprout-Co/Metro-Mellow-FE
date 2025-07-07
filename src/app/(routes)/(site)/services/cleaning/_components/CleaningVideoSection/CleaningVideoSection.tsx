@@ -44,105 +44,109 @@ const CleaningVideoSection = () => {
   return (
     <section className={styles.video} ref={ref}>
       <div className={styles.video__container}>
-        <motion.div 
-          className={styles.video__wrapper}
+        <motion.h2 
+          className={styles.video__title}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
           variants={fadeIn}
         >
-          <div className={styles.video__player}>
-            {!videoPlaying ? (
-              <>
-                <div className={styles.video__thumbnail}>
-                  <img 
-                    src="/images/cleaning/c4.jpeg" 
-                    alt="Professional Cleaning Video Thumbnail" 
-                    className={styles.video__image}
-                  />
-                  <div className={styles.video__overlay}>
-                    <button 
-                      className={styles.video__playButton}
-                      onClick={playVideo}
-                      aria-label="Play video"
-                    >
-                      <Play size={32} />
-                    </button>
+          See How We Transform Your Space
+        </motion.h2>
+        
+        <div className={styles.video__main}>
+          <motion.div 
+            className={styles.video__wrapper}
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
+            variants={fadeIn}
+          >
+            <div className={styles.video__player}>
+              {!videoPlaying ? (
+                <>
+                  <div className={styles.video__thumbnail}>
+                    <img 
+                      src="/images/cleaning/c4.jpeg" 
+                      alt="Professional Cleaning Video Thumbnail" 
+                      className={styles.video__image}
+                    />
+                    <div className={styles.video__overlay}>
+                      <button 
+                        className={styles.video__playButton}
+                        onClick={playVideo}
+                        aria-label="Play video"
+                      >
+                        <Play size={32} />
+                      </button>
+                    </div>
                   </div>
+                </>
+              ) : (
+                <div className={styles.video__iframe}>
+                  <iframe
+                    src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                    title="Metro Mellow Cleaning Process"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
                 </div>
-              </>
-            ) : (
-              <div className={styles.video__iframe}>
-                <iframe
-                  src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-                  title="Metro Mellow Cleaning Process"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
-              </div>
-            )}
-          </div>
-        </motion.div>
+              )}
+            </div>
+          </motion.div>
 
-        <motion.div 
-          className={styles.video__content}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          variants={staggerContainer}
-        >
-          <motion.h2 
-            className={styles.video__title}
-            variants={fadeIn}
-          >
-            See How We Transform Your Space
-          </motion.h2>
-          
-          <motion.p 
-            className={styles.video__description}
-            variants={fadeIn}
-          >
-            Watch our professional cleaning process in action. From initial assessment to final inspection, see how we deliver exceptional results every time.
-          </motion.p>
-          
-          <motion.ul 
-            className={styles.video__features}
+          <motion.div 
+            className={styles.video__content}
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
             variants={staggerContainer}
           >
-            <motion.li 
-              className={styles.video__feature}
+            <motion.p 
+              className={styles.video__description}
               variants={fadeIn}
             >
-              Professional equipment and techniques
-            </motion.li>
-            <motion.li 
-              className={styles.video__feature}
+              Watch our professional cleaning process in action. From initial assessment to final inspection, see how we deliver exceptional results every time.
+            </motion.p>
+            
+            <motion.ul 
+              className={styles.video__features}
+              variants={staggerContainer}
+            >
+              <motion.li 
+                className={styles.video__feature}
+                variants={fadeIn}
+              >
+                Professional equipment and techniques
+              </motion.li>
+              <motion.li 
+                className={styles.video__feature}
+                variants={fadeIn}
+              >
+                Attention to detail
+              </motion.li>
+              <motion.li 
+                className={styles.video__feature}
+                variants={fadeIn}
+              >
+                Quality assurance process
+              </motion.li>
+              <motion.li 
+                className={styles.video__feature}
+                variants={fadeIn}
+              >
+                Customer satisfaction guarantee
+              </motion.li>
+            </motion.ul>
+            
+            <motion.div 
+              className={styles.video__cta}
               variants={fadeIn}
             >
-              Attention to detail
-            </motion.li>
-            <motion.li 
-              className={styles.video__feature}
-              variants={fadeIn}
-            >
-              Quality assurance process
-            </motion.li>
-            <motion.li 
-              className={styles.video__feature}
-              variants={fadeIn}
-            >
-              Customer satisfaction guarantee
-            </motion.li>
-          </motion.ul>
-          
-          <motion.div 
-            className={styles.video__cta}
-            variants={fadeIn}
-          >
-            <Button href={Routes.GET_STARTED} size="lg">
-              Book Your Cleaning Today
-            </Button>
+              <Button href={Routes.GET_STARTED} size="lg">
+                Book Your Cleaning Today
+              </Button>
+            </motion.div>
           </motion.div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
