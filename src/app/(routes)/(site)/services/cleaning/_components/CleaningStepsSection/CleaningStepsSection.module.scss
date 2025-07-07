@@ -46,13 +46,14 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 0;
+    gap: spacing('6xl');
 
     @include breakpoint-down('md') {
       width: 100%;
       margin-top: 0;
       margin-bottom: spacing('md');
       flex-direction: column;
-      gap: spacing('lg');
+      gap: spacing('4xl');
     }
 
     @include breakpoint-down('sm') {
@@ -60,7 +61,7 @@
       margin-top: 0;
       margin-bottom: spacing('sm');
       flex-direction: column;
-      gap: spacing('md');
+      gap: spacing('2xl');
     }
   }
 
