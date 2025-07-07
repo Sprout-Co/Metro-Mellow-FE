@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('/images/cleaning/c1.jpeg');
+  background-image: url('/images/cleaning/c2.jpeg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -76,7 +76,7 @@
     line-height: 1;
     
     &--accent {
-      color: color('primary', 'light');
+      color: color('status', 'info');
       font-weight: map-get($font-weights, 'bold');
       margin-bottom: spacing('sm');
       display: inline;
