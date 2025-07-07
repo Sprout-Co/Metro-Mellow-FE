@@ -126,18 +126,13 @@ export default function Navbar() {
                 {/* Brand Logo */}
                 <Link href="/" className={styles.navbar__brand}>
                     <div className={styles.navbar__logo}>
-                        {/* Logo placeholder - can be replaced with actual logo */}
-                   
-                        {/* <div className={styles.navbar__logoMark}>
-
-                        </div> */}
-                             <Image
-                        src="/images/brand/cover.png"
-                        alt="Urban Serve"
-                        width={140}
-                        height={40}
-                        className={styles.navbar__logo}
-                    />
+                        <Image
+                            src="/images/brand/logo.jpeg"
+                            alt="Metro Mellow"
+                            width={140}
+                            height={40}
+                            className={styles.navbar__logo}
+                        />
                     </div>
                 </Link>
 
@@ -256,7 +251,13 @@ export default function Navbar() {
                         >
                             <div className={styles.navbar__mobileHeader}>
                                 <div className={styles.navbar__mobileLogo}>
-                                    <div className={styles.navbar__logoMark}></div>
+                                    <Image
+                                        src="/images/brand/logo.jpeg"
+                                        alt="Metro Mellow"
+                                        width={100}
+                                        height={30}
+                                        className={styles.navbar__logo}
+                                    />
                                 </div>
                                 <button
                                     className={styles.navbar__mobileClose}
