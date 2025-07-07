@@ -29,7 +29,7 @@
 
   &__title {
     @include heading-1;
-    font-size: font-size('h2');
+    font-size: font-size('h1');
     color: color('neutral', 'black');
     margin-bottom: spacing('md');
     line-height: line-height('tight');
