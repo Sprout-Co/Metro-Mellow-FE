@@ -2,6 +2,7 @@ import React from 'react';
 import CleaningHero from './_components/CleaningHero/CleaningHero';
 import CleaningPromoSection from './_components/CleaningPromoSection/CleaningPromoSection';
 import CleaningServicesShowcase from './_components/CleaningServicesShowcase/CleaningServicesShowcase';
+import CleaningVideoSection from './_components/CleaningVideoSection/CleaningVideoSection';
 import Hero from './_components/Hero/Hero';
 import About from './_components/About/About';
 import Services from './_components/Services/Services';
@@ -23,6 +24,7 @@ export default function CleaningPage() {
             <CleaningHero />
             <CleaningPromoSection />
             <CleaningServicesShowcase />
+            <CleaningVideoSection />
             {/* <Hero />
             <About />
             <Services />
