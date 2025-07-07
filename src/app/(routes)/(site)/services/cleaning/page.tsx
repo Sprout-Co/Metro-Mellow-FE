@@ -1,4 +1,9 @@
 import React from 'react';
+import CleaningHero from './_components/CleaningHero/CleaningHero';
+import CleaningPromoSection from './_components/CleaningPromoSection/CleaningPromoSection';
+import CleaningServicesShowcase from './_components/CleaningServicesShowcase/CleaningServicesShowcase';
+import CleaningVideoSection from './_components/CleaningVideoSection/CleaningVideoSection';
+import CleaningStepsSection from './_components/CleaningStepsSection/CleaningStepsSection';
 import Hero from './_components/Hero/Hero';
 import About from './_components/About/About';
 import Services from './_components/Services/Services';
@@ -17,7 +22,12 @@ export const metadata = {
 export default function CleaningPage() {
     return (
         <main>
-            <Hero />
+            <CleaningHero />
+            <CleaningPromoSection />
+            <CleaningServicesShowcase />
+            <CleaningVideoSection />
+            <CleaningStepsSection />
+            {/* <Hero />
             <About />
             <Services />
             <WhyChooseUs />
@@ -25,7 +35,7 @@ export default function CleaningPage() {
             <Testimonials />
             <FAQ />
             <CTA />
-            <Contact />
+            <Contact /> */}
         </main>
     );
 }
