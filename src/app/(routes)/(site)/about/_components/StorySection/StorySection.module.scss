@@ -5,7 +5,6 @@
 .storySection {
   width: 100%;
   background-color: color('accent', 'lighter');
-  padding: spacing('5xl') 0;
   
   @include breakpoint-down('md') {
     padding: spacing('3xl') 0;

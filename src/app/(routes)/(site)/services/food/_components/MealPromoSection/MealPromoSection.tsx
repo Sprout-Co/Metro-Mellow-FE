@@ -3,6 +3,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import styles from './MealPromoSection.module.scss';
+import { Button } from '@/components/ui/Button/Button';
+import { Routes } from '@/constants/routes';
 
 const MealPromoSection = () => {
   const fadeIn = {
@@ -58,9 +60,9 @@ const MealPromoSection = () => {
             className={styles.promo__cta}
             variants={fadeIn}
           >
-            <button className={styles.promo__button}>
+            <Button href={Routes.GET_STARTED} size="lg">
               PLACE AN ORDER
-            </button>
+            </Button>
           </motion.div>
         </motion.div>
       </div>

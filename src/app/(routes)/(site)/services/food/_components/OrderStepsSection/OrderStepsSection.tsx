@@ -4,6 +4,8 @@ import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import styles from './OrderStepsSection.module.scss';
+import { Button } from '@/components/ui/Button/Button';
+import { Routes } from '@/constants/routes';
 
 const OrderStepsSection = () => {
   const fadeIn = {
@@ -31,41 +33,37 @@ const OrderStepsSection = () => {
   return (
     <section className={styles.orderSteps}>
       <div className={styles.orderSteps__container}>
-        <motion.div 
-          className={styles.orderSteps__content}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={staggerContainer}
-        >
-          <motion.h2 
-            className={styles.orderSteps__title}
-            variants={fadeIn}
-          >
-            What do I <br />
-            Need to do?
-          </motion.h2>
-          
-          <motion.p 
-            className={styles.orderSteps__subtitle}
-            variants={fadeIn}
-          >
-            Tap into tasty with just a few clicks.
-          </motion.p>
-        </motion.div>
-        
+        <div>
+          <div></div>
+        <Image
+          src="/images/food/plate-svg.png"
+          alt="Plate with fork and knife"
+          width={600}
+          height={600}
+          className={styles.orderSteps__image}
+          priority
+          style={{ position: "relative", zIndex: 2 }}
+        />
+        </div>
+
         <div className={styles.orderSteps__illustration}>
-          <Image
-            src="/images/food/plate-svg.png"
-            alt="Plate with fork and knife"
-            width={600}
-            height={600}
-            className={styles.orderSteps__image}
-            priority
-            style={{ position: 'relative', zIndex: 2 }}
-          />
-          
-          <motion.ul 
+          <motion.div
+            className={styles.orderSteps__content}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={staggerContainer}
+          >
+            <motion.h2 className={styles.orderSteps__title} variants={fadeIn}>
+              What do I <br />
+              Need to do?
+            </motion.h2>
+
+            <motion.p className={styles.orderSteps__subtitle} variants={fadeIn}>
+              Tap into tasty with just a few clicks.
+            </motion.p>
+          </motion.div>
+          <motion.ul
             className={styles.orderSteps__steps}
             initial="hidden"
             whileInView="visible"
@@ -74,30 +72,36 @@ const OrderStepsSection = () => {
           >
             <motion.li variants={fadeIn}>
               <span className={styles.orderSteps__step}>1</span>
-              <span className={styles.orderSteps__stepText}>Choose your crave.</span>
+              <span className={styles.orderSteps__stepText}>
+                Choose your crave.
+              </span>
             </motion.li>
             <motion.li variants={fadeIn}>
               <span className={styles.orderSteps__step}>2</span>
-              <span className={styles.orderSteps__stepText}>Track your order.</span>
+              <span className={styles.orderSteps__stepText}>
+                Track your order.
+              </span>
             </motion.li>
             <motion.li variants={fadeIn}>
               <span className={styles.orderSteps__step}>3</span>
-              <span className={styles.orderSteps__stepText}>Enjoy every bite.</span>
+              <span className={styles.orderSteps__stepText}>
+                Enjoy every bite.
+              </span>
             </motion.li>
           </motion.ul>
         </div>
       </div>
-      
-      <motion.div 
+
+      <motion.div
         className={styles.orderSteps__cta}
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay: 0.6 }}
       >
-        <button className={styles.orderSteps__button}>
+        <Button href={Routes.GET_STARTED} size="lg">
           ORDER NOW
-        </button>
+        </Button>
       </motion.div>
     </section>
   );
