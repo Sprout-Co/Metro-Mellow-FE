@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
   sassOptions: {
     includePaths: ["./src/styles"],
     prependData: `@import "@/styles/abstracts-old/variables"; @import "@/styles/abstracts-old/mixins"; @import "@/styles/abstracts-old/functions";`,
+    quietDeps: true,
   },
   images: {
     formats: ["image/avif", "image/webp"],
@@ -40,6 +41,11 @@ const nextConfig: NextConfig = {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
+  },
+  webpack: (config) => {
+    // Ignore SCSS errors and warnings
+    config.ignoreWarnings = [{ module: /\.scss$/ }];
+    return config;
   },
 };
 
