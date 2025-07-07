@@ -2,7 +2,7 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import styles from "./SuperAdminSidebar.module.scss";
+import styles from "./SuperAdminSideBar.module.scss";
 
 interface SuperAdminSidebarProps {
   collapsed: boolean;

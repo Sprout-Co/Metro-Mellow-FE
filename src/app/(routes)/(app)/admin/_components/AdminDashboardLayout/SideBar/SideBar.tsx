@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Icon } from "@/components/ui/Icon/Icon";
-import styles from "./Sidebar.module.scss";
+import styles from "./SideBar.module.scss";
 
 interface SidebarProps {
   collapsed: boolean;
