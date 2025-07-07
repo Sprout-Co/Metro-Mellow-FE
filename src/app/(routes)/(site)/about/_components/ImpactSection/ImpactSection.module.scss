@@ -16,7 +16,7 @@
   }
 
   &__container {
-    max-width: map-get($container-max-widths, "xl");
+    @include container;
     margin: 0 auto;
     padding: 0 map-get($spacing, "lg");
     position: relative;

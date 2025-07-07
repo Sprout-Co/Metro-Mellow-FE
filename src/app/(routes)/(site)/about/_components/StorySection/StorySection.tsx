@@ -1,8 +1,10 @@
-'use client'
-import React from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import styles from './StorySection.module.scss';
+"use client";
+import React from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import styles from "./StorySection.module.scss";
+import { Button } from "@/components/ui/Button/Button";
+import VideoSection from "../VideoSection/VideoSection";
 
 const StorySection: React.FC = () => {
   // Animation variants
@@ -40,46 +42,56 @@ const StorySection: React.FC = () => {
   };
 
   return (
-    <section className={styles.storySection}>
-      <div className={styles.storySection__container}>
-        <div className={styles.storySection__content}>
-          <motion.h2 
-            className={styles.storySection__title}
-            initial="hidden"
-            animate="visible"
-            custom={1}
-            variants={textVariants}
-          >
-            Our Story:<br />
-            From Frazzle<br /> 
-            to Dazzle
-          </motion.h2>
-          
-          <motion.p 
-            className={styles.storySection__subtitle}
-            initial="hidden"
-            animate="visible"
-            custom={2}
-            variants={textVariants}
-          >
-            We're the spark that turns your chaos into calm, the groove that gets your life back in tune.
-          </motion.p>
-          
-          <motion.div
-            className={styles.storySection__cta}
-            initial="hidden"
-            animate="visible"
-            variants={buttonVariants}
-            whileHover="hover"
-          >
-            <Link href="/bookings" className={styles.storySection__button}>
-              BOOK A SERVICE
-            </Link>
-          </motion.div>
+    <>
+      <section className={styles.storySection}>
+        <div className={styles.storySection__container}>
+          <div className={styles.storySection__content}>
+            <motion.h2
+              className={styles.storySection__title}
+              initial="hidden"
+              animate="visible"
+              custom={1}
+              variants={textVariants}
+            >
+              Our Story:
+              <br />
+              From Frazzle
+              <br />
+              to Dazzle
+            </motion.h2>
+
+            <motion.p
+              className={styles.storySection__subtitle}
+              initial="hidden"
+              animate="visible"
+              custom={2}
+              variants={textVariants}
+            >
+              We're the spark that turns your chaos into calm, the groove that
+              gets your life back in tune.
+            </motion.p>
+
+            <motion.div
+              className={styles.storySection__cta}
+              initial="hidden"
+              animate="visible"
+              variants={buttonVariants}
+              whileHover="hover"
+            >
+              <Button
+                href="/bookings"
+                size="lg"
+                className={styles.storySection__button}
+              >
+                BOOK A SERVICE
+              </Button>
+            </motion.div>
+          </div>
         </div>
-      </div>
-    </section>
+        <VideoSection />
+      </section>
+    </>
   );
 };
 
-export default StorySection; 
+export default StorySection;

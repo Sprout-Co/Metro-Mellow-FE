@@ -3,6 +3,8 @@
 import React from 'react';
 import Image from 'next/image';
 import styles from './ImpactSection.module.scss';
+import { Button } from '@/components/ui/Button/Button';
+import { Routes } from '@/constants/routes';
 
 const ImpactSection: React.FC = () => {
   return (
@@ -39,7 +41,9 @@ const ImpactSection: React.FC = () => {
         </div>
         
         <div className={styles['impact-section__cta']}>
-          <button>JOIN OUR MISSION</button>
+          <Button href={Routes.GET_STARTED} size="lg">
+            JOIN OUR MISSION
+          </Button>
         </div>
       </div>
     </section>

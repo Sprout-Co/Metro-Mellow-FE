@@ -354,6 +354,7 @@
   user-select: none;
   outline: none;
   padding: map-get($button-padding, "xl");
+  letter-spacing: normal;
 
   // Size variations
   // @if $size == "sm" {

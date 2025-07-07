@@ -46,6 +46,7 @@
   &__title {
     @include heading-2;
     letter-spacing: letter-spacing('tight');
+    color: color('neutral', 'lighter');
     
     @include breakpoint-down('xl') {
       @include font-size('h3');
@@ -121,6 +122,7 @@
     transition: color 0.3s ease;
     position: relative;
     padding-right: spacing('3xl');
+    color: color('neutral', 'lighter');
     
     @include breakpoint-down('lg') {
       @include subtitle-2;
