@@ -1,367 +1,154 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/animations";
 
 .hero {
-  padding: spacing("6xl") 0 spacing("4xl");
   position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #f5f7ff 0%, #e6eeff 100%);
-  min-height: 90vh;
+  width: 100%;
+  min-height: 100vh;
   display: flex;
   align-items: center;
+  justify-content: center;
+  background-image: url('/images/laundry/l3.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to right,
+      color-alpha('neutral', 'black', 0.7) 0%,
+      color-alpha('neutral', 'black', 0.5) 50%,
+      color-alpha('neutral', 'black', 0.7) 100%
+    );
+    z-index: 1;
+  }
 
   &__container {
     @include container;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: spacing("3xl");
     position: relative;
     z-index: 2;
-
-    @include breakpoint-up("lg") {
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      gap: spacing("4xl");
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 0;
+    @include breakpoint-down('md') {
+      height: auto;
+      padding-top: spacing('3xl');
+      padding-bottom: spacing('3xl');
+    }
+    @include breakpoint-down('sm') {
+      padding-top: spacing('2xl');
+      padding-bottom: spacing('2xl');
     }
   }
 
   &__content {
-    max-width: 600px;
-
-    @include breakpoint-up("lg") {
-      padding-top: spacing("3xl");
+    max-width: 655px;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+    color: color('neutral', 'white');
+    padding: 0;
+    @include breakpoint-down('md') {
+      max-width: 100%;
+      padding: 0 spacing('md');
     }
-  }
-
-  &__label {
-    display: inline-block;
-    padding: spacing("xxs") spacing("sm");
-    background-color: rgba(color("primary", "base"), 0.1);
-    color: color("primary", "base");
-    font-size: map-get($font-sizes, "xs");
-    font-weight: map-get($font-weights, "semibold");
-    border-radius: border-radius("full");
-    margin-bottom: spacing("md");
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    @include breakpoint-down('sm') {
+      padding: 0 spacing('sm');
+    }
   }
 
   &__title {
-    font-family: $font-family-heading;
-    font-weight: map-get($font-weights, "bold");
-    font-size: map-get($font-sizes, "3xl");
-    line-height: 1.2;
-    color: color("neutral", "black");
-    margin-bottom: spacing("lg");
-
-    @include breakpoint-up("md") {
-      font-size: map-get($font-sizes, "4xl");
+    @include heading-1;
+    font-size: font-size('h1') * 1.2;
+    color: color('neutral', 'white');
+    margin-bottom: spacing('lg');
+    line-height: 1;
+    
+    &--accent {
+      color: color('primary', 'light');
+      font-weight: map-get($font-weights, 'bold');
+      margin-bottom: spacing('sm');
+      display: inline;
     }
-
-    @include breakpoint-up("lg") {
-      font-size: map-get($font-sizes, "5xl");
-    }
-  }
-
-  &__highlight {
-    color: color("primary", "base");
-    position: relative;
-
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 0.1em;
-      left: 0;
-      width: 100%;
-      height: 0.3em;
-      background-color: rgba(color("primary", "base"), 0.2);
-      z-index: -1;
-    }
-  }
-
-  &__subtitle {
-    font-size: map-get($font-sizes, "base");
-    line-height: map-get($line-heights, "relaxed");
-    color: color("neutral", "darker");
-    margin-bottom: spacing("xl");
-
-    @include breakpoint-up("md") {
-      font-size: map-get($font-sizes, "lg");
-    }
-  }
-
-  &__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: spacing("md");
-    margin-bottom: spacing("xl");
-  }
-
-  &__button {
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(color("primary", "base"), 0.2);
-
-    &::after {
-      content: "";
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: rgba(255, 255, 255, 0.2);
-      transform: rotate(45deg);
-      z-index: 1;
-      transition: all 0.6s ease-in-out;
-      opacity: 0;
-    }
-
-    &:hover::after {
-      opacity: 1;
-      transform: rotate(45deg) translate(-10%, -10%);
-    }
-  }
-
-  &__priceLink {
-    display: inline-flex;
-    align-items: center;
-    gap: spacing("xs");
-    font-weight: map-get($font-weights, "medium");
-    color: color("neutral", "darker");
-    text-decoration: none;
-    padding: spacing("sm") spacing("md");
-    border-radius: border-radius("md");
-    transition: all 0.3s ease;
-
-    svg {
-      transition: transform 0.3s ease;
-    }
-
-    &:hover {
-      color: color("primary", "base");
-      background-color: rgba(color("primary", "base"), 0.05);
-
-      svg {
-        transform: translateY(3px);
+    &--main {
+      display: inline;
+      font-weight: map-get($font-weights, 'bold');
+      color: color('neutral', 'white');
+      font-size: inherit;
+      @include breakpoint-down('sm') {
+        white-space: normal;
       }
     }
-  }
-
-  &__features {
-    display: flex;
-    flex-wrap: wrap;
-    gap: spacing("md") spacing("lg");
-    margin-top: spacing("lg");
-  }
-
-  &__feature {
-    display: flex;
-    align-items: center;
-    gap: spacing("xs");
-    font-size: map-get($font-sizes, "sm");
-    color: color("neutral", "darker");
-  }
-
-  &__icon {
-    color: color("primary", "base");
-    width: 18px;
-    height: 18px;
-    flex-shrink: 0;
-  }
-
-  &__imageContainer {
-    position: relative;
-    height: 500px;
-
-    @include breakpoint-up("lg") {
-      height: 600px;
+    @include breakpoint-down('md') {
+      font-size: font-size('h2') * 1.2;
+    }
+    @include breakpoint-down('sm') {
+      font-size: font-size('h3') * 1.2;
+      line-height: 1.1;
     }
   }
 
-  &__imageMain {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    border-radius: border-radius("2xl");
-    overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  &__description {
+    @include paragraph;
+    color: color('neutral', 'white');
+    font-size: font-size('body-1');
+    margin-bottom: spacing('2xl');
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('body-2');
+      margin-bottom: spacing('xl');
+    }
 
-    @include breakpoint-up("lg") {
-      width: 90%;
-      margin-left: auto;
+    @include breakpoint-down('sm') {
+      font-size: font-size('body-2');
+      margin-bottom: spacing('lg');
     }
   }
 
-  &__image {
-    object-fit: cover;
-    transition: transform 8s ease;
-
-    &:hover {
-      transform: scale(1.1);
+  &__cta {
+    margin-top: spacing('2xl');
+    @include breakpoint-down('md') {
+      margin-top: spacing('xl');
+    }
+    @include breakpoint-down('sm') {
+      margin-top: spacing('lg');
     }
   }
-
-  &__bubble1,
-  &__bubble2 {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    gap: spacing("xs");
-    background-color: color("neutral", "white");
-    padding: spacing("sm") spacing("md");
-    border-radius: border-radius("full");
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    font-size: map-get($font-sizes, "sm");
-    font-weight: map-get($font-weights, "medium");
-    color: color("neutral", "black");
-    z-index: 3;
-
-    svg {
-      color: color("primary", "base");
+  
+  &__button {
+    @include button-primary('lg');
+    min-width: 260px;
+    max-width: 340px;
+    
+    @include breakpoint-down('md') {
+      min-width: 180px;
+      max-width: 100%;
+      height: button-height('md');
+      padding: spacing('sm') spacing('xl');
+      @include font-size('button');
     }
-  }
-
-  &__bubble1 {
-    top: 10%;
-    left: -10%;
-    animation: float 3s ease-in-out infinite;
-
-    @include breakpoint-up("lg") {
-      left: 0;
+    
+    @include breakpoint-down('sm') {
+      min-width: 100%;
+      width: 100%;
+      max-width: 100%;
+      padding: 0 spacing('xl');
+      font-size: font-size('body-2');
+      height: button-height('lg');
     }
-  }
-
-  &__bubble2 {
-    bottom: 15%;
-    right: -5%;
-    animation: float 3s ease-in-out infinite 1.5s;
-
-    @include breakpoint-up("lg") {
-      right: 10%;
-    }
-  }
-
-  &__shapesContainer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  &__shape1 {
-    position: absolute;
-    top: -5%;
-    right: 5%;
-    width: 300px;
-    height: 300px;
-    background-color: rgba(color("primary", "light"), 0.05);
-    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-    animation: rotate 30s linear infinite;
-  }
-
-  &__shape2 {
-    position: absolute;
-    bottom: 10%;
-    left: 5%;
-    width: 250px;
-    height: 250px;
-    background-color: rgba(color("secondary", "base"), 0.05);
-    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-    animation: rotate 25s linear infinite reverse;
-  }
-
-  &__shape3 {
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    width: 150px;
-    height: 150px;
-    background-color: rgba(color("primary", "base"), 0.05);
-    border-radius: 50%;
-    animation: pulse 5s ease-in-out infinite;
-  }
-
-  &__scrollIndicator {
-    position: absolute;
-    bottom: spacing("lg");
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 2;
-  }
-
-  &__scrollText {
-    font-size: map-get($font-sizes, "xs");
-    color: color("neutral", "darker");
-    margin-bottom: spacing("xs");
-  }
-
-  &__mouse {
-    width: 26px;
-    height: 40px;
-    border: 2px solid color("neutral", "darker");
-    border-radius: 20px;
-    position: relative;
-  }
-
-  &__mouseWheel {
-    width: 4px;
-    height: 8px;
-    background-color: color("neutral", "darker");
-    border-radius: border-radius("full");
-    position: absolute;
-    top: 6px;
-    left: 50%;
-    transform: translateX(-50%);
-    animation: scrollWheel 1.5s ease-in-out infinite;
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.5;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.7;
-  }
-}
-
-@keyframes scrollWheel {
-  0% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(15px);
   }
 }

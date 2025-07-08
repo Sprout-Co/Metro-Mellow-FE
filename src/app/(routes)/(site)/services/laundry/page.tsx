@@ -1,4 +1,3 @@
-
 import React from 'react';
 import LaundryHero from './LaundryHero/LaundryHero';
 import LaundryAbout from './LaundryAbout/LaundryAbout';
@@ -22,16 +21,6 @@ export default function LaundryPage() {
     return (
         <main>
             <LaundryHero />
-            <LaundryAbout />
-            <LaundryServices />
-            <LaundryProcess />
-            <LaundryPricing />
-            <LaundryBenefits />
-            <LaundryEcoFriendly />
-            <LaundryTestimonials />
-            <LaundryFAQ />
-            <LaundryCTA />
-            <LaundryContact />
         </main>
     );
 }
