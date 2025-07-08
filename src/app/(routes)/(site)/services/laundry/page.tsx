@@ -1,15 +1,6 @@
 import React from 'react';
 import LaundryHero from './LaundryHero/LaundryHero';
-import LaundryAbout from './LaundryAbout/LaundryAbout';
-import LaundryServices from './LaundryServices/LaundryServices';
-import LaundryProcess from './LaundryProcess/LaundryProcess';
-import LaundryPricing from './LaundryPricing/LaundryPricing';
-import LaundryBenefits from './LaundryBenefits/LaundryBenefits';
-import LaundryEcoFriendly from './LaundryEcoFriendly/LaundryEcoFriendly';
-import LaundryTestimonials from './LaundryTestimonial/LaundryTestimonial';
-import LaundryFAQ from './LaundryFAQ/LaundryFAQ';
-import LaundryCTA from './LaundryCTA/LaundryCTA';
-import LaundryContact from './LaundryContact/LaundryContact';
+import LaundryFeatures from './LaundryFeatures/LaundryFeatures';
 
 export const metadata = {
     title: 'Professional Laundry Services | Urban Serve',
@@ -21,6 +12,7 @@ export default function LaundryPage() {
     return (
         <main>
             <LaundryHero />
+            <LaundryFeatures />
         </main>
     );
 }
