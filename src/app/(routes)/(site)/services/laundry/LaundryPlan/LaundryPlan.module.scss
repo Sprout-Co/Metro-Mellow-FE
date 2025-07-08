@@ -36,6 +36,11 @@
       align-items: flex-start;
       gap: spacing('10xl');
     }
+    @include breakpoint-down('sm') {
+      grid-template-columns: 1fr;
+      gap: spacing('3xl');
+      justify-items: center;
+    }
   }
 
   &__content {
@@ -47,6 +52,10 @@
       text-align: center;
       align-items: center;
     }
+    @include breakpoint-down('sm') {
+      margin-bottom: spacing('2xl');
+      width: 100%;
+    }
   }
 
   &__heading {
@@ -55,6 +64,11 @@
     @include breakpoint-down('lg') {
       max-width: 100%;
       margin-bottom: spacing('3xl');
+    }
+    @include breakpoint-down('sm') {
+      margin-bottom: spacing('xl');
+      width: 100%;
+      text-align: center;
     }
   }
 
@@ -69,10 +83,10 @@
     @include breakpoint-down('md') {
       font-size: font-size('h2') * 1.2;
     }
-    
     @include breakpoint-down('sm') {
-      font-size: font-size('h3') * 1.2;
+      font-size: font-size('h3');
       line-height: 1.1;
+      text-align: center;
     }
   }
 
@@ -86,6 +100,9 @@
       font-size: font-size('body-2');
       margin-bottom: spacing('lg');
     }
+    @include breakpoint-down('sm') {
+      text-align: center;
+    }
   }
 
   &__cta {
@@ -93,6 +110,11 @@
     
     @include breakpoint-down('md') {
       margin-top: spacing('lg');
+    }
+    @include breakpoint-down('sm') {
+      width: 100%;
+      display: flex;
+      justify-content: center;
     }
   }
 
@@ -106,6 +128,12 @@
     &:hover {
       background-color: color('neutral', 'lightest') !important;
     }
+    @include breakpoint-down('sm') {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      text-align: center;
+    }
   }
 
   &__services {
@@ -116,8 +144,12 @@
     @include breakpoint-down('lg') {
       align-items: flex-start;
     }
-    
-    @include breakpoint-down('md') {
+    @include breakpoint-down('sm') {
+      align-items: center;
+      width: 100%;
+      text-align: center;
+    }
+    @include breakpoint-down('sm') {
       gap: spacing('lg');
     }
   }
@@ -126,6 +158,12 @@
     display: flex;
     align-items: flex-start;
     gap: spacing('md');
+    @include breakpoint-down('sm') {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+    }
   }
 
   &__serviceIcon {
@@ -141,11 +179,18 @@
       width: 100%;
       height: 100%;
     }
+    @include breakpoint-down('sm') {
+      margin-bottom: spacing('xs');
+    }
   }
 
   &__serviceContent {
     display: flex;
     flex-direction: column;
+    @include breakpoint-down('sm') {
+      align-items: center;
+      text-align: center;
+    }
   }
 
   &__serviceTitle {
@@ -153,11 +198,17 @@
     color: color('neutral', 'white');
     margin-bottom: spacing('xs');
     font-weight: map-get($font-weights, 'semibold');
+    @include breakpoint-down('sm') {
+      font-size: font-size('body-1');
+    }
   }
 
   &__serviceDescription {
     @include paragraph;
     color: color-alpha('neutral', 'white', 0.9);
     font-size: font-size('body-2');
+    @include breakpoint-down('sm') {
+      font-size: font-size('caption');
+    }
   }
 } 
