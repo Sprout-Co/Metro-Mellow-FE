@@ -2,6 +2,7 @@ import React from 'react';
 import LaundryHero from './LaundryHero/LaundryHero';
 import LaundryFeatures from './LaundryFeatures/LaundryFeatures';
 import LaundrySuds from './LaundrySuds/LaundrySuds';
+import LaundryPlan from './LaundryPlan/LaundryPlan';
 
 export const metadata = {
     title: 'Professional Laundry Services | Urban Serve',
@@ -15,6 +16,7 @@ export default function LaundryPage() {
             <LaundryHero />
             <LaundryFeatures />
             <LaundrySuds />
+            <LaundryPlan />
         </main>
     );
 }

@@ -1,0 +1,163 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/animations";
+
+.plan {
+  position: relative;
+  width: 100%;
+  padding: spacing('6xl') 0;
+  background-color: color('primary', 'base');
+  color: color('neutral', 'white');
+  overflow: hidden;
+  border-radius: border-radius('lg');
+  margin: spacing('4xl') auto;
+  max-width: 90%;
+  
+  @include breakpoint-down('md') {
+    padding: spacing('4xl') 0;
+    margin: spacing('3xl') auto;
+  }
+  
+  @include breakpoint-down('sm') {
+    padding: spacing('3xl') spacing('md');
+    margin: spacing('2xl') auto;
+    max-width: 95%;
+  }
+
+  &__container {
+    @include container;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: spacing('4xl');
+    
+    @include breakpoint-up('lg') {
+      grid-template-columns: 1fr 1.5fr;
+      align-items: flex-start;
+      gap: spacing('10xl');
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    
+    @include breakpoint-down('lg') {
+      text-align: center;
+      align-items: center;
+    }
+  }
+
+  &__heading {
+    max-width: 400px;
+    
+    @include breakpoint-down('lg') {
+      max-width: 100%;
+      margin-bottom: spacing('3xl');
+    }
+  }
+
+  &__title {
+    @include heading-1;
+    font-size: font-size('h1') * 1.2;
+    color: color('neutral', 'white');
+    margin-bottom: spacing('md');
+    line-height: 1;
+    font-weight: map-get($font-weights, 'bold');
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('h2') * 1.2;
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('h3') * 1.2;
+      line-height: 1.1;
+    }
+  }
+
+  &__subtitle {
+    @include paragraph;
+    color: color('neutral', 'white');
+    font-size: font-size('body-1');
+    margin-bottom: spacing('xl');
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('body-2');
+      margin-bottom: spacing('lg');
+    }
+  }
+
+  &__cta {
+    margin-top: spacing('xl');
+    
+    @include breakpoint-down('md') {
+      margin-top: spacing('lg');
+    }
+  }
+
+  &__button {
+    background-color: color('neutral', 'white') !important;
+    color: color('primary', 'dark') !important;
+    border-radius: border-radius('full') !important;
+    padding: spacing('sm') spacing('xl') !important;
+    font-weight: map-get($font-weights, 'medium') !important;
+    
+    &:hover {
+      background-color: color('neutral', 'lightest') !important;
+    }
+  }
+
+  &__services {
+    display: flex;
+    flex-direction: column;
+    gap: spacing('xl');
+    
+    @include breakpoint-down('lg') {
+      align-items: flex-start;
+    }
+    
+    @include breakpoint-down('md') {
+      gap: spacing('lg');
+    }
+  }
+
+  &__serviceItem {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing('md');
+  }
+
+  &__serviceIcon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color('neutral', 'white');
+    flex-shrink: 0;
+    
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__serviceContent {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__serviceTitle {
+    @include heading-4;
+    color: color('neutral', 'white');
+    margin-bottom: spacing('xs');
+    font-weight: map-get($font-weights, 'semibold');
+  }
+
+  &__serviceDescription {
+    @include paragraph;
+    color: color-alpha('neutral', 'white', 0.9);
+    font-size: font-size('body-2');
+  }
+} 
