@@ -3,21 +3,21 @@ import { setContext } from "@apollo/client/link/context";
 import { isTokenValid } from "@/utils/jwt";
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000/graphql",
+  uri: process.env.NEXT_PUBLIC_GRAPHQL_URL || "http://localhost:4000/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
   // Get the JWT token from the auth-token cookie
   let token = null;
-  
+
   if (typeof window !== "undefined") {
     const authTokenCookie = document.cookie
       .split("; ")
       .find((row) => row.startsWith("auth-token="));
-    
+
     if (authTokenCookie) {
       token = decodeURIComponent(authTokenCookie.split("=")[1]);
-      
+
       // Validate the token before using it
       // if (!isTokenValid(token)) {
       //   console.warn("Invalid or expired JWT token, removing from cookie");
