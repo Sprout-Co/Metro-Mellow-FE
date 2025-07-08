@@ -101,7 +101,7 @@
     color: color('primary', 'dark') !important;
     border-radius: border-radius('full') !important;
     padding: spacing('sm') spacing('xl') !important;
-    font-weight: map-get($font-weights, 'medium') !important;
+    font-weight: map-get($font-weights, 'bold') !important;
     
     &:hover {
       background-color: color('neutral', 'lightest') !important;
