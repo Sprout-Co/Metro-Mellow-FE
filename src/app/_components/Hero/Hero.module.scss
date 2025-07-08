@@ -139,6 +139,26 @@
     }
   }
   
+  &__subtitle {
+    @include body-1;
+    font-size: font-size('body-1');
+    color: color('neutral', 'light');
+    margin-bottom: spacing('xl');
+    line-height: line-height('relaxed');
+    max-width: 500px;
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('body-2');
+      text-align: center;
+      max-width: 100%;
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('body-2');
+      line-height: line-height('normal');
+    }
+  }
+  
   &__cta {
     margin-top: spacing('2xl');
     

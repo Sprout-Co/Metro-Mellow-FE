@@ -128,6 +128,16 @@ const Hero: FC = () => {
             </span>
           </motion.h1>
 
+          <motion.p
+            className={styles.hero__subtitle}
+            initial="hidden"
+            animate="visible"
+            custom={2}
+            variants={textVariants}
+          >
+            Subscribe to hassle-free home services - meals, cleaning,laundry and pest control delivered when you need them
+          </motion.p>
+
           <motion.div
             className={styles.hero__cta}
             initial="hidden"
