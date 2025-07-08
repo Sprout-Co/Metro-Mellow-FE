@@ -108,7 +108,7 @@
 
   &__card {
     background-color: color-alpha('primary', 'light', 0.05);
-    padding: spacing('xl');
+    padding: spacing('3xl') spacing('xl') spacing('xl') spacing('xl');
     border-radius: border-radius('lg');
     transition: $transition-base;
     position: relative;
@@ -116,7 +116,7 @@
     &--spin {
       background-color: color('neutral', 'lightest');
       color: color('neutral', 'black');
-      padding: spacing('3xl') spacing('xl');
+      padding: spacing('3xl') spacing('xl') spacing('xl') spacing('xl');
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -134,7 +134,7 @@
     &--freshness {
       background-color: color('primary', 'base');
       color: color('neutral', 'white');
-      padding: spacing('3xl') spacing('xl');
+      padding: spacing('3xl') spacing('xl') spacing('xl') spacing('xl');
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -208,7 +208,8 @@
     border-radius: border-radius('full');
     position: absolute;
     top: -25px;
-    right: 25px;
+    left: 50%;
+    transform: translateX(-50%);
     box-shadow: shadow('sm');
     
     .features__card--freshness & {
