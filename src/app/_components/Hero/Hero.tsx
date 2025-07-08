@@ -6,6 +6,7 @@ import Link from 'next/link';
 import styles from './Hero.module.scss';
 import { Button } from '@/components/ui/Button';
 import { ArrowRight, Mail, Plus } from 'lucide-react';
+import { Routes } from '@/constants/routes';
 
 const Hero: FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -135,7 +136,7 @@ const Hero: FC = () => {
             custom={2}
             variants={textVariants}
           >
-            Subscribe to hassle-free home services - meals, cleaning,laundry and pest control delivered when you need them
+            Subscribe to hassle-free home services - <Link href="/services/food" className={styles.hero__subtitleHighlight}>meals</Link>, <Link href="/services/cleaning" className={styles.hero__subtitleHighlight}>cleaning</Link>, <Link href="/services/laundry" className={styles.hero__subtitleHighlight}>laundry</Link> and <Link href="/services/pest-control" className={styles.hero__subtitleHighlight}>pest control</Link> delivered when you need them
           </motion.p>
 
           <motion.div

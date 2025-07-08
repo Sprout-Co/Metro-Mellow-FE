@@ -157,6 +157,23 @@
       font-size: font-size('body-2');
       line-height: line-height('normal');
     }
+    
+    &Highlight {
+      color: color('accent', 'base');
+      font-weight: map-get($font-weights, 'semibold');
+      text-decoration: underline;
+      text-decoration-color: color('accent', 'base');
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      
+      &:hover {
+        color: color('accent', 'dark');
+        text-decoration-color: color('accent', 'dark');
+        transform: translateY(-1px);
+      }
+    }
   }
   
   &__cta {
