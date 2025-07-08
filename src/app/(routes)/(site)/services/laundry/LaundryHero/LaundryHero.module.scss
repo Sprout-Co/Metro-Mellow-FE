@@ -15,6 +15,11 @@
   background-position: center;
   background-repeat: no-repeat;
   overflow: hidden;
+  
+  @include breakpoint-down('sm') {
+    min-height: 100vh;
+    background-attachment: scroll;
+  }
 
   &__overlay {
     position: absolute;
@@ -47,6 +52,8 @@
       padding-bottom: spacing('3xl');
     }
     @include breakpoint-down('sm') {
+      height: auto;
+      min-height: 100vh;
       padding-top: spacing('2xl');
       padding-bottom: spacing('2xl');
     }
@@ -64,7 +71,11 @@
       padding: 0 spacing('md');
     }
     @include breakpoint-down('sm') {
+      max-width: 100%;
       padding: 0 spacing('sm');
+      margin-top: spacing('lg');
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
   }
 
@@ -80,6 +91,14 @@
       font-weight: map-get($font-weights, 'bold');
       margin-bottom: spacing('sm');
       display: inline;
+      @include breakpoint-down('sm') {
+        display: block;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+        font-size: font-size('h4') * 1.1;
+        margin-bottom: 0;
+      }
     }
     &--main {
       display: inline;
@@ -88,14 +107,27 @@
       font-size: inherit;
       @include breakpoint-down('sm') {
         white-space: normal;
+        display: block;
+        margin-top: spacing('xs');
+      }
+    }
+    
+    // Override br tag on mobile
+    @include breakpoint-down('sm') {
+      br {
+        display: none;
       }
     }
     @include breakpoint-down('md') {
       font-size: font-size('h2') * 1.2;
+      margin-bottom: spacing('md');
     }
     @include breakpoint-down('sm') {
-      font-size: font-size('h3') * 1.2;
-      line-height: 1.1;
+      font-size: font-size('h4') * 1.1;
+      line-height: 1;
+      margin-bottom: spacing('xs');
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
   }
 
@@ -111,11 +143,14 @@
     @include breakpoint-down('md') {
       font-size: font-size('body-2');
       margin-bottom: spacing('xl');
+      max-width: 100%;
     }
 
     @include breakpoint-down('sm') {
       font-size: font-size('body-2');
       margin-bottom: spacing('lg');
+      max-width: 100%;
+      padding: 0 spacing('xs');
     }
   }
 
@@ -126,6 +161,9 @@
     }
     @include breakpoint-down('sm') {
       margin-top: spacing('lg');
+      width: 100%;
+      display: flex;
+      justify-content: center;
     }
   }
   
@@ -149,6 +187,7 @@
       padding: 0 spacing('xl');
       font-size: font-size('body-2');
       height: button-height('lg');
+      border-radius: border-radius('lg');
     }
   }
 }

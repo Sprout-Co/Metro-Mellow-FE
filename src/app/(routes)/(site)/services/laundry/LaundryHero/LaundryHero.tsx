@@ -50,7 +50,7 @@ const LaundryHero = () => {
             className={styles.hero__description}
             variants={fadeIn}
           >
-            Turn your dirty laundry blues into crisp, clean tunes.
+            Turn your dirty laundry blues into crisp, clean tunes. We pickup and deliver.
           </motion.p>
 
           <motion.div 
