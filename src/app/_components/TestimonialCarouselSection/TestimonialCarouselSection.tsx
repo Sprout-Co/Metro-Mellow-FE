@@ -1,24 +1,22 @@
 "use client"
 import React, { useState } from "react";
 import styles from "./TestimonialCarouselSection.module.scss";
+import { Icon } from "@/components/ui/Icon/Icon";
 
 const testimonials = [
   {
     text: "I really like the system at this management, I love recommending this software to you guys",
-    name: "Ashley Cooper",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+    name: "Adebayo Oke",
     rating: 5,
   },
   {
     text: "The service is fantastic and the support team is always helpful!",
-    name: "Jordan Smith",
-    avatar: "https://randomuser.me/api/portraits/men/45.jpg",
+    name: "Chioma Phillips",
     rating: 5,
   },
   {
     text: "A seamless experience from start to finish. Highly recommended!",
-    name: "Taylor Lee",
-    avatar: "https://randomuser.me/api/portraits/women/65.jpg",
+    name: "Kemi Ayobanji",
     rating: 5,
   },
 ];
@@ -43,16 +41,10 @@ const TestimonialCarouselSection = () => {
           <div className={styles.card} key={i}>
             <p className={styles.text}>{t.text}</p>
             <div className={styles.quote}>
-              <svg width="117" height="83" viewBox="0 0 117 83" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="55.2765" y="82.9141" width="55.2764" height="82.9147" transform="rotate(180 55.2765 82.9141)" fill="currentColor"/>
-                <rect x="116.476" y="82.9141" width="55.2764" height="82.9147" transform="rotate(180 116.476 82.9141)" fill="currentColor"/>
-              </svg>
-              
+              <Icon name="quote" size={48} />
             </div>
             <div className={styles.userInfo}>
-              <img className={styles.avatar} src={t.avatar} alt={t.name} />
               <span className={styles.name}>{t.name}</span>
-              <span className={styles.stars}>{"★".repeat(t.rating)}</span>
             </div>
           </div>
         ))}

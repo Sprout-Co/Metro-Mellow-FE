@@ -29,37 +29,37 @@ const foodCategories: FoodCategory[] = [
         id: 'cc1',
         name: 'Jollof Rice',
         description: 'Aromatic rice cooked in rich tomato sauce with spices and vegetables',
-        image: '/images/food/jollof-rice.png'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'cc2',
         name: 'Pounded Yam & Efo Riro',
         description: 'Smooth pounded yam served with spinach stew and assorted meat',
-        image: '/images/food/f14.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'cc3',
         name: 'Amala & Ewedu',
         description: 'Yam flour swallow with jute leaves soup and beef',
-        image: '/images/food/f3.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'cc4',
         name: 'Egusi Soup & Fufu',
         description: 'Ground melon seed soup with cassava fufu and fish',
-        image: '/images/food/f4.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'cc5',
         name: 'Banga Soup & Starch',
         description: 'Palm nut soup with cassava starch and fresh fish',
-        image: '/images/food/f1.png'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'cc6',
         name: 'Okro Soup & Eba',
         description: 'Fresh okra soup with garri and prawns',
-        image: '/images/food/f2.png'
+        image: '/images/food/empty-plate.png'
       }
     ]
   },
@@ -71,37 +71,37 @@ const foodCategories: FoodCategory[] = [
         id: 'gd1',
         name: 'Pepper Soup',
         description: 'Spicy hot soup with goat meat, fish, or chicken and herbs',
-        image: '/images/food/f5.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'gd2',
         name: 'Suya',
         description: 'Grilled spicy beef skewers with groundnut powder and spices',
-        image: '/images/food/f6.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'gd3',
         name: 'Nkwobi',
         description: 'Spicy cow foot served with palm oil and utazi leaves',
-        image: '/images/food/f7.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'gd4',
         name: 'Abacha & Ugba',
         description: 'African salad with cassava flakes, oil bean seeds, and fish',
-        image: '/images/food/f8.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'gd5',
         name: 'Isi Ewu',
         description: 'Goat head pepper soup with palm oil and spices',
-        image: '/images/food/f5.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'gd6',
         name: 'Ofada Rice & Ayamase',
         description: 'Local rice with green pepper sauce and assorted meat',
-        image: '/images/food/f6.jpeg'
+        image: '/images/food/empty-plate.png'
       }
     ]
   },
@@ -113,37 +113,37 @@ const foodCategories: FoodCategory[] = [
         id: 'hb1',
         name: 'Efo Riro Salad',
         description: 'Fresh spinach with tomatoes, peppers, and grilled fish',
-        image: '/images/food/f9.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'hb2',
         name: 'Bitter Leaf Soup',
         description: 'Light bitter leaf soup with fish and minimal palm oil',
-        image: '/images/food/f10.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'hb3',
         name: 'Vegetable Okro',
         description: 'Fresh okra soup with vegetables and light seasoning',
-        image: '/images/food/f11.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'hb4',
         name: 'Grilled Fish & Plantain',
         description: 'Fresh grilled fish with ripe plantain and vegetables',
-        image: '/images/food/f12.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'hb5',
         name: 'Yam & Egg Sauce',
         description: 'Boiled yam with light tomato and egg sauce',
-        image: '/images/food/f9.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'hb6',
         name: 'Coconut Rice',
         description: 'Light coconut rice with vegetables and grilled chicken',
-        image: '/images/food/f10.jpeg'
+        image: '/images/food/empty-plate.png'
       }
     ]
   },
@@ -155,37 +155,37 @@ const foodCategories: FoodCategory[] = [
         id: 'st1',
         name: 'Puff Puff',
         description: 'Deep-fried sweet dough balls dusted with powdered sugar',
-        image: '/images/food/f13.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'st2',
         name: 'Chin Chin',
         description: 'Crispy fried pastry squares with a hint of nutmeg',
-        image: '/images/food/f14.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'st3',
         name: 'Boli & Fish',
         description: 'Roasted plantain with grilled fish and pepper sauce',
-        image: '/images/food/f15.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'st4',
         name: 'Akara',
         description: 'Bean cakes made from ground beans and spices',
-        image: '/images/food/f16.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'st5',
         name: 'Moi Moi',
         description: 'Steamed bean pudding with fish and vegetables',
-        image: '/images/food/f13.jpeg'
+        image: '/images/food/empty-plate.png'
       },
       {
         id: 'st6',
         name: 'Zobo Drink',
         description: 'Refreshing hibiscus drink with ginger and pineapple',
-        image: '/images/food/f14.jpeg'
+        image: '/images/food/empty-plate.png'
       }
     ]
   }

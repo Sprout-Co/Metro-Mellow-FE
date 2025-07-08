@@ -44,6 +44,7 @@ import {
   FileText,
   BarChart3,
   TrendingUp,
+  Quote,
 } from "lucide-react";
 
 // Map of icon names to components
@@ -86,6 +87,7 @@ const icons = {
   "file-text": FileText,
   "bar-chart": BarChart3,
   "trending-up": TrendingUp,
+  quote: Quote,
   "help-circle": dynamic(() =>
     import("lucide-react").then((mod) => mod.HelpCircle)
   ),
