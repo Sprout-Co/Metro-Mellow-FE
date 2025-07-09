@@ -27,6 +27,7 @@ export enum Routes {
   ADMIN_CUSTOMERS_DETAILS = "/admin/customers/[id]",
   // Public routes
   HOME = "/",
+  WELCOME = "/welcome",
   ABOUT = "/about",
   CONTACT = "/contact",
   TERMS = "/terms",
