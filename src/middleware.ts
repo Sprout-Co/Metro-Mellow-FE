@@ -39,6 +39,8 @@ export function middleware(request: NextRequest) {
     const isApiRoute = pathname.startsWith("/api");
     const isStaticAsset =
       pathname.startsWith("/_next") ||
+      pathname.startsWith("/images") ||
+      pathname.startsWith("/videos") ||
       pathname.startsWith("/public") ||
       pathname === "/favicon.ico";
 
