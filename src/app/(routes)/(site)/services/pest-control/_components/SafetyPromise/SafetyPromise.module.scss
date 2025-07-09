@@ -7,7 +7,7 @@
   position: relative;
   width: 100%;
   @include section-spacing("3xl");
-  background-color: color("neutral", "white");
+  background-color: color-alpha('primary', 'lighter', 0.5);
   overflow: hidden;
 
   &__container {

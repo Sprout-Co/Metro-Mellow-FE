@@ -5,7 +5,7 @@
 
 .serviceCoverage {
   @include section-spacing("2xl");
-  background: color("neutral", "white");
+  background-color: color("neutral", "white");
 
   &__container {
     @include container;
