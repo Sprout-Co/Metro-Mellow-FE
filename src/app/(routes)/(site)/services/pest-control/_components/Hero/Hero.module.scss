@@ -74,11 +74,17 @@
     color: color('neutral', 'white');
     margin-bottom: spacing('lg');
     line-height: 1;
+    text-align: center;
+    
+    &Line {
+      display: block;
+      text-align: center;
+      width: 100%;
+    }
     
     &--accent {
       color: color('primary', 'light');
       font-weight: map-get($font-weights, 'bold');
-      margin-bottom: spacing('sm');
       display: inline;
     }
     &--main {
@@ -86,10 +92,6 @@
       font-weight: map-get($font-weights, 'bold');
       color: color('neutral', 'white');
       font-size: inherit;
-      white-space: nowrap;
-      @include breakpoint-down('sm') {
-        white-space: normal;
-      }
     }
     @include breakpoint-down('md') {
       font-size: font-size('h2') * 1.2;

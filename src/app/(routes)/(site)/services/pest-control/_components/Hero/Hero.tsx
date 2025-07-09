@@ -42,8 +42,12 @@ const PestControlHero = () => {
             className={styles.hero__title}
             variants={fadeIn}
           >
-            <span className={styles['hero__title--accent']}>Bugged</span> Out?<br />
-            <span className={styles['hero__title--main']}>We Are Here To Help</span>
+            <div className={styles.hero__titleLine}>
+              <span className={styles['hero__title--accent']}>Bugged</span> Out?
+            </div>
+            <div className={styles.hero__titleLine}>
+              <span className={styles['hero__title--main']}>We Are Here To Help</span>
+            </div>
           </motion.h1>
 
           <motion.p 
