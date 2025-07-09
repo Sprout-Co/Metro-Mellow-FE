@@ -135,6 +135,13 @@
     }
   }
 
+  &__video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: border-radius('lg');
+  }
+
   &__content {
     flex: 0.8;
     max-width: 500px;

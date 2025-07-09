@@ -8,10 +8,10 @@ interface ServiceHeroProps {
 }
 
 const services = [
-  { name: 'Laundromat', colorClass: styles['service-badge--laundromat'] },
+  { name: 'Laundry', colorClass: styles['service-badge--laundromat'] },
   { name: 'Cleaning', colorClass: styles['service-badge--cleaning'] },
-  { name: 'Cooking', colorClass: styles['service-badge--cooking'] },
-  { name: 'Pests', colorClass: styles['service-badge--pests'] },
+  { name: 'Food', colorClass: styles['service-badge--cooking'] },
+  { name: 'Pest Control', colorClass: styles['service-badge--pests'] },
 ];
 
 const ServiceHero: React.FC<ServiceHeroProps> = ({ onBookServices }) => {

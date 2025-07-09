@@ -1,16 +1,18 @@
-
 import React from 'react';
 import LaundryHero from './LaundryHero/LaundryHero';
-import LaundryAbout from './LaundryAbout/LaundryAbout';
-import LaundryServices from './LaundryServices/LaundryServices';
-import LaundryProcess from './LaundryProcess/LaundryProcess';
-import LaundryPricing from './LaundryPricing/LaundryPricing';
-import LaundryBenefits from './LaundryBenefits/LaundryBenefits';
-import LaundryEcoFriendly from './LaundryEcoFriendly/LaundryEcoFriendly';
-import LaundryTestimonials from './LaundryTestimonial/LaundryTestimonial';
-import LaundryFAQ from './LaundryFAQ/LaundryFAQ';
-import LaundryCTA from './LaundryCTA/LaundryCTA';
-import LaundryContact from './LaundryContact/LaundryContact';
+import LaundryFeatures from './LaundryFeatures/LaundryFeatures';
+import LaundrySuds from './LaundrySuds/LaundrySuds';
+import LaundryPlan from './LaundryPlan/LaundryPlan';
+import LaundryStepsSection from './LaundryStepsSection/LaundryStepsSection';
+import FAQSection, { FAQItem } from '@/components/ui/FAQSection/FAQSection';
+
+const laundryFaqs: FAQItem[] = [
+  { id: "l1", question: "Do you offer same-day laundry service?", answer: "Yes, we offer same-day service for most orders placed before noon." },
+  { id: "l2", question: "Are my clothes washed separately?", answer: "Absolutely. We never mix your laundry with anyone else's for hygiene and care." },
+  { id: "l3", question: "Can you remove tough stains?", answer: "Our experts use advanced techniques to tackle even the toughest stains. Results may vary by fabric." },
+  { id: "l4", question: "What detergents do you use?", answer: "We use premium, eco-friendly detergents safe for sensitive skin and the environment." },
+  { id: "l5", question: "How do I schedule a pickup?", answer: "Simply book online or call us. We'll handle the rest!" },
+];
 
 export const metadata = {
     title: 'Professional Laundry Services | Urban Serve',
@@ -22,16 +24,11 @@ export default function LaundryPage() {
     return (
         <main>
             <LaundryHero />
-            <LaundryAbout />
-            <LaundryServices />
-            <LaundryProcess />
-            <LaundryPricing />
-            <LaundryBenefits />
-            <LaundryEcoFriendly />
-            <LaundryTestimonials />
-            <LaundryFAQ />
-            <LaundryCTA />
-            <LaundryContact />
+            <LaundryFeatures />
+            <LaundrySuds />
+            <LaundryPlan />
+            <LaundryStepsSection />
+            <FAQSection faqs={laundryFaqs} />
         </main>
     );
 }

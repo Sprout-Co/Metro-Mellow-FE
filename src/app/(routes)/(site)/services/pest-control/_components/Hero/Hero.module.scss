@@ -1,170 +1,157 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/animations";
 
 .hero {
   position: relative;
+  width: 100%;
   min-height: 100vh;
-  padding: spacing("4xl") 0;
-  background: linear-gradient(
-    to right,
-    color("neutral", "light") 50%,
-    rgba(color("primary", "light"), 0.2) 50%
-  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('/images/pest-control/p1.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   overflow: hidden;
 
-  @include breakpoint-down("md") {
-    background: color("neutral", "light");
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to right,
+      color-alpha('neutral', 'black', 0.7) 0%,
+      color-alpha('neutral', 'black', 0.5) 50%,
+      color-alpha('neutral', 'black', 0.7) 100%
+    );
+    z-index: 1;
   }
 
   &__container {
     @include container;
+    position: relative;
+    z-index: 2;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    gap: spacing("xl");
-    height: 100%;
-
-    @include breakpoint-down("md") {
-      flex-direction: column;
-      text-align: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 0;
+    @include breakpoint-down('md') {
+      height: auto;
+      padding-top: spacing('3xl');
+      padding-bottom: spacing('3xl');
+    }
+    @include breakpoint-down('sm') {
+      padding-top: spacing('2xl');
+      padding-bottom: spacing('2xl');
     }
   }
 
   &__content {
-    flex: 1;
-    max-width: 600px;
-    z-index: z-index("default");
-
-    @include breakpoint-down("md") {
+    max-width: 655px;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+    color: color('neutral', 'white');
+    padding: 0;
+    @include breakpoint-down('md') {
       max-width: 100%;
+      padding: 0 spacing('md');
+    }
+    @include breakpoint-down('sm') {
+      padding: 0 spacing('sm');
     }
   }
 
   &__title {
     @include heading-1;
-    margin-bottom: spacing("md");
-    color: color("neutral", "black");
-
-    span {
-      color: color("primary", "base");
+    font-size: font-size('h1') * 1.2;
+    color: color('neutral', 'white');
+    margin-bottom: spacing('lg');
+    line-height: 1;
+    text-align: center;
+    
+    &Line {
       display: block;
+      text-align: center;
+      width: 100%;
+    }
+    
+    &--accent {
+      color: color('primary', 'light');
+      font-weight: map-get($font-weights, 'bold');
+      display: inline;
+    }
+    &--main {
+      display: inline;
+      font-weight: map-get($font-weights, 'bold');
+      color: color('neutral', 'white');
+      font-size: inherit;
+    }
+    @include breakpoint-down('md') {
+      font-size: font-size('h2') * 1.2;
+    }
+    @include breakpoint-down('sm') {
+      font-size: font-size('h3') * 1.2;
+      line-height: 1.1;
     }
   }
 
   &__description {
     @include paragraph;
-    font-size: map-get($font-sizes, "lg");
-    margin-bottom: spacing("lg");
-    color: color("neutral", "dark");
-    max-width: 550px;
+    color: color('neutral', 'white');
+    font-size: font-size('body-1');
+    margin-bottom: spacing('2xl');
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('body-2');
+      margin-bottom: spacing('xl');
+    }
 
-    @include breakpoint-down("md") {
-      margin-left: auto;
-      margin-right: auto;
+    @include breakpoint-down('sm') {
+      font-size: font-size('body-2');
+      margin-bottom: spacing('lg');
     }
   }
 
-  &__buttons {
-    display: flex;
-    gap: spacing("md");
-    margin-bottom: spacing("xl");
-
-    @include breakpoint-down("sm") {
-      flex-direction: column;
+  &__cta {
+    margin-top: spacing('2xl');
+    @include breakpoint-down('md') {
+      margin-top: spacing('xl');
+    }
+    @include breakpoint-down('sm') {
+      margin-top: spacing('lg');
+    }
+  }
+  
+  &__button {
+    @include button-primary('lg');
+    min-width: 260px;
+    max-width: 340px;
+    
+    @include breakpoint-down('md') {
+      min-width: 180px;
+      max-width: 100%;
+      height: button-height('md');
+      padding: spacing('sm') spacing('xl');
+      @include font-size('button');
+    }
+    
+    @include breakpoint-down('sm') {
+      min-width: 100%;
       width: 100%;
-      max-width: 300px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  }
-
-  &__stats {
-    display: flex;
-    gap: spacing("lg");
-
-    @include breakpoint-down("md") {
-      justify-content: center;
-    }
-
-    @include breakpoint-down("sm") {
-      flex-direction: column;
-      align-items: center;
-    }
-  }
-
-  &__stat {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
-    @include breakpoint-down("md") {
-      align-items: center;
-    }
-
-    &-number {
-      @include heading-3;
-      color: color("primary", "base");
-      font-weight: map-get($font-weights, "bold");
-    }
-
-    &-text {
-      font-size: map-get($font-sizes, "sm");
-      line-height: map-get($line-heights, "normal");
-      color: color("neutral", "dark");
-    }
-  }
-
-  &__image {
-    flex: 1;
-    position: relative;
-    height: 700px;
-
-    @include breakpoint-down("md") {
-      width: 100%;
-      max-width: 500px;
-      height: 500px;
-      margin-top: spacing("xl");
-    }
-
-    &-main {
-      position: relative;
-      object-fit: cover;
-      border-radius: border-radius("lg");
-      box-shadow: map-get($box-shadows, "lg");
-      z-index: z-index("default");
-    }
-
-    &-accent {
-      position: absolute;
-      top: spacing("md");
-      right: spacing("md");
-      width: 100%;
-      height: 100%;
-      background-color: color("secondary", "light");
-      border-radius: border-radius("lg");
-      z-index: z-index("negative");
-    }
-  }
-
-  &__scroll {
-    position: absolute;
-    bottom: spacing("lg");
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: z-index("default");
-
-    a {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: color("primary", "base");
-      text-decoration: none;
-      transition: $transition-base;
-
-      &:hover {
-        color: color("primary", "dark");
-      }
+      max-width: 100%;
+      padding: 0 spacing('xl');
+      font-size: font-size('body-2');
+      height: button-height('lg');
     }
   }
 }

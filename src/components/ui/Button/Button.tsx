@@ -179,14 +179,13 @@ export const Button = forwardRef<
       variants: buttonVariants[animation],
     };
 
-    // Link props
+    // Link props (without motion props for Next.js Link)
     const linkProps = {
       className: buttonClasses,
       onClick: handleClick,
       href,
       target: isExternal ? "_blank" : target,
       rel: isExternal ? "noopener noreferrer" : rel,
-      ...motionProps,
     };
 
     // Button props
@@ -249,7 +248,7 @@ export const Button = forwardRef<
         );
       } else {
         return (
-          <motion.a ref={combineLinkRef} {...linkProps}>
+          <motion.a ref={combineLinkRef} {...linkProps} {...motionProps}>
             {content}
           </motion.a>
         );

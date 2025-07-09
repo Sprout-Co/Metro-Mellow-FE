@@ -1,0 +1,190 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/animations";
+
+.safetyPromise {
+  position: relative;
+  width: 100%;
+  @include section-spacing("3xl");
+  background-color: color-alpha('primary', 'lighter', 0.5);
+  overflow: hidden;
+
+  &__container {
+    @include container;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    @include breakpoint-down("md") {
+      padding-top: spacing("xl");
+      padding-bottom: spacing("xl");
+    }
+    
+    @include breakpoint-down("sm") {
+      padding-top: spacing("lg");
+      padding-bottom: spacing("lg");
+    }
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("3xl");
+    align-items: center;
+    width: 100%;
+    
+    @include breakpoint-down("lg") {
+      gap: spacing("2xl");
+    }
+    
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+      gap: spacing("xl");
+    }
+  }
+
+  &__textContent {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    
+    @include breakpoint-down("md") {
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  &__title {
+    @include heading-1;
+    color: color("neutral", "black");
+    margin-bottom: spacing("lg");
+    line-height: 1.1;
+    font-size: font-size("h1") * 1.2;
+    
+    @include breakpoint-down("lg") {
+      font-size: font-size("h2") * 1.2;
+    }
+    
+    @include breakpoint-down("md") {
+      font-size: font-size("h3") * 1.2;
+      text-align: center;
+    }
+    
+    @include breakpoint-down("sm") {
+      font-size: font-size("h4") * 1.2;
+      line-height: 1.2;
+    }
+  }
+
+  &__titleAmp {
+    font-size: 120%;
+    color: color("primary", "base");
+    font-weight: map-get($font-weights, "bold");
+    display: inline-block;
+    margin: 0 spacing("xs");
+  }
+
+  &__description {
+    @include paragraph;
+    color: color("neutral", "darkest");
+    font-size: font-size("body-1");
+    margin-bottom: spacing("2xl");
+    max-width: 500px;
+    
+    @include breakpoint-down("lg") {
+      font-size: font-size("body-2");
+      margin-bottom: spacing("xl");
+    }
+    
+    @include breakpoint-down("md") {
+      text-align: center;
+    }
+    
+    @include breakpoint-down("sm") {
+      margin-bottom: spacing("lg");
+    }
+  }
+
+  &__cta {
+    margin-top: spacing("xl");
+    
+    @include breakpoint-down("md") {
+      margin-top: spacing("lg");
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    
+    @include breakpoint-down("sm") {
+      margin-top: spacing("md");
+    }
+  }
+
+  &__imageWrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    
+    @include breakpoint-down("md") {
+      min-height: 250px;
+    }
+  }
+
+  &__checkmark {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    background-color: color("neutral", "lightest");
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 4px solid color("neutral", "lighter");
+    box-shadow: 0 10px 30px rgba(color("neutral", "black"), 0.1);
+    
+    svg {
+      width: 80%;
+      height: 80%;
+      color: color("primary", "base");
+    }
+    
+    &::before {
+      content: '';
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      border: 2px solid color("neutral", "light");
+      z-index: -1;
+    }
+    
+    @include breakpoint-down("lg") {
+      width: 200px;
+      height: 200px;
+      
+      &::before {
+        width: 240px;
+        height: 240px;
+      }
+    }
+    
+    @include breakpoint-down("sm") {
+      width: 100px;
+      height: 100px;
+      
+      &::before {
+        width: 130px;
+        height: 130px;
+      }
+    }
+  }
+} 
