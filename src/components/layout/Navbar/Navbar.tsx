@@ -190,12 +190,6 @@ export default function Navbar() {
                                                     transition={{ duration: 0.2, ease: "easeOut" }}
                                                 >
                                                     <div className={styles.navbar__dropdownWrapper}>
-                                                        <div className={styles.navbar__dropdownHeader}>
-                                                            <h3 className={styles.navbar__dropdownTitle}>Our Services</h3>
-                                                            <p className={styles.navbar__dropdownDesc}>
-                                                                Explore our range of professional cleaning services
-                                                            </p>
-                                                        </div>
                                                         <div className={styles.navbar__dropdownGrid}>
                                                             {item.dropdownItems?.map((dropdownItem) => (
                                                                 <Link
