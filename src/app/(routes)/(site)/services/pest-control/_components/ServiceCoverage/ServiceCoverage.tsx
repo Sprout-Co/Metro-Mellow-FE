@@ -2,37 +2,36 @@
 
 import React from 'react';
 import styles from './ServiceCoverage.module.scss';
-import { Icon } from '@/components/ui/Icon/Icon';
 
 const pests = [
   {
     name: 'Ants',
-    icon: 'bug',
+    emoji: '🐜',
     description: 'Elimination of common household ants and their colonies.'
   },
   {
     name: 'Cockroaches',
-    icon: 'shield',
+    emoji: '🪳',
     description: 'Targeted treatments for all major cockroach species.'
   },
   {
     name: 'Rodents',
-    icon: 'activity',
+    emoji: '🐭',
     description: 'Safe removal and prevention of mice and rats.'
   },
   {
     name: 'Termites',
-    icon: 'droplet',
+    emoji: '🪲',
     description: 'Comprehensive termite inspection and control.'
   },
   {
     name: 'Mosquitoes',
-    icon: 'zap',
+    emoji: '🦟',
     description: 'Outdoor and indoor mosquito management.'
   },
   {
     name: 'Bed Bugs',
-    icon: 'bed',
+    emoji: '🛏️',
     description: 'Effective eradication of bed bug infestations.'
   },
 ];
@@ -46,7 +45,7 @@ const ServiceCoverage = () => {
           {pests.map((pest) => (
             <div key={pest.name} className={styles.serviceCoverage__card}>
               <div className={styles.serviceCoverage__iconWrapper}>
-                <Icon name={pest.icon} size={40} />
+                <span className={styles.serviceCoverage__emoji} role="img" aria-label={pest.name}>{pest.emoji}</span>
               </div>
               <div className={styles.serviceCoverage__cardContent}>
                 <h3 className={styles.serviceCoverage__cardTitle}>{pest.name}</h3>

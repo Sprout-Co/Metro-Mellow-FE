@@ -99,4 +99,18 @@
     font-size: font-size("body-2");
     margin: 0;
   }
+
+  &__emoji {
+    font-size: font-size('h1');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    @include breakpoint-down('sm') {
+      font-size: font-size('h2');
+      width: 48px;
+      height: 48px;
+    }
+  }
 } 
