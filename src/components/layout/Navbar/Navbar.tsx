@@ -14,50 +14,25 @@ const serviceItems = [
         title: 'Cleaning',
         href: '/services/cleaning',
         description: 'Professional home cleaning services',
-        icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            </svg>
-        )
+        image: '/images/cleaning/c1.jpeg'
     },
     {
         title: 'Laundry',
         href: '/services/laundry',
-        description: 'Professional laundry and dry cleaning services',
-        icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                <line x1="12" y1="22.08" x2="12" y2="12"></line>
-            </svg>
-        )
+        description: 'Professional laundry and dry cleaning',
+        image: '/images/laundry/eco-friendly.jpg'
     },
     {
         title: 'Food',
         href: '/services/food',
-        description: 'Delicious home-cooked meals prepared fresh',
-        icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
-                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
-                <line x1="6" y1="1" x2="6" y2="4"></line>
-                <line x1="10" y1="1" x2="10" y2="4"></line>
-                <line x1="14" y1="1" x2="14" y2="4"></line>
-            </svg>
-        )
+        description: 'Delicious home-cooked meals',
+        image: '/images/food/amala-ewedu.png'
     },
     {
         title: 'Pest Control',
         href: '/services/pest-control',
-        description: 'Effective and eco-friendly pest control solutions',
-        icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                <path d="M2 17l10 5 10-5"></path>
-                <path d="M2 12l10 5 10-5"></path>
-            </svg>
-        )
+        description: 'Eco-friendly pest control solutions',
+        image: '/images/pest-control/p1.jpeg'
     }
 ];
 
@@ -189,28 +164,32 @@ export default function Navbar() {
                                                     exit={{ opacity: 0, y: 15 }}
                                                     transition={{ duration: 0.2, ease: "easeOut" }}
                                                 >
-                                                    <div className={styles.navbar__dropdownWrapper}>
-                                                        <div className={styles.navbar__dropdownGrid}>
-                                                            {item.dropdownItems?.map((dropdownItem) => (
-                                                                <Link
-                                                                    key={dropdownItem.href}
-                                                                    href={dropdownItem.href}
-                                                                    className={styles.navbar__dropdownItem}
-                                                                >
-                                                                    <div className={styles.navbar__dropdownContent}>
-                                                                        <h4 className={styles.navbar__dropdownItemTitle}>
-                                                                            {dropdownItem.title}
-                                                                        </h4>
-                                                                        <p className={styles.navbar__dropdownItemDesc}>
-                                                                            {dropdownItem.description}
-                                                                        </p>
+                                                    <div className={styles.navbar__dropdownList}>
+                                                        {item.dropdownItems?.map((dropdownItem) => (
+                                                            <Link
+                                                                key={dropdownItem.href}
+                                                                href={dropdownItem.href}
+                                                                className={styles.navbar__dropdownItem}
+                                                            >
+                                                                <div className={styles.navbar__dropdownImage}>
+                                                                    <Image
+                                                                        src={dropdownItem.image}
+                                                                        alt={dropdownItem.title}
+                                                                        width={40}
+                                                                        height={40}
+                                                                        className={styles.navbar__dropdownImg}
+                                                                    />
+                                                                </div>
+                                                                <div className={styles.navbar__dropdownContent}>
+                                                                    <div className={styles.navbar__dropdownTitle}>
+                                                                        {dropdownItem.title}
                                                                     </div>
-                                                                    <div className={styles.navbar__dropdownIcon}>
-                                                                        {dropdownItem.icon}
+                                                                    <div className={styles.navbar__dropdownDesc}>
+                                                                        {dropdownItem.description}
                                                                     </div>
-                                                                </Link>
-                                                            ))}
-                                                        </div>
+                                                                </div>
+                                                            </Link>
+                                                        ))}
                                                     </div>
                                                 </motion.div>
                                             )}
@@ -324,10 +303,16 @@ export default function Navbar() {
                                                                                 href={dropdownItem.href}
                                                                                 className={styles.navbar__mobileSubmenuLink}
                                                                             >
-                                                                                <div className={styles.navbar__mobileSubmenuIcon}>
-                                                                                    {dropdownItem.icon}
+                                                                                <div className={styles.navbar__mobileSubmenuImage}>
+                                                                                    <Image
+                                                                                        src={dropdownItem.image}
+                                                                                        alt={dropdownItem.title}
+                                                                                        width={35}
+                                                                                        height={35}
+                                                                                        className={styles.navbar__mobileSubmenuImg}
+                                                                                    />
                                                                                 </div>
-                                                                                <div>
+                                                                                <div className={styles.navbar__mobileSubmenuContent}>
                                                                                     <div className={styles.navbar__mobileSubmenuTitle}>
                                                                                         {dropdownItem.title}
                                                                                     </div>
