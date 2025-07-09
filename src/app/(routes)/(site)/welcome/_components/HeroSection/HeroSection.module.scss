@@ -1,0 +1,270 @@
+@import "abstracts/variables";
+@import "abstracts/functions";
+@import "abstracts/mixins";
+
+.heroSection {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: spacing('9xl');
+  overflow: hidden;
+  padding-top: 100px;
+  
+  &__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    @include breakpoint-down('md') {
+      background-size: cover;
+      background-position: center 20%;
+    }
+    
+    @include breakpoint-down('sm') {
+      background-size: cover;
+      background-position: center 30%;
+    }
+  }
+  
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to right,
+      color-alpha('neutral', 'black', 0.8) 0%,
+      color-alpha('neutral', 'black', 0.6) 60%,
+      color-alpha('neutral', 'black', 0.4) 100%
+    );
+    z-index: 1;
+    
+    @include breakpoint-down('md') {
+      background: linear-gradient(
+        to bottom,
+        color-alpha('neutral', 'black', 0.7) 0%,
+        color-alpha('neutral', 'black', 0.5) 50%,
+        color-alpha('neutral', 'black', 0.8) 100%
+      );
+    }
+    
+    @include breakpoint-down('sm') {
+      background: linear-gradient(
+        to bottom,
+        color-alpha('neutral', 'black', 0.6) 0%,
+        color-alpha('neutral', 'black', 0.4) 40%,
+        color-alpha('neutral', 'black', 0.7) 100%
+      );
+    }
+  }
+  
+  &__container {
+    @include container;
+    position: relative;
+    height: 100%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    
+    @include breakpoint-down('md') {
+      align-items: flex-start;
+      padding-top: spacing('3xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      padding-top: spacing('2xl');
+    }
+  }
+  
+  &__content {
+    max-width: 700px;
+    margin-left: spacing('lg');
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    
+    @include breakpoint-down('md') {
+      margin-left: 0;
+      text-align: center;
+      max-width: 100%;
+      position: relative;
+      transform: none;
+      top: auto;
+    }
+    
+    @include breakpoint-down('sm') {
+      padding: 0 spacing('sm');
+    }
+  }
+
+  &__badge {
+    @include flex($align: center, $justify: flex-start);
+    gap: spacing('xs');
+    background-color: color-alpha('accent', 'base', 0.15);
+    border: 1px solid color-alpha('accent', 'base', 0.3);
+    border-radius: border-radius('pill');
+    padding: spacing('xs') spacing('md');
+    margin-bottom: spacing('lg');
+    width: fit-content;
+    
+    @include breakpoint-down('md') {
+      margin: 0 auto spacing('lg');
+    }
+    
+    span {
+      @include font-size('small');
+      @include font-weight('semibold');
+      color: color('accent', 'base');
+      text-transform: uppercase;
+      letter-spacing: letter-spacing('wide');
+    }
+  }
+
+  &__badgeIcon {
+    width: 14px;
+    height: 14px;
+    color: color('accent', 'base');
+  }
+  
+  &__title {
+    @include heading-1;
+    font-size: font-size('h1') * 1.2;
+    color: color('neutral', 'white');
+    margin-bottom: spacing('lg');
+    line-height: 1;
+    
+    &--accent {
+      display: block;
+      color: color('accent', 'base');
+      font-weight: map-get($font-weights, 'bold');
+      margin-bottom: spacing('sm');
+    }
+    
+    &--main {
+      display: block;
+      font-weight: map-get($font-weights, 'bold');
+    }
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('h2') * 1.2;
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('h3') * 1.2;
+      line-height: 1.1;
+    }
+  }
+  
+  &__subtitle {
+    @include body-1;
+    font-size: font-size('body-1');
+    color: color('neutral', 'light');
+    margin-bottom: spacing('xl');
+    line-height: line-height('relaxed');
+    max-width: 550px;
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('body-2');
+      text-align: center;
+      max-width: 100%;
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('body-2');
+      line-height: line-height('normal');
+    }
+  }
+  
+  &__cta {
+    @include flex($direction: column, $align: flex-start);
+    gap: spacing('md');
+    margin-top: spacing('2xl');
+    
+    @include breakpoint-down('md') {
+      align-items: center;
+      margin-top: spacing('xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      margin-top: spacing('lg');
+      width: 100%;
+    }
+  }
+
+  &__buttonIcon {
+    width: 18px;
+    height: 18px;
+    margin-left: spacing('xs');
+  }
+
+  &__ctaText {
+    @include font-size('body-2');
+    color: color('neutral', 'light');
+    margin: 0;
+    
+    @include breakpoint-down('md') {
+      text-align: center;
+    }
+  }
+
+  &__ctaNumber {
+    @include font-weight('bold');
+    color: color('accent', 'base');
+  }
+  
+  &__indicators {
+    position: absolute;
+    bottom: spacing('2xl');
+    right: spacing('2xl');
+    display: flex;
+    gap: spacing('xs');
+    z-index: 2;
+    
+    @include breakpoint-down('md') {
+      right: spacing('xl');
+      bottom: spacing('xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      right: spacing('md');
+      bottom: spacing('lg');
+    }
+  }
+  
+  &__indicator {
+    width: spacing('md');
+    height: spacing('xs');
+    background-color: color('neutral', 'medium');
+    border-radius: border-radius('full');
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background-color: color('neutral', 'light');
+      transform: scale(1.1);
+    }
+    
+    &--active {
+      background-color: color('accent', 'base');
+      width: spacing('xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      width: spacing('sm');
+      height: spacing('xxs');
+      
+      &--active {
+        width: spacing('lg');
+      }
+    }
+  }
+}
