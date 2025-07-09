@@ -11,23 +11,24 @@ import Button from '@/components/ui/Button/Button';
 // Define service dropdown items
 const serviceItems = [
     {
+        title: 'Food',
+        href: '/services/food',
+        description: 'Delicious home-cooked meals',
+        image: '/images/food/jollof-rice.png'
+    },
+    {
         title: 'Cleaning',
         href: '/services/cleaning',
         description: 'Professional home cleaning services',
-        image: '/images/cleaning/c1.jpeg'
+        image: '/images/cleaning/c2.jpeg'
     },
     {
         title: 'Laundry',
         href: '/services/laundry',
         description: 'Professional laundry and dry cleaning',
-        image: '/images/laundry/eco-friendly.jpg'
+        image: '/images/laundry/l3.jpeg'
     },
-    {
-        title: 'Food',
-        href: '/services/food',
-        description: 'Delicious home-cooked meals',
-        image: '/images/food/amala-ewedu.png'
-    },
+
     {
         title: 'Pest Control',
         href: '/services/pest-control',
