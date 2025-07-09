@@ -1,0 +1,187 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.faq {
+  position: relative;
+  @include section-spacing('6xl');
+  background-color: color('neutral', 'black');
+  color: color('neutral', 'lighter');
+  overflow: hidden;
+
+  @include breakpoint-down('md') {
+    padding: spacing('4xl') 0;
+  }
+
+  @include breakpoint-down('sm') {
+    padding: spacing('3xl') 0;
+  }
+
+  &__container {
+    @include container;
+  }
+
+  &__content {
+    @include flex(row, nowrap, flex-start, flex-start);
+    gap: spacing('4xl');
+
+    @include breakpoint-down('lg') {
+      gap: spacing('3xl');
+    }
+
+    @include breakpoint-down('md') {
+      @include flex-column;
+      gap: spacing('2xl');
+    }
+  }
+
+  &__heading {
+    flex: 1;
+
+    @include breakpoint-down('md') {
+      margin-bottom: spacing('xl');
+    }
+  }
+
+  &__title {
+    @include heading-2;
+    letter-spacing: letter-spacing('tight');
+    color: color('neutral', 'lighter');
+    
+    @include breakpoint-down('xl') {
+      @include font-size('h3');
+    }
+    
+    @include breakpoint-down('lg') {
+      @include font-size('h3');
+    }
+    
+    @include breakpoint-down('md') {
+      @include font-size('h4');
+    }
+    
+    @include breakpoint-down('sm') {
+      @include font-size('h5');
+      text-align: center;
+      br {
+        display: none;
+      }
+    }
+  }
+
+  &__title-line {
+    @include breakpoint-down('sm') {
+      display: block;
+      margin-bottom: spacing('xs');
+      text-align: center;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__questions {
+    flex: 1;
+    @include flex-column;
+    justify-content: center;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__item {
+    margin-bottom: spacing('2xl');
+    
+    @include breakpoint-down('md') {
+      margin-bottom: spacing('xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      margin-bottom: spacing('lg');
+    }
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &_expanded {
+      .faq__question {
+        color: color('secondary', 'base');
+      }
+    }
+  }
+
+  &__question {
+    @include flex(row, nowrap, flex-start, center);
+    @include subtitle-1;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    position: relative;
+    padding-right: spacing('3xl');
+    color: color('neutral', 'lighter');
+    
+    @include breakpoint-down('lg') {
+      @include subtitle-2;
+    }
+    
+    @include breakpoint-down('md') {
+      @include body-1;
+    }
+    
+    @include breakpoint-down('sm') {
+      @include body-2;
+    }
+
+    &:hover {
+      color: color('secondary', 'light');
+    }
+  }
+
+  &__dash {
+    color: color('secondary', 'base');
+    margin-right: spacing('md');
+    @include font-weight('bold');
+  }
+
+  &__toggle {
+    position: absolute;
+    right: 0;
+    @include font-size('subtitle-1');
+    color: color('secondary', 'base');
+    @include font-weight('bold');
+    
+    @include breakpoint-down('lg') {
+      @include font-size('subtitle-2');
+    }
+    
+    @include breakpoint-down('md') {
+      @include font-size('body-1');
+    }
+  }
+
+  &__answer {
+    margin-top: spacing('md');
+    padding-left: spacing('4xl');
+    @include body-1;
+    color: color('neutral', 'light');
+    max-width: 95%;
+    
+    @include breakpoint-down('lg') {
+      @include body-2;
+      padding-left: spacing('3xl');
+    }
+    
+    @include breakpoint-down('md') {
+      padding-left: spacing('2xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      @include font-size('small');
+      padding-left: spacing('xl');
+    }
+  }
+} 
