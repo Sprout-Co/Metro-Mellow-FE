@@ -1,0 +1,364 @@
+@import "abstracts/variables";
+@import "abstracts/functions";
+@import "abstracts/mixins";
+
+.waitlistSection {
+  @include section-spacing('4xl');
+  background: linear-gradient(
+    135deg,
+    color('primary', 'base') 0%,
+    color('primary', 'dark') 100%
+  );
+  color: color('neutral', 'white');
+  
+  &__container {
+    @include container;
+    max-width: map-get($container-max-widths, 'lg');
+  }
+  
+  &__content {
+    text-align: center;
+  }
+  
+  &__header {
+    margin-bottom: spacing('3xl');
+    
+    @include breakpoint-down('md') {
+      margin-bottom: spacing('2xl');
+    }
+  }
+  
+  &__title {
+    @include heading-2;
+    margin-bottom: spacing('lg');
+    
+    &--accent {
+      display: block;
+      color: color('accent', 'base');
+      @include font-weight('medium');
+      margin-bottom: spacing('xs');
+    }
+    
+    &--main {
+      display: block;
+      color: color('neutral', 'white');
+      @include font-weight('bold');
+    }
+    
+    @include breakpoint-down('md') {
+      @include font-size('h3');
+    }
+    
+    @include breakpoint-down('sm') {
+      @include font-size('h4');
+    }
+  }
+  
+  &__subtitle {
+    @include body-1;
+    color: color('neutral', 'lightest');
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: line-height('relaxed');
+    
+    @include breakpoint-down('md') {
+      @include font-size('body-2');
+    }
+  }
+  
+  &__benefits {
+    @include flex($direction: column);
+    gap: spacing('xl');
+    margin-bottom: spacing('3xl');
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    @include breakpoint-down('lg') {
+      max-width: 600px;
+    }
+    
+    @include breakpoint-down('md') {
+      margin-bottom: spacing('2xl');
+      gap: spacing('lg');
+      max-width: 100%;
+    }
+    
+    @include breakpoint-down('sm') {
+      gap: spacing('md');
+      margin-bottom: spacing('xl');
+    }
+  }
+  
+  &__benefit {
+    @include flex($align: center);
+    gap: spacing('lg');
+    text-align: left;
+    
+    @include breakpoint-down('md') {
+      gap: spacing('md');
+    }
+    
+    @include breakpoint-down('sm') {
+      flex-direction: column;
+      text-align: center;
+      gap: spacing('sm');
+    }
+  }
+  
+  &__benefitIcon {
+    @include flex-center;
+    width: 50px;
+    height: 50px;
+    background-color: color-alpha('neutral', 'white', 0.15);
+    border: 1px solid color-alpha('neutral', 'white', 0.3);
+    border-radius: border-radius('xl');
+    flex-shrink: 0;
+    
+    svg {
+      width: 24px;
+      height: 24px;
+      color: color('accent', 'base');
+    }
+    
+    @include breakpoint-down('sm') {
+      width: 40px;
+      height: 40px;
+      
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+  
+  &__benefitContent {
+    flex: 1;
+  }
+  
+  &__benefitTitle {
+    @include subtitle-2;
+    color: color('neutral', 'white');
+    margin-bottom: spacing('xs');
+    
+    @include breakpoint-down('sm') {
+      @include font-size('body-1');
+    }
+  }
+  
+  &__benefitDescription {
+    @include body-2;
+    color: color('neutral', 'light');
+    line-height: line-height('relaxed');
+    margin: 0;
+    
+    @include breakpoint-down('sm') {
+      @include font-size('caption');
+    }
+  }
+  
+  &__form {
+    margin-bottom: spacing('3xl');
+    
+    @include breakpoint-down('md') {
+      margin-bottom: spacing('2xl');
+    }
+  }
+  
+  &__inputGroup {
+    @include flex($align: center);
+    gap: spacing('md');
+    max-width: 500px;
+    margin: 0 auto spacing('md');
+    
+    @include breakpoint-down('md') {
+      max-width: 100%;
+      flex-direction: column;
+      gap: spacing('sm');
+    }
+    
+    @include breakpoint-down('sm') {
+      flex-direction: column;
+      gap: spacing('sm');
+    }
+  }
+  
+  &__input {
+    @include input('lg');
+    flex: 1;
+    background-color: color('neutral', 'white');
+    border: 1px solid color('neutral', 'lighter');
+    color: color('neutral', 'darkest');
+    
+    &:focus {
+      border-color: color('accent', 'base');
+      box-shadow: 0 0 0 3px color-alpha('accent', 'base', 0.2);
+    }
+    
+    &::placeholder {
+      color: color('neutral', 'medium');
+    }
+    
+    @include breakpoint-down('md') {
+      width: 100%;
+    }
+    
+    @include breakpoint-down('sm') {
+      width: 100%;
+    }
+  }
+  
+  &__submitButton {
+    flex-shrink: 0;
+    min-width: 160px;
+    
+    @include breakpoint-down('md') {
+      width: 100%;
+      min-width: auto;
+    }
+    
+    @include breakpoint-down('sm') {
+      width: 100%;
+    }
+  }
+  
+  &__buttonIcon {
+    width: 18px;
+    height: 18px;
+    margin-left: spacing('xs');
+  }
+  
+  &__formText {
+    @include font-size('small');
+    color: color('neutral', 'light');
+    margin: 0;
+    
+    @include breakpoint-down('sm') {
+      @include font-size('xs');
+    }
+  }
+  
+  &__formNumber {
+    @include font-weight('bold');
+    color: color('accent', 'base');
+  }
+  
+  &__stats {
+    @include flex($justify: center, $wrap: wrap);
+    gap: spacing('2xl');
+    
+    @include breakpoint-down('md') {
+      gap: spacing('xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      flex-direction: column;
+      gap: spacing('lg');
+    }
+  }
+  
+  &__stat {
+    text-align: center;
+    
+    @include breakpoint-down('sm') {
+      padding: spacing('md') 0;
+      border-bottom: 1px solid color-alpha('neutral', 'white', 0.2);
+      
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+  
+  &__statNumber {
+    @include heading-3;
+    color: color('accent', 'base');
+    display: block;
+    @include font-weight('bold');
+    
+    @include breakpoint-down('md') {
+      @include font-size('h4');
+    }
+  }
+  
+  &__statLabel {
+    @include font-size('small');
+    color: color('neutral', 'lightest');
+    text-transform: uppercase;
+    letter-spacing: letter-spacing('wide');
+    margin-top: spacing('xs');
+    display: block;
+    
+    @include breakpoint-down('sm') {
+      @include font-size('xs');
+    }
+  }
+  
+  // Success state
+  &__success {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: spacing('4xl') 0;
+    
+    @include breakpoint-down('md') {
+      padding: spacing('3xl') 0;
+    }
+  }
+  
+  &__successIcon {
+    @include flex-center;
+    width: 80px;
+    height: 80px;
+    background-color: color('status', 'success');
+    border-radius: border-radius('full');
+    margin: 0 auto spacing('xl');
+    
+    svg {
+      width: 40px;
+      height: 40px;
+      color: color('neutral', 'white');
+    }
+    
+    @include breakpoint-down('sm') {
+      width: 60px;
+      height: 60px;
+      
+      svg {
+        width: 30px;
+        height: 30px;
+      }
+    }
+  }
+  
+  &__successTitle {
+    @include heading-3;
+    color: color('neutral', 'white');
+    margin-bottom: spacing('lg');
+    
+    @include breakpoint-down('md') {
+      @include font-size('h4');
+    }
+  }
+  
+  &__successText {
+    @include body-1;
+    color: color('neutral', 'lightest');
+    line-height: line-height('relaxed');
+    margin-bottom: spacing('2xl');
+    
+    @include breakpoint-down('md') {
+      @include font-size('body-2');
+    }
+  }
+  
+  &__successStats {
+    @include flex($justify: center, $wrap: wrap);
+    gap: spacing('2xl');
+    
+    @include breakpoint-down('sm') {
+      flex-direction: column;
+      gap: spacing('lg');
+    }
+  }
+}

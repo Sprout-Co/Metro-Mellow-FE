@@ -45,6 +45,10 @@ import {
   BarChart3,
   TrendingUp,
   Quote,
+  Ant,
+  Rat,
+  BugOff,
+  Mosquito,
 } from "lucide-react";
 
 // Map of icon names to components
@@ -88,6 +92,10 @@ const icons = {
   "bar-chart": BarChart3,
   "trending-up": TrendingUp,
   quote: Quote,
+  ant: Ant,
+  rat: Rat,
+  "bug-off": BugOff,
+  mosquito: Mosquito,
   "help-circle": dynamic(() =>
     import("lucide-react").then((mod) => mod.HelpCircle)
   ),
