@@ -82,7 +82,7 @@ export default function SuperAdminDashboardPage() {
     {
       admin: "Sarah Thompson",
       action: "Generated global report",
-      target: "Q2 Financial Summary",
+      target: "Q3 Financial Summary",
       time: "Yesterday, 16:42",
       ip: "192.168.1.23",
     },

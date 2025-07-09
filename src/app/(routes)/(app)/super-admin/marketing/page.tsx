@@ -248,7 +248,7 @@ export default function MarketingPage() {
     },
     {
       id: 2,
-      subject: "Metro Mellow Monthly Newsletter - May 2024",
+      subject: "Metromellow Monthly Newsletter - May 2024",
       status: "sent",
       recipients: 3218,
       opens: 2105,

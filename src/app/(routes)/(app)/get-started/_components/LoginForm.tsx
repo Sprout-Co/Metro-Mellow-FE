@@ -147,7 +147,7 @@ export default function LoginForm({
         >
           <h1 className={styles.loginForm__title}>Welcome Back</h1>
           <p className={styles.loginForm__subtitle}>
-            Sign in to continue to Metro Mellow
+            Sign in to continue to Metromellow
           </p>
 
           <SocialAuth onSocialAuth={handleSocialAuth} />

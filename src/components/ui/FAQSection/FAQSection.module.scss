@@ -122,7 +122,6 @@
     transition: color 0.3s ease;
     position: relative;
     padding-right: spacing('3xl');
-    color: color('neutral', 'lighter');
     
     @include breakpoint-down('lg') {
       @include subtitle-2;
@@ -135,6 +134,8 @@
     @include breakpoint-down('sm') {
       @include body-2;
     }
+
+    color: color('neutral', 'white');
 
     &:hover {
       color: color('secondary', 'light');
@@ -167,7 +168,6 @@
     margin-top: spacing('md');
     padding-left: spacing('4xl');
     @include body-1;
-    color: color('neutral', 'light');
     max-width: 95%;
     
     @include breakpoint-down('lg') {
@@ -183,5 +183,7 @@
       @include font-size('small');
       padding-left: spacing('xl');
     }
+    color: color('neutral', 'white');
+    font-style: italic;
   }
 } 
