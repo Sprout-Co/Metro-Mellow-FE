@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Metromellow",
+  title: "Metro Mellow",
   description: "Your one-stop-shop for all!",
 };
 
@@ -25,9 +25,10 @@ export default function SiteLayout({
 }>) {
   return (
     <>
-      <Navbar />
+      {process.env.MAINTENANCE_MODE === "true" ? null : <Navbar />}
+
       {children}
-      <Footer />
+      {process.env.MAINTENANCE_MODE === "true" ? null : <Footer />}
     </>
   );
 }

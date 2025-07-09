@@ -193,7 +193,7 @@ const WaitlistSection: FC = () => {
                 variant="primary"
                 size="lg"
                 disabled={isLoading || !email.trim()}
-                className={styles.waitlistSection__submitButton}
+                // className={styles.waitlistSection__submitButton}
               >
                 {isLoading ? (
                   <span>Joining...</span>
