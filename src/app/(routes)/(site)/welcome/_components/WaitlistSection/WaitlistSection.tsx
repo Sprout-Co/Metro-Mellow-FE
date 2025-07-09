@@ -15,7 +15,7 @@ const WaitlistSection: FC = () => {
     {
       icon: Users,
       title: "First Access",
-      description: "Be among the first to experience Metro Mellow services",
+      description: "Be among the first to experience Metromellow services",
     },
     {
       icon: Gift,
@@ -92,7 +92,7 @@ const WaitlistSection: FC = () => {
               <CheckCircle />
             </div>
             <h2 className={styles.waitlistSection__successTitle}>
-              Welcome to the Metro Mellow Family!
+              Welcome to the Metromellow Family!
             </h2>
             <p className={styles.waitlistSection__successText}>
               You're now on our exclusive waitlist. We'll keep you updated on
@@ -110,7 +110,7 @@ const WaitlistSection: FC = () => {
               </div>
               <div className={styles.waitlistSection__stat}>
                 <span className={styles.waitlistSection__statNumber}>
-                  Q2 2025
+                  Q3 2025
                 </span>
                 <span className={styles.waitlistSection__statLabel}>
                   Expected launch
@@ -209,7 +209,7 @@ const WaitlistSection: FC = () => {
             </div>
 
             <p className={styles.waitlistSection__formText}>
-              <span className={styles.waitlistSection__formNumber}>2,500+</span>{" "}
+              <span className={styles.waitlistSection__formNumber}>200+</span>{" "}
               people already joined • No spam, unsubscribe anytime
             </p>
           </motion.form>

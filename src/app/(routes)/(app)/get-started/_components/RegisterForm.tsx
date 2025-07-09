@@ -229,7 +229,7 @@ export default function RegisterForm({
           >
             <h1 className={styles.registerForm__title}>Create Account</h1>
             <p className={styles.registerForm__subtitle}>
-              Join Metro Mellow to get started
+              Join Metromellow to get started
             </p>
 
             <SocialAuth onSocialAuth={handleSocialAuth} />

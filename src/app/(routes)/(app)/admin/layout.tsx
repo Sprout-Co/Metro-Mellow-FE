@@ -2,8 +2,8 @@ import React from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Metro Mellow | Admin Dashboard",
-  description: "Metro Mellow administrator dashboard and management system",
+  title: "Metromellow | Admin Dashboard",
+  description: "Metromellow administrator dashboard and management system",
 };
 
 export default function AdminLayout({

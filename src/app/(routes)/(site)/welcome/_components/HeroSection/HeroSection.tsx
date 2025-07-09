@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { FC, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/Button';
-import { ArrowRight, Mail } from 'lucide-react';
-import styles from './HeroSection.module.scss';
+import { FC, useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/Button";
+import { ArrowRight, Mail } from "lucide-react";
+import styles from "./HeroSection.module.scss";
 
 const HeroSection: FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  
+
   const heroImages = [
-    '/images/home/hero4.png',
-    '/images/home/hero6.png',
-    '/images/home/hero3.png',
-    '/images/home/hero5.png',
+    "/images/home/hero4.png",
+    "/images/home/hero6.png",
+    "/images/home/hero3.png",
+    "/images/home/hero5.png",
   ];
 
   useEffect(() => {
@@ -113,7 +113,9 @@ const HeroSection: FC = () => {
             custom={1}
             variants={textVariants}
           >
-            <span className={styles["heroSection__title--accent"]}>Premium</span>
+            <span className={styles["heroSection__title--accent"]}>
+              Premium
+            </span>
             <span className={styles["heroSection__title--main"]}>
               Home Services
               <br />
@@ -128,8 +130,9 @@ const HeroSection: FC = () => {
             custom={2}
             variants={textVariants}
           >
-            Metro Mellow is launching soon with professional cleaning, cooking, laundry, and pest control services. 
-            Join thousands of Nigerians on our waitlist to get early access and exclusive launch offers.
+            Metromellow is launching soon with professional cleaning, cooking,
+            laundry, and pest control services. Join thousands of Nigerians on
+            our waitlist to get early access and exclusive launch offers.
           </motion.p>
 
           <motion.div
@@ -138,14 +141,19 @@ const HeroSection: FC = () => {
             animate="visible"
             variants={buttonVariants}
           >
-            <Button variant="white" size="lg" fullWidth={false} onClick={() => {
-              const waitlistSection = document.getElementById('waitlist');
-              if (waitlistSection) {
-                waitlistSection.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}>
+            <Button
+              variant="white"
+              size="lg"
+              fullWidth={false}
+              onClick={() => {
+                const waitlistSection = document.getElementById("waitlist");
+                if (waitlistSection) {
+                  waitlistSection.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+            >
               <span>Join Waitlist</span>
-              <ArrowRight className={styles.heroSection__buttonIcon}  />
+              <ArrowRight className={styles.heroSection__buttonIcon} />
             </Button>
             <motion.p
               className={styles.heroSection__ctaText}
@@ -154,7 +162,8 @@ const HeroSection: FC = () => {
               custom={3}
               variants={textVariants}
             >
-              <span className={styles.heroSection__ctaNumber}>200+</span> people already joined
+              <span className={styles.heroSection__ctaNumber}>200+</span> people
+              already joined
             </motion.p>
           </motion.div>
         </div>

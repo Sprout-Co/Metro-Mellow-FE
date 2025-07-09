@@ -14,7 +14,7 @@ export default function SystemConfigPage() {
 
   // Company settings
   const [companySettings, setCompanySettings] = useState({
-    companyName: "Metro Mellow Home Services",
+    companyName: "Metromellow Home Services",
     supportEmail: "support@metromellow.com",
     contactPhone: "(555) 123-4567",
     website: "www.metromellow.com",
@@ -29,7 +29,7 @@ export default function SystemConfigPage() {
     smtpPort: "587",
     smtpUsername: "notifications@metromellow.com",
     smtpPassword: "••••••••••••",
-    fromName: "Metro Mellow Services",
+    fromName: "Metromellow Services",
     fromEmail: "notifications@metromellow.com",
     enableSsl: true,
   });

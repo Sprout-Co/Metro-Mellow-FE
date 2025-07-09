@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Metro Mellow",
+  title: "Metromellow",
   description: "Your one-stop-shop for all!",
 };
 
