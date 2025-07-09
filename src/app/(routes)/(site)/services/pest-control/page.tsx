@@ -1,6 +1,7 @@
 import React from "react";
 import Hero from "./_components/Hero/Hero";
 import SafetyPromise from "./_components/SafetyPromise/SafetyPromise";
+import ServiceCoverage from "./_components/ServiceCoverage/ServiceCoverage";
 
 export const metadata = {
   title: "Professional Pest Control Services | Urban Serve",
@@ -15,6 +16,7 @@ export default function PestControlPage() {
     <main>
       <Hero />
       <SafetyPromise />
+      <ServiceCoverage />
     </main>
   );
 }

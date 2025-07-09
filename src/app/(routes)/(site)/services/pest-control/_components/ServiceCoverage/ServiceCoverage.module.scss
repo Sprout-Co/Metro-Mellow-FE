@@ -1,0 +1,102 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/animations";
+
+.serviceCoverage {
+  @include section-spacing("2xl");
+  background: color("neutral", "white");
+
+  &__container {
+    @include container;
+    text-align: center;
+  }
+
+  &__title {
+    @include heading-1;
+    color: color("neutral", "black");
+    margin-bottom: spacing("3xl");
+    font-size: font-size("h1") * 1.2;
+    line-height: 1.1;
+    @include breakpoint-down("lg") {
+      font-size: font-size("h2") * 1.2;
+    }
+    @include breakpoint-down("md") {
+      font-size: font-size("h3") * 1.2;
+    }
+    @include breakpoint-down("sm") {
+      font-size: font-size("h4") * 1.2;
+      line-height: 1.2;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: spacing("2xl");
+    justify-items: center;
+    @include breakpoint-down("md") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__card {
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    box-shadow: 0 2px 12px rgba(color("neutral", "black"), 0.04);
+    padding: spacing("2xl") spacing("xl");
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.2s;
+    width: 100%;
+    max-width: 320px;
+    min-height: 320px;
+    @include breakpoint-down("sm") {
+      min-height: 0;
+      padding: spacing("xl") spacing("md");
+    }
+    &:hover {
+      box-shadow: 0 6px 24px rgba(color("primary", "base"), 0.10);
+    }
+  }
+
+  &__iconWrapper {
+    background: color("primary", "lighter");
+    border-radius: border-radius("full");
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: spacing("lg");
+    svg {
+      color: color("primary", "base");
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  &__cardContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__cardTitle {
+    @include font-size("h4");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
+  }
+
+  &__cardDesc {
+    @include paragraph;
+    color: color("neutral", "darkest");
+    font-size: font-size("body-2");
+    margin: 0;
+  }
+} 
