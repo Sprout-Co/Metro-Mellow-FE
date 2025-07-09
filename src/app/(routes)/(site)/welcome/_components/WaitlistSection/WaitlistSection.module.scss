@@ -74,9 +74,19 @@
     margin-left: auto;
     margin-right: auto;
     
+    @include breakpoint-down('lg') {
+      max-width: 600px;
+    }
+    
     @include breakpoint-down('md') {
       margin-bottom: spacing('2xl');
       gap: spacing('lg');
+      max-width: 100%;
+    }
+    
+    @include breakpoint-down('sm') {
+      gap: spacing('md');
+      margin-bottom: spacing('xl');
     }
   }
   
@@ -85,10 +95,14 @@
     gap: spacing('lg');
     text-align: left;
     
+    @include breakpoint-down('md') {
+      gap: spacing('md');
+    }
+    
     @include breakpoint-down('sm') {
       flex-direction: column;
       text-align: center;
-      gap: spacing('md');
+      gap: spacing('sm');
     }
   }
   
@@ -157,6 +171,12 @@
     max-width: 500px;
     margin: 0 auto spacing('md');
     
+    @include breakpoint-down('md') {
+      max-width: 100%;
+      flex-direction: column;
+      gap: spacing('sm');
+    }
+    
     @include breakpoint-down('sm') {
       flex-direction: column;
       gap: spacing('sm');
@@ -179,6 +199,10 @@
       color: color('neutral', 'medium');
     }
     
+    @include breakpoint-down('md') {
+      width: 100%;
+    }
+    
     @include breakpoint-down('sm') {
       width: 100%;
     }
@@ -187,6 +211,11 @@
   &__submitButton {
     flex-shrink: 0;
     min-width: 160px;
+    
+    @include breakpoint-down('md') {
+      width: 100%;
+      min-width: auto;
+    }
     
     @include breakpoint-down('sm') {
       width: 100%;

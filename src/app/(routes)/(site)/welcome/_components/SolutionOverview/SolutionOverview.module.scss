@@ -89,8 +89,17 @@
   &__serviceGrid {
     @include grid-responsive(1, 1, 2, 2, spacing('2xl'));
     
+    @include breakpoint-down('lg') {
+      @include grid-responsive(1, 1, 2, 2, spacing('xl'));
+    }
+    
     @include breakpoint-down('md') {
+      @include grid-responsive(1, 1, 1, 1, spacing('lg'));
       gap: spacing('xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      gap: spacing('lg');
     }
   }
   
@@ -115,6 +124,13 @@
     @include flex($align: center);
     gap: spacing('md');
     margin-bottom: spacing('lg');
+    
+    @include breakpoint-down('sm') {
+      flex-direction: column;
+      text-align: center;
+      gap: spacing('sm');
+      margin-bottom: spacing('md');
+    }
   }
   
   &__serviceIcon {
@@ -192,8 +208,18 @@
   &__benefitGrid {
     @include grid-responsive(1, 2, 2, 4, spacing('xl'));
     
+    @include breakpoint-down('lg') {
+      @include grid-responsive(1, 2, 2, 3, spacing('lg'));
+    }
+    
     @include breakpoint-down('md') {
+      @include grid-responsive(1, 1, 2, 2, spacing('lg'));
       gap: spacing('lg');
+    }
+    
+    @include breakpoint-down('sm') {
+      @include grid-responsive(1, 1, 1, 1, spacing('md'));
+      gap: spacing('md');
     }
   }
   
@@ -314,6 +340,10 @@
     @include flex($justify: center, $wrap: wrap);
     gap: spacing('md');
     
+    @include breakpoint-down('sm') {
+      gap: spacing('sm');
+    }
+    
     span {
       @include font-size('small');
       @include font-weight('medium');
@@ -324,6 +354,11 @@
       border: 1px solid color-alpha('neutral', 'white', 0.3);
       text-transform: uppercase;
       letter-spacing: letter-spacing('wide');
+      
+      @include breakpoint-down('sm') {
+        @include font-size('xs');
+        padding: spacing('xxs') spacing('sm');
+      }
     }
   }
 }

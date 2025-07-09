@@ -66,8 +66,18 @@
     @include grid-responsive(1, 2, 2, 4, spacing('xl'));
     margin-bottom: spacing('4xl');
     
+    @include breakpoint-down('lg') {
+      @include grid-responsive(1, 2, 2, 3, spacing('lg'));
+    }
+    
     @include breakpoint-down('md') {
+      @include grid-responsive(1, 1, 2, 2, spacing('lg'));
       margin-bottom: spacing('3xl');
+    }
+    
+    @include breakpoint-down('sm') {
+      @include grid-responsive(1, 1, 1, 1, spacing('md'));
+      margin-bottom: spacing('2xl');
     }
   }
   
@@ -92,6 +102,12 @@
   &__cardHeader {
     @include flex($justify: space-between, $align: center);
     margin-bottom: spacing('lg');
+    
+    @include breakpoint-down('md') {
+      flex-direction: column;
+      gap: spacing('sm');
+      margin-bottom: spacing('md');
+    }
     
     @include breakpoint-down('sm') {
       flex-direction: column;
@@ -136,6 +152,11 @@
     border-radius: border-radius('pill');
     text-transform: uppercase;
     letter-spacing: letter-spacing('wide');
+    
+    @include breakpoint-down('md') {
+      order: -1;
+      @include font-size('xs');
+    }
     
     @include breakpoint-down('sm') {
       order: -1;
