@@ -46,6 +46,18 @@ const serviceItems = [
                 <line x1="14" y1="1" x2="14" y2="4"></line>
             </svg>
         )
+    },
+    {
+        title: 'Pest Control',
+        href: '/services/pest-control',
+        description: 'Effective and eco-friendly pest control solutions',
+        icon: (
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+            </svg>
+        )
     }
 ];
 

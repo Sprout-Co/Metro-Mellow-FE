@@ -22,15 +22,7 @@ export default function PestControlPage() {
   return (
     <main>
       <Hero />
-      <About />
-      <Services />
-      <Process />
-      <Benefits />
-      <SafetyStandards />
-      <Testimonials />
-      <FAQ />
-      <CTA />
-      <Contact />
+  
     </main>
   );
 }
