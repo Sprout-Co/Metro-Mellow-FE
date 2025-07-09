@@ -18,15 +18,19 @@
     margin-bottom: spacing("3xl");
     font-size: font-size("h1") * 1.2;
     line-height: 1.1;
+    
     @include breakpoint-down("lg") {
       font-size: font-size("h2") * 1.2;
     }
+    
     @include breakpoint-down("md") {
       font-size: font-size("h3") * 1.2;
     }
+    
     @include breakpoint-down("sm") {
-      font-size: font-size("h4") * 1.2;
+      font-size: font-size("h5");
       line-height: 1.2;
+      margin-bottom: spacing("xl");
     }
   }
 
@@ -55,10 +59,17 @@
     width: 100%;
     max-width: 320px;
     min-height: 320px;
+    
+    @include breakpoint-down("md") {
+      min-height: 280px;
+      padding: spacing("xl") spacing("lg");
+    }
+    
     @include breakpoint-down("sm") {
       min-height: 0;
-      padding: spacing("xl") spacing("md");
+      padding: spacing("lg") spacing("md");
     }
+    
     &:hover {
       box-shadow: 0 6px 24px rgba(color("primary", "base"), 0.10);
     }
@@ -73,10 +84,33 @@
     align-items: center;
     justify-content: center;
     margin-bottom: spacing("lg");
+    
+    @include breakpoint-down("md") {
+      width: 56px;
+      height: 56px;
+      margin-bottom: spacing("md");
+    }
+    
+    @include breakpoint-down("sm") {
+      width: 48px;
+      height: 48px;
+      margin-bottom: spacing("sm");
+    }
+    
     svg {
       color: color("primary", "base");
       width: 40px;
       height: 40px;
+      
+      @include breakpoint-down("md") {
+        width: 36px;
+        height: 36px;
+      }
+      
+      @include breakpoint-down("sm") {
+        width: 32px;
+        height: 32px;
+      }
     }
   }
 
@@ -91,6 +125,15 @@
     font-weight: map-get($font-weights, "bold");
     color: color("neutral", "black");
     margin-bottom: spacing("sm");
+    
+    @include breakpoint-down("md") {
+      font-size: font-size("h5");
+    }
+    
+    @include breakpoint-down("sm") {
+      font-size: font-size("body-1");
+      margin-bottom: spacing("xs");
+    }
   }
 
   &__cardDesc {
@@ -98,6 +141,16 @@
     color: color("neutral", "darkest");
     font-size: font-size("body-2");
     margin: 0;
+    line-height: line-height("normal");
+    
+    @include breakpoint-down("md") {
+      font-size: font-size("body-2");
+    }
+    
+    @include breakpoint-down("sm") {
+      font-size: font-size("caption");
+      line-height: line-height("relaxed");
+    }
   }
 
   &__emoji {
@@ -107,8 +160,15 @@
     justify-content: center;
     width: 64px;
     height: 64px;
-    @include breakpoint-down('sm') {
+    
+    @include breakpoint-down("md") {
       font-size: font-size('h2');
+      width: 56px;
+      height: 56px;
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('h3');
       width: 48px;
       height: 48px;
     }
