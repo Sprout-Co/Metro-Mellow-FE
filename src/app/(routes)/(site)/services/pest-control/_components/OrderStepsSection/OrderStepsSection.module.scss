@@ -6,15 +6,14 @@
 .orderSteps {
   position: relative;
   width: 100%;
-  background-color: color('neutral', 'white');
-  @include section-spacing('6xl');
+  background-color: color-alpha('primary', 'lighter', 0.5);
+  @include section-spacing('4xl');
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow: visible;
   z-index: 1;
-  padding-top: 0;
 
   &__container {
     width: 100%;
@@ -43,18 +42,24 @@
     position: relative;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    width: 100%;
+    align-items: center;
     margin-top: 0;
+    gap: spacing('6xl');
 
     @include breakpoint-down('md') {
+      width: 100%;
+      margin-top: 0;
+      margin-bottom: spacing('md');
       flex-direction: column;
-      align-items: center;
-      gap: spacing('xl');
+      gap: spacing('4xl');
     }
-    
+
     @include breakpoint-down('sm') {
-      gap: spacing('lg');
+      width: 100%;
+      margin-top: 0;
+      margin-bottom: spacing('sm');
+      flex-direction: column;
+      gap: spacing('2xl');
     }
   }
 
@@ -66,7 +71,16 @@
       width: 100%;
       padding-right: 0;
       text-align: center;
-      margin-bottom: 0;
+      margin-top: 0;
+      margin-bottom: spacing('xl');
+    }
+
+    @include breakpoint-down('sm') {
+      width: 100%;
+      padding-right: 0;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: spacing('lg');
     }
   }
 
@@ -107,11 +121,18 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: flex-start;
+    justify-content: center;
+    margin-top: -#{spacing('xl')};
 
     @include breakpoint-down('md') {
       width: 100%;
       align-items: center;
+      margin-top: -#{spacing('lg')};
+    }
+    @include breakpoint-down('sm') {
+      width: 100%;
+      align-items: center;
+      margin-top: -#{spacing('md')};
     }
 
     li {
@@ -120,20 +141,14 @@
       margin-bottom: spacing('md');
       justify-content: flex-start;
       width: 100%;
-      
       @include breakpoint-down('md') {
         justify-content: center;
-        text-align: center;
-        flex-direction: column;
-        gap: spacing('sm');
+        width: 100%;
       }
-      
       @include breakpoint-down('sm') {
-        margin-bottom: spacing('lg');
-      }
-      
-      &:last-child {
-        margin-bottom: 0;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: spacing('sm');
       }
     }
   }
@@ -152,16 +167,11 @@
     margin-right: spacing('sm');
     line-height: 1;
     flex-shrink: 0;
-    
-    @include breakpoint-down('md') {
-      margin-right: 0;
-      margin-bottom: spacing('xs');
-    }
-    
     @include breakpoint-down('sm') {
       width: spacing('xl');
       height: spacing('xl');
       font-size: font-size('caption');
+      margin-right: spacing('xs');
     }
   }
 
@@ -169,11 +179,8 @@
     font-size: font-size('body-1');
     font-weight: map-get($font-weights, 'medium');
     color: color('neutral', 'black');
-    line-height: line-height('normal');
-    
     @include breakpoint-down('md') {
       font-size: font-size('body-2');
-      text-align: center;
     }
     @include breakpoint-down('sm') {
       font-size: font-size('caption');
