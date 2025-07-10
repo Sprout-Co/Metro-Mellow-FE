@@ -228,6 +228,29 @@
     margin-left: spacing('xs');
   }
   
+  &__error {
+    @include flex($align: center);
+    gap: spacing('xs');
+    background-color: color-alpha('status', 'error', 0.1);
+    border: 1px solid color-alpha('status', 'error', 0.3);
+    border-radius: border-radius('md');
+    padding: spacing('sm') spacing('md');
+    margin: spacing('sm') 0 0;
+    
+    span {
+      @include font-size('small');
+      color: color('status', 'error');
+      @include font-weight('medium');
+    }
+  }
+
+  &__errorIcon {
+    width: 16px;
+    height: 16px;
+    color: color('status', 'error');
+    flex-shrink: 0;
+  }
+
   &__formText {
     @include font-size('small');
     color: color('neutral', 'light');
