@@ -3,6 +3,7 @@ import HeroSection from "./_components/HeroSection/HeroSection";
 import ProblemStatement from "./_components/ProblemStatement/ProblemStatement";
 import SolutionOverview from "./_components/SolutionOverview/SolutionOverview";
 import WaitlistSection from "./_components/WaitlistSection/WaitlistSection";
+import SocialMediaSection from "./_components/SocialMediaSection/SocialMediaSection";
 import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
 import styles from "./Welcome.module.scss";
 
@@ -58,6 +59,7 @@ export default function WelcomePage() {
       <ProblemStatement />
       <SolutionOverview />
       <WaitlistSection />
+      <SocialMediaSection />
       <FAQSection faqs={welcomeFaqs} />
     </main>
   );
