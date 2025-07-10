@@ -20,10 +20,10 @@ const SolutionOverview: FC = () => {
       icon: ChefHat,
       title: "Professional Cooking",
       description:
-        "Expert chefs prepare fresh, nutritious meals in your kitchen using your preferred ingredients.",
+        "Expert chefs prepare fresh, nutritious meals from our curated menu using quality ingredients, delivered to your doorstep on a subscription basis.",
       features: [
-        "Custom meal plans",
-        "Dietary accommodations",
+        "Curated menu selection",
+        "Subscription-based delivery",
         "Fresh ingredients",
       ],
     },
