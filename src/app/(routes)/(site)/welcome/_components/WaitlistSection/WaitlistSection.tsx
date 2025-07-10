@@ -1,15 +1,28 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import { ArrowRight, CheckCircle, Users, Gift, Bell } from "lucide-react";
+import { ArrowRight, CheckCircle, Users, Gift, Bell, AlertCircle } from "lucide-react";
+import { useWaitlist } from "@/hooks/useWaitlist";
 import styles from "./WaitlistSection.module.scss";
 
 const WaitlistSection: FC = () => {
   const [email, setEmail] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    isLoading,
+    isSubmitted,
+    error,
+    successMessage,
+    stats,
+    addToWaitlist,
+    getStats
+  } = useWaitlist();
+
+  // Load waitlist stats on component mount
+  useEffect(() => {
+    getStats();
+  }, [getStats]);
 
   const benefits = [
     {
@@ -33,14 +46,16 @@ const WaitlistSection: FC = () => {
     e.preventDefault();
     if (!email.trim()) return;
 
-    setIsLoading(true);
+    await addToWaitlist(email.trim(), {
+      source: 'welcome_page',
+      interests: ['cleaning', 'cooking', 'laundry', 'pest-control'] // All services for now
+    });
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    setIsSubmitted(true);
-    setIsLoading(false);
-    setEmail("");
+    if (isSubmitted) {
+      setEmail("");
+      // Refresh stats after successful signup
+      getStats();
+    }
   };
 
   const containerVariants = {
@@ -95,14 +110,12 @@ const WaitlistSection: FC = () => {
               Welcome to the Metromellow Family!
             </h2>
             <p className={styles.waitlistSection__successText}>
-              You're now on our exclusive waitlist. We'll keep you updated on
-              our launch progress and send you early access when we're ready to
-              serve you.
+              {successMessage || "You're now on our exclusive waitlist. We'll keep you updated on our launch progress and send you early access when we're ready to serve you."}
             </p>
             <div className={styles.waitlistSection__successStats}>
               <div className={styles.waitlistSection__stat}>
                 <span className={styles.waitlistSection__statNumber}>
-                  2,501
+                  {'200+'}
                 </span>
                 <span className={styles.waitlistSection__statLabel}>
                   People on waitlist
@@ -208,8 +221,17 @@ const WaitlistSection: FC = () => {
               </Button>
             </div>
 
+            {error && (
+              <div className={styles.waitlistSection__error}>
+                <AlertCircle className={styles.waitlistSection__errorIcon} />
+                <span>{error}</span>
+              </div>
+            )}
+
             <p className={styles.waitlistSection__formText}>
-              <span className={styles.waitlistSection__formNumber}>200+</span>{" "}
+              <span className={styles.waitlistSection__formNumber}>
+                {'200+'}
+              </span>{" "}
               people already joined • No spam, unsubscribe anytime
             </p>
           </motion.form>

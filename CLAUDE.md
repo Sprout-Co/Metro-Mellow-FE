@@ -40,6 +40,7 @@ Metromellow is a comprehensive home services platform built with Next.js 15, off
 - **Zustand** for client-side state management
 - **Tailwind CSS** + **SASS/SCSS** for styling
 - **Framer Motion** for animations
+- **Firebase** for waitlist collection and analytics
 
 ### Project Structure
 
@@ -106,6 +107,25 @@ The backend provides comprehensive GraphQL schema with:
 - Admin routes require ADMIN or SUPER_ADMIN roles
 - Authentication state managed via Zustand store
 
+### Firebase Integration
+
+#### Waitlist Management
+- **Firestore Database**: Stores waitlist signups with email validation
+- **Real-time Analytics**: Tracks signup metrics and conversion rates
+- **Security Rules**: Protects data with proper access controls
+- **Duplicate Prevention**: Prevents multiple signups with same email
+
+#### Firebase Services
+- **Firestore**: Database for waitlist collection (`src/lib/services/waitlist.ts`)
+- **Analytics**: Tracks user engagement and conversion metrics
+- **Security**: Role-based access control with admin permissions
+
+#### Configuration
+- Firebase config in `src/lib/firebase.ts`
+- Environment variables for API keys and project settings
+- Security rules defined in `firestore.rules`
+- Setup guide available in `FIREBASE_SETUP.md`
+
 ## Development Guidelines
 
 ### Code Organization
@@ -133,7 +153,16 @@ The backend provides comprehensive GraphQL schema with:
 
 - Use Apollo Client for all server-side data
 - Use Zustand for UI state, authentication status, and client-side preferences
+- Use Firebase services for waitlist and analytics data
 - Avoid duplicating server state in client stores
+
+### Firebase Development
+
+- Use the custom `useWaitlist` hook for waitlist operations
+- Follow the `waitlistService` patterns for data operations
+- Implement proper error handling for Firebase operations
+- Test Firebase integration with proper environment variables
+- Monitor Firestore usage and costs in development
 
 ### Testing & Quality
 
@@ -160,6 +189,9 @@ The backend provides comprehensive GraphQL schema with:
 - `codegen.ts` - GraphQL code generation configuration
 - `tailwind.config.ts` - Tailwind CSS configuration
 - `src/lib/apollo-client.ts` - Apollo Client setup with authentication
+- `src/lib/firebase.ts` - Firebase configuration and initialization
+- `firestore.rules` - Firestore security rules for data protection
+- `FIREBASE_SETUP.md` - Complete Firebase setup and configuration guide
 
 ### Core Features
 
@@ -167,6 +199,8 @@ The backend provides comprehensive GraphQL schema with:
 - `src/store/` - Zustand state management
 - `src/constants/` - Application constants and route definitions
 - `src/graphql/` - All GraphQL-related code (queries, mutations, types, hooks)
+- `src/lib/services/waitlist.ts` - Firebase waitlist management service
+- `src/hooks/useWaitlist.ts` - Custom hook for waitlist operations
 
 ### Styling
 
