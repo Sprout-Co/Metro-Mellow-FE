@@ -1,0 +1,161 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.businessHero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+
+  @include breakpoint-down("lg") {
+    height: 80vh;
+  }
+
+  @include breakpoint-down("md") {
+    height: 70vh;
+  }
+
+  &__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+    will-change: opacity;
+  }
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to bottom,
+      rgba(darken(color("primary", "base"), 15%), 0.7),
+      rgba(color("primary", "base"), 0.6)
+    );
+    z-index: 2;
+  }
+
+  &__container {
+    @include container();
+    position: relative;
+    height: 100%;
+    z-index: 3;
+    @include flex-column();
+    justify-content: center;
+  }
+
+  &__content {
+    width: 60%;
+    @include breakpoint-down("lg") {
+      width: 80%;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    @include breakpoint-down("md") {
+      width: 100%;
+    }
+  }
+
+  &__title {
+    @include heading-1();
+    color: color("neutral", "white");
+    margin-bottom: spacing("xl");
+  }
+
+  &__subtitle {
+    @include font-size("body-1");
+    @include font-weight("regular");
+    color: color("neutral", "lightest");
+    opacity: 0.9;
+    line-height: map-get($line-heights, "relaxed");
+    margin-bottom: spacing("2xl");
+    max-width: 600px;
+
+    @include breakpoint-down("lg") {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  &__cta {
+    display: flex;
+    gap: spacing("md");
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      gap: spacing("sm");
+    }
+  }
+
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px; // Accessibility touch target
+
+    &:focus-visible {
+      outline: 2px solid color("primary", "light");
+      outline-offset: 2px;
+    }
+  }
+
+  &__indicators {
+    position: absolute;
+    bottom: spacing("3xl");
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: spacing("sm");
+    z-index: 3;
+  }
+
+  &__indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: color("neutral", "white");
+    opacity: 0.5;
+    cursor: pointer;
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+
+    &:hover {
+      opacity: 0.8;
+      transform: scale(1.1);
+    }
+
+    &--active {
+      opacity: 1;
+      background-color: color("secondary", "base");
+    }
+  }
+
+  &__scrollIndicator {
+    position: absolute;
+    bottom: spacing("md");
+    left: 50%;
+    transform: translateX(-50%) rotate(90deg);
+    z-index: 3;
+    opacity: 0.7;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &__scrollIcon {
+    color: color("neutral", "white");
+  }
+}
