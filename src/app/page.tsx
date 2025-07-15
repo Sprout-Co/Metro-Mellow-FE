@@ -16,6 +16,7 @@ import ChoresSection from "./_components/ChoresSection/ChoresSection";
 import MobileAppPromoSection from "./_components/MobileAppPromoSection/MobileAppPromoSection";
 import ToDoToTaDaSection from "./_components/ToDoToTaDaSection/ToDoToTaDaSection";
 import TestimonialCarouselSection from "./_components/TestimonialCarouselSection/TestimonialCarouselSection";
+import ServiceCatalog from "./_components/ServiceCatalog/ServiceCatalog";
 
 export const metadata = {
   title: "Home Services - Professional Cleaning, Laundry, Cooking & More",
@@ -34,6 +35,7 @@ export default function Home() {
         <ServiceHero />
         <ChoresSection />
         <MobileAppPromoSection />
+        <ServiceCatalog />
         <ToDoToTaDaSection />
         <TestimonialCarouselSection />
       </main>
