@@ -34,8 +34,8 @@ export default function Home() {
         <ServicesGallery />
         <ServiceHero />
         <ChoresSection />
-        <MobileAppPromoSection />
         <ServiceCatalog />
+        <MobileAppPromoSection />
         <ToDoToTaDaSection />
         <TestimonialCarouselSection />
       </main>
