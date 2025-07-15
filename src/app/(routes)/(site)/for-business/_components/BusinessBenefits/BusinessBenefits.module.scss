@@ -34,6 +34,7 @@
 
   &__title {
     @include heading-2();
+    @include font-weight("bold");
     margin-bottom: spacing("md");
   }
 
@@ -51,7 +52,19 @@
   }
 
   &__grid {
-    @include grid-responsive(1, 2, 3, $gap: spacing("lg"));
+    display: grid;
+    gap: spacing("lg");
+    grid-template-columns: 1fr;
+
+    @include breakpoint-up("md") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include breakpoint-up("lg") {
+      grid-template-columns: repeat(3, 1fr);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
     @include breakpoint-down("md") {
       gap: spacing("md");
@@ -71,6 +84,10 @@
   transition: all 0.3s ease-out;
   position: relative;
   will-change: transform;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   &:focus-visible {
     outline: 2px solid color("primary", "base");
@@ -124,6 +141,7 @@
     color: color("neutral", "dark");
     line-height: map-get($line-heights, "relaxed");
     margin-bottom: spacing("lg");
+    flex-grow: 1;
   }
 
   &__metric {
