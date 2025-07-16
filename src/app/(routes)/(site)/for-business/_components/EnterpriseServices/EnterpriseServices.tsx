@@ -192,7 +192,7 @@ const EnterpriseServices: React.FC = () => {
       ],
       ctaText: "Learn More",
       delay: 0.15,
-      image: "/images/corporate/cp1.png",
+      image: "/images/corporate/cp5.png",
     },
     {
       icon: <ChefHat size={24} />,
@@ -210,7 +210,7 @@ const EnterpriseServices: React.FC = () => {
       ],
       ctaText: "Learn More",
       delay: 0.3,
-      image: "/images/corporate/cp2.png",
+      image: "/images/corporate/cp1.png",
     },
     {
       icon: <Shirt size={24} />,
@@ -228,7 +228,7 @@ const EnterpriseServices: React.FC = () => {
       ],
       ctaText: "Learn More",
       delay: 0.45,
-      image: "/images/corporate/cp3.png",
+      image: "/images/corporate/cp8.png",
     },
     {
       icon: <Bug size={24} />,
@@ -246,7 +246,7 @@ const EnterpriseServices: React.FC = () => {
       ],
       ctaText: "Learn More",
       delay: 0.6,
-      image: "/images/corporate/cp4.png",
+      image: "/images/corporate/cp3.png",
     },
   ];
 
