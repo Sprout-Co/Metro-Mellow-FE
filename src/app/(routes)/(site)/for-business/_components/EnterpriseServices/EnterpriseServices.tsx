@@ -23,6 +23,7 @@ interface ServiceCardProps {
   features: string[];
   ctaText: string;
   delay: number;
+  image: string;
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({
@@ -35,6 +36,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   features,
   ctaText,
   delay,
+  image,
 }) => {
   const controls = useAnimation();
   const cardRef = useRef<HTMLDivElement>(null);
@@ -82,6 +84,14 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       initial="hidden"
       animate={controls}
     >
+      <div className={styles.serviceCard__imageContainer}>
+        <img 
+          src={image} 
+          alt={title}
+          className={styles.serviceCard__image}
+        />
+      </div>
+
       <div className={styles.serviceCard__header}>
         <div
           className={`${styles.serviceCard__iconContainer} ${styles[iconClass]}`}
@@ -178,6 +188,7 @@ const EnterpriseServices: React.FC = () => {
       ],
       ctaText: "Learn More",
       delay: 0.15,
+      image: "/images/corporate/cp1.png",
     },
     {
       icon: <ChefHat size={24} />,
@@ -195,6 +206,7 @@ const EnterpriseServices: React.FC = () => {
       ],
       ctaText: "Learn More",
       delay: 0.3,
+      image: "/images/corporate/cp2.png",
     },
     {
       icon: <Shirt size={24} />,
@@ -212,6 +224,7 @@ const EnterpriseServices: React.FC = () => {
       ],
       ctaText: "Learn More",
       delay: 0.45,
+      image: "/images/corporate/cp3.png",
     },
     {
       icon: <Bug size={24} />,
@@ -229,6 +242,7 @@ const EnterpriseServices: React.FC = () => {
       ],
       ctaText: "Learn More",
       delay: 0.6,
+      image: "/images/corporate/cp4.png",
     },
   ];
 
@@ -270,6 +284,7 @@ const EnterpriseServices: React.FC = () => {
               features={service.features}
               ctaText={service.ctaText}
               delay={service.delay}
+              image={service.image}
             />
           ))}
         </div>

@@ -116,6 +116,27 @@
     outline-offset: 2px;
   }
 
+  &__imageContainer {
+    width: 100%;
+    height: 160px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: spacing("lg");
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover {
+    .serviceCard__image {
+      transform: scale(1.05);
+    }
+  }
+
   &__header {
     display: flex;
     align-items: center;
