@@ -1,54 +1,55 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import styles from './Navbar.module.scss';
-import Button from '@/components/ui/Button/Button';
+import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import styles from "./Navbar.module.scss";
+import Button from "@/components/ui/Button/Button";
 
 // Define service dropdown items
 const serviceItems = [
     {
-        title: 'Food',
-        href: '/services/food',
-        description: 'Delicious home-cooked meals',
-        image: '/images/food/jollof-rice.png'
-    },
-    {
-        title: 'Cleaning',
-        href: '/services/cleaning',
-        description: 'Professional home cleaning services',
-        image: '/images/cleaning/c2.jpeg'
-    },
-    {
-        title: 'Laundry',
-        href: '/services/laundry',
-        description: 'Professional laundry and dry cleaning',
-        image: '/images/laundry/l3.jpeg'
-    },
+    title: "Food",
+    href: "/services/food",
+    description: "Delicious home-cooked meals",
+    image: "/images/food/jollof-rice.png",
+  },
+  {
+    title: "Cleaning",
+    href: "/services/cleaning",
+    description: "Professional home cleaning services",
+    image: "/images/cleaning/c2.jpeg",
+  },
+  {
+    title: "Laundry",
+    href: "/services/laundry",
+    description: "Professional laundry and dry cleaning",
+    image: "/images/laundry/l3.jpeg",
+  },
 
-    {
-        title: 'Pest Control',
-        href: '/services/pest-control',
-        description: 'Eco-friendly pest control solutions',
-        image: '/images/pest-control/p1.jpeg'
-    }
+  {
+    title: "Pest Control",
+    href: "/services/pest-control",
+    description: "Eco-friendly pest control solutions",
+    image: "/images/pest-control/p1.jpeg",
+  },
 ];
 
 // Main navigation items
 const navItems = [
-    { label: 'HOME', href: '/' },
-    { label: 'ABOUT', href: '/about' },
+  { label: "HOME", href: "/" },
+  { label: "ABOUT", href: "/about" },
     {
-        label: 'SERVICES',
-        href: '/services',
+    label: "SERVICES",
+    href: "/services",
         hasDropdown: true,
-        dropdownItems: serviceItems
+    dropdownItems: serviceItems,
     },
-    { label: 'BOOKINGS', href: '/bookings' },
-    { label: 'CONTACT', href: '/contact' },
+  { label: "FOR BUSINESS", href: "/for-business" },
+  { label: "BOOKINGS", href: "/bookings" },
+  { label: "CONTACT", href: "/contact" },
 ];
 
 export default function Navbar() {
@@ -64,20 +65,23 @@ export default function Navbar() {
             setIsScrolled(window.scrollY > 20);
         };
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
     // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
                 setActiveDropdown(null);
             }
         };
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     // Close mobile menu when route changes
@@ -96,7 +100,7 @@ export default function Navbar() {
     };
 
     const isActive = (href: string) => {
-        if (href === '/') {
+    if (href === "/") {
             return pathname === href;
         }
         return pathname.startsWith(href);
@@ -104,9 +108,11 @@ export default function Navbar() {
 
     const navbarClasses = [
         styles.navbar,
-        isScrolled ? styles['navbar--scrolled'] : '',
-        isMobileMenuOpen ? styles['navbar--menuOpen'] : ''
-    ].filter(Boolean).join(' ');
+    isScrolled ? styles["navbar--scrolled"] : "",
+    isMobileMenuOpen ? styles["navbar--menuOpen"] : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
     return (
         <header className={navbarClasses}>
@@ -130,12 +136,12 @@ export default function Navbar() {
                         {navItems.map((item) => (
                             <li
                                 key={item.label}
-                                className={`${styles.navbar__item} ${isActive(item.href) ? styles['navbar__item--active'] : ''}`}
+                className={`${styles.navbar__item} ${isActive(item.href) ? styles["navbar__item--active"] : ""}`}
                             >
                                 {item.hasDropdown ? (
                                     <>
                                         <button
-                                            className={`${styles.navbar__link} ${styles['navbar__link--hasDropdown']} ${activeDropdown === item.label ? styles['navbar__link--dropdownActive'] : ''}`}
+                      className={`${styles.navbar__link} ${styles["navbar__link--hasDropdown"]} ${activeDropdown === item.label ? styles["navbar__link--dropdownActive"] : ""}`}
                                             onClick={() => toggleDropdown(item.label)}
                                             aria-expanded={activeDropdown === item.label}
                                         >
@@ -230,9 +236,9 @@ export default function Navbar() {
                     {isMobileMenuOpen && (
                         <motion.div
                             className={styles.navbar__mobileMenu}
-                            initial={{ opacity: 0, x: '100%' }}
+              initial={{ opacity: 0, x: "100%" }}
                             animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: '100%' }}
+              exit={{ opacity: 0, x: "100%" }}
                             transition={{ duration: 0.3, ease: "easeInOut" }}
                         >
                             <div className={styles.navbar__mobileHeader}>
@@ -250,7 +256,17 @@ export default function Navbar() {
                                     onClick={toggleMobileMenu}
                                     aria-label="Close menu"
                                 >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
                                         <line x1="18" y1="6" x2="6" y2="18"></line>
                                         <line x1="6" y1="6" x2="18" y2="18"></line>
                                     </svg>
@@ -262,12 +278,12 @@ export default function Navbar() {
                                     {navItems.map((item) => (
                                         <li
                                             key={item.label}
-                                            className={`${styles.navbar__mobileItem} ${isActive(item.href) ? styles['navbar__mobileItem--active'] : ''}`}
+                      className={`${styles.navbar__mobileItem} ${isActive(item.href) ? styles["navbar__mobileItem--active"] : ""}`}
                                         >
                                             {item.hasDropdown ? (
                                                 <>
                                                     <button
-                                                        className={`${styles.navbar__mobileLink} ${activeDropdown === item.label ? styles['navbar__mobileLink--open'] : ''}`}
+                            className={`${styles.navbar__mobileLink} ${activeDropdown === item.label ? styles["navbar__mobileLink--open"] : ""}`}
                                                         onClick={() => toggleDropdown(item.label)}
                                                         aria-expanded={activeDropdown === item.label}
                                                     >
@@ -293,31 +309,61 @@ export default function Navbar() {
                                                             <motion.div
                                                                 className={styles.navbar__mobileSubmenu}
                                                                 initial={{ height: 0, opacity: 0 }}
-                                                                animate={{ height: 'auto', opacity: 1 }}
+                                animate={{ height: "auto", opacity: 1 }}
                                                                 exit={{ height: 0, opacity: 0 }}
-                                                                transition={{ duration: 0.3, ease: "easeInOut" }}
-                                                            >
-                                                                <ul className={styles.navbar__mobileSubmenuList}>
+                                transition={{
+                                  duration: 0.3,
+                                  ease: "easeInOut",
+                                }}
+                              >
+                                <ul
+                                  className={styles.navbar__mobileSubmenuList}
+                                >
                                                                     {item.dropdownItems?.map((dropdownItem) => (
-                                                                        <li key={dropdownItem.href} className={styles.navbar__mobileSubmenuItem}>
+                                    <li
+                                      key={dropdownItem.href}
+                                      className={
+                                        styles.navbar__mobileSubmenuItem
+                                      }
+                                    >
                                                                             <Link
                                                                                 href={dropdownItem.href}
-                                                                                className={styles.navbar__mobileSubmenuLink}
-                                                                            >
-                                                                                <div className={styles.navbar__mobileSubmenuImage}>
+                                        className={
+                                          styles.navbar__mobileSubmenuLink
+                                        }
+                                      >
+                                        <div
+                                          className={
+                                            styles.navbar__mobileSubmenuImage
+                                          }
+                                        >
                                                                                     <Image
                                                                                         src={dropdownItem.image}
                                                                                         alt={dropdownItem.title}
                                                                                         width={35}
                                                                                         height={35}
-                                                                                        className={styles.navbar__mobileSubmenuImg}
+                                            className={
+                                              styles.navbar__mobileSubmenuImg
+                                            }
                                                                                     />
                                                                                 </div>
-                                                                                <div className={styles.navbar__mobileSubmenuContent}>
-                                                                                    <div className={styles.navbar__mobileSubmenuTitle}>
+                                        <div
+                                          className={
+                                            styles.navbar__mobileSubmenuContent
+                                          }
+                                        >
+                                          <div
+                                            className={
+                                              styles.navbar__mobileSubmenuTitle
+                                            }
+                                          >
                                                                                         {dropdownItem.title}
                                                                                     </div>
-                                                                                    <div className={styles.navbar__mobileSubmenuDesc}>
+                                          <div
+                                            className={
+                                              styles.navbar__mobileSubmenuDesc
+                                            }
+                                          >
                                                                                         {dropdownItem.description}
                                                                                     </div>
                                                                                 </div>
@@ -330,7 +376,10 @@ export default function Navbar() {
                                                     </AnimatePresence>
                                                 </>
                                             ) : (
-                                                <Link href={item.href} className={styles.navbar__mobileLink}>
+                        <Link
+                          href={item.href}
+                          className={styles.navbar__mobileLink}
+                        >
                                                     {item.label}
                                                 </Link>
                                             )}

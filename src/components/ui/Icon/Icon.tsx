@@ -49,6 +49,9 @@ import {
   Rat,
   BugOff,
   Mosquito,
+  Star,
+  Repeat,
+  Heart,
 } from "lucide-react";
 
 // Map of icon names to components
@@ -96,6 +99,9 @@ const icons = {
   rat: Rat,
   "bug-off": BugOff,
   mosquito: Mosquito,
+  star: Star,
+  repeat: Repeat,
+  heart: Heart,
   "help-circle": dynamic(() =>
     import("lucide-react").then((mod) => mod.HelpCircle)
   ),

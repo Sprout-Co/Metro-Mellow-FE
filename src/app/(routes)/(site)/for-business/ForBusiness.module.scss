@@ -1,0 +1,53 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.forBusiness {
+  &__section {
+    @include section-spacing("2xl");
+  }
+
+  &__container {
+    @include container();
+  }
+
+  &__sectionHeader {
+    margin-bottom: spacing("3xl");
+    text-align: center;
+
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("2xl");
+    }
+  }
+
+  &__sectionBadge {
+    display: inline-block;
+    padding: spacing("xs") spacing("sm");
+    background-color: color("accent", "lighter");
+    color: color("primary", "base");
+    @include font-size("small");
+    @include font-weight("medium");
+    border-radius: 4px;
+    margin-bottom: spacing("md");
+    text-transform: uppercase;
+    letter-spacing: map-get($letter-spacing, "wide");
+  }
+
+  &__sectionTitle {
+    @include heading-2();
+    margin-bottom: spacing("md");
+
+    &--highlight {
+      color: color("secondary", "base");
+    }
+  }
+
+  &__sectionSubtitle {
+    @include font-size("body-1");
+    @include font-weight("regular");
+    color: color("neutral", "dark");
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: map-get($line-heights, "relaxed");
+  }
+}
