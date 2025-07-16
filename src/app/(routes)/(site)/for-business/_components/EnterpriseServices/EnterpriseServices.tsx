@@ -82,33 +82,35 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       initial="hidden"
       animate={controls}
     >
-      <div
-        className={`${styles.serviceCard__iconContainer} ${styles[iconClass]}`}
-      >
-        {icon}
+      <div className={styles.serviceCard__header}>
+        <div
+          className={`${styles.serviceCard__iconContainer} ${styles[iconClass]}`}
+        >
+          {icon}
+        </div>
+        <span
+          className={`${styles.serviceCard__category} ${styles[categoryClass]}`}
+        >
+          {category}
+        </span>
       </div>
 
-      <span
-        className={`${styles.serviceCard__category} ${styles[categoryClass]}`}
-      >
-        {category}
-      </span>
+      <div className={styles.serviceCard__content}>
+        <h3 className={styles.serviceCard__title}>{title}</h3>
+        <p className={styles.serviceCard__description}>{description}</p>
+      </div>
 
-      <h3 className={styles.serviceCard__title}>{title}</h3>
-
-      <p className={styles.serviceCard__description}>{description}</p>
-
-      <ul className={styles.serviceCard__features}>
+      <div className={styles.serviceCard__features}>
         {features.map((feature, index) => (
-          <li key={index} className={styles.serviceCard__feature}>
+          <div key={index} className={styles.serviceCard__feature}>
             <CheckCircle
               size={16}
               className={styles.serviceCard__featureIcon}
             />
             <span>{feature}</span>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
 
       <Button
         variant="primary"

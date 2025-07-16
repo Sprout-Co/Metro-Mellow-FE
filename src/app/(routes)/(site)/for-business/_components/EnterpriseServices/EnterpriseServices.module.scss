@@ -116,15 +116,22 @@
     outline-offset: 2px;
   }
 
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: spacing("lg");
+  }
+
   &__iconContainer {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 60px;
-    height: 60px;
+    width: 56px;
+    height: 56px;
     border-radius: 12px;
-    margin-bottom: spacing("md");
     color: color("neutral", "white");
+    flex-shrink: 0;
 
     svg {
       stroke-width: 2;
@@ -166,7 +173,6 @@
     @include font-size("small");
     @include font-weight("semibold");
     letter-spacing: map-get($letter-spacing, "wide");
-    margin-bottom: spacing("md");
     text-transform: uppercase;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
@@ -199,6 +205,10 @@
     }
   }
 
+  &__content {
+    margin-bottom: spacing("lg");
+  }
+
   &__title {
     @include font-size("title");
     @include font-weight("semibold");
@@ -216,27 +226,22 @@
     @include font-weight("regular");
     color: color("neutral", "dark");
     line-height: map-get($line-heights, "relaxed");
-    margin-bottom: spacing("md");
   }
 
   &__features {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 spacing("md") 0;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+    margin-bottom: spacing("lg");
     flex-grow: 1;
   }
 
   &__feature {
     display: flex;
     align-items: center;
-    margin-bottom: spacing("xs");
     @include font-size("body-2");
     @include font-weight("medium");
     color: color("neutral", "dark");
-
-    &:last-child {
-      margin-bottom: 0;
-    }
   }
 
   &__featureIcon {
