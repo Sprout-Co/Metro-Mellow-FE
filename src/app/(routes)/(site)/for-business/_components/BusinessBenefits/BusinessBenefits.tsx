@@ -9,8 +9,6 @@ import styles from "./BusinessBenefits.module.scss";
 interface StatCardProps {
   icon: React.ReactNode;
   iconBgClass: string;
-  metric: string;
-  metricClass: string;
   title: string;
   description: string;
   delay: number;
@@ -19,8 +17,6 @@ interface StatCardProps {
 const StatCard: React.FC<StatCardProps> = ({
   icon,
   iconBgClass,
-  metric,
-  metricClass,
   title,
   description,
   delay,
@@ -62,19 +58,6 @@ const StatCard: React.FC<StatCardProps> = ({
     },
   };
 
-  const metricVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut",
-        delay: delay + 0.2,
-      },
-    },
-  };
-
   return (
     <motion.div
       ref={cardRef}
@@ -96,18 +79,10 @@ const StatCard: React.FC<StatCardProps> = ({
           {icon}
         </motion.div>
         
-        <motion.div
-          className={`${styles.statCard__metric} ${styles[metricClass]}`}
-          variants={metricVariants}
-          initial="hidden"
-          animate={controls}
-        >
-          {metric}
-        </motion.div>
+        <h3 className={styles.statCard__title}>{title}</h3>
       </div>
 
       <div className={styles.statCard__content}>
-        <h3 className={styles.statCard__title}>{title}</h3>
         <p className={styles.statCard__description}>{description}</p>
       </div>
 
@@ -160,8 +135,6 @@ const BusinessBenefits: React.FC = () => {
     {
       icon: <TrendingDown size={24} />,
       iconBgClass: "statCard__iconBg--success",
-      metric: "40%",
-      metricClass: "statCard__metric--success",
       title: "Cost Efficiency",
       description:
         "Reduce operational costs by up to 40% through optimized service delivery and resource allocation.",
@@ -170,8 +143,6 @@ const BusinessBenefits: React.FC = () => {
     {
       icon: <Users size={24} />,
       iconBgClass: "statCard__iconBg--secondary",
-      metric: "85%",
-      metricClass: "statCard__metric--secondary",
       title: "Employee Satisfaction",
       description:
         "Boost workplace morale and productivity with services that enhance employee well-being and comfort.",
@@ -180,8 +151,6 @@ const BusinessBenefits: React.FC = () => {
     {
       icon: <TrendingUp size={24} />,
       iconBgClass: "statCard__iconBg--primary",
-      metric: "∞",
-      metricClass: "statCard__metric--primary",
       title: "Scalability",
       description:
         "Flexible solutions that grow with your business, from startups to enterprise-level operations.",
@@ -219,8 +188,6 @@ const BusinessBenefits: React.FC = () => {
               key={index}
               icon={stat.icon}
               iconBgClass={stat.iconBgClass}
-              metric={stat.metric}
-              metricClass={stat.metricClass}
               title={stat.title}
               description={stat.description}
               delay={stat.delay}

@@ -97,18 +97,19 @@
   &__header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: spacing("xl");
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
   }
 
   &__iconContainer {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 64px;
-    height: 64px;
-    border-radius: 16px;
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
     color: color("neutral", "white");
+    flex-shrink: 0;
 
     svg {
       stroke-width: 2;
@@ -129,32 +130,7 @@
     }
   }
 
-  &__metric {
-    font-size: 4rem;
-    @include font-weight("black");
-    letter-spacing: map-get($letter-spacing, "tight");
-    line-height: 1;
 
-    @include breakpoint-down("lg") {
-      font-size: 3.5rem;
-    }
-
-    @include breakpoint-down("md") {
-      font-size: 3rem;
-    }
-
-    &--primary {
-      color: color("primary", "base");
-    }
-
-    &--secondary {
-      color: color("secondary", "base");
-    }
-
-    &--success {
-      color: color("status", "success");
-    }
-  }
 
   &__content {
     flex-grow: 1;
@@ -165,8 +141,8 @@
     @include font-size("h5");
     @include font-weight("semibold");
     color: color("neutral", "black");
-    margin-bottom: spacing("sm");
     letter-spacing: map-get($letter-spacing, "tighter");
+    margin: 0;
 
     @include breakpoint-down("lg") {
       @include font-size("subtitle-1");
