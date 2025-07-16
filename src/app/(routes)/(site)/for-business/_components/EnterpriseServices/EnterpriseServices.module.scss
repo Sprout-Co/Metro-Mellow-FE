@@ -158,42 +158,44 @@
   }
 
   &__category {
-    display: inline-block;
-    padding: spacing("xxs") spacing("sm");
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xs") spacing("md");
     border-radius: 100px;
     @include font-size("small");
-    @include font-weight("medium");
+    @include font-weight("semibold");
     letter-spacing: map-get($letter-spacing, "wide");
-    margin-bottom: spacing("sm");
+    margin-bottom: spacing("md");
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    width: fit-content;
+    white-space: nowrap;
 
     &--primary {
-      background-color: color("primary", "lighter");
-      color: color("primary", "base");
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
     }
 
     &--secondary {
-      background-color: color("primary", "lighter");
-      color: color("primary", "base");
+      background-color: color("secondary", "base");
+      color: color("neutral", "white");
     }
 
     &--accent {
-      background-color: color("primary", "lighter");
-      color: color("primary", "base");
+      background-color: color("accent", "base");
+      color: color("neutral", "black");
     }
 
     &--neutral {
-      background-color: color("primary", "lighter");
-      color: color("primary", "base");
+      background-color: color("neutral", "dark");
+      color: color("neutral", "white");
     }
 
-    &--info {
-      background-color: color("primary", "lighter");
-      color: color("primary", "base");
-    }
-
-    &--custom {
-      background-color: color("primary", "lighter");
-      color: color("primary", "base");
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
   }
 
