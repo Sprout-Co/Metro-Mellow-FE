@@ -12,8 +12,8 @@ export default function BusinessPage() {
   return (
     <main className={styles.forBusiness}>
       <BusinessHero />
-      <BusinessBenefits />
       <EnterpriseServices />
+      <BusinessBenefits />
       <EnterpriseFeatures />
       <SuccessStoriesSection />
       {/* Other business sections will be added here */}
