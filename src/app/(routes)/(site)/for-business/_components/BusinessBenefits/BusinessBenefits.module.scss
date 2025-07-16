@@ -12,10 +12,10 @@
 
   &__header {
     text-align: center;
-    margin-bottom: spacing("3xl");
+    margin-bottom: spacing("4xl");
 
     @include breakpoint-down("md") {
-      margin-bottom: spacing("2xl");
+      margin-bottom: spacing("3xl");
     }
   }
 
@@ -53,7 +53,7 @@
 
   &__grid {
     display: grid;
-    gap: spacing("lg");
+    gap: spacing("xl");
     grid-template-columns: 1fr;
 
     @include breakpoint-up("md") {
@@ -67,31 +67,38 @@
     }
 
     @include breakpoint-down("md") {
-      gap: spacing("md");
+      gap: spacing("lg");
     }
 
     @include breakpoint-down("sm") {
-      gap: spacing("sm");
+      gap: spacing("md");
     }
   }
 }
 
-.benefitCard {
+.statCard {
   background-color: color("neutral", "white");
-  border-radius: 12px;
-  padding: spacing("xl");
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease-out;
+  border-radius: 16px;
+  padding: spacing("2xl");
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s ease-out;
   position: relative;
-  will-change: transform;
-  min-height: 320px;
+  will-change: transform, box-shadow;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  min-height: 320px;
+  height: 100%;
 
   &:focus-visible {
     outline: 2px solid color("primary", "base");
     outline-offset: 2px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
   }
 
   &__iconContainer {
@@ -101,8 +108,8 @@
     width: 56px;
     height: 56px;
     border-radius: 12px;
-    margin-bottom: spacing("md");
     color: color("neutral", "white");
+    flex-shrink: 0;
 
     svg {
       stroke-width: 2;
@@ -123,12 +130,19 @@
     }
   }
 
+
+
+  &__content {
+    flex-grow: 1;
+    margin-bottom: spacing("lg");
+  }
+
   &__title {
-    @include font-size("title");
+    @include font-size("h5");
     @include font-weight("semibold");
     color: color("neutral", "black");
-    margin-bottom: spacing("sm");
     letter-spacing: map-get($letter-spacing, "tighter");
+    margin: 0;
 
     @include breakpoint-down("lg") {
       @include font-size("subtitle-1");
@@ -140,35 +154,6 @@
     @include font-weight("regular");
     color: color("neutral", "dark");
     line-height: map-get($line-heights, "relaxed");
-    margin-bottom: spacing("lg");
-    flex-grow: 1;
-  }
-
-  &__metric {
-    font-size: 3.5rem;
-    @include font-weight("bold");
-    letter-spacing: map-get($letter-spacing, "tight");
-    margin-bottom: spacing("md");
-
-    @include breakpoint-down("lg") {
-      font-size: 3rem;
-    }
-
-    @include breakpoint-down("md") {
-      font-size: 2.5rem;
-    }
-
-    &--primary {
-      color: color("primary", "base");
-    }
-
-    &--secondary {
-      color: color("secondary", "base");
-    }
-
-    &--success {
-      color: color("status", "success");
-    }
   }
 
   &__link {
@@ -179,6 +164,7 @@
     color: color("primary", "base");
     text-decoration: none;
     transition: color 0.2s ease;
+    margin-top: auto;
 
     &:hover {
       color: color("primary", "dark");
@@ -191,7 +177,7 @@
   }
 
   &:hover {
-    .benefitCard__linkIcon {
+    .statCard__linkIcon {
       transform: translateX(4px);
     }
   }

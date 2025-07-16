@@ -101,14 +101,14 @@
 .serviceCard {
   background-color: color("neutral", "white");
   border-radius: 16px;
-  padding: spacing("xl");
+  padding: spacing("lg");
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   transition: all 0.4s ease-out;
   position: relative;
   will-change: transform, box-shadow;
   display: flex;
   flex-direction: column;
-  min-height: 380px;
+  min-height: 280px;
   height: 100%;
 
   &:focus-visible {
@@ -220,7 +220,7 @@
   &__features {
     list-style: none;
     padding: 0;
-    margin: 0 0 spacing("lg") 0;
+    margin: 0 0 spacing("md") 0;
     flex-grow: 1;
   }
 
@@ -249,10 +249,10 @@
   }
 
   @include breakpoint-down("md") {
-    min-height: 360px;
+    min-height: 260px;
   }
 
   @include breakpoint-down("sm") {
-    min-height: 320px;
+    min-height: 240px;
   }
 }

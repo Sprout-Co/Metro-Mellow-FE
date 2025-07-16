@@ -3,29 +3,26 @@
 import React, { useRef, useEffect } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { TrendingDown, Users, TrendingUp, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import styles from "./BusinessBenefits.module.scss";
 
-interface BenefitCardProps {
+interface StatCardProps {
   icon: React.ReactNode;
   iconBgClass: string;
   title: string;
   description: string;
-  metric: string;
-  metricClass: string;
   delay: number;
 }
 
-const BenefitCard: React.FC<BenefitCardProps> = ({
+const StatCard: React.FC<StatCardProps> = ({
   icon,
   iconBgClass,
   title,
   description,
-  metric,
-  metricClass,
   delay,
 }) => {
-  const controls = useAnimation();
   const cardRef = useRef<HTMLDivElement>(null);
+  const controls = useAnimation();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -61,50 +58,37 @@ const BenefitCard: React.FC<BenefitCardProps> = ({
     },
   };
 
-  const iconVariants = {
-    initial: { scale: 1 },
-    hover: {
-      scale: 1.1,
-      transition: {
-        duration: 0.3,
-        ease: "easeOut",
-        yoyo: Infinity,
-      },
-    },
-  };
-
   return (
     <motion.div
       ref={cardRef}
-      className={styles.benefitCard}
+      className={styles.statCard}
       variants={cardVariants}
       initial="hidden"
       animate={controls}
       whileHover={{
         y: -5,
-        boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
         transition: { duration: 0.3, ease: "easeOut" },
       }}
     >
-      <motion.div
-        className={`${styles.benefitCard__iconContainer} ${styles[iconBgClass]}`}
-        variants={iconVariants}
-        whileHover="hover"
-      >
-        {icon}
-      </motion.div>
-
-      <h3 className={styles.benefitCard__title}>{title}</h3>
-
-      <p className={styles.benefitCard__description}>{description}</p>
-
-      <div className={`${styles.benefitCard__metric} ${styles[metricClass]}`}>
-        {metric}
+      <div className={styles.statCard__header}>
+        <motion.div
+          className={`${styles.statCard__iconContainer} ${styles[iconBgClass]}`}
+          whileHover={{ scale: 1.1 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+        >
+          {icon}
+        </motion.div>
+        
+        <h3 className={styles.statCard__title}>{title}</h3>
       </div>
 
-      <a href="#" className={styles.benefitCard__link}>
+      <div className={styles.statCard__content}>
+        <p className={styles.statCard__description}>{description}</p>
+      </div>
+
+      <a href="#" className={styles.statCard__link}>
         Learn more{" "}
-        <ArrowRight size={16} className={styles.benefitCard__linkIcon} />
+        <ArrowRight size={16} className={styles.statCard__linkIcon} />
       </a>
     </motion.div>
   );
@@ -147,35 +131,29 @@ const BusinessBenefits: React.FC = () => {
     },
   };
 
-  const benefits = [
+  const stats = [
     {
       icon: <TrendingDown size={24} />,
-      iconBgClass: "benefitCard__iconBg--success",
+      iconBgClass: "statCard__iconBg--success",
       title: "Cost Efficiency",
       description:
         "Reduce operational costs by up to 40% through optimized service delivery and resource allocation.",
-      metric: "40%",
-      metricClass: "benefitCard__metric--success",
       delay: 0.2,
     },
     {
       icon: <Users size={24} />,
-      iconBgClass: "benefitCard__iconBg--secondary",
+      iconBgClass: "statCard__iconBg--secondary",
       title: "Employee Satisfaction",
       description:
         "Boost workplace morale and productivity with services that enhance employee well-being and comfort.",
-      metric: "85%",
-      metricClass: "benefitCard__metric--secondary",
       delay: 0.4,
     },
     {
       icon: <TrendingUp size={24} />,
-      iconBgClass: "benefitCard__iconBg--primary",
+      iconBgClass: "statCard__iconBg--primary",
       title: "Scalability",
       description:
         "Flexible solutions that grow with your business, from startups to enterprise-level operations.",
-      metric: "∞",
-      metricClass: "benefitCard__metric--primary",
       delay: 0.6,
     },
   ];
@@ -205,16 +183,14 @@ const BusinessBenefits: React.FC = () => {
         </motion.div>
 
         <div className={styles.businessBenefits__grid}>
-          {benefits.map((benefit, index) => (
-            <BenefitCard
+          {stats.map((stat, index) => (
+            <StatCard
               key={index}
-              icon={benefit.icon}
-              iconBgClass={benefit.iconBgClass}
-              title={benefit.title}
-              description={benefit.description}
-              metric={benefit.metric}
-              metricClass={benefit.metricClass}
-              delay={benefit.delay}
+              icon={stat.icon}
+              iconBgClass={stat.iconBgClass}
+              title={stat.title}
+              description={stat.description}
+              delay={stat.delay}
             />
           ))}
         </div>
