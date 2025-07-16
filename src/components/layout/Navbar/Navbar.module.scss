@@ -44,6 +44,8 @@
   &__logo {
     display: flex;
     align-items: center;
+    border-radius: border-radius("md");
+    overflow: hidden;
   }
 
   &__logoMark {
