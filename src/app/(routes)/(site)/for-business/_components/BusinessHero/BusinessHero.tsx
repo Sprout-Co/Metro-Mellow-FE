@@ -1,29 +1,30 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
-import { ArrowRight, Calendar } from "lucide-react";
-import { Button } from "@/components/ui/Button";
-import styles from "./BusinessHero.module.scss";
+import { FC, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
+import styles from './BusinessHero.module.scss';
+import { Button } from '@/components/ui/Button';
+import { ArrowRight, Calendar } from 'lucide-react';
 
-const businessImages = [
-  "/images/brand/b1.jpeg",
-  "/images/brand/b2.jpeg",
-  "/images/brand/b3.jpeg",
-];
-
-const BusinessHero: React.FC = () => {
+const BusinessHero: FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  
+  // Business hero images array
+  const businessImages = [
+    '/images/cleaning/c2.jpeg',
+    '/images/pest-control/p1.jpeg',
+    '/images/laundry/l1.jpeg',
+  ];
 
   // Auto-slide effect
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % businessImages.length);
-    }, 8000); // Change slide every 8 seconds
+    }, 10000); // Change slide every 10 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  }, [businessImages.length]);
 
   // Animation variants
   const textVariants = {
@@ -50,13 +51,18 @@ const BusinessHero: React.FC = () => {
         ease: "easeOut",
       },
     },
-    hover: {
-      scale: 1.05,
+  };
+
+  const indicatorVariants = {
+    hidden: { opacity: 0 },
+    visible: (i: number) => ({
+      opacity: 1,
       transition: {
-        duration: 0.2,
-        ease: "easeInOut",
+        delay: 0.7 + (i * 0.1),
+        duration: 0.4,
+        ease: "easeOut",
       },
-    },
+    }),
   };
 
   const slideVariants = {
@@ -68,18 +74,6 @@ const BusinessHero: React.FC = () => {
     },
     exit: {
       opacity: 0,
-    },
-  };
-
-  const scrollIndicatorVariants = {
-    initial: { y: 0 },
-    animate: {
-      y: [0, 10, 0],
-      transition: {
-        duration: 1.5,
-        repeat: Infinity,
-        repeatType: "loop",
-      },
     },
   };
 
@@ -118,7 +112,12 @@ const BusinessHero: React.FC = () => {
             custom={1}
             variants={textVariants}
           >
-            Enterprise Solutions for Modern Businesses
+            <span className={styles["businessHero__title--accent"]}>Enterprise</span>
+            <span className={styles["businessHero__title--main"]}>
+              Solutions for
+              <br />
+              Modern Businesses
+            </span>
           </motion.h1>
 
           <motion.p
@@ -128,8 +127,7 @@ const BusinessHero: React.FC = () => {
             custom={2}
             variants={textVariants}
           >
-            Streamline operations, boost productivity, and enhance employee
-            satisfaction with our comprehensive B2B service platform
+            Streamline operations, boost productivity, and enhance employee satisfaction with our comprehensive B2B service platform
           </motion.p>
 
           <motion.div
@@ -137,29 +135,18 @@ const BusinessHero: React.FC = () => {
             initial="hidden"
             animate="visible"
             variants={buttonVariants}
+            whileHover="hover"
           >
-            <Button
-              variant="primary"
-              size="lg"
-              className={styles.businessHero__button}
-              rightIcon={<ArrowRight size={18} />}
-            >
+            <Button variant="white" size='lg' fullWidth={false} rightIcon={<ArrowRight size={18} />}>
               Get Enterprise Quote
             </Button>
-
-            <Button
-              variant="white"
-              size="lg"
-              className={styles.businessHero__button}
-              rightIcon={<Calendar size={18} />}
-            >
+            <Button variant="white" size='lg' fullWidth={false} rightIcon={<Calendar size={18} />}>
               Schedule Demo
             </Button>
           </motion.div>
         </div>
       </div>
 
-      {/* Slide indicators */}
       <div className={styles.businessHero__indicators}>
         {businessImages.map((_, index) => (
           <motion.span
@@ -168,21 +155,12 @@ const BusinessHero: React.FC = () => {
             initial="hidden"
             animate="visible"
             custom={index}
-            variants={textVariants}
+            variants={indicatorVariants}
             onClick={() => handleIndicatorClick(index)}
+            style={{ cursor: "pointer" }}
           />
         ))}
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        className={styles.businessHero__scrollIndicator}
-        variants={scrollIndicatorVariants}
-        initial="initial"
-        animate="animate"
-      >
-        <ArrowRight size={24} className={styles.businessHero__scrollIcon} />
-      </motion.div>
     </section>
   );
 };

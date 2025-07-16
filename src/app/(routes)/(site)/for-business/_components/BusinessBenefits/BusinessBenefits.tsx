@@ -195,7 +195,7 @@ const BusinessBenefits: React.FC = () => {
           <h2 className={styles.businessBenefits__title}>
             Why Leading Companies Choose{" "}
             <span className={styles.businessBenefits__highlight}>
-              Metro Mellow
+              Metromellow
             </span>
           </h2>
           <p className={styles.businessBenefits__subtitle}>

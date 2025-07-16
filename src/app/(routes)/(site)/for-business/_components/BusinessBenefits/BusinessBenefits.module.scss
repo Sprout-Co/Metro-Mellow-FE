@@ -39,7 +39,7 @@
   }
 
   &__highlight {
-    color: color("secondary", "base");
+    color: color("primary", "base");
   }
 
   &__subtitle {
@@ -124,14 +124,14 @@
   }
 
   &__title {
-    @include font-size("h4");
+    @include font-size("title");
     @include font-weight("semibold");
     color: color("neutral", "black");
     margin-bottom: spacing("sm");
     letter-spacing: map-get($letter-spacing, "tighter");
 
     @include breakpoint-down("lg") {
-      @include font-size("h5");
+      @include font-size("subtitle-1");
     }
   }
 
