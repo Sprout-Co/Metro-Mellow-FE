@@ -122,6 +122,7 @@
     border-radius: 12px;
     overflow: hidden;
     margin-bottom: spacing("lg");
+    position: relative;
   }
 
   &__image {
@@ -131,28 +132,42 @@
     transition: transform 0.3s ease;
   }
 
+  &__imageOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.4) 0%,
+      rgba(0, 0, 0, 0.1) 50%,
+      rgba(0, 0, 0, 0.2) 100%
+    );
+    z-index: 1;
+  }
+
   &:hover {
     .serviceCard__image {
       transform: scale(1.05);
     }
   }
 
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: spacing("lg");
-  }
-
   &__iconContainer {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     border-radius: 12px;
     color: color("neutral", "white");
-    flex-shrink: 0;
+    position: absolute;
+    top: spacing("sm");
+    left: spacing("sm");
+    z-index: 2;
+    backdrop-filter: blur(8px);
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 
     svg {
       stroke-width: 2;
@@ -199,24 +214,30 @@
     transition: all 0.3s ease;
     width: fit-content;
     white-space: nowrap;
+    position: absolute;
+    top: spacing("sm");
+    right: spacing("sm");
+    z-index: 2;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 
     &--primary {
-      background-color: color("primary", "base");
+      background-color: rgba(color("primary", "base"), 0.9);
       color: color("neutral", "white");
     }
 
     &--secondary {
-      background-color: color("secondary", "base");
+      background-color: rgba(color("secondary", "base"), 0.9);
       color: color("neutral", "white");
     }
 
     &--accent {
-      background-color: color("accent", "base");
+      background-color: rgba(color("accent", "base"), 0.9);
       color: color("neutral", "black");
     }
 
     &--neutral {
-      background-color: color("neutral", "dark");
+      background-color: rgba(color("neutral", "dark"), 0.9);
       color: color("neutral", "white");
     }
 

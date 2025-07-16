@@ -90,14 +90,18 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           alt={title}
           className={styles.serviceCard__image}
         />
-      </div>
-
-      <div className={styles.serviceCard__header}>
+        
+        {/* Overlay gradient for better text readability */}
+        <div className={styles.serviceCard__imageOverlay} />
+        
+        {/* Icon positioned in top-left corner of image */}
         <div
           className={`${styles.serviceCard__iconContainer} ${styles[iconClass]}`}
         >
           {icon}
         </div>
+        
+        {/* Category tag positioned in top-right corner of image */}
         <span
           className={`${styles.serviceCard__category} ${styles[categoryClass]}`}
         >
