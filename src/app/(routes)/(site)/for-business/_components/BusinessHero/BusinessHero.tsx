@@ -12,7 +12,7 @@ const BusinessHero: FC = () => {
   
   // Business hero images array
   const businessImages = [
-    '/images/corporate/cp2.png',
+    '/images/corporate/cp12.png',
     '/images/corporate/cp1.png',
     '/images/corporate/cp3.png',
   ];
@@ -112,11 +112,11 @@ const BusinessHero: FC = () => {
             custom={1}
             variants={textVariants}
           >
-            <span className={styles["businessHero__title--accent"]}>Enterprise</span>
+            <span className={styles["businessHero__title--accent"]}>Corporate</span>
             <span className={styles["businessHero__title--main"]}>
-              Solutions for
+              Facility
               <br />
-              Modern Businesses
+              Services
             </span>
           </motion.h1>
 
@@ -127,7 +127,7 @@ const BusinessHero: FC = () => {
             custom={2}
             variants={textVariants}
           >
-            Streamline operations, boost productivity, and enhance employee satisfaction with our comprehensive B2B service platform
+            Transform your workplace with comprehensive facility services. Professional cleaning, catering, laundry, and pest control - all managed seamlessly for your business.
           </motion.p>
 
           <motion.div
