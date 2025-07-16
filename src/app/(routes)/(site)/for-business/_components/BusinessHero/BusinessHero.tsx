@@ -12,9 +12,9 @@ const BusinessHero: FC = () => {
   
   // Business hero images array
   const businessImages = [
-    '/images/cleaning/c2.jpeg',
-    '/images/pest-control/p1.jpeg',
-    '/images/laundry/l1.jpeg',
+    '/images/corporate/cp2.png',
+    '/images/corporate/cp1.png',
+    '/images/corporate/cp3.png',
   ];
 
   // Auto-slide effect
