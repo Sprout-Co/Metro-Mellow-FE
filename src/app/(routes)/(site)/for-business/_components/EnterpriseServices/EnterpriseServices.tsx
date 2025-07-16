@@ -6,9 +6,7 @@ import {
   Building2,
   ChefHat,
   Shirt,
-  Wrench,
-  Calendar,
-  Puzzle,
+  Bug,
   CheckCircle,
   ArrowRight,
 } from "lucide-react";
@@ -25,6 +23,7 @@ interface ServiceCardProps {
   features: string[];
   ctaText: string;
   delay: number;
+  image: string;
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({
@@ -37,6 +36,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   features,
   ctaText,
   delay,
+  image,
 }) => {
   const controls = useAnimation();
   const cardRef = useRef<HTMLDivElement>(null);
@@ -84,33 +84,47 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       initial="hidden"
       animate={controls}
     >
-      <div
-        className={`${styles.serviceCard__iconContainer} ${styles[iconClass]}`}
-      >
-        {icon}
+      <div className={styles.serviceCard__imageContainer}>
+        <img 
+          src={image} 
+          alt={title}
+          className={styles.serviceCard__image}
+        />
+        
+        {/* Overlay gradient for better text readability */}
+        <div className={styles.serviceCard__imageOverlay} />
+        
+        {/* Icon positioned in top-left corner of image */}
+        <div
+          className={`${styles.serviceCard__iconContainer} ${styles[iconClass]}`}
+        >
+          {icon}
+        </div>
+        
+        {/* Category tag positioned in top-right corner of image */}
+        <span
+          className={`${styles.serviceCard__category} ${styles[categoryClass]}`}
+        >
+          {category}
+        </span>
       </div>
 
-      <span
-        className={`${styles.serviceCard__category} ${styles[categoryClass]}`}
-      >
-        {category}
-      </span>
+      <div className={styles.serviceCard__content}>
+        <h3 className={styles.serviceCard__title}>{title}</h3>
+        <p className={styles.serviceCard__description}>{description}</p>
+      </div>
 
-      <h3 className={styles.serviceCard__title}>{title}</h3>
-
-      <p className={styles.serviceCard__description}>{description}</p>
-
-      <ul className={styles.serviceCard__features}>
+      <div className={styles.serviceCard__features}>
         {features.map((feature, index) => (
-          <li key={index} className={styles.serviceCard__feature}>
+          <div key={index} className={styles.serviceCard__feature}>
             <CheckCircle
               size={16}
               className={styles.serviceCard__featureIcon}
             />
             <span>{feature}</span>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
 
       <Button
         variant="primary"
@@ -178,6 +192,7 @@ const EnterpriseServices: React.FC = () => {
       ],
       ctaText: "Learn More",
       delay: 0.15,
+      image: "/images/corporate/cp5.png",
     },
     {
       icon: <ChefHat size={24} />,
@@ -195,6 +210,7 @@ const EnterpriseServices: React.FC = () => {
       ],
       ctaText: "Learn More",
       delay: 0.3,
+      image: "/images/corporate/cp1.png",
     },
     {
       icon: <Shirt size={24} />,
@@ -212,57 +228,25 @@ const EnterpriseServices: React.FC = () => {
       ],
       ctaText: "Learn More",
       delay: 0.45,
+      image: "/images/corporate/cp8.png",
     },
     {
-      icon: <Wrench size={24} />,
+      icon: <Bug size={24} />,
       iconClass: "serviceCard__iconBg--neutral",
-      category: "Maintenance",
+      category: "Pest Control",
       categoryClass: "serviceCard__category--neutral",
-      title: "Facility Management",
+      title: "Commercial Pest Management",
       description:
-        "Comprehensive facility management to keep your workplace running smoothly.",
+        "Comprehensive pest control solutions to maintain a safe and hygienic workplace environment.",
       features: [
-        "Building maintenance",
-        "Equipment servicing",
-        "Preventive care",
-        "24/7 support",
+        "Regular inspections",
+        "Preventive treatments",
+        "Emergency response",
+        "Eco-friendly solutions",
       ],
       ctaText: "Learn More",
       delay: 0.6,
-    },
-    {
-      icon: <Calendar size={24} />,
-      iconClass: "serviceCard__iconBg--info",
-      category: "Event Services",
-      categoryClass: "serviceCard__category--info",
-      title: "Event Support",
-      description:
-        "Full-service event support for corporate gatherings, conferences, and meetings.",
-      features: [
-        "Corporate events",
-        "Meetings",
-        "Conferences",
-        "Setup & teardown",
-      ],
-      ctaText: "Learn More",
-      delay: 0.75,
-    },
-    {
-      icon: <Puzzle size={24} />,
-      iconClass: "serviceCard__iconBg--custom",
-      category: "Tailored Services",
-      categoryClass: "serviceCard__category--custom",
-      title: "Custom Solutions",
-      description:
-        "Bespoke service packages tailored to your specific business requirements.",
-      features: [
-        "Bespoke solutions",
-        "Industry-specific services",
-        "Scalable packages",
-        "Consultation",
-      ],
-      ctaText: "Learn More",
-      delay: 0.9,
+      image: "/images/corporate/cp3.png",
     },
   ];
 
@@ -304,6 +288,7 @@ const EnterpriseServices: React.FC = () => {
               features={service.features}
               ctaText={service.ctaText}
               delay={service.delay}
+              image={service.image}
             />
           ))}
         </div>

@@ -83,8 +83,8 @@
     }
 
     @include breakpoint-up("lg") {
-      grid-template-columns: repeat(3, 1fr);
-      max-width: 1400px;
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 1200px;
       margin: 0 auto;
     }
 
@@ -116,15 +116,58 @@
     outline-offset: 2px;
   }
 
+  &__imageContainer {
+    width: 100%;
+    height: 200px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: spacing("lg");
+    position: relative;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  &__imageOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.4) 0%,
+      rgba(0, 0, 0, 0.1) 50%,
+      rgba(0, 0, 0, 0.2) 100%
+    );
+    z-index: 1;
+  }
+
+  &:hover {
+    .serviceCard__image {
+      transform: scale(1.05);
+    }
+  }
+
   &__iconContainer {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
     border-radius: 12px;
-    margin-bottom: spacing("md");
     color: color("neutral", "white");
+    position: absolute;
+    top: spacing("sm");
+    left: spacing("sm");
+    z-index: 2;
+    backdrop-filter: blur(8px);
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 
     svg {
       stroke-width: 2;
@@ -158,43 +201,54 @@
   }
 
   &__category {
-    display: inline-block;
-    padding: spacing("xxs") spacing("sm");
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xs") spacing("md");
     border-radius: 100px;
     @include font-size("small");
-    @include font-weight("medium");
+    @include font-weight("semibold");
     letter-spacing: map-get($letter-spacing, "wide");
-    margin-bottom: spacing("sm");
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    width: fit-content;
+    white-space: nowrap;
+    position: absolute;
+    top: spacing("sm");
+    right: spacing("sm");
+    z-index: 2;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 
     &--primary {
-      background-color: color("primary", "lighter");
-      color: color("primary", "base");
+      background-color: rgba(color("primary", "base"), 0.9);
+      color: color("neutral", "white");
     }
 
     &--secondary {
-      background-color: color("primary", "lighter");
-      color: color("primary", "base");
+      background-color: rgba(color("secondary", "base"), 0.9);
+      color: color("neutral", "white");
     }
 
     &--accent {
-      background-color: color("primary", "lighter");
-      color: color("primary", "base");
+      background-color: rgba(color("accent", "base"), 0.9);
+      color: color("neutral", "black");
     }
 
     &--neutral {
-      background-color: color("primary", "lighter");
-      color: color("primary", "base");
+      background-color: rgba(color("neutral", "dark"), 0.9);
+      color: color("neutral", "white");
     }
 
-    &--info {
-      background-color: color("primary", "lighter");
-      color: color("primary", "base");
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
+  }
 
-    &--custom {
-      background-color: color("primary", "lighter");
-      color: color("primary", "base");
-    }
+  &__content {
+    margin-bottom: spacing("lg");
   }
 
   &__title {
@@ -214,27 +268,22 @@
     @include font-weight("regular");
     color: color("neutral", "dark");
     line-height: map-get($line-heights, "relaxed");
-    margin-bottom: spacing("md");
   }
 
   &__features {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 spacing("md") 0;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+    margin-bottom: spacing("lg");
     flex-grow: 1;
   }
 
   &__feature {
     display: flex;
     align-items: center;
-    margin-bottom: spacing("xs");
     @include font-size("body-2");
     @include font-weight("medium");
     color: color("neutral", "dark");
-
-    &:last-child {
-      margin-bottom: 0;
-    }
   }
 
   &__featureIcon {
