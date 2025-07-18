@@ -198,7 +198,7 @@
 
   &__foodName {
     padding: spacing("md") spacing("md") spacing("xs");
-    @include font-size("h6");
+    @include font-size("body-1");
     @include font-weight("bold");
     color: color("neutral", "black");
     margin: 0;
@@ -222,7 +222,7 @@
   }
 
   &__foodPrice {
-    @include font-size("body-1");
+    @include font-size("body-2");
     @include font-weight("bold");
     color: color("neutral", "black");
   }
@@ -231,8 +231,8 @@
     background-color: color("primary", "base");
     color: color("neutral", "white");
     border: none;
-    padding: spacing("sm") spacing("lg");
-    @include font-size("small");
+    padding: spacing("xs") spacing("md");
+    @include font-size("xs");
     @include font-weight("bold");
     text-transform: uppercase;
     border-radius: 0;
