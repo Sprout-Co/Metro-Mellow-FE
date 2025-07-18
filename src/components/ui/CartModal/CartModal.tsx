@@ -23,6 +23,7 @@ interface CartModalProps {
   items: CartItem[];
   onUpdateQuantity: (id: string, quantity: number) => void;
   onRemoveItem: (id: string) => void;
+  onRemoveVariant?: (itemId: string, variant: string) => void;
 }
 
 export const CartModal: React.FC<CartModalProps> = ({
@@ -32,6 +33,7 @@ export const CartModal: React.FC<CartModalProps> = ({
   items,
   onUpdateQuantity,
   onRemoveItem,
+  onRemoveVariant,
 }) => {
   // Calculate subtotal
   const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -48,6 +50,7 @@ export const CartModal: React.FC<CartModalProps> = ({
       title="Your cart"
       maxWidth="600px"
       className={styles.cartModal}
+      showCloseButton={true}
     >
       <div className={styles.cartModal__content}>
         {items.length === 0 ? (
@@ -70,33 +73,10 @@ export const CartModal: React.FC<CartModalProps> = ({
                   </div>
                   
                   <div className={styles.cartModal__itemInfo}>
-                    <div className={styles.cartModal__itemHeader}>
-                      <h3 className={styles.cartModal__itemName}>{item.name}</h3>
-                      <button
-                        className={styles.cartModal__itemRemove}
-                        onClick={() => onRemoveItem(item.id)}
-                        aria-label="Remove item"
-                      >
-                        <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M18 6L6 18M6 6L18 18"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </button>
-                    </div>
+                    <h3 className={styles.cartModal__itemName}>{item.name}</h3>
                     
                     <div className={styles.cartModal__itemPrice}>
-                      {formatPrice(item.price)}
+                      NGN {item.price.toLocaleString()}
                     </div>
                     
                     <div className={styles.cartModal__itemVariants}>
@@ -106,46 +86,67 @@ export const CartModal: React.FC<CartModalProps> = ({
                           <button 
                             className={styles.cartModal__variantRemove}
                             aria-label={`Remove ${variant}`}
+                            onClick={() => onRemoveVariant?.(item.id, variant)}
                           >
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
+                            ✕
                           </button>
                         </div>
                       ))}
                     </div>
-                    
-                    <div className={styles.cartModal__itemFooter}>
-                      <div className={styles.cartModal__quantityControls}>
-                        <button
-                          className={styles.cartModal__quantityButton}
-                          onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))}
-                          disabled={item.quantity <= 1}
-                        >
-                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </button>
-                        <span className={styles.cartModal__quantity}>{item.quantity}</span>
-                        <button
-                          className={styles.cartModal__quantityButton}
-                          onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-                        >
-                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </button>
-                      </div>
+                  </div>
+                  
+                  <div className={styles.cartModal__itemActions}>
+                    <div className={styles.cartModal__quantityControls}>
+                      <button
+                        className={styles.cartModal__quantityButton}
+                        onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                        disabled={item.quantity <= 1}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </button>
+                      <span className={styles.cartModal__quantity}>{item.quantity}</span>
+                      <button
+                        className={styles.cartModal__quantityButton}
+                        onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </button>
                     </div>
+                    
+                    <button
+                      className={styles.cartModal__itemRemove}
+                      onClick={() => onRemoveItem(item.id)}
+                      aria-label="Remove item"
+                    >
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M18 6L6 18M6 6L18 18"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
             
-            <div className={styles.cartModal__subtotal}>
+                          <div className={styles.cartModal__subtotal}>
               <span className={styles.cartModal__subtotalLabel}>Sub-total</span>
               <span className={styles.cartModal__subtotalAmount}>
-                {formatPrice(subtotal)}
+                NGN {subtotal.toLocaleString()}
               </span>
             </div>
             

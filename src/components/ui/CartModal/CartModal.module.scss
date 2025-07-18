@@ -9,14 +9,14 @@
   &__content {
     display: flex;
     flex-direction: column;
-    gap: spacing("lg");
+    gap: spacing("md");
   }
   
   &__empty {
     text-align: center;
-    padding: spacing("xl");
+    padding: spacing("lg");
     color: color("neutral", "dark");
-    font-size: font-size("body-1");
+    font-size: font-size("body-2");
   }
   
   &__items {
@@ -25,10 +25,10 @@
     gap: spacing("md");
     max-height: 60vh;
     overflow-y: auto;
-    padding-right: spacing("sm");
+    padding-right: spacing("xs");
     
     &::-webkit-scrollbar {
-      width: spacing("xs");
+      width: 4px;
     }
     
     &::-webkit-scrollbar-track {
@@ -45,20 +45,22 @@
   &__item {
     display: flex;
     gap: spacing("md");
-    padding: spacing("md");
-    background-color: color("neutral", "lightest");
-    border-radius: border-radius("lg");
+    padding: spacing("sm");
+    background-color: color("neutral", "white");
     position: relative;
+    border-bottom: 1px solid color("neutral", "lighter");
+    align-items: center;
     
     @include breakpoint-down("sm") {
       flex-direction: column;
+      align-items: flex-start;
     }
   }
   
   &__itemImage {
-    width: spacing("6xl");
-    height: spacing("6xl");
-    border-radius: border-radius("md");
+    width: spacing("4xl");
+    height: spacing("4xl");
+    border-radius: border-radius("sm");
     overflow: hidden;
     flex-shrink: 0;
     
@@ -73,20 +75,20 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: spacing("xs");
-  }
-  
-  &__itemHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    gap: spacing("xxs");
   }
   
   &__itemName {
-    font-size: font-size("body-1");
+    font-size: font-size("body-2");
     font-weight: font-weight("semibold");
     color: color("neutral", "black");
     margin: 0;
+  }
+  
+  &__itemActions {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
   }
   
   &__itemRemove {
@@ -97,35 +99,39 @@
     color: color("neutral", "darker");
     border-radius: border-radius("full");
     transition: $transition-base;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     
     &:hover {
-      background-color: color-alpha("status", "error", 0.1);
       color: color("status", "error");
     }
   }
   
   &__itemPrice {
-    font-size: font-size("subtitle-1");
-    font-weight: font-weight("bold");
-    color: color("primary", "base");
+    font-size: font-size("body-2");
+    font-weight: font-weight("semibold");
+    color: color("neutral", "darkest");
   }
   
   &__itemVariants {
     display: flex;
     flex-wrap: wrap;
     gap: spacing("xs");
-    margin: spacing("xs") 0;
+    margin-top: spacing("xxs");
   }
   
   &__itemVariant {
     display: flex;
     align-items: center;
-    gap: spacing("xxs");
+    gap: 2px;
     padding: spacing("xs") spacing("sm");
     background-color: color("neutral", "lighter");
+    border: none;
     border-radius: border-radius("pill");
-    font-size: font-size("small");
+    font-size: font-size("xs");
     color: color("neutral", "darkest");
+    font-weight: font-weight("medium");
   }
   
   &__variantRemove {
@@ -135,20 +141,16 @@
     background: none;
     border: none;
     padding: 0;
+    font-size: 10px;
     cursor: pointer;
-    color: color("neutral", "dark");
+    color: color("neutral", "darkest");
     transition: $transition-base;
+    margin-left: 0;
+    font-weight: font-weight("medium");
     
     &:hover {
       color: color("status", "error");
     }
-  }
-  
-  &__itemFooter {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: spacing("sm");
   }
   
   &__quantityControls {
@@ -158,24 +160,24 @@
     border-radius: border-radius("pill");
     overflow: hidden;
     border: 1px solid color("neutral", "light");
-    padding: spacing("xxs") spacing("xs");
+    padding: 0 spacing("xs");
+    height: 30px;
   }
   
   &__quantityButton {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: spacing("xl");
-    height: spacing("xl");
-    border-radius: border-radius("full");
+    width: 20px;
+    height: 20px;
     border: none;
-    background-color: color("neutral", "white");
+    background-color: transparent;
     color: color("neutral", "darkest");
     cursor: pointer;
     transition: $transition-base;
+    padding: 0;
     
     &:hover:not(:disabled) {
-      background-color: color("primary", "lighter");
       color: color("primary", "base");
     }
     
@@ -186,9 +188,10 @@
   }
   
   &__quantity {
-    min-width: spacing("xl");
+    min-width: spacing("md");
     text-align: center;
     font-weight: font-weight("semibold");
+    font-size: font-size("body-2");
   }
   
   &__subtotal {
@@ -196,24 +199,29 @@
     justify-content: space-between;
     align-items: center;
     padding: spacing("md") 0;
-    border-top: 1px solid color("neutral", "light");
-    border-bottom: 1px solid color("neutral", "light");
     margin-top: spacing("sm");
   }
   
   &__subtotalLabel {
-    font-size: font-size("subtitle-1");
+    font-size: font-size("body-2");
     font-weight: font-weight("semibold");
     color: color("neutral", "darkest");
   }
   
   &__subtotalAmount {
-    font-size: font-size("title");
+    font-size: font-size("subtitle-1");
     font-weight: font-weight("bold");
-    color: color("primary", "base");
+    color: color("neutral", "black");
   }
   
   &__footer {
-    margin-top: spacing("md");
+    margin-top: spacing("lg");
+    
+    button {
+      text-transform: uppercase;
+      background-color: color("primary", "base");
+      font-weight: font-weight("semibold");
+      letter-spacing: 0.5px;
+    }
   }
 } 

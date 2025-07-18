@@ -18,6 +18,7 @@ interface FoodItem {
   image: string;
   isSpicy: boolean;
   isTopRated: boolean;
+  variants?: string[];
 }
 
 // Modal props interface
@@ -255,7 +256,13 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
 
   const handleAddToCart = (item: FoodItem) => {
-    setCartItems(prev => [...prev, item]);
+    // For now, we'll add some default variants
+    // In a real implementation, these would come from user selection
+    const itemWithVariants = {
+      ...item,
+      variants: ['Beef', 'Turkey', 'Salad'] // Default variants as shown in the image
+    };
+    setCartItems(prev => [...prev, itemWithVariants]);
   };
 
   const handleLoadMore = () => {
@@ -295,7 +302,7 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
       price: item.price,
       image: item.image,
       quantity: 1,
-      variants: []
+      variants: item.variants || []
     }));
   };
 
@@ -312,6 +319,20 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
   const handleRemoveItem = (id: string) => {
     const [itemId] = id.split('-');
     setCartItems(prev => prev.filter(item => item.id !== itemId));
+  };
+
+  // Handle variant removal
+  const handleRemoveVariant = (itemId: string, variant: string) => {
+    const [originalItemId] = itemId.split('-');
+    setCartItems(prev => prev.map(item => {
+      if (item.id === originalItemId) {
+        return {
+          ...item,
+          variants: item.variants?.filter(v => v !== variant) || []
+        };
+      }
+      return item;
+    }));
   };
 
   // Handle continue to checkout
@@ -480,6 +501,7 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
         items={convertToCartItems()}
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
+        onRemoveVariant={handleRemoveVariant}
         onContinue={handleContinueToCheckout}
       />
     </>
