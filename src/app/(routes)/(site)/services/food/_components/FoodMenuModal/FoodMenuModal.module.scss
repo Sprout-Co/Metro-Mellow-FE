@@ -130,6 +130,31 @@
     }
   }
 
+  &__searchBar {
+    margin-bottom: spacing("xl");
+    
+    input {
+      width: 100%;
+      padding: spacing("md") spacing("lg");
+      border: border-width("thin") solid color("neutral", "light");
+      border-radius: border-radius("lg");
+      @include font-size("body-2");
+      color: color("neutral", "black");
+      background-color: color("neutral", "white");
+      transition: $transition-base;
+      
+      &::placeholder {
+        color: color("neutral", "medium");
+      }
+      
+      &:focus {
+        outline: none;
+        border-color: color("primary", "base");
+        box-shadow: shadow("focus");
+      }
+    }
+  }
+
   &__foodGrid {
     @include grid-responsive(1, 2, 3, 4, spacing("xl"));
     margin-bottom: spacing("3xl");
@@ -158,7 +183,7 @@
   &__foodImageContainer {
     position: relative;
     width: 100%;
-    height: 220px;
+    height: 350px;
     overflow: hidden;
   }
 
@@ -184,7 +209,7 @@
   &__topRatedLabel {
     color: color("neutral", "black");
     @include font-size("small");
-    @include font-weight("semibold");
+    @include font-weight("regular");
   }
 
   &__spicyBadge {
@@ -289,7 +314,7 @@
     }
 
     &__foodImageContainer {
-      height: 180px;
+      height: 250px;
     }
   }
 }
@@ -316,7 +341,7 @@
     }
 
     &__foodImageContainer {
-      height: 160px;
+      height: 200px;
     }
 
     &__foodFooter {

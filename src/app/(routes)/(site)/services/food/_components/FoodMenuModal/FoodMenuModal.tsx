@@ -63,25 +63,52 @@ const foodItems: FoodItem[] = [
   },
   {
     id: "5",
-    name: "Fried Rice",
+    name: "Amala & Ewedu",
     description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f4.jpeg",
-    isSpicy: true,
+    image: "/images/food/amala-ewedu.png",
+    isSpicy: false,
     isTopRated: true,
   },
   {
     id: "6",
-    name: "Jollof Rice",
+    name: "Egusi & Fufu",
+    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    price: 4950,
+    image: "/images/food/egusi-fufu.png",
+    isSpicy: false,
+    isTopRated: false,
+  },
+  {
+    id: "7",
+    name: "Pounded Yam & Efo Riro",
+    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    price: 4950,
+    image: "/images/food/pounded-yam-efo-riro.png",
+    isSpicy: true,
+    isTopRated: false,
+  },
+  {
+    id: "8",
+    name: "Grilled Chicken",
+    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    price: 4950,
+    image: "/images/food/f4.jpeg",
+    isSpicy: false,
+    isTopRated: true,
+  },
+  {
+    id: "9",
+    name: "Beef Stew",
     description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f5.jpeg",
     isSpicy: true,
-    isTopRated: true,
+    isTopRated: false,
   },
   {
-    id: "7",
-    name: "Creamy Pasta",
+    id: "10",
+    name: "Fish Pepper Soup",
     description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f6.jpeg",
@@ -89,31 +116,162 @@ const foodItems: FoodItem[] = [
     isTopRated: true,
   },
   {
-    id: "8",
-    name: "Jollof Pasta",
+    id: "11",
+    name: "Vegetable Salad",
     description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f7.jpeg",
+    isSpicy: false,
+    isTopRated: false,
+  },
+  {
+    id: "12",
+    name: "Chicken Curry",
+    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    price: 4950,
+    image: "/images/food/f8.jpeg",
     isSpicy: true,
+    isTopRated: false,
+  },
+  {
+    id: "13",
+    name: "Moi Moi",
+    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    price: 4950,
+    image: "/images/food/f9.jpeg",
+    isSpicy: false,
+    isTopRated: true,
+  },
+  {
+    id: "14",
+    name: "Akara",
+    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    price: 4950,
+    image: "/images/food/f10.jpeg",
+    isSpicy: false,
+    isTopRated: false,
+  },
+  {
+    id: "15",
+    name: "Suya",
+    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    price: 4950,
+    image: "/images/food/f11.jpeg",
+    isSpicy: true,
+    isTopRated: true,
+  },
+  {
+    id: "16",
+    name: "Pepper Soup",
+    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    price: 4950,
+    image: "/images/food/f12.jpeg",
+    isSpicy: true,
+    isTopRated: false,
+  },
+  {
+    id: "17",
+    name: "Efo Riro",
+    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    price: 4950,
+    image: "/images/food/f13.jpeg",
+    isSpicy: false,
+    isTopRated: false,
+  },
+  {
+    id: "18",
+    name: "Banga Soup",
+    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    price: 4950,
+    image: "/images/food/f14.jpeg",
+    isSpicy: false,
+    isTopRated: true,
+  },
+  {
+    id: "19",
+    name: "Okro Soup",
+    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    price: 4950,
+    image: "/images/food/f15.jpeg",
+    isSpicy: false,
+    isTopRated: false,
+  },
+  {
+    id: "20",
+    name: "Ewedu Soup",
+    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    price: 4950,
+    image: "/images/food/f16.jpeg",
+    isSpicy: false,
+    isTopRated: false,
+  },
+  {
+    id: "21",
+    name: "Gbegiri",
+    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    price: 4950,
+    image: "/images/food/f17.png",
+    isSpicy: false,
+    isTopRated: false,
+  },
+  {
+    id: "22",
+    name: "Efo Elegusi",
+    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    price: 4950,
+    image: "/images/food/f20.jpeg",
+    isSpicy: true,
+    isTopRated: false,
+  },
+  {
+    id: "23",
+    name: "Ogbono Soup",
+    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    price: 4950,
+    image: "/images/food/f21.jpeg",
+    isSpicy: false,
+    isTopRated: false,
+  },
+  {
+    id: "24",
+    name: "Afang Soup",
+    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    price: 4950,
+    image: "/images/food/f0.jpeg",
+    isSpicy: false,
     isTopRated: true,
   },
 ];
 
 const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
   const [cartItems, setCartItems] = useState<FoodItem[]>([]);
+  const [visibleItems, setVisibleItems] = useState(8);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleAddToCart = (item: FoodItem) => {
     setCartItems(prev => [...prev, item]);
   };
 
   const handleLoadMore = () => {
-    // TODO: Implement load more functionality
-    console.log("Load more dishes clicked");
+    setVisibleItems(prev => Math.min(prev + 8, filteredItems.length));
   };
 
   const formatPrice = (price: number) => {
     return `NGN ${price.toLocaleString()}`;
   };
+
+  // Filter items based on search query
+  const filteredItems = foodItems.filter(item =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const hasMoreItems = visibleItems < filteredItems.length;
+  const displayedItems = filteredItems.slice(0, visibleItems);
+
+  // Reset visible items when search changes
+  React.useEffect(() => {
+    setVisibleItems(8);
+  }, [searchQuery]);
 
   if (!isOpen) return null;
 
@@ -196,9 +354,19 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
 
           {/* Content */}
           <div className={styles.modal__content}>
+            {/* Search Bar */}
+            <div className={styles.modal__searchBar}>
+              <input
+                type="text"
+                placeholder="Search for dishes..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
             {/* Food Grid */}
             <div className={styles.modal__foodGrid}>
-              {foodItems.map((item) => (
+              {displayedItems.map((item) => (
                 <motion.div
                   key={item.id}
                   className={styles.modal__foodCard}
@@ -248,16 +416,18 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
             </div>
 
             {/* Load More Button */}
-            <div className={styles.modal__loadMoreContainer}>
-              <div className={styles.modal__separatorLine}></div>
-              <Button
-                size="lg"
-                onClick={handleLoadMore}
-              >
-                Load More Dishes
-              </Button>
-              <div className={styles.modal__separatorLine}></div>
-            </div>
+            {hasMoreItems && (
+              <div className={styles.modal__loadMoreContainer}>
+                <div className={styles.modal__separatorLine}></div>
+                <Button
+                  size="lg"
+                  onClick={handleLoadMore}
+                >
+                  LOAD MORE DISHES
+                </Button>
+                <div className={styles.modal__separatorLine}></div>
+              </div>
+            )}
           </div>
         </motion.div>
       </motion.div>
