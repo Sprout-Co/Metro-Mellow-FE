@@ -25,10 +25,38 @@
   &__headerTitle {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: spacing("sm");
     font-size: font-size("subtitle-1");
     font-weight: font-weight("bold");
     color: color("neutral", "black");
+  }
+  
+  &__headerLeft {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+  }
+  
+  &__closeButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background-color: color("neutral", "lighter");
+    color: color("neutral", "darkest");
+    cursor: pointer;
+    border-radius: border-radius("full");
+    font-size: font-size("body-2");
+    font-weight: font-weight("bold");
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: color("neutral", "light");
+      color: color("status", "error");
+    }
   }
   
   &__content {
