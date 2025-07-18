@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/Button/Button";
 import Modal from "@/components/ui/Modal/Modal";
 import FoodItemModal from "../FoodItemModal";
+import CartModal, { CartItem } from "@/components/ui/CartModal";
 import styles from "./FoodMenuModal.module.scss";
 
 // Food item interface
@@ -251,6 +252,7 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFoodItem, setSelectedFoodItem] = useState<FoodItem | null>(null);
   const [isFoodItemModalOpen, setIsFoodItemModalOpen] = useState(false);
+  const [isCartModalOpen, setIsCartModalOpen] = useState(false);
 
   const handleAddToCart = (item: FoodItem) => {
     setCartItems(prev => [...prev, item]);
@@ -275,6 +277,50 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
     setIsFoodItemModalOpen(false);
   };
 
+  // Open cart modal
+  const handleCartClick = () => {
+    setIsCartModalOpen(true);
+  };
+
+  // Close cart modal
+  const handleCartModalClose = () => {
+    setIsCartModalOpen(false);
+  };
+
+  // Convert FoodItem to CartItem format
+  const convertToCartItems = (): CartItem[] => {
+    return cartItems.map((item, index) => ({
+      id: `${item.id}-${index}`,
+      name: item.name,
+      price: item.price,
+      image: item.image,
+      quantity: 1,
+      variants: []
+    }));
+  };
+
+  // Handle cart item quantity update
+  const handleUpdateQuantity = (id: string, quantity: number) => {
+    // For now, we'll just remove the item if quantity is 0
+    // In a real implementation, you'd want to update the quantity
+    if (quantity <= 0) {
+      handleRemoveItem(id);
+    }
+  };
+
+  // Handle cart item removal
+  const handleRemoveItem = (id: string) => {
+    const [itemId] = id.split('-');
+    setCartItems(prev => prev.filter(item => item.id !== itemId));
+  };
+
+  // Handle continue to checkout
+  const handleContinueToCheckout = () => {
+    console.log('Continue to checkout with items:', cartItems);
+    setIsCartModalOpen(false);
+    // Here you would typically navigate to checkout or open checkout modal
+  };
+
   // Filter items based on search query
   const filteredItems = foodItems.filter(item =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -295,7 +341,11 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
         Select your sumptuous platters
       </h2>
       <div className={styles.modal__cart}>
-        <div className={styles.modal__cartIcon}>
+        <div 
+          className={styles.modal__cartIcon}
+          onClick={handleCartClick}
+          style={{ cursor: 'pointer' }}
+        >
           <svg
             width="24"
             height="24"
@@ -422,6 +472,16 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
           foodItem={selectedFoodItem}
         />
       )}
+
+      {/* Cart Modal */}
+      <CartModal
+        isOpen={isCartModalOpen}
+        onClose={handleCartModalClose}
+        items={convertToCartItems()}
+        onUpdateQuantity={handleUpdateQuantity}
+        onRemoveItem={handleRemoveItem}
+        onContinue={handleContinueToCheckout}
+      />
     </>
   );
 };
