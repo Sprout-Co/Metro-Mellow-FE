@@ -11,7 +11,7 @@
   position: relative;
 
   &__container {
-    max-width: map-get($container-max-widths, '2xl');
+    @include container;
     margin: 0 auto;
     padding: 0 spacing('md');
     display: flex;

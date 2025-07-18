@@ -9,6 +9,10 @@
   text-align: center;
 }
 
+.container {
+  @include container;
+}
+
 .heading {
   color: map-get(map-get($colors, "neutral"), "white");
   font-size: map-get($font-sizes, "h2");
