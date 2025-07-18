@@ -74,7 +74,7 @@
     background-color: color("neutral", "white");
     position: relative;
     border-bottom: 1px solid color("neutral", "lighter");
-    align-items: center;
+    align-items: stretch;
     
     @include breakpoint-down("sm") {
       flex-direction: column;
@@ -84,7 +84,7 @@
   
   &__itemImage {
     width: 80px;
-    height: 80px;
+    height: 140px;
     border-radius: border-radius("md");
     overflow: hidden;
     flex-shrink: 0;
@@ -102,6 +102,7 @@
     flex-direction: column;
     gap: spacing("xs");
     min-width: 0;
+    justify-content: space-between;
   }
   
   &__itemName {
@@ -115,9 +116,10 @@
   &__itemActions {
     display: flex;
     align-items: center;
-    gap: 0;
-    flex-shrink: 0;
-    margin-left: auto;
+    justify-content: space-between;
+    gap: spacing("sm");
+    margin-top: spacing("md");
+    width: 100%;
   }
   
   &__itemRemove {
@@ -133,7 +135,6 @@
     justify-content: center;
     width: 28px;
     height: 28px;
-    margin-left: spacing("xs");
     
     &:hover {
       color: color("status", "error");
@@ -245,7 +246,7 @@
   }
   
   &__subtotalAmount {
-    font-size: font-size("subtitle-1");
+    font-size: font-size("body-1");
     font-weight: font-weight("bold");
     color: color("neutral", "black");
   }
