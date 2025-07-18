@@ -195,16 +195,18 @@
     overflow: hidden;
     border: 1px solid color("neutral", "light");
     padding: spacing("xxs") spacing("xs");
-    height: 32px;
+    height: 36px;
     background-color: color("neutral", "white");
+    position: relative;
+    z-index: 1;
   }
   
   &__quantityButton {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     border: none;
     background-color: color("neutral", "black");
     color: color("neutral", "white");
@@ -212,6 +214,8 @@
     transition: $transition-base;
     padding: 0;
     border-radius: border-radius("full");
+    position: relative;
+    z-index: 1;
     
     &:hover:not(:disabled) {
       background-color: color("primary", "base");

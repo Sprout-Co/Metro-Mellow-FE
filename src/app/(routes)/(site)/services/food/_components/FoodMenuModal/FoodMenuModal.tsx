@@ -20,6 +20,7 @@ interface FoodItem {
   isSpicy: boolean;
   isTopRated: boolean;
   variants?: string[];
+  quantity?: number;
 }
 
 // Modal props interface
@@ -302,17 +303,28 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
       name: item.name,
       price: item.price,
       image: item.image,
-      quantity: 1,
+      quantity: item.quantity || 1,
       variants: item.variants || []
     }));
   };
 
   // Handle cart item quantity update
   const handleUpdateQuantity = (id: string, quantity: number) => {
-    // For now, we'll just remove the item if quantity is 0
-    // In a real implementation, you'd want to update the quantity
+    console.log('Updating quantity for item:', id, 'to:', quantity);
+    
     if (quantity <= 0) {
       handleRemoveItem(id);
+    } else {
+      const [itemId] = id.split('-');
+      setCartItems(prev => prev.map(item => {
+        if (item.id === itemId) {
+          return {
+            ...item,
+            quantity: quantity
+          };
+        }
+        return item;
+      }));
     }
   };
 

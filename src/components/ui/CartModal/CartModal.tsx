@@ -110,8 +110,12 @@ export const CartModal: React.FC<CartModalProps> = ({
                       <div className={styles.cartModal__quantityControls}>
                         <button
                           className={styles.cartModal__quantityButton}
-                          onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                          onClick={() => {
+                            console.log('Decrement clicked for item:', item.id, 'current quantity:', item.quantity);
+                            onUpdateQuantity(item.id, Math.max(1, item.quantity - 1));
+                          }}
                           disabled={item.quantity <= 1}
+                          type="button"
                         >
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -120,7 +124,11 @@ export const CartModal: React.FC<CartModalProps> = ({
                         <span className={styles.cartModal__quantity}>{item.quantity}</span>
                         <button
                           className={styles.cartModal__quantityButton}
-                          onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+                          onClick={() => {
+                            console.log('Increment clicked for item:', item.id, 'current quantity:', item.quantity);
+                            onUpdateQuantity(item.id, item.quantity + 1);
+                          }}
+                          type="button"
                         >
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
