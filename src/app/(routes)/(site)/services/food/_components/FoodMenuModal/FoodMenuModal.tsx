@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Button } from "@/components/ui/Button/Button";
 import Modal from "@/components/ui/Modal/Modal";
+import FoodItemModal from "../FoodItemModal";
 import styles from "./FoodMenuModal.module.scss";
 
 // Food item interface
@@ -248,6 +249,8 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
   const [cartItems, setCartItems] = useState<FoodItem[]>([]);
   const [visibleItems, setVisibleItems] = useState(8);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedFoodItem, setSelectedFoodItem] = useState<FoodItem | null>(null);
+  const [isFoodItemModalOpen, setIsFoodItemModalOpen] = useState(false);
 
   const handleAddToCart = (item: FoodItem) => {
     setCartItems(prev => [...prev, item]);
@@ -259,6 +262,17 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
 
   const formatPrice = (price: number) => {
     return `NGN ${price.toLocaleString()}`;
+  };
+
+  // Open food item modal
+  const handleFoodItemClick = (item: FoodItem) => {
+    setSelectedFoodItem(item);
+    setIsFoodItemModalOpen(true);
+  };
+  
+  // Close food item modal
+  const handleFoodItemModalClose = () => {
+    setIsFoodItemModalOpen(false);
   };
 
   // Filter items based on search query
@@ -308,90 +322,107 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
   );
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      maxWidth="1200px"
-      maxHeight="90vh"
-      showCloseButton={true}
-      headerContent={headerContent}
-      className={styles.foodMenuModal}
-    >
-      {/* Search Bar */}
-      <div className={styles.modal__searchBar}>
-        <input
-          type="text"
-          placeholder="Search for dishes..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
-
-      {/* Food Grid */}
-      <div className={styles.modal__foodGrid}>
-        {displayedItems.map((item) => (
-          <motion.div
-            key={item.id}
-            className={styles.modal__foodCard}
-            whileHover={{ y: -4 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div className={styles.modal__foodImageContainer}>
-              <Image
-                src={item.image}
-                alt={item.name}
-                width={300}
-                height={300}
-                className={styles.modal__foodImage}
-              />
-            </div>
-            
-            <div className={styles.modal__topRatedContainer}>
-              <div className={styles.modal__topRatedLabel}>
-                Top Rated Dish
-              </div>
-              {item.isSpicy && (
-                <div className={styles.modal__spicyBadge}>
-                  Spicy
-                </div>
-              )}
-            </div>
-            
-            <h3 className={styles.modal__foodName}>{item.name}</h3>
-            
-            <p className={styles.modal__foodDescription}>
-              {item.description}
-            </p>
-            
-            <div className={styles.modal__foodFooter}>
-              <span className={styles.modal__foodPrice}>
-                {formatPrice(item.price)}
-              </span>
-              <button 
-                className={styles.modal__addToCartButton}
-                onClick={() => handleAddToCart(item)}
-              >
-                ADD TO CART
-              </button>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Load More Button */}
-      {hasMoreItems && (
-        <div className={styles.modal__loadMoreContainer}>
-          <div className={styles.modal__separatorLine}></div>
-          <Button
-            size="lg"
-            onClick={handleLoadMore}
-          >
-            LOAD MORE DISHES
-          </Button>
-          <div className={styles.modal__separatorLine}></div>
+    <>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        maxWidth="1200px"
+        maxHeight="90vh"
+        showCloseButton={true}
+        headerContent={headerContent}
+        className={styles.foodMenuModal}
+      >
+        {/* Search Bar */}
+        <div className={styles.modal__searchBar}>
+          <input
+            type="text"
+            placeholder="Search for dishes..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
+
+        {/* Food Grid */}
+        <div className={styles.modal__foodGrid}>
+          {displayedItems.map((item) => (
+            <motion.div
+              key={item.id}
+              className={styles.modal__foodCard}
+              whileHover={{ y: -4 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => handleFoodItemClick(item)}
+            >
+              <div className={styles.modal__foodImageContainer}>
+                <Image
+                  src={item.image}
+                  alt={item.name}
+                  width={300}
+                  height={300}
+                  className={styles.modal__foodImage}
+                />
+              </div>
+              
+              <div className={styles.modal__topRatedContainer}>
+                {item.isTopRated && (
+                  <div className={styles.modal__topRatedLabel}>
+                    Top Rated Dish
+                  </div>
+                )}
+                {item.isSpicy && (
+                  <div className={styles.modal__spicyBadge}>
+                    Spicy
+                  </div>
+                )}
+              </div>
+              
+              <h3 className={styles.modal__foodName}>{item.name}</h3>
+              
+              <p className={styles.modal__foodDescription}>
+                {item.description}
+              </p>
+              
+              <div className={styles.modal__foodFooter}>
+                <span className={styles.modal__foodPrice}>
+                  {formatPrice(item.price)}
+                </span>
+                <button 
+                  className={styles.modal__addToCartButton}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddToCart(item);
+                  }}
+                >
+                  ADD TO CART
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Load More Button */}
+        {hasMoreItems && (
+          <div className={styles.modal__loadMoreContainer}>
+            <div className={styles.modal__separatorLine}></div>
+            <Button
+              size="lg"
+              onClick={handleLoadMore}
+            >
+              LOAD MORE DISHES
+            </Button>
+            <div className={styles.modal__separatorLine}></div>
+          </div>
+        )}
+      </Modal>
+
+      {/* Food Item Modal */}
+      {selectedFoodItem && (
+        <FoodItemModal
+          isOpen={isFoodItemModalOpen}
+          onClose={handleFoodItemModalClose}
+          foodItem={selectedFoodItem}
+        />
       )}
-    </Modal>
+    </>
   );
 };
 
