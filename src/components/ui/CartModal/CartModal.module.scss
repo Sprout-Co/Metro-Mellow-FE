@@ -158,14 +158,20 @@
   &__itemVariant {
     display: flex;
     align-items: center;
-    gap: 2px;
-    padding: spacing("xxs") spacing("xs");
+    gap: spacing("xs");
+    padding: spacing("xs") spacing("sm");
     background-color: color("neutral", "lighter");
-    border: none;
-    border-radius: border-radius("pill");
-    font-size: font-size("xs");
+    border: 1px solid color("primary", "base");
+    border-radius: border-radius("md");
+    font-size: font-size("small");
     color: color("neutral", "darkest");
     font-weight: font-weight("medium");
+    position: relative;
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: color("neutral", "light");
+    }
   }
   
   &__variantRemove {
@@ -175,15 +181,19 @@
     background: none;
     border: none;
     padding: 0;
-    font-size: 10px;
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
     cursor: pointer;
-    color: color("neutral", "darkest");
+    color: color("neutral", "dark");
     transition: $transition-base;
-    margin-left: 0;
-    font-weight: font-weight("medium");
+    margin-left: spacing("xxs");
+    font-weight: font-weight("semibold");
+    border-radius: border-radius("full");
     
     &:hover {
       color: color("status", "error");
+      background-color: color("neutral", "white");
     }
   }
   
