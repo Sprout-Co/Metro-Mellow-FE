@@ -3,9 +3,13 @@
 import { motion } from 'framer-motion';
 import styles from './FoodHero.module.scss';
 import { Button } from '@/components/ui/Button/Button';
-import { Routes } from '@/constants/routes';
 
 const FoodHero = () => {
+  const handleOrderMeal = () => {
+    console.log('Order meal clicked');
+    // Handle order meal action, e.g., redirect to order page or open order modal
+  };
+
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
@@ -59,7 +63,7 @@ const FoodHero = () => {
             className={styles.hero__cta}
             variants={fadeIn}
           >
-            <Button href={Routes.GET_STARTED} size="lg">
+            <Button onClick={handleOrderMeal} size="lg">
               ORDER A MEAL
             </Button>
           </motion.div>
