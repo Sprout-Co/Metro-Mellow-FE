@@ -50,17 +50,26 @@ export const CartModal: React.FC<CartModalProps> = ({
       onClose={onClose}
       headerContent={
         <div className={styles.cartModal__headerTitle}>
-          <span>Your cart</span>
-          <CartIcon
-            itemCount={items.length}
-            size="sm"
-            showBadge={true}
-          />
+          <div className={styles.cartModal__headerLeft}>
+            <span>Your cart</span>
+            <CartIcon
+              itemCount={items.length}
+              size="sm"
+              showBadge={true}
+            />
+          </div>
+          <button 
+            className={styles.cartModal__closeButton}
+            onClick={onClose}
+            aria-label="Close cart"
+          >
+            ✕
+          </button>
         </div>
       }
+      showCloseButton={false}
       maxWidth="450px"
       className={styles.cartModal}
-      showCloseButton={true}
     >
       <div className={styles.cartModal__content}>
         {items.length === 0 ? (
