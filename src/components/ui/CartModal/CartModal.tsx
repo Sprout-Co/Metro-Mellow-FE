@@ -58,7 +58,7 @@ export const CartModal: React.FC<CartModalProps> = ({
           />
         </div>
       }
-      maxWidth="600px"
+      maxWidth="450px"
       className={styles.cartModal}
       showCloseButton={true}
     >
@@ -89,20 +89,22 @@ export const CartModal: React.FC<CartModalProps> = ({
                       NGN {item.price.toLocaleString()}
                     </div>
                     
-                    <div className={styles.cartModal__itemVariants}>
-                      {item.variants.map((variant, index) => (
-                        <div key={index} className={styles.cartModal__itemVariant}>
-                          {variant}
-                          <button 
-                            className={styles.cartModal__variantRemove}
-                            aria-label={`Remove ${variant}`}
-                            onClick={() => onRemoveVariant?.(item.id, variant)}
-                          >
-                            ✕
-                          </button>
-                        </div>
-                      ))}
-                    </div>
+                    {item.variants.length > 0 && (
+                      <div className={styles.cartModal__itemVariants}>
+                        {item.variants.map((variant, index) => (
+                          <div key={index} className={styles.cartModal__itemVariant}>
+                            {variant}
+                            <button 
+                              className={styles.cartModal__variantRemove}
+                              aria-label={`Remove ${variant}`}
+                              onClick={() => onRemoveVariant?.(item.id, variant)}
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   
                   <div className={styles.cartModal__itemActions}>
@@ -112,7 +114,7 @@ export const CartModal: React.FC<CartModalProps> = ({
                         onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))}
                         disabled={item.quantity <= 1}
                       >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </button>
@@ -121,7 +123,7 @@ export const CartModal: React.FC<CartModalProps> = ({
                         className={styles.cartModal__quantityButton}
                         onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
                       >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </button>
@@ -133,14 +135,14 @@ export const CartModal: React.FC<CartModalProps> = ({
                       aria-label="Remove item"
                     >
                       <svg
-                        width="20"
-                        height="20"
+                        width="16"
+                        height="16"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M18 6L6 18M6 6L18 18"
+                          d="M3 6h18m-2 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"
                           stroke="currentColor"
                           strokeWidth="2"
                           strokeLinecap="round"

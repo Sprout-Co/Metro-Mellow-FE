@@ -5,6 +5,22 @@
 
 .cartModal {
   // Custom styles for the cart modal if needed
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  left: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: flex-end !important;
+  padding: spacing("md") !important;
+  
+  :global(.modal__container) {
+    margin: 0 !important;
+    align-self: flex-start !important;
+    margin-top: spacing("xl") !important;
+  }
   
   &__headerTitle {
     display: flex;
@@ -53,8 +69,8 @@
   
   &__item {
     display: flex;
-    gap: spacing("md");
-    padding: spacing("sm");
+    gap: spacing("sm");
+    padding: spacing("sm") spacing("md");
     background-color: color("neutral", "white");
     position: relative;
     border-bottom: 1px solid color("neutral", "lighter");
@@ -67,9 +83,9 @@
   }
   
   &__itemImage {
-    width: spacing("4xl");
-    height: spacing("4xl");
-    border-radius: border-radius("sm");
+    width: 80px;
+    height: 80px;
+    border-radius: border-radius("md");
     overflow: hidden;
     flex-shrink: 0;
     
@@ -84,20 +100,24 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: spacing("xxs");
+    gap: spacing("xs");
+    min-width: 0;
   }
   
   &__itemName {
     font-size: font-size("body-2");
-    font-weight: font-weight("semibold");
+    font-weight: font-weight("bold");
     color: color("neutral", "black");
     margin: 0;
+    line-height: 1.3;
   }
   
   &__itemActions {
     display: flex;
     align-items: center;
-    gap: spacing("md");
+    gap: 0;
+    flex-shrink: 0;
+    margin-left: auto;
   }
   
   &__itemRemove {
@@ -105,22 +125,26 @@
     border: none;
     padding: spacing("xxs");
     cursor: pointer;
-    color: color("neutral", "darker");
+    color: color("neutral", "dark");
     border-radius: border-radius("full");
     transition: $transition-base;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 28px;
+    height: 28px;
+    margin-left: spacing("xs");
     
     &:hover {
       color: color("status", "error");
+      background-color: color("neutral", "lighter");
     }
   }
   
   &__itemPrice {
     font-size: font-size("body-2");
     font-weight: font-weight("semibold");
-    color: color("neutral", "darkest");
+    color: color("neutral", "black");
   }
   
   &__itemVariants {
@@ -134,7 +158,7 @@
     display: flex;
     align-items: center;
     gap: 2px;
-    padding: spacing("xs") spacing("sm");
+    padding: spacing("xxs") spacing("xs");
     background-color: color("neutral", "lighter");
     border: none;
     border-radius: border-radius("pill");
@@ -165,12 +189,13 @@
   &__quantityControls {
     display: flex;
     align-items: center;
-    gap: spacing("sm");
+    gap: spacing("xs");
     border-radius: border-radius("pill");
     overflow: hidden;
     border: 1px solid color("neutral", "light");
-    padding: 0 spacing("xs");
-    height: 30px;
+    padding: spacing("xxs") spacing("xs");
+    height: 32px;
+    background-color: color("neutral", "white");
   }
   
   &__quantityButton {
@@ -180,14 +205,15 @@
     width: 20px;
     height: 20px;
     border: none;
-    background-color: transparent;
-    color: color("neutral", "darkest");
+    background-color: color("neutral", "black");
+    color: color("neutral", "white");
     cursor: pointer;
     transition: $transition-base;
     padding: 0;
+    border-radius: border-radius("full");
     
     &:hover:not(:disabled) {
-      color: color("primary", "base");
+      background-color: color("primary", "base");
     }
     
     &:disabled {
@@ -201,6 +227,7 @@
     text-align: center;
     font-weight: font-weight("semibold");
     font-size: font-size("body-2");
+    color: color("neutral", "black");
   }
   
   &__subtotal {
