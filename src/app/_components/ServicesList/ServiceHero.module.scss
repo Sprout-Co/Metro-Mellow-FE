@@ -1,11 +1,11 @@
 // src/app/_components/Hero/Hero.module.scss
-@import '../../../styles/abstracts/variables';
-@import '../../../styles/abstracts/functions';
-@import '../../../styles/abstracts/mixins';
-@import '../../../styles/abstracts/animations';
+@import "../../../styles/abstracts/variables";
+@import "../../../styles/abstracts/functions";
+@import "../../../styles/abstracts/mixins";
+@import "../../../styles/abstracts/animations";
 
 .service-hero {
-  background-color: color('primary', 'base');
+  background-color: color("primary", "base");
   width: 100%;
   min-height: 554px;
   height: 554px;
@@ -13,7 +13,7 @@
   position: relative;
   overflow: hidden;
 
-  @include breakpoint-down('md') {
+  @include breakpoint-down("md") {
     min-height: 500px;
   }
 
@@ -23,14 +23,14 @@
     @include flex(row, nowrap, space-between, stretch);
     height: 100%;
     position: relative;
-    
-    @include breakpoint-down('lg') {
+
+    @include breakpoint-down("lg") {
       @include flex(column, nowrap, flex-start, stretch);
-      gap: spacing('3xl');
+      gap: spacing("3xl");
     }
-    
-    @include breakpoint-down('sm') {
-      gap: spacing('lg');
+
+    @include breakpoint-down("sm") {
+      gap: spacing("lg");
     }
   }
 
@@ -41,13 +41,13 @@
     min-width: 0;
     height: 100%;
     min-height: 500px;
-    
-    @include breakpoint-down('lg') {
+
+    @include breakpoint-down("lg") {
       align-items: center;
       min-height: unset;
     }
-    
-    @include breakpoint-down('sm') {
+
+    @include breakpoint-down("sm") {
       width: 100%;
       min-height: unset;
     }
@@ -58,55 +58,55 @@
     justify-content: center;
     width: 100%;
     max-width: 480px;
-    padding: spacing('2xl') 0;
-    
-    @include breakpoint-down('lg') {
+    padding: spacing("2xl") 0;
+
+    @include breakpoint-down("lg") {
       @include flex-column-center;
       text-align: center;
       margin-left: 0;
       max-width: 100%;
-      padding: spacing('xl') 0;
+      padding: spacing("xl") 0;
     }
   }
 
   &__heading {
     @include heading-1;
-    color: color('neutral', 'white');
-    margin-bottom: spacing('xl');
-    
-    @include breakpoint-down('xl') {
-      @include font-size('h2');
+    color: color("neutral", "white");
+    margin-bottom: spacing("xl");
+
+    @include breakpoint-down("xl") {
+      @include font-size("h2");
     }
-    
-    @include breakpoint-down('md') {
-      @include font-size('h3');
+
+    @include breakpoint-down("md") {
+      @include font-size("h3");
     }
-    
-    @include breakpoint-down('sm') {
-      @include font-size('h4');
+
+    @include breakpoint-down("sm") {
+      @include font-size("h4");
     }
   }
 
   &__cta {
-    @include button-white('lg');
-    color: color('primary', 'base');
+    @include button-white("lg");
+    color: color("primary", "base");
     min-width: 260px;
     max-width: 340px;
-    
-    @include breakpoint-down('md') {
+
+    @include breakpoint-down("md") {
       min-width: 180px;
       max-width: 100%;
       height: 2.5rem;
-      padding: spacing('sm') spacing('xl');
-      @include font-size('button');
+      padding: spacing("sm") spacing("xl");
+      @include font-size("button");
     }
-    
-    @include breakpoint-down('sm') {
+
+    @include breakpoint-down("sm") {
       min-width: 100%;
       width: 100%;
       max-width: 100%;
-      padding: spacing('xl') 0;
-      @include font-size('body-2');
+      padding: spacing("xl") 0;
+      @include font-size("body-2");
     }
   }
 
@@ -116,15 +116,16 @@
     min-width: 0;
     height: 100%;
     position: relative;
-    
-    @include breakpoint-down('lg') {
+
+    @include breakpoint-down("lg") {
       justify-content: center;
-      margin-top: spacing('xl');
+      margin-top: spacing("xl");
+      display: none;
     }
-    
-    @include breakpoint-down('sm') {
+
+    @include breakpoint-down("sm") {
       width: 100%;
-      margin-top: spacing('md');
+      margin-top: spacing("md");
     }
   }
 
@@ -134,17 +135,17 @@
     align-items: stretch;
     width: 100%;
     max-width: 700px;
-    gap: spacing('xl');
+    gap: spacing("xl");
     height: 100%;
-    
-    @include breakpoint-down('md') {
-      gap: spacing('md');
-      margin: spacing('xl') 0;
+
+    @include breakpoint-down("md") {
+      gap: spacing("md");
+      margin: spacing("xl") 0;
     }
-    
-    @include breakpoint-down('sm') {
-      gap: spacing('xs');
-      margin: spacing('md') 0;
+
+    @include breakpoint-down("sm") {
+      gap: spacing("xs");
+      margin: spacing("md") 0;
     }
   }
 }
@@ -154,76 +155,88 @@
   min-width: 340px;
   max-width: 480px;
   height: 70px;
-  padding: 0 spacing('3xl');
+  padding: 0 spacing("3xl");
   transform: skewX(-25deg);
-  box-shadow: shadow('md');
+  box-shadow: shadow("md");
   transition: $transition-base;
   z-index: 1;
-  
-  @include breakpoint-down('md') {
+
+  @include breakpoint-down("md") {
     min-width: 180px;
     max-width: 100%;
     height: 44px;
-    padding: 0 spacing('xl');
+    padding: 0 spacing("xl");
   }
-  
-  @include breakpoint-down('sm') {
+
+  @include breakpoint-down("sm") {
     min-width: 120px;
     max-width: 100%;
     height: 32px;
-    padding: 0 spacing('sm');
+    padding: 0 spacing("sm");
   }
   &__text {
-    @include font-size('h6');
-    @include font-weight('medium');
+    @include font-size("h6");
+    @include font-weight("medium");
     font-family: $font-family-base;
-    color: color('neutral', 'darkest');
+    color: color("neutral", "darkest");
     transform: skewX(25deg);
-    
-    @include breakpoint-down('md') {
-      @include font-size('title');
+
+    @include breakpoint-down("md") {
+      @include font-size("title");
     }
-    
-    @include breakpoint-down('sm') {
-      @include font-size('small');
+
+    @include breakpoint-down("sm") {
+      @include font-size("small");
     }
   }
   // Zigzag/stepped effect
   &:nth-child(odd) {
     align-self: flex-end;
   }
-  
+
   &:nth-child(even) {
     align-self: flex-start;
-    margin-left: spacing('10xl');
-    
-    @include breakpoint-down('md') {
-      margin-left: spacing('md');
+    margin-left: spacing("10xl");
+
+    // @include breakpoint-down("lg") {
+    //   margin-left: 0;
+    // }
+
+    @include breakpoint-down("xl") {
+      margin-left: spacing("xl");
     }
-    
-    @include breakpoint-down('sm') {
-      margin-left: spacing('xs');
+
+    @include breakpoint-down("md") {
+      margin-left: spacing("md");
+    }
+
+    @include breakpoint-down("sm") {
+      margin-left: spacing("xs");
     }
   }
 }
 
 // Service-specific colors (all from abstracts)
 .service-badge--laundromat {
-  background-color: color('accent', 'base');
+  background-color: color("accent", "base");
 }
 
 .service-badge--cleaning {
-  background-color: color('secondary', 'light');
+  background-color: color("secondary", "light");
 }
 
 .service-badge--cooking {
-  background-color: color('neutral', 'lighter');
+  background-color: color("neutral", "lighter");
 }
 
 .service-badge--errands {
-  background-color: color('neutral', 'white');
+  background-color: color("neutral", "white");
 }
 
 .service-badge--pests {
-  background-color: color('accent', 'base');
+  background-color: color("accent", "base");
+}
+
+.service-badge--upholstery {
+  background-color: color("neutral", "white");
 }

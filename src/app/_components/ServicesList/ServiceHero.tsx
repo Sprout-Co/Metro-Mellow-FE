@@ -12,7 +12,8 @@ const services = [
   { name: 'Cleaning', colorClass: styles['service-badge--cleaning'] },
   { name: 'Food', colorClass: styles['service-badge--cooking'] },
   { name: 'Pest Control', colorClass: styles['service-badge--pests'] },
-  
+  // { name: 'Upholstery', colorClass: styles['service-badge--upholstery'] },
+
 ];
 
 const ServiceHero: React.FC<ServiceHeroProps> = ({ onBookServices }) => {
