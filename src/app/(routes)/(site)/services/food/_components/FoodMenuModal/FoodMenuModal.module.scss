@@ -246,6 +246,20 @@
   &__loadMoreContainer {
     @include flex-center;
     padding-top: spacing("xl");
+    gap: spacing("lg");
+  }
+
+  &__separatorLine {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      color("primary", "light") 20%,
+      color("primary", "light") 80%,
+      transparent
+    );
+    max-width: 300px;
   }
 }
 
