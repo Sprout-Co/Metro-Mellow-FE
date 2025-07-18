@@ -1,0 +1,169 @@
+"use client";
+
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
+import Modal from '@/components/ui/Modal/Modal';
+import { Button } from '@/components/ui/Button/Button';
+import styles from './CartModal.module.scss';
+
+export interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  quantity: number;
+  variants: string[];
+}
+
+interface CartModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onContinue?: () => void;
+  items: CartItem[];
+  onUpdateQuantity: (id: string, quantity: number) => void;
+  onRemoveItem: (id: string) => void;
+}
+
+export const CartModal: React.FC<CartModalProps> = ({
+  isOpen,
+  onClose,
+  onContinue,
+  items,
+  onUpdateQuantity,
+  onRemoveItem,
+}) => {
+  // Calculate subtotal
+  const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  // Format price with NGN currency
+  const formatPrice = (price: number) => {
+    return `NGN ${price.toLocaleString()}`;
+  };
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Your cart"
+      maxWidth="600px"
+      className={styles.cartModal}
+    >
+      <div className={styles.cartModal__content}>
+        {items.length === 0 ? (
+          <div className={styles.cartModal__empty}>
+            <p>Your cart is empty</p>
+          </div>
+        ) : (
+          <>
+            <div className={styles.cartModal__items}>
+              {items.map((item) => (
+                <div key={item.id} className={styles.cartModal__item}>
+                  <div className={styles.cartModal__itemImage}>
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      width={80}
+                      height={80}
+                      objectFit="cover"
+                    />
+                  </div>
+                  
+                  <div className={styles.cartModal__itemInfo}>
+                    <div className={styles.cartModal__itemHeader}>
+                      <h3 className={styles.cartModal__itemName}>{item.name}</h3>
+                      <button
+                        className={styles.cartModal__itemRemove}
+                        onClick={() => onRemoveItem(item.id)}
+                        aria-label="Remove item"
+                      >
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M18 6L6 18M6 6L18 18"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    
+                    <div className={styles.cartModal__itemPrice}>
+                      {formatPrice(item.price)}
+                    </div>
+                    
+                    <div className={styles.cartModal__itemVariants}>
+                      {item.variants.map((variant, index) => (
+                        <div key={index} className={styles.cartModal__itemVariant}>
+                          {variant}
+                          <button 
+                            className={styles.cartModal__variantRemove}
+                            aria-label={`Remove ${variant}`}
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <div className={styles.cartModal__itemFooter}>
+                      <div className={styles.cartModal__quantityControls}>
+                        <button
+                          className={styles.cartModal__quantityButton}
+                          onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                          disabled={item.quantity <= 1}
+                        >
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </button>
+                        <span className={styles.cartModal__quantity}>{item.quantity}</span>
+                        <button
+                          className={styles.cartModal__quantityButton}
+                          onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+                        >
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <div className={styles.cartModal__subtotal}>
+              <span className={styles.cartModal__subtotalLabel}>Sub-total</span>
+              <span className={styles.cartModal__subtotalAmount}>
+                {formatPrice(subtotal)}
+              </span>
+            </div>
+            
+            <div className={styles.cartModal__footer}>
+              <Button
+                variant="primary"
+                size="lg"
+                fullWidth
+                onClick={onContinue}
+              >
+                CONTINUE
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
+    </Modal>
+  );
+};
+
+export default CartModal; 
