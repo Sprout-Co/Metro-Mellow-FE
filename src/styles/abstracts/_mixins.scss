@@ -65,10 +65,15 @@
   margin-right: auto;
   padding-left: spacing("md");
   padding-right: spacing("md");
+  max-width: map-get($container-max-widths, "xxs");
 
   @if $max-width {
     max-width: $max-width;
   } @else {
+    @include breakpoint-up("xs") {
+      max-width: map-get($container-max-widths, "xs");
+    }
+
     @include breakpoint-up("sm") {
       max-width: map-get($container-max-widths, "sm");
     }
