@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Modal from '@/components/ui/Modal/Modal';
 import { Button } from '@/components/ui/Button/Button';
+import CartIcon from '@/components/ui/CartIcon';
 import styles from './CartModal.module.scss';
 
 export interface CartItem {
@@ -47,7 +48,16 @@ export const CartModal: React.FC<CartModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Your cart"
+      headerContent={
+        <div className={styles.cartModal__headerTitle}>
+          <span>Your cart</span>
+          <CartIcon
+            itemCount={items.length}
+            size="sm"
+            showBadge={true}
+          />
+        </div>
+      }
       maxWidth="600px"
       className={styles.cartModal}
       showCloseButton={true}

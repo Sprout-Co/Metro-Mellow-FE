@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button/Button";
 import Modal from "@/components/ui/Modal/Modal";
 import FoodItemModal from "../FoodItemModal";
 import CartModal, { CartItem } from "@/components/ui/CartModal";
+import CartIcon from "@/components/ui/CartIcon";
 import styles from "./FoodMenuModal.module.scss";
 
 // Food item interface
@@ -362,32 +363,12 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
         Select your sumptuous platters
       </h2>
       <div className={styles.modal__cart}>
-        <div 
-          className={styles.modal__cartIcon}
+        <CartIcon
+          itemCount={cartItems.length}
           onClick={handleCartClick}
-          style={{ cursor: 'pointer' }}
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17C17 18.1 16.1 19 15 19H9C7.9 19 7 18.1 7 17V13H17Z"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          {cartItems.length > 0 && (
-            <span className={styles.modal__cartBadge}>
-              {cartItems.length}
-            </span>
-          )}
-        </div>
+          size="md"
+          showBadge={true}
+        />
       </div>
     </div>
   );

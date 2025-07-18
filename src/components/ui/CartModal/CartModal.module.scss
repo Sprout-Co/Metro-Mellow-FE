@@ -6,6 +6,15 @@
 .cartModal {
   // Custom styles for the cart modal if needed
   
+  &__headerTitle {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    font-size: font-size("subtitle-1");
+    font-weight: font-weight("bold");
+    color: color("neutral", "black");
+  }
+  
   &__content {
     display: flex;
     flex-direction: column;

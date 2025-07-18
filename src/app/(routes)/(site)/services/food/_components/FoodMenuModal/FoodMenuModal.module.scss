@@ -74,44 +74,8 @@
     @include flex-center;
   }
 
-  &__cartIcon {
-    position: relative;
+  &__cart {
     @include flex-center;
-    width: spacing("2xl");
-    height: spacing("2xl");
-    color: color("primary", "base");
-    background-color: rgba(color("primary", "base"), 0.1);
-    border-radius: border-radius("full");
-    transition: $transition-base;
-    cursor: pointer;
-
-    &:hover {
-      background-color: rgba(color("primary", "base"), 0.2);
-      color: color("primary", "dark");
-      transform: scale(1.05);
-    }
-
-    &:active {
-      transform: scale(0.95);
-    }
-  }
-
-  &__cartBadge {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    @include flex-center;
-    min-width: 20px;
-    height: 20px;
-    padding: 0 6px;
-    background-color: color("secondary", "base");
-    color: color("neutral", "white");
-    @include font-size("xs");
-    @include font-weight("bold");
-    border-radius: border-radius("full");
-    border: 2px solid color("neutral", "white");
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 1;
   }
 
   &__close {
