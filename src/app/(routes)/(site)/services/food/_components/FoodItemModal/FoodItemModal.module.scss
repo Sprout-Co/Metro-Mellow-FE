@@ -1,0 +1,232 @@
+@import "@/styles/abstracts/_variables.scss";
+@import "@/styles/abstracts/_functions.scss";
+@import "@/styles/abstracts/_mixins.scss";
+
+.foodItemModal {
+  // Custom styles for the food item modal container
+}
+
+.modal {
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("lg");
+    
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &__imageContainer {
+    height: 100%;
+    max-height: 400px;
+    overflow: hidden;
+    border-radius: border-radius("lg");
+    position: relative;
+    
+    @include breakpoint-down("md") {
+      max-height: 250px;
+    }
+  }
+  
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  &__details {
+    @include flex-column;
+    gap: spacing("md");
+  }
+  
+  &__labelContainer {
+    @include flex;
+    gap: spacing("sm");
+    margin-bottom: spacing("xs");
+  }
+  
+  &__topRated {
+    background-color: color-alpha("accent", "base", 0.2);
+    color: color("neutral", "black");
+    font-size: font-size("xs");
+    padding: spacing("xxs") spacing("sm");
+    border-radius: border-radius("md");
+    @include font-weight("medium");
+  }
+  
+  &__spicy {
+    background-color: color-alpha("secondary", "base", 0.15);
+    color: color("secondary", "dark");
+    font-size: font-size("xs");
+    padding: spacing("xxs") spacing("sm");
+    border-radius: border-radius("md");
+    @include font-weight("medium");
+  }
+  
+  &__title {
+    @include font-size("subtitle-1");
+    @include font-weight("bold");
+    color: color("neutral", "black");
+    margin: 0;
+    
+    @include breakpoint-down("md") {
+      @include font-size("body-1");
+    }
+  }
+  
+  &__description {
+    color: color("neutral", "dark");
+    @include font-size("small");
+    margin-bottom: spacing("sm");
+    line-height: line-height("normal");
+  }
+  
+  &__price {
+    @include font-size("body-1");
+    @include font-weight("bold");
+    color: color("primary", "base");
+    margin: spacing("sm") 0;
+  }
+  
+  &__options {
+    margin: spacing("sm") 0;
+    
+    &Title {
+      @include font-size("small");
+      @include font-weight("medium");
+      color: color("neutral", "darkest");
+      margin-bottom: spacing("xs");
+    }
+  }
+  
+  &__spiceOptions {
+    @include flex;
+    gap: spacing("md");
+    margin-bottom: spacing("md");
+    
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+  
+  &__spiceOption {
+    @include flex;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("xs") spacing("md");
+    background-color: color("neutral", "lightest");
+    border: border-width("thin") solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: font-size("small");
+    
+    &:hover {
+      background-color: color-alpha("primary", "lighter", 0.5);
+    }
+    
+    &_selected {
+      background-color: color-alpha("primary", "lighter", 0.8);
+      border-color: color("primary", "base");
+    }
+  }
+  
+  &__radioIcon {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: border-width("medium") solid color("neutral", "medium");
+    position: relative;
+    
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: color("primary", "base");
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    
+    .modal__spiceOption_selected & {
+      border-color: color("primary", "base");
+      
+      &::after {
+        opacity: 1;
+      }
+    }
+  }
+  
+  &__quantityContainer {
+    @include flex;
+    align-items: center;
+    gap: spacing("md");
+    margin: spacing("md") 0;
+  }
+  
+  &__quantityButton {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    @include flex-center;
+    background-color: color("neutral", "lightest");
+    border: border-width("thin") solid color("neutral", "lighter");
+    font-size: font-size("body-2");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: color-alpha("primary", "lighter", 0.5);
+    }
+    
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+  
+  &__quantity {
+    @include font-size("body-2");
+    @include font-weight("bold");
+    color: color("neutral", "black");
+    min-width: 32px;
+    text-align: center;
+  }
+  
+  &__proteinOptions {
+    @include flex;
+    flex-wrap: wrap;
+    gap: spacing("sm");
+    margin: spacing("sm") 0;
+  }
+  
+  &__proteinOption {
+    padding: spacing("xs") spacing("md");
+    background-color: color("neutral", "lightest");
+    border: border-width("thin") solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    @include font-size("small");
+    color: color("neutral", "darkest");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: color-alpha("primary", "lighter", 0.5);
+    }
+    
+    &_selected {
+      background-color: color-alpha("primary", "lighter", 0.8);
+      border-color: color("primary", "base");
+      color: color("primary", "base");
+    }
+  }
+  
+  &__orderButton {
+    margin-top: spacing("md");
+  }
+} 

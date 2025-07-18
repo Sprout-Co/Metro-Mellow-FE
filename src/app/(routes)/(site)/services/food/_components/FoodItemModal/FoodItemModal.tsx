@@ -1,0 +1,172 @@
+"use client";
+
+import React, { useState } from "react";
+import Image from "next/image";
+import Modal from "@/components/ui/Modal/Modal";
+import { Button } from "@/components/ui/Button/Button";
+import styles from "./FoodItemModal.module.scss";
+
+// Food item interface (should match with FoodMenuModal)
+interface FoodItem {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  isSpicy: boolean;
+  isTopRated: boolean;
+}
+
+interface FoodItemModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  foodItem: FoodItem;
+}
+
+const FoodItemModal: React.FC<FoodItemModalProps> = ({
+  isOpen,
+  onClose,
+  foodItem,
+}) => {
+  const [quantity, setQuantity] = useState(1);
+  const [selectedSpiceLevel, setSelectedSpiceLevel] = useState<"small" | "plenty" | null>(null);
+  const [selectedProtein, setSelectedProtein] = useState<string | null>(null);
+
+  const incrementQuantity = () => {
+    setQuantity((prev) => prev + 1);
+  };
+
+  const decrementQuantity = () => {
+    if (quantity > 1) {
+      setQuantity((prev) => prev - 1);
+    }
+  };
+
+  const handleProteinSelect = (protein: string) => {
+    setSelectedProtein(protein);
+  };
+
+  const formatPrice = (price: number) => {
+    return `NGN ${price.toLocaleString()}`;
+  };
+
+  const handleOrder = () => {
+    // Implement order functionality
+    console.log("Order placed:", {
+      foodItem,
+      quantity,
+      spiceLevel: selectedSpiceLevel,
+      protein: selectedProtein,
+    });
+    onClose();
+  };
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      maxWidth="1000px"
+      maxHeight="90vh"
+      showCloseButton={true}
+      backdropBlur={true}
+      className={styles.foodItemModal}
+    >
+      <div className={styles.modal__content}>
+        <div className={styles.modal__imageContainer}>
+          <Image
+            src={foodItem.image}
+            alt={foodItem.name}
+            width={500}
+            height={500}
+            className={styles.modal__image}
+          />
+        </div>
+
+        <div className={styles.modal__details}>
+          <div className={styles.modal__labelContainer}>
+            {foodItem.isTopRated && (
+              <div className={styles.modal__topRated}>Top Rated Dish</div>
+            )}
+            {foodItem.isSpicy && (
+              <div className={styles.modal__spicy}>Spicy</div>
+            )}
+          </div>
+
+          <h2 className={styles.modal__title}>{foodItem.name}</h2>
+          
+          <p className={styles.modal__description}>{foodItem.description}</p>
+          
+          <div className={styles.modal__price}>
+            {formatPrice(foodItem.price)}
+          </div>
+          
+          <div className={styles.modal__options}>
+            <h3 className={styles.modal__optionsTitle}>Extras you might like</h3>
+            
+            <div className={styles.modal__spiceOptions}>
+              <button 
+                className={`${styles.modal__spiceOption} ${selectedSpiceLevel === "small" ? styles.modal__spiceOption_selected : ""}`}
+                onClick={() => setSelectedSpiceLevel("small")}
+              >
+                <span className={styles.modal__radioIcon}></span>
+                <span>Small Pepper</span>
+              </button>
+              
+              <button 
+                className={`${styles.modal__spiceOption} ${selectedSpiceLevel === "plenty" ? styles.modal__spiceOption_selected : ""}`}
+                onClick={() => setSelectedSpiceLevel("plenty")}
+              >
+                <span className={styles.modal__radioIcon}></span>
+                <span>Plenty Pepper</span>
+              </button>
+            </div>
+          </div>
+          
+          <div className={styles.modal__quantityContainer}>
+            <button 
+              className={styles.modal__quantityButton} 
+              onClick={incrementQuantity}
+            >
+              +
+            </button>
+            
+            <div className={styles.modal__quantity}>{quantity}</div>
+            
+            <button 
+              className={styles.modal__quantityButton} 
+              onClick={decrementQuantity}
+            >
+              -
+            </button>
+          </div>
+          
+          <div className={styles.modal__proteinOptions}>
+            {["Beef", "Chicken", "Turkey", "Salad"].map((protein) => (
+              <button
+                key={protein}
+                className={`${styles.modal__proteinOption} ${
+                  selectedProtein === protein ? styles.modal__proteinOption_selected : ""
+                }`}
+                onClick={() => handleProteinSelect(protein)}
+              >
+                {protein}
+              </button>
+            ))}
+          </div>
+          
+          <Button 
+            variant="primary"
+            size="lg"
+            fullWidth
+            onClick={handleOrder}
+            className={styles.modal__orderButton}
+          >
+            ORDER
+          </Button>
+        </div>
+      </div>
+    </Modal>
+  );
+};
+
+export default FoodItemModal; 
