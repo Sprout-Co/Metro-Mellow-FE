@@ -4,7 +4,7 @@ import MealPromoSection from './_components/MealPromoSection/MealPromoSection';
 import FruitBowlSection from './_components/FruitBowlSection/FruitBowlSection';
 import FoodIllustrationSection from './_components/FoodIllustrationSection/FoodIllustrationSection';
 import OrderStepsSection from './_components/OrderStepsSection/OrderStepsSection';
-import FoodSliderSection from './_components/FoodSliderSection/FoodSliderSection';
+import FoodMenuSection from './_components/FoodMenuSection/FoodMenuSection';
 import FAQSection, { FAQItem } from '@/components/ui/FAQSection/FAQSection';
 
 const foodFaqs: FAQItem[] = [
@@ -25,21 +25,10 @@ export default function FoodPage() {
         <main>
            <FoodHero />
            <MealPromoSection />
-           <FoodSliderSection />
-           {/* <FruitBowlSection /> */}
+           <FoodMenuSection />
            <FoodIllustrationSection />
            <OrderStepsSection />
            <FAQSection faqs={foodFaqs} />
-           {/* <CookingAbout />
-           <CookingPlans />
-           <CookingProcess />
-           <CookingMenu />
-           <CookingBenefits />
-           <CookingChefs />
-           <CookingTestimonials />
-           <CookingFAQ />
-           <CookingCTA />
-           <CookingContact /> */}
         </main>
     );
 }

@@ -1,0 +1,329 @@
+@import "@/styles/abstracts/_variables.scss";
+@import "@/styles/abstracts/_functions.scss";
+@import "@/styles/abstracts/_mixins.scss";
+@import "@/styles/abstracts/_animations.scss";
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  @include flex-center;
+  z-index: z-index("modal");
+
+  &__backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(color("neutral", "black"), 0.6);
+    backdrop-filter: blur(spacing("xs"));
+  }
+
+  &__container {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    max-height: 90vh;
+    background-color: color("neutral", "white");
+    border-radius: border-radius("2xl");
+    overflow: hidden;
+    box-shadow: shadow("2xl");
+    @include flex-column;
+  }
+
+  &__header {
+    padding: spacing("xl") spacing("2xl");
+    border-bottom: border-width("thin") solid color("neutral", "lighter");
+    @include flex-between;
+    background: linear-gradient(
+      to right,
+      rgba(color("primary", "base"), 0.03),
+      rgba(color("primary", "light"), 0.05)
+    );
+
+    @include breakpoint-down("md") {
+      padding: spacing("lg") spacing("xl");
+    }
+  }
+
+  &__headerContent {
+    @include flex-between;
+    flex: 1;
+    margin-right: spacing("lg");
+  }
+
+  &__title {
+    @include font-size("title");
+    @include font-weight("bold");
+    color: color("neutral", "black");
+    margin: 0;
+
+    @include breakpoint-down("md") {
+      @include font-size("subtitle-1");
+    }
+  }
+
+  &__cart {
+    @include flex-center;
+  }
+
+  &__cartIcon {
+    position: relative;
+    @include flex-center;
+    width: spacing("2xl");
+    height: spacing("2xl");
+    color: color("neutral", "dark");
+    background-color: rgba(color("neutral", "medium"), 0.1);
+    border-radius: border-radius("full");
+    transition: $transition-base;
+
+    &:hover {
+      background-color: rgba(color("neutral", "medium"), 0.2);
+      color: color("neutral", "black");
+    }
+  }
+
+  &__cartBadge {
+    position: absolute;
+    top: -spacing("xs");
+    right: -spacing("xs");
+    @include flex-center;
+    min-width: spacing("lg");
+    height: spacing("lg");
+    padding: 0 spacing("xs");
+    background-color: color("secondary", "base");
+    color: color("neutral", "white");
+    @include font-size("xs");
+    @include font-weight("bold");
+    border-radius: border-radius("full");
+    border: border-width("medium") solid color("neutral", "white");
+  }
+
+  &__close {
+    @include flex-center;
+    width: spacing("2xl");
+    height: spacing("2xl");
+    border-radius: border-radius("full");
+    color: color("neutral", "dark");
+    background-color: rgba(color("neutral", "medium"), 0.1);
+    border: none;
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      background-color: rgba(color("neutral", "medium"), 0.2);
+      color: color("neutral", "black");
+      transform: rotate(90deg);
+    }
+  }
+
+  &__content {
+    padding: spacing("2xl");
+    overflow-y: auto;
+    flex: 1;
+
+    @include breakpoint-down("md") {
+      padding: spacing("xl");
+    }
+  }
+
+  &__foodGrid {
+    @include grid-responsive(1, 2, 3, 4, spacing("xl"));
+    margin-bottom: spacing("3xl");
+
+    @include breakpoint-down("sm") {
+      gap: spacing("lg");
+    }
+  }
+
+  &__foodCard {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    overflow: hidden;
+    box-shadow: shadow("md");
+    transition: $transition-base;
+    cursor: pointer;
+    border: border-width("thin") solid color("neutral", "lighter");
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+      box-shadow: shadow("lg");
+    }
+  }
+
+  &__foodImageContainer {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+  }
+
+  &__foodImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: $transition-base;
+
+    .modal__foodCard:hover & {
+      transform: scale(1.05);
+    }
+  }
+
+  &__topRatedContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("xs") spacing("md");
+    background-color: color("accent", "lighter");
+  }
+
+  &__topRatedLabel {
+    color: color("neutral", "black");
+    @include font-size("small");
+    @include font-weight("semibold");
+  }
+
+  &__spicyBadge {
+    padding: spacing("xxs") spacing("sm");
+    background-color: color("accent", "base");
+    color: color("neutral", "black");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    border-radius: border-radius("md");
+  }
+
+  &__foodName {
+    padding: spacing("md") spacing("md") spacing("xs");
+    @include font-size("h6");
+    @include font-weight("bold");
+    color: color("neutral", "black");
+    margin: 0;
+    line-height: line-height("tight");
+  }
+
+  &__foodDescription {
+    padding: 0 spacing("md") spacing("lg");
+    @include font-size("small");
+    color: color("neutral", "dark");
+    line-height: line-height("normal");
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  &__foodFooter {
+    padding: spacing("md");
+    @include flex-between;
+    align-items: center;
+    border-top: border-width("thin") solid color("neutral", "lighter");
+  }
+
+  &__foodPrice {
+    @include font-size("body-1");
+    @include font-weight("bold");
+    color: color("neutral", "black");
+  }
+
+  &__addToCartButton {
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    padding: spacing("sm") spacing("lg");
+    @include font-size("small");
+    @include font-weight("bold");
+    text-transform: uppercase;
+    border-radius: 0;
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: color("primary", "dark");
+    }
+  }
+
+  &__loadMoreContainer {
+    @include flex-center;
+    padding-top: spacing("xl");
+  }
+
+  &__loadMoreButton {
+    min-width: 200px;
+    padding: spacing("md") spacing("xl");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    @include font-size("body-2");
+    @include font-weight("bold");
+    text-transform: uppercase;
+    border-radius: border-radius("pill");
+    transition: $transition-base;
+    
+    &:hover {
+      background-color: color("primary", "dark");
+    }
+  }
+}
+
+// Responsive adjustments
+@include breakpoint-down("lg") {
+  .modal {
+    &__container {
+      width: 95%;
+      max-height: 95vh;
+    }
+
+    &__foodGrid {
+      @include grid-responsive(1, 2, 2, 3, spacing("lg"));
+    }
+  }
+}
+
+@include breakpoint-down("md") {
+  .modal {
+    &__container {
+      width: 98%;
+      max-height: 98vh;
+    }
+
+    &__foodGrid {
+      @include grid-responsive(1, 2, 2, 2, spacing("md"));
+    }
+
+    &__foodImageContainer {
+      height: 180px;
+    }
+  }
+}
+
+@include breakpoint-down("sm") {
+  .modal {
+    &__container {
+      width: 100%;
+      height: 100%;
+      max-height: 100vh;
+      border-radius: 0;
+    }
+
+    &__header {
+      padding: spacing("lg");
+    }
+
+    &__content {
+      padding: spacing("lg");
+    }
+
+    &__foodGrid {
+      @include grid-responsive(1, 1, 1, 1, spacing("md"));
+    }
+
+    &__foodImageContainer {
+      height: 160px;
+    }
+
+    &__foodFooter {
+      @include flex-between;
+    }
+  }
+}
