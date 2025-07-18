@@ -1,0 +1,203 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.signInModal {
+  &__container {
+    position: relative;
+    padding: spacing("md");
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__close {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+    width: spacing("xl");
+    height: spacing("xl");
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("neutral", "dark");
+    background-color: rgba(color("neutral", "medium"), 0.1);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: z-index("modal") + 1;
+
+    &:hover {
+      background-color: rgba(color("neutral", "medium"), 0.2);
+      color: color("neutral", "black");
+      transform: rotate(90deg);
+    }
+  }
+
+  &__content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: spacing("lg") spacing("md");
+  }
+
+  &__logo {
+    margin-bottom: spacing("lg");
+  }
+
+  &__title {
+    @include heading-3;
+    color: color("primary", "base");
+    text-align: center;
+    margin-bottom: spacing("xs");
+  }
+
+  &__subtitle {
+    font-size: font-size("body-2");
+    color: color("neutral", "dark");
+    text-align: center;
+    margin-bottom: spacing("xl");
+  }
+
+  &__form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+  }
+
+  &__formGroup {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  &__label {
+    font-size: font-size("button");
+    font-weight: font-weight("medium");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xs");
+  }
+
+  &__inputWrapper {
+    width: 100%;
+  }
+
+  &__input {
+    width: 100%;
+    height: spacing("3xl");
+    padding: 0 spacing("md");
+    border: border-width("thin") solid color("neutral", "light");
+    border-radius: border-radius("md");
+    font-size: font-size("body-2");
+    color: color("neutral", "black");
+    background-color: color("neutral", "white");
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
+    }
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+  }
+
+  &__passwordContainer {
+    position: relative;
+    width: 100%;
+  }
+
+  &__passwordToggle {
+    position: absolute;
+    top: 50%;
+    right: spacing("md");
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: color("primary", "base");
+    }
+  }
+
+  &__error {
+    color: color("status", "error");
+    font-size: font-size("small");
+    margin-top: spacing("xs");
+  }
+
+  &__button {
+    @include button-base("lg");
+    @include button-primary;
+    width: 100%;
+    height: button-height("lg");
+    margin-top: spacing("md");
+    font-weight: font-weight("semibold");
+    letter-spacing: letter-spacing("wider");
+    position: relative;
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.3);
+    }
+  }
+
+  &__buttonSpinner {
+    width: spacing("md");
+    height: spacing("md");
+    border: 2px solid color("neutral", "white");
+    border-top-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: spacing("xs");
+    animation: spin 0.8s linear infinite;
+  }
+
+  &__signup {
+    margin-top: spacing("xl");
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    font-size: font-size("button");
+    color: color("neutral", "dark");
+
+    p {
+      margin: 0;
+    }
+  }
+
+  &__signupLink {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: font-size("button");
+    font-weight: font-weight("semibold");
+    color: color("primary", "base");
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: color("primary", "dark");
+      text-decoration: underline;
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+} 
