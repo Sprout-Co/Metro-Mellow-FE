@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: color-alpha('primary', 'lighter', 0.5);
+  background-color: color('neutral', 'lightest');
   overflow: hidden;
 
   &__container {

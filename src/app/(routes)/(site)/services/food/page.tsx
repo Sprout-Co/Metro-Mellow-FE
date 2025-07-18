@@ -24,8 +24,8 @@ export default function FoodPage() {
     return (
         <main>
            <FoodHero />
-           <MealPromoSection />
            <FoodMenuSection />
+           <MealPromoSection />
            <FoodIllustrationSection />
            <OrderStepsSection />
            <FAQSection faqs={foodFaqs} />

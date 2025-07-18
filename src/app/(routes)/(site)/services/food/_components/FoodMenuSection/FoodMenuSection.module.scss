@@ -6,7 +6,7 @@
 // Main section styling
 .section {
   width: 100%;
-  background-color: color('neutral', 'lightest');
+  background-color: color-alpha('primary', 'lighter', 0.5);
   @include section-spacing('4xl');
   position: relative;
   overflow: hidden;
@@ -19,8 +19,8 @@
     width: 60%;
     height: 100%;
     background: linear-gradient(135deg, 
-      color-alpha('primary', 'lighter', 0.1),
-      color-alpha('primary', 'light', 0.05)
+      color-alpha('neutral', 'lightest', 0.1),
+      color-alpha('neutral', 'lighter', 0.05)
     );
     z-index: 1;
     pointer-events: none;
