@@ -249,12 +249,12 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
 
             {/* Load More Button */}
             <div className={styles.modal__loadMoreContainer}>
-              <button
-                className={styles.modal__loadMoreButton}
+              <Button
+                size="lg"
                 onClick={handleLoadMore}
               >
                 LOAD MORE DISHES
-              </button>
+              </Button>
             </div>
           </div>
         </motion.div>

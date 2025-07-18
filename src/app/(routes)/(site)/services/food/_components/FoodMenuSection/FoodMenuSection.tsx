@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { Button } from '@/components/ui/Button/Button';
 import styles from './FoodMenuSection.module.scss';
-import FoodMenuModal, { MenuItem } from '../FoodMenuModal/FoodMenuModal';
+import FoodMenuModal from '../FoodMenuModal/FoodMenuModal';
 
 const FoodMenuSection: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,13 +23,13 @@ const FoodMenuSection: React.FC = () => {
             to satisfy every craving. Place your order now and enjoy a delicious meal 
             delivered to your doorstep.
           </p>
-          <button className={styles.button} onClick={openModal}>
+          <Button size="lg" onClick={openModal}>
             Explore Menu Options
-          </button>
+          </Button>
         </div>
         <div className={styles.imageContainer}>
           <Image 
-            src="/images/food/egusi-fufu.png" 
+            src="/images/food/jollof-rice.png" 
             alt="Delicious Food"
             width={500}
             height={400}

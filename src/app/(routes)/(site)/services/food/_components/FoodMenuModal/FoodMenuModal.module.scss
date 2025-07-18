@@ -247,23 +247,6 @@
     @include flex-center;
     padding-top: spacing("xl");
   }
-
-  &__loadMoreButton {
-    min-width: 200px;
-    padding: spacing("md") spacing("xl");
-    background-color: color("primary", "base");
-    color: color("neutral", "white");
-    border: none;
-    @include font-size("body-2");
-    @include font-weight("bold");
-    text-transform: uppercase;
-    border-radius: border-radius("pill");
-    transition: $transition-base;
-    
-    &:hover {
-      background-color: color("primary", "dark");
-    }
-  }
 }
 
 // Responsive adjustments

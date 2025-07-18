@@ -70,20 +70,6 @@
   margin-bottom: spacing('xl');
 }
 
-.button {
-  @include button-primary;
-  font-size: font-size('body-1');
-  padding: spacing('md') spacing('lg');
-  border-radius: border-radius('lg');
-  transition: $transition-base;
-  font-weight: map-get($font-weights, 'medium');
-  
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: shadow('md');
-  }
-}
-
 .imageContainer {
   flex: 1;
   max-width: 500px;
