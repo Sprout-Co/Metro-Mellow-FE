@@ -78,11 +78,7 @@ const StorySection: React.FC = () => {
               variants={buttonVariants}
               whileHover="hover"
             >
-              <Button
-                href="/bookings"
-                size="lg"
-                className={styles.storySection__button}
-              >
+              <Button href="/bookings" size="lg" variant="primary">
                 BOOK A SERVICE
               </Button>
             </motion.div>
