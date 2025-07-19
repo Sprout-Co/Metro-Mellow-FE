@@ -48,7 +48,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               src="/images/brand/logo.jpeg" 
               alt="Metro Mellow Logo" 
               width={200} 
-              height={60} 
+              height={60}
+              style={{ borderRadius: '8px' }}
             />
           </div>
 
