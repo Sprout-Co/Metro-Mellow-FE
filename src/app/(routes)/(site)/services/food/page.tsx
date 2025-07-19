@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import FoodHero from './_components/FoodHero/FoodHero';
 import MealPromoSection from './_components/MealPromoSection/MealPromoSection';
@@ -14,11 +16,6 @@ const foodFaqs: FAQItem[] = [
   { id: "f4", question: "Is there a minimum order amount?", answer: "No minimums! Order as much or as little as you like." },
   { id: "f5", question: "What if my food arrives cold?", answer: "Contact us within 30 minutes and we'll make it right with a replacement or refund." },
 ];
-
-export const metadata = {
-    title: 'Food Delivery Services | MetroMellow',
-    description: 'Delicious meals delivered to your doorstep. From comfort food to gourmet dishes, enjoy hassle-free eating with MetroMellow food delivery.',
-}
 
 export default function FoodPage() {
     return (
