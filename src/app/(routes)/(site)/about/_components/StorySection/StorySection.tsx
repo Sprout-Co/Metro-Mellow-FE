@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import styles from "./StorySection.module.scss";
 import { Button } from "@/components/ui/Button/Button";
 import VideoSection from "../VideoSection/VideoSection";
+import CTAButtonExample from "@/components/ui/Button/CTAButton/CTAButtonExample";
 
 const StorySection: React.FC = () => {
   // Animation variants
@@ -81,6 +82,7 @@ const StorySection: React.FC = () => {
               <Button href="/bookings" size="lg" variant="primary">
                 BOOK A SERVICE
               </Button>
+              <CTAButtonExample />
             </motion.div>
           </div>
         </div>

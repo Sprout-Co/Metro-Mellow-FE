@@ -1,90 +1,535 @@
-@import '@/styles/variables';
-@import '@/styles/mixins';
+@import "@/styles/abstracts/_variables.scss";
+@import "@/styles/abstracts/_functions.scss";
+@import "@/styles/abstracts/_mixins.scss";
+@import "@/styles/abstracts/_animations.scss";
 
-.button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-family: $font-family-base;
-    font-weight: $font-weight-medium;
-    border-radius: $border-radius-md;
-    transition: all $transition-fast;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    white-space: nowrap;
+// ===================================
+// CTA BUTTON WRAPPER
+// ===================================
 
-    &:focus {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba($color-primary, 0.3);
+.ctaButtonWrapper {
+  display: inline-block;
+  position: relative;
+  isolation: isolate;
+
+  // Ensure proper stacking context for effects
+  transform: translateZ(0);
+  will-change: transform;
+
+  // Smooth transitions for state changes
+  transition: all map-get($transition-duration, "fast")
+    map-get($transition-timing, "ease-out");
+}
+
+// ===================================
+// BASE CTA BUTTON STYLES
+// ===================================
+
+.ctaButton {
+  position: relative;
+  z-index: 2;
+
+  // Enhanced shadows for attention
+  box-shadow:
+    shadow("md"),
+    0 0 0 1px color-alpha("primary", "base", 0.1);
+
+  // Smooth transitions
+  transition: all map-get($transition-duration, "base")
+    map-get($transition-timing, "ease-out");
+
+  // Enhanced focus states
+  &:focus-visible {
+    outline: 3px solid color-alpha("primary", "base", 0.3);
+    outline-offset: 3px;
+    box-shadow:
+      shadow("lg"),
+      0 0 0 1px color("primary", "base"),
+      0 0 20px color-alpha("primary", "base", 0.4);
+  }
+
+  // Enhanced hover states
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow:
+      shadow("lg"),
+      0 0 25px color-alpha("primary", "base", 0.3);
+  }
+
+  // Active state
+  &:active:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: shadow("md");
+  }
+}
+
+// ===================================
+// ANIMATION INTENSITY MODIFIERS
+// ===================================
+
+.intensity-subtle {
+  .ctaButton {
+    box-shadow: shadow("sm");
+
+    &:hover {
+      box-shadow: shadow("md");
     }
+  }
+}
 
-    &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
+.intensity-medium {
+  // Default styles already applied above
+}
+
+.intensity-intense {
+  .ctaButton {
+    box-shadow:
+      shadow("lg"),
+      0 0 15px color-alpha("primary", "base", 0.2);
+
+    &:hover {
+      box-shadow:
+        shadow("xl"),
+        0 0 35px color-alpha("primary", "base", 0.4),
+        0 0 60px color-alpha("secondary", "base", 0.2);
     }
+  }
 }
 
-// Variants
-.primary {
-    background-color: $color-primary;
-    color: $color-text-white;
+// ===================================
+// SPECIFIC ANIMATION STYLES
+// ===================================
 
-    &:hover:not(:disabled) {
-        background-color: $color-primary-dark;
-    }
+// Glow animation with CSS for performance
+.animation-glow {
+  &::before {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border-radius: inherit;
+    background: linear-gradient(
+      45deg,
+      color-alpha("primary", "base", 0.6),
+      color-alpha("secondary", "base", 0.6),
+      color-alpha("accent", "base", 0.6),
+      color-alpha("primary", "base", 0.6)
+    );
+    background-size: 200% 200%;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity map-get($transition-duration, "base")
+      map-get($transition-timing, "ease-out");
+    animation: glowRotate 3s linear infinite;
+  }
+
+  &.animating::before {
+    opacity: 0.8;
+  }
+
+  &.continuous::before {
+    opacity: 0.6;
+  }
 }
 
-.secondary {
-    background-color: $color-secondary;
-    color: $color-text-dark;
-
-    &:hover:not(:disabled) {
-        background-color: $color-secondary-dark;
-    }
+@keyframes glowRotate {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-.outline {
-    background-color: transparent;
-    color: $color-text-white;
-    border: 2px solid $color-text-white;
+// Shimmer effect
+.animation-shimmer {
+  overflow: hidden;
 
-    &:hover:not(:disabled) {
-        background-color: rgba($color-text-white, 0.1);
-    }
-}
-
-.text {
-    background-color: transparent;
-    color: $color-primary;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-
-    &:hover:not(:disabled) {
-        color: $color-primary-dark;
-        text-decoration: underline;
-    }
-}
-
-// Sizes
-.small {
-    font-size: $font-size-small;
-    padding: ($spacing-xs - 2px) $spacing-sm;
-    height: 36px;
-}
-
-.medium {
-    font-size: $font-size-base;
-    padding: $spacing-xs $spacing-md;
-    height: 44px;
-}
-
-.large {
-    font-size: $font-size-base;
-    padding: $spacing-sm $spacing-lg;
-    height: 52px;
-}
-
-.fullWidth {
+  .shimmerEffect {
+    position: absolute;
+    top: 0;
+    left: -100%;
     width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-alpha("neutral", "white", 0.4),
+      transparent
+    );
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity map-get($transition-duration, "fast")
+      map-get($transition-timing, "ease-out");
+  }
+
+  &.animating .shimmerEffect {
+    opacity: 1;
+    animation: shimmerMove 1.5s ease-out infinite;
+  }
+
+  &.continuous .shimmerEffect {
+    opacity: 1;
+    animation: shimmerMove 2s ease-out infinite;
+  }
+}
+
+@keyframes shimmerMove {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+// Enhanced pulse with additional effects
+.animation-pulse {
+  &.animating,
+  &.continuous {
+    .ctaButton {
+      box-shadow:
+        shadow("md"),
+        0 0 0 0 color-alpha("primary", "base", 0.7);
+      animation: pulseShadow 2s ease-out infinite;
+    }
+  }
+}
+
+@keyframes pulseShadow {
+  0% {
+    box-shadow:
+      shadow("md"),
+      0 0 0 0 color-alpha("primary", "base", 0.7);
+  }
+  70% {
+    box-shadow:
+      shadow("lg"),
+      0 0 0 15px color-alpha("primary", "base", 0);
+  }
+  100% {
+    box-shadow:
+      shadow("md"),
+      0 0 0 0 color-alpha("primary", "base", 0);
+  }
+}
+
+// Heartbeat with enhanced visual effects
+.animation-heartbeat {
+  &.animating,
+  &.continuous {
+    .ctaButton {
+      animation: heartbeatGlow 1.5s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes heartbeatGlow {
+  0%,
+  100% {
+    box-shadow: shadow("md");
+  }
+  14% {
+    box-shadow:
+      shadow("lg"),
+      0 0 20px color-alpha("primary", "base", 0.5);
+  }
+  28% {
+    box-shadow: shadow("md");
+  }
+  42% {
+    box-shadow:
+      shadow("lg"),
+      0 0 25px color-alpha("primary", "base", 0.6);
+  }
+  70% {
+    box-shadow: shadow("md");
+  }
+}
+
+// Enhanced bounce with trailing effect
+.animation-bounce {
+  &.animating,
+  &.continuous {
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: color-alpha("primary", "base", 0.1);
+      border-radius: inherit;
+      z-index: 1;
+      opacity: 0;
+      animation: bounceTrail 1s ease-out;
+    }
+  }
+
+  &.continuous::after {
+    animation: bounceTrail 1s ease-out infinite;
+  }
+}
+
+@keyframes bounceTrail {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+}
+
+// Enhanced vibrate with color shift
+.animation-vibrate {
+  &.animating,
+  &.continuous {
+    .ctaButton {
+      animation: vibrateColor 0.8s ease-in-out;
+    }
+  }
+
+  &.continuous .ctaButton {
+    animation: vibrateColor 0.8s ease-in-out infinite;
+  }
+}
+
+@keyframes vibrateColor {
+  0%,
+  100% {
+    filter: hue-rotate(0deg) brightness(1);
+  }
+  25% {
+    filter: hue-rotate(10deg) brightness(1.1);
+  }
+  50% {
+    filter: hue-rotate(-10deg) brightness(1.05);
+  }
+  75% {
+    filter: hue-rotate(5deg) brightness(1.1);
+  }
+}
+
+// Enhanced wobble with shadow movement
+.animation-wobble {
+  &.animating,
+  &.continuous {
+    .ctaButton {
+      animation: wobbleShadow 1.2s ease-in-out;
+    }
+  }
+
+  &.continuous .ctaButton {
+    animation: wobbleShadow 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes wobbleShadow {
+  0%,
+  100% {
+    box-shadow: shadow("md");
+  }
+  25% {
+    box-shadow:
+      15px 5px 20px color-alpha("neutral", "black", 0.15),
+      -5px -5px 15px color-alpha("primary", "base", 0.1);
+  }
+  75% {
+    box-shadow:
+      -15px 5px 20px color-alpha("neutral", "black", 0.15),
+      5px -5px 15px color-alpha("primary", "base", 0.1);
+  }
+}
+
+// Flash with color explosion
+.animation-flash {
+  &.animating,
+  &.continuous {
+    &::before {
+      content: "";
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      background: radial-gradient(
+        circle,
+        color-alpha("accent", "base", 0.8) 0%,
+        color-alpha("secondary", "base", 0.6) 30%,
+        transparent 70%
+      );
+      border-radius: inherit;
+      z-index: -1;
+      opacity: 0;
+      animation: flashExplosion 1s ease-out;
+    }
+  }
+
+  &.continuous::before {
+    animation: flashExplosion 2s ease-out infinite;
+  }
+}
+
+@keyframes flashExplosion {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+// Flicker with electrical effect
+.animation-flicker {
+  &.animating,
+  &.continuous {
+    .ctaButton {
+      animation: electricFlicker 0.8s ease-in-out;
+    }
+  }
+
+  &.continuous .ctaButton {
+    animation: electricFlicker 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes electricFlicker {
+  0%,
+  100% {
+    box-shadow: shadow("md");
+    filter: brightness(1);
+  }
+  10% {
+    box-shadow:
+      shadow("lg"),
+      0 0 20px color-alpha("accent", "base", 0.8);
+    filter: brightness(1.2);
+  }
+  20% {
+    box-shadow: shadow("sm");
+    filter: brightness(0.8);
+  }
+  30% {
+    box-shadow:
+      shadow("xl"),
+      0 0 30px color-alpha("accent", "base", 0.9);
+    filter: brightness(1.3);
+  }
+  40% {
+    box-shadow: shadow("md");
+    filter: brightness(0.9);
+  }
+  60% {
+    box-shadow:
+      shadow("lg"),
+      0 0 25px color-alpha("accent", "base", 0.7);
+    filter: brightness(1.1);
+  }
+}
+
+// ===================================
+// EFFECT OVERLAYS
+// ===================================
+
+.effectOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity map-get($transition-duration, "base")
+    map-get($transition-timing, "ease-out");
+}
+
+// ===================================
+// STATE MODIFIERS
+// ===================================
+
+.paused {
+  .ctaButton {
+    animation-play-state: paused !important;
+  }
+
+  &::before,
+  &::after {
+    animation-play-state: paused !important;
+  }
+
+  .effectOverlay,
+  .shimmerEffect {
+    animation-play-state: paused !important;
+  }
+}
+
+// ===================================
+// ACCESSIBILITY & REDUCED MOTION
+// ===================================
+
+@media (prefers-reduced-motion: reduce) {
+  .ctaButtonWrapper {
+    * {
+      animation: none !important;
+      transition: none !important;
+    }
+
+    &::before,
+    &::after {
+      display: none !important;
+    }
+
+    .effectOverlay,
+    .shimmerEffect {
+      display: none !important;
+    }
+  }
+}
+
+// ===================================
+// HIGH CONTRAST MODE
+// ===================================
+
+@media (prefers-contrast: high) {
+  .ctaButton {
+    border: 2px solid currentColor;
+
+    &:focus-visible {
+      outline: 4px solid currentColor;
+      outline-offset: 4px;
+    }
+  }
+
+  // Disable complex animations in high contrast mode
+  .ctaButtonWrapper {
+    &::before,
+    &::after {
+      display: none;
+    }
+
+    .effectOverlay,
+    .shimmerEffect {
+      display: none;
+    }
+  }
 }
