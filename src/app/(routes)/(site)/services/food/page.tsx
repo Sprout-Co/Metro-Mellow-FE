@@ -1,4 +1,6 @@
-import React from 'react';
+"use client";
+
+import React, { useState, useEffect } from 'react';
 import FoodHero from './_components/FoodHero/FoodHero';
 import MealPromoSection from './_components/MealPromoSection/MealPromoSection';
 import FruitBowlSection from './_components/FruitBowlSection/FruitBowlSection';
@@ -6,6 +8,7 @@ import FoodIllustrationSection from './_components/FoodIllustrationSection/FoodI
 import OrderStepsSection from './_components/OrderStepsSection/OrderStepsSection';
 import FoodMenuSection from './_components/FoodMenuSection/FoodMenuSection';
 import FAQSection, { FAQItem } from '@/components/ui/FAQSection/FAQSection';
+import LoginModal from '@/components/ui/LoginModal/LoginModal';
 
 const foodFaqs: FAQItem[] = [
   { id: "f1", question: "Are your meals freshly prepared?", answer: "Yes! All our meals are cooked fresh daily by professional chefs and delivered hot to your door." },
@@ -15,12 +18,18 @@ const foodFaqs: FAQItem[] = [
   { id: "f5", question: "What if my food arrives cold?", answer: "Contact us within 30 minutes and we'll make it right with a replacement or refund." },
 ];
 
-export const metadata = {
-    title: 'Food Delivery Services | MetroMellow',
-    description: 'Delicious meals delivered to your doorstep. From comfort food to gourmet dishes, enjoy hassle-free eating with MetroMellow food delivery.',
-}
-
 export default function FoodPage() {
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+    useEffect(() => {
+        // Open the login modal when the page loads
+        setIsLoginModalOpen(true);
+    }, []);
+
+    const closeLoginModal = () => {
+        setIsLoginModalOpen(false);
+    };
+
     return (
         <main>
            <FoodHero />
@@ -29,6 +38,11 @@ export default function FoodPage() {
            <FoodIllustrationSection />
            <OrderStepsSection />
            <FAQSection faqs={foodFaqs} />
+           
+           <LoginModal 
+               isOpen={isLoginModalOpen} 
+               onClose={closeLoginModal} 
+           />
         </main>
     );
 }
