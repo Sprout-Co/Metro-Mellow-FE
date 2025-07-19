@@ -7,13 +7,13 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 60vh;
+  min-height: 70vh;
   padding: spacing("lg");
 
   &__formContainer {
     background-color: color("neutral", "lightest");
     border-radius: border-radius("2xl");
-    padding: spacing("xl");
+    padding: spacing("2xl");
     max-width: 500px;
     width: 100%;
     box-shadow: shadow("xl");
