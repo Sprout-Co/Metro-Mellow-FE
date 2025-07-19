@@ -4,6 +4,7 @@
 
 .loginModal {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -18,6 +19,7 @@
     width: 100%;
     box-shadow: shadow("xl");
     border: 1px solid color("neutral", "lighter");
+    margin-bottom: spacing("lg");
   }
 
   &__logo {
@@ -107,44 +109,31 @@
   }
 
   &__button {
-    width: 100%;
-    padding: spacing("sm") spacing("md");
-    background-color: color("primary", "base");
-    color: color("neutral", "white");
-    border: none;
-    border-radius: border-radius("md");
-    font-size: font-size("xs");
-    font-weight: font-weight("bold");
-    cursor: pointer;
-    transition: $transition-base;
     margin-top: spacing("sm");
-
-    &:hover {
-      background-color: color("primary", "dark");
-    }
-
-    &:focus {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.3);
-    }
   }
 
-  &__footer {
-    margin-top: spacing("md");
+  &__signupWrapper {
+    background-color: rgba(color("neutral", "lighter"), 0.5);
+    border-radius: border-radius("pill");
+    padding: spacing("sm") spacing("2xl");
     text-align: center;
+    max-width: 500px;
+  }
+
+  &__signupText {
     font-size: font-size("xs");
     color: color("neutral", "dark");
+    margin: 0;
   }
 
-  &__link {
+  &__signupLink {
     color: color("primary", "base");
-    font-weight: font-weight("medium");
+    font-weight: font-weight("bold");
     text-decoration: none;
     transition: $transition-fast;
 
     &:hover {
       text-decoration: underline;
-      color: color("primary", "dark");
     }
   }
 } 

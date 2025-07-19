@@ -95,14 +95,22 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               </div>
             </div>
 
-            <button className={styles.loginModal__button} type="submit">
+            <Button 
+              type="submit"
+              variant="primary"
+              size="lg"
+              fullWidth={true}
+              className={styles.loginModal__button}
+            >
               LOGIN
-            </button>
+            </Button>
           </form>
-
-          <div className={styles.loginModal__footer}>
-            <p>Don't have an account? <Link href="/get-started" className={styles.loginModal__link}>Sign up</Link></p>
-          </div>
+        </div>
+        
+        <div className={styles.loginModal__signupWrapper}>
+          <p className={styles.loginModal__signupText}>
+            Don't have an account? <Link href="/get-started" className={styles.loginModal__signupLink}>Sign up</Link>
+          </p>
         </div>
       </div>
     </Modal>
