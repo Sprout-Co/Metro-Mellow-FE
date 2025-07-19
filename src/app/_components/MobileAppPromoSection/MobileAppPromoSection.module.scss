@@ -1,39 +1,39 @@
-@import '../../../styles/abstracts/variables';
-@import '../../../styles/abstracts/functions';
-@import '../../../styles/abstracts/mixins';
-@import '../../../styles/abstracts/animations';
+@import "../../../styles/abstracts/variables";
+@import "../../../styles/abstracts/functions";
+@import "../../../styles/abstracts/mixins";
+@import "../../../styles/abstracts/animations";
 
 .app-promo {
   width: 100%;
-  padding: spacing('4xl') 0;
+  padding: spacing("4xl") 0;
   overflow: hidden;
-  background-color: color('primary', 'base');
+  background-color: color("primary", "base");
   position: relative;
 
   &__container {
-    max-width: map-get($container-max-widths, '2xl');
+    @include container;
     margin: 0 auto;
-    padding: 0 spacing('md');
+    padding: 0 spacing("md");
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: spacing('6xl');
+    gap: spacing("6xl");
 
-    @include breakpoint-down('lg') {
+    @include breakpoint-down("lg") {
       flex-direction: column;
-      gap: spacing('3xl');
+      gap: spacing("3xl");
       align-items: center;
       justify-content: center;
     }
 
-    @include breakpoint-down('md') {
-      padding: 0 spacing('sm');
-      gap: spacing('2xl');
+    @include breakpoint-down("md") {
+      padding: 0 spacing("sm");
+      gap: spacing("2xl");
     }
-    
-    @include breakpoint-down('sm') {
-      padding: 0 spacing('md');
-      gap: spacing('xl');
+
+    @include breakpoint-down("sm") {
+      padding: 0 spacing("md");
+      gap: spacing("xl");
     }
   }
 
@@ -41,7 +41,7 @@
     flex: 1;
     max-width: 550px;
 
-    @include breakpoint-down('lg') {
+    @include breakpoint-down("lg") {
       max-width: 100%;
       text-align: center;
       order: 2;
@@ -49,55 +49,54 @@
       flex-direction: column;
       align-items: center;
     }
-    
-    @include breakpoint-down('sm') {
+
+    @include breakpoint-down("sm") {
       max-width: 100%;
-      padding: 0 spacing('sm');
+      padding: 0 spacing("sm");
     }
   }
 
   &__heading {
     inline-size: max-content;
-    font-size: font-size('h1') * 1.05;
+    font-size: font-size("h1") * 1.05;
     font-family: $font-family-heading;
-    font-weight: map-get($font-weights, 'bold');
-    color: color('primary', 'lighter');
-    margin-bottom: spacing('lg');
+    font-weight: map-get($font-weights, "bold");
+    color: color("primary", "lighter");
+    margin-bottom: spacing("lg");
     line-height: 1.05;
     overflow-wrap: break-word;
     word-break: break-word;
-    
 
-    @include breakpoint-down('xl') {
-      font-size: font-size('h3');
+    @include breakpoint-down("xl") {
+      font-size: font-size("h3");
     }
 
-    @include breakpoint-down('md') {
-      font-size: font-size('h2') * 1.1;
+    @include breakpoint-down("md") {
+      font-size: font-size("h2") * 1.1;
       text-align: center;
     }
 
-    @include breakpoint-down('sm') {
-      font-size: font-size('h4');
+    @include breakpoint-down("sm") {
+      font-size: font-size("h4");
       text-align: center;
       inline-size: 100%;
     }
   }
 
   &__description {
-    font-size: font-size('body-1') * 1.3;
-    color: color('primary', 'lighter');
-    margin-bottom: spacing('xl');
+    font-size: font-size("body-1") * 1.3;
+    color: color("primary", "lighter");
+    margin-bottom: spacing("xl");
     max-width: 520px;
-    line-height: map-get($line-heights, 'relaxed');
+    line-height: map-get($line-heights, "relaxed");
 
-    @include breakpoint-down('md') {
+    @include breakpoint-down("md") {
       max-width: 100%;
       text-align: center;
     }
 
-    @include breakpoint-down('sm') {
-      font-size: font-size('body-2');
+    @include breakpoint-down("sm") {
+      font-size: font-size("body-2");
       text-align: center;
       max-width: 100%;
     }
@@ -105,67 +104,67 @@
 
   &__buttons {
     display: flex;
-    gap: spacing('md');
+    gap: spacing("md");
 
-    @include breakpoint-down('sm') {
+    @include breakpoint-down("sm") {
       flex-direction: column;
-      gap: spacing('sm');
+      gap: spacing("sm");
     }
 
-    @include breakpoint-down('lg') {
+    @include breakpoint-down("lg") {
       justify-content: center;
     }
   }
 
   &__button-primary,
   &__button-secondary {
-    padding: spacing('xl') spacing('3xl');
+    padding: spacing("xl") spacing("3xl");
     min-width: 200px;
     text-align: center;
-    @include breakpoint-down('sm') {
+    @include breakpoint-down("sm") {
       min-width: 100%;
       width: 100%;
-      padding: spacing('md') 0;
-      font-size: font-size('body-2');
+      padding: spacing("md") 0;
+      font-size: font-size("body-2");
     }
   }
 
   &__button-primary {
-    @include button-primary('md');
-    background-color: color('primary', 'base');
+    @include button-primary("md");
+    background-color: color("primary", "base");
     transition: $transition-base;
-    padding: spacing('xl') spacing('3xl');
+    padding: spacing("xl") spacing("3xl");
     min-width: 200px;
     text-align: center;
-    @include breakpoint-down('sm') {
+    @include breakpoint-down("sm") {
       min-width: 100%;
-      padding: spacing('xl') 0;
+      padding: spacing("xl") 0;
     }
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: map-get($shadows, 'md');
+      box-shadow: map-get($shadows, "md");
     }
   }
 
   &__button-secondary {
-    @include button-secondary('md');
-    color: color('primary', 'base');
-    border-color: color('primary', 'base');
+    @include button-secondary("md");
+    color: color("primary", "base");
+    border-color: color("primary", "base");
     transition: $transition-base;
-    padding: spacing('xl') spacing('3xl');
+    padding: spacing("xl") spacing("3xl");
     min-width: 200px;
     text-align: center;
-    @include breakpoint-down('sm') {
+    @include breakpoint-down("sm") {
       min-width: 100%;
-      padding: spacing('xl') 0;
+      padding: spacing("xl") 0;
     }
 
     &:hover {
-      background-color: color('primary', 'base');
-      color: color('neutral', 'white');
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
       transform: translateY(-2px);
-      box-shadow: map-get($shadows, 'md');
+      box-shadow: map-get($shadows, "md");
     }
   }
 
@@ -176,13 +175,13 @@
     position: relative;
     z-index: 1;
 
-    @include breakpoint-down('lg') {
+    @include breakpoint-down("lg") {
       justify-content: center;
       order: 1;
       width: 100%;
     }
-    
-    @include breakpoint-down('sm') {
+
+    @include breakpoint-down("sm") {
       justify-content: center;
       width: 100%;
     }
@@ -196,19 +195,32 @@
     transition: $transition-base;
 
     &:hover {
-      transform: perspective(1000px) rotateY(-5deg) rotateX(2deg) translateY(-5px);
+      transform: perspective(1000px) rotateY(-5deg) rotateX(2deg)
+        translateY(-5px);
     }
 
-    @include breakpoint-down('md') {
+    @include breakpoint-down("2xl") {
+      transform: perspective(1000px) rotateY(-10deg) rotateX(5deg);
+      // transform: translateX(-21%) translateY(-10%) perspective(1000px) rotateY(-10deg) rotateX(5deg);
+      width: 552px;
+    }
+
+    @include breakpoint-down("xl") {
+      transform: perspective(1000px) rotateY(-10deg) rotateX(5deg);
       width: 500px;
+    }
+
+    @include breakpoint-down("md") {
+      width: 400px;
       max-width: 500px;
-      transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+      // transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
       &:hover {
-        transform: perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(-5px);
+        transform: perspective(1000px) rotateY(0deg) rotateX(0deg)
+          translateY(-5px);
       }
     }
 
-    @include breakpoint-down('sm') {
+    @include breakpoint-down("sm") {
       width: 340px;
       max-width: 340px;
     }

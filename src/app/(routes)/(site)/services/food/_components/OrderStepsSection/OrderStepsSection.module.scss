@@ -6,50 +6,71 @@
 .orderSteps {
   position: relative;
   width: 100%;
-  background-color: color('neutral', 'white');
-  @include section-spacing('6xl');
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: visible;
-  z-index: 1;
-  padding-top: 0;
+  background-color: color("neutral", "white");
+  @include section-spacing("6xl");
+  overflow: hidden;
+  padding-top: spacing("3xl");
+
+  @include breakpoint-down("md") {
+    padding-top: spacing("xl");
+  }
 
   &__container {
-    width: 100%;
     @include container;
-    // display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: spacing('3xl');
+    display: grid;
+    grid-template-columns: minmax(300px, 45%) 1fr;
+    align-items: center;
+    gap: spacing("3xl");
     position: relative;
-    z-index: 1;
 
-    @include breakpoint-down('md') {
-      flex-direction: column;
-      align-items: center;
-      gap: spacing('xl');
-      padding: 0 spacing('sm');
+    @include breakpoint-down("lg") {
+      grid-template-columns: 1fr;
+      gap: spacing("2xl");
     }
-    
-    @include breakpoint-down('sm') {
-      padding: 0 spacing('sm');
+
+    @include breakpoint-down("md") {
+      gap: spacing("xl");
     }
   }
 
-  &__illustration {
+  &__imageWrapper {
     position: relative;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    margin-top: 0;
+    margin-top: -30px;
 
-    @include breakpoint-down('md') {
+    @include breakpoint-down("lg") {
+      margin: 0 auto;
+      max-width: 400px;
       width: 100%;
-      margin-top: 0;
-      margin-bottom: spacing('md');
+      order: 1;
+    }
+
+    @include breakpoint-down("sm") {
+      max-width: 300px;
+      margin-top: -20px;
+    }
+  }
+
+  &__imageDecoration {
+    position: absolute;
+    width: 140%;
+    height: 140%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(
+      circle,
+      color-alpha("accent", "lighter", 0.2) 0%,
+      transparent 70%
+    );
+    border-radius: 50%;
+    z-index: 1;
+
+    @include breakpoint-down("md") {
+      width: 120%;
+      height: 120%;
     }
   }
 
@@ -58,65 +79,106 @@
     width: 100%;
     height: auto;
     max-width: 500px;
-    transform: none;
-    margin-bottom: 0;
-    display: block;
-    margin-left: auto;
-    // margin-right: auto;
-    margin-top: -70px;
     z-index: 2;
+    filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.1));
+    animation: gentle-float 6s ease-in-out infinite;
 
-    @include breakpoint-down('md') {
-      max-width: 300px;
-      margin-top: -60px;
+    @include breakpoint-down("lg") {
+      max-width: 400px;
     }
-    @include breakpoint-down('sm') {
-      max-width: 180px;
-      margin-top: -50px;
+
+    @include breakpoint-down("md") {
+      max-width: 300px;
+    }
+
+    @include breakpoint-down("sm") {
+      max-width: 240px;
     }
   }
 
   &__content {
-    width: 50%;
-    padding-right: spacing('xl');
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    z-index: 3;
 
-    @include breakpoint-down('md') {
-      width: 100%;
-      padding-right: 0;
+    @include breakpoint-down("lg") {
+      align-items: center;
       text-align: center;
-      margin-top: 0;
-      margin-bottom: spacing('xl');
+      order: 2;
+    }
+  }
+
+  &__textContent {
+    margin-bottom: spacing("xl");
+
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("lg");
     }
   }
 
   &__title {
-    // font-size: font-size('h1');
-    // font-weight: map-get($font-weights, 'bold');
-    // line-height: line-height('tight');
-    // color: color('neutral', 'black');
-    margin-bottom: spacing('md');
     @include heading-1;
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
+    position: relative;
 
-    // @include breakpoint-down('md') {
-    //   font-size: font-size('h3');
-    // }
-    // @include breakpoint-down('sm') {
-    //   font-size: font-size('h4');
-    // }
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      height: 3px;
+      width: 60px;
+      background-color: color("secondary", "base");
+
+      @include breakpoint-down("lg") {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+
+    @include breakpoint-down("lg") {
+      font-size: font-size("h2");
+    }
+
+    @include breakpoint-down("md") {
+      font-size: font-size("h3");
+    }
+
+    @include breakpoint-down("sm") {
+      font-size: font-size("h4");
+    }
+  }
+
+  &__titleBreak {
+    @include breakpoint-down("sm") {
+      display: none;
+    }
   }
 
   &__subtitle {
-    font-size: font-size('subtitle-1');
-    font-weight: map-get($font-weights, 'medium');
-    line-height: line-height('normal');
-    color: color('neutral', 'darkest');
-    margin-bottom: spacing('lg');
+    font-size: font-size("subtitle-1");
+    font-weight: map-get($font-weights, "medium");
+    line-height: line-height("normal");
+    color: color("neutral", "dark");
+    margin-top: spacing("md");
 
-    @include breakpoint-down('md') {
-      font-size: font-size('body-1');
+    @include breakpoint-down("md") {
+      font-size: font-size("body-1");
     }
-    @include breakpoint-down('sm') {
-      font-size: font-size('body-2');
+
+    @include breakpoint-down("sm") {
+      font-size: font-size("body-2");
+    }
+  }
+
+  &__stepsWrapper {
+    width: 100%;
+    margin-bottom: spacing("2xl");
+
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("xl");
     }
   }
 
@@ -124,101 +186,135 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    width: 50%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    margin-top: -#{spacing('xl')};
+    gap: spacing("md");
 
-    @include breakpoint-down('md') {
+    @include breakpoint-down("lg") {
       align-items: center;
-      margin-top: -#{spacing('lg')};
-    }
-    @include breakpoint-down('sm') {
-      margin-top: -#{spacing('md')};
-    }
-
-    li {
-      display: flex;
-      align-items: center;
-      margin-bottom: spacing('md');
-      justify-content: flex-start;
-      width: 100%;
-      @include breakpoint-down('md') {
-        justify-content: center;
-        width: 100%;
-      }
     }
   }
 
-  &__step {
+  &__stepItem {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 380px;
+    padding: spacing("md") spacing("md") spacing("md") spacing("sm");
+    border-radius: border-radius("lg");
+    background-color: color-alpha("neutral", "lightest", 0.5);
+    border-left: 4px solid color("primary", "base");
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    &:hover {
+      background-color: color-alpha("neutral", "lightest", 0.8);
+      transform: translateX(5px);
+    }
+
+    @include breakpoint-down("md") {
+      max-width: 320px;
+    }
+
+    @include breakpoint-down("sm") {
+      max-width: 280px;
+      padding: spacing("sm") spacing("sm") spacing("sm") spacing("xs");
+    }
+  }
+
+  &__stepNumber {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: spacing('2xl');
-    height: spacing('2xl');
+    width: spacing("3xl");
+    height: spacing("3xl");
     border-radius: 50%;
-    background-color: color('primary', 'base');
-    color: color('neutral', 'white');
-    font-size: font-size('body-2');
-    font-weight: map-get($font-weights, 'bold');
-    margin-right: spacing('sm');
-    line-height: 1;
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    font-size: font-size("body-2");
+    font-weight: map-get($font-weights, "bold");
+    margin-right: spacing("md");
     flex-shrink: 0;
-    @include breakpoint-down('sm') {
-      width: spacing('xl');
-      height: spacing('xl');
-      font-size: font-size('caption');
-      margin-right: spacing('xs');
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+    background: white;
+    color: #000;
+    border: 1px solid #000;
+
+    @include breakpoint-down("md") {
+      width: spacing("2xl");
+      height: spacing("2xl");
+      // font-size: font-size("h6");
+      margin-right: spacing("sm");
+    }
+
+    @include breakpoint-down("sm") {
+      width: spacing("xl");
+      height: spacing("xl");
+      // font-size: font-size("subtitle-2");
     }
   }
 
   &__stepText {
-    font-size: font-size('body-1');
-    font-weight: map-get($font-weights, 'medium');
-    color: color('neutral', 'black');
-    @include breakpoint-down('md') {
-      font-size: font-size('body-2');
+    font-size: font-size("body-1");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "darkest");
+
+    @include breakpoint-down("md") {
+      font-size: font-size("body-2");
     }
-    @include breakpoint-down('sm') {
-      font-size: font-size('caption');
+
+    @include breakpoint-down("sm") {
+      font-size: 0.95rem;
     }
   }
 
   &__cta {
-    margin-top: spacing('4xl');
-    display: flex;
-    justify-content: center;
     width: 100%;
-    @include breakpoint-down('md') {
-      margin-top: spacing('2xl');
-    }
-    @include breakpoint-down('sm') {
-      margin-top: spacing('xl');
+    display: flex;
+    justify-content: flex-start;
+
+    @include breakpoint-down("lg") {
+      justify-content: center;
     }
   }
-  
+
   &__button {
-    @include button-primary('lg');
-    min-width: 260px;
-    max-width: 340px;
-    
-    @include breakpoint-down('md') {
-      min-width: 180px;
-      max-width: 100%;
-      height: button-height('md');
-      padding: spacing('sm') spacing('xl');
-      @include font-size('button');
+    min-width: 200px;
+    padding: spacing("md") spacing("xl");
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    background: linear-gradient(
+      to right,
+      color("primary", "base"),
+      color("primary", "dark")
+    );
+
+    &:hover {
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     }
-    
-    @include breakpoint-down('sm') {
-      min-width: 100%;
+
+    @include breakpoint-down("md") {
+      min-width: 180px;
+    }
+
+    @include breakpoint-down("sm") {
       width: 100%;
-      max-width: 100%;
-      padding: 0 spacing('xl');
-      font-size: font-size('body-2');
-      height: button-height('lg');
+      max-width: 260px;
     }
   }
-} 
+}
+
+/* Keyframe animation for the floating plate effect */
+@keyframes gentle-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
