@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import FoodHero from './_components/FoodHero/FoodHero';
 import MealPromoSection from './_components/MealPromoSection/MealPromoSection';
 import FruitBowlSection from './_components/FruitBowlSection/FruitBowlSection';
@@ -8,7 +8,6 @@ import FoodIllustrationSection from './_components/FoodIllustrationSection/FoodI
 import OrderStepsSection from './_components/OrderStepsSection/OrderStepsSection';
 import FoodMenuSection from './_components/FoodMenuSection/FoodMenuSection';
 import FAQSection, { FAQItem } from '@/components/ui/FAQSection/FAQSection';
-import LoginModal from '@/components/ui/LoginModal/LoginModal';
 
 const foodFaqs: FAQItem[] = [
   { id: "f1", question: "Are your meals freshly prepared?", answer: "Yes! All our meals are cooked fresh daily by professional chefs and delivered hot to your door." },
@@ -19,17 +18,6 @@ const foodFaqs: FAQItem[] = [
 ];
 
 export default function FoodPage() {
-    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-
-    useEffect(() => {
-        // Open the login modal when the page loads
-        setIsLoginModalOpen(true);
-    }, []);
-
-    const closeLoginModal = () => {
-        setIsLoginModalOpen(false);
-    };
-
     return (
         <main>
            <FoodHero />
@@ -38,11 +26,6 @@ export default function FoodPage() {
            <FoodIllustrationSection />
            <OrderStepsSection />
            <FAQSection faqs={foodFaqs} />
-           
-           <LoginModal 
-               isOpen={isLoginModalOpen} 
-               onClose={closeLoginModal} 
-           />
         </main>
     );
 }
