@@ -1,22 +1,23 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import styles from './LaundryStepsSection.module.scss';
-import { Button } from '@/components/ui/Button/Button';
-import { Routes } from '@/constants/routes';
+import React from "react";
+import { motion } from "framer-motion";
+import styles from "./LaundryStepsSection.module.scss";
+import { CTAButton } from "@/components/ui/Button/CTAButton";
+import { Routes } from "@/constants/routes";
+import { ArrowRightIcon } from "lucide-react";
 
 const LaundryStepsSection = () => {
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { 
+      transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const staggerContainer = {
@@ -24,9 +25,9 @@ const LaundryStepsSection = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2
-      }
-    }
+        staggerChildren: 0.2,
+      },
+    },
   };
 
   return (
@@ -41,9 +42,14 @@ const LaundryStepsSection = () => {
             variants={staggerContainer}
           >
             <motion.h2 className={styles.laundrySteps__title} variants={fadeIn}>
-              How Laundry<br />Works
+              How Laundry
+              <br />
+              Works
             </motion.h2>
-            <motion.p className={styles.laundrySteps__subtitle} variants={fadeIn}>
+            <motion.p
+              className={styles.laundrySteps__subtitle}
+              variants={fadeIn}
+            >
               Get your laundry done in three easy steps.
             </motion.p>
           </motion.div>
@@ -82,12 +88,18 @@ const LaundryStepsSection = () => {
         viewport={{ once: true }}
         transition={{ delay: 0.6 }}
       >
-        <Button href={Routes.GET_STARTED} size="lg">
-          BOOK LAUNDRY
-        </Button>
+        <CTAButton
+          href={Routes.GET_STARTED}
+          size="lg"
+          animationType="vibrate"
+          animationIntensity="intense"
+        >
+          START LAUNDRY
+          <ArrowRightIcon className={styles.icon} />
+        </CTAButton>
       </motion.div>
     </section>
   );
 };
 
-export default LaundryStepsSection; 
+export default LaundryStepsSection;
