@@ -1,6 +1,7 @@
 // app/contact/page.tsx
 import { Metadata } from 'next';
 import ContactHero from './_components/ContactHero/ContactHero';
+import ContactInfo from './_components/ContactInfo/ContactInfo';
 
 export const metadata: Metadata = {
   title: 'Contact Metro Mellow | Get in Touch',
@@ -11,6 +12,7 @@ export default function ContactPage() {
   return (
     <main>
       <ContactHero />
+      <ContactInfo />
     </main>
   );
 }
