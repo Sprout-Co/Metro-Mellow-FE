@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { Button } from '@/components/ui/Button/Button';
-import styles from './FoodMenuSection.module.scss';
-import FoodMenuModal from '../FoodMenuModal/FoodMenuModal';
+import React, { useState } from "react";
+import Image from "next/image";
+import { CTAButton } from "@/components/ui/Button/CTAButton";
+import styles from "./FoodMenuSection.module.scss";
+import FoodMenuModal from "../FoodMenuModal/FoodMenuModal";
+import { ArrowRightIcon } from "lucide-react";
 
 const FoodMenuSection: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,18 +19,24 @@ const FoodMenuSection: React.FC = () => {
         <div className={styles.content}>
           <h2 className={styles.title}>Delicious Meals on Demand</h2>
           <p className={styles.description}>
-            Browse through our extensive menu of freshly prepared meals from local chefs. 
-            From traditional Nigerian classics to international cuisine, we have something 
-            to satisfy every craving. Place your order now and enjoy a delicious meal 
-            delivered to your doorstep.
+            Browse through our extensive menu of freshly prepared meals from
+            local chefs. From traditional Nigerian classics to international
+            cuisine, we have something to satisfy every craving. Place your
+            order now and enjoy a delicious meal delivered to your doorstep.
           </p>
-          <Button size="lg" onClick={openModal}>
+          <CTAButton
+            size="lg"
+            onClick={openModal}
+            animationType="wobble"
+            animationIntensity="intense"
+          >
             Explore Menu Options
-          </Button>
+            <ArrowRightIcon className={styles.icon} />
+          </CTAButton>
         </div>
         <div className={styles.imageContainer}>
-          <Image 
-            src="/images/food/jollof-rice.png" 
+          <Image
+            src="/images/food/jollof-rice.png"
             alt="Delicious Food"
             width={500}
             height={400}
@@ -37,12 +44,9 @@ const FoodMenuSection: React.FC = () => {
           />
         </div>
       </div>
-      <FoodMenuModal 
-        isOpen={isModalOpen}
-        onClose={closeModal}
-      />
+      <FoodMenuModal isOpen={isModalOpen} onClose={closeModal} />
     </section>
   );
 };
 
-export default FoodMenuSection; 
+export default FoodMenuSection;

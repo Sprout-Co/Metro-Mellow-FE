@@ -58,7 +58,8 @@ const FoodHero = () => {
           <motion.div className={styles.hero__cta} variants={fadeIn}>
             <CTAButton
               onClick={handleOrderMeal}
-              animationType="pulse"
+              animationType="wobble"
+              animationIntensity="intense"
               size="lg"
             >
               ORDER A MEAL
