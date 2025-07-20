@@ -6,7 +6,8 @@
 .chores-section {
   width: 100%;
   background: color('neutral', 'white');
-  @include section-spacing('6xl');
+  padding-top: spacing('2xl');
+  padding-bottom: spacing('2xl');
   text-align: center;
   overflow: hidden;
   color: color('neutral', 'black');
@@ -49,12 +50,12 @@
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: spacing('lg');
     justify-content: center;
     margin-top: spacing('xl');
     
-    @include breakpoint-down('md') {
+    @include breakpoint-down('lg') {
       grid-template-columns: repeat(2, 1fr);
       gap: spacing('md');
     }
@@ -80,8 +81,9 @@
   transition: $transition-base;
   padding-top: calc(#{spacing('2xl')} + 6rem);
   padding-right: spacing('2xl');
+  min-width: 320px;
   
-  @include breakpoint-down('md') {
+  @include breakpoint-down('lg') {
     min-height: 280px;
     padding: spacing('xl') spacing('md');
   }
@@ -91,6 +93,7 @@
     padding: spacing('lg') spacing('md');
     align-items: center;
     text-align: center;
+    min-width: auto;
   }
   
   &:hover {
