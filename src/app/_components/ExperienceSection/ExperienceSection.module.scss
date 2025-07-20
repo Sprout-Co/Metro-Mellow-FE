@@ -25,6 +25,8 @@
     @include breakpoint-down("md") {
       width: 100%;
       margin-bottom: spacing("xl");
+      display: flex;
+      justify-content: center;
     }
   }
 
@@ -37,6 +39,11 @@
     @include flex-center;
     position: relative;
     overflow: hidden;
+
+    @include breakpoint-down("xl") {
+      width: 300px;
+      height: 440px;
+    }
 
     @include breakpoint-down("md") {
       width: 360px;
@@ -163,8 +170,8 @@
 
     @include breakpoint-down("md") {
       @include flex-column-center;
-      text-align: left;
       width: 100%;
+      text-align: center;
     }
   }
 
@@ -172,11 +179,23 @@
     @include heading-1;
     color: color("neutral", "black");
     margin-bottom: spacing("lg");
-        letter-spacing: normal;
+    letter-spacing: normal;
     line-height: 1;
+
+    @include breakpoint-down("xl") {
+      @include font-size("h3");
+    }
+
+    @include breakpoint-down("lg") {
+      @include font-size("h4");
+    }
 
     @include breakpoint-down("md") {
       @include font-size("h3");
+
+      br {
+        display: none;
+      }
     }
 
     @include breakpoint-down("sm") {
