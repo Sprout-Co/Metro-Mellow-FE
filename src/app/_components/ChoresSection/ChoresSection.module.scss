@@ -6,8 +6,7 @@
 .chores-section {
   width: 100%;
   background: color('neutral', 'white');
-  padding-top: spacing('2xl');
-  padding-bottom: spacing('2xl');
+  @include section-spacing('6xl');
   text-align: center;
   overflow: hidden;
   color: color('neutral', 'black');
@@ -24,6 +23,10 @@
     color: color('neutral', 'black');
     margin-bottom: spacing('md');
     line-height: map-get($line-heights, 'tight');
+    
+    @include breakpoint-down('lg') {
+      font-size: font-size('h2');
+    }
     
     @include breakpoint-down('md') {
       font-size: font-size('h3');
