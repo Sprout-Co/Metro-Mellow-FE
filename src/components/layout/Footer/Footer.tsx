@@ -30,7 +30,17 @@ export default function Footer() {
     <footer className={styles.footerSection}>
       <div className={styles.footerContent}>
         <div className={styles.leftCol}>
-          <div className={styles.logoPlaceholder}></div>
+          <Link href="/" className={styles.footer__brand}>
+            <div className={styles.footer__logo}>
+              <Image
+                src="/images/brand/logo.jpeg"
+                alt="Metro Mellow"
+                width={140}
+                height={40}
+                className={styles.footer__logo}
+              />
+            </div>
+          </Link>
           <p className={styles.contactPrompt}>Questions? Comments? Concerns?</p>
           <button className={styles.discordBtn} type="button">Chat with us on Discord</button>
         </div>
