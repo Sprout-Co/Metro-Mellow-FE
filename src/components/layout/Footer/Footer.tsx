@@ -67,7 +67,6 @@ export default function Footer() {
               <li><a href="#">Laundry</a></li>
               <li><a href="#">Cleaning</a></li>
               <li><a href="#">Pests</a></li>
-              <li><a href="#">Errands</a></li>
             </ul>
           </div>
           <div className={styles.colGroup}>
