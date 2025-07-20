@@ -1,0 +1,132 @@
+@import '../../../../../../styles/abstracts/variables';
+@import '../../../../../../styles/abstracts/functions';
+@import '../../../../../../styles/abstracts/mixins';
+
+.contactForm {
+  position: relative;
+  background-color: color('neutral', 'white');
+  padding: spacing('6xl') 0;
+  
+  @include breakpoint-down('md') {
+    padding: spacing('4xl') 0;
+  }
+  
+  @include breakpoint-down('sm') {
+    padding: spacing('3xl') 0;
+  }
+  
+  &__container {
+    @include container;
+  }
+  
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing('4xl');
+    align-items: stretch;
+    
+    @include breakpoint-down('lg') {
+      grid-template-columns: 1fr;
+      gap: spacing('3xl');
+    }
+  }
+  
+  &__mapWrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+    
+    @include breakpoint-down('md') {
+      min-height: 400px;
+    }
+    
+    @include breakpoint-down('sm') {
+      min-height: 350px;
+    }
+  }
+  
+  &__map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: border-radius('md');
+    box-shadow: map-get($shadows, 'sm');
+  }
+  
+  &__mapIframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  
+  &__formWrapper {
+    width: 100%;
+  }
+  
+  &__form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: spacing('lg');
+  }
+  
+  &__formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: spacing('xs');
+  }
+  
+  &__label {
+    @include font-size('body-2');
+    @include font-weight('medium');
+    color: color('neutral', 'darkest');
+  }
+  
+  &__input,
+  &__select,
+  &__textarea {
+    width: 100%;
+    padding: map-get($input-padding, 'md');
+    border: 1px solid color('neutral', 'light');
+    border-radius: border-radius('md');
+    background-color: color('neutral', 'white');
+    color: color('neutral', 'black');
+    font-family: $font-family-base;
+    @include font-size('body-2');
+    transition: $transition-base;
+    
+    &:focus {
+      outline: none;
+      border-color: color('primary', 'base');
+      box-shadow: map-get($shadows, 'focus');
+    }
+    
+    &::placeholder {
+      color: color('neutral', 'dark');
+      opacity: 0.7;
+    }
+  }
+  
+  &__select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right spacing('md') center;
+    background-size: spacing('lg') spacing('lg');
+    padding-right: spacing('3xl');
+  }
+  
+  &__selectWrapper {
+    position: relative;
+  }
+  
+  &__textarea {
+    resize: vertical;
+    min-height: spacing('7xl');
+  }
+} 

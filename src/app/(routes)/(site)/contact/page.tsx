@@ -2,6 +2,7 @@
 import { Metadata } from 'next';
 import ContactHero from './_components/ContactHero/ContactHero';
 import ContactInfo from './_components/ContactInfo/ContactInfo';
+import ContactForm from './_components/ContactForm/ContactForm';
 
 export const metadata: Metadata = {
   title: 'Contact Metro Mellow | Get in Touch',
@@ -13,6 +14,7 @@ export default function ContactPage() {
     <main>
       <ContactHero />
       <ContactInfo />
+      <ContactForm />
     </main>
   );
 }
