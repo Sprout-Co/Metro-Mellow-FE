@@ -15,6 +15,7 @@
   // Ensure proper stacking context for effects
   transform: translateZ(0);
   will-change: transform;
+  width: fit-content;
 
   // Smooth transitions for state changes
   transition: all map-get($transition-duration, "fast")
