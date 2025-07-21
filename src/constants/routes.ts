@@ -30,6 +30,7 @@ export enum Routes {
   WELCOME = "/welcome",
   ABOUT = "/about",
   CONTACT = "/contact",
+  FOR_BUSINESS = "/for-business",
   TERMS = "/terms",
   PRIVACY = "/privacy",
 }

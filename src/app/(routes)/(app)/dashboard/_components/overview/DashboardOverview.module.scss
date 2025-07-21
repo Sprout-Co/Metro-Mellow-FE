@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .overview {
   padding-bottom: spacing("3xl");
@@ -51,12 +51,12 @@
     background-color: color("neutral", "white");
     padding: spacing("md");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     transition: $transition-base;
 
     &:hover {
       transform: translateY(-3px);
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
     }
   }
 
@@ -76,18 +76,18 @@
     }
 
     &--active {
-      background-color: rgba(map-get($colors, "info"), 0.1);
-      color: color("info");
+      background-color: color-alpha("status", "info", 0.1);
+      color: color("status", "info");
     }
 
     &--rewards {
-      background-color: rgba(map-get($colors, "warning"), 0.1);
-      color: color("warning");
+      background-color: color-alpha("status", "warning", 0.1);
+      color: color("status", "warning");
     }
 
     &--completed {
-      background-color: rgba(map-get($colors, "success"), 0.1);
-      color: color("success");
+      background-color: color-alpha("status", "success", 0.1);
+      color: color("status", "success");
     }
   }
 
@@ -127,7 +127,7 @@
   &__section {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     padding: spacing("lg");
   }
 

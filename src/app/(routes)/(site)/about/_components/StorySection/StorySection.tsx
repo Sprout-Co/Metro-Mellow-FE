@@ -5,6 +5,9 @@ import { motion } from "framer-motion";
 import styles from "./StorySection.module.scss";
 import { Button } from "@/components/ui/Button/Button";
 import VideoSection from "../VideoSection/VideoSection";
+import CTAButtonExample from "@/components/ui/Button/CTAButton/CTAButtonExample";
+import { CTAButton } from "@/components/ui/Button/CTAButton";
+import { Routes } from "@/constants/routes";
 
 const StorySection: React.FC = () => {
   // Animation variants
@@ -78,13 +81,21 @@ const StorySection: React.FC = () => {
               variants={buttonVariants}
               whileHover="hover"
             >
-              <Button
-                href="/bookings"
+              {/* <Button href="/bookings" size="lg" variant="primary">
+                BOOK A SERVICE
+              </Button> */}
+              <CTAButton
+                animationType="wobble"
+                animationIntensity="intense"
+                autoAnimate={1000}
+                animationInterval={4000}
+                variant="primary"
                 size="lg"
-                className={styles.storySection__button}
+                href={Routes.GET_STARTED}
               >
                 BOOK A SERVICE
-              </Button>
+              </CTAButton>
+              {/* <CTAButtonExample /> */}
             </motion.div>
           </div>
         </div>

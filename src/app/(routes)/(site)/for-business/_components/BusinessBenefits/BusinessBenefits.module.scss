@@ -1,0 +1,184 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.businessBenefits {
+  @include section-spacing("2xl");
+  background-color: color("neutral", "lightest");
+
+  &__container {
+    @include container();
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("4xl");
+
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("3xl");
+    }
+  }
+
+  &__badge {
+    display: inline-block;
+    padding: spacing("xs") spacing("sm");
+    background-color: color("accent", "lighter");
+    color: color("primary", "base");
+    @include font-size("small");
+    @include font-weight("medium");
+    border-radius: 4px;
+    margin-bottom: spacing("md");
+    text-transform: uppercase;
+    letter-spacing: map-get($letter-spacing, "wide");
+  }
+
+  &__title {
+    @include heading-2();
+    @include font-weight("bold");
+    margin-bottom: spacing("md");
+  }
+
+  &__highlight {
+    color: color("primary", "base");
+  }
+
+  &__subtitle {
+    @include font-size("body-1");
+    @include font-weight("regular");
+    color: color("neutral", "dark");
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: map-get($line-heights, "relaxed");
+  }
+
+  &__grid {
+    display: grid;
+    gap: spacing("xl");
+    grid-template-columns: 1fr;
+
+    @include breakpoint-up("md") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include breakpoint-up("lg") {
+      grid-template-columns: repeat(3, 1fr);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    @include breakpoint-down("md") {
+      gap: spacing("lg");
+    }
+
+    @include breakpoint-down("sm") {
+      gap: spacing("md");
+    }
+  }
+}
+
+.statCard {
+  background-color: color("neutral", "white");
+  border-radius: 16px;
+  padding: spacing("2xl");
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s ease-out;
+  position: relative;
+  will-change: transform, box-shadow;
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
+  height: 100%;
+
+  &:focus-visible {
+    outline: 2px solid color("primary", "base");
+    outline-offset: 2px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
+  }
+
+  &__iconContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    color: color("neutral", "white");
+    flex-shrink: 0;
+
+    svg {
+      stroke-width: 2;
+    }
+  }
+
+  &__iconBg {
+    &--primary {
+      background-color: color("primary", "base");
+    }
+
+    &--secondary {
+      background-color: color("secondary", "base");
+    }
+
+    &--success {
+      background-color: color("status", "success");
+    }
+  }
+
+
+
+  &__content {
+    flex-grow: 1;
+    margin-bottom: spacing("lg");
+  }
+
+  &__title {
+    @include font-size("h5");
+    @include font-weight("semibold");
+    color: color("neutral", "black");
+    letter-spacing: map-get($letter-spacing, "tighter");
+    margin: 0;
+
+    @include breakpoint-down("lg") {
+      @include font-size("subtitle-1");
+    }
+  }
+
+  &__description {
+    @include font-size("body-2");
+    @include font-weight("regular");
+    color: color("neutral", "dark");
+    line-height: map-get($line-heights, "relaxed");
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    @include font-size("body-2");
+    @include font-weight("medium");
+    color: color("primary", "base");
+    text-decoration: none;
+    transition: color 0.2s ease;
+    margin-top: auto;
+
+    &:hover {
+      color: color("primary", "dark");
+    }
+  }
+
+  &__linkIcon {
+    margin-left: spacing("xs");
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    .statCard__linkIcon {
+      transform: translateX(4px);
+    }
+  }
+}

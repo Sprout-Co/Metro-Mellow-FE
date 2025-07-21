@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .marketing_page {
   &__header {
@@ -137,8 +137,8 @@
     border-radius: border-radius("sm");
 
     &--active {
-      background-color: rgba(color("success"), 0.1);
-      color: color("success");
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
     }
 
     &--draft {
@@ -147,8 +147,8 @@
     }
 
     &--scheduled {
-      background-color: rgba(color("info"), 0.1);
-      color: color("info");
+      background-color: rgba(color("status", "info"), 0.1);
+      color: color("status", "info");
     }
 
     &--completed {
@@ -303,11 +303,11 @@
     font-weight: map-get($font-weights, "semibold");
 
     &--positive {
-      color: color("success");
+      color: color("status", "success");
     }
 
     &--negative {
-      color: color("error");
+      color: color("status", "error");
     }
   }
 
@@ -762,8 +762,8 @@
     font-weight: map-get($font-weights, "semibold");
 
     &--sent {
-      background-color: rgba(color("success"), 0.1);
-      color: color("success");
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
     }
 
     &--draft {
@@ -772,8 +772,8 @@
     }
 
     &--scheduled {
-      background-color: rgba(color("info"), 0.1);
-      color: color("info");
+      background-color: rgba(color("status", "info"), 0.1);
+      color: color("status", "info");
     }
   }
 
@@ -797,7 +797,7 @@
       }
 
       &.opens:before {
-        background-color: color("success");
+        background-color: color("status", "success");
       }
 
       &.clicks:before {

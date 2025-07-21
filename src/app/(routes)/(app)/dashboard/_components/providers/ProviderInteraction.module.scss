@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .providers {
   &__header {
@@ -41,7 +41,7 @@
   &__sidebar {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     height: fit-content;
     overflow: hidden;
 
@@ -180,7 +180,7 @@
   }
 
   &__ratingIcon {
-    color: color("warning");
+    color: color("status", "warning");
     margin: 0 spacing("xxs");
   }
 
@@ -191,7 +191,7 @@
   &__main {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     min-height: 70vh;
   }
 
@@ -636,7 +636,7 @@
     font-size: map-get($font-sizes, "base");
     color: color("neutral", "darker");
     margin-right: spacing("xs");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
   }
 
   &__messageTime {
@@ -697,7 +697,7 @@
 
   &__starFull,
   &__starHalf {
-    color: color("warning");
+    color: color("status", "warning");
   }
 
   &__starEmpty {
@@ -795,7 +795,7 @@
 
     &:hover,
     &--active {
-      color: color("warning");
+      color: color("status", "warning");
     }
   }
 

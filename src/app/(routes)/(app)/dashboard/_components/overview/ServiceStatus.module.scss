@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .status {
   &__list {
@@ -67,12 +67,12 @@
 
     &--active {
       background-color: rgba(map-get($colors, "success"), 0.1);
-      color: color("success");
+      color: color("status", "success");
     }
 
     &--paused {
       background-color: rgba(map-get($colors, "warning"), 0.1);
-      color: color("warning");
+      color: color("status", "warning");
     }
   }
 

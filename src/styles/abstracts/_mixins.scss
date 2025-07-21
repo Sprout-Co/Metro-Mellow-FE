@@ -65,10 +65,15 @@
   margin-right: auto;
   padding-left: spacing("md");
   padding-right: spacing("md");
+  max-width: map-get($container-max-widths, "xxs");
 
   @if $max-width {
     max-width: $max-width;
   } @else {
+    @include breakpoint-up("xs") {
+      max-width: map-get($container-max-widths, "xs");
+    }
+
     @include breakpoint-up("sm") {
       max-width: map-get($container-max-widths, "sm");
     }
@@ -323,6 +328,15 @@
 @mixin body-2 {
   font-family: $font-family-base;
   @include font-size("body-2");
+  @include font-weight("medium");
+  line-height: map-get($line-heights, "relaxed");
+  letter-spacing: map-get($letter-spacing, "wide");
+  color: color("neutral", "dark");
+}
+
+@mixin paragraph {
+  font-family: $font-family-base;
+  @include font-size("body-1");
   @include font-weight("medium");
   line-height: map-get($line-heights, "relaxed");
   letter-spacing: map-get($letter-spacing, "wide");

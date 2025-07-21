@@ -8,12 +8,7 @@ import {
 } from "./utils/jwt";
 
 // Define protected routes that require authentication
-const protectedRoutes = [
-  Routes.DASHBOARD,
-  Routes.PROFILE,
-  Routes.BOOKINGS,
-  Routes.PAYMENTS,
-];
+const protectedRoutes = [Routes.DASHBOARD, Routes.PROFILE, Routes.PAYMENTS];
 
 // Define admin-only routes
 const adminRoutes = [

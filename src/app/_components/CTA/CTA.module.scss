@@ -1,7 +1,7 @@
 // components/home/CTASection.module.scss
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .cta {
   background: linear-gradient(
@@ -128,8 +128,8 @@
   }
 
   &__success {
-    background-color: rgba(color("success"), 0.2);
-    border: 1px solid color("success");
+    background-color: color-alpha("success", 0.2);
+    border: 1px solid color("status", "success");
     padding: spacing("md") spacing("lg");
     border-radius: border-radius("md");
     width: 100%;
@@ -157,7 +157,7 @@
   &__featureIcon {
     width: 48px;
     height: 48px;
-    background-color: rgba(color("neutral", "white"), 0.1);
+    background-color: color-alpha("neutral", "white", 0.1);
     border-radius: border-radius("md");
     @include flex-center;
     margin-right: spacing("md");

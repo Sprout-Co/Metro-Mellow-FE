@@ -35,6 +35,7 @@ const TestimonialCarouselSection = () => {
 
   return (
     <section className={styles.section}>
+      <div className={styles.container}>
       <h2 className={styles.heading}>Hear the gospel<br />from the crowd</h2>
       <div className={styles.carousel}>
         {testimonials.slice(index, index + CARDS_PER_VIEW).map((t, i) => (
@@ -56,6 +57,7 @@ const TestimonialCarouselSection = () => {
         <button className={styles.navBtn + ' ' + styles.active} onClick={handleNext} aria-label="Next testimonials">
           &#8594;
         </button>
+      </div>
       </div>
     </section>
   );

@@ -1,124 +1,146 @@
-// components/contact/ContactInfo.module.scss
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import '../../../../../../styles/abstracts/variables';
+@import '../../../../../../styles/abstracts/functions';
+@import '../../../../../../styles/abstracts/mixins';
 
 .contactInfo {
-  padding: spacing("5xl") 0;
-  background-color: color("neutral", "lighter");
-
+  position: relative;
+  background-color: color('neutral', 'lightest');
+  padding: spacing('6xl') 0;
+  
+  @include breakpoint-down('md') {
+    padding: spacing('4xl') 0;
+  }
+  
+  @include breakpoint-down('sm') {
+    padding: spacing('3xl') 0;
+  }
+  
   &__container {
     @include container;
   }
-
-  &__card {
-    background-color: color("neutral", "white");
-    border-radius: border-radius("lg");
-    padding: spacing("2xl");
-    box-shadow: map-get($box-shadows, "md");
-    max-width: 500px;
-    margin: 0 auto;
-  }
-
-  &__title {
-    font-family: $font-family-heading;
-    font-size: map-get($font-sizes, "3xl");
-    font-weight: map-get($font-weights, "bold");
-    color: color("neutral", "darker");
-    margin-bottom: spacing("md");
-
-    @include breakpoint-down("md") {
-      font-size: map-get($font-sizes, "2xl");
+  
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing('4xl');
+    align-items: flex-start;
+    
+    @include breakpoint-down('md') {
+      grid-template-columns: 1fr;
+      gap: spacing('3xl');
     }
   }
-
-  &__divider {
-    width: 60px;
-    height: 4px;
-    background-color: color("primary", "base");
-    margin-bottom: spacing("xl");
+  
+  &__heading {
+    @include breakpoint-down('md') {
+      text-align: center;
+    }
   }
-
+  
+  &__title {
+    @include heading-2;
+    color: color('neutral', 'black');
+    margin-bottom: spacing('lg');
+    font-size: font-size('h2');
+    line-height: 1.1;
+    font-weight: map-get($font-weights, 'bold');
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('h3');
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('h4');
+    }
+  }
+  
+  &__titleLarge {
+    display: block;
+    font-size: font-size('h1');
+    font-weight: map-get($font-weights, 'bold');
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('h2');
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('h3');
+    }
+  }
+  
+  &__subtitle {
+    @include body-1;
+    color: color('neutral', 'darkest');
+    max-width: 25rem;
+    font-size: font-size('body-1');
+    line-height: line-height('relaxed');
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('body-2');
+      margin: 0 auto;
+    }
+  }
+  
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: spacing('3xl');
+    
+    @include breakpoint-down('md') {
+      gap: spacing('2xl');
+    }
+  }
+  
   &__item {
     display: flex;
-    align-items: flex-start;
-    margin-bottom: spacing("lg");
-
-    &:last-of-type {
-      margin-bottom: spacing("2xl");
+    align-items: center;
+    gap: spacing('lg');
+    
+    @include breakpoint-down('md') {
+      justify-content: center;
+    }
+    
+    @include breakpoint-down('sm') {
+      flex-direction: column;
+      text-align: center;
+      gap: spacing('md');
     }
   }
-
+  
   &__iconWrapper {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background-color: rgba(color("primary", "base"), 0.1);
-    color: color("primary", "base");
-    @include flex-center;
-    margin-right: spacing("md");
-    flex-shrink: 0;
-  }
-
-  &__content {
-    flex: 1;
-  }
-
-  &__subtitle {
-    font-family: $font-family-heading;
-    font-size: map-get($font-sizes, "lg");
-    font-weight: map-get($font-weights, "semibold");
-    color: color("neutral", "darker");
-    margin-bottom: spacing("xs");
-  }
-
-  &__text {
-    font-size: map-get($font-sizes, "base");
-    color: color("neutral", "dark");
-    line-height: map-get($line-heights, "relaxed");
-  }
-
-  &__link {
-    color: color("primary", "base");
-    text-decoration: none;
-    transition: $transition-base;
-
-    &:hover {
-      color: color("primary", "dark");
-      text-decoration: underline;
-    }
-  }
-
-  &__social {
-    border-top: 1px solid color("neutral", "medium");
-    padding-top: spacing("lg");
-  }
-
-  &__socialTitle {
-    font-family: $font-family-heading;
-    font-size: map-get($font-sizes, "base");
-    font-weight: map-get($font-weights, "semibold");
-    color: color("neutral", "darker");
-    margin-bottom: spacing("md");
-  }
-
-  &__socialLinks {
     display: flex;
-    gap: spacing("md");
-  }
-
-  &__socialLink {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: color("neutral", "lighter");
-    color: color("primary", "base");
-    @include flex-center;
-    transition: $transition-base;
-
-    &:hover {
-      background-color: color("primary", "base");
-      color: color("neutral", "white");
+    align-items: center;
+    justify-content: center;
+    width: spacing('4xl');
+    height: spacing('4xl');
+    background-color: color('neutral', 'lighter');
+    border-radius: border-radius('md');
+    
+    @include breakpoint-down('sm') {
+      width: spacing('3xl');
+      height: spacing('3xl');
     }
   }
-}
+  
+  &__icon {
+    width: spacing('xl');
+    height: spacing('xl');
+    color: color('primary', 'base');
+    
+    @include breakpoint-down('sm') {
+      width: spacing('lg');
+      height: spacing('lg');
+    }
+  }
+  
+  &__text {
+    @include body-1;
+    color: color('neutral', 'darker');
+    font-size: font-size('body-1');
+    line-height: line-height('relaxed');
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('body-2');
+    }
+  }
+} 

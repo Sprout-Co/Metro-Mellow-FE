@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .add_customer_modal {
   &__form {
@@ -14,10 +14,10 @@
     border-radius: border-radius("lg");
     padding: spacing("md");
     margin-bottom: spacing("md");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
 
     &:hover {
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
       transition: box-shadow 0.3s ease;
     }
   }
@@ -55,7 +55,7 @@
   }
 
   &__required {
-    color: color("error");
+    color: color("status", "error");
     margin-left: spacing("xxs");
   }
 
@@ -77,10 +77,10 @@
     }
 
     &--error {
-      border-color: color("error");
+      border-color: color("status", "error");
 
       &:focus {
-        box-shadow: 0 0 0 3px rgba(color("error"), 0.1);
+        box-shadow: 0 0 0 3px rgba(color("status", "error"), 0.1);
       }
     }
 
@@ -121,18 +121,18 @@
   }
 
   &__error {
-    background-color: rgba(color("error"), 0.1);
-    color: color("error");
+    background-color: rgba(color("status", "error"), 0.1);
+    color: color("status", "error");
     padding: spacing("sm") spacing("md");
     border-radius: border-radius("md");
     margin-bottom: spacing("md");
     font-size: map-get($font-sizes, "sm");
     font-weight: map-get($font-weights, "medium");
-    border-left: 3px solid color("error");
+    border-left: 3px solid color("status", "error");
   }
 
   &__error_text {
-    color: color("error");
+    color: color("status", "error");
     font-size: map-get($font-sizes, "xs");
     margin-top: spacing("xxs");
     display: block;

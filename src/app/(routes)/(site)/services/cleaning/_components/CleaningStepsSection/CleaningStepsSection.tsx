@@ -1,22 +1,24 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import styles from './CleaningStepsSection.module.scss';
-import { Button } from '@/components/ui/Button/Button';
-import { Routes } from '@/constants/routes';
+import React from "react";
+import { motion } from "framer-motion";
+import styles from "./CleaningStepsSection.module.scss";
+import { Button } from "@/components/ui/Button/Button";
+import { Routes } from "@/constants/routes";
+import { CTAButton } from "@/components/ui/Button/CTAButton";
+import { ArrowRightIcon } from "lucide-react";
 
 const CleaningStepsSection = () => {
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { 
+      transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const staggerContainer = {
@@ -24,15 +26,14 @@ const CleaningStepsSection = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2
-      }
-    }
+        staggerChildren: 0.2,
+      },
+    },
   };
 
   return (
     <section className={styles.cleaningSteps}>
       <div className={styles.cleaningSteps__container}>
-
         <div className={styles.cleaningSteps__illustration}>
           <motion.div
             className={styles.cleaningSteps__content}
@@ -41,12 +42,18 @@ const CleaningStepsSection = () => {
             viewport={{ once: true, amount: 0.3 }}
             variants={staggerContainer}
           >
-            <motion.h2 className={styles.cleaningSteps__title} variants={fadeIn}>
+            <motion.h2
+              className={styles.cleaningSteps__title}
+              variants={fadeIn}
+            >
               What do I <br />
               Need to do?
             </motion.h2>
 
-            <motion.p className={styles.cleaningSteps__subtitle} variants={fadeIn}>
+            <motion.p
+              className={styles.cleaningSteps__subtitle}
+              variants={fadeIn}
+            >
               Get your space sparkling clean with just a few clicks.
             </motion.p>
           </motion.div>
@@ -86,12 +93,18 @@ const CleaningStepsSection = () => {
         viewport={{ once: true }}
         transition={{ delay: 0.6 }}
       >
-        <Button href={Routes.GET_STARTED} size="lg">
+        <CTAButton
+          href={Routes.GET_STARTED}
+          size="lg"
+          animationType="vibrate"
+          animationIntensity="intense"
+        >
           BOOK CLEANING
-        </Button>
+          <ArrowRightIcon className={styles.icon} />
+        </CTAButton>
       </motion.div>
     </section>
   );
 };
 
-export default CleaningStepsSection; 
+export default CleaningStepsSection;

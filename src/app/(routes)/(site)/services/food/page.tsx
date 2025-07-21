@@ -1,10 +1,12 @@
+"use client";
+
 import React from 'react';
 import FoodHero from './_components/FoodHero/FoodHero';
 import MealPromoSection from './_components/MealPromoSection/MealPromoSection';
 import FruitBowlSection from './_components/FruitBowlSection/FruitBowlSection';
 import FoodIllustrationSection from './_components/FoodIllustrationSection/FoodIllustrationSection';
 import OrderStepsSection from './_components/OrderStepsSection/OrderStepsSection';
-import FoodSliderSection from './_components/FoodSliderSection/FoodSliderSection';
+import FoodMenuSection from './_components/FoodMenuSection/FoodMenuSection';
 import FAQSection, { FAQItem } from '@/components/ui/FAQSection/FAQSection';
 
 const foodFaqs: FAQItem[] = [
@@ -15,31 +17,15 @@ const foodFaqs: FAQItem[] = [
   { id: "f5", question: "What if my food arrives cold?", answer: "Contact us within 30 minutes and we'll make it right with a replacement or refund." },
 ];
 
-export const metadata = {
-    title: 'Food Delivery Services | MetroMellow',
-    description: 'Delicious meals delivered to your doorstep. From comfort food to gourmet dishes, enjoy hassle-free eating with MetroMellow food delivery.',
-}
-
 export default function FoodPage() {
     return (
         <main>
            <FoodHero />
+           <FoodMenuSection />
            <MealPromoSection />
-           <FoodSliderSection />
-           {/* <FruitBowlSection /> */}
            <FoodIllustrationSection />
            <OrderStepsSection />
            <FAQSection faqs={foodFaqs} />
-           {/* <CookingAbout />
-           <CookingPlans />
-           <CookingProcess />
-           <CookingMenu />
-           <CookingBenefits />
-           <CookingChefs />
-           <CookingTestimonials />
-           <CookingFAQ />
-           <CookingCTA />
-           <CookingContact /> */}
         </main>
     );
 }

@@ -1,12 +1,12 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .confirmation_modal {
   position: relative;
   background: color("neutral", "white");
   border-radius: border-radius("lg");
-  box-shadow: map-get($box-shadows, "xl");
+  box-shadow: map-get($shadows, "xl");
   max-width: 480px;
   width: 90vw;
   margin: auto;
@@ -72,31 +72,31 @@
   // Variant styles
   &--danger {
     .confirmation_modal__icon {
-      color: color("error");
+      color: color("status", "error");
     }
 
     .confirmation_modal__title {
-      color: color("error");
+      color: color("status", "error");
     }
   }
 
   &--warning {
     .confirmation_modal__icon {
-      color: color("warning");
+      color: color("status", "warning");
     }
 
     .confirmation_modal__title {
-      color: color("warning");
+      color: color("status", "warning");
     }
   }
 
   &--info {
     .confirmation_modal__icon {
-      color: color("info");
+      color: color("status", "info");
     }
 
     .confirmation_modal__title {
-      color: color("info");
+      color: color("status", "info");
     }
   }
 }

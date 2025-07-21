@@ -1,7 +1,7 @@
 // components/layout/Footer.module.scss
 @import "@/styles/abstracts/_variables.scss";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .footerSection {
   background: map-get(map-get($colors, "primary"), "base");
@@ -39,12 +39,16 @@
   }
 }
 
-.logoPlaceholder {
-  width: 120px;
-  height: 32px;
-  background: map-get(map-get($colors, "neutral"), "lighter");
-  border-radius: map-get($spacing, "xs");
+.footer__brand {
+  display: block;
+  text-decoration: none;
   margin-bottom: map-get($spacing, "md");
+}
+
+.footer__logo {
+  width: 180px;
+  height: 50px;
+  object-fit: contain;
 }
 
 .contactPrompt {
@@ -62,7 +66,9 @@
   font-size: map-get($font-sizes, "body-2");
   font-weight: map-get($font-weights, "medium");
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
   margin-top: map-get($spacing, "sm");
   &:hover,
   &:focus {

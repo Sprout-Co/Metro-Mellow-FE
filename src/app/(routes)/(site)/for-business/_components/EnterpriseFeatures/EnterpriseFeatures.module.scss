@@ -1,0 +1,196 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.enterpriseFeatures {
+  @include section-spacing("2xl");
+  background-color: color("primary", "base");
+  position: relative;
+  overflow: hidden;
+
+  // Subtle background pattern
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(
+      circle at 25px 25px,
+      rgba(color("primary", "lighter"), 0.1) 2px,
+      transparent 0
+    );
+    background-size: 50px 50px;
+    z-index: 1;
+  }
+
+  &__container {
+    @include container();
+    position: relative;
+    z-index: 2;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("4xl");
+
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("3xl");
+    }
+  }
+
+  &__badge {
+    display: inline-block;
+    padding: spacing("xs") spacing("sm");
+    background-color: color("neutral", "white");
+    color: color("primary", "base");
+    @include font-size("small");
+    @include font-weight("medium");
+    border-radius: 4px;
+    margin-bottom: spacing("md");
+    text-transform: uppercase;
+    letter-spacing: map-get($letter-spacing, "wide");
+  }
+
+  &__title {
+    @include heading-2();
+    @include font-weight("bold");
+    color: color("neutral", "white");
+    margin-bottom: spacing("md");
+  }
+
+  &__highlight {
+    color: color("accent", "base");
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background-color: rgba(color("accent", "base"), 0.3);
+      border-radius: border-radius("full");
+    }
+  }
+
+  &__subtitle {
+    @include font-size("body-1");
+    @include font-weight("regular");
+    color: color("neutral", "lightest");
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: map-get($line-heights, "relaxed");
+  }
+
+  &__grid {
+    display: grid;
+    gap: spacing("xl");
+    grid-template-columns: 1fr;
+
+    @include breakpoint-up("md") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include breakpoint-up("lg") {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @include breakpoint-down("md") {
+      gap: spacing("lg");
+    }
+
+    @include breakpoint-down("sm") {
+      gap: spacing("md");
+    }
+  }
+}
+
+.featureCard {
+  background-color: color("neutral", "white");
+  border-radius: 16px;
+  padding: spacing("xl");
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  &:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+
+    .featureCard__iconContainer {
+      transform: scale(1.05);
+    }
+  }
+
+  &__iconContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    margin-bottom: spacing("md");
+    color: color("neutral", "white");
+    transition: transform 0.3s ease;
+
+    svg {
+      stroke-width: 2;
+    }
+  }
+
+  &__iconBg {
+    &--primary {
+      background-color: color("primary", "base");
+      box-shadow: 0 4px 12px rgba(color("primary", "base"), 0.2);
+    }
+
+    &--secondary {
+      background-color: color("secondary", "base");
+      box-shadow: 0 4px 12px rgba(color("secondary", "base"), 0.2);
+    }
+
+    &--accent {
+      background-color: color("accent", "base");
+      box-shadow: 0 4px 12px rgba(color("accent", "base"), 0.2);
+    }
+  }
+
+  &__title {
+    @include font-size("subtitle-2");
+    @include font-weight("semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
+    letter-spacing: map-get($letter-spacing, "tight");
+
+    @include breakpoint-down("lg") {
+      @include font-size("subtitle-2");
+    }
+  }
+
+  &__description {
+    @include font-size("body-2");
+    @include font-weight("regular");
+    color: color("neutral", "dark");
+    line-height: map-get($line-heights, "relaxed");
+  }
+}
+
+// Animation for icon pulse on hover
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .notificationsSettings {
   padding: spacing("xl") 0;
@@ -31,7 +31,7 @@
   &__content {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     overflow: hidden;
   }
 
@@ -235,14 +235,14 @@
     bottom: spacing("xl");
     left: 50%;
     transform: translateX(-50%);
-    background-color: color("success");
+    background-color: color("status", "success");
     color: color("neutral", "white");
     padding: spacing("sm") spacing("lg");
     border-radius: border-radius("full");
     display: flex;
     align-items: center;
     gap: spacing("xs");
-    box-shadow: map-get($box-shadows, "md");
+    box-shadow: map-get($shadows, "md");
     opacity: 0;
     pointer-events: none;
     z-index: z-index("tooltip");
@@ -282,7 +282,7 @@
   }
 
   &__noteIcon {
-    color: color("info");
+    color: color("status", "info");
     flex-shrink: 0;
     margin-top: 2px;
   }
