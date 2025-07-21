@@ -4,7 +4,7 @@
 
 .header {
   background-color: color("neutral", "white");
-  box-shadow: map-get($box-shadows, "sm");
+  box-shadow: map-get($shadows, "sm");
   padding: spacing("md") 0;
   position: sticky;
   top: 0;
@@ -111,7 +111,7 @@
     width: 8px;
     height: 8px;
     border-radius: border-radius("full");
-    background-color: color("error");
+    background-color: color("status", "error");
   }
 
   &__user {
@@ -171,7 +171,7 @@
     top: calc(100% + #{spacing("xs")});
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "lg");
+    box-shadow: map-get($shadows, "lg");
     overflow: hidden;
     min-width: 280px;
     z-index: z-index("dropdown");

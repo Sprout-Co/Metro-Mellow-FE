@@ -208,7 +208,7 @@
   }
 
   &__testimonialStars {
-    color: color("warning");
+    color: color("status", "warning");
   }
 }
 
@@ -226,7 +226,7 @@
   }
 
   &__required {
-    color: color("error");
+    color: color("status", "error");
     margin-left: 2px;
   }
 
@@ -245,10 +245,10 @@
     }
 
     &--error {
-      border-color: color("error");
+      border-color: color("status", "error");
 
       &.formInput__wrapper--focused {
-        box-shadow: 0 0 0 3px rgba(color("error"), 0.1);
+        box-shadow: 0 0 0 3px rgba(color("status", "error"), 0.1);
       }
     }
   }
@@ -294,7 +294,7 @@
 
   &__error {
     font-size: map-get($font-sizes, "xs");
-    color: color("error");
+    color: color("status", "error");
     margin-top: spacing("xs");
     display: flex;
     align-items: center;
@@ -429,7 +429,7 @@
   }
 
   &__required {
-    color: color("error");
+    color: color("status", "error");
     margin-left: 2px;
   }
 
@@ -503,9 +503,9 @@
   &__error {
     margin: spacing("sm") 0;
     padding: spacing("sm") spacing("md");
-    background-color: rgba(color("error"), 0.1);
+    background-color: rgba(color("status", "error"), 0.1);
     border-radius: border-radius("md");
-    color: color("error");
+    color: color("status", "error");
     font-size: map-get($font-sizes, "sm");
     display: flex;
     align-items: center;
@@ -620,15 +620,15 @@
     transition: width 0.3s ease;
 
     &--weak {
-      background-color: color("error");
+      background-color: color("status", "error");
     }
 
     &--medium {
-      background-color: color("warning");
+      background-color: color("status", "warning");
     }
 
     &--strong {
-      background-color: color("success");
+      background-color: color("status", "success");
     }
   }
 
@@ -643,15 +643,15 @@
     font-weight: map-get($font-weights, "medium");
 
     &--weak {
-      color: color("error");
+      color: color("status", "error");
     }
 
     &--medium {
-      color: color("warning");
+      color: color("status", "warning");
     }
 
     &--strong {
-      color: color("success");
+      color: color("status", "success");
     }
   }
 
@@ -725,7 +725,7 @@
 
   &__checkError {
     font-size: map-get($font-sizes, "xs");
-    color: color("error");
+    color: color("status", "error");
     margin-top: spacing("xs");
     margin-left: spacing("lg");
   }
@@ -733,9 +733,9 @@
   &__error {
     margin: spacing("sm") 0;
     padding: spacing("sm") spacing("md");
-    background-color: rgba(color("error"), 0.1);
+    background-color: rgba(color("status", "error"), 0.1);
     border-radius: border-radius("md");
-    color: color("error");
+    color: color("status", "error");
     font-size: map-get($font-sizes, "sm");
     display: flex;
     align-items: center;
@@ -891,17 +891,17 @@
   &__error {
     margin: spacing("sm") 0;
     padding: spacing("sm") spacing("md");
-    background-color: rgba(color("error"), 0.1);
+    background-color: rgba(color("status", "error"), 0.1);
     border-radius: border-radius("md");
-    color: color("error");
+    color: color("status", "error");
     font-size: map-get($font-sizes, "sm");
     display: flex;
     align-items: center;
     gap: spacing("xs");
 
     &--success {
-      background-color: rgba(color("success"), 0.1);
-      color: color("success");
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
     }
   }
 }
@@ -943,13 +943,13 @@
     gap: spacing("xs");
 
     &--error {
-      background-color: rgba(color("error"), 0.1);
-      color: color("error");
+      background-color: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
     }
 
     &--success {
-      background-color: rgba(color("success"), 0.1);
-      color: color("success");
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
     }
   }
 
@@ -993,10 +993,10 @@
     }
 
     &--error {
-      border-color: color("error");
+      border-color: color("status", "error");
 
       &:focus {
-        box-shadow: 0 0 0 3px rgba(color("error"), 0.1);
+        box-shadow: 0 0 0 3px rgba(color("status", "error"), 0.1);
       }
     }
   }

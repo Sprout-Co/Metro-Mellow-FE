@@ -127,7 +127,7 @@
     transition: $transition-base;
 
     &:hover {
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
       transform: translateY(-2px);
     }
 
@@ -225,10 +225,10 @@
   }
 
   &__removeBtn {
-    color: color("error");
+    color: color("status", "error");
 
     &:hover {
-      background-color: rgba(color("error"), 0.05);
+      background-color: rgba(color("status", "error"), 0.05);
     }
   }
 
@@ -461,18 +461,18 @@
     font-weight: map-get($font-weights, "medium");
 
     &Paid {
-      background-color: rgba(color("success"), 0.1);
-      color: color("success");
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
     }
 
     &Pending {
-      background-color: rgba(color("warning"), 0.1);
-      color: color("warning");
+      background-color: rgba(color("status", "warning"), 0.1);
+      color: color("status", "warning");
     }
 
     &Failed {
-      background-color: rgba(color("error"), 0.1);
-      color: color("error");
+      background-color: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
     }
   }
 
@@ -606,8 +606,8 @@
     transition: $transition-base;
 
     &:hover {
-      color: color("error");
-      background-color: rgba(color("error"), 0.1);
+      color: color("status", "error");
+      background-color: rgba(color("status", "error"), 0.1);
     }
   }
 
@@ -663,10 +663,10 @@
     left: 50%;
     transform: translateX(-50%);
     padding: spacing("sm") spacing("lg");
-    background-color: color("success");
+    background-color: color("status", "success");
     color: color("neutral", "white");
     border-radius: border-radius("full");
-    box-shadow: map-get($box-shadows, "md");
+    box-shadow: map-get($shadows, "md");
     z-index: z-index("tooltip");
 
     svg {

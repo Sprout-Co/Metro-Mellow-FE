@@ -286,7 +286,7 @@
     transition: $transition-base;
 
     &:hover {
-      box-shadow: map-get($box-shadows, "sm");
+      box-shadow: map-get($shadows, "sm");
     }
   }
 
@@ -410,12 +410,12 @@
     display: flex;
     align-items: flex-start;
     padding: spacing("md");
-    background-color: rgba(map-get($colors, "info"), 0.1);
+    background-color: color-alpha("status", "info", 0.1);
     border-radius: border-radius("md");
     margin-bottom: spacing("lg");
 
     svg {
-      color: color("info");
+      color: color("status", "info");
       margin-right: spacing("sm");
       margin-top: 2px;
       flex-shrink: 0;

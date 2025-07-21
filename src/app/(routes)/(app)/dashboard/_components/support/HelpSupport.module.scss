@@ -31,7 +31,7 @@
   &__section {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     padding: spacing("xl");
     margin-bottom: spacing("xl");
 

@@ -45,19 +45,19 @@
     }
 
     &--success {
-      border-left: 4px solid color("success");
+      border-left: 4px solid color("status", "success");
     }
 
     &--info {
-      border-left: 4px solid color("info");
+      border-left: 4px solid color("status", "info");
     }
 
     &--warning {
-      border-left: 4px solid color("warning");
+      border-left: 4px solid color("status", "warning");
     }
 
     &--error {
-      border-left: 4px solid color("error");
+      border-left: 4px solid color("status", "error");
     }
   }
 
@@ -220,19 +220,19 @@
     gap: spacing("sm");
 
     &--warning {
-      background-color: rgba(color("warning"), 0.1);
+      background-color: rgba(color("status", "warning"), 0.1);
     }
 
     &--info {
-      background-color: rgba(color("info"), 0.1);
+      background-color: rgba(color("status", "info"), 0.1);
     }
 
     &--success {
-      background-color: rgba(color("success"), 0.1);
+      background-color: rgba(color("status", "success"), 0.1);
     }
 
     &--error {
-      background-color: rgba(color("error"), 0.1);
+      background-color: rgba(color("status", "error"), 0.1);
     }
   }
 

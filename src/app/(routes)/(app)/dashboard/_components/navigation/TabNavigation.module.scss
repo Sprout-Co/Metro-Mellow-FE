@@ -5,7 +5,7 @@
 .tabs {
   background-color: color("neutral", "white");
   border-radius: border-radius("lg");
-  box-shadow: map-get($box-shadows, "sm");
+  box-shadow: map-get($shadows, "sm");
   overflow: hidden;
   position: sticky;
   top: spacing("lg");

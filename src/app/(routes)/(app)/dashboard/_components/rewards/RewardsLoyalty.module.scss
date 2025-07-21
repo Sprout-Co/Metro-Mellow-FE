@@ -32,7 +32,7 @@
     display: flex;
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     padding: spacing("xl");
     margin-bottom: spacing("xl");
 
@@ -108,7 +108,7 @@
     align-items: center;
     padding: spacing("xs") spacing("md");
     background-color: rgba(map-get($colors, "warning"), 0.1);
-    color: color("warning");
+    color: color("status", "warning");
     border-radius: border-radius("full");
     font-weight: map-get($font-weights, "semibold");
 
@@ -162,7 +162,7 @@
   &__section {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     padding: spacing("xl");
   }
 
@@ -192,7 +192,7 @@
     transition: $transition-base;
 
     &:hover {
-      box-shadow: map-get($box-shadows, "sm");
+      box-shadow: map-get($shadows, "sm");
       transform: translateY(-2px);
     }
   }
@@ -215,7 +215,7 @@
     align-items: center;
     padding: spacing("xxs") spacing("xs");
     background-color: rgba(map-get($colors, "warning"), 0.1);
-    color: color("warning");
+    color: color("status", "warning");
     border-radius: border-radius("full");
     font-size: map-get($font-sizes, "xs");
     font-weight: map-get($font-weights, "medium");
@@ -394,18 +394,18 @@
 
     &--redeemed {
       .rewards__historyIcon {
-        color: color("error");
+        color: color("status", "error");
       }
 
       .rewards__historyPoints {
-        color: color("error");
+        color: color("status", "error");
       }
     }
   }
 
   &__historyIcon {
     margin-right: spacing("md");
-    color: color("success");
+    color: color("status", "success");
     font-size: map-get($font-sizes, "xl");
     flex-shrink: 0;
   }
@@ -445,7 +445,7 @@
   &__historyPoints {
     font-size: map-get($font-sizes, "lg");
     font-weight: map-get($font-weights, "bold");
-    color: color("success");
+    color: color("status", "success");
     margin-left: spacing("md");
     flex-shrink: 0;
   }

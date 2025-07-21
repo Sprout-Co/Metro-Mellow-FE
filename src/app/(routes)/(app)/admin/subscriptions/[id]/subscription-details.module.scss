@@ -297,11 +297,11 @@
     border-radius: border-radius("lg");
     overflow: hidden;
     background-color: color("neutral", "white");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     transition: $transition-base;
 
     &:hover {
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
     }
   }
 
@@ -549,7 +549,7 @@
   }
 
   &__amount {
-    color: color("success") !important;
+    color: color("status", "success") !important;
     font-weight: map-get($font-weights, "bold") !important;
   }
 
@@ -691,7 +691,7 @@
   }
 
   &__error_icon {
-    color: color("error");
+    color: color("status", "error");
     margin-bottom: spacing("sm");
   }
 

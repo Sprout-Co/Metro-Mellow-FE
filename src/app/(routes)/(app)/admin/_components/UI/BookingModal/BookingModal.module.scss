@@ -271,7 +271,7 @@
     text-align: right;
 
     &--price {
-      color: color("success");
+      color: color("status", "success");
       font-size: map-get($font-sizes, "lg");
       font-weight: map-get($font-weights, "semibold");
     }
@@ -311,7 +311,7 @@
     flex-shrink: 0;
 
     &--completed {
-      background: color("success");
+      background: color("status", "success");
     }
 
     &--active {
@@ -484,8 +484,8 @@
     }
 
     &:invalid {
-      border-color: color("error");
-      box-shadow: 0 0 0 3px rgba(color("error"), 0.1);
+      border-color: color("status", "error");
+      box-shadow: 0 0 0 3px rgba(color("status", "error"), 0.1);
     }
 
     &[type="date"] {

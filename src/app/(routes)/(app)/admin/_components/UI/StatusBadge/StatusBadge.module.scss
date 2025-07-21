@@ -23,22 +23,22 @@
   }
 
   &--success {
-    background-color: rgba(color("success"), 0.1);
-    color: color("success");
+    background-color: rgba(color("status", "success"), 0.1);
+    color: color("status", "success");
   }
 
   &--warning {
-    background-color: rgba(color("warning"), 0.1);
-    color: color("warning");
+    background-color: rgba(color("status", "warning"), 0.1);
+    color: color("status", "warning");
   }
 
   &--error {
-    background-color: rgba(color("error"), 0.1);
-    color: color("error");
+    background-color: rgba(color("status", "error"), 0.1);
+    color: color("status", "error");
   }
 
   &--info {
-    background-color: rgba(color("info"), 0.1);
-    color: color("info");
+    background-color: rgba(color("status", "info"), 0.1);
+    color: color("status", "info");
   }
 }

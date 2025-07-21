@@ -92,7 +92,7 @@
 
     &:hover {
       transform: translateY(-3px);
-      box-shadow: map-get($box-shadows, "lg");
+      box-shadow: map-get($shadows, "lg");
     }
   }
 

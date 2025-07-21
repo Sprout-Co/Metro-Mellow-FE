@@ -43,13 +43,13 @@
   &__card {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     padding: spacing("lg");
     height: 100%;
     transition: $transition-base;
 
     &:hover {
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
       transform: translateY(-3px);
     }
 
@@ -142,11 +142,11 @@
       margin-top: spacing("xs");
 
       &--positive {
-        color: color("success");
+        color: color("status", "success");
       }
 
       &--negative {
-        color: color("error");
+        color: color("status", "error");
       }
     }
   }
@@ -197,17 +197,17 @@
 
     &--success {
       background-color: rgba(map-get($colors, "success"), 0.1);
-      color: color("success");
+      color: color("status", "success");
     }
 
     &--warning {
       background-color: rgba(map-get($colors, "warning"), 0.1);
-      color: color("warning");
+      color: color("status", "warning");
     }
 
     &--error {
-      background-color: rgba(map-get($colors, "error"), 0.1);
-      color: color("error");
+      background-color: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
     }
   }
 

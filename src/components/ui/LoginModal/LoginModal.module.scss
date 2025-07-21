@@ -23,14 +23,14 @@
     align-items: center;
     justify-content: center;
     color: color("neutral", "dark");
-    background-color: rgba(color("neutral", "medium"), 0.1);
+    background-color: color-alpha("neutral", "medium", 0.1);
     border: none;
     cursor: pointer;
     transition: all 0.2s ease;
     z-index: 10;
 
     &:hover {
-      background-color: rgba(color("neutral", "medium"), 0.2);
+      background-color: color-alpha("neutral", "medium", 0.2);
       color: color("neutral", "black");
       transform: rotate(90deg);
     }
@@ -105,7 +105,7 @@
     &:focus {
       outline: none;
       border-color: color("primary", "base");
-      box-shadow: 0 0 0 2px rgba(color("primary", "base"), 0.2);
+      box-shadow: 0 0 0 2px color-alpha("primary", "base", 0.2);
     }
 
     &::placeholder {
@@ -141,7 +141,7 @@
   }
 
   &__signupWrapper {
-    background-color: rgba(color("neutral", "lighter"), 0.5);
+    background-color: color-alpha("neutral", "lighter", 0.5);
     border-radius: border-radius("pill");
     padding: spacing("sm") spacing("2xl");
     text-align: center;

@@ -112,7 +112,7 @@
   }
 
   &__iconWrapper {
-    background-color: rgba(color("primary", "light"), 0.1);
+    background-color: color-alpha("primary", "light", 0.1);
     width: 60px;
     height: 60px;
     border-radius: border-radius("lg");
@@ -144,7 +144,7 @@
 
   &__image {
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "md");
+    box-shadow: map-get($shadows, "md");
     max-width: 100%;
     height: auto;
   }

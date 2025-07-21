@@ -115,12 +115,12 @@
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
     overflow: hidden;
-    box-shadow: map-get($box-shadows, "md");
+    box-shadow: map-get($shadows, "md");
     transition: $transition-base;
 
     &:hover {
       transform: translateY(-8px);
-      box-shadow: map-get($box-shadows, "lg");
+      box-shadow: map-get($shadows, "lg");
 
       .menu__item-img {
         transform: scale(1.05);

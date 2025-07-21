@@ -151,11 +151,11 @@
     font-size: map-get($font-sizes, "xs");
 
     &--positive {
-      color: color("success");
+      color: color("status", "success");
     }
 
     &--negative {
-      color: color("error");
+      color: color("status", "error");
     }
 
     &--neutral {
@@ -340,15 +340,15 @@
     }
 
     &--3 {
-      background-color: color("success");
+      background-color: color("status", "success");
     }
 
     &--4 {
-      background-color: color("info");
+      background-color: color("status", "info");
     }
 
     &--5 {
-      background-color: color("warning");
+      background-color: color("status", "warning");
     }
   }
 

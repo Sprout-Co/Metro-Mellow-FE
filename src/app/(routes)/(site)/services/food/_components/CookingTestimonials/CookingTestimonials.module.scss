@@ -80,7 +80,7 @@
     background-color: color("neutral", "white");
     padding: spacing("xl");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "md");
+    box-shadow: map-get($shadows, "md");
 
     &-header {
       display: flex;
@@ -137,7 +137,7 @@
       color: color("neutral", "medium");
 
       &--active {
-        color: color("warning");
+        color: color("status", "warning");
       }
     }
 
@@ -174,7 +174,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: map-get($box-shadows, "md");
+    box-shadow: map-get($shadows, "md");
     z-index: z-index("default");
     transition: $transition-base;
 

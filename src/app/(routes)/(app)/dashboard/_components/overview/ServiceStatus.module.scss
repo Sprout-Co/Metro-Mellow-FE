@@ -67,12 +67,12 @@
 
     &--active {
       background-color: rgba(map-get($colors, "success"), 0.1);
-      color: color("success");
+      color: color("status", "success");
     }
 
     &--paused {
       background-color: rgba(map-get($colors, "warning"), 0.1);
-      color: color("warning");
+      color: color("status", "warning");
     }
   }
 

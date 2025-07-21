@@ -76,19 +76,19 @@
     }
 
     &--success {
-      background-color: color("success");
+      background-color: color("status", "success");
     }
 
     &--info {
-      background-color: color("info");
+      background-color: color("status", "info");
     }
 
     &--warning {
-      background-color: color("warning");
+      background-color: color("status", "warning");
     }
 
     &--error {
-      background-color: color("error");
+      background-color: color("status", "error");
     }
   }
 

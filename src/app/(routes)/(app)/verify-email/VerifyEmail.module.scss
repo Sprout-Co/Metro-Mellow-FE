@@ -46,7 +46,7 @@
   }
 
   &__success {
-    color: color("success");
+    color: color("status", "success");
     margin-bottom: spacing("md");
 
     svg {
@@ -55,7 +55,7 @@
   }
 
   &__error {
-    color: color("error");
+    color: color("status", "error");
     margin-bottom: spacing("md");
 
     svg {

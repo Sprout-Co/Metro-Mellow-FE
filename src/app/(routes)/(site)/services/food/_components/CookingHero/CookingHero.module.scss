@@ -10,7 +10,7 @@
   background: linear-gradient(
     to right,
     color("neutral", "light") 50%,
-    rgba(color("secondary", "light"), 0.2) 50%
+    color-alpha("secondary", "light", 0.2) 50%
   );
   overflow: hidden;
 
@@ -132,7 +132,7 @@
       position: relative;
       object-fit: cover;
       border-radius: border-radius("lg");
-      box-shadow: map-get($box-shadows, "lg");
+      box-shadow: map-get($shadows, "lg");
       z-index: z-index("default");
     }
 

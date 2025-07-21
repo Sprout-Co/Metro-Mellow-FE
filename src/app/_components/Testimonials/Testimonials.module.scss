@@ -63,7 +63,7 @@
     background-color: color("neutral", "lighter");
     border-radius: border-radius("lg");
     padding: spacing("xl");
-    box-shadow: map-get($box-shadows, "md");
+    box-shadow: map-get($shadows, "md");
 
     &--active {
       z-index: 1;
@@ -136,7 +136,7 @@
   &__service {
     display: inline-block;
     font-size: map-get($font-sizes, "xs");
-    background-color: rgba(color("primary", "base"), 0.1);
+    background-color: color-alpha("primary", "base", 0.1);
     color: color("primary", "base");
     padding: spacing("xxs") spacing("xs");
     border-radius: border-radius("sm");
@@ -154,7 +154,7 @@
     font-size: map-get($font-sizes, "base");
 
     &--active {
-      color: color("warning");
+      color: color("status", "warning");
     }
   }
 

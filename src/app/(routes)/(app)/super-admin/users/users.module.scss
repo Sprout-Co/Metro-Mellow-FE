@@ -143,8 +143,8 @@
     display: inline-block;
 
     &--active {
-      background-color: rgba(color("success"), 0.1);
-      color: color("success");
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
     }
 
     &--inactive {
@@ -153,8 +153,8 @@
     }
 
     &--suspended {
-      background-color: rgba(color("error"), 0.1);
-      color: color("error");
+      background-color: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
     }
   }
 
@@ -171,21 +171,21 @@
     cursor: pointer;
 
     &--edit {
-      background-color: rgba(color("info"), 0.1);
-      color: color("info");
+      background-color: rgba(color("status", "info"), 0.1);
+      color: color("status", "info");
 
       &:hover {
-        background-color: color("info");
+        background-color: color("status", "info");
         color: color("neutral", "white");
       }
     }
 
     &--delete {
-      background-color: rgba(color("error"), 0.1);
-      color: color("error");
+      background-color: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
 
       &:hover {
-        background-color: color("error");
+        background-color: color("status", "error");
         color: color("neutral", "white");
       }
     }

@@ -89,12 +89,12 @@
     padding: spacing("md");
     background-color: color("neutral", "white");
     border-radius: border-radius("md");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     transition: $transition-base;
 
     &:hover {
       transform: translateY(-5px);
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
     }
 
     &-icon {
@@ -138,7 +138,7 @@
 
     &-main {
       border-radius: border-radius("lg");
-      box-shadow: map-get($box-shadows, "lg");
+      box-shadow: map-get($shadows, "lg");
       position: relative;
       z-index: z-index("default");
       width: 100%;

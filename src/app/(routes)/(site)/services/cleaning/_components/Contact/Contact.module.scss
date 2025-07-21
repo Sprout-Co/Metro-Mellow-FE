@@ -313,8 +313,8 @@
     align-items: center;
     gap: spacing("sm");
     padding: spacing("sm") spacing("md");
-    background-color: rgba(color("success"), 0.1);
-    color: color("success");
+    background-color: rgba(color("status", "success"), 0.1);
+    color: color("status", "success");
     border-radius: border-radius("md");
     font-size: map-get($font-sizes, "sm");
     animation: fadeIn 0.5s ease;

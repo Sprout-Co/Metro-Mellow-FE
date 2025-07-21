@@ -48,7 +48,7 @@
     position: relative;
     border-radius: border-radius("lg");
     overflow: hidden;
-    box-shadow: map-get($box-shadows, "lg");
+    box-shadow: map-get($shadows, "lg");
   }
 
   &__image {
@@ -81,7 +81,7 @@
     height: 180px;
     border-radius: border-radius("lg");
     overflow: hidden;
-    box-shadow: map-get($box-shadows, "lg");
+    box-shadow: map-get($shadows, "lg");
     z-index: 2;
 
     @include breakpoint-up("md") {
@@ -109,7 +109,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: map-get($box-shadows, "lg");
+    box-shadow: map-get($shadows, "lg");
 
     @include breakpoint-up("md") {
       transform: translateX(-50%);

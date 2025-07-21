@@ -71,11 +71,11 @@
     }
 
     &--logout {
-      color: color("error");
+      color: color("status", "error");
 
       &:hover {
-        background-color: rgba(map-get($colors, "error"), 0.05);
-        color: color("error");
+        background-color: rgba(color("status", "error"), 0.05);
+        color: color("status", "error");
       }
     }
   }

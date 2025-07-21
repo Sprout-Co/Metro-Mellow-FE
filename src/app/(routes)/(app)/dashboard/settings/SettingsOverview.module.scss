@@ -43,12 +43,12 @@
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
     border: 1px solid color("neutral", "lighter");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     overflow: hidden;
     transition: $transition-base;
 
     &:hover {
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
       transform: translateY(-4px);
       border-color: color("primary", "light");
 
@@ -113,14 +113,14 @@
   &__dangerTitle {
     font-size: map-get($font-sizes, "xl");
     font-weight: map-get($font-weights, "semibold");
-    color: color("error");
+    color: color("status", "error");
     margin-bottom: spacing("lg");
   }
 
   &__dangerCard {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    border: 1px solid rgba(color("error"), 0.3);
+    border: 1px solid rgba(color("status", "error"), 0.3);
     padding: spacing("lg");
     display: flex;
     align-items: center;
@@ -150,9 +150,9 @@
   }
 
   &__dangerButton {
-    background-color: rgba(color("error"), 0.1);
-    color: color("error");
-    border: 1px solid color("error");
+    background-color: rgba(color("status", "error"), 0.1);
+    color: color("status", "error");
+    border: 1px solid color("status", "error");
     padding: spacing("sm") spacing("lg");
     border-radius: border-radius("md");
     font-weight: map-get($font-weights, "medium");
@@ -160,7 +160,7 @@
     cursor: pointer;
 
     &:hover {
-      background-color: color("error");
+      background-color: color("status", "error");
       color: color("neutral", "white");
     }
   }

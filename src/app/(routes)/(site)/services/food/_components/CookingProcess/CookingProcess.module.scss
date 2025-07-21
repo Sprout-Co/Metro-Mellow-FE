@@ -126,7 +126,7 @@
       border-radius: border-radius("full");
       background-color: color("neutral", "white");
       color: color("secondary", "base");
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
       margin-bottom: spacing("md");
 
       @include breakpoint-down("md") {
@@ -186,7 +186,7 @@
     background-color: color("neutral", "white");
     padding: spacing("xl");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "md");
+    box-shadow: map-get($shadows, "md");
     max-width: 600px;
     margin: 0 auto;
   }

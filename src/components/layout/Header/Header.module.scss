@@ -14,7 +14,7 @@
 
   &--scrolled {
     background-color: color("neutral", "white");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     padding: spacing("sm") 0;
   }
 
@@ -98,7 +98,7 @@
     left: 0;
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "md");
+    box-shadow: map-get($shadows, "md");
     width: 200px;
     padding: spacing("md");
     opacity: 0;

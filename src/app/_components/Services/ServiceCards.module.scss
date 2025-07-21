@@ -130,7 +130,7 @@
 
     &:hover {
       transform: translateY(-5px);
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
       border-color: color("primary", "light");
 
       .serviceCards__iconWrapper {

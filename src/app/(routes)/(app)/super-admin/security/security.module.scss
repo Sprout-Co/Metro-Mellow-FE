@@ -194,18 +194,18 @@
     border-radius: border-radius("sm");
 
     &--critical {
-      background-color: rgba(color("error"), 0.1);
-      color: color("error");
+      background-color: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
     }
 
     &--moderate {
-      background-color: rgba(color("warning"), 0.1);
-      color: color("warning");
+      background-color: rgba(color("status", "warning"), 0.1);
+      color: color("status", "warning");
     }
 
     &--low {
-      background-color: rgba(color("info"), 0.1);
-      color: color("info");
+      background-color: rgba(color("status", "info"), 0.1);
+      color: color("status", "info");
     }
   }
 
@@ -263,8 +263,8 @@
     color: color("neutral", "dark");
 
     &--active {
-      background-color: rgba(color("success"), 0.1);
-      color: color("success");
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
     }
   }
 
@@ -335,23 +335,23 @@
     border-radius: border-radius("sm");
 
     &--critical {
-      background-color: rgba(color("error"), 0.1);
-      color: color("error");
+      background-color: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
     }
 
     &--high {
-      background-color: rgba(color("warning"), 0.1);
-      color: color("warning");
+      background-color: rgba(color("status", "warning"), 0.1);
+      color: color("status", "warning");
     }
 
     &--moderate {
-      background-color: rgba(color("info"), 0.1);
-      color: color("info");
+      background-color: rgba(color("status", "info"), 0.1);
+      color: color("status", "info");
     }
 
     &--low {
-      background-color: rgba(color("success"), 0.1);
-      color: color("success");
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
     }
   }
 
@@ -406,13 +406,13 @@
     border-radius: border-radius("sm");
 
     &--active {
-      background-color: rgba(color("warning"), 0.1);
-      color: color("warning");
+      background-color: rgba(color("status", "warning"), 0.1);
+      color: color("status", "warning");
     }
 
     &--resolved {
-      background-color: rgba(color("success"), 0.1);
-      color: color("success");
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
     }
   }
 
@@ -805,13 +805,13 @@
     font-weight: map-get($font-weights, "semibold");
 
     &--success {
-      background-color: rgba(color("success"), 0.1);
-      color: color("success");
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
     }
 
     &--failed {
-      background-color: rgba(color("error"), 0.1);
-      color: color("error");
+      background-color: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
     }
   }
 

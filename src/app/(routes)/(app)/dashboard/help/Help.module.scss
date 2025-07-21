@@ -129,7 +129,7 @@
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
     padding: spacing("xl");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
   }
 
   &__faqList {
@@ -146,7 +146,7 @@
 
     &:hover {
       border-color: color("neutral", "medium");
-      box-shadow: map-get($box-shadows, "sm");
+      box-shadow: map-get($shadows, "sm");
     }
 
     &Open {
@@ -215,7 +215,7 @@
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
     padding: spacing("xl");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
   }
 
   &__supportChannels {
@@ -240,7 +240,7 @@
 
     &:hover {
       border-color: color("primary", "light");
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
       transform: translateY(-3px);
     }
   }
@@ -290,7 +290,7 @@
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
     padding: spacing("xl");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
   }
 
   &__resourcesList {
@@ -348,7 +348,7 @@
     font-size: map-get($font-sizes, "xxs");
     font-weight: map-get($font-weights, "semibold");
     color: color("neutral", "white");
-    background-color: color("success");
+    background-color: color("status", "success");
     padding: 2px 6px;
     border-radius: border-radius("full");
     text-transform: uppercase;

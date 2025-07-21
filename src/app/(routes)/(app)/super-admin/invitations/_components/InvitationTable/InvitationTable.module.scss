@@ -84,23 +84,23 @@
   text-transform: uppercase;
 
   &__pending {
-    background-color: rgba(map-get($colors, "warning"), 0.1);
-    color: map-get($colors, "warning");
+    background-color: color-alpha("status", "warning", 0.1);
+    color: color("status", "warning");
   }
 
   &__used {
-    background-color: rgba(map-get($colors, "success"), 0.1);
-    color: map-get($colors, "success");
+    background-color: color-alpha("status", "success", 0.1);
+    color: color("status", "success");
   }
 
   &__expired {
-    background-color: rgba(map-get($colors, "error"), 0.1);
-    color: map-get($colors, "error");
+    background-color: rgba(color("status", "error"), 0.1);
+    color: color("status", "error");
   }
 }
 
 .expired_date {
-  color: map-get($colors, "error");
+  color: color("status", "error");
   font-weight: map-get($font-weights, "medium");
 }
 
@@ -123,20 +123,20 @@
 }
 
 .action_btn_resend {
-  background-color: rgba(map-get($colors, "info"), 0.1);
-  color: map-get($colors, "info");
+  background-color: color-alpha("status", "info", 0.1);
+  color: color("status", "info");
 
   &:hover {
-    background-color: rgba(map-get($colors, "info"), 0.2);
+    background-color: color-alpha("status", "info", 0.2);
   }
 }
 
 .action_btn_cancel {
-  background-color: rgba(map-get($colors, "error"), 0.1);
-  color: map-get($colors, "error");
+  background-color: rgba(color("status", "error"), 0.1);
+  color: color("status", "error");
 
   &:hover {
-    background-color: rgba(map-get($colors, "error"), 0.2);
+    background-color: rgba(color("status", "error"), 0.2);
   }
 }
 
