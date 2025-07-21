@@ -4,7 +4,9 @@ import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import styles from "./ExperienceSection.module.scss";
-import { Button } from "@/components/ui/Button";
+// import { Button } from "@/components/ui/Button";
+import { CTAButton } from "@/components/ui/Button/CTAButton";
+import { Routes } from "@/constants/routes";
 
 const ExperienceSection: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -85,9 +87,14 @@ const ExperienceSection: React.FC = () => {
           {/* <button className={styles["experience-section__cta"]} type="button">
             BOOK A SERVICE
           </button> */}
-          <Button variant="primary" size="lg">
+          <CTAButton
+            href={Routes.GET_STARTED}
+            size="lg"
+            variant="primary"
+            animationType="vibrate"
+          >
             Book a service
-          </Button>
+          </CTAButton>
         </div>
       </div>
     </section>

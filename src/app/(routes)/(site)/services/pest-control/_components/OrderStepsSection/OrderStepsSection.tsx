@@ -1,22 +1,24 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import styles from './OrderStepsSection.module.scss';
-import { Button } from '@/components/ui/Button/Button';
-import { Routes } from '@/constants/routes';
+import React from "react";
+import { motion } from "framer-motion";
+import styles from "./OrderStepsSection.module.scss";
+import { Button } from "@/components/ui/Button/Button";
+import { Routes } from "@/constants/routes";
+import { CTAButton } from "@/components/ui/Button/CTAButton";
+import { ArrowRightIcon } from "lucide-react";
 
 const OrderStepsSection = () => {
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { 
+      transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const staggerContainer = {
@@ -24,9 +26,9 @@ const OrderStepsSection = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2
-      }
-    }
+        staggerChildren: 0.2,
+      },
+    },
   };
 
   return (
@@ -86,12 +88,18 @@ const OrderStepsSection = () => {
         viewport={{ once: true }}
         transition={{ delay: 0.6 }}
       >
-        <Button href={Routes.GET_STARTED} size="lg">
+        <CTAButton
+          href={Routes.GET_STARTED}
+          size="lg"
+          animationType="vibrate"
+          animationIntensity="intense"
+        >
           BOOK PEST CONTROL
-        </Button>
+          <ArrowRightIcon className={styles.icon} />
+        </CTAButton>
       </motion.div>
     </section>
   );
 };
 
-export default OrderStepsSection; 
+export default OrderStepsSection;

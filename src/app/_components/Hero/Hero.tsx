@@ -1,22 +1,23 @@
-"use client"
+"use client";
 
-import { FC, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
-import styles from './Hero.module.scss';
-import { Button } from '@/components/ui/Button';
-import { ArrowRight, Mail, Plus } from 'lucide-react';
-import { Routes } from '@/constants/routes';
+import { FC, useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import styles from "./Hero.module.scss";
+import { Button } from "@/components/ui/Button";
+import { ArrowRight, Mail, Plus } from "lucide-react";
+import { Routes } from "@/constants/routes";
+import { CTAButton } from "@/components/ui/Button/CTAButton";
 
 const Hero: FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  
+
   // Hero images array
   const heroImages = [
-    '/images/home/hero4.png',
-    '/images/home/hero6.png',
-    '/images/home/hero3.png',
-    '/images/home/hero5.png',
+    "/images/home/hero4.png",
+    "/images/home/hero6.png",
+    "/images/home/hero3.png",
+    "/images/home/hero5.png",
   ];
 
   // Auto-slide effect
@@ -67,7 +68,7 @@ const Hero: FC = () => {
     visible: (i: number) => ({
       opacity: 1,
       transition: {
-        delay: 0.7 + (i * 0.1),
+        delay: 0.7 + i * 0.1,
         duration: 0.4,
         ease: "easeOut",
       },
@@ -136,7 +137,35 @@ const Hero: FC = () => {
             custom={2}
             variants={textVariants}
           >
-            Subscribe to hassle-free home services - <Link href="/services/food" className={styles.hero__subtitleHighlight}>meals</Link>, <Link href="/services/cleaning" className={styles.hero__subtitleHighlight}>cleaning</Link>, <Link href="/services/laundry" className={styles.hero__subtitleHighlight}>laundry</Link> and <Link href="/services/pest-control" className={styles.hero__subtitleHighlight}>pest control</Link> delivered when you need them
+            Subscribe to hassle-free home services -{" "}
+            <Link
+              href="/services/food"
+              className={styles.hero__subtitleHighlight}
+            >
+              meals
+            </Link>
+            ,{" "}
+            <Link
+              href="/services/cleaning"
+              className={styles.hero__subtitleHighlight}
+            >
+              cleaning
+            </Link>
+            ,{" "}
+            <Link
+              href="/services/laundry"
+              className={styles.hero__subtitleHighlight}
+            >
+              laundry
+            </Link>{" "}
+            and{" "}
+            <Link
+              href="/services/pest-control"
+              className={styles.hero__subtitleHighlight}
+            >
+              pest control
+            </Link>{" "}
+            delivered when you need them
           </motion.p>
 
           <motion.div
@@ -149,7 +178,17 @@ const Hero: FC = () => {
             {/* <Link href="/get-started" className={styles.hero__button}>
               BOOK A SERVICE
             </Link> */}
-            <Button variant="white" size='lg' fullWidth={false}>Book a service</Button>
+            <CTAButton
+              variant="white"
+              size="lg"
+              fullWidth={false}
+              href={Routes.GET_STARTED}
+              animationType="wobble"
+              animationIntensity="intense"
+              animationInterval={1500}
+            >
+              Book a service
+            </CTAButton>
           </motion.div>
         </div>
       </div>

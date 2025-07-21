@@ -4,6 +4,8 @@ import React from "react";
 import Image from "next/image";
 import styles from "./MagicHandsSection.module.scss";
 import { Button } from "@/components/ui/Button";
+import { Routes } from "@/constants/routes";
+import { CTAButton } from "@/components/ui/Button/CTAButton";
 
 const MagicHandsSection: React.FC = () => {
   return (
@@ -68,9 +70,9 @@ const MagicHandsSection: React.FC = () => {
           </div>
 
           <div className={styles["magic-hands__cta"]}>
-            <Button href="/bookings" size="lg" variant="primary">
+            <CTAButton href={Routes.GET_STARTED} size="lg" variant="primary">
               JOIN OUR MISSION
-            </Button>
+            </CTAButton>
           </div>
         </div>
       </div>

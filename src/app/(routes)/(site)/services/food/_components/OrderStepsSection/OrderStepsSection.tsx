@@ -4,8 +4,9 @@ import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import styles from "./OrderStepsSection.module.scss";
-import { Button } from "@/components/ui/Button/Button";
+import { CTAButton } from "@/components/ui/Button/CTAButton";
 import { Routes } from "@/constants/routes";
+import { ArrowRightIcon } from "lucide-react";
 
 const OrderStepsSection = () => {
   // Animation variants
@@ -129,13 +130,16 @@ const OrderStepsSection = () => {
               },
             }}
           >
-            <Button
+            <CTAButton
               href={Routes.GET_STARTED}
               size="lg"
               className={styles.orderSteps__button}
+              animationType="bounce"
+              animationIntensity="intense"
             >
               ORDER NOW
-            </Button>
+              <ArrowRightIcon className={styles.icon} />
+            </CTAButton>
           </motion.div>
         </div>
       </motion.div>

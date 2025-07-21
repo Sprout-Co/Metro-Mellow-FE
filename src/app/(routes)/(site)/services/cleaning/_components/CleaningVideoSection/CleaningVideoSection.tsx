@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React, { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import styles from './CleaningVideoSection.module.scss';
-import { Button } from '@/components/ui/Button/Button';
-import { Routes } from '@/constants/routes';
-import { Play } from 'lucide-react';
+import React, { useState, useRef } from "react";
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import styles from "./CleaningVideoSection.module.scss";
+import { CTAButton } from "@/components/ui/Button/CTAButton";
+import { Routes } from "@/constants/routes";
+import { ArrowRightIcon, Play } from "lucide-react";
 
 const CleaningVideoSection = () => {
   const [videoPlaying, setVideoPlaying] = useState(false);
@@ -34,14 +34,14 @@ const CleaningVideoSection = () => {
 
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { 
+      transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const staggerContainer = {
@@ -49,15 +49,15 @@ const CleaningVideoSection = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2
-      }
-    }
+        staggerChildren: 0.2,
+      },
+    },
   };
 
   return (
     <section className={styles.video} ref={ref}>
       <div className={styles.video__container}>
-        <motion.h2 
+        <motion.h2
           className={styles.video__title}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
@@ -65,9 +65,9 @@ const CleaningVideoSection = () => {
         >
           See How We Transform Your Space
         </motion.h2>
-        
+
         <div className={styles.video__main}>
-          <motion.div 
+          <motion.div
             className={styles.video__wrapper}
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
@@ -77,13 +77,13 @@ const CleaningVideoSection = () => {
               {!videoPlaying ? (
                 <>
                   <div className={styles.video__thumbnail}>
-                    <img 
+                    <img
                       src={THUMBNAIL_URL}
-                      alt="Professional Cleaning Video Thumbnail" 
+                      alt="Professional Cleaning Video Thumbnail"
                       className={styles.video__image}
                     />
                     <div className={styles.video__overlay}>
-                      <button 
+                      <button
                         className={styles.video__playButton}
                         onClick={playVideo}
                         aria-label="Play video"
@@ -105,56 +105,46 @@ const CleaningVideoSection = () => {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className={styles.video__content}
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
             variants={staggerContainer}
           >
-            <motion.p 
-              className={styles.video__description}
-              variants={fadeIn}
-            >
-              Watch our professional cleaning process in action. From initial assessment to final inspection, see how we deliver exceptional results every time.
+            <motion.p className={styles.video__description} variants={fadeIn}>
+              Watch our professional cleaning process in action. From initial
+              assessment to final inspection, see how we deliver exceptional
+              results every time.
             </motion.p>
-            
-            <motion.ul 
+
+            <motion.ul
               className={styles.video__features}
               variants={staggerContainer}
             >
-              <motion.li 
-                className={styles.video__feature}
-                variants={fadeIn}
-              >
+              <motion.li className={styles.video__feature} variants={fadeIn}>
                 Professional equipment and techniques
               </motion.li>
-              <motion.li 
-                className={styles.video__feature}
-                variants={fadeIn}
-              >
+              <motion.li className={styles.video__feature} variants={fadeIn}>
                 Attention to detail
               </motion.li>
-              <motion.li 
-                className={styles.video__feature}
-                variants={fadeIn}
-              >
+              <motion.li className={styles.video__feature} variants={fadeIn}>
                 Quality assurance process
               </motion.li>
-              <motion.li 
-                className={styles.video__feature}
-                variants={fadeIn}
-              >
+              <motion.li className={styles.video__feature} variants={fadeIn}>
                 Customer satisfaction guarantee
               </motion.li>
             </motion.ul>
-            
-            <motion.div 
-              className={styles.video__cta}
-              variants={fadeIn}
-            >
-              <Button href={Routes.GET_STARTED} size="lg">
+
+            <motion.div className={styles.video__cta} variants={fadeIn}>
+              <CTAButton
+                href={Routes.GET_STARTED}
+                size="lg"
+                animationType="pulse"
+                animationIntensity="intense"
+              >
                 Book Your Cleaning Today
-              </Button>
+                <ArrowRightIcon className={styles.icon} />
+              </CTAButton>
             </motion.div>
           </motion.div>
         </div>
@@ -163,4 +153,4 @@ const CleaningVideoSection = () => {
   );
 };
 
-export default CleaningVideoSection; 
+export default CleaningVideoSection;
