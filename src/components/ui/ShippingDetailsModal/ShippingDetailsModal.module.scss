@@ -1,0 +1,199 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.shipping {
+  padding: 0 spacing("xl");
+
+  &__title {
+    @include font-size("subtitle-1");
+    @include font-weight("semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("lg");
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__addressType {
+    margin-bottom: spacing("lg");
+  }
+
+  &__radioGroup {
+    @include flex($direction: row);
+    gap: spacing("xl");
+  }
+
+  &__radioLabel {
+    @include flex($align: center);
+    cursor: pointer;
+    position: relative;
+    padding: spacing("sm") 0;
+  }
+
+  &__radioInput {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+
+    &:checked + .shipping__radioButton {
+      border-color: color("primary", "base");
+      background-color: color("primary", "base");
+
+      &::after {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+  }
+
+  &__radioButton {
+    height: spacing("lg");
+    width: spacing("lg");
+    border-radius: border-radius("full");
+    border: map-get($border-width, "medium") solid color("neutral", "medium");
+    display: inline-block;
+    margin-right: spacing("md");
+    position: relative;
+    transition: $transition-base;
+    background-color: color("neutral", "white");
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: spacing("sm");
+      height: spacing("sm");
+      border-radius: border-radius("full");
+      background-color: color("neutral", "white");
+      transition: $transition-base;
+      opacity: 0;
+    }
+  }
+
+  &__radioText {
+    @include font-size("body-2");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+  }
+
+  // Saved address styles
+  &__savedAddress {
+    margin-bottom: spacing("lg");
+  }
+
+  &__savedAddressCard {
+    position: relative;
+    background-color: color-alpha("primary", "lighter", 0.3);
+    padding: spacing("lg") spacing("lg");
+    border-radius: border-radius("lg");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__editButton {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    color: color("primary", "base");
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    @include font-size("body-2");
+    @include font-weight("medium");
+    transition: $transition-base;
+
+    &:hover {
+      color: color("primary", "dark");
+    }
+
+    svg {
+      stroke: currentColor;
+    }
+  }
+
+  &__savedAddressItem {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("md");
+    color: color("neutral", "darkest");
+    @include font-size("body-2");
+    @include font-weight("regular");
+
+    span {
+      word-break: break-word;
+      padding-right: spacing("xl");
+    }
+  }
+
+  &__savedAddressIcon {
+    flex-shrink: 0;
+    color: color("primary", "base");
+    height: 20px;
+    width: 20px;
+    margin-top: spacing("xs");
+  }
+
+  &__formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__label {
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  &__input,
+  &__select {
+    @include input;
+    border-radius: border-radius("lg");
+    border: map-get($border-width, "thin") solid color("neutral", "light");
+    width: 100%;
+    height: auto;
+    padding: map-get($input-padding, "md");
+    @include font-size("body-2");
+
+    &:focus {
+      border-color: color("primary", "base");
+      box-shadow: map-get($shadows, "focus");
+    }
+  }
+
+  &__select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right spacing("sm") center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: spacing("xl");
+  }
+
+  &__buttonContainer {
+    margin-top: spacing("xl");
+  }
+
+  &__button {
+    @include button-primary("lg");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    text-transform: uppercase;
+    @include font-weight("bold");
+    letter-spacing: letter-spacing("wider");
+    padding: spacing("md") spacing("lg");
+    height: button-height("lg");
+  }
+} 
