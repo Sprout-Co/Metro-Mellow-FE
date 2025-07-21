@@ -25,6 +25,11 @@
   &__radioGroup {
     @include flex($direction: row);
     gap: spacing("xl");
+
+    @include breakpoint-down("md") {
+      @include flex($direction: column);
+      gap: spacing("md");
+    }
   }
 
   &__radioLabel {
