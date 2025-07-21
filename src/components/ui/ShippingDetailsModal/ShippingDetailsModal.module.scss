@@ -3,10 +3,12 @@
 @import "@/styles/abstracts/functions";
 
 .shipping {
+  padding: 0 spacing("xl");
+
   &__title {
     @include font-size("subtitle-1");
     @include font-weight("semibold");
-    color: color("primary", "dark");
+    color: color("neutral", "black");
     margin-bottom: spacing("lg");
   }
 
