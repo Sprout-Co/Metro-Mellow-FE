@@ -14,7 +14,6 @@ interface ShippingDetailsModalProps {
 export interface ShippingDetails {
   fullname: string;
   state: string;
-  lga: string;
   address: string;
   email: string;
   phone: string;
@@ -28,8 +27,7 @@ const ShippingDetailsModal: React.FC<ShippingDetailsModalProps> = ({
 }) => {
   const [formData, setFormData] = useState<ShippingDetails>({
     fullname: "",
-    state: "",
-    lga: "",
+    state: "lagos",
     address: "",
     email: "",
     phone: "",
@@ -93,7 +91,7 @@ const ShippingDetailsModal: React.FC<ShippingDetailsModalProps> = ({
           </div>
 
           <div className={styles.shipping__formGroup}>
-            <label className={styles.shipping__label}>Fullname</label>
+            <label className={styles.shipping__label}>Full Name</label>
             <input
               type="text"
               name="fullname"
@@ -114,23 +112,6 @@ const ShippingDetailsModal: React.FC<ShippingDetailsModalProps> = ({
             >
               <option value="">Select State</option>
               <option value="lagos">Lagos</option>
-              <option value="abuja">Abuja</option>
-              <option value="rivers">Rivers</option>
-            </select>
-          </div>
-
-          <div className={styles.shipping__formGroup}>
-            <label className={styles.shipping__label}>LGA</label>
-            <select
-              name="lga"
-              value={formData.lga}
-              onChange={handleChange}
-              className={styles.shipping__select}
-            >
-              <option value="">Select LGA</option>
-              <option value="ikeja">Ikeja</option>
-              <option value="lekki">Lekki</option>
-              <option value="yaba">Yaba</option>
             </select>
           </div>
 
