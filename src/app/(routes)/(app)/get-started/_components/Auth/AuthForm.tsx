@@ -176,7 +176,7 @@ export default function AuthForm() {
             <Link href="/" className={styles.auth__logo}>
               <Image
                 src="/images/logo.svg"
-                alt="Metro Mellow"
+                alt="Metromellow"
                 width={180}
                 height={50}
               />
@@ -196,7 +196,7 @@ export default function AuthForm() {
                 >
                   <h1 className={styles.auth__title}>Welcome Back</h1>
                   <p className={styles.auth__subtitle}>
-                    Sign in to continue to Metro Mellow
+                    Sign in to continue to Metromellow
                   </p>
 
                   <div className={styles.auth__social}>
@@ -379,7 +379,7 @@ export default function AuthForm() {
                 >
                   <h1 className={styles.auth__title}>Create Account</h1>
                   <p className={styles.auth__subtitle}>
-                    Join Metro Mellow today
+                    Join Metromellow today
                   </p>
 
                   <form onSubmit={handleRegisterSubmit}>
@@ -678,7 +678,7 @@ export default function AuthForm() {
           <div className={styles.auth__imageWrapper}>
             <div className={styles.auth__image}>
               <h2 className={styles.auth__imageTitle}>
-                Experience the Metro Mellow Difference
+                Experience the Metromellow Difference
               </h2>
               <p className={styles.auth__imageText}>
                 Join thousands of satisfied customers enjoying premium home
@@ -705,8 +705,8 @@ export default function AuthForm() {
               <div className={styles.auth__testimonials}>
                 <div className={styles.auth__testimonial}>
                   <p className={styles.auth__testimonialText}>
-                    "Metro Mellow transformed our home care experience with
-                    their reliable and professional service!"
+                    "Metromellow transformed our home care experience with their
+                    reliable and professional service!"
                   </p>
                   <div className={styles.auth__testimonialAuthor}>
                     <div className={styles.auth__testimonialName}>Sarah J.</div>

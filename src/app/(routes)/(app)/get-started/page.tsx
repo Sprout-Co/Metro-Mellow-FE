@@ -1,11 +1,12 @@
 // app/get-started/page.tsx
-import { Metadata } from 'next';
-import AuthForm from './_components/Auth/AuthForm';
-import AuthManagement from './_components/AuthManagement';
+import { Metadata } from "next";
+import AuthForm from "./_components/Auth/AuthForm";
+import AuthManagement from "./_components/AuthManagement";
 
 export const metadata: Metadata = {
-  title: 'Get Started | Metro Mellow',
-  description: 'Create an account or sign in to Metro Mellow to access our home services.',
+  title: "Get Started | Metromellow",
+  description:
+    "Create an account or sign in to Metromellow to access our home services.",
 };
 
 export default function GetStartedPage() {

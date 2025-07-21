@@ -49,12 +49,12 @@ export default function DashboardHeader() {
         <div className={styles.header__logo}>
           {/* <Image 
             src="/images/brand/cover.png" 
-            alt="Metro Mellow" 
+            alt="Metromellow" 
             width={40} 
             height={40} 
           /> */}
           <span className={styles.header__logoText}>
-            <Link href={Routes.DASHBOARD}>Metro Mellow</Link>
+            <Link href={Routes.DASHBOARD}>Metromellow</Link>
           </span>
         </div>
 

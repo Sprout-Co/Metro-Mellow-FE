@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Metro Mellow is a comprehensive home services platform built with Next.js 15, offering cleaning, laundry, cooking, errands, and pest control services. The platform features:
+Metromellow is a comprehensive home services platform built with Next.js 15, offering cleaning, laundry, cooking, errands, and pest control services. The platform features:
 
 - **Customer Website**: Public-facing site with service information and booking
 - **Customer Dashboard**: Protected area for managing appointments, subscriptions, and account settings
@@ -14,6 +14,7 @@ Metro Mellow is a comprehensive home services platform built with Next.js 15, of
 ## Development Commands
 
 ### Core Commands
+
 - `npm run dev` - Start development server (default port 3000)
 - `npm run build` - Build production application
 - `npm start` - Start production server
@@ -24,6 +25,7 @@ Metro Mellow is a comprehensive home services platform built with Next.js 15, of
 - `npm run test:coverage` - Run tests with coverage report
 
 ### GraphQL Development
+
 - Backend GraphQL endpoint: `http://localhost:4000/graphql`
 - Run `npm run codegen` to generate TypeScript types from GraphQL schema
 - GraphQL types are auto-generated in `src/graphql/api.ts`
@@ -31,16 +33,19 @@ Metro Mellow is a comprehensive home services platform built with Next.js 15, of
 ## Architecture Overview
 
 ### Frontend Stack
+
 - **Next.js 15** with App Router (src/app directory structure)
 - **TypeScript** for type safety
 - **Apollo Client** for GraphQL state management
 - **Zustand** for client-side state management
 - **Tailwind CSS** + **SASS/SCSS** for styling
 - **Framer Motion** for animations
+- **Firebase** for waitlist collection and analytics
 
 ### Project Structure
 
 #### Route Organization
+
 - `src/app/(routes)/(site)/` - Public website pages (about, services, contact)
 - `src/app/(routes)/(app)/dashboard/` - Customer dashboard (protected)
 - `src/app/(routes)/(app)/admin/` - Admin panel (admin-only)
@@ -48,16 +53,19 @@ Metro Mellow is a comprehensive home services platform built with Next.js 15, of
 - `src/app/(routes)/get-started/` - Authentication flows
 
 #### Component Architecture
+
 - `src/components/` - Reusable components (ui, layout, providers)
 - `src/app/_components/` - Route-specific components
 - Component structure: `ComponentName/ComponentName.tsx` + `ComponentName.module.scss`
 
 #### State Management
+
 - **GraphQL**: Apollo Client for server state and caching
 - **Zustand**: Client-side state in `src/store/slices/`
 - **Authentication**: Cookie-based with JWT tokens stored in "auth-storage" cookie
 
 #### Styling System
+
 - **SASS Architecture**: Variables, mixins, and functions in `src/styles/abstracts/`
 - **Global imports**: Variables and mixins auto-imported via Next.js config
 - **Tailwind CSS**: Utility classes for rapid development
@@ -66,7 +74,9 @@ Metro Mellow is a comprehensive home services platform built with Next.js 15, of
 ### GraphQL Integration
 
 #### Backend Schema
+
 The backend provides comprehensive GraphQL schema with:
+
 - **User Management**: Authentication, profiles, role-based access
 - **Service Management**: Cleaning, laundry, cooking, errands, pest control
 - **Booking System**: Appointments, scheduling, status tracking
@@ -75,6 +85,7 @@ The backend provides comprehensive GraphQL schema with:
 - **Subscription System**: Recurring services with different plans
 
 #### Frontend GraphQL Setup
+
 - **Queries/Mutations**: Organized by domain in `src/graphql/queries/` and `src/graphql/mutations/`
 - **Hooks**: Custom GraphQL hooks in `src/graphql/hooks/`
 - **Type Generation**: Auto-generated types from backend schema
@@ -83,43 +94,78 @@ The backend provides comprehensive GraphQL schema with:
 ### Authentication & Authorization
 
 #### User Roles
+
 - `CUSTOMER` - Standard users booking services
-- `STAFF` - Service providers 
+- `STAFF` - Service providers
 - `ADMIN` - Service and staff managers
 - `SUPER_ADMIN` - Platform administrators
 
 #### Route Protection
+
 - Middleware handles authentication and role-based access
 - Protected routes redirect unauthenticated users to `/get-started`
 - Admin routes require ADMIN or SUPER_ADMIN roles
 - Authentication state managed via Zustand store
 
+### Firebase Integration
+
+#### Waitlist Management
+- **Firestore Database**: Stores waitlist signups with email validation
+- **Real-time Analytics**: Tracks signup metrics and conversion rates
+- **Security Rules**: Protects data with proper access controls
+- **Duplicate Prevention**: Prevents multiple signups with same email
+
+#### Firebase Services
+- **Firestore**: Database for waitlist collection (`src/lib/services/waitlist.ts`)
+- **Analytics**: Tracks user engagement and conversion metrics
+- **Security**: Role-based access control with admin permissions
+
+#### Configuration
+- Firebase config in `src/lib/firebase.ts`
+- Environment variables for API keys and project settings
+- Security rules defined in `firestore.rules`
+- Setup guide available in `FIREBASE_SETUP.md`
+
 ## Development Guidelines
 
 ### Code Organization
+
 - Follow existing component structure with TypeScript + SCSS modules
 - Use GraphQL hooks for data fetching and mutations
 - Implement proper loading and error states for all async operations
 - Follow existing naming conventions for files and components
 
 ### GraphQL Development
+
 - Always run `npm run codegen` after backend schema changes
 - Use generated TypeScript types for type safety
 - Organize queries/mutations by domain (auth, bookings, services, etc.)
 - Handle GraphQL errors appropriately in UI components
 
 ### Styling Conventions
+
 - Use SCSS modules for component-specific styles
 - Leverage Tailwind for utility classes and rapid prototyping
 - Import global SASS variables/mixins as needed (auto-imported)
 - Follow responsive design patterns established in existing components
 
 ### State Management
+
 - Use Apollo Client for all server-side data
 - Use Zustand for UI state, authentication status, and client-side preferences
+- Use Firebase services for waitlist and analytics data
 - Avoid duplicating server state in client stores
 
+### Firebase Development
+
+- Use the custom `useWaitlist` hook for waitlist operations
+- Follow the `waitlistService` patterns for data operations
+- Implement proper error handling for Firebase operations
+- Test Firebase integration with proper environment variables
+- Monitor Firestore usage and costs in development
+
 ### Testing & Quality
+
 - Run `npm run lint` before committing changes
 - Ensure TypeScript compilation passes with `npm run build`
 - Run `npm test` to execute unit tests for components and hooks
@@ -127,6 +173,7 @@ The backend provides comprehensive GraphQL schema with:
 - Verify responsive design on multiple screen sizes
 
 ### Testing Framework
+
 - **Jest** with React Testing Library for unit tests
 - Tests located in `__tests__` directories alongside components
 - Mock configurations for GraphQL, Redux, and Next.js features
@@ -137,18 +184,26 @@ The backend provides comprehensive GraphQL schema with:
 ## Key Files & Directories
 
 ### Configuration
+
 - `next.config.ts` - Next.js configuration with SASS setup and optimization
 - `codegen.ts` - GraphQL code generation configuration
 - `tailwind.config.ts` - Tailwind CSS configuration
 - `src/lib/apollo-client.ts` - Apollo Client setup with authentication
+- `src/lib/firebase.ts` - Firebase configuration and initialization
+- `firestore.rules` - Firestore security rules for data protection
+- `FIREBASE_SETUP.md` - Complete Firebase setup and configuration guide
 
 ### Core Features
+
 - `src/middleware.ts` - Route protection and role-based access control
 - `src/store/` - Zustand state management
 - `src/constants/` - Application constants and route definitions
 - `src/graphql/` - All GraphQL-related code (queries, mutations, types, hooks)
+- `src/lib/services/waitlist.ts` - Firebase waitlist management service
+- `src/hooks/useWaitlist.ts` - Custom hook for waitlist operations
 
 ### Styling
+
 - `src/styles/abstracts/` - SASS variables, mixins, and functions
 - `src/app/globals.scss` - Global styles and CSS imports
 
