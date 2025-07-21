@@ -84,6 +84,67 @@
     color: color("neutral", "darkest");
   }
 
+  // Saved address styles
+  &__savedAddress {
+    margin-bottom: spacing("lg");
+  }
+
+  &__savedAddressCard {
+    position: relative;
+    background-color: color-alpha("primary", "lighter", 0.3);
+    padding: spacing("lg") spacing("lg");
+    border-radius: border-radius("lg");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__editButton {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    color: color("primary", "base");
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    @include font-size("body-2");
+    @include font-weight("medium");
+    transition: $transition-base;
+
+    &:hover {
+      color: color("primary", "dark");
+    }
+
+    svg {
+      stroke: currentColor;
+    }
+  }
+
+  &__savedAddressItem {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("md");
+    color: color("neutral", "darkest");
+    @include font-size("body-2");
+    @include font-weight("regular");
+
+    span {
+      word-break: break-word;
+      padding-right: spacing("xl");
+    }
+  }
+
+  &__savedAddressIcon {
+    flex-shrink: 0;
+    color: color("primary", "base");
+    height: 20px;
+    width: 20px;
+    margin-top: spacing("xs");
+  }
+
   &__formGroup {
     display: flex;
     flex-direction: column;
