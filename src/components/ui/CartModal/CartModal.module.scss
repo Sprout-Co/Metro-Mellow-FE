@@ -16,10 +16,22 @@
   justify-content: flex-end !important;
   padding: spacing("md") !important;
   
+  @include breakpoint-down("md") {
+    padding: spacing("sm") !important;
+    justify-content: center !important;
+  }
+  
   :global(.modal__container) {
     margin: 0 !important;
     align-self: flex-start !important;
     margin-top: spacing("xl") !important;
+    
+    @include breakpoint-down("md") {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin-top: spacing("lg") !important;
+      margin-bottom: spacing("lg") !important;
+    }
   }
   
   &__headerTitle {
@@ -80,6 +92,11 @@
     overflow-y: auto;
     padding-right: spacing("xs");
     
+    @include breakpoint-down("md") {
+      max-height: 50vh;
+      padding-right: 0;
+    }
+    
     &::-webkit-scrollbar {
       width: 4px;
     }
@@ -104,9 +121,11 @@
     border-bottom: 1px solid color("neutral", "lighter");
     align-items: stretch;
     
-    @include breakpoint-down("sm") {
+    @include breakpoint-down("md") {
       flex-direction: column;
       align-items: flex-start;
+      gap: spacing("md");
+      padding: spacing("md");
     }
   }
   
@@ -116,6 +135,12 @@
     border-radius: border-radius("md");
     overflow: hidden;
     flex-shrink: 0;
+    
+    @include breakpoint-down("md") {
+      width: 100%;
+      height: 200px;
+      align-self: center;
+    }
     
     img {
       width: 100%;
@@ -148,6 +173,12 @@
     gap: spacing("lg");
     margin-top: spacing("md");
     width: 100%;
+    
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      align-items: stretch;
+      gap: spacing("md");
+    }
   }
   
   &__itemRemove {
@@ -236,6 +267,13 @@
     background-color: color("neutral", "white");
     position: relative;
     z-index: 1;
+    
+    @include breakpoint-down("md") {
+      justify-content: center;
+      width: 100%;
+      max-width: 200px;
+      margin: 0 auto;
+    }
   }
   
   &__quantityButton {
