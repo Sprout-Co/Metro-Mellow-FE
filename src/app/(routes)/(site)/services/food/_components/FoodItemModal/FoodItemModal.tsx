@@ -89,7 +89,10 @@ const FoodItemModal: React.FC<FoodItemModalProps> = ({
               </div>
             )}
             {!foodItem.isTopRated && foodItem.isSpicy && (
-              <div className={styles.modal__spicyOnly}>Spicy</div>
+              <div className={styles.modal__topRated}>
+                <span></span>
+                <span className={styles.modal__spicy}>Spicy</span>
+              </div>
             )}
           </div>
 
