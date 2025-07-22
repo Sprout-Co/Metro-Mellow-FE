@@ -1,0 +1,57 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.service_selection {
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("lg") 0;
+
+    svg {
+      color: color("primary", "base");
+    }
+  }
+
+  &__field {
+    margin-bottom: spacing("lg");
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__label {
+    display: block;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xs");
+  }
+
+  &__select {
+    width: 100%;
+    padding: spacing("sm") spacing("md");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "base");
+    background-color: color("neutral", "white");
+    color: color("neutral", "black");
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}

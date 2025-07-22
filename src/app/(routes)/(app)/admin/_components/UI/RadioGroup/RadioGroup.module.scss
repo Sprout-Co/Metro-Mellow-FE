@@ -1,0 +1,46 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.radio_group {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("sm");
+
+  &__option {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: spacing("xs") 0;
+    transition: all 0.2s ease;
+
+    &:hover:not(.disabled) {
+      .radio_group__label {
+        color: color("primary", "base");
+      }
+    }
+
+    &.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__input {
+    margin-right: spacing("sm");
+    width: 16px;
+    height: 16px;
+    accent-color: color("primary", "base");
+    cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  &__label {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+    transition: color 0.2s ease;
+  }
+}

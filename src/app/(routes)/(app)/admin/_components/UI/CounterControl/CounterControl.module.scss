@@ -1,0 +1,58 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.counter {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("xs");
+
+  &__label {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+  }
+
+  &__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    background-color: color("neutral", "white");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background-color: color("neutral", "lighter");
+      border-color: color("neutral", "medium");
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__value {
+    min-width: 40px;
+    text-align: center;
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+  }
+}
