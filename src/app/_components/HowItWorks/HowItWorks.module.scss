@@ -1,7 +1,7 @@
 // components/home/HowItWorks.module.scss
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .process {
   background-color: color("neutral", "lighter");
@@ -112,7 +112,7 @@
   }
 
   &__iconWrapper {
-    background-color: rgba(color("primary", "light"), 0.1);
+    background-color: color-alpha("primary", "light", 0.1);
     width: 60px;
     height: 60px;
     border-radius: border-radius("lg");
@@ -144,7 +144,7 @@
 
   &__image {
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "md");
+    box-shadow: map-get($shadows, "md");
     max-width: 100%;
     height: auto;
   }

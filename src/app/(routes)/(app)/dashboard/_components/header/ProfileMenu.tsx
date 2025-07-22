@@ -117,7 +117,7 @@ export default function ProfileMenu({ onClose }: ProfileMenuProps) {
       </nav>
 
       <div className={styles.menu__footer}>
-        <p className={styles.menu__version}>Metro Mellow v1.0.0</p>
+        <p className={styles.menu__version}>Metromellow v1.0.0</p>
       </div>
     </div>
   );

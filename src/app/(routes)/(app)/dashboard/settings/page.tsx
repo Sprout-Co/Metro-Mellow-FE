@@ -3,8 +3,8 @@ import DashboardHeader from "../_components/header/DashboardHeader";
 import SettingsOverview from "./SettingsOverview";
 
 export const metadata: Metadata = {
-  title: "Settings | Metro Mellow",
-  description: "Manage your Metro Mellow account settings and preferences.",
+  title: "Settings | Metromellow",
+  description: "Manage your Metromellow account settings and preferences.",
 };
 
 export default function SettingsPage() {

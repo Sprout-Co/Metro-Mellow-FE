@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .modal {
   position: fixed;
@@ -950,7 +950,7 @@
 
   &__inclusion {
     padding: 14px 16px;
-    background-color: rgba(color("success"), 0.08);
+    background-color: rgba(color("status", "success"), 0.08);
     border-radius: 12px;
     margin-bottom: 12px;
     display: flex;
@@ -968,7 +968,7 @@
     }
 
     svg {
-      color: color("success");
+      color: color("status", "success");
       flex-shrink: 0;
       margin-top: 2px;
     }
@@ -1232,11 +1232,11 @@
       align-items: flex-start;
       gap: 8px;
       padding: 10px 12px;
-      background-color: rgba(color("success"), 0.05);
+      background-color: rgba(color("status", "success"), 0.05);
       border-radius: 8px;
 
       svg {
-        color: color("success");
+        color: color("status", "success");
         flex-shrink: 0;
       }
 
@@ -1323,12 +1323,12 @@
     gap: 8px;
     margin-top: 16px;
     padding: 12px;
-    background-color: rgba(color("info"), 0.05);
+    background-color: rgba(color("status", "info"), 0.05);
     border-radius: 8px;
-    border-left: 3px solid color("info");
+    border-left: 3px solid color("status", "info");
 
     svg {
-      color: color("info");
+      color: color("status", "info");
       flex-shrink: 0;
       margin-top: 2px;
     }
@@ -1449,8 +1449,8 @@
     }
 
     &--weekly {
-      background-color: rgba(color("success"), 0.1);
-      color: color("success");
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
     }
 
     &--bi-weekly {
@@ -1459,8 +1459,8 @@
     }
 
     &--monthly {
-      background-color: rgba(color("info"), 0.1);
-      color: color("info");
+      background-color: rgba(color("status", "info"), 0.1);
+      color: color("status", "info");
     }
   }
 
@@ -1823,7 +1823,7 @@
     color: color("neutral", "darker");
     transition: $transition-base;
     cursor: pointer;
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     overflow: hidden;
     position: relative;
 
@@ -1831,7 +1831,7 @@
       background-color: rgba(color("neutral", "lighter"), 0.5);
       border-color: color("neutral", "medium");
       transform: translateY(-2px);
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
     }
 
     &Selected {
@@ -1880,7 +1880,7 @@
     color: color("neutral", "darker");
     transition: $transition-base;
     cursor: pointer;
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     position: relative;
     text-align: left;
     height: 100%;
@@ -1889,7 +1889,7 @@
       background-color: rgba(color("neutral", "lighter"), 0.5);
       border-color: color("neutral", "medium");
       transform: translateY(-2px);
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
     }
 
     &Selected {
@@ -1979,8 +1979,8 @@
     }
 
     &Time {
-      background-color: rgba(color("info"), 0.1);
-      color: color("info");
+      background-color: rgba(color("status", "info"), 0.1);
+      color: color("status", "info");
     }
   }
 

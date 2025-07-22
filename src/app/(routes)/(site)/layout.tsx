@@ -25,9 +25,10 @@ export default function SiteLayout({
 }>) {
   return (
     <>
-      <Navbar />
+      {process.env.MAINTENANCE_MODE === "true" ? null : <Navbar />}
+
       {children}
-      <Footer />
+      {process.env.MAINTENANCE_MODE === "true" ? null : <Footer />}
     </>
   );
 }

@@ -165,7 +165,7 @@ const resourceCategories = [
 const resources = [
   {
     id: 1,
-    title: "Getting Started with Metro Mellow",
+    title: "Getting Started with Metromellow",
     description:
       "A complete guide to setting up your account and booking your first service",
     category: "guides",

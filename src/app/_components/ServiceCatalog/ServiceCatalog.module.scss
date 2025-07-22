@@ -89,7 +89,7 @@
     transition: $transition-base;
 
     &:hover {
-      background-color: rgba(color("neutral", "white"), 0.1);
+      background-color: color-alpha("neutral", "white", 0.1);
     }
 
     &--active {

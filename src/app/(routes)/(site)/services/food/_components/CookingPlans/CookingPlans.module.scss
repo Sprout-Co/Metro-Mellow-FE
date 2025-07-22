@@ -1,7 +1,7 @@
 // styles/components/cooking/CookingPlans.module.scss
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .plans {
   padding: spacing("4xl") 0;
@@ -162,12 +162,12 @@
 
     &:hover {
       transform: translateY(-8px);
-      box-shadow: map-get($box-shadows, "lg");
+      box-shadow: map-get($shadows, "lg");
     }
 
     &--popular {
       border-color: color("secondary", "base");
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
       z-index: z-index("default");
     }
 

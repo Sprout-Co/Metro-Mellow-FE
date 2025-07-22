@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .booking_details {
   max-width: 800px;
@@ -103,7 +103,7 @@
   &__price {
     font-size: map-get($font-sizes, "3xl");
     font-weight: map-get($font-weights, "bold");
-    color: color("success");
+    color: color("status", "success");
 
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "2xl");
@@ -540,51 +540,51 @@
     border: 1px solid transparent;
 
     &--pending {
-      background: rgba(color("warning"), 0.1);
-      color: color("warning");
-      border-color: rgba(color("warning"), 0.2);
+      background: rgba(color("status", "warning"), 0.1);
+      color: color("status", "warning");
+      border-color: rgba(color("status", "warning"), 0.2);
     }
 
     &--confirmed {
-      background: rgba(color("info"), 0.1);
-      color: color("info");
-      border-color: rgba(color("info"), 0.2);
+      background: rgba(color("status", "info"), 0.1);
+      color: color("status", "info");
+      border-color: rgba(color("status", "info"), 0.2);
     }
 
     &--in-progress {
-      background: rgba(color("info"), 0.15);
-      color: darken(color("info"), 15%);
-      border-color: rgba(color("info"), 0.3);
+      background: rgba(color("status", "info"), 0.15);
+      color: darken(color("status", "info"), 15%);
+      border-color: rgba(color("status", "info"), 0.3);
     }
 
     &--completed {
-      background: rgba(color("success"), 0.1);
-      color: color("success");
-      border-color: rgba(color("success"), 0.2);
+      background: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
+      border-color: rgba(color("status", "success"), 0.2);
     }
 
     &--cancelled {
-      background: rgba(color("error"), 0.1);
-      color: color("error");
-      border-color: rgba(color("error"), 0.2);
+      background: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
+      border-color: rgba(color("status", "error"), 0.2);
     }
 
     &--paid {
-      background: rgba(color("success"), 0.1);
-      color: color("success");
-      border-color: rgba(color("success"), 0.2);
+      background: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
+      border-color: rgba(color("status", "success"), 0.2);
     }
 
     &--unpaid {
-      background: rgba(color("warning"), 0.1);
-      color: color("warning");
-      border-color: rgba(color("warning"), 0.2);
+      background: rgba(color("status", "warning"), 0.1);
+      color: color("status", "warning");
+      border-color: rgba(color("status", "warning"), 0.2);
     }
 
     &--refunded {
-      background: rgba(color("error"), 0.1);
-      color: color("error");
-      border-color: rgba(color("error"), 0.2);
+      background: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
+      border-color: rgba(color("status", "error"), 0.2);
     }
   }
 
@@ -608,7 +608,7 @@
     padding: spacing("xl");
 
     p {
-      color: color("error");
+      color: color("status", "error");
       font-size: map-get($font-sizes, "lg");
       margin-bottom: spacing("lg");
     }
@@ -822,8 +822,8 @@
     }
 
     &:invalid {
-      border-color: color("error");
-      box-shadow: 0 0 0 3px rgba(color("error"), 0.1);
+      border-color: color("status", "error");
+      box-shadow: 0 0 0 3px rgba(color("status", "error"), 0.1);
     }
 
     &[type="date"] {

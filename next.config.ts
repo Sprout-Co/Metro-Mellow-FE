@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   sassOptions: {
     includePaths: ["./src/styles"],
-    prependData: `@import "@/styles/abstracts-old/variables"; @import "@/styles/abstracts-old/mixins"; @import "@/styles/abstracts-old/functions";`,
+    prependData: `@import "@/styles/abstracts/variables"; @import "@/styles/abstracts/mixins"; @import "@/styles/abstracts/functions";`,
     quietDeps: true,
   },
   images: {

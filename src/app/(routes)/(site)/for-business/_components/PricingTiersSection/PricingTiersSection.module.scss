@@ -94,7 +94,7 @@
     background-color: color("neutral", "white");
     border-radius: border-radius("xl");
     padding: spacing("2xl");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     border: 1px solid color("neutral", "lighter");
     transition: all 0.3s ease;
     position: relative;
@@ -105,7 +105,7 @@
 
     &:hover {
       transform: translateY(-5px);
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
     }
 
     &.animate {
@@ -119,13 +119,13 @@
     // Featured card styling
     &__featured {
       border: 2px solid color("secondary", "base");
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
       transform: translateY(-10px) scale(1.02);
       z-index: 2;
 
       &:hover {
         transform: translateY(-15px) scale(1.02);
-        box-shadow: map-get($box-shadows, "lg");
+        box-shadow: map-get($shadows, "lg");
       }
 
       .pricingTiers__cardAction {
@@ -187,7 +187,7 @@
     font-weight: map-get($font-weights, "bold");
     padding: spacing("xs") spacing("md");
     border-radius: border-radius("full");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
   }
 
   &__cardHeader {

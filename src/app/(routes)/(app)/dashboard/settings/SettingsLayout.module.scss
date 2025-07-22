@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .settingsLayout {
   padding: spacing("xl") 0;
@@ -31,7 +31,7 @@
   &__content {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     overflow: hidden;
   }
 }

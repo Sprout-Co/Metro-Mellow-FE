@@ -1,7 +1,7 @@
 // styles/components/cooking/CookingChefs.module.scss
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .chefs {
   padding: spacing("4xl") 0;
@@ -78,12 +78,12 @@
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
     overflow: hidden;
-    box-shadow: map-get($box-shadows, "md");
+    box-shadow: map-get($shadows, "md");
     transition: $transition-base;
 
     &:hover {
       transform: translateY(-8px);
-      box-shadow: map-get($box-shadows, "lg");
+      box-shadow: map-get($shadows, "lg");
 
       .chefs__card-img {
         transform: scale(1.05);

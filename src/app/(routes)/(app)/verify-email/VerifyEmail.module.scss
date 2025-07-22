@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .verifyEmail {
   min-height: 100vh;
@@ -46,7 +46,7 @@
   }
 
   &__success {
-    color: color("success");
+    color: color("status", "success");
     margin-bottom: spacing("md");
 
     svg {
@@ -55,7 +55,7 @@
   }
 
   &__error {
-    color: color("error");
+    color: color("status", "error");
     margin-bottom: spacing("md");
 
     svg {
