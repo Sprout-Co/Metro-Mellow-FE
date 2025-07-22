@@ -77,6 +77,7 @@ const CustomerSelectionSection: React.FC<CustomerSelectionSectionProps> = ({
                 type="radio"
                 name="customer"
                 value={customer.id}
+                required
                 checked={selectedCustomerId === customer.id}
                 onChange={(e) => onCustomerSelect(e.target.value)}
                 className={styles.customer_selection__radio}

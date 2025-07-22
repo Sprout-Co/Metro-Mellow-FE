@@ -49,6 +49,7 @@ const ServiceSelectionSection: React.FC<ServiceSelectionSectionProps> = ({
               }}
               className={styles.service_selection__select}
               disabled={isLoading}
+              required
             >
               <option value="">Select a service</option>
               {services.map((service) => (
@@ -70,6 +71,7 @@ const ServiceSelectionSection: React.FC<ServiceSelectionSectionProps> = ({
                 onChange={(e) => onOptionSelect(e.target.value)}
                 className={styles.service_selection__select}
                 disabled={isLoading}
+                required
               >
                 <option value="">Select an option</option>
                 {selectedService.options.map((option) => (
