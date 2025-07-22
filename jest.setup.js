@@ -6,8 +6,15 @@ jest.mock('framer-motion', () => ({
     div: 'div',
     span: 'span',
     button: 'button',
+    h1: 'h1',
+    p: 'p',
   },
   AnimatePresence: ({ children }) => children,
+  useAnimation: () => ({
+    start: jest.fn(),
+    stop: jest.fn(),
+    set: jest.fn(),
+  }),
 }))
 
 // Mock Next.js router
