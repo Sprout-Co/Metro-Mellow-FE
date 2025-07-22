@@ -10,6 +10,7 @@ interface CustomerSelectionSectionProps {
   customerSearchQuery: string;
   onCustomerSelect: (id: string) => void;
   onSearchQueryChange: (query: string) => void;
+  isLoading?: boolean;
 }
 
 const CustomerSelectionSection: React.FC<CustomerSelectionSectionProps> = ({
@@ -18,6 +19,7 @@ const CustomerSelectionSection: React.FC<CustomerSelectionSectionProps> = ({
   customerSearchQuery,
   onCustomerSelect,
   onSearchQueryChange,
+  isLoading = false,
 }) => {
   // Filter customers based on search
   const filteredCustomers = customers.filter((customer) => {
@@ -48,44 +50,58 @@ const CustomerSelectionSection: React.FC<CustomerSelectionSectionProps> = ({
           value={customerSearchQuery}
           onChange={(e) => onSearchQueryChange(e.target.value)}
           className={styles.customer_selection__search_input}
+          disabled={isLoading}
         />
       </div>
 
       <div className={styles.customer_selection__list}>
-        {filteredCustomers.map((customer) => (
-          <label
-            key={customer.id}
-            className={`${styles.customer_selection__option} ${
-              selectedCustomerId === customer.id ? styles.selected : ""
-            }`}
-          >
-            <input
-              type="radio"
-              name="customer"
-              value={customer.id}
-              checked={selectedCustomerId === customer.id}
-              onChange={(e) => onCustomerSelect(e.target.value)}
-              className={styles.customer_selection__radio}
-            />
-            <div className={styles.customer_selection__avatar}>
-              {customer.firstName?.charAt(0) || "N"}
-            </div>
-            <div className={styles.customer_selection__info}>
-              <div className={styles.customer_selection__name}>
-                {`${customer.firstName || ""} ${customer.lastName || ""}`.trim() ||
-                  "N/A"}
+        {isLoading ? (
+          <div className={styles.customer_selection__loading}>
+            <Icon name="loader" size={20} />
+            <span>Loading customers...</span>
+          </div>
+        ) : filteredCustomers.length === 0 ? (
+          <div className={styles.customer_selection__empty}>
+            <Icon name="users" size={20} />
+            <span>No customers found</span>
+          </div>
+        ) : (
+          filteredCustomers.map((customer) => (
+            <label
+              key={customer.id}
+              className={`${styles.customer_selection__option} ${
+                selectedCustomerId === customer.id ? styles.selected : ""
+              }`}
+            >
+              <input
+                type="radio"
+                name="customer"
+                value={customer.id}
+                checked={selectedCustomerId === customer.id}
+                onChange={(e) => onCustomerSelect(e.target.value)}
+                className={styles.customer_selection__radio}
+                disabled={isLoading}
+              />
+              <div className={styles.customer_selection__avatar}>
+                {customer.firstName?.charAt(0) || "N"}
               </div>
-              <div className={styles.customer_selection__email}>
-                {customer.email}
-              </div>
-              {customer.phone && (
-                <div className={styles.customer_selection__phone}>
-                  {customer.phone}
+              <div className={styles.customer_selection__info}>
+                <div className={styles.customer_selection__name}>
+                  {`${customer.firstName || ""} ${customer.lastName || ""}`.trim() ||
+                    "N/A"}
                 </div>
-              )}
-            </div>
-          </label>
-        ))}
+                <div className={styles.customer_selection__email}>
+                  {customer.email}
+                </div>
+                {customer.phone && (
+                  <div className={styles.customer_selection__phone}>
+                    {customer.phone}
+                  </div>
+                )}
+              </div>
+            </label>
+          ))
+        )}
       </div>
     </Card>
   );

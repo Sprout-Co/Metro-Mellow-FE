@@ -42,6 +42,10 @@ export default function AddBookingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Section loading states
+  const [isLoadingCustomers, setIsLoadingCustomers] = useState(false);
+  const [isLoadingServices, setIsLoadingServices] = useState(false);
+
   // Data state
   const [customers, setCustomers] = useState<User[]>([]);
   const [services, setServices] = useState<Service[]>([]);
@@ -84,6 +88,9 @@ export default function AddBookingPage() {
       try {
         setIsLoading(true);
         setError(null);
+        setIsLoadingCustomers(true);
+        setIsLoadingServices(true);
+
         const [customersData, servicesData] = await Promise.all([
           handleGetUsers(UserRole.Customer),
           handleGetServices(undefined, ServiceStatus.Active),
@@ -100,6 +107,8 @@ export default function AddBookingPage() {
         setError("Failed to load data. Please try again.");
       } finally {
         setIsLoading(false);
+        setIsLoadingCustomers(false);
+        setIsLoadingServices(false);
       }
     };
 
@@ -344,7 +353,7 @@ export default function AddBookingPage() {
       >
         <div className={styles.add_booking__loading}>
           <Icon name="loader" size={32} />
-          <p>Loading...</p>
+          <p>Loading booking form...</p>
         </div>
       </AdminDashboardLayout>
     );
@@ -379,6 +388,7 @@ export default function AddBookingPage() {
               customerSearchQuery={customerSearchQuery}
               onCustomerSelect={setSelectedCustomerId}
               onSearchQueryChange={setCustomerSearchQuery}
+              isLoading={isLoadingCustomers}
             />
 
             <ServiceSelectionSection
@@ -390,6 +400,7 @@ export default function AddBookingPage() {
                 setSelectedOptionId(""); // Reset option when service changes
               }}
               onOptionSelect={setSelectedOptionId}
+              isLoading={isLoadingServices}
             />
 
             <ServiceDetailsSection

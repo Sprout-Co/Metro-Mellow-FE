@@ -49,6 +49,11 @@
     &::placeholder {
       color: color("neutral", "medium");
     }
+
+    &:disabled {
+      background-color: color("neutral", "lighter");
+      cursor: not-allowed;
+    }
   }
 
   &__list {
@@ -84,6 +89,10 @@
   &__radio {
     margin: 0;
     accent-color: color("primary", "base");
+
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
 
   &__avatar {
@@ -108,26 +117,49 @@
   &__name {
     font-weight: map-get($font-weights, "medium");
     color: color("neutral", "black");
-    margin-bottom: spacing("xxs");
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    margin-bottom: spacing("xs");
+    font-size: map-get($font-sizes, "base");
   }
 
   &__email {
-    font-size: map-get($font-sizes, "sm");
     color: color("neutral", "dark");
-    margin-bottom: spacing("xxs");
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: map-get($font-sizes, "sm");
+    margin-bottom: spacing("xs");
   }
 
   &__phone {
-    font-size: map-get($font-sizes, "sm");
     color: color("neutral", "medium");
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: map-get($font-sizes, "sm");
+  }
+
+  &__loading,
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("sm");
+    padding: spacing("xl");
+    color: color("neutral", "medium");
+    font-size: map-get($font-sizes, "base");
+    text-align: center;
+
+    svg {
+      color: color("neutral", "medium");
+    }
+  }
+
+  &__loading {
+    svg {
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

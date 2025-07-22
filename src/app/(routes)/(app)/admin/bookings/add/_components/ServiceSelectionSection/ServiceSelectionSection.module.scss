@@ -52,6 +52,32 @@
     &:disabled {
       opacity: 0.6;
       cursor: not-allowed;
+      background-color: color("neutral", "lighter");
     }
+  }
+
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("sm");
+    padding: spacing("xl");
+    color: color("neutral", "medium");
+    font-size: map-get($font-sizes, "base");
+    text-align: center;
+
+    svg {
+      color: color("neutral", "medium");
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
