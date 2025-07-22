@@ -38,8 +38,19 @@ This document outlines the comprehensive unit testing strategy for all non-authe
 
 ### 3. About Page (`/about`)
 - **File**: `src/app/(routes)/(site)/about/page.tsx`
-- **Components**: Various about page sections
-- **Testing Focus**: Content rendering, team information, company story
+- **Components**: 
+  - AboutHero
+  - OurStory
+  - StorySection
+  - OurValues
+  - MagicHandsSection
+  - ImpactSection
+  - Statistics
+  - TeamSection
+  - VideoSection
+  - FAQSection
+  - AboutCTA
+- **Testing Focus**: Content rendering, team information, company story, values display, statistics, video content
 
 ### 4. Contact Page (`/contact`)
 - **File**: `src/app/(routes)/(site)/contact/page.tsx`
