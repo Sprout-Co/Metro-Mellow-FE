@@ -25,7 +25,7 @@ const FormActions: React.FC<FormActionsProps> = ({
       <Button
         type="submit"
         variant="primary"
-        disabled={!isValid || isSubmitting}
+        // disabled={!isValid || isSubmitting}
       >
         {isSubmitting ? "Creating..." : "Create Booking"}
       </Button>

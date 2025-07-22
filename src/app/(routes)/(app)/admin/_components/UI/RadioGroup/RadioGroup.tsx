@@ -14,6 +14,7 @@ interface RadioGroupProps {
   onChange: (value: string) => void;
   className?: string;
   disabled?: boolean;
+  required?: boolean;
 }
 
 const RadioGroup: React.FC<RadioGroupProps> = ({
@@ -23,6 +24,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   onChange,
   className = "",
   disabled = false,
+  required = true,
 }) => {
   return (
     <div className={`${styles.radio_group} ${className}`}>
@@ -41,6 +43,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
             onChange={(e) => onChange(e.target.value)}
             disabled={option.disabled || disabled}
             className={styles.radio_group__input}
+            required={required}
           />
           <span className={styles.radio_group__label}>{option.label}</span>
         </label>
