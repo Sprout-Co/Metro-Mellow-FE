@@ -92,8 +92,8 @@
   }
   
   &__title {
-    @include font-size("body-1");
-    @include font-weight("bold");
+    @include font-size("h5");
+    @include font-weight("black");
     color: color("neutral", "black");
     margin: 0;
     padding: 0 spacing("lg");
@@ -119,8 +119,8 @@
   }
   
   &__price {
-    @include font-size("body-1");
-    @include font-weight("bold");
+    @include font-size("h5");
+    @include font-weight("black");
     color: color("neutral", "black");
     text-align: right;
   }
@@ -147,11 +147,7 @@
     gap: spacing("sm");
     margin-bottom: spacing("md");
     width: 100%;
-    
-    @include breakpoint-down("sm") {
-      flex-direction: column;
-      align-items: flex-start;
-    }
+    justify-content: flex-start;
   }
   
   &__spiceOption {
@@ -165,7 +161,9 @@
     cursor: pointer;
     transition: all 0.2s ease;
     font-size: font-size("small");
-    width: 100%;
+    min-width: 200px;
+    max-width: 300px;
+    width: auto;
     height: 48px;
     color: color("neutral", "white");
     
