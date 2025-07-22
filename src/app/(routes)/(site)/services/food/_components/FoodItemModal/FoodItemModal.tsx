@@ -110,21 +110,24 @@ const FoodItemModal: React.FC<FoodItemModalProps> = ({
             <h3 className={styles.modal__optionsTitle}>Extras you might like</h3>
             
             <div className={styles.modal__spiceOptions}>
-              <button 
+              <Button
+                type="button"
+                variant="secondary"
                 className={`${styles.modal__spiceOption} ${selectedSpiceLevel === "small" ? styles.modal__spiceOption_selected : ""}`}
                 onClick={() => setSelectedSpiceLevel("small")}
               >
                 <span className={styles.modal__radioIcon}></span>
                 <span>Small Pepper</span>
-              </button>
-              
-              <button 
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
                 className={`${styles.modal__spiceOption} ${selectedSpiceLevel === "plenty" ? styles.modal__spiceOption_selected : ""}`}
                 onClick={() => setSelectedSpiceLevel("plenty")}
               >
                 <span className={styles.modal__radioIcon}></span>
                 <span>Plenty Pepper</span>
-              </button>
+              </Button>
             </div>
           </div>
           
