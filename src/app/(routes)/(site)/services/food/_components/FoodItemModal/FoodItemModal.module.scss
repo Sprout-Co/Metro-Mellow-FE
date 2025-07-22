@@ -69,46 +69,46 @@
   }
   
   &__title {
-    @include font-size("h4");
+    @include font-size("body-1");
     @include font-weight("bold");
     color: color("neutral", "black");
     margin: 0;
     margin-top: spacing("xs");
     
     @include breakpoint-down("md") {
-      @include font-size("subtitle-1");
+      @include font-size("body-1");
     }
   }
   
   &__description {
     color: color("neutral", "dark");
-    @include font-size("body-2");
-    margin: spacing("md") 0;
+    @include font-size("small");
+    margin: spacing("sm") 0;
     line-height: line-height("normal");
   }
   
   &__priceContainer {
-    margin-bottom: spacing("md");
+    margin-bottom: spacing("sm");
     display: flex;
     justify-content: flex-end;
   }
   
   &__price {
-    @include font-size("h5");
+    @include font-size("body-1");
     @include font-weight("bold");
     color: color("neutral", "black");
     text-align: right;
   }
   
   &__options {
-    margin: spacing("sm") 0;
+    margin: spacing("xs") 0;
     width: 100%;
     background-color: color("neutral", "lightest");
-    padding: spacing("md");
+    padding: spacing("sm");
     border-radius: border-radius("lg");
     
     &Title {
-      @include font-size("body-2");
+      @include font-size("small");
       @include font-weight("medium");
       color: color("neutral", "darkest");
       margin-bottom: spacing("xs");
@@ -117,8 +117,8 @@
   
   &__spiceOptions {
     @include flex;
-    gap: spacing("md");
-    margin-bottom: spacing("lg");
+    gap: spacing("sm");
+    margin-bottom: spacing("md");
     width: 100%;
     
     @include breakpoint-down("sm") {
@@ -131,15 +131,15 @@
     @include flex;
     align-items: center;
     gap: spacing("sm");
-    padding: spacing("md");
+    padding: spacing("xs");
     background-color: color("neutral", "darkest");
     border: 1px solid color("neutral", "darkest");
     border-radius: border-radius("lg");
     cursor: pointer;
     transition: all 0.2s ease;
-    font-size: font-size("body-2");
+    font-size: font-size("small");
     width: 100%;
-    height: 56px;
+    height: 48px;
     color: color("neutral", "white");
     
     &:hover {
@@ -191,9 +191,9 @@
     justify-content: space-between;
     align-items: center;
     gap: spacing("md");
-    margin: spacing("md") 0;
+    margin: spacing("sm") 0;
     background-color: color("neutral", "white");
-    padding: spacing("md");
+    padding: spacing("sm");
     border-radius: border-radius("lg");
     border: 1px solid color("neutral", "lighter");
   }
@@ -205,8 +205,8 @@
   }
   
   &__quantityButton {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     @include flex-center;
     background-color: color("neutral", "black");
@@ -237,19 +237,19 @@
   &__proteinOptions {
     @include flex;
     flex-wrap: wrap;
-    gap: spacing("sm");
-    margin: spacing("md") 0 0 0;
+    gap: spacing("xs");
+    margin: spacing("sm") 0 0 0;
     background-color: color("neutral", "lightest");
-    padding: spacing("md");
+    padding: spacing("sm");
     border-radius: border-radius("lg");
   }
   
   &__proteinOption {
-    padding: spacing("xs") spacing("md");
+    padding: spacing("xxs") spacing("sm");
     background-color: color("neutral", "lightest");
     border: border-width("thin") solid color("neutral", "lighter");
     border-radius: border-radius("lg");
-    @include font-size("body-2");
+    @include font-size("small");
     color: color("neutral", "darkest");
     cursor: pointer;
     transition: all 0.2s ease;
