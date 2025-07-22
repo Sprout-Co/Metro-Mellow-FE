@@ -5,6 +5,11 @@
 .foodItemModal {
   overflow: visible;
   background-color: color("neutral", "white");
+
+  @include breakpoint-down("md") {
+    max-height: 100vh;
+    overflow-y: auto;
+  }
 }
 
 .modal {
@@ -26,6 +31,12 @@
     
     @include breakpoint-down("md") {
       max-height: 280px;
+      height: 280px;
+    }
+
+    @include breakpoint-down("sm") {
+      max-height: 220px;
+      height: 220px;
     }
   }
   
@@ -40,11 +51,19 @@
     gap: spacing("sm");
     padding: 0;
     background-color: color("neutral", "white");
+
+    @include breakpoint-down("md") {
+      padding-bottom: spacing("lg");
+    }
   }
   
   &__labelSection {
     width: 100%;
     margin-bottom: spacing("md");
+
+    @include breakpoint-down("sm") {
+      margin-bottom: spacing("sm");
+    }
   }
   
   &__labelContainer {
@@ -66,6 +85,11 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+
+    @include breakpoint-down("sm") {
+      padding: spacing("xs") spacing("md");
+      font-size: font-size("xs");
+    }
   }
   
   &__spicy {
@@ -78,6 +102,11 @@
     display: inline-block;
     position: absolute;
     right: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      right: spacing("md");
+      font-size: font-size("xs");
+    }
   }
   
   &__spicyOnly {
@@ -100,6 +129,8 @@
     
     @include breakpoint-down("md") {
       @include font-size("body-1");
+      padding: 0 spacing("md");
+      margin-top: spacing("sm");
     }
   }
   
@@ -109,6 +140,10 @@
     margin: spacing("sm") 0;
     line-height: line-height("normal");
     padding: 0 spacing("lg");
+
+    @include breakpoint-down("md") {
+      padding: 0 spacing("md");
+    }
   }
   
   &__priceContainer {
@@ -116,6 +151,10 @@
     display: flex;
     justify-content: flex-end;
     padding: 0 spacing("lg");
+
+    @include breakpoint-down("md") {
+      padding: 0 spacing("md");
+    }
   }
   
   &__price {
@@ -123,6 +162,10 @@
     @include font-weight("black");
     color: color("neutral", "black");
     text-align: right;
+
+    @include breakpoint-down("md") {
+      @include font-size("body-1");
+    }
   }
   
   &__options {
@@ -137,11 +180,21 @@
     margin-left: spacing("lg");
     margin-right: spacing("lg");
     
+    @include breakpoint-down("md") {
+      margin-left: spacing("md");
+      margin-right: spacing("md");
+      max-width: calc(100% - #{spacing("md") * 2});
+    }
+    
     &Title {
       @include font-size("small");
       @include font-weight("medium");
       color: color("neutral", "darkest");
       margin-bottom: spacing("xs");
+
+      @include breakpoint-down("sm") {
+        @include font-size("xs");
+      }
     }
   }
   
@@ -151,6 +204,10 @@
     margin-bottom: spacing("md");
     width: 100%;
     justify-content: flex-start;
+    
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+    }
   }
   
   &__spiceOption {
@@ -169,6 +226,13 @@
     width: auto;
     height: 48px;
     color: color("neutral", "white");
+    
+    @include breakpoint-down("sm") {
+      width: 100%;
+      max-width: 100%;
+      min-width: unset;
+      height: 44px;
+    }
     
     &:hover {
       background-color: color("neutral", "darker");
@@ -226,12 +290,27 @@
     border: 1px solid color("neutral", "lighter");
     margin-left: spacing("lg");
     margin-right: spacing("lg");
+
+    @include breakpoint-down("md") {
+      margin-left: spacing("md");
+      margin-right: spacing("md");
+    }
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      gap: spacing("sm");
+    }
   }
   
   &__quantitySection {
     @include flex;
     align-items: center;
     gap: spacing("sm");
+
+    @include breakpoint-down("sm") {
+      width: 100%;
+      justify-content: center;
+    }
   }
   
   &__quantityButton {
@@ -254,6 +333,11 @@
     &:active {
       transform: scale(0.95);
     }
+
+    @include breakpoint-down("sm") {
+      width: 40px;
+      height: 40px;
+    }
   }
   
   &__quantity {
@@ -262,6 +346,10 @@
     color: color("neutral", "black");
     min-width: 32px;
     text-align: center;
+
+    @include breakpoint-down("sm") {
+      min-width: 40px;
+    }
   }
   
   &__proteinOptions {
@@ -274,6 +362,11 @@
     border-radius: border-radius("lg");
     margin-left: spacing("lg");
     margin-right: spacing("lg");
+
+    @include breakpoint-down("md") {
+      margin-left: spacing("md");
+      margin-right: spacing("md");
+    }
   }
   
   &__proteinOption {
@@ -295,6 +388,11 @@
       border-color: color("primary", "base");
       color: color("primary", "base");
     }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("xxs") spacing("xs");
+      @include font-size("xs");
+    }
   }
   
   &__orderButton {
@@ -304,5 +402,9 @@
     padding: spacing("sm") spacing("lg") !important;
     min-width: 160px;
     height: 48px;
+
+    @include breakpoint-down("sm") {
+      width: 100%;
+    }
   }
 } 
