@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Testimonials from '@/app/_components/Testimonials/Testimonials'
 
@@ -15,7 +15,7 @@ describe('Testimonials Component', () => {
       render(<Testimonials />)
       
       // Check testimonials section exists
-      expect(screen.getByRole('region')).toBeInTheDocument()
+      expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
     })
 
     it('displays the main title with correct text', () => {
@@ -93,7 +93,9 @@ describe('Testimonials Component', () => {
       expect(screen.getByText('Sarah Johnson')).toBeInTheDocument()
       
       // Fast forward 5 seconds
-      jest.advanceTimersByTime(5000)
+      act(() => {
+        jest.advanceTimersByTime(5000)
+      })
       
       await waitFor(() => {
         expect(screen.getByText('Michael Rodriguez')).toBeInTheDocument()
@@ -104,7 +106,9 @@ describe('Testimonials Component', () => {
       render(<Testimonials />)
       
       // Fast forward through multiple rotations
-      jest.advanceTimersByTime(15000) // 3 rotations
+      act(() => {
+        jest.advanceTimersByTime(15000) // 3 rotations
+      })
       
       await waitFor(() => {
         expect(screen.getByText('David Williams')).toBeInTheDocument()
