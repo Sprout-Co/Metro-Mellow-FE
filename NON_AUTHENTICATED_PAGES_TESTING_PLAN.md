@@ -86,8 +86,14 @@ This document outlines the comprehensive unit testing strategy for all non-authe
 
 ### 7. Cleaning Services Page (`/services/cleaning`)
 - **File**: `src/app/(routes)/(site)/services/cleaning/page.tsx`
-- **Components**: Cleaning-specific components
-- **Testing Focus**: Service packages, pricing, cleaning options
+- **Components**: 
+  - CleaningHero
+  - CleaningPromoSection
+  - CleaningServicesShowcase
+  - CleaningVideoSection
+  - CleaningStepsSection
+  - FAQSection (reused component)
+- **Testing Focus**: Service packages, pricing, cleaning options, service showcase, video content, process steps
 
 ### 8. Laundry Services Page (`/services/laundry`)
 - **File**: `src/app/(routes)/(site)/services/laundry/page.tsx`
