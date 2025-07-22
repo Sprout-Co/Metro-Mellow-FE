@@ -59,7 +59,7 @@ const itemVariants = {
 
 export default function ServiceShowcase() {
   return (
-    <section className={styles.services}>
+    <section className={styles.services} role="region">
       <div className={styles.services__container}>
         <motion.div 
           className={styles.services__header}
@@ -87,6 +87,7 @@ export default function ServiceShowcase() {
               className={styles.services__card}
               variants={itemVariants}
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
+              data-testid={service.id}
             >
               <div className={styles.services__iconWrapper}>
                 <Image 
