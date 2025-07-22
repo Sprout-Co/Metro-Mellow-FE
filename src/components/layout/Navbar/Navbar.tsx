@@ -39,17 +39,17 @@ const serviceItems = [
 
 // Main navigation items
 const navItems = [
-  { label: "HOME", href: "/" },
-  { label: "ABOUT", href: "/about" },
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
     {
-    label: "SERVICES",
+    label: "Services",
     href: "/services",
         hasDropdown: true,
     dropdownItems: serviceItems,
     },
-  { label: "FOR BUSINESS", href: "/for-business" },
-  { label: "BOOKINGS", href: "/bookings" },
-  { label: "CONTACT", href: "/contact" },
+  { label: "For Business", href: "/for-business" },
+  { label: "Bookings", href: "/bookings" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
@@ -215,7 +215,7 @@ export default function Navbar() {
                 {/* Action Button */}
                 <div className={styles.navbar__actions}>
                     <Link href="/login" className={styles.navbar__loginBtn}>
-                        LOGIN
+                        Login
                     </Link>
                 </div>
 
@@ -390,7 +390,7 @@ export default function Navbar() {
 
                             <div className={styles.navbar__mobileFooter}>
                                 <Link href="/login" className={styles.navbar__mobileButton}>
-                                    LOGIN
+                                    Login
                                 </Link>
                             </div>
                         </motion.div>

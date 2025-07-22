@@ -106,7 +106,7 @@
   &__link {
     display: flex;
     align-items: center;
-    font-size: font-size("xs");
+    font-size: font-size("small");
     font-weight: font-weight("bold");
     color: color("primary", "base");
     text-decoration: none;
@@ -283,7 +283,7 @@
     padding: spacing("sm") spacing("lg");
     border-radius: border-radius("full");
     font-weight: font-weight("semibold");
-    font-size: font-size("small");
+    font-size: font-size("body-2");
     letter-spacing: letter-spacing("wide");
     transition: all 0.3s ease;
     border: 2px solid color("primary", "base");
@@ -417,7 +417,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: font-size("body-2");
+    font-size: font-size("body-1");
     font-weight: font-weight("medium");
     color: color("neutral", "darkest");
     text-decoration: none;
@@ -535,7 +535,7 @@
     padding: spacing("md");
     border-radius: border-radius("lg");
     font-weight: font-weight("semibold");
-    font-size: font-size("body-2");
+    font-size: font-size("body-1");
     text-align: center;
     letter-spacing: letter-spacing("wide");
     transition: all 0.3s ease;
