@@ -46,10 +46,6 @@ const FoodItemModal: React.FC<FoodItemModalProps> = ({
     setSelectedProtein(protein);
   };
 
-  const formatPrice = (price: number) => {
-    return `NGN ${price.toLocaleString()}`;
-  };
-
   const handleOrder = () => {
     // Implement order functionality
     console.log("Order placed:", {
@@ -96,8 +92,10 @@ const FoodItemModal: React.FC<FoodItemModalProps> = ({
           
           <p className={styles.modal__description}>{foodItem.description}</p>
           
-          <div className={styles.modal__price}>
-            {formatPrice(foodItem.price)}
+          <div className={styles.modal__priceContainer}>
+            <div className={styles.modal__price}>
+              NGN {foodItem.price}
+            </div>
           </div>
           
           <div className={styles.modal__options}>
@@ -122,22 +120,35 @@ const FoodItemModal: React.FC<FoodItemModalProps> = ({
             </div>
           </div>
           
-          <div className={styles.modal__quantityContainer}>
-            <button 
-              className={styles.modal__quantityButton} 
-              onClick={incrementQuantity}
-            >
-              +
-            </button>
+          <div className={styles.modal__actionControls}>
+            <div className={styles.modal__quantitySection}>
+              <button 
+                className={styles.modal__quantityButton} 
+                onClick={incrementQuantity}
+                aria-label="Increase quantity"
+              >
+                +
+              </button>
+              
+              <span className={styles.modal__quantity}>{quantity}</span>
+              
+              <button 
+                className={styles.modal__quantityButton} 
+                onClick={decrementQuantity}
+                aria-label="Decrease quantity"
+              >
+                -
+              </button>
+            </div>
             
-            <div className={styles.modal__quantity}>{quantity}</div>
-            
-            <button 
-              className={styles.modal__quantityButton} 
-              onClick={decrementQuantity}
+            <Button 
+              variant="primary"
+              size="lg"
+              onClick={handleOrder}
+              className={styles.modal__orderButton}
             >
-              -
-            </button>
+              ORDER
+            </Button>
           </div>
           
           <div className={styles.modal__proteinOptions}>
@@ -153,16 +164,6 @@ const FoodItemModal: React.FC<FoodItemModalProps> = ({
               </button>
             ))}
           </div>
-          
-          <Button 
-            variant="primary"
-            size="lg"
-            fullWidth
-            onClick={handleOrder}
-            className={styles.modal__orderButton}
-          >
-            ORDER
-          </Button>
         </div>
       </div>
     </Modal>
