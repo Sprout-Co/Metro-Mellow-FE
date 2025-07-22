@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .billing {
   min-height: 100vh;
@@ -84,7 +84,7 @@
   &__content {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     min-height: 400px;
   }
 
@@ -170,22 +170,22 @@
 
     &Paid {
       background-color: rgba(map-get($colors, "success"), 0.1);
-      color: color("success");
+      color: color("status", "success");
     }
 
     &Pending {
       background-color: rgba(map-get($colors, "warning"), 0.1);
-      color: color("warning");
+      color: color("status", "warning");
     }
 
     &Failed {
-      background-color: rgba(map-get($colors, "error"), 0.1);
-      color: color("error");
+      background-color: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
     }
 
     &Active {
       background-color: rgba(map-get($colors, "success"), 0.1);
-      color: color("success");
+      color: color("status", "success");
     }
 
     &Inactive {
@@ -194,8 +194,8 @@
     }
 
     &Cancelled {
-      background-color: rgba(map-get($colors, "error"), 0.1);
-      color: color("error");
+      background-color: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
     }
   }
 
@@ -238,7 +238,7 @@
     transition: $transition-base;
 
     &:hover {
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
       transform: translateY(-3px);
     }
   }
@@ -350,7 +350,7 @@
     transition: $transition-base;
 
     &:hover {
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
       transform: translateY(-3px);
     }
   }

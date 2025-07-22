@@ -1,7 +1,7 @@
 // styles/components/cooking/CookingFAQ.module.scss
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .faq {
   padding: spacing("4xl") 0;
@@ -68,15 +68,15 @@
     background-color: color("neutral", "white");
     border-radius: border-radius("md");
     overflow: hidden;
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     transition: $transition-base;
 
     &:hover {
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
     }
 
     &--active {
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
     }
   }
 
@@ -133,7 +133,7 @@
     padding: spacing("xl");
     background-color: color("neutral", "light");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "md");
+    box-shadow: map-get($shadows, "md");
 
     p {
       font-size: map-get($font-sizes, "lg");

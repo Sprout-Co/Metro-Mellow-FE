@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .serviceForm {
   width: 100%;
@@ -10,7 +10,7 @@
 
   @include breakpoint-up("sm") {
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "md");
+    box-shadow: map-get($shadows, "md");
   }
 
   &__container {
@@ -90,7 +90,7 @@
     width: 100%;
     background-color: color("neutral", "white");
     border-radius: border-radius("md");
-    box-shadow: map-get($box-shadows, "md");
+    box-shadow: map-get($shadows, "md");
     z-index: z-index("dropdown");
     overflow: hidden;
     animation: dropdownFade 0.2s ease-in-out;
@@ -119,7 +119,7 @@
     }
 
     &--selected {
-      background-color: rgba(color("primary", "base"), 0.1);
+      background-color: color-alpha("primary", "base", 0.1);
       color: color("primary", "base");
       font-weight: map-get($font-weights, "medium");
     }

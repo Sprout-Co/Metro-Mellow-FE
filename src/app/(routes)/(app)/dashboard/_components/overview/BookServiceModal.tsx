@@ -1080,7 +1080,7 @@ export default function BookServiceModal({
               <div className={styles.modal__companyLogo}>
                 <Icon name="home" size={20} />
               </div>
-              <div className={styles.modal__companyName}>Metro Mellow</div>
+              <div className={styles.modal__companyName}>Metromellow</div>
             </div>
             <div className={styles.modal__bookingNumber}>
               #{Math.floor(100000 + Math.random() * 900000)}

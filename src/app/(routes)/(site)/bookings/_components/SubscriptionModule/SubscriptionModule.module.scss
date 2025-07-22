@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .subscription {
   padding: spacing("2xl");
@@ -159,7 +159,7 @@
 
     svg {
       font-size: 48px;
-      color: color("error");
+      color: color("status", "error");
     }
 
     h3 {
@@ -194,10 +194,10 @@
     display: flex;
     align-items: center;
     padding: spacing("md");
-    background-color: rgba(color("error"), 0.1);
-    border-left: 3px solid color("error");
+    background-color: rgba(color("status", "error"), 0.1);
+    border-left: 3px solid color("status", "error");
     border-radius: border-radius("sm");
-    color: color("error");
+    color: color("status", "error");
     gap: spacing("sm");
     font-size: map-get($font-sizes, "sm");
 

@@ -1,4 +1,4 @@
-# Metro Mellow Frontend Project Structure
+# Metromellow Frontend Project Structure
 
 This document provides a detailed overview of the project structure and explains the purpose of each directory and file.
 
@@ -158,4 +158,4 @@ metro-mellow-fe/
 - **API Integration**: GraphQL
 - **Build Tools**: PostCSS, ESLint
 
-This structure follows modern React application best practices and provides a scalable foundation for the Metro Mellow frontend application.
+This structure follows modern React application best practices and provides a scalable foundation for the Metromellow frontend application.

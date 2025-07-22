@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .customer_details {
   &__header {
@@ -119,13 +119,13 @@
   &__card {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     padding: spacing("lg");
     height: fit-content;
     transition: $transition-base;
 
     &:hover {
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
     }
 
     &--full {
@@ -256,8 +256,8 @@
     font-weight: map-get($font-weights, "medium");
 
     &--active {
-      background-color: rgba(color("success"), 0.1);
-      color: color("success");
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
     }
 
     &--inactive {
@@ -266,13 +266,13 @@
     }
 
     &--pending {
-      background-color: rgba(color("warning"), 0.1);
-      color: color("warning");
+      background-color: rgba(color("status", "warning"), 0.1);
+      color: color("status", "warning");
     }
 
     &--cancelled {
-      background-color: rgba(color("error"), 0.1);
-      color: color("error");
+      background-color: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
     }
   }
 
@@ -301,8 +301,8 @@
     gap: spacing("xs");
     padding: spacing("sm") spacing("md");
     background-color: transparent;
-    color: color("error");
-    border: 1px solid color("error");
+    color: color("status", "error");
+    border: 1px solid color("status", "error");
     border-radius: border-radius("md");
     font-size: map-get($font-sizes, "sm");
     font-weight: map-get($font-weights, "medium");
@@ -310,7 +310,7 @@
     transition: $transition-base;
 
     &:hover {
-      background-color: rgba(color("error"), 0.1);
+      background-color: rgba(color("status", "error"), 0.1);
     }
   }
 

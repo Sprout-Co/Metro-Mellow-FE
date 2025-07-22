@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .recent_bookings {
   &__title {
@@ -49,18 +49,18 @@
     }
 
     &--success {
-      background-color: rgba(color("success"), 0.1);
-      color: color("success");
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
     }
 
     &--info {
-      background-color: rgba(color("info"), 0.1);
-      color: color("info");
+      background-color: rgba(color("status", "info"), 0.1);
+      color: color("status", "info");
     }
 
     &--warning {
-      background-color: rgba(color("warning"), 0.1);
-      color: color("warning");
+      background-color: rgba(color("status", "warning"), 0.1);
+      color: color("status", "warning");
     }
   }
 

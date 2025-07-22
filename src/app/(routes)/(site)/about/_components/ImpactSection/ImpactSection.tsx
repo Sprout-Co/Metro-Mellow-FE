@@ -41,7 +41,7 @@ const ImpactSection: React.FC = () => {
         <div className={styles["impact-section__map"]}>
           <Image
             src="/images/impact/map.png"
-            alt="Metro Mellow global impact map"
+            alt="Metromellow global impact map"
             width={1200}
             height={600}
             priority

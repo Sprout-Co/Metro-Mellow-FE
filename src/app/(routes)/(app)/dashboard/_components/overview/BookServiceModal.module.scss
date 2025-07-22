@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .modal {
   position: fixed;
@@ -963,7 +963,7 @@
 
   &__inclusion {
     padding: 14px 16px;
-    background-color: rgba(color("success"), 0.08);
+    background-color: rgba(color("status", "success"), 0.08);
     border-radius: 12px;
     margin-bottom: 12px;
     display: flex;
@@ -981,7 +981,7 @@
     }
 
     svg {
-      color: color("success");
+      color: color("status", "success");
       flex-shrink: 0;
       margin-top: 2px;
     }
@@ -1348,22 +1348,22 @@
     text-transform: capitalize;
 
     &--one-off {
-      background-color: rgba(map-get($colors, "info"), 0.1);
-      color: map-get($colors, "info");
+      background-color: color-alpha("status", "info", 0.1);
+      color: color("status", "info");
     }
 
     &--weekly {
-      background-color: rgba(map-get($colors, "success"), 0.1);
-      color: map-get($colors, "success");
+      background-color: color-alpha("status", "success", 0.1);
+      color: color("status", "success");
     }
 
     &--bi-weekly {
-      background-color: rgba(map-get($colors, "warning"), 0.1);
-      color: map-get($colors, "warning");
+      background-color: color-alpha("status", "warning", 0.1);
+      color: color("status", "warning");
     }
 
     &--monthly {
-      background-color: rgba(map-get($colors, "primary", "light"), 0.1);
+      background-color: color-alpha("primary", "light", 0.1);
       color: color("primary", "light");
     }
   }
@@ -1374,17 +1374,17 @@
     gap: 16px;
     background: linear-gradient(
       to right,
-      rgba(map-get($colors, "success"), 0.05),
-      rgba(map-get($colors, "success"), 0.02)
+      color-alpha("status", "success", 0.05),
+      color-alpha("status", "success", 0.02)
     );
     border-radius: 12px;
     padding: 16px;
-    border-left: 3px solid map-get($colors, "success");
+    border-left: 3px solid color("status", "success");
     transition: all 0.3s ease;
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(map-get($colors, "success"), 0.1);
+      box-shadow: 0 4px 12px color-alpha("status", "success", 0.1);
     }
   }
 
@@ -1392,11 +1392,11 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background-color: rgba(map-get($colors, "success"), 0.1);
+    background-color: color-alpha("status", "success", 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: map-get($colors, "success");
+    color: color("status", "success");
     flex-shrink: 0;
   }
 
@@ -1519,8 +1519,8 @@
   &__laundryBags {
     background: linear-gradient(
       135deg,
-      map-get($colors, "warning"),
-      adjust-color(map-get($colors, "warning"), $lightness: 10%)
+      color("status", "warning"),
+      adjust-color(color("status", "warning"), $lightness: 10%)
     );
     color: color("neutral", "white");
     width: 80px;
@@ -1530,7 +1530,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 10px rgba(map-get($colors, "warning"), 0.3);
+    box-shadow: 0 4px 10px color-alpha("status", "warning", 0.3);
     flex-shrink: 0;
   }
 
@@ -1614,13 +1614,13 @@
     border-radius: 12px;
     background: linear-gradient(
       135deg,
-      rgba(map-get($colors, "info"), 0.15),
-      rgba(map-get($colors, "info"), 0.05)
+      color-alpha("status", "info", 0.15),
+      color-alpha("status", "info", 0.05)
     );
     display: flex;
     align-items: center;
     justify-content: center;
-    color: map-get($colors, "info");
+    color: color("status", "info");
     flex-shrink: 0;
   }
 
@@ -1828,17 +1828,17 @@
     gap: 10px;
     margin-top: 20px;
     padding: 16px;
-    background-color: rgba(map-get($colors, "info"), 0.05);
+    background-color: color-alpha("status", "info", 0.05);
     border-radius: 12px;
-    border-left: 3px solid map-get($colors, "info");
+    border-left: 3px solid color("status", "info");
     transition: all 0.2s ease;
 
     &:hover {
-      background-color: rgba(map-get($colors, "info"), 0.08);
+      background-color: color-alpha("status", "info", 0.08);
     }
 
     svg {
-      color: map-get($colors, "info");
+      color: color("status", "info");
       flex-shrink: 0;
       margin-top: 2px;
     }
@@ -1862,18 +1862,18 @@
     align-items: flex-start;
     gap: 10px;
     padding: 16px;
-    background-color: rgba(map-get($colors, "success"), 0.05);
+    background-color: color-alpha("status", "success", 0.05);
     border-radius: 12px;
     transition: all 0.2s ease;
 
     &:hover {
       transform: translateY(-2px);
-      background-color: rgba(map-get($colors, "success"), 0.08);
-      box-shadow: 0 4px 12px rgba(map-get($colors, "success"), 0.1);
+      background-color: color-alpha("status", "success", 0.08);
+      box-shadow: 0 4px 12px color-alpha("status", "success", 0.1);
     }
 
     svg {
-      color: map-get($colors, "success");
+      color: color("status", "success");
       flex-shrink: 0;
       margin-top: 2px;
     }

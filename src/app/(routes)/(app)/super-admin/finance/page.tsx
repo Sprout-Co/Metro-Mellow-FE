@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 export default function FinancialAdminPage() {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedYear, setSelectedYear] = useState("2024");
-  const [selectedQuarter, setSelectedQuarter] = useState("Q2");
+  const [selectedQuarter, setSelectedQuarter] = useState("Q3");
 
   // Mock financial overview data
   const overviewData = {
@@ -209,7 +209,7 @@ export default function FinancialAdminPage() {
                 className={styles.finance_page__select}
               >
                 <option value="Q1">Q1 (Jan-Mar)</option>
-                <option value="Q2">Q2 (Apr-Jun)</option>
+                <option value="Q3">Q3 (Apr-Jun)</option>
                 <option value="Q3">Q3 (Jul-Sep)</option>
                 <option value="Q4">Q4 (Oct-Dec)</option>
                 <option value="YTD">Year to Date</option>

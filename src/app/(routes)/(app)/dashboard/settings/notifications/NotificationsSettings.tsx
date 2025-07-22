@@ -200,7 +200,7 @@ export default function NotificationsSettings() {
           Notification Settings
         </h1>
         <p className={styles.notificationsSettings__subtitle}>
-          Customize how and when you receive notifications from Metro Mellow
+          Customize how and when you receive notifications from Metromellow
         </p>
       </div>
 

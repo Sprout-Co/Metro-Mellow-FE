@@ -28,6 +28,22 @@ const UserRole = {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // ✅ Much safer: Explicit control
+  if (process.env.MAINTENANCE_MODE === "true") {
+    const isWelcomePage = pathname === Routes.WELCOME;
+    const isApiRoute = pathname.startsWith("/api");
+    const isStaticAsset =
+      pathname.startsWith("/_next") ||
+      pathname.startsWith("/images") ||
+      pathname.startsWith("/videos") ||
+      pathname.startsWith("/public") ||
+      pathname === "/favicon.ico";
+
+    if (!isWelcomePage && !isApiRoute && !isStaticAsset) {
+      return NextResponse.redirect(new URL(Routes.WELCOME, request.url));
+    }
+  }
+
   // Get the JWT token from the auth-token cookie
   const authToken = request.cookies.get("auth-token")?.value;
 

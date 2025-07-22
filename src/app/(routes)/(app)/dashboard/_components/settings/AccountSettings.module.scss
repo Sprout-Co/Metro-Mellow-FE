@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .settings {
   &__header {
@@ -41,7 +41,7 @@
   &__sidebar {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     overflow: hidden;
 
     @include breakpoint-down("lg") {
@@ -104,7 +104,7 @@
   &__main {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     padding: spacing("xl");
     min-height: 70vh;
   }
@@ -446,7 +446,7 @@
   }
 
   &__sessionCurrent {
-    color: color("success");
+    color: color("status", "success");
     font-weight: map-get($font-weights, "medium");
     margin-bottom: spacing("xxs");
   }
@@ -460,7 +460,7 @@
     align-items: center;
     background: none;
     border: none;
-    color: color("error");
+    color: color("status", "error");
     font-size: map-get($font-sizes, "sm");
     cursor: pointer;
 

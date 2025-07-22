@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .serviceCards {
   padding: spacing("3xl") spacing("md");
@@ -130,7 +130,7 @@
 
     &:hover {
       transform: translateY(-5px);
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
       border-color: color("primary", "light");
 
       .serviceCards__iconWrapper {

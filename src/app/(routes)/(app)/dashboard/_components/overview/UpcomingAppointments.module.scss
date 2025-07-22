@@ -1,6 +1,6 @@
-@import "@/styles/abstracts-old/variables";
-@import "@/styles/abstracts-old/mixins";
-@import "@/styles/abstracts-old/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .appointments {
   position: relative;
@@ -74,7 +74,7 @@
     &_active {
       background-color: color("neutral", "white");
       color: color("primary", "base");
-      box-shadow: map-get($box-shadows, "xs");
+      box-shadow: map-get($shadows, "xs");
     }
   }
 
@@ -89,11 +89,11 @@
     border-radius: border-radius("lg");
     border: 1px solid color("neutral", "lighter");
     overflow: hidden;
-    box-shadow: map-get($box-shadows, "sm");
+    box-shadow: map-get($shadows, "sm");
     transition: $transition-base;
 
     &:hover {
-      box-shadow: map-get($box-shadows, "md");
+      box-shadow: map-get($shadows, "md");
     }
   }
 
@@ -136,8 +136,8 @@
     }
 
     &--imminent {
-      background-color: rgba(color("warning"), 0.1);
-      color: color("warning");
+      background-color: rgba(color("status", "warning"), 0.1);
+      color: color("status", "warning");
     }
 
     @include breakpoint-down("sm") {
@@ -206,13 +206,13 @@
     flex-shrink: 0;
 
     &--confirmed {
-      background-color: rgba(color("success"), 0.1);
-      color: color("success");
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
     }
 
     &--pending {
-      background-color: rgba(color("warning"), 0.1);
-      color: color("warning");
+      background-color: rgba(color("status", "warning"), 0.1);
+      color: color("status", "warning");
     }
 
     &--in_progress {
@@ -221,8 +221,8 @@
     }
 
     &--cancelled {
-      background-color: rgba(color("error"), 0.1);
-      color: color("error");
+      background-color: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
     }
 
     &--completed {
@@ -276,8 +276,8 @@
     color: color("primary", "base");
 
     &--imminent {
-      background-color: rgba(color("warning"), 0.1);
-      color: color("warning");
+      background-color: rgba(color("status", "warning"), 0.1);
+      color: color("status", "warning");
     }
   }
 
@@ -390,7 +390,7 @@
     display: flex;
     align-items: center;
     gap: spacing("xs");
-    color: color("warning");
+    color: color("status", "warning");
     font-size: map-get($font-sizes, "sm");
 
     svg {
@@ -461,11 +461,11 @@
 
     &--cancel {
       background-color: transparent;
-      color: color("error");
-      border: 1px solid rgba(color("error"), 0.3);
+      color: color("status", "error");
+      border: 1px solid rgba(color("status", "error"), 0.3);
 
       &:hover {
-        background-color: rgba(color("error"), 0.05);
+        background-color: rgba(color("status", "error"), 0.05);
       }
     }
 
@@ -480,12 +480,12 @@
     }
 
     &--confirm {
-      background-color: color("error");
+      background-color: color("status", "error");
       color: color("neutral", "white");
       border: none;
 
       &:hover {
-        background-color: darken(color("error"), 10%);
+        background-color: darken(color("status", "error"), 10%);
       }
 
       &:disabled {
@@ -634,13 +634,13 @@
     align-items: center;
     text-align: center;
     padding: spacing("2xl");
-    background-color: rgba(color("error"), 0.05);
+    background-color: rgba(color("status", "error"), 0.05);
     border-radius: border-radius("lg");
     color: color("neutral", "darker");
   }
 
   &__errorIcon {
-    color: color("error");
+    color: color("status", "error");
     margin-bottom: spacing("md");
 
     svg {
@@ -653,7 +653,7 @@
     display: inline-flex;
     align-items: center;
     gap: spacing("xs");
-    background-color: color("error");
+    background-color: color("status", "error");
     color: color("neutral", "white");
     padding: spacing("sm") spacing("lg");
     border: none;
@@ -664,7 +664,7 @@
     transition: $transition-base;
 
     &:hover {
-      background-color: darken(color("error"), 10%);
+      background-color: darken(color("status", "error"), 10%);
     }
   }
 
@@ -689,7 +689,7 @@
     width: 64px;
     height: 64px;
     margin: 0 auto spacing("lg");
-    color: color("success");
+    color: color("status", "success");
 
     svg {
       width: 100%;

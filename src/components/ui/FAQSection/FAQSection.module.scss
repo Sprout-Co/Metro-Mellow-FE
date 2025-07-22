@@ -140,6 +140,8 @@
       @include body-2;
     }
 
+    color: color("neutral", "white");
+
     &:hover {
       color: color("secondary", "light");
     }
@@ -188,5 +190,7 @@
       @include font-size("small");
       padding-left: spacing("xl");
     }
+    color: color("neutral", "white");
+    font-style: italic;
   }
 }
