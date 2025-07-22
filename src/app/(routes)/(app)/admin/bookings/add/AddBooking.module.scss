@@ -1,0 +1,1009 @@
+@import "abstracts/variables";
+@import "abstracts/mixins";
+@import "abstracts/functions";
+
+.add_booking {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 0;
+  position: relative;
+
+  // Add subtle background pattern
+  &::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(
+        circle at 20% 50%,
+        color-alpha("primary", "base", 0.02) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        color-alpha("secondary", "base", 0.02) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 40% 80%,
+        color-alpha("status", "info", 0.02) 0%,
+        transparent 50%
+      );
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 8px;
+    position: relative;
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    // Add decorative element
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -16px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(
+        90deg,
+        color("primary"),
+        color-alpha("primary", "base", 0.3)
+      );
+      border-radius: 3px;
+    }
+  }
+
+  &__title_area {
+    flex: 1;
+  }
+
+  &__title {
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(
+      135deg,
+      color("neutral", "black"),
+      color("primary")
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: color("neutral", "black"); // Fallback
+    margin: 0 0 8px 0;
+    line-height: 1.2;
+    animation: slideInLeft 0.8s ease-out;
+
+    @include breakpoint-down("md") {
+      font-size: 24px;
+    }
+  }
+
+  &__subtitle {
+    font-size: 16px;
+    color: color("neutral", "dark");
+    margin: 0;
+    line-height: 1.4;
+    animation: slideInLeft 0.8s ease-out 0.2s both;
+
+    @include breakpoint-down("md") {
+      font-size: 14px;
+    }
+  }
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 24px;
+    gap: 16px;
+
+    svg {
+      animation:
+        spin 1s linear infinite,
+        pulse 2s ease-in-out infinite alternate;
+      color: color("primary");
+      filter: drop-shadow(0 4px 8px color-alpha("primary", "base", 0.3));
+    }
+
+    p {
+      color: color("neutral", "dark");
+      font-size: 16px;
+      margin: 0;
+      animation: fadeInUp 0.6s ease-out 0.3s both;
+    }
+  }
+
+  &__error {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: linear-gradient(
+      135deg,
+      color-alpha("status", "error", 0.1),
+      color-alpha("status", "error", 0.05)
+    );
+    border: 1px solid color("status", "error");
+    border-radius: 12px;
+    color: color-darken("status", "error", 10%);
+    font-size: 14px;
+    margin-bottom: 16px;
+    animation:
+      slideInDown 0.4s ease-out,
+      shake 0.6s ease-in-out 0.4s;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px color-alpha("status", "error", 0.15);
+
+    svg {
+      flex-shrink: 0;
+      color: color("status", "error");
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    span {
+      flex: 1;
+      font-weight: 500;
+    }
+
+    button {
+      background: none;
+      border: none;
+      color: color("status", "error");
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        background-color: color("status", "error");
+        color: white;
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  // Form Layout
+  &__form_grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+
+    @include breakpoint-down("lg") {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+
+  &__section {
+    padding: 24px !important;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+      );
+      transition: left 0.6s ease-in-out;
+    }
+
+    &:hover {
+      // transform: translateY(-4px);
+      box-shadow:
+        0 16px 48px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      border-color: color-alpha("primary", "base", 0.3);
+
+      &::before {
+        left: 100%;
+      }
+    }
+
+    &:focus-within {
+      border-color: color("primary");
+      box-shadow:
+        0 16px 48px rgba(0, 0, 0, 0.12),
+        0 0 0 4px color-alpha("primary", "base", 0.1);
+    }
+
+    @include breakpoint-down("md") {
+      padding: 20px !important;
+    }
+  }
+
+  &__section_title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    color: color("neutral", "black");
+    margin: 0 0 20px 0;
+    padding-bottom: 12px;
+    border-bottom: 2px solid transparent;
+
+    svg {
+      color: white;
+      background: linear-gradient(
+        135deg,
+        color("primary"),
+        color-darken("primary", "base", 10%)
+      );
+      padding: 8px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px color-alpha("primary", "base", 0.3);
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 6px 16px color-alpha("primary", "base", 0.4);
+      }
+    }
+  }
+
+  // Form Elements
+  &__field {
+    margin-bottom: 20px;
+    animation: fadeInUp 0.6s ease-out;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: color("neutral", "black");
+    margin-bottom: 8px;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        color("primary"),
+        color-alpha("primary", "base", 0.3)
+      );
+      transition: width 0.3s ease;
+    }
+
+    &:focus-within::after {
+      width: 30px;
+    }
+  }
+
+  &__input,
+  &__select,
+  &__textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid transparent;
+    background:
+      linear-gradient(white, white) padding-box,
+      linear-gradient(
+          135deg,
+          color("neutral", "light"),
+          color-alpha("primary", "base", 0.2)
+        )
+        border-box;
+    border-radius: 12px;
+    font-size: 14px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+
+    &:focus {
+      outline: none;
+      background:
+        linear-gradient(white, white) padding-box,
+        linear-gradient(
+            135deg,
+            color("primary"),
+            color-alpha("primary", "base", 0.6)
+          )
+          border-box;
+      box-shadow:
+        0 8px 24px color-alpha("primary", "base", 0.15),
+        inset 0 1px 4px color-alpha("primary", "base", 0.1);
+      transform: translateY(-2px);
+    }
+
+    &::placeholder {
+      color: color("neutral", "medium");
+      transition: color 0.3s ease;
+    }
+
+    &:focus::placeholder {
+      color: color-alpha("neutral", "medium", 0.6);
+    }
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+  }
+
+  &__form_row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // Customer Search
+  &__search {
+    position: relative;
+    margin-bottom: 16px;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 44px;
+      width: 1px;
+      height: 20px;
+      background: color("neutral", "light");
+      transform: translateY(-50%);
+    }
+
+    svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: color("primary");
+      z-index: 2;
+      transition: all 0.3s ease;
+    }
+
+    &:focus-within svg {
+      color: color("primary");
+      transform: translateY(-50%) scale(1.1);
+    }
+  }
+
+  &__search_input {
+    padding-left: 50px;
+    background: linear-gradient(
+      135deg,
+      color-alpha("primary", "base", 0.02),
+      color-alpha("primary", "base", 0.05)
+    );
+
+    &:focus {
+      background: linear-gradient(
+        135deg,
+        color-alpha("primary", "base", 0.05),
+        color-alpha("primary", "base", 0.08)
+      );
+    }
+  }
+
+  &__customer_list {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 2px solid transparent;
+    background:
+      linear-gradient(white, white) padding-box,
+      linear-gradient(
+          135deg,
+          color("neutral", "light"),
+          color-alpha("primary", "base", 0.1)
+        )
+        border-box;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+
+    // Custom scrollbar
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: color-alpha("neutral", "light", 0.3);
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: linear-gradient(
+        180deg,
+        color("primary"),
+        color-alpha("primary", "base", 0.7)
+      );
+      border-radius: 3px;
+
+      &:hover {
+        background: color("primary");
+      }
+    }
+  }
+
+  &__customer_option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-bottom: 1px solid color-alpha("neutral", "light", 0.5);
+    position: relative;
+    background: transparent;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0;
+      background: linear-gradient(
+        135deg,
+        color("primary"),
+        color-alpha("primary", "base", 0.7)
+      );
+      transition: width 0.3s ease;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      // transform: translateX(4px);
+
+      &::before {
+        width: 3px;
+      }
+
+      .add_booking__customer_avatar {
+        transform: scale(1.1);
+        box-shadow: 0 6px 16px color-alpha("primary", "base", 0.3);
+      }
+    }
+
+    &.selected {
+      background: linear-gradient(
+        135deg,
+        color-alpha("primary", "base", 0.1),
+        color-alpha("primary", "base", 0.05)
+      );
+      border-color: color-alpha("primary", "base", 0.3);
+
+      &::before {
+        width: 4px;
+      }
+
+      .add_booking__customer_avatar {
+        background: linear-gradient(
+          135deg,
+          color("primary"),
+          color-darken("primary", "base", 10%)
+        );
+        box-shadow: 0 4px 12px color-alpha("primary", "base", 0.4);
+      }
+    }
+  }
+
+  &__radio {
+    margin: 0;
+    margin-right: 8px;
+    accent-color: color("primary");
+  }
+
+  &__customer_avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(
+      135deg,
+      color("primary"),
+      color-alpha("primary", "base", 0.8)
+    );
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    flex-shrink: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 8px color-alpha("primary", "base", 0.2);
+  }
+
+  &__customer_info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__customer_name {
+    font-size: 14px;
+    font-weight: 600;
+    color: color("neutral", "black");
+    margin: 0 0 4px 0;
+    line-height: 1.2;
+  }
+
+  &__customer_email {
+    font-size: 12px;
+    color: color("neutral", "dark");
+    margin: 0 0 2px 0;
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__customer_phone {
+    font-size: 12px;
+    color: color("neutral", "dark");
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  // Radio Groups
+  &__radio_group {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+
+  &__radio_option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: color("neutral", "black");
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+
+    &:hover {
+      background: color-alpha("primary", "base", 0.05);
+      border-color: color-alpha("primary", "base", 0.2);
+    }
+
+    input[type="radio"] {
+      margin: 0;
+      accent-color: color("primary");
+
+      &:checked + span {
+        color: color("primary");
+        font-weight: 600;
+      }
+    }
+
+    &:has(input:checked) {
+      background: color-alpha("primary", "base", 0.1);
+      border-color: color("primary");
+    }
+  }
+
+  // Counters
+  &__counter_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__counter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border: 2px solid transparent;
+    background:
+      linear-gradient(white, white) padding-box,
+      linear-gradient(
+          135deg,
+          color("neutral", "light"),
+          color-alpha("primary", "base", 0.1)
+        )
+        border-box;
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      background:
+        linear-gradient(
+            color-alpha("primary", "base", 0.02),
+            color-alpha("primary", "base", 0.05)
+          )
+          padding-box,
+        linear-gradient(
+            135deg,
+            color("primary"),
+            color-alpha("primary", "base", 0.6)
+          )
+          border-box;
+    }
+  }
+
+  &__counter_label {
+    font-size: 14px;
+    font-weight: 500;
+    color: color("neutral", "black");
+    flex: 1;
+  }
+
+  &__counter_controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__counter_btn {
+    width: 32px;
+    height: 32px;
+    border: 2px solid transparent;
+    background:
+      linear-gradient(white, white) padding-box,
+      linear-gradient(
+          135deg,
+          color("neutral", "light"),
+          color-alpha("primary", "base", 0.2)
+        )
+        border-box;
+    border-radius: 50%;
+    color: color("neutral", "black");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+
+    &:hover:not(:disabled) {
+      background:
+        linear-gradient(color("primary"), color("primary")) padding-box,
+        linear-gradient(
+            135deg,
+            color("primary"),
+            color-darken("primary", "base", 10%)
+          )
+          border-box;
+      color: white;
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px color-alpha("primary", "base", 0.3);
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.95);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      filter: grayscale(1);
+    }
+
+    svg {
+      font-size: 14px;
+      transition: transform 0.2s ease;
+    }
+  }
+
+  &__counter_value {
+    font-size: 16px;
+    font-weight: 700;
+    color: color("primary");
+    min-width: 24px;
+    text-align: center;
+    padding: 4px 8px;
+    background: linear-gradient(
+      135deg,
+      color-alpha("primary", "base", 0.1),
+      color-alpha("primary", "base", 0.05)
+    );
+    border-radius: 6px;
+    transition: all 0.3s ease;
+  }
+
+  // Price Summary
+  &__price_summary {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__price_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: color("neutral", "black");
+    padding: 8px 0;
+    border-bottom: 1px solid color-alpha("neutral", "light", 0.5);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: color-alpha("primary", "base", 0.02);
+      padding-left: 8px;
+      padding-right: 8px;
+      border-radius: 6px;
+    }
+
+    span:first-child {
+      font-weight: 500;
+    }
+
+    span:last-child {
+      font-weight: 600;
+      background: linear-gradient(
+        135deg,
+        color("neutral", "black"),
+        color("primary")
+      );
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  &__price_total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 12px;
+    margin-top: 8px;
+    background: linear-gradient(
+      135deg,
+      color-alpha("primary", "base", 0.1),
+      color-alpha("primary", "base", 0.05)
+    );
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    color: color("neutral", "black");
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+      );
+      transition: left 0.6s ease;
+    }
+
+    &:hover::before {
+      left: 100%;
+    }
+
+    span:last-child {
+      color: color("primary");
+      font-size: 20px;
+      font-weight: 800;
+      text-shadow: 0 2px 4px color-alpha("primary", "base", 0.2);
+      animation: priceGlow 2s ease-in-out infinite alternate;
+    }
+  }
+
+  // Footer
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: spacing("md");
+    border-radius: border-radius("md");
+    background:
+      linear-gradient(white, white) padding-box,
+      linear-gradient(
+          90deg,
+          color("neutral", "light"),
+          color-alpha("primary", "base", 0.2),
+          color("neutral", "light")
+        )
+        border-box;
+    animation: fadeInUp 0.8s ease-out 0.6s both;
+
+    @include breakpoint-down("md") {
+      flex-direction: column-reverse;
+      align-items: stretch;
+    }
+  }
+}
+
+// Animations
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes priceGlow {
+  0% {
+    text-shadow: 0 2px 4px color-alpha("primary", "base", 0.2);
+  }
+  100% {
+    text-shadow:
+      0 2px 8px color-alpha("primary", "base", 0.4),
+      0 0 12px color-alpha("primary", "base", 0.2);
+  }
+}
+
+@keyframes priceChange {
+  0% {
+    transform: scale(1);
+    color: color("primary");
+  }
+  50% {
+    transform: scale(1.1);
+    color: color("status", "success");
+  }
+  100% {
+    transform: scale(1);
+    color: color("primary");
+  }
+}
+
+.price_changed {
+  animation: priceChange 0.6s ease-in-out;
+}
+
+// Enhanced responsive design
+@include breakpoint-down("sm") {
+  .add_booking {
+    gap: 16px;
+
+    &__section {
+      padding: 16px !important;
+      border-radius: 12px;
+    }
+
+    &__counter_btn {
+      width: 28px;
+      height: 28px;
+    }
+
+    &__customer_avatar {
+      width: 36px;
+      height: 36px;
+      font-size: 14px;
+    }
+  }
+}
