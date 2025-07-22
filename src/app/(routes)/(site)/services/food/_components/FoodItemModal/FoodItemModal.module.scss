@@ -38,8 +38,13 @@
   &__details {
     @include flex-column;
     gap: spacing("sm");
-    padding: spacing("lg");
+    padding: 0;
     background-color: color("neutral", "white");
+  }
+  
+  &__labelSection {
+    width: 100%;
+    margin-bottom: spacing("md");
   }
   
   &__labelContainer {
@@ -51,21 +56,36 @@
   }
   
   &__topRated {
-    background-color: color-alpha("accent", "lighter", 0.4);
+    background-color: color-alpha("accent", "lightest", 0.6);
     color: color("neutral", "black");
-    font-size: font-size("xs");
-    padding: spacing("xxs") spacing("sm");
-    border-radius: border-radius("md");
+    font-size: font-size("small");
+    padding: spacing("sm") spacing("lg");
     @include font-weight("medium");
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   
   &__spicy {
-    background-color: color-alpha("secondary", "lighter", 0.4);
-    color: color("secondary", "dark");
+    background-color: color("accent", "base");
+    color: color("neutral", "darkest");
     font-size: font-size("xs");
-    padding: spacing("xxs") spacing("sm");
-    border-radius: border-radius("md");
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("sm");
     @include font-weight("medium");
+    display: inline-block;
+  }
+  
+  &__spicyOnly {
+    background-color: color("accent", "base");
+    color: color("neutral", "darkest");
+    font-size: font-size("xs");
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("sm");
+    @include font-weight("medium");
+    display: inline-block;
+    align-self: flex-end;
   }
   
   &__title {
@@ -73,7 +93,7 @@
     @include font-weight("bold");
     color: color("neutral", "black");
     margin: 0;
-    margin-top: spacing("xs");
+    padding: 0 spacing("lg");
     
     @include breakpoint-down("md") {
       @include font-size("body-1");
@@ -85,12 +105,14 @@
     @include font-size("small");
     margin: spacing("sm") 0;
     line-height: line-height("normal");
+    padding: 0 spacing("lg");
   }
   
   &__priceContainer {
     margin-bottom: spacing("sm");
     display: flex;
     justify-content: flex-end;
+    padding: 0 spacing("lg");
   }
   
   &__price {
@@ -106,6 +128,8 @@
     background-color: color("neutral", "lightest");
     padding: spacing("sm");
     border-radius: border-radius("lg");
+    margin-left: spacing("lg");
+    margin-right: spacing("lg");
     
     &Title {
       @include font-size("small");
@@ -196,6 +220,8 @@
     padding: spacing("sm");
     border-radius: border-radius("lg");
     border: 1px solid color("neutral", "lighter");
+    margin-left: spacing("lg");
+    margin-right: spacing("lg");
   }
   
   &__quantitySection {
@@ -242,6 +268,8 @@
     background-color: color("neutral", "lightest");
     padding: spacing("sm");
     border-radius: border-radius("lg");
+    margin-left: spacing("lg");
+    margin-right: spacing("lg");
   }
   
   &__proteinOption {
