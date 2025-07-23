@@ -10,7 +10,7 @@
   height: 100%;
   z-index: z-index("modal");
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
 
   &__backdrop {
@@ -25,19 +25,20 @@
 
   &__container {
     position: relative;
-    width: 100%;
-    max-width: 480px;
-    height: 100vh;
+    width: 92%;
+    max-width: 500px;
+    max-height: 90vh;
     background-color: color("neutral", "white");
-    border-radius: border-radius("xl") 0 0 border-radius("xl");
+    border-radius: border-radius("xl");
     box-shadow: map-get($shadows, "xl");
     display: flex;
     flex-direction: column;
     overflow: hidden;
 
     @include breakpoint-down("sm") {
+      width: 95%;
       max-width: 100%;
-      border-radius: 0;
+      max-height: 95vh;
     }
   }
 

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Modal from "@/components/ui/Modal/Modal";
 import { Button } from "@/components/ui/Button/Button";
 import CheckoutModal, { CheckoutFormData } from "@/components/ui/CheckoutModal/CheckoutModal";
+import ServiceDetailsSlidePanel from "@/components/ui/ServiceDetailsSlidePanel/ServiceDetailsSlidePanel";
 import styles from "./CleaningServiceModal.module.scss";
 
 interface RoomCounter {
@@ -65,6 +66,9 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
     }
     setRoomCounters(updatedCounters);
   };
+
+  // Calculate total room count
+  const totalRoomCount = roomCounters.reduce((total, room) => total + room.count, 0);
 
   // Handle order submission
   const handleOrderSubmit = () => {
@@ -206,6 +210,17 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
         isOpen={isCheckoutModalOpen}
         onClose={handleCheckoutClose}
         onContinue={handleCheckoutComplete}
+      />
+
+      {/* Service Details Slide Panel */}
+      <ServiceDetailsSlidePanel
+        isOpen={isCheckoutModalOpen}
+        serviceTitle={serviceTitle}
+        serviceDescription={serviceDescription}
+        servicePrice={servicePrice}
+        serviceImage={serviceImage}
+        apartmentType={apartmentType}
+        roomCount={totalRoomCount}
       />
     </Modal>
   );

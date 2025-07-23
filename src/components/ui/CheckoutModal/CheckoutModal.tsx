@@ -118,13 +118,12 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
           {/* Modal Content */}
           <motion.div
             className={styles.checkoutModal__container}
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ 
-              type: "spring", 
-              damping: 30, 
-              stiffness: 300 
+              duration: 0.3,
+              ease: "easeOut"
             }}
           >
             {/* Header */}
