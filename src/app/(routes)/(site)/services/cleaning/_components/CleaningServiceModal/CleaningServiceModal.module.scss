@@ -1,0 +1,186 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.cleaningServiceModal {
+  // Modal specific styles
+  :global(.modal__content) {
+    padding: 0;
+  }
+}
+
+.modal {
+  &__container {
+    display: flex;
+    flex-direction: column;
+
+    @include breakpoint-up("md") {
+      flex-direction: row;
+      min-height: 80vh;
+    }
+  }
+
+  &__imageSection {
+    flex: 1;
+    position: relative;
+    height: 230px;
+
+    @include breakpoint-up("md") {
+      height: 480px;
+      max-height: 70vh;
+      max-width: 40%;
+    }
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__detailsSection {
+    flex: 1;
+    padding: spacing("xl");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+  }
+
+  &__title {
+    font-size: font-size("2xl");
+    font-weight: font-weight("bold");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xs");
+
+    @include breakpoint-up("lg") {
+      font-size: font-size("4xl");
+    }
+  }
+
+  &__description {
+    font-size: font-size("body-2");
+    color: color("neutral", "darker");
+    line-height: line-height("relaxed");
+    margin-bottom: spacing("lg");
+  }
+
+  &__price {
+    font-size: font-size("3xl");
+    font-weight: font-weight("bold");
+    color: color("neutral", "darkest");
+    margin-top: spacing("md");
+    margin-bottom: spacing("xl");
+    text-align: right;
+  }
+
+  &__sectionTitle {
+    font-size: font-size("sm");
+    font-weight: font-weight("medium");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("md");
+  }
+
+  &__apartmentTypeSection {
+    margin-bottom: spacing("xl");
+  }
+
+  &__apartmentTypes {
+    display: flex;
+    gap: spacing("md");
+    flex-wrap: wrap;
+  }
+
+  &__apartmentType {
+    flex: 1;
+    min-width: 150px;
+    padding: spacing("md");
+    border: map-get($border-width, "thin") solid color("neutral", "light");
+    border-radius: border-radius("lg");
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      border-color: color("primary", "base");
+    }
+
+    &_selected {
+      background-color: color-alpha("primary", "base", 0.05);
+      border-color: color("primary", "base");
+    }
+  }
+
+  &__radioInput {
+    margin-right: spacing("sm");
+    accent-color: color("primary", "base");
+  }
+
+  &__roomCountersSection {
+    margin-top: spacing("lg");
+  }
+
+  &__roomCountersGrid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: spacing("md");
+    
+    @include breakpoint-up("sm") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    @include breakpoint-up("lg") {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  &__roomCounter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("sm") spacing("md");
+    border-radius: border-radius("md");
+    background-color: color("neutral", "lightest");
+  }
+
+  &__roomName {
+    font-weight: font-weight("medium");
+    color: color("neutral", "darkest");
+  }
+
+  &__counterControls {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+  }
+
+  &__counterButton {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background-color: color("neutral", "darker");
+    color: color("neutral", "white");
+    font-weight: font-weight("bold");
+    font-size: font-size("lg");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover {
+      background-color: color("primary", "base");
+    }
+  }
+
+  &__counterValue {
+    min-width: 20px;
+    text-align: center;
+    font-weight: font-weight("bold");
+  }
+
+  &__orderButtonContainer {
+    margin-top: spacing("xl");
+  }
+} 

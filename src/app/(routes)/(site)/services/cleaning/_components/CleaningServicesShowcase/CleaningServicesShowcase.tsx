@@ -1,11 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import styles from "./CleaningServicesShowcase.module.scss";
 import { Button } from "@/components/ui/Button/Button";
-import { Routes } from "@/constants/routes";
+import CleaningServiceModal from "../CleaningServiceModal/CleaningServiceModal";
 
 // Service data
 const cleaningServices = [
@@ -21,6 +21,8 @@ const cleaningServices = [
       "Bathroom Cleaning",
       "Kitchen Cleaning",
     ],
+    price: 2950,
+    image: "/images/cleaning/cleaning-detail.jpg"
   },
   {
     id: "deep",
@@ -34,6 +36,8 @@ const cleaningServices = [
       "Baseboards",
       "Light Fixtures",
     ],
+    price: 4950,
+    image: "/images/cleaning/deep-cleaning.jpg"
   },
   {
     id: "movein",
@@ -47,6 +51,8 @@ const cleaningServices = [
       "Window Cleaning",
       "Wall Washing",
     ],
+    price: 6950,
+    image: "/images/cleaning/residential-cleaning.jpg"
   },
 ];
 
@@ -55,6 +61,10 @@ const CleaningServicesShowcase = () => {
     triggerOnce: true,
     threshold: 0.1,
   });
+
+  // State for modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<typeof cleaningServices[0] | null>(null);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -77,6 +87,17 @@ const CleaningServicesShowcase = () => {
         ease: "easeOut",
       },
     },
+  };
+
+  // Handle opening the modal with selected service
+  const handleOpenModal = (service: typeof cleaningServices[0]) => {
+    setSelectedService(service);
+    setIsModalOpen(true);
+  };
+
+  // Handle closing the modal
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -140,7 +161,11 @@ const CleaningServicesShowcase = () => {
                 </ul>
 
                 <div className={styles.showcase__action}>
-                  <Button href={Routes.GET_STARTED} variant="primary" size="sm">
+                  <Button 
+                    variant="primary" 
+                    size="sm"
+                    onClick={() => handleOpenModal(service)}
+                  >
                     Book Now
                   </Button>
                 </div>
@@ -149,6 +174,18 @@ const CleaningServicesShowcase = () => {
           ))}
         </motion.div>
       </div>
+
+      {/* Cleaning Service Modal */}
+      {selectedService && (
+        <CleaningServiceModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          serviceTitle={selectedService.name}
+          serviceDescription={selectedService.description}
+          servicePrice={selectedService.price}
+          serviceImage={selectedService.image}
+        />
+      )}
     </section>
   );
 };
