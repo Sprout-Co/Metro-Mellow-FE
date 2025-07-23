@@ -209,6 +209,7 @@ const CleaningServicesShowcase = () => {
           servicePrice={selectedService.price}
           serviceImage={selectedService.image}
           serviceConfiguration={getCleaningServiceConfiguration()}
+          serviceType="Cleaning"
           onOrderSubmit={(configuration) => {
             console.log("Cleaning service configuration:", configuration);
           }}

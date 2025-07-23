@@ -36,6 +36,7 @@ export interface ServiceModalProps {
   serviceDescription?: string;
   servicePrice?: number;
   serviceConfiguration?: ServiceConfiguration;
+  serviceType?: string;
   // Optional sections to show/hide
   showImageSection?: boolean;
   showPriceSection?: boolean;
@@ -55,6 +56,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
   serviceDescription = "Service description",
   servicePrice = 0,
   serviceConfiguration,
+  serviceType = "Service",
   showImageSection = true,
   showPriceSection = true,
   showConfigurationSection = true,
@@ -284,6 +286,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
         isOpen={isCheckoutModalOpen}
         onClose={handleCheckoutClose}
         onContinue={handleCheckoutComplete}
+        serviceType={serviceType}
       />
 
       {/* Service Details Slide Panel */}

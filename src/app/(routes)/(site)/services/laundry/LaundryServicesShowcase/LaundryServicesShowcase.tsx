@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import styles from "./LaundryServicesShowcase.module.scss";
 import { Button } from "@/components/ui/Button/Button";
+import ServiceModal, { ServiceConfiguration } from "@/components/ui/ServiceModal/ServiceModal";
 
 // Service data
 const laundryServices = [
@@ -63,6 +64,25 @@ const LaundryServicesShowcase = () => {
     threshold: 0.1,
   });
 
+  // State for modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<typeof laundryServices[0] | null>(null);
+
+  // Configuration for laundry service modal
+  const getLaundryServiceConfiguration = (): ServiceConfiguration => ({
+    options: [
+      { id: "shirt", name: "Shirt", count: 1 },
+      { id: "trouser", name: "Trouser", count: 1 },
+      { id: "native", name: "Native", count: 1 },
+      { id: "towel", name: "Towel", count: 1 },
+      { id: "bedsheet", name: "Bedsheet", count: 1 },
+      { id: "duvet", name: "Duvet", count: 1 },
+      { id: "shoe", name: "Shoe", count: 1 },
+      { id: "other", name: "Other", count: 1 },
+    ],
+    allowCustomization: true
+  });
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -86,7 +106,21 @@ const LaundryServicesShowcase = () => {
     },
   };
 
+  // Handle opening the modal with selected service
+  const handleOpenModal = (service: typeof laundryServices[0]) => {
+    setSelectedService(service);
+    setIsModalOpen(true);
+  };
 
+  // Handle closing the modal
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  // Handle order submission
+  const handleOrderSubmit = (configuration: any) => {
+    console.log("Laundry service configuration:", configuration);
+  };
 
   return (
     <section className={styles.showcase} ref={sectionRef}>
@@ -158,6 +192,7 @@ const LaundryServicesShowcase = () => {
                   <Button 
                     variant="primary" 
                     size="sm"
+                    onClick={() => handleOpenModal(service)}
                   >
                     Book Now
                   </Button>
@@ -167,6 +202,21 @@ const LaundryServicesShowcase = () => {
           ))}
         </motion.div>
       </div>
+
+      {/* Laundry Service Modal */}
+      {selectedService && (
+        <ServiceModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          serviceTitle={selectedService.name}
+          serviceDescription={selectedService.description}
+          servicePrice={selectedService.price}
+          serviceImage={selectedService.image}
+          serviceConfiguration={getLaundryServiceConfiguration()}
+          serviceType="Laundry"
+          onOrderSubmit={handleOrderSubmit}
+        />
+      )}
     </section>
   );
 };

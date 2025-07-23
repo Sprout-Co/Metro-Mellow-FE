@@ -10,6 +10,7 @@ export interface CheckoutModalProps {
   isOpen: boolean;
   onClose: () => void;
   onContinue?: (formData: CheckoutFormData) => void;
+  serviceType?: string;
 }
 
 export interface CheckoutFormData {
@@ -28,6 +29,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   isOpen,
   onClose,
   onContinue,
+  serviceType = "Cleaning",
 }) => {
   // Form state management
   const [formData, setFormData] = useState<CheckoutFormData>({
@@ -157,7 +159,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
               <form onSubmit={handleSubmit} className={styles.checkoutModal__form}>
                 {/* Section Title */}
                 <h3 className={styles.checkoutModal__sectionTitle}>
-                  Cleaning Details
+                  {serviceType} Details
                 </h3>
 
                 {/* Date Field */}
