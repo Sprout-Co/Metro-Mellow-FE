@@ -82,6 +82,10 @@
 
   &__apartmentTypeSection {
     margin-bottom: spacing("xl");
+    padding: spacing("lg");
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("md");
+    width: fit-content;
   }
 
   &__apartmentTypes {
@@ -91,29 +95,70 @@
   }
 
   &__apartmentType {
-    flex: 1;
-    min-width: 150px;
-    padding: spacing("md");
-    border: map-get($border-width, "thin") solid color("neutral", "light");
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 140px;
+    max-width: 180px;
+    padding: spacing("md") spacing("lg");
+    background-color: color("neutral", "darker");
+    color: color("neutral", "white");
+    border: none;
     border-radius: border-radius("lg");
     display: flex;
     align-items: center;
     cursor: pointer;
     transition: $transition-base;
+    font-weight: font-weight("medium");
 
     &:hover {
-      border-color: color("primary", "base");
+      background-color: color("neutral", "darkest");
     }
 
     &_selected {
-      background-color: color-alpha("primary", "base", 0.05);
-      border-color: color("primary", "base");
+      background-color: color("neutral", "darkest");
+      
+      .modal__radioInput {
+        &::before {
+          background-color: color("neutral", "white");
+        }
+      }
+    }
+
+    span {
+      color: color("neutral", "white");
+      font-weight: font-weight("medium");
     }
   }
 
   &__radioInput {
     margin-right: spacing("sm");
-    accent-color: color("primary", "base");
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+    border: 2px solid color("neutral", "light");
+    border-radius: 50%;
+    background-color: transparent;
+    position: relative;
+    cursor: pointer;
+    appearance: none;
+    flex-shrink: 0;
+    
+    &:checked {
+      border-color: color("neutral", "white");
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: color("neutral", "white");
+      }
+    }
   }
 
   &__roomCountersSection {
@@ -138,9 +183,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: spacing("sm") spacing("md");
+    padding: spacing("md") spacing("lg");
     border-radius: border-radius("md");
-    background-color: color("neutral", "lightest");
+    border: 0.2px solid color("neutral", "light");
+    margin-bottom: spacing("sm");
   }
 
   &__roomName {
@@ -182,5 +228,21 @@
 
   &__orderButtonContainer {
     margin-top: spacing("xl");
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__orderButton {
+    min-width: 200px;
+    padding-left: spacing("xl");
+    padding-right: spacing("xl");
+    background-color: color("primary", "darker") !important;
+    border-color: color("primary", "darker") !important;
+    
+    &:hover {
+      background-color: color("primary", "base") !important;
+      border-color: color("primary", "base") !important;
+      color: color("neutral", "white") !important;
+    }
   }
 } 

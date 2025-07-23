@@ -33,15 +33,15 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
 
   // State for room counters
   const [roomCounters, setRoomCounters] = useState<RoomCounter[]>([
-    { name: "BEDROOM", count: 1 },
-    { name: "LIVING ROOM", count: 1 },
-    { name: "KITCHEN", count: 1 },
-    { name: "BALCONY", count: 1 },
-    { name: "LOBBY", count: 1 },
-    { name: "OUTDOOR", count: 1 },
-    { name: "STUDY ROOM", count: 1 },
-    { name: "BATHROOM", count: 1 },
-    { name: "OTHER", count: 1 },
+    { name: "Bedroom", count: 1 },
+    { name: "Living Room", count: 1 },
+    { name: "Kitchen", count: 1 },
+    { name: "Balcony", count: 1 },
+    { name: "Lobby", count: 1 },
+    { name: "Outdoor", count: 1 },
+    { name: "Study Room", count: 1 },
+    { name: "Bathroom", count: 1 },
+    { name: "Other", count: 1 },
   ]);
 
   // Handle apartment type selection
@@ -154,8 +154,8 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
             <Button
               variant="primary"
               size="lg"
-              fullWidth
               onClick={handleOrderSubmit}
+              className={styles.modal__orderButton}
             >
               ORDER
             </Button>
