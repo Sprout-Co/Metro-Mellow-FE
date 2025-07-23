@@ -108,6 +108,11 @@
     display: flex;
     gap: spacing("md");
     flex-wrap: wrap;
+    justify-content: center;
+
+    @include breakpoint-up("lg") {
+      justify-content: flex-start;
+    }
   }
 
   &__apartmentType {
