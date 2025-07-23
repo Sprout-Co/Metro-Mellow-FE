@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import AdminDashboardLayout from "../../_components/AdminDashboardLayout/AdminDashboardLayout";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
@@ -33,9 +33,13 @@ import styles from "./AddBooking.module.scss";
 
 export default function AddBookingPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { handleCreateBooking } = useBookingOperations();
   const { handleGetServices } = useServiceOperations();
   const { handleGetUsers } = useAuthOperations();
+
+  // Get customerId from URL params if available
+  const customerIdFromUrl = searchParams.get("customerId");
 
   // Loading and error states
   const [isLoading, setIsLoading] = useState(true);
@@ -114,6 +118,16 @@ export default function AddBookingPage() {
 
     fetchData();
   }, [handleGetUsers, handleGetServices]);
+
+  // Pre-select customer if customerId is provided in URL
+  useEffect(() => {
+    if (customerIdFromUrl && customers.length > 0) {
+      const customerExists = customers.find((c) => c.id === customerIdFromUrl);
+      if (customerExists) {
+        setSelectedCustomerId(customerIdFromUrl);
+      }
+    }
+  }, [customerIdFromUrl, customers]);
 
   // Computed values
   const selectedCustomer = customers.find((c) => c.id === selectedCustomerId);

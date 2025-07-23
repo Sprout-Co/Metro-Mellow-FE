@@ -35,6 +35,13 @@ const CustomerSelectionSection: React.FC<CustomerSelectionSectionProps> = ({
     );
   });
 
+  // Sort to show selected customer first
+  const sortedCustomers = [...filteredCustomers].sort((a, b) => {
+    if (a.id === selectedCustomerId) return -1;
+    if (b.id === selectedCustomerId) return 1;
+    return 0;
+  });
+
   return (
     <Card className={styles.customer_selection}>
       <h3 className={styles.customer_selection__title}>
@@ -66,7 +73,7 @@ const CustomerSelectionSection: React.FC<CustomerSelectionSectionProps> = ({
             <span>No customers found</span>
           </div>
         ) : (
-          filteredCustomers.map((customer) => (
+          sortedCustomers.map((customer) => (
             <label
               key={customer.id}
               className={`${styles.customer_selection__option} ${
