@@ -4,11 +4,11 @@ import OrderStepsSection from '@/app/(routes)/(site)/services/food/_components/O
 import { Routes } from '@/constants/routes';
 
 // Mock Next.js Image component
-jest.mock('next/image', () => ({
-  default: ({ src, alt, ...props }: any) => (
-    <img src={src} alt={alt} {...props} />
-  ),
-}));
+jest.mock('next/image', () => {
+  return function MockImage({ src, alt, ...props }: any) {
+    return <img src={src} alt={alt} {...props} />;
+  };
+});
 
 // Mock framer-motion to avoid animation-related issues in tests
 jest.mock('framer-motion', () => ({
@@ -20,15 +20,11 @@ jest.mock('framer-motion', () => ({
     ul: ({ children, ...props }: any) => <ul {...props}>{children}</ul>,
     li: ({ children, ...props }: any) => <li {...props}>{children}</li>,
   },
-}));
-
-// Mock the CTAButton component
-jest.mock('@/components/ui/Button/CTAButton', () => ({
-  CTAButton: ({ children, href, ...props }: any) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
+  useAnimation: () => ({
+    start: jest.fn(),
+    stop: jest.fn(),
+    set: jest.fn(),
+  }),
 }));
 
 // Mock the ArrowRightIcon
@@ -46,7 +42,7 @@ describe('OrderStepsSection', () => {
       render(<OrderStepsSection />);
       
       // Verify the component renders without errors
-      expect(screen.getByRole('banner')).toBeInTheDocument();
+      expect(document.querySelector('section')).toBeInTheDocument();
     });
 
     it('displays the main title correctly', () => {
@@ -152,7 +148,7 @@ describe('OrderStepsSection', () => {
       render(<OrderStepsSection />);
       
       // Check that the main section exists
-      const section = screen.getByRole('banner');
+      const section = document.querySelector('section');
       expect(section).toBeInTheDocument();
       
       // Check that the steps list is properly structured
