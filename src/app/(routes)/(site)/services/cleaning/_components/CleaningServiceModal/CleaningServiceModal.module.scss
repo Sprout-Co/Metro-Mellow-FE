@@ -70,7 +70,11 @@
     color: color("neutral", "darkest");
     margin-top: spacing("md");
     margin-bottom: spacing("xl");
-    text-align: right;
+    text-align: center;
+
+    @include breakpoint-up("md") {
+      text-align: right;
+    }
   }
 
   &__sectionTitle {
@@ -230,7 +234,11 @@
   &__orderButtonContainer {
     margin-top: spacing("xl");
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
+
+    @include breakpoint-up("md") {
+      justify-content: flex-end;
+    }
   }
 
   &__orderButton {
