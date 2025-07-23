@@ -74,7 +74,7 @@ const ServiceDetailsSlidePanel: React.FC<ServiceDetailsSlidePanelProps> = ({
             {(apartmentType || roomCount) && (
               <div className={styles.slidePanel__configuration}>
                 <h4 className={styles.slidePanel__configTitle}>
-                  Your Configuration
+                  Service Details
                 </h4>
                 <div className={styles.slidePanel__configDetails}>
                   {apartmentType && (
