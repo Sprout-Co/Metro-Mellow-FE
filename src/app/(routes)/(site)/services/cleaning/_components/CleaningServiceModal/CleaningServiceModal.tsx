@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Modal from "@/components/ui/Modal/Modal";
 import { Button } from "@/components/ui/Button/Button";
+import CheckoutModal, { CheckoutFormData } from "@/components/ui/CheckoutModal/CheckoutModal";
 import styles from "./CleaningServiceModal.module.scss";
 
 interface RoomCounter {
@@ -44,6 +45,9 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
     { name: "Other", count: 1 },
   ]);
 
+  // State for checkout modal
+  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+
   // Handle apartment type selection
   const handleApartmentTypeChange = (type: "flat" | "duplex") => {
     setApartmentType(type);
@@ -64,9 +68,43 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
 
   // Handle order submission
   const handleOrderSubmit = () => {
-    // Implement order submission logic
-    console.log("Order submitted", { apartmentType, roomCounters });
+    // Store the service configuration and open checkout modal
+    console.log("Service configured", { apartmentType, roomCounters, serviceTitle, servicePrice });
+    setIsCheckoutModalOpen(true);
+  };
+
+  // Handle checkout completion
+  const handleCheckoutComplete = (formData: CheckoutFormData) => {
+    // Process the complete order with both service and checkout data
+    const completeOrder = {
+      service: {
+        title: serviceTitle,
+        price: servicePrice,
+        apartmentType,
+        roomCounters,
+      },
+      checkout: formData,
+    };
+    
+    console.log("Complete order:", completeOrder);
+    
+    // Here you would typically:
+    // 1. Send order to your backend API
+    // 2. Process payment
+    // 3. Show success message
+    // 4. Navigate to order confirmation
+    
+    // For now, close both modals
+    setIsCheckoutModalOpen(false);
     onClose();
+    
+    // Show success message
+    alert("Order placed successfully! We'll confirm your booking details shortly.");
+  };
+
+  // Handle checkout modal close
+  const handleCheckoutClose = () => {
+    setIsCheckoutModalOpen(false);
   };
 
   return (
@@ -162,6 +200,13 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Checkout Modal */}
+      <CheckoutModal
+        isOpen={isCheckoutModalOpen}
+        onClose={handleCheckoutClose}
+        onContinue={handleCheckoutComplete}
+      />
     </Modal>
   );
 };
