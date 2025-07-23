@@ -192,6 +192,7 @@
   &__roomName {
     font-weight: font-weight("medium");
     color: color("neutral", "darkest");
+    margin-right: spacing("md");
   }
 
   &__counterControls {

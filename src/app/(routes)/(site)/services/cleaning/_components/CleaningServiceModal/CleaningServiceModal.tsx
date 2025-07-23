@@ -23,7 +23,7 @@ interface CleaningServiceModalProps {
 const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   isOpen,
   onClose,
-  serviceImage = "/images/cleaning/deep-cleaning.jpg",
+  serviceImage = "/images/cleaning/c1.jpeg",
   serviceTitle = "Deep Cleaning",
   serviceDescription = "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
   servicePrice = 4950,

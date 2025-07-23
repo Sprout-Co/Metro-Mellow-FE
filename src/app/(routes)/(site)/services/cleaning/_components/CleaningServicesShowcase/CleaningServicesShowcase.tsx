@@ -22,7 +22,7 @@ const cleaningServices = [
       "Kitchen Cleaning",
     ],
     price: 2950,
-    image: "/images/cleaning/cleaning-detail.jpg"
+    image: "/images/cleaning/c1.jpeg"
   },
   {
     id: "deep",
@@ -37,7 +37,7 @@ const cleaningServices = [
       "Light Fixtures",
     ],
     price: 4950,
-    image: "/images/cleaning/deep-cleaning.jpg"
+    image: "/images/cleaning/c2.jpeg"
   },
   {
     id: "movein",
@@ -52,7 +52,7 @@ const cleaningServices = [
       "Wall Washing",
     ],
     price: 6950,
-    image: "/images/cleaning/residential-cleaning.jpg"
+    image: "/images/cleaning/c3.jpeg"
   },
 ];
 
