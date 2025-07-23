@@ -16,6 +16,7 @@ interface ServiceDetailsSlidePanelProps {
   serviceImage: string;
   apartmentType?: "flat" | "duplex";
   roomCount?: number;
+  serviceType?: string;
 }
 
 const ServiceDetailsSlidePanel: React.FC<ServiceDetailsSlidePanelProps> = ({
@@ -28,6 +29,7 @@ const ServiceDetailsSlidePanel: React.FC<ServiceDetailsSlidePanelProps> = ({
   serviceImage,
   apartmentType,
   roomCount,
+  serviceType = "Cleaning",
 }) => {
   // Don't render anything if neither open nor should show toggle
   if (!isOpen && !onOpen) return null;
@@ -116,7 +118,7 @@ const ServiceDetailsSlidePanel: React.FC<ServiceDetailsSlidePanelProps> = ({
             />
             <div className={styles.slidePanel__imageOverlay}>
               <h3 className={styles.slidePanel__imageTitle}>
-                Your Cleaning Service
+                Your {serviceType} Service
               </h3>
             </div>
           </div>

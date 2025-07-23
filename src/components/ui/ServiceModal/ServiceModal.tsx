@@ -300,6 +300,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
         serviceImage={serviceImage}
         apartmentType={selectedCategories.apartmentType as "flat" | "duplex" | undefined}
         roomCount={getTotalCount()}
+        serviceType={serviceType}
       />
     </Modal>
   );
