@@ -5,7 +5,7 @@ import Image from "next/image";
 import Modal from "@/components/ui/Modal/Modal";
 import { Button } from "@/components/ui/Button/Button";
 import CheckoutModal, { CheckoutFormData } from "@/components/ui/CheckoutModal/CheckoutModal";
-import ServiceDetailsSlidePanel from "@/components/ui/ServiceDetailsSlidePanel/ServiceDetailsSlidePanel";
+import ServiceDetailsSlidePanel from "@/components/ui/ServiceDetailsSlidePanel";
 import styles from "./CleaningServiceModal.module.scss";
 
 interface RoomCounter {
@@ -46,8 +46,9 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
     { name: "Other", count: 1 },
   ]);
 
-  // State for checkout modal
+  // State for checkout modal and slide panel
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+  const [isSlidePanelOpen, setIsSlidePanelOpen] = useState(false);
 
   // Handle apartment type selection
   const handleApartmentTypeChange = (type: "flat" | "duplex") => {
@@ -75,6 +76,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
     // Store the service configuration and open checkout modal
     console.log("Service configured", { apartmentType, roomCounters, serviceTitle, servicePrice });
     setIsCheckoutModalOpen(true);
+    setIsSlidePanelOpen(true);
   };
 
   // Handle checkout completion
@@ -109,6 +111,12 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   // Handle checkout modal close
   const handleCheckoutClose = () => {
     setIsCheckoutModalOpen(false);
+    setIsSlidePanelOpen(false);
+  };
+
+  // Handle slide panel close
+  const handleSlidePanelClose = () => {
+    setIsSlidePanelOpen(false);
   };
 
   return (
@@ -214,7 +222,8 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
 
       {/* Service Details Slide Panel */}
       <ServiceDetailsSlidePanel
-        isOpen={isCheckoutModalOpen}
+        isOpen={isSlidePanelOpen}
+        onClose={handleSlidePanelClose}
         serviceTitle={serviceTitle}
         serviceDescription={serviceDescription}
         servicePrice={servicePrice}

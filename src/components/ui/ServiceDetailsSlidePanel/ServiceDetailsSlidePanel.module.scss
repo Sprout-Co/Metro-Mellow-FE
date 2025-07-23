@@ -21,7 +21,35 @@
   }
 
   @include breakpoint-down("sm") {
-    max-width: 100%;
+    display: none;
+  }
+
+  &__close {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("neutral", "white");
+    background-color: color-alpha("neutral", "black", 0.6);
+    border: none;
+    cursor: pointer;
+    transition: $transition-fast;
+    z-index: 10;
+
+    &:hover {
+      background-color: color-alpha("neutral", "black", 0.8);
+      transform: scale(1.1);
+    }
+
+    &:focus-visible {
+      outline: map-get($border-width, "medium") solid color("neutral", "white");
+      outline-offset: spacing("xxs");
+    }
   }
 
   &__imageContainer {
