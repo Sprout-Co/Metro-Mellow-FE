@@ -1,12 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import styles from "./LaundryServicesShowcase.module.scss";
 import { Button } from "@/components/ui/Button/Button";
-import Modal from "@/components/ui/Modal/Modal";
-import Image from "next/image";
 
 // Service data
 const laundryServices = [
@@ -57,118 +55,13 @@ const laundryServices = [
   },
 ];
 
-// Service Modal Component
-const LaundryServiceModal = ({ 
-  isOpen, 
-  onClose, 
-  service 
-}: { 
-  isOpen: boolean; 
-  onClose: () => void; 
-  service: typeof laundryServices[0] 
-}) => {
-  const [quantity, setQuantity] = useState(1);
 
-  const handleIncrement = () => {
-    setQuantity(prev => prev + 1);
-  };
-
-  const handleDecrement = () => {
-    if (quantity > 1) {
-      setQuantity(prev => prev - 1);
-    }
-  };
-
-  const handleOrder = () => {
-    console.log("Order placed for", service.name, "Quantity:", quantity);
-    // Here you would typically handle the order process
-    onClose();
-  };
-
-  return (
-    <Modal isOpen={isOpen} onClose={onClose} maxWidth="800px">
-      <div className={styles.modal}>
-        <div className={styles.modal__imageSection}>
-          <Image
-            src={service.image}
-            alt={service.name}
-            width={400}
-            height={300}
-            className={styles.modal__image}
-          />
-        </div>
-        
-        <div className={styles.modal__content}>
-          <h2 className={styles.modal__title}>{service.name}</h2>
-          <p className={styles.modal__description}>{service.description}</p>
-          
-          <div className={styles.modal__price}>
-            NGN {service.price.toLocaleString()}
-          </div>
-          
-          <div className={styles.modal__features}>
-            <h3 className={styles.modal__subtitle}>Features</h3>
-            <ul className={styles.modal__featuresList}>
-              {service.features.map((feature, index) => (
-                <li key={index} className={styles.modal__feature}>
-                  {feature}
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          <div className={styles.modal__quantity}>
-            <h3 className={styles.modal__subtitle}>How many loads?</h3>
-            <div className={styles.modal__counter}>
-              <button 
-                className={styles.modal__counterButton} 
-                onClick={handleDecrement}
-                disabled={quantity <= 1}
-              >
-                -
-              </button>
-              <span className={styles.modal__counterValue}>{quantity}</span>
-              <button 
-                className={styles.modal__counterButton} 
-                onClick={handleIncrement}
-              >
-                +
-              </button>
-            </div>
-          </div>
-          
-          <div className={styles.modal__totalSection}>
-            <span className={styles.modal__totalLabel}>Total:</span>
-            <span className={styles.modal__totalValue}>
-              NGN {(service.price * quantity).toLocaleString()}
-            </span>
-          </div>
-          
-          <div className={styles.modal__actions}>
-            <Button 
-              variant="primary" 
-              size="lg" 
-              onClick={handleOrder}
-              fullWidth
-            >
-              Book Service
-            </Button>
-          </div>
-        </div>
-      </div>
-    </Modal>
-  );
-};
 
 const LaundryServicesShowcase = () => {
   const [sectionRef, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
-
-  // State for modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<typeof laundryServices[0] | null>(null);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -193,16 +86,7 @@ const LaundryServicesShowcase = () => {
     },
   };
 
-  // Handle opening the modal with selected service
-  const handleOpenModal = (service: typeof laundryServices[0]) => {
-    setSelectedService(service);
-    setIsModalOpen(true);
-  };
 
-  // Handle closing the modal
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
 
   return (
     <section className={styles.showcase} ref={sectionRef}>
@@ -274,7 +158,6 @@ const LaundryServicesShowcase = () => {
                   <Button 
                     variant="primary" 
                     size="sm"
-                    onClick={() => handleOpenModal(service)}
                   >
                     Book Now
                   </Button>
@@ -284,15 +167,6 @@ const LaundryServicesShowcase = () => {
           ))}
         </motion.div>
       </div>
-
-      {/* Laundry Service Modal */}
-      {selectedService && (
-        <LaundryServiceModal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          service={selectedService}
-        />
-      )}
     </section>
   );
 };
