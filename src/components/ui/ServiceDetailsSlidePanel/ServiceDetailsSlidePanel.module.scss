@@ -11,7 +11,7 @@
   height: 100vh;
   background-color: color("neutral", "white");
   box-shadow: map-get($shadows, "xl");
-  z-index: z-index("overlay");
+  z-index: z-index("popover"); // Higher than modal to ensure it's above checkout modal
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -49,6 +49,47 @@
     &:focus-visible {
       outline: map-get($border-width, "medium") solid color("neutral", "white");
       outline-offset: spacing("xxs");
+    }
+  }
+
+  &__toggle {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("lg") 0 0 border-radius("lg");
+    padding: spacing("md") spacing("sm");
+    cursor: pointer;
+    transition: $transition-fast;
+    z-index: z-index("popover"); // Same as slide panel to stay above checkout modal
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    box-shadow: map-get($shadows, "md");
+    @include font-weight("medium");
+    @include font-size("sm");
+
+    &:hover {
+      background-color: color("primary", "dark");
+      transform: translateY(-50%) translateX(-2px);
+    }
+
+    &:focus-visible {
+      outline: map-get($border-width, "medium") solid color("neutral", "white");
+      outline-offset: spacing("xxs");
+    }
+
+    span {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+    }
+
+    svg {
+      transform: rotate(180deg);
     }
   }
 

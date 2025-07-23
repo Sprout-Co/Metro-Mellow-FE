@@ -9,6 +9,7 @@ import styles from "./ServiceDetailsSlidePanel.module.scss";
 interface ServiceDetailsSlidePanelProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpen: () => void;
   serviceTitle: string;
   serviceDescription: string;
   servicePrice: number;
@@ -20,6 +21,7 @@ interface ServiceDetailsSlidePanelProps {
 const ServiceDetailsSlidePanel: React.FC<ServiceDetailsSlidePanelProps> = ({
   isOpen,
   onClose,
+  onOpen,
   serviceTitle,
   serviceDescription,
   servicePrice,
@@ -27,13 +29,16 @@ const ServiceDetailsSlidePanel: React.FC<ServiceDetailsSlidePanelProps> = ({
   apartmentType,
   roomCount,
 }) => {
-  if (!isOpen) return null;
+  // Don't render anything if neither open nor should show toggle
+  if (!isOpen && !onOpen) return null;
 
   return (
     <Portal>
-      <AnimatePresence mode="wait">
-        <motion.div
-          className={styles.slidePanel}
+      {/* Toggle Button - shows when panel is closed */}
+      {!isOpen && onOpen && (
+        <motion.button
+          className={styles.slidePanel__toggle}
+          onClick={onOpen}
           initial={{ x: "100%" }}
           animate={{ x: 0 }}
           exit={{ x: "100%" }}
@@ -42,7 +47,41 @@ const ServiceDetailsSlidePanel: React.FC<ServiceDetailsSlidePanelProps> = ({
             damping: 30, 
             stiffness: 300 
           }}
+          aria-label="Show service details"
         >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9 18L15 12L9 6"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <span>Details</span>
+        </motion.button>
+      )}
+
+      {/* Main Slide Panel */}
+      <AnimatePresence mode="wait">
+        {isOpen && (
+          <motion.div
+            className={styles.slidePanel}
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ 
+              type: "spring", 
+              damping: 30, 
+              stiffness: 300 
+            }}
+          >
           {/* Close Button */}
           <button 
             className={styles.slidePanel__close} 
@@ -148,6 +187,7 @@ const ServiceDetailsSlidePanel: React.FC<ServiceDetailsSlidePanelProps> = ({
             </div>
           </div>
         </motion.div>
+        )}
       </AnimatePresence>
     </Portal>
   );

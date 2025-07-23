@@ -119,6 +119,11 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
     setIsSlidePanelOpen(false);
   };
 
+  // Handle slide panel open
+  const handleSlidePanelOpen = () => {
+    setIsSlidePanelOpen(true);
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -224,6 +229,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
       <ServiceDetailsSlidePanel
         isOpen={isSlidePanelOpen}
         onClose={handleSlidePanelClose}
+        onOpen={handleSlidePanelOpen}
         serviceTitle={serviceTitle}
         serviceDescription={serviceDescription}
         servicePrice={servicePrice}

@@ -12,6 +12,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  pointer-events: none; // Allow events to pass through
+
+  // On desktop, don't cover the slide panel area
+  @include breakpoint-up("md") {
+    width: calc(100% - 450px); // Match the backdrop width
+  }
 
   &__backdrop {
     position: absolute;
@@ -21,6 +27,12 @@
     height: 100%;
     background-color: color-alpha("neutral", "black", 0.6);
     backdrop-filter: blur(spacing("xs"));
+    pointer-events: auto; // Re-enable pointer events for backdrop
+    
+    // On desktop, backdrop should cover full height but not the slide panel width
+    @include breakpoint-up("md") {
+      width: 100%; // Full width of the reduced modal container
+    }
   }
 
   &__container {
@@ -34,6 +46,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    pointer-events: auto; // Re-enable pointer events for the modal content
 
     @include breakpoint-down("sm") {
       width: 95%;
