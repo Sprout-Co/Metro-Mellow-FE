@@ -216,6 +216,7 @@ export type CreateAdminInvitationInput = {
 
 export type CreateBookingInput = {
   address: Scalars['ID']['input'];
+  customerId?: InputMaybe<Scalars['ID']['input']>;
   date: Scalars['DateTime']['input'];
   notes?: InputMaybe<Scalars['String']['input']>;
   serviceDetails: ServiceDetailsInput;

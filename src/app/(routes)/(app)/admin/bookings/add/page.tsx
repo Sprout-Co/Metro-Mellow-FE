@@ -303,6 +303,7 @@ export default function AddBookingPage() {
       };
 
       const bookingData: CreateBookingInput = {
+        customerId: selectedCustomerId,
         serviceId: selectedService._id,
         serviceType: getServiceType(selectedService.service_id),
         serviceOption: selectedOption?.service_id || ("" as string),
