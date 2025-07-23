@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import OrderStepsSection from '@/app/(routes)/(site)/services/food/_components/OrderStepsSection/OrderStepsSection';
+import { Routes } from '@/constants/routes';
 
 // Mock Next.js Image component
 jest.mock('next/image', () => ({
@@ -18,13 +19,6 @@ jest.mock('framer-motion', () => ({
     p: ({ children, ...props }: any) => <p {...props}>{children}</p>,
     ul: ({ children, ...props }: any) => <ul {...props}>{children}</ul>,
     li: ({ children, ...props }: any) => <li {...props}>{children}</li>,
-  },
-}));
-
-// Mock the Routes constant
-jest.mock('@/constants/routes', () => ({
-  Routes: {
-    GET_STARTED: '/get-started',
   },
 }));
 
@@ -109,7 +103,7 @@ describe('OrderStepsSection', () => {
       expect(ctaButton).toBeInTheDocument();
       
       // Check that the button links to the correct route
-      expect(ctaButton).toHaveAttribute('href', '/get-started');
+      expect(ctaButton).toHaveAttribute('href', Routes.GET_STARTED);
     });
 
     it('includes the arrow icon in the CTA button', () => {
