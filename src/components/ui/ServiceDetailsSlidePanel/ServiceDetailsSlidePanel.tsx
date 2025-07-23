@@ -17,6 +17,7 @@ interface ServiceDetailsSlidePanelProps {
   apartmentType?: "flat" | "duplex";
   roomCount?: number;
   serviceType?: string;
+  includedFeatures?: string[];
 }
 
 const ServiceDetailsSlidePanel: React.FC<ServiceDetailsSlidePanelProps> = ({
@@ -30,6 +31,12 @@ const ServiceDetailsSlidePanel: React.FC<ServiceDetailsSlidePanelProps> = ({
   apartmentType,
   roomCount,
   serviceType = "Cleaning",
+  includedFeatures = [
+    "Professional cleaning supplies included",
+    "Experienced and vetted cleaning professionals", 
+    "Satisfaction guarantee",
+    "Flexible scheduling options"
+  ],
 }) => {
   // Don't render anything if neither open nor should show toggle
   if (!isOpen && !onOpen) return null;
@@ -173,18 +180,11 @@ const ServiceDetailsSlidePanel: React.FC<ServiceDetailsSlidePanelProps> = ({
                 What's Included
               </h4>
               <ul className={styles.slidePanel__featuresList}>
-                <li className={styles.slidePanel__feature}>
-                  Professional cleaning supplies included
-                </li>
-                <li className={styles.slidePanel__feature}>
-                  Experienced and vetted cleaning professionals
-                </li>
-                <li className={styles.slidePanel__feature}>
-                  Satisfaction guarantee
-                </li>
-                <li className={styles.slidePanel__feature}>
-                  Flexible scheduling options
-                </li>
+                {includedFeatures.map((feature, index) => (
+                  <li key={index} className={styles.slidePanel__feature}>
+                    {feature}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

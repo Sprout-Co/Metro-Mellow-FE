@@ -90,6 +90,16 @@ const CleaningServicesShowcase = () => {
     allowCustomization: true
   });
 
+  // Features included in cleaning services
+  const getCleaningIncludedFeatures = () => [
+    "Professional cleaning supplies included",
+    "Experienced and vetted cleaning professionals",
+    "Satisfaction guarantee",
+    "Flexible scheduling options",
+    "Eco-friendly cleaning products available",
+    "Deep sanitization and disinfection"
+  ];
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -210,6 +220,7 @@ const CleaningServicesShowcase = () => {
           serviceImage={selectedService.image}
           serviceConfiguration={getCleaningServiceConfiguration()}
           serviceType="Cleaning"
+          includedFeatures={getCleaningIncludedFeatures()}
           onOrderSubmit={(configuration) => {
             console.log("Cleaning service configuration:", configuration);
           }}

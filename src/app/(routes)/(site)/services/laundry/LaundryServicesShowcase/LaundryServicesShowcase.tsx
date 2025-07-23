@@ -122,6 +122,16 @@ const LaundryServicesShowcase = () => {
     console.log("Laundry service configuration:", configuration);
   };
 
+  // Features included in laundry services
+  const getLaundryIncludedFeatures = () => [
+    "Professional laundry detergents included",
+    "Experienced and vetted laundry professionals",
+    "Satisfaction guarantee",
+    "Flexible pickup and delivery",
+    "Eco-friendly washing options",
+    "Careful handling of delicate fabrics"
+  ];
+
   return (
     <section className={styles.showcase} ref={sectionRef}>
       <div className={styles.showcase__container}>
@@ -214,6 +224,7 @@ const LaundryServicesShowcase = () => {
           serviceImage={selectedService.image}
           serviceConfiguration={getLaundryServiceConfiguration()}
           serviceType="Laundry"
+          includedFeatures={getLaundryIncludedFeatures()}
           onOrderSubmit={handleOrderSubmit}
         />
       )}

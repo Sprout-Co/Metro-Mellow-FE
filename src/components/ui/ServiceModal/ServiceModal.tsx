@@ -37,6 +37,7 @@ export interface ServiceModalProps {
   servicePrice?: number;
   serviceConfiguration?: ServiceConfiguration;
   serviceType?: string;
+  includedFeatures?: string[];
   // Optional sections to show/hide
   showImageSection?: boolean;
   showPriceSection?: boolean;
@@ -57,6 +58,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
   servicePrice = 0,
   serviceConfiguration,
   serviceType = "Service",
+  includedFeatures,
   showImageSection = true,
   showPriceSection = true,
   showConfigurationSection = true,
@@ -301,6 +303,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
         apartmentType={selectedCategories.apartmentType as "flat" | "duplex" | undefined}
         roomCount={getTotalCount()}
         serviceType={serviceType}
+        includedFeatures={includedFeatures}
       />
     </Modal>
   );
