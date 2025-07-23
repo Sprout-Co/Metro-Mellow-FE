@@ -5,7 +5,7 @@ import Image from "next/image";
 import Modal from "@/components/ui/Modal/Modal";
 import { Button } from "@/components/ui/Button/Button";
 import CheckoutModal, { CheckoutFormData } from "@/components/ui/CheckoutModal/CheckoutModal";
-import ServiceDetailsSlidePanel from "@/components/ui/ServiceDetailsSlidePanel";
+import ServiceDetailsSlidePanel from "@/components/ui/ServiceDetailsSlidePanel/ServiceDetailsSlidePanel";
 import styles from "./CleaningServiceModal.module.scss";
 
 interface RoomCounter {
