@@ -5,7 +5,7 @@ This document outlines the comprehensive unit testing strategy for all non-authe
 
 ## Priority 1: Core Public Pages
 
-### 1. Home Page (`/`)
+### 1. Home Page (`/`)   DONE
 - **File**: `src/app/page.tsx`
 - **Components**: 
   - Hero
@@ -36,7 +36,7 @@ This document outlines the comprehensive unit testing strategy for all non-authe
   - FAQSection
 - **Testing Focus**: Waitlist functionality, FAQ interactions, maintenance mode behavior
 
-### 3. About Page (`/about`)
+### 3. About Page (`/about`) DONE
 - **File**: `src/app/(routes)/(site)/about/page.tsx`
 - **Components**: 
   - AboutHero
