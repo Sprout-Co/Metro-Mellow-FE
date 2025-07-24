@@ -32,19 +32,10 @@ export default function CleaningPage() {
     return (
         <main>
             <CleaningHero />
-            <CleaningPromoSection />
             <CleaningServicesShowcase />
+            <CleaningPromoSection />
             <CleaningVideoSection />
             <CleaningStepsSection />
-            {/* <Hero />
-            <About />
-            <Services />
-            <WhyChooseUs />
-            <OurProcess />
-            <Testimonials />
-            <FAQ />
-            <CTA />
-            <Contact /> */}
             <FAQSection faqs={cleaningFaqs} />
         </main>
     );
