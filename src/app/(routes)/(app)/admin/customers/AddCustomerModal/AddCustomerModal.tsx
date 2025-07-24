@@ -89,26 +89,31 @@ const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
     setIsLoading(true);
 
     try {
-      await handleCreateCustomer({
+      const createdCustomerData = await handleCreateCustomer({
         ...formData,
         role: UserRole.Customer,
       });
-    console.log({ ...formData, role: UserRole.Customer });
 
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: defaultPassword,
-        phone: "",
-        address: {
-          city: "",
-          street: "",
-        },
-      });
+      if (createdCustomerData?.success) {
+        onSuccess();
+        onClose();
 
-      onSuccess();
-      onClose();
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          password: defaultPassword,
+          phone: "",
+          address: {
+            city: "",
+            street: "",
+          },
+        });
+      } else {
+        setErrors({
+          form: createdCustomerData?.message || "Failed to create customer",
+        });
+      }
     } catch (error) {
       console.error("Error creating customer:", error);
       if (error instanceof Error) {

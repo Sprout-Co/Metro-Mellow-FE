@@ -98,8 +98,9 @@ export type AdminInvitationResponse = {
 export type AuthPayload = {
   __typename?: 'AuthPayload';
   message?: Maybe<Scalars['String']['output']>;
+  success?: Maybe<Scalars['Boolean']['output']>;
   token?: Maybe<Scalars['String']['output']>;
-  user: User;
+  user?: Maybe<User>;
 };
 
 export type Billing = {
@@ -1530,21 +1531,21 @@ export type CreateCustomerMutationVariables = Exact<{
 }>;
 
 
-export type CreateCustomerMutation = { __typename?: 'Mutation', createCustomer: { __typename?: 'AuthPayload', token?: string | null, message?: string | null, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any } } };
+export type CreateCustomerMutation = { __typename?: 'Mutation', createCustomer: { __typename?: 'AuthPayload', token?: string | null, message?: string | null, success?: boolean | null, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any } | null } };
 
 export type CreateStaffMutationVariables = Exact<{
   input: CreateUserInput;
 }>;
 
 
-export type CreateStaffMutation = { __typename?: 'Mutation', createStaff: { __typename?: 'AuthPayload', token?: string | null, message?: string | null, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null> | null, defaultAddress?: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null } } };
+export type CreateStaffMutation = { __typename?: 'Mutation', createStaff: { __typename?: 'AuthPayload', token?: string | null, message?: string | null, success?: boolean | null, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null> | null, defaultAddress?: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null } | null } };
 
 export type RegisterMutationVariables = Exact<{
   input: CreateUserInput;
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'AuthPayload', message?: string | null, token?: string | null, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, emailVerified?: boolean | null, accountStatus?: AccountStatus | null } } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'AuthPayload', message?: string | null, token?: string | null, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, emailVerified?: boolean | null, accountStatus?: AccountStatus | null } | null } };
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -1552,7 +1553,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'AuthPayload', token?: string | null, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null } } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'AuthPayload', token?: string | null, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null } | null } };
 
 export type UpdateProfileMutationVariables = Exact<{
   input: UpdateUserInput;
@@ -2358,6 +2359,7 @@ export const CreateCustomerDocument = gql`
       updatedAt
     }
     message
+    success
   }
 }
     `;
@@ -2425,6 +2427,7 @@ export const CreateStaffDocument = gql`
       updatedAt
     }
     message
+    success
   }
 }
     `;
