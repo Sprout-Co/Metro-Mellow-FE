@@ -91,7 +91,8 @@ const CustomerSelectionSection: React.FC<CustomerSelectionSectionProps> = ({
               <option value="">Select a customer...</option>
               {filteredCustomers.map((customer) => (
                 <option key={customer.id} value={customer.id}>
-                  {customer.firstName} {customer.lastName} - {customer.email}
+                  {customer.firstName} {customer.lastName} - {customer.email} -{" "}
+                  {customer.phone}
                 </option>
               ))}
             </select>
