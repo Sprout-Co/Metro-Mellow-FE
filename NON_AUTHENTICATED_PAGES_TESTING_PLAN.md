@@ -80,7 +80,7 @@ This document outlines the comprehensive unit testing strategy for all non-authe
   - FruitBowlSection
   - FoodIllustrationSection
   - OrderStepsSection
-  - FoodMenuSection     -----------------------next to code
+  - FoodMenuSection     
   - FAQSection
 - **Testing Focus**: Menu display, food categories, ordering process
 
