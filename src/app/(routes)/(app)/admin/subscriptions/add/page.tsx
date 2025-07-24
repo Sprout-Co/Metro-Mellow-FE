@@ -134,17 +134,17 @@ export default function AddSubscriptionPage() {
   };
 
   const validateForm = (): string | null => {
-    if (!selectedCustomerId) return "Please select a customer";
-    if (serviceConfigurations.length === 0)
-      return "Please add at least one service";
-    if (!selectedAddressId) return "Please select an address";
+    // if (!selectedCustomerId) return "Please select a customer";
+    // if (serviceConfigurations.length === 0)
+    //   return "Please add at least one service";
+    // if (!selectedAddressId) return "Please select an address";
 
-    for (const service of serviceConfigurations) {
-      if (!service.serviceId) return "Please select all services";
-      if (service.price <= 0) return "Service prices must be greater than 0";
-      if (service.scheduledDays.length === 0)
-        return "Please select scheduled days for all services";
-    }
+    // for (const service of serviceConfigurations) {
+    //   if (!service.serviceId) return "Please select all services";
+    //   if (service.price <= 0) return "Service prices must be greater than 0";
+    //   if (service.scheduledDays.length === 0)
+    //     return "Please select scheduled days for all services";
+    // }
 
     return null;
   };
@@ -180,8 +180,10 @@ export default function AddSubscriptionPage() {
         startDate: new Date(startDate).toISOString(),
       };
 
-      await handleCreateSubscription(input);
-      router.push("/admin/subscriptions");
+      console.log(input);
+
+      // await handleCreateSubscription(input);
+      // router.push("/admin/subscriptions");
     } catch (error) {
       console.error("Error creating subscription:", error);
       setError(
