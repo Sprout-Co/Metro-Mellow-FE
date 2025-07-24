@@ -69,10 +69,10 @@ const PestControlServicesShowcase = () => {
   // Configuration for pest control service modal
   const getPestControlServiceConfiguration = (): ServiceConfiguration => ({
     options: [
-      { id: "bedrooms", name: "Number of Bedrooms", count: 1 },
-      { id: "livingrooms", name: "Number of Living Rooms", count: 1 },
+      { id: "bedrooms", name: "Bedrooms", count: 1 },
+      { id: "livingrooms", name: "Living Rooms", count: 1 },
       { id: "kitchen", name: "Kitchen", count: 1 },
-      { id: "bathrooms", name: "Number of Bathrooms", count: 1 },
+      { id: "bathrooms", name: "Bathrooms", count: 1 },
       { id: "outdoor", name: "Outdoor Area", count: 1 },
     ],
     allowCustomization: true
