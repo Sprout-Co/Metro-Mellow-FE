@@ -1638,6 +1638,13 @@ export type UpdateAddressMutationVariables = Exact<{
 
 export type UpdateAddressMutation = { __typename?: 'Mutation', updateAddress: boolean };
 
+export type RemoveAddressMutationVariables = Exact<{
+  addressId: Scalars['ID']['input'];
+}>;
+
+
+export type RemoveAddressMutation = { __typename?: 'Mutation', removeAddress: boolean };
+
 export type UpdateBookingPaymentStatusMutationVariables = Exact<{
   updateBookingPaymentStatusId: Scalars['ID']['input'];
   paymentStatus: PaymentStatus;
@@ -1975,14 +1982,14 @@ export type AdminInvitationQuery = { __typename?: 'Query', adminInvitation?: { _
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label: string } | null } | null };
+export type GetCurrentUserQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label: string } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null> | null } | null };
 
 export type GetUserByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label: string } | null } | null };
+export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label: string } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null> | null } | null };
 
 export type GetUsersQueryVariables = Exact<{
   role?: InputMaybe<UserRole>;
@@ -2903,6 +2910,37 @@ export function useUpdateAddressMutation(baseOptions?: ApolloReactHooks.Mutation
 export type UpdateAddressMutationHookResult = ReturnType<typeof useUpdateAddressMutation>;
 export type UpdateAddressMutationResult = Apollo.MutationResult<UpdateAddressMutation>;
 export type UpdateAddressMutationOptions = Apollo.BaseMutationOptions<UpdateAddressMutation, UpdateAddressMutationVariables>;
+export const RemoveAddressDocument = gql`
+    mutation RemoveAddress($addressId: ID!) {
+  removeAddress(addressId: $addressId)
+}
+    `;
+export type RemoveAddressMutationFn = Apollo.MutationFunction<RemoveAddressMutation, RemoveAddressMutationVariables>;
+
+/**
+ * __useRemoveAddressMutation__
+ *
+ * To run a mutation, you first call `useRemoveAddressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveAddressMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeAddressMutation, { data, loading, error }] = useRemoveAddressMutation({
+ *   variables: {
+ *      addressId: // value for 'addressId'
+ *   },
+ * });
+ */
+export function useRemoveAddressMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RemoveAddressMutation, RemoveAddressMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<RemoveAddressMutation, RemoveAddressMutationVariables>(RemoveAddressDocument, options);
+      }
+export type RemoveAddressMutationHookResult = ReturnType<typeof useRemoveAddressMutation>;
+export type RemoveAddressMutationResult = Apollo.MutationResult<RemoveAddressMutation>;
+export type RemoveAddressMutationOptions = Apollo.BaseMutationOptions<RemoveAddressMutation, RemoveAddressMutationVariables>;
 export const UpdateBookingPaymentStatusDocument = gql`
     mutation UpdateBookingPaymentStatus($updateBookingPaymentStatusId: ID!, $paymentStatus: PaymentStatus!) {
   updateBookingPaymentStatus(
@@ -4686,6 +4724,16 @@ export const GetCurrentUserDocument = gql`
       isDefault
       label
     }
+    addresses {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+    }
     emailVerified
     emailVerifiedAt
     accountStatus
@@ -4742,6 +4790,16 @@ export const GetUserByIdDocument = gql`
       zipCode
       country
       id
+      isDefault
+      label
+    }
+    addresses {
+      id
+      street
+      city
+      state
+      zipCode
+      country
       isDefault
       label
     }
