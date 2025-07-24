@@ -1,0 +1,29 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.add_subscription_page {
+  &__header {
+    margin-bottom: spacing("xl");
+  }
+
+  &__title {
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xl");
+    max-width: 1200px;
+  }
+}

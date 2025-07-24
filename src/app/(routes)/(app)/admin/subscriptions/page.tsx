@@ -376,7 +376,7 @@ export default function SubscriptionsPage() {
               variant="primary"
               size="medium"
               icon="+"
-              onClick={() => console.log("Create subscription functionality to be implemented")}
+              onClick={() => router.push("/admin/subscriptions/add")}
             >
               Add Subscription
             </Button>
