@@ -28,6 +28,7 @@ import {
   CreateBookingInput,
   User,
   UserRole,
+  Address,
 } from "@/graphql/api";
 import styles from "./AddBooking.module.scss";
 
@@ -84,6 +85,7 @@ export default function AddBookingPage() {
     new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split("T")[0]
   );
   const [selectedTime, setSelectedTime] = useState<TimeSlot | "">("");
+  const [selectedAddressId, setSelectedAddressId] = useState("");
   const [notes, setNotes] = useState("");
 
   // Fetch data on mount
@@ -135,6 +137,26 @@ export default function AddBookingPage() {
   const selectedOption = selectedService?.options?.find(
     (o) => o.id === selectedOptionId
   );
+
+  // Auto-select default address when customer changes
+  useEffect(() => {
+    if (selectedCustomer?.defaultAddress?.id) {
+      setSelectedAddressId(selectedCustomer.defaultAddress.id);
+    } else if (
+      selectedCustomer?.addresses &&
+      selectedCustomer.addresses.length > 0
+    ) {
+      // If no default address, select the first available address
+      const firstAddress = selectedCustomer.addresses.find(
+        (addr) => addr !== null
+      );
+      if (firstAddress) {
+        setSelectedAddressId(firstAddress.id);
+      }
+    } else {
+      setSelectedAddressId("");
+    }
+  }, [selectedCustomer]);
 
   // Calculate total price
   const calculateTotalPrice = useCallback(() => {
@@ -221,7 +243,8 @@ export default function AddBookingPage() {
       !selectedCustomerId ||
       !selectedServiceId ||
       !selectedDate ||
-      !selectedTime
+      !selectedTime ||
+      !selectedAddressId
     ) {
       return false;
     }
@@ -277,7 +300,8 @@ export default function AddBookingPage() {
       !selectedCustomer ||
       !selectedService ||
       !selectedDate ||
-      !selectedTime
+      !selectedTime ||
+      !selectedAddressId
     ) {
       setError("Please fill in all required fields");
       return;
@@ -309,7 +333,7 @@ export default function AddBookingPage() {
         serviceOption: selectedOption?.service_id || ("" as string),
         date: new Date(selectedDate),
         timeSlot: selectedTime as TimeSlot,
-        address: selectedCustomer.defaultAddress?.id || "",
+        address: selectedAddressId,
         notes: notes,
         serviceDetails: {
           serviceOption: selectedOption?.service_id || ("" as string),
@@ -435,9 +459,16 @@ export default function AddBookingPage() {
             <ScheduleSection
               selectedDate={selectedDate}
               selectedTime={selectedTime}
+              selectedAddressId={selectedAddressId}
+              customerAddresses={
+                selectedCustomer?.addresses?.filter(
+                  (addr): addr is Address => addr !== null
+                ) || []
+              }
               notes={notes}
               onDateChange={setSelectedDate}
               onTimeChange={setSelectedTime}
+              onAddressChange={setSelectedAddressId}
               onNotesChange={setNotes}
             />
 

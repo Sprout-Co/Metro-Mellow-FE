@@ -1988,7 +1988,7 @@ export type GetUsersQueryVariables = Exact<{
 }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label: string } | null }> };
+export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label: string } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null> | null }> };
 
 export type GetBookingsQueryVariables = Exact<{
   status?: InputMaybe<BookingStatus>;
@@ -4799,6 +4799,16 @@ export const GetUsersDocument = gql`
       zipCode
       country
       id
+      isDefault
+      label
+    }
+    addresses {
+      id
+      street
+      city
+      state
+      zipCode
+      country
       isDefault
       label
     }

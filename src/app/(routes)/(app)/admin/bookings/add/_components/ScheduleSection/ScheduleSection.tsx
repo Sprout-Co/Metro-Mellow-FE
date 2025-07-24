@@ -1,24 +1,30 @@
 import React from "react";
 import { Icon } from "@/components/ui/Icon/Icon";
 import Card from "../../../../_components/UI/Card/Card";
-import { TimeSlot } from "@/graphql/api";
+import { TimeSlot, Address } from "@/graphql/api";
 import styles from "./ScheduleSection.module.scss";
 
 interface ScheduleSectionProps {
   selectedDate: string;
   selectedTime: TimeSlot | "";
+  selectedAddressId: string;
   notes: string;
+  customerAddresses?: Address[];
   onDateChange: (date: string) => void;
   onTimeChange: (time: TimeSlot) => void;
+  onAddressChange: (addressId: string) => void;
   onNotesChange: (notes: string) => void;
 }
 
 const ScheduleSection: React.FC<ScheduleSectionProps> = ({
   selectedDate,
   selectedTime,
+  selectedAddressId,
   notes,
+  customerAddresses = [],
   onDateChange,
   onTimeChange,
+  onAddressChange,
   onNotesChange,
 }) => {
   return (
@@ -55,6 +61,32 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
             <option value={TimeSlot.Evening}>Evening (4PM-8PM)</option>
           </select>
         </div>
+      </div>
+
+      <div className={styles.schedule__field}>
+        <label className={styles.schedule__label}>Service Address</label>
+        {customerAddresses.length > 0 ? (
+          <select
+            value={selectedAddressId}
+            onChange={(e) => onAddressChange(e.target.value)}
+            className={styles.schedule__select}
+            required
+          >
+            <option value="">Select address</option>
+            {customerAddresses.map((address) => (
+              <option key={address.id} value={address.id}>
+                {address.label} - {address.street}, {address.city},{" "}
+                {address.state}
+                {address.isDefault && " (Default)"}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <div className={styles.schedule__no_addresses}>
+            <Icon name="map-pin" size={16} />
+            <span>No addresses available for this customer</span>
+          </div>
+        )}
       </div>
 
       <div className={styles.schedule__field}>

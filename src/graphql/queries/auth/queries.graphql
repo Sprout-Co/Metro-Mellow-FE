@@ -68,6 +68,16 @@ query GetUsers($role: UserRole) {
       isDefault
       label
     }
+    addresses {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+    }
     emailVerified
     emailVerifiedAt
     accountStatus
