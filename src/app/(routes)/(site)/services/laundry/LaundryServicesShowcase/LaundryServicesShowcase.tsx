@@ -3,60 +3,62 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import styles from "./CleaningServicesShowcase.module.scss";
+import styles from "./LaundryServicesShowcase.module.scss";
 import { Button } from "@/components/ui/Button/Button";
 import ServiceModal, { ServiceConfiguration } from "@/components/ui/ServiceModal/ServiceModal";
 
 // Service data
-const cleaningServices = [
+const laundryServices = [
   {
     id: "standard",
-    name: "Standard Cleaning",
-    icon: "🧹",
+    name: "Standard Laundry",
+    icon: "👕",
     description:
-      "Regular maintenance cleaning for your home. Dusting, vacuuming, and surface cleaning.",
+      "Basic wash, dry, and fold service for everyday clothing and linens. Perfect for regular laundry needs.",
     features: [
-      "Dusting & Wiping",
-      "Vacuuming",
-      "Bathroom Cleaning",
-      "Kitchen Cleaning",
+      "Wash & Dry",
+      "Basic Folding",
+      "Stain Treatment",
+      "Fabric Softener",
     ],
-    price: 2950,
-    image: "/images/cleaning/c1.jpeg"
+    price: 1950,
+    image: "/images/laundry/l1.jpeg"
   },
   {
-    id: "deep",
-    name: "Deep Cleaning",
+    id: "premium",
+    name: "Premium Laundry",
     icon: "✨",
     description:
-      "Thorough cleaning including hard-to-reach areas, appliances, and detailed attention.",
+      "Enhanced laundry service with special care for delicate fabrics and precision folding techniques.",
     features: [
       "Everything in Standard",
-      "Inside Appliances",
-      "Baseboards",
-      "Light Fixtures",
+      "Delicate Fabric Care",
+      "Precision Folding",
+      "Garment Steaming",
     ],
-    price: 4950,
-    image: "/images/cleaning/c2.jpeg"
+    price: 3450,
+    image: "/images/laundry/l5.jpeg"
   },
   {
-    id: "movein",
-    name: "Move-in/Move-out",
-    icon: "📦",
+    id: "drycleaning",
+    name: "Dry Cleaning",
+    icon: "🧥",
     description:
-      "Complete cleaning for new beginnings. Perfect for landlords and tenants.",
+      "Professional dry cleaning for suits, dresses, and special garments that require careful handling.",
     features: [
-      "Deep Cleaning Plus",
-      "Inside Cabinets",
-      "Window Cleaning",
-      "Wall Washing",
+      "Suit & Formal Wear",
+      "Stain Removal",
+      "Pressing & Finishing",
+      "Garment Preservation",
     ],
-    price: 6950,
-    image: "/images/cleaning/c3.jpeg"
+    price: 4950,
+    image: "/images/laundry/dry-cleaning.jpg"
   },
 ];
 
-const CleaningServicesShowcase = () => {
+
+
+const LaundryServicesShowcase = () => {
   const [sectionRef, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -64,41 +66,22 @@ const CleaningServicesShowcase = () => {
 
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<typeof cleaningServices[0] | null>(null);
+  const [selectedService, setSelectedService] = useState<typeof laundryServices[0] | null>(null);
 
-  // Configuration for cleaning service modal
-  const getCleaningServiceConfiguration = (): ServiceConfiguration => ({
-    categories: [
-      {
-        id: "apartmentType",
-        name: "Your Apartment type",
-        options: ["Flat/Apartment", "Duplex/House"],
-        required: true
-      }
-    ],
+  // Configuration for laundry service modal
+  const getLaundryServiceConfiguration = (): ServiceConfiguration => ({
     options: [
-      { id: "bedroom", name: "Bedroom", count: 1 },
-      { id: "livingRoom", name: "Living Room", count: 1 },
-      { id: "kitchen", name: "Kitchen", count: 1 },
-      { id: "balcony", name: "Balcony", count: 1 },
-      { id: "lobby", name: "Lobby", count: 1 },
-      { id: "outdoor", name: "Outdoor", count: 1 },
-      { id: "studyRoom", name: "Study Room", count: 1 },
-      { id: "bathroom", name: "Bathroom", count: 1 },
+      { id: "shirt", name: "Shirt", count: 1 },
+      { id: "trouser", name: "Trouser", count: 1 },
+      { id: "native", name: "Native", count: 1 },
+      { id: "towel", name: "Towel", count: 1 },
+      { id: "bedsheet", name: "Bedsheet", count: 1 },
+      { id: "duvet", name: "Duvet", count: 1 },
+      { id: "shoe", name: "Shoe", count: 1 },
       { id: "other", name: "Other", count: 1 },
     ],
     allowCustomization: true
   });
-
-  // Features included in cleaning services
-  const getCleaningIncludedFeatures = () => [
-    "Professional cleaning supplies included",
-    "Experienced and vetted cleaning professionals",
-    "Satisfaction guarantee",
-    "Flexible scheduling options",
-    "Eco-friendly cleaning products available",
-    "Deep sanitization and disinfection"
-  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -124,7 +107,7 @@ const CleaningServicesShowcase = () => {
   };
 
   // Handle opening the modal with selected service
-  const handleOpenModal = (service: typeof cleaningServices[0]) => {
+  const handleOpenModal = (service: typeof laundryServices[0]) => {
     setSelectedService(service);
     setIsModalOpen(true);
   };
@@ -133,6 +116,21 @@ const CleaningServicesShowcase = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+  // Handle order submission
+  const handleOrderSubmit = (configuration: any) => {
+    console.log("Laundry service configuration:", configuration);
+  };
+
+  // Features included in laundry services
+  const getLaundryIncludedFeatures = () => [
+    "Professional laundry detergents included",
+    "Experienced and vetted laundry professionals",
+    "Satisfaction guarantee",
+    "Flexible pickup and delivery",
+    "Eco-friendly washing options",
+    "Careful handling of delicate fabrics"
+  ];
 
   return (
     <section className={styles.showcase} ref={sectionRef}>
@@ -153,10 +151,9 @@ const CleaningServicesShowcase = () => {
               : { opacity: 0, y: 20 }
           }
         >
-          <h2 className={styles.showcase__title}>Our Cleaning Services</h2>
+          <h2 className={styles.showcase__title}>Choose Your Laundry Service</h2>
           <p className={styles.showcase__subtitle}>
-            From everyday tidying to deep transformations, we have the perfect
-            service for your needs.
+            From everyday essentials to specialty fabrics, we have the perfect care solution for your garments.
           </p>
         </motion.div>
 
@@ -166,7 +163,7 @@ const CleaningServicesShowcase = () => {
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
         >
-          {cleaningServices.map((service) => (
+          {laundryServices.map((service) => (
             <motion.div
               key={service.id}
               className={styles.showcase__card}
@@ -193,6 +190,13 @@ const CleaningServicesShowcase = () => {
                     </li>
                   ))}
                 </ul>
+                
+                <div className={styles.showcase__priceTag}>
+                  <span className={styles.showcase__priceValue}>
+                    NGN {service.price.toLocaleString()}
+                  </span>
+                  <span className={styles.showcase__priceUnit}>/load</span>
+                </div>
 
                 <div className={styles.showcase__action}>
                   <Button 
@@ -209,7 +213,7 @@ const CleaningServicesShowcase = () => {
         </motion.div>
       </div>
 
-      {/* Cleaning Service Modal */}
+      {/* Laundry Service Modal */}
       {selectedService && (
         <ServiceModal
           isOpen={isModalOpen}
@@ -218,16 +222,14 @@ const CleaningServicesShowcase = () => {
           serviceDescription={selectedService.description}
           servicePrice={selectedService.price}
           serviceImage={selectedService.image}
-          serviceConfiguration={getCleaningServiceConfiguration()}
-          serviceType="Cleaning"
-          includedFeatures={getCleaningIncludedFeatures()}
-          onOrderSubmit={(configuration) => {
-            console.log("Cleaning service configuration:", configuration);
-          }}
+          serviceConfiguration={getLaundryServiceConfiguration()}
+          serviceType="Laundry"
+          includedFeatures={getLaundryIncludedFeatures()}
+          onOrderSubmit={handleOrderSubmit}
         />
       )}
     </section>
   );
 };
 
-export default CleaningServicesShowcase;
+export default LaundryServicesShowcase; 
