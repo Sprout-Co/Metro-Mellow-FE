@@ -16,11 +16,11 @@ import {
   ServiceCategory,
   CreateSubscriptionInput,
   SubscriptionServiceInput,
+  Address,
 } from "@/graphql/api";
 import CustomerSelectionSection from "./_components/CustomerSelectionSection/CustomerSelectionSection";
 import ServiceConfigurationSection from "./_components/ServiceConfigurationSection/ServiceConfigurationSection";
 import BillingScheduleSection from "./_components/BillingScheduleSection/BillingScheduleSection";
-import AddressSelectionSection from "./_components/AddressSelectionSection/AddressSelectionSection";
 import FormActions from "./_components/FormActions/FormActions";
 import ErrorDisplay from "./_components/ErrorDisplay/ErrorDisplay";
 import styles from "./AddSubscriptionPage.module.scss";
@@ -43,9 +43,15 @@ export default function AddSubscriptionPage() {
   // Form state
   const [selectedCustomerId, setSelectedCustomerId] = useState("");
   const [customerSearchQuery, setCustomerSearchQuery] = useState("");
-  const [serviceConfigurations, setServiceConfigurations] = useState<ServiceConfiguration[]>([]);
-  const [billingCycle, setBillingCycle] = useState<BillingCycle>(BillingCycle.Monthly);
-  const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
+  const [serviceConfigurations, setServiceConfigurations] = useState<
+    ServiceConfiguration[]
+  >([]);
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>(
+    BillingCycle.Monthly
+  );
+  const [startDate, setStartDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
   const [duration, setDuration] = useState(1);
   const [autoRenew, setAutoRenew] = useState(true);
   const [selectedAddressId, setSelectedAddressId] = useState("");
@@ -53,7 +59,7 @@ export default function AddSubscriptionPage() {
   // Data state
   const [customers, setCustomers] = useState<User[]>([]);
   const [services, setServices] = useState<Service[]>([]);
-  const [customerAddresses, setCustomerAddresses] = useState<any[]>([]);
+  const [customerAddresses, setCustomerAddresses] = useState<Address[]>([]);
 
   const { handleCreateSubscription } = useSubscriptionOperations();
   const { handleGetCustomers } = useCustomerOperations();
@@ -66,6 +72,14 @@ export default function AddSubscriptionPage() {
   useEffect(() => {
     if (selectedCustomerId) {
       fetchCustomerAddresses();
+      const customer = customers.find(
+        (customer) => customer.id === selectedCustomerId
+      );
+      const addresses =
+        customer?.addresses?.filter(
+          (address): address is Address => address !== null
+        ) || [];
+      setCustomerAddresses(addresses);
     }
   }, [selectedCustomerId]);
 
@@ -105,7 +119,10 @@ export default function AddSubscriptionPage() {
     setServiceConfigurations([...serviceConfigurations, newService]);
   };
 
-  const handleUpdateService = (index: number, updatedService: ServiceConfiguration) => {
+  const handleUpdateService = (
+    index: number,
+    updatedService: ServiceConfiguration
+  ) => {
     const updated = [...serviceConfigurations];
     updated[index] = updatedService;
     setServiceConfigurations(updated);
@@ -118,15 +135,17 @@ export default function AddSubscriptionPage() {
 
   const validateForm = (): string | null => {
     if (!selectedCustomerId) return "Please select a customer";
-    if (serviceConfigurations.length === 0) return "Please add at least one service";
+    if (serviceConfigurations.length === 0)
+      return "Please add at least one service";
     if (!selectedAddressId) return "Please select an address";
-    
+
     for (const service of serviceConfigurations) {
       if (!service.serviceId) return "Please select all services";
       if (service.price <= 0) return "Service prices must be greater than 0";
-      if (service.scheduledDays.length === 0) return "Please select scheduled days for all services";
+      if (service.scheduledDays.length === 0)
+        return "Please select scheduled days for all services";
     }
-    
+
     return null;
   };
 
@@ -141,15 +160,16 @@ export default function AddSubscriptionPage() {
       setIsLoading(true);
       setError(null);
 
-      const subscriptionServices: SubscriptionServiceInput[] = serviceConfigurations.map(service => ({
-        serviceId: service.serviceId,
-        price: service.price,
-        frequency: service.frequency,
-        scheduledDays: service.scheduledDays,
-        preferredTimeSlot: service.preferredTimeSlot,
-        serviceDetails: service.serviceDetails,
-        category: service.category,
-      }));
+      const subscriptionServices: SubscriptionServiceInput[] =
+        serviceConfigurations.map((service) => ({
+          serviceId: service.serviceId,
+          price: service.price,
+          frequency: service.frequency,
+          scheduledDays: service.scheduledDays,
+          preferredTimeSlot: service.preferredTimeSlot,
+          serviceDetails: service.serviceDetails,
+          category: service.category,
+        }));
 
       const input: CreateSubscriptionInput = {
         address: selectedAddressId,
@@ -164,7 +184,9 @@ export default function AddSubscriptionPage() {
       router.push("/admin/subscriptions");
     } catch (error) {
       console.error("Error creating subscription:", error);
-      setError(error instanceof Error ? error.message : "Failed to create subscription");
+      setError(
+        error instanceof Error ? error.message : "Failed to create subscription"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -181,21 +203,28 @@ export default function AddSubscriptionPage() {
     >
       <div className={styles.add_subscription_page}>
         <div className={styles.add_subscription_page__header}>
-          <h2 className={styles.add_subscription_page__title}>Create New Subscription</h2>
+          <h2 className={styles.add_subscription_page__title}>
+            Create New Subscription
+          </h2>
           <p className={styles.add_subscription_page__subtitle}>
             Configure a new subscription for a customer
           </p>
         </div>
 
-        {error && <ErrorDisplay error={error} onDismiss={() => setError(null)} />}
+        {error && (
+          <ErrorDisplay error={error} onDismiss={() => setError(null)} />
+        )}
 
         <div className={styles.add_subscription_page__form}>
           <CustomerSelectionSection
             customers={customers}
             selectedCustomerId={selectedCustomerId}
             customerSearchQuery={customerSearchQuery}
+            addresses={customerAddresses}
+            selectedAddressId={selectedAddressId}
             onCustomerSelect={setSelectedCustomerId}
             onSearchQueryChange={setCustomerSearchQuery}
+            onAddressSelect={setSelectedAddressId}
             isLoading={isLoading}
           />
 
@@ -216,13 +245,6 @@ export default function AddSubscriptionPage() {
             setDuration={setDuration}
             autoRenew={autoRenew}
             setAutoRenew={setAutoRenew}
-          />
-
-          <AddressSelectionSection
-            addresses={customerAddresses}
-            selectedAddressId={selectedAddressId}
-            onAddressSelect={setSelectedAddressId}
-            customerId={selectedCustomerId}
           />
 
           <FormActions
