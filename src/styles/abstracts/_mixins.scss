@@ -10,6 +10,27 @@
 // RESPONSIVE MIXINS
 // ===================================
 
+// Semantic breakpoint mapping for respond-to mixin
+$semantic-breakpoints: (
+  "mobile": "sm",
+  "tablet": "md",
+  "desktop": "lg",
+  "large-desktop": "xl",
+);
+
+@mixin respond-to($breakpoint) {
+  @if map-has-key($semantic-breakpoints, $breakpoint) {
+    $actual-breakpoint: map-get($semantic-breakpoints, $breakpoint);
+    @include breakpoint-down($actual-breakpoint) {
+      @content;
+    }
+  } @else {
+    @include breakpoint-down($breakpoint) {
+      @content;
+    }
+  }
+}
+
 @mixin breakpoint-up($breakpoint) {
   @if map-has-key($breakpoints, $breakpoint) {
     @media (min-width: map-get($breakpoints, $breakpoint)) {

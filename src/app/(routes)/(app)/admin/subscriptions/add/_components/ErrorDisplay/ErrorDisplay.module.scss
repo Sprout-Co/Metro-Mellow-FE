@@ -1,48 +1,68 @@
+// ErrorDisplay.module.scss
 @import "@/styles/abstracts/variables";
 @import "@/styles/abstracts/mixins";
 @import "@/styles/abstracts/functions";
 
 .error_display {
-  background-color: rgba(color("status", "error"), 0.1);
-  border: 1px solid rgba(color("status", "error"), 0.2);
-  border-radius: border-radius("md");
-  padding: spacing("md");
-  margin-bottom: spacing("lg");
+  background-color: map-get($colors, "status", "error");
+  border-radius: map-get($border-radius, "md");
+  padding: map-get($spacing, "md");
+  margin-bottom: map-get($spacing, "lg");
+  border: 1px solid darken(map-get($colors, "status", "error"), 10%);
 
   &__content {
     display: flex;
-    align-items: center;
-    gap: spacing("sm");
+    align-items: flex-start;
+    gap: map-get($spacing, "md");
   }
 
   &__icon {
-    color: color("status", "error");
+    color: map-get($colors, "neutral", "white");
     flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  &__text {
+    flex: 1;
+  }
+
+  &__title {
+    font-size: map-get($font-sizes, "md");
+    font-weight: map-get($font-weights, "semibold");
+    color: map-get($colors, "neutral", "white");
+    margin: 0 0 map-get($spacing, "xs") 0;
   }
 
   &__message {
-    flex: 1;
-    font-size: map-get($font-sizes, "base");
-    color: color("status", "error");
-    font-weight: map-get($font-weights, "medium");
+    font-size: map-get($font-sizes, "sm");
+    color: map-get($colors, "neutral", "white");
+    margin: 0;
+    line-height: 1.4;
   }
 
-  &__dismiss {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    border: none;
-    border-radius: border-radius("sm");
-    background-color: transparent;
-    color: color("status", "error");
-    cursor: pointer;
+  &__actions {
     flex-shrink: 0;
-    transition: background-color 0.2s ease;
+  }
+}
 
-    &:hover {
-      background-color: rgba(color("status", "error"), 0.1);
+// Responsive design
+@include respond-to("tablet") {
+  .error_display {
+    padding: map-get($spacing, "sm");
+
+    &__content {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: map-get($spacing, "sm");
+    }
+  }
+}
+
+@include respond-to("mobile") {
+  .error_display {
+    &__content {
+      gap: map-get($spacing, "sm");
     }
   }
 }

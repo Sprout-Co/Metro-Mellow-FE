@@ -1,8 +1,13 @@
 import React from "react";
 import { Icon } from "@/components/ui/Icon/Icon";
 import Card from "../../../../_components/UI/Card/Card";
-import Button from "../../../../_components/UI/Button/Button";
-import { Service, SubscriptionFrequency, TimeSlot, ScheduleDays, ServiceCategory } from "@/graphql/api";
+import {
+  Service,
+  SubscriptionFrequency,
+  TimeSlot,
+  ScheduleDays,
+  ServiceCategory,
+} from "@/graphql/api";
 import styles from "./ServiceConfigurationSection.module.scss";
 
 interface ServiceConfiguration {
@@ -17,37 +22,118 @@ interface ServiceConfiguration {
 
 interface ServiceConfigurationSectionProps {
   services: Service[];
-  serviceConfigurations: ServiceConfiguration[];
-  onAddService: () => void;
-  onUpdateService: (index: number, service: ServiceConfiguration) => void;
-  onRemoveService: (index: number) => void;
+  selectedServices: Set<string>;
+  serviceConfigurations: Map<string, ServiceConfiguration>;
+  onServiceToggle: (serviceId: string) => void;
+  onConfigurationUpdate: (
+    serviceId: string,
+    config: Partial<ServiceConfiguration>
+  ) => void;
+  isLoading?: boolean;
 }
 
-const ServiceConfigurationSection: React.FC<ServiceConfigurationSectionProps> = ({
+const ServiceConfigurationSection: React.FC<
+  ServiceConfigurationSectionProps
+> = ({
   services,
+  selectedServices,
   serviceConfigurations,
-  onAddService,
-  onUpdateService,
-  onRemoveService,
+  onServiceToggle,
+  onConfigurationUpdate,
+  isLoading = false,
 }) => {
-  const handleServiceChange = (index: number, field: keyof ServiceConfiguration, value: any) => {
-    const updated = { ...serviceConfigurations[index], [field]: value };
-    onUpdateService(index, updated);
-  };
+  const handleScheduledDaysChange = (
+    serviceId: string,
+    day: ScheduleDays,
+    checked: boolean
+  ) => {
+    const config = serviceConfigurations.get(serviceId);
+    if (!config) return;
 
-  const handleScheduledDaysChange = (index: number, day: ScheduleDays, checked: boolean) => {
-    const current = serviceConfigurations[index].scheduledDays;
-    const updated = checked 
+    const current = config.scheduledDays;
+    const updated = checked
       ? [...current, day]
-      : current.filter(d => d !== day);
-    handleServiceChange(index, 'scheduledDays', updated);
+      : current.filter((d) => d !== day);
+
+    onConfigurationUpdate(serviceId, { scheduledDays: updated });
   };
 
-  const getServiceOptions = (excludeIds: string[]) => {
-    return services.filter(service => !excludeIds.includes(service._id));
+  const getServiceIcon = (category: ServiceCategory): string => {
+    switch (category) {
+      case ServiceCategory.Cleaning:
+        return "droplets";
+      case ServiceCategory.Cooking:
+        return "utensils";
+      case ServiceCategory.Laundry:
+        return "shirt";
+      case ServiceCategory.PestControl:
+        return "bug";
+      case ServiceCategory.Errands:
+        return "package";
+      default:
+        return "package";
+    }
   };
 
-  const usedServiceIds = serviceConfigurations.map(config => config.serviceId).filter(Boolean);
+  const getFrequencyLabel = (frequency: SubscriptionFrequency): string => {
+    switch (frequency) {
+      case SubscriptionFrequency.Daily:
+        return "Daily";
+      case SubscriptionFrequency.Weekly:
+        return "Weekly";
+      case SubscriptionFrequency.BiWeekly:
+        return "Bi-Weekly";
+      case SubscriptionFrequency.Monthly:
+        return "Monthly";
+      default:
+        return "Weekly";
+    }
+  };
+
+  const getTimeSlotLabel = (timeSlot: TimeSlot): string => {
+    switch (timeSlot) {
+      case TimeSlot.Morning:
+        return "Morning (8AM - 12PM)";
+      case TimeSlot.Afternoon:
+        return "Afternoon (12PM - 4PM)";
+      case TimeSlot.Evening:
+        return "Evening (4PM - 8PM)";
+      default:
+        return "Morning (8AM - 12PM)";
+    }
+  };
+
+  const getDayLabel = (day: ScheduleDays): string => {
+    switch (day) {
+      case ScheduleDays.Monday:
+        return "Mon";
+      case ScheduleDays.Tuesday:
+        return "Tue";
+      case ScheduleDays.Wednesday:
+        return "Wed";
+      case ScheduleDays.Thursday:
+        return "Thu";
+      case ScheduleDays.Friday:
+        return "Fri";
+      case ScheduleDays.Saturday:
+        return "Sat";
+      case ScheduleDays.Sunday:
+        return "Sun";
+      default:
+        return "Mon";
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <Card className={styles.service_configuration}>
+        <div className={styles.service_configuration__loading}>
+          <Icon name="loader" size={24} />
+          <p>Loading services...</p>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card className={styles.service_configuration}>
@@ -56,67 +142,74 @@ const ServiceConfigurationSection: React.FC<ServiceConfigurationSectionProps> = 
           <Icon name="package" />
           Service Configuration
         </h3>
-        <Button
-          variant="secondary"
-          size="small"
-          icon="+"
-          onClick={onAddService}
-        >
-          Add Service
-        </Button>
+        <p className={styles.service_configuration__subtitle}>
+          Select services and configure their settings
+        </p>
       </div>
 
-      {serviceConfigurations.length === 0 ? (
-        <div className={styles.service_configuration__empty}>
-          <Icon name="package" size={48} />
-          <p>No services added yet</p>
-          <Button variant="primary" onClick={onAddService}>
-            Add Your First Service
-          </Button>
+      {/* Service Selection */}
+      <div className={styles.service_configuration__selection}>
+        <h4 className={styles.service_configuration__section_title}>
+          Available Services
+        </h4>
+        <div className={styles.service_configuration__services_grid}>
+          {services.map((service) => (
+            <div
+              key={service._id}
+              className={`${styles.service_configuration__service_card} ${
+                selectedServices.has(service._id)
+                  ? styles["service_configuration__service_card--selected"]
+                  : ""
+              }`}
+              onClick={() => onServiceToggle(service._id)}
+            >
+              <div className={styles.service_configuration__service_icon}>
+                <Icon name={getServiceIcon(service.category)} />
+              </div>
+              <div className={styles.service_configuration__service_info}>
+                <h5>{service.name}</h5>
+                <p>{service.description}</p>
+                <span className={styles.service_configuration__service_price}>
+                  ${service.price}
+                </span>
+              </div>
+              <div className={styles.service_configuration__service_checkbox}>
+                <input
+                  type="checkbox"
+                  checked={selectedServices.has(service._id)}
+                  onChange={() => onServiceToggle(service._id)}
+                  className={styles.service_configuration__checkbox}
+                />
+              </div>
+            </div>
+          ))}
         </div>
-      ) : (
-        <div className={styles.service_configuration__services}>
-          {serviceConfigurations.map((config, index) => {
-            const availableServices = getServiceOptions(usedServiceIds.filter((_, i) => i !== index));
-            const selectedService = services.find(s => s._id === config.serviceId);
+      </div>
+
+      {/* Service Configuration */}
+      {selectedServices.size > 0 && (
+        <div className={styles.service_configuration__config}>
+          <h4 className={styles.service_configuration__section_title}>
+            Service Settings
+          </h4>
+          {Array.from(selectedServices).map((serviceId) => {
+            const service = services.find((s) => s._id === serviceId);
+            const config = serviceConfigurations.get(serviceId);
+
+            if (!service || !config) return null;
 
             return (
-              <div key={index} className={styles.service_configuration__service_item}>
-                <div className={styles.service_configuration__service_header}>
-                  <h4>Service {index + 1}</h4>
-                  <button
-                    type="button"
-                    onClick={() => onRemoveService(index)}
-                    className={styles.service_configuration__remove_btn}
-                  >
-                    <Icon name="x" size={16} />
-                  </button>
+              <div
+                key={serviceId}
+                className={styles.service_configuration__config_item}
+              >
+                <div className={styles.service_configuration__config_header}>
+                  <h5>{service.name}</h5>
+                  <Icon name={getServiceIcon(service.category)} />
                 </div>
 
-                <div className={styles.service_configuration__grid}>
-                  <div className={styles.service_configuration__field}>
-                    <label>Service Type</label>
-                    <select
-                      value={config.serviceId}
-                      onChange={(e) => {
-                        const service = services.find(s => s._id === e.target.value);
-                        handleServiceChange(index, 'serviceId', e.target.value);
-                        if (service) {
-                          handleServiceChange(index, 'category', service.category);
-                          handleServiceChange(index, 'price', service.basePrice || 0);
-                        }
-                      }}
-                      className={styles.service_configuration__select}
-                    >
-                      <option value="">Select service...</option>
-                      {availableServices.map((service) => (
-                        <option key={service._id} value={service._id}>
-                          {service.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
+                <div className={styles.service_configuration__config_grid}>
+                  {/* Price */}
                   <div className={styles.service_configuration__field}>
                     <label>Price ($)</label>
                     <input
@@ -124,65 +217,101 @@ const ServiceConfigurationSection: React.FC<ServiceConfigurationSectionProps> = 
                       min="0"
                       step="0.01"
                       value={config.price}
-                      onChange={(e) => handleServiceChange(index, 'price', parseFloat(e.target.value) || 0)}
+                      onChange={(e) =>
+                        onConfigurationUpdate(serviceId, {
+                          price: parseFloat(e.target.value) || 0,
+                        })
+                      }
                       className={styles.service_configuration__input}
                     />
                   </div>
 
+                  {/* Frequency */}
                   <div className={styles.service_configuration__field}>
                     <label>Frequency</label>
                     <select
                       value={config.frequency}
-                      onChange={(e) => handleServiceChange(index, 'frequency', e.target.value as SubscriptionFrequency)}
+                      onChange={(e) =>
+                        onConfigurationUpdate(serviceId, {
+                          frequency: e.target.value as SubscriptionFrequency,
+                        })
+                      }
                       className={styles.service_configuration__select}
                     >
-                      <option value={SubscriptionFrequency.Weekly}>Weekly</option>
-                      <option value={SubscriptionFrequency.BiWeekly}>Bi-weekly</option>
-                      <option value={SubscriptionFrequency.Monthly}>Monthly</option>
+                      <option value={SubscriptionFrequency.Daily}>Daily</option>
+                      <option value={SubscriptionFrequency.Weekly}>
+                        Weekly
+                      </option>
+                      <option value={SubscriptionFrequency.BiWeekly}>
+                        Bi-Weekly
+                      </option>
+                      <option value={SubscriptionFrequency.Monthly}>
+                        Monthly
+                      </option>
                     </select>
                   </div>
 
+                  {/* Time Slot */}
                   <div className={styles.service_configuration__field}>
                     <label>Preferred Time</label>
                     <select
                       value={config.preferredTimeSlot}
-                      onChange={(e) => handleServiceChange(index, 'preferredTimeSlot', e.target.value as TimeSlot)}
+                      onChange={(e) =>
+                        onConfigurationUpdate(serviceId, {
+                          preferredTimeSlot: e.target.value as TimeSlot,
+                        })
+                      }
                       className={styles.service_configuration__select}
                     >
-                      <option value={TimeSlot.Morning}>Morning (8AM - 12PM)</option>
-                      <option value={TimeSlot.Afternoon}>Afternoon (12PM - 5PM)</option>
-                      <option value={TimeSlot.Evening}>Evening (5PM - 8PM)</option>
+                      <option value={TimeSlot.Morning}>
+                        Morning (8AM - 12PM)
+                      </option>
+                      <option value={TimeSlot.Afternoon}>
+                        Afternoon (12PM - 4PM)
+                      </option>
+                      <option value={TimeSlot.Evening}>
+                        Evening (4PM - 8PM)
+                      </option>
                     </select>
                   </div>
-                </div>
 
-                <div className={styles.service_configuration__field}>
-                  <label>Scheduled Days</label>
-                  <div className={styles.service_configuration__days}>
-                    {Object.values(ScheduleDays).map((day) => (
-                      <label key={day} className={styles.service_configuration__day_checkbox}>
-                        <input
-                          type="checkbox"
-                          checked={config.scheduledDays.includes(day)}
-                          onChange={(e) => handleScheduledDaysChange(index, day, e.target.checked)}
-                        />
-                        <span>{day}</span>
-                      </label>
-                    ))}
+                  {/* Scheduled Days */}
+                  <div className={styles.service_configuration__field}>
+                    <label>Scheduled Days</label>
+                    <div className={styles.service_configuration__days_grid}>
+                      {Object.values(ScheduleDays).map((day) => (
+                        <label
+                          key={day}
+                          className={styles.service_configuration__day_checkbox}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={config.scheduledDays.includes(day)}
+                            onChange={(e) =>
+                              handleScheduledDaysChange(
+                                serviceId,
+                                day,
+                                e.target.checked
+                              )
+                            }
+                          />
+                          <span>{getDayLabel(day)}</span>
+                        </label>
+                      ))}
+                    </div>
                   </div>
                 </div>
-
-                {selectedService && (
-                  <div className={styles.service_configuration__service_info}>
-                    <p><strong>Category:</strong> {selectedService.category}</p>
-                    {selectedService.description && (
-                      <p><strong>Description:</strong> {selectedService.description}</p>
-                    )}
-                  </div>
-                )}
               </div>
             );
           })}
+        </div>
+      )}
+
+      {selectedServices.size === 0 && (
+        <div className={styles.service_configuration__empty}>
+          <Icon name="package" size={48} />
+          <p>No services selected</p>
+          <p>Select services from above to configure their settings</p>
         </div>
       )}
     </Card>
