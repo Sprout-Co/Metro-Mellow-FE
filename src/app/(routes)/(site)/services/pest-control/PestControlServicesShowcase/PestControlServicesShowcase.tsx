@@ -3,60 +3,60 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import styles from "./CleaningServicesShowcase.module.scss";
+import styles from "./PestControlServicesShowcase.module.scss";
 import { Button } from "@/components/ui/Button/Button";
 import ServiceModal, { ServiceConfiguration } from "@/components/ui/ServiceModal/ServiceModal";
 
 // Service data
-const cleaningServices = [
+const pestControlServices = [
   {
-    id: "standard",
-    name: "Standard Cleaning",
-    icon: "🧹",
+    id: "general",
+    name: "General Pest Control",
+    icon: "🐜",
     description:
-      "Regular maintenance cleaning for your home. Dusting, vacuuming, and surface cleaning.",
+      "Comprehensive treatment for common household pests including ants, cockroaches, and spiders. Perfect for regular maintenance.",
     features: [
-      "Dusting & Wiping",
-      "Vacuuming",
-      "Bathroom Cleaning",
-      "Kitchen Cleaning",
+      "Interior & Exterior Treatment",
+      "Common Pest Elimination",
+      "Prevention Barriers",
+      "30-Day Guarantee",
     ],
-    price: 2950,
-    image: "/images/cleaning/c1.jpeg"
+    price: 7500,
+    image: "/images/pest-control/p1.jpeg"
   },
   {
-    id: "deep",
-    name: "Deep Cleaning",
-    icon: "✨",
+    id: "termite",
+    name: "Termite Treatment",
+    icon: "🪲",
     description:
-      "Thorough cleaning including hard-to-reach areas, appliances, and detailed attention.",
+      "Specialized treatment for termite infestations with thorough inspection, targeted elimination, and preventative measures.",
     features: [
-      "Everything in Standard",
-      "Inside Appliances",
-      "Baseboards",
-      "Light Fixtures",
+      "Termite Colony Elimination",
+      "Wood Treatment",
+      "Barrier Installation",
+      "3-Month Guarantee",
     ],
-    price: 4950,
-    image: "/images/cleaning/c2.jpeg"
+    price: 12500,
+    image: "/images/pest-control/p1.jpeg"
   },
   {
-    id: "movein",
-    name: "Move-in/Move-out",
-    icon: "📦",
+    id: "rodent",
+    name: "Rodent Control",
+    icon: "🐭",
     description:
-      "Complete cleaning for new beginnings. Perfect for landlords and tenants.",
+      "Complete rodent management solutions including trapping, removal, and preventative sealing of entry points.",
     features: [
-      "Deep Cleaning Plus",
-      "Inside Cabinets",
-      "Window Cleaning",
-      "Wall Washing",
+      "Rodent Removal",
+      "Entry Point Sealing",
+      "Sanitation Treatment",
+      "Preventative Consultation",
     ],
-    price: 6950,
-    image: "/images/cleaning/c3.jpeg"
+    price: 9500,
+    image: "/images/pest-control/p1.jpeg"
   },
 ];
 
-const CleaningServicesShowcase = () => {
+const PestControlServicesShowcase = () => {
   const [sectionRef, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -64,41 +64,19 @@ const CleaningServicesShowcase = () => {
 
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<typeof cleaningServices[0] | null>(null);
+  const [selectedService, setSelectedService] = useState<typeof pestControlServices[0] | null>(null);
 
-  // Configuration for cleaning service modal
-  const getCleaningServiceConfiguration = (): ServiceConfiguration => ({
-    categories: [
-      {
-        id: "apartmentType",
-        name: "Your Apartment type",
-        options: ["Flat/Apartment", "Duplex/House"],
-        required: true
-      }
-    ],
+  // Configuration for pest control service modal
+  const getPestControlServiceConfiguration = (): ServiceConfiguration => ({
     options: [
-      { id: "bedroom", name: "Bedroom", count: 1 },
-      { id: "livingRoom", name: "Living Room", count: 1 },
+      { id: "bedrooms", name: "Bedrooms", count: 1 },
+      { id: "livingrooms", name: "Living Rooms", count: 1 },
       { id: "kitchen", name: "Kitchen", count: 1 },
-      { id: "balcony", name: "Balcony", count: 1 },
-      { id: "lobby", name: "Lobby", count: 1 },
-      { id: "outdoor", name: "Outdoor", count: 1 },
-      { id: "studyRoom", name: "Study Room", count: 1 },
-      { id: "bathroom", name: "Bathroom", count: 1 },
-      { id: "other", name: "Other", count: 1 },
+      { id: "bathrooms", name: "Bathrooms", count: 1 },
+      { id: "outdoor", name: "Outdoor Area", count: 1 },
     ],
     allowCustomization: true
   });
-
-  // Features included in cleaning services
-  const getCleaningIncludedFeatures = () => [
-    "Professional cleaning supplies included",
-    "Experienced and vetted cleaning professionals",
-    "Satisfaction guarantee",
-    "Flexible scheduling options",
-    "Eco-friendly cleaning products available",
-    "Deep sanitization and disinfection"
-  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -124,7 +102,7 @@ const CleaningServicesShowcase = () => {
   };
 
   // Handle opening the modal with selected service
-  const handleOpenModal = (service: typeof cleaningServices[0]) => {
+  const handleOpenModal = (service: typeof pestControlServices[0]) => {
     setSelectedService(service);
     setIsModalOpen(true);
   };
@@ -133,6 +111,21 @@ const CleaningServicesShowcase = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+  // Handle order submission
+  const handleOrderSubmit = (configuration: any) => {
+    console.log("Pest control service configuration:", configuration);
+  };
+
+  // Features included in pest control services
+  const getPestControlIncludedFeatures = () => [
+    "EPA-approved pest control products",
+    "Experienced and certified pest control technicians",
+    "Satisfaction guarantee",
+    "Flexible scheduling options",
+    "Eco-friendly solutions available",
+    "Comprehensive pest assessment included"
+  ];
 
   return (
     <section className={styles.showcase} ref={sectionRef}>
@@ -153,10 +146,9 @@ const CleaningServicesShowcase = () => {
               : { opacity: 0, y: 20 }
           }
         >
-          <h2 className={styles.showcase__title}>Our Cleaning Services</h2>
+          <h2 className={styles.showcase__title}>Choose Your Pest Control Service</h2>
           <p className={styles.showcase__subtitle}>
-            From everyday tidying to deep transformations, we have the perfect
-            service for your needs.
+            From basic treatments to specialized solutions, we have the perfect pest management options for your home or business.
           </p>
         </motion.div>
 
@@ -166,7 +158,7 @@ const CleaningServicesShowcase = () => {
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
         >
-          {cleaningServices.map((service) => (
+          {pestControlServices.map((service) => (
             <motion.div
               key={service.id}
               className={styles.showcase__card}
@@ -193,6 +185,13 @@ const CleaningServicesShowcase = () => {
                     </li>
                   ))}
                 </ul>
+                
+                <div className={styles.showcase__priceTag}>
+                  <span className={styles.showcase__priceValue}>
+                    NGN {service.price.toLocaleString()}
+                  </span>
+                  <span className={styles.showcase__priceUnit}>/service</span>
+                </div>
 
                 <div className={styles.showcase__action}>
                   <Button 
@@ -209,7 +208,7 @@ const CleaningServicesShowcase = () => {
         </motion.div>
       </div>
 
-      {/* Cleaning Service Modal */}
+      {/* Pest Control Service Modal */}
       {selectedService && (
         <ServiceModal
           isOpen={isModalOpen}
@@ -218,16 +217,14 @@ const CleaningServicesShowcase = () => {
           serviceDescription={selectedService.description}
           servicePrice={selectedService.price}
           serviceImage={selectedService.image}
-          serviceConfiguration={getCleaningServiceConfiguration()}
-          serviceType="Cleaning"
-          includedFeatures={getCleaningIncludedFeatures()}
-          onOrderSubmit={(configuration) => {
-            console.log("Cleaning service configuration:", configuration);
-          }}
+          serviceConfiguration={getPestControlServiceConfiguration()}
+          serviceType="Pest Control"
+          includedFeatures={getPestControlIncludedFeatures()}
+          onOrderSubmit={handleOrderSubmit}
         />
       )}
     </section>
   );
 };
 
-export default CleaningServicesShowcase;
+export default PestControlServicesShowcase; 

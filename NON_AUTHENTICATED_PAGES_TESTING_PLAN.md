@@ -5,7 +5,7 @@ This document outlines the comprehensive unit testing strategy for all non-authe
 
 ## Priority 1: Core Public Pages
 
-### 1. Home Page (`/`)
+### 1. Home Page (`/`)   DONE
 - **File**: `src/app/page.tsx`
 - **Components**: 
   - Hero
@@ -36,10 +36,21 @@ This document outlines the comprehensive unit testing strategy for all non-authe
   - FAQSection
 - **Testing Focus**: Waitlist functionality, FAQ interactions, maintenance mode behavior
 
-### 3. About Page (`/about`)
+### 3. About Page (`/about`) DONE
 - **File**: `src/app/(routes)/(site)/about/page.tsx`
-- **Components**: Various about page sections
-- **Testing Focus**: Content rendering, team information, company story
+- **Components**: 
+  - AboutHero
+  - OurStory
+  - StorySection
+  - OurValues
+  - MagicHandsSection
+  - ImpactSection
+  - Statistics
+  - TeamSection
+  - VideoSection
+  - FAQSection
+  - AboutCTA
+- **Testing Focus**: Content rendering, team information, company story, values display, statistics, video content
 
 ### 4. Contact Page (`/contact`)
 - **File**: `src/app/(routes)/(site)/contact/page.tsx`
@@ -69,14 +80,20 @@ This document outlines the comprehensive unit testing strategy for all non-authe
   - FruitBowlSection
   - FoodIllustrationSection
   - OrderStepsSection
-  - FoodMenuSection
+  - FoodMenuSection     
   - FAQSection
 - **Testing Focus**: Menu display, food categories, ordering process
 
 ### 7. Cleaning Services Page (`/services/cleaning`)
 - **File**: `src/app/(routes)/(site)/services/cleaning/page.tsx`
-- **Components**: Cleaning-specific components
-- **Testing Focus**: Service packages, pricing, cleaning options
+- **Components**: 
+  - CleaningHero
+  - CleaningPromoSection
+  - CleaningServicesShowcase
+  - CleaningVideoSection
+  - CleaningStepsSection
+  - FAQSection (reused component)
+- **Testing Focus**: Service packages, pricing, cleaning options, service showcase, video content, process steps
 
 ### 8. Laundry Services Page (`/services/laundry`)
 - **File**: `src/app/(routes)/(site)/services/laundry/page.tsx`
