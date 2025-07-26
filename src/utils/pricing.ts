@@ -133,7 +133,20 @@ function calculateCleaningPrice(
   const { cleaningType, houseType, rooms } = config.cleaning;
 
   // Get room prices from service or use defaults
-  const roomPrices = service.roomPrices || DEFAULT_ROOM_PRICES;
+  const apiRoomPrices = service.roomPrices;
+  const roomPrices = apiRoomPrices
+    ? {
+        bedroom: apiRoomPrices.bedroom,
+        livingRoom: apiRoomPrices.livingRoom,
+        bathroom: apiRoomPrices.bathroom,
+        kitchen: apiRoomPrices.kitchen,
+        balcony: apiRoomPrices.balcony,
+        studyRoom: apiRoomPrices.study, // API has 'study', we use 'studyRoom'
+        lobby: apiRoomPrices.lobby,
+        outdoor: apiRoomPrices.outdoor,
+        other: DEFAULT_ROOM_PRICES.other, // API doesn't have 'other', use default
+      }
+    : DEFAULT_ROOM_PRICES;
 
   // Calculate total room cost
   let totalRoomCost = 0;
@@ -259,7 +272,21 @@ export function getPricingBreakdown(
         const { cleaningType, houseType, rooms } = config.cleaning;
 
         // Room costs
-        const roomPrices = service.roomPrices || DEFAULT_ROOM_PRICES;
+        const apiRoomPrices = service.roomPrices;
+        const roomPrices = apiRoomPrices
+          ? {
+              bedroom: apiRoomPrices.bedroom,
+              livingRoom: apiRoomPrices.livingRoom,
+              bathroom: apiRoomPrices.bathroom,
+              kitchen: apiRoomPrices.kitchen,
+              balcony: apiRoomPrices.balcony,
+              studyRoom: apiRoomPrices.study, // API has 'study', we use 'studyRoom'
+              lobby: apiRoomPrices.lobby,
+              outdoor: apiRoomPrices.outdoor,
+              other: DEFAULT_ROOM_PRICES.other, // API doesn't have 'other', use default
+            }
+          : DEFAULT_ROOM_PRICES;
+
         Object.entries(rooms).forEach(([roomKey, quantity]) => {
           if (quantity > 0) {
             const roomPrice =
