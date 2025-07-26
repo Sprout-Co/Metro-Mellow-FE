@@ -89,13 +89,15 @@ const ServiceConfigurationSection: React.FC<
       case SubscriptionFrequency.Daily:
         return "Daily";
       case SubscriptionFrequency.Weekly:
-        return "Weekly";
+        return "Weekly (Every Week)";
       case SubscriptionFrequency.BiWeekly:
-        return "Bi-Weekly";
+        return "Bi-Weekly (Every 2 Weeks)";
       case SubscriptionFrequency.Monthly:
-        return "Monthly";
+        return "Monthly (Every Month)";
+      case SubscriptionFrequency.Quarterly:
+        return "Quarterly (Every 3 Months)";
       default:
-        return "Weekly";
+        return "invalid frequency";
     }
   };
 
@@ -143,6 +145,31 @@ const ServiceConfigurationSection: React.FC<
       </Card>
     );
   }
+
+  const getServiceFrequencyOptions = (
+    service: ServiceCategory
+  ): SubscriptionFrequency[] => {
+    switch (service) {
+      case ServiceCategory.Cleaning:
+        return [
+          SubscriptionFrequency.Weekly,
+          SubscriptionFrequency.BiWeekly,
+          SubscriptionFrequency.Monthly,
+        ];
+      case ServiceCategory.Laundry:
+        return [
+          SubscriptionFrequency.Weekly,
+          SubscriptionFrequency.BiWeekly,
+          SubscriptionFrequency.Monthly,
+        ];
+      case ServiceCategory.Cooking:
+        return [SubscriptionFrequency.Weekly, SubscriptionFrequency.BiWeekly];
+      case ServiceCategory.PestControl:
+        return [SubscriptionFrequency.Quarterly];
+      default:
+        return [];
+    }
+  };
 
   return (
     <Card className={styles.service_configuration}>
@@ -336,7 +363,14 @@ const ServiceConfigurationSection: React.FC<
                       }}
                       className={styles.service_configuration__select}
                     >
-                      <option value={SubscriptionFrequency.Daily}>
+                      {getServiceFrequencyOptions(service.category).map(
+                        (frequency) => (
+                          <option key={frequency} value={frequency}>
+                            {getFrequencyLabel(frequency)}
+                          </option>
+                        )
+                      )}
+                      {/* <option value={SubscriptionFrequency.Daily}>
                         Daily (Every Day)
                       </option>
                       <option value={SubscriptionFrequency.Weekly}>
@@ -347,7 +381,7 @@ const ServiceConfigurationSection: React.FC<
                       </option>
                       <option value={SubscriptionFrequency.Monthly}>
                         Monthly (Every Month)
-                      </option>
+                      </option> */}
                     </select>
                     <p
                       className={
