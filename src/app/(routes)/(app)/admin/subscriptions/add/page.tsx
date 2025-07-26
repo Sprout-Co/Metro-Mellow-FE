@@ -20,23 +20,13 @@ import {
   Address,
   ServiceStatus,
 } from "@/graphql/api";
+import { ServiceConfiguration } from "@/app/(routes)/(app)/admin/subscriptions/add/types/subscription";
 import CustomerSelectionSection from "./_components/CustomerSelectionSection/CustomerSelectionSection";
 import ServiceConfigurationSection from "./_components/ServiceConfigurationSection/ServiceConfigurationSection";
 import BillingScheduleSection from "./_components/BillingScheduleSection/BillingScheduleSection";
 import FormActions from "./_components/FormActions/FormActions";
 import ErrorDisplay from "./_components/ErrorDisplay/ErrorDisplay";
 import styles from "./AddSubscriptionPage.module.scss";
-
-interface ServiceConfiguration {
-  serviceId: string;
-  price: number;
-  frequency: SubscriptionFrequency;
-  scheduledDays: ScheduleDays[];
-  preferredTimeSlot: TimeSlot;
-  serviceDetails: any;
-  category: ServiceCategory;
-  selectedOption?: string;
-}
 
 export default function AddSubscriptionPage() {
   const router = useRouter();

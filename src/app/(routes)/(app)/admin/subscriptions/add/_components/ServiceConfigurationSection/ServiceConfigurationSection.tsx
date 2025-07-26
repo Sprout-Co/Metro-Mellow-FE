@@ -8,19 +8,9 @@ import {
   ScheduleDays,
   ServiceCategory,
 } from "@/graphql/api";
+import { ServiceConfiguration } from "@/app/(routes)/(app)/admin/subscriptions/add/types/subscription";
 import { formatToNaira } from "@/utils/string";
 import styles from "./ServiceConfigurationSection.module.scss";
-
-interface ServiceConfiguration {
-  serviceId: string;
-  price: number;
-  frequency: SubscriptionFrequency;
-  scheduledDays: ScheduleDays[];
-  preferredTimeSlot: TimeSlot;
-  serviceDetails: any;
-  category: ServiceCategory;
-  selectedOption?: string; // Add selected service option
-}
 
 interface ServiceConfigurationSectionProps {
   services: Service[];

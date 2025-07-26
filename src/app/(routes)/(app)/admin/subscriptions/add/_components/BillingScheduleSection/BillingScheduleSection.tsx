@@ -9,19 +9,9 @@ import {
   ScheduleDays,
   ServiceCategory,
 } from "@/graphql/api";
+import { ServiceConfiguration } from "@/app/(routes)/(app)/admin/subscriptions/add/types/subscription";
 import { formatToNaira } from "@/utils/string";
 import styles from "./BillingScheduleSection.module.scss";
-
-interface ServiceConfiguration {
-  serviceId: string;
-  price: number;
-  frequency: SubscriptionFrequency;
-  scheduledDays: ScheduleDays[];
-  preferredTimeSlot: TimeSlot;
-  serviceDetails: any;
-  category: ServiceCategory;
-  selectedOption?: string;
-}
 
 interface BillingScheduleSectionProps {
   billingCycle: BillingCycle;
