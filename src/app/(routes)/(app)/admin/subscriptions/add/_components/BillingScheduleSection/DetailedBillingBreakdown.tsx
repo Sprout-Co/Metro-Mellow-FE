@@ -15,7 +15,6 @@ import {
   calculateServicesPerBillingCycle,
   calculateBillingCycleAmount,
   calculateTotalSubscriptionCost,
-  getPricingBreakdown,
 } from "@/utils/pricing";
 import styles from "./DetailedBillingBreakdown.module.scss";
 
@@ -46,21 +45,6 @@ const DetailedBillingBreakdown: React.FC<DetailedBillingBreakdownProps> = ({
         return "Quarterly";
       default:
         return cycle;
-    }
-  };
-
-  const getDurationLabel = () => {
-    switch (billingCycle) {
-      case BillingCycle.Weekly:
-        return duration === 1 ? "week" : "weeks";
-      case BillingCycle.BiWeekly:
-        return duration === 1 ? "bi-week period" : "bi-week periods";
-      case BillingCycle.Monthly:
-        return duration === 1 ? "month" : "months";
-      case BillingCycle.Quarterly:
-        return duration === 1 ? "quarter" : "quarters";
-      default:
-        return "periods";
     }
   };
 
@@ -168,76 +152,142 @@ const DetailedBillingBreakdown: React.FC<DetailedBillingBreakdownProps> = ({
 
   return (
     <div className={styles.detailed_breakdown}>
-      {/* How Billing Works Section */}
+      {/* Non-Technical Summary - Added at the beginning */}
       <div className={styles.detailed_breakdown__section}>
         <h4 className={styles.detailed_breakdown__section_title}>
-          <Icon name="info-circle" />
-          How Our Billing System Works
+          <Icon name="lightbulb" />
+          Understanding Your Subscription (In Simple Terms)
         </h4>
-        <div className={styles.detailed_breakdown__explanation}>
-          <div className={styles.detailed_breakdown__explanation_item}>
-            <h5>🔄 Two-Tier Frequency System</h5>
+        <div className={styles.detailed_breakdown__simple_summary}>
+          <div className={styles.detailed_breakdown__summary_explanation}>
+            <h5>🎯 What You Need to Know</h5>
             <p>
-              Our system uses two separate frequencies to give you maximum
-              flexibility:
+              Think of your subscription like a{" "}
+              <strong>monthly gym membership</strong> or{" "}
+              <strong>Netflix subscription</strong>. You pay a fixed amount
+              regularly, and you get services delivered to your home.
             </p>
-            <ul>
-              <li>
-                <strong>Service Frequency:</strong> How often your services are
-                performed (weekly, bi-weekly, monthly, quarterly)
-              </li>
-              <li>
-                <strong>Billing Frequency:</strong> How often you're charged
-                (weekly, bi-weekly, monthly, quarterly)
-              </li>
-            </ul>
           </div>
 
-          <div className={styles.detailed_breakdown__explanation_item}>
-            <h5>💰 Billing Calculation Formula</h5>
-            <p>Your billing amount is calculated using this simple formula:</p>
-            <div className={styles.detailed_breakdown__formula}>
-              <strong>
-                Billing Amount = Service Price × Services Per Billing Cycle
-              </strong>
+          <div className={styles.detailed_breakdown__key_points}>
+            <div className={styles.detailed_breakdown__key_point}>
+              <div className={styles.detailed_breakdown__key_icon}>💳</div>
+              <div>
+                <h6>Fixed Monthly Payment</h6>
+                <p>
+                  You pay the same amount every{" "}
+                  {formatBillingCycle(billingCycle).toLowerCase()}, just like
+                  your phone bill
+                </p>
+              </div>
             </div>
-            <p>
-              Where "Services Per Billing Cycle" depends on your service
-              frequency and billing cycle.
-            </p>
+
+            <div className={styles.detailed_breakdown__key_point}>
+              <div className={styles.detailed_breakdown__key_icon}>📅</div>
+              <div>
+                <h6>Services on Schedule</h6>
+                <p>
+                  We come to your home on the days you choose, at the times you
+                  prefer
+                </p>
+              </div>
+            </div>
+
+            <div className={styles.detailed_breakdown__key_point}>
+              <div className={styles.detailed_breakdown__key_icon}>💰</div>
+              <div>
+                <h6>No Surprise Charges</h6>
+                <p>
+                  Your bill is calculated upfront - you know exactly what you'll
+                  pay
+                </p>
+              </div>
+            </div>
+
+            <div className={styles.detailed_breakdown__key_point}>
+              <div className={styles.detailed_breakdown__key_icon}>⏰</div>
+              <div>
+                <h6>Set It & Forget It</h6>
+                <p>
+                  Once set up, everything runs automatically - no need to
+                  remember to book services
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className={styles.detailed_breakdown__explanation_item}>
-            <h5>📅 Your Current Configuration</h5>
-            <div className={styles.detailed_breakdown__config_summary}>
-              <div className={styles.detailed_breakdown__config_item}>
-                <span>Billing Cycle:</span>
-                <strong>{formatBillingCycle(billingCycle)}</strong>
-              </div>
-              <div className={styles.detailed_breakdown__config_item}>
-                <span>Duration:</span>
-                <strong>
-                  {duration} {getDurationLabel()}
-                </strong>
-              </div>
-              <div className={styles.detailed_breakdown__config_item}>
-                <span>Start Date:</span>
-                <strong>{new Date(startDate).toLocaleDateString()}</strong>
-              </div>
-              <div className={styles.detailed_breakdown__config_item}>
-                <span>Total Billing Cycles:</span>
-                <strong>{getBillingCyclesInDuration()}</strong>
-              </div>
+          <div className={styles.detailed_breakdown__how_it_works}>
+            <h5>🔍 How Your Bill is Calculated</h5>
+            <div className={styles.detailed_breakdown__calculation_example}>
+              <p>
+                <strong>Example:</strong> If you choose weekly cleaning for
+                ₦5,000 per visit:
+              </p>
+              <ul>
+                <li>Weekly cleaning = 4 visits per month</li>
+                <li>4 visits × ₦5,000 = ₦20,000 per month</li>
+                <li>You pay ₦20,000 monthly, we clean weekly</li>
+              </ul>
+              <p className={styles.detailed_breakdown__example_note}>
+                💡 <strong>Simple:</strong> More frequent services = higher
+                monthly bill, but better value per service
+              </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Service-by-Service Breakdown */}
+      {/* Simple How It Works */}
+      <div className={styles.detailed_breakdown__section}>
+        <h4 className={styles.detailed_breakdown__section_title}>
+          <Icon name="info-circle" />
+          How Your Billing Works
+        </h4>
+        <div className={styles.detailed_breakdown__simple_explanation}>
+          <div className={styles.detailed_breakdown__explanation_card}>
+            <div className={styles.detailed_breakdown__explanation_icon}>
+              💰
+            </div>
+            <div>
+              <h5>Simple Formula</h5>
+              <p>
+                You pay for each service × how many times it happens per billing
+                cycle
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.detailed_breakdown__explanation_card}>
+            <div className={styles.detailed_breakdown__explanation_icon}>
+              📅
+            </div>
+            <div>
+              <h5>Your Schedule</h5>
+              <p>
+                Billed every{" "}
+                <strong>
+                  {formatBillingCycle(billingCycle).toLowerCase()}
+                </strong>{" "}
+                for{" "}
+                <strong>
+                  {duration}{" "}
+                  {billingCycle === BillingCycle.Weekly
+                    ? "weeks"
+                    : billingCycle === BillingCycle.Monthly
+                      ? "months"
+                      : "periods"}
+                </strong>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Service Breakdown - Simplified */}
       <div className={styles.detailed_breakdown__section}>
         <h4 className={styles.detailed_breakdown__section_title}>
           <Icon name="calculator" />
-          Service-by-Service Breakdown
+          What You're Paying For
         </h4>
 
         {selectedServices.map((service) => {
@@ -255,18 +305,11 @@ const DetailedBillingBreakdown: React.FC<DetailedBillingBreakdownProps> = ({
             config,
             billingCycle
           );
-          const totalServiceCost = calculateTotalSubscriptionCost(
-            service,
-            config,
-            billingCycle,
-            duration
-          );
-          const pricingBreakdown = getPricingBreakdown(service, config);
 
           return (
             <div
               key={service._id}
-              className={styles.detailed_breakdown__service}
+              className={styles.detailed_breakdown__service_simple}
             >
               <div className={styles.detailed_breakdown__service_header}>
                 <div className={styles.detailed_breakdown__service_icon}>
@@ -274,8 +317,8 @@ const DetailedBillingBreakdown: React.FC<DetailedBillingBreakdownProps> = ({
                 </div>
                 <div className={styles.detailed_breakdown__service_info}>
                   <h5>{service.name}</h5>
-                  <p className={styles.detailed_breakdown__service_frequency}>
-                    {getFrequencyLabel(config.frequency)} service on{" "}
+                  <p>
+                    {getFrequencyLabel(config.frequency)} on{" "}
                     {config.scheduledDays
                       .map(
                         (day, index) =>
@@ -290,106 +333,23 @@ const DetailedBillingBreakdown: React.FC<DetailedBillingBreakdownProps> = ({
                 </div>
               </div>
 
-              <div className={styles.detailed_breakdown__service_calculation}>
-                <div className={styles.detailed_breakdown__calculation_step}>
-                  <h6>Step 1: Calculate Service Price</h6>
-                  <div className={styles.detailed_breakdown__price_breakdown}>
-                    <div className={styles.detailed_breakdown__price_item}>
-                      <span>Base Price:</span>
-                      <span>{formatToNaira(pricingBreakdown.basePrice)}</span>
-                    </div>
-                    {pricingBreakdown.adjustments.map((adjustment, index) => (
-                      <div
-                        key={index}
-                        className={styles.detailed_breakdown__price_item}
-                      >
-                        <span>{adjustment.label}:</span>
-                        <span>
-                          {adjustment.multiplier
-                            ? `${adjustment.multiplier}x multiplier`
-                            : formatToNaira(adjustment.amount)}
-                        </span>
-                      </div>
-                    ))}
-                    <div
-                      className={styles.detailed_breakdown__price_item_total}
-                    >
-                      <span>Service Price:</span>
-                      <span>{formatToNaira(servicePrice)}</span>
-                    </div>
-                  </div>
+              <div className={styles.detailed_breakdown__service_pricing}>
+                <div className={styles.detailed_breakdown__pricing_row}>
+                  <span>Price per service:</span>
+                  <span>{formatToNaira(servicePrice)}</span>
                 </div>
-
-                <div className={styles.detailed_breakdown__calculation_step}>
-                  <h6>Step 2: Calculate Services Per Billing Cycle</h6>
-                  <div
-                    className={styles.detailed_breakdown__frequency_calculation}
-                  >
-                    <p>
-                      <strong>Service Frequency:</strong>{" "}
-                      {getFrequencyLabel(config.frequency)}
-                    </p>
-                    <p>
-                      <strong>Scheduled Days:</strong>{" "}
-                      {config.scheduledDays.length} day(s) per{" "}
-                      {getFrequencyLabel(config.frequency).toLowerCase()}
-                    </p>
-                    <p>
-                      <strong>Billing Cycle:</strong>{" "}
-                      {formatBillingCycle(billingCycle)}
-                    </p>
-                    <div className={styles.detailed_breakdown__formula}>
-                      <strong>
-                        Services Per Billing Cycle ={" "}
-                        {config.scheduledDays.length} ×{" "}
-                        {servicesPerBillingCycle / config.scheduledDays.length}{" "}
-                        = {Math.round(servicesPerBillingCycle)}
-                      </strong>
-                    </div>
-                  </div>
+                <div className={styles.detailed_breakdown__pricing_row}>
+                  <span>
+                    Services per{" "}
+                    {formatBillingCycle(billingCycle).toLowerCase()}:
+                  </span>
+                  <span>{Math.round(servicesPerBillingCycle)}</span>
                 </div>
-
-                <div className={styles.detailed_breakdown__calculation_step}>
-                  <h6>Step 3: Calculate Billing Amount</h6>
-                  <div
-                    className={styles.detailed_breakdown__billing_calculation}
-                  >
-                    <div className={styles.detailed_breakdown__formula}>
-                      <strong>
-                        Billing Amount = {formatToNaira(servicePrice)} ×{" "}
-                        {Math.round(servicesPerBillingCycle)} ={" "}
-                        {formatToNaira(billingCycleAmount)}
-                      </strong>
-                    </div>
-                    <p>
-                      You'll be charged{" "}
-                      <strong>{formatToNaira(billingCycleAmount)}</strong> every{" "}
-                      {formatBillingCycle(billingCycle).toLowerCase()} for this
-                      service.
-                    </p>
-                  </div>
-                </div>
-
-                <div className={styles.detailed_breakdown__calculation_step}>
-                  <h6>Step 4: Calculate Total Service Cost</h6>
-                  <div className={styles.detailed_breakdown__total_calculation}>
-                    <p>
-                      <strong>Total Billing Cycles:</strong>{" "}
-                      {getBillingCyclesInDuration()}
-                    </p>
-                    <div className={styles.detailed_breakdown__formula}>
-                      <strong>
-                        Total Cost = {formatToNaira(billingCycleAmount)} ×{" "}
-                        {getBillingCyclesInDuration()} ={" "}
-                        {formatToNaira(totalServiceCost)}
-                      </strong>
-                    </div>
-                    <p>
-                      Total cost for this service over {duration}{" "}
-                      {getDurationLabel()}:{" "}
-                      <strong>{formatToNaira(totalServiceCost)}</strong>
-                    </p>
-                  </div>
+                <div className={styles.detailed_breakdown__pricing_row_total}>
+                  <span>
+                    Total per {formatBillingCycle(billingCycle).toLowerCase()}:
+                  </span>
+                  <span>{formatToNaira(billingCycleAmount)}</span>
                 </div>
               </div>
             </div>
@@ -397,47 +357,50 @@ const DetailedBillingBreakdown: React.FC<DetailedBillingBreakdownProps> = ({
         })}
       </div>
 
-      {/* Summary Section */}
+      {/* Simple Summary */}
       <div className={styles.detailed_breakdown__section}>
         <h4 className={styles.detailed_breakdown__section_title}>
           <Icon name="summary" />
-          Billing Summary
+          Your Billing Summary
         </h4>
 
-        <div className={styles.detailed_breakdown__summary}>
-          <div className={styles.detailed_breakdown__summary_item}>
-            <span>
-              Amount per {formatBillingCycle(billingCycle).toLowerCase()}:
-            </span>
-            <strong>{formatToNaira(calculateTotalBillingCycleAmount())}</strong>
+        <div className={styles.detailed_breakdown__summary_simple}>
+          <div className={styles.detailed_breakdown__summary_card}>
+            <div className={styles.detailed_breakdown__summary_icon}>💳</div>
+            <div>
+              <h5>Per {formatBillingCycle(billingCycle).toLowerCase()}</h5>
+              <p className={styles.detailed_breakdown__summary_amount}>
+                {formatToNaira(calculateTotalBillingCycleAmount())}
+              </p>
+            </div>
           </div>
-          <div className={styles.detailed_breakdown__summary_item}>
-            <span>Number of billing cycles:</span>
-            <strong>{getBillingCyclesInDuration()}</strong>
-          </div>
-          <div className={styles.detailed_breakdown__summary_item}>
-            <span>Total subscription cost:</span>
-            <strong>
-              {formatToNaira(calculateTotalSubscriptionCostForAllServices())}
-            </strong>
+
+          <div className={styles.detailed_breakdown__summary_card}>
+            <div className={styles.detailed_breakdown__summary_icon}>📊</div>
+            <div>
+              <h5>
+                Total for {duration}{" "}
+                {billingCycle === BillingCycle.Weekly
+                  ? "weeks"
+                  : billingCycle === BillingCycle.Monthly
+                    ? "months"
+                    : "periods"}
+              </h5>
+              <p className={styles.detailed_breakdown__summary_amount}>
+                {formatToNaira(calculateTotalSubscriptionCostForAllServices())}
+              </p>
+            </div>
           </div>
         </div>
 
-        <div className={styles.detailed_breakdown__billing_schedule}>
-          <h5>📅 Your Billing Schedule</h5>
+        <div className={styles.detailed_breakdown__billing_note}>
           <p>
-            You'll be charged{" "}
-            <strong>{formatToNaira(calculateTotalBillingCycleAmount())}</strong>{" "}
-            every {formatBillingCycle(billingCycle).toLowerCase()}, starting on{" "}
-            <strong>{new Date(startDate).toLocaleDateString()}</strong>.
+            💡 <strong>First payment:</strong>{" "}
+            {new Date(startDate).toLocaleDateString()}
           </p>
           <p>
-            This will continue for{" "}
-            <strong>
-              {duration} {getDurationLabel()}
-            </strong>
-            , totaling{" "}
-            <strong>{getBillingCyclesInDuration()} billing cycles</strong>.
+            💡 <strong>Billing cycles:</strong> {getBillingCyclesInDuration()}{" "}
+            total
           </p>
         </div>
       </div>
