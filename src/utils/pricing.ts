@@ -9,6 +9,8 @@ import {
   TreatmentType,
   RoomQuantitiesInput,
   LaundryItemsInput,
+  SubscriptionFrequency,
+  BillingCycle,
 } from "@/graphql/api";
 import { ServiceConfiguration } from "@/app/(routes)/(app)/admin/subscriptions/add/types/subscription";
 
@@ -441,4 +443,176 @@ export function getPricingBreakdown(
     adjustments,
     totalPrice,
   };
+}
+
+/**
+ * Calculate the number of services performed within a billing cycle
+ * based on service frequency and billing cycle
+ */
+export function calculateServicesPerBillingCycle(
+  serviceFrequency: SubscriptionFrequency,
+  scheduledDaysCount: number,
+  billingCycle: BillingCycle
+): number {
+  const servicesPerPeriod = scheduledDaysCount;
+
+  switch (serviceFrequency) {
+    case SubscriptionFrequency.Daily:
+      return servicesPerPeriod * getDaysInBillingCycle(billingCycle);
+    case SubscriptionFrequency.Weekly:
+      return servicesPerPeriod * getWeeksInBillingCycle(billingCycle);
+    case SubscriptionFrequency.BiWeekly:
+      return servicesPerPeriod * getBiWeeksInBillingCycle(billingCycle);
+    case SubscriptionFrequency.Monthly:
+      return servicesPerPeriod * getMonthsInBillingCycle(billingCycle);
+    case SubscriptionFrequency.Quarterly:
+      return servicesPerPeriod * getQuartersInBillingCycle(billingCycle);
+    default:
+      return 0;
+  }
+}
+
+/**
+ * Helper functions to calculate periods within billing cycles
+ */
+function getDaysInBillingCycle(billingCycle: BillingCycle): number {
+  switch (billingCycle) {
+    case BillingCycle.Weekly:
+      return 7;
+    case BillingCycle.BiWeekly:
+      return 14;
+    case BillingCycle.Monthly:
+      return 30; // Average days per month
+    case BillingCycle.Quarterly:
+      return 90; // Average days per quarter
+    default:
+      return 0;
+  }
+}
+
+function getWeeksInBillingCycle(billingCycle: BillingCycle): number {
+  switch (billingCycle) {
+    case BillingCycle.Weekly:
+      return 1;
+    case BillingCycle.BiWeekly:
+      return 2;
+    case BillingCycle.Monthly:
+      return 4; // Average weeks per month
+    case BillingCycle.Quarterly:
+      return 12; // Average weeks per quarter
+    default:
+      return 0;
+  }
+}
+
+function getBiWeeksInBillingCycle(billingCycle: BillingCycle): number {
+  switch (billingCycle) {
+    case BillingCycle.Weekly:
+      return 0.5; // Half a bi-week
+    case BillingCycle.BiWeekly:
+      return 1;
+    case BillingCycle.Monthly:
+      return 2; // Average bi-weeks per month
+    case BillingCycle.Quarterly:
+      return 6; // Average bi-weeks per quarter
+    default:
+      return 0;
+  }
+}
+
+function getMonthsInBillingCycle(billingCycle: BillingCycle): number {
+  switch (billingCycle) {
+    case BillingCycle.Weekly:
+      return 0.25; // Quarter of a month
+    case BillingCycle.BiWeekly:
+      return 0.5; // Half a month
+    case BillingCycle.Monthly:
+      return 1;
+    case BillingCycle.Quarterly:
+      return 3;
+    default:
+      return 0;
+  }
+}
+
+function getQuartersInBillingCycle(billingCycle: BillingCycle): number {
+  switch (billingCycle) {
+    case BillingCycle.Weekly:
+      return 0.083; // 1/12 of a quarter
+    case BillingCycle.BiWeekly:
+      return 0.167; // 1/6 of a quarter
+    case BillingCycle.Monthly:
+      return 0.333; // 1/3 of a quarter
+    case BillingCycle.Quarterly:
+      return 1;
+    default:
+      return 0;
+  }
+}
+
+/**
+ * Calculate the total billing amount for a billing cycle
+ * This is the correct way to calculate billing based on service frequency
+ */
+export function calculateBillingCycleAmount(
+  service: Service,
+  config: ServiceConfiguration,
+  billingCycle: BillingCycle
+): number {
+  // Calculate the price for one service instance
+  const servicePrice = calculateServicePrice(service, config);
+
+  // Calculate how many services are performed in this billing cycle
+  const servicesPerBillingCycle = calculateServicesPerBillingCycle(
+    config.frequency,
+    config.scheduledDays.length,
+    billingCycle
+  );
+
+  return servicePrice * servicesPerBillingCycle;
+}
+
+/**
+ * Calculate total subscription cost for the entire duration
+ */
+export function calculateTotalSubscriptionCost(
+  service: Service,
+  config: ServiceConfiguration,
+  billingCycle: BillingCycle,
+  duration: number
+): number {
+  const billingCycleAmount = calculateBillingCycleAmount(
+    service,
+    config,
+    billingCycle
+  );
+
+  // Calculate number of billing cycles in the duration
+  const billingCyclesInDuration = getBillingCyclesInDuration(
+    billingCycle,
+    duration
+  );
+
+  return billingCycleAmount * billingCyclesInDuration;
+}
+
+/**
+ * Calculate how many billing cycles occur within the subscription duration
+ */
+function getBillingCyclesInDuration(
+  billingCycle: BillingCycle,
+  duration: number
+): number {
+  switch (billingCycle) {
+    case BillingCycle.Weekly:
+      return duration; // Duration is in weeks
+    case BillingCycle.BiWeekly:
+      return Math.ceil(duration / 2); // Duration is in weeks, convert to bi-weeks
+    case BillingCycle.Monthly:
+      return duration; // Duration is in months
+    case BillingCycle.Quarterly:
+      return Math.ceil(duration / 3); // Duration is in months, convert to quarters
+    default:
+      return duration;
+  }
 }

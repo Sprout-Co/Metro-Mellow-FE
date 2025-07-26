@@ -11,7 +11,12 @@ import {
 } from "@/graphql/api";
 import { ServiceConfiguration } from "@/app/(routes)/(app)/admin/subscriptions/add/types/subscription";
 import { formatToNaira } from "@/utils/string";
-import { calculateServicePrice } from "@/utils/pricing";
+import {
+  calculateServicePrice,
+  calculateServicesPerBillingCycle,
+  calculateBillingCycleAmount,
+  calculateTotalSubscriptionCost,
+} from "@/utils/pricing";
 import styles from "./BillingScheduleSection.module.scss";
 
 interface BillingScheduleSectionProps {
@@ -74,9 +79,13 @@ const BillingScheduleSection: React.FC<BillingScheduleSectionProps> = ({
     selectedServices.forEach((service) => {
       const config = serviceConfigurations.get(service._id);
       if (config) {
-        // Use the pricing utility to calculate the accurate price
-        const calculatedPrice = calculateServicePrice(service, config);
-        total += calculatedPrice;
+        // Use the correct billing cycle calculation
+        const billingCycleAmount = calculateBillingCycleAmount(
+          service,
+          config,
+          billingCycle
+        );
+        total += billingCycleAmount;
       }
     });
     return total;
@@ -249,14 +258,23 @@ const BillingScheduleSection: React.FC<BillingScheduleSectionProps> = ({
                         <h5>{service.name}</h5>
                         <p>
                           {formatToNaira(
-                            calculateServicePrice(service, config)
+                            calculateBillingCycleAmount(
+                              service,
+                              config,
+                              billingCycle
+                            )
                           )}{" "}
-                          per{" "}
-                          {getFrequencyLabel(config.frequency).toLowerCase()}
+                          per {formatBillingCycle(billingCycle).toLowerCase()}
                         </p>
                       </div>
                       <div className={styles.billing_schedule__service_price}>
-                        {formatToNaira(calculateServicePrice(service, config))}
+                        {formatToNaira(
+                          calculateBillingCycleAmount(
+                            service,
+                            config,
+                            billingCycle
+                          )
+                        )}
                       </div>
                     </div>
                     <div className={styles.billing_schedule__service_details}>
@@ -309,37 +327,12 @@ const BillingScheduleSection: React.FC<BillingScheduleSectionProps> = ({
                       const config = serviceConfigurations.get(service._id);
                       if (!config) return null;
 
-                      const servicesPerBillingCycle = (() => {
-                        switch (config.frequency) {
-                          case SubscriptionFrequency.Daily:
-                            return (
-                              config.scheduledDays.length *
-                              (billingCycle === BillingCycle.Monthly ? 30 : 90)
-                            );
-                          case SubscriptionFrequency.Weekly:
-                            return (
-                              config.scheduledDays.length *
-                              (billingCycle === BillingCycle.Monthly ? 4 : 12)
-                            );
-                          case SubscriptionFrequency.BiWeekly:
-                            return (
-                              config.scheduledDays.length *
-                              (billingCycle === BillingCycle.Monthly ? 2 : 6)
-                            );
-                          case SubscriptionFrequency.Monthly:
-                            return (
-                              config.scheduledDays.length *
-                              (billingCycle === BillingCycle.Monthly ? 1 : 3)
-                            );
-                          case SubscriptionFrequency.Quarterly:
-                            return (
-                              config.scheduledDays.length *
-                              (billingCycle === BillingCycle.Monthly ? 0.33 : 1)
-                            );
-                          default:
-                            return 0;
-                        }
-                      })();
+                      const servicesPerBillingCycle =
+                        calculateServicesPerBillingCycle(
+                          config.frequency,
+                          config.scheduledDays.length,
+                          billingCycle
+                        );
 
                       const calculatedPrice = calculateServicePrice(
                         service,
@@ -375,13 +368,22 @@ const BillingScheduleSection: React.FC<BillingScheduleSectionProps> = ({
                     {getDurationLabel()} will be{" "}
                     <strong>
                       {formatToNaira(
-                        calculateTotalPrice() *
-                          (billingCycle === BillingCycle.Monthly
-                            ? duration
-                            : Math.ceil(duration / 3))
+                        selectedServices.reduce((total, service) => {
+                          const config = serviceConfigurations.get(service._id);
+                          if (!config) return total;
+                          return (
+                            total +
+                            calculateTotalSubscriptionCost(
+                              service,
+                              config,
+                              billingCycle,
+                              duration
+                            )
+                          );
+                        }, 0)
                       )}
                     </strong>
-                    , billed {formatBillingCycle(billingCycle).toLowerCase()} at
+                    , billed {formatBillingCycle(billingCycle).toLowerCase()} at{" "}
                     {formatToNaira(calculateTotalPrice())} per cycle.
                   </p>
                 </div>
