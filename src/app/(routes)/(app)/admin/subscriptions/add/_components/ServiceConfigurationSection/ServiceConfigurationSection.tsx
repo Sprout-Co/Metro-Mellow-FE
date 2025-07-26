@@ -8,6 +8,7 @@ import {
   ScheduleDays,
   ServiceCategory,
 } from "@/graphql/api";
+import { formatToNaira } from "@/utils/string";
 import styles from "./ServiceConfigurationSection.module.scss";
 
 interface ServiceConfiguration {
@@ -171,7 +172,7 @@ const ServiceConfigurationSection: React.FC<
                 <h5>{service.name}</h5>
                 <p>{service.description}</p>
                 <span className={styles.service_configuration__service_price}>
-                  ${service.price}
+                  {formatToNaira(service.price)}
                 </span>
               </div>
               <div className={styles.service_configuration__service_checkbox}>
@@ -226,7 +227,7 @@ const ServiceConfigurationSection: React.FC<
                         <option value="">Select an option</option>
                         {service.options.map((option) => (
                           <option key={option.id} value={option.id}>
-                            {option.label} - ${option.price}
+                            {option.label} - {formatToNaira(option.price)}
                           </option>
                         ))}
                       </select>

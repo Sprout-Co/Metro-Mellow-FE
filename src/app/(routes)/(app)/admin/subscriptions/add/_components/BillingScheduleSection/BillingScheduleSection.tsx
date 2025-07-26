@@ -9,6 +9,7 @@ import {
   ScheduleDays,
   ServiceCategory,
 } from "@/graphql/api";
+import { formatToNaira } from "@/utils/string";
 import styles from "./BillingScheduleSection.module.scss";
 
 interface ServiceConfiguration {
@@ -251,12 +252,12 @@ const BillingScheduleSection: React.FC<BillingScheduleSectionProps> = ({
                       <div className={styles.billing_schedule__service_info}>
                         <h5>{service.name}</h5>
                         <p>
-                          ${config.price} per{" "}
+                          {formatToNaira(config.price)} per{" "}
                           {getFrequencyLabel(config.frequency).toLowerCase()}
                         </p>
                       </div>
                       <div className={styles.billing_schedule__service_price}>
-                        ${config.price}
+                        {formatToNaira(config.price)}
                       </div>
                     </div>
                     <div className={styles.billing_schedule__service_details}>
@@ -275,12 +276,110 @@ const BillingScheduleSection: React.FC<BillingScheduleSectionProps> = ({
                 );
               })}
             </div>
+            <div className={styles.billing_schedule__explanation}>
+              <h5>How You'll Be Charged & Services Delivered</h5>
+              <div className={styles.billing_schedule__explanation_content}>
+                <div className={styles.billing_schedule__explanation_section}>
+                  <h6>📅 Billing Schedule</h6>
+                  <p>
+                    You'll be charged{" "}
+                    <strong>{formatToNaira(calculateTotalPrice())}</strong>{" "}
+                    every {formatBillingCycle(billingCycle).toLowerCase()}
+                    for {duration} {getDurationLabel()}. Your first charge will
+                    be on {startDate}.
+                  </p>
+                </div>
+
+                <div className={styles.billing_schedule__explanation_section}>
+                  <h6>🛠️ Service Delivery</h6>
+                  <p>
+                    Based on your selections, here's how your services will be
+                    delivered:
+                  </p>
+                  <ul>
+                    {selectedServices.map((service) => {
+                      const config = serviceConfigurations.get(service._id);
+                      if (!config) return null;
+
+                      const servicesPerBillingCycle = (() => {
+                        switch (config.frequency) {
+                          case SubscriptionFrequency.Daily:
+                            return (
+                              config.scheduledDays.length *
+                              (billingCycle === BillingCycle.Monthly ? 30 : 90)
+                            );
+                          case SubscriptionFrequency.Weekly:
+                            return (
+                              config.scheduledDays.length *
+                              (billingCycle === BillingCycle.Monthly ? 4 : 12)
+                            );
+                          case SubscriptionFrequency.BiWeekly:
+                            return (
+                              config.scheduledDays.length *
+                              (billingCycle === BillingCycle.Monthly ? 2 : 6)
+                            );
+                          case SubscriptionFrequency.Monthly:
+                            return (
+                              config.scheduledDays.length *
+                              (billingCycle === BillingCycle.Monthly ? 1 : 3)
+                            );
+                          case SubscriptionFrequency.Quarterly:
+                            return (
+                              config.scheduledDays.length *
+                              (billingCycle === BillingCycle.Monthly ? 0.33 : 1)
+                            );
+                          default:
+                            return 0;
+                        }
+                      })();
+
+                      return (
+                        <li key={service._id}>
+                          <strong>{service.name}</strong>:{" "}
+                          {getFrequencyLabel(config.frequency).toLowerCase()} on{" "}
+                          {config.scheduledDays
+                            .map(
+                              (day, index) =>
+                                `${getDayLabel(day)}${index < config.scheduledDays.length - 1 ? ", " : ""}`
+                            )
+                            .join("")}{" "}
+                          at{" "}
+                          {getTimeSlotLabel(config.preferredTimeSlot)
+                            .split(" ")[0]
+                            .toLowerCase()}{" "}
+                          (~{Math.round(servicesPerBillingCycle)} services per{" "}
+                          {formatBillingCycle(billingCycle).toLowerCase()})
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+
+                <div className={styles.billing_schedule__explanation_section}>
+                  <h6>💰 Total Cost Breakdown</h6>
+                  <p>
+                    Your total subscription cost for {duration}{" "}
+                    {getDurationLabel()} will be{" "}
+                    <strong>
+                      {formatToNaira(
+                        calculateTotalPrice() *
+                          (billingCycle === BillingCycle.Monthly
+                            ? duration
+                            : Math.ceil(duration / 3))
+                      )}
+                    </strong>
+                    , billed {formatBillingCycle(billingCycle).toLowerCase()} at
+                    {formatToNaira(calculateTotalPrice())} per cycle.
+                  </p>
+                </div>
+              </div>
+            </div>
             <div className={styles.billing_schedule__total}>
               <span>
                 Total per {formatBillingCycle(billingCycle).toLowerCase()}:
               </span>
               <span className={styles.billing_schedule__total_price}>
-                ${calculateTotalPrice()}
+                {formatToNaira(calculateTotalPrice())}
               </span>
             </div>
           </div>

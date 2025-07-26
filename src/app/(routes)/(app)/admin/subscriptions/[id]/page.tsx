@@ -936,7 +936,7 @@ export default function SubscriptionDetailsPage() {
                                 styles.subscription_details__service_price
                               }
                             >
-                              ${serviceItem.price?.toFixed(2) || "0.00"}/month
+                              {formatToNaira(serviceItem.price || 0)}/month
                             </div>
                           </div>
 
@@ -1307,7 +1307,7 @@ export default function SubscriptionDetailsPage() {
                       <div className={styles.subscription_details__billing_row}>
                         <span>Monthly Total:</span>
                         <span className={styles.subscription_details__amount}>
-                          ${subscription.totalPrice?.toFixed(2)}
+                          {formatToNaira(subscription.totalPrice || 0)}
                         </span>
                       </div>
                       {subscription.duration && (
@@ -1356,7 +1356,9 @@ export default function SubscriptionDetailsPage() {
                                 ).toISOString()
                               )}
                             </td>
-                            <td>${subscription.totalPrice?.toFixed(2)}</td>
+                            <td>
+                              {formatToNaira(subscription.totalPrice || 0)}
+                            </td>
                             <td>
                               <StatusBadge status="active" label="Paid" />
                             </td>
@@ -1382,7 +1384,9 @@ export default function SubscriptionDetailsPage() {
                                 ).toISOString()
                               )}
                             </td>
-                            <td>${subscription.totalPrice?.toFixed(2)}</td>
+                            <td>
+                              {formatToNaira(subscription.totalPrice || 0)}
+                            </td>
                             <td>
                               <StatusBadge status="active" label="Paid" />
                             </td>
