@@ -159,6 +159,21 @@
     }
   }
 
+  &__config_header_right {
+    display: flex;
+    align-items: center;
+    gap: map-get($spacing, "md");
+  }
+
+  &__config_price {
+    font-size: map-get($font-sizes, "md");
+    font-weight: map-get($font-weights, "bold");
+    color: map-get($colors, "primary", "base");
+    padding: map-get($spacing, "xs") map-get($spacing, "sm");
+    background-color: map-get($colors, "primary", "lighter");
+    border-radius: map-get($border-radius, "sm");
+  }
+
   &__config_grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -175,6 +190,13 @@
       font-weight: map-get($font-weights, "medium");
       color: map-get($colors, "neutral", "dark");
     }
+  }
+
+  &__field_description {
+    font-size: map-get($font-sizes, "xs");
+    color: map-get($colors, "neutral", "dark");
+    margin: map-get($spacing, "xs") 0 0 0;
+    line-height: 1.4;
   }
 
   &__input,

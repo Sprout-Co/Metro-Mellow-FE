@@ -35,6 +35,7 @@ interface ServiceConfiguration {
   preferredTimeSlot: TimeSlot;
   serviceDetails: any;
   category: ServiceCategory;
+  selectedOption?: string;
 }
 
 export default function AddSubscriptionPage() {
@@ -146,14 +147,30 @@ export default function AddSubscriptionPage() {
         if (service) {
           setServiceConfigurations((prevConfig) => {
             const newConfig = new Map(prevConfig);
+            // Use the first option's price if available, otherwise use base service price
+            const defaultOption =
+              service.options && service.options.length > 0
+                ? service.options[0]
+                : null;
+            const defaultPrice = defaultOption
+              ? defaultOption.price
+              : service.price || 0;
+
             newConfig.set(serviceId, {
               serviceId,
-              price: service.price || 0,
+              price: defaultPrice,
               frequency: SubscriptionFrequency.Weekly,
               scheduledDays: [ScheduleDays.Monday],
               preferredTimeSlot: TimeSlot.Morning,
-              serviceDetails: {},
+              serviceDetails: defaultOption
+                ? {
+                    optionId: defaultOption.id,
+                    optionLabel: defaultOption.label,
+                    optionPrice: defaultOption.price,
+                  }
+                : {},
               category: service.category,
+              selectedOption: defaultOption ? defaultOption.id : undefined,
             });
             return newConfig;
           });

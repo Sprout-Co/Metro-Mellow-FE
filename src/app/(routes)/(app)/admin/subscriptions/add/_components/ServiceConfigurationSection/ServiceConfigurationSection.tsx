@@ -207,7 +207,18 @@ const ServiceConfigurationSection: React.FC<
               >
                 <div className={styles.service_configuration__config_header}>
                   <h5>{service.name}</h5>
-                  <Icon name={getServiceIcon(service.category)} />
+                  <div
+                    className={
+                      styles.service_configuration__config_header_right
+                    }
+                  >
+                    <Icon name={getServiceIcon(service.category)} />
+                    <span
+                      className={styles.service_configuration__config_price}
+                    >
+                      {formatToNaira(config.price)}
+                    </span>
+                  </div>
                 </div>
 
                 <div className={styles.service_configuration__config_grid}>
@@ -217,11 +228,24 @@ const ServiceConfigurationSection: React.FC<
                       <label>Service Option</label>
                       <select
                         value={config.selectedOption || ""}
-                        onChange={(e) =>
+                        onChange={(e) => {
+                          const selectedOptionId = e.target.value;
+                          const selectedOption = service.options?.find(
+                            (option) => option.id === selectedOptionId
+                          );
+
                           onConfigurationUpdate(serviceId, {
-                            selectedOption: e.target.value,
-                          })
-                        }
+                            selectedOption: selectedOptionId,
+                            price: selectedOption?.price || service.price || 0,
+                            serviceDetails: selectedOption
+                              ? {
+                                  optionId: selectedOption.id,
+                                  optionLabel: selectedOption.label,
+                                  optionPrice: selectedOption.price,
+                                }
+                              : {},
+                          });
+                        }}
                         className={styles.service_configuration__select}
                       >
                         <option value="">Select an option</option>
@@ -231,6 +255,24 @@ const ServiceConfigurationSection: React.FC<
                           </option>
                         ))}
                       </select>
+                      <p
+                        className={
+                          styles.service_configuration__field_description
+                        }
+                      >
+                        Select a specific service option to customize your
+                        experience.
+                        {config.selectedOption &&
+                          config.serviceDetails?.optionLabel && (
+                            <>
+                              <br />
+                              Selected:{" "}
+                              <strong>
+                                {config.serviceDetails.optionLabel}
+                              </strong>
+                            </>
+                          )}
+                      </p>
                     </div>
                   )}
 

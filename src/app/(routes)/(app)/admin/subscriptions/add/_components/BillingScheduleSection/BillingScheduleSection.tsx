@@ -20,6 +20,7 @@ interface ServiceConfiguration {
   preferredTimeSlot: TimeSlot;
   serviceDetails: any;
   category: ServiceCategory;
+  selectedOption?: string;
 }
 
 interface BillingScheduleSectionProps {
@@ -154,6 +155,8 @@ const BillingScheduleSection: React.FC<BillingScheduleSectionProps> = ({
     }
   };
 
+  console.log(selectedServices, "xxxx");
+  console.log(serviceConfigurations, "xxxx");
   return (
     <Card className={styles.billing_schedule}>
       <div className={styles.billing_schedule__header}>
@@ -261,6 +264,15 @@ const BillingScheduleSection: React.FC<BillingScheduleSectionProps> = ({
                       </div>
                     </div>
                     <div className={styles.billing_schedule__service_details}>
+                      {config.selectedOption &&
+                        config.serviceDetails?.optionLabel && (
+                          <div
+                            className={styles.billing_schedule__service_detail}
+                          >
+                            <span>Option:</span>{" "}
+                            {config.serviceDetails.optionLabel}
+                          </div>
+                        )}
                       <div className={styles.billing_schedule__service_detail}>
                         <span>Time:</span>{" "}
                         {getTimeSlotLabel(config.preferredTimeSlot)}
