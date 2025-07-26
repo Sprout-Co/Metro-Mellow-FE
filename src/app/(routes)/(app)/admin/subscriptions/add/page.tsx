@@ -54,7 +54,7 @@ export default function AddSubscriptionPage() {
 
   // Billing and scheduling state
   const [billingCycle, setBillingCycle] = useState<BillingCycle>(
-    BillingCycle.Weekly
+    BillingCycle.Monthly
   );
   const [duration, setDuration] = useState<number>(2);
   const [startDate, setStartDate] = useState<string>("");

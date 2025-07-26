@@ -50,10 +50,6 @@ const BillingScheduleSection: React.FC<BillingScheduleSectionProps> = ({
 
   const formatBillingCycle = (cycle: BillingCycle) => {
     switch (cycle) {
-      case BillingCycle.Weekly:
-        return "Weekly";
-      case BillingCycle.BiWeekly:
-        return "Bi-Weekly";
       case BillingCycle.Monthly:
         return "Monthly";
       case BillingCycle.Quarterly:
@@ -65,10 +61,6 @@ const BillingScheduleSection: React.FC<BillingScheduleSectionProps> = ({
 
   const getDurationLabel = () => {
     switch (billingCycle) {
-      case BillingCycle.Weekly:
-        return duration === 1 ? "week" : "weeks";
-      case BillingCycle.BiWeekly:
-        return duration === 1 ? "bi-week period" : "bi-week periods";
       case BillingCycle.Monthly:
         return duration === 1 ? "month" : "months";
       case BillingCycle.Quarterly:
@@ -193,8 +185,6 @@ const BillingScheduleSection: React.FC<BillingScheduleSectionProps> = ({
                 }
                 className={styles.billing_schedule__select}
               >
-                <option value={BillingCycle.Weekly}>Weekly</option>
-                <option value={BillingCycle.BiWeekly}>Bi-Weekly</option>
                 <option value={BillingCycle.Monthly}>Monthly</option>
                 <option value={BillingCycle.Quarterly}>Quarterly</option>
               </select>

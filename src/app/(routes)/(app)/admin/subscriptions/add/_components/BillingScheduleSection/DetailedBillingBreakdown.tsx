@@ -35,10 +35,6 @@ const DetailedBillingBreakdown: React.FC<DetailedBillingBreakdownProps> = ({
 }) => {
   const formatBillingCycle = (cycle: BillingCycle) => {
     switch (cycle) {
-      case BillingCycle.Weekly:
-        return "Weekly";
-      case BillingCycle.BiWeekly:
-        return "Bi-Weekly";
       case BillingCycle.Monthly:
         return "Monthly";
       case BillingCycle.Quarterly:
@@ -137,10 +133,6 @@ const DetailedBillingBreakdown: React.FC<DetailedBillingBreakdownProps> = ({
 
   const getBillingCyclesInDuration = () => {
     switch (billingCycle) {
-      case BillingCycle.Weekly:
-        return duration;
-      case BillingCycle.BiWeekly:
-        return Math.ceil(duration / 2);
       case BillingCycle.Monthly:
         return duration;
       case BillingCycle.Quarterly:
@@ -271,11 +263,7 @@ const DetailedBillingBreakdown: React.FC<DetailedBillingBreakdownProps> = ({
                 for{" "}
                 <strong>
                   {duration}{" "}
-                  {billingCycle === BillingCycle.Weekly
-                    ? "weeks"
-                    : billingCycle === BillingCycle.Monthly
-                      ? "months"
-                      : "periods"}
+                  {billingCycle === BillingCycle.Monthly ? "months" : "periods"}
                 </strong>
               </p>
             </div>
@@ -380,11 +368,7 @@ const DetailedBillingBreakdown: React.FC<DetailedBillingBreakdownProps> = ({
             <div>
               <h5>
                 Total for {duration}{" "}
-                {billingCycle === BillingCycle.Weekly
-                  ? "weeks"
-                  : billingCycle === BillingCycle.Monthly
-                    ? "months"
-                    : "periods"}
+                {billingCycle === BillingCycle.Monthly ? "months" : "periods"}
               </h5>
               <p className={styles.detailed_breakdown__summary_amount}>
                 {formatToNaira(calculateTotalSubscriptionCostForAllServices())}

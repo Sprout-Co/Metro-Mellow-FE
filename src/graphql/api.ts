@@ -119,10 +119,8 @@ export type Billing = {
 };
 
 export enum BillingCycle {
-  BiWeekly = 'BI_WEEKLY',
   Monthly = 'MONTHLY',
-  Quarterly = 'QUARTERLY',
-  Weekly = 'WEEKLY'
+  Quarterly = 'QUARTERLY'
 }
 
 export enum BillingStatus {
