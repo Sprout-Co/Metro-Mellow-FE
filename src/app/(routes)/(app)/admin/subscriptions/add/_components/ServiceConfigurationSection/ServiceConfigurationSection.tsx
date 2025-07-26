@@ -271,13 +271,10 @@ const ServiceConfigurationSection: React.FC<
                           const updatedConfig = {
                             ...config,
                             selectedOption: selectedOptionId,
-                            serviceDetails: selectedOption
-                              ? {
-                                  optionId: selectedOption.id,
-                                  optionLabel: selectedOption.label,
-                                  optionPrice: selectedOption.price,
-                                }
-                              : {},
+                            serviceDetails: {
+                              ...config.serviceDetails,
+                              serviceOption: selectedOptionId,
+                            },
                           };
 
                           // Calculate new price using the pricing utility
@@ -308,16 +305,17 @@ const ServiceConfigurationSection: React.FC<
                       >
                         Select a specific service option to customize your
                         experience.
-                        {config.selectedOption &&
-                          config.serviceDetails?.optionLabel && (
-                            <>
-                              <br />
-                              Selected:{" "}
-                              <strong>
-                                {config.serviceDetails.optionLabel}
-                              </strong>
-                            </>
-                          )}
+                        {config.selectedOption && (
+                          <>
+                            <br />
+                            Selected:{" "}
+                            <strong>
+                              {service.options?.find(
+                                (opt) => opt.id === config.selectedOption
+                              )?.label || config.selectedOption}
+                            </strong>
+                          </>
+                        )}
                       </p>
                     </div>
                   )}
@@ -363,6 +361,7 @@ const ServiceConfigurationSection: React.FC<
                       }}
                       className={styles.service_configuration__select}
                     >
+                      <option value="">Select a frequency</option>
                       {getServiceFrequencyOptions(service.category).map(
                         (frequency) => (
                           <option key={frequency} value={frequency}>

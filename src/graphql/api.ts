@@ -275,6 +275,7 @@ export type CreateSubscriptionInput = {
   address: Scalars['String']['input'];
   autoRenew: Scalars['Boolean']['input'];
   billingCycle: BillingCycle;
+  customerId?: InputMaybe<Scalars['ID']['input']>;
   duration: Scalars['Int']['input'];
   services: Array<SubscriptionServiceInput>;
   startDate: Scalars['DateTime']['input'];

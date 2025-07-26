@@ -19,6 +19,12 @@ import {
   SubscriptionServiceInput,
   Address,
   ServiceStatus,
+  CleaningType,
+  HouseType,
+  LaundryType,
+  MealType,
+  Severity,
+  TreatmentType,
 } from "@/graphql/api";
 import { ServiceConfiguration } from "@/app/(routes)/(app)/admin/subscriptions/add/types/subscription";
 import CustomerSelectionSection from "./_components/CustomerSelectionSection/CustomerSelectionSection";
@@ -27,6 +33,128 @@ import BillingScheduleSection from "./_components/BillingScheduleSection/Billing
 import FormActions from "./_components/FormActions/FormActions";
 import ErrorDisplay from "./_components/ErrorDisplay/ErrorDisplay";
 import styles from "./AddSubscriptionPage.module.scss";
+
+// Helper function to generate default service configuration based on category
+const generateDefaultServiceConfiguration = (
+  service: Service,
+  defaultOption?: any
+): ServiceConfiguration => {
+  // Set sensible defaults for each category
+  let frequency = SubscriptionFrequency.Weekly;
+  let scheduledDays = [ScheduleDays.Monday];
+  let preferredTimeSlot = TimeSlot.Morning;
+
+  switch (service.category) {
+    case ServiceCategory.Cleaning:
+      frequency = SubscriptionFrequency.Weekly;
+      scheduledDays = [ScheduleDays.Monday];
+      break;
+    case ServiceCategory.Laundry:
+      frequency = SubscriptionFrequency.BiWeekly;
+      scheduledDays = [ScheduleDays.Monday];
+      break;
+    case ServiceCategory.Cooking:
+      frequency = SubscriptionFrequency.Weekly;
+      scheduledDays = [ScheduleDays.Monday, ScheduleDays.Thursday];
+      break;
+    case ServiceCategory.PestControl:
+      frequency = SubscriptionFrequency.Quarterly;
+      scheduledDays = [ScheduleDays.Monday];
+      break;
+    default:
+      break;
+  }
+
+  // Service-specific details
+  const baseServiceDetails = {
+    serviceOption: defaultOption ? defaultOption.id : "",
+  };
+
+  let serviceDetails: any = baseServiceDetails;
+  let cleaning, laundry, cooking, pestControl;
+
+  switch (service.category) {
+    case ServiceCategory.Cleaning:
+      cleaning = {
+        cleaningType: CleaningType.StandardCleaning,
+        houseType: HouseType.Flat,
+        rooms: {
+          bedroom: 2,
+          livingRoom: 1,
+          bathroom: 1,
+          kitchen: 1,
+          balcony: 0,
+          studyRoom: 0,
+          lobby: 0,
+          outdoor: 0,
+          other: 0,
+        },
+      };
+      serviceDetails = { ...baseServiceDetails, cleaning };
+      break;
+    case ServiceCategory.Laundry:
+      laundry = {
+        bags: 2,
+        laundryType: LaundryType.StandardLaundry,
+        items: {
+          shirts: 5,
+          pants: 3,
+          dresses: 2,
+          suits: 1,
+          others: 3,
+        },
+      };
+      serviceDetails = { ...baseServiceDetails, laundry };
+      break;
+    case ServiceCategory.Cooking:
+      cooking = {
+        mealType: MealType.Basic,
+        mealsPerDelivery: [
+          { count: 2, day: ScheduleDays.Monday },
+          { count: 2, day: ScheduleDays.Thursday },
+        ],
+      };
+      serviceDetails = {
+        ...baseServiceDetails,
+        cooking: {
+          mealType: MealType.Basic,
+          mealDeliveries: [
+            { count: 2, day: ScheduleDays.Monday },
+            { count: 2, day: ScheduleDays.Thursday },
+          ],
+        },
+      };
+      break;
+    case ServiceCategory.PestControl:
+      pestControl = {
+        areas: ["living room", "kitchen", "bathroom"],
+        severity: Severity.Low,
+        treatmentType: TreatmentType.Residential,
+      };
+      serviceDetails = { ...baseServiceDetails, pestControl };
+      break;
+    default:
+      break;
+  }
+
+  // Use the first option's price if available, otherwise use base service price
+  const defaultPrice = defaultOption ? defaultOption.price : service.price || 0;
+
+  return {
+    serviceId: service._id,
+    price: defaultPrice,
+    frequency,
+    scheduledDays,
+    preferredTimeSlot,
+    serviceDetails,
+    category: service.category,
+    selectedOption: defaultOption ? defaultOption.id : "",
+    cleaning,
+    laundry,
+    cooking,
+    pestControl,
+  };
+};
 
 export default function AddSubscriptionPage() {
   const router = useRouter();
@@ -136,28 +264,15 @@ export default function AddSubscriptionPage() {
         const service = services.find((s) => s._id === serviceId);
         if (service) {
           setServiceConfigurations((prevConfig) => {
-            const newConfig = new Map(prevConfig);
-            // Use the first option's price if available, otherwise use base service price
             const defaultOption =
               service.options && service.options.length > 0
                 ? service.options[0]
                 : null;
-            const defaultPrice = defaultOption
-              ? defaultOption.price
-              : service.price || 0;
-
-            newConfig.set(serviceId, {
+            const newConfig = new Map(prevConfig);
+            newConfig.set(
               serviceId,
-              price: defaultPrice,
-              frequency: SubscriptionFrequency.Weekly,
-              scheduledDays: [ScheduleDays.Monday],
-              preferredTimeSlot: TimeSlot.Morning,
-              serviceDetails: {
-                serviceOption: defaultOption ? defaultOption.id : "",
-              },
-              category: service.category,
-              selectedOption: defaultOption ? defaultOption.id : "",
-            });
+              generateDefaultServiceConfiguration(service, defaultOption)
+            );
             return newConfig;
           });
         }
@@ -259,6 +374,7 @@ export default function AddSubscriptionPage() {
       });
 
       const subscriptionInput: CreateSubscriptionInput = {
+        customerId: selectedCustomerId,
         address: selectedAddressId,
         autoRenew: true,
         services: subscriptionServices,
