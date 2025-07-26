@@ -152,15 +152,11 @@ export default function AddSubscriptionPage() {
               frequency: SubscriptionFrequency.Weekly,
               scheduledDays: [ScheduleDays.Monday],
               preferredTimeSlot: TimeSlot.Morning,
-              serviceDetails: defaultOption
-                ? {
-                    optionId: defaultOption.id,
-                    optionLabel: defaultOption.label,
-                    optionPrice: defaultOption.price,
-                  }
-                : {},
+              serviceDetails: {
+                serviceOption: defaultOption ? defaultOption.id : "",
+              },
               category: service.category,
-              selectedOption: defaultOption ? defaultOption.id : undefined,
+              selectedOption: defaultOption ? defaultOption.id : "",
             });
             return newConfig;
           });
@@ -242,6 +238,15 @@ export default function AddSubscriptionPage() {
           throw new Error(`Configuration not found for service ${serviceId}`);
         }
 
+        // Convert ServiceDetails to ServiceDetailsInput format
+        const serviceDetailsInput = {
+          serviceOption: config.selectedOption,
+          cleaning: config.cleaning,
+          laundry: config.laundry,
+          pestControl: config.pestControl,
+          cooking: config.cooking,
+        };
+
         return {
           serviceId,
           category: service.category,
@@ -249,7 +254,7 @@ export default function AddSubscriptionPage() {
           frequency: config.frequency,
           scheduledDays: config.scheduledDays,
           preferredTimeSlot: config.preferredTimeSlot,
-          serviceDetails: config.serviceDetails,
+          serviceDetails: serviceDetailsInput,
         };
       });
 
@@ -262,14 +267,17 @@ export default function AddSubscriptionPage() {
         startDate,
       };
 
+      console.log(subscriptionInput, "subscriptionInput zzzz");
+
       const result = await handleCreateSubscription(subscriptionInput);
+      console.log(result, "result zzzz");
 
       if (result) {
         // Redirect to subscriptions list with success message
         router.push("/admin/subscriptions?success=true");
       }
     } catch (error) {
-      console.error("Error creating subscription:", error);
+      console.error("Error creating subscription zzz:", error);
       setError(
         error instanceof Error ? error.message : "Failed to create subscription"
       );

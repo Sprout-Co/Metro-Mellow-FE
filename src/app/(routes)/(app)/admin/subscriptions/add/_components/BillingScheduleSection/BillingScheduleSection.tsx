@@ -272,15 +272,13 @@ const BillingScheduleSection: React.FC<BillingScheduleSectionProps> = ({
                       </div>
                     </div>
                     <div className={styles.billing_schedule__service_details}>
-                      {config.selectedOption &&
-                        config.serviceDetails?.optionLabel && (
-                          <div
-                            className={styles.billing_schedule__service_detail}
-                          >
-                            <span>Option:</span>{" "}
-                            {config.serviceDetails.optionLabel}
-                          </div>
-                        )}
+                      {config.selectedOption && (
+                        <div
+                          className={styles.billing_schedule__service_detail}
+                        >
+                          <span>Option:</span> {config.selectedOption}
+                        </div>
+                      )}
                       <div className={styles.billing_schedule__service_detail}>
                         <span>Time:</span>{" "}
                         {getTimeSlotLabel(config.preferredTimeSlot)}

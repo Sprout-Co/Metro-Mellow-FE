@@ -7,6 +7,7 @@ import {
   LaundryDetailsInput,
   PestControlDetailsInput,
   CookingDetailsInput,
+  ServiceDetails,
 } from "@/graphql/api";
 
 export interface ServiceConfiguration {
@@ -15,9 +16,9 @@ export interface ServiceConfiguration {
   frequency: SubscriptionFrequency;
   scheduledDays: ScheduleDays[];
   preferredTimeSlot: TimeSlot;
-  serviceDetails: any;
+  serviceDetails: ServiceDetails;
   category: ServiceCategory;
-  selectedOption?: string;
+  selectedOption: string;
 
   // Service-specific configurations using existing API types
   cleaning?: CleaningDetailsInput;
