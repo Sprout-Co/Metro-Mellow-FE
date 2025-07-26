@@ -1,0 +1,371 @@
+.detailed_breakdown {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 24px;
+
+  &__section {
+    margin-bottom: 32px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__section_title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e9ecef;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      color: #3498db;
+    }
+  }
+
+  &__explanation {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__explanation_item {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    border-left: 4px solid #3498db;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    h5 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: #6c757d;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+
+      li {
+        color: #6c757d;
+        line-height: 1.6;
+        margin-bottom: 8px;
+
+        strong {
+          color: #2c3e50;
+        }
+      }
+    }
+  }
+
+  &__formula {
+    background: #e8f4fd;
+    border: 1px solid #b3d9ff;
+    border-radius: 6px;
+    padding: 12px;
+    margin: 12px 0;
+    text-align: center;
+    font-family: "Courier New", monospace;
+    color: #2c3e50;
+  }
+
+  &__config_summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  &__config_item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+
+    span {
+      color: #6c757d;
+      font-size: 14px;
+    }
+
+    strong {
+      color: #2c3e50;
+      font-weight: 600;
+    }
+  }
+
+  &__service {
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__service_header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  &__service_icon {
+    width: 48px;
+    height: 48px;
+    background: #3498db;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__service_info {
+    flex: 1;
+
+    h5 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 8px;
+    }
+  }
+
+  &__service_frequency {
+    color: #6c757d;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  &__service_calculation {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__calculation_step {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    border-left: 4px solid #28a745;
+
+    h6 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      &::before {
+        content: "→";
+        color: #28a745;
+        font-weight: bold;
+      }
+    }
+  }
+
+  &__price_breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__price_item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: white;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+
+    span:first-child {
+      color: #6c757d;
+      font-size: 14px;
+    }
+
+    span:last-child {
+      color: #2c3e50;
+      font-weight: 500;
+    }
+  }
+
+  &__price_item_total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #e8f5e8;
+    border-radius: 4px;
+    border: 1px solid #28a745;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+
+  &__frequency_calculation {
+    p {
+      color: #6c757d;
+      margin-bottom: 8px;
+      line-height: 1.5;
+
+      strong {
+        color: #2c3e50;
+      }
+    }
+  }
+
+  &__billing_calculation {
+    p {
+      color: #6c757d;
+      margin-top: 12px;
+      line-height: 1.5;
+
+      strong {
+        color: #2c3e50;
+      }
+    }
+  }
+
+  &__total_calculation {
+    p {
+      color: #6c757d;
+      margin-bottom: 8px;
+      line-height: 1.5;
+
+      strong {
+        color: #2c3e50;
+      }
+    }
+  }
+
+  &__summary {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  &__summary_item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+    span:first-child {
+      color: #6c757d;
+      font-size: 16px;
+    }
+
+    strong {
+      color: #2c3e50;
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
+
+  &__billing_schedule {
+    background: #e8f4fd;
+    border: 1px solid #b3d9ff;
+    border-radius: 8px;
+    padding: 20px;
+
+    h5 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    p {
+      color: #6c757d;
+      line-height: 1.6;
+      margin-bottom: 8px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      strong {
+        color: #2c3e50;
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .detailed_breakdown {
+    padding: 16px;
+
+    &__config_summary {
+      grid-template-columns: 1fr;
+    }
+
+    &__service_header {
+      flex-direction: column;
+      text-align: center;
+      gap: 12px;
+    }
+
+    &__service_icon {
+      width: 40px;
+      height: 40px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    &__calculation_step {
+      padding: 16px;
+    }
+
+    &__summary_item {
+      flex-direction: column;
+      gap: 8px;
+      text-align: center;
+
+      strong {
+        font-size: 16px;
+      }
+    }
+  }
+}
