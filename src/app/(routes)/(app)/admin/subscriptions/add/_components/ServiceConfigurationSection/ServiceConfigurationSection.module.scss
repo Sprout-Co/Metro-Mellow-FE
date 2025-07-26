@@ -67,12 +67,11 @@
     border: 2px solid map-get($colors, "neutral", "light");
     border-radius: map-get($border-radius, "md");
     cursor: pointer;
-    transition: all 0.3s ease;
-    background-color: map-get($colors, "neutral", "white");
+    transition: all 0.2s ease;
 
     &:hover {
       border-color: map-get($colors, "primary", "base");
-      box-shadow: map-get($shadows, "sm");
+      background-color: map-get($colors, "primary", "lighter");
     }
 
     &--selected {
@@ -82,15 +81,14 @@
   }
 
   &__service_icon {
-    width: 48px;
-    height: 48px;
-    border-radius: map-get($border-radius, "md");
-    background-color: map-get($colors, "primary", "light");
     display: flex;
     align-items: center;
     justify-content: center;
-    color: map-get($colors, "primary", "base");
-    font-size: map-get($font-sizes, "lg");
+    width: 48px;
+    height: 48px;
+    background-color: map-get($colors, "primary", "base");
+    color: map-get($colors, "neutral", "white");
+    border-radius: map-get($border-radius, "md");
     flex-shrink: 0;
   }
 
@@ -113,7 +111,7 @@
   }
 
   &__service_price {
-    font-size: map-get($font-sizes, "md");
+    font-size: map-get($font-sizes, "sm");
     font-weight: map-get($font-weights, "bold");
     color: map-get($colors, "primary", "base");
   }
@@ -126,12 +124,10 @@
     width: 20px;
     height: 20px;
     accent-color: map-get($colors, "primary", "base");
-    cursor: pointer;
   }
 
   &__config {
-    border-top: 1px solid map-get($colors, "neutral", "light");
-    padding-top: map-get($spacing, "lg");
+    margin-top: map-get($spacing, "xl");
   }
 
   &__config_item {
@@ -204,14 +200,13 @@
     padding: map-get($spacing, "sm");
     border: 1px solid map-get($colors, "neutral", "light");
     border-radius: map-get($border-radius, "sm");
-    font-size: map-get($font-sizes, "md");
+    font-size: map-get($font-sizes, "sm");
     background-color: map-get($colors, "neutral", "white");
-    transition: border-color 0.3s ease;
+    transition: border-color 0.2s ease;
 
     &:focus {
       outline: none;
       border-color: map-get($colors, "primary", "base");
-      box-shadow: 0 0 0 3px map-get($colors, "primary", "lighter");
     }
   }
 
@@ -226,12 +221,14 @@
     align-items: center;
     gap: map-get($spacing, "xs");
     padding: map-get($spacing, "xs");
+    border: 1px solid map-get($colors, "neutral", "light");
     border-radius: map-get($border-radius, "sm");
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.2s ease;
+    font-size: map-get($font-sizes, "sm");
 
     &:hover {
-      background-color: map-get($colors, "neutral", "light");
+      background-color: map-get($colors, "neutral", "lightest");
     }
 
     input[type="checkbox"] {
@@ -239,72 +236,186 @@
       height: 16px;
       accent-color: map-get($colors, "primary", "base");
     }
-
-    span {
-      font-size: map-get($font-sizes, "sm");
-      color: map-get($colors, "neutral", "dark");
-      font-weight: map-get($font-weights, "medium");
-    }
-  }
-
-  &__option_details {
-    margin-top: map-get($spacing, "sm");
-    padding: map-get($spacing, "sm");
-    background-color: map-get($colors, "neutral", "lightest");
-    border-radius: map-get($border-radius, "sm");
-    border-left: 3px solid map-get($colors, "primary", "base");
-  }
-
-  &__option_description {
-    font-size: map-get($font-sizes, "sm");
-    color: map-get($colors, "neutral", "dark");
-    margin-bottom: map-get($spacing, "xs");
-    line-height: 1.4;
-  }
-
-  &__option_inclusions {
-    font-size: map-get($font-sizes, "xs");
-    color: map-get($colors, "neutral", "dark");
-
-    strong {
-      color: map-get($colors, "neutral", "darkest");
-      font-weight: map-get($font-weights, "semibold");
-    }
-
-    ul {
-      margin: map-get($spacing, "xs") 0 0 map-get($spacing, "sm");
-      padding: 0;
-      list-style: none;
-
-      li {
-        position: relative;
-        padding-left: map-get($spacing, "sm");
-        margin-bottom: map-get($spacing, "xs");
-
-        &::before {
-          content: "✓";
-          position: absolute;
-          left: 0;
-          color: map-get($colors, "status", "success");
-          font-weight: map-get($font-weights, "bold");
-        }
-      }
-    }
   }
 
   &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    gap: map-get($spacing, "md");
     text-align: center;
-    padding: map-get($spacing, "xl");
     color: map-get($colors, "neutral", "dark");
 
     p {
+      margin: 0;
       font-size: map-get($font-sizes, "md");
-      margin: map-get($spacing, "sm") 0;
-
-      &:first-of-type {
-        font-weight: map-get($font-weights, "semibold");
-      }
     }
+  }
+
+  // Service-specific fields styles
+  &__specific_fields {
+    display: flex;
+    flex-direction: column;
+    gap: map-get($spacing, "md");
+  }
+
+  &__rooms_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: map-get($spacing, "sm");
+  }
+
+  &__room_item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: map-get($spacing, "sm");
+    border: 1px solid map-get($colors, "neutral", "light");
+    border-radius: map-get($border-radius, "sm");
+    background-color: map-get($colors, "neutral", "white");
+  }
+
+  &__room_label {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: map-get($colors, "neutral", "dark");
+  }
+
+  &__room_controls {
+    display: flex;
+    align-items: center;
+    gap: map-get($spacing, "xs");
+  }
+
+  &__quantity_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid map-get($colors, "neutral", "light");
+    border-radius: map-get($border-radius, "sm");
+    background-color: map-get($colors, "neutral", "white");
+    color: map-get($colors, "neutral", "dark");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: map-get($colors, "primary", "base");
+      color: map-get($colors, "neutral", "white");
+      border-color: map-get($colors, "primary", "base");
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__quantity_display {
+    min-width: 24px;
+    text-align: center;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: map-get($colors, "neutral", "black");
+  }
+
+  &__bags_control {
+    display: flex;
+    align-items: center;
+    gap: map-get($spacing, "sm");
+    padding: map-get($spacing, "sm");
+    border: 1px solid map-get($colors, "neutral", "light");
+    border-radius: map-get($border-radius, "sm");
+    background-color: map-get($colors, "neutral", "white");
+  }
+
+  &__items_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: map-get($spacing, "sm");
+  }
+
+  &__item_control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: map-get($spacing, "sm");
+    border: 1px solid map-get($colors, "neutral", "light");
+    border-radius: map-get($border-radius, "sm");
+    background-color: map-get($colors, "neutral", "white");
+  }
+
+  &__item_label {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: map-get($colors, "neutral", "dark");
+  }
+
+  &__item_controls {
+    display: flex;
+    align-items: center;
+    gap: map-get($spacing, "xs");
+  }
+
+  &__areas_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: map-get($spacing, "sm");
+  }
+
+  &__area_checkbox {
+    display: flex;
+    align-items: center;
+    gap: map-get($spacing, "xs");
+    padding: map-get($spacing, "sm");
+    border: 1px solid map-get($colors, "neutral", "light");
+    border-radius: map-get($border-radius, "sm");
+    background-color: map-get($colors, "neutral", "white");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: map-get($font-sizes, "sm");
+
+    &:hover {
+      background-color: map-get($colors, "neutral", "lightest");
+    }
+
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: map-get($colors, "primary", "base");
+    }
+  }
+
+  &__meals_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: map-get($spacing, "sm");
+  }
+
+  &__meal_day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: map-get($spacing, "xs");
+    padding: map-get($spacing, "sm");
+    border: 1px solid map-get($colors, "neutral", "light");
+    border-radius: map-get($border-radius, "sm");
+    background-color: map-get($colors, "neutral", "white");
+  }
+
+  &__day_label {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: map-get($colors, "neutral", "dark");
+  }
+
+  &__meal_controls {
+    display: flex;
+    align-items: center;
+    gap: map-get($spacing, "xs");
   }
 }
 

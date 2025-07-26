@@ -3,6 +3,14 @@ import {
   ScheduleDays,
   TimeSlot,
   ServiceCategory,
+  HouseType,
+  RoomQuantitiesInput,
+  LaundryType,
+  LaundryItemsInput,
+  Severity,
+  TreatmentType,
+  MealType,
+  MealDeliveryInput,
 } from "@/graphql/api";
 
 export interface ServiceConfiguration {
@@ -14,4 +22,27 @@ export interface ServiceConfiguration {
   serviceDetails: any;
   category: ServiceCategory;
   selectedOption?: string;
+
+  // Service-specific configurations
+  cleaning?: {
+    houseType?: HouseType;
+    roomQuantities?: RoomQuantitiesInput;
+  };
+
+  laundry?: {
+    bags?: number;
+    laundryType?: LaundryType;
+    items?: LaundryItemsInput;
+  };
+
+  pestControl?: {
+    severity?: Severity;
+    treatmentType?: TreatmentType;
+    areas?: string[];
+  };
+
+  cooking?: {
+    mealType?: MealType;
+    mealsPerDelivery?: MealDeliveryInput[];
+  };
 }

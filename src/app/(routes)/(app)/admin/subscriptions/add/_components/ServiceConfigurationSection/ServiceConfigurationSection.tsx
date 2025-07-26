@@ -10,6 +10,7 @@ import {
 } from "@/graphql/api";
 import { ServiceConfiguration } from "@/app/(routes)/(app)/admin/subscriptions/add/types/subscription";
 import { formatToNaira } from "@/utils/string";
+import ServiceSpecificFields from "./ServiceSpecificFields";
 import styles from "./ServiceConfigurationSection.module.scss";
 
 interface ServiceConfigurationSectionProps {
@@ -265,6 +266,14 @@ const ServiceConfigurationSection: React.FC<
                       </p>
                     </div>
                   )}
+
+                  {/* Service-Specific Fields */}
+                  <ServiceSpecificFields
+                    serviceCategory={service.category}
+                    config={config}
+                    onConfigurationUpdate={onConfigurationUpdate}
+                    serviceId={serviceId}
+                  />
 
                   {/* Frequency */}
                   <div className={styles.service_configuration__field}>
