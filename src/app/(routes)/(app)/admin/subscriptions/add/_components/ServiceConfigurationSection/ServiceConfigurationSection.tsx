@@ -246,17 +246,33 @@ const ServiceConfigurationSection: React.FC<
                       }
                       className={styles.service_configuration__select}
                     >
-                      <option value={SubscriptionFrequency.Daily}>Daily</option>
+                      <option value={SubscriptionFrequency.Daily}>
+                        Daily (Every Day)
+                      </option>
                       <option value={SubscriptionFrequency.Weekly}>
-                        Weekly
+                        Weekly (Every Week)
                       </option>
                       <option value={SubscriptionFrequency.BiWeekly}>
-                        Bi-Weekly
+                        Bi-Weekly (Every 2 Weeks)
                       </option>
                       <option value={SubscriptionFrequency.Monthly}>
-                        Monthly
+                        Monthly (Every Month)
                       </option>
                     </select>
+                    <p
+                      className={
+                        styles.service_configuration__field_description
+                      }
+                    >
+                      Frequency is how often you want the service to be
+                      delivered.
+                      <br />
+                      Every{" "}
+                      {config.scheduledDays
+                        .map((day) => getDayLabel(day))
+                        .join(", ")}{" "}
+                      for {getFrequencyLabel(config.frequency).toLowerCase()}
+                    </p>
                   </div>
 
                   {/* Time Slot */}
