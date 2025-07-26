@@ -225,6 +225,51 @@
     }
   }
 
+  &__option_details {
+    margin-top: map-get($spacing, "sm");
+    padding: map-get($spacing, "sm");
+    background-color: map-get($colors, "neutral", "lightest");
+    border-radius: map-get($border-radius, "sm");
+    border-left: 3px solid map-get($colors, "primary", "base");
+  }
+
+  &__option_description {
+    font-size: map-get($font-sizes, "sm");
+    color: map-get($colors, "neutral", "dark");
+    margin-bottom: map-get($spacing, "xs");
+    line-height: 1.4;
+  }
+
+  &__option_inclusions {
+    font-size: map-get($font-sizes, "xs");
+    color: map-get($colors, "neutral", "dark");
+
+    strong {
+      color: map-get($colors, "neutral", "darkest");
+      font-weight: map-get($font-weights, "semibold");
+    }
+
+    ul {
+      margin: map-get($spacing, "xs") 0 0 map-get($spacing, "sm");
+      padding: 0;
+      list-style: none;
+
+      li {
+        position: relative;
+        padding-left: map-get($spacing, "sm");
+        margin-bottom: map-get($spacing, "xs");
+
+        &::before {
+          content: "✓";
+          position: absolute;
+          left: 0;
+          color: map-get($colors, "status", "success");
+          font-weight: map-get($font-weights, "bold");
+        }
+      }
+    }
+  }
+
   &__empty {
     text-align: center;
     padding: map-get($spacing, "xl");

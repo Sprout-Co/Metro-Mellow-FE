@@ -18,6 +18,7 @@ interface ServiceConfiguration {
   preferredTimeSlot: TimeSlot;
   serviceDetails: any;
   category: ServiceCategory;
+  selectedOption?: string; // Add selected service option
 }
 
 interface ServiceConfigurationSectionProps {
@@ -209,22 +210,28 @@ const ServiceConfigurationSection: React.FC<
                 </div>
 
                 <div className={styles.service_configuration__config_grid}>
-                  {/* Price */}
-                  <div className={styles.service_configuration__field}>
-                    <label>Price ($)</label>
-                    <input
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      value={config.price}
-                      onChange={(e) =>
-                        onConfigurationUpdate(serviceId, {
-                          price: parseFloat(e.target.value) || 0,
-                        })
-                      }
-                      className={styles.service_configuration__input}
-                    />
-                  </div>
+                  {/* Service Options */}
+                  {service.options && service.options.length > 0 && (
+                    <div className={styles.service_configuration__field}>
+                      <label>Service Option</label>
+                      <select
+                        value={config.selectedOption || ""}
+                        onChange={(e) =>
+                          onConfigurationUpdate(serviceId, {
+                            selectedOption: e.target.value,
+                          })
+                        }
+                        className={styles.service_configuration__select}
+                      >
+                        <option value="">Select an option</option>
+                        {service.options.map((option) => (
+                          <option key={option.id} value={option.id}>
+                            {option.label} - ${option.price}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
 
                   {/* Frequency */}
                   <div className={styles.service_configuration__field}>
