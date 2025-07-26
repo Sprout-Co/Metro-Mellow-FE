@@ -10,6 +10,7 @@ import {
 } from "@/graphql/api";
 import { ServiceConfiguration } from "@/app/(routes)/(app)/admin/subscriptions/add/types/subscription";
 import { formatToNaira } from "@/utils/string";
+import { calculateServicePrice } from "@/utils/pricing";
 import ServiceSpecificFields from "./ServiceSpecificFields";
 import styles from "./ServiceConfigurationSection.module.scss";
 
@@ -48,7 +49,22 @@ const ServiceConfigurationSection: React.FC<
       ? [...current, day]
       : current.filter((d) => d !== day);
 
-    onConfigurationUpdate(serviceId, { scheduledDays: updated });
+    const updatedConfig = {
+      ...config,
+      scheduledDays: updated,
+    };
+
+    // Calculate new price with updated days
+    const service = services.find((s) => s._id === serviceId);
+    if (service) {
+      const newPrice = calculateServicePrice(service, updatedConfig);
+      onConfigurationUpdate(serviceId, {
+        scheduledDays: updated,
+        price: newPrice,
+      });
+    } else {
+      onConfigurationUpdate(serviceId, { scheduledDays: updated });
+    }
   };
 
   const getServiceIcon = (category: ServiceCategory): string => {
@@ -225,9 +241,9 @@ const ServiceConfigurationSection: React.FC<
                             (option) => option.id === selectedOptionId
                           );
 
-                          onConfigurationUpdate(serviceId, {
+                          const updatedConfig = {
+                            ...config,
                             selectedOption: selectedOptionId,
-                            price: selectedOption?.price || service.price || 0,
                             serviceDetails: selectedOption
                               ? {
                                   optionId: selectedOption.id,
@@ -235,6 +251,18 @@ const ServiceConfigurationSection: React.FC<
                                   optionPrice: selectedOption.price,
                                 }
                               : {},
+                          };
+
+                          // Calculate new price using the pricing utility
+                          const newPrice = calculateServicePrice(
+                            service,
+                            updatedConfig
+                          );
+
+                          onConfigurationUpdate(serviceId, {
+                            selectedOption: selectedOptionId,
+                            price: newPrice,
+                            serviceDetails: updatedConfig.serviceDetails,
                           });
                         }}
                         className={styles.service_configuration__select}
@@ -273,6 +301,7 @@ const ServiceConfigurationSection: React.FC<
                     config={config}
                     onConfigurationUpdate={onConfigurationUpdate}
                     serviceId={serviceId}
+                    service={service}
                   />
 
                   {/* Frequency */}
@@ -280,11 +309,31 @@ const ServiceConfigurationSection: React.FC<
                     <label>Frequency</label>
                     <select
                       value={config.frequency}
-                      onChange={(e) =>
-                        onConfigurationUpdate(serviceId, {
+                      onChange={(e) => {
+                        const updatedConfig = {
+                          ...config,
                           frequency: e.target.value as SubscriptionFrequency,
-                        })
-                      }
+                        };
+
+                        // Calculate new price with updated frequency
+                        const service = services.find(
+                          (s) => s._id === serviceId
+                        );
+                        if (service) {
+                          const newPrice = calculateServicePrice(
+                            service,
+                            updatedConfig
+                          );
+                          onConfigurationUpdate(serviceId, {
+                            frequency: e.target.value as SubscriptionFrequency,
+                            price: newPrice,
+                          });
+                        } else {
+                          onConfigurationUpdate(serviceId, {
+                            frequency: e.target.value as SubscriptionFrequency,
+                          });
+                        }
+                      }}
                       className={styles.service_configuration__select}
                     >
                       <option value={SubscriptionFrequency.Daily}>

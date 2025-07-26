@@ -11,6 +11,7 @@ import {
 } from "@/graphql/api";
 import { ServiceConfiguration } from "@/app/(routes)/(app)/admin/subscriptions/add/types/subscription";
 import { formatToNaira } from "@/utils/string";
+import { calculateServicePrice } from "@/utils/pricing";
 import styles from "./BillingScheduleSection.module.scss";
 
 interface BillingScheduleSectionProps {
@@ -73,7 +74,9 @@ const BillingScheduleSection: React.FC<BillingScheduleSectionProps> = ({
     selectedServices.forEach((service) => {
       const config = serviceConfigurations.get(service._id);
       if (config) {
-        total += config.price;
+        // Use the pricing utility to calculate the accurate price
+        const calculatedPrice = calculateServicePrice(service, config);
+        total += calculatedPrice;
       }
     });
     return total;
@@ -245,12 +248,15 @@ const BillingScheduleSection: React.FC<BillingScheduleSectionProps> = ({
                       <div className={styles.billing_schedule__service_info}>
                         <h5>{service.name}</h5>
                         <p>
-                          {formatToNaira(config.price)} per{" "}
+                          {formatToNaira(
+                            calculateServicePrice(service, config)
+                          )}{" "}
+                          per{" "}
                           {getFrequencyLabel(config.frequency).toLowerCase()}
                         </p>
                       </div>
                       <div className={styles.billing_schedule__service_price}>
-                        {formatToNaira(config.price)}
+                        {formatToNaira(calculateServicePrice(service, config))}
                       </div>
                     </div>
                     <div className={styles.billing_schedule__service_details}>
@@ -334,6 +340,11 @@ const BillingScheduleSection: React.FC<BillingScheduleSectionProps> = ({
                             return 0;
                         }
                       })();
+
+                      const calculatedPrice = calculateServicePrice(
+                        service,
+                        config
+                      );
 
                       return (
                         <li key={service._id}>

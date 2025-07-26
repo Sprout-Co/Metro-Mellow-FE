@@ -12,9 +12,11 @@ import {
   MealDeliveryInput,
   ScheduleDays,
   CleaningType,
+  Service,
 } from "@/graphql/api";
 import { ServiceConfiguration } from "@/app/(routes)/(app)/admin/subscriptions/add/types/subscription";
 import { formatToNaira } from "@/utils/string";
+import { calculateServicePrice } from "@/utils/pricing";
 import styles from "./ServiceConfigurationSection.module.scss";
 
 interface ServiceSpecificFieldsProps {
@@ -25,6 +27,7 @@ interface ServiceSpecificFieldsProps {
     config: Partial<ServiceConfiguration>
   ) => void;
   serviceId: string;
+  service: Service;
 }
 
 const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
@@ -32,6 +35,7 @@ const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
   config,
   onConfigurationUpdate,
   serviceId,
+  service,
 }) => {
   // Room labels for cleaning services
   const roomLabels: Record<keyof RoomQuantitiesInput, string> = {
@@ -68,13 +72,22 @@ const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
       [room]: Math.max(0, currentQuantities[room] + (increment ? 1 : -1)),
     };
 
-    onConfigurationUpdate(serviceId, {
+    const updatedConfig = {
+      ...config,
       cleaning: {
         cleaningType:
           config.cleaning?.cleaningType || CleaningType.StandardCleaning,
         houseType: config.cleaning?.houseType || HouseType.Flat,
         rooms: updatedQuantities,
       },
+    };
+
+    // Calculate new price
+    const newPrice = calculateServicePrice(service, updatedConfig);
+
+    onConfigurationUpdate(serviceId, {
+      cleaning: updatedConfig.cleaning,
+      price: newPrice,
     });
   };
 
@@ -83,12 +96,21 @@ const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
     const currentBags = config.laundry?.bags || 1;
     const newBags = Math.max(1, currentBags + (increment ? 1 : -1));
 
-    onConfigurationUpdate(serviceId, {
+    const updatedConfig = {
+      ...config,
       laundry: {
         bags: newBags,
         laundryType: config.laundry?.laundryType || LaundryType.StandardLaundry,
         items: config.laundry?.items,
       },
+    };
+
+    // Calculate new price
+    const newPrice = calculateServicePrice(service, updatedConfig);
+
+    onConfigurationUpdate(serviceId, {
+      laundry: updatedConfig.laundry,
+      price: newPrice,
     });
   };
 
@@ -110,12 +132,21 @@ const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
       [itemType]: Math.max(0, currentItems[itemType] + (increment ? 1 : -1)),
     };
 
-    onConfigurationUpdate(serviceId, {
+    const updatedConfig = {
+      ...config,
       laundry: {
         bags: config.laundry?.bags || 1,
         laundryType: config.laundry?.laundryType || LaundryType.StandardLaundry,
         items: updatedItems,
       },
+    };
+
+    // Calculate new price
+    const newPrice = calculateServicePrice(service, updatedConfig);
+
+    onConfigurationUpdate(serviceId, {
+      laundry: updatedConfig.laundry,
+      price: newPrice,
     });
   };
 
@@ -126,13 +157,22 @@ const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
       ? [...currentAreas, area]
       : currentAreas.filter((a) => a !== area);
 
-    onConfigurationUpdate(serviceId, {
+    const updatedConfig = {
+      ...config,
       pestControl: {
         areas: updatedAreas,
         severity: config.pestControl?.severity || Severity.Medium,
         treatmentType:
           config.pestControl?.treatmentType || TreatmentType.Residential,
       },
+    };
+
+    // Calculate new price
+    const newPrice = calculateServicePrice(service, updatedConfig);
+
+    onConfigurationUpdate(serviceId, {
+      pestControl: updatedConfig.pestControl,
+      price: newPrice,
     });
   };
 
@@ -154,11 +194,20 @@ const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
       updatedDeliveries = [...currentDeliveries, { day, count }];
     }
 
-    onConfigurationUpdate(serviceId, {
+    const updatedConfig = {
+      ...config,
       cooking: {
         mealType: config.cooking?.mealType || MealType.Standard,
         mealsPerDelivery: updatedDeliveries,
       },
+    };
+
+    // Calculate new price
+    const newPrice = calculateServicePrice(service, updatedConfig);
+
+    onConfigurationUpdate(serviceId, {
+      cooking: updatedConfig.cooking,
+      price: newPrice,
     });
   };
 
@@ -169,8 +218,9 @@ const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
         <label>Property Type</label>
         <select
           value={config.cleaning?.houseType || HouseType.Flat}
-          onChange={(e) =>
-            onConfigurationUpdate(serviceId, {
+          onChange={(e) => {
+            const updatedConfig = {
+              ...config,
               cleaning: {
                 cleaningType:
                   config.cleaning?.cleaningType ||
@@ -188,8 +238,16 @@ const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
                   studyRoom: 0,
                 },
               },
-            })
-          }
+            };
+
+            // Calculate new price
+            const newPrice = calculateServicePrice(service, updatedConfig);
+
+            onConfigurationUpdate(serviceId, {
+              cleaning: updatedConfig.cleaning,
+              price: newPrice,
+            });
+          }}
           className={styles.service_configuration__select}
         >
           <option value={HouseType.Flat}>Flat/Apartment</option>
@@ -246,15 +304,24 @@ const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
         <label>Laundry Type</label>
         <select
           value={config.laundry?.laundryType || LaundryType.StandardLaundry}
-          onChange={(e) =>
-            onConfigurationUpdate(serviceId, {
+          onChange={(e) => {
+            const updatedConfig = {
+              ...config,
               laundry: {
                 bags: config.laundry?.bags || 1,
                 laundryType: e.target.value as LaundryType,
                 items: config.laundry?.items,
               },
-            })
-          }
+            };
+
+            // Calculate new price
+            const newPrice = calculateServicePrice(service, updatedConfig);
+
+            onConfigurationUpdate(serviceId, {
+              laundry: updatedConfig.laundry,
+              price: newPrice,
+            });
+          }}
           className={styles.service_configuration__select}
         >
           <option value={LaundryType.StandardLaundry}>Wash & Fold</option>
@@ -342,8 +409,9 @@ const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
         <label>Infestation Severity</label>
         <select
           value={config.pestControl?.severity || Severity.Medium}
-          onChange={(e) =>
-            onConfigurationUpdate(serviceId, {
+          onChange={(e) => {
+            const updatedConfig = {
+              ...config,
               pestControl: {
                 areas: config.pestControl?.areas || [],
                 severity: e.target.value as Severity,
@@ -351,8 +419,16 @@ const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
                   config.pestControl?.treatmentType ||
                   TreatmentType.Residential,
               },
-            })
-          }
+            };
+
+            // Calculate new price
+            const newPrice = calculateServicePrice(service, updatedConfig);
+
+            onConfigurationUpdate(serviceId, {
+              pestControl: updatedConfig.pestControl,
+              price: newPrice,
+            });
+          }}
           className={styles.service_configuration__select}
         >
           <option value={Severity.Low}>Low</option>
@@ -365,15 +441,24 @@ const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
         <label>Treatment Type</label>
         <select
           value={config.pestControl?.treatmentType || TreatmentType.Residential}
-          onChange={(e) =>
-            onConfigurationUpdate(serviceId, {
+          onChange={(e) => {
+            const updatedConfig = {
+              ...config,
               pestControl: {
                 areas: config.pestControl?.areas || [],
                 severity: config.pestControl?.severity || Severity.Medium,
                 treatmentType: e.target.value as TreatmentType,
               },
-            })
-          }
+            };
+
+            // Calculate new price
+            const newPrice = calculateServicePrice(service, updatedConfig);
+
+            onConfigurationUpdate(serviceId, {
+              pestControl: updatedConfig.pestControl,
+              price: newPrice,
+            });
+          }}
           className={styles.service_configuration__select}
         >
           <option value={TreatmentType.Residential}>Residential</option>
@@ -418,14 +503,23 @@ const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
         <label>Meal Type</label>
         <select
           value={config.cooking?.mealType || MealType.Standard}
-          onChange={(e) =>
-            onConfigurationUpdate(serviceId, {
+          onChange={(e) => {
+            const updatedConfig = {
+              ...config,
               cooking: {
                 mealType: e.target.value as MealType,
                 mealsPerDelivery: config.cooking?.mealsPerDelivery || [],
               },
-            })
-          }
+            };
+
+            // Calculate new price
+            const newPrice = calculateServicePrice(service, updatedConfig);
+
+            onConfigurationUpdate(serviceId, {
+              cooking: updatedConfig.cooking,
+              price: newPrice,
+            });
+          }}
           className={styles.service_configuration__select}
         >
           <option value={MealType.Basic}>Basic</option>
