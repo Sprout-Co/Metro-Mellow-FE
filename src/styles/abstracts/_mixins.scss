@@ -223,6 +223,10 @@ $semantic-breakpoints: (
   }
 }
 
+@mixin font-secondary {
+  font-family: $font-family-secondary;
+}
+
 @mixin heading-base {
   font-family: $font-family-heading;
   line-height: map-get($line-heights, "tight");
@@ -338,7 +342,7 @@ $semantic-breakpoints: (
 }
 
 @mixin body-1 {
-  font-family: $font-family-base;
+  @include font-secondary; // Use Montserrat for body text
   @include font-size("body-1");
   @include font-weight("medium");
   line-height: map-get($line-heights, "relaxed");
@@ -347,7 +351,7 @@ $semantic-breakpoints: (
 }
 
 @mixin body-2 {
-  font-family: $font-family-base;
+  @include font-secondary; // Use Montserrat for body text
   @include font-size("body-2");
   @include font-weight("medium");
   line-height: map-get($line-heights, "relaxed");
@@ -356,7 +360,7 @@ $semantic-breakpoints: (
 }
 
 @mixin paragraph {
-  font-family: $font-family-base;
+  @include font-secondary; // Use Montserrat for body text
   @include font-size("body-1");
   @include font-weight("medium");
   line-height: map-get($line-heights, "relaxed");
@@ -365,7 +369,7 @@ $semantic-breakpoints: (
 }
 
 @mixin caption {
-  font-family: $font-family-base;
+  @include font-secondary; // Use Montserrat for body text
   @include font-size("caption");
   @include font-weight("light");
   line-height: map-get($line-heights, "relaxed");
@@ -381,7 +385,7 @@ $semantic-breakpoints: (
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: $font-family-base;
+  @include font-secondary; // Use Montserrat for buttons
   @include font-size("button");
   @include font-weight("bold");
   text-decoration: none;

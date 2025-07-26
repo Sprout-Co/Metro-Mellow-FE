@@ -3,7 +3,7 @@
 // Functions
 // ===================================
 
-@import 'variables';
+@import "variables";
 
 // ===================================
 // COLOR FUNCTIONS
@@ -13,11 +13,11 @@
 /// @param {String} $color-name - The color category (primary, secondary, neutral, etc.)
 /// @param {String} $shade - The shade of the color (base, light, dark, etc.)
 /// @return {Color} - The color value
-@function color($color-name, $shade: 'base') {
+@function color($color-name, $shade: "base") {
   @if map-has-key($colors, $color-name) {
     $color: map-get($colors, $color-name);
-    
-    @if type-of($color) == 'map' {
+
+    @if type-of($color) == "map" {
       @if map-has-key($color, $shade) {
         @return map-get($color, $shade);
       } @else {
@@ -36,7 +36,7 @@
 /// @param {String} $shade - The shade of the color
 /// @param {Number} $alpha - The opacity value (0-1)
 /// @return {Color} - The rgba color value
-@function color-alpha($color-name, $shade: 'base', $alpha: 1) {
+@function color-alpha($color-name, $shade: "base", $alpha: 1) {
   $color: color($color-name, $shade);
   @return rgba($color, $alpha);
 }
@@ -46,7 +46,7 @@
 /// @param {String} $shade - The shade of the color
 /// @param {Number} $amount - The amount to lighten (0-100%)
 /// @return {Color} - The lightened color
-@function color-lighten($color-name, $shade: 'base', $amount: 10%) {
+@function color-lighten($color-name, $shade: "base", $amount: 10%) {
   $color: color($color-name, $shade);
   @return lighten($color, $amount);
 }
@@ -56,7 +56,7 @@
 /// @param {String} $shade - The shade of the color
 /// @param {Number} $amount - The amount to darken (0-100%)
 /// @return {Color} - The darkened color
-@function color-darken($color-name, $shade: 'base', $amount: 10%) {
+@function color-darken($color-name, $shade: "base", $amount: 10%) {
   $color: color($color-name, $shade);
   @return darken($color, $amount);
 }
@@ -68,7 +68,13 @@
 /// @param {String} $color2-shade - Second color shade
 /// @param {Number} $weight - The weight of the first color (0-100%)
 /// @return {Color} - The mixed color
-@function color-mix($color1-name, $color1-shade: 'base', $color2-name, $color2-shade: 'base', $weight: 50%) {
+@function color-mix(
+  $color1-name,
+  $color1-shade: "base",
+  $color2-name,
+  $color2-shade: "base",
+  $weight: 50%
+) {
   $color1: color($color1-name, $color1-shade);
   $color2: color($color2-name, $color2-shade);
   @return mix($color1, $color2, $weight);
@@ -132,6 +138,12 @@
   } @else {
     @error "Invalid font weight key: '#{$key}'. Available weights: #{map-keys($font-weights)}";
   }
+}
+
+/// Get secondary font family
+/// @return {String} - The secondary font family
+@function font-family-secondary() {
+  @return $font-family-secondary;
 }
 
 /// Get line height from the line heights map
@@ -257,7 +269,7 @@
 /// @param {Number} $number - The number with unit
 /// @return {Number} - The unitless number
 @function strip-unit($number) {
-  @if type-of($number) == 'number' and not unitless($number) {
+  @if type-of($number) == "number" and not unitless($number) {
     @return $number / ($number * 0 + 1);
   }
   @return $number;
@@ -367,7 +379,12 @@
 /// @param {String} $timing - The timing function key
 /// @param {Time} $delay - The delay (optional)
 /// @return {String} - The transition value
-@function transition($property: all, $duration: "base", $timing: "ease-in-out", $delay: 0s) {
+@function transition(
+  $property: all,
+  $duration: "base",
+  $timing: "ease-in-out",
+  $delay: 0s
+) {
   $duration-value: transition-duration($duration);
   $timing-value: transition-timing($timing);
   @return $property $duration-value $timing-value $delay;
@@ -391,7 +408,7 @@
 /// @return {*} - The found value or null
 @function map-deep-get($map, $keys...) {
   @each $key in $keys {
-    @if type-of($map) != 'map' or not map-has-key($map, $key) {
+    @if type-of($map) != "map" or not map-has-key($map, $key) {
       @return null;
     }
     $map: map-get($map, $key);
@@ -406,10 +423,20 @@
 @function map-deep-merge($parent-map, $child-map) {
   $result: $parent-map;
   @each $key, $value in $child-map {
-    @if type-of($value) == 'map' and type-of(map-get($result, $key)) == 'map' {
-      $result: map-merge($result, ($key: map-deep-merge(map-get($result, $key), $value)));
+    @if type-of($value) == "map" and type-of(map-get($result, $key)) == "map" {
+      $result: map-merge(
+        $result,
+        (
+          $key: map-deep-merge(map-get($result, $key), $value),
+        )
+      );
     } @else {
-      $result: map-merge($result, ($key: $value));
+      $result: map-merge(
+        $result,
+        (
+          $key: $value,
+        )
+      );
     }
   }
   @return $result;
