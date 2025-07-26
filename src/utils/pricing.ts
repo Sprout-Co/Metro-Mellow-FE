@@ -477,10 +477,6 @@ export function calculateServicesPerBillingCycle(
  */
 function getDaysInBillingCycle(billingCycle: BillingCycle): number {
   switch (billingCycle) {
-    case BillingCycle.Weekly:
-      return 7;
-    case BillingCycle.BiWeekly:
-      return 14;
     case BillingCycle.Monthly:
       return 30; // Average days per month
     case BillingCycle.Quarterly:
@@ -492,10 +488,6 @@ function getDaysInBillingCycle(billingCycle: BillingCycle): number {
 
 function getWeeksInBillingCycle(billingCycle: BillingCycle): number {
   switch (billingCycle) {
-    case BillingCycle.Weekly:
-      return 1;
-    case BillingCycle.BiWeekly:
-      return 2;
     case BillingCycle.Monthly:
       return 4; // Average weeks per month
     case BillingCycle.Quarterly:
@@ -507,10 +499,6 @@ function getWeeksInBillingCycle(billingCycle: BillingCycle): number {
 
 function getBiWeeksInBillingCycle(billingCycle: BillingCycle): number {
   switch (billingCycle) {
-    case BillingCycle.Weekly:
-      return 0.5; // Half a bi-week
-    case BillingCycle.BiWeekly:
-      return 1;
     case BillingCycle.Monthly:
       return 2; // Average bi-weeks per month
     case BillingCycle.Quarterly:
@@ -522,10 +510,6 @@ function getBiWeeksInBillingCycle(billingCycle: BillingCycle): number {
 
 function getMonthsInBillingCycle(billingCycle: BillingCycle): number {
   switch (billingCycle) {
-    case BillingCycle.Weekly:
-      return 0.25; // Quarter of a month
-    case BillingCycle.BiWeekly:
-      return 0.5; // Half a month
     case BillingCycle.Monthly:
       return 1;
     case BillingCycle.Quarterly:
@@ -537,10 +521,6 @@ function getMonthsInBillingCycle(billingCycle: BillingCycle): number {
 
 function getQuartersInBillingCycle(billingCycle: BillingCycle): number {
   switch (billingCycle) {
-    case BillingCycle.Weekly:
-      return 0.083; // 1/12 of a quarter
-    case BillingCycle.BiWeekly:
-      return 0.167; // 1/6 of a quarter
     case BillingCycle.Monthly:
       return 0.333; // 1/3 of a quarter
     case BillingCycle.Quarterly:
@@ -604,10 +584,6 @@ function getBillingCyclesInDuration(
   duration: number
 ): number {
   switch (billingCycle) {
-    case BillingCycle.Weekly:
-      return duration; // Duration is in weeks
-    case BillingCycle.BiWeekly:
-      return Math.ceil(duration / 2); // Duration is in weeks, convert to bi-weeks
     case BillingCycle.Monthly:
       return duration; // Duration is in months
     case BillingCycle.Quarterly:
