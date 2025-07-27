@@ -179,7 +179,6 @@
     @include heading-1;
     color: color("neutral", "black");
     margin-bottom: spacing("lg");
-    letter-spacing: normal;
     line-height: 1;
 
     @include breakpoint-down("xl") {
