@@ -23,6 +23,7 @@ interface ServiceConfigurationSectionProps {
     serviceId: string,
     config: Partial<ServiceConfiguration>
   ) => void;
+  isServiceDisabled?: (serviceId: string) => boolean;
   isLoading?: boolean;
 }
 
@@ -34,6 +35,7 @@ const ServiceConfigurationSection: React.FC<
   serviceConfigurations,
   onServiceToggle,
   onConfigurationUpdate,
+  isServiceDisabled,
   isLoading = false,
 }) => {
   const handleScheduledDaysChange = (
@@ -189,36 +191,57 @@ const ServiceConfigurationSection: React.FC<
           Available Services
         </h4>
         <div className={styles.service_configuration__services_grid}>
-          {services.map((service) => (
-            <div
-              key={service._id}
-              className={`${styles.service_configuration__service_card} ${
-                selectedServices.has(service._id)
-                  ? styles["service_configuration__service_card--selected"]
-                  : ""
-              }`}
-              onClick={() => onServiceToggle(service._id)}
-            >
-              <div className={styles.service_configuration__service_icon}>
-                <Icon name={getServiceIcon(service.category)} />
+          {services.map((service) => {
+            const isDisabled = isServiceDisabled
+              ? isServiceDisabled(service._id)
+              : false;
+            return (
+              <div
+                key={service._id}
+                className={`${styles.service_configuration__service_card} ${
+                  selectedServices.has(service._id)
+                    ? styles["service_configuration__service_card--selected"]
+                    : ""
+                } ${
+                  isDisabled
+                    ? styles["service_configuration__service_card--disabled"]
+                    : ""
+                }`}
+                onClick={() => !isDisabled && onServiceToggle(service._id)}
+              >
+                <div className={styles.service_configuration__service_icon}>
+                  <Icon name={getServiceIcon(service.category)} />
+                </div>
+                <div className={styles.service_configuration__service_info}>
+                  <h5>{service.name}</h5>
+                  <p>{service.description}</p>
+                  <span className={styles.service_configuration__service_price}>
+                    {formatToNaira(service.price)}
+                  </span>
+                  {isDisabled && (
+                    <p
+                      className={
+                        styles.service_configuration__service_disabled_message
+                      }
+                    >
+                      {service.category === ServiceCategory.PestControl
+                        ? "Not available with other services"
+                        : "Not available with pest control"}
+                    </p>
+                  )}
+                </div>
+                <div className={styles.service_configuration__service_checkbox}>
+                  <input
+                    type="checkbox"
+                    checked={selectedServices.has(service._id)}
+                    onChange={() => !isDisabled && onServiceToggle(service._id)}
+                    disabled={isDisabled}
+                    className={styles.service_configuration__checkbox}
+                  />
+                </div>
               </div>
-              <div className={styles.service_configuration__service_info}>
-                <h5>{service.name}</h5>
-                <p>{service.description}</p>
-                <span className={styles.service_configuration__service_price}>
-                  {formatToNaira(service.price)}
-                </span>
-              </div>
-              <div className={styles.service_configuration__service_checkbox}>
-                <input
-                  type="checkbox"
-                  checked={selectedServices.has(service._id)}
-                  onChange={() => onServiceToggle(service._id)}
-                  className={styles.service_configuration__checkbox}
-                />
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

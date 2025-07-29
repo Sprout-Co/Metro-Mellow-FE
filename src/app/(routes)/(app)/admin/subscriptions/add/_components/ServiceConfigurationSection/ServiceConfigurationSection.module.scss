@@ -78,6 +78,18 @@
       border-color: map-get($colors, "primary", "base");
       background-color: map-get($colors, "primary", "lighter");
     }
+
+    &--disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background-color: map-get($colors, "neutral", "lightest");
+      border-color: map-get($colors, "neutral", "light");
+
+      &:hover {
+        border-color: map-get($colors, "neutral", "light");
+        background-color: map-get($colors, "neutral", "lightest");
+      }
+    }
   }
 
   &__service_icon {
@@ -116,6 +128,13 @@
     color: map-get($colors, "primary", "base");
   }
 
+  &__service_disabled_message {
+    font-size: map-get($font-sizes, "xs");
+    color: map-get($colors, "error", "base");
+    margin: map-get($spacing, "xs") 0 0 0;
+    font-style: italic;
+  }
+
   &__service_checkbox {
     flex-shrink: 0;
   }
@@ -124,6 +143,11 @@
     width: 20px;
     height: 20px;
     accent-color: map-get($colors, "primary", "base");
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   }
 
   &__config {

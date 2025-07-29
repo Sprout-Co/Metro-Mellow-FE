@@ -246,8 +246,41 @@ export default function AddSubscriptionPage() {
     }
   }, [selectedCustomerId, customers]);
 
+  // Helper function to determine if a service should be disabled
+  const isServiceDisabled = (serviceId: string): boolean => {
+    const service = services.find((s) => s._id === serviceId);
+    if (!service) return false;
+
+    const isPestControl = service.category === ServiceCategory.PestControl;
+    const hasPestControl = Array.from(selectedServices).some((selectedId) => {
+      const selectedService = services.find((s) => s._id === selectedId);
+      return selectedService?.category === ServiceCategory.PestControl;
+    });
+    const hasOtherServices = Array.from(selectedServices).some((selectedId) => {
+      const selectedService = services.find((s) => s._id === selectedId);
+      return selectedService?.category !== ServiceCategory.PestControl;
+    });
+
+    // If pest control is selected, disable all other services
+    if (hasPestControl && !isPestControl) {
+      return true;
+    }
+
+    // If other services are selected, disable pest control
+    if (hasOtherServices && isPestControl) {
+      return true;
+    }
+
+    return false;
+  };
+
   // Handle service selection
   const toggleService = (serviceId: string) => {
+    // Don't allow toggling if service is disabled
+    if (isServiceDisabled(serviceId)) {
+      return;
+    }
+
     setSelectedServices((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(serviceId)) {
@@ -520,6 +553,7 @@ export default function AddSubscriptionPage() {
               serviceConfigurations={serviceConfigurations}
               onServiceToggle={toggleService}
               onConfigurationUpdate={updateServiceConfiguration}
+              isServiceDisabled={isServiceDisabled}
               isLoading={false}
             />
           )}
