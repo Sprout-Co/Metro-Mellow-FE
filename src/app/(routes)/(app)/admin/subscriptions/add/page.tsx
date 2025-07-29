@@ -315,7 +315,15 @@ export default function AddSubscriptionPage() {
       case 1:
         return selectedCustomerId !== "" && selectedAddressId !== "";
       case 2:
-        return selectedServices.size > 0;
+        return (
+          selectedServices.size > 0 &&
+          Array.from(selectedServices).every((serviceId) => {
+            const config = serviceConfigurations.get(serviceId);
+            return (
+              config && config.scheduledDays && config.scheduledDays.length > 0
+            );
+          })
+        );
       case 3:
         return startDate !== "" && duration > 0;
       default:
