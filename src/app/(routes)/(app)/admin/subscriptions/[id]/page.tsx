@@ -860,7 +860,7 @@ export default function SubscriptionDetailsPage() {
                   <h2 className={styles.subscription_details__card_title}>
                     Services
                   </h2>
-                  {subscription.status === SubscriptionStatus.Active && (
+                  {/* {subscription.status === SubscriptionStatus.Active && (
                     <Button
                       variant="primary"
                       size="small"
@@ -868,7 +868,7 @@ export default function SubscriptionDetailsPage() {
                     >
                       Add Service
                     </Button>
-                  )}
+                  )} */}
                 </div>
 
                 {subscription.subscriptionServices &&
@@ -1521,13 +1521,13 @@ export default function SubscriptionDetailsPage() {
         />
 
         {/* Add Service Modal */}
-        <AddServiceModal
+        {/* <AddServiceModal
           isOpen={showAddServiceModal}
           onClose={() => setShowAddServiceModal(false)}
           subscriptionId={id}
           onServiceAdded={handleServiceAdded}
           subscriptionServices={subscription.subscriptionServices}
-        />
+        /> */}
       </div>
     </AdminDashboardLayout>
   );

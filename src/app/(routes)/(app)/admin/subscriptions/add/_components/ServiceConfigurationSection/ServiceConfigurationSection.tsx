@@ -23,7 +23,7 @@ interface ServiceConfigurationSectionProps {
     serviceId: string,
     config: Partial<ServiceConfiguration>
   ) => void;
-  isServiceDisabled?: (serviceId: string) => boolean;
+  // isServiceDisabled?: (serviceId: string) => boolean;
   isLoading?: boolean;
 }
 
@@ -35,21 +35,28 @@ const ServiceConfigurationSection: React.FC<
   serviceConfigurations,
   onServiceToggle,
   onConfigurationUpdate,
-  isServiceDisabled,
+  // isServiceDisabled,
   isLoading = false,
 }) => {
   const handleScheduledDaysChange = (
     serviceId: string,
     day: ScheduleDays,
-    checked: boolean
+    checked: boolean,
+    isRadio: boolean = false
   ) => {
     const config = serviceConfigurations.get(serviceId);
     if (!config) return;
 
-    const current = config.scheduledDays;
-    const updated = checked
-      ? [...current, day]
-      : current.filter((d) => d !== day);
+    let updated: ScheduleDays[];
+
+    if (isRadio) {
+      // For radio buttons, only allow one selection
+      updated = checked ? [day] : [];
+    } else {
+      // For checkboxes, allow multiple selections
+      const current = config.scheduledDays;
+      updated = checked ? [...current, day] : current.filter((d) => d !== day);
+    }
 
     const updatedConfig = {
       ...config,
@@ -167,7 +174,7 @@ const ServiceConfigurationSection: React.FC<
       case ServiceCategory.Cooking:
         return [SubscriptionFrequency.Weekly, SubscriptionFrequency.BiWeekly];
       case ServiceCategory.PestControl:
-        return [SubscriptionFrequency.Quarterly];
+        return [SubscriptionFrequency.Quarterly, SubscriptionFrequency.Monthly];
       default:
         return [];
     }
@@ -192,9 +199,9 @@ const ServiceConfigurationSection: React.FC<
         </h4>
         <div className={styles.service_configuration__services_grid}>
           {services.map((service) => {
-            const isDisabled = isServiceDisabled
-              ? isServiceDisabled(service._id)
-              : false;
+            // const isDisabled = isServiceDisabled
+            //   ? isServiceDisabled(service._id)
+            //   : false;
             return (
               <div
                 key={service._id}
@@ -202,12 +209,8 @@ const ServiceConfigurationSection: React.FC<
                   selectedServices.has(service._id)
                     ? styles["service_configuration__service_card--selected"]
                     : ""
-                } ${
-                  isDisabled
-                    ? styles["service_configuration__service_card--disabled"]
-                    : ""
                 }`}
-                onClick={() => !isDisabled && onServiceToggle(service._id)}
+                onClick={() => onServiceToggle(service._id)}
               >
                 <div className={styles.service_configuration__service_icon}>
                   <Icon name={getServiceIcon(service.category)} />
@@ -218,24 +221,13 @@ const ServiceConfigurationSection: React.FC<
                   <span className={styles.service_configuration__service_price}>
                     {formatToNaira(service.price)}
                   </span>
-                  {isDisabled && (
-                    <p
-                      className={
-                        styles.service_configuration__service_disabled_message
-                      }
-                    >
-                      {service.category === ServiceCategory.PestControl
-                        ? "Not available with other services"
-                        : "Not available with pest control"}
-                    </p>
-                  )}
                 </div>
                 <div className={styles.service_configuration__service_checkbox}>
                   <input
                     type="checkbox"
                     checked={selectedServices.has(service._id)}
-                    onChange={() => !isDisabled && onServiceToggle(service._id)}
-                    disabled={isDisabled}
+                    onChange={() => onServiceToggle(service._id)}
+                    // disabled={isDisabled}
                     className={styles.service_configuration__checkbox}
                   />
                 </div>
@@ -449,25 +441,57 @@ const ServiceConfigurationSection: React.FC<
                   <div className={styles.service_configuration__field}>
                     <label>Scheduled Days</label>
                     <div className={styles.service_configuration__days_grid}>
-                      {Object.values(ScheduleDays).map((day) => (
-                        <label
-                          key={day}
-                          className={styles.service_configuration__day_checkbox}
-                        >
-                          <input
-                            type="checkbox"
-                            checked={config.scheduledDays.includes(day)}
-                            onChange={(e) =>
-                              handleScheduledDaysChange(
-                                serviceId,
-                                day,
-                                e.target.checked
-                              )
-                            }
-                          />
-                          <span>{getDayLabel(day)}</span>
-                        </label>
-                      ))}
+                      {config.frequency === SubscriptionFrequency.Monthly ||
+                      config.frequency === SubscriptionFrequency.Quarterly ? (
+                        <>
+                          {Object.values(ScheduleDays).map((day) => (
+                            <label
+                              key={day}
+                              className={
+                                styles.service_configuration__day_checkbox
+                              }
+                            >
+                              <input
+                                type="radio"
+                                checked={config.scheduledDays.includes(day)}
+                                onChange={(e) =>
+                                  handleScheduledDaysChange(
+                                    serviceId,
+                                    day,
+                                    e.target.checked,
+                                    true
+                                  )
+                                }
+                              />
+                              <span>{getDayLabel(day)}</span>
+                            </label>
+                          ))}
+                        </>
+                      ) : (
+                        <>
+                          {Object.values(ScheduleDays).map((day) => (
+                            <label
+                              key={day}
+                              className={
+                                styles.service_configuration__day_checkbox
+                              }
+                            >
+                              <input
+                                type="checkbox"
+                                checked={config.scheduledDays.includes(day)}
+                                onChange={(e) =>
+                                  handleScheduledDaysChange(
+                                    serviceId,
+                                    day,
+                                    e.target.checked
+                                  )
+                                }
+                              />
+                              <span>{getDayLabel(day)}</span>
+                            </label>
+                          ))}
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>

@@ -185,7 +185,11 @@ const BillingScheduleSection: React.FC<BillingScheduleSectionProps> = ({
                 }
                 className={styles.billing_schedule__select}
               >
-                <option value={BillingCycle.Monthly}>Monthly</option>
+                {selectedServices[0].category !==
+                  ServiceCategory.PestControl && (
+                  <option value={BillingCycle.Monthly}>Monthly</option>
+                )}
+
                 <option value={BillingCycle.Quarterly}>Quarterly</option>
               </select>
               <small className={styles.billing_schedule__help_text}>
@@ -197,14 +201,32 @@ const BillingScheduleSection: React.FC<BillingScheduleSectionProps> = ({
               <label className={styles.billing_schedule__label}>
                 Duration ({getDurationLabel()})
               </label>
-              <input
-                type="number"
-                min="1"
-                max="36"
-                value={duration}
-                onChange={(e) => setDuration(parseInt(e.target.value) || 1)}
-                className={styles.billing_schedule__input}
-              />
+              {selectedServices[0].category === ServiceCategory.PestControl ? (
+                <>
+                  <select
+                    value={duration}
+                    onChange={(e) => setDuration(parseInt(e.target.value) || 3)}
+                    className={styles.billing_schedule__select}
+                  >
+                    <option value="3">3 Months</option>
+                    <option value="6">6 Months</option>
+                    <option value="9">9 Months</option>
+                    <option value="12">12 Months</option>
+                  </select>
+                </>
+              ) : (
+                <>
+                  <input
+                    type="number"
+                    min="1"
+                    max="36"
+                    value={duration}
+                    onChange={(e) => setDuration(parseInt(e.target.value) || 1)}
+                    className={styles.billing_schedule__input}
+                  />
+                </>
+              )}
+
               <small className={styles.billing_schedule__help_text}>
                 How long the subscription should run
               </small>
