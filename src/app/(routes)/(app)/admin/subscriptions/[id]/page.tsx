@@ -8,6 +8,7 @@ import Card from "../../_components/UI/Card/Card";
 import Button from "../../_components/UI/Button/Button";
 import StatusBadge from "../../_components/UI/StatusBadge/StatusBadge";
 import ConfirmationModal from "../../_components/UI/ConfirmationModal/ConfirmationModal";
+import AddServiceModal from "./_components/AddServiceModal/AddServiceModal";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
 import { SubscriptionStatus, Subscription } from "@/graphql/api";
@@ -47,6 +48,7 @@ export default function SubscriptionDetailsPage() {
 
   // Modal states
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showAddServiceModal, setShowAddServiceModal] = useState(false);
   const [confirmAction, setConfirmAction] = useState<{
     type: string;
     title: string;
@@ -256,6 +258,11 @@ export default function SubscriptionDetailsPage() {
     } finally {
       setIsActionLoading(false);
     }
+  };
+
+  const handleServiceAdded = async () => {
+    // Refresh the subscription data to show the newly added service
+    await fetchSubscription();
   };
 
   const formatDate = (dateString: string) => {
@@ -857,11 +864,7 @@ export default function SubscriptionDetailsPage() {
                     <Button
                       variant="primary"
                       size="small"
-                      onClick={() =>
-                        console.log(
-                          "Add service functionality to be implemented"
-                        )
-                      }
+                      onClick={() => setShowAddServiceModal(true)}
                     >
                       Add Service
                     </Button>
@@ -1192,11 +1195,7 @@ export default function SubscriptionDetailsPage() {
                       <Button
                         variant="primary"
                         size="small"
-                        onClick={() =>
-                          console.log(
-                            "Add service functionality to be implemented"
-                          )
-                        }
+                        onClick={() => setShowAddServiceModal(true)}
                       >
                         Add a Service
                       </Button>
@@ -1519,6 +1518,14 @@ export default function SubscriptionDetailsPage() {
                 : "info"
           }
           isLoading={isActionLoading}
+        />
+
+        {/* Add Service Modal */}
+        <AddServiceModal
+          isOpen={showAddServiceModal}
+          onClose={() => setShowAddServiceModal(false)}
+          subscriptionId={id}
+          onServiceAdded={handleServiceAdded}
         />
       </div>
     </AdminDashboardLayout>

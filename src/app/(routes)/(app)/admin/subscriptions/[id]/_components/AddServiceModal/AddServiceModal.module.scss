@@ -1,0 +1,311 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+
+.add_service_modal {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-height: 80vh;
+  overflow-y: auto;
+
+  &__error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background-color: rgba(color("status", "error"), 0.1);
+    border: 1px solid rgba(color("status", "error"), 0.3);
+    border-radius: border-radius("md");
+    color: color("status", "error");
+    font-size: font-size("body-2");
+  }
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 3rem 1rem;
+    color: color("neutral", "black");
+
+    svg {
+      animation: spin 1s linear infinite;
+    }
+
+    p {
+      margin: 0;
+      font-size: font-size("body-2");
+    }
+  }
+
+  &__section_title {
+    font-size: font-size("h5");
+    font-weight: 600;
+    color: color("neutral", "black");
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  // Service Selection Styles
+  &__selection {
+    margin-bottom: 1.5rem;
+  }
+
+  &__services_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+
+  &__service_card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 2px solid color("neutral", "light");
+    border-radius: border-radius("lg");
+    background-color: color("neutral", "white");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: color("neutral", "medium");
+      box-shadow: shadow("sm");
+    }
+
+    &--selected {
+      border-color: color("primary", "base");
+      background-color: rgba(color("primary", "base"), 0.05);
+    }
+  }
+
+  &__service_icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: border-radius("md");
+    background-color: rgba(color("primary", "base"), 0.1);
+    color: color("primary", "base");
+    flex-shrink: 0;
+  }
+
+  &__service_info {
+    flex: 1;
+    min-width: 0;
+
+    h5 {
+      font-size: font-size("h5");
+      font-weight: 600;
+      color: color("neutral", "black");
+      margin: 0 0 0.25rem 0;
+    }
+
+    p {
+      font-size: font-size("body-2");
+      color: color("neutral", "medium");
+      margin: 0 0 0.5rem 0;
+      line-height: 1.4;
+    }
+  }
+
+  &__service_price {
+    font-size: font-size("body-2");
+    font-weight: 600;
+    color: color("primary", "base");
+  }
+
+  &__service_checkbox {
+    flex-shrink: 0;
+
+    input[type="checkbox"] {
+      width: 1.25rem;
+      height: 1.25rem;
+      cursor: pointer;
+    }
+  }
+
+  // Configuration Styles
+  &__configuration {
+    border-top: 1px solid color("neutral", "light");
+    padding-top: 1.5rem;
+  }
+
+  &__config_item {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 1px solid color("neutral", "light");
+    border-radius: border-radius("lg");
+    background-color: color("neutral", "white");
+  }
+
+  &__config_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid color("neutral", "light");
+
+    h5 {
+      font-size: font-size("h5");
+      font-weight: 600;
+      color: color("neutral", "black");
+      margin: 0;
+    }
+  }
+
+  &__config_price {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: font-size("h5");
+    font-weight: 600;
+    color: color("primary", "base");
+  }
+
+  &__config_fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+      font-size: font-size("body-2");
+      font-weight: 500;
+      color: color("neutral", "black");
+    }
+  }
+
+  &__select {
+    padding: 0.75rem;
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    background-color: color("neutral", "white");
+    color: color("neutral", "black");
+    font-size: font-size("body-2");
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
+    }
+  }
+
+  &__days_grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+  }
+
+  &__day_checkbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    border: 1px solid color("neutral", "light");
+    border-radius: border-radius("sm");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: font-size("body-2");
+    text-align: center;
+
+    &:hover {
+      border-color: color("neutral", "medium");
+    }
+
+    input[type="checkbox"] {
+      margin: 0;
+    }
+
+    input[type="checkbox"]:checked + span {
+      color: color("primary", "base");
+      font-weight: 600;
+    }
+  }
+
+  // Footer Styles
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid color("neutral", "light");
+    margin-top: auto;
+  }
+
+  &__total {
+    flex: 1;
+  }
+
+  &__total_price {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    span {
+      font-size: font-size("h5");
+      font-weight: 700;
+      color: color("primary", "base");
+    }
+
+    small {
+      font-size: font-size("body-2");
+      color: color("neutral", "medium");
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+}
+
+// Animations
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .add_service_modal {
+    &__services_grid {
+      grid-template-columns: 1fr;
+    }
+
+    &__config_fields {
+      grid-template-columns: 1fr;
+    }
+
+    &__footer {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+    }
+
+    &__actions {
+      justify-content: stretch;
+
+      button {
+        flex: 1;
+      }
+    }
+  }
+}
