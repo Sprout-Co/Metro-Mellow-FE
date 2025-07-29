@@ -18,6 +18,7 @@ import {
   TreatmentType,
   MealType,
   SubscriptionServiceInput,
+  SubscriptionService,
 } from "@/graphql/api";
 import { ServiceConfiguration } from "../../../add/types/subscription";
 import { formatToNaira } from "@/utils/string";
@@ -32,6 +33,7 @@ interface AddServiceModalProps {
   onClose: () => void;
   subscriptionId: string;
   onServiceAdded: () => void;
+  subscriptionServices: SubscriptionService[];
 }
 
 const AddServiceModal: React.FC<AddServiceModalProps> = ({
@@ -39,6 +41,7 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
   onClose,
   subscriptionId,
   onServiceAdded,
+  subscriptionServices,
 }) => {
   const [services, setServices] = useState<Service[]>([]);
   const [selectedServices, setSelectedServices] = useState<Set<string>>(
@@ -65,7 +68,13 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
       setIsLoading(true);
       setError(null);
       const servicesData = await handleGetServices();
-      setServices(servicesData as Service[]);
+      const servicesToAdd = servicesData.filter(
+        (service) =>
+          !subscriptionServices.some(
+            (subService) => subService.service._id === service._id
+          )
+      );
+      setServices(servicesToAdd as Service[]);
     } catch (error) {
       console.error("Error fetching services:", error);
       setError("Failed to load services. Please try again.");

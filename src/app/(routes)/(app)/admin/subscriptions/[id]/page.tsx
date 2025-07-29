@@ -1526,6 +1526,7 @@ export default function SubscriptionDetailsPage() {
           onClose={() => setShowAddServiceModal(false)}
           subscriptionId={id}
           onServiceAdded={handleServiceAdded}
+          subscriptionServices={subscription.subscriptionServices}
         />
       </div>
     </AdminDashboardLayout>
