@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Modal from "@/components/ui/Modal/Modal";
 import Button from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
@@ -354,161 +355,174 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
     if (selectedServices.size === 0) return null;
 
     return (
-      <div className={styles.add_service_modal__configuration}>
+      <motion.div
+        className={styles.add_service_modal__configuration}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
         <h4 className={styles.add_service_modal__section_title}>
+          <Icon name="settings" size={16} />
           Service Configuration
         </h4>
-        {Array.from(selectedServices).map((serviceId) => {
-          const service = services.find((s) => s._id === serviceId);
-          const config = serviceConfigurations.get(serviceId);
+        <AnimatePresence>
+          {Array.from(selectedServices).map((serviceId) => {
+            const service = services.find((s) => s._id === serviceId);
+            const config = serviceConfigurations.get(serviceId);
 
-          if (!service || !config) return null;
+            if (!service || !config) return null;
 
-          return (
-            <div
-              key={serviceId}
-              className={styles.add_service_modal__config_item}
-            >
-              <div className={styles.add_service_modal__config_header}>
-                <h5>{service.name}</h5>
-                <div className={styles.add_service_modal__config_price}>
-                  <Icon name={getServiceIcon(service.category)} size={16} />
-                  <span>{formatToNaira(config.price)}</span>
+            return (
+              <motion.div
+                key={serviceId}
+                className={styles.add_service_modal__config_item}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className={styles.add_service_modal__config_header}>
+                  <h5>{service.name}</h5>
+                  <div className={styles.add_service_modal__config_price}>
+                    <Icon name={getServiceIcon(service.category)} size={16} />
+                    <span>{formatToNaira(config.price)}</span>
+                  </div>
                 </div>
-              </div>
 
-              <div className={styles.add_service_modal__config_fields}>
-                {/* Service Options */}
-                {service.options && service.options.length > 0 && (
+                <div className={styles.add_service_modal__config_fields}>
+                  {/* Service Options */}
+                  {service.options && service.options.length > 0 && (
+                    <div className={styles.add_service_modal__field}>
+                      <label>Service Option</label>
+                      <select
+                        value={config.selectedOption || ""}
+                        onChange={(e) => {
+                          const selectedOptionId = e.target.value;
+                          const updatedConfig = {
+                            ...config,
+                            selectedOption: selectedOptionId,
+                            serviceDetails: {
+                              ...config.serviceDetails,
+                              serviceOption: selectedOptionId,
+                            },
+                          };
+
+                          const newPrice = calculateServicePrice(
+                            service,
+                            updatedConfig
+                          );
+                          handleConfigurationUpdate(serviceId, {
+                            selectedOption: selectedOptionId,
+                            price: newPrice,
+                            serviceDetails: updatedConfig.serviceDetails,
+                          });
+                        }}
+                        className={styles.add_service_modal__select}
+                      >
+                        <option value="">Select an option</option>
+                        {service.options.map((option) => (
+                          <option key={option.id} value={option.id}>
+                            {option.label} - {formatToNaira(option.price)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  {/* Service-Specific Fields */}
+                  <ServiceSpecificFields
+                    serviceCategory={service.category}
+                    config={config}
+                    onConfigurationUpdate={handleConfigurationUpdate}
+                    serviceId={serviceId}
+                    service={service}
+                  />
+
+                  {/* Frequency */}
                   <div className={styles.add_service_modal__field}>
-                    <label>Service Option</label>
+                    <label>Frequency</label>
                     <select
-                      value={config.selectedOption || ""}
+                      value={config.frequency}
                       onChange={(e) => {
-                        const selectedOptionId = e.target.value;
-                        const updatedConfig = {
-                          ...config,
-                          selectedOption: selectedOptionId,
-                          serviceDetails: {
-                            ...config.serviceDetails,
-                            serviceOption: selectedOptionId,
-                          },
-                        };
-
+                        const frequency = e.target
+                          .value as SubscriptionFrequency;
+                        const updatedConfig = { ...config, frequency };
                         const newPrice = calculateServicePrice(
                           service,
                           updatedConfig
                         );
                         handleConfigurationUpdate(serviceId, {
-                          selectedOption: selectedOptionId,
+                          frequency,
                           price: newPrice,
-                          serviceDetails: updatedConfig.serviceDetails,
                         });
                       }}
                       className={styles.add_service_modal__select}
                     >
-                      <option value="">Select an option</option>
-                      {service.options.map((option) => (
-                        <option key={option.id} value={option.id}>
-                          {option.label} - {formatToNaira(option.price)}
-                        </option>
-                      ))}
+                      {getServiceFrequencyOptions(service.category).map(
+                        (frequency) => (
+                          <option key={frequency} value={frequency}>
+                            {getFrequencyLabel(frequency)}
+                          </option>
+                        )
+                      )}
                     </select>
                   </div>
-                )}
 
-                {/* Service-Specific Fields */}
-                <ServiceSpecificFields
-                  serviceCategory={service.category}
-                  config={config}
-                  onConfigurationUpdate={handleConfigurationUpdate}
-                  serviceId={serviceId}
-                  service={service}
-                />
+                  {/* Time Slot */}
+                  <div className={styles.add_service_modal__field}>
+                    <label>Preferred Time</label>
+                    <select
+                      value={config.preferredTimeSlot}
+                      onChange={(e) =>
+                        handleConfigurationUpdate(serviceId, {
+                          preferredTimeSlot: e.target.value as TimeSlot,
+                        })
+                      }
+                      className={styles.add_service_modal__select}
+                    >
+                      <option value={TimeSlot.Morning}>
+                        Morning (8AM - 12PM)
+                      </option>
+                      <option value={TimeSlot.Afternoon}>
+                        Afternoon (12PM - 4PM)
+                      </option>
+                      <option value={TimeSlot.Evening}>
+                        Evening (4PM - 8PM)
+                      </option>
+                    </select>
+                  </div>
 
-                {/* Frequency */}
-                <div className={styles.add_service_modal__field}>
-                  <label>Frequency</label>
-                  <select
-                    value={config.frequency}
-                    onChange={(e) => {
-                      const frequency = e.target.value as SubscriptionFrequency;
-                      const updatedConfig = { ...config, frequency };
-                      const newPrice = calculateServicePrice(
-                        service,
-                        updatedConfig
-                      );
-                      handleConfigurationUpdate(serviceId, {
-                        frequency,
-                        price: newPrice,
-                      });
-                    }}
-                    className={styles.add_service_modal__select}
-                  >
-                    {getServiceFrequencyOptions(service.category).map(
-                      (frequency) => (
-                        <option key={frequency} value={frequency}>
-                          {getFrequencyLabel(frequency)}
-                        </option>
-                      )
-                    )}
-                  </select>
-                </div>
-
-                {/* Time Slot */}
-                <div className={styles.add_service_modal__field}>
-                  <label>Preferred Time</label>
-                  <select
-                    value={config.preferredTimeSlot}
-                    onChange={(e) =>
-                      handleConfigurationUpdate(serviceId, {
-                        preferredTimeSlot: e.target.value as TimeSlot,
-                      })
-                    }
-                    className={styles.add_service_modal__select}
-                  >
-                    <option value={TimeSlot.Morning}>
-                      Morning (8AM - 12PM)
-                    </option>
-                    <option value={TimeSlot.Afternoon}>
-                      Afternoon (12PM - 4PM)
-                    </option>
-                    <option value={TimeSlot.Evening}>
-                      Evening (4PM - 8PM)
-                    </option>
-                  </select>
-                </div>
-
-                {/* Scheduled Days */}
-                <div className={styles.add_service_modal__field}>
-                  <label>Scheduled Days</label>
-                  <div className={styles.add_service_modal__days_grid}>
-                    {Object.values(ScheduleDays).map((day) => (
-                      <label
-                        key={day}
-                        className={styles.add_service_modal__day_checkbox}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={config.scheduledDays.includes(day)}
-                          onChange={(e) =>
-                            handleScheduledDaysChange(
-                              serviceId,
-                              day,
-                              e.target.checked
-                            )
-                          }
-                        />
-                        <span>{getDayLabel(day)}</span>
-                      </label>
-                    ))}
+                  {/* Scheduled Days */}
+                  <div className={styles.add_service_modal__field}>
+                    <label>Scheduled Days</label>
+                    <div className={styles.add_service_modal__days_grid}>
+                      {Object.values(ScheduleDays).map((day) => (
+                        <label
+                          key={day}
+                          className={styles.add_service_modal__day_checkbox}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={config.scheduledDays.includes(day)}
+                            onChange={(e) =>
+                              handleScheduledDaysChange(
+                                serviceId,
+                                day,
+                                e.target.checked
+                              )
+                            }
+                          />
+                          <span>{getDayLabel(day)}</span>
+                        </label>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+      </motion.div>
     );
   };
 
@@ -522,10 +536,15 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
     >
       <div className={styles.add_service_modal}>
         {error && (
-          <div className={styles.add_service_modal__error}>
+          <motion.div
+            className={styles.add_service_modal__error}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+          >
             <Icon name="alert-triangle" size={16} />
             <span>{error}</span>
-          </div>
+          </motion.div>
         )}
 
         {isLoading ? (
@@ -536,13 +555,19 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
         ) : (
           <>
             {/* Service Selection */}
-            <div className={styles.add_service_modal__selection}>
+            <motion.div
+              className={styles.add_service_modal__selection}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
               <h4 className={styles.add_service_modal__section_title}>
+                <Icon name="list" size={16} />
                 Available Services
               </h4>
               <div className={styles.add_service_modal__services_grid}>
-                {services.map((service) => (
-                  <div
+                {services.map((service, index) => (
+                  <motion.div
                     key={service._id}
                     className={`${styles.add_service_modal__service_card} ${
                       selectedServices.has(service._id)
@@ -550,9 +575,14 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
                         : ""
                     }`}
                     onClick={() => handleServiceToggle(service._id)}
+                    // initial={{ opacity: 0, y: 20 }}
+                    // animate={{ opacity: 1, y: 0 }}
+                    // transition={{ duration: 0.2, delay: index * 0.05 }}
+                    // whileHover={{ scale: 1.02 }}
+                    // whileTap={{ scale: 0.98 }}
                   >
                     <div className={styles.add_service_modal__service_icon}>
-                      <Icon name={getServiceIcon(service.category)} size={24} />
+                      <Icon name={getServiceIcon(service.category)} size={18} />
                     </div>
                     <div className={styles.add_service_modal__service_info}>
                       <h5>{service.name}</h5>
@@ -568,16 +598,21 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
                         onChange={() => handleServiceToggle(service._id)}
                       />
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
 
             {/* Service Configuration */}
             {renderServiceConfiguration()}
 
             {/* Footer */}
-            <div className={styles.add_service_modal__footer}>
+            <motion.div
+              className={styles.add_service_modal__footer}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.2 }}
+            >
               <div className={styles.add_service_modal__total}>
                 {selectedServices.size > 0 && (
                   <div className={styles.add_service_modal__total_price}>
@@ -598,10 +633,17 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
                   onClick={handleSubmit}
                   disabled={selectedServices.size === 0 || isSubmitting}
                 >
-                  {isSubmitting ? "Adding Services..." : "Add Services"}
+                  {isSubmitting ? (
+                    <>
+                      <Icon name="loader" size={16} />
+                      <span>Adding...</span>
+                    </>
+                  ) : (
+                    "Add Services"
+                  )}
                 </Button>
               </div>
-            </div>
+            </motion.div>
           </>
         )}
       </div>
