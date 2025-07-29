@@ -23,7 +23,7 @@ interface ServiceConfigurationSectionProps {
     serviceId: string,
     config: Partial<ServiceConfiguration>
   ) => void;
-  // isServiceDisabled?: (serviceId: string) => boolean;
+  isServiceDisabled?: (serviceId: string) => boolean;
   isLoading?: boolean;
 }
 
@@ -35,7 +35,7 @@ const ServiceConfigurationSection: React.FC<
   serviceConfigurations,
   onServiceToggle,
   onConfigurationUpdate,
-  // isServiceDisabled,
+  isServiceDisabled,
   isLoading = false,
 }) => {
   const handleScheduledDaysChange = (
@@ -199,9 +199,9 @@ const ServiceConfigurationSection: React.FC<
         </h4>
         <div className={styles.service_configuration__services_grid}>
           {services.map((service) => {
-            // const isDisabled = isServiceDisabled
-            //   ? isServiceDisabled(service._id)
-            //   : false;
+            const isDisabled = isServiceDisabled
+              ? isServiceDisabled(service._id)
+              : false;
             return (
               <div
                 key={service._id}
@@ -209,8 +209,8 @@ const ServiceConfigurationSection: React.FC<
                   selectedServices.has(service._id)
                     ? styles["service_configuration__service_card--selected"]
                     : ""
-                }`}
-                onClick={() => onServiceToggle(service._id)}
+                } ${isDisabled ? styles["service_configuration__service_card--disabled"] : ""}`}
+                onClick={() => !isDisabled && onServiceToggle(service._id)}
               >
                 <div className={styles.service_configuration__service_icon}>
                   <Icon name={getServiceIcon(service.category)} />
@@ -221,13 +221,22 @@ const ServiceConfigurationSection: React.FC<
                   <span className={styles.service_configuration__service_price}>
                     {formatToNaira(service.price)}
                   </span>
+                  {isDisabled && (
+                    <p
+                      className={
+                        styles.service_configuration__service_disabled_message
+                      }
+                    >
+                      Only one service can be selected at a time
+                    </p>
+                  )}
                 </div>
                 <div className={styles.service_configuration__service_checkbox}>
                   <input
                     type="checkbox"
                     checked={selectedServices.has(service._id)}
                     onChange={() => onServiceToggle(service._id)}
-                    // disabled={isDisabled}
+                    disabled={isDisabled}
                     className={styles.service_configuration__checkbox}
                   />
                 </div>
@@ -350,27 +359,40 @@ const ServiceConfigurationSection: React.FC<
                     <select
                       value={config.frequency}
                       onChange={(e) => {
+                        const newFrequency = e.target
+                          .value as SubscriptionFrequency;
                         const updatedConfig = {
                           ...config,
-                          frequency: e.target.value as SubscriptionFrequency,
+                          frequency: newFrequency,
                         };
 
+                        // Check if this frequency change would create a conflict
+                        const isPestControl =
+                          service.category === ServiceCategory.PestControl;
+                        const isWeeklyOrBiWeekly =
+                          newFrequency === SubscriptionFrequency.Weekly ||
+                          newFrequency === SubscriptionFrequency.BiWeekly;
+
+                        // If pest control is being set to weekly/bi-weekly, this shouldn't happen
+                        if (isPestControl && isWeeklyOrBiWeekly) {
+                          console.warn(
+                            "Pest control should not have weekly/bi-weekly frequency options"
+                          );
+                        }
+
                         // Calculate new price with updated frequency
-                        const service = services.find(
-                          (s) => s._id === serviceId
-                        );
                         if (service) {
                           const newPrice = calculateServicePrice(
                             service,
                             updatedConfig
                           );
                           onConfigurationUpdate(serviceId, {
-                            frequency: e.target.value as SubscriptionFrequency,
+                            frequency: newFrequency,
                             price: newPrice,
                           });
                         } else {
                           onConfigurationUpdate(serviceId, {
-                            frequency: e.target.value as SubscriptionFrequency,
+                            frequency: newFrequency,
                           });
                         }
                       }}

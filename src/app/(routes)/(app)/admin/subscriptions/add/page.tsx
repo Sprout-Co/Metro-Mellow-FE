@@ -247,39 +247,65 @@ export default function AddSubscriptionPage() {
   }, [selectedCustomerId, customers]);
 
   // Helper function to determine if a service should be disabled
-  // const isServiceDisabled = (serviceId: string): boolean => {
-  //   const service = services.find((s) => s._id === serviceId);
-  //   if (!service) return false;
+  const isServiceDisabled = (serviceId: string): boolean => {
+    const service = services.find((s) => s._id === serviceId);
+    if (!service) return false;
 
-  //   const isPestControl = service.category === ServiceCategory.PestControl;
-  //   const hasPestControl = Array.from(selectedServices).some((selectedId) => {
-  //     const selectedService = services.find((s) => s._id === selectedId);
-  //     return selectedService?.category === ServiceCategory.PestControl;
-  //   });
-  //   const hasOtherServices = Array.from(selectedServices).some((selectedId) => {
-  //     const selectedService = services.find((s) => s._id === selectedId);
-  //     return selectedService?.category !== ServiceCategory.PestControl;
-  //   });
+    const isPestControl = service.category === ServiceCategory.PestControl;
 
-  //   // If pest control is selected, disable all other services
-  //   if (hasPestControl && !isPestControl) {
-  //     return true;
-  //   }
+    // Check if any selected service has Weekly or Bi-Weekly frequency
+    const hasWeeklyOrBiWeeklyService = Array.from(selectedServices).some(
+      (selectedId) => {
+        const selectedService = services.find((s) => s._id === selectedId);
+        if (!selectedService) return false;
 
-  //   // If other services are selected, disable pest control
-  //   if (hasOtherServices && isPestControl) {
-  //     return true;
-  //   }
+        const config = serviceConfigurations.get(selectedId);
+        if (!config) return false;
 
-  //   return false;
-  // };
+        return (
+          selectedService.category !== ServiceCategory.PestControl &&
+          (config.frequency === SubscriptionFrequency.Weekly ||
+            config.frequency === SubscriptionFrequency.BiWeekly)
+        );
+      }
+    );
+
+    // Check if pest control is selected with Quarterly frequency
+    const hasQuarterlyPestControl = Array.from(selectedServices).some(
+      (selectedId) => {
+        const selectedService = services.find((s) => s._id === selectedId);
+        if (
+          !selectedService ||
+          selectedService.category !== ServiceCategory.PestControl
+        )
+          return false;
+
+        const config = serviceConfigurations.get(selectedId);
+        if (!config) return false;
+
+        return config.frequency === SubscriptionFrequency.Quarterly;
+      }
+    );
+
+    // If Weekly or Bi-Weekly services are selected, disable pest control
+    if (hasWeeklyOrBiWeeklyService && isPestControl) {
+      return true;
+    }
+
+    // If pest control with Quarterly frequency is selected, disable other services
+    if (hasQuarterlyPestControl && !isPestControl) {
+      return true;
+    }
+
+    return false;
+  };
 
   // Handle service selection
   const toggleService = (serviceId: string) => {
     // Don't allow toggling if service is disabled
-    // if (isServiceDisabled(serviceId)) {
-    //   return;
-    // }
+    if (isServiceDisabled(serviceId)) {
+      return;
+    }
 
     setSelectedServices((prev) => {
       const newSet = new Set(prev);
@@ -558,7 +584,7 @@ export default function AddSubscriptionPage() {
               serviceConfigurations={serviceConfigurations}
               onServiceToggle={toggleService}
               onConfigurationUpdate={updateServiceConfiguration}
-              // isServiceDisabled={isServiceDisabled}
+              isServiceDisabled={isServiceDisabled}
               isLoading={false}
             />
           )}
