@@ -18,16 +18,13 @@
   }
 
   &__title {
-    font-family: $font-family-heading;
-    font-size: font-size("h1") * 1.1;
-    font-weight: map-get($font-weights, "bold");
-    color: color("neutral", "black");
+    @include heading-1;
     margin-bottom: spacing("md");
 
     @include breakpoint-down("md") {
       font-size: font-size("h3");
     }
-    
+
     @include breakpoint-down("sm") {
       font-size: font-size("h4");
     }
@@ -36,7 +33,7 @@
   &__subtitle {
     font-size: map-get($font-sizes, "subtitle-1");
     color: color("neutral", "black");
-    
+
     @include breakpoint-down("md") {
       font-size: map-get($font-sizes, "body-1");
     }
@@ -96,9 +93,9 @@
       background-color: color("primary", "light");
       font-weight: map-get($font-weights, "bold");
       position: relative;
-      
+
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         right: 0;
         top: 0;
@@ -179,4 +176,4 @@
     font-size: map-get($font-sizes, "body-2");
     color: color("neutral", "darker");
   }
-} 
+}

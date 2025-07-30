@@ -1,0 +1,62 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.price_summary {
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("lg") 0;
+
+    svg {
+      color: color("primary", "base");
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("xs") 0;
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+  }
+
+  &__total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("sm") 0;
+    border-top: 1px solid color("neutral", "lighter");
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+  }
+
+  &__price_changed {
+    animation: priceChange 1s ease-in-out;
+  }
+}
+
+@keyframes priceChange {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+    color: color("status", "success");
+  }
+  100% {
+    transform: scale(1);
+  }
+}

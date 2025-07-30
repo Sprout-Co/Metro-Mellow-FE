@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Modal from "@/components/ui/Modal/Modal";
 import styles from "./EditCustomerModal.module.scss";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
-import { User, AccountStatus, UserRole } from "@/graphql/api";
+import { User, AccountStatus, UserRole, Address } from "@/graphql/api";
+import { Icon } from "@/components/ui/Icon/Icon";
 
 interface EditCustomerModalProps {
   isOpen: boolean;
@@ -24,11 +25,17 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
     handleUpdateAddress,
     handleAddAddress,
     handleUpdateAccountStatus,
+    handleSetDefaultAddress,
+    handleRemoveAddress,
   } = useAuthOperations();
   const [activeTab, setActiveTab] = useState("personal");
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showAccountConfirmation, setShowAccountConfirmation] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [addressToDelete, setAddressToDelete] = useState<string | null>(null);
+  const [isAddingAddress, setIsAddingAddress] = useState(false);
+  const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     personal: {
@@ -44,7 +51,8 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
       state: "",
       zipCode: "",
       country: "",
-      isDefault: true,
+      label: "",
+      isDefault: false,
     },
   });
 
@@ -59,22 +67,32 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
         accountStatus: customer.accountStatus || AccountStatus.Active,
       },
       address: {
-        street: customer.defaultAddress?.street || "",
-        city: customer.defaultAddress?.city || "",
-        state: customer.defaultAddress?.state || "",
-        zipCode: customer.defaultAddress?.zipCode || "",
-        country: customer.defaultAddress?.country || "",
-        isDefault: true, // Default address is always marked as default
+        street: "",
+        city: "",
+        state: "",
+        zipCode: "",
+        country: "",
+        label: "",
+        isDefault: false,
       },
     });
   }, [customer, isOpen]);
 
-  // Reset confirmation dialog when modal closes
+  // Reset confirmation dialogs when modal closes
   useEffect(() => {
     if (!isOpen) {
       setShowAccountConfirmation(false);
+      setShowDeleteConfirmation(false);
+      setAddressToDelete(null);
+      setIsAddingAddress(false);
+      setEditingAddressId(null);
     }
   }, [isOpen]);
+
+  // Get all customer addresses (filter out null values)
+  const customerAddresses = (customer.addresses || []).filter(
+    (addr): addr is Address => addr !== null
+  );
 
   const validatePersonalInfo = () => {
     const newErrors: Record<string, string> = {};
@@ -113,6 +131,10 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
 
     if (!formData.address.city.trim()) {
       newErrors.city = "City is required";
+    }
+
+    if (!formData.address.label.trim()) {
+      newErrors.label = "Address label is required";
     }
 
     setErrors(newErrors);
@@ -165,7 +187,7 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
     }
   };
 
-  const handleUpdateAddressInfo = async () => {
+  const handleAddNewAddress = async () => {
     if (!validateAddress()) {
       return;
     }
@@ -179,16 +201,94 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
         state: formData.address.state,
         zipCode: formData.address.zipCode,
         country: formData.address.country,
-        isDefault: true,
+        label: formData.address.label,
+        isDefault: formData.address.isDefault,
         userId: customer.id,
       };
 
-      if (customer.defaultAddress?.id) {
-        await handleUpdateAddress(customer.defaultAddress.id, addressData);
-      } else {
-        await handleAddAddress(addressData);
-      }
+      await handleAddAddress(addressData);
 
+      // Reset form
+      setFormData((prev) => ({
+        ...prev,
+        address: {
+          street: "",
+          city: "",
+          state: "",
+          zipCode: "",
+          country: "",
+          label: "",
+          isDefault: false,
+        },
+      }));
+
+      setIsAddingAddress(false);
+      onSuccess();
+      setErrors({});
+    } catch (error) {
+      console.error("Error adding address:", error);
+      if (error instanceof Error) {
+        setErrors({ address: error.message });
+      } else {
+        setErrors({ address: "An unknown error occurred" });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEditAddress = (address: Address) => {
+    setFormData((prev) => ({
+      ...prev,
+      address: {
+        street: address.street || "",
+        city: address.city || "",
+        state: address.state || "",
+        zipCode: address.zipCode || "",
+        country: address.country || "",
+        label: address.label || "",
+        isDefault: address.isDefault || false,
+      },
+    }));
+    setEditingAddressId(address.id);
+  };
+
+  const handleUpdateAddressInfo = async () => {
+    if (!validateAddress() || !editingAddressId) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const addressData = {
+        street: formData.address.street,
+        city: formData.address.city,
+        state: formData.address.state,
+        zipCode: formData.address.zipCode,
+        country: formData.address.country,
+        label: formData.address.label,
+        isDefault: formData.address.isDefault,
+        userId: customer.id,
+      };
+
+      await handleUpdateAddress(editingAddressId, addressData);
+
+      // Reset form
+      setFormData((prev) => ({
+        ...prev,
+        address: {
+          street: "",
+          city: "",
+          state: "",
+          zipCode: "",
+          country: "",
+          label: "",
+          isDefault: false,
+        },
+      }));
+
+      setEditingAddressId(null);
       onSuccess();
       setErrors({});
     } catch (error) {
@@ -201,6 +301,75 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSetDefault = async (addressId: string) => {
+    setIsLoading(true);
+
+    try {
+      await handleSetDefaultAddress(addressId);
+      onSuccess();
+    } catch (error) {
+      console.error("Error setting default address:", error);
+      if (error instanceof Error) {
+        setErrors({ address: error.message });
+      } else {
+        setErrors({ address: "An unknown error occurred" });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeleteAddress = (addressId: string) => {
+    setAddressToDelete(addressId);
+    setShowDeleteConfirmation(true);
+  };
+
+  const handleConfirmDeleteAddress = async () => {
+    if (!addressToDelete) return;
+
+    setIsLoading(true);
+    setShowDeleteConfirmation(false);
+
+    try {
+      await handleRemoveAddress(addressToDelete);
+
+      onSuccess();
+      setAddressToDelete(null);
+    } catch (error) {
+      console.error("Error deleting address:", error);
+      if (error instanceof Error) {
+        setErrors({ address: error.message });
+      } else {
+        setErrors({ address: "An unknown error occurred" });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCancelDeleteAddress = () => {
+    setShowDeleteConfirmation(false);
+    setAddressToDelete(null);
+  };
+
+  const handleCancelAddressEdit = () => {
+    setEditingAddressId(null);
+    setIsAddingAddress(false);
+    setFormData((prev) => ({
+      ...prev,
+      address: {
+        street: "",
+        city: "",
+        state: "",
+        zipCode: "",
+        country: "",
+        label: "",
+        isDefault: false,
+      },
+    }));
+    setErrors({});
   };
 
   const handleUpdateAccountInfo = async () => {
@@ -247,7 +416,7 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       title="Edit Customer"
-      maxWidth="600px"
+      maxWidth="800px"
     >
       <div className={styles.edit_customer_modal}>
         {(errors.form ||
@@ -286,7 +455,7 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
               }`}
               onClick={() => setActiveTab("address")}
             >
-              Address
+              Addresses ({customerAddresses.length})
             </button>
             <button
               type="button"
@@ -452,132 +621,342 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                   exit="exit"
                   variants={tabContentVariants}
                 >
-                  <h3 className={styles.edit_customer_modal__section_title}>
-                    Default Address Information
-                  </h3>
-
-                  <div className={styles.edit_customer_modal__field}>
-                    <label className={styles.edit_customer_modal__label}>
-                      Street Address
-                    </label>
-                    <input
-                      type="text"
-                      name="street"
-                      value={formData.address.street}
-                      onChange={(e) => handleChange("address", e)}
-                      className={`${styles.edit_customer_modal__input} ${
-                        errors.street
-                          ? styles["edit_customer_modal__input--error"]
-                          : ""
-                      }`}
-                      placeholder="10 Carter street, Idimu, Lagos"
-                    />
-                    {errors.street && (
-                      <span className={styles.edit_customer_modal__error_text}>
-                        {errors.street}
-                      </span>
+                  <div className={styles.edit_customer_modal__section_header}>
+                    <h3 className={styles.edit_customer_modal__section_title}>
+                      Address Management
+                    </h3>
+                    {!isAddingAddress && !editingAddressId && (
+                      <button
+                        type="button"
+                        className={styles.edit_customer_modal__add_button}
+                        onClick={() => setIsAddingAddress(true)}
+                      >
+                        <Icon name="plus" size={16} />
+                        Add New Address
+                      </button>
                     )}
                   </div>
 
-                  <div className={styles.edit_customer_modal__row}>
-                    <div className={styles.edit_customer_modal__field}>
-                      <label className={styles.edit_customer_modal__label}>
-                        City
-                      </label>
-                      <input
-                        type="text"
-                        name="city"
-                        value={formData.address.city}
-                        onChange={(e) => handleChange("address", e)}
-                        className={`${styles.edit_customer_modal__input} ${
-                          errors.city
-                            ? styles["edit_customer_modal__input--error"]
-                            : ""
-                        }`}
-                        placeholder="Egbeda"
-                      />
-                      {errors.city && (
-                        <span
-                          className={styles.edit_customer_modal__error_text}
+                  {/* Address List */}
+                  {!isAddingAddress && !editingAddressId && (
+                    <div className={styles.edit_customer_modal__address_list}>
+                      {customerAddresses.length === 0 ? (
+                        <div
+                          className={styles.edit_customer_modal__empty_state}
                         >
-                          {errors.city}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className={styles.edit_customer_modal__field}>
-                      <label className={styles.edit_customer_modal__label}>
-                        State
-                      </label>
-                      <input
-                        type="text"
-                        name="state"
-                        value="Lagos"
-                        disabled
-                        onChange={(e) => handleChange("address", e)}
-                        className={styles.edit_customer_modal__input}
-                        placeholder="Lagos"
-                      />
-                    </div>
-                  </div>
-
-                  <div className={styles.edit_customer_modal__row}>
-                    <div className={styles.edit_customer_modal__field}>
-                      <label className={styles.edit_customer_modal__label}>
-                        Zip/Postal Code
-                      </label>
-                      <input
-                        type="text"
-                        name="zipCode"
-                        value={formData.address.zipCode}
-                        onChange={(e) => handleChange("address", e)}
-                        className={styles.edit_customer_modal__input}
-                        placeholder="110001"
-                      />
-                    </div>
-                  </div>
-
-                  <div className={styles.edit_customer_modal__field}>
-                    <div
-                      className={styles.edit_customer_modal__checkbox_container}
-                    >
-                      <input
-                        type="checkbox"
-                        name="isDefault"
-                        id="isDefault"
-                        checked={formData.address.isDefault}
-                        onChange={(e) => handleChange("address", e)}
-                        className={styles.edit_customer_modal__checkbox}
-                      />
-                      <label
-                        htmlFor="isDefault"
-                        className={styles.edit_customer_modal__checkbox_label}
-                      >
-                        Mark as default address
-                      </label>
-                    </div>
-                    <p className={styles.edit_customer_modal__help_text}>
-                      When checked, this address will be used as the customer's
-                      primary address for deliveries and billing.
-                    </p>
-                  </div>
-
-                  <div className={styles.edit_customer_modal__section_actions}>
-                    <button
-                      type="button"
-                      className={styles.edit_customer_modal__section_submit}
-                      onClick={handleUpdateAddressInfo}
-                      disabled={isLoading}
-                    >
-                      {isLoading ? (
-                        <span
-                          className={styles.edit_customer_modal__spinner}
-                        ></span>
+                          <Icon name="map-pin" size={48} />
+                          <p>No addresses found</p>
+                          <p>
+                            Add the customer's first address to get started.
+                          </p>
+                        </div>
                       ) : (
-                        "Update Address"
+                        customerAddresses.map((address) => (
+                          <div
+                            key={address.id}
+                            className={`${styles.edit_customer_modal__address_card} ${
+                              address.isDefault
+                                ? styles[
+                                    "edit_customer_modal__address_card--default"
+                                  ]
+                                : ""
+                            }`}
+                          >
+                            <div
+                              className={
+                                styles.edit_customer_modal__address_content
+                              }
+                            >
+                              <div
+                                className={
+                                  styles.edit_customer_modal__address_header
+                                }
+                              >
+                                <h4
+                                  className={
+                                    styles.edit_customer_modal__address_label
+                                  }
+                                >
+                                  {address.label}
+                                  {address.isDefault && (
+                                    <span
+                                      className={
+                                        styles.edit_customer_modal__default_badge
+                                      }
+                                    >
+                                      Default
+                                    </span>
+                                  )}
+                                </h4>
+                                <div
+                                  className={
+                                    styles.edit_customer_modal__address_actions
+                                  }
+                                >
+                                  {!address.isDefault && (
+                                    <button
+                                      type="button"
+                                      className={
+                                        styles.edit_customer_modal__action_button
+                                      }
+                                      onClick={() =>
+                                        handleSetDefault(address.id)
+                                      }
+                                      disabled={isLoading}
+                                      title="Set as default"
+                                    >
+                                      <Icon name="star" size={14} />
+                                    </button>
+                                  )}
+                                  <button
+                                    type="button"
+                                    className={
+                                      styles.edit_customer_modal__action_button
+                                    }
+                                    onClick={() => handleEditAddress(address)}
+                                    disabled={isLoading}
+                                    title="Edit address"
+                                  >
+                                    <Icon name="edit" size={14} />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className={
+                                      styles.edit_customer_modal__action_button
+                                    }
+                                    onClick={() =>
+                                      handleDeleteAddress(address.id)
+                                    }
+                                    disabled={isLoading}
+                                    title="Delete address"
+                                  >
+                                    <Icon name="trash" size={14} />
+                                  </button>
+                                </div>
+                              </div>
+                              <div
+                                className={
+                                  styles.edit_customer_modal__address_details
+                                }
+                              >
+                                <p>{address.street}</p>
+                                <p>
+                                  {address.city}, {address.state}{" "}
+                                  {address.zipCode}
+                                </p>
+                                <p>{address.country}</p>
+                              </div>
+                            </div>
+                          </div>
+                        ))
                       )}
-                    </button>
-                  </div>
+                    </div>
+                  )}
+
+                  {/* Add/Edit Address Form */}
+                  {(isAddingAddress || editingAddressId) && (
+                    <div className={styles.edit_customer_modal__address_form}>
+                      <h4 className={styles.edit_customer_modal__form_title}>
+                        {isAddingAddress ? "Add New Address" : "Edit Address"}
+                      </h4>
+
+                      <div className={styles.edit_customer_modal__field}>
+                        <label className={styles.edit_customer_modal__label}>
+                          Address Label{" "}
+                          <span
+                            className={styles.edit_customer_modal__required}
+                          >
+                            *
+                          </span>
+                        </label>
+                        <input
+                          type="text"
+                          name="label"
+                          value={formData.address.label}
+                          onChange={(e) => handleChange("address", e)}
+                          className={`${styles.edit_customer_modal__input} ${
+                            errors.label
+                              ? styles["edit_customer_modal__input--error"]
+                              : ""
+                          }`}
+                          placeholder="Home, Office, etc."
+                        />
+                        {errors.label && (
+                          <span
+                            className={styles.edit_customer_modal__error_text}
+                          >
+                            {errors.label}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className={styles.edit_customer_modal__field}>
+                        <label className={styles.edit_customer_modal__label}>
+                          Street Address{" "}
+                          <span
+                            className={styles.edit_customer_modal__required}
+                          >
+                            *
+                          </span>
+                        </label>
+                        <input
+                          type="text"
+                          name="street"
+                          value={formData.address.street}
+                          onChange={(e) => handleChange("address", e)}
+                          className={`${styles.edit_customer_modal__input} ${
+                            errors.street
+                              ? styles["edit_customer_modal__input--error"]
+                              : ""
+                          }`}
+                          placeholder="10 Carter street, Idimu, Lagos"
+                        />
+                        {errors.street && (
+                          <span
+                            className={styles.edit_customer_modal__error_text}
+                          >
+                            {errors.street}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className={styles.edit_customer_modal__row}>
+                        <div className={styles.edit_customer_modal__field}>
+                          <label className={styles.edit_customer_modal__label}>
+                            City{" "}
+                            <span
+                              className={styles.edit_customer_modal__required}
+                            >
+                              *
+                            </span>
+                          </label>
+                          <input
+                            type="text"
+                            name="city"
+                            value={formData.address.city}
+                            onChange={(e) => handleChange("address", e)}
+                            className={`${styles.edit_customer_modal__input} ${
+                              errors.city
+                                ? styles["edit_customer_modal__input--error"]
+                                : ""
+                            }`}
+                            placeholder="Egbeda"
+                          />
+                          {errors.city && (
+                            <span
+                              className={styles.edit_customer_modal__error_text}
+                            >
+                              {errors.city}
+                            </span>
+                          )}
+                        </div>
+
+                        <div className={styles.edit_customer_modal__field}>
+                          <label className={styles.edit_customer_modal__label}>
+                            State
+                          </label>
+                          <input
+                            type="text"
+                            name="state"
+                            value={formData.address.state}
+                            onChange={(e) => handleChange("address", e)}
+                            className={styles.edit_customer_modal__input}
+                            placeholder="Lagos"
+                          />
+                        </div>
+                      </div>
+
+                      <div className={styles.edit_customer_modal__row}>
+                        <div className={styles.edit_customer_modal__field}>
+                          <label className={styles.edit_customer_modal__label}>
+                            Zip/Postal Code
+                          </label>
+                          <input
+                            type="text"
+                            name="zipCode"
+                            value={formData.address.zipCode}
+                            onChange={(e) => handleChange("address", e)}
+                            className={styles.edit_customer_modal__input}
+                            placeholder="110001"
+                          />
+                        </div>
+
+                        <div className={styles.edit_customer_modal__field}>
+                          <label className={styles.edit_customer_modal__label}>
+                            Country
+                          </label>
+                          <input
+                            type="text"
+                            name="country"
+                            value={formData.address.country}
+                            onChange={(e) => handleChange("address", e)}
+                            className={styles.edit_customer_modal__input}
+                            placeholder="Nigeria"
+                          />
+                        </div>
+                      </div>
+
+                      <div className={styles.edit_customer_modal__field}>
+                        <div
+                          className={
+                            styles.edit_customer_modal__checkbox_container
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            name="isDefault"
+                            id="isDefault"
+                            checked={formData.address.isDefault}
+                            onChange={(e) => handleChange("address", e)}
+                            className={styles.edit_customer_modal__checkbox}
+                          />
+                          <label
+                            htmlFor="isDefault"
+                            className={
+                              styles.edit_customer_modal__checkbox_label
+                            }
+                          >
+                            Set as default address
+                          </label>
+                        </div>
+                        <p className={styles.edit_customer_modal__help_text}>
+                          When checked, this address will be used as the
+                          customer's primary address for deliveries and billing.
+                        </p>
+                      </div>
+
+                      <div className={styles.edit_customer_modal__form_actions}>
+                        <button
+                          type="button"
+                          className={styles.edit_customer_modal__cancel_button}
+                          onClick={handleCancelAddressEdit}
+                          disabled={isLoading}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          className={styles.edit_customer_modal__section_submit}
+                          onClick={
+                            isAddingAddress
+                              ? handleAddNewAddress
+                              : handleUpdateAddressInfo
+                          }
+                          disabled={isLoading}
+                        >
+                          {isLoading ? (
+                            <span
+                              className={styles.edit_customer_modal__spinner}
+                            ></span>
+                          ) : isAddingAddress ? (
+                            "Add Address"
+                          ) : (
+                            "Update Address"
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </motion.div>
               )}
 
@@ -745,6 +1124,49 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                 <span className={styles.edit_customer_modal__spinner}></span>
               ) : (
                 "Update Status"
+              )}
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Delete Address Confirmation Dialog */}
+      <Modal
+        isOpen={showDeleteConfirmation}
+        onClose={handleCancelDeleteAddress}
+        title="Confirm Address Deletion"
+        maxWidth="400px"
+      >
+        <div className={styles.edit_customer_modal__confirmation}>
+          <div className={styles.edit_customer_modal__confirmation_content}>
+            <p className={styles.edit_customer_modal__confirmation_text}>
+              Are you sure you want to delete this address?
+            </p>
+            <p className={styles.edit_customer_modal__confirmation_warning}>
+              This action cannot be undone. The address will be permanently
+              removed from the customer's account.
+            </p>
+          </div>
+
+          <div className={styles.edit_customer_modal__confirmation_actions}>
+            <button
+              type="button"
+              className={styles.edit_customer_modal__confirmation_cancel}
+              onClick={handleCancelDeleteAddress}
+              disabled={isLoading}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className={styles.edit_customer_modal__confirmation_confirm}
+              onClick={handleConfirmDeleteAddress}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <span className={styles.edit_customer_modal__spinner}></span>
+              ) : (
+                "Delete Address"
               )}
             </button>
           </div>

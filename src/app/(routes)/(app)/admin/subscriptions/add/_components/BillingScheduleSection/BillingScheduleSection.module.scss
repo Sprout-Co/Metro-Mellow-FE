@@ -1,0 +1,346 @@
+// BillingScheduleSection.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.billing_schedule {
+  padding: map-get($spacing, "lg");
+
+  &__header {
+    margin-bottom: map-get($spacing, "lg");
+    text-align: center;
+  }
+
+  &__title {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: map-get($colors, "neutral", "black");
+    margin: 0 0 map-get($spacing, "xs") 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: map-get($spacing, "sm");
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "md");
+    color: map-get($colors, "neutral", "dark");
+    margin: 0;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: map-get($spacing, "xl");
+  }
+
+  &__section {
+    border-bottom: 1px solid map-get($colors, "neutral", "light");
+    padding-bottom: map-get($spacing, "lg");
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+  }
+
+  &__section_title {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: map-get($colors, "neutral", "black");
+    margin: 0 0 map-get($spacing, "md") 0;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: map-get($spacing, "md");
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: map-get($spacing, "xs");
+  }
+
+  &__label {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: map-get($colors, "neutral", "dark");
+  }
+
+  &__input,
+  &__select,
+  &__textarea {
+    padding: map-get($spacing, "sm");
+    border: 1px solid map-get($colors, "neutral", "light");
+    border-radius: map-get($border-radius, "sm");
+    font-size: map-get($font-sizes, "md");
+    background-color: map-get($colors, "neutral", "white");
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: map-get($colors, "primary", "base");
+      box-shadow: 0 0 0 3px map-get($colors, "primary", "lighter");
+    }
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 100px;
+    font-family: inherit;
+  }
+
+  &__help_text {
+    font-size: map-get($font-sizes, "xs");
+    color: map-get($colors, "neutral", "dark");
+    line-height: 1.4;
+  }
+
+  &__services_summary {
+    display: flex;
+    flex-direction: column;
+    gap: map-get($spacing, "md");
+  }
+
+  &__service_item {
+    background-color: map-get($colors, "neutral", "lightest");
+    border-radius: map-get($border-radius, "md");
+    padding: map-get($spacing, "md");
+    border: 1px solid map-get($colors, "neutral", "light");
+  }
+
+  &__service_header {
+    display: flex;
+    align-items: center;
+    gap: map-get($spacing, "md");
+    margin-bottom: map-get($spacing, "sm");
+  }
+
+  &__service_icon {
+    width: 40px;
+    height: 40px;
+    border-radius: map-get($border-radius, "sm");
+    background-color: map-get($colors, "primary", "light");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: map-get($colors, "primary", "base");
+    font-size: map-get($font-sizes, "md");
+    flex-shrink: 0;
+  }
+
+  &__service_info {
+    flex: 1;
+
+    h5 {
+      font-size: map-get($font-sizes, "md");
+      font-weight: map-get($font-weights, "semibold");
+      color: map-get($colors, "neutral", "black");
+      margin: 0 0 map-get($spacing, "xs") 0;
+    }
+
+    p {
+      font-size: map-get($font-sizes, "sm");
+      color: map-get($colors, "neutral", "dark");
+      margin: 0;
+    }
+  }
+
+  &__service_price {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "bold");
+    color: map-get($colors, "primary", "base");
+    flex-shrink: 0;
+  }
+
+  &__service_details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: map-get($spacing, "sm");
+    padding-top: map-get($spacing, "sm");
+    border-top: 1px solid map-get($colors, "neutral", "light");
+  }
+
+  &__service_detail {
+    font-size: map-get($font-sizes, "sm");
+    color: map-get($colors, "neutral", "dark");
+
+    span {
+      font-weight: map-get($font-weights, "medium");
+      color: map-get($colors, "neutral", "black");
+    }
+  }
+
+  &__total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: map-get($spacing, "md");
+    background-color: map-get($colors, "primary", "lighter");
+    border-radius: map-get($border-radius, "md");
+    margin-top: map-get($spacing, "md");
+
+    span:first-child {
+      font-size: map-get($font-sizes, "md");
+      font-weight: map-get($font-weights, "medium");
+      color: map-get($colors, "neutral", "black");
+    }
+  }
+
+  &__total_price {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "bold");
+    color: map-get($colors, "primary", "base");
+  }
+
+  &__explanation {
+    margin-top: 24px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+  }
+
+  &__explanation_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e9ecef;
+
+    h5 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin: 0;
+    }
+  }
+
+  &__toggle_button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background: #2980b9;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__explanation_content {
+    display: flex;
+    flex-direction: column;
+    gap: map-get($spacing, "lg");
+  }
+
+  &__explanation_section {
+    h6 {
+      font-size: map-get($font-sizes, "md");
+      font-weight: map-get($font-weights, "semibold");
+      color: map-get($colors, "neutral", "black");
+      margin: 0 0 map-get($spacing, "sm") 0;
+      display: flex;
+      align-items: center;
+      gap: map-get($spacing, "xs");
+    }
+
+    p {
+      font-size: map-get($font-sizes, "sm");
+      color: map-get($colors, "neutral", "dark");
+      margin: 0 0 map-get($spacing, "sm") 0;
+      line-height: 1.5;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: map-get($spacing, "lg");
+    }
+
+    li {
+      font-size: map-get($font-sizes, "sm");
+      color: map-get($colors, "neutral", "dark");
+      margin-bottom: map-get($spacing, "xs");
+      line-height: 1.4;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      strong {
+        color: map-get($colors, "neutral", "black");
+        font-weight: map-get($font-weights, "medium");
+      }
+    }
+  }
+}
+
+// Responsive design
+@include respond-to("tablet") {
+  .billing_schedule {
+    padding: map-get($spacing, "md");
+
+    &__grid {
+      grid-template-columns: 1fr;
+    }
+
+    &__service_details {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@include respond-to("mobile") {
+  .billing_schedule {
+    padding: map-get($spacing, "sm");
+
+    &__service_header {
+      flex-direction: column;
+      text-align: center;
+      gap: map-get($spacing, "sm");
+    }
+
+    &__service_info {
+      text-align: center;
+    }
+
+    &__total {
+      flex-direction: column;
+      gap: map-get($spacing, "sm");
+      text-align: center;
+    }
+
+    &__explanation {
+      padding: map-get($spacing, "md");
+
+      h5 {
+        font-size: map-get($font-sizes, "md");
+      }
+    }
+
+    &__explanation_section {
+      h6 {
+        font-size: map-get($font-sizes, "sm");
+      }
+
+      ul {
+        padding-left: map-get($spacing, "md");
+      }
+    }
+  }
+}

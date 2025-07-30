@@ -1,0 +1,105 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.schedule {
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("lg") 0;
+
+    svg {
+      color: color("primary", "base");
+    }
+  }
+
+  &__form_row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__field {
+    margin-bottom: spacing("lg");
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__label {
+    display: block;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xs");
+  }
+
+  &__input,
+  &__select {
+    width: 100%;
+    padding: spacing("sm") spacing("md");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "base");
+    background-color: color("neutral", "white");
+    color: color("neutral", "black");
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+    }
+  }
+
+  &__select {
+    cursor: pointer;
+  }
+
+  &__textarea {
+    width: 100%;
+    padding: spacing("sm") spacing("md");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "base");
+    background-color: color("neutral", "white");
+    color: color("neutral", "black");
+    font-family: $font-family-base;
+    resize: vertical;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+    }
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+  }
+
+  &__no_addresses {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("md");
+    background-color: color("neutral", "lighter");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    color: color("neutral", "dark");
+    font-size: map-get($font-sizes, "sm");
+
+    svg {
+      color: color("neutral", "medium");
+    }
+  }
+}

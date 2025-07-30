@@ -1,0 +1,179 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.add_booking {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("lg");
+  padding: 0;
+  position: relative;
+
+  // Add subtle background pattern
+  &::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(
+        circle at 20% 50%,
+        rgba(color("primary", "base"), 0.02) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        rgba(color("secondary", "base"), 0.02) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 40% 80%,
+        rgba(color("status", "info"), 0.02) 0%,
+        transparent 50%
+      );
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: spacing("md");
+    margin-bottom: spacing("sm");
+    position: relative;
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    // Add decorative element
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -spacing("md");
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(
+        90deg,
+        color("primary", "base"),
+        rgba(color("primary", "base"), 0.3)
+      );
+      border-radius: 3px;
+    }
+  }
+
+  &__title_area {
+    flex: 1;
+  }
+
+  &__title {
+    font-size: map-get($font-sizes, "3xl");
+    font-weight: map-get($font-weights, "bold");
+    background: linear-gradient(
+      135deg,
+      color("neutral", "black"),
+      color("primary", "base")
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: color("neutral", "black"); // Fallback
+    margin: 0 0 spacing("sm") 0;
+    line-height: 1.2;
+    animation: slideInLeft 0.8s ease-out;
+
+    @include breakpoint-down("md") {
+      font-size: map-get($font-sizes, "2xl");
+    }
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+    margin: 0;
+    line-height: 1.4;
+    animation: slideInLeft 0.8s ease-out 0.2s both;
+  }
+
+  &__form_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: spacing("lg");
+    margin-bottom: spacing("xl");
+
+    @include breakpoint-down("lg") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xl");
+    gap: spacing("md");
+    color: color("neutral", "dark");
+    font-size: map-get($font-sizes, "base");
+  }
+
+  &__success {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("md");
+    background-color: rgba(color("status", "success"), 0.1);
+    border: 1px solid rgba(color("status", "success"), 0.2);
+    border-radius: border-radius("md");
+    color: color("status", "success");
+    margin-bottom: spacing("lg");
+
+    svg {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+    }
+
+    span {
+      flex: 1;
+      font-size: map-get($font-sizes, "base");
+      font-weight: map-get($font-weights, "medium");
+    }
+  }
+
+  &__success_close {
+    background: none;
+    border: none;
+    color: color("status", "success");
+    font-size: map-get($font-sizes, "lg");
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: border-radius("sm");
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(color("status", "success"), 0.1);
+    }
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

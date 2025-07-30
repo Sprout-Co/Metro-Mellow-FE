@@ -2,7 +2,13 @@ import React from "react";
 import styles from "./StatusBadge.module.scss";
 
 interface StatusBadgeProps {
-  status: "active" | "inactive" | "pending" | "completed" | "cancelled";
+  status:
+    | "active"
+    | "inactive"
+    | "pending"
+    | "completed"
+    | "cancelled"
+    | "confirmed";
   label?: string;
 }
 
@@ -13,6 +19,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, label }) => {
     pending: { label: "Pending", color: "warning" },
     completed: { label: "Completed", color: "primary" },
     cancelled: { label: "Cancelled", color: "error" },
+    confirmed: { label: "Confirmed", color: "primary" },
   };
 
   const { label: defaultLabel, color } = statusMap[status];

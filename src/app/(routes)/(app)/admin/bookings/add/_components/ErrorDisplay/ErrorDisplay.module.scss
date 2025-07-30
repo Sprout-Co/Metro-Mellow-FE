@@ -1,0 +1,46 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.error_display {
+  display: flex;
+  align-items: center;
+  gap: spacing("sm");
+  padding: spacing("md");
+  background-color: rgba(color("status", "error"), 0.1);
+  border: 1px solid rgba(color("status", "error"), 0.2);
+  border-radius: border-radius("md");
+  color: color("status", "error");
+  margin-bottom: spacing("lg");
+
+  svg {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+  }
+
+  span {
+    flex: 1;
+    font-size: map-get($font-sizes, "base");
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    color: color("status", "error");
+    font-size: map-get($font-sizes, "lg");
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: border-radius("sm");
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(color("status", "error"), 0.1);
+    }
+  }
+}

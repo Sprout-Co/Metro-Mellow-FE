@@ -1,0 +1,158 @@
+// AddSubscriptionPage.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 map-get($spacing, "md");
+}
+
+// Progress indicator
+.progress {
+  margin-bottom: map-get($spacing, "xl");
+
+  &__steps {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: map-get($colors, "neutral", "light");
+      z-index: 1;
+    }
+  }
+
+  &__step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    background-color: map-get($colors, "neutral", "white");
+    padding: map-get($spacing, "sm");
+
+    &--active {
+      .progress__step_number {
+        background-color: map-get($colors, "primary", "base");
+        color: map-get($colors, "neutral", "white");
+      }
+
+      .progress__step_label {
+        color: map-get($colors, "primary", "base");
+        font-weight: 600;
+      }
+    }
+  }
+
+  &__step_number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: map-get($colors, "neutral", "light");
+    color: map-get($colors, "neutral", "dark");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin-bottom: map-get($spacing, "xs");
+    transition: all 0.3s ease;
+  }
+
+  &__step_label {
+    font-size: map-get($font-sizes, "sm");
+    color: map-get($colors, "neutral", "dark");
+    text-align: center;
+    transition: color 0.3s ease;
+  }
+}
+
+// Content area
+.content {
+  background-color: map-get($colors, "neutral", "white");
+  border-radius: map-get($border-radius, "lg");
+  box-shadow: map-get($shadows, "sm");
+  margin-bottom: map-get($spacing, "xl");
+  overflow: hidden;
+}
+
+// Loading state
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: map-get($spacing, "md");
+
+  &__spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid map-get($colors, "neutral", "light");
+    border-top: 3px solid map-get($colors, "primary", "base");
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  p {
+    color: map-get($colors, "neutral", "dark");
+    font-size: map-get($font-sizes, "md");
+  }
+}
+
+// Responsive design
+@include respond-to("tablet") {
+  .container {
+    padding: 0 map-get($spacing, "sm");
+  }
+
+  .progress {
+    &__steps {
+      flex-direction: column;
+      gap: map-get($spacing, "md");
+
+      &::before {
+        display: none;
+      }
+    }
+
+    &__step {
+      flex-direction: row;
+      gap: map-get($spacing, "sm");
+
+      .progress__step_number {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+@include respond-to("mobile") {
+  .container {
+    padding: 0 map-get($spacing, "xs");
+  }
+
+  .progress {
+    &__step_label {
+      font-size: map-get($font-sizes, "xs");
+    }
+  }
+}
+
+// Animation keyframes
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

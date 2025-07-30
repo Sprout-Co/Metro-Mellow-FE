@@ -7,13 +7,11 @@ import Button from "../_components/UI/Button/Button";
 import Table from "../_components/UI/Table/Table";
 import StatusBadge from "../_components/UI/StatusBadge/StatusBadge";
 import ConfirmationModal from "../_components/UI/ConfirmationModal/ConfirmationModal";
-import BookingModal from "../_components/UI/BookingModal/BookingModal";
 import { motion } from "framer-motion";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { BookingStatus, Booking, PaymentStatus, TimeSlot } from "@/graphql/api";
 import { formatToNaira } from "@/utils/string";
 import { Icon } from "@/components/ui/Icon/Icon";
-import BookServiceModal from "../../dashboard/_components/overview/BookServiceModal";
 import { useRouter } from "next/navigation";
 
 export default function BookingsPage() {
@@ -27,12 +25,6 @@ export default function BookingsPage() {
   const [error, setError] = useState<string | null>(null);
 
   // Modal states
-  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
-  const [showBookingModal, setShowBookingModal] = useState(false);
-  const [bookingModalMode, setBookingModalMode] = useState<"view" | "edit">(
-    "view"
-  );
-  const [showBookServiceModal, setShowBookServiceModal] = useState(false);
   // Confirmation modal states
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [confirmAction, setConfirmAction] = useState<{
@@ -49,7 +41,6 @@ export default function BookingsPage() {
     handleCancelBooking,
     handleCompleteBooking,
     handleUpdateBookingStatus,
-    handleRescheduleBooking,
   } = useBookingOperations();
 
   useEffect(() => {
@@ -164,51 +155,6 @@ export default function BookingsPage() {
     }
   };
 
-  const handleBookingReschedule = async (
-    bookingId: string,
-    newDate: string,
-    newTime: string
-  ) => {
-    try {
-      setError(null);
-
-      // Convert time string to TimeSlot enum
-      let timeSlot: TimeSlot;
-      const hour = parseInt(newTime.split(":")[0]);
-
-      if (hour >= 6 && hour < 12) {
-        timeSlot = TimeSlot.Morning;
-      } else if (hour >= 12 && hour < 18) {
-        timeSlot = TimeSlot.Afternoon;
-      } else {
-        timeSlot = TimeSlot.Evening;
-      }
-
-      await handleRescheduleBooking(bookingId, newDate, timeSlot);
-      await fetchBookings();
-
-      // Close the booking modal after successful reschedule
-      setShowBookingModal(false);
-      setSelectedBooking(null);
-    } catch (error) {
-      console.error("Error rescheduling booking:", error);
-      setError(
-        error instanceof Error ? error.message : "Failed to reschedule booking"
-      );
-    }
-  };
-
-  const openBookingModal = (mode: "view" | "edit", booking: Booking) => {
-    setSelectedBooking(booking);
-    setBookingModalMode(mode);
-    setShowBookingModal(true);
-  };
-
-  const closeBookingModal = () => {
-    setShowBookingModal(false);
-    setSelectedBooking(null);
-  };
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case BookingStatus.Pending:
@@ -232,12 +178,6 @@ export default function BookingsPage() {
       month: "short",
       day: "numeric",
     });
-  };
-
-  const formatTime = (timeSlot: unknown) => {
-    if (!timeSlot || typeof timeSlot !== "object") return "N/A";
-    const slot = timeSlot as { startTime?: string; endTime?: string };
-    return `${slot.startTime || ""} - ${slot.endTime || ""}`;
   };
 
   const viewBooking = (booking: Booking) => {
@@ -406,12 +346,12 @@ export default function BookingsPage() {
               </button>
               <button
                 className={styles.bookings_page__action_button}
-                onClick={() => openBookingModal("edit", booking)}
+                onClick={() => router.push(`/admin/bookings/${booking.id}`)}
                 title="Edit booking"
               >
                 Edit
               </button>
-              {booking.status !== BookingStatus.Completed &&
+              {/* {booking.status !== BookingStatus.Completed &&
                 booking.status !== BookingStatus.Cancelled && (
                   <select
                     className={styles.bookings_page__status_select}
@@ -433,7 +373,7 @@ export default function BookingsPage() {
                     <option value={BookingStatus.Completed}>Completed</option>
                     <option value={BookingStatus.Cancelled}>Cancelled</option>
                   </select>
-                )}
+                )} */}
             </div>
           </>
         );
@@ -492,7 +432,7 @@ export default function BookingsPage() {
               variant="primary"
               size="medium"
               icon="+"
-              onClick={() => setShowBookServiceModal(true)}
+              onClick={() => router.push("/admin/bookings/add")}
             >
               Add Booking
             </Button>
@@ -607,13 +547,6 @@ export default function BookingsPage() {
               : "warning"
           }
           isLoading={isActionLoading}
-        />
-
-        {/* {BookServiceModal} */}
-        <BookServiceModal
-          isOpen={showBookServiceModal}
-          onClose={() => setShowBookServiceModal(false)}
-          addressId={selectedBooking?.address?.id}
         />
       </div>
     </AdminDashboardLayout>

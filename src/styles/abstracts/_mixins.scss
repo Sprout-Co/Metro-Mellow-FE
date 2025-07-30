@@ -10,6 +10,27 @@
 // RESPONSIVE MIXINS
 // ===================================
 
+// Semantic breakpoint mapping for respond-to mixin
+$semantic-breakpoints: (
+  "mobile": "sm",
+  "tablet": "md",
+  "desktop": "lg",
+  "large-desktop": "xl",
+);
+
+@mixin respond-to($breakpoint) {
+  @if map-has-key($semantic-breakpoints, $breakpoint) {
+    $actual-breakpoint: map-get($semantic-breakpoints, $breakpoint);
+    @include breakpoint-down($actual-breakpoint) {
+      @content;
+    }
+  } @else {
+    @include breakpoint-down($breakpoint) {
+      @content;
+    }
+  }
+}
+
 @mixin breakpoint-up($breakpoint) {
   @if map-has-key($breakpoints, $breakpoint) {
     @media (min-width: map-get($breakpoints, $breakpoint)) {
@@ -202,6 +223,10 @@
   }
 }
 
+@mixin font-secondary {
+  font-family: $font-family-secondary;
+}
+
 @mixin heading-base {
   font-family: $font-family-heading;
   line-height: map-get($line-heights, "tight");
@@ -212,8 +237,8 @@
 @mixin heading-1 {
   @include heading-base;
   @include font-size("h1");
-  @include font-weight("bold");
-  letter-spacing: map-get($letter-spacing, "tighter");
+  @include font-weight("black");
+  letter-spacing: map-get($letter-spacing, "tight");
 
   @include breakpoint-down("lg") {
     @include font-size("h2");
@@ -317,16 +342,16 @@
 }
 
 @mixin body-1 {
-  font-family: $font-family-base;
+  @include font-secondary; // Use Montserrat for body text
   @include font-size("body-1");
   @include font-weight("medium");
   line-height: map-get($line-heights, "relaxed");
-  letter-spacing: map-get($letter-spacing, "wide");
+  letter-spacing: map-get($letter-spacing, "normal");
   color: color("neutral", "dark");
 }
 
 @mixin body-2 {
-  font-family: $font-family-base;
+  @include font-secondary; // Use Montserrat for body text
   @include font-size("body-2");
   @include font-weight("medium");
   line-height: map-get($line-heights, "relaxed");
@@ -335,7 +360,7 @@
 }
 
 @mixin paragraph {
-  font-family: $font-family-base;
+  @include font-secondary; // Use Montserrat for body text
   @include font-size("body-1");
   @include font-weight("medium");
   line-height: map-get($line-heights, "relaxed");
@@ -344,7 +369,7 @@
 }
 
 @mixin caption {
-  font-family: $font-family-base;
+  @include font-secondary; // Use Montserrat for body text
   @include font-size("caption");
   @include font-weight("light");
   line-height: map-get($line-heights, "relaxed");
@@ -360,7 +385,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: $font-family-base;
+  @include font-secondary; // Use Montserrat for buttons
   @include font-size("button");
   @include font-weight("bold");
   text-decoration: none;

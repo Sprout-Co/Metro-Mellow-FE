@@ -16,6 +16,16 @@ query GetCurrentUser {
       isDefault
       label
     }
+    addresses {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+    }
     emailVerified
     emailVerifiedAt
     accountStatus
@@ -42,6 +52,16 @@ query GetUserById($id: ID!) {
       isDefault
       label
     }
+    addresses {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+    }
     emailVerified
     emailVerifiedAt
     accountStatus
@@ -65,6 +85,16 @@ query GetUsers($role: UserRole) {
       zipCode
       country
       id
+      isDefault
+      label
+    }
+    addresses {
+      id
+      street
+      city
+      state
+      zipCode
+      country
       isDefault
       label
     }

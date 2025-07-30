@@ -1,7 +1,7 @@
 @import "../../../styles/abstracts/_variables.scss";
 
 .section {
-    background-color: color('accent', 'lighter');
+  background-color: color("accent", "lighter");
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,11 +15,8 @@
 }
 
 .heading {
-  font-size: map-get($font-sizes, "h2");
-  font-weight: map-get($font-weights, "bold");
-  color: map-get(map-get($colors, "neutral"), "black");
-  margin-bottom: map-get($spacing, "xl");
-  line-height: map-get($line-heights, "tight");
+  @include heading-1;
+  margin-bottom: spacing("xl");
 }
 
 .bold {
@@ -73,7 +70,9 @@
   cursor: pointer;
   font-weight: map-get($font-weights, "bold");
   letter-spacing: map-get($letter-spacing, "wider");
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 
   &:hover,
   &:focus {
@@ -104,4 +103,4 @@
     font-size: map-get($font-sizes, "body-2");
     padding: map-get($spacing, "md") 0;
   }
-} 
+}

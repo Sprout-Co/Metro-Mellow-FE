@@ -289,25 +289,28 @@ export const useStaffOperations = () => {
    * @returns Staff profile data
    * @throws Error if fetch fails
    */
-  const handleGetStaffProfile = useCallback(async (id: string) => {
-    try {
-      const { data, errors } = await getStaffProfileById({
-        variables: { id },
-      });
+  const handleGetStaffProfile = useCallback(
+    async (id: string) => {
+      try {
+        const { data, errors } = await getStaffProfileById({
+          variables: { id },
+        });
 
-      if (errors) {
-        throw new Error(errors[0].message);
-      }
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
 
-      return data?.staffProfile;
-    } catch (error) {
-      console.error("Staff profile fetch error:", error);
-      if (error instanceof Error) {
-        throw new Error(error.message);
+        return data?.staffProfile;
+      } catch (error) {
+        console.error("Staff profile fetch error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
       }
-      throw new Error("An unexpected error occurred");
-    }
-  }, [getStaffProfileById]);
+    },
+    [getStaffProfileById]
+  );
 
   /**
    * Fetches staff profiles with optional status filter
@@ -315,25 +318,69 @@ export const useStaffOperations = () => {
    * @returns Array of staff profiles
    * @throws Error if fetch fails
    */
-  const handleGetStaffProfiles = useCallback(async (status?: StaffStatus) => {
-    try {
-      const { data, errors } = await getStaffProfiles({
-        variables: { status },
-      });
+  const handleGetStaffProfiles = useCallback(
+    async (status?: StaffStatus) => {
+      try {
+        const { data, errors } = await getStaffProfiles({
+          variables: { status },
+        });
 
-      if (errors) {
-        throw new Error(errors[0].message);
-      }
+        if (errors) {
+          // Check if the error is related to null firstName/lastName fields
+          const isNullFieldError = errors.some(
+            (error) =>
+              error.message.includes(
+                "Cannot return null for non-nullable field User.firstName"
+              ) ||
+              error.message.includes(
+                "Cannot return null for non-nullable field User.lastName"
+              ) ||
+              error.message.includes(
+                "Cannot return null for non-nullable field User.email"
+              )
+          );
 
-      return data?.staffProfiles;
-    } catch (error) {
-      console.error("Staff profiles fetch error:", error);
-      if (error instanceof Error) {
-        throw new Error(error.message);
+          if (isNullFieldError) {
+            console.warn(
+              "Staff profiles query failed due to null user fields. Returning empty array to prevent crash."
+            );
+            return []; // Return empty array instead of throwing error
+          }
+
+          throw new Error(errors[0].message);
+        }
+
+        return data?.staffProfiles || [];
+      } catch (error) {
+        console.error("Staff profiles fetch error:", error);
+
+        // Check if this is a GraphQL error related to null fields
+        if (
+          error instanceof Error &&
+          (error.message.includes(
+            "Cannot return null for non-nullable field User.firstName"
+          ) ||
+            error.message.includes(
+              "Cannot return null for non-nullable field User.lastName"
+            ) ||
+            error.message.includes(
+              "Cannot return null for non-nullable field User.email"
+            ))
+        ) {
+          console.warn(
+            "Staff profiles query failed due to data integrity issues. Returning empty array."
+          );
+          return []; // Return empty array instead of throwing error
+        }
+
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
       }
-      throw new Error("An unexpected error occurred");
-    }
-  }, [getStaffProfiles]);
+    },
+    [getStaffProfiles]
+  );
 
   /**
    * Fetches available staff for a service category and date
@@ -371,25 +418,28 @@ export const useStaffOperations = () => {
    * @returns Staff performance rating
    * @throws Error if fetch fails
    */
-  const handleGetStaffPerformance = useCallback(async (id: string) => {
-    try {
-      const { data, errors } = await getStaffPerformance({
-        variables: { id },
-      });
+  const handleGetStaffPerformance = useCallback(
+    async (id: string) => {
+      try {
+        const { data, errors } = await getStaffPerformance({
+          variables: { id },
+        });
 
-      if (errors) {
-        throw new Error(errors[0].message);
-      }
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
 
-      return data?.staffPerformance;
-    } catch (error) {
-      console.error("Staff performance fetch error:", error);
-      if (error instanceof Error) {
-        throw new Error(error.message);
+        return data?.staffPerformance;
+      } catch (error) {
+        console.error("Staff performance fetch error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
       }
-      throw new Error("An unexpected error occurred");
-    }
-  }, [getStaffPerformance]);
+    },
+    [getStaffPerformance]
+  );
 
   return {
     handleCreateStaffProfile,

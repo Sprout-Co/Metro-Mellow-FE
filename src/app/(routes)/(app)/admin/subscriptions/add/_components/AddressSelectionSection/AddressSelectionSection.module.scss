@@ -1,0 +1,108 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.address_selection {
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("lg") 0;
+  }
+
+  &__placeholder,
+  &__empty {
+    text-align: center;
+    padding: spacing("2xl");
+    color: color("neutral", "dark");
+
+    p {
+      margin: spacing("md") 0;
+      font-size: map-get($font-sizes, "base");
+    }
+
+    small {
+      font-size: map-get($font-sizes, "sm");
+      color: color("neutral", "dark");
+    }
+  }
+
+  &__field {
+    margin-bottom: spacing("lg");
+  }
+
+  &__label {
+    display: block;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+  }
+
+  &__select {
+    width: 100%;
+    padding: spacing("sm");
+    border: 1px solid color("neutral", "light");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "base");
+    background-color: white;
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
+    }
+  }
+
+  &__selected {
+    margin-top: spacing("lg");
+
+    h4 {
+      margin: 0 0 spacing("sm") 0;
+      font-size: map-get($font-sizes, "base");
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "black");
+    }
+  }
+
+  &__address_card {
+    padding: spacing("md");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
+    border: 1px solid color("neutral", "light");
+  }
+
+  &__address_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("sm");
+
+    strong {
+      font-size: map-get($font-sizes, "base");
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "black");
+    }
+  }
+
+  &__default_badge {
+    padding: spacing("xs") spacing("sm");
+    background-color: color("primary", "base");
+    color: white;
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    border-radius: border-radius("full");
+    text-transform: uppercase;
+  }
+
+  &__address_details {
+    p {
+      margin: spacing("xs") 0;
+      font-size: map-get($font-sizes, "sm");
+      color: color("neutral", "dark");
+    }
+  }
+}

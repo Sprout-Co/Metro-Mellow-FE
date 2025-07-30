@@ -10,17 +10,24 @@ import StatusBadge from "../_components/UI/StatusBadge/StatusBadge";
 import ConfirmationModal from "../_components/UI/ConfirmationModal/ConfirmationModal";
 import { motion } from "framer-motion";
 import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
-import { SubscriptionStatus, Subscription, SubscriptionService } from "@/graphql/api";
+import {
+  SubscriptionStatus,
+  Subscription,
+  SubscriptionService,
+} from "@/graphql/api";
 import { Icon } from "@/components/ui/Icon/Icon";
+import { formatToNaira } from "@/utils/string";
 
 export default function SubscriptionsPage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeFilter, setActiveFilter] = useState<SubscriptionStatus | "all">("all");
+  const [activeFilter, setActiveFilter] = useState<SubscriptionStatus | "all">(
+    "all"
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Confirmation modal states
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [confirmAction, setConfirmAction] = useState<{
@@ -65,25 +72,35 @@ export default function SubscriptionsPage() {
   const filteredSubscriptions = subscriptions.filter((subscription) => {
     const matchesSearch =
       searchQuery === "" ||
-      subscription.customer?.firstName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      subscription.customer?.lastName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      subscription.customer?.firstName
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      subscription.customer?.lastName
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
       subscription.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
       subscription.subscriptionServices?.some((service: SubscriptionService) =>
         service.service?.name?.toLowerCase().includes(searchQuery.toLowerCase())
       );
 
-    const matchesFilter = activeFilter === "all" || subscription.status === activeFilter;
+    const matchesFilter =
+      activeFilter === "all" || subscription.status === activeFilter;
 
     return matchesSearch && matchesFilter;
   });
 
-  const openStatusConfirmation = (subscriptionId: string, newStatus: SubscriptionStatus) => {
-    const subscription = subscriptions.find(s => s.id === subscriptionId);
-    const customerName = subscription?.customer ? `${subscription.customer.firstName || ""} ${subscription.customer.lastName || ""}`.trim() : "Unknown";
-    
+  const openStatusConfirmation = (
+    subscriptionId: string,
+    newStatus: SubscriptionStatus
+  ) => {
+    const subscription = subscriptions.find((s) => s.id === subscriptionId);
+    const customerName = subscription?.customer
+      ? `${subscription.customer.firstName || ""} ${subscription.customer.lastName || ""}`.trim()
+      : "Unknown";
+
     let title = "";
     let message = "";
-    
+
     switch (newStatus) {
       case SubscriptionStatus.Cancelled:
         title = "Cancel Subscription";
@@ -110,7 +127,7 @@ export default function SubscriptionsPage() {
         title = "Update Status";
         message = `Update the subscription status for ${customerName}?`;
     }
-    
+
     setConfirmAction({
       type: "status_change",
       subscriptionId,
@@ -123,26 +140,32 @@ export default function SubscriptionsPage() {
 
   const handleConfirmedStatusUpdate = async () => {
     if (!confirmAction) return;
-    
+
     try {
       setIsActionLoading(true);
       setError(null);
-      
+
       const { subscriptionId, newStatus } = confirmAction;
-      const subscription = subscriptions.find(s => s.id === subscriptionId);
-      
+      const subscription = subscriptions.find((s) => s.id === subscriptionId);
+
       if (newStatus === SubscriptionStatus.Cancelled) {
         await handleCancelSubscription(subscriptionId);
       } else if (newStatus === SubscriptionStatus.Paused) {
         await handlePauseSubscription(subscriptionId);
-      } else if (newStatus === SubscriptionStatus.Active && subscription?.status === SubscriptionStatus.Paused) {
+      } else if (
+        newStatus === SubscriptionStatus.Active &&
+        subscription?.status === SubscriptionStatus.Paused
+      ) {
         await handleResumeSubscription(subscriptionId);
-      } else if (newStatus === SubscriptionStatus.Active && subscription?.status === SubscriptionStatus.Cancelled) {
+      } else if (
+        newStatus === SubscriptionStatus.Active &&
+        subscription?.status === SubscriptionStatus.Cancelled
+      ) {
         await handleReactivateSubscription(subscriptionId);
       } else {
         await handleUpdateSubscriptionStatus(subscriptionId, newStatus);
       }
-      
+
       await fetchSubscriptions();
       setShowConfirmModal(false);
       setConfirmAction(null);
@@ -158,7 +181,10 @@ export default function SubscriptionsPage() {
     }
   };
 
-  const openModal = (_type: "create" | "edit" | "view", _subscription?: unknown) => {
+  const openModal = (
+    _type: "create" | "edit" | "view",
+    _subscription?: unknown
+  ) => {
     // Modal functionality to be implemented
     console.log("Modal functionality to be implemented");
   };
@@ -179,10 +205,10 @@ export default function SubscriptionsPage() {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
@@ -191,17 +217,23 @@ export default function SubscriptionsPage() {
   };
 
   const calculateTotalPrice = (services: unknown[]) => {
-    return services?.reduce((total, service) => {
-      const s = service as { price?: number };
-      return total + (s.price || 0);
-    }, 0) || 0;
+    return (
+      services?.reduce((total: number, service) => {
+        const s = service as { price?: number };
+        return total + (s.price || 0);
+      }, 0) || 0
+    );
   };
 
   const getServiceNames = (services: unknown[]) => {
-    return services?.map((service) => {
-      const s = service as { service?: { name?: string } };
-      return s.service?.name;
-    }).join(", ") || "N/A";
+    return (
+      services
+        ?.map((service) => {
+          const s = service as { service?: { name?: string } };
+          return s.service?.name;
+        })
+        .join(", ") || "N/A"
+    );
   };
 
   const columns = [
@@ -210,13 +242,15 @@ export default function SubscriptionsPage() {
       header: "Customer",
       width: "18%",
       render: (value: unknown) => {
-        const customer = value as { 
-          firstName?: string; 
-          lastName?: string; 
+        const customer = value as {
+          firstName?: string;
+          lastName?: string;
           email?: string;
-          phone?: string; 
+          phone?: string;
         };
-        const fullName = `${customer?.firstName || ""} ${customer?.lastName || ""}`.trim() || "N/A";
+        const fullName =
+          `${customer?.firstName || ""} ${customer?.lastName || ""}`.trim() ||
+          "N/A";
         return (
           <div className={styles.subscriptions_page__customer_cell}>
             {/* <div className={styles.subscriptions_page__customer_initial}>
@@ -227,10 +261,10 @@ export default function SubscriptionsPage() {
                 {fullName}
               </div>
               <div className={styles.subscriptions_page__customer_email}>
-                {customer?.email || 'N/A'}
+                {customer?.email || "N/A"}
               </div>
               <div className={styles.subscriptions_page__customer_phone}>
-                {customer?.phone || 'N/A'}
+                {customer?.phone || "N/A"}
               </div>
             </div>
           </div>
@@ -249,10 +283,11 @@ export default function SubscriptionsPage() {
               {getServiceNames(services)}
             </div>
             <div className={styles.subscriptions_page__services_count}>
-              {services?.length || 0} service{(services?.length || 0) !== 1 ? 's' : ''}
+              {services?.length || 0} service
+              {(services?.length || 0) !== 1 ? "s" : ""}
             </div>
             <div className={styles.subscriptions_page__services_price}>
-              ${calculateTotalPrice(services).toFixed(2)}/month
+              {formatToNaira(calculateTotalPrice(services))}/month
             </div>
           </div>
         );
@@ -268,7 +303,12 @@ export default function SubscriptionsPage() {
             {formatBillingCycle(value)}
           </div>
           <div className={styles.subscriptions_page__billing_frequency}>
-            Every {value === "MONTHLY" ? "month" : value === "WEEKLY" ? "week" : "year"}
+            Every{" "}
+            {value === "MONTHLY"
+              ? "month"
+              : value === "WEEKLY"
+                ? "week"
+                : "year"}
           </div>
         </div>
       ),
@@ -283,7 +323,10 @@ export default function SubscriptionsPage() {
             {formatDate(value)}
           </div>
           <div className={styles.subscriptions_page__date_elapsed}>
-            {Math.floor((Date.now() - new Date(value).getTime()) / (1000 * 60 * 60 * 24))} days ago
+            {Math.floor(
+              (Date.now() - new Date(value).getTime()) / (1000 * 60 * 60 * 24)
+            )}{" "}
+            days ago
           </div>
         </div>
       ),
@@ -293,10 +336,15 @@ export default function SubscriptionsPage() {
       header: "Next Billing",
       width: "10%",
       render: (value: string) => {
-        if (!value) return <span className={styles.subscriptions_page__no_billing}>N/A</span>;
+        if (!value)
+          return (
+            <span className={styles.subscriptions_page__no_billing}>N/A</span>
+          );
         const isOverdue = new Date(value) < new Date();
         return (
-          <div className={`${styles.subscriptions_page__next_billing} ${isOverdue ? styles.subscriptions_page__overdue : ''}`}>
+          <div
+            className={`${styles.subscriptions_page__next_billing} ${isOverdue ? styles.subscriptions_page__overdue : ""}`}
+          >
             {formatDate(value)}
           </div>
         );
@@ -316,14 +364,16 @@ export default function SubscriptionsPage() {
     {
       key: "actions",
       header: "Actions",
-      width: "16%",
+      width: "10%",
       render: (_value: unknown, row: unknown) => {
         const subscription = row as Subscription;
         return (
           <div className={styles.subscriptions_page__actions_cell}>
             <button
               className={styles.subscriptions_page__action_button}
-              onClick={() => router.push(`/admin/subscriptions/${subscription.id}`)}
+              onClick={() =>
+                router.push(`/admin/subscriptions/${subscription.id}`)
+              }
               title="View details"
             >
               View
@@ -338,12 +388,14 @@ export default function SubscriptionsPage() {
     { label: "Total Subscriptions", value: subscriptions.length },
     {
       label: "Active",
-      value: subscriptions.filter((s) => s.status === SubscriptionStatus.Active).length,
+      value: subscriptions.filter((s) => s.status === SubscriptionStatus.Active)
+        .length,
     },
     {
       label: "Paused",
-      value: subscriptions.filter((s) => s.status === SubscriptionStatus.Paused).length,
-    }
+      value: subscriptions.filter((s) => s.status === SubscriptionStatus.Paused)
+        .length,
+    },
   ];
 
   const filterOptions = [
@@ -365,7 +417,9 @@ export default function SubscriptionsPage() {
       <div className={styles.subscriptions_page}>
         <div className={styles.subscriptions_page__header}>
           <div className={styles.subscriptions_page__title_area}>
-            <h2 className={styles.subscriptions_page__title}>Subscription Management</h2>
+            <h2 className={styles.subscriptions_page__title}>
+              Subscription Management
+            </h2>
             <p className={styles.subscriptions_page__subtitle}>
               View and manage all customer subscriptions
             </p>
@@ -376,7 +430,7 @@ export default function SubscriptionsPage() {
               variant="primary"
               size="medium"
               icon="+"
-              onClick={() => console.log("Create subscription functionality to be implemented")}
+              onClick={() => router.push("/admin/subscriptions/add")}
             >
               Add Subscription
             </Button>
@@ -386,7 +440,11 @@ export default function SubscriptionsPage() {
         {error && (
           <div className={styles.subscriptions_page__error}>
             <div className={styles.subscriptions_page__error_content}>
-              <Icon name="alert-triangle" size={16} className={styles.subscriptions_page__error_icon} />
+              <Icon
+                name="alert-triangle"
+                size={16}
+                className={styles.subscriptions_page__error_icon}
+              />
               <span className={styles.subscriptions_page__error_message}>
                 {error}
               </span>
@@ -403,8 +461,12 @@ export default function SubscriptionsPage() {
         <div className={styles.subscriptions_page__stats}>
           {subscriptionStats.map((stat, index) => (
             <Card key={index} className={styles.subscriptions_page__stat_card}>
-              <h3 className={styles.subscriptions_page__stat_label}>{stat.label}</h3>
-              <p className={styles.subscriptions_page__stat_value}>{stat.value}</p>
+              <h3 className={styles.subscriptions_page__stat_label}>
+                {stat.label}
+              </h3>
+              <p className={styles.subscriptions_page__stat_value}>
+                {stat.value}
+              </p>
             </Card>
           ))}
         </div>
@@ -430,7 +492,9 @@ export default function SubscriptionsPage() {
                       ? styles["subscriptions_page__filter_button--active"]
                       : ""
                   }`}
-                  onClick={() => setActiveFilter(option.value as SubscriptionStatus | "all")}
+                  onClick={() =>
+                    setActiveFilter(option.value as SubscriptionStatus | "all")
+                  }
                 >
                   {option.label}
                 </button>
@@ -444,12 +508,16 @@ export default function SubscriptionsPage() {
             transition={{ duration: 0.3 }}
           >
             {isLoading ? (
-              <div className={styles.subscriptions_page__loading}>Loading subscriptions...</div>
+              <div className={styles.subscriptions_page__loading}>
+                Loading subscriptions...
+              </div>
             ) : (
               <Table
                 columns={columns}
                 data={filteredSubscriptions}
-                onRowClick={(subscription) => router.push(`/admin/subscriptions/${subscription.id}`)}
+                onRowClick={(subscription) =>
+                  router.push(`/admin/subscriptions/${subscription.id}`)
+                }
               />
             )}
           </motion.div>
@@ -467,7 +535,11 @@ export default function SubscriptionsPage() {
           message={confirmAction?.message || ""}
           confirmText="Confirm"
           cancelText="Cancel"
-          variant={confirmAction?.newStatus === SubscriptionStatus.Cancelled ? "danger" : "warning"}
+          variant={
+            confirmAction?.newStatus === SubscriptionStatus.Cancelled
+              ? "danger"
+              : "warning"
+          }
           isLoading={isActionLoading}
         />
       </div>

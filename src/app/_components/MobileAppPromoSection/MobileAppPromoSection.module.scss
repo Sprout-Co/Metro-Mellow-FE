@@ -58,9 +58,7 @@
 
   &__heading {
     inline-size: max-content;
-    font-size: font-size("h1") * 1.05;
-    font-family: $font-family-heading;
-    font-weight: map-get($font-weights, "bold");
+    @include heading-1;
     color: color("primary", "lighter");
     margin-bottom: spacing("lg");
     line-height: 1.05;

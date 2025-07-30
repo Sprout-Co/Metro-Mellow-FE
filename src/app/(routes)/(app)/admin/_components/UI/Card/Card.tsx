@@ -11,7 +11,7 @@ const Card: React.FC<CardProps> = ({ children, className = "" }) => {
   return (
     <motion.div
       className={`${styles.card} ${className}`}
-      whileHover={{ y: -4 }}
+      // whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}
     >
       {children}
