@@ -351,7 +351,7 @@ export default function BookingsPage() {
               >
                 Edit
               </button>
-              {booking.status !== BookingStatus.Completed &&
+              {/* {booking.status !== BookingStatus.Completed &&
                 booking.status !== BookingStatus.Cancelled && (
                   <select
                     className={styles.bookings_page__status_select}
@@ -373,7 +373,7 @@ export default function BookingsPage() {
                     <option value={BookingStatus.Completed}>Completed</option>
                     <option value={BookingStatus.Cancelled}>Cancelled</option>
                   </select>
-                )}
+                )} */}
             </div>
           </>
         );

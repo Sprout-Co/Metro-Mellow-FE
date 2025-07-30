@@ -135,7 +135,7 @@ export default function CustomersPage() {
     {
       key: "accountStatus",
       header: "Status",
-      width: "15%",
+      width: "20%",
       render: (value: AccountStatus) => (
         <StatusBadge
           status={getStatusColor(value)}
@@ -157,7 +157,7 @@ export default function CustomersPage() {
     {
       key: "actions",
       header: "Actions",
-      width: "20%",
+      width: "10%",
       render: (_value: unknown, row: unknown) => {
         const customer = row as User;
         return (
@@ -224,7 +224,12 @@ export default function CustomersPage() {
           </div>
 
           <div className={styles.customers_page__actions}>
-            <Button variant="primary" size="medium" icon="+" onClick={() => setIsAddCustomerModalOpen(true)}>
+            <Button
+              variant="primary"
+              size="medium"
+              icon="+"
+              onClick={() => setIsAddCustomerModalOpen(true)}
+            >
               Add Customer
             </Button>
           </div>
@@ -233,7 +238,11 @@ export default function CustomersPage() {
         {error && (
           <div className={styles.customers_page__error}>
             <div className={styles.customers_page__error_content}>
-              <Icon name="alert-triangle" size={16} className={styles.customers_page__error_icon} />
+              <Icon
+                name="alert-triangle"
+                size={16}
+                className={styles.customers_page__error_icon}
+              />
               <span className={styles.customers_page__error_message}>
                 {error}
               </span>

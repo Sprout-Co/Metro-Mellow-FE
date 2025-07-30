@@ -364,7 +364,7 @@ export default function SubscriptionsPage() {
     {
       key: "actions",
       header: "Actions",
-      width: "16%",
+      width: "10%",
       render: (_value: unknown, row: unknown) => {
         const subscription = row as Subscription;
         return (
