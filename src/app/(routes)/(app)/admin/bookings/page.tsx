@@ -155,7 +155,6 @@ export default function BookingsPage() {
     }
   };
 
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case BookingStatus.Pending:
@@ -180,7 +179,6 @@ export default function BookingsPage() {
       day: "numeric",
     });
   };
-
 
   const viewBooking = (booking: Booking) => {
     router.push(`/admin/bookings/${booking.id}`);
@@ -550,7 +548,6 @@ export default function BookingsPage() {
           }
           isLoading={isActionLoading}
         />
-
       </div>
     </AdminDashboardLayout>
   );

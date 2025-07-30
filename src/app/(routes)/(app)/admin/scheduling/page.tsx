@@ -122,7 +122,7 @@ export default function SchedulingPage() {
 
   // Get unique services and staff for filter options
   const uniqueServices = useMemo(() => {
-    const services = bookings.map((booking) => booking.service.name);
+    const services = bookings.map((booking) => booking.service?.name);
     return [...new Set(services)];
   }, [bookings]);
 
@@ -141,7 +141,7 @@ export default function SchedulingPage() {
       const statusMatch =
         statusFilter === "all" || booking.status === statusFilter;
       const serviceMatch =
-        serviceFilter === "all" || booking.service.name === serviceFilter;
+        serviceFilter === "all" || booking.service?.name === serviceFilter;
       const staffMatch =
         staffFilter === "all" ||
         (booking.staff &&
@@ -171,7 +171,7 @@ export default function SchedulingPage() {
     return filteredBookings.map((booking) => ({
       id: booking.id,
       customerName: `${booking.customer.firstName} ${booking.customer.lastName}`,
-      service: booking.service.name,
+      service: booking.service?.name || "Unknown Service",
       date: new Date(booking.date).toLocaleDateString("en-US", {
         month: "long",
         day: "numeric",
@@ -338,7 +338,7 @@ export default function SchedulingPage() {
           statusFilter === "all" ? undefined : statusFilter
         );
         if (updatedBookings) {
-          setBookings(updatedBookings);
+          setBookings(updatedBookings as Booking[]);
         }
       }
     } catch (error) {
@@ -402,11 +402,11 @@ export default function SchedulingPage() {
       const result = await handleAssignStaff(bookingId, staffId);
       if (result) {
         // Refresh bookings to show updated assignment
-        const updatedBookings = await handleGetBookings({
-          status: statusFilter === "all" ? undefined : statusFilter,
-        });
-        if (updatedBookings.success && updatedBookings.data) {
-          setBookings(updatedBookings.data);
+        const updatedBookings = await handleGetBookings(
+          statusFilter === "all" ? undefined : statusFilter
+        );
+        if (updatedBookings) {
+          setBookings(updatedBookings as Booking[]);
         }
         setShowStaffModal(null);
       }
@@ -421,13 +421,13 @@ export default function SchedulingPage() {
   ) => {
     try {
       const result = await handleCreateBooking(bookingData);
-      if (result.success) {
+      if (result) {
         // Refresh bookings to show new appointment
-        const updatedBookings = await handleGetBookings({
-          status: statusFilter === "all" ? undefined : statusFilter,
-        });
-        if (updatedBookings.success && updatedBookings.data) {
-          setBookings(updatedBookings.data);
+        const updatedBookings = await handleGetBookings(
+          statusFilter === "all" ? undefined : statusFilter
+        );
+        if (updatedBookings) {
+          setBookings(updatedBookings as Booking[]);
         }
         setShowNewAppointmentModal(false);
       }
