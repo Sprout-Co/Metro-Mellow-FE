@@ -227,7 +227,7 @@ const ServiceConfigurationSection: React.FC<
                         styles.service_configuration__service_disabled_message
                       }
                     >
-                      Only one service can be selected at a time
+                      Only available with other monthly services frequency
                     </p>
                   )}
                 </div>
