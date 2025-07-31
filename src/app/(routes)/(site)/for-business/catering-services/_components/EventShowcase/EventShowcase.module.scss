@@ -1,0 +1,13 @@
+@import "abstracts/variables";
+@import "abstracts/mixins";
+@import "abstracts/functions";
+
+.eventShowcase {
+  @include section-spacing("2xl");
+  background: color("neutral", "white");
+
+  &__container {
+    @include container;
+    text-align: center;
+  }
+}

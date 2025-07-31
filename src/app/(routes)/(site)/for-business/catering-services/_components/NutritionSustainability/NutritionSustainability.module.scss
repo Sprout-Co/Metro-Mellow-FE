@@ -1,0 +1,13 @@
+@import "abstracts/variables";
+@import "abstracts/mixins";
+@import "abstracts/functions";
+
+.nutritionSustainability {
+  @include section-spacing("2xl");
+  background: color("neutral", "lightest");
+
+  &__container {
+    @include container;
+    text-align: center;
+  }
+}

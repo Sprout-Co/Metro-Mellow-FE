@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import styles from "./EnterpriseServices.module.scss";
+import { Routes } from "@/constants/routes";
 
 interface ServiceCardProps {
   icon: React.ReactNode;
@@ -24,6 +25,7 @@ interface ServiceCardProps {
   ctaText: string;
   delay: number;
   image: string;
+  link: string;
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({
@@ -37,6 +39,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   ctaText,
   delay,
   image,
+  link,
 }) => {
   const controls = useAnimation();
   const cardRef = useRef<HTMLDivElement>(null);
@@ -85,22 +88,18 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       animate={controls}
     >
       <div className={styles.serviceCard__imageContainer}>
-        <img 
-          src={image} 
-          alt={title}
-          className={styles.serviceCard__image}
-        />
-        
+        <img src={image} alt={title} className={styles.serviceCard__image} />
+
         {/* Overlay gradient for better text readability */}
         <div className={styles.serviceCard__imageOverlay} />
-        
+
         {/* Icon positioned in top-left corner of image */}
         <div
           className={`${styles.serviceCard__iconContainer} ${styles[iconClass]}`}
         >
           {icon}
         </div>
-        
+
         {/* Category tag positioned in top-right corner of image */}
         <span
           className={`${styles.serviceCard__category} ${styles[categoryClass]}`}
@@ -131,6 +130,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
         size="md"
         rightIcon={<ArrowRight size={16} />}
         className={styles.serviceCard__cta}
+        href={link}
       >
         {ctaText}
       </Button>
@@ -193,6 +193,7 @@ const EnterpriseServices: React.FC = () => {
       ctaText: "Learn More",
       delay: 0.15,
       image: "/images/corporate/cp5.png",
+      link: Routes.FOR_BUSINESS_CLEANING,
     },
     {
       icon: <ChefHat size={24} />,
@@ -211,6 +212,7 @@ const EnterpriseServices: React.FC = () => {
       ctaText: "Learn More",
       delay: 0.3,
       image: "/images/corporate/cp1.png",
+      link: Routes.FOR_BUSINESS_CATERING,
     },
     {
       icon: <Shirt size={24} />,
@@ -229,6 +231,7 @@ const EnterpriseServices: React.FC = () => {
       ctaText: "Learn More",
       delay: 0.45,
       image: "/images/corporate/cp8.png",
+      link: Routes.FOR_BUSINESS_LAUNDRY,
     },
     {
       icon: <Bug size={24} />,
@@ -247,6 +250,7 @@ const EnterpriseServices: React.FC = () => {
       ctaText: "Learn More",
       delay: 0.6,
       image: "/images/corporate/cp3.png",
+      link: Routes.FOR_BUSINESS_PEST_CONTROL,
     },
   ];
 
@@ -289,6 +293,7 @@ const EnterpriseServices: React.FC = () => {
               ctaText={service.ctaText}
               delay={service.delay}
               image={service.image}
+              link={service.link}
             />
           ))}
         </div>

@@ -1,0 +1,19 @@
+@import "abstracts/variables";
+@import "abstracts/mixins";
+@import "abstracts/functions";
+
+.menuShowcase {
+  @include section-spacing("2xl");
+  background: color("neutral", "lightest");
+
+  &__container {
+    @include container;
+    text-align: center;
+  }
+
+  &__title {
+    @include heading-2;
+    margin-bottom: spacing("lg");
+    color: color("neutral", "black");
+  }
+}

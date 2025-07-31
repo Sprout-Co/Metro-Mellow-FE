@@ -1,0 +1,267 @@
+// ===================================
+// CORPORATE CLEANING HERO COMPONENT
+// ===================================
+
+@import "abstracts/variables";
+@import "abstracts/mixins";
+@import "abstracts/functions";
+
+.corporateCleaningHero {
+  @include hero-base;
+  background: linear-gradient(
+    135deg,
+    color("primary", "darker") 0%,
+    color("primary", "base") 100%
+  );
+  position: relative;
+  overflow: hidden;
+
+  &__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+  }
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      color-alpha("primary", "base", 0.85) 0%,
+      color-alpha("primary", "darker", 0.75) 100%
+    );
+    z-index: 2;
+  }
+
+  &__container {
+    @include hero-container;
+    z-index: 3;
+    @include flex($direction: column, $justify: center, $align: center);
+    text-align: center;
+    gap: spacing("3xl");
+  }
+
+  &__content {
+    max-width: 900px;
+    color: color("neutral", "white");
+  }
+
+  &__badge {
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("semibold");
+    background: color-alpha("neutral", "white", 0.2);
+    color: color("neutral", "white");
+    padding: spacing("xs") spacing("lg");
+    border-radius: border-radius("pill");
+    border: 2px solid color-alpha("neutral", "white", 0.3);
+    text-transform: uppercase;
+    letter-spacing: letter-spacing("wide");
+    display: inline-block;
+    margin-bottom: spacing("xl");
+    backdrop-filter: blur(10px);
+  }
+
+  &__title {
+    margin-bottom: spacing("xl");
+    
+    &--accent {
+      @include heading-1;
+      color: color("accent", "base");
+      display: block;
+      margin-bottom: spacing("sm");
+      
+      @include breakpoint-down("md") {
+        @include heading-2;
+      }
+    }
+
+    &--main {
+      @include heading-1;
+      color: color("neutral", "white");
+      display: block;
+      line-height: line-height("tight");
+      
+      @include breakpoint-down("md") {
+        @include heading-2;
+      }
+    }
+  }
+
+  &__subtitle {
+    @include body-1;
+    color: color-alpha("neutral", "white", 0.9);
+    margin-bottom: spacing("2xl");
+    line-height: line-height("relaxed");
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &__highlights {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+    margin-bottom: spacing("3xl");
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    @include breakpoint-up("md") {
+      @include grid("1fr 1fr", spacing("md"));
+    }
+  }
+
+  &__highlight {
+    @include flex($align: center);
+    gap: spacing("sm");
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "white");
+    justify-content: flex-start;
+    
+    @include breakpoint-down("md") {
+      justify-content: center;
+    }
+
+    svg {
+      color: color("accent", "base");
+      flex-shrink: 0;
+    }
+  }
+
+  &__cta {
+    @include flex($direction: row, $justify: center, $align: center);
+    gap: spacing("lg");
+    flex-wrap: wrap;
+  }
+
+  &__stats {
+    @include grid-responsive(1, 3, 3, 3, spacing("xl"));
+    width: 100%;
+    max-width: 600px;
+  }
+
+  &__stat {
+    text-align: center;
+    padding: spacing("lg");
+    background: color-alpha("neutral", "white", 0.1);
+    border-radius: border-radius("xl");
+    border: 2px solid color-alpha("neutral", "white", 0.2);
+    backdrop-filter: blur(10px);
+    transition: $transition-base;
+
+    &:hover {
+      background: color-alpha("neutral", "white", 0.15);
+      border-color: color-alpha("accent", "base", 0.5);
+      transform: translateY(-2px);
+    }
+  }
+
+  &__statIcon {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto spacing("sm");
+    @include flex-center;
+    background: color("accent", "base");
+    border-radius: border-radius("lg");
+    color: color("neutral", "black");
+  }
+
+  &__statNumber {
+    @include heading-4;
+    color: color("neutral", "white");
+    margin-bottom: spacing("xs");
+  }
+
+  &__statLabel {
+    @include font-secondary;
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color-alpha("neutral", "white", 0.8);
+    text-transform: uppercase;
+    letter-spacing: letter-spacing("wide");
+  }
+
+  &__indicators {
+    position: absolute;
+    bottom: spacing("xl");
+    left: 50%;
+    transform: translateX(-50%);
+    @include flex($justify: center, $align: center);
+    gap: spacing("sm");
+    z-index: 4;
+  }
+
+  &__indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: border-radius("full");
+    background: color-alpha("neutral", "white", 0.4);
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      background: color-alpha("neutral", "white", 0.6);
+    }
+
+    &--active {
+      background: color("accent", "base");
+      transform: scale(1.2);
+    }
+  }
+}
+
+// Responsive adjustments
+@include breakpoint-down("lg") {
+  .corporateCleaningHero {
+    &__container {
+      gap: spacing("2xl");
+    }
+
+    &__stats {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@include breakpoint-down("md") {
+  .corporateCleaningHero {
+    &__cta {
+      flex-direction: column;
+      width: 100%;
+      
+      button {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+
+    &__highlights {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@include breakpoint-down("sm") {
+  .corporateCleaningHero {
+    &__stat {
+      padding: spacing("md");
+    }
+
+    &__statIcon {
+      width: 32px;
+      height: 32px;
+    }
+  }
+}

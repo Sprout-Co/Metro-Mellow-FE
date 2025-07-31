@@ -1,0 +1,14 @@
+@import "abstracts/variables";
+@import "abstracts/mixins";
+@import "abstracts/functions";
+
+.cateringCTA {
+  @include section-spacing("2xl");
+  background: linear-gradient(135deg, color("secondary", "base"), color("secondary", "dark"));
+  color: color("neutral", "white");
+
+  &__container {
+    @include container;
+    text-align: center;
+  }
+}
