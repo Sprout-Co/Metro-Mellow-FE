@@ -517,10 +517,12 @@
 
     &--active {
       background-color: rgba(color("status", "success"), 0.1);
+      background-color: rgba(color("status", "success"), 0.1);
       color: color("status", "success");
     }
 
     &--paused {
+      background-color: rgba(color("status", "warning"), 0.1);
       background-color: rgba(color("status", "warning"), 0.1);
       color: color("status", "warning");
     }
