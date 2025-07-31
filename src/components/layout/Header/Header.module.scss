@@ -7,7 +7,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  z-index: z-index("fixed");
+  z-index: z-index("sticky");
   background-color: transparent;
   transition: $transition-base;
   padding: spacing("md") 0;
@@ -26,7 +26,7 @@
   &__logo {
     display: block;
     position: relative;
-    z-index: z-index("fixed") + 1;
+    z-index: z-index("sticky") + 1;
 
     img {
       height: auto;
@@ -168,7 +168,7 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    z-index: z-index("fixed") + 1;
+    z-index: z-index("sticky") + 1;
 
     @include breakpoint-up("lg") {
       display: none;
@@ -227,7 +227,7 @@
     transform: translateX(100%);
     transition: transform 0.3s ease;
     overflow-y: auto;
-    z-index: z-index("fixed");
+    z-index: z-index("sticky");
 
     &--open {
       transform: translateX(0);

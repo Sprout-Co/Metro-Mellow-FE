@@ -196,13 +196,13 @@
     }
 
     &--success {
-      background-color: color("status", "success");
-      color: color("neutral", "white");
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
     }
 
     &--warning {
-      background-color: color("status", "warning");
-      color: color("neutral", "white");
+      background-color: rgba(color("status", "warning"), 0.1);
+      color: color("status", "warning");
     }
 
     &--error {

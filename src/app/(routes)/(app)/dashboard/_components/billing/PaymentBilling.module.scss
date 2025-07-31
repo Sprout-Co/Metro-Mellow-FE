@@ -271,8 +271,8 @@
     align-items: center;
     justify-content: center;
     padding: spacing("xxs") spacing("xs");
-    background-color: color("status", "success");
-    color: color("neutral", "white");
+    background-color: rgba(color("status", "success"), 0.1);
+    color: color("status", "success");
     font-size: map-get($font-sizes, "xs");
     font-weight: map-get($font-weights, "medium");
     border-radius: border-radius("md");
@@ -404,13 +404,13 @@
     font-weight: map-get($font-weights, "medium");
 
     &--paid {
-      background-color: color("status", "success");
-      color: color("neutral", "white");
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
     }
 
     &--pending {
-      background-color: color("status", "warning");
-      color: color("neutral", "white");
+      background-color: rgba(color("status", "warning"), 0.1);
+      color: color("status", "warning");
     }
   }
 
@@ -517,10 +517,12 @@
 
     &--active {
       background-color: rgba(color("status", "success"), 0.1);
+      background-color: rgba(color("status", "success"), 0.1);
       color: color("status", "success");
     }
 
     &--paused {
+      background-color: rgba(color("status", "warning"), 0.1);
       background-color: rgba(color("status", "warning"), 0.1);
       color: color("status", "warning");
     }
