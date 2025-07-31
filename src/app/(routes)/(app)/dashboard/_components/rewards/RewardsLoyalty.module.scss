@@ -107,7 +107,7 @@
     display: inline-flex;
     align-items: center;
     padding: spacing("xs") spacing("md");
-    background-color: rgba(map-get($colors, "warning"), 0.1);
+    background-color: rgba(color("status", "warning"), 0.1);
     color: color("status", "warning");
     border-radius: border-radius("full");
     font-weight: map-get($font-weights, "semibold");
@@ -214,7 +214,7 @@
     display: flex;
     align-items: center;
     padding: spacing("xxs") spacing("xs");
-    background-color: rgba(map-get($colors, "warning"), 0.1);
+    background-color: rgba(color("status", "warning"), 0.1);
     color: color("status", "warning");
     border-radius: border-radius("full");
     font-size: map-get($font-sizes, "xs");
