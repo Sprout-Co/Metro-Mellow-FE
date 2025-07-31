@@ -116,286 +116,297 @@ export default function Navbar() {
 
   return (
     <header className={navbarClasses}>
-      <div className={styles.navbar__container}>
-        {/* Brand Logo */}
-        <Link href="/" className={styles.navbar__brand}>
-          <div className={styles.navbar__logo}>
-            <Image
-              src="/images/brand/logo.jpeg"
-              alt="Metromellow"
-              width={140}
-              height={40}
-              className={styles.navbar__logo}
-            />
-          </div>
-        </Link>
-
-        {/* Main Navigation - Desktop */}
-        <nav className={styles.navbar__nav} ref={dropdownRef}>
-          <ul className={styles.navbar__list}>
-            {navItems.map((item) => (
-              <li
-                key={item.label}
-                className={`${styles.navbar__item} ${isActive(item.href) ? styles["navbar__item--active"] : ""}`}
-              >
-                {item.hasDropdown ? (
-                  <>
-                    <button
-                      className={`${styles.navbar__link} ${styles["navbar__link--hasDropdown"]} ${activeDropdown === item.label ? styles["navbar__link--dropdownActive"] : ""}`}
-                      onClick={() => toggleDropdown(item.label)}
-                      aria-expanded={activeDropdown === item.label}
-                    >
-                      <span>{item.label}</span>
-                      <svg
-                        className={styles.navbar__dropdownIcon}
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                      </svg>
-                    </button>
-
-                    <AnimatePresence>
-                      {activeDropdown === item.label && (
-                        <motion.div
-                          className={styles.navbar__dropdown}
-                          initial={{ opacity: 0, y: 15 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 15 }}
-                          transition={{ duration: 0.2, ease: "easeOut" }}
-                        >
-                          <div className={styles.navbar__dropdownList}>
-                            {item.dropdownItems?.map((dropdownItem) => (
-                              <Link
-                                key={dropdownItem.href}
-                                href={dropdownItem.href}
-                                className={styles.navbar__dropdownItem}
-                              >
-                                <div className={styles.navbar__dropdownImage}>
-                                  <Image
-                                    src={dropdownItem.image}
-                                    alt={dropdownItem.title}
-                                    width={40}
-                                    height={40}
-                                    className={styles.navbar__dropdownImg}
-                                  />
-                                </div>
-                                <div className={styles.navbar__dropdownContent}>
-                                  <div className={styles.navbar__dropdownTitle}>
-                                    {dropdownItem.title}
-                                  </div>
-                                  <div className={styles.navbar__dropdownDesc}>
-                                    {dropdownItem.description}
-                                  </div>
-                                </div>
-                              </Link>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </>
-                ) : (
-                  <Link href={item.href} className={styles.navbar__link}>
-                    {item.label}
-                  </Link>
-                )}
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        {/* Action Button */}
-        <div className={styles.navbar__actions}>
-          <Link href="/login" className={styles.navbar__loginBtn}>
-            Login
+      <div className={styles.navbar__wrapper}>
+        <div className={styles.navbar__container}>
+          {/* Brand Logo */}
+          <Link href="/" className={styles.navbar__brand}>
+            <div className={styles.navbar__logo}>
+              <Image
+                src="/images/brand/logo.jpeg"
+                alt="Metromellow"
+                width={140}
+                height={40}
+                className={styles.navbar__logo}
+              />
+            </div>
           </Link>
-        </div>
 
-        {/* Mobile Menu Toggle */}
-        <button
-          className={styles.navbar__mobileToggle}
-          onClick={toggleMobileMenu}
-          aria-label="Toggle menu"
-          aria-expanded={isMobileMenuOpen}
-        >
-          <span className={styles.navbar__bar}></span>
-          <span className={styles.navbar__bar}></span>
-          <span className={styles.navbar__bar}></span>
-        </button>
-
-        {/* Mobile Navigation */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              className={styles.navbar__mobileMenu}
-              initial={{ opacity: 0, x: "100%" }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: "100%" }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-            >
-              <div className={styles.navbar__mobileHeader}>
-                <div className={styles.navbar__mobileLogo}>
-                  <Image
-                    src="/images/brand/logo.jpeg"
-                    alt="Metro Mellow"
-                    width={100}
-                    height={30}
-                    className={styles.navbar__logo}
-                  />
-                </div>
-                <button
-                  className={styles.navbar__mobileClose}
-                  onClick={toggleMobileMenu}
-                  aria-label="Close menu"
+          {/* Main Navigation - Desktop */}
+          <nav className={styles.navbar__nav} ref={dropdownRef}>
+            <ul className={styles.navbar__list}>
+              {navItems.map((item) => (
+                <li
+                  key={item.label}
+                  className={`${styles.navbar__item} ${isActive(item.href) ? styles["navbar__item--active"] : ""}`}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                  </svg>
-                </button>
-              </div>
+                  {item.hasDropdown ? (
+                    <>
+                      <button
+                        className={`${styles.navbar__link} ${styles["navbar__link--hasDropdown"]} ${activeDropdown === item.label ? styles["navbar__link--dropdownActive"] : ""}`}
+                        onClick={() => toggleDropdown(item.label)}
+                        aria-expanded={activeDropdown === item.label}
+                      >
+                        <span>{item.label}</span>
+                        <svg
+                          className={styles.navbar__dropdownIcon}
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                      </button>
 
-              <nav className={styles.navbar__mobileNav}>
-                <ul className={styles.navbar__mobileList}>
-                  {navItems.map((item) => (
-                    <li
-                      key={item.label}
-                      className={`${styles.navbar__mobileItem} ${isActive(item.href) ? styles["navbar__mobileItem--active"] : ""}`}
-                    >
-                      {item.hasDropdown ? (
-                        <>
-                          <button
-                            className={`${styles.navbar__mobileLink} ${activeDropdown === item.label ? styles["navbar__mobileLink--open"] : ""}`}
-                            onClick={() => toggleDropdown(item.label)}
-                            aria-expanded={activeDropdown === item.label}
+                      <AnimatePresence>
+                        {activeDropdown === item.label && (
+                          <motion.div
+                            className={styles.navbar__dropdown}
+                            initial={{ opacity: 0, y: 15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 15 }}
+                            transition={{ duration: 0.2, ease: "easeOut" }}
                           >
-                            {item.label}
-                            <svg
-                              className={styles.navbar__mobileDropdownIcon}
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="20"
-                              height="20"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                          </button>
-
-                          <AnimatePresence>
-                            {activeDropdown === item.label && (
-                              <motion.div
-                                className={styles.navbar__mobileSubmenu}
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{
-                                  duration: 0.3,
-                                  ease: "easeInOut",
-                                }}
-                              >
-                                <ul
-                                  className={styles.navbar__mobileSubmenuList}
+                            <div className={styles.navbar__dropdownList}>
+                              {item.dropdownItems?.map((dropdownItem) => (
+                                <Link
+                                  key={dropdownItem.href}
+                                  href={dropdownItem.href}
+                                  className={styles.navbar__dropdownItem}
                                 >
-                                  {item.dropdownItems?.map((dropdownItem) => (
-                                    <li
-                                      key={dropdownItem.href}
-                                      className={
-                                        styles.navbar__mobileSubmenuItem
-                                      }
+                                  <div className={styles.navbar__dropdownImage}>
+                                    <Image
+                                      src={dropdownItem.image}
+                                      alt={dropdownItem.title}
+                                      width={40}
+                                      height={40}
+                                      className={styles.navbar__dropdownImg}
+                                    />
+                                  </div>
+                                  <div
+                                    className={styles.navbar__dropdownContent}
+                                  >
+                                    <div
+                                      className={styles.navbar__dropdownTitle}
                                     >
-                                      <Link
-                                        href={dropdownItem.href}
+                                      {dropdownItem.title}
+                                    </div>
+                                    <div
+                                      className={styles.navbar__dropdownDesc}
+                                    >
+                                      {dropdownItem.description}
+                                    </div>
+                                  </div>
+                                </Link>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </>
+                  ) : (
+                    <Link href={item.href} className={styles.navbar__link}>
+                      {item.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Action Button */}
+          <div className={styles.navbar__actions}>
+            <Link href="/get-started" className={styles.navbar__loginBtn}>
+              Login
+            </Link>
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <button
+            className={styles.navbar__mobileToggle}
+            onClick={toggleMobileMenu}
+            aria-label="Toggle menu"
+            aria-expanded={isMobileMenuOpen}
+          >
+            <span className={styles.navbar__bar}></span>
+            <span className={styles.navbar__bar}></span>
+            <span className={styles.navbar__bar}></span>
+          </button>
+
+          {/* Mobile Navigation */}
+          <AnimatePresence>
+            {isMobileMenuOpen && (
+              <motion.div
+                className={styles.navbar__mobileMenu}
+                initial={{ opacity: 0, x: "100%" }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: "100%" }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              >
+                <div className={styles.navbar__mobileHeader}>
+                  <div className={styles.navbar__mobileLogo}>
+                    <Image
+                      src="/images/brand/logo.jpeg"
+                      alt="Metro Mellow"
+                      width={100}
+                      height={30}
+                      className={styles.navbar__logo}
+                    />
+                  </div>
+                  <button
+                    className={styles.navbar__mobileClose}
+                    onClick={toggleMobileMenu}
+                    aria-label="Close menu"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+
+                <nav className={styles.navbar__mobileNav}>
+                  <ul className={styles.navbar__mobileList}>
+                    {navItems.map((item) => (
+                      <li
+                        key={item.label}
+                        className={`${styles.navbar__mobileItem} ${isActive(item.href) ? styles["navbar__mobileItem--active"] : ""}`}
+                      >
+                        {item.hasDropdown ? (
+                          <>
+                            <button
+                              className={`${styles.navbar__mobileLink} ${activeDropdown === item.label ? styles["navbar__mobileLink--open"] : ""}`}
+                              onClick={() => toggleDropdown(item.label)}
+                              aria-expanded={activeDropdown === item.label}
+                            >
+                              {item.label}
+                              <svg
+                                className={styles.navbar__mobileDropdownIcon}
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                              </svg>
+                            </button>
+
+                            <AnimatePresence>
+                              {activeDropdown === item.label && (
+                                <motion.div
+                                  className={styles.navbar__mobileSubmenu}
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: "auto", opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{
+                                    duration: 0.3,
+                                    ease: "easeInOut",
+                                  }}
+                                >
+                                  <ul
+                                    className={styles.navbar__mobileSubmenuList}
+                                  >
+                                    {item.dropdownItems?.map((dropdownItem) => (
+                                      <li
+                                        key={dropdownItem.href}
                                         className={
-                                          styles.navbar__mobileSubmenuLink
+                                          styles.navbar__mobileSubmenuItem
                                         }
                                       >
-                                        <div
+                                        <Link
+                                          href={dropdownItem.href}
                                           className={
-                                            styles.navbar__mobileSubmenuImage
-                                          }
-                                        >
-                                          <Image
-                                            src={dropdownItem.image}
-                                            alt={dropdownItem.title}
-                                            width={35}
-                                            height={35}
-                                            className={
-                                              styles.navbar__mobileSubmenuImg
-                                            }
-                                          />
-                                        </div>
-                                        <div
-                                          className={
-                                            styles.navbar__mobileSubmenuContent
+                                            styles.navbar__mobileSubmenuLink
                                           }
                                         >
                                           <div
                                             className={
-                                              styles.navbar__mobileSubmenuTitle
+                                              styles.navbar__mobileSubmenuImage
                                             }
                                           >
-                                            {dropdownItem.title}
+                                            <Image
+                                              src={dropdownItem.image}
+                                              alt={dropdownItem.title}
+                                              width={35}
+                                              height={35}
+                                              className={
+                                                styles.navbar__mobileSubmenuImg
+                                              }
+                                            />
                                           </div>
                                           <div
                                             className={
-                                              styles.navbar__mobileSubmenuDesc
+                                              styles.navbar__mobileSubmenuContent
                                             }
                                           >
-                                            {dropdownItem.description}
+                                            <div
+                                              className={
+                                                styles.navbar__mobileSubmenuTitle
+                                              }
+                                            >
+                                              {dropdownItem.title}
+                                            </div>
+                                            <div
+                                              className={
+                                                styles.navbar__mobileSubmenuDesc
+                                              }
+                                            >
+                                              {dropdownItem.description}
+                                            </div>
                                           </div>
-                                        </div>
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </>
-                      ) : (
-                        <Link
-                          href={item.href}
-                          className={styles.navbar__mobileLink}
-                        >
-                          {item.label}
-                        </Link>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </nav>
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </>
+                        ) : (
+                          <Link
+                            href={item.href}
+                            className={styles.navbar__mobileLink}
+                          >
+                            {item.label}
+                          </Link>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
 
-              <div className={styles.navbar__mobileFooter}>
-                <Link href="/login" className={styles.navbar__mobileButton}>
-                  Login
-                </Link>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                <div className={styles.navbar__mobileFooter}>
+                  <Link
+                    href="/get-started"
+                    className={styles.navbar__mobileButton}
+                  >
+                    Login
+                  </Link>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </header>
   );

@@ -99,7 +99,6 @@ const StorySection: React.FC = () => {
             </motion.div>
           </div>
         </div>
-        <VideoSection />
       </section>
     </>
   );
