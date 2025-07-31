@@ -4,6 +4,7 @@ import SafetyPromise from "./_components/SafetyPromise/SafetyPromise";
 import ServiceCoverage from "./_components/ServiceCoverage/ServiceCoverage";
 import OrderStepsSection from "./_components/OrderStepsSection/OrderStepsSection";
 import FAQSection, { FAQItem } from '@/components/ui/FAQSection/FAQSection';
+import PestControlServicesShowcase from "./PestControlServicesShowcase/PestControlServicesShowcase";
 
 const pestFaqs: FAQItem[] = [
   { id: "p1", question: "Are your pest control treatments safe for kids and pets?", answer: "Yes! We use eco-friendly, pet-safe, and family-safe products for all treatments." },
@@ -25,6 +26,7 @@ export default function PestControlPage() {
   return (
     <main>
       <Hero />
+      <PestControlServicesShowcase />
       <SafetyPromise />
       <ServiceCoverage />
       <OrderStepsSection />

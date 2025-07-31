@@ -31,7 +31,7 @@ html {
 }
 
 body {
-  font-family: $font-family-base;
+  @include font-secondary; // Use Montserrat as the default body font
   @include body-2;
   background-color: color("neutral", "white");
   color: color("neutral", "darkest");
@@ -67,6 +67,24 @@ body {
   &--6 {
     @include heading-6;
   }
+}
+
+// Font Family Utility Classes
+.font-heading {
+  font-family: $font-family-heading; // Baloo 2 for headings
+}
+
+.font-body {
+  @include font-secondary; // Montserrat for body text
+}
+
+// Legacy classes for backward compatibility
+.font-primary {
+  font-family: $font-family-primary;
+}
+
+.font-secondary {
+  @include font-secondary;
 }
 
 .title {

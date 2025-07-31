@@ -177,6 +177,7 @@
   &__text {
     @include font-size("h6");
     @include font-weight("medium");
+    @include body-1;
     font-family: $font-family-base;
     color: color("neutral", "darkest");
     transform: skewX(25deg);

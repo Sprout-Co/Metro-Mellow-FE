@@ -92,7 +92,7 @@ const Hero: FC = () => {
   };
 
   return (
-    <section className={styles.hero}>
+    <section className={styles.hero} role="banner">
       {/* Sliding background images */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -204,6 +204,7 @@ const Hero: FC = () => {
             variants={indicatorVariants}
             onClick={() => handleIndicatorClick(index)}
             style={{ cursor: "pointer" }}
+            data-testid="hero-indicator"
           />
         ))}
       </div>

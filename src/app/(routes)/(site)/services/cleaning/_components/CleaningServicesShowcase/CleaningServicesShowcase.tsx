@@ -1,11 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import styles from "./CleaningServicesShowcase.module.scss";
 import { Button } from "@/components/ui/Button/Button";
-import { Routes } from "@/constants/routes";
+import ServiceModal, { ServiceConfiguration } from "@/components/ui/ServiceModal/ServiceModal";
 
 // Service data
 const cleaningServices = [
@@ -21,6 +21,8 @@ const cleaningServices = [
       "Bathroom Cleaning",
       "Kitchen Cleaning",
     ],
+    price: 2950,
+    image: "/images/cleaning/c1.jpeg"
   },
   {
     id: "deep",
@@ -34,6 +36,8 @@ const cleaningServices = [
       "Baseboards",
       "Light Fixtures",
     ],
+    price: 4950,
+    image: "/images/cleaning/c2.jpeg"
   },
   {
     id: "movein",
@@ -47,6 +51,8 @@ const cleaningServices = [
       "Window Cleaning",
       "Wall Washing",
     ],
+    price: 6950,
+    image: "/images/cleaning/c3.jpeg"
   },
 ];
 
@@ -55,6 +61,44 @@ const CleaningServicesShowcase = () => {
     triggerOnce: true,
     threshold: 0.1,
   });
+
+  // State for modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<typeof cleaningServices[0] | null>(null);
+
+  // Configuration for cleaning service modal
+  const getCleaningServiceConfiguration = (): ServiceConfiguration => ({
+    categories: [
+      {
+        id: "apartmentType",
+        name: "Your Apartment type",
+        options: ["Flat/Apartment", "Duplex/House"],
+        required: true
+      }
+    ],
+    options: [
+      { id: "bedroom", name: "Bedroom", count: 1 },
+      { id: "livingRoom", name: "Living Room", count: 1 },
+      { id: "kitchen", name: "Kitchen", count: 1 },
+      { id: "balcony", name: "Balcony", count: 1 },
+      { id: "lobby", name: "Lobby", count: 1 },
+      { id: "outdoor", name: "Outdoor", count: 1 },
+      { id: "studyRoom", name: "Study Room", count: 1 },
+      { id: "bathroom", name: "Bathroom", count: 1 },
+      { id: "other", name: "Other", count: 1 },
+    ],
+    allowCustomization: true
+  });
+
+  // Features included in cleaning services
+  const getCleaningIncludedFeatures = () => [
+    "Professional cleaning supplies included",
+    "Experienced and vetted cleaning professionals",
+    "Satisfaction guarantee",
+    "Flexible scheduling options",
+    "Eco-friendly cleaning products available",
+    "Deep sanitization and disinfection"
+  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -77,6 +121,17 @@ const CleaningServicesShowcase = () => {
         ease: "easeOut",
       },
     },
+  };
+
+  // Handle opening the modal with selected service
+  const handleOpenModal = (service: typeof cleaningServices[0]) => {
+    setSelectedService(service);
+    setIsModalOpen(true);
+  };
+
+  // Handle closing the modal
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -140,7 +195,11 @@ const CleaningServicesShowcase = () => {
                 </ul>
 
                 <div className={styles.showcase__action}>
-                  <Button href={Routes.GET_STARTED} variant="primary" size="sm">
+                  <Button 
+                    variant="primary" 
+                    size="sm"
+                    onClick={() => handleOpenModal(service)}
+                  >
                     Book Now
                   </Button>
                 </div>
@@ -149,6 +208,24 @@ const CleaningServicesShowcase = () => {
           ))}
         </motion.div>
       </div>
+
+      {/* Cleaning Service Modal */}
+      {selectedService && (
+        <ServiceModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          serviceTitle={selectedService.name}
+          serviceDescription={selectedService.description}
+          servicePrice={selectedService.price}
+          serviceImage={selectedService.image}
+          serviceConfiguration={getCleaningServiceConfiguration()}
+          serviceType="Cleaning"
+          includedFeatures={getCleaningIncludedFeatures()}
+          onOrderSubmit={(configuration) => {
+            console.log("Cleaning service configuration:", configuration);
+          }}
+        />
+      )}
     </section>
   );
 };

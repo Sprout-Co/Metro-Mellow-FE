@@ -98,8 +98,9 @@ export type AdminInvitationResponse = {
 export type AuthPayload = {
   __typename?: 'AuthPayload';
   message?: Maybe<Scalars['String']['output']>;
+  success?: Maybe<Scalars['Boolean']['output']>;
   token?: Maybe<Scalars['String']['output']>;
-  user: User;
+  user?: Maybe<User>;
 };
 
 export type Billing = {
@@ -118,10 +119,8 @@ export type Billing = {
 };
 
 export enum BillingCycle {
-  BiWeekly = 'BI_WEEKLY',
   Monthly = 'MONTHLY',
-  Quarterly = 'QUARTERLY',
-  Weekly = 'WEEKLY'
+  Quarterly = 'QUARTERLY'
 }
 
 export enum BillingStatus {
@@ -216,6 +215,7 @@ export type CreateAdminInvitationInput = {
 
 export type CreateBookingInput = {
   address: Scalars['ID']['input'];
+  customerId?: InputMaybe<Scalars['ID']['input']>;
   date: Scalars['DateTime']['input'];
   notes?: InputMaybe<Scalars['String']['input']>;
   serviceDetails: ServiceDetailsInput;
@@ -275,6 +275,7 @@ export type CreateSubscriptionInput = {
   address: Scalars['String']['input'];
   autoRenew: Scalars['Boolean']['input'];
   billingCycle: BillingCycle;
+  customerId?: InputMaybe<Scalars['ID']['input']>;
   duration: Scalars['Int']['input'];
   services: Array<SubscriptionServiceInput>;
   startDate: Scalars['DateTime']['input'];
@@ -1529,21 +1530,21 @@ export type CreateCustomerMutationVariables = Exact<{
 }>;
 
 
-export type CreateCustomerMutation = { __typename?: 'Mutation', createCustomer: { __typename?: 'AuthPayload', token?: string | null, message?: string | null, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any } } };
+export type CreateCustomerMutation = { __typename?: 'Mutation', createCustomer: { __typename?: 'AuthPayload', token?: string | null, message?: string | null, success?: boolean | null, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any } | null } };
 
 export type CreateStaffMutationVariables = Exact<{
   input: CreateUserInput;
 }>;
 
 
-export type CreateStaffMutation = { __typename?: 'Mutation', createStaff: { __typename?: 'AuthPayload', token?: string | null, message?: string | null, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null> | null, defaultAddress?: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null } } };
+export type CreateStaffMutation = { __typename?: 'Mutation', createStaff: { __typename?: 'AuthPayload', token?: string | null, message?: string | null, success?: boolean | null, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null> | null, defaultAddress?: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null } | null } };
 
 export type RegisterMutationVariables = Exact<{
   input: CreateUserInput;
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'AuthPayload', message?: string | null, token?: string | null, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, emailVerified?: boolean | null, accountStatus?: AccountStatus | null } } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'AuthPayload', message?: string | null, token?: string | null, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, emailVerified?: boolean | null, accountStatus?: AccountStatus | null } | null } };
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -1551,7 +1552,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'AuthPayload', token?: string | null, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null } } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'AuthPayload', token?: string | null, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null } | null } };
 
 export type UpdateProfileMutationVariables = Exact<{
   input: UpdateUserInput;
@@ -1635,6 +1636,13 @@ export type UpdateAddressMutationVariables = Exact<{
 
 
 export type UpdateAddressMutation = { __typename?: 'Mutation', updateAddress: boolean };
+
+export type RemoveAddressMutationVariables = Exact<{
+  addressId: Scalars['ID']['input'];
+}>;
+
+
+export type RemoveAddressMutation = { __typename?: 'Mutation', removeAddress: boolean };
 
 export type UpdateBookingPaymentStatusMutationVariables = Exact<{
   updateBookingPaymentStatusId: Scalars['ID']['input'];
@@ -1973,21 +1981,21 @@ export type AdminInvitationQuery = { __typename?: 'Query', adminInvitation?: { _
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label: string } | null } | null };
+export type GetCurrentUserQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label: string } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null> | null } | null };
 
 export type GetUserByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label: string } | null } | null };
+export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label: string } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null> | null } | null };
 
 export type GetUsersQueryVariables = Exact<{
   role?: InputMaybe<UserRole>;
 }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label: string } | null }> };
+export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label: string } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label: string } | null> | null }> };
 
 export type GetBookingsQueryVariables = Exact<{
   status?: InputMaybe<BookingStatus>;
@@ -2357,6 +2365,7 @@ export const CreateCustomerDocument = gql`
       updatedAt
     }
     message
+    success
   }
 }
     `;
@@ -2424,6 +2433,7 @@ export const CreateStaffDocument = gql`
       updatedAt
     }
     message
+    success
   }
 }
     `;
@@ -2899,6 +2909,37 @@ export function useUpdateAddressMutation(baseOptions?: ApolloReactHooks.Mutation
 export type UpdateAddressMutationHookResult = ReturnType<typeof useUpdateAddressMutation>;
 export type UpdateAddressMutationResult = Apollo.MutationResult<UpdateAddressMutation>;
 export type UpdateAddressMutationOptions = Apollo.BaseMutationOptions<UpdateAddressMutation, UpdateAddressMutationVariables>;
+export const RemoveAddressDocument = gql`
+    mutation RemoveAddress($addressId: ID!) {
+  removeAddress(addressId: $addressId)
+}
+    `;
+export type RemoveAddressMutationFn = Apollo.MutationFunction<RemoveAddressMutation, RemoveAddressMutationVariables>;
+
+/**
+ * __useRemoveAddressMutation__
+ *
+ * To run a mutation, you first call `useRemoveAddressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveAddressMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeAddressMutation, { data, loading, error }] = useRemoveAddressMutation({
+ *   variables: {
+ *      addressId: // value for 'addressId'
+ *   },
+ * });
+ */
+export function useRemoveAddressMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RemoveAddressMutation, RemoveAddressMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<RemoveAddressMutation, RemoveAddressMutationVariables>(RemoveAddressDocument, options);
+      }
+export type RemoveAddressMutationHookResult = ReturnType<typeof useRemoveAddressMutation>;
+export type RemoveAddressMutationResult = Apollo.MutationResult<RemoveAddressMutation>;
+export type RemoveAddressMutationOptions = Apollo.BaseMutationOptions<RemoveAddressMutation, RemoveAddressMutationVariables>;
 export const UpdateBookingPaymentStatusDocument = gql`
     mutation UpdateBookingPaymentStatus($updateBookingPaymentStatusId: ID!, $paymentStatus: PaymentStatus!) {
   updateBookingPaymentStatus(
@@ -4682,6 +4723,16 @@ export const GetCurrentUserDocument = gql`
       isDefault
       label
     }
+    addresses {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+    }
     emailVerified
     emailVerifiedAt
     accountStatus
@@ -4738,6 +4789,16 @@ export const GetUserByIdDocument = gql`
       zipCode
       country
       id
+      isDefault
+      label
+    }
+    addresses {
+      id
+      street
+      city
+      state
+      zipCode
+      country
       isDefault
       label
     }
@@ -4798,6 +4859,16 @@ export const GetUsersDocument = gql`
       zipCode
       country
       id
+      isDefault
+      label
+    }
+    addresses {
+      id
+      street
+      city
+      state
+      zipCode
+      country
       isDefault
       label
     }

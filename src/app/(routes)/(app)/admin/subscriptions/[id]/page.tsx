@@ -8,6 +8,7 @@ import Card from "../../_components/UI/Card/Card";
 import Button from "../../_components/UI/Button/Button";
 import StatusBadge from "../../_components/UI/StatusBadge/StatusBadge";
 import ConfirmationModal from "../../_components/UI/ConfirmationModal/ConfirmationModal";
+import AddServiceModal from "./_components/AddServiceModal/AddServiceModal";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
 import { SubscriptionStatus, Subscription } from "@/graphql/api";
@@ -47,6 +48,7 @@ export default function SubscriptionDetailsPage() {
 
   // Modal states
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showAddServiceModal, setShowAddServiceModal] = useState(false);
   const [confirmAction, setConfirmAction] = useState<{
     type: string;
     title: string;
@@ -256,6 +258,11 @@ export default function SubscriptionDetailsPage() {
     } finally {
       setIsActionLoading(false);
     }
+  };
+
+  const handleServiceAdded = async () => {
+    // Refresh the subscription data to show the newly added service
+    await fetchSubscription();
   };
 
   const formatDate = (dateString: string) => {
@@ -853,19 +860,15 @@ export default function SubscriptionDetailsPage() {
                   <h2 className={styles.subscription_details__card_title}>
                     Services
                   </h2>
-                  {subscription.status === SubscriptionStatus.Active && (
+                  {/* {subscription.status === SubscriptionStatus.Active && (
                     <Button
                       variant="primary"
                       size="small"
-                      onClick={() =>
-                        console.log(
-                          "Add service functionality to be implemented"
-                        )
-                      }
+                      onClick={() => setShowAddServiceModal(true)}
                     >
                       Add Service
                     </Button>
-                  )}
+                  )} */}
                 </div>
 
                 {subscription.subscriptionServices &&
@@ -936,7 +939,7 @@ export default function SubscriptionDetailsPage() {
                                 styles.subscription_details__service_price
                               }
                             >
-                              ${serviceItem.price?.toFixed(2) || "0.00"}/month
+                              {formatToNaira(serviceItem.price || 0)}/month
                             </div>
                           </div>
 
@@ -1192,11 +1195,7 @@ export default function SubscriptionDetailsPage() {
                       <Button
                         variant="primary"
                         size="small"
-                        onClick={() =>
-                          console.log(
-                            "Add service functionality to be implemented"
-                          )
-                        }
+                        onClick={() => setShowAddServiceModal(true)}
                       >
                         Add a Service
                       </Button>
@@ -1307,7 +1306,7 @@ export default function SubscriptionDetailsPage() {
                       <div className={styles.subscription_details__billing_row}>
                         <span>Monthly Total:</span>
                         <span className={styles.subscription_details__amount}>
-                          ${subscription.totalPrice?.toFixed(2)}
+                          {formatToNaira(subscription.totalPrice || 0)}
                         </span>
                       </div>
                       {subscription.duration && (
@@ -1356,7 +1355,9 @@ export default function SubscriptionDetailsPage() {
                                 ).toISOString()
                               )}
                             </td>
-                            <td>${subscription.totalPrice?.toFixed(2)}</td>
+                            <td>
+                              {formatToNaira(subscription.totalPrice || 0)}
+                            </td>
                             <td>
                               <StatusBadge status="active" label="Paid" />
                             </td>
@@ -1382,7 +1383,9 @@ export default function SubscriptionDetailsPage() {
                                 ).toISOString()
                               )}
                             </td>
-                            <td>${subscription.totalPrice?.toFixed(2)}</td>
+                            <td>
+                              {formatToNaira(subscription.totalPrice || 0)}
+                            </td>
                             <td>
                               <StatusBadge status="active" label="Paid" />
                             </td>
@@ -1516,6 +1519,15 @@ export default function SubscriptionDetailsPage() {
           }
           isLoading={isActionLoading}
         />
+
+        {/* Add Service Modal */}
+        {/* <AddServiceModal
+          isOpen={showAddServiceModal}
+          onClose={() => setShowAddServiceModal(false)}
+          subscriptionId={id}
+          onServiceAdded={handleServiceAdded}
+          subscriptionServices={subscription.subscriptionServices}
+        /> */}
       </div>
     </AdminDashboardLayout>
   );

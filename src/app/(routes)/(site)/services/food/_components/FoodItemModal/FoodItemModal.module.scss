@@ -3,14 +3,20 @@
 @import "@/styles/abstracts/_mixins.scss";
 
 .foodItemModal {
-  // Custom styles for the food item modal container
+  overflow: visible;
+  background-color: color("neutral", "white");
+
+  @include breakpoint-down("md") {
+    max-height: 100vh;
+    overflow-y: auto;
+  }
 }
 
 .modal {
   &__content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: spacing("lg");
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 0;
     
     @include breakpoint-down("md") {
       grid-template-columns: 1fr;
@@ -19,13 +25,18 @@
   
   &__imageContainer {
     height: 100%;
-    max-height: 400px;
     overflow: hidden;
-    border-radius: border-radius("lg");
     position: relative;
+    border-radius: 0;
     
     @include breakpoint-down("md") {
-      max-height: 250px;
+      max-height: 280px;
+      height: 280px;
+    }
+
+    @include breakpoint-down("sm") {
+      max-height: 220px;
+      height: 220px;
     }
   }
   
@@ -37,77 +48,165 @@
   
   &__details {
     @include flex-column;
-    gap: spacing("md");
+    gap: spacing("sm");
+    padding: 0;
+    background-color: color("neutral", "white");
+
+    @include breakpoint-down("md") {
+      padding-bottom: spacing("lg");
+    }
+  }
+  
+  &__labelSection {
+    width: 100%;
+    margin-bottom: spacing("md");
+
+    @include breakpoint-down("sm") {
+      margin-bottom: spacing("sm");
+    }
   }
   
   &__labelContainer {
     @include flex;
+    justify-content: flex-end;
     gap: spacing("sm");
     margin-bottom: spacing("xs");
+    width: 100%;
   }
   
   &__topRated {
-    background-color: color-alpha("accent", "base", 0.2);
+    background-color: color-alpha("accent", "lighter", 0.6);
     color: color("neutral", "black");
-    font-size: font-size("xs");
-    padding: spacing("xxs") spacing("sm");
-    border-radius: border-radius("md");
+    font-size: font-size("small");
+    padding: spacing("sm") spacing("lg");
     @include font-weight("medium");
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    @include breakpoint-down("sm") {
+      padding: spacing("xs") spacing("md");
+      font-size: font-size("xs");
+    }
   }
   
   &__spicy {
-    background-color: color-alpha("secondary", "base", 0.15);
-    color: color("secondary", "dark");
+    background-color: color("accent", "base");
+    color: color("neutral", "darkest");
     font-size: font-size("xs");
-    padding: spacing("xxs") spacing("sm");
-    border-radius: border-radius("md");
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("sm");
     @include font-weight("medium");
+    display: inline-block;
+    position: absolute;
+    right: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      right: spacing("md");
+      font-size: font-size("xs");
+    }
+  }
+  
+  &__spicyOnly {
+    background-color: color("accent", "base");
+    color: color("neutral", "darkest");
+    font-size: font-size("xs");
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("sm");
+    @include font-weight("medium");
+    display: inline-block;
+    align-self: flex-end;
   }
   
   &__title {
-    @include font-size("subtitle-1");
-    @include font-weight("bold");
+    @include font-size("h5");
+    @include font-weight("black");
     color: color("neutral", "black");
     margin: 0;
+    padding: 0 spacing("lg");
     
     @include breakpoint-down("md") {
       @include font-size("body-1");
+      padding: 0 spacing("md");
+      margin-top: spacing("sm");
     }
   }
   
   &__description {
     color: color("neutral", "dark");
     @include font-size("small");
-    margin-bottom: spacing("sm");
+    margin: spacing("sm") 0;
     line-height: line-height("normal");
+    padding: 0 spacing("lg");
+
+    @include breakpoint-down("md") {
+      padding: 0 spacing("md");
+    }
+  }
+  
+  &__priceContainer {
+    margin-bottom: spacing("sm");
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 spacing("lg");
+
+    @include breakpoint-down("md") {
+      padding: 0 spacing("md");
+    }
   }
   
   &__price {
-    @include font-size("body-1");
-    @include font-weight("bold");
-    color: color("primary", "base");
-    margin: spacing("sm") 0;
+    @include font-size("h5");
+    @include font-weight("black");
+    color: color("neutral", "black");
+    text-align: right;
+
+    @include breakpoint-down("md") {
+      @include font-size("body-1");
+    }
   }
   
   &__options {
-    margin: spacing("sm") 0;
+    margin: spacing("xs") 0;
+    width: 100%;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: color("neutral", "lightest");
+    padding: spacing("sm");
+    border-radius: border-radius("lg");
+    margin-left: spacing("lg");
+    margin-right: spacing("lg");
+    
+    @include breakpoint-down("md") {
+      margin-left: spacing("md");
+      margin-right: spacing("md");
+      max-width: calc(100% - #{spacing("md") * 2});
+    }
     
     &Title {
       @include font-size("small");
       @include font-weight("medium");
       color: color("neutral", "darkest");
       margin-bottom: spacing("xs");
+
+      @include breakpoint-down("sm") {
+        @include font-size("xs");
+      }
     }
   }
   
   &__spiceOptions {
     @include flex;
-    gap: spacing("md");
+    gap: spacing("sm");
     margin-bottom: spacing("md");
+    width: 100%;
+    justify-content: flex-start;
     
     @include breakpoint-down("sm") {
       flex-direction: column;
-      align-items: flex-start;
     }
   }
   
@@ -115,21 +214,34 @@
     @include flex;
     align-items: center;
     gap: spacing("sm");
-    padding: spacing("xs") spacing("md");
-    background-color: color("neutral", "lightest");
-    border: border-width("thin") solid color("neutral", "lighter");
+    padding: spacing("xs");
+    background-color: color("neutral", "darkest");
+    border: 1px solid color("neutral", "darkest");
     border-radius: border-radius("lg");
     cursor: pointer;
     transition: all 0.2s ease;
     font-size: font-size("small");
+    min-width: 200px;
+    max-width: 300px;
+    width: auto;
+    height: 48px;
+    color: color("neutral", "white");
+    
+    @include breakpoint-down("sm") {
+      width: 100%;
+      max-width: 100%;
+      min-width: unset;
+      height: 44px;
+    }
     
     &:hover {
-      background-color: color-alpha("primary", "lighter", 0.5);
+      background-color: color("neutral", "darker");
     }
     
     &_selected {
-      background-color: color-alpha("primary", "lighter", 0.8);
-      border-color: color("primary", "base");
+      background-color: color("neutral", "darkest");
+      border-color: color("neutral", "darkest");
+      color: color("neutral", "white");
     }
   }
   
@@ -137,8 +249,10 @@
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    border: border-width("medium") solid color("neutral", "medium");
+    border: 2px solid color("neutral", "white");
+    display: inline-block;
     position: relative;
+    background-color: color("neutral", "white");
     
     &::after {
       content: "";
@@ -155,7 +269,8 @@
     }
     
     .modal__spiceOption_selected & {
-      border-color: color("primary", "base");
+      border-color: color("neutral", "white");
+      background-color: color("neutral", "white");
       
       &::after {
         opacity: 1;
@@ -163,50 +278,99 @@
     }
   }
   
-  &__quantityContainer {
+  &__actionControls {
     @include flex;
+    justify-content: space-between;
     align-items: center;
     gap: spacing("md");
-    margin: spacing("md") 0;
+    margin: spacing("sm") 0;
+    background-color: color("neutral", "white");
+    padding: spacing("sm");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+    margin-left: spacing("lg");
+    margin-right: spacing("lg");
+
+    @include breakpoint-down("md") {
+      margin-left: spacing("md");
+      margin-right: spacing("md");
+    }
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      gap: spacing("sm");
+    }
+  }
+  
+  &__quantitySection {
+    @include flex;
+    align-items: center;
+    gap: spacing("sm");
+
+    @include breakpoint-down("sm") {
+      width: 100%;
+      justify-content: center;
+    }
   }
   
   &__quantityButton {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     @include flex-center;
-    background-color: color("neutral", "lightest");
-    border: border-width("thin") solid color("neutral", "lighter");
-    font-size: font-size("body-2");
+    background-color: color("neutral", "black");
+    color: color("neutral", "white");
+    border: none;
+    font-size: font-size("body-1");
+    font-weight: font-weight("bold");
     cursor: pointer;
     transition: all 0.2s ease;
     
     &:hover {
-      background-color: color-alpha("primary", "lighter", 0.5);
+      opacity: 0.9;
     }
     
     &:active {
       transform: scale(0.95);
     }
+
+    @include breakpoint-down("sm") {
+      width: 40px;
+      height: 40px;
+    }
   }
   
   &__quantity {
-    @include font-size("body-2");
+    @include font-size("body-1");
     @include font-weight("bold");
     color: color("neutral", "black");
     min-width: 32px;
     text-align: center;
+
+    @include breakpoint-down("sm") {
+      min-width: 40px;
+    }
   }
   
   &__proteinOptions {
     @include flex;
     flex-wrap: wrap;
-    gap: spacing("sm");
-    margin: spacing("sm") 0;
+    gap: spacing("xs");
+    margin: spacing("sm") 0 0 0;
+    background-color: color("neutral", "lightest");
+    padding: spacing("sm");
+    border-radius: border-radius("lg");
+    margin-left: spacing("lg");
+    margin-right: spacing("lg");
+
+    @include breakpoint-down("md") {
+      margin-left: spacing("md");
+      margin-right: spacing("md");
+    }
   }
   
   &__proteinOption {
-    padding: spacing("xs") spacing("md");
+    padding: spacing("xxs") spacing("sm");
     background-color: color("neutral", "lightest");
     border: border-width("thin") solid color("neutral", "lighter");
     border-radius: border-radius("lg");
@@ -220,13 +384,27 @@
     }
     
     &_selected {
-      background-color: color-alpha("primary", "lighter", 0.8);
+      background-color: color("neutral", "white");
       border-color: color("primary", "base");
       color: color("primary", "base");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("xxs") spacing("xs");
+      @include font-size("xs");
     }
   }
   
   &__orderButton {
-    margin-top: spacing("md");
+    background-color: color("primary", "base") !important;
+    color: color("neutral", "white") !important;
+    border-radius: border-radius("md") !important;
+    padding: spacing("sm") spacing("lg") !important;
+    min-width: 160px;
+    height: 48px;
+
+    @include breakpoint-down("sm") {
+      width: 100%;
+    }
   }
 } 

@@ -90,6 +90,10 @@ mutation UpdateAddress($addressId: ID!, $input: AddressInput!) {
   updateAddress(addressId: $addressId, input: $input)
 }
 
+mutation RemoveAddress($addressId: ID!) {
+  removeAddress(addressId: $addressId)
+}
+
 mutation UpdateBookingPaymentStatus(
   $updateBookingPaymentStatusId: ID!
   $paymentStatus: PaymentStatus!

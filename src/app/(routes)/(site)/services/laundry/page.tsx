@@ -2,6 +2,7 @@ import React from 'react';
 import LaundryHero from './LaundryHero/LaundryHero';
 import LaundryFeatures from './LaundryFeatures/LaundryFeatures';
 import LaundrySuds from './LaundrySuds/LaundrySuds';
+import LaundryServicesShowcase from './LaundryServicesShowcase/LaundryServicesShowcase';
 import LaundryPlan from './LaundryPlan/LaundryPlan';
 import LaundryStepsSection from './LaundryStepsSection/LaundryStepsSection';
 import FAQSection, { FAQItem } from '@/components/ui/FAQSection/FAQSection';
@@ -24,6 +25,7 @@ export default function LaundryPage() {
     return (
         <main>
             <LaundryHero />
+            <LaundryServicesShowcase />
             <LaundryFeatures />
             <LaundrySuds />
             <LaundryPlan />

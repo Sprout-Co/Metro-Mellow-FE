@@ -80,6 +80,7 @@ mutation CreateCustomer($input: CreateUserInput!) {
       updatedAt
     }
     message
+    success
   }
 }
 
@@ -120,5 +121,6 @@ mutation CreateStaff($input: CreateUserInput!) {
       updatedAt
     }
     message
+    success
   }
 }

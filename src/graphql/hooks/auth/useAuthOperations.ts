@@ -23,17 +23,18 @@ import {
   AddressInput,
   useUpdateAddressMutation,
   useSetDefaultAddressMutation,
+  useRemoveAddressMutation,
   UpdateUserInput,
   AccountStatus,
   useUpdateAccountStatusMutation,
 } from "@/graphql/api";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
-import { 
-  login as loginAction, 
-  logout as logoutAction, 
+import {
+  login as loginAction,
+  logout as logoutAction,
   setUser,
   selectToken,
-  selectUser 
+  selectUser,
 } from "@/lib/redux";
 import { UserRole } from "@/graphql/api";
 import { Routes } from "@/constants/routes";
@@ -42,7 +43,7 @@ export const useAuthOperations = () => {
   const dispatch = useAppDispatch();
   const currentToken = useAppSelector(selectToken);
   const currentUser = useAppSelector(selectUser);
-  
+
   const [loginMutation] = useLoginMutation();
   const [registerMutation] = useRegisterMutation();
   const [updateProfileMutation] = useUpdateProfileMutation();
@@ -58,6 +59,7 @@ export const useAuthOperations = () => {
   const [addAddressMutation] = useAddAddressMutation();
   const [updateAddressMutation] = useUpdateAddressMutation();
   const [setDefaultAddressMutation] = useSetDefaultAddressMutation();
+  const [removeAddressMutation] = useRemoveAddressMutation();
   const [updateAccountStatusMutation] = useUpdateAccountStatusMutation();
   /**
    * Handles user login with email and password
@@ -601,6 +603,35 @@ export const useAuthOperations = () => {
   );
 
   /**
+   * Removes an address for the current user
+   * @param id - Address ID to remove
+   * @returns Boolean indicating success
+   * @throws Error if removal fails
+   */
+  const handleRemoveAddress = useCallback(
+    async (id: string) => {
+      try {
+        const { data, errors } = await removeAddressMutation({
+          variables: { addressId: id },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.removeAddress;
+      } catch (error) {
+        console.error("Remove address error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [removeAddressMutation]
+  );
+
+  /**
    * Updates account status for a user
    * @param userId - User ID to update status for
    * @param status - New account status
@@ -648,6 +679,7 @@ export const useAuthOperations = () => {
     handleAddAddress,
     handleUpdateAddress,
     handleSetDefaultAddress,
+    handleRemoveAddress,
     handleUpdateAccountStatus,
   };
 };

@@ -42,7 +42,7 @@
     border-bottom: 1px solid color("neutral", "lighter");
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     background: linear-gradient(
       to right,
       color-alpha("primary", "base", 0.03),
@@ -54,6 +54,7 @@
     font-size: map-get($font-sizes, "xl");
     font-weight: map-get($font-weights, "bold");
     color: color("primary", "dark");
+    order: 1;
   }
 
   &__content {
@@ -74,6 +75,7 @@
     border: none;
     cursor: pointer;
     transition: all 0.2s ease;
+    order: 2;
 
     &:hover {
       background-color: color-alpha("neutral", "medium", 0.2);

@@ -17,10 +17,11 @@
   }
 
   &__heading {
-    font-size: font-size("h1") * 1.1;
-    font-family: $font-family-heading;
-    font-weight: map-get($font-weights, "bold");
-    color: color("neutral", "black");
+    // font-size: font-size('h1') * 1.1;
+    // font-family: $font-family-heading;
+    // font-weight: map-get($font-weights, 'bold');
+    // color: color('neutral', 'black');
+    @include heading-1;
     margin-bottom: spacing("md");
     line-height: map-get($line-heights, "tight");
 
@@ -53,7 +54,7 @@
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: spacing("lg");
     justify-content: center;
     margin-top: spacing("xl");
@@ -84,8 +85,9 @@
   transition: $transition-base;
   padding-top: calc(#{spacing("2xl")} + 6rem);
   padding-right: spacing("2xl");
+  min-width: 320px;
 
-  @include breakpoint-down("md") {
+  @include breakpoint-down("lg") {
     min-height: 280px;
     padding: spacing("xl") spacing("md");
   }
@@ -95,6 +97,7 @@
     padding: spacing("lg") spacing("md");
     align-items: center;
     text-align: center;
+    min-width: auto;
   }
 
   &:hover {

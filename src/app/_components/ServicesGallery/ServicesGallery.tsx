@@ -65,7 +65,7 @@ const serviceProfessionals = [
 
 const ServicesGallery = () => {
   return (
-    <section className={styles.servicesGallery}>
+    <section className={styles.servicesGallery} role="region">
       <div className={styles.servicesGallery__container}>
         {/* Decorative SVGs */}
         <div className={styles.servicesGallery__decorations}>
@@ -182,6 +182,7 @@ const ServicesGallery = () => {
             >
               <div
                 className={`${styles.servicesGallery__card} ${styles[`servicesGallery__card--${professional.bgColor}`]}`}
+                data-testid={professional.id}
               >
                 <img
                   src={professional.image}

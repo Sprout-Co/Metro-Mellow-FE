@@ -320,6 +320,14 @@ export default function CustomerDetailsPage() {
 
             <div className={styles.customer_details__actions}>
               <button
+                className={styles.customer_details__add_booking_button}
+                onClick={() =>
+                  router.push(`/admin/bookings/add?customerId=${customerId}`)
+                }
+              >
+                Add Booking
+              </button>
+              <button
                 className={styles.customer_details__edit_button}
                 onClick={() => setIsEditModalOpen(true)}
               >

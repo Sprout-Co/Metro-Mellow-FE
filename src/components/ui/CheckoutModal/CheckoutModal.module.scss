@@ -1,0 +1,386 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.checkoutModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: z-index("modal");
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none; // Allow events to pass through
+
+  // On desktop, don't cover the slide panel area
+  @include breakpoint-up("md") {
+    width: calc(100% - 450px); // Match the backdrop width
+  }
+
+  &__backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: color-alpha("neutral", "black", 0.6);
+    backdrop-filter: blur(spacing("xs"));
+    pointer-events: auto; // Re-enable pointer events for backdrop
+    
+    // On desktop, backdrop should cover full height but not the slide panel width
+    @include breakpoint-up("md") {
+      width: 100%; // Full width of the reduced modal container
+    }
+  }
+
+  &__container {
+    position: relative;
+    width: 92%;
+    max-width: 500px;
+    max-height: 90vh;
+    background-color: color("neutral", "white");
+    border-radius: border-radius("xl");
+    box-shadow: map-get($shadows, "xl");
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    pointer-events: auto; // Re-enable pointer events for the modal content
+
+    @include breakpoint-down("sm") {
+      width: 95%;
+      max-width: 100%;
+      max-height: 95vh;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("lg") spacing("xl");
+    border-bottom: map-get($border-width, "thin") solid color("neutral", "lighter");
+    background: linear-gradient(
+      135deg,
+      color-alpha("primary", "base", 0.02),
+      color-alpha("primary", "light", 0.03)
+    );
+    flex-shrink: 0;
+  }
+
+  &__title {
+    @include heading-4;
+    color: color("neutral", "black");
+    margin: 0;
+  }
+
+  &__close {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("neutral", "dark");
+    background-color: color-alpha("neutral", "medium", 0.1);
+    border: none;
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover {
+      background-color: color-alpha("neutral", "medium", 0.2);
+      color: color("neutral", "black");
+      transform: rotate(90deg);
+    }
+
+    &:focus-visible {
+      outline: map-get($border-width, "medium") solid color("primary", "base");
+      outline-offset: spacing("xxs");
+    }
+  }
+
+  &__content {
+    flex: 1;
+    padding: spacing("xl");
+    overflow-y: auto;
+    
+    // Custom scrollbar
+    &::-webkit-scrollbar {
+      width: spacing("xs");
+    }
+
+    &::-webkit-scrollbar-track {
+      background: color("neutral", "lightest");
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: color("neutral", "light");
+      border-radius: border-radius("full");
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: color("neutral", "medium");
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+  }
+
+  &__sectionTitle {
+    @include subtitle-1;
+    color: color("neutral", "black");
+    margin: 0 0 spacing("md") 0;
+    padding-bottom: spacing("sm");
+    border-bottom: map-get($border-width, "thin") solid color("neutral", "lighter");
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__label {
+    @include body-2;
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    margin: 0;
+  }
+
+  &__inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__input {
+    @include input("md");
+    width: 100%;
+    background-color: color("neutral", "white");
+    border: map-get($border-width, "thin") solid color("neutral", "light");
+    border-radius: border-radius("lg");
+    @include font-size("body-2");
+    color: color("neutral", "darkest");
+    transition: $transition-base;
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+
+    &:focus {
+      border-color: color("primary", "base");
+      box-shadow: map-get($shadows, "focus");
+      outline: none;
+    }
+
+    &:disabled {
+      background-color: color("neutral", "lighter");
+      color: color("neutral", "medium");
+      cursor: not-allowed;
+    }
+
+    // Date input specific styles
+    &[type="date"] {
+      padding-right: spacing("2xl");
+      
+      &::-webkit-calendar-picker-indicator {
+        opacity: 0;
+        position: absolute;
+        right: spacing("sm");
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &__inputIcon {
+    position: absolute;
+    right: spacing("md");
+    color: color("neutral", "medium");
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  &__select {
+    @include select("md");
+    width: 100%;
+    background-color: color("neutral", "white");
+    border: map-get($border-width, "thin") solid color("neutral", "light");
+    border-radius: border-radius("lg");
+    @include font-size("body-2");
+    color: color("neutral", "darkest");
+    transition: $transition-base;
+    appearance: none;
+    cursor: pointer;
+    height: auto;
+
+    // Custom dropdown arrow
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right spacing("md") center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: spacing("2xl");
+
+    &:focus {
+      border-color: color("primary", "base");
+      box-shadow: map-get($shadows, "focus");
+      outline: none;
+    }
+
+    &:disabled {
+      background-color: color("neutral", "lighter");
+      color: color("neutral", "medium");
+      cursor: not-allowed;
+    }
+  }
+
+  &__radioGroup {
+    display: flex;
+    gap: spacing("lg");
+    margin: spacing("sm") 0;
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      gap: spacing("md");
+    }
+  }
+
+  &__radioLabel {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    cursor: pointer;
+    @include body-2;
+    color: color("neutral", "darkest");
+  }
+
+  &__radio {
+    width: 20px;
+    height: 20px;
+    border: map-get($border-width, "medium") solid color("neutral", "light");
+    border-radius: 50%;
+    background-color: color("neutral", "white");
+    appearance: none;
+    cursor: pointer;
+    transition: $transition-base;
+    position: relative;
+
+    &:checked {
+      border-color: color("primary", "base");
+      background-color: color("neutral", "white");
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: color("primary", "base");
+      }
+    }
+
+    &:focus-visible {
+      outline: map-get($border-width, "medium") solid color("primary", "base");
+      outline-offset: spacing("xxs");
+    }
+  }
+
+  &__radioText {
+    @include font-weight("medium");
+    user-select: none;
+  }
+
+  &__buttonWrapper {
+    margin-top: spacing("xl");
+    padding-top: spacing("lg");
+    border-top: map-get($border-width, "thin") solid color("neutral", "lighter");
+  }
+
+  &__continueButton {
+    text-transform: uppercase;
+    letter-spacing: map-get($letter-spacing, "wider");
+    @include font-weight("bold");
+  }
+
+  // Animation states
+  &__container {
+    // Ensure smooth animations
+    will-change: transform;
+  }
+
+  // Loading states
+  &__form {
+    &--loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+  }
+
+  // Error states
+  &__input,
+  &__select {
+    &--error {
+      border-color: color("status", "error");
+
+      &:focus {
+        border-color: color("status", "error");
+        box-shadow: map-get($shadows, "focus-error");
+      }
+    }
+  }
+
+  // Success states
+  &__input,
+  &__select {
+    &--success {
+      border-color: color("status", "success");
+    }
+  }
+
+  // Responsive adjustments
+  @include breakpoint-down("md") {
+    &__container {
+      max-width: 420px;
+    }
+
+    &__content {
+      padding: spacing("lg");
+    }
+
+    &__header {
+      padding: spacing("md") spacing("lg");
+    }
+  }
+
+  @include breakpoint-down("sm") {
+    &__container {
+      max-width: 100%;
+      border-radius: 0;
+    }
+
+    &__content {
+      padding: spacing("md");
+    }
+
+    &__header {
+      padding: spacing("md");
+    }
+
+    &__form {
+      gap: spacing("md");
+    }
+
+    &__buttonWrapper {
+      margin-top: spacing("lg");
+      padding-top: spacing("md");
+    }
+  }
+} 

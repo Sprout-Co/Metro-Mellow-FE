@@ -101,7 +101,7 @@ type PlanSummaryProps = {
 
 const PlanSummary: React.FC<PlanSummaryProps> = ({
   selectedServices,
-  billingCycle = BillingCycle.Weekly,
+  billingCycle = BillingCycle.Monthly,
   duration = 2,
   onUpdateService,
   setShowSubscriptionForm,
@@ -119,18 +119,12 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
   const [editServiceModal, setEditServiceModal] = useState(false);
   const [subscriptionInput, setSubscriptionInput] =
     useState<CreateSubscriptionInput>({
-      billingCycle: billingCycle.toUpperCase() as BillingCycle,
+      billingCycle: BillingCycle.Monthly,
       duration: Number(duration),
       startDate: new Date().toISOString(),
       autoRenew: true,
       services: [],
-      address: {
-        street: "broadway street",
-        city: "lagos",
-        state: "lagos",
-        zipCode: "10001",
-        country: "nigeria",
-      },
+      address: "6846ce4923c7d1dafbdea59f",
     });
 
   // Add state for submission
@@ -139,6 +133,17 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
 
   // Get subscription operations hook
   const { handleCreateSubscription } = useSubscriptionOperations();
+
+  // Update subscription input when billingCycle or duration changes
+  useEffect(() => {
+    if (billingCycle) {
+      setSubscriptionInput((prev) => ({
+        ...prev,
+        billingCycle: billingCycle.toUpperCase() as BillingCycle,
+        duration: Number(duration),
+      }));
+    }
+  }, [billingCycle, duration]);
 
   // Extend base services with details
   useEffect(() => {
@@ -591,12 +596,12 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
               <span>
                 Total ({duration}{" "}
                 {duration === 1
-                  ? billingCycle === BillingCycle.Weekly
-                    ? "week"
-                    : "month"
-                  : billingCycle === BillingCycle.Weekly
-                    ? "weeks"
-                    : "months"}
+                  ? billingCycle === BillingCycle.Monthly
+                    ? "month"
+                    : "quarter"
+                  : billingCycle === BillingCycle.Monthly
+                    ? "months"
+                    : "quarters"}
                 )
               </span>
               <span>{formatPrice(total)}</span>
@@ -604,9 +609,9 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
 
             <div className={styles.plan_summary__per_period}>
               <span>
-                {billingCycle === BillingCycle.Weekly
-                  ? "Weekly payment: "
-                  : "Monthly payment: "}
+                {billingCycle === BillingCycle.Monthly
+                  ? "Monthly payment: "
+                  : "Quarterly payment: "}
                 {formatPrice(perPeriod)}
               </span>
             </div>
@@ -629,12 +634,12 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
               <span className={styles.plan_summary__total_period}>
                 {duration}{" "}
                 {duration === 1
-                  ? billingCycle === BillingCycle.Weekly
-                    ? "week"
-                    : "month"
-                  : billingCycle === BillingCycle.Weekly
-                    ? "weeks"
-                    : "months"}
+                  ? billingCycle === BillingCycle.Monthly
+                    ? "month"
+                    : "quarter"
+                  : billingCycle === BillingCycle.Monthly
+                    ? "months"
+                    : "quarters"}
               </span>
             </div>
           </motion.div>

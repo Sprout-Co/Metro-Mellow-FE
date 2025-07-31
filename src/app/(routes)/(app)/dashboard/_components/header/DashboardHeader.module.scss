@@ -8,7 +8,7 @@
   padding: spacing("md") 0;
   position: sticky;
   top: 0;
-  z-index: z-index("fixed");
+  z-index: z-index("sticky");
 
   &__container {
     @include container;

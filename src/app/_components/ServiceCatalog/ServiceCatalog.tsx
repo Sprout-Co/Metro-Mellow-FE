@@ -8,38 +8,38 @@ import styles from './ServiceCatalog.module.scss';
 const foodCategories = [
   {
     id: 'combos',
-    title: 'COMBO\'S',
-    image: '/images/food/egusi-fufu.png',
+    title: 'Combo\'s',
+    image: '/images/food/jollof-rice.png',
     price: 'NGN 5,000',
   },
   {
     id: 'platters',
-    title: 'PLATTERS',
-    image: '/images/food/egusi-fufu.png',
+    title: 'Platters',
+    image: '/images/food/f1.png',
     price: 'NGN 5,000',
   },
   {
     id: 'proteins',
-    title: 'PROTEINS',
-    image: '/images/food/egusi-fufu.png',
+    title: 'Proteins',
+    image: '/images/food/pounded-yam-efo-riro.png',
     price: 'NGN 5,000',
   },
   {
     id: 'wraps',
-    title: 'WRAPS',
-    image: '/images/food/egusi-fufu.png',
+    title: 'Wraps',
+    image: '/images/food/f4.jpeg',
     price: 'NGN 5,000',
   },
   {
     id: 'soups',
-    title: 'SOUPS',
-    image: '/images/food/egusi-fufu.png',
+    title: 'Soups',
+    image: '/images/food/f2.png',
     price: 'NGN 5,000',
   },
   {
     id: 'drinks',
-    title: 'DRINKS',
-    image: '/images/food/egusi-fufu.png',
+    title: 'Drinks',
+    image: '/images/food/f3.jpeg',
     price: 'NGN 5,000',
   }
 ];
@@ -50,32 +50,32 @@ const foodCategories = [
 const cleaningCategories = [
   {
     id: 'deep-cleaning',
-    title: 'DEEP CLEANING',
+    title: 'Deep Cleaning',
     image: '/images/cleaning/c1.jpeg',
   },
   {
     id: 'regular-cleaning',
-    title: 'REGULAR CLEANING',
+    title: 'Regular Cleaning',
     image: '/images/cleaning/c2.jpeg',
   },
   {
     id: 'kitchen-cleaning',
-    title: 'KITCHEN CLEANING',
+    title: 'Kitchen Cleaning',
     image: '/images/cleaning/c3.jpeg',
   },
   {
     id: 'bathroom-cleaning',
-    title: 'BATHROOM CLEANING',
+    title: 'Bathroom Cleaning',
     image: '/images/cleaning/c1.jpeg',
   },
   {
     id: 'window-cleaning',
-    title: 'WINDOW CLEANING',
+    title: 'Window Cleaning',
     image: '/images/cleaning/c2.jpeg',
   },
   {
     id: 'carpet-cleaning',
-    title: 'CARPET CLEANING',
+    title: 'Carpet Cleaning',
     image: '/images/cleaning/c3.jpeg',
   }
 ];
@@ -84,32 +84,32 @@ const cleaningCategories = [
 const pestControlCategories = [
   {
     id: 'general-pest',
-    title: 'GENERAL PEST CONTROL',
+    title: 'General Pest Control',
     image: '/images/pest-control/p1.jpeg',
   },
   {
     id: 'cockroach-control',
-    title: 'COCKROACH CONTROL',
+    title: 'Cockroach Control',
     image: '/images/pest-control/p1.jpeg',
   },
   {
     id: 'rodent-control',
-    title: 'RODENT CONTROL',
+    title: 'Rodent Control',
     image: '/images/pest-control/p1.jpeg',
   },
   {
     id: 'termite-control',
-    title: 'TERMITE CONTROL',
+    title: 'Termite Control',
     image: '/images/pest-control/p1.jpeg',
   },
   {
     id: 'bedbug-control',
-    title: 'BEDBUG CONTROL',
+    title: 'Bedbug Control',
     image: '/images/pest-control/p1.jpeg',
   },
   {
     id: 'mosquito-control',
-    title: 'MOSQUITO CONTROL',
+    title: 'Mosquito Control',
     image: '/images/pest-control/p1.jpeg',
   }
 ];
@@ -118,32 +118,32 @@ const pestControlCategories = [
 const laundryCategories = [
   {
     id: 'wash-dry-fold',
-    title: 'WASH & FOLD',
+    title: 'Wash & Fold',
     image: '/images/laundry/l1.jpeg',
   },
   {
     id: 'dry-cleaning',
-    title: 'DRY CLEANING',
+    title: 'Dry Cleaning',
     image: '/images/laundry/l2.jpeg',
   },
   {
     id: 'ironing',
-    title: 'IRONING',
+    title: 'Ironing',
     image: '/images/laundry/l3.jpeg',
   },
   {
     id: 'starch-press',
-    title: 'STARCH & PRESS',
+    title: 'Starch & Press',
     image: '/images/laundry/l1.jpeg',
   },
   {
     id: 'curtain-cleaning',
-    title: 'CURTAIN CLEANING',
+    title: 'Curtain Cleaning',
     image: '/images/laundry/l2.jpeg',
   },
   {
     id: 'bedding-cleaning',
-    title: 'BEDDING CLEANING',
+    title: 'Bedding Cleaning',
     image: '/images/laundry/l3.jpeg',
   }
 ];

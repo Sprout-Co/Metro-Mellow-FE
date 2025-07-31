@@ -187,27 +187,20 @@ export const useServiceOperations = () => {
     }
   }, []);
 
-  // Move the query hook to the top level
-  const {
-    data: servicesData,
-    loading: servicesLoading,
-    error: servicesError,
-  } = useGetServicesQuery({
-    variables: { category: undefined, status: undefined },
+  const { refetch: getServices } = useGetServicesQuery({
+    skip: true,
   });
 
   const handleGetServices = useCallback(
     async (category?: ServiceCategory, status?: ServiceStatus) => {
       try {
-        if (servicesError) {
-          throw new Error(servicesError.message);
+        const { data, errors } = await getServices({ category, status });
+
+        if (errors) {
+          throw new Error(errors[0].message);
         }
-        return servicesData?.services.filter((service) => {
-          const matchesCategory = category ? service.category === category : true;
-          const matchesStatus = status ? service.status === status : true;
-          return matchesCategory && matchesStatus;
-        });
-        // return servicesData?.services;
+
+        return data?.services;
       } catch (error) {
         console.error("Services fetch error:", error);
         if (error instanceof Error) {
@@ -216,7 +209,7 @@ export const useServiceOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [servicesData, servicesError]
+    [getServices]
   );
 
   return {
@@ -226,7 +219,5 @@ export const useServiceOperations = () => {
     handleUpdateServiceStatus,
     handleGetService,
     handleGetServices,
-    servicesLoading,
-    servicesError,
   };
 };
