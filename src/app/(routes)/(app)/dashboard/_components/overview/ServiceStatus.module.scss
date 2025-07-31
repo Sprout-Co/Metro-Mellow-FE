@@ -66,12 +66,12 @@
     font-weight: map-get($font-weights, "medium");
 
     &--active {
-      background-color: rgba(map-get($colors, "success"), 0.1);
+      background-color: rgba(color("status", "success"), 0.1);
       color: color("status", "success");
     }
 
     &--paused {
-      background-color: rgba(map-get($colors, "warning"), 0.1);
+      background-color: rgba(color("status", "warning"), 0.1);
       color: color("status", "warning");
     }
   }

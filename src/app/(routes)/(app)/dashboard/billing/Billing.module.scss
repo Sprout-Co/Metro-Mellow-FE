@@ -169,12 +169,12 @@
     font-weight: map-get($font-weights, "medium");
 
     &Paid {
-      background-color: rgba(map-get($colors, "success"), 0.1);
+      background-color: rgba(color("status", "success"), 0.1);
       color: color("status", "success");
     }
 
     &Pending {
-      background-color: rgba(map-get($colors, "warning"), 0.1);
+      background-color: rgba(color("status", "warning"), 0.1);
       color: color("status", "warning");
     }
 
@@ -184,7 +184,7 @@
     }
 
     &Active {
-      background-color: rgba(map-get($colors, "success"), 0.1);
+      background-color: rgba(color("status", "success"), 0.1);
       color: color("status", "success");
     }
 
