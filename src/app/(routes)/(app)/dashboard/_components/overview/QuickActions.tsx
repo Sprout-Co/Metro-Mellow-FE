@@ -56,6 +56,7 @@ const quickActions = [
 export default function QuickActions() {
   const dispatch = useAppDispatch();
   const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
+  const [isBookServiceModalOpen, setIsBookServiceModalOpen] = useState(false);
   const itemVariants = {
     hidden: { opacity: 0, scale: 0.9 },
     visible: (i: number) => ({
@@ -74,6 +75,7 @@ export default function QuickActions() {
   const handleActionClick = (actionId: string) => {
     if (actionId === "book") {
       dispatch(openModal({ type: "book-service" }));
+      setIsBookServiceModalOpen(true);
     } else if (actionId === "reschedule") {
       setIsRescheduleModalOpen(true);
     }
@@ -133,7 +135,10 @@ export default function QuickActions() {
           <Icon name="arrow-right" />
         </button>
       </motion.div>
-      <BookServiceModal isOpen={true} onClose={() => {}} />
+      <BookServiceModal
+        isOpen={isBookServiceModalOpen}
+        onClose={() => setIsBookServiceModalOpen(false)}
+      />
       <RescheduleServiceModal
         isOpen={isRescheduleModalOpen}
         onClose={() => setIsRescheduleModalOpen(false)}

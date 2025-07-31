@@ -191,23 +191,23 @@
     font-weight: map-get($font-weights, "medium");
 
     &--primary {
-      background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+      background-color: color("primary", "light");
       color: color("primary", "base");
     }
 
     &--success {
-      background-color: rgba(map-get($colors, "success"), 0.1);
-      color: color("status", "success");
+      background-color: color("status", "success");
+      color: color("neutral", "white");
     }
 
     &--warning {
-      background-color: rgba(map-get($colors, "warning"), 0.1);
-      color: color("status", "warning");
+      background-color: color("status", "warning");
+      color: color("neutral", "white");
     }
 
     &--error {
-      background-color: rgba(color("status", "error"), 0.1);
-      color: color("status", "error");
+      background-color: color("status", "error");
+      color: color("neutral", "white");
     }
   }
 
@@ -244,12 +244,12 @@
     &Title {
       font-size: map-get($font-sizes, "xl");
       font-weight: map-get($font-weights, "medium");
-      color: color("neutral", "darker");
+      color: color("neutral", "black");
       margin-bottom: spacing("xs");
     }
 
     &Text {
-      color: color("neutral", "dark");
+      color: color("neutral", "black");
       margin-bottom: spacing("lg");
       max-width: 24rem;
     }
