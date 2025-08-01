@@ -11,7 +11,7 @@ import {
   ServiceCategory,
   Service,
   ServiceStatus,
-  ExtraItem,
+  ServiceOption,
 } from "@/graphql/api";
 
 // Define service categories for sidebar
@@ -26,6 +26,10 @@ const ServiceCatalog: FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<ServiceCategory>(
     ServiceCategory.Cooking
   );
+
+  // State for modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
 
   // Fetch services from API
   const {
@@ -100,52 +104,8 @@ const ServiceCatalog: FC = () => {
     }
   };
 
-  // Function to get the appropriate data based on selected category
-  const getCategoryData = () => {
-    const services = servicesData?.services || [];
-
-    // Transform API data to display service options
-    const transformedServices: any[] = [];
-
-    services.forEach((service: Service) => {
-      // If service has options, display each option as a separate card
-      if (service.options && service.options.length > 0) {
-        service.options.forEach((option) => {
-          transformedServices.push({
-            id: `${service._id}-${option.id}`,
-            serviceId: service._id,
-            optionId: option.id,
-            title: option.label,
-            image: getSafeImageUrl(service.imageUrl),
-            price: `NGN ${option.price.toLocaleString()}`,
-            description: option.description,
-            duration: "30-45 mins", // This might need to come from service options or be calculated
-            rating: 4.8, // This might need to come from reviews/ratings
-            includes:
-              option.inclusions?.join(", ") ||
-              service.inclusions?.join(", ") ||
-              "Standard service",
-            serviceName: service.name,
-            extraItems: option.extraItems,
-          });
-        });
-      } else {
-        // If no options, display the main service
-        transformedServices.push({
-          id: service._id,
-          serviceId: service._id,
-          title: service.name,
-          image: getSafeImageUrl(service.imageUrl),
-          price: service.displayPrice,
-          description: service.description,
-          duration: "30-45 mins", // This might need to come from service options or be calculated
-          rating: 4.8, // This might need to come from reviews/ratings
-          includes: service.inclusions?.join(", ") || "Standard service",
-          serviceName: service.name,
-        });
-      }
-    });
-
+  // Function to get category configuration
+  const getCategoryConfig = (category: ServiceCategory) => {
     const categoryConfig = {
       [ServiceCategory.Cooking]: {
         title: "Our Delicacies",
@@ -173,19 +133,17 @@ const ServiceCatalog: FC = () => {
       },
     };
 
-    return {
-      data: transformedServices,
-      title: categoryConfig[selectedCategory]?.title || "Services",
-      subtitle:
-        categoryConfig[selectedCategory]?.subtitle || "Explore our services",
-    };
+    return (
+      categoryConfig[category] || {
+        title: "Services",
+        subtitle: "Explore our services",
+      }
+    );
   };
 
-  const {
-    data: currentData,
-    title: currentTitle,
-    subtitle: currentSubtitle,
-  } = getCategoryData();
+  const services = servicesData?.services || [];
+  const { title: currentTitle, subtitle: currentSubtitle } =
+    getCategoryConfig(selectedCategory);
 
   // Handle loading state
   if (loading) {
@@ -346,6 +304,14 @@ const ServiceCatalog: FC = () => {
     );
   }
 
+  // Handle opening the modal with selected service
+  const handleOrderClick = (service: Service, option: ServiceOption) => {
+    console.log("service", service);
+    console.log("option", option);
+    setSelectedService(service);
+    setIsModalOpen(true);
+  };
+
   return (
     <section className={styles.catalog}>
       <div className={styles.catalog__container}>
@@ -413,82 +379,100 @@ const ServiceCatalog: FC = () => {
                 animate="visible"
                 exit={{ opacity: 0 }}
               >
-                {currentData.length > 0 ? (
-                  currentData.map((service) => (
-                    <motion.div
-                      key={service.id}
-                      className={styles.catalog__card}
-                      variants={itemVariants}
-                    >
-                      <div className={styles.catalog__cardImageWrapper}>
-                        <Image
-                          src={service.image}
-                          alt={service.title}
-                          width={400}
-                          height={300}
-                          className={styles.catalog__cardImage}
-                        />
-                        <div className={styles.catalog__cardBadge}>
-                          {service.rating}{" "}
-                          <Star
-                            size={12}
-                            style={{ display: "inline", marginLeft: "2px" }}
-                          />
-                        </div>
-                      </div>
-                      <div className={styles.catalog__cardContent}>
-                        <div className={styles.catalog__cardHeader}>
-                          <h4 className={styles.catalog__cardTitle}>
-                            {service.title}
-                          </h4>
-                          <div className={styles.catalog__cardPrice}>
-                            {service.price}
+                {services.length > 0 ? (
+                  services.map((service) => {
+                    // If service has options, render each option as a separate card
+                    if (service.options && service.options.length > 0) {
+                      return service.options.map((option: ServiceOption) => (
+                        <motion.div
+                          key={`${service._id}-${option.id}`}
+                          className={styles.catalog__card}
+                          variants={itemVariants}
+                        >
+                          <div className={styles.catalog__cardImageWrapper}>
+                            <Image
+                              src={getSafeImageUrl(service.imageUrl)}
+                              alt={option.label}
+                              width={400}
+                              height={300}
+                              className={styles.catalog__cardImage}
+                            />
+                            <div className={styles.catalog__cardBadge}>
+                              4.8{" "}
+                              <Star
+                                size={12}
+                                style={{ display: "inline", marginLeft: "2px" }}
+                              />
+                            </div>
                           </div>
-                        </div>
-
-                        <p className={styles.catalog__cardDescription}>
-                          {service.description}
-                        </p>
-
-                        <div className={styles.catalog__cardMeta}>
-                          <div className={styles.catalog__cardMetaItem}>
-                            <Clock size={16} />
-                            <span>{service.duration}</span>
-                          </div>
-                          <div className={styles.catalog__cardMetaItem}>
-                            <Star size={16} />
-                            <span>{service.includes}</span>
-                          </div>
-                        </div>
-
-                        {/* Show extra items if available */}
-                        {service.extraItems &&
-                          service.extraItems.length > 0 && (
-                            <div className={styles.catalog__cardExtra}>
-                              <h5>Extra Items Available:</h5>
-                              <div className={styles.catalog__cardExtraItems}>
-                                {service.extraItems.map(
-                                  (item: ExtraItem, index: number) => (
-                                    <span
-                                      key={index}
-                                      className={styles.catalog__cardExtraItem}
-                                    >
-                                      {item.name} (+NGN {item.cost})
-                                    </span>
-                                  )
-                                )}
+                          <div className={styles.catalog__cardContent}>
+                            <div className={styles.catalog__cardHeader}>
+                              <h4 className={styles.catalog__cardTitle}>
+                                {option.label}
+                              </h4>
+                              <div className={styles.catalog__cardPrice}>
+                                NGN {option.price.toLocaleString()}
                               </div>
                             </div>
-                          )}
 
-                        <div className={styles.catalog__cardActions}>
-                          <Button variant="primary" size="lg" fullWidth={true}>
-                            {getButtonText(selectedCategory)}
-                          </Button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))
+                            <p className={styles.catalog__cardDescription}>
+                              {option.description}
+                            </p>
+
+                            <div className={styles.catalog__cardMeta}>
+                              <div className={styles.catalog__cardMetaItem}>
+                                <Clock size={16} />
+                                <span>30-45 mins</span>
+                              </div>
+                              <div className={styles.catalog__cardMetaItem}>
+                                <Star size={16} />
+                                <span>
+                                  {option.inclusions?.join(", ") ||
+                                    service.inclusions?.join(", ") ||
+                                    "Standard service"}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Show extra items if available */}
+                            {option.extraItems &&
+                              option.extraItems.length > 0 && (
+                                <div className={styles.catalog__cardExtra}>
+                                  <h5>Extra Items Available:</h5>
+                                  <div
+                                    className={styles.catalog__cardExtraItems}
+                                  >
+                                    {option.extraItems.map((item, index) => (
+                                      <span
+                                        key={index}
+                                        className={
+                                          styles.catalog__cardExtraItem
+                                        }
+                                      >
+                                        {item.name} (+NGN {item.cost})
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                            <div className={styles.catalog__cardActions}>
+                              <Button
+                                variant="primary"
+                                size="lg"
+                                fullWidth={true}
+                                onClick={() =>
+                                  handleOrderClick(service, option)
+                                }
+                              >
+                                {getButtonText(selectedCategory)}
+                              </Button>
+                            </div>
+                          </div>
+                        </motion.div>
+                      ));
+                    }
+                  })
                 ) : (
                   <motion.div
                     className={styles.catalog__empty}
