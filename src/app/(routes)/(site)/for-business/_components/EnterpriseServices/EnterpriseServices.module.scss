@@ -96,6 +96,72 @@
       gap: spacing("md");
     }
   }
+
+  &__customSolutionsCTA {
+    margin-top: spacing("4xl");
+    padding: spacing("3xl") spacing("xl");
+    background: linear-gradient(
+      135deg,
+      rgba(color("neutral", "white"), 0.1) 0%,
+      rgba(color("accent", "base"), 0.05) 100%
+    );
+    border: 1px solid rgba(color("neutral", "white"), 0.15);
+    border-radius: 20px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+
+    @include breakpoint-down("md") {
+      margin-top: spacing("3xl");
+      padding: spacing("2xl") spacing("lg");
+    }
+
+    @include breakpoint-down("sm") {
+      margin-top: spacing("2xl");
+      padding: spacing("xl") spacing("md");
+    }
+  }
+
+  &__customSolutionsContent {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  &__customSolutionsTitle {
+    @include font-size("title");
+    @include font-weight("semibold");
+    color: color("neutral", "white");
+    margin-bottom: spacing("md");
+    letter-spacing: map-get($letter-spacing, "tighter");
+
+    @include breakpoint-down("md") {
+      @include font-size("subtitle-1");
+    }
+  }
+
+  &__customSolutionsDescription {
+    @include font-size("body-1");
+    @include font-weight("regular");
+    color: color("neutral", "lightest");
+    line-height: map-get($line-heights, "relaxed");
+    margin-bottom: spacing("xl");
+
+    @include breakpoint-down("md") {
+      @include font-size("body-2");
+      margin-bottom: spacing("lg");
+    }
+  }
+
+  &__customSolutionsButton {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("sm");
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(color("secondary", "base"), 0.3);
+    }
+  }
 }
 
 .serviceCard {

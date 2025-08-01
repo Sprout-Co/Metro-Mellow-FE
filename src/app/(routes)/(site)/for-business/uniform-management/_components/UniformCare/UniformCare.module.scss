@@ -1,0 +1,187 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.uniformCare {
+  @include section-spacing("4xl");
+  background-color: color("neutral", "light");
+  position: relative;
+  overflow: hidden;
+
+  // Background decoration
+  &::before {
+    content: "";
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: rgba(color("primary", "lighter"), 0.2);
+    z-index: z-index("negative");
+  }
+
+  &__container {
+    @include container;
+    position: relative;
+    z-index: z-index("base");
+    text-align: center;
+    max-width: 1000px;
+  }
+
+  &__title {
+    @include heading-2;
+    color: color("neutral", "black");
+    margin-bottom: spacing("3xl");
+    font-weight: map-get($font-weights, "bold");
+  }
+
+  &__packages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: spacing("xl");
+    max-width: 900px;
+    margin: 0 auto;
+
+    @include breakpoint-up("md") {
+      grid-template-columns: repeat(3, 1fr);
+      gap: spacing("lg");
+    }
+  }
+
+  &__package {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("xl");
+    padding: spacing("2xl");
+    box-shadow: map-get($shadows, "sm");
+    border: 2px solid color("neutral", "lighter");
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: map-get($shadows, "md");
+    }
+
+    &--popular {
+      border-color: color("primary", "base");
+      transform: translateY(-8px) scale(1.05);
+      box-shadow: map-get($shadows, "lg");
+
+      &:hover {
+        transform: translateY(-12px) scale(1.05);
+        box-shadow: map-get($shadows, "xl");
+      }
+    }
+
+    h3 {
+      font-size: map-get($font-sizes, "xl");
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "black");
+      margin-bottom: spacing("lg");
+    }
+  }
+
+  &__popularBadge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(
+      135deg,
+      color("primary", "base") 0%,
+      color("primary", "dark") 100%
+    );
+    color: color("neutral", "white");
+    padding: spacing("xs") spacing("md");
+    border-radius: border-radius("full");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "semibold");
+    display: flex;
+    align-items: center;
+    gap: spacing("xxs");
+    box-shadow: map-get($shadows, "sm");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    svg {
+      fill: currentColor;
+    }
+  }
+
+  &__price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: spacing("xs");
+    margin-bottom: spacing("xl");
+
+    span {
+      font-size: map-get($font-sizes, "3xl");
+      font-weight: map-get($font-weights, "bold");
+      color: color("primary", "base");
+      line-height: 1;
+    }
+
+    small {
+      font-size: map-get($font-sizes, "sm");
+      color: color("neutral", "darker");
+      font-weight: map-get($font-weights, "medium");
+    }
+  }
+
+  // Popular package styling
+  &__package--popular &__price span {
+    color: color("primary", "dark");
+  }
+
+  &__package--popular h3 {
+    color: color("primary", "base");
+  }
+
+  @media (max-width: 768px) {
+    @include section-spacing("3xl");
+
+    &__container {
+      padding: 0 spacing("md");
+    }
+
+    &__title {
+      font-size: map-get($font-sizes, "2xl");
+      margin-bottom: spacing("2xl");
+    }
+
+    &__packages {
+      grid-template-columns: 1fr;
+      gap: spacing("lg");
+    }
+
+    &__package {
+      padding: spacing("xl");
+
+      &--popular {
+        transform: none;
+        scale: 1;
+
+        &:hover {
+          transform: translateY(-5px);
+          scale: 1;
+        }
+      }
+    }
+
+    &__popularBadge {
+      top: -10px;
+      padding: spacing("xxs") spacing("sm");
+      font-size: map-get($font-sizes, "xxs");
+    }
+
+    &__price span {
+      font-size: map-get($font-sizes, "2xl");
+    }
+  }
+}

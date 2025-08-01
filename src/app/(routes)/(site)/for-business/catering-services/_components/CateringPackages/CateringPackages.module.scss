@@ -1,0 +1,270 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.cateringPackages {
+  padding: spacing("5xl") 0;
+  background: linear-gradient(
+    135deg,
+    color("neutral", "lighter") 0%,
+    color("primary", "lighter") 100%
+  );
+
+  &__container {
+    @include container();
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("4xl");
+
+    h2 {
+      @include heading-2();
+      color: color("primary", "base");
+      margin-bottom: spacing("lg");
+    }
+
+    p {
+      @include font-size("lg");
+      color: color("neutral", "dark");
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: map-get($line-heights, "relaxed");
+    }
+  }
+}
+
+.packages {
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: spacing("xl");
+    margin-bottom: spacing("4xl");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+      gap: spacing("lg");
+    }
+  }
+
+  &__footer {
+    background: color("neutral", "white");
+    border-radius: 20px;
+    padding: spacing("3xl");
+    text-align: center;
+    border: 1px solid color("primary", "light");
+    box-shadow: shadow("md");
+  }
+}
+
+.footer {
+  &__content {
+    h3 {
+      @include heading-4();
+      color: color("primary", "base");
+      margin-bottom: spacing("md");
+    }
+
+    p {
+      @include font-size("base");
+      color: color("neutral", "dark");
+      margin-bottom: spacing("lg");
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: map-get($line-heights, "relaxed");
+    }
+  }
+}
+
+.package {
+  &__card {
+    background: color("neutral", "white");
+    border-radius: 20px;
+    padding: spacing("xl");
+    border: 1px solid color("neutral", "light");
+    transition: all map-get($transition-duration, "base")
+      map-get($transition-timing, "ease-out");
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(
+        90deg,
+        color("accent", "base") 0%,
+        color("primary", "base") 100%
+      );
+      transform: scaleX(0);
+      transition: transform map-get($transition-duration, "base")
+        map-get($transition-timing, "ease-out");
+    }
+
+    &:hover {
+      box-shadow: shadow("lg");
+      border-color: color("primary", "light");
+
+      &::before {
+        transform: scaleX(1);
+      }
+    }
+
+    &_popular {
+      border-color: color("accent", "base");
+      border-width: 2px;
+      transform: scale(1.05);
+
+      &::before {
+        background: color("accent", "base");
+        transform: scaleX(1);
+      }
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+    background: linear-gradient(
+      135deg,
+      color("accent", "base") 0%,
+      color("primary", "base") 100%
+    );
+    color: color("neutral", "white");
+    padding: spacing("xs") spacing("sm");
+    border-radius: 20px;
+    @include font-size("xs");
+    font-weight: map-get($font-weights, "bold");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("lg");
+  }
+
+  &__icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: linear-gradient(
+      135deg,
+      color("accent", "lighter") 0%,
+      color("primary", "lighter") 100%
+    );
+    color: color("accent", "base");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto spacing("md");
+    transition: all map-get($transition-duration, "base")
+      map-get($transition-timing, "ease-out");
+
+    svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .package__card:hover & {
+      background: linear-gradient(
+        135deg,
+        color("accent", "base") 0%,
+        color("primary", "base") 100%
+      );
+      color: color("neutral", "white");
+      transform: scale(1.1);
+    }
+  }
+
+  &__header h3 {
+    @include heading-4();
+    color: color("primary", "base");
+    margin-bottom: spacing("sm");
+  }
+
+  &__pricing {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: spacing("xs");
+  }
+
+  &__price {
+    @include heading-3();
+    color: color("accent", "base");
+    font-weight: map-get($font-weights, "bold");
+  }
+
+  &__period {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+  }
+
+  &__description {
+    @include font-size("base");
+    color: color("neutral", "dark");
+    line-height: map-get($line-heights, "relaxed");
+    margin-bottom: spacing("lg");
+    text-align: center;
+  }
+
+  &__features {
+    flex: 1;
+    margin-bottom: spacing("lg");
+
+    h4 {
+      @include font-size("sm");
+      @include font-weight("semibold");
+      color: color("primary", "base");
+      margin-bottom: spacing("md");
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        @include font-size("sm");
+        color: color("neutral", "dark");
+        padding: spacing("xs") 0;
+        display: flex;
+        align-items: flex-start;
+        gap: spacing("sm");
+        line-height: map-get($line-heights, "relaxed");
+
+        svg {
+          width: 16px;
+          height: 16px;
+          color: color("accent", "base");
+          flex-shrink: 0;
+          margin-top: 2px;
+        }
+      }
+    }
+  }
+
+  &__cta {
+    text-align: center;
+  }
+}
+
+.feature {
+  &__icon {
+    width: 16px;
+    height: 16px;
+    color: color("accent", "base");
+    flex-shrink: 0;
+  }
+}

@@ -1,0 +1,184 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.laundryProcess {
+  @include section-spacing("4xl");
+  background-color: color("neutral", "light");
+  position: relative;
+  overflow: hidden;
+
+  // Background decoration
+  &::before {
+    content: "";
+    position: absolute;
+    left: -100px;
+    top: -100px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: rgba(color("primary", "lighter"), 0.3);
+    z-index: z-index("negative");
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: -80px;
+    bottom: -80px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background-color: rgba(color("secondary", "lighter"), 0.2);
+    z-index: z-index("negative");
+  }
+
+  &__container {
+    @include container;
+    position: relative;
+    z-index: z-index("base");
+    text-align: center;
+  }
+
+  h2 {
+    @include heading-2;
+    color: color("neutral", "black");
+    margin-bottom: spacing("3xl");
+    font-weight: map-get($font-weights, "bold");
+  }
+
+  &__steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: spacing("2xl");
+    position: relative;
+
+    @include breakpoint-up("md") {
+      grid-template-columns: repeat(4, 1fr);
+      gap: spacing("xl");
+    }
+
+    // Connection line between steps (desktop only)
+    &::before {
+      content: "";
+      position: absolute;
+      top: 40px;
+      left: 10%;
+      width: 80%;
+      height: 2px;
+      background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(color("primary", "base"), 0.3) 25%,
+        rgba(color("primary", "base"), 0.3) 75%,
+        transparent 100%
+      );
+      z-index: z-index("negative");
+
+      @include breakpoint-down("md") {
+        display: none;
+      }
+    }
+  }
+
+  &__step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: z-index("base");
+
+    @include breakpoint-down("sm") {
+      flex-direction: row;
+      text-align: left;
+      gap: spacing("md");
+    }
+  }
+
+  &__stepIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: border-radius("full");
+    background: linear-gradient(
+      135deg,
+      color("primary", "base") 0%,
+      color("primary", "dark") 100%
+    );
+    color: color("neutral", "white");
+    box-shadow: map-get($shadows, "md");
+    margin-bottom: spacing("md");
+    position: relative;
+    z-index: z-index("base");
+
+    @include breakpoint-down("sm") {
+      margin-bottom: 0;
+      width: 60px;
+      height: 60px;
+      min-width: 60px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    svg {
+      transition: $transition-base;
+    }
+  }
+
+  h3 {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
+
+    @include breakpoint-down("sm") {
+      margin-bottom: spacing("xs");
+    }
+  }
+
+  p {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "darker");
+    line-height: map-get($line-heights, "relaxed");
+    margin: 0;
+    max-width: 200px;
+
+    @include breakpoint-down("sm") {
+      max-width: none;
+      flex: 1;
+    }
+  }
+
+  // Hover effects
+  &__step:hover &__stepIcon {
+    transform: translateY(-3px);
+    box-shadow: map-get($shadows, "lg");
+
+    svg {
+      transform: scale(1.1);
+    }
+  }
+
+  @media (max-width: 768px) {
+    @include section-spacing("3xl");
+
+    &__container {
+      padding: 0 spacing("md");
+    }
+
+    h2 {
+      font-size: map-get($font-sizes, "2xl");
+      margin-bottom: spacing("2xl");
+    }
+
+    &__steps {
+      gap: spacing("xl");
+    }
+  }
+}

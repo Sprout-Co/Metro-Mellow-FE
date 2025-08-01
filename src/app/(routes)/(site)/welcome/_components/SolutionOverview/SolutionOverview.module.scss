@@ -3,361 +3,361 @@
 @import "abstracts/mixins";
 
 .solutionOverview {
-  @include section-spacing('4xl');
-  background-color: color('neutral', 'white');
-  
+  @include section-spacing("4xl");
+  background-color: color("neutral", "white");
+
   &__container {
     @include container;
-    max-width: map-get($container-max-widths, '2xl');
+    max-width: map-get($container-max-widths, "2xl");
   }
-  
+
   &__header {
     text-align: center;
-    margin-bottom: spacing('4xl');
-    
-    @include breakpoint-down('md') {
-      margin-bottom: spacing('3xl');
+    margin-bottom: spacing("4xl");
+
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("3xl");
     }
   }
-  
+
   &__title {
     @include heading-2;
-    margin-bottom: spacing('lg');
-    
+    margin-bottom: spacing("lg");
+
     &--accent {
       display: block;
-      color: color('primary', 'base');
-      @include font-weight('medium');
-      margin-bottom: spacing('xs');
+      color: color("primary", "base");
+      @include font-weight("medium");
+      margin-bottom: spacing("xs");
     }
-    
+
     &--main {
       display: block;
-      color: color('neutral', 'darkest');
-      @include font-weight('bold');
+      color: color("neutral", "darkest");
+      @include font-weight("bold");
     }
-    
-    @include breakpoint-down('md') {
-      @include font-size('h3');
+
+    @include breakpoint-down("md") {
+      @include font-size("h3");
     }
-    
-    @include breakpoint-down('sm') {
-      @include font-size('h4');
+
+    @include breakpoint-down("sm") {
+      @include font-size("h4");
     }
   }
-  
+
   &__subtitle {
     @include body-1;
-    color: color('neutral', 'dark');
+    color: color("neutral", "dark");
     max-width: 700px;
     margin: 0 auto;
-    line-height: line-height('relaxed');
-    
-    @include breakpoint-down('md') {
-      @include font-size('body-2');
+    line-height: line-height("relaxed");
+
+    @include breakpoint-down("md") {
+      @include font-size("body-2");
     }
   }
-  
+
   &__services {
-    margin-bottom: spacing('5xl');
-    
-    @include breakpoint-down('md') {
-      margin-bottom: spacing('4xl');
+    margin-bottom: spacing("5xl");
+
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("4xl");
     }
   }
-  
+
   &__benefits {
-    margin-bottom: spacing('5xl');
-    
-    @include breakpoint-down('md') {
-      margin-bottom: spacing('4xl');
+    margin-bottom: spacing("5xl");
+
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("4xl");
     }
   }
-  
+
   &__sectionTitle {
     @include heading-3;
-    color: color('neutral', 'darkest');
+    color: color("neutral", "darkest");
     text-align: center;
-    margin-bottom: spacing('3xl');
-    
-    @include breakpoint-down('md') {
-      @include font-size('h4');
-      margin-bottom: spacing('2xl');
+    margin-bottom: spacing("3xl");
+
+    @include breakpoint-down("md") {
+      @include font-size("h4");
+      margin-bottom: spacing("2xl");
     }
   }
-  
+
   &__serviceGrid {
-    @include grid-responsive(1, 1, 2, 2, spacing('2xl'));
-    
-    @include breakpoint-down('lg') {
-      @include grid-responsive(1, 1, 2, 2, spacing('xl'));
+    @include grid-responsive(1, 1, 2, 2, spacing("2xl"));
+
+    @include breakpoint-down("lg") {
+      @include grid-responsive(1, 1, 2, 2, spacing("xl"));
     }
-    
-    @include breakpoint-down('md') {
-      @include grid-responsive(1, 1, 1, 1, spacing('lg'));
-      gap: spacing('xl');
+
+    @include breakpoint-down("md") {
+      @include grid-responsive(1, 1, 1, 1, spacing("lg"));
+      gap: spacing("xl");
     }
-    
-    @include breakpoint-down('sm') {
-      gap: spacing('lg');
+
+    @include breakpoint-down("sm") {
+      gap: spacing("lg");
     }
   }
-  
+
   &__serviceCard {
-    @include card('md');
-    @include card-body('xl');
-    border: 1px solid color('neutral', 'lighter');
+    @include card("md");
+    @include card-body("xl");
+    border: 1px solid color("neutral", "lighter");
     transition: all 0.3s ease;
-    
+
     &:hover {
       transform: translateY(-6px);
-      box-shadow: map-get($shadows, 'xl');
-      border-color: color('primary', 'light');
+      box-shadow: map-get($shadows, "xl");
+      border-color: color("primary", "light");
     }
-    
-    @include breakpoint-down('sm') {
-      @include card-body('lg');
+
+    @include breakpoint-down("sm") {
+      @include card-body("lg");
     }
   }
-  
+
   &__serviceHeader {
     @include flex($align: center);
-    gap: spacing('md');
-    margin-bottom: spacing('lg');
-    
-    @include breakpoint-down('sm') {
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("sm") {
       flex-direction: column;
       text-align: center;
-      gap: spacing('sm');
-      margin-bottom: spacing('md');
+      gap: spacing("sm");
+      margin-bottom: spacing("md");
     }
   }
-  
+
   &__serviceIcon {
     @include flex-center;
     width: 50px;
     height: 50px;
     background: linear-gradient(
       135deg,
-      color('primary', 'base') 0%,
-      color('primary', 'dark') 100%
+      color("primary", "base") 0%,
+      color("primary", "dark") 100%
     );
-    border-radius: border-radius('xl');
+    border-radius: border-radius("xl");
     flex-shrink: 0;
-    
+
     svg {
       width: 24px;
       height: 24px;
-      color: color('neutral', 'white');
+      color: color("neutral", "white");
     }
-    
-    @include breakpoint-down('sm') {
+
+    @include breakpoint-down("sm") {
       width: 40px;
       height: 40px;
-      
+
       svg {
         width: 20px;
         height: 20px;
       }
     }
   }
-  
+
   &__serviceTitle {
     @include subtitle-1;
-    color: color('neutral', 'darkest');
+    color: color("neutral", "darkest");
     margin: 0;
-    
-    @include breakpoint-down('sm') {
-      @include font-size('subtitle-2');
+
+    @include breakpoint-down("sm") {
+      @include font-size("subtitle-2");
     }
   }
-  
+
   &__serviceDescription {
     @include body-2;
-    color: color('neutral', 'dark');
-    line-height: line-height('relaxed');
-    margin-bottom: spacing('lg');
-    
-    @include breakpoint-down('sm') {
-      @include font-size('caption');
+    color: color("neutral", "dark");
+    line-height: line-height("relaxed");
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      @include font-size("caption");
     }
   }
-  
+
   &__serviceFeatures {
     list-style: none;
     padding: 0;
     margin: 0;
     @include flex($direction: column);
-    gap: spacing('sm');
+    gap: spacing("sm");
   }
-  
+
   &__serviceFeature {
-    @include font-size('small');
-    color: color('neutral', 'darker');
+    @include font-size("small");
+    color: color("neutral", "darker");
     @include flex($align: center);
-    gap: spacing('xs');
-    
+    gap: spacing("xs");
+
     &::before {
       content: "✓";
-      color: color('primary', 'base');
-      @include font-weight('bold');
+      color: color("primary", "base");
+      @include font-weight("bold");
       font-size: 12px;
     }
   }
-  
+
   &__benefitGrid {
-    @include grid-responsive(1, 2, 2, 4, spacing('xl'));
-    
-    @include breakpoint-down('lg') {
-      @include grid-responsive(1, 2, 2, 3, spacing('lg'));
+    @include grid-responsive(1, 2, 2, 4, spacing("xl"));
+
+    @include breakpoint-down("lg") {
+      @include grid-responsive(1, 2, 2, 3, spacing("lg"));
     }
-    
-    @include breakpoint-down('md') {
-      @include grid-responsive(1, 1, 2, 2, spacing('lg'));
-      gap: spacing('lg');
+
+    @include breakpoint-down("md") {
+      @include grid-responsive(1, 1, 2, 2, spacing("lg"));
+      gap: spacing("lg");
     }
-    
-    @include breakpoint-down('sm') {
-      @include grid-responsive(1, 1, 1, 1, spacing('md'));
-      gap: spacing('md');
+
+    @include breakpoint-down("sm") {
+      @include grid-responsive(1, 1, 1, 1, spacing("md"));
+      gap: spacing("md");
     }
   }
-  
+
   &__benefitCard {
     text-align: center;
-    padding: spacing('xl');
-    border-radius: border-radius('lg');
-    background-color: color('neutral', 'lightest');
-    border: 1px solid color('neutral', 'lighter');
+    padding: spacing("xl");
+    border-radius: border-radius("lg");
+    background-color: color("neutral", "lightest");
+    border: 1px solid color("neutral", "lighter");
     transition: all 0.3s ease;
-    
+
     &:hover {
-      background-color: color('neutral', 'white');
+      background-color: color("neutral", "white");
       transform: translateY(-2px);
-      box-shadow: map-get($shadows, 'md');
+      box-shadow: map-get($shadows, "md");
     }
-    
-    @include breakpoint-down('sm') {
-      padding: spacing('lg');
+
+    @include breakpoint-down("sm") {
+      padding: spacing("lg");
     }
   }
-  
+
   &__benefitIcon {
     @include flex-center;
     width: 60px;
     height: 60px;
     background: linear-gradient(
       135deg,
-      color('accent', 'base') 0%,
-      color('accent', 'dark') 100%
+      color("accent", "base") 0%,
+      color("accent", "dark") 100%
     );
-    border-radius: border-radius('2xl');
-    margin: 0 auto spacing('lg');
-    
+    border-radius: border-radius("2xl");
+    margin: 0 auto spacing("lg");
+
     svg {
       width: 28px;
       height: 28px;
-      color: color('neutral', 'darkest');
+      color: color("neutral", "darkest");
     }
-    
-    @include breakpoint-down('sm') {
+
+    @include breakpoint-down("sm") {
       width: 50px;
       height: 50px;
-      
+
       svg {
         width: 24px;
         height: 24px;
       }
     }
   }
-  
+
   &__benefitTitle {
     @include subtitle-2;
-    color: color('neutral', 'darkest');
-    margin-bottom: spacing('md');
-    
-    @include breakpoint-down('sm') {
-      @include font-size('body-1');
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("md");
+
+    @include breakpoint-down("sm") {
+      @include font-size("body-1");
     }
   }
-  
+
   &__benefitDescription {
     @include body-2;
-    color: color('neutral', 'dark');
-    line-height: line-height('relaxed');
+    color: color("neutral", "dark");
+    line-height: line-height("relaxed");
     margin: 0;
-    
-    @include breakpoint-down('sm') {
-      @include font-size('caption');
+
+    @include breakpoint-down("sm") {
+      @include font-size("caption");
     }
   }
-  
+
   &__launch {
     text-align: center;
     max-width: 800px;
     margin: 0 auto;
-    padding: spacing('4xl') spacing('2xl');
+    padding: spacing("4xl") spacing("2xl");
     background: linear-gradient(
       135deg,
-      color('primary', 'base') 0%,
-      color('primary', 'dark') 100%
+      color("primary", "base") 0%,
+      color("primary", "dark") 100%
     );
-    border-radius: border-radius('2xl');
-    color: color('neutral', 'white');
-    
-    @include breakpoint-down('md') {
-      padding: spacing('3xl') spacing('xl');
+    border-radius: border-radius("2xl");
+    color: color("neutral", "white");
+
+    @include breakpoint-down("md") {
+      padding: spacing("3xl") spacing("xl");
     }
-    
-    @include breakpoint-down('sm') {
-      padding: spacing('2xl') spacing('lg');
-      border-radius: border-radius('lg');
+
+    @include breakpoint-down("sm") {
+      padding: spacing("2xl") spacing("lg");
+      border-radius: border-radius("lg");
     }
   }
-  
+
   &__launchTitle {
     @include heading-3;
-    color: color('neutral', 'white');
-    margin-bottom: spacing('lg');
-    
-    @include breakpoint-down('md') {
-      @include font-size('h4');
+    color: color("neutral", "white");
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("md") {
+      @include font-size("h4");
     }
   }
-  
+
   &__launchText {
     @include body-1;
-    color: color('neutral', 'lightest');
-    line-height: line-height('relaxed');
-    margin-bottom: spacing('xl');
-    
-    @include breakpoint-down('md') {
-      @include font-size('body-2');
+    color: color("neutral", "lightest");
+    line-height: line-height("relaxed");
+    margin-bottom: spacing("xl");
+
+    @include breakpoint-down("md") {
+      @include font-size("body-2");
     }
   }
-  
+
   &__launchBadge {
     @include flex($justify: center, $wrap: wrap);
-    gap: spacing('md');
-    
-    @include breakpoint-down('sm') {
-      gap: spacing('sm');
+    gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      gap: spacing("sm");
     }
-    
+
     span {
-      @include font-size('small');
-      @include font-weight('medium');
-      background-color: color-alpha('neutral', 'white', 0.2);
-      color: color('neutral', 'white');
-      padding: spacing('xs') spacing('md');
-      border-radius: border-radius('pill');
-      border: 1px solid color-alpha('neutral', 'white', 0.3);
+      @include font-size("small");
+      @include font-weight("medium");
+      background-color: color-alpha("neutral", "white", 0.2);
+      color: color("neutral", "white");
+      padding: spacing("xs") spacing("md");
+      border-radius: border-radius("pill");
+      border: 1px solid color-alpha("neutral", "white", 0.3);
       text-transform: uppercase;
-      letter-spacing: letter-spacing('wide');
-      
-      @include breakpoint-down('sm') {
-        @include font-size('xs');
-        padding: spacing('xxs') spacing('sm');
+      letter-spacing: letter-spacing("wide");
+
+      @include breakpoint-down("sm") {
+        @include font-size("xs");
+        padding: spacing("xxs") spacing("sm");
       }
     }
   }
