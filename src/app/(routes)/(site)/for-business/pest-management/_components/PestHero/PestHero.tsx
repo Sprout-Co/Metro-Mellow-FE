@@ -22,17 +22,22 @@ const PestHero: React.FC = () => {
             Professional Commercial Pest Control
           </div>
           <h1 className={styles.pestHero__title}>
-            <span className={styles["pestHero__title--accent"]}>Comprehensive</span>
+            <span className={styles["pestHero__title--accent"]}>
+              Comprehensive
+            </span>
             <span className={styles["pestHero__title--main"]}>
-              Pest Management<br />Solutions
+              Pest Management
+              <br />
+              Solutions
             </span>
           </h1>
           <p className={styles.pestHero__subtitle}>
-            Protect your business reputation and ensure a safe, hygienic environment with our
-            comprehensive commercial pest control solutions. From prevention to emergency response,
-            we safeguard your workplace against all pest threats.
+            Protect your business reputation and ensure a safe, hygienic
+            environment with our comprehensive commercial pest control
+            solutions. From prevention to emergency response, we safeguard your
+            workplace against all pest threats.
           </p>
-          <div className={styles.pestHero__stats}>
+          {/* <div className={styles.pestHero__stats}>
             <div className={styles.pestHero__stat}>
               <Shield size={24} />
               <div>
@@ -62,7 +67,7 @@ const PestHero: React.FC = () => {
             <Button variant="white" size="lg" rightIcon={<Phone size={18} />}>
               Emergency Line
             </Button>
-          </div>
+          </div> */}
         </motion.div>
       </div>
     </section>

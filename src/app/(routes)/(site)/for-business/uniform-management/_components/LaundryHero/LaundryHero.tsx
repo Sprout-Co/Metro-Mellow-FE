@@ -22,17 +22,22 @@ const LaundryHero: React.FC = () => {
             Professional Laundry & Uniform Services
           </div>
           <h1 className={styles.laundryHero__title}>
-            <span className={styles["laundryHero__title--accent"]}>Premium</span>
+            <span className={styles["laundryHero__title--accent"]}>
+              Premium
+            </span>
             <span className={styles["laundryHero__title--main"]}>
-              Corporate<br />Laundry Solutions
+              Corporate
+              <br />
+              Laundry Solutions
             </span>
           </h1>
           <p className={styles.laundryHero__subtitle}>
-            Keep your team looking professional with our comprehensive laundry and uniform
-            management services. From daily garment care to specialized uniform maintenance,
-            we ensure your corporate image stays pristine.
+            Keep your team looking professional with our comprehensive laundry
+            and uniform management services. From daily garment care to
+            specialized uniform maintenance, we ensure your corporate image
+            stays pristine.
           </p>
-          <div className={styles.laundryHero__features}>
+          {/* <div className={styles.laundryHero__features}>
             <div className={styles.laundryHero__feature}>
               <Shirt size={20} />
               <span>Uniform Care Specialists</span>
@@ -49,15 +54,15 @@ const LaundryHero: React.FC = () => {
               <Droplets size={20} />
               <span>Eco-Friendly Products</span>
             </div>
-          </div>
-          <div className={styles.laundryHero__cta}>
+          </div> */}
+          {/* <div className={styles.laundryHero__cta}>
             <Button variant="primary" size="lg" rightIcon={<ArrowRight size={18} />}>
               Get Free Quote
             </Button>
             <Button variant="white" size="lg" rightIcon={<Shirt size={18} />}>
               Schedule Pickup
             </Button>
-          </div>
+          </div> */}
         </motion.div>
       </div>
     </section>

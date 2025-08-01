@@ -22,17 +22,22 @@ const CustomHero: React.FC = () => {
             Tailored Business Solutions
           </div>
           <h1 className={styles.customHero__title}>
-            <span className={styles["customHero__title--accent"]}>Integrated</span>
+            <span className={styles["customHero__title--accent"]}>
+              Integrated
+            </span>
             <span className={styles["customHero__title--main"]}>
-              Custom Service<br />Solutions
+              Custom Service
+              <br />
+              Solutions
             </span>
           </h1>
           <p className={styles.customHero__subtitle}>
-            Every business is unique. That's why we create integrated service packages
-            tailored to your specific needs, industry requirements, and operational goals.
-            From single-location businesses to multi-national corporations.
+            Every business is unique. That's why we create integrated service
+            packages tailored to your specific needs, industry requirements, and
+            operational goals. From single-location businesses to multi-national
+            corporations.
           </p>
-          <div className={styles.customHero__features}>
+          {/* <div className={styles.customHero__features}>
             <div className={styles.customHero__feature}>
               <Settings size={20} />
               <span>Customizable Service Bundles</span>
@@ -53,7 +58,7 @@ const CustomHero: React.FC = () => {
             <Button variant="white" size="lg" rightIcon={<Users size={18} />}>
               Consult Expert
             </Button>
-          </div>
+          </div> */}
         </motion.div>
       </div>
     </section>

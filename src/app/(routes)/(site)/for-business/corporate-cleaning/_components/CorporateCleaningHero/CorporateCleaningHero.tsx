@@ -15,16 +15,20 @@ import styles from "./CorporateCleaningHero.module.scss";
 
 const CorporateCleaningHero: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  
+
   const heroImages = [
-    '/images/corporate/cp5.png',
-    '/images/corporate/cp6.png',
-    '/images/corporate/cp7.png',
+    "/images/corporate/cp5.png",
+    "/images/corporate/cp6.png",
+    "/images/corporate/cp7.png",
   ];
 
   const stats = [
     { icon: <Shield size={24} />, number: "500+", label: "Corporate Clients" },
-    { icon: <Clock size={24} />, number: "24/7", label: "Service Availability" },
+    {
+      icon: <Clock size={24} />,
+      number: "24/7",
+      label: "Service Availability",
+    },
     { icon: <Star size={24} />, number: "98%", label: "Client Satisfaction" },
   ];
 
@@ -116,12 +120,12 @@ const CorporateCleaningHero: React.FC = () => {
             custom={2}
             variants={textVariants}
           >
-            Maintain the highest standards of cleanliness and professionalism
-            in your workplace with our comprehensive corporate cleaning solutions.
+            Maintain the highest standards of cleanliness and professionalism in
+            your workplace with our comprehensive corporate cleaning solutions.
             From daily maintenance to specialized deep cleaning, we ensure your
             business environment reflects your commitment to excellence.
           </motion.p>
-
+          {/* 
           <motion.div
             className={styles.corporateCleaningHero__highlights}
             initial="hidden"
@@ -161,10 +165,10 @@ const CorporateCleaningHero: React.FC = () => {
             >
               Schedule Consultation
             </Button>
-          </motion.div>
+          </motion.div> */}
         </div>
 
-        <motion.div
+        {/* <motion.div
           className={styles.corporateCleaningHero__stats}
           initial="hidden"
           animate="visible"
@@ -184,16 +188,14 @@ const CorporateCleaningHero: React.FC = () => {
               </div>
             </div>
           ))}
-        </motion.div>
+        </motion.div> */}
       </div>
 
       <div className={styles.corporateCleaningHero__indicators}>
         {heroImages.map((_, index) => (
           <span
             key={index}
-            className={`${
-              styles.corporateCleaningHero__indicator
-            } ${
+            className={`${styles.corporateCleaningHero__indicator} ${
               index === currentSlide
                 ? styles["corporateCleaningHero__indicator--active"]
                 : ""
