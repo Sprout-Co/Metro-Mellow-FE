@@ -30,7 +30,14 @@ export enum Routes {
   WELCOME = "/welcome",
   ABOUT = "/about",
   CONTACT = "/contact",
-  FOR_BUSINESS = "/for-business",
   TERMS = "/terms",
   PRIVACY = "/privacy",
+
+  // For Business routes
+  FOR_BUSINESS = "/for-business",
+  FOR_BUSINESS_CATERING = "/for-business/catering-services",
+  FOR_BUSINESS_CLEANING = "/for-business/corporate-cleaning",
+  FOR_BUSINESS_LAUNDRY = "/for-business/uniform-management",
+  FOR_BUSINESS_PEST_CONTROL = "/for-business/pest-management",
+  FOR_BUSINESS_CUSTOM_SOLUTIONS = "/for-business/custom-solutions",
 }

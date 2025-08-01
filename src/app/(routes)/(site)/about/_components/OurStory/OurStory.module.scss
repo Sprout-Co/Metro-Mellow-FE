@@ -1,22 +1,22 @@
 // components/about/OurStory.module.scss
-@import '../../../../../../styles/abstracts/variables';
-@import '../../../../../../styles/abstracts/functions';
-@import '../../../../../../styles/abstracts/mixins';
+@import "../../../../../../styles/abstracts/variables";
+@import "../../../../../../styles/abstracts/functions";
+@import "../../../../../../styles/abstracts/mixins";
 
 .story {
-  @include section-spacing('6xl');
-  background-color: color('neutral', 'white');
+  @include section-spacing("6xl");
+  background-color: color("neutral", "white");
 
   &__container {
     @include container;
   }
 
   &__grid {
-    @include grid-responsive(1, 2, 2, 2, spacing('3xl'));
+    @include grid-responsive(1, 2, 2, 2, spacing("3xl"));
     align-items: center;
 
-    @include breakpoint-down('lg') {
-      gap: spacing('2xl');
+    @include breakpoint-down("lg") {
+      gap: spacing("2xl");
     }
   }
 
@@ -34,7 +34,7 @@
     object-fit: cover;
     z-index: 2;
     position: relative;
-    box-shadow: shadow('lg');
+    box-shadow: shadow("lg");
   }
 
   &__imageAccent {
@@ -43,8 +43,8 @@
     left: -20px;
     width: 100%;
     height: 100%;
-    background-color: color('primary', 'light');
-    border-radius: border-radius('lg');
+    background-color: color("primary", "light");
+    border-radius: border-radius("lg");
     z-index: 1;
 
     @include breakpoint-down("md") {
@@ -63,40 +63,40 @@
 
   &__title {
     @include heading-3;
-    color: color('neutral', 'darker');
-    margin-bottom: spacing('md');
+    color: color("neutral", "darker");
+    margin-bottom: spacing("md");
 
-    @include breakpoint-down('md') {
-      @include font-size('h4');
+    @include breakpoint-down("md") {
+      @include font-size("h4");
     }
   }
 
   &__divider {
     width: 80px;
     height: 4px;
-    background-color: color('primary', 'base');
-    margin-bottom: spacing('xl');
+    background-color: color("primary", "base");
+    margin-bottom: spacing("xl");
   }
 
   &__paragraph {
     @include body-1;
-    color: color('neutral', 'dark');
-    margin-bottom: spacing('lg');
+    color: color("neutral", "dark");
+    margin-bottom: spacing("lg");
 
-    @include breakpoint-down('md') {
+    @include breakpoint-down("md") {
       @include body-2;
     }
   }
 
   &__signature {
-    margin-top: spacing('xl');
+    margin-top: spacing("xl");
     @include flex-column;
   }
 
   &__founders {
     @include caption;
-    color: color('neutral', 'darker');
-    margin-top: spacing('xs');
+    color: color("neutral", "darker");
+    margin-top: spacing("xs");
     font-style: italic;
   }
 }

@@ -61,7 +61,7 @@ export default function AboutPage() {
   return (
     <main className={styles.aboutPage}>
       <StorySection />
-      {/* <VideoSection /> */}
+      <VideoSection />
       <ImpactSection />
       <MagicHandsSection />
       <FAQSection faqs={aboutFaqs} />

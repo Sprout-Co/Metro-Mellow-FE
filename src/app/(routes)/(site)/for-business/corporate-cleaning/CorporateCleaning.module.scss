@@ -1,0 +1,12 @@
+// ===================================
+// CORPORATE CLEANING PAGE
+// ===================================
+
+@import "abstracts/variables";
+@import "abstracts/mixins";
+@import "abstracts/functions";
+
+.corporateCleaning {
+  background: color("neutral", "white");
+  min-height: 100vh;
+}
