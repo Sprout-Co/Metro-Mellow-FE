@@ -37,7 +37,7 @@ export enum Routes {
   FOR_BUSINESS = "/for-business",
   FOR_BUSINESS_CATERING = "/for-business/catering-services",
   FOR_BUSINESS_CLEANING = "/for-business/corporate-cleaning",
-  FOR_BUSINESS_LAUNDRY = "/for-business/laundry-services",
-  FOR_BUSINESS_PEST_CONTROL = "/for-business/pest-control-services",
+  FOR_BUSINESS_LAUNDRY = "/for-business/uniform-management",
+  FOR_BUSINESS_PEST_CONTROL = "/for-business/pest-management",
   FOR_BUSINESS_CUSTOM_SOLUTIONS = "/for-business/custom-solutions",
 }

@@ -297,6 +297,35 @@ const EnterpriseServices: React.FC = () => {
             />
           ))}
         </div>
+
+        {/* Custom Solutions CTA Section */}
+        <motion.div
+          className={styles.enterpriseServices__customSolutionsCTA}
+          variants={headerVariants}
+          initial="hidden"
+          animate={headerControls}
+        >
+          <div className={styles.enterpriseServices__customSolutionsContent}>
+            <h3 className={styles.enterpriseServices__customSolutionsTitle}>
+              Need Something More Specific?
+            </h3>
+            <p
+              className={styles.enterpriseServices__customSolutionsDescription}
+            >
+              Every business is unique. Explore our custom solutions tailored to
+              your industry's specific needs and challenges.
+            </p>
+            <Button
+              variant="secondary"
+              size="lg"
+              rightIcon={<ArrowRight size={18} />}
+              className={styles.enterpriseServices__customSolutionsButton}
+              href={Routes.FOR_BUSINESS_CUSTOM_SOLUTIONS}
+            >
+              Explore Custom Solutions
+            </Button>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
