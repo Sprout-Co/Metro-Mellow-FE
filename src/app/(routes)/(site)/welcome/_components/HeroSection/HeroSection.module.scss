@@ -75,6 +75,7 @@
     flex-direction: column;
     justify-content: center;
     text-align: left;
+    align-items: flex-start;
 
     @include breakpoint-down("lg") {
       align-items: flex-start;
