@@ -6,273 +6,38 @@ import { Button } from "@/components/ui/Button";
 import { Clock, Star, ArrowRight, Search } from "lucide-react";
 import styles from "./ServiceCatalog.module.scss";
 import { AnimatePresence, motion } from "framer-motion";
-
-// Define food categories data
-const foodCategories = [
-  {
-    id: "combos",
-    title: "Combo's",
-    image: "/images/food/jollof-rice.png",
-    price: "NGN 5,000",
-    description: "Complete meal with rice, protein & sides",
-    duration: "30-45 mins",
-    rating: 4.8,
-    includes: "Rice, Protein, Vegetables, Drink",
-  },
-  {
-    id: "platters",
-    title: "Platters",
-    image: "/images/food/f1.png",
-    price: "NGN 5,000",
-    description: "Generous portions perfect for sharing",
-    duration: "25-40 mins",
-    rating: 4.7,
-    includes: "Mixed portions, Multiple sides",
-  },
-  {
-    id: "proteins",
-    title: "Proteins",
-    image: "/images/food/pounded-yam-efo-riro.png",
-    price: "NGN 5,000",
-    description: "Premium grilled proteins prepared fresh",
-    duration: "20-35 mins",
-    rating: 4.9,
-    includes: "Chicken, Beef, Fish options",
-  },
-  {
-    id: "wraps",
-    title: "Wraps",
-    image: "/images/food/f4.jpeg",
-    price: "NGN 5,000",
-    description: "Fresh wraps with premium fillings",
-    duration: "15-25 mins",
-    rating: 4.6,
-    includes: "Fresh vegetables, Premium sauces",
-  },
-  {
-    id: "soups",
-    title: "Soups",
-    image: "/images/food/f2.png",
-    price: "NGN 5,000",
-    description: "Traditional Nigerian soups",
-    duration: "35-50 mins",
-    rating: 4.8,
-    includes: "Traditional spices, Fresh ingredients",
-  },
-  {
-    id: "drinks",
-    title: "Drinks",
-    image: "/images/food/f3.jpeg",
-    price: "NGN 5,000",
-    description: "Refreshing beverages & traditional drinks",
-    duration: "5-10 mins",
-    rating: 4.5,
-    includes: "Hot & Cold options available",
-  },
-];
-
-// Define cleaning categories data
-const cleaningCategories = [
-  {
-    id: "deep-cleaning",
-    title: "Deep Cleaning",
-    image: "/images/cleaning/c1.jpeg",
-    price: "From NGN 15,000",
-    description: "Comprehensive cleaning for your entire space",
-    duration: "4-6 hours",
-    rating: 4.9,
-    includes: "All rooms, Appliances, Deep sanitization",
-  },
-  {
-    id: "regular-cleaning",
-    title: "Regular Cleaning",
-    image: "/images/cleaning/c2.jpeg",
-    price: "From NGN 8,000",
-    description: "Weekly maintenance cleaning service",
-    duration: "2-3 hours",
-    rating: 4.8,
-    includes: "Surface cleaning, Vacuuming, Mopping",
-  },
-  {
-    id: "kitchen-cleaning",
-    title: "Kitchen Cleaning",
-    image: "/images/cleaning/c3.jpeg",
-    price: "From NGN 6,000",
-    description: "Kitchen deep cleaning & sanitization",
-    duration: "2-3 hours",
-    rating: 4.7,
-    includes: "Appliances, Counters, Cabinet exteriors",
-  },
-  {
-    id: "bathroom-cleaning",
-    title: "Bathroom Cleaning",
-    image: "/images/cleaning/c1.jpeg",
-    price: "From NGN 4,000",
-    description: "Complete bathroom sanitization",
-    duration: "1-2 hours",
-    rating: 4.8,
-    includes: "Tiles, Fixtures, Mirrors, Sanitization",
-  },
-  {
-    id: "window-cleaning",
-    title: "Window Cleaning",
-    image: "/images/cleaning/c2.jpeg",
-    price: "From NGN 3,000",
-    description: "Professional interior & exterior cleaning",
-    duration: "1-2 hours",
-    rating: 4.6,
-    includes: "Interior & Exterior, Frames, Sills",
-  },
-  {
-    id: "carpet-cleaning",
-    title: "Carpet Cleaning",
-    image: "/images/cleaning/c3.jpeg",
-    price: "From NGN 5,000",
-    description: "Professional carpet & upholstery cleaning",
-    duration: "2-4 hours",
-    rating: 4.7,
-    includes: "Steam cleaning, Stain removal, Deodorizing",
-  },
-];
-
-// Define pest control categories data
-const pestControlCategories = [
-  {
-    id: "general-pest",
-    title: "General Pest Control",
-    image: "/images/pest-control/p1.jpeg",
-    price: "From NGN 12,000",
-    description: "Complete pest prevention & elimination",
-    duration: "2-3 hours",
-    rating: 4.8,
-    includes: "Inspection, Treatment, 3-month warranty",
-  },
-  {
-    id: "cockroach-control",
-    title: "Cockroach Control",
-    image: "/images/pest-control/p1.jpeg",
-    price: "From NGN 8,000",
-    description: "Safe cockroach elimination treatment",
-    duration: "1-2 hours",
-    rating: 4.9,
-    includes: "Gel baiting, Spray treatment, Follow-up",
-  },
-  {
-    id: "rodent-control",
-    title: "Rodent Control",
-    image: "/images/pest-control/p1.jpeg",
-    price: "From NGN 10,000",
-    description: "Rodent removal & entry point sealing",
-    duration: "2-4 hours",
-    rating: 4.7,
-    includes: "Trapping, Sealing, Prevention advice",
-  },
-  {
-    id: "termite-control",
-    title: "Termite Control",
-    image: "/images/pest-control/p1.jpeg",
-    price: "From NGN 25,000",
-    description: "Professional termite treatment",
-    duration: "4-6 hours",
-    rating: 4.8,
-    includes: "Soil treatment, Wood treatment, 1-year warranty",
-  },
-  {
-    id: "bedbug-control",
-    title: "Bedbug Control",
-    image: "/images/pest-control/p1.jpeg",
-    price: "From NGN 15,000",
-    description: "Complete bedbug heat treatment",
-    duration: "3-5 hours",
-    rating: 4.6,
-    includes: "Heat treatment, Chemical spray, Mattress care",
-  },
-  {
-    id: "mosquito-control",
-    title: "Mosquito Control",
-    image: "/images/pest-control/p1.jpeg",
-    price: "From NGN 7,000",
-    description: "Mosquito control & breeding elimination",
-    duration: "1-2 hours",
-    rating: 4.5,
-    includes: "Fogging, Breeding site treatment, Prevention",
-  },
-];
-
-// Define laundry categories data
-const laundryCategories = [
-  {
-    id: "wash-dry-fold",
-    title: "Wash & Fold",
-    image: "/images/laundry/l1.jpeg",
-    price: "From NGN 2,000",
-    description: "Complete wash, dry & fold service",
-    duration: "24-48 hours",
-    rating: 4.8,
-    includes: "Wash, Dry, Fold, Eco-friendly detergent",
-  },
-  {
-    id: "dry-cleaning",
-    title: "Dry Cleaning",
-    image: "/images/laundry/l2.jpeg",
-    price: "From NGN 3,500",
-    description: "Professional dry cleaning service",
-    duration: "2-3 days",
-    rating: 4.9,
-    includes: "Stain treatment, Press, Protective bags",
-  },
-  {
-    id: "ironing",
-    title: "Ironing",
-    image: "/images/laundry/l3.jpeg",
-    price: "From NGN 500",
-    description: "Professional ironing for crisp clothes",
-    duration: "4-8 hours",
-    rating: 4.7,
-    includes: "Steam ironing, Hangers, Quality guarantee",
-  },
-  {
-    id: "starch-press",
-    title: "Starch & Press",
-    image: "/images/laundry/l1.jpeg",
-    price: "From NGN 800",
-    description: "Traditional starch & press service",
-    duration: "6-12 hours",
-    rating: 4.6,
-    includes: "Custom starch levels, Professional press",
-  },
-  {
-    id: "curtain-cleaning",
-    title: "Curtain Cleaning",
-    image: "/images/laundry/l2.jpeg",
-    price: "From NGN 5,000",
-    description: "Specialized curtain cleaning service",
-    duration: "3-5 days",
-    rating: 4.5,
-    includes: "Take down, Clean, Rehang service",
-  },
-  {
-    id: "bedding-cleaning",
-    title: "Bedding Cleaning",
-    image: "/images/laundry/l3.jpeg",
-    price: "From NGN 3,000",
-    description: "Deep cleaning for bedding & pillows",
-    duration: "2-3 days",
-    rating: 4.8,
-    includes: "Sanitization, Dust mite removal, Fresh scent",
-  },
-];
+import {
+  useGetServicesQuery,
+  ServiceCategory,
+  Service,
+  ServiceStatus,
+  ExtraItem,
+} from "@/graphql/api";
 
 // Define service categories for sidebar
 const serviceCategories = [
-  { id: "food", name: "Food" },
-  { id: "cleaning", name: "Cleaning" },
-  { id: "pest-control", name: "Pest Control" },
-  { id: "laundry", name: "Laundry" },
+  { id: "COOKING", name: "Food" },
+  { id: "CLEANING", name: "Cleaning" },
+  { id: "PEST_CONTROL", name: "Pest Control" },
+  { id: "LAUNDRY", name: "Laundry" },
 ];
 
 const ServiceCatalog: FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState("food");
+  const [selectedCategory, setSelectedCategory] = useState<ServiceCategory>(
+    ServiceCategory.Cooking
+  );
+
+  // Fetch services from API
+  const {
+    data: servicesData,
+    loading,
+    error,
+  } = useGetServicesQuery({
+    variables: {
+      category: selectedCategory,
+      status: ServiceStatus.Active,
+    },
+  });
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -297,45 +62,123 @@ const ServiceCatalog: FC = () => {
     },
   };
 
+  // Function to validate and get safe image URL
+  const getSafeImageUrl = (imageUrl: string | null | undefined): string => {
+    if (!imageUrl) {
+      return "/images/food/jollof-rice.png"; // fallback image
+    }
+
+    // Check if it's a relative URL (starts with /)
+    if (imageUrl.startsWith("/")) {
+      return imageUrl;
+    }
+
+    // Check if it's a local image in public folder
+    if (imageUrl.startsWith("/images/")) {
+      return imageUrl;
+    }
+
+    // For external URLs, we'll use a fallback for now
+    // You can add specific domains to next.config.ts if needed
+    console.warn(`External image URL not configured: ${imageUrl}`);
+    return "/images/food/jollof-rice.png"; // fallback image
+  };
+
+  // Function to get appropriate button text based on category
+  const getButtonText = (category: ServiceCategory): string => {
+    switch (category) {
+      case ServiceCategory.Cooking:
+        return "Order Now";
+      case ServiceCategory.Cleaning:
+        return "Book Cleaning";
+      case ServiceCategory.Laundry:
+        return "Book Laundry";
+      case ServiceCategory.PestControl:
+        return "Book Service";
+      default:
+        return "Book Now";
+    }
+  };
+
   // Function to get the appropriate data based on selected category
   const getCategoryData = () => {
-    switch (selectedCategory) {
-      case "food":
-        return {
-          data: foodCategories,
-          title: "Our Delicacies",
-          subtitle:
-            "Explore our menu of delicious meals prepared with fresh ingredients",
-        };
-      case "cleaning":
-        return {
-          data: cleaningCategories,
-          title: "Cleaning Services",
-          subtitle:
-            "Professional cleaning services to keep your space spotless and fresh",
-        };
-      case "pest-control":
-        return {
-          data: pestControlCategories,
-          title: "Pest Control Solutions",
-          subtitle:
-            "Effective pest control treatments for a pest-free environment",
-        };
-      case "laundry":
-        return {
-          data: laundryCategories,
-          title: "Laundry Services",
-          subtitle:
-            "Quality laundry services to keep your clothes looking their best",
-        };
-      default:
-        return {
-          data: foodCategories,
-          title: "Our Delicacies",
-          subtitle:
-            "Explore our menu of delicious meals prepared with fresh ingredients",
-        };
-    }
+    const services = servicesData?.services || [];
+
+    // Transform API data to display service options
+    const transformedServices: any[] = [];
+
+    services.forEach((service: Service) => {
+      // If service has options, display each option as a separate card
+      if (service.options && service.options.length > 0) {
+        service.options.forEach((option) => {
+          transformedServices.push({
+            id: `${service._id}-${option.id}`,
+            serviceId: service._id,
+            optionId: option.id,
+            title: option.label,
+            image: getSafeImageUrl(service.imageUrl),
+            price: `NGN ${option.price.toLocaleString()}`,
+            description: option.description,
+            duration: "30-45 mins", // This might need to come from service options or be calculated
+            rating: 4.8, // This might need to come from reviews/ratings
+            includes:
+              option.inclusions?.join(", ") ||
+              service.inclusions?.join(", ") ||
+              "Standard service",
+            serviceName: service.name,
+            extraItems: option.extraItems,
+          });
+        });
+      } else {
+        // If no options, display the main service
+        transformedServices.push({
+          id: service._id,
+          serviceId: service._id,
+          title: service.name,
+          image: getSafeImageUrl(service.imageUrl),
+          price: service.displayPrice,
+          description: service.description,
+          duration: "30-45 mins", // This might need to come from service options or be calculated
+          rating: 4.8, // This might need to come from reviews/ratings
+          includes: service.inclusions?.join(", ") || "Standard service",
+          serviceName: service.name,
+        });
+      }
+    });
+
+    const categoryConfig = {
+      [ServiceCategory.Cooking]: {
+        title: "Our Delicacies",
+        subtitle:
+          "Explore our menu of delicious meals prepared with fresh ingredients",
+      },
+      [ServiceCategory.Cleaning]: {
+        title: "Cleaning Services",
+        subtitle:
+          "Professional cleaning services to keep your space spotless and fresh",
+      },
+      [ServiceCategory.PestControl]: {
+        title: "Pest Control Solutions",
+        subtitle:
+          "Effective pest control treatments for a pest-free environment",
+      },
+      [ServiceCategory.Laundry]: {
+        title: "Laundry Services",
+        subtitle:
+          "Quality laundry services to keep your clothes looking their best",
+      },
+      [ServiceCategory.Errands]: {
+        title: "Errand Services",
+        subtitle: "Convenient errand services to save you time and effort",
+      },
+    };
+
+    return {
+      data: transformedServices,
+      title: categoryConfig[selectedCategory]?.title || "Services",
+      subtitle:
+        categoryConfig[selectedCategory]?.subtitle || "Explore our services",
+    };
   };
 
   const {
@@ -343,6 +186,165 @@ const ServiceCatalog: FC = () => {
     title: currentTitle,
     subtitle: currentSubtitle,
   } = getCategoryData();
+
+  // Handle loading state
+  if (loading) {
+    return (
+      <section className={styles.catalog}>
+        <div className={styles.catalog__container}>
+          <div className={styles.catalog__header}>
+            <h2 className={styles.catalog__title}>Our catalog</h2>
+            <p className={styles.catalog__subtitle}>
+              Select your need and wait for the magic.
+            </p>
+          </div>
+          <div className={styles.catalog__content}>
+            <div className={styles.catalog__sidebar}>
+              <div className={styles.catalog__sidebarHeader}>
+                <h3 className={styles.catalog__sidebarTitle}>Categories</h3>
+              </div>
+              <ul className={styles.catalog__sidebarList}>
+                {serviceCategories.map((category) => (
+                  <li
+                    key={category.id}
+                    className={`${styles.catalog__sidebarItem} ${
+                      category.id === selectedCategory
+                        ? styles["catalog__sidebarItem--active"]
+                        : ""
+                    }`}
+                    onClick={() =>
+                      setSelectedCategory(category.id as ServiceCategory)
+                    }
+                  >
+                    {category.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className={styles.catalog__main}>
+              <div className={styles.catalog__mainHeader}>
+                <h3 className={styles.catalog__mainTitle}>Loading...</h3>
+                <p className={styles.catalog__mainSubtitle}>
+                  Please wait while we fetch the services.
+                </p>
+              </div>
+              <div className={styles.catalog__grid}>
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <div key={i} className={styles.catalog__card}>
+                    <div className={styles.catalog__cardImageWrapper}>
+                      <div
+                        className={styles.catalog__cardImage}
+                        style={{ backgroundColor: "#f0f0f0", height: "300px" }}
+                      />
+                    </div>
+                    <div className={styles.catalog__cardContent}>
+                      <div className={styles.catalog__cardHeader}>
+                        <h4 className={styles.catalog__cardTitle}>
+                          Loading...
+                        </h4>
+                        <div className={styles.catalog__cardPrice}>...</div>
+                      </div>
+                      <p className={styles.catalog__cardDescription}>
+                        Loading service details...
+                      </p>
+                      <div className={styles.catalog__cardMeta}>
+                        <div className={styles.catalog__cardMetaItem}>
+                          <Clock size={16} />
+                          <span>...</span>
+                        </div>
+                        <div className={styles.catalog__cardMetaItem}>
+                          <Star size={16} />
+                          <span>...</span>
+                        </div>
+                      </div>
+                      <div className={styles.catalog__cardActions}>
+                        <Button
+                          variant="primary"
+                          size="lg"
+                          fullWidth={true}
+                          disabled
+                        >
+                          Loading...
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Handle error state
+  if (error) {
+    return (
+      <section className={styles.catalog}>
+        <div className={styles.catalog__container}>
+          <div className={styles.catalog__header}>
+            <h2 className={styles.catalog__title}>Our catalog</h2>
+            <p className={styles.catalog__subtitle}>
+              Select your need and wait for the magic.
+            </p>
+          </div>
+          <div className={styles.catalog__content}>
+            <div className={styles.catalog__sidebar}>
+              <div className={styles.catalog__sidebarHeader}>
+                <h3 className={styles.catalog__sidebarTitle}>Categories</h3>
+              </div>
+              <ul className={styles.catalog__sidebarList}>
+                {serviceCategories.map((category) => (
+                  <li
+                    key={category.id}
+                    className={`${styles.catalog__sidebarItem} ${
+                      category.id === selectedCategory
+                        ? styles["catalog__sidebarItem--active"]
+                        : ""
+                    }`}
+                    onClick={() =>
+                      setSelectedCategory(category.id as ServiceCategory)
+                    }
+                  >
+                    {category.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className={styles.catalog__main}>
+              <div className={styles.catalog__mainHeader}>
+                <h3 className={styles.catalog__mainTitle}>
+                  Error Loading Services
+                </h3>
+                <p className={styles.catalog__mainSubtitle}>
+                  We encountered an error while loading the services. Please try
+                  again later.
+                </p>
+              </div>
+              <div className={styles.catalog__grid}>
+                <motion.div
+                  className={styles.catalog__empty}
+                  variants={itemVariants}
+                >
+                  <div className={styles.catalog__emptyIcon}>
+                    <Search size={48} />
+                  </div>
+                  <h4 className={styles.catalog__emptyTitle}>
+                    Unable to load services
+                  </h4>
+                  <p className={styles.catalog__emptyText}>
+                    {error.message ||
+                      "An error occurred while fetching services. Please refresh the page or try again later."}
+                  </p>
+                </motion.div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className={styles.catalog}>
@@ -369,7 +371,9 @@ const ServiceCatalog: FC = () => {
                       ? styles["catalog__sidebarItem--active"]
                       : ""
                   }`}
-                  onClick={() => setSelectedCategory(category.id)}
+                  onClick={() =>
+                    setSelectedCategory(category.id as ServiceCategory)
+                  }
                 >
                   {category.name}
                 </li>
@@ -457,9 +461,29 @@ const ServiceCatalog: FC = () => {
                           </div>
                         </div>
 
+                        {/* Show extra items if available */}
+                        {service.extraItems &&
+                          service.extraItems.length > 0 && (
+                            <div className={styles.catalog__cardExtra}>
+                              <h5>Extra Items Available:</h5>
+                              <div className={styles.catalog__cardExtraItems}>
+                                {service.extraItems.map(
+                                  (item: ExtraItem, index: number) => (
+                                    <span
+                                      key={index}
+                                      className={styles.catalog__cardExtraItem}
+                                    >
+                                      {item.name} (+NGN {item.cost})
+                                    </span>
+                                  )
+                                )}
+                              </div>
+                            </div>
+                          )}
+
                         <div className={styles.catalog__cardActions}>
                           <Button variant="primary" size="lg" fullWidth={true}>
-                            Book Now
+                            {getButtonText(selectedCategory)}
                           </Button>
                         </div>
                       </div>
