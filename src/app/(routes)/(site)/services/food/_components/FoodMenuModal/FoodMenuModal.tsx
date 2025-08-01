@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/Button/Button";
 import Modal from "@/components/ui/Modal/Modal";
 import FoodItemModal from "../FoodItemModal";
-import CartModal, { CartItem } from "@/components/ui/CartModal";
+import CartModal, { CartItem } from "@/components/ui/booking/modals/CartModal";
 import CartIcon from "@/components/ui/CartIcon";
 import styles from "./FoodMenuModal.module.scss";
 
@@ -34,7 +34,8 @@ const foodItems: FoodItem[] = [
   {
     id: "1",
     name: "Fried Rice",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f1.png",
     isSpicy: true,
@@ -43,7 +44,8 @@ const foodItems: FoodItem[] = [
   {
     id: "2",
     name: "Jollof Rice",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/jollof-rice.png",
     isSpicy: true,
@@ -52,7 +54,8 @@ const foodItems: FoodItem[] = [
   {
     id: "3",
     name: "Creamy Pasta",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f2.png",
     isSpicy: true,
@@ -61,7 +64,8 @@ const foodItems: FoodItem[] = [
   {
     id: "4",
     name: "Jollof Pasta",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f3.jpeg",
     isSpicy: true,
@@ -70,7 +74,8 @@ const foodItems: FoodItem[] = [
   {
     id: "5",
     name: "Amala & Ewedu",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/amala-ewedu.png",
     isSpicy: false,
@@ -79,7 +84,8 @@ const foodItems: FoodItem[] = [
   {
     id: "6",
     name: "Egusi & Fufu",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/egusi-fufu.png",
     isSpicy: false,
@@ -88,7 +94,8 @@ const foodItems: FoodItem[] = [
   {
     id: "7",
     name: "Pounded Yam & Efo Riro",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/pounded-yam-efo-riro.png",
     isSpicy: true,
@@ -97,7 +104,8 @@ const foodItems: FoodItem[] = [
   {
     id: "8",
     name: "Grilled Chicken",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f4.jpeg",
     isSpicy: false,
@@ -106,7 +114,8 @@ const foodItems: FoodItem[] = [
   {
     id: "9",
     name: "Beef Stew",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f5.jpeg",
     isSpicy: true,
@@ -115,7 +124,8 @@ const foodItems: FoodItem[] = [
   {
     id: "10",
     name: "Fish Pepper Soup",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f6.jpeg",
     isSpicy: true,
@@ -124,7 +134,8 @@ const foodItems: FoodItem[] = [
   {
     id: "11",
     name: "Vegetable Salad",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f7.jpeg",
     isSpicy: false,
@@ -133,7 +144,8 @@ const foodItems: FoodItem[] = [
   {
     id: "12",
     name: "Chicken Curry",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f8.jpeg",
     isSpicy: true,
@@ -142,7 +154,8 @@ const foodItems: FoodItem[] = [
   {
     id: "13",
     name: "Moi Moi",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f9.jpeg",
     isSpicy: false,
@@ -151,7 +164,8 @@ const foodItems: FoodItem[] = [
   {
     id: "14",
     name: "Akara",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f10.jpeg",
     isSpicy: false,
@@ -160,7 +174,8 @@ const foodItems: FoodItem[] = [
   {
     id: "15",
     name: "Suya",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f11.jpeg",
     isSpicy: true,
@@ -169,7 +184,8 @@ const foodItems: FoodItem[] = [
   {
     id: "16",
     name: "Pepper Soup",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f12.jpeg",
     isSpicy: true,
@@ -178,7 +194,8 @@ const foodItems: FoodItem[] = [
   {
     id: "17",
     name: "Efo Riro",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f13.jpeg",
     isSpicy: false,
@@ -187,7 +204,8 @@ const foodItems: FoodItem[] = [
   {
     id: "18",
     name: "Banga Soup",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f14.jpeg",
     isSpicy: false,
@@ -196,7 +214,8 @@ const foodItems: FoodItem[] = [
   {
     id: "19",
     name: "Okro Soup",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f15.jpeg",
     isSpicy: false,
@@ -205,7 +224,8 @@ const foodItems: FoodItem[] = [
   {
     id: "20",
     name: "Ewedu Soup",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f16.jpeg",
     isSpicy: false,
@@ -214,7 +234,8 @@ const foodItems: FoodItem[] = [
   {
     id: "21",
     name: "Gbegiri",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f17.png",
     isSpicy: false,
@@ -223,7 +244,8 @@ const foodItems: FoodItem[] = [
   {
     id: "22",
     name: "Efo Elegusi",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f20.jpeg",
     isSpicy: true,
@@ -232,7 +254,8 @@ const foodItems: FoodItem[] = [
   {
     id: "23",
     name: "Ogbono Soup",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f21.jpeg",
     isSpicy: false,
@@ -241,7 +264,8 @@ const foodItems: FoodItem[] = [
   {
     id: "24",
     name: "Afang Soup",
-    description: "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
+    description:
+      "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
     image: "/images/food/f0.jpeg",
     isSpicy: false,
@@ -253,7 +277,9 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
   const [cartItems, setCartItems] = useState<FoodItem[]>([]);
   const [visibleItems, setVisibleItems] = useState(8);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFoodItem, setSelectedFoodItem] = useState<FoodItem | null>(null);
+  const [selectedFoodItem, setSelectedFoodItem] = useState<FoodItem | null>(
+    null
+  );
   const [isFoodItemModalOpen, setIsFoodItemModalOpen] = useState(false);
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
 
@@ -262,13 +288,13 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
     // In a real implementation, these would come from user selection
     const itemWithVariants = {
       ...item,
-      variants: ['Beef', 'Turkey', 'Salad'] // Default variants as shown in the image
+      variants: ["Beef", "Turkey", "Salad"], // Default variants as shown in the image
     };
-    setCartItems(prev => [...prev, itemWithVariants]);
+    setCartItems((prev) => [...prev, itemWithVariants]);
   };
 
   const handleLoadMore = () => {
-    setVisibleItems(prev => Math.min(prev + 8, filteredItems.length));
+    setVisibleItems((prev) => Math.min(prev + 8, filteredItems.length));
   };
 
   const formatPrice = (price: number) => {
@@ -280,7 +306,7 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
     setSelectedFoodItem(item);
     setIsFoodItemModalOpen(true);
   };
-  
+
   // Close food item modal
   const handleFoodItemModalClose = () => {
     setIsFoodItemModalOpen(false);
@@ -304,59 +330,63 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
       price: item.price,
       image: item.image,
       quantity: item.quantity || 1,
-      variants: item.variants || []
+      variants: item.variants || [],
     }));
   };
 
   // Handle cart item quantity update
   const handleUpdateQuantity = (id: string, quantity: number) => {
-    console.log('Updating quantity for item:', id, 'to:', quantity);
-    
+    console.log("Updating quantity for item:", id, "to:", quantity);
+
     if (quantity <= 0) {
       handleRemoveItem(id);
     } else {
-      const [itemId] = id.split('-');
-      setCartItems(prev => prev.map(item => {
-        if (item.id === itemId) {
-          return {
-            ...item,
-            quantity: quantity
-          };
-        }
-        return item;
-      }));
+      const [itemId] = id.split("-");
+      setCartItems((prev) =>
+        prev.map((item) => {
+          if (item.id === itemId) {
+            return {
+              ...item,
+              quantity: quantity,
+            };
+          }
+          return item;
+        })
+      );
     }
   };
 
   // Handle cart item removal
   const handleRemoveItem = (id: string) => {
-    const [itemId] = id.split('-');
-    setCartItems(prev => prev.filter(item => item.id !== itemId));
+    const [itemId] = id.split("-");
+    setCartItems((prev) => prev.filter((item) => item.id !== itemId));
   };
 
   // Handle variant removal
   const handleRemoveVariant = (itemId: string, variant: string) => {
-    const [originalItemId] = itemId.split('-');
-    setCartItems(prev => prev.map(item => {
-      if (item.id === originalItemId) {
-        return {
-          ...item,
-          variants: item.variants?.filter(v => v !== variant) || []
-        };
-      }
-      return item;
-    }));
+    const [originalItemId] = itemId.split("-");
+    setCartItems((prev) =>
+      prev.map((item) => {
+        if (item.id === originalItemId) {
+          return {
+            ...item,
+            variants: item.variants?.filter((v) => v !== variant) || [],
+          };
+        }
+        return item;
+      })
+    );
   };
 
   // Handle continue to checkout
   const handleContinueToCheckout = () => {
-    console.log('Continue to checkout with items:', cartItems);
+    console.log("Continue to checkout with items:", cartItems);
     setIsCartModalOpen(false);
     // Here you would typically navigate to checkout or open checkout modal
   };
 
   // Filter items based on search query
-  const filteredItems = foodItems.filter(item =>
+  const filteredItems = foodItems.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -371,9 +401,7 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
   // Custom header content
   const headerContent = (
     <div className={styles.modal__headerContent}>
-      <h2 className={styles.modal__title}>
-        Select your sumptuous platters
-      </h2>
+      <h2 className={styles.modal__title}>Select your sumptuous platters</h2>
       <div className={styles.modal__cart}>
         <CartIcon
           itemCount={cartItems.length}
@@ -425,7 +453,7 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
                   className={styles.modal__foodImage}
                 />
               </div>
-              
+
               <div className={styles.modal__topRatedContainer}>
                 {item.isTopRated && (
                   <div className={styles.modal__topRatedLabel}>
@@ -433,23 +461,21 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
                   </div>
                 )}
                 {item.isSpicy && (
-                  <div className={styles.modal__spicyBadge}>
-                    Spicy
-                  </div>
+                  <div className={styles.modal__spicyBadge}>Spicy</div>
                 )}
               </div>
-              
+
               <h3 className={styles.modal__foodName}>{item.name}</h3>
-              
+
               <p className={styles.modal__foodDescription}>
                 {item.description}
               </p>
-              
+
               <div className={styles.modal__foodFooter}>
                 <span className={styles.modal__foodPrice}>
                   {formatPrice(item.price)}
                 </span>
-                <button 
+                <button
                   className={styles.modal__addToCartButton}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -467,10 +493,7 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
         {hasMoreItems && (
           <div className={styles.modal__loadMoreContainer}>
             <div className={styles.modal__separatorLine}></div>
-            <Button
-              size="lg"
-              onClick={handleLoadMore}
-            >
+            <Button size="lg" onClick={handleLoadMore}>
               LOAD MORE DISHES
             </Button>
             <div className={styles.modal__separatorLine}></div>

@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Portal from "../Portal/Portal";
-import Button from "../Button/Button";
+import Portal from "../../../Portal/Portal";
+import Button from "../../../Button/Button";
 import styles from "./CheckoutModal.module.scss";
 
 export interface CheckoutModalProps {
@@ -123,16 +123,16 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ 
+            transition={{
               duration: 0.3,
-              ease: "easeOut"
+              ease: "easeOut",
             }}
           >
             {/* Header */}
             <div className={styles.checkoutModal__header}>
               <h2 className={styles.checkoutModal__title}>Checkout</h2>
-              <button 
-                className={styles.checkoutModal__close} 
+              <button
+                className={styles.checkoutModal__close}
                 onClick={onClose}
                 aria-label="Close modal"
               >
@@ -156,7 +156,10 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
             {/* Form Content */}
             <div className={styles.checkoutModal__content}>
-              <form onSubmit={handleSubmit} className={styles.checkoutModal__form}>
+              <form
+                onSubmit={handleSubmit}
+                className={styles.checkoutModal__form}
+              >
                 {/* Section Title */}
                 <h3 className={styles.checkoutModal__sectionTitle}>
                   {serviceType} Details
@@ -256,7 +259,10 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
                 {/* Fullname Field */}
                 <div className={styles.checkoutModal__field}>
-                  <label htmlFor="fullname" className={styles.checkoutModal__label}>
+                  <label
+                    htmlFor="fullname"
+                    className={styles.checkoutModal__label}
+                  >
                     Fullname
                   </label>
                   <input
@@ -272,7 +278,10 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
                 {/* State Field */}
                 <div className={styles.checkoutModal__field}>
-                  <label htmlFor="state" className={styles.checkoutModal__label}>
+                  <label
+                    htmlFor="state"
+                    className={styles.checkoutModal__label}
+                  >
                     State
                   </label>
                   <select
@@ -314,7 +323,10 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
                 {/* Address Field */}
                 <div className={styles.checkoutModal__field}>
-                  <label htmlFor="address" className={styles.checkoutModal__label}>
+                  <label
+                    htmlFor="address"
+                    className={styles.checkoutModal__label}
+                  >
                     Address
                   </label>
                   <input
@@ -330,7 +342,10 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
                 {/* Email Field */}
                 <div className={styles.checkoutModal__field}>
-                  <label htmlFor="email" className={styles.checkoutModal__label}>
+                  <label
+                    htmlFor="email"
+                    className={styles.checkoutModal__label}
+                  >
                     Email Address
                   </label>
                   <input
@@ -346,7 +361,10 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
                 {/* Phone Field */}
                 <div className={styles.checkoutModal__field}>
-                  <label htmlFor="phone" className={styles.checkoutModal__label}>
+                  <label
+                    htmlFor="phone"
+                    className={styles.checkoutModal__label}
+                  >
                     Phone
                   </label>
                   <input
@@ -381,4 +399,4 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   );
 };
 
-export default CheckoutModal; 
+export default CheckoutModal;

@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
-import Modal from '@/components/ui/Modal/Modal';
-import { Button } from '@/components/ui/Button/Button';
-import CartIcon from '@/components/ui/CartIcon';
-import ShippingDetailsModal, { ShippingDetails } from '@/components/ui/ShippingDetailsModal/ShippingDetailsModal';
-import styles from './CartModal.module.scss';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import Modal from "@/components/ui/Modal/Modal";
+import { Button } from "@/components/ui/Button/Button";
+import CartIcon from "@/components/ui/CartIcon";
+import ShippingDetailsModal, {
+  ShippingDetails,
+} from "@/components/ui/booking/modals/ShippingDetailsModal/ShippingDetailsModal";
+import styles from "./CartModal.module.scss";
 
 export interface CartItem {
   id: string;
@@ -40,7 +42,10 @@ export const CartModal: React.FC<CartModalProps> = ({
   const [showShippingModal, setShowShippingModal] = useState(false);
 
   // Calculate subtotal
-  const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const subtotal = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   // Format price with NGN currency
   const formatPrice = (price: number) => {
@@ -71,13 +76,9 @@ export const CartModal: React.FC<CartModalProps> = ({
           <div className={styles.cartModal__headerTitle}>
             <div className={styles.cartModal__headerLeft}>
               <span>Your cart</span>
-              <CartIcon
-                itemCount={items.length}
-                size="sm"
-                showBadge={true}
-              />
+              <CartIcon itemCount={items.length} size="sm" showBadge={true} />
             </div>
-            <button 
+            <button
               className={styles.cartModal__closeButton}
               onClick={onClose}
               aria-label="Close cart"
@@ -109,23 +110,30 @@ export const CartModal: React.FC<CartModalProps> = ({
                         objectFit="cover"
                       />
                     </div>
-                    
+
                     <div className={styles.cartModal__itemInfo}>
-                      <h3 className={styles.cartModal__itemName}>{item.name}</h3>
-                      
+                      <h3 className={styles.cartModal__itemName}>
+                        {item.name}
+                      </h3>
+
                       <div className={styles.cartModal__itemPrice}>
                         NGN {item.price.toLocaleString()}
                       </div>
-                      
+
                       {item.variants.length > 0 && (
                         <div className={styles.cartModal__itemVariants}>
                           {item.variants.map((variant, index) => (
-                            <div key={index} className={styles.cartModal__itemVariant}>
+                            <div
+                              key={index}
+                              className={styles.cartModal__itemVariant}
+                            >
                               {variant}
-                              <button 
+                              <button
                                 className={styles.cartModal__variantRemove}
                                 aria-label={`Remove ${variant}`}
-                                onClick={() => onRemoveVariant?.(item.id, variant)}
+                                onClick={() =>
+                                  onRemoveVariant?.(item.id, variant)
+                                }
                               >
                                 ✕
                               </button>
@@ -133,37 +141,76 @@ export const CartModal: React.FC<CartModalProps> = ({
                           ))}
                         </div>
                       )}
-                      
+
                       <div className={styles.cartModal__itemActions}>
                         <div className={styles.cartModal__quantityControls}>
                           <button
                             className={styles.cartModal__quantityButton}
                             onClick={() => {
-                              console.log('Decrement clicked for item:', item.id, 'current quantity:', item.quantity);
-                              onUpdateQuantity(item.id, Math.max(1, item.quantity - 1));
+                              console.log(
+                                "Decrement clicked for item:",
+                                item.id,
+                                "current quantity:",
+                                item.quantity
+                              );
+                              onUpdateQuantity(
+                                item.id,
+                                Math.max(1, item.quantity - 1)
+                              );
                             }}
                             disabled={item.quantity <= 1}
                             type="button"
                           >
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <svg
+                              width="12"
+                              height="12"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M5 12H19"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
                             </svg>
                           </button>
-                          <span className={styles.cartModal__quantity}>{item.quantity}</span>
+                          <span className={styles.cartModal__quantity}>
+                            {item.quantity}
+                          </span>
                           <button
                             className={styles.cartModal__quantityButton}
                             onClick={() => {
-                              console.log('Increment clicked for item:', item.id, 'current quantity:', item.quantity);
+                              console.log(
+                                "Increment clicked for item:",
+                                item.id,
+                                "current quantity:",
+                                item.quantity
+                              );
                               onUpdateQuantity(item.id, item.quantity + 1);
                             }}
                             type="button"
                           >
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <svg
+                              width="12"
+                              height="12"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M12 5V19M5 12H19"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
                             </svg>
                           </button>
                         </div>
-                        
+
                         <button
                           className={styles.cartModal__itemRemove}
                           onClick={() => onRemoveItem(item.id)}
@@ -190,14 +237,16 @@ export const CartModal: React.FC<CartModalProps> = ({
                   </div>
                 ))}
               </div>
-              
+
               <div className={styles.cartModal__subtotal}>
-                <span className={styles.cartModal__subtotalLabel}>Sub-total</span>
+                <span className={styles.cartModal__subtotalLabel}>
+                  Sub-total
+                </span>
                 <span className={styles.cartModal__subtotalAmount}>
                   NGN {subtotal.toLocaleString()}
                 </span>
               </div>
-              
+
               <div className={styles.cartModal__footer}>
                 <Button
                   variant="primary"
@@ -213,7 +262,7 @@ export const CartModal: React.FC<CartModalProps> = ({
         </div>
       </Modal>
 
-      <ShippingDetailsModal 
+      <ShippingDetailsModal
         isOpen={showShippingModal && isOpen}
         onClose={handleShippingModalClose}
         onContinue={handleShippingDetailsSubmit}
@@ -222,4 +271,4 @@ export const CartModal: React.FC<CartModalProps> = ({
   );
 };
 
-export default CartModal; 
+export default CartModal;

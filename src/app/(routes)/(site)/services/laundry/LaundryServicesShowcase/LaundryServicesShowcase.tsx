@@ -5,7 +5,9 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import styles from "./LaundryServicesShowcase.module.scss";
 import { Button } from "@/components/ui/Button/Button";
-import ServiceModal, { ServiceConfiguration } from "@/components/ui/ServiceModal/ServiceModal";
+import ServiceModal, {
+  ServiceConfiguration,
+} from "@/components/ui/booking/modals/ServiceModal/ServiceModal";
 
 // Service data
 const laundryServices = [
@@ -22,7 +24,7 @@ const laundryServices = [
       "Fabric Softener",
     ],
     price: 1950,
-    image: "/images/laundry/l1.jpeg"
+    image: "/images/laundry/l1.jpeg",
   },
   {
     id: "premium",
@@ -37,7 +39,7 @@ const laundryServices = [
       "Garment Steaming",
     ],
     price: 3450,
-    image: "/images/laundry/l5.jpeg"
+    image: "/images/laundry/l5.jpeg",
   },
   {
     id: "drycleaning",
@@ -52,11 +54,9 @@ const laundryServices = [
       "Garment Preservation",
     ],
     price: 4950,
-    image: "/images/laundry/dry-cleaning.jpg"
+    image: "/images/laundry/dry-cleaning.jpg",
   },
 ];
-
-
 
 const LaundryServicesShowcase = () => {
   const [sectionRef, inView] = useInView({
@@ -66,7 +66,9 @@ const LaundryServicesShowcase = () => {
 
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<typeof laundryServices[0] | null>(null);
+  const [selectedService, setSelectedService] = useState<
+    (typeof laundryServices)[0] | null
+  >(null);
 
   // Configuration for laundry service modal
   const getLaundryServiceConfiguration = (): ServiceConfiguration => ({
@@ -80,7 +82,7 @@ const LaundryServicesShowcase = () => {
       { id: "shoe", name: "Shoe", count: 1 },
       { id: "other", name: "Other", count: 1 },
     ],
-    allowCustomization: true
+    allowCustomization: true,
   });
 
   const containerVariants = {
@@ -107,7 +109,7 @@ const LaundryServicesShowcase = () => {
   };
 
   // Handle opening the modal with selected service
-  const handleOpenModal = (service: typeof laundryServices[0]) => {
+  const handleOpenModal = (service: (typeof laundryServices)[0]) => {
     setSelectedService(service);
     setIsModalOpen(true);
   };
@@ -129,7 +131,7 @@ const LaundryServicesShowcase = () => {
     "Satisfaction guarantee",
     "Flexible pickup and delivery",
     "Eco-friendly washing options",
-    "Careful handling of delicate fabrics"
+    "Careful handling of delicate fabrics",
   ];
 
   return (
@@ -151,9 +153,12 @@ const LaundryServicesShowcase = () => {
               : { opacity: 0, y: 20 }
           }
         >
-          <h2 className={styles.showcase__title}>Choose Your Laundry Service</h2>
+          <h2 className={styles.showcase__title}>
+            Choose Your Laundry Service
+          </h2>
           <p className={styles.showcase__subtitle}>
-            From everyday essentials to specialty fabrics, we have the perfect care solution for your garments.
+            From everyday essentials to specialty fabrics, we have the perfect
+            care solution for your garments.
           </p>
         </motion.div>
 
@@ -190,7 +195,7 @@ const LaundryServicesShowcase = () => {
                     </li>
                   ))}
                 </ul>
-                
+
                 <div className={styles.showcase__priceTag}>
                   <span className={styles.showcase__priceValue}>
                     NGN {service.price.toLocaleString()}
@@ -199,8 +204,8 @@ const LaundryServicesShowcase = () => {
                 </div>
 
                 <div className={styles.showcase__action}>
-                  <Button 
-                    variant="primary" 
+                  <Button
+                    variant="primary"
                     size="sm"
                     onClick={() => handleOpenModal(service)}
                   >
@@ -232,4 +237,4 @@ const LaundryServicesShowcase = () => {
   );
 };
 
-export default LaundryServicesShowcase; 
+export default LaundryServicesShowcase;

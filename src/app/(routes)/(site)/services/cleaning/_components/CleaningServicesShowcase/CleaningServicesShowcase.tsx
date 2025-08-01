@@ -5,7 +5,9 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import styles from "./CleaningServicesShowcase.module.scss";
 import { Button } from "@/components/ui/Button/Button";
-import ServiceModal, { ServiceConfiguration } from "@/components/ui/ServiceModal/ServiceModal";
+import ServiceModal, {
+  ServiceConfiguration,
+} from "@/components/ui/booking/modals/ServiceModal/ServiceModal";
 
 // Service data
 const cleaningServices = [
@@ -22,7 +24,7 @@ const cleaningServices = [
       "Kitchen Cleaning",
     ],
     price: 2950,
-    image: "/images/cleaning/c1.jpeg"
+    image: "/images/cleaning/c1.jpeg",
   },
   {
     id: "deep",
@@ -37,7 +39,7 @@ const cleaningServices = [
       "Light Fixtures",
     ],
     price: 4950,
-    image: "/images/cleaning/c2.jpeg"
+    image: "/images/cleaning/c2.jpeg",
   },
   {
     id: "movein",
@@ -52,7 +54,7 @@ const cleaningServices = [
       "Wall Washing",
     ],
     price: 6950,
-    image: "/images/cleaning/c3.jpeg"
+    image: "/images/cleaning/c3.jpeg",
   },
 ];
 
@@ -64,7 +66,9 @@ const CleaningServicesShowcase = () => {
 
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<typeof cleaningServices[0] | null>(null);
+  const [selectedService, setSelectedService] = useState<
+    (typeof cleaningServices)[0] | null
+  >(null);
 
   // Configuration for cleaning service modal
   const getCleaningServiceConfiguration = (): ServiceConfiguration => ({
@@ -73,8 +77,8 @@ const CleaningServicesShowcase = () => {
         id: "apartmentType",
         name: "Your Apartment type",
         options: ["Flat/Apartment", "Duplex/House"],
-        required: true
-      }
+        required: true,
+      },
     ],
     options: [
       { id: "bedroom", name: "Bedroom", count: 1 },
@@ -87,7 +91,7 @@ const CleaningServicesShowcase = () => {
       { id: "bathroom", name: "Bathroom", count: 1 },
       { id: "other", name: "Other", count: 1 },
     ],
-    allowCustomization: true
+    allowCustomization: true,
   });
 
   // Features included in cleaning services
@@ -97,7 +101,7 @@ const CleaningServicesShowcase = () => {
     "Satisfaction guarantee",
     "Flexible scheduling options",
     "Eco-friendly cleaning products available",
-    "Deep sanitization and disinfection"
+    "Deep sanitization and disinfection",
   ];
 
   const containerVariants = {
@@ -124,7 +128,7 @@ const CleaningServicesShowcase = () => {
   };
 
   // Handle opening the modal with selected service
-  const handleOpenModal = (service: typeof cleaningServices[0]) => {
+  const handleOpenModal = (service: (typeof cleaningServices)[0]) => {
     setSelectedService(service);
     setIsModalOpen(true);
   };
@@ -195,8 +199,8 @@ const CleaningServicesShowcase = () => {
                 </ul>
 
                 <div className={styles.showcase__action}>
-                  <Button 
-                    variant="primary" 
+                  <Button
+                    variant="primary"
                     size="sm"
                     onClick={() => handleOpenModal(service)}
                   >

@@ -5,7 +5,9 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import styles from "./PestControlServicesShowcase.module.scss";
 import { Button } from "@/components/ui/Button/Button";
-import ServiceModal, { ServiceConfiguration } from "@/components/ui/ServiceModal/ServiceModal";
+import ServiceModal, {
+  ServiceConfiguration,
+} from "@/components/ui/booking/modals/ServiceModal/ServiceModal";
 
 // Service data
 const pestControlServices = [
@@ -22,7 +24,7 @@ const pestControlServices = [
       "30-Day Guarantee",
     ],
     price: 7500,
-    image: "/images/pest-control/p1.jpeg"
+    image: "/images/pest-control/p1.jpeg",
   },
   {
     id: "termite",
@@ -37,7 +39,7 @@ const pestControlServices = [
       "3-Month Guarantee",
     ],
     price: 12500,
-    image: "/images/pest-control/p1.jpeg"
+    image: "/images/pest-control/p1.jpeg",
   },
   {
     id: "rodent",
@@ -52,7 +54,7 @@ const pestControlServices = [
       "Preventative Consultation",
     ],
     price: 9500,
-    image: "/images/pest-control/p1.jpeg"
+    image: "/images/pest-control/p1.jpeg",
   },
 ];
 
@@ -64,7 +66,9 @@ const PestControlServicesShowcase = () => {
 
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<typeof pestControlServices[0] | null>(null);
+  const [selectedService, setSelectedService] = useState<
+    (typeof pestControlServices)[0] | null
+  >(null);
 
   // Configuration for pest control service modal
   const getPestControlServiceConfiguration = (): ServiceConfiguration => ({
@@ -75,7 +79,7 @@ const PestControlServicesShowcase = () => {
       { id: "bathrooms", name: "Bathrooms", count: 1 },
       { id: "outdoor", name: "Outdoor Area", count: 1 },
     ],
-    allowCustomization: true
+    allowCustomization: true,
   });
 
   const containerVariants = {
@@ -102,7 +106,7 @@ const PestControlServicesShowcase = () => {
   };
 
   // Handle opening the modal with selected service
-  const handleOpenModal = (service: typeof pestControlServices[0]) => {
+  const handleOpenModal = (service: (typeof pestControlServices)[0]) => {
     setSelectedService(service);
     setIsModalOpen(true);
   };
@@ -124,7 +128,7 @@ const PestControlServicesShowcase = () => {
     "Satisfaction guarantee",
     "Flexible scheduling options",
     "Eco-friendly solutions available",
-    "Comprehensive pest assessment included"
+    "Comprehensive pest assessment included",
   ];
 
   return (
@@ -146,9 +150,12 @@ const PestControlServicesShowcase = () => {
               : { opacity: 0, y: 20 }
           }
         >
-          <h2 className={styles.showcase__title}>Choose Your Pest Control Service</h2>
+          <h2 className={styles.showcase__title}>
+            Choose Your Pest Control Service
+          </h2>
           <p className={styles.showcase__subtitle}>
-            From basic treatments to specialized solutions, we have the perfect pest management options for your home or business.
+            From basic treatments to specialized solutions, we have the perfect
+            pest management options for your home or business.
           </p>
         </motion.div>
 
@@ -185,7 +192,7 @@ const PestControlServicesShowcase = () => {
                     </li>
                   ))}
                 </ul>
-                
+
                 <div className={styles.showcase__priceTag}>
                   <span className={styles.showcase__priceValue}>
                     NGN {service.price.toLocaleString()}
@@ -194,8 +201,8 @@ const PestControlServicesShowcase = () => {
                 </div>
 
                 <div className={styles.showcase__action}>
-                  <Button 
-                    variant="primary" 
+                  <Button
+                    variant="primary"
                     size="sm"
                     onClick={() => handleOpenModal(service)}
                   >
@@ -227,4 +234,4 @@ const PestControlServicesShowcase = () => {
   );
 };
 
-export default PestControlServicesShowcase; 
+export default PestControlServicesShowcase;
