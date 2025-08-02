@@ -13,6 +13,9 @@ import {
   ServiceStatus,
   ServiceOption,
 } from "@/graphql/api";
+import ServiceModal, {
+  ServiceConfiguration,
+} from "@/components/ui/booking/modals/ServiceModal/ServiceModal";
 
 // Define service categories for sidebar
 const serviceCategories = [
@@ -30,6 +33,9 @@ const ServiceCatalog: FC = () => {
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [selectedOption, setSelectedOption] = useState<ServiceOption | null>(
+    null
+  );
 
   // Fetch services from API
   const {
@@ -104,7 +110,7 @@ const ServiceCatalog: FC = () => {
     }
   };
 
-  // Function to get category configuration
+  // Function to get category configuration using API data
   const getCategoryConfig = (category: ServiceCategory) => {
     const categoryConfig = {
       [ServiceCategory.Cooking]: {
@@ -139,6 +145,164 @@ const ServiceCatalog: FC = () => {
         subtitle: "Explore our services",
       }
     );
+  };
+
+  // Function to get service configuration based on category and service data
+  const getServiceConfiguration = (
+    category: ServiceCategory,
+    service?: Service
+  ): ServiceConfiguration => {
+    // Use service features from API if available
+    const serviceFeatures = service?.features || [];
+
+    switch (category) {
+      case ServiceCategory.Cleaning:
+        return {
+          categories: [
+            {
+              id: "apartmentType",
+              name: "Your Apartment type",
+              options: ["Flat/Apartment", "Duplex/House"],
+              required: true,
+            },
+          ],
+          options: [
+            { id: "bedroom", name: "Bedroom", count: 1 },
+            { id: "livingRoom", name: "Living Room", count: 1 },
+            { id: "kitchen", name: "Kitchen", count: 1 },
+            { id: "bathroom", name: "Bathroom", count: 1 },
+            { id: "balcony", name: "Balcony", count: 1 },
+            { id: "studyRoom", name: "Study Room", count: 1 },
+          ],
+          allowCustomization: true,
+        };
+      case ServiceCategory.Cooking:
+        return {
+          categories: [
+            {
+              id: "mealType",
+              name: "Meal Type",
+              options: ["Basic", "Standard"],
+              required: true,
+            },
+            {
+              id: "deliveryFrequency",
+              name: "Delivery Frequency",
+              options: ["Daily", "Weekly", "Monthly"],
+              required: true,
+            },
+          ],
+          options: [
+            { id: "breakfast", name: "Breakfast", count: 1 },
+            { id: "lunch", name: "Lunch", count: 1 },
+            { id: "dinner", name: "Dinner", count: 1 },
+          ],
+          allowCustomization: true,
+        };
+      case ServiceCategory.Laundry:
+        return {
+          categories: [
+            {
+              id: "laundryType",
+              name: "Laundry Type",
+              options: ["Standard Laundry", "Premium Laundry", "Dry Cleaning"],
+              required: true,
+            },
+          ],
+          options: [
+            { id: "shirts", name: "Shirts", count: 1 },
+            { id: "pants", name: "Pants", count: 1 },
+            { id: "dresses", name: "Dresses", count: 1 },
+            { id: "suits", name: "Suits", count: 1 },
+            { id: "others", name: "Others", count: 1 },
+          ],
+          allowCustomization: true,
+        };
+      case ServiceCategory.PestControl:
+        return {
+          categories: [
+            {
+              id: "propertyType",
+              name: "Property Type",
+              options: ["Residential", "Commercial"],
+              required: true,
+            },
+            {
+              id: "pestType",
+              name: "Pest Type",
+              options: ["General", "Cockroaches", "Rats", "Termites"],
+              required: true,
+            },
+          ],
+          options: [
+            { id: "rooms", name: "Rooms", count: 1 },
+            { id: "outdoor", name: "Outdoor Area", count: 1 },
+          ],
+          allowCustomization: true,
+        };
+      default:
+        return {
+          options: [{ id: "quantity", name: "Quantity", count: 1 }],
+          allowCustomization: true,
+        };
+    }
+  };
+
+  // Function to get included features based on API data and category
+  const getIncludedFeatures = (
+    category: ServiceCategory,
+    service?: Service
+  ): string[] => {
+    // Use service features from API if available
+    if (service?.features && service.features.length > 0) {
+      return service.features;
+    }
+
+    // Fallback to category-specific features
+    switch (category) {
+      case ServiceCategory.Cleaning:
+        return [
+          "Professional cleaning supplies included",
+          "Experienced and vetted cleaning professionals",
+          "Satisfaction guarantee",
+          "Flexible scheduling options",
+          "Eco-friendly cleaning products available",
+          "Deep sanitization and disinfection",
+        ];
+      case ServiceCategory.Cooking:
+        return [
+          "Fresh, high-quality ingredients",
+          "Professional chefs",
+          "Customizable meal plans",
+          "On-time delivery",
+          "Hygienic preparation",
+          "Dietary restrictions accommodated",
+        ];
+      case ServiceCategory.Laundry:
+        return [
+          "Professional laundry service",
+          "Eco-friendly detergents",
+          "Stain treatment included",
+          "Quality assurance",
+          "Express service available",
+          "Free pickup and delivery",
+        ];
+      case ServiceCategory.PestControl:
+        return [
+          "Licensed pest control professionals",
+          "Safe and effective treatments",
+          "Follow-up visits included",
+          "Warranty on services",
+          "Eco-friendly options available",
+          "Emergency service available",
+        ];
+      default:
+        return [
+          "Professional service",
+          "Quality guarantee",
+          "Flexible scheduling",
+        ];
+    }
   };
 
   const services = servicesData?.services || [];
@@ -309,7 +473,15 @@ const ServiceCatalog: FC = () => {
     console.log("service", service);
     console.log("option", option);
     setSelectedService(service);
+    setSelectedOption(option);
     setIsModalOpen(true);
+  };
+
+  // Handle closing the modal
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedService(null);
+    setSelectedOption(null);
   };
 
   return (
@@ -495,6 +667,34 @@ const ServiceCatalog: FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Service Modal */}
+      {selectedService && selectedOption && (
+        <ServiceModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          serviceTitle={selectedOption.label}
+          serviceDescription={selectedOption.description}
+          servicePrice={selectedOption.price}
+          serviceImage={getSafeImageUrl(selectedService.imageUrl)}
+          serviceConfiguration={getServiceConfiguration(
+            selectedCategory,
+            selectedService
+          )}
+          serviceType={selectedCategory}
+          includedFeatures={getIncludedFeatures(
+            selectedCategory,
+            selectedService
+          )}
+          onOrderSubmit={(configuration) => {
+            console.log("Service configuration:", {
+              service: selectedService,
+              option: selectedOption,
+              configuration,
+            });
+          }}
+        />
+      )}
     </section>
   );
 };
