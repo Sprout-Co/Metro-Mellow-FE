@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Portal from "../../../Portal/Portal";
 import styles from "./ServiceDetailsSlidePanel.module.scss";
+import { HouseType } from "@/graphql/api";
 
 interface ServiceDetailsSlidePanelProps {
   isOpen: boolean;
@@ -14,7 +15,7 @@ interface ServiceDetailsSlidePanelProps {
   serviceDescription: string;
   servicePrice: number;
   serviceImage: string;
-  apartmentType?: "flat" | "duplex";
+  apartmentType?: HouseType;
   roomCount?: number;
   serviceType?: string;
   includedFeatures?: string[];
@@ -156,7 +157,7 @@ const ServiceDetailsSlidePanel: React.FC<ServiceDetailsSlidePanelProps> = ({
                           Property Type:
                         </span>
                         <span className={styles.slidePanel__configValue}>
-                          {apartmentType === "flat"
+                          {apartmentType === HouseType.Flat
                             ? "Flat/Apartment"
                             : "Duplex/House"}
                         </span>

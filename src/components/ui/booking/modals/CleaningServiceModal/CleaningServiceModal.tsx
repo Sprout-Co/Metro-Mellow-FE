@@ -9,6 +9,7 @@ import CheckoutModal, {
 } from "@/components/ui/booking/modals/CheckoutModal/CheckoutModal";
 import ServiceDetailsSlidePanel from "@/components/ui/booking/modals/ServiceDetailsSlidePanel/ServiceDetailsSlidePanel";
 import styles from "./CleaningServiceModal.module.scss";
+import { HouseType, RoomQuantitiesInput, ServiceOption } from "@/graphql/api";
 
 export interface CleaningServiceOption {
   id: string;
@@ -17,8 +18,8 @@ export interface CleaningServiceOption {
 }
 
 export interface CleaningServiceConfiguration {
-  apartmentType: "flat" | "duplex";
-  rooms: CleaningServiceOption[];
+  apartmentType: HouseType;
+  roomQuantities: RoomQuantitiesInput;
 }
 
 export interface CleaningServiceModalProps {
@@ -30,6 +31,7 @@ export interface CleaningServiceModalProps {
   servicePrice?: number;
   includedFeatures?: string[];
   onOrderSubmit?: (configuration: CleaningServiceConfiguration) => void;
+  serviceOption?: ServiceOption;
 }
 
 const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
@@ -41,55 +43,66 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   servicePrice = 0,
   includedFeatures = [],
   onOrderSubmit,
+  serviceOption,
 }) => {
   // State for cleaning configuration
-  const [apartmentType, setApartmentType] = useState<"flat" | "duplex">("flat");
-  const [rooms, setRooms] = useState<CleaningServiceOption[]>([
-    { id: "bedroom", name: "Bedroom", count: 1 },
-    { id: "livingRoom", name: "Living Room", count: 1 },
-    { id: "kitchen", name: "Kitchen", count: 1 },
-    { id: "bathroom", name: "Bathroom", count: 1 },
-    { id: "balcony", name: "Balcony", count: 1 },
-    { id: "lobby", name: "Lobby", count: 1 },
-    { id: "outdoor", name: "Outdoor", count: 1 },
-    { id: "studyRoom", name: "Study Room", count: 1 },
-    { id: "other", name: "Other", count: 1 },
-  ]);
+  const [apartmentType, setApartmentType] = useState<HouseType>(HouseType.Flat);
+  const [roomQuantities, setRoomQuantities] = useState<RoomQuantitiesInput>({
+    balcony: 0,
+    bathroom: 1,
+    bedroom: 1,
+    kitchen: 1,
+    livingRoom: 1,
+    lobby: 1,
+    other: 0,
+    outdoor: 0,
+    studyRoom: 0,
+  });
 
   // State for checkout modal and slide panel
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [isSlidePanelOpen, setIsSlidePanelOpen] = useState(false);
 
   // Handle apartment type change
-  const handleApartmentTypeChange = (type: "flat" | "duplex") => {
+  const handleApartmentTypeChange = (type: HouseType) => {
     setApartmentType(type);
   };
 
   // Handle room counter changes
-  const handleRoomCounterChange = (roomId: string, increment: boolean) => {
-    setRooms((prev) =>
-      prev.map((room) => {
-        if (room.id === roomId) {
-          const newCount = increment
-            ? room.count + 1
-            : Math.max(0, room.count - 1);
-          return { ...room, count: newCount };
-        }
-        return room;
-      })
-    );
+  const handleRoomCounterChange = (
+    room: keyof RoomQuantitiesInput,
+    increment: boolean
+  ) => {
+    // setRooms((prev) =>
+    //   prev.map((room) => {
+    //     if (room.id === roomId) {
+    //       const newCount = increment
+    //         ? room.count + 1
+    //         : Math.max(0, room.count - 1);
+    //       return { ...room, count: newCount };
+    //     }
+    //     return room;
+    //   })
+    // );
+    setRoomQuantities((prev) => ({
+      ...prev,
+      [room]: Math.max(0, (prev[room] as number) + (increment ? 1 : -1)),
+    }));
   };
 
   // Calculate total room count
   const getTotalRoomCount = () => {
-    return rooms.reduce((total, room) => total + room.count, 0);
+    return Object.values(roomQuantities).reduce(
+      (total, quantity) => total + quantity,
+      0
+    );
   };
 
   // Handle order submission
   const handleOrderSubmit = () => {
     const configuration: CleaningServiceConfiguration = {
       apartmentType,
-      rooms,
+      roomQuantities,
     };
 
     if (onOrderSubmit) {
@@ -107,7 +120,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
         title: serviceTitle,
         price: servicePrice,
         apartmentType,
-        rooms,
+        roomQuantities,
       },
       checkout: formData,
     };
@@ -162,8 +175,10 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
         {/* Details Section */}
         <div className={styles.modal__detailsSection}>
           {/* Service Title and Description */}
-          <h2 className={styles.modal__title}>{serviceTitle}</h2>
-          <p className={styles.modal__description}>{serviceDescription}</p>
+          <h2 className={styles.modal__title}>{serviceOption?.label}</h2>
+          <p className={styles.modal__description}>
+            {serviceOption?.description}
+          </p>
 
           {/* Price Section */}
           <div className={styles.modal__price}>
@@ -178,30 +193,30 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
               <div className={styles.apartmentTypeOptions}>
                 <label
                   className={`${styles.apartmentTypeOption} ${
-                    apartmentType === "flat" ? styles.selected : ""
+                    apartmentType === HouseType.Flat ? styles.selected : ""
                   }`}
                 >
                   <input
                     type="radio"
                     name="apartmentType"
-                    value="flat"
-                    checked={apartmentType === "flat"}
-                    onChange={() => handleApartmentTypeChange("flat")}
+                    value={HouseType.Flat}
+                    checked={apartmentType === HouseType.Flat}
+                    onChange={() => handleApartmentTypeChange(HouseType.Flat)}
                     className={styles.radioInput}
                   />
                   <span>Flat/Apartment</span>
                 </label>
                 <label
                   className={`${styles.apartmentTypeOption} ${
-                    apartmentType === "duplex" ? styles.selected : ""
+                    apartmentType === HouseType.Duplex ? styles.selected : ""
                   }`}
                 >
                   <input
                     type="radio"
                     name="apartmentType"
-                    value="duplex"
-                    checked={apartmentType === "duplex"}
-                    onChange={() => handleApartmentTypeChange("duplex")}
+                    value={HouseType.Duplex}
+                    checked={apartmentType === HouseType.Duplex}
+                    onChange={() => handleApartmentTypeChange(HouseType.Duplex)}
                     className={styles.radioInput}
                   />
                   <span>Duplex/House</span>
@@ -213,22 +228,36 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
             <div className={styles.section}>
               <h3 className={styles.sectionTitle}>Select Rooms to Clean</h3>
               <div className={styles.roomsGrid}>
-                {rooms.map((room) => (
-                  <div key={room.id} className={styles.roomCounter}>
-                    <span className={styles.roomName}>{room.name}</span>
+                {Object.entries(roomQuantities).map(([room, quantity]) => (
+                  <div key={room} className={styles.roomCounter}>
+                    <span className={styles.roomName}>
+                      {room
+                        .replace(/([A-Z])/g, " $1")
+                        .replace(/^./, (str) => str.toUpperCase())}
+                    </span>
                     <div className={styles.counterControls}>
                       <button
                         className={styles.counterButton}
-                        onClick={() => handleRoomCounterChange(room.id, false)}
-                        aria-label={`Decrement ${room.name}`}
+                        onClick={() =>
+                          handleRoomCounterChange(
+                            room as keyof RoomQuantitiesInput,
+                            false
+                          )
+                        }
+                        aria-label={`Decrement ${room}`}
                       >
                         -
                       </button>
-                      <span className={styles.counterValue}>{room.count}</span>
+                      <span className={styles.counterValue}>{quantity}</span>
                       <button
                         className={styles.counterButton}
-                        onClick={() => handleRoomCounterChange(room.id, true)}
-                        aria-label={`Increment ${room.name}`}
+                        onClick={() =>
+                          handleRoomCounterChange(
+                            room as keyof RoomQuantitiesInput,
+                            true
+                          )
+                        }
+                        aria-label={`Increment ${room}`}
                       >
                         +
                       </button>
@@ -236,21 +265,13 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
                   </div>
                 ))}
               </div>
-              <div className={styles.totalRooms}>
-                Total Rooms: {getTotalRoomCount()}
-              </div>
             </div>
           </div>
 
           {/* Order Button */}
           <div className={styles.modal__orderButtonContainer}>
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={handleOrderSubmit}
-              className={styles.modal__orderButton}
-            >
-              ORDER CLEANING SERVICE
+            <Button variant="primary" size="lg" onClick={handleOrderSubmit}>
+              ORDER
             </Button>
           </div>
         </div>
