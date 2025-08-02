@@ -28,7 +28,7 @@
     background-color: color-alpha("neutral", "black", 0.6);
     backdrop-filter: blur(spacing("xs"));
     pointer-events: auto; // Re-enable pointer events for backdrop
-    
+
     // On desktop, backdrop should cover full height but not the slide panel width
     @include breakpoint-up("md") {
       width: 100%; // Full width of the reduced modal container
@@ -60,7 +60,8 @@
     align-items: center;
     justify-content: space-between;
     padding: spacing("lg") spacing("xl");
-    border-bottom: map-get($border-width, "thin") solid color("neutral", "lighter");
+    border-bottom: map-get($border-width, "thin") solid
+      color("neutral", "lighter");
     background: linear-gradient(
       135deg,
       color-alpha("primary", "base", 0.02),
@@ -104,7 +105,7 @@
     flex: 1;
     padding: spacing("xl");
     overflow-y: auto;
-    
+
     // Custom scrollbar
     &::-webkit-scrollbar {
       width: spacing("xs");
@@ -135,7 +136,8 @@
     color: color("neutral", "black");
     margin: 0 0 spacing("md") 0;
     padding-bottom: spacing("sm");
-    border-bottom: map-get($border-width, "thin") solid color("neutral", "lighter");
+    border-bottom: map-get($border-width, "thin") solid
+      color("neutral", "lighter");
   }
 
   &__field {
@@ -186,7 +188,7 @@
     // Date input specific styles
     &[type="date"] {
       padding-right: spacing("2xl");
-      
+
       &::-webkit-calendar-picker-indicator {
         opacity: 0;
         position: absolute;
@@ -360,6 +362,102 @@
     }
   }
 
+  // Address list styles
+  &__addressList {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+    margin-top: spacing("sm");
+  }
+
+  &__addressListTitle {
+    @include subtitle-2;
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("sm") 0;
+  }
+
+  &__addressCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("md");
+    border: map-get($border-width, "thin") solid color("neutral", "light");
+    border-radius: border-radius("lg");
+    transition: $transition-base;
+    cursor: pointer;
+    background-color: color("neutral", "white");
+
+    &:hover {
+      border-color: color("primary", "light");
+      background-color: color-alpha("primary", "lighter", 0.1);
+    }
+
+    &__selected {
+      border-color: color("primary", "base");
+      background-color: color-alpha("primary", "lighter", 0.2);
+      box-shadow: map-get($shadows, "sm");
+    }
+  }
+
+  &__addressCardContent {
+    flex: 1;
+  }
+
+  &__addressCardHeader {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    margin-bottom: spacing("xs");
+  }
+
+  &__addressCardLabel {
+    @include body-2;
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+  }
+
+  &__addressCardDefault {
+    @include caption;
+    background-color: color("primary", "lighter");
+    color: color("primary", "dark");
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("sm");
+    @include font-weight("medium");
+  }
+
+  &__addressCardText {
+    @include font-secondary;
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    margin: spacing("xxs") 0;
+    line-height: map-get($line-heights, "normal");
+  }
+
+  &__addressCardRadio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__noAddress {
+    background-color: color-alpha("neutral", "lightest", 0.5);
+    border: map-get($border-width, "thin") dashed color("neutral", "light");
+    border-radius: border-radius("lg");
+    padding: spacing("lg");
+    text-align: center;
+
+    p {
+      @include body-2;
+      color: color("neutral", "dark");
+      margin: spacing("xs") 0;
+
+      &:first-child {
+        @include font-weight("medium");
+        color: color("neutral", "darkest");
+      }
+    }
+  }
+
   @include breakpoint-down("sm") {
     &__container {
       max-width: 100%;
@@ -382,5 +480,9 @@
       margin-top: spacing("lg");
       padding-top: spacing("md");
     }
+
+    &__addressCard {
+      padding: spacing("sm");
+    }
   }
-} 
+}

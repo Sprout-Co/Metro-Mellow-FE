@@ -9,7 +9,16 @@ import CheckoutModal, {
 } from "@/components/ui/booking/modals/CheckoutModal/CheckoutModal";
 import ServiceDetailsSlidePanel from "@/components/ui/booking/modals/ServiceDetailsSlidePanel/ServiceDetailsSlidePanel";
 import styles from "./CleaningServiceModal.module.scss";
-import { HouseType, RoomQuantitiesInput, ServiceOption } from "@/graphql/api";
+import {
+  CleaningType,
+  CreateBookingInput,
+  HouseType,
+  RoomQuantitiesInput,
+  Service,
+  ServiceCategory,
+  ServiceOption,
+} from "@/graphql/api";
+import OrderSuccessModal from "../OrderSuccessModal/OrderSuccessModal";
 
 export interface CleaningServiceOption {
   id: string;
@@ -32,6 +41,7 @@ export interface CleaningServiceModalProps {
   includedFeatures?: string[];
   onOrderSubmit?: (configuration: CleaningServiceConfiguration) => void;
   serviceOption?: ServiceOption;
+  service: Service;
 }
 
 const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
@@ -44,6 +54,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   includedFeatures = [],
   onOrderSubmit,
   serviceOption,
+  service,
 }) => {
   // State for cleaning configuration
   const [apartmentType, setApartmentType] = useState<HouseType>(HouseType.Flat);
@@ -62,6 +73,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   // State for checkout modal and slide panel
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [isSlidePanelOpen, setIsSlidePanelOpen] = useState(false);
+  const [showOrderSuccessModal, setShowOrderSuccessModal] = useState(false);
 
   // Handle apartment type change
   const handleApartmentTypeChange = (type: HouseType) => {
@@ -115,25 +127,35 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
 
   // Handle checkout completion
   const handleCheckoutComplete = (formData: CheckoutFormData) => {
-    const completeOrder = {
-      service: {
-        title: serviceTitle,
-        price: servicePrice,
-        apartmentType,
-        roomQuantities,
+    const completeOrder: CreateBookingInput = {
+      serviceId: service._id,
+      serviceType: service.category,
+      serviceOption: serviceOption?.service_id || "",
+      date: formData.date,
+      timeSlot: formData.timeSlot,
+      address: formData.addressId || "",
+      notes: `Frequency`,
+      serviceDetails: {
+        serviceOption: serviceOption?.service_id || "",
+        cleaning: {
+          cleaningType: serviceOption?.service_id as unknown as CleaningType,
+          houseType: apartmentType,
+          rooms: roomQuantities,
+        },
       },
-      checkout: formData,
+      totalPrice: servicePrice,
     };
 
     console.log("Complete cleaning order:", completeOrder);
 
     // Close modals and show success
-    setIsCheckoutModalOpen(false);
-    onClose();
+    setShowOrderSuccessModal(true);
+    // setIsCheckoutModalOpen(false);
+    // onClose();
 
-    alert(
-      "Cleaning service booked successfully! We'll confirm your booking details shortly."
-    );
+    // alert(
+    // "Cleaning service booked successfully! We'll confirm your booking details shortly."
+    // );
   };
 
   // Handle checkout modal close
@@ -298,6 +320,15 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
         roomCount={getTotalRoomCount()}
         serviceType="Cleaning"
         includedFeatures={includedFeatures}
+      />
+
+      {/* Order Success Modal */}
+      <OrderSuccessModal
+        isOpen={showOrderSuccessModal}
+        onClose={() => {
+          setShowOrderSuccessModal(false);
+          onClose();
+        }}
       />
     </Modal>
   );

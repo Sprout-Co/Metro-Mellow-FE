@@ -29,9 +29,8 @@ const CleaningServicesShowcase: React.FC<CleaningServicesShowcaseProps> = ({
 
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<ServiceOption | null>(
-    null
-  );
+  const [selectedServiceOption, setSelectedServiceOption] =
+    useState<ServiceOption | null>(null);
 
   // Features included in cleaning services
   const getCleaningIncludedFeatures = () => [
@@ -67,8 +66,8 @@ const CleaningServicesShowcase: React.FC<CleaningServicesShowcaseProps> = ({
   };
 
   // Handle opening the modal with selected service
-  const handleOpenModal = (service: ServiceOption) => {
-    setSelectedService(service);
+  const handleOpenModal = (serviceOption: ServiceOption) => {
+    setSelectedServiceOption(serviceOption);
     setIsModalOpen(true);
   };
 
@@ -157,13 +156,14 @@ const CleaningServicesShowcase: React.FC<CleaningServicesShowcaseProps> = ({
       </div>
 
       {/* Cleaning Service Modal */}
-      {selectedService && (
+      {selectedServiceOption && servicesData?.[0] && (
         <CleaningServiceModal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
-          serviceOption={selectedService}
+          serviceOption={selectedServiceOption}
+          service={servicesData[0]}
           includedFeatures={
-            selectedService.inclusions || getCleaningIncludedFeatures()
+            selectedServiceOption.inclusions || getCleaningIncludedFeatures()
           }
           onOrderSubmit={(configuration: CleaningServiceConfiguration) => {
             console.log("Cleaning service configuration:", configuration);

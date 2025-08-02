@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Portal from "../../../Portal/Portal";
 import Button from "../../../Button/Button";
 import styles from "./CheckoutModal.module.scss";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { AddressInput, TimeSlot } from "@/graphql/api";
 
 export interface CheckoutModalProps {
   isOpen: boolean;
@@ -15,14 +17,10 @@ export interface CheckoutModalProps {
 
 export interface CheckoutFormData {
   date: string;
-  time: string;
-  addressType: "saved" | "new";
-  fullname: string;
-  state: string;
-  lga: string;
-  address: string;
-  email: string;
-  phone: string;
+  timeSlot: TimeSlot;
+  city: string;
+  street: string;
+  addressId?: string;
 }
 
 const CheckoutModal: React.FC<CheckoutModalProps> = ({
@@ -32,17 +30,33 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   serviceType = "Cleaning",
 }) => {
   // Form state management
+  const { user } = useAppSelector((state) => state.auth);
   const [formData, setFormData] = useState<CheckoutFormData>({
     date: "",
-    time: "",
-    addressType: "new",
-    fullname: "Dele Ja",
-    state: "",
-    lga: "",
-    address: "",
-    email: "",
-    phone: "",
+    timeSlot: TimeSlot.Morning,
+    city: user?.defaultAddress?.city || "",
+    street: user?.defaultAddress?.street || "",
+    addressId: user?.defaultAddress?.id,
   });
+
+  const [address, setAddress] = useState<AddressInput>({
+    city: "",
+    street: "",
+    state: "Lagos",
+  });
+  const [isNewAddress, setIsNewAddress] = useState(!user?.addresses?.length);
+
+  // Set default address when component mounts or user changes
+  React.useEffect(() => {
+    if (user?.defaultAddress) {
+      setFormData((prev) => ({
+        ...prev,
+        addressId: user.defaultAddress?.id,
+        city: user.defaultAddress?.city || "",
+        street: user.defaultAddress?.street || "",
+      }));
+    }
+  }, [user]);
 
   // Handle escape key press
   React.useEffect(() => {
@@ -78,14 +92,6 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }));
-  };
-
-  // Handle radio button changes
-  const handleRadioChange = (value: "saved" | "new") => {
-    setFormData((prev) => ({
-      ...prev,
-      addressType: value,
     }));
   };
 
@@ -205,178 +211,198 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     Time
                   </label>
                   <select
-                    id="time"
-                    name="time"
-                    value={formData.time}
+                    id="timeSlot"
+                    name="timeSlot"
+                    value={formData.timeSlot}
                     onChange={handleInputChange}
                     className={styles.checkoutModal__select}
                     required
                   >
-                    <option value="">Select time</option>
-                    <option value="09:00">9:00 AM</option>
-                    <option value="10:00">10:00 AM</option>
-                    <option value="11:00">11:00 AM</option>
-                    <option value="12:00">12:00 PM</option>
-                    <option value="13:00">1:00 PM</option>
-                    <option value="14:00">2:00 PM</option>
-                    <option value="15:00">3:00 PM</option>
-                    <option value="16:00">4:00 PM</option>
-                    <option value="17:00">5:00 PM</option>
+                    <option value={TimeSlot.Morning}>Morning</option>
+                    <option value={TimeSlot.Afternoon}>Afternoon</option>
+                    <option value={TimeSlot.Evening}>Evening</option>
                   </select>
                 </div>
 
                 {/* Address Type Radio Buttons */}
-                <div className={styles.checkoutModal__field}>
-                  <div className={styles.checkoutModal__radioGroup}>
-                    <label className={styles.checkoutModal__radioLabel}>
-                      <input
-                        type="radio"
-                        name="addressType"
-                        value="saved"
-                        checked={formData.addressType === "saved"}
-                        onChange={() => handleRadioChange("saved")}
-                        className={styles.checkoutModal__radio}
-                      />
-                      <span className={styles.checkoutModal__radioText}>
-                        Saved Address
-                      </span>
-                    </label>
-                    <label className={styles.checkoutModal__radioLabel}>
-                      <input
-                        type="radio"
-                        name="addressType"
-                        value="new"
-                        checked={formData.addressType === "new"}
-                        onChange={() => handleRadioChange("new")}
-                        className={styles.checkoutModal__radio}
-                      />
-                      <span className={styles.checkoutModal__radioText}>
-                        New Address
-                      </span>
-                    </label>
+                {user ? (
+                  <div className={styles.checkoutModal__field}>
+                    <div className={styles.checkoutModal__radioGroup}>
+                      <label className={styles.checkoutModal__radioLabel}>
+                        <input
+                          type="radio"
+                          name="addressType"
+                          value="saved"
+                          // checked={formData.addressType === "saved"}
+                          checked={!isNewAddress}
+                          onChange={() => setIsNewAddress(false)}
+                          className={styles.checkoutModal__radio}
+                        />
+                        <span className={styles.checkoutModal__radioText}>
+                          Saved Address
+                        </span>
+                      </label>
+                      <label className={styles.checkoutModal__radioLabel}>
+                        <input
+                          type="radio"
+                          name="addressType"
+                          value="new"
+                          // checked={formData.addressType === "new"}
+                          checked={isNewAddress}
+                          onChange={() => setIsNewAddress(true)}
+                          className={styles.checkoutModal__radio}
+                        />
+                        <span className={styles.checkoutModal__radioText}>
+                          New Address
+                        </span>
+                      </label>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className={styles.checkoutModal__field}>
+                    <p>Please login to continue</p>
+                  </div>
+                )}
 
-                {/* Fullname Field */}
-                <div className={styles.checkoutModal__field}>
-                  <label
-                    htmlFor="fullname"
-                    className={styles.checkoutModal__label}
-                  >
-                    Fullname
-                  </label>
-                  <input
-                    type="text"
-                    id="fullname"
-                    name="fullname"
-                    value={formData.fullname}
-                    onChange={handleInputChange}
-                    className={styles.checkoutModal__input}
-                    required
-                  />
-                </div>
-
-                {/* State Field */}
-                <div className={styles.checkoutModal__field}>
-                  <label
-                    htmlFor="state"
-                    className={styles.checkoutModal__label}
-                  >
-                    State
-                  </label>
-                  <select
-                    id="state"
-                    name="state"
-                    value={formData.state}
-                    onChange={handleInputChange}
-                    className={styles.checkoutModal__select}
-                    required
-                  >
-                    <option value="">Select state</option>
-                    <option value="lagos">Lagos</option>
-                    <option value="abuja">Abuja</option>
-                    <option value="rivers">Rivers</option>
-                    <option value="ogun">Ogun</option>
-                  </select>
-                </div>
-
-                {/* LGA Field */}
-                <div className={styles.checkoutModal__field}>
-                  <label htmlFor="lga" className={styles.checkoutModal__label}>
-                    LGA
-                  </label>
-                  <select
-                    id="lga"
-                    name="lga"
-                    value={formData.lga}
-                    onChange={handleInputChange}
-                    className={styles.checkoutModal__select}
-                    required
-                  >
-                    <option value="">Select LGA</option>
-                    <option value="ikeja">Ikeja</option>
-                    <option value="victoria-island">Victoria Island</option>
-                    <option value="lekki">Lekki</option>
-                    <option value="surulere">Surulere</option>
-                  </select>
-                </div>
-
-                {/* Address Field */}
-                <div className={styles.checkoutModal__field}>
-                  <label
-                    htmlFor="address"
-                    className={styles.checkoutModal__label}
-                  >
-                    Address
-                  </label>
-                  <input
-                    type="text"
-                    id="address"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    className={styles.checkoutModal__input}
-                    required
-                  />
-                </div>
-
-                {/* Email Field */}
-                <div className={styles.checkoutModal__field}>
-                  <label
-                    htmlFor="email"
-                    className={styles.checkoutModal__label}
-                  >
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className={styles.checkoutModal__input}
-                    required
-                  />
-                </div>
-
-                {/* Phone Field */}
-                <div className={styles.checkoutModal__field}>
-                  <label
-                    htmlFor="phone"
-                    className={styles.checkoutModal__label}
-                  >
-                    Phone
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className={styles.checkoutModal__input}
-                    required
-                  />
-                </div>
+                {isNewAddress ? (
+                  <>
+                    {/* City Field */}
+                    <div className={styles.checkoutModal__field}>
+                      <label
+                        htmlFor="city"
+                        className={styles.checkoutModal__label}
+                      >
+                        City
+                      </label>
+                      <select
+                        id="city"
+                        name="city"
+                        value={formData.city}
+                        onChange={handleInputChange}
+                        className={styles.checkoutModal__select}
+                        required
+                      >
+                        <option value="">Select City</option>
+                        <option value="ikeja">Ikeja</option>
+                        <option value="victoria-island">Victoria Island</option>
+                        <option value="lekki">Lekki</option>
+                        <option value="surulere">Surulere</option>
+                      </select>
+                    </div>
+                    {/* Address Field */}
+                    <div className={styles.checkoutModal__field}>
+                      <label
+                        htmlFor="street"
+                        className={styles.checkoutModal__label}
+                      >
+                        Street
+                      </label>
+                      <input
+                        type="text"
+                        id="street"
+                        name="street"
+                        value={formData.street}
+                        onChange={handleInputChange}
+                        className={styles.checkoutModal__input}
+                        required
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {user?.addresses && user.addresses.length > 0 ? (
+                      <div className={styles.checkoutModal__addressList}>
+                        <h4 className={styles.checkoutModal__addressListTitle}>
+                          Select an address
+                        </h4>
+                        {user.addresses.map(
+                          (address) =>
+                            address && (
+                              <div
+                                key={address.id}
+                                className={`${styles.checkoutModal__addressCard} ${
+                                  formData.addressId === address.id
+                                    ? styles.checkoutModal__addressCard__selected
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  setFormData((prev) => ({
+                                    ...prev,
+                                    addressId: address.id,
+                                    city: address.city || "",
+                                    street: address.street || "",
+                                  }))
+                                }
+                              >
+                                <div
+                                  className={
+                                    styles.checkoutModal__addressCardContent
+                                  }
+                                >
+                                  <div
+                                    className={
+                                      styles.checkoutModal__addressCardHeader
+                                    }
+                                  >
+                                    <span
+                                      className={
+                                        styles.checkoutModal__addressCardLabel
+                                      }
+                                    >
+                                      {address.label}
+                                    </span>
+                                    {address.isDefault && (
+                                      <span
+                                        className={
+                                          styles.checkoutModal__addressCardDefault
+                                        }
+                                      >
+                                        Default
+                                      </span>
+                                    )}
+                                  </div>
+                                  <p
+                                    className={
+                                      styles.checkoutModal__addressCardText
+                                    }
+                                  >
+                                    {address.street}
+                                  </p>
+                                  <p
+                                    className={
+                                      styles.checkoutModal__addressCardText
+                                    }
+                                  >
+                                    {address.city}, {address.state}{" "}
+                                    {address.zipCode}
+                                  </p>
+                                </div>
+                                <div
+                                  className={
+                                    styles.checkoutModal__addressCardRadio
+                                  }
+                                >
+                                  <input
+                                    type="radio"
+                                    name="addressId"
+                                    value={address.id}
+                                    checked={formData.addressId === address.id}
+                                    onChange={() => {}}
+                                    className={styles.checkoutModal__radio}
+                                  />
+                                </div>
+                              </div>
+                            )
+                        )}
+                      </div>
+                    ) : (
+                      <div className={styles.checkoutModal__noAddress}>
+                        <p>You don't have any saved addresses.</p>
+                        <p>Please add a new address.</p>
+                      </div>
+                    )}
+                  </>
+                )}
 
                 {/* Submit Button */}
                 <div className={styles.checkoutModal__buttonWrapper}>
