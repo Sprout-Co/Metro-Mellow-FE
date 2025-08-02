@@ -16,6 +16,7 @@ import {
   RoomQuantitiesInput,
   Service,
   ServiceCategory,
+  ServiceId,
   ServiceOption,
 } from "@/graphql/api";
 import OrderSuccessModal from "../OrderSuccessModal/OrderSuccessModal";
@@ -125,6 +126,53 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
     setIsSlidePanelOpen(true);
   };
 
+  const calculateTotalPrice = () => {
+    if (!service) return 0;
+
+    let totalPrice = service.price;
+
+    {
+      // Calculate total price based on room prices and number of days
+      const selectedDays = 1; // Default to 1 day for one-off bookings
+      const roomPrices = service.roomPrices || {};
+
+      // Calculate total price for each room type
+      const roomTotal = Object.entries(roomQuantities).reduce(
+        (total, [room, quantity]) => {
+          const roomPrice = roomPrices[room as keyof typeof roomPrices] || 0;
+          return total + roomPrice * (quantity as number);
+        },
+        0
+      );
+
+      let cleaningTypeMultiplier = 1;
+
+      switch (serviceOption?.service_id) {
+        case ServiceId.StandardCleaning:
+          cleaningTypeMultiplier = 1;
+          break;
+        case ServiceId.DeepCleaning:
+          cleaningTypeMultiplier = 2.5;
+          break;
+        case ServiceId.PostConstructionCleaning:
+          cleaningTypeMultiplier = 4;
+          break;
+        case ServiceId.MoveInMoveOutCleaning:
+          cleaningTypeMultiplier = 2.5;
+          break;
+        default:
+          break;
+      }
+
+      // Multiply by number of days selected
+      totalPrice = roomTotal * selectedDays * cleaningTypeMultiplier;
+      if (apartmentType === HouseType.Duplex) {
+        totalPrice *= 1.5;
+      }
+    }
+    return totalPrice;
+  };
+
   // Handle checkout completion
   const handleCheckoutComplete = (formData: CheckoutFormData) => {
     const completeOrder: CreateBookingInput = {
@@ -143,19 +191,11 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
           rooms: roomQuantities,
         },
       },
-      totalPrice: servicePrice,
+      totalPrice: calculateTotalPrice(),
     };
 
     console.log("Complete cleaning order:", completeOrder);
-
-    // Close modals and show success
     setShowOrderSuccessModal(true);
-    // setIsCheckoutModalOpen(false);
-    // onClose();
-
-    // alert(
-    // "Cleaning service booked successfully! We'll confirm your booking details shortly."
-    // );
   };
 
   // Handle checkout modal close
@@ -204,7 +244,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
 
           {/* Price Section */}
           <div className={styles.modal__price}>
-            NGN {servicePrice.toLocaleString()}
+            NGN {calculateTotalPrice().toLocaleString()}
           </div>
 
           {/* Configuration Section */}

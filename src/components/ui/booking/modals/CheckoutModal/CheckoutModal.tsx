@@ -32,7 +32,9 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   // Form state management
   const { user } = useAppSelector((state) => state.auth);
   const [formData, setFormData] = useState<CheckoutFormData>({
-    date: "",
+    date: new Date(Date.now() + 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split("T")[0],
     timeSlot: TimeSlot.Morning,
     city: user?.defaultAddress?.city || "",
     street: user?.defaultAddress?.street || "",
