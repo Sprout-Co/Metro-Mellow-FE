@@ -20,6 +20,9 @@ import {
   ServiceOption,
 } from "@/graphql/api";
 import OrderSuccessModal from "../OrderSuccessModal/OrderSuccessModal";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
+import { LocalStorageKeys } from "@/utils/localStorage";
 
 export interface CleaningServiceOption {
   id: string;
@@ -75,6 +78,9 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [isSlidePanelOpen, setIsSlidePanelOpen] = useState(false);
   const [showOrderSuccessModal, setShowOrderSuccessModal] = useState(false);
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+
+  const { handleCreateBooking, isCreatingBooking } = useBookingOperations();
 
   // Handle apartment type change
   const handleApartmentTypeChange = (type: HouseType) => {
@@ -174,28 +180,40 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   };
 
   // Handle checkout completion
-  const handleCheckoutComplete = (formData: CheckoutFormData) => {
-    const completeOrder: CreateBookingInput = {
-      serviceId: service._id,
-      serviceType: service.category,
-      serviceOption: serviceOption?.service_id || "",
-      date: formData.date,
-      timeSlot: formData.timeSlot,
-      address: formData.addressId || "",
-      notes: `Frequency`,
-      serviceDetails: {
+  const handleCheckoutComplete = async (formData: CheckoutFormData) => {
+    try {
+      const completeOrder: CreateBookingInput = {
+        serviceId: service._id,
+        serviceType: service.category,
         serviceOption: serviceOption?.service_id || "",
-        cleaning: {
-          cleaningType: serviceOption?.service_id as unknown as CleaningType,
-          houseType: apartmentType,
-          rooms: roomQuantities,
+        date: formData.date,
+        timeSlot: formData.timeSlot,
+        address: formData.addressId || "",
+        notes: `Frequency`,
+        serviceDetails: {
+          serviceOption: serviceOption?.service_id || "",
+          cleaning: {
+            cleaningType: serviceOption?.service_id as unknown as CleaningType,
+            houseType: apartmentType,
+            rooms: roomQuantities,
+          },
         },
-      },
-      totalPrice: calculateTotalPrice(),
-    };
+        totalPrice: calculateTotalPrice(),
+      };
 
-    console.log("Complete cleaning order:", completeOrder);
-    setShowOrderSuccessModal(true);
+      if (isAuthenticated) {
+        await handleCreateBooking(completeOrder);
+        setShowOrderSuccessModal(true);
+      } else {
+        localStorage.setItem(
+          LocalStorageKeys.BOOKING_DATA_TO_COMPLETE,
+          JSON.stringify(completeOrder)
+        );
+      }
+      console.log("Complete cleaning order:", completeOrder);
+    } catch (error) {
+      console.error("Error creating booking:", error);
+    }
   };
 
   // Handle checkout modal close
@@ -345,6 +363,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
         onClose={handleCheckoutClose}
         onContinue={handleCheckoutComplete}
         serviceType="Cleaning"
+        submitting={isCreatingBooking}
       />
 
       {/* Service Details Slide Panel */}

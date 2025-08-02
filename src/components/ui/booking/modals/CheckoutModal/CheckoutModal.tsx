@@ -13,6 +13,7 @@ export interface CheckoutModalProps {
   onClose: () => void;
   onContinue?: (formData: CheckoutFormData) => void;
   serviceType?: string;
+  submitting?: boolean;
 }
 
 export interface CheckoutFormData {
@@ -28,9 +29,10 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   onClose,
   onContinue,
   serviceType = "Cleaning",
+  submitting = false,
 }) => {
   // Form state management
-  const { user } = useAppSelector((state) => state.auth);
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
   const [formData, setFormData] = useState<CheckoutFormData>({
     date: new Date(Date.now() + 24 * 60 * 60 * 1000)
       .toISOString()
@@ -227,7 +229,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 </div>
 
                 {/* Address Type Radio Buttons */}
-                {user ? (
+                {user && isAuthenticated ? (
                   <div className={styles.checkoutModal__field}>
                     <div className={styles.checkoutModal__radioGroup}>
                       <label className={styles.checkoutModal__radioLabel}>
@@ -415,7 +417,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     fullWidth
                     className={styles.checkoutModal__continueButton}
                   >
-                    CONTINUE
+                    {submitting ? "Hang on..." : "CONTINUE"}
                   </Button>
                 </div>
               </form>
