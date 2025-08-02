@@ -5,9 +5,9 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import styles from "./CleaningServicesShowcase.module.scss";
 import { Button } from "@/components/ui/Button/Button";
-import ServiceModal, {
-  ServiceConfiguration,
-} from "@/components/ui/booking/modals/ServiceModal/ServiceModal";
+import CleaningServiceModal, {
+  CleaningServiceConfiguration,
+} from "@/components/ui/booking/modals/CleaningServiceModal/CleaningServiceModal";
 
 // Service data
 const cleaningServices = [
@@ -69,30 +69,6 @@ const CleaningServicesShowcase = () => {
   const [selectedService, setSelectedService] = useState<
     (typeof cleaningServices)[0] | null
   >(null);
-
-  // Configuration for cleaning service modal
-  const getCleaningServiceConfiguration = (): ServiceConfiguration => ({
-    categories: [
-      {
-        id: "apartmentType",
-        name: "Your Apartment type",
-        options: ["Flat/Apartment", "Duplex/House"],
-        required: true,
-      },
-    ],
-    options: [
-      { id: "bedroom", name: "Bedroom", count: 1 },
-      { id: "livingRoom", name: "Living Room", count: 1 },
-      { id: "kitchen", name: "Kitchen", count: 1 },
-      { id: "balcony", name: "Balcony", count: 1 },
-      { id: "lobby", name: "Lobby", count: 1 },
-      { id: "outdoor", name: "Outdoor", count: 1 },
-      { id: "studyRoom", name: "Study Room", count: 1 },
-      { id: "bathroom", name: "Bathroom", count: 1 },
-      { id: "other", name: "Other", count: 1 },
-    ],
-    allowCustomization: true,
-  });
 
   // Features included in cleaning services
   const getCleaningIncludedFeatures = () => [
@@ -215,17 +191,15 @@ const CleaningServicesShowcase = () => {
 
       {/* Cleaning Service Modal */}
       {selectedService && (
-        <ServiceModal
+        <CleaningServiceModal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           serviceTitle={selectedService.name}
           serviceDescription={selectedService.description}
           servicePrice={selectedService.price}
           serviceImage={selectedService.image}
-          serviceConfiguration={getCleaningServiceConfiguration()}
-          serviceType="Cleaning"
           includedFeatures={getCleaningIncludedFeatures()}
-          onOrderSubmit={(configuration) => {
+          onOrderSubmit={(configuration: CleaningServiceConfiguration) => {
             console.log("Cleaning service configuration:", configuration);
           }}
         />
