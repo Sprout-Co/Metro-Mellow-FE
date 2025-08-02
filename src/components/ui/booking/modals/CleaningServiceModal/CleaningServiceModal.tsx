@@ -23,6 +23,7 @@ import OrderSuccessModal from "../OrderSuccessModal/OrderSuccessModal";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { LocalStorageKeys } from "@/utils/localStorage";
+import LoginModal from "@/components/ui/LoginModal/LoginModal";
 
 export interface CleaningServiceOption {
   id: string;
@@ -78,6 +79,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [isSlidePanelOpen, setIsSlidePanelOpen] = useState(false);
   const [showOrderSuccessModal, setShowOrderSuccessModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
   const { handleCreateBooking, isCreatingBooking } = useBookingOperations();
@@ -209,6 +211,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
           LocalStorageKeys.BOOKING_DATA_TO_COMPLETE,
           JSON.stringify(completeOrder)
         );
+        setShowLoginModal(true);
       }
       console.log("Complete cleaning order:", completeOrder);
     } catch (error) {
@@ -389,6 +392,15 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
           onClose();
         }}
       />
+
+      {!isAuthenticated && (
+        <LoginModal
+          isOpen={showLoginModal}
+          onClose={() => {
+            setShowLoginModal(false);
+          }}
+        />
+      )}
     </Modal>
   );
 };
