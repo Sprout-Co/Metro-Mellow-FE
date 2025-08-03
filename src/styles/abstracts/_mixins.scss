@@ -728,6 +728,7 @@ $semantic-breakpoints: (
   background-position: center;
   background-repeat: no-repeat;
   overflow: hidden;
+  background-attachment: fixed;
 }
 
 @mixin hero-container {
