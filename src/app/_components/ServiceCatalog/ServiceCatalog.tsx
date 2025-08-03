@@ -20,6 +20,7 @@ import CleaningServiceModal from "@/components/ui/booking/modals/CleaningService
 import PestControlServiceModal from "@/components/ui/booking/modals/PestControlServiceModal/PestControlServiceModal";
 import LaundryServiceModal from "@/components/ui/booking/modals/LaundryServiceModal/LaundryServiceModal";
 import CookingServiceModal from "@/components/ui/booking/modals/CookingServiceModal";
+import FoodMenuModal from "@/app/(routes)/(site)/services/food/_components/FoodMenuModal";
 
 // Define service categories for sidebar
 const serviceCategories = [
@@ -492,12 +493,7 @@ const ServiceCatalog: FC = () => {
     switch (service.category) {
       case ServiceCategory.Cooking:
         return (
-          <CookingServiceModal
-            isOpen={isModalOpen}
-            onClose={handleCloseModal}
-            serviceOption={option}
-            service={service}
-          />
+          <FoodMenuModal isOpen={isModalOpen} onClose={handleCloseModal} />
         );
       case ServiceCategory.Cleaning:
         return (
@@ -718,12 +714,10 @@ const ServiceCatalog: FC = () => {
       </div>
 
       {/* Service Modal */}
-      {selectedService &&
-        selectedOption &&
-        renderServiceModal(
-          selectedService,
-          selectedOption
-        )
+      {
+        selectedService &&
+          selectedOption &&
+          renderServiceModal(selectedService, selectedOption)
         // <ServiceModal
         //   isOpen={isModalOpen}
         //   onClose={handleCloseModal}
