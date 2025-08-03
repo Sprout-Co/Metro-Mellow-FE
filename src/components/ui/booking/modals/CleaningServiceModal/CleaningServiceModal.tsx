@@ -23,7 +23,8 @@ import OrderSuccessModal from "../OrderSuccessModal/OrderSuccessModal";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { LocalStorageKeys } from "@/utils/localStorage";
-import LoginModal from "@/components/ui/LoginModal/LoginModal";
+import LoginModal from "@/components/ui/booking/modals/LoginModal/LoginModal";
+// import LoginModal from "@/components/ui/LoginModal/LoginModal";
 
 export interface CleaningServiceOption {
   id: string;
