@@ -9,6 +9,20 @@ import CheckoutModal, {
 } from "@/components/ui/booking/modals/CheckoutModal/CheckoutModal";
 import ServiceDetailsSlidePanel from "@/components/ui/booking/modals/ServiceDetailsSlidePanel/ServiceDetailsSlidePanel";
 import styles from "./LaundryServiceModal.module.scss";
+import {
+  CreateBookingInput,
+  Service,
+  ServiceCategory,
+  ServiceId,
+  ServiceOption,
+  LaundryType,
+  LaundryItemsInput,
+} from "@/graphql/api";
+import OrderSuccessModal from "../OrderSuccessModal/OrderSuccessModal";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
+import { LocalStorageKeys } from "@/utils/localStorage";
+import LoginModal from "@/components/ui/booking/modals/LoginModal/LoginModal";
 
 export interface LaundryItem {
   id: string;
@@ -17,9 +31,9 @@ export interface LaundryItem {
 }
 
 export interface LaundryServiceConfiguration {
-  laundryType: "standard" | "dry-clean" | "express";
+  laundryType: LaundryType;
   bags: number;
-  items: LaundryItem[];
+  items: LaundryItemsInput;
 }
 
 export interface LaundryServiceModalProps {
@@ -31,6 +45,8 @@ export interface LaundryServiceModalProps {
   servicePrice?: number;
   includedFeatures?: string[];
   onOrderSubmit?: (configuration: LaundryServiceConfiguration) => void;
+  serviceOption?: ServiceOption;
+  service: Service;
 }
 
 const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
@@ -42,31 +58,45 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
   servicePrice = 0,
   includedFeatures = [],
   onOrderSubmit,
+  serviceOption,
+  service,
 }) => {
-  // State for laundry configuration
-  const [laundryType, setLaundryType] = useState<
-    "standard" | "dry-clean" | "express"
-  >("standard");
   const [bags, setBags] = useState(1);
-  const [items, setItems] = useState<LaundryItem[]>([
-    { id: "shirts", name: "Shirts", count: 0 },
-    { id: "pants", name: "Pants", count: 0 },
-    { id: "dresses", name: "Dresses", count: 0 },
-    { id: "suits", name: "Suits", count: 0 },
-    { id: "bedding", name: "Bedding", count: 0 },
-    { id: "towels", name: "Towels", count: 0 },
-    { id: "other", name: "Other", count: 0 },
-  ]);
 
   // State for checkout modal and slide panel
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [isSlidePanelOpen, setIsSlidePanelOpen] = useState(false);
+  const [showOrderSuccessModal, setShowOrderSuccessModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
-  // Handle laundry type change
-  const handleLaundryTypeChange = (
-    type: "standard" | "dry-clean" | "express"
-  ) => {
-    setLaundryType(type);
+  const { handleCreateBooking, isCreatingBooking } = useBookingOperations();
+
+  // Calculate total price
+  const calculateTotalPrice = () => {
+    if (!service) return 0;
+
+    let totalPrice = serviceOption?.price || service.price;
+    const totalItems = bags * totalPrice;
+
+    // Base price multiplier based on laundry type
+    let typeMultiplier = 1;
+    switch (serviceOption?.service_id) {
+      case ServiceId.StandardLaundry:
+        typeMultiplier = 1;
+        break;
+      case ServiceId.PremiumLaundry:
+        typeMultiplier = 1.5;
+        break;
+      case ServiceId.DryCleaning:
+        typeMultiplier = 2;
+        break;
+    }
+
+    // Price per bag calculation
+    totalPrice = totalItems * typeMultiplier;
+
+    return totalPrice;
   };
 
   // Handle bag count change
@@ -75,64 +105,59 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
     setBags(newCount);
   };
 
-  // Handle item counter changes
-  const handleItemCounterChange = (itemId: string, increment: boolean) => {
-    setItems((prev) =>
-      prev.map((item) => {
-        if (item.id === itemId) {
-          const newCount = increment
-            ? item.count + 1
-            : Math.max(0, item.count - 1);
-          return { ...item, count: newCount };
-        }
-        return item;
-      })
-    );
-  };
-
-  // Calculate total item count
-  const getTotalItemCount = () => {
-    return items.reduce((total, item) => total + item.count, 0);
-  };
-
   // Handle order submission
   const handleOrderSubmit = () => {
-    const configuration: LaundryServiceConfiguration = {
-      laundryType,
-      bags,
-      items,
-    };
+    // const configuration: LaundryServiceConfiguration = {
+    //   laundryType: LaundryType.StandardLaundry,
+    //   bags,
+    // };
 
-    if (onOrderSubmit) {
-      onOrderSubmit(configuration);
-    }
+    // if (onOrderSubmit) {
+    //   onOrderSubmit(configuration);
+    // }
 
     setIsCheckoutModalOpen(true);
     setIsSlidePanelOpen(true);
   };
 
   // Handle checkout completion
-  const handleCheckoutComplete = (formData: CheckoutFormData) => {
-    const completeOrder = {
-      service: {
-        title: serviceTitle,
-        price: servicePrice,
-        laundryType,
-        bags,
-        items,
-      },
-      checkout: formData,
-    };
+  const handleCheckoutComplete = async (formData: CheckoutFormData) => {
+    try {
+      if (!serviceOption?.service_id) {
+        throw new Error("Service option is required");
+      }
+      const completeOrder: CreateBookingInput = {
+        serviceId: service._id,
+        serviceType: service.category,
+        serviceOption: serviceOption?.service_id || "",
+        date: formData.date,
+        timeSlot: formData.timeSlot,
+        address: formData.addressId || "",
+        notes: `Laundry Type: ${LaundryType.StandardLaundry}, Bags: ${bags}`,
+        serviceDetails: {
+          serviceOption: serviceOption?.service_id || "",
+          laundry: {
+            laundryType: serviceOption.service_id as unknown as LaundryType,
+            bags,
+          },
+        },
+        totalPrice: calculateTotalPrice(),
+      };
 
-    console.log("Complete laundry order:", completeOrder);
-
-    // Close modals and show success
-    setIsCheckoutModalOpen(false);
-    onClose();
-
-    alert(
-      "Laundry service booked successfully! We'll confirm your booking details shortly."
-    );
+      if (isAuthenticated) {
+        await handleCreateBooking(completeOrder);
+        setShowOrderSuccessModal(true);
+      } else {
+        localStorage.setItem(
+          LocalStorageKeys.BOOKING_DATA_TO_COMPLETE,
+          JSON.stringify(completeOrder)
+        );
+        setShowLoginModal(true);
+      }
+      console.log("Complete laundry order:", completeOrder);
+    } catch (error) {
+      console.error("Error creating booking:", error);
+    }
   };
 
   // Handle checkout modal close
@@ -174,68 +199,18 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
         {/* Details Section */}
         <div className={styles.modal__detailsSection}>
           {/* Service Title and Description */}
-          <h2 className={styles.modal__title}>{serviceTitle}</h2>
-          <p className={styles.modal__description}>{serviceDescription}</p>
+          <h2 className={styles.modal__title}>{serviceOption?.label}</h2>
+          <p className={styles.modal__description}>
+            {serviceOption?.description}
+          </p>
 
           {/* Price Section */}
           <div className={styles.modal__price}>
-            NGN {servicePrice.toLocaleString()}
+            NGN {calculateTotalPrice().toLocaleString()}
           </div>
 
           {/* Configuration Section */}
           <div className={styles.modal__configurationSection}>
-            {/* Laundry Type Selection */}
-            <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Service Type</h3>
-              <div className={styles.laundryTypeOptions}>
-                <label
-                  className={`${styles.laundryTypeOption} ${
-                    laundryType === "standard" ? styles.selected : ""
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="laundryType"
-                    value="standard"
-                    checked={laundryType === "standard"}
-                    onChange={() => handleLaundryTypeChange("standard")}
-                    className={styles.radioInput}
-                  />
-                  <span>Standard (2-3 days)</span>
-                </label>
-                <label
-                  className={`${styles.laundryTypeOption} ${
-                    laundryType === "dry-clean" ? styles.selected : ""
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="laundryType"
-                    value="dry-clean"
-                    checked={laundryType === "dry-clean"}
-                    onChange={() => handleLaundryTypeChange("dry-clean")}
-                    className={styles.radioInput}
-                  />
-                  <span>Dry Clean (3-4 days)</span>
-                </label>
-                <label
-                  className={`${styles.laundryTypeOption} ${
-                    laundryType === "express" ? styles.selected : ""
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="laundryType"
-                    value="express"
-                    checked={laundryType === "express"}
-                    onChange={() => handleLaundryTypeChange("express")}
-                    className={styles.radioInput}
-                  />
-                  <span>Express (24 hours)</span>
-                </label>
-              </div>
-            </div>
-
             {/* Bag Count */}
             <div className={styles.section}>
               <h3 className={styles.sectionTitle}>Number of Bags</h3>
@@ -263,23 +238,26 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
 
             {/* Item Selection */}
             <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Item Breakdown (Optional)</h3>
+              <h3 className={styles.sectionTitle}>Extra Items (TBD)</h3>
               <div className={styles.itemsGrid}>
-                {items.map((item) => (
+                {[
+                  { name: "Duvet", id: "duvet" },
+                  { name: "Bedsheet", id: "bedsheet" },
+                  { name: "Towel", id: "towel" },
+                  { name: "Other", id: "other" },
+                ].map((item) => (
                   <div key={item.id} className={styles.itemCounter}>
                     <span className={styles.itemName}>{item.name}</span>
                     <div className={styles.counterControls}>
                       <button
                         className={styles.counterButton}
-                        onClick={() => handleItemCounterChange(item.id, false)}
                         aria-label={`Decrement ${item.name}`}
                       >
                         -
                       </button>
-                      <span className={styles.counterValue}>{item.count}</span>
+                      <span className={styles.counterValue}>0</span>
                       <button
                         className={styles.counterButton}
-                        onClick={() => handleItemCounterChange(item.id, true)}
                         aria-label={`Increment ${item.name}`}
                       >
                         +
@@ -287,9 +265,6 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
                     </div>
                   </div>
                 ))}
-              </div>
-              <div className={styles.totalItems}>
-                Total Items: {getTotalItemCount()}
               </div>
             </div>
           </div>
@@ -314,6 +289,7 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
         onClose={handleCheckoutClose}
         onContinue={handleCheckoutComplete}
         serviceType="Laundry"
+        submitting={isCreatingBooking}
       />
 
       {/* Service Details Slide Panel */}
@@ -323,11 +299,31 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
         onOpen={handleSlidePanelOpen}
         serviceTitle={serviceTitle}
         serviceDescription={serviceDescription}
-        servicePrice={servicePrice}
+        servicePrice={calculateTotalPrice()}
         serviceImage={serviceImage}
         serviceType="Laundry"
         includedFeatures={includedFeatures}
+        apartmentType={undefined}
+        roomCount={bags}
       />
+
+      {/* Order Success Modal */}
+      <OrderSuccessModal
+        isOpen={showOrderSuccessModal}
+        onClose={() => {
+          setShowOrderSuccessModal(false);
+          onClose();
+        }}
+      />
+
+      {!isAuthenticated && (
+        <LoginModal
+          isOpen={showLoginModal}
+          onClose={() => {
+            setShowLoginModal(false);
+          }}
+        />
+      )}
     </Modal>
   );
 };

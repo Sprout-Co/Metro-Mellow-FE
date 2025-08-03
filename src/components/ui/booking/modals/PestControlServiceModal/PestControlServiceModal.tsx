@@ -9,6 +9,20 @@ import CheckoutModal, {
 } from "@/components/ui/booking/modals/CheckoutModal/CheckoutModal";
 import ServiceDetailsSlidePanel from "@/components/ui/booking/modals/ServiceDetailsSlidePanel/ServiceDetailsSlidePanel";
 import styles from "./PestControlServiceModal.module.scss";
+import {
+  CreateBookingInput,
+  Service,
+  ServiceCategory,
+  ServiceId,
+  ServiceOption,
+  Severity,
+  TreatmentType,
+} from "@/graphql/api";
+import OrderSuccessModal from "../OrderSuccessModal/OrderSuccessModal";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
+import { LocalStorageKeys } from "@/utils/localStorage";
+import LoginModal from "@/components/ui/booking/modals/LoginModal/LoginModal";
 
 export interface TreatmentArea {
   id: string;
@@ -17,8 +31,8 @@ export interface TreatmentArea {
 }
 
 export interface PestControlServiceConfiguration {
-  treatmentType: "residential" | "commercial" | "emergency";
-  severity: "low" | "medium" | "high";
+  treatmentType: TreatmentType;
+  severity: Severity;
   areas: TreatmentArea[];
 }
 
@@ -31,6 +45,8 @@ export interface PestControlServiceModalProps {
   servicePrice?: number;
   includedFeatures?: string[];
   onOrderSubmit?: (configuration: PestControlServiceConfiguration) => void;
+  serviceOption?: ServiceOption;
+  service: Service;
 }
 
 const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
@@ -42,12 +58,14 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
   servicePrice = 0,
   includedFeatures = [],
   onOrderSubmit,
+  serviceOption,
+  service,
 }) => {
   // State for pest control configuration
-  const [treatmentType, setTreatmentType] = useState<
-    "residential" | "commercial" | "emergency"
-  >("residential");
-  const [severity, setSeverity] = useState<"low" | "medium" | "high">("medium");
+  const [treatmentType, setTreatmentType] = useState<TreatmentType>(
+    TreatmentType.Residential
+  );
+  const [severity, setSeverity] = useState<Severity>(Severity.Medium);
   const [areas, setAreas] = useState<TreatmentArea[]>([
     { id: "kitchen", name: "Kitchen", selected: true },
     { id: "bathroom", name: "Bathroom", selected: true },
@@ -62,16 +80,53 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
   // State for checkout modal and slide panel
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [isSlidePanelOpen, setIsSlidePanelOpen] = useState(false);
+  const [showOrderSuccessModal, setShowOrderSuccessModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
-  // Handle treatment type change
-  const handleTreatmentTypeChange = (
-    type: "residential" | "commercial" | "emergency"
-  ) => {
-    setTreatmentType(type);
+  const { handleCreateBooking, isCreatingBooking } = useBookingOperations();
+
+  // Calculate total price
+  const calculateTotalPrice = () => {
+    if (!service) return 0;
+
+    let totalPrice = service.price;
+    const selectedAreasCount = getSelectedAreasCount();
+
+    // Base price multiplier based on treatment type
+    let typeMultiplier = 1;
+    switch (treatmentType) {
+      case TreatmentType.Residential:
+        typeMultiplier = 1;
+        break;
+      case TreatmentType.Commercial:
+        typeMultiplier = 2;
+        break;
+    }
+
+    // Severity multiplier
+    let severityMultiplier = 1;
+    switch (severity) {
+      case Severity.Low:
+        severityMultiplier = 1;
+        break;
+      case Severity.Medium:
+        severityMultiplier = 1.5;
+        break;
+      case Severity.High:
+        severityMultiplier = 2;
+        break;
+    }
+
+    // Price calculation: base price * areas * type * severity
+    totalPrice =
+      service.price * selectedAreasCount * typeMultiplier * severityMultiplier;
+
+    return totalPrice;
   };
 
   // Handle severity change
-  const handleSeverityChange = (level: "low" | "medium" | "high") => {
+  const handleSeverityChange = (level: Severity) => {
     setSeverity(level);
   };
 
@@ -106,27 +161,45 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
   };
 
   // Handle checkout completion
-  const handleCheckoutComplete = (formData: CheckoutFormData) => {
-    const completeOrder = {
-      service: {
-        title: serviceTitle,
-        price: servicePrice,
-        treatmentType,
-        severity,
-        areas: areas.filter((area) => area.selected),
-      },
-      checkout: formData,
-    };
+  const handleCheckoutComplete = async (formData: CheckoutFormData) => {
+    try {
+      const completeOrder: CreateBookingInput = {
+        serviceId: service._id,
+        serviceType: service.category,
+        serviceOption: serviceOption?.service_id || "",
+        date: formData.date,
+        timeSlot: formData.timeSlot,
+        address: formData.addressId || "",
+        notes: `Treatment Type: ${treatmentType}, Severity: ${severity}, Areas: ${areas
+          .filter((a) => a.selected)
+          .map((a) => a.name)
+          .join(", ")}`,
+        serviceDetails: {
+          serviceOption: serviceOption?.service_id || "",
+          pestControl: {
+            treatmentType:
+              serviceOption?.service_id as unknown as TreatmentType,
+            severity,
+            areas: areas.filter((area) => area.selected).map((area) => area.id),
+          },
+        },
+        totalPrice: calculateTotalPrice(),
+      };
 
-    console.log("Complete pest control order:", completeOrder);
-
-    // Close modals and show success
-    setIsCheckoutModalOpen(false);
-    onClose();
-
-    alert(
-      "Pest control service booked successfully! We'll confirm your booking details shortly."
-    );
+      if (isAuthenticated) {
+        await handleCreateBooking(completeOrder);
+        setShowOrderSuccessModal(true);
+      } else {
+        localStorage.setItem(
+          LocalStorageKeys.BOOKING_DATA_TO_COMPLETE,
+          JSON.stringify(completeOrder)
+        );
+        setShowLoginModal(true);
+      }
+      console.log("Complete pest control order:", completeOrder);
+    } catch (error) {
+      console.error("Error creating booking:", error);
+    }
   };
 
   // Handle checkout modal close
@@ -168,113 +241,63 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
         {/* Details Section */}
         <div className={styles.modal__detailsSection}>
           {/* Service Title and Description */}
-          <h2 className={styles.modal__title}>{serviceTitle}</h2>
-          <p className={styles.modal__description}>{serviceDescription}</p>
+          <h2 className={styles.modal__title}>{serviceOption?.label}</h2>
+          <p className={styles.modal__description}>
+            {serviceOption?.description}
+          </p>
 
           {/* Price Section */}
           <div className={styles.modal__price}>
-            NGN {servicePrice.toLocaleString()}
+            NGN {calculateTotalPrice().toLocaleString()}
           </div>
 
           {/* Configuration Section */}
           <div className={styles.modal__configurationSection}>
-            {/* Treatment Type Selection */}
-            <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Treatment Type</h3>
-              <div className={styles.treatmentTypeOptions}>
-                <label
-                  className={`${styles.treatmentTypeOption} ${
-                    treatmentType === "residential" ? styles.selected : ""
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="treatmentType"
-                    value="residential"
-                    checked={treatmentType === "residential"}
-                    onChange={() => handleTreatmentTypeChange("residential")}
-                    className={styles.radioInput}
-                  />
-                  <span>Residential - Home treatment</span>
-                </label>
-                <label
-                  className={`${styles.treatmentTypeOption} ${
-                    treatmentType === "commercial" ? styles.selected : ""
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="treatmentType"
-                    value="commercial"
-                    checked={treatmentType === "commercial"}
-                    onChange={() => handleTreatmentTypeChange("commercial")}
-                    className={styles.radioInput}
-                  />
-                  <span>Commercial - Business treatment</span>
-                </label>
-                <label
-                  className={`${styles.treatmentTypeOption} ${
-                    treatmentType === "emergency" ? styles.selected : ""
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="treatmentType"
-                    value="emergency"
-                    checked={treatmentType === "emergency"}
-                    onChange={() => handleTreatmentTypeChange("emergency")}
-                    className={styles.radioInput}
-                  />
-                  <span>Emergency - Urgent treatment</span>
-                </label>
-              </div>
-            </div>
-
             {/* Severity Level */}
             <div className={styles.section}>
               <h3 className={styles.sectionTitle}>Infestation Severity</h3>
               <div className={styles.severityOptions}>
                 <label
                   className={`${styles.severityOption} ${
-                    severity === "low" ? styles.selected : ""
+                    severity === Severity.Low ? styles.selected : ""
                   }`}
                 >
                   <input
                     type="radio"
                     name="severity"
-                    value="low"
-                    checked={severity === "low"}
-                    onChange={() => handleSeverityChange("low")}
+                    value={Severity.Low}
+                    checked={severity === Severity.Low}
+                    onChange={() => handleSeverityChange(Severity.Low)}
                     className={styles.radioInput}
                   />
                   <span>Low - Minor infestation</span>
                 </label>
                 <label
                   className={`${styles.severityOption} ${
-                    severity === "medium" ? styles.selected : ""
+                    severity === Severity.Medium ? styles.selected : ""
                   }`}
                 >
                   <input
                     type="radio"
                     name="severity"
-                    value="medium"
-                    checked={severity === "medium"}
-                    onChange={() => handleSeverityChange("medium")}
+                    value={Severity.Medium}
+                    checked={severity === Severity.Medium}
+                    onChange={() => handleSeverityChange(Severity.Medium)}
                     className={styles.radioInput}
                   />
                   <span>Medium - Moderate infestation</span>
                 </label>
                 <label
                   className={`${styles.severityOption} ${
-                    severity === "high" ? styles.selected : ""
+                    severity === Severity.High ? styles.selected : ""
                   }`}
                 >
                   <input
                     type="radio"
                     name="severity"
-                    value="high"
-                    checked={severity === "high"}
-                    onChange={() => handleSeverityChange("high")}
+                    value={Severity.High}
+                    checked={severity === Severity.High}
+                    onChange={() => handleSeverityChange(Severity.High)}
                     className={styles.radioInput}
                   />
                   <span>High - Severe infestation</span>
@@ -329,6 +352,7 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
         onClose={handleCheckoutClose}
         onContinue={handleCheckoutComplete}
         serviceType="Pest Control"
+        submitting={isCreatingBooking}
       />
 
       {/* Service Details Slide Panel */}
@@ -338,11 +362,31 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
         onOpen={handleSlidePanelOpen}
         serviceTitle={serviceTitle}
         serviceDescription={serviceDescription}
-        servicePrice={servicePrice}
+        servicePrice={calculateTotalPrice()}
         serviceImage={serviceImage}
         serviceType="Pest Control"
         includedFeatures={includedFeatures}
+        apartmentType={undefined}
+        roomCount={getSelectedAreasCount()}
       />
+
+      {/* Order Success Modal */}
+      <OrderSuccessModal
+        isOpen={showOrderSuccessModal}
+        onClose={() => {
+          setShowOrderSuccessModal(false);
+          onClose();
+        }}
+      />
+
+      {!isAuthenticated && (
+        <LoginModal
+          isOpen={showLoginModal}
+          onClose={() => {
+            setShowLoginModal(false);
+          }}
+        />
+      )}
     </Modal>
   );
 };
