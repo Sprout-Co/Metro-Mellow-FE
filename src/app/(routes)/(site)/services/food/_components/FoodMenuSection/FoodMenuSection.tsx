@@ -6,8 +6,19 @@ import { CTAButton } from "@/components/ui/Button/CTAButton";
 import styles from "./FoodMenuSection.module.scss";
 import FoodMenuModal from "../FoodMenuModal/FoodMenuModal";
 import { ArrowRightIcon } from "lucide-react";
+import { GetServicesQuery } from "@/graphql/api";
 
-const FoodMenuSection: React.FC = () => {
+interface FoodMenuSectionProps {
+  servicesData?: GetServicesQuery["services"];
+  loading?: boolean;
+  error?: any;
+}
+
+const FoodMenuSection: React.FC<FoodMenuSectionProps> = ({
+  servicesData,
+  loading,
+  error,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);

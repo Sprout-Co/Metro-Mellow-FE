@@ -4,8 +4,10 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Modal from "@/components/ui/Modal/Modal";
 import { Button } from "@/components/ui/Button/Button";
-import CheckoutModal, { CheckoutFormData } from "@/components/ui/CheckoutModal/CheckoutModal";
-import ServiceDetailsSlidePanel from "@/components/ui/ServiceDetailsSlidePanel/ServiceDetailsSlidePanel";
+import CheckoutModal, {
+  CheckoutFormData,
+} from "@/components/ui/booking/modals/CheckoutModal/CheckoutModal";
+import ServiceDetailsSlidePanel from "@/components/ui/booking/modals/ServiceDetailsSlidePanel/ServiceDetailsSlidePanel";
 import styles from "./ServiceModal.module.scss";
 
 // Configuration interfaces for different service types
@@ -67,7 +69,9 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
   onOrderSubmit,
 }) => {
   // State for service configuration
-  const [selectedCategories, setSelectedCategories] = useState<Record<string, string>>({});
+  const [selectedCategories, setSelectedCategories] = useState<
+    Record<string, string>
+  >({});
   const [serviceOptions, setServiceOptions] = useState<ServiceOption[]>(
     serviceConfiguration?.options || []
   );
@@ -78,18 +82,20 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
 
   // Handle category selection (radio buttons)
   const handleCategoryChange = (categoryId: string, optionValue: string) => {
-    setSelectedCategories(prev => ({
+    setSelectedCategories((prev) => ({
       ...prev,
-      [categoryId]: optionValue
+      [categoryId]: optionValue,
     }));
   };
 
   // Handle service option counter changes
   const handleOptionCounterChange = (optionId: string, increment: boolean) => {
-    setServiceOptions(prev => 
-      prev.map(option => {
+    setServiceOptions((prev) =>
+      prev.map((option) => {
         if (option.id === optionId) {
-          const newCount = increment ? option.count + 1 : Math.max(0, option.count - 1);
+          const newCount = increment
+            ? option.count + 1
+            : Math.max(0, option.count - 1);
           return { ...option, count: newCount };
         }
         return option;
@@ -110,13 +116,13 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
       serviceTitle,
       servicePrice,
     };
-    
+
     console.log("Service configured", configuration);
-    
+
     if (onOrderSubmit) {
       onOrderSubmit(configuration);
     }
-    
+
     setIsCheckoutModalOpen(true);
     setIsSlidePanelOpen(true);
   };
@@ -132,14 +138,16 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
       },
       checkout: formData,
     };
-    
+
     console.log("Complete order:", completeOrder);
-    
+
     // Close modals and show success
     setIsCheckoutModalOpen(false);
     onClose();
-    
-    alert("Order placed successfully! We'll confirm your booking details shortly.");
+
+    alert(
+      "Order placed successfully! We'll confirm your booking details shortly."
+    );
   };
 
   // Handle checkout modal close
@@ -170,7 +178,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
         {/* Image Section */}
         {showImageSection && (
           <div className={styles.modal__imageSection}>
-            <Image 
+            <Image
               src={serviceImage}
               alt={serviceTitle}
               width={500}
@@ -184,9 +192,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
         <div className={styles.modal__detailsSection}>
           {/* Custom header content */}
           {headerContent && (
-            <div className={styles.modal__headerContent}>
-              {headerContent}
-            </div>
+            <div className={styles.modal__headerContent}>{headerContent}</div>
           )}
 
           {/* Service Title and Description */}
@@ -204,23 +210,32 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
           {showConfigurationSection && serviceConfiguration && (
             <div className={styles.modal__configurationSection}>
               {/* Category Selection (Radio buttons) */}
-              {serviceConfiguration.categories?.map(category => (
-                <div key={category.id} className={styles.modal__categorySection}>
-                  <h3 className={styles.modal__sectionTitle}>{category.name}</h3>
+              {serviceConfiguration.categories?.map((category) => (
+                <div
+                  key={category.id}
+                  className={styles.modal__categorySection}
+                >
+                  <h3 className={styles.modal__sectionTitle}>
+                    {category.name}
+                  </h3>
                   <div className={styles.modal__categoryOptions}>
-                    {category.options.map(option => (
-                      <label 
+                    {category.options.map((option) => (
+                      <label
                         key={option}
                         className={`${styles.modal__categoryOption} ${
-                          selectedCategories[category.id] === option ? styles.modal__categoryOption_selected : ""
+                          selectedCategories[category.id] === option
+                            ? styles.modal__categoryOption_selected
+                            : ""
                         }`}
                       >
-                        <input 
-                          type="radio" 
+                        <input
+                          type="radio"
                           name={category.id}
                           value={option}
                           checked={selectedCategories[category.id] === option}
-                          onChange={() => handleCategoryChange(category.id, option)}
+                          onChange={() =>
+                            handleCategoryChange(category.id, option)
+                          }
                           className={styles.modal__radioInput}
                         />
                         <span>{option}</span>
@@ -231,42 +246,52 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
               ))}
 
               {/* Service Options with Counters */}
-              {serviceConfiguration.options && serviceConfiguration.options.length > 0 && (
-                <div className={styles.modal__optionsSection}>
-                  <div className={styles.modal__optionsGrid}>
-                    {serviceOptions.map(option => (
-                      <div key={option.id} className={styles.modal__optionCounter}>
-                        <span className={styles.modal__optionName}>{option.name}</span>
-                        <div className={styles.modal__counterControls}>
-                          <button
-                            className={styles.modal__counterButton}
-                            onClick={() => handleOptionCounterChange(option.id, true)}
-                            aria-label={`Increment ${option.name}`}
-                          >
-                            +
-                          </button>
-                          <span className={styles.modal__counterValue}>{option.count}</span>
-                          <button
-                            className={styles.modal__counterButton}
-                            onClick={() => handleOptionCounterChange(option.id, false)}
-                            aria-label={`Decrement ${option.name}`}
-                          >
-                            -
-                          </button>
+              {serviceConfiguration.options &&
+                serviceConfiguration.options.length > 0 && (
+                  <div className={styles.modal__optionsSection}>
+                    <div className={styles.modal__optionsGrid}>
+                      {serviceOptions.map((option) => (
+                        <div
+                          key={option.id}
+                          className={styles.modal__optionCounter}
+                        >
+                          <span className={styles.modal__optionName}>
+                            {option.name}
+                          </span>
+                          <div className={styles.modal__counterControls}>
+                            <button
+                              className={styles.modal__counterButton}
+                              onClick={() =>
+                                handleOptionCounterChange(option.id, true)
+                              }
+                              aria-label={`Increment ${option.name}`}
+                            >
+                              +
+                            </button>
+                            <span className={styles.modal__counterValue}>
+                              {option.count}
+                            </span>
+                            <button
+                              className={styles.modal__counterButton}
+                              onClick={() =>
+                                handleOptionCounterChange(option.id, false)
+                              }
+                              aria-label={`Decrement ${option.name}`}
+                            >
+                              -
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </div>
           )}
 
           {/* Custom footer content */}
           {footerContent && (
-            <div className={styles.modal__footerContent}>
-              {footerContent}
-            </div>
+            <div className={styles.modal__footerContent}>{footerContent}</div>
           )}
 
           {/* Order Button */}
@@ -300,7 +325,9 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
         serviceDescription={serviceDescription}
         servicePrice={servicePrice}
         serviceImage={serviceImage}
-        apartmentType={selectedCategories.apartmentType as "flat" | "duplex" | undefined}
+        apartmentType={
+          selectedCategories.apartmentType as "flat" | "duplex" | undefined
+        }
         roomCount={getTotalCount()}
         serviceType={serviceType}
         includedFeatures={includedFeatures}
@@ -309,4 +336,4 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
   );
 };
 
-export default ServiceModal; 
+export default ServiceModal;

@@ -62,13 +62,12 @@ export type Address = {
 
 export type AddressInput = {
   city: Scalars['String']['input'];
-  country: Scalars['String']['input'];
   isDefault?: InputMaybe<Scalars['Boolean']['input']>;
   label?: InputMaybe<Scalars['String']['input']>;
-  state: Scalars['String']['input'];
+  state?: InputMaybe<Scalars['String']['input']>;
   street: Scalars['String']['input'];
   userId?: InputMaybe<Scalars['ID']['input']>;
-  zipCode: Scalars['String']['input'];
+  zipCode?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type AdminInvitation = {

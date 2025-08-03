@@ -22,7 +22,16 @@ const nextConfig: NextConfig = {
   },
   images: {
     formats: ["image/avif", "image/webp"],
-    domains: [], // Add your image domains here if needed
+    domains: [
+      "example.com",
+      "images.unsplash.com",
+      "via.placeholder.com",
+      "picsum.photos",
+      "cloudinary.com",
+      "res.cloudinary.com",
+      "firebasestorage.googleapis.com",
+      "storage.googleapis.com",
+    ], // Add your image domains here if needed
     minimumCacheTTL: 60,
   },
   compress: true,

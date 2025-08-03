@@ -5,58 +5,21 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import styles from "./PestControlServicesShowcase.module.scss";
 import { Button } from "@/components/ui/Button/Button";
-import ServiceModal, { ServiceConfiguration } from "@/components/ui/ServiceModal/ServiceModal";
+import { ServiceConfiguration } from "@/components/ui/booking/modals/ServiceModal/ServiceModal";
+import { GetServicesQuery, ServiceOption } from "@/graphql/api";
+import PestControlServiceModal, {
+  PestControlServiceConfiguration,
+} from "@/components/ui/booking/modals/PestControlServiceModal";
 
-// Service data
-const pestControlServices = [
-  {
-    id: "general",
-    name: "General Pest Control",
-    icon: "🐜",
-    description:
-      "Comprehensive treatment for common household pests including ants, cockroaches, and spiders. Perfect for regular maintenance.",
-    features: [
-      "Interior & Exterior Treatment",
-      "Common Pest Elimination",
-      "Prevention Barriers",
-      "30-Day Guarantee",
-    ],
-    price: 7500,
-    image: "/images/pest-control/p1.jpeg"
-  },
-  {
-    id: "termite",
-    name: "Termite Treatment",
-    icon: "🪲",
-    description:
-      "Specialized treatment for termite infestations with thorough inspection, targeted elimination, and preventative measures.",
-    features: [
-      "Termite Colony Elimination",
-      "Wood Treatment",
-      "Barrier Installation",
-      "3-Month Guarantee",
-    ],
-    price: 12500,
-    image: "/images/pest-control/p1.jpeg"
-  },
-  {
-    id: "rodent",
-    name: "Rodent Control",
-    icon: "🐭",
-    description:
-      "Complete rodent management solutions including trapping, removal, and preventative sealing of entry points.",
-    features: [
-      "Rodent Removal",
-      "Entry Point Sealing",
-      "Sanitation Treatment",
-      "Preventative Consultation",
-    ],
-    price: 9500,
-    image: "/images/pest-control/p1.jpeg"
-  },
-];
+interface PestControlServicesShowcaseProps {
+  servicesData?: GetServicesQuery["services"];
+  loading?: boolean;
+  error?: any;
+}
 
-const PestControlServicesShowcase = () => {
+const PestControlServicesShowcase: React.FC<
+  PestControlServicesShowcaseProps
+> = ({ servicesData, loading, error }) => {
   const [sectionRef, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -64,7 +27,8 @@ const PestControlServicesShowcase = () => {
 
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<typeof pestControlServices[0] | null>(null);
+  const [selectedServiceOption, setSelectedServiceOption] =
+    useState<ServiceOption | null>(null);
 
   // Configuration for pest control service modal
   const getPestControlServiceConfiguration = (): ServiceConfiguration => ({
@@ -75,7 +39,7 @@ const PestControlServicesShowcase = () => {
       { id: "bathrooms", name: "Bathrooms", count: 1 },
       { id: "outdoor", name: "Outdoor Area", count: 1 },
     ],
-    allowCustomization: true
+    allowCustomization: true,
   });
 
   const containerVariants = {
@@ -102,8 +66,8 @@ const PestControlServicesShowcase = () => {
   };
 
   // Handle opening the modal with selected service
-  const handleOpenModal = (service: typeof pestControlServices[0]) => {
-    setSelectedService(service);
+  const handleOpenModal = (serviceOption: ServiceOption) => {
+    setSelectedServiceOption(serviceOption);
     setIsModalOpen(true);
   };
 
@@ -124,7 +88,7 @@ const PestControlServicesShowcase = () => {
     "Satisfaction guarantee",
     "Flexible scheduling options",
     "Eco-friendly solutions available",
-    "Comprehensive pest assessment included"
+    "Comprehensive pest assessment included",
   ];
 
   return (
@@ -146,9 +110,12 @@ const PestControlServicesShowcase = () => {
               : { opacity: 0, y: 20 }
           }
         >
-          <h2 className={styles.showcase__title}>Choose Your Pest Control Service</h2>
+          <h2 className={styles.showcase__title}>
+            Choose Your Pest Control Service
+          </h2>
           <p className={styles.showcase__subtitle}>
-            From basic treatments to specialized solutions, we have the perfect pest management options for your home or business.
+            From basic treatments to specialized solutions, we have the perfect
+            pest management options for your home or business.
           </p>
         </motion.div>
 
@@ -158,7 +125,7 @@ const PestControlServicesShowcase = () => {
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
         >
-          {pestControlServices.map((service) => (
+          {servicesData?.[0]?.options?.map((service) => (
             <motion.div
               key={service.id}
               className={styles.showcase__card}
@@ -169,33 +136,31 @@ const PestControlServicesShowcase = () => {
               }}
             >
               <div className={styles.showcase__icon}>
-                <span className={styles.showcase__emoji}>{service.icon}</span>
+                <span className={styles.showcase__emoji}>🐜</span>
               </div>
 
               <div className={styles.showcase__content}>
-                <h3 className={styles.showcase__name}>{service.name}</h3>
-                <p className={styles.showcase__description}>
-                  {service.description}
-                </p>
+                <h3 className={styles.showcase__name}>{service.label}</h3>
+                <p className={styles.showcase__description}>{service.label}</p>
 
                 <ul className={styles.showcase__features}>
-                  {service.features.map((feature, index) => (
+                  {service.inclusions?.map((feature, index) => (
                     <li key={index} className={styles.showcase__feature}>
                       {feature}
                     </li>
                   ))}
                 </ul>
-                
+
                 <div className={styles.showcase__priceTag}>
                   <span className={styles.showcase__priceValue}>
-                    NGN {service.price.toLocaleString()}
+                    NGN {service.price?.toLocaleString()}
                   </span>
                   <span className={styles.showcase__priceUnit}>/service</span>
                 </div>
 
                 <div className={styles.showcase__action}>
-                  <Button 
-                    variant="primary" 
+                  <Button
+                    variant="primary"
                     size="sm"
                     onClick={() => handleOpenModal(service)}
                   >
@@ -209,22 +174,23 @@ const PestControlServicesShowcase = () => {
       </div>
 
       {/* Pest Control Service Modal */}
-      {selectedService && (
-        <ServiceModal
+      {selectedServiceOption && servicesData?.[0] && (
+        <PestControlServiceModal
+          serviceImage={"/images/pest-control/p1.jpeg"}
           isOpen={isModalOpen}
           onClose={handleCloseModal}
-          serviceTitle={selectedService.name}
-          serviceDescription={selectedService.description}
-          servicePrice={selectedService.price}
-          serviceImage={selectedService.image}
-          serviceConfiguration={getPestControlServiceConfiguration()}
-          serviceType="Pest Control"
-          includedFeatures={getPestControlIncludedFeatures()}
-          onOrderSubmit={handleOrderSubmit}
+          serviceOption={selectedServiceOption}
+          service={servicesData?.[0]}
+          includedFeatures={
+            selectedServiceOption.inclusions || getPestControlIncludedFeatures()
+          }
+          onOrderSubmit={(configuration: PestControlServiceConfiguration) => {
+            console.log("Pest control service configuration:", configuration);
+          }}
         />
       )}
     </section>
   );
 };
 
-export default PestControlServicesShowcase; 
+export default PestControlServicesShowcase;

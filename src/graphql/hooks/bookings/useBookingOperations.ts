@@ -35,10 +35,11 @@ import {
 } from "@/graphql/api";
 
 export const useBookingOperations = () => {
-  const [createBookingMutation] = useCreateBookingMutation({
-    // refetchQueries: [{ query: GetCustomerBookingsDocument }],
-    // awaitRefetchQueries: true,
-  });
+  const [createBookingMutation, { loading: isCreatingBooking }] =
+    useCreateBookingMutation({
+      // refetchQueries: [{ query: GetCustomerBookingsDocument }],
+      // awaitRefetchQueries: true,
+    });
   const [updateBookingMutation] = useUpdateBookingMutation();
   const [cancelBookingMutation] = useCancelBookingMutation();
   const [completeBookingMutation] = useCompleteBookingMutation();
@@ -386,5 +387,6 @@ export const useBookingOperations = () => {
     currentCustomerBookings: customerBookingsData?.customerBookings,
     currentStaffBookings: staffBookingsData?.staffBookings,
     currentBooking: bookingData?.booking,
+    isCreatingBooking,
   };
 };

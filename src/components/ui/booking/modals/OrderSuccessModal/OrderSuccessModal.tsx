@@ -2,18 +2,22 @@
 
 import React from "react";
 import Image from "next/image";
-import Modal from "../Modal/Modal";
-import Button from "../Button/Button";
+import Modal from "@/components/ui/Modal/Modal";
+import { Button } from "@/components/ui/Button/Button";
 import styles from "./OrderSuccessModal.module.scss";
 
 interface OrderSuccessModalProps {
   isOpen: boolean;
   onClose: () => void;
+  title?: string;
+  message?: string;
 }
 
 const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({
   isOpen,
   onClose,
+  title = "Your order has been sent. Thank you!",
+  message = "We'll notify you once your order is ready.",
 }) => {
   return (
     <Modal
@@ -25,12 +29,8 @@ const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({
     >
       <div className={styles.success}>
         <div className={styles.success__content}>
-          <h2 className={styles.success__title}>
-            Your order has been sent. Thank you!
-          </h2>
-                      <p className={styles.success__message}>
-              We'll notify you once your order is ready.
-            </p>
+          <h2 className={styles.success__title}>{title}</h2>
+          <p className={styles.success__message}>{message}</p>
           <div className={styles.success__illustration}>
             <Image
               src="/images/general/success_order.png"
@@ -54,4 +54,4 @@ const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({
   );
 };
 
-export default OrderSuccessModal; 
+export default OrderSuccessModal;

@@ -1,6 +1,6 @@
-@import "../../../styles/abstracts/variables";
-@import "../../../styles/abstracts/mixins";
-@import "../../../styles/abstracts/functions";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
 
 .success {
   text-align: center;
@@ -33,7 +33,7 @@
 
     img {
       width: 100%;
-      height: auto;
+      height: 200px;
       object-fit: contain;
     }
   }
@@ -59,4 +59,4 @@
       margin: spacing("md") auto;
     }
   }
-} 
+}

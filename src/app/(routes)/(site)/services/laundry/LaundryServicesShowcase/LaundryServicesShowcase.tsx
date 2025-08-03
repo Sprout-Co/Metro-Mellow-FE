@@ -5,60 +5,25 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import styles from "./LaundryServicesShowcase.module.scss";
 import { Button } from "@/components/ui/Button/Button";
-import ServiceModal, { ServiceConfiguration } from "@/components/ui/ServiceModal/ServiceModal";
+import ServiceModal, {
+  ServiceConfiguration,
+} from "@/components/ui/booking/modals/ServiceModal/ServiceModal";
+import LaundryServiceModal, {
+  LaundryServiceConfiguration,
+} from "@/components/ui/booking/modals/LaundryServiceModal/LaundryServiceModal";
+import { GetServicesQuery, Service, ServiceOption } from "@/graphql/api";
 
-// Service data
-const laundryServices = [
-  {
-    id: "standard",
-    name: "Standard Laundry",
-    icon: "👕",
-    description:
-      "Basic wash, dry, and fold service for everyday clothing and linens. Perfect for regular laundry needs.",
-    features: [
-      "Wash & Dry",
-      "Basic Folding",
-      "Stain Treatment",
-      "Fabric Softener",
-    ],
-    price: 1950,
-    image: "/images/laundry/l1.jpeg"
-  },
-  {
-    id: "premium",
-    name: "Premium Laundry",
-    icon: "✨",
-    description:
-      "Enhanced laundry service with special care for delicate fabrics and precision folding techniques.",
-    features: [
-      "Everything in Standard",
-      "Delicate Fabric Care",
-      "Precision Folding",
-      "Garment Steaming",
-    ],
-    price: 3450,
-    image: "/images/laundry/l5.jpeg"
-  },
-  {
-    id: "drycleaning",
-    name: "Dry Cleaning",
-    icon: "🧥",
-    description:
-      "Professional dry cleaning for suits, dresses, and special garments that require careful handling.",
-    features: [
-      "Suit & Formal Wear",
-      "Stain Removal",
-      "Pressing & Finishing",
-      "Garment Preservation",
-    ],
-    price: 4950,
-    image: "/images/laundry/dry-cleaning.jpg"
-  },
-];
+interface LaundryServicesShowcaseProps {
+  servicesData?: GetServicesQuery["services"];
+  loading?: boolean;
+  error?: any;
+}
 
-
-
-const LaundryServicesShowcase = () => {
+const LaundryServicesShowcase: React.FC<LaundryServicesShowcaseProps> = ({
+  servicesData,
+  loading,
+  error,
+}) => {
   const [sectionRef, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -66,7 +31,8 @@ const LaundryServicesShowcase = () => {
 
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<typeof laundryServices[0] | null>(null);
+  const [selectedServiceOption, setSelectedServiceOption] =
+    useState<ServiceOption | null>(null);
 
   // Configuration for laundry service modal
   const getLaundryServiceConfiguration = (): ServiceConfiguration => ({
@@ -80,7 +46,7 @@ const LaundryServicesShowcase = () => {
       { id: "shoe", name: "Shoe", count: 1 },
       { id: "other", name: "Other", count: 1 },
     ],
-    allowCustomization: true
+    allowCustomization: true,
   });
 
   const containerVariants = {
@@ -107,8 +73,8 @@ const LaundryServicesShowcase = () => {
   };
 
   // Handle opening the modal with selected service
-  const handleOpenModal = (service: typeof laundryServices[0]) => {
-    setSelectedService(service);
+  const handleOpenModal = (serviceOption: ServiceOption) => {
+    setSelectedServiceOption(serviceOption);
     setIsModalOpen(true);
   };
 
@@ -129,7 +95,7 @@ const LaundryServicesShowcase = () => {
     "Satisfaction guarantee",
     "Flexible pickup and delivery",
     "Eco-friendly washing options",
-    "Careful handling of delicate fabrics"
+    "Careful handling of delicate fabrics",
   ];
 
   return (
@@ -151,9 +117,12 @@ const LaundryServicesShowcase = () => {
               : { opacity: 0, y: 20 }
           }
         >
-          <h2 className={styles.showcase__title}>Choose Your Laundry Service</h2>
+          <h2 className={styles.showcase__title}>
+            Choose Your Laundry Service
+          </h2>
           <p className={styles.showcase__subtitle}>
-            From everyday essentials to specialty fabrics, we have the perfect care solution for your garments.
+            From everyday essentials to specialty fabrics, we have the perfect
+            care solution for your garments.
           </p>
         </motion.div>
 
@@ -163,7 +132,7 @@ const LaundryServicesShowcase = () => {
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
         >
-          {laundryServices.map((service) => (
+          {servicesData?.[0]?.options?.map((service) => (
             <motion.div
               key={service.id}
               className={styles.showcase__card}
@@ -174,33 +143,33 @@ const LaundryServicesShowcase = () => {
               }}
             >
               <div className={styles.showcase__icon}>
-                <span className={styles.showcase__emoji}>{service.icon}</span>
+                <span className={styles.showcase__emoji}>🧺</span>
               </div>
 
               <div className={styles.showcase__content}>
-                <h3 className={styles.showcase__name}>{service.name}</h3>
+                <h3 className={styles.showcase__name}>{service.label}</h3>
                 <p className={styles.showcase__description}>
                   {service.description}
                 </p>
 
                 <ul className={styles.showcase__features}>
-                  {service.features.map((feature, index) => (
+                  {service.inclusions?.map((feature, index) => (
                     <li key={index} className={styles.showcase__feature}>
                       {feature}
                     </li>
                   ))}
                 </ul>
-                
+
                 <div className={styles.showcase__priceTag}>
                   <span className={styles.showcase__priceValue}>
-                    NGN {service.price.toLocaleString()}
+                    NGN {service.price?.toLocaleString()}
                   </span>
                   <span className={styles.showcase__priceUnit}>/load</span>
                 </div>
 
                 <div className={styles.showcase__action}>
-                  <Button 
-                    variant="primary" 
+                  <Button
+                    variant="primary"
                     size="sm"
                     onClick={() => handleOpenModal(service)}
                   >
@@ -214,22 +183,22 @@ const LaundryServicesShowcase = () => {
       </div>
 
       {/* Laundry Service Modal */}
-      {selectedService && (
-        <ServiceModal
+      {selectedServiceOption && servicesData?.[0] && (
+        <LaundryServiceModal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
-          serviceTitle={selectedService.name}
-          serviceDescription={selectedService.description}
-          servicePrice={selectedService.price}
-          serviceImage={selectedService.image}
-          serviceConfiguration={getLaundryServiceConfiguration()}
-          serviceType="Laundry"
-          includedFeatures={getLaundryIncludedFeatures()}
-          onOrderSubmit={handleOrderSubmit}
+          serviceOption={selectedServiceOption}
+          service={servicesData?.[0]}
+          includedFeatures={
+            selectedServiceOption.inclusions || getLaundryIncludedFeatures()
+          }
+          onOrderSubmit={(configuration: LaundryServiceConfiguration) => {
+            console.log("Laundry service configuration:", configuration);
+          }}
         />
       )}
     </section>
   );
 };
 
-export default LaundryServicesShowcase; 
+export default LaundryServicesShowcase;
