@@ -1,15 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Modal from "@/components/ui/Modal/Modal";
 import { Button } from "@/components/ui/Button/Button";
 import CartIcon from "@/components/ui/CartIcon";
-import ShippingDetailsModal, {
-  ShippingDetails,
-} from "@/components/ui/booking/modals/ShippingDetailsModal/ShippingDetailsModal";
 import styles from "./CartModal.module.scss";
+import CheckoutModal, {
+  CheckoutFormData,
+} from "../CheckoutModal/CheckoutModal";
 
 export interface CartItem {
   id: string;
@@ -23,7 +22,7 @@ export interface CartItem {
 interface CartModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onContinue?: (shippingDetails?: ShippingDetails) => void;
+  onContinue?: (formData?: CheckoutFormData) => void;
   items: CartItem[];
   onUpdateQuantity: (id: string, quantity: number) => void;
   onRemoveItem: (id: string) => void;
@@ -56,10 +55,10 @@ export const CartModal: React.FC<CartModalProps> = ({
     setShowShippingModal(true);
   };
 
-  const handleShippingDetailsSubmit = (shippingDetails: ShippingDetails) => {
+  const handleCheckoutComplete = (formData: CheckoutFormData) => {
     setShowShippingModal(false);
     if (onContinue) {
-      onContinue(shippingDetails);
+      onContinue(formData);
     }
   };
 
@@ -262,10 +261,17 @@ export const CartModal: React.FC<CartModalProps> = ({
         </div>
       </Modal>
 
-      <ShippingDetailsModal
+      {/* <ShippingDetailsModal
         isOpen={showShippingModal && isOpen}
         onClose={handleShippingModalClose}
         onContinue={handleShippingDetailsSubmit}
+      /> */}
+      <CheckoutModal
+        isOpen={showShippingModal}
+        onClose={handleShippingModalClose}
+        onContinue={handleCheckoutComplete}
+        serviceType="Food"
+        submitting={false}
       />
     </>
   );

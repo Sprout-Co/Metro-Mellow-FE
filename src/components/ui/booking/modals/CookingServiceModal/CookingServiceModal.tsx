@@ -9,6 +9,18 @@ import CheckoutModal, {
 } from "@/components/ui/booking/modals/CheckoutModal/CheckoutModal";
 import ServiceDetailsSlidePanel from "@/components/ui/booking/modals/ServiceDetailsSlidePanel/ServiceDetailsSlidePanel";
 import styles from "./CookingServiceModal.module.scss";
+import {
+  CreateBookingInput,
+  Service,
+  ServiceCategory,
+  ServiceId,
+  ServiceOption,
+} from "@/graphql/api";
+import OrderSuccessModal from "../OrderSuccessModal/OrderSuccessModal";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
+import { LocalStorageKeys } from "@/utils/localStorage";
+import LoginModal from "@/components/ui/booking/modals/LoginModal/LoginModal";
 
 export interface MealOption {
   id: string;
@@ -31,6 +43,8 @@ export interface CookingServiceModalProps {
   servicePrice?: number;
   includedFeatures?: string[];
   onOrderSubmit?: (configuration: CookingServiceConfiguration) => void;
+  serviceOption?: ServiceOption;
+  service: Service;
 }
 
 const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
@@ -42,6 +56,8 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
   servicePrice = 0,
   includedFeatures = [],
   onOrderSubmit,
+  serviceOption,
+  service,
 }) => {
   // State for cooking configuration
   const [mealType, setMealType] = useState<"basic" | "standard" | "premium">(
@@ -59,6 +75,52 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
   // State for checkout modal and slide panel
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [isSlidePanelOpen, setIsSlidePanelOpen] = useState(false);
+  const [showOrderSuccessModal, setShowOrderSuccessModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+
+  const { handleCreateBooking, isCreatingBooking } = useBookingOperations();
+
+  // Calculate total price
+  const calculateTotalPrice = () => {
+    if (!service) return 0;
+
+    let totalPrice = service.price;
+    const totalMeals = getTotalMealCount();
+
+    // Base price multiplier based on meal type
+    let typeMultiplier = 1;
+    switch (mealType) {
+      case "basic":
+        typeMultiplier = 1;
+        break;
+      case "standard":
+        typeMultiplier = 1.5;
+        break;
+      case "premium":
+        typeMultiplier = 2.5;
+        break;
+    }
+
+    // Frequency multiplier
+    let frequencyMultiplier = 1;
+    switch (deliveryFrequency) {
+      case "daily":
+        frequencyMultiplier = 1;
+        break;
+      case "weekly":
+        frequencyMultiplier = 7;
+        break;
+      case "monthly":
+        frequencyMultiplier = 30;
+        break;
+    }
+
+    // Price calculation: base price * meals * type * frequency
+    totalPrice = service.price * totalMeals * typeMultiplier * frequencyMultiplier;
+
+    return totalPrice;
+  };
 
   // Handle meal type change
   const handleMealTypeChange = (type: "basic" | "standard" | "premium") => {
@@ -109,27 +171,41 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
   };
 
   // Handle checkout completion
-  const handleCheckoutComplete = (formData: CheckoutFormData) => {
-    const completeOrder = {
-      service: {
-        title: serviceTitle,
-        price: servicePrice,
-        mealType,
-        deliveryFrequency,
-        meals,
-      },
-      checkout: formData,
-    };
+  const handleCheckoutComplete = async (formData: CheckoutFormData) => {
+    try {
+      const completeOrder: CreateBookingInput = {
+        serviceId: service._id,
+        serviceType: service.category,
+        serviceOption: serviceOption?.service_id || "",
+        date: formData.date,
+        timeSlot: formData.timeSlot,
+        address: formData.addressId || "",
+        notes: `Meal Type: ${mealType}, Frequency: ${deliveryFrequency}, Meals: ${meals.map(m => `${m.name}(${m.count})`).join(', ')}`,
+        serviceDetails: {
+          serviceOption: serviceOption?.service_id || "",
+          cooking: {
+            mealType,
+            deliveryFrequency,
+            meals: meals.filter(meal => meal.count > 0),
+          },
+        },
+        totalPrice: calculateTotalPrice(),
+      };
 
-    console.log("Complete cooking order:", completeOrder);
-
-    // Close modals and show success
-    setIsCheckoutModalOpen(false);
-    onClose();
-
-    alert(
-      "Cooking service booked successfully! We'll confirm your booking details shortly."
-    );
+      if (isAuthenticated) {
+        await handleCreateBooking(completeOrder);
+        setShowOrderSuccessModal(true);
+      } else {
+        localStorage.setItem(
+          LocalStorageKeys.BOOKING_DATA_TO_COMPLETE,
+          JSON.stringify(completeOrder)
+        );
+        setShowLoginModal(true);
+      }
+      console.log("Complete cooking order:", completeOrder);
+    } catch (error) {
+      console.error("Error creating booking:", error);
+    }
   };
 
   // Handle checkout modal close
@@ -171,12 +247,14 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
         {/* Details Section */}
         <div className={styles.modal__detailsSection}>
           {/* Service Title and Description */}
-          <h2 className={styles.modal__title}>{serviceTitle}</h2>
-          <p className={styles.modal__description}>{serviceDescription}</p>
+          <h2 className={styles.modal__title}>{serviceOption?.label}</h2>
+          <p className={styles.modal__description}>
+            {serviceOption?.description}
+          </p>
 
           {/* Price Section */}
           <div className={styles.modal__price}>
-            NGN {servicePrice.toLocaleString()}
+            NGN {calculateTotalPrice().toLocaleString()}
           </div>
 
           {/* Configuration Section */}
@@ -338,6 +416,7 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
         onClose={handleCheckoutClose}
         onContinue={handleCheckoutComplete}
         serviceType="Cooking"
+        submitting={isCreatingBooking}
       />
 
       {/* Service Details Slide Panel */}
@@ -347,11 +426,31 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
         onOpen={handleSlidePanelOpen}
         serviceTitle={serviceTitle}
         serviceDescription={serviceDescription}
-        servicePrice={servicePrice}
+        servicePrice={calculateTotalPrice()}
         serviceImage={serviceImage}
         serviceType="Cooking"
         includedFeatures={includedFeatures}
+        apartmentType={undefined}
+        roomCount={getTotalMealCount()}
       />
+
+      {/* Order Success Modal */}
+      <OrderSuccessModal
+        isOpen={showOrderSuccessModal}
+        onClose={() => {
+          setShowOrderSuccessModal(false);
+          onClose();
+        }}
+      />
+
+      {!isAuthenticated && (
+        <LoginModal
+          isOpen={showLoginModal}
+          onClose={() => {
+            setShowLoginModal(false);
+          }}
+        />
+      )}
     </Modal>
   );
 };
