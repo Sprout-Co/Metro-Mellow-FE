@@ -16,6 +16,10 @@ import {
 import ServiceModal, {
   ServiceConfiguration,
 } from "@/components/ui/booking/modals/ServiceModal/ServiceModal";
+import CleaningServiceModal from "@/components/ui/booking/modals/CleaningServiceModal/CleaningServiceModal";
+import PestControlServiceModal from "@/components/ui/booking/modals/PestControlServiceModal/PestControlServiceModal";
+import LaundryServiceModal from "@/components/ui/booking/modals/LaundryServiceModal/LaundryServiceModal";
+import CookingServiceModal from "@/components/ui/booking/modals/CookingServiceModal";
 
 // Define service categories for sidebar
 const serviceCategories = [
@@ -484,6 +488,51 @@ const ServiceCatalog: FC = () => {
     setSelectedOption(null);
   };
 
+  const renderServiceModal = (service: Service, option: ServiceOption) => {
+    switch (service.category) {
+      case ServiceCategory.Cooking:
+        return (
+          <CookingServiceModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            serviceOption={option}
+            service={service}
+          />
+        );
+      case ServiceCategory.Cleaning:
+        return (
+          <CleaningServiceModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            serviceOption={option}
+            service={service}
+            includedFeatures={
+              option.inclusions ||
+              getIncludedFeatures(ServiceCategory.Cleaning, service)
+            }
+          />
+        );
+      case ServiceCategory.PestControl:
+        return (
+          <PestControlServiceModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            serviceOption={option}
+            service={service}
+          />
+        );
+      case ServiceCategory.Laundry:
+        return (
+          <LaundryServiceModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            serviceOption={option}
+            service={service}
+          />
+        );
+    }
+  };
+
   return (
     <section className={styles.catalog}>
       <div className={styles.catalog__container}>
@@ -669,32 +718,37 @@ const ServiceCatalog: FC = () => {
       </div>
 
       {/* Service Modal */}
-      {selectedService && selectedOption && (
-        <ServiceModal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          serviceTitle={selectedOption.label}
-          serviceDescription={selectedOption.description}
-          servicePrice={selectedOption.price}
-          serviceImage={getSafeImageUrl(selectedService.imageUrl)}
-          serviceConfiguration={getServiceConfiguration(
-            selectedCategory,
-            selectedService
-          )}
-          serviceType={selectedCategory}
-          includedFeatures={getIncludedFeatures(
-            selectedCategory,
-            selectedService
-          )}
-          onOrderSubmit={(configuration) => {
-            console.log("Service configuration:", {
-              service: selectedService,
-              option: selectedOption,
-              configuration,
-            });
-          }}
-        />
-      )}
+      {selectedService &&
+        selectedOption &&
+        renderServiceModal(
+          selectedService,
+          selectedOption
+        )
+        // <ServiceModal
+        //   isOpen={isModalOpen}
+        //   onClose={handleCloseModal}
+        //   serviceTitle={selectedOption.label}
+        //   serviceDescription={selectedOption.description}
+        //   servicePrice={selectedOption.price}
+        //   serviceImage={getSafeImageUrl(selectedService.imageUrl)}
+        //   serviceConfiguration={getServiceConfiguration(
+        //     selectedCategory,
+        //     selectedService
+        //   )}
+        //   serviceType={selectedCategory}
+        //   includedFeatures={getIncludedFeatures(
+        //     selectedCategory,
+        //     selectedService
+        //   )}
+        //   onOrderSubmit={(configuration) => {
+        //     console.log("Service configuration:", {
+        //       service: selectedService,
+        //       option: selectedOption,
+        //       configuration,
+        //     });
+        //   }}
+        // />
+      }
     </section>
   );
 };
