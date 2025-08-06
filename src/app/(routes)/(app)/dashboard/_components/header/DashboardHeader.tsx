@@ -145,7 +145,7 @@ export default function DashboardHeader() {
               </div>
               <div className={styles.header__profileAvatar}>
                 <Image 
-                  src="https://i.pravatar.cc/100?img=8" 
+                  src="/images/brand/b1.jpeg" 
                   alt="John Doe" 
                   width={40} 
                   height={40}
@@ -165,7 +165,7 @@ export default function DashboardHeader() {
                   <div className={styles.header__profileHeader}>
                     <div className={styles.header__profileAvatar}>
                       <Image 
-                        src="https://i.pravatar.cc/100?img=8" 
+                        src="/images/brand/b1.jpeg" 
                         alt="John Doe" 
                         width={60} 
                         height={60}
