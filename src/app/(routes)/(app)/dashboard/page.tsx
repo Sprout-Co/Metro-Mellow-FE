@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import DashboardHeader from './_components/header/DashboardHeader';
+import DashboardBanner from './_components/banner/DashboardBanner';
 import NavigationTabs from './_components/navigation/NavigationTabs';
 import ServiceTabs from './_components/service-tabs/ServiceTabs';
 import QuickActions from './_components/quick-actions/QuickActions';
@@ -17,6 +18,7 @@ export default function Dashboard() {
   return (
     <div className={styles.dashboard}>
       <DashboardHeader />
+      <DashboardBanner />
       
       <div className={styles.dashboard__content}>
         <div className={styles.dashboard__container}>
