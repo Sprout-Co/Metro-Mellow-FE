@@ -1,0 +1,203 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/animations";
+
+.orderSteps {
+  position: relative;
+  width: 100%;
+  background-color: color-alpha('primary', 'lighter', 0.5);
+  @include section-spacing('4xl');
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  z-index: 1;
+
+  &__container {
+    width: 100%;
+    @include container;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: spacing('3xl');
+    position: relative;
+    z-index: 1;
+
+    @include breakpoint-down('md') {
+      flex-direction: column;
+      align-items: center;
+      gap: spacing('xl');
+      padding: 0 spacing('md');
+    }
+    
+    @include breakpoint-down('sm') {
+      padding: 0 spacing('sm');
+      gap: spacing('lg');
+    }
+  }
+
+  &__illustration {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0;
+    gap: spacing('6xl');
+
+    @include breakpoint-down('md') {
+      width: 100%;
+      margin-top: 0;
+      margin-bottom: spacing('md');
+      flex-direction: column;
+      gap: spacing('4xl');
+    }
+
+    @include breakpoint-down('sm') {
+      width: 100%;
+      margin-top: 0;
+      margin-bottom: spacing('sm');
+      flex-direction: column;
+      gap: spacing('2xl');
+    }
+  }
+
+  &__content {
+    width: 50%;
+    padding-right: spacing('xl');
+
+    @include breakpoint-down('md') {
+      width: 100%;
+      padding-right: 0;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: spacing('xl');
+    }
+
+    @include breakpoint-down('sm') {
+      width: 100%;
+      padding-right: 0;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: spacing('lg');
+    }
+  }
+
+  &__title {
+    margin-bottom: spacing('md');
+    @include heading-1;
+    
+    @include breakpoint-down('md') {
+      font-size: font-size('h3');
+    }
+    
+    @include breakpoint-down('sm') {
+      font-size: font-size('h4');
+    }
+  }
+
+  &__subtitle {
+    font-size: font-size('subtitle-1');
+    font-weight: map-get($font-weights, 'medium');
+    line-height: line-height('normal');
+    color: color('neutral', 'darkest');
+    margin-bottom: spacing('lg');
+
+    @include breakpoint-down('md') {
+      font-size: font-size('body-1');
+      margin-bottom: spacing('md');
+    }
+    @include breakpoint-down('sm') {
+      font-size: font-size('body-2');
+    }
+  }
+
+  &__steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: -#{spacing('xl')};
+
+    @include breakpoint-down('md') {
+      width: 100%;
+      align-items: center;
+      margin-top: -#{spacing('lg')};
+    }
+    @include breakpoint-down('sm') {
+      width: 100%;
+      align-items: center;
+      margin-top: -#{spacing('md')};
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      margin-bottom: spacing('md');
+      justify-content: flex-start;
+      width: 100%;
+      @include breakpoint-down('md') {
+        justify-content: center;
+        width: 100%;
+      }
+      @include breakpoint-down('sm') {
+        justify-content: center;
+        width: 100%;
+        margin-bottom: spacing('sm');
+      }
+    }
+  }
+
+  &__step {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: spacing('2xl');
+    height: spacing('2xl');
+    border-radius: 50%;
+    background-color: color('primary', 'base');
+    color: color('neutral', 'white');
+    font-size: font-size('body-2');
+    font-weight: map-get($font-weights, 'bold');
+    margin-right: spacing('sm');
+    line-height: 1;
+    flex-shrink: 0;
+    @include breakpoint-down('sm') {
+      width: spacing('xl');
+      height: spacing('xl');
+      font-size: font-size('caption');
+      margin-right: spacing('xs');
+    }
+  }
+
+  &__stepText {
+    font-size: font-size('body-1');
+    font-weight: map-get($font-weights, 'medium');
+    color: color('neutral', 'black');
+    @include breakpoint-down('md') {
+      font-size: font-size('body-2');
+    }
+    @include breakpoint-down('sm') {
+      font-size: font-size('caption');
+    }
+  }
+
+  &__cta {
+    margin-top: spacing('4xl');
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    
+    @include breakpoint-down('md') {
+      margin-top: spacing('2xl');
+    }
+    @include breakpoint-down('sm') {
+      margin-top: spacing('xl');
+    }
+  }
+} 

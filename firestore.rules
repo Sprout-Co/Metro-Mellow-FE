@@ -1,0 +1,59 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Waitlist collection rules
+    match /waitlist/{document} {
+      // Allow anyone to create (add to waitlist)
+      allow create: if isValidWaitlistData();
+      
+      // Only allow admins to read, update, or delete
+      allow read, update, delete: if isAdmin();
+    }
+    
+    // Helper functions
+    function isValidWaitlistData() {
+      let requiredFields = ['email', 'createdAt', 'source'];
+      let data = request.resource.data;
+      
+      return (
+        // Check required fields exist
+        requiredFields.toSet().difference(data.keys().toSet()).size() == 0 &&
+        
+        // Validate email format (basic validation)
+        data.email is string &&
+        data.email.matches('.*@.*\\..*') &&
+        data.email.size() <= 254 &&
+        
+        // Validate source
+        data.source is string &&
+        data.source.size() <= 50 &&
+        
+        // Validate createdAt is server timestamp
+        data.createdAt == request.time &&
+        
+        // Optional fields validation
+        (!('location' in data) || (data.location is string && data.location.size() <= 100)) &&
+        (!('userAgent' in data) || (data.userAgent is string && data.userAgent.size() <= 500)) &&
+        (!('interests' in data) || (data.interests is list && data.interests.size() <= 10))
+      );
+    }
+    
+    function isAdmin() {
+      // For now, only authenticated admin users can access
+      // You can modify this based on your authentication system
+      return request.auth != null && 
+             request.auth.token.email != null &&
+             request.auth.token.email in [
+               'admin@metromellow.com',
+               'founder@metromellow.com'
+               // Add your admin emails here
+             ];
+    }
+    
+    // Default deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

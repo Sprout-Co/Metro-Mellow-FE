@@ -1,0 +1,126 @@
+mutation CreateAdminInvitation($input: CreateAdminInvitationInput!) {
+  createAdminInvitation(input: $input) {
+    success
+    message
+    invitation {
+      id
+      email
+      firstName
+      lastName
+      role
+      invitedBy {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        emailVerified
+        emailVerifiedAt
+        accountStatus
+      }
+      invitedByName
+      invitationToken
+      expiresAt
+      isUsed
+      usedAt
+      createdAt
+      permissions
+    }
+  }
+}
+
+mutation AcceptAdminInvitation($input: AcceptAdminInvitationInput!) {
+  acceptAdminInvitation(input: $input) {
+    success
+    message
+    token
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+mutation ResendAdminInvitation($invitationId: ID!) {
+  resendAdminInvitation(invitationId: $invitationId)
+}
+
+mutation CancelAdminInvitation($invitationId: ID!) {
+  cancelAdminInvitation(invitationId: $invitationId)
+}
+
+mutation CleanupExpiredInvitations {
+  cleanupExpiredInvitations
+}
+
+mutation CreateCustomer($input: CreateUserInput!) {
+  createCustomer(input: $input) {
+    token
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+      createdAt
+      updatedAt
+    }
+    message
+    success
+  }
+}
+
+mutation CreateStaff($input: CreateUserInput!) {
+  createStaff(input: $input) {
+    token
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      addresses {
+        id
+        street
+        city
+        state
+        zipCode
+        country
+        isDefault
+        label
+      }
+      defaultAddress {
+        id
+        street
+        city
+        state
+        zipCode
+        country
+        isDefault
+        label
+      }
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+      createdAt
+      updatedAt
+    }
+    message
+    success
+  }
+}

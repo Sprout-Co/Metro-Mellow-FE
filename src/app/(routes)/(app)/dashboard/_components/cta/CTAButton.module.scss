@@ -1,0 +1,23 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.ctaButton {
+  @include button-primary("lg");
+  background-color: color("primary", "base");
+  color: color("neutral", "white");
+  border-radius: border-radius("pill");
+  padding: spacing("md") spacing("2xl");
+  min-width: 300px;
+  text-transform: uppercase;
+  @include font-secondary;
+  @include font-size("body-2");
+  @include font-weight("bold");
+  letter-spacing: map-get($letter-spacing, "wide");
+  box-shadow: map-get($shadows, "md");
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: map-get($shadows, "lg");
+  }
+}

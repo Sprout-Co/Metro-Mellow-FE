@@ -1,0 +1,146 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.cta {
+  padding: spacing("5xl") 0;
+  background-color: color("primary", "base");
+  background-image: url("/images/patterns/cta-pattern.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to right,
+      rgba(color("primary", "dark"), 0.9),
+      rgba(color("primary", "base"), 0.8)
+    );
+    z-index: 0;
+  }
+
+  &__container {
+    @include container;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  &__title {
+    @include heading-1;
+    color: color("neutral", "white");
+    margin-bottom: spacing("md");
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "lg");
+    line-height: map-get($line-heights, "relaxed");
+    color: rgba(color("neutral", "white"), 0.9);
+    margin-bottom: spacing("xl");
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("md");
+    margin-bottom: spacing("xl");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      width: 100%;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  &__button {
+    &_primary {
+      display: inline-block;
+      padding: spacing("md") spacing("xl");
+      background-color: color("neutral", "white");
+      color: color("primary", "base");
+      font-size: map-get($font-sizes, "md");
+      font-weight: map-get($font-weights, "semibold");
+      border-radius: border-radius("md");
+      text-decoration: none;
+      transition: $transition-base;
+
+      &:hover {
+        background-color: rgba(color("neutral", "white"), 0.9);
+        transform: translateY(-3px);
+      }
+
+      @include breakpoint-down("sm") {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    &_secondary {
+      display: inline-block;
+      padding: spacing("md") spacing("xl");
+      background-color: transparent;
+      color: color("neutral", "white");
+      font-size: map-get($font-sizes, "md");
+      font-weight: map-get($font-weights, "semibold");
+      border-radius: border-radius("md");
+      text-decoration: none;
+      border: 2px solid rgba(color("neutral", "white"), 0.3);
+      transition: $transition-base;
+
+      &:hover {
+        background-color: rgba(color("neutral", "white"), 0.1);
+        transform: translateY(-3px);
+      }
+
+      @include breakpoint-down("sm") {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: spacing("xl");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      gap: spacing("md");
+    }
+
+    &_item {
+      display: flex;
+      align-items: center;
+      color: color("neutral", "white");
+      font-size: map-get($font-sizes, "md");
+      font-weight: map-get($font-weights, "medium");
+    }
+
+    &_icon {
+      margin-right: spacing("xs");
+      flex-shrink: 0;
+    }
+  }
+}

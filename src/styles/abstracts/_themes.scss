@@ -1,0 +1,526 @@
+// ===================================
+// THEME VARIATIONS
+// Location: src/styles/abstracts/_themes.scss
+// ===================================
+
+@import 'variables';
+@import 'functions';
+@import 'mixins';
+
+// ===================================
+// THEME CONFIGURATION
+// ===================================
+
+// Light Theme (Default)
+$light-theme: (
+  "primary": (
+    "base": #075056,
+    "light": #397378,
+    "lighter": #6a969a,
+    "lightest": #9cb9bb,
+    "dark": #075056,
+    "darker": #043840,
+  ),
+  "secondary": (
+    "base": #fe5b04,
+    "light": #fe7c36,
+    "lighter": #fe9d68,
+    "lightest": #ffbd9b,
+    "dark": #e54f03,
+    "darker": #cc4503,
+  ),
+  "accent": (
+    "base": #f4d47d,
+    "light": #f6dd97,
+    "lighter": #f8e5b1,
+    "lightest": #fbeecb,
+    "dark": #f2ce5b,
+    "darker": #f0c840,
+  ),
+  "neutral": (
+    "white": #ffffff,
+    "lightest": #fbfbfb,
+    "lighter": #f1f1f1,
+    "light": #cbcbcb,
+    "medium": #b8b8b8,
+    "dark": #9f9f9f,
+    "darker": #6e6e6e,
+    "darkest": #444449,
+    "black": #1b1c22,
+  ),
+  "surface": (
+    "primary": #ffffff,
+    "secondary": #fbfbfb,
+    "tertiary": #f1f1f1,
+    "elevated": #ffffff,
+  ),
+  "text": (
+    "primary": #1b1c22,
+    "secondary": #444449,
+    "tertiary": #6e6e6e,
+    "inverse": #ffffff,
+    "muted": #9f9f9f,
+  ),
+  "border": (
+    "primary": #cbcbcb,
+    "secondary": #f1f1f1,
+    "focus": #075056,
+    "error": #fb2222,
+  ),
+  "shadow": (
+    "color": rgba(27, 28, 34, 0.1),
+    "strong": rgba(27, 28, 34, 0.15),
+  ),
+  "status": (
+    "success": #14dbab,
+    "error": #fb2222,
+    "warning": #edf12b,
+    "info": #2293fb,
+  )
+);
+
+// Dark Theme
+$dark-theme: (
+  "primary": (
+    "base": #6a969a,
+    "light": #9cb9bb,
+    "lighter": #cddcdd,
+    "lightest": #e6f0f1,
+    "dark": #397378,
+    "darker": #075056,
+  ),
+  "secondary": (
+    "base": #ff7c36,
+    "light": #ff9d68,
+    "lighter": #ffbd9b,
+    "lightest": #ffdecd,
+    "dark": #fe5b04,
+    "darker": #e54f03,
+  ),
+  "accent": (
+    "base": #f6dd97,
+    "light": #f8e5b1,
+    "lighter": #fbeecb,
+    "lightest": #fdf6e5,
+    "dark": #f4d47d,
+    "darker": #f2ce5b,
+  ),
+  "neutral": (
+    "white": #1a1d23,
+    "lightest": #1f2329,
+    "lighter": #252a32,
+    "light": #2d343d,
+    "medium": #3a424d,
+    "dark": #4a555f,
+    "darker": #6b7681,
+    "darkest": #9ca3af,
+    "black": #f3f4f6,
+  ),
+  "surface": (
+    "primary": #1a1d23,
+    "secondary": #1f2329,
+    "tertiary": #252a32,
+    "elevated": #2d343d,
+  ),
+  "text": (
+    "primary": #f3f4f6,
+    "secondary": #d1d5db,
+    "tertiary": #9ca3af,
+    "inverse": #1a1d23,
+    "muted": #6b7681,
+  ),
+  "border": (
+    "primary": #3a424d,
+    "secondary": #2d343d,
+    "focus": #6a969a,
+    "error": #fb2222,
+  ),
+  "shadow": (
+    "color": rgba(0, 0, 0, 0.3),
+    "strong": rgba(0, 0, 0, 0.5),
+  ),
+  "status": (
+    "success": #34d399,
+    "error": #f87171,
+    "warning": #fbbf24,
+    "info": #60a5fa,
+  )
+);
+
+// ===================================
+// THEME MIXINS
+// ===================================
+
+@mixin theme($theme-map) {
+  @each $category, $shades in $theme-map {
+    @if type-of($shades) == 'map' {
+      @each $shade, $value in $shades {
+        --color-#{$category}-#{$shade}: #{$value};
+      }
+    } @else {
+      --color-#{$category}: #{$shades};
+    }
+  }
+}
+
+@mixin light-theme {
+  @include theme($light-theme);
+}
+
+@mixin dark-theme {
+  @include theme($dark-theme);
+}
+
+// Theme-aware color function
+@function theme-color($category, $shade: 'base') {
+  @return var(--color-#{$category}-#{$shade});
+}
+
+// ===================================
+// THEME SETUP
+// ===================================
+
+:root {
+  @include light-theme;
+  
+  // Additional CSS custom properties for components
+  --navbar-height: 4.5rem;
+  --sidebar-width: 16rem;
+  --sidebar-collapsed-width: 4rem;
+  --content-max-width: 1200px;
+  
+  // Animation preferences
+  --animation-fast: #{map-get($animation-durations, 'fast')};
+  --animation-base: #{map-get($animation-durations, 'base')};
+  --animation-slow: #{map-get($animation-durations, 'slow')};
+  
+  // Component-specific variables
+  --border-radius-sm: #{border-radius('sm')};
+  --border-radius-md: #{border-radius('md')};
+  --border-radius-lg: #{border-radius('lg')};
+  --border-radius-xl: #{border-radius('xl')};
+  
+  --spacing-xs: #{spacing('xs')};
+  --spacing-sm: #{spacing('sm')};
+  --spacing-md: #{spacing('md')};
+  --spacing-lg: #{spacing('lg')};
+  --spacing-xl: #{spacing('xl')};
+  
+  --shadow-sm: #{shadow('sm')};
+  --shadow-md: #{shadow('md')};
+  --shadow-lg: #{shadow('lg')};
+  --shadow-xl: #{shadow('xl')};
+}
+
+// Dark theme selector
+[data-theme="dark"] {
+  @include dark-theme;
+}
+
+// System preference detection
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    @include dark-theme;
+  }
+}
+
+// ===================================
+// THEME-AWARE COMPONENTS
+// ===================================
+
+// Theme-aware button variants
+@mixin theme-button-primary {
+  background-color: theme-color('primary', 'base');
+  color: theme-color('text', 'inverse');
+  border-color: theme-color('primary', 'base');
+  
+  &:hover:not(:disabled) {
+    background-color: theme-color('primary', 'dark');
+    border-color: theme-color('primary', 'dark');
+  }
+  
+  &:focus:not(:disabled) {
+    box-shadow: 0 0 0 3px color-alpha(theme-color('primary', 'base'), 0.3);
+  }
+}
+
+@mixin theme-button-secondary {
+  background-color: transparent;
+  color: theme-color('secondary', 'base');
+  border-color: theme-color('secondary', 'base');
+  
+  &:hover:not(:disabled) {
+    background-color: theme-color('secondary', 'base');
+    color: theme-color('text', 'inverse');
+  }
+  
+  &:focus:not(:disabled) {
+    box-shadow: 0 0 0 3px color-alpha(theme-color('secondary', 'base'), 0.3);
+  }
+}
+
+// Theme-aware card
+@mixin theme-card {
+  background-color: theme-color('surface', 'primary');
+  border: 1px solid theme-color('border', 'secondary');
+  color: theme-color('text', 'primary');
+  box-shadow: 0 4px 6px -1px var(--shadow-color, #{map-get($shadows, 'md')});
+}
+
+// Theme-aware input
+@mixin theme-input {
+  background-color: theme-color('surface', 'primary');
+  border: 1px solid theme-color('border', 'primary');
+  color: theme-color('text', 'primary');
+  
+  &::placeholder {
+    color: theme-color('text', 'muted');
+  }
+  
+  &:focus {
+    border-color: theme-color('border', 'focus');
+    box-shadow: 0 0 0 3px color-alpha(theme-color('border', 'focus'), 0.1);
+  }
+  
+  &:disabled {
+    background-color: theme-color('surface', 'tertiary');
+    color: theme-color('text', 'muted');
+  }
+}
+
+// ===================================
+// THEME UTILITY CLASSES
+// ===================================
+
+.theme {
+  // Surface colors
+  &--surface-primary {
+    background-color: theme-color('surface', 'primary');
+    color: theme-color('text', 'primary');
+  }
+  
+  &--surface-secondary {
+    background-color: theme-color('surface', 'secondary');
+    color: theme-color('text', 'primary');
+  }
+  
+  &--surface-elevated {
+    background-color: theme-color('surface', 'elevated');
+    color: theme-color('text', 'primary');
+    box-shadow: var(--shadow-md);
+  }
+  
+  // Text colors
+  &--text-primary {
+    color: theme-color('text', 'primary');
+  }
+  
+  &--text-secondary {
+    color: theme-color('text', 'secondary');
+  }
+  
+  &--text-muted {
+    color: theme-color('text', 'muted');
+  }
+  
+  &--text-inverse {
+    color: theme-color('text', 'inverse');
+  }
+  
+  // Border colors
+  &--border-primary {
+    border-color: theme-color('border', 'primary');
+  }
+  
+  &--border-secondary {
+    border-color: theme-color('border', 'secondary');
+  }
+}
+
+// ===================================
+// THEME TOGGLE COMPONENT
+// ===================================
+
+.theme-toggle {
+  position: relative;
+  width: 3rem;
+  height: 1.5rem;
+  background-color: theme-color('neutral', 'light');
+  border: 1px solid theme-color('border', 'primary');
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: background-color var(--animation-fast);
+  
+  // Toggle knob
+  &::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 1.25rem;
+    height: 1.25rem;
+    background-color: theme-color('surface', 'primary');
+    border-radius: 50%;
+    transition: transform var(--animation-fast);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  // Active state (dark mode)
+  &--active {
+    background-color: theme-color('primary', 'base');
+    
+    &::after {
+      transform: translateX(1.5rem);
+    }
+  }
+  
+  // Focus state
+  &:focus-visible {
+    outline: 2px solid theme-color('border', 'focus');
+    outline-offset: 2px;
+  }
+  
+  // Icons
+  .theme-toggle__icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1rem;
+    height: 1rem;
+    opacity: 0.6;
+    transition: opacity var(--animation-fast);
+    
+    &--sun {
+      left: 0.25rem;
+      color: #fbbf24;
+    }
+    
+    &--moon {
+      right: 0.25rem;
+      color: #6366f1;
+    }
+  }
+  
+  &--active {
+    .theme-toggle__icon--sun {
+      opacity: 1;
+    }
+    
+    .theme-toggle__icon--moon {
+      opacity: 0.3;
+    }
+  }
+}
+
+// ===================================
+// HIGH CONTRAST THEME
+// ===================================
+
+@media (prefers-contrast: high) {
+  :root {
+    --color-neutral-light: #000000;
+    --color-neutral-medium: #000000;
+    --color-neutral-dark: #000000;
+    --color-text-secondary: #000000;
+    --color-border-primary: #000000;
+    
+    // Increase contrast for interactive elements
+    --color-primary-base: #000080;
+    --color-secondary-base: #cc4400;
+  }
+  
+  [data-theme="dark"] {
+    --color-neutral-light: #ffffff;
+    --color-neutral-medium: #ffffff;
+    --color-neutral-dark: #ffffff;
+    --color-text-secondary: #ffffff;
+    --color-border-primary: #ffffff;
+    
+    --color-primary-base: #66ccff;
+    --color-secondary-base: #ff6600;
+  }
+}
+
+// ===================================
+// PRINT THEME
+// ===================================
+
+@media print {
+  :root {
+    --color-surface-primary: #ffffff;
+    --color-surface-secondary: #ffffff;
+    --color-surface-elevated: #ffffff;
+    --color-text-primary: #000000;
+    --color-text-secondary: #333333;
+    --color-text-muted: #666666;
+    --color-border-primary: #000000;
+    --color-border-secondary: #666666;
+    --shadow-md: none;
+    --shadow-lg: none;
+  }
+  
+  .theme-toggle {
+    display: none;
+  }
+}
+
+// ===================================
+// THEME TRANSITION ANIMATIONS
+// ===================================
+
+* {
+  transition: 
+    background-color var(--animation-fast),
+    border-color var(--animation-fast),
+    color var(--animation-fast),
+    box-shadow var(--animation-fast);
+}
+
+// Disable transitions on theme change to prevent flash
+.theme-transitioning * {
+  transition: none !important;
+}
+
+// ===================================
+// REDUCED MOTION THEME SUPPORT
+// ===================================
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle {
+    &::after {
+      transition: none;
+    }
+    
+    .theme-toggle__icon {
+      transition: none;
+    }
+  }
+  
+  * {
+    transition: none !important;
+  }
+}
+
+// ===================================
+// THEME DEBUGGING (Development only)
+// ===================================
+
+@if $debug-mode {
+  .theme-debug {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: theme-color('surface', 'elevated');
+    border: 1px solid theme-color('border', 'primary');
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-sm);
+    font-size: 0.75rem;
+    z-index: 9999;
+    
+    &::before {
+      content: 'Theme: ' attr(data-current-theme);
+      display: block;
+      color: theme-color('text', 'primary');
+    }
+  }
+}

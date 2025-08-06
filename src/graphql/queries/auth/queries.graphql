@@ -1,0 +1,107 @@
+query GetCurrentUser {
+  me {
+    id
+    email
+    firstName
+    lastName
+    role
+    phone
+    defaultAddress {
+      street
+      city
+      state
+      zipCode
+      country
+      id
+      isDefault
+      label
+    }
+    addresses {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+    }
+    emailVerified
+    emailVerifiedAt
+    accountStatus
+    createdAt
+    updatedAt
+  }
+}
+
+query GetUserById($id: ID!) {
+  user(id: $id) {
+    id
+    email
+    firstName
+    lastName
+    role
+    phone
+    defaultAddress {
+      street
+      city
+      state
+      zipCode
+      country
+      id
+      isDefault
+      label
+    }
+    addresses {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+    }
+    emailVerified
+    emailVerifiedAt
+    accountStatus
+    createdAt
+    updatedAt
+  }
+}
+
+query GetUsers($role: UserRole) {
+  users(role: $role) {
+    id
+    email
+    firstName
+    lastName
+    role
+    phone
+    defaultAddress {
+      street
+      city
+      state
+      zipCode
+      country
+      id
+      isDefault
+      label
+    }
+    addresses {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+    }
+    emailVerified
+    emailVerifiedAt
+    accountStatus
+    createdAt
+    updatedAt
+  }
+}

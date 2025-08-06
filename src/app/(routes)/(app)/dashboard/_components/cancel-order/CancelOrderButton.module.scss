@@ -1,0 +1,19 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.cancelOrderButton {
+  background-color: color("status", "error") !important;
+  color: color("neutral", "white") !important;
+  border-color: color("status", "error") !important;
+  @include font-secondary;
+  @include font-size("sm");
+  @include font-weight("medium");
+  transition: $transition-base;
+  
+  &:hover {
+    background-color: color("neutral", "white") !important;
+    color: color("status", "error") !important;
+    border-color: color("status", "error") !important;
+  }
+}

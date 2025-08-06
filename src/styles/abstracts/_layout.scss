@@ -1,0 +1,647 @@
+// ===================================
+// LAYOUT UTILITIES
+// Location: src/styles/abstracts/_layout.scss
+// ===================================
+
+@import 'variables';
+@import 'functions';
+@import 'mixins';
+
+// ===================================
+// LAYOUT CONTAINERS
+// ===================================
+
+// Base container
+.container {
+  @include container;
+  
+  // Size modifiers
+  &--sm {
+    max-width: container-width('sm');
+  }
+  
+  &--md {
+    max-width: container-width('md');
+  }
+  
+  &--lg {
+    max-width: container-width('lg');
+  }
+  
+  &--xl {
+    max-width: container-width('xl');
+  }
+  
+  &--2xl {
+    max-width: container-width('2xl');
+  }
+  
+  &--fluid {
+    max-width: none;
+    width: 100%;
+  }
+  
+  &--narrow {
+    max-width: 600px;
+  }
+  
+  &--wide {
+    max-width: 1400px;
+  }
+}
+
+// Section spacing
+.section {
+  @include section-spacing;
+  
+  &--sm {
+    @include section-spacing('lg');
+  }
+  
+  &--md {
+    @include section-spacing('xl');
+  }
+  
+  &--lg {
+    @include section-spacing('3xl');
+  }
+  
+  &--xl {
+    @include section-spacing('4xl');
+  }
+  
+  &--none {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+// ===================================
+// GRID LAYOUTS
+// ===================================
+
+.grid {
+  @include grid;
+  
+  // Column variations
+  &--1 { @include grid-cols(1); }
+  &--2 { @include grid-cols(2); }
+  &--3 { @include grid-cols(3); }
+  &--4 { @include grid-cols(4); }
+  &--5 { @include grid-cols(5); }
+  &--6 { @include grid-cols(6); }
+  &--12 { @include grid-cols(12); }
+  
+  // Responsive grids
+  &--responsive-2 {
+    @include grid-responsive(1, 2, 2, 2);
+  }
+  
+  &--responsive-3 {
+    @include grid-responsive(1, 2, 3, 3);
+  }
+  
+  &--responsive-4 {
+    @include grid-responsive(1, 2, 3, 4);
+  }
+  
+  // Auto-fit grids
+  &--auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+  
+  &--auto-fit-sm {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  
+  &--auto-fit-lg {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+  
+  // Gap modifiers
+  &--gap-xs { gap: spacing('xs'); }
+  &--gap-sm { gap: spacing('sm'); }
+  &--gap-md { gap: spacing('md'); }
+  &--gap-lg { gap: spacing('lg'); }
+  &--gap-xl { gap: spacing('xl'); }
+  &--gap-2xl { gap: spacing('2xl'); }
+  
+  // Alignment
+  &--center {
+    place-items: center;
+  }
+  
+  &--start {
+    place-items: start;
+  }
+  
+  &--end {
+    place-items: end;
+  }
+}
+
+// Grid item utilities
+.grid-item {
+  &--span-2 { grid-column: span 2; }
+  &--span-3 { grid-column: span 3; }
+  &--span-4 { grid-column: span 4; }
+  &--span-5 { grid-column: span 5; }
+  &--span-6 { grid-column: span 6; }
+  &--span-full { grid-column: 1 / -1; }
+  
+  // Row spanning
+  &--row-span-2 { grid-row: span 2; }
+  &--row-span-3 { grid-row: span 3; }
+  &--row-span-4 { grid-row: span 4; }
+}
+
+// ===================================
+// FLEXBOX LAYOUTS
+// ===================================
+
+.flex {
+  @include flex;
+  
+  // Direction
+  &--row { flex-direction: row; }
+  &--row-reverse { flex-direction: row-reverse; }
+  &--col { flex-direction: column; }
+  &--col-reverse { flex-direction: column-reverse; }
+  
+  // Wrap
+  &--wrap { flex-wrap: wrap; }
+  &--nowrap { flex-wrap: nowrap; }
+  &--wrap-reverse { flex-wrap: wrap-reverse; }
+  
+  // Justify content
+  &--justify-start { justify-content: flex-start; }
+  &--justify-end { justify-content: flex-end; }
+  &--justify-center { justify-content: center; }
+  &--justify-between { justify-content: space-between; }
+  &--justify-around { justify-content: space-around; }
+  &--justify-evenly { justify-content: space-evenly; }
+  
+  // Align items
+  &--items-start { align-items: flex-start; }
+  &--items-end { align-items: flex-end; }
+  &--items-center { align-items: center; }
+  &--items-baseline { align-items: baseline; }
+  &--items-stretch { align-items: stretch; }
+  
+  // Align content
+  &--content-start { align-content: flex-start; }
+  &--content-end { align-content: flex-end; }
+  &--content-center { align-content: center; }
+  &--content-between { align-content: space-between; }
+  &--content-around { align-content: space-around; }
+  &--content-evenly { align-content: space-evenly; }
+  
+  // Common combinations
+  &--center {
+    @include flex-center;
+  }
+  
+  &--between {
+    @include flex-between;
+  }
+  
+  &--around {
+    @include flex-around;
+  }
+  
+  &--column-center {
+    @include flex-column-center;
+  }
+  
+  // Gaps
+  &--gap-xs { gap: spacing('xs'); }
+  &--gap-sm { gap: spacing('sm'); }
+  &--gap-md { gap: spacing('md'); }
+  &--gap-lg { gap: spacing('lg'); }
+  &--gap-xl { gap: spacing('xl'); }
+  &--gap-2xl { gap: spacing('2xl'); }
+}
+
+// Flex item utilities
+.flex-item {
+  &--grow { flex-grow: 1; }
+  &--shrink { flex-shrink: 1; }
+  &--no-shrink { flex-shrink: 0; }
+  &--no-grow { flex-grow: 0; }
+  
+  // Flex basis
+  &--auto { flex: auto; }
+  &--initial { flex: initial; }
+  &--none { flex: none; }
+  &--1 { flex: 1; }
+  &--2 { flex: 2; }
+  &--3 { flex: 3; }
+  
+  // Align self
+  &--self-start { align-self: flex-start; }
+  &--self-end { align-self: flex-end; }
+  &--self-center { align-self: center; }
+  &--self-baseline { align-self: baseline; }
+  &--self-stretch { align-self: stretch; }
+}
+
+// ===================================
+// POSITIONING
+// ===================================
+
+.position {
+  &--static { position: static; }
+  &--relative { position: relative; }
+  &--absolute { position: absolute; }
+  &--fixed { position: fixed; }
+  &--sticky { position: sticky; }
+}
+
+// Positioning utilities
+.inset {
+  &--0 { top: 0; right: 0; bottom: 0; left: 0; }
+  &--auto { top: auto; right: auto; bottom: auto; left: auto; }
+  
+  // Individual sides
+  &-x-0 { left: 0; right: 0; }
+  &-y-0 { top: 0; bottom: 0; }
+  
+  &-t-0 { top: 0; }
+  &-r-0 { right: 0; }
+  &-b-0 { bottom: 0; }
+  &-l-0 { left: 0; }
+  
+  &-t-auto { top: auto; }
+  &-r-auto { right: auto; }
+  &-b-auto { bottom: auto; }
+  &-l-auto { left: auto; }
+}
+
+// Center positioning
+.center {
+  &--absolute {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  &--x {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  &--y {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+// ===================================
+// SIZING UTILITIES
+// ===================================
+
+// Width utilities
+.w {
+  &--auto { width: auto; }
+  &--full { width: 100%; }
+  &--screen { width: 100vw; }
+  &--min { width: min-content; }
+  &--max { width: max-content; }
+  &--fit { width: fit-content; }
+  
+  // Fractional widths
+  &--1\/2 { width: 50%; }
+  &--1\/3 { width: 33.333333%; }
+  &--2\/3 { width: 66.666667%; }
+  &--1\/4 { width: 25%; }
+  &--3\/4 { width: 75%; }
+  &--1\/5 { width: 20%; }
+  &--2\/5 { width: 40%; }
+  &--3\/5 { width: 60%; }
+  &--4\/5 { width: 80%; }
+  
+  // Fixed widths
+  &--xs { width: 20rem; }
+  &--sm { width: 24rem; }
+  &--md { width: 28rem; }
+  &--lg { width: 32rem; }
+  &--xl { width: 36rem; }
+  &--2xl { width: 42rem; }
+  &--3xl { width: 48rem; }
+}
+
+// Height utilities
+.h {
+  &--auto { height: auto; }
+  &--full { height: 100%; }
+  &--screen { height: 100vh; }
+  &--min { height: min-content; }
+  &--max { height: max-content; }
+  &--fit { height: fit-content; }
+  
+  // Fixed heights
+  &--0 { height: 0; }
+  &--px { height: 1px; }
+  &--1 { height: 0.25rem; }
+  &--2 { height: 0.5rem; }
+  &--3 { height: 0.75rem; }
+  &--4 { height: 1rem; }
+  &--5 { height: 1.25rem; }
+  &--6 { height: 1.5rem; }
+  &--8 { height: 2rem; }
+  &--10 { height: 2.5rem; }
+  &--12 { height: 3rem; }
+  &--16 { height: 4rem; }
+  &--20 { height: 5rem; }
+  &--24 { height: 6rem; }
+  &--32 { height: 8rem; }
+  &--40 { height: 10rem; }
+  &--48 { height: 12rem; }
+  &--56 { height: 14rem; }
+  &--64 { height: 16rem; }
+}
+
+// Min/Max width utilities
+.min-w {
+  &--0 { min-width: 0; }
+  &--full { min-width: 100%; }
+  &--min { min-width: min-content; }
+  &--max { min-width: max-content; }
+  &--fit { min-width: fit-content; }
+}
+
+.max-w {
+  &--none { max-width: none; }
+  &--xs { max-width: 20rem; }
+  &--sm { max-width: 24rem; }
+  &--md { max-width: 28rem; }
+  &--lg { max-width: 32rem; }
+  &--xl { max-width: 36rem; }
+  &--2xl { max-width: 42rem; }
+  &--3xl { max-width: 48rem; }
+  &--4xl { max-width: 56rem; }
+  &--5xl { max-width: 64rem; }
+  &--6xl { max-width: 72rem; }
+  &--7xl { max-width: 80rem; }
+  &--full { max-width: 100%; }
+  &--min { max-width: min-content; }
+  &--max { max-width: max-content; }
+  &--fit { max-width: fit-content; }
+  &--prose { max-width: 65ch; }
+}
+
+// Min/Max height utilities
+.min-h {
+  &--0 { min-height: 0; }
+  &--full { min-height: 100%; }
+  &--screen { min-height: 100vh; }
+}
+
+.max-h {
+  &--none { max-height: none; }
+  &--full { max-height: 100%; }
+  &--screen { max-height: 100vh; }
+  &--xs { max-height: 20rem; }
+  &--sm { max-height: 24rem; }
+  &--md { max-height: 28rem; }
+  &--lg { max-height: 32rem; }
+  &--xl { max-height: 36rem; }
+  &--2xl { max-height: 42rem; }
+}
+
+// ===================================
+// OVERFLOW UTILITIES
+// ===================================
+
+.overflow {
+  &--auto { overflow: auto; }
+  &--hidden { overflow: hidden; }
+  &--visible { overflow: visible; }
+  &--scroll { overflow: scroll; }
+  
+  &-x-auto { overflow-x: auto; }
+  &-x-hidden { overflow-x: hidden; }
+  &-x-visible { overflow-x: visible; }
+  &-x-scroll { overflow-x: scroll; }
+  
+  &-y-auto { overflow-y: auto; }
+  &-y-hidden { overflow-y: hidden; }
+  &-y-visible { overflow-y: visible; }
+  &-y-scroll { overflow-y: scroll; }
+}
+
+// ===================================
+// DISPLAY UTILITIES
+// ===================================
+
+.d {
+  &--none { display: none; }
+  &--inline { display: inline; }
+  &--inline-block { display: inline-block; }
+  &--block { display: block; }
+  &--flex { display: flex; }
+  &--inline-flex { display: inline-flex; }
+  &--grid { display: grid; }
+  &--inline-grid { display: inline-grid; }
+  &--table { display: table; }
+  &--table-cell { display: table-cell; }
+  &--table-row { display: table-row; }
+  &--flow-root { display: flow-root; }
+  &--contents { display: contents; }
+}
+
+// ===================================
+// VISIBILITY UTILITIES
+// ===================================
+
+.visibility {
+  &--visible { visibility: visible; }
+  &--hidden { visibility: hidden; }
+  &--collapse { visibility: collapse; }
+}
+
+.opacity {
+  &--0 { opacity: 0; }
+  &--5 { opacity: 0.05; }
+  &--10 { opacity: 0.1; }
+  &--20 { opacity: 0.2; }
+  &--25 { opacity: 0.25; }
+  &--30 { opacity: 0.3; }
+  &--40 { opacity: 0.4; }
+  &--50 { opacity: 0.5; }
+  &--60 { opacity: 0.6; }
+  &--70 { opacity: 0.7; }
+  &--75 { opacity: 0.75; }
+  &--80 { opacity: 0.8; }
+  &--90 { opacity: 0.9; }
+  &--95 { opacity: 0.95; }
+  &--100 { opacity: 1; }
+}
+
+// ===================================
+// Z-INDEX UTILITIES
+// ===================================
+
+.z {
+  &--auto { z-index: auto; }
+  &--0 { z-index: 0; }
+  &--10 { z-index: 10; }
+  &--20 { z-index: 20; }
+  &--30 { z-index: 30; }
+  &--40 { z-index: 40; }
+  &--50 { z-index: 50; }
+  
+  // Named z-index values
+  &--negative { z-index: z-index('negative'); }
+  &--base { z-index: z-index('base'); }
+  &--docked { z-index: z-index('docked'); }
+  &--dropdown { z-index: z-index('dropdown'); }
+  &--sticky { z-index: z-index('sticky'); }
+  &--banner { z-index: z-index('banner'); }
+  &--overlay { z-index: z-index('overlay'); }
+  &--modal { z-index: z-index('modal'); }
+  &--popover { z-index: z-index('popover'); }
+  &--tooltip { z-index: z-index('tooltip'); }
+  &--toast { z-index: z-index('toast'); }
+}
+
+// ===================================
+// ASPECT RATIO UTILITIES
+// ===================================
+
+.aspect {
+  &--square {
+    @include aspect-ratio(1, 1);
+  }
+  
+  &--video {
+    @include aspect-ratio(16, 9);
+  }
+  
+  &--video-4-3 {
+    @include aspect-ratio(4, 3);
+  }
+  
+  &--photo {
+    @include aspect-ratio(3, 2);
+  }
+  
+  &--portrait {
+    @include aspect-ratio(2, 3);
+  }
+  
+  &--golden {
+    @include aspect-ratio(1.618, 1);
+  }
+}
+
+// ===================================
+// OBJECT FIT UTILITIES
+// ===================================
+
+.object {
+  &--contain { object-fit: contain; }
+  &--cover { object-fit: cover; }
+  &--fill { object-fit: fill; }
+  &--none { object-fit: none; }
+  &--scale-down { object-fit: scale-down; }
+  
+  // Object position
+  &-center { object-position: center; }
+  &-top { object-position: top; }
+  &-top-right { object-position: top right; }
+  &-right { object-position: right; }
+  &-bottom-right { object-position: bottom right; }
+  &-bottom { object-position: bottom; }
+  &-bottom-left { object-position: bottom left; }
+  &-left { object-position: left; }
+  &-top-left { object-position: top left; }
+}
+
+// ===================================
+// RESPONSIVE UTILITIES
+// ===================================
+
+// Generate responsive variants for key utilities
+@each $breakpoint in map-keys($breakpoints) {
+  @include breakpoint-up($breakpoint) {
+    // Display utilities
+    .#{$breakpoint}\:d--none { display: none !important; }
+    .#{$breakpoint}\:d--block { display: block !important; }
+    .#{$breakpoint}\:d--flex { display: flex !important; }
+    .#{$breakpoint}\:d--grid { display: grid !important; }
+    
+    // Flex direction
+    .#{$breakpoint}\:flex--row { flex-direction: row !important; }
+    .#{$breakpoint}\:flex--col { flex-direction: column !important; }
+    
+    // Text alignment
+    .#{$breakpoint}\:text--left { text-align: left !important; }
+    .#{$breakpoint}\:text--center { text-align: center !important; }
+    .#{$breakpoint}\:text--right { text-align: right !important; }
+    
+    // Width utilities
+    .#{$breakpoint}\:w--full { width: 100% !important; }
+    .#{$breakpoint}\:w--auto { width: auto !important; }
+    
+    // Grid columns
+    .#{$breakpoint}\:grid--1 { @include grid-cols(1); }
+    .#{$breakpoint}\:grid--2 { @include grid-cols(2); }
+    .#{$breakpoint}\:grid--3 { @include grid-cols(3); }
+    .#{$breakpoint}\:grid--4 { @include grid-cols(4); }
+  }
+}
+
+// ===================================
+// ACCESSIBILITY UTILITIES
+// ===================================
+
+.sr-only {
+  @include visually-hidden;
+}
+
+.not-sr-only {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+// Focus utilities
+.focus-ring {
+  &:focus-visible {
+    outline: 2px solid color('primary', 'base');
+    outline-offset: 2px;
+  }
+}
+
+.focus-ring-inset {
+  &:focus-visible {
+    outline: 2px solid color('primary', 'base');
+    outline-offset: -2px;
+  }
+}
+
+// ===================================
+// PRINT UTILITIES
+// ===================================
+
+@media print {
+  .print {
+    &--hidden { display: none !important; }
+    &--block { display: block !important; }
+    &--inline { display: inline !important; }
+    &--inline-block { display: inline-block !important; }
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}

@@ -1,0 +1,435 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.details {
+  &__header {
+    display: flex;
+    flex-direction: column;
+
+    @include breakpoint-up("md") {
+      flex-direction: row;
+    }
+  }
+
+  &__image {
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    border-radius: border-radius("lg");
+    position: relative;
+    margin-bottom: spacing("md");
+
+    @include breakpoint-up("md") {
+      width: 280px;
+      height: 200px;
+      margin-right: spacing("xl");
+      margin-bottom: 0;
+      flex-shrink: 0;
+    }
+  }
+
+  &__defaultBadge {
+    position: absolute;
+    top: spacing("sm");
+    left: spacing("sm");
+    display: flex;
+    align-items: center;
+    padding: spacing("xs") spacing("sm");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+
+    svg {
+      margin-right: spacing("xxs");
+      font-size: map-get($font-sizes, "sm");
+    }
+  }
+
+  &__info {
+    flex: 1;
+  }
+
+  &__name {
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+  }
+
+  &__address {
+    display: flex;
+    align-items: flex-start;
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("md");
+
+    svg {
+      margin-right: spacing("xs");
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: spacing("md");
+
+    @include breakpoint-up("lg") {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  &__stat {
+    display: flex;
+    align-items: center;
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "darker");
+
+    svg {
+      margin-right: spacing("xs");
+      color: color("primary", "base");
+    }
+  }
+
+  &__tabs {
+    display: flex;
+    border-bottom: 1px solid color("neutral", "lighter");
+    margin: spacing("xl") 0 spacing("lg");
+    overflow-x: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    scrollbar-width: none;
+  }
+
+  &__tab {
+    padding: spacing("sm") spacing("md");
+    border: none;
+    background: none;
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "darker");
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+
+    &:hover {
+      color: color("primary", "base");
+    }
+
+    &--active {
+      color: color("primary", "base");
+      font-weight: map-get($font-weights, "medium");
+    }
+  }
+
+  &__tabIndicator {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: color("primary", "base");
+  }
+
+  &__content {
+    min-height: 400px;
+  }
+
+  &__section {
+    padding: spacing("md") 0;
+  }
+
+  &__sectionTitle {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("lg");
+  }
+
+  &__propertyDetails {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: spacing("md");
+
+    @include breakpoint-up("md") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__detail {
+    display: flex;
+    align-items: baseline;
+  }
+
+  &__detailLabel {
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+    min-width: 120px;
+  }
+
+  &__detailValue {
+    color: color("neutral", "black");
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing("md");
+    margin-top: spacing("xl");
+  }
+
+  &__actionBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("sm") spacing("lg");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    background-color: color("neutral", "white");
+    color: color("neutral", "darker");
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "medium");
+    cursor: pointer;
+    transition: $transition-base;
+
+    svg {
+      margin-right: spacing("xs");
+    }
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+    }
+  }
+
+  &__actionBtnPrimary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("sm") spacing("lg");
+    border: none;
+    border-radius: border-radius("md");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "medium");
+    cursor: pointer;
+    transition: $transition-base;
+
+    svg {
+      margin-right: spacing("xs");
+    }
+
+    &:hover {
+      background-color: color("primary", "dark");
+    }
+  }
+
+  &__accessInfo {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: spacing("lg");
+
+    @include breakpoint-up("md") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__accessItem {
+    background-color: color("neutral", "lighter");
+    padding: spacing("md");
+    border-radius: border-radius("md");
+  }
+
+  &__accessTitle {
+    display: flex;
+    align-items: center;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
+
+    svg {
+      margin-right: spacing("xs");
+      color: color("primary", "base");
+    }
+  }
+
+  &__accessText {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "darker");
+    line-height: 1.5;
+  }
+
+  &__petsList {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: spacing("md");
+
+    @include breakpoint-up("md") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__petCard {
+    display: flex;
+    align-items: flex-start;
+    padding: spacing("md");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    transition: $transition-base;
+
+    &:hover {
+      box-shadow: map-get($shadows, "sm");
+    }
+  }
+
+  &__petIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("lg");
+    background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+    color: color("primary", "base");
+    margin-right: spacing("md");
+    font-size: map-get($font-sizes, "xl");
+    flex-shrink: 0;
+  }
+
+  &__petInfo {
+    flex: 1;
+  }
+
+  &__petName {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__petDetails {
+    display: flex;
+    align-items: center;
+    margin-bottom: spacing("xs");
+  }
+
+  &__petType,
+  &__petBreed {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+  }
+
+  &__petType {
+    margin-right: spacing("sm");
+
+    &::after {
+      content: "•";
+      margin-left: spacing("sm");
+    }
+  }
+
+  &__petNotes {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "darker");
+    line-height: 1.4;
+  }
+
+  &__emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xl");
+    text-align: center;
+  }
+
+  &__emptyIcon {
+    font-size: 3rem;
+    color: color("neutral", "medium");
+    margin-bottom: spacing("md");
+  }
+
+  &__emptyText {
+    font-size: map-get($font-sizes, "lg");
+    color: color("neutral", "dark");
+  }
+
+  &__servicesStats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: spacing("md");
+    margin-bottom: spacing("xl");
+  }
+
+  &__serviceStat {
+    display: flex;
+    align-items: center;
+    background-color: color("neutral", "lighter");
+    padding: spacing("md");
+    border-radius: border-radius("md");
+  }
+
+  &__serviceStatIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("full");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    margin-right: spacing("md");
+    font-size: map-get($font-sizes, "xl");
+  }
+
+  &__serviceStatContent {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__serviceStatValue {
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+  }
+
+  &__serviceStatLabel {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+  }
+
+  &__servicesMessage {
+    display: flex;
+    align-items: flex-start;
+    padding: spacing("md");
+    background-color: color-alpha("status", "info", 0.1);
+    border-radius: border-radius("md");
+    margin-bottom: spacing("lg");
+
+    svg {
+      color: color("status", "info");
+      margin-right: spacing("sm");
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    p {
+      font-size: map-get($font-sizes, "base");
+      color: color("neutral", "darker");
+      margin: 0;
+
+      strong {
+        font-weight: map-get($font-weights, "semibold");
+        margin: 0 spacing("xxs");
+      }
+    }
+  }
+}

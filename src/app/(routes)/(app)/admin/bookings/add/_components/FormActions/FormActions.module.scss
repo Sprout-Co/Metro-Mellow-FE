@@ -1,0 +1,16 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.form_actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: spacing("md");
+  padding-top: spacing("lg");
+  border-top: 1px solid color("neutral", "lighter");
+  margin-top: spacing("xl");
+
+  @include breakpoint-down("sm") {
+    flex-direction: column-reverse;
+  }
+}

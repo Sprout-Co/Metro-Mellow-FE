@@ -1,0 +1,166 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.fontWeightDemo {
+  padding: spacing("2xl");
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  @include heading-2;
+  text-align: center;
+  margin-bottom: spacing("3xl");
+  color: color("neutral", "black");
+}
+
+.fontSection {
+  margin-bottom: spacing("4xl");
+}
+
+.fontName {
+  @include heading-3;
+  margin-bottom: spacing("xl");
+  color: color("primary", "base");
+  border-bottom: 2px solid color("primary", "light");
+  padding-bottom: spacing("sm");
+}
+
+.weightGrid {
+  display: grid;
+  gap: spacing("lg");
+}
+
+.weightItem {
+  display: flex;
+  align-items: center;
+  gap: spacing("lg");
+  padding: spacing("md");
+  background: color("neutral", "lightest");
+  border-radius: border-radius("md");
+  border-left: 4px solid color("primary", "base");
+}
+
+.weightLabel {
+  @include font-secondary;
+  @include font-size("small");
+  @include font-weight("semibold");
+  color: color("neutral", "dark");
+  min-width: 120px;
+  text-align: right;
+}
+
+// Baloo 2 Weights
+.baloo2Regular {
+  font-family: $font-family-heading;
+  font-weight: 400;
+  font-size: font-size("body-1");
+  color: color("neutral", "black");
+}
+
+.baloo2Medium {
+  font-family: $font-family-heading;
+  font-weight: 500;
+  font-size: font-size("body-1");
+  color: color("neutral", "black");
+}
+
+.baloo2SemiBold {
+  font-family: $font-family-heading;
+  font-weight: 600;
+  font-size: font-size("body-1");
+  color: color("neutral", "black");
+}
+
+.baloo2Bold {
+  font-family: $font-family-heading;
+  font-weight: 700;
+  font-size: font-size("body-1");
+  color: color("neutral", "black");
+}
+
+.baloo2ExtraBold {
+  font-family: $font-family-heading;
+  font-weight: 800;
+  font-size: font-size("body-1");
+  color: color("neutral", "black");
+}
+
+// Montserrat Weights
+.montserratThin {
+  @include font-secondary;
+  font-weight: 100;
+  font-size: font-size("body-1");
+  color: color("neutral", "black");
+}
+
+.montserratExtraLight {
+  @include font-secondary;
+  font-weight: 200;
+  font-size: font-size("body-1");
+  color: color("neutral", "black");
+}
+
+.montserratLight {
+  @include font-secondary;
+  font-weight: 300;
+  font-size: font-size("body-1");
+  color: color("neutral", "black");
+}
+
+.montserratRegular {
+  @include font-secondary;
+  font-weight: 400;
+  font-size: font-size("body-1");
+  color: color("neutral", "black");
+}
+
+.montserratMedium {
+  @include font-secondary;
+  font-weight: 500;
+  font-size: font-size("body-1");
+  color: color("neutral", "black");
+}
+
+.montserratSemiBold {
+  @include font-secondary;
+  font-weight: 600;
+  font-size: font-size("body-1");
+  color: color("neutral", "black");
+}
+
+.montserratBold {
+  @include font-secondary;
+  font-weight: 700;
+  font-size: font-size("body-1");
+  color: color("neutral", "black");
+}
+
+.montserratExtraBold {
+  @include font-secondary;
+  font-weight: 800;
+  font-size: font-size("body-1");
+  color: color("neutral", "black");
+}
+
+.montserratBlack {
+  @include font-secondary;
+  font-weight: 900;
+  font-size: font-size("body-1");
+  color: color("neutral", "black");
+}
+
+// Responsive adjustments
+@include breakpoint-down("md") {
+  .weightItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: spacing("sm");
+  }
+
+  .weightLabel {
+    min-width: auto;
+    text-align: left;
+  }
+}

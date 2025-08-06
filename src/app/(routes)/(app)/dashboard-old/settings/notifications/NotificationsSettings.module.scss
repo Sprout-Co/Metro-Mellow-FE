@@ -1,0 +1,289 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.notificationsSettings {
+  padding: spacing("xl") 0;
+  max-width: 900px;
+  margin: 0 auto;
+
+  &__header {
+    margin-bottom: spacing("xl");
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+
+    @include breakpoint-up("md") {
+      font-size: map-get($font-sizes, "3xl");
+    }
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+  }
+
+  &__content {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    box-shadow: map-get($shadows, "sm");
+    overflow: hidden;
+  }
+
+  &__categorySelector {
+    display: flex;
+    overflow-x: auto;
+    padding: spacing("md");
+    background-color: color("neutral", "lighter");
+    border-bottom: 1px solid color("neutral", "medium");
+    gap: spacing("xs");
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    @include breakpoint-down("md") {
+      padding: spacing("sm");
+    }
+  }
+
+  &__categoryButton {
+    padding: spacing("xs") spacing("md");
+    background-color: transparent;
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("full");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: $transition-base;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: rgba(color("primary", "base"), 0.05);
+      border-color: color("primary", "light");
+      color: color("primary", "base");
+    }
+
+    &Active {
+      background-color: color("primary", "base");
+      border-color: color("primary", "base");
+      color: color("neutral", "white");
+
+      &:hover {
+        background-color: color("primary", "dark");
+        border-color: color("primary", "dark");
+      }
+    }
+  }
+
+  &__tableContainer {
+    overflow-x: auto;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      padding: spacing("md");
+      text-align: left;
+      border-bottom: 1px solid color("neutral", "lighter");
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "dark");
+      font-size: map-get($font-sizes, "sm");
+    }
+
+    td {
+      padding: spacing("md");
+      border-bottom: 1px solid color("neutral", "lighter");
+      vertical-align: middle;
+    }
+  }
+
+  &__notificationColumn {
+    width: 50%;
+
+    @include breakpoint-down("md") {
+      width: 40%;
+    }
+  }
+
+  &__channelColumn {
+    width: calc(50% / 3);
+    text-align: center;
+
+    @include breakpoint-down("md") {
+      width: 20%;
+    }
+  }
+
+  &__channelHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: spacing("xs");
+  }
+
+  &__toggleAllLabel {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: spacing("xxs");
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "darker");
+  }
+
+  &__toggleAllText {
+    user-select: none;
+  }
+
+  &__row {
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+    }
+  }
+
+  &__notificationInfo {
+    padding-right: spacing("md");
+  }
+
+  &__notificationTitle {
+    font-weight: map-get($font-weights, "medium");
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__notificationDescription {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+  }
+
+  &__channelToggle {
+    text-align: center;
+  }
+
+  /* Custom Switch */
+  &__switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 24px;
+    margin: 0 auto;
+
+    input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+
+      &:checked + .notificationsSettings__slider {
+        background-color: color("primary", "base");
+      }
+
+      &:checked + .notificationsSettings__slider:before {
+        transform: translateX(16px);
+      }
+
+      &:focus + .notificationsSettings__slider {
+        box-shadow: 0 0 1px color("primary", "base");
+      }
+    }
+  }
+
+  &__slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: color("neutral", "medium");
+    transition: 0.4s;
+    border-radius: 24px;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: color("neutral", "white");
+      border-radius: 50%;
+      transition: 0.4s;
+    }
+  }
+
+  &__footer {
+    padding: spacing("lg");
+    border-top: 1px solid color("neutral", "lighter");
+    position: relative;
+  }
+
+  &__saveIndicator {
+    position: fixed;
+    bottom: spacing("xl");
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: color("status", "success");
+    color: color("neutral", "white");
+    padding: spacing("sm") spacing("lg");
+    border-radius: border-radius("full");
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    box-shadow: map-get($shadows, "md");
+    opacity: 0;
+    pointer-events: none;
+    z-index: z-index("tooltip");
+    transition: $transition-base;
+
+    &Visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    svg {
+      stroke-width: 3;
+    }
+  }
+
+  &__note {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("xs");
+    background-color: color("neutral", "lighter");
+    padding: spacing("md");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+
+    a {
+      color: color("primary", "base");
+      text-decoration: none;
+      font-weight: map-get($font-weights, "medium");
+      transition: $transition-base;
+
+      &:hover {
+        text-decoration: underline;
+        color: color("primary", "dark");
+      }
+    }
+  }
+
+  &__noteIcon {
+    color: color("status", "info");
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+}

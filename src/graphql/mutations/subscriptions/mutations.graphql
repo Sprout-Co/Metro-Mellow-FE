@@ -1,0 +1,59 @@
+mutation CreateSubscription($input: CreateSubscriptionInput!) {
+  createSubscription(input: $input)
+}
+
+mutation UpdateSubscription($id: ID!, $input: UpdateSubscriptionInput!) {
+  updateSubscription(id: $id, input: $input)
+}
+
+mutation CancelSubscription($id: ID!) {
+  cancelSubscription(id: $id)
+}
+
+mutation PauseSubscription($pauseSubscriptionId: ID!) {
+  pauseSubscription(id: $pauseSubscriptionId)
+}
+
+mutation ResumeSubscription($resumeSubscriptionId: ID!) {
+  resumeSubscription(id: $resumeSubscriptionId)
+}
+
+mutation UpdateSubscriptionStatus(
+  $updateSubscriptionStatusId: ID!
+  $status: SubscriptionStatus!
+) {
+  updateSubscriptionStatus(id: $updateSubscriptionStatusId, status: $status)
+}
+
+mutation AddServiceToSubscription(
+  $subscriptionId: ID!
+  $service: SubscriptionServiceInput!
+) {
+  addServiceToSubscription(subscriptionId: $subscriptionId, service: $service)
+}
+
+mutation RemoveServiceFromSubscription(
+  $subscriptionId: ID!
+  $subscriptionServiceId: ID!
+) {
+  removeServiceFromSubscription(
+    subscriptionId: $subscriptionId
+    subscriptionServiceId: $subscriptionServiceId
+  )
+}
+
+mutation UpdateSubscriptionService(
+  $subscriptionId: ID!
+  $subscriptionServiceId: ID!
+  $input: UpdateSubscriptionServiceInput!
+) {
+  updateSubscriptionService(
+    subscriptionId: $subscriptionId
+    subscriptionServiceId: $subscriptionServiceId
+    input: $input
+  )
+}
+
+mutation ReactivateSubscription($reactivateSubscriptionId: ID!) {
+  reactivateSubscription(id: $reactivateSubscriptionId)
+}

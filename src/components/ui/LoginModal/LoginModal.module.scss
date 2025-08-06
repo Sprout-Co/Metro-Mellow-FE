@@ -1,0 +1,168 @@
+@import "@/styles/abstracts/_variables.scss";
+@import "@/styles/abstracts/_functions.scss";
+@import "@/styles/abstracts/_mixins.scss";
+
+.loginModal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 70vh;
+  padding: spacing("lg");
+  position: relative;
+
+  &__closeButton {
+    position: absolute;
+    top: spacing("lg");
+    right: spacing("lg");
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("neutral", "dark");
+    background-color: color-alpha("neutral", "medium", 0.1);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+
+    &:hover {
+      background-color: color-alpha("neutral", "medium", 0.2);
+      color: color("neutral", "black");
+      transform: rotate(90deg);
+    }
+  }
+
+  &__formContainer {
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("2xl");
+    padding: spacing("2xl");
+    max-width: 500px;
+    width: 100%;
+    box-shadow: shadow("xl");
+    border: 1px solid color("neutral", "lighter");
+    margin-bottom: spacing("lg");
+    margin-top: spacing("4xl");
+  }
+
+  &__logo {
+    margin-bottom: spacing("md");
+    display: flex;
+    justify-content: center;
+    border-radius: border-radius("lg");
+    overflow: hidden;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("lg");
+  }
+
+  &__title {
+    color: color("neutral", "black");
+    font-size: font-size("body-2");
+    font-weight: font-weight("bold");
+    margin-bottom: spacing("xs");
+  }
+
+  &__subtitle {
+    color: color("neutral", "dark");
+    font-size: font-size("xs");
+    font-weight: font-weight("regular");
+  }
+
+  &__form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__label {
+    font-size: font-size("xs");
+    font-weight: font-weight("medium");
+    color: color("neutral", "black");
+  }
+
+  &__input {
+    width: 100%;
+    padding: spacing("sm");
+    font-size: font-size("xs");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    background-color: color("neutral", "white");
+    transition: $transition-base;
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 2px color-alpha("primary", "base", 0.2);
+    }
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+  }
+
+  &__passwordWrapper {
+    position: relative;
+  }
+
+  &__togglePassword {
+    position: absolute;
+    right: spacing("sm");
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: color("neutral", "dark");
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+
+    &:hover {
+      color: color("primary", "base");
+    }
+  }
+
+  &__button {
+    margin-top: spacing("sm");
+  }
+
+  &__signupWrapper {
+    background-color: color-alpha("neutral", "lighter", 0.5);
+    border-radius: border-radius("pill");
+    padding: spacing("sm") spacing("2xl");
+    text-align: center;
+    max-width: 500px;
+    margin-bottom: spacing("4xl");
+  }
+
+  &__signupText {
+    font-size: font-size("xs");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
+
+  &__signupLink {
+    color: color("primary", "base");
+    font-weight: font-weight("bold");
+    text-decoration: none;
+    transition: $transition-fast;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+} 

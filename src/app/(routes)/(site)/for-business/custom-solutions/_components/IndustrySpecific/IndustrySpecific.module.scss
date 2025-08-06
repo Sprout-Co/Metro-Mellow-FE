@@ -1,0 +1,221 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.industrySpecific {
+  padding: spacing("5xl") 0;
+  background: color("neutral", "white");
+
+  &__container {
+    @include container();
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("4xl");
+
+    h2 {
+      @include heading-2();
+      color: color("primary", "base");
+      margin-bottom: spacing("md");
+    }
+
+    p {
+      @include font-size("lg");
+      color: color("neutral", "dark");
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: map-get($line-heights, "relaxed");
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: spacing("xl");
+    margin-bottom: spacing("4xl");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+      gap: spacing("lg");
+    }
+  }
+
+  &__cta {
+    text-align: center;
+    padding: spacing("3xl") spacing("xl");
+    background: linear-gradient(
+      135deg,
+      color("primary", "lighter") 0%,
+      color("accent", "lighter") 100%
+    );
+    border-radius: 16px;
+    border: 1px solid color("primary", "light");
+
+    h3 {
+      @include heading-3();
+      color: color("primary", "base");
+      margin-bottom: spacing("md");
+    }
+
+    p {
+      @include font-size("base");
+      color: color("neutral", "dark");
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    @include breakpoint-down("md") {
+      padding: spacing("2xl") spacing("lg");
+    }
+  }
+}
+
+.industryCard {
+  background: color("neutral", "white");
+  border-radius: 16px;
+  padding: spacing("xl");
+  border: 1px solid color("neutral", "light");
+  transition: all map-get($transition-duration, "base")
+    map-get($transition-timing, "ease-out");
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(
+      90deg,
+      color("primary", "base") 0%,
+      color("accent", "base") 100%
+    );
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform map-get($transition-duration, "base")
+      map-get($transition-timing, "ease-out");
+  }
+
+  &:hover {
+    box-shadow: shadow("lg");
+    border-color: color("primary", "light");
+
+    &::before {
+      transform: scaleX(1);
+    }
+
+    .industryCard__icon {
+      background: linear-gradient(
+        135deg,
+        color("primary", "base") 0%,
+        color("accent", "base") 100%
+      );
+      color: color("neutral", "white");
+      transform: scale(1.1);
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
+
+    h3 {
+      @include heading-4();
+      color: color("primary", "base");
+      margin: 0;
+    }
+  }
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: color("primary", "lighter");
+    color: color("primary", "base");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all map-get($transition-duration, "base")
+      map-get($transition-timing, "ease-out");
+    flex-shrink: 0;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__description {
+    @include font-size("base");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("lg");
+    line-height: map-get($line-heights, "relaxed");
+  }
+
+  &__services {
+    margin-bottom: spacing("lg");
+
+    h4 {
+      @include font-size("sm");
+      @include font-weight("semibold");
+      color: color("primary", "base");
+      margin-bottom: spacing("sm");
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        @include font-size("sm");
+        color: color("neutral", "dark");
+        padding: 6px 0;
+        position: relative;
+        padding-left: 20px;
+
+        &::before {
+          content: "•";
+          color: color("primary", "base");
+          position: absolute;
+          left: 0;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  &__requirements {
+    h4 {
+      @include font-size("sm");
+      @include font-weight("semibold");
+      color: color("primary", "base");
+      margin-bottom: spacing("sm");
+    }
+  }
+}
+
+.requirements {
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing("xs");
+  }
+}
+
+.requirement {
+  &__tag {
+    @include font-size("xs");
+    background: color("accent", "lighter");
+    color: color("accent", "base");
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: map-get($font-weights, "medium");
+    border: 1px solid color("accent", "light");
+  }
+}

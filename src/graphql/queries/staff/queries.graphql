@@ -1,0 +1,93 @@
+query GetStaffProfiles($status: StaffStatus) {
+  staffProfiles(status: $status) {
+    id
+    user {
+      id
+      firstName
+      lastName
+      email
+    }
+    serviceCategories
+    availability {
+      dayOfWeek
+      startTime
+      endTime
+      isAvailable
+    }
+    rating
+    totalJobs
+    completedJobs
+    activeJobs
+    documents {
+      id
+      type
+      url
+      verified
+      uploadedAt
+    }
+    status
+    createdAt
+    updatedAt
+  }
+}
+
+query GetStaffProfileById($id: ID!) {
+  staffProfile(id: $id) {
+    id
+    user {
+      id
+      firstName
+      lastName
+      email
+    }
+    serviceCategories
+    availability {
+      dayOfWeek
+      startTime
+      endTime
+      isAvailable
+    }
+    rating
+    totalJobs
+    completedJobs
+    activeJobs
+    documents {
+      id
+      type
+      url
+      verified
+      uploadedAt
+    }
+    status
+    createdAt
+    updatedAt
+  }
+}
+
+query GetAvailableStaff($serviceCategory: ServiceCategory!, $date: DateTime!) {
+  availableStaff(serviceCategory: $serviceCategory, date: $date) {
+    id
+    user {
+      id
+      firstName
+      lastName
+      email
+    }
+    serviceCategories
+    availability {
+      dayOfWeek
+      startTime
+      endTime
+      isAvailable
+    }
+    rating
+    totalJobs
+    completedJobs
+    activeJobs
+    status
+  }
+}
+
+query GetStaffPerformance($id: ID!) {
+  staffPerformance(id: $id)
+}

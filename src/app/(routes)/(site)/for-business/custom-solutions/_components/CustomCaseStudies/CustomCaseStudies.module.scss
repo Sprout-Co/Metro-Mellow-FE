@@ -1,0 +1,29 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.customCaseStudies {
+  padding: spacing("5xl") 0;
+  background: color("neutral", "white");
+
+  &__container {
+    @include container();
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+
+    h2 {
+      @include heading-2();
+      color: color("primary", "base");
+      margin-bottom: spacing("lg");
+    }
+
+    p {
+      @include font-size("lg");
+      color: color("neutral", "dark");
+      line-height: map-get($line-heights, "relaxed");
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+}

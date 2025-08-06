@@ -1,0 +1,204 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.serviceBundleBuilder {
+  padding: spacing("5xl") 0;
+  background: linear-gradient(
+    135deg,
+    color("primary", "lighter") 0%,
+    color("neutral", "lighter") 100%
+  );
+
+  &__container {
+    @include container();
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("4xl");
+
+    h2 {
+      @include heading-2();
+      color: color("primary", "base");
+      margin-bottom: spacing("lg");
+    }
+
+    p {
+      @include font-size("lg");
+      color: color("neutral", "dark");
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: spacing("lg");
+    margin-bottom: spacing("3xl");
+  }
+
+  &__summary {
+    background: color("neutral", "white");
+    border-radius: 16px;
+    padding: spacing("xl");
+    box-shadow: shadow("lg");
+    border: 1px solid color("primary", "light");
+
+    @include breakpoint-down("md") {
+      padding: spacing("lg");
+    }
+  }
+}
+
+.serviceCard {
+  background: color("neutral", "white");
+  border-radius: 12px;
+  padding: spacing("lg");
+  border: 2px solid color("neutral", "light");
+  cursor: pointer;
+  transition: all map-get($transition-duration, "base")
+    map-get($transition-timing, "ease-out");
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: color("primary", "light");
+    transform: scaleX(0);
+    transition: transform map-get($transition-duration, "base")
+      map-get($transition-timing, "ease-out");
+  }
+
+  &:hover {
+    border-color: color("primary", "light");
+    box-shadow: shadow("md");
+    transform: translateY(-2px);
+
+    &::before {
+      transform: scaleX(1);
+    }
+  }
+
+  &_selected {
+    border-color: color("primary", "base");
+    background: linear-gradient(
+      135deg,
+      color("primary", "lighter") 0%,
+      color("neutral", "white") 100%
+    );
+
+    &::before {
+      background: color("primary", "base");
+      transform: scaleX(1);
+    }
+
+    .serviceCard__checkbox {
+      background: color("primary", "base");
+      color: color("neutral", "white");
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    margin-bottom: spacing("md");
+
+    h3 {
+      @include heading-4();
+      color: color("primary", "base");
+      margin: 0;
+    }
+  }
+
+  &__checkbox {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    background: color("neutral", "light");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("neutral", "dark");
+    transition: all map-get($transition-duration, "base")
+      map-get($transition-timing, "ease-out");
+    flex-shrink: 0;
+  }
+
+  &__description {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("lg");
+    line-height: map-get($line-heights, "relaxed");
+  }
+
+  &__pricing {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  &__price {
+    @include heading-4();
+    color: color("primary", "base");
+    font-weight: map-get($font-weights, "bold");
+  }
+
+  &__frequency {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+  }
+}
+
+.summary {
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: spacing("xl");
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("lg");
+    }
+  }
+
+  &__details {
+    h3 {
+      @include heading-4();
+      color: color("primary", "base");
+      margin-bottom: spacing("xs");
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      margin-bottom: spacing("sm");
+    }
+  }
+
+  &__total {
+    display: flex;
+    align-items: baseline;
+    gap: spacing("xs");
+
+    span {
+      @include font-size("base");
+      color: color("neutral", "dark");
+    }
+
+    strong {
+      @include heading-3();
+      color: color("primary", "base");
+      font-weight: map-get($font-weights, "bold");
+    }
+  }
+}

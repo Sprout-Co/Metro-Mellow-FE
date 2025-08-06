@@ -1,0 +1,87 @@
+@import "@/styles/abstracts/_variables.scss";
+@import "@/styles/abstracts/_functions.scss";
+@import "@/styles/abstracts/_mixins.scss";
+
+.showcase {
+  @include container;
+  padding: spacing("2xl") spacing("md");
+  background: linear-gradient(
+    135deg,
+    color-alpha("neutral", "lightest", 0.5),
+    color-alpha("primary", "lighter", 0.3)
+  );
+  min-height: 100vh;
+}
+
+.title {
+  @include heading-2;
+  text-align: center;
+  margin-bottom: spacing("2xl");
+  color: color("neutral", "darkest");
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: spacing("xl");
+  margin-bottom: spacing("3xl");
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: spacing("lg");
+  background: color("neutral", "white");
+  border-radius: border-radius("xl");
+  box-shadow: shadow("md");
+  transition: all map-get($transition-duration, "base")
+    map-get($transition-timing, "ease-out");
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: shadow("lg");
+  }
+}
+
+.description {
+  @include caption;
+  text-align: center;
+  margin-top: spacing("sm");
+  color: color("neutral", "dark");
+  font-weight: font-weight("medium");
+}
+
+.tips {
+  background: color("neutral", "white");
+  padding: spacing("xl");
+  border-radius: border-radius("lg");
+  box-shadow: shadow("md");
+
+  h3 {
+    @include heading-4;
+    margin-bottom: spacing("md");
+    color: color("primary", "base");
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    @include body-2;
+    padding: spacing("xs") 0;
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    strong {
+      color: color("primary", "base");
+      font-weight: font-weight("semibold");
+    }
+  }
+}

@@ -1,0 +1,101 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.loginModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: z-index("modal");
+
+  &__backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: color-alpha("neutral", "black", 0.6);
+    backdrop-filter: blur(4px);
+  }
+
+  &__container {
+    position: relative;
+    width: 92%;
+    max-width: 480px;
+    max-height: 90vh;
+    background-color: color("neutral", "white");
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background: linear-gradient(
+      to right,
+      color-alpha("primary", "base", 0.03),
+      color-alpha("primary", "light", 0.05)
+    );
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+
+  &__content {
+    // padding: 24px;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  &__close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("neutral", "dark");
+    background-color: color-alpha("neutral", "medium", 0.1);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: color-alpha("neutral", "medium", 0.2);
+      color: color("neutral", "black");
+      transform: rotate(90deg);
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .loginModal {
+    &__container {
+      width: 95%;
+      max-width: none;
+      margin: 20px;
+    }
+
+    &__content {
+      padding: 20px;
+    }
+
+    &__header {
+      padding: 12px 16px;
+    }
+  }
+}

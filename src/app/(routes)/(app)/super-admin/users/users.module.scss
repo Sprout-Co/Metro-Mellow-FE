@@ -1,0 +1,446 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.users_page {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      gap: spacing("md");
+    }
+  }
+
+  &__title {
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
+  }
+
+  &__description {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
+
+  &__tabs {
+    display: flex;
+    margin-bottom: spacing("lg");
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    @include breakpoint-down("sm") {
+      overflow-x: auto;
+      white-space: nowrap;
+      padding-bottom: spacing("xs");
+    }
+  }
+
+  &__tab {
+    padding: spacing("sm") spacing("lg");
+    background: none;
+    border: none;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    position: relative;
+
+    &:hover {
+      color: color("secondary", "base");
+    }
+
+    &--active {
+      color: color("secondary", "base");
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: color("secondary", "base");
+      }
+    }
+  }
+
+  &__search {
+    margin-bottom: spacing("lg");
+  }
+
+  &__search_input {
+    width: 100%;
+    padding: spacing("sm") spacing("md");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+
+    &:focus {
+      outline: none;
+      border-color: color("secondary", "base");
+      box-shadow: 0 0 0 2px rgba(color("secondary", "base"), 0.1);
+    }
+  }
+
+  &__content {
+    padding: spacing("lg");
+
+    @include breakpoint-down("md") {
+      padding: spacing("md");
+    }
+  }
+
+  &__table_container {
+    overflow-x: auto;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      text-align: left;
+      padding: spacing("sm");
+      font-size: map-get($font-sizes, "xs");
+      font-weight: map-get($font-weights, "semibold");
+      color: color("neutral", "dark");
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid color("neutral", "lighter");
+    }
+
+    td {
+      padding: spacing("sm");
+      border-bottom: 1px solid color("neutral", "lighter");
+      font-size: map-get($font-sizes, "sm");
+    }
+
+    tr:hover {
+      background-color: rgba(color("neutral", "lighter"), 0.5);
+    }
+  }
+
+  &__permission_badge {
+    background-color: rgba(color("secondary", "base"), 0.1);
+    color: color("secondary", "base");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "semibold");
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("sm");
+    display: inline-block;
+  }
+
+  &__status {
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "semibold");
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("sm");
+    display: inline-block;
+
+    &--active {
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
+    }
+
+    &--inactive {
+      background-color: rgba(color("neutral", "dark"), 0.1);
+      color: color("neutral", "dark");
+    }
+
+    &--suspended {
+      background-color: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
+    }
+  }
+
+  &__actions_cell {
+    display: flex;
+    gap: spacing("xs");
+  }
+
+  &__action_btn {
+    padding: spacing("xxs") spacing("xs");
+    font-size: map-get($font-sizes, "xs");
+    border: none;
+    border-radius: border-radius("sm");
+    cursor: pointer;
+
+    &--edit {
+      background-color: rgba(color("status", "info"), 0.1);
+      color: color("status", "info");
+
+      &:hover {
+        background-color: color("status", "info");
+        color: color("neutral", "white");
+      }
+    }
+
+    &--delete {
+      background-color: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
+
+      &:hover {
+        background-color: color("status", "error");
+        color: color("neutral", "white");
+      }
+    }
+  }
+
+  &__roles_container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: spacing("md");
+  }
+
+  &__role_card {
+    background-color: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    padding: spacing("md");
+    display: flex;
+    flex-direction: column;
+
+    &--new {
+      border: 2px dashed color("neutral", "medium");
+      background-color: rgba(color("neutral", "lighter"), 0.5);
+      cursor: pointer;
+
+      &:hover {
+        border-color: color("secondary", "base");
+        background-color: rgba(color("secondary", "base"), 0.05);
+      }
+    }
+  }
+
+  &__role_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("sm");
+  }
+
+  &__role_name {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0;
+  }
+
+  &__role_users {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    background-color: color("neutral", "lighter");
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("full");
+  }
+
+  &__role_description {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("md") 0;
+  }
+
+  &__permissions {
+    margin-bottom: spacing("md");
+  }
+
+  &__permissions_title {
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("xs") 0;
+  }
+
+  &__permissions_list {
+    font-size: map-get($font-sizes, "sm");
+    color: color("secondary", "base");
+    margin: 0;
+  }
+
+  &__role_actions {
+    display: flex;
+    gap: spacing("sm");
+    margin-top: auto;
+    padding-top: spacing("md");
+  }
+
+  &__role_btn {
+    flex: 1;
+    padding: spacing("xs") spacing("sm");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    background-color: color("neutral", "lighter");
+    color: color("neutral", "dark");
+    border: none;
+    border-radius: border-radius("sm");
+    cursor: pointer;
+
+    &:hover {
+      background-color: color("secondary", "base");
+      color: color("neutral", "white");
+    }
+  }
+
+  &__new_role {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    padding: spacing("lg") 0;
+  }
+
+  &__new_role_icon {
+    font-size: map-get($font-sizes, "3xl");
+    color: color("neutral", "medium");
+    margin-bottom: spacing("sm");
+  }
+
+  &__new_role_title {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xs") 0;
+  }
+
+  &__new_role_description {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
+
+  &__activity_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("sm");
+    }
+  }
+
+  &__activity_title {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0;
+  }
+
+  &__activity_select {
+    padding: spacing("xs") spacing("md");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    background-color: color("neutral", "white");
+
+    &:focus {
+      outline: none;
+      border-color: color("secondary", "base");
+    }
+  }
+
+  &__activity_list {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__activity_item {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr 1fr;
+    gap: spacing("sm");
+    padding: spacing("sm");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__activity_time {
+    color: color("neutral", "dark");
+  }
+
+  &__activity_user {
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+  }
+
+  &__activity_action {
+    color: color("secondary", "base");
+  }
+
+  &__activity_ip {
+    color: color("neutral", "dark");
+    text-align: right;
+
+    @include breakpoint-down("md") {
+      text-align: left;
+    }
+  }
+
+  &__activity_pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: spacing("xl");
+    gap: spacing("md");
+  }
+
+  &__pagination_btn {
+    padding: spacing("xs") spacing("md");
+    background-color: color("neutral", "lighter");
+    color: color("neutral", "dark");
+    border: none;
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    cursor: pointer;
+
+    &:hover {
+      background-color: color("secondary", "base");
+      color: color("neutral", "white");
+    }
+  }
+
+  &__pagination_pages {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+  }
+
+  &__pagination_page {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: color("neutral", "lighter");
+    color: color("neutral", "dark");
+    border: none;
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    cursor: pointer;
+
+    &:hover {
+      background-color: color("secondary", "base");
+      color: color("neutral", "white");
+    }
+
+    &--active {
+      background-color: color("secondary", "base");
+      color: color("neutral", "white");
+    }
+  }
+}

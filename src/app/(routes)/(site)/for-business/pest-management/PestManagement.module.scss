@@ -1,0 +1,8 @@
+@import "abstracts/variables";
+@import "abstracts/mixins";
+@import "abstracts/functions";
+
+.pestManagement {
+  background: color("neutral", "white");
+  min-height: 100vh;
+}

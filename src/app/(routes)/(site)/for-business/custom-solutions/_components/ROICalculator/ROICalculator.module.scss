@@ -1,0 +1,286 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.roiCalculator {
+  padding: spacing("5xl") 0;
+  background: color("neutral", "white");
+
+  &__container {
+    @include container();
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("4xl");
+
+    h2 {
+      @include heading-2();
+      color: color("primary", "base");
+      margin: spacing("lg") 0 spacing("lg");
+    }
+
+    p {
+      @include font-size("lg");
+      color: color("neutral", "dark");
+      max-width: 700px;
+      margin: 0 auto;
+    }
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("3xl");
+    margin-bottom: spacing("4xl");
+
+    @include breakpoint-down("lg") {
+      grid-template-columns: 1fr;
+      gap: spacing("2xl");
+    }
+  }
+}
+
+.header {
+  &__icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    background: linear-gradient(
+      135deg,
+      color("primary", "base") 0%,
+      color("accent", "base") 100%
+    );
+    color: color("neutral", "white");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+
+    svg {
+      width: 36px;
+      height: 36px;
+    }
+  }
+}
+
+.calculator {
+  &__inputs {
+    background: color("neutral", "lighter");
+    border-radius: 20px;
+    padding: spacing("2xl");
+    border: 1px solid color("neutral", "light");
+
+    h3 {
+      @include heading-4();
+      color: color("primary", "base");
+      margin-bottom: spacing("xl");
+      text-align: center;
+    }
+
+    @include breakpoint-down("md") {
+      padding: spacing("xl") spacing("lg");
+    }
+  }
+
+  &__results {
+    background: linear-gradient(
+      135deg,
+      color("primary", "lighter") 0%,
+      color("accent", "lighter") 100%
+    );
+    border-radius: 20px;
+    padding: spacing("2xl");
+    border: 1px solid color("primary", "light");
+
+    h3 {
+      @include heading-4();
+      color: color("primary", "base");
+      margin-bottom: spacing("xl");
+      text-align: center;
+    }
+
+    @include breakpoint-down("md") {
+      padding: spacing("xl") spacing("lg");
+    }
+  }
+}
+
+.input {
+  &__group {
+    margin-bottom: spacing("lg");
+
+    label {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      font-weight: map-get($font-weights, "medium");
+      display: block;
+      margin-bottom: spacing("xs");
+    }
+
+    input {
+      width: 100%;
+      padding: spacing("sm") spacing("md");
+      border: 2px solid color("neutral", "light");
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all map-get($transition-duration, "base")
+        map-get($transition-timing, "ease-out");
+      background: color("neutral", "white");
+
+      &:focus {
+        outline: none;
+        border-color: color("primary", "base");
+        box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
+      }
+
+      &:hover {
+        border-color: color("primary", "light");
+      }
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.results {
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.result {
+  &__card {
+    background: color("neutral", "white");
+    border-radius: 12px;
+    padding: spacing("lg");
+    text-align: center;
+    border: 1px solid color("primary", "light");
+    transition: all map-get($transition-duration, "base")
+      map-get($transition-timing, "ease-out");
+
+    &:hover {
+      box-shadow: shadow("md");
+      transform: translateY(-2px);
+    }
+  }
+
+  &__value {
+    @include heading-3();
+    color: color("primary", "base");
+    font-weight: map-get($font-weights, "bold");
+    margin-bottom: spacing("xs");
+  }
+
+  &__label {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+    font-weight: map-get($font-weights, "medium");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+.payback {
+  &__period {
+    text-align: center;
+    padding: spacing("lg");
+    background: color("neutral", "white");
+    border-radius: 12px;
+    border: 2px solid color("accent", "light");
+    margin-bottom: spacing("xl");
+
+    strong {
+      @include heading-4();
+      color: color("accent", "base");
+    }
+  }
+}
+
+.benefits {
+  &__section {
+    text-align: center;
+
+    h3 {
+      @include heading-3();
+      color: color("primary", "base");
+      margin-bottom: spacing("2xl");
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: spacing("xl");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+      gap: spacing("lg");
+    }
+  }
+}
+
+.benefit {
+  &__card {
+    background: color("neutral", "lighter");
+    border-radius: 16px;
+    padding: spacing("xl") spacing("lg");
+    text-align: center;
+    border: 1px solid color("neutral", "light");
+    transition: all map-get($transition-duration, "base")
+      map-get($transition-timing, "ease-out");
+
+    &:hover {
+      background: color("neutral", "white");
+      box-shadow: shadow("md");
+      transform: translateY(-4px);
+    }
+
+    h4 {
+      @include font-size("sm");
+      @include font-weight("semibold");
+      color: color("primary", "base");
+      margin: spacing("md") 0 spacing("sm");
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      line-height: map-get($line-heights, "relaxed");
+    }
+  }
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: color("primary", "lighter");
+    color: color("primary", "base");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    transition: all map-get($transition-duration, "base")
+      map-get($transition-timing, "ease-out");
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .benefit__card:hover & {
+      background: color("primary", "base");
+      color: color("neutral", "white");
+      transform: scale(1.1);
+    }
+  }
+}

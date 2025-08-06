@@ -1,0 +1,98 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.menu {
+  width: 100%;
+
+  &__header {
+    padding: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+  }
+
+  &__avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("full");
+    background-color: color("primary", "light");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("neutral", "white");
+    font-weight: map-get($font-weights, "semibold");
+    font-size: map-get($font-sizes, "lg");
+    margin-right: spacing("sm");
+    flex-shrink: 0;
+  }
+
+  &__userInfo {
+    flex: 1;
+  }
+
+  &__userName {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__userEmail {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+  }
+
+  &__nav {
+    padding: spacing("xs") 0;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    padding: spacing("sm") spacing("md");
+    color: color("neutral", "darker");
+    font-size: map-get($font-sizes, "base");
+    transition: $transition-base;
+    text-decoration: none;
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+      color: color("primary", "base");
+    }
+
+    &--logout {
+      color: color("status", "error");
+
+      &:hover {
+        background-color: rgba(color("status", "error"), 0.05);
+        color: color("status", "error");
+      }
+    }
+  }
+
+  &__icon {
+    margin-right: spacing("sm");
+  }
+
+  &__footer {
+    padding: spacing("sm") spacing("md");
+    border-top: 1px solid color("neutral", "lighter");
+    text-align: center;
+  }
+
+  &__version {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
+}
