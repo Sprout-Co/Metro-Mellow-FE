@@ -28,6 +28,12 @@
     @include flex-center;
   }
   
+  &__serviceIcon {
+    width: 24px;
+    height: 24px;
+    color: color("accent", "dark");
+  }
+  
   &__emoji {
     font-size: font-size("xl");
     line-height: 1;

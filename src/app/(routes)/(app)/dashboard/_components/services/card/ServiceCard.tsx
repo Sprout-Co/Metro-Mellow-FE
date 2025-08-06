@@ -1,8 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Button from '@/components/ui/Button/Button';
 import styles from './ServiceCard.module.scss';
+import * as LucideIcons from "lucide-react";
+import { IconName } from '@/constants/services';
 
 export interface ServiceCardProps {
   id: string;
@@ -15,6 +17,7 @@ export interface ServiceCardProps {
   additionalInfo?: string;
   frequency: string;
   isAssigned?: boolean;
+  icon?: IconName;
 }
 
 export default function ServiceCard({
@@ -27,7 +30,8 @@ export default function ServiceCard({
   location,
   additionalInfo,
   frequency,
-  isAssigned = false
+  isAssigned = false,
+  icon = 'House'
 }: ServiceCardProps) {
   const [expanded, setExpanded] = useState(false);
 
@@ -42,13 +46,34 @@ export default function ServiceCard({
   const handleReschedule = () => {
     console.log(`Rescheduling service ${id}`);
   };
+  
+  const getServiceIcon = () => {
+    // Map service types to icons
+    const iconMap: Record<string, IconName> = {
+      'Cleaning': 'House',
+      'Laundry': 'Shirt',
+      'Cooking': 'CookingPot',
+      'Errand': 'PersonStanding',
+      'Pest Control': 'BugOff',
+      'Gardening': 'Fence',
+    };
+    
+    return iconMap[serviceType] || icon;
+  };
+  
+  const serviceIcon = getServiceIcon();
+  const IconComponent = LucideIcons[serviceIcon] as React.ElementType;
 
   return (
     <div className={styles.serviceCard}>
       <div className={styles.serviceCard__header}>
         <div className={styles.serviceCard__iconContainer}>
           <div className={styles.serviceCard__icon}>
-            <span className={styles.serviceCard__emoji}>🧹</span>
+            {IconComponent ? (
+              <IconComponent className={styles.serviceCard__serviceIcon} />
+            ) : (
+              <span className={styles.serviceCard__emoji}>🧹</span>
+            )}
           </div>
         </div>
         
@@ -56,7 +81,7 @@ export default function ServiceCard({
           <div className={styles.serviceCard__titleRow}>
             <h3 className={styles.serviceCard__title}>{serviceType}</h3>
             <span className={`${styles.serviceCard__badge} ${styles[`serviceCard__badge--${status.toLowerCase()}`]}`}>
-              {status}
+              {status.charAt(0).toUpperCase() + status.slice(1)}
             </span>
           </div>
           

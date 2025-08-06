@@ -5,6 +5,7 @@ import DashboardHeader from './_components/header/DashboardHeader';
 import DashboardBanner from './_components/banner/DashboardBanner';
 import NavigationTabs from './_components/navigation/NavigationTabs';
 import ServicesSection from './_components/services/ServicesSection';
+import AllOrdersSection from './_components/all-orders/AllOrdersSection';
 import QuickActions from './_components/quick-actions/QuickActions';
 import CTAButton from './_components/cta/CTAButton';
 
@@ -13,6 +14,12 @@ import styles from './Dashboard.module.scss';
 export default function Dashboard() {
   // This would typically be fetched from an API
   const hasServices = true;
+
+  const EmptyState = () => (
+    <div className={styles.dashboard__emptyState}>
+      <p>No services found.</p>
+    </div>
+  );
 
   return (
     <div className={styles.dashboard}>
@@ -31,7 +38,7 @@ export default function Dashboard() {
           
           <div className={styles.dashboard__main}>
             <div className={styles.dashboard__services}>
-              {hasServices ? <ServicesSection /> : <EmptyState />}
+              {hasServices ? <AllOrdersSection /> : <EmptyState />}
             </div>
             
             <div className={styles.dashboard__sidebar}>
