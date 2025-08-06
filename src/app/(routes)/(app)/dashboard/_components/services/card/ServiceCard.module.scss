@@ -51,7 +51,7 @@
   
   &__title {
     @include font-secondary;
-    @include font-size("body-1");
+    @include font-size("base");
     @include font-weight("semibold");
     color: color("neutral", "darkest");
     margin: 0;
@@ -102,9 +102,16 @@
     gap: spacing("sm");
   }
   
-  &__date, &__time {
+  &__date {
     display: flex;
     align-items: center;
+  }
+  
+  &__time {
+    display: flex;
+    align-items: center;
+    @include font-weight("bold");
+    color: color("neutral", "black");
   }
   
   &__actions {
