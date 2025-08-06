@@ -48,7 +48,7 @@ export default function ServiceCard({
       <div className={styles.serviceCard__header}>
         <div className={styles.serviceCard__iconContainer}>
           <div className={styles.serviceCard__icon}>
-            <span className={styles.serviceCard__emoji}>📅</span>
+            <span className={styles.serviceCard__emoji}>🧹</span>
           </div>
         </div>
         
