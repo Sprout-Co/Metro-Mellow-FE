@@ -9,7 +9,7 @@ export default function EmptyState() {
       <div className={styles.emptyState__content}>
         <div className={styles.emptyState__imageContainer}>
           <Image
-            src="/images/general/success_order.png"
+            src="/images/brand/empty-state.png"
             alt="No services"
             width={213}
             height={213}

@@ -4,16 +4,15 @@ import { useEffect } from 'react';
 import DashboardHeader from './_components/header/DashboardHeader';
 import DashboardBanner from './_components/banner/DashboardBanner';
 import NavigationTabs from './_components/navigation/NavigationTabs';
-import ServiceTabs from './_components/service-tabs/ServiceTabs';
+import ServicesSection from './_components/services/ServicesSection';
 import QuickActions from './_components/quick-actions/QuickActions';
-import EmptyState from './_components/empty-state/EmptyState';
 import CTAButton from './_components/cta/CTAButton';
 
 import styles from './Dashboard.module.scss';
 
 export default function Dashboard() {
   // This would typically be fetched from an API
-  const hasServices = false;
+  const hasServices = true;
 
   return (
     <div className={styles.dashboard}>
@@ -32,19 +31,7 @@ export default function Dashboard() {
           
           <div className={styles.dashboard__main}>
             <div className={styles.dashboard__services}>
-              <ServiceTabs 
-                tabs={[
-                  { id: 'upcoming', label: 'UPCOMING', isActive: true },
-                  { id: 'past', label: 'PAST', isActive: false },
-                  { id: 'canceled', label: 'CANCELED', isActive: false },
-                  { id: 'paused', label: 'PAUSED', isActive: false },
-                  { id: 'all', label: 'ALL', isActive: false },
-                ]} 
-              />
-              
-              <div className={styles.dashboard__serviceContent}>
-                {!hasServices && <EmptyState />}
-              </div>
+              {hasServices ? <ServicesSection /> : <EmptyState />}
             </div>
             
             <div className={styles.dashboard__sidebar}>
