@@ -76,9 +76,10 @@
       color: color("status", "upcoming-text");
     }
     
-    &--past {
-      background-color: color("neutral", "lighter");
-      color: color("neutral", "dark");
+    &--completed {
+      background-color: color("status", "success");
+      color: color("neutral", "white");
+      opacity: 0.8;
     }
     
     &--canceled {

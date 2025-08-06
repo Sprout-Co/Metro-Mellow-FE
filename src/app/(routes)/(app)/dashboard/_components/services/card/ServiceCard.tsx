@@ -9,7 +9,7 @@ import { IconName } from '@/constants/services';
 export interface ServiceCardProps {
   id: string;
   serviceType: string;
-  status: 'upcoming' | 'past' | 'canceled' | 'paused';
+  status: 'upcoming' | 'completed' | 'canceled' | 'paused';
   date: string;
   time: string;
   timeOfDay: string;

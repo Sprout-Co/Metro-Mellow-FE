@@ -23,7 +23,7 @@ const mockServices: ServiceCardProps[] = [
   {
     id: '2',
     serviceType: 'Laundry',
-    status: 'past',
+    status: 'completed',
     date: 'Sat, Aug 25',
     time: '8:00 AM',
     timeOfDay: 'Morning',
@@ -62,7 +62,7 @@ const mockServices: ServiceCardProps[] = [
   {
     id: '5',
     serviceType: 'Pest Control',
-    status: 'past',
+    status: 'completed',
     date: 'Sat, Aug 25',
     time: '8:00 AM',
     timeOfDay: 'Morning',
@@ -88,7 +88,7 @@ const mockServices: ServiceCardProps[] = [
   {
     id: '7',
     serviceType: 'Laundry',
-    status: 'past',
+    status: 'completed',
     date: 'Sat, Aug 25',
     time: '8:00 AM',
     timeOfDay: 'Morning',
@@ -122,7 +122,7 @@ interface Tab {
 export default function ServicesSection() {
   const [tabs, setTabs] = useState<Tab[]>([
     { id: 'upcoming', label: 'UPCOMING', isActive: false },
-    { id: 'past', label: 'PAST', isActive: false },
+    { id: 'completed', label: 'COMPLETED', isActive: false },
     { id: 'canceled', label: 'CANCELED', isActive: false },
     { id: 'paused', label: 'PAUSED', isActive: false },
     { id: 'all', label: 'ALL', isActive: true },
