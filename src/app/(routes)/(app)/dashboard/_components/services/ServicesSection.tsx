@@ -23,7 +23,7 @@ const mockServices: ServiceCardProps[] = [
   {
     id: '2',
     serviceType: 'Laundry',
-    status: 'completed',
+    status: 'past',
     date: 'Sat, Aug 25',
     time: '8:00 AM',
     timeOfDay: 'Morning',
@@ -35,7 +35,7 @@ const mockServices: ServiceCardProps[] = [
   },
   {
     id: '3',
-    serviceType: 'Cooking',
+    serviceType: 'Food',
     status: 'canceled',
     date: 'Sat, Aug 25',
     time: '8:00 AM',
@@ -62,7 +62,7 @@ const mockServices: ServiceCardProps[] = [
   {
     id: '5',
     serviceType: 'Pest Control',
-    status: 'completed',
+    status: 'past',
     date: 'Sat, Aug 25',
     time: '8:00 AM',
     timeOfDay: 'Morning',
@@ -74,7 +74,7 @@ const mockServices: ServiceCardProps[] = [
   },
   {
     id: '6',
-    serviceType: 'Gardening',
+    serviceType: 'Food',
     status: 'upcoming',
     date: 'Sat, Aug 25',
     time: '8:00 AM',
@@ -83,12 +83,12 @@ const mockServices: ServiceCardProps[] = [
     additionalInfo: 'Dolor hic tibi proderit olim Lorem ipsure connectur ammet eget vivvera',
     frequency: 'One-time off',
     isAssigned: true,
-    icon: 'Fence'
+    icon: 'CookingPot'
   },
   {
     id: '7',
-    serviceType: 'Errand',
-    status: 'completed',
+    serviceType: 'Laundry',
+    status: 'past',
     date: 'Sat, Aug 25',
     time: '8:00 AM',
     timeOfDay: 'Morning',
@@ -96,7 +96,7 @@ const mockServices: ServiceCardProps[] = [
     additionalInfo: 'Dolor hic tibi proderit olim Lorem ipsure connectur ammet eget vivvera',
     frequency: 'One-time off',
     isAssigned: true,
-    icon: 'PersonStanding'
+    icon: 'Shirt'
   },
   {
     id: '8',

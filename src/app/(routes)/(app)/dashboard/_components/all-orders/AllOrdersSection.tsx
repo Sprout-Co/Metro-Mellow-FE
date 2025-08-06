@@ -23,7 +23,7 @@ const mockAllOrders: ServiceCardProps[] = [
   {
     id: '2',
     serviceType: 'Laundry',
-    status: 'completed',
+    status: 'past',
     date: 'Sat, Aug 25',
     time: '8:00 AM',
     timeOfDay: 'Morning',
@@ -35,7 +35,7 @@ const mockAllOrders: ServiceCardProps[] = [
   },
   {
     id: '3',
-    serviceType: 'Cooking',
+    serviceType: 'Food',
     status: 'canceled',
     date: 'Sat, Aug 25',
     time: '8:00 AM',
@@ -62,7 +62,7 @@ const mockAllOrders: ServiceCardProps[] = [
   {
     id: '5',
     serviceType: 'Pest Control',
-    status: 'completed',
+    status: 'past',
     date: 'Fri, Aug 24',
     time: '9:00 AM',
     timeOfDay: 'Morning',
@@ -74,29 +74,29 @@ const mockAllOrders: ServiceCardProps[] = [
   },
   {
     id: '6',
-    serviceType: 'Gardening',
+    serviceType: 'Food',
     status: 'upcoming',
     date: 'Tue, Aug 28',
     time: '2:00 PM',
     timeOfDay: 'Afternoon',
     location: '7, Abisogun Street, Highcost, Barnawa, Lagos',
-    additionalInfo: 'Lawn mowing and plant trimming',
+    additionalInfo: 'Home-cooked meals preparation',
     frequency: 'Bi-weekly',
     isAssigned: true,
-    icon: 'Fence'
+    icon: 'CookingPot'
   },
   {
     id: '7',
-    serviceType: 'Errand',
-    status: 'completed',
+    serviceType: 'Laundry',
+    status: 'past',
     date: 'Wed, Aug 22',
     time: '11:00 AM',
     timeOfDay: 'Morning',
     location: '7, Abisogun Street, Highcost, Barnawa, Lagos',
-    additionalInfo: 'Grocery shopping and pharmacy pickup',
+    additionalInfo: 'Dry cleaning and ironing',
     frequency: 'One-time off',
     isAssigned: true,
-    icon: 'PersonStanding'
+    icon: 'Shirt'
   },
   {
     id: '8',
@@ -120,12 +120,6 @@ interface Tab {
 }
 
 export default function AllOrdersSection() {
-  const [tabs, setTabs] = useState<Tab[]>([
-    { id: 'overview', label: 'OVERVIEW', isActive: true },
-    { id: 'subscription', label: 'SUBSCRIPTION', isActive: false },
-    { id: 'address', label: 'ADDRESS', isActive: false },
-  ]);
-  
   const [serviceFilterTabs, setServiceFilterTabs] = useState<Tab[]>([
     { id: 'upcoming', label: 'UPCOMING', isActive: false },
     { id: 'past', label: 'PAST', isActive: false },
@@ -134,17 +128,7 @@ export default function AllOrdersSection() {
     { id: 'all', label: 'ALL', isActive: true },
   ]);
   
-  const activeTab = tabs.find(tab => tab.isActive)?.id || 'overview';
   const activeServiceFilterTab = serviceFilterTabs.find(tab => tab.isActive)?.id || 'all';
-  
-  const handleTabClick = (clickedTabId: string) => {
-    const updatedTabs = tabs.map(tab => ({
-      ...tab,
-      isActive: tab.id === clickedTabId
-    }));
-    
-    setTabs(updatedTabs);
-  };
   
   const handleServiceFilterTabClick = (clickedTabId: string) => {
     const updatedTabs = serviceFilterTabs.map(tab => ({
@@ -157,17 +141,6 @@ export default function AllOrdersSection() {
   
   return (
     <div className={styles.allOrders}>
-      <div className={styles.allOrders__tabs}>
-        {tabs.map(tab => (
-          <button
-            key={tab.id}
-            className={`${styles.allOrders__tab} ${tab.isActive ? styles['allOrders__tab--active'] : ''}`}
-            onClick={() => handleTabClick(tab.id)}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
       
       <div className={styles.allOrders__serviceFilterTabs}>
         {serviceFilterTabs.map(tab => (

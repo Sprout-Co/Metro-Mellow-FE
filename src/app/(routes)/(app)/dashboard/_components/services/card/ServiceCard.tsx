@@ -52,10 +52,8 @@ export default function ServiceCard({
     const iconMap: Record<string, IconName> = {
       'Cleaning': 'House',
       'Laundry': 'Shirt',
-      'Cooking': 'CookingPot',
-      'Errand': 'PersonStanding',
+      'Food': 'CookingPot',
       'Pest Control': 'BugOff',
-      'Gardening': 'Fence',
     };
     
     return iconMap[serviceType] || icon;
