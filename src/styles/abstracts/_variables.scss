@@ -44,6 +44,8 @@ $color-error: #fb2222;
 $color-success: #059669; // Darker green for better contrast
 $color-warning: #d97706; // Darker amber/orange for better contrast
 $color-info: #2293fb;
+$color-upcoming-bg: #FFF2E7; // Light orange background for upcoming status
+$color-upcoming-text: #F2994A; // Orange text for upcoming status
 
 // Semantic Color Mapping
 $colors: (
@@ -85,6 +87,8 @@ $colors: (
     "error": $color-error,
     "warning": $color-warning,
     "info": $color-info,
+    "upcoming-bg": $color-upcoming-bg,
+    "upcoming-text": $color-upcoming-text,
   ),
 );
 

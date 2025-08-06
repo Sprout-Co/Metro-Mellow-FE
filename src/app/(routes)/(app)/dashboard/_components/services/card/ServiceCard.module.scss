@@ -66,8 +66,8 @@
     text-transform: capitalize;
     
     &--upcoming {
-      background-color: color("accent", "lighter");
-      color: color("accent", "dark");
+      background-color: color("status", "upcoming-bg");
+      color: color("status", "upcoming-text");
     }
     
     &--past {
