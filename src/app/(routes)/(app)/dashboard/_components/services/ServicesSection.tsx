@@ -18,7 +18,7 @@ const mockServices: ServiceCardProps[] = [
     additionalInfo: 'Dolor hic tibi proderit olim Lorem ipsure connectur ammet eget vivvera',
     frequency: 'One-time off',
     isAssigned: false,
-    icon: 'House'
+    icon: 'Sparkles'
   },
   {
     id: '2',
@@ -57,7 +57,7 @@ const mockServices: ServiceCardProps[] = [
     additionalInfo: 'Dolor hic tibi proderit olim Lorem ipsure connectur ammet eget vivvera',
     frequency: 'One-time off',
     isAssigned: true,
-    icon: 'House'
+    icon: 'Sparkles'
   },
   {
     id: '5',
@@ -109,7 +109,7 @@ const mockServices: ServiceCardProps[] = [
     additionalInfo: 'Dolor hic tibi proderit olim Lorem ipsure connectur ammet eget vivvera',
     frequency: 'One-time off',
     isAssigned: true,
-    icon: 'House'
+    icon: 'Sparkles'
   }
 ];
 

@@ -18,7 +18,7 @@ const mockAllOrders: ServiceCardProps[] = [
     additionalInfo: 'Deep cleaning for the entire house',
     frequency: 'One-time off',
     isAssigned: false,
-    icon: 'House'
+    icon: 'Sparkles'
   },
   {
     id: '2',
@@ -57,7 +57,7 @@ const mockAllOrders: ServiceCardProps[] = [
     additionalInfo: 'Focus on bathroom and kitchen',
     frequency: 'One-time off',
     isAssigned: true,
-    icon: 'House'
+    icon: 'Sparkles'
   },
   {
     id: '5',
@@ -109,7 +109,7 @@ const mockAllOrders: ServiceCardProps[] = [
     additionalInfo: 'Window cleaning and dusting',
     frequency: 'One-time off',
     isAssigned: true,
-    icon: 'House'
+    icon: 'Sparkles'
   }
 ];
 

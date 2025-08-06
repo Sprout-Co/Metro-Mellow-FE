@@ -50,7 +50,7 @@ export default function ServiceCard({
   const getServiceIcon = () => {
     // Map service types to icons
     const iconMap: Record<string, IconName> = {
-      'Cleaning': 'House',
+      'Cleaning': 'Sparkles',
       'Laundry': 'Shirt',
       'Food': 'CookingPot',
       'Pest Control': 'BugOff',
