@@ -3,28 +3,19 @@
 @import "@/styles/abstracts/functions";
 
 .appointments {
-  position: relative;
-
   &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: spacing("lg");
-
-    @include breakpoint-down("md") {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: spacing("md");
-    }
+    @include flex-between;
+    margin-bottom: spacing("md");
+    flex-wrap: wrap;
+    gap: spacing("md");
   }
 
   &__title {
-    font-size: map-get($font-sizes, "xl");
-    font-weight: map-get($font-weights, "semibold");
+    font-size: font-size("xl");
+    font-weight: font-weight("semibold");
     color: color("neutral", "black");
     display: flex;
     align-items: center;
-    gap: spacing("xs");
   }
 
   &__count {
@@ -33,49 +24,67 @@
     justify-content: center;
     background-color: color("primary", "base");
     color: color("neutral", "white");
+    font-size: font-size("xs");
+    width: 24px;
+    height: 24px;
     border-radius: border-radius("full");
-    font-size: map-get($font-sizes, "xs");
-    font-weight: map-get($font-weights, "semibold");
-    height: 22px;
-    min-width: 22px;
-    padding: 0 spacing("xs");
+    margin-left: spacing("xs");
   }
 
   &__filters {
     display: flex;
-    align-items: center;
     gap: spacing("xs");
-    background-color: rgba(color("neutral", "lighter"), 0.5);
-    border-radius: border-radius("md");
-    padding: spacing("xxs");
+    overflow-x: auto;
+    padding-bottom: spacing("xs");
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     @include breakpoint-down("md") {
       width: 100%;
-      justify-content: center;
+      justify-content: space-between;
     }
   }
 
   &__filterBtn {
-    border: none;
-    background: none;
-    padding: spacing("xs") spacing("md");
-    border-radius: border-radius("md");
-    font-size: map-get($font-sizes, "sm");
-    font-weight: map-get($font-weights, "medium");
+    padding: spacing("xs") spacing("sm");
+    font-size: font-size("sm");
     color: color("neutral", "dark");
-    cursor: pointer;
+    border-radius: border-radius("md");
     transition: $transition-base;
+    white-space: nowrap;
 
     &:hover {
-      background-color: rgba(color("primary", "base"), 0.05);
-      color: color("primary", "base");
+      background-color: color("neutral", "lightest");
     }
 
     &_active {
-      background-color: color("neutral", "white");
+      background-color: color-alpha("primary", "base", 0.1);
       color: color("primary", "base");
-      box-shadow: map-get($shadows, "xs");
+      font-weight: font-weight("medium");
     }
+  }
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xl");
+    color: color("neutral", "dark");
+  }
+
+  &__spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid color-alpha("primary", "light", 0.3);
+    border-top-color: color("primary", "base");
+    border-radius: border-radius("full");
+    animation: spin 1s linear infinite;
+    margin-bottom: spacing("md");
   }
 
   &__list {
@@ -87,78 +96,49 @@
   &__card {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    border: 1px solid color("neutral", "lighter");
+    box-shadow: shadow("sm");
     overflow: hidden;
-    box-shadow: map-get($shadows, "sm");
     transition: $transition-base;
 
     &:hover {
-      box-shadow: map-get($shadows, "md");
+      box-shadow: shadow("md");
     }
   }
 
   &__cardContent {
+    padding: spacing("md");
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: spacing("md") spacing("lg");
   }
 
   &__mainInfo {
     display: flex;
     align-items: center;
     flex: 1;
-    min-width: 0;
-
-    @include breakpoint-down("sm") {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: spacing("sm");
-    }
   }
 
   &__serviceIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("md");
+    background-color: color-alpha("primary", "light", 0.1);
+    color: color("primary", "base");
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
-    border-radius: border-radius("lg");
-    background-color: rgba(color("primary", "base"), 0.1);
-    color: color("primary", "base");
     margin-right: spacing("md");
     flex-shrink: 0;
-    transition: $transition-base;
-
-    svg {
-      width: 24px;
-      height: 24px;
-    }
 
     &--imminent {
-      background-color: rgba(color("status", "warning"), 0.1);
+      background-color: color-alpha("status", "warning", 0.1);
       color: color("status", "warning");
-    }
-
-    @include breakpoint-down("sm") {
-      margin-right: 0;
-      width: 40px;
-      height: 40px;
-
-      svg {
-        width: 20px;
-        height: 20px;
-      }
+      animation: pulse 2s infinite;
     }
   }
 
   &__infoContainer {
     flex: 1;
-    min-width: 0;
-
-    @include breakpoint-down("sm") {
-      width: 100%;
-    }
   }
 
   &__infoRow {
@@ -172,126 +152,99 @@
     }
 
     @include breakpoint-down("sm") {
-      flex-wrap: wrap;
-      gap: spacing("xs");
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 
   &__service {
-    font-size: map-get($font-sizes, "lg");
-    font-weight: map-get($font-weights, "semibold");
+    font-size: font-size("lg");
+    font-weight: font-weight("semibold");
     color: color("neutral", "black");
-    margin: 0;
-    @include truncate;
-    max-width: 200px;
+    margin-right: spacing("md");
 
     @include breakpoint-down("md") {
-      font-size: map-get($font-sizes, "base");
-      max-width: 150px;
-    }
-
-    @include breakpoint-down("sm") {
-      max-width: none;
+      font-size: font-size("base");
     }
   }
 
   &__status {
     display: inline-flex;
     align-items: center;
-    padding: spacing("xxs") spacing("sm");
+    padding: spacing("xxs") spacing("xs");
     border-radius: border-radius("full");
-    font-size: map-get($font-sizes, "xs");
-    font-weight: map-get($font-weights, "medium");
+    font-size: font-size("xs");
+    font-weight: font-weight("medium");
     text-transform: capitalize;
-    flex-shrink: 0;
-
-    &--confirmed {
-      background-color: rgba(color("status", "success"), 0.1);
-      color: color("status", "success");
-    }
 
     &--pending {
-      background-color: rgba(color("status", "warning"), 0.1);
-      color: color("status", "warning");
-    }
-
-    &--in_progress {
-      background-color: rgba(color("primary", "base"), 0.1);
+      background-color: color-alpha("primary", "light", 0.1);
       color: color("primary", "base");
     }
 
+    &--completed {
+      background-color: color-alpha("status", "success", 0.1);
+      color: color("status", "success");
+    }
+
     &--cancelled {
-      background-color: rgba(color("status", "error"), 0.1);
+      background-color: color-alpha("status", "error", 0.1);
       color: color("status", "error");
     }
 
-    &--completed {
-      background-color: rgba(color("neutral", "dark"), 0.1);
-      color: color("neutral", "dark");
+    &--paused {
+      background-color: color-alpha("status", "warning", 0.1);
+      color: color("status", "warning");
+    }
+
+    @include breakpoint-down("sm") {
+      margin-top: spacing("xxs");
     }
   }
 
   &__dateTime {
     display: flex;
     align-items: center;
-
-    @include breakpoint-down("xs") {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: spacing("xxs");
-    }
+    flex-wrap: wrap;
+    gap: spacing("sm");
   }
 
-  &__date,
-  &__time {
+  &__date, &__time {
     display: flex;
     align-items: center;
-    font-size: map-get($font-sizes, "sm");
+    font-size: font-size("sm");
     color: color("neutral", "dark");
-
-    &:first-child {
-      margin-right: spacing("md");
-
-      @include breakpoint-down("xs") {
-        margin-right: 0;
-      }
-    }
 
     svg {
       margin-right: spacing("xxs");
-      color: color("neutral", "darker");
       width: 14px;
       height: 14px;
     }
   }
 
   &__countdown {
-    display: inline-flex;
-    align-items: center;
-    padding: spacing("xxs") spacing("sm");
-    border-radius: border-radius("md");
-    font-size: map-get($font-sizes, "xs");
-    font-weight: map-get($font-weights, "medium");
-    background-color: rgba(color("primary", "base"), 0.1);
+    font-size: font-size("sm");
+    font-weight: font-weight("medium");
     color: color("primary", "base");
 
     &--imminent {
-      background-color: rgba(color("status", "warning"), 0.1);
       color: color("status", "warning");
+    }
+
+    &--completed {
+      color: color("status", "success");
     }
   }
 
   &__expandBtn {
+    width: 32px;
+    height: 32px;
+    border-radius: border-radius("full");
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: border-radius("md");
-    background: none;
-    border: none;
+    background-color: color("neutral", "lightest");
     color: color("neutral", "dark");
-    cursor: pointer;
     transition: $transition-base;
     flex-shrink: 0;
 
@@ -299,33 +252,32 @@
       background-color: color("neutral", "lighter");
       color: color("primary", "base");
     }
-
-    svg {
-      width: 18px;
-      height: 18px;
-    }
   }
 
   &__details {
-    padding: spacing("lg");
     border-top: 1px solid color("neutral", "lighter");
-    background-color: color("neutral", "lighter");
+    padding: spacing("md");
+    overflow: hidden;
   }
 
   &__detailsGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: spacing("xl");
-    margin-bottom: spacing("lg");
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("md");
 
-    @include breakpoint-down("sm") {
+    @include breakpoint-down("md") {
       grid-template-columns: 1fr;
-      gap: spacing("lg");
     }
   }
 
+  &__detailsColumn {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
   &__detailsSection {
-    margin-bottom: spacing("lg");
+    margin-bottom: spacing("md");
 
     &:last-child {
       margin-bottom: 0;
@@ -335,16 +287,14 @@
   &__detailsTitle {
     display: flex;
     align-items: center;
-    gap: spacing("xs");
-    font-size: map-get($font-sizes, "base");
-    font-weight: map-get($font-weights, "medium");
-    color: color("neutral", "darker");
-    margin: 0 0 spacing("sm") 0;
+    font-size: font-size("base");
+    font-weight: font-weight("medium");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xs");
 
     svg {
+      margin-right: spacing("xs");
       color: color("primary", "base");
-      width: 16px;
-      height: 16px;
     }
   }
 
@@ -354,150 +304,104 @@
   }
 
   &__providerAvatar {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: border-radius("full");
-    background-color: color("secondary", "base");
+    background-color: color("primary", "base");
     color: color("neutral", "white");
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: map-get($font-weights, "semibold");
-    font-size: map-get($font-sizes, "sm");
+    font-weight: font-weight("bold");
     margin-right: spacing("sm");
     flex-shrink: 0;
   }
 
   &__providerInfo {
-    min-width: 0;
+    display: flex;
+    flex-direction: column;
   }
 
   &__providerName {
-    display: block;
-    font-weight: map-get($font-weights, "medium");
+    font-weight: font-weight("medium");
     color: color("neutral", "black");
-    font-size: map-get($font-sizes, "base");
-    @include truncate;
+    margin-bottom: spacing("xxs");
   }
 
   &__providerRole {
-    display: block;
-    font-size: map-get($font-sizes, "xs");
+    font-size: font-size("xs");
     color: color("neutral", "dark");
   }
 
   &__unassigned {
     display: flex;
     align-items: center;
-    gap: spacing("xs");
     color: color("status", "warning");
-    font-size: map-get($font-sizes, "sm");
+    font-size: font-size("sm");
 
     svg {
-      width: 16px;
-      height: 16px;
+      margin-right: spacing("xs");
     }
   }
 
   &__address {
     font-style: normal;
-    color: color("neutral", "darker");
-    font-size: map-get($font-sizes, "sm");
-    line-height: map-get($line-heights, "relaxed");
+    font-size: font-size("sm");
+    color: color("neutral", "dark");
+    line-height: line-height("relaxed");
   }
 
   &__notes {
-    font-size: map-get($font-sizes, "sm");
-    color: color("neutral", "darker");
-    line-height: map-get($line-heights, "relaxed");
-    background-color: color("neutral", "white");
-    border-radius: border-radius("md");
-    padding: spacing("sm") spacing("md");
-    border: 1px solid color("neutral", "medium");
+    font-size: font-size("sm");
+    color: color("neutral", "dark");
+    line-height: line-height("relaxed");
   }
 
   &__actions {
     display: flex;
     flex-wrap: wrap;
     gap: spacing("sm");
-
-    @include breakpoint-down("sm") {
-      flex-direction: column;
-    }
+    margin-top: spacing("md");
+    padding-top: spacing("md");
+    border-top: 1px solid color("neutral", "lighter");
   }
 
   &__actionBtn {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: spacing("xs");
-    padding: spacing("sm") spacing("md");
+    padding: spacing("xs") spacing("sm");
     border-radius: border-radius("md");
-    font-size: map-get($font-sizes, "sm");
-    font-weight: map-get($font-weights, "medium");
-    cursor: pointer;
+    font-size: font-size("sm");
+    font-weight: font-weight("medium");
     transition: $transition-base;
-    flex: 1;
-    text-align: center;
-
-    @include breakpoint-down("sm") {
-      width: 100%;
-    }
 
     svg {
+      margin-right: spacing("xs");
       width: 16px;
       height: 16px;
     }
 
     &--reschedule {
-      background-color: rgba(color("primary", "base"), 0.1);
+      background-color: color-alpha("primary", "light", 0.1);
       color: color("primary", "base");
-      border: none;
 
       &:hover {
-        background-color: rgba(color("primary", "base"), 0.2);
+        background-color: color-alpha("primary", "light", 0.2);
       }
     }
 
     &--cancel {
-      background-color: transparent;
+      background-color: color-alpha("status", "error", 0.1);
       color: color("status", "error");
-      border: 1px solid rgba(color("status", "error"), 0.3);
 
       &:hover {
-        background-color: rgba(color("status", "error"), 0.05);
-      }
-    }
-
-    &--details {
-      background-color: color("primary", "base");
-      color: color("neutral", "white");
-      border: none;
-
-      &:hover {
-        background-color: color("primary", "dark");
-      }
-    }
-
-    &--confirm {
-      background-color: color("status", "error");
-      color: color("neutral", "white");
-      border: none;
-
-      &:hover {
-        background-color: darken(color("status", "error"), 10%);
-      }
-
-      &:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
+        background-color: color-alpha("status", "error", 0.2);
       }
     }
 
     &--primary {
       background-color: color("primary", "base");
       color: color("neutral", "white");
-      border: none;
 
       &:hover {
         background-color: color("primary", "dark");
@@ -506,194 +410,91 @@
   }
 
   &__footer {
-    margin-top: spacing("lg");
-    display: flex;
-    justify-content: center;
+    margin-top: spacing("md");
+    text-align: center;
   }
 
   &__viewAllBtn {
     display: inline-flex;
     align-items: center;
-    gap: spacing("xs");
-    background: none;
-    border: none;
-    color: color("primary", "base");
-    font-weight: map-get($font-weights, "medium");
-    font-size: map-get($font-sizes, "base");
-    cursor: pointer;
-    transition: $transition-base;
-    padding: spacing("sm") spacing("lg");
+    padding: spacing("xs") spacing("md");
     border-radius: border-radius("md");
-
-    &:hover {
-      background-color: rgba(color("primary", "base"), 0.05);
-    }
+    font-size: font-size("sm");
+    font-weight: font-weight("medium");
+    color: color("primary", "base");
+    transition: $transition-base;
 
     svg {
-      width: 16px;
-      height: 16px;
-      transition: $transition-base;
+      margin-left: spacing("xs");
+    }
+
+    &:hover {
+      background-color: color-alpha("primary", "light", 0.1);
     }
   }
 
-  // Empty state
   &__empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    @include flex-center;
+    @include flex-column;
+    padding: spacing("xl");
     text-align: center;
-    padding: spacing("3xl") spacing("xl");
-    background-color: color("neutral", "white");
-    border-radius: border-radius("lg");
-    border: 1px dashed color("neutral", "medium");
   }
 
   &__emptyIcon {
-    width: 80px;
-    height: 80px;
+    width: 64px;
+    height: 64px;
+    border-radius: border-radius("full");
+    background-color: color-alpha("neutral", "lighter", 0.5);
+    color: color("neutral", "dark");
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(color("primary", "base"), 0.1);
-    border-radius: 50%;
-    margin-bottom: spacing("xl");
+    margin-bottom: spacing("md");
 
     svg {
-      width: 40px;
-      height: 40px;
-      color: color("primary", "base");
+      width: 32px;
+      height: 32px;
     }
   }
 
   &__emptyTitle {
-    font-size: map-get($font-sizes, "2xl");
-    font-weight: map-get($font-weights, "bold");
+    font-size: font-size("xl");
+    font-weight: font-weight("medium");
     color: color("neutral", "black");
-    margin-bottom: spacing("md");
+    margin-bottom: spacing("xs");
   }
 
   &__emptyText {
     color: color("neutral", "dark");
+    margin-bottom: spacing("lg");
     max-width: 400px;
-    margin-bottom: spacing("xl");
   }
 
   &__scheduleBtn {
+    @include button-primary;
     display: inline-flex;
     align-items: center;
-    gap: spacing("xs");
-    background-color: color("primary", "base");
-    color: color("neutral", "white");
-    border: none;
-    border-radius: border-radius("md");
-    padding: spacing("md") spacing("xl");
-    font-weight: map-get($font-weights, "medium");
-    cursor: pointer;
-    transition: $transition-base;
-
-    &:hover {
-      background-color: color("primary", "dark");
-    }
 
     svg {
-      width: 16px;
-      height: 16px;
+      margin-left: spacing("xs");
     }
   }
+}
 
-  // Loading state
-  &__loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 200px;
-    color: color("neutral", "dark");
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
+}
 
-  &__spinner {
-    width: 48px;
-    height: 48px;
-    border: 4px solid rgba(color("primary", "base"), 0.1);
-    border-radius: 50%;
-    border-top-color: color("primary", "base");
-    animation: spinner 1s linear infinite;
-    margin-bottom: spacing("md");
+@keyframes pulse {
+  0% {
+    opacity: 1;
   }
-
-  @keyframes spinner {
-    to {
-      transform: rotate(360deg);
-    }
+  50% {
+    opacity: 0.7;
   }
-
-  // Error state
-  &__error {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: spacing("2xl");
-    background-color: rgba(color("status", "error"), 0.05);
-    border-radius: border-radius("lg");
-    color: color("neutral", "darker");
-  }
-
-  &__errorIcon {
-    color: color("status", "error");
-    margin-bottom: spacing("md");
-
-    svg {
-      width: 48px;
-      height: 48px;
-    }
-  }
-
-  &__retryBtn {
-    display: inline-flex;
-    align-items: center;
-    gap: spacing("xs");
-    background-color: color("status", "error");
-    color: color("neutral", "white");
-    padding: spacing("sm") spacing("lg");
-    border: none;
-    border-radius: border-radius("md");
-    margin-top: spacing("md");
-    font-weight: map-get($font-weights, "medium");
-    cursor: pointer;
-    transition: $transition-base;
-
-    &:hover {
-      background-color: darken(color("status", "error"), 10%);
-    }
-  }
-
-  &__modalContent {
-    padding: spacing("lg");
-    text-align: center;
-
-    p {
-      margin-bottom: spacing("lg");
-      color: color("neutral", "darker");
-      font-size: map-get($font-sizes, "base");
-    }
-  }
-
-  &__modalActions {
-    display: flex;
-    gap: spacing("sm");
-    justify-content: center;
-  }
-
-  &__successIcon {
-    width: 64px;
-    height: 64px;
-    margin: 0 auto spacing("lg");
-    color: color("status", "success");
-
-    svg {
-      width: 100%;
-      height: 100%;
-    }
+  100% {
+    opacity: 1;
   }
 }

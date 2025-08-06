@@ -29,13 +29,13 @@
 
     &Title {
       font-family: $font-family-heading;
-      font-size: font-size("xl");
-      font-weight: font-weight("semibold");
+      font-size: map-get($font-sizes, "xl");
+      font-weight: map-get($font-weights, "semibold");
       color: color("neutral", "black");
       margin-bottom: spacing("md");
 
       @include breakpoint-down("md") {
-        font-size: font-size("lg");
+        font-size: map-get($font-sizes, "lg");
       }
     }
   }
@@ -43,26 +43,26 @@
   &__card {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: shadow("sm");
+    box-shadow: map-get($shadows, "sm");
     padding: spacing("lg");
     height: 100%;
     transition: $transition-base;
 
     &:hover {
-      box-shadow: shadow("md");
+      box-shadow: map-get($shadows, "md");
       transform: translateY(-3px);
     }
 
     &Title {
-      font-weight: font-weight("semibold");
-      font-size: font-size("lg");
+      font-weight: map-get($font-weights, "semibold");
+      font-size: map-get($font-sizes, "lg");
       color: color("neutral", "black");
       margin-bottom: spacing("sm");
     }
 
     &Subtitle {
-      font-weight: font-weight("medium");
-      font-size: font-size("base");
+      font-weight: map-get($font-weights, "medium");
+      font-size: map-get($font-sizes, "base");
       color: color("neutral", "darker");
       margin-bottom: spacing("sm");
     }
@@ -125,20 +125,20 @@
     @include flex-column;
 
     &Value {
-      font-size: font-size("3xl");
-      font-weight: font-weight("bold");
+      font-size: map-get($font-sizes, "3xl");
+      font-weight: map-get($font-weights, "bold");
       color: color("primary", "base");
-      line-height: line-height("tight");
+      line-height: map-get($line-heights, "tight");
     }
 
     &Label {
-      font-size: font-size("sm");
+      font-size: map-get($font-sizes, "sm");
       color: color("neutral", "dark");
       margin-top: spacing("xxs");
     }
 
     &Change {
-      font-size: font-size("xs");
+      font-size: map-get($font-sizes, "xs");
       margin-top: spacing("xs");
 
       &--positive {
@@ -187,8 +187,8 @@
     align-items: center;
     padding: spacing("xxs") spacing("xs");
     border-radius: border-radius("full");
-    font-size: font-size("xs");
-    font-weight: font-weight("medium");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
 
     &--primary {
       background-color: color("primary", "light");
@@ -196,12 +196,12 @@
     }
 
     &--success {
-      background-color: color-alpha("status", "success", 0.1);
+      background-color: rgba(color("status", "success"), 0.1);
       color: color("status", "success");
     }
 
     &--warning {
-      background-color: color-alpha("status", "warning", 0.1);
+      background-color: rgba(color("status", "warning"), 0.1);
       color: color("status", "warning");
     }
 
@@ -242,8 +242,8 @@
     }
 
     &Title {
-      font-size: font-size("xl");
-      font-weight: font-weight("medium");
+      font-size: map-get($font-sizes, "xl");
+      font-weight: map-get($font-weights, "medium");
       color: color("neutral", "black");
       margin-bottom: spacing("xs");
     }

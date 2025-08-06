@@ -1,105 +1,82 @@
-//@ts-nocheck
-"use client";
-import { LucideProps } from "lucide-react";
-import dynamic from "next/dynamic";
-import { memo } from "react";
+import React from 'react';
+import { 
+  Home, Calendar, Building, CreditCard, Users, Settings, Gift, 
+  HelpCircle, Clock, Bell, Award, CheckCircle, RefreshCw, 
+  Package, Coffee, Shield, MapPin, User, Info, X, ChevronUp, 
+  ChevronDown, ArrowRight, AlertCircle, Headphones, CalendarPlus,
+  ClipboardList, Zap
+} from 'react-feather';
 
-// Import specific icons to reduce bundle size
-import {
-  Home,
-  CalendarPlus,
-  Calendar,
-  Search,
-  Bell,
-  User,
-  ChevronDown,
-  ChevronUp,
-  ChevronRight,
-  ArrowRight,
-  ArrowLeft,
-  Clock,
-  CheckCircle,
-  RefreshCw,
-  Award,
-  Activity,
-  Zap,
-  MapPin,
-  Headphones,
-  Settings,
-  PlusCircle,
-  Plus,
-  Minus,
-  X,
-  ClipboardList,
-  Square,
-  Bed,
-  Droplet,
-  Shield,
-  Coffee,
-  Package,
-  Users,
-} from "lucide-react";
-
-// Map of icon names to components
-const icons = {
-  home: Home,
-  "calendar-plus": CalendarPlus,
-  calendar: Calendar,
-  search: Search,
-  bell: Bell,
-  user: User,
-  "chevron-down": ChevronDown,
-  "chevron-up": ChevronUp,
-  "chevron-right": ChevronRight,
-  "arrow-right": ArrowRight,
-  "arrow-left": ArrowLeft,
-  clock: Clock,
-  "check-circle": CheckCircle,
-  "refresh-cw": RefreshCw,
-  award: Award,
-  activity: Activity,
-  zap: Zap,
-  "map-pin": MapPin,
-  headphones: Headphones,
-  settings: Settings,
-  "plus-circle": PlusCircle,
-  plus: Plus,
-  minus: Minus,
-  x: X,
-  "clipboard-list": ClipboardList,
-  square: Square,
-  bed: Bed,
-  droplet: Droplet,
-  shield: Shield,
-  coffee: Coffee,
-  package: Package,
-  users: Users,
-  "help-circle": dynamic(() =>
-    import("lucide-react").then((mod) => mod.HelpCircle)
-  ),
-  building: dynamic(() => import("lucide-react").then((mod) => mod.Building)),
-  "credit-card": dynamic(() =>
-    import("lucide-react").then((mod) => mod.CreditCard)
-  ),
-  gift: dynamic(() => import("lucide-react").then((mod) => mod.Gift)),
-};
-
-export type IconName = keyof typeof icons;
-
-interface IconProps extends LucideProps {
-  name: IconName | any;
+interface IconProps {
+  name: string;
   className?: string;
+  size?: number;
+  color?: string;
 }
 
-const Icon = ({ name, className = "", ...rest }: IconProps) => {
-  const IconComponent = icons[name];
+const Icon: React.FC<IconProps> = ({ name, className, size = 20, color }) => {
+  const iconProps = { size, color, className };
 
-  if (!IconComponent) {
-    console.warn(`Icon "${name}" not found`);
-    return null;
+  switch (name) {
+    case 'home':
+      return <Home {...iconProps} />;
+    case 'calendar':
+      return <Calendar {...iconProps} />;
+    case 'building':
+      return <Building {...iconProps} />;
+    case 'credit-card':
+      return <CreditCard {...iconProps} />;
+    case 'users':
+      return <Users {...iconProps} />;
+    case 'settings':
+      return <Settings {...iconProps} />;
+    case 'gift':
+      return <Gift {...iconProps} />;
+    case 'help-circle':
+      return <HelpCircle {...iconProps} />;
+    case 'clock':
+      return <Clock {...iconProps} />;
+    case 'bell':
+      return <Bell {...iconProps} />;
+    case 'award':
+      return <Award {...iconProps} />;
+    case 'check-circle':
+      return <CheckCircle {...iconProps} />;
+    case 'refresh-cw':
+      return <RefreshCw {...iconProps} />;
+    case 'package':
+      return <Package {...iconProps} />;
+    case 'coffee':
+      return <Coffee {...iconProps} />;
+    case 'shield':
+      return <Shield {...iconProps} />;
+    case 'map-pin':
+      return <MapPin {...iconProps} />;
+    case 'user':
+      return <User {...iconProps} />;
+    case 'info':
+      return <Info {...iconProps} />;
+    case 'x':
+      return <X {...iconProps} />;
+    case 'chevron-up':
+      return <ChevronUp {...iconProps} />;
+    case 'chevron-down':
+      return <ChevronDown {...iconProps} />;
+    case 'arrow-right':
+      return <ArrowRight {...iconProps} />;
+    case 'alert-circle':
+      return <AlertCircle {...iconProps} />;
+    case 'headphones':
+      return <Headphones {...iconProps} />;
+    case 'calendar-plus':
+      return <CalendarPlus {...iconProps} />;
+    case 'clipboard-list':
+      return <ClipboardList {...iconProps} />;
+    case 'zap':
+      return <Zap {...iconProps} />;
+    default:
+      return <Package {...iconProps} />;
   }
-
-  return <IconComponent className={className} {...rest} />;
 };
 
-export default memo(Icon);
+export default Icon;

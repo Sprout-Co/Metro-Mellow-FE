@@ -1,127 +1,211 @@
-"use client";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
-import Icon from "../common/Icon";
-import NotificationsMenu from "./NotificationsMenu";
-import ProfileMenu from "./ProfileMenu";
-import styles from "./DashboardHeader.module.scss";
-import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
-import { useAppSelector } from "@/lib/redux/hooks";
-import { selectUser } from "@/lib/redux";
-import Link from "next/link";
-import { Routes } from "@/constants/routes";
+'use client';
+import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import Icon from '../common/Icon';
+import styles from './DashboardHeader.module.scss';
 
 export default function DashboardHeader() {
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const { handleGetCurrentUser } = useAuthOperations();
-  const currentUser = useAppSelector(selectUser);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
-  // Fetch current user data on component mount
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        await handleGetCurrentUser();
-      } catch (error) {
-        console.error("Failed to fetch user data:", error);
-      }
-    };
-
-    fetchUserData();
-  }, [handleGetCurrentUser]);
-
-  // Get user initials for avatar
-  const getUserInitials = () => {
-    if (!currentUser?.firstName || !currentUser?.lastName) return "?";
-    return `${currentUser.firstName[0]}${currentUser.lastName[0]}`;
+  const toggleProfileMenu = () => {
+    setIsProfileMenuOpen(!isProfileMenuOpen);
+    if (isNotificationsOpen) setIsNotificationsOpen(false);
   };
 
-  // Get full name
-  const getFullName = () => {
-    if (!currentUser?.firstName || !currentUser?.lastName) return "User";
-    return `${currentUser.firstName} ${currentUser.lastName}`;
+  const toggleNotifications = () => {
+    setIsNotificationsOpen(!isNotificationsOpen);
+    if (isProfileMenuOpen) setIsProfileMenuOpen(false);
+  };
+
+  const menuVariants = {
+    hidden: { opacity: 0, y: -10, scale: 0.95 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1,
+      transition: { 
+        type: "spring", 
+        stiffness: 300, 
+        damping: 20 
+      } 
+    },
+    exit: { 
+      opacity: 0, 
+      y: -10, 
+      scale: 0.95,
+      transition: { 
+        duration: 0.2 
+      } 
+    }
   };
 
   return (
     <header className={styles.header}>
       <div className={styles.header__container}>
         <div className={styles.header__logo}>
-          {/* <Image 
-            src="/images/brand/cover.png" 
-            alt="Metromellow" 
-            width={40} 
-            height={40} 
-          /> */}
-          <span className={styles.header__logoText}>
-            <Link href={Routes.DASHBOARD}>Metromellow</Link>
-          </span>
+          <Link href="/">
+            <Image 
+              src="/images/brand/logo.jpeg" 
+              alt="Metro Mellow" 
+              width={150} 
+              height={40} 
+              className={styles.header__logoImage}
+            />
+          </Link>
         </div>
-
-        {/* <div className={styles.header__search}>
-          <Icon name="search" className={styles.header__searchIcon} />
-          <input 
-            type="text" 
-            className={styles.header__searchInput} 
-            placeholder="Search services, appointments..." 
-          />
-        </div> */}
-
+        
         <div className={styles.header__actions}>
-          <button
-            className={styles.header__actionBtn}
-            onClick={() => {
-              setShowNotifications(!showNotifications);
-              if (showProfileMenu) setShowProfileMenu(false);
-            }}
-          >
-            <div className={styles.header__notificationIndicator}></div>
-            <Icon name="bell" />
-          </button>
-
-          <div className={styles.header__user}>
-            <button
-              className={styles.header__userBtn}
-              onClick={() => {
-                setShowProfileMenu(!showProfileMenu);
-                if (showNotifications) setShowNotifications(false);
-              }}
+          <div className={styles.header__actionItem}>
+            <button 
+              className={styles.header__notificationBtn}
+              onClick={toggleNotifications}
+              aria-label="Notifications"
             >
-              <div className={styles.header__avatar}>
-                <span>{getUserInitials()}</span>
-              </div>
-              <span className={styles.header__userName}>{getFullName()}</span>
-              <Icon name="chevron-down" className={styles.header__userIcon} />
+              <Icon name="bell" />
+              <span className={styles.header__notificationBadge}>2</span>
             </button>
+            
+            <AnimatePresence>
+              {isNotificationsOpen && (
+                <motion.div 
+                  className={styles.header__notificationsPanel}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  variants={menuVariants}
+                >
+                  <div className={styles.header__notificationsHeader}>
+                    <h3>Notifications</h3>
+                    <button className={styles.header__markAllBtn}>
+                      Mark all as read
+                    </button>
+                  </div>
+                  
+                  <div className={styles.header__notificationsList}>
+                    <div className={`${styles.header__notificationItem} ${styles['header__notificationItem--unread']}`}>
+                      <div className={`${styles.header__notificationIcon} ${styles['header__notificationIcon--info']}`}>
+                        <Icon name="calendar" />
+                      </div>
+                      <div className={styles.header__notificationContent}>
+                        <p className={styles.header__notificationText}>
+                          Your cleaning service is scheduled for tomorrow at 10:00 AM.
+                        </p>
+                        <span className={styles.header__notificationTime}>2 hours ago</span>
+                      </div>
+                    </div>
+                    
+                    <div className={`${styles.header__notificationItem} ${styles['header__notificationItem--unread']}`}>
+                      <div className={`${styles.header__notificationIcon} ${styles['header__notificationIcon--success']}`}>
+                        <Icon name="check-circle" />
+                      </div>
+                      <div className={styles.header__notificationContent}>
+                        <p className={styles.header__notificationText}>
+                          Your subscription has been successfully renewed for the next month.
+                        </p>
+                        <span className={styles.header__notificationTime}>1 day ago</span>
+                      </div>
+                    </div>
+                    
+                    <div className={styles.header__notificationItem}>
+                      <div className={`${styles.header__notificationIcon} ${styles['header__notificationIcon--warning']}`}>
+                        <Icon name="alert-circle" />
+                      </div>
+                      <div className={styles.header__notificationContent}>
+                        <p className={styles.header__notificationText}>
+                          Please update your payment information before the next billing cycle.
+                        </p>
+                        <span className={styles.header__notificationTime}>3 days ago</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className={styles.header__notificationsFooter}>
+                    <Link href="/dashboard/notifications" className={styles.header__viewAllLink}>
+                      View all notifications
+                      <Icon name="arrow-right" />
+                    </Link>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+          
+          <div className={styles.header__actionItem}>
+            <button 
+              className={styles.header__profileBtn}
+              onClick={toggleProfileMenu}
+              aria-label="User profile"
+              aria-expanded={isProfileMenuOpen}
+            >
+              <div className={styles.header__profileInfo}>
+                <span className={styles.header__profileName}>Hi, John</span>
+              </div>
+              <div className={styles.header__profileAvatar}>
+                <Image 
+                  src="https://i.pravatar.cc/100?img=8" 
+                  alt="John Doe" 
+                  width={40} 
+                  height={40}
+                />
+              </div>
+            </button>
+            
+            <AnimatePresence>
+              {isProfileMenuOpen && (
+                <motion.div 
+                  className={styles.header__profileMenu}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  variants={menuVariants}
+                >
+                  <div className={styles.header__profileHeader}>
+                    <div className={styles.header__profileAvatar}>
+                      <Image 
+                        src="https://i.pravatar.cc/100?img=8" 
+                        alt="John Doe" 
+                        width={60} 
+                        height={60}
+                      />
+                    </div>
+                    <div className={styles.header__profileDetails}>
+                      <h3 className={styles.header__profileFullName}>John Doe</h3>
+                      <p className={styles.header__profileEmail}>john.doe@example.com</p>
+                    </div>
+                  </div>
+                  
+                  <div className={styles.header__menuItems}>
+                    <Link href="/dashboard/settings/profile" className={styles.header__menuItem}>
+                      <Icon name="user" className={styles.header__menuIcon} />
+                      <span>My Profile</span>
+                    </Link>
+                    
+                    <Link href="/dashboard/settings" className={styles.header__menuItem}>
+                      <Icon name="settings" className={styles.header__menuIcon} />
+                      <span>Settings</span>
+                    </Link>
+                    
+                    <Link href="/dashboard/help" className={styles.header__menuItem}>
+                      <Icon name="help-circle" className={styles.header__menuIcon} />
+                      <span>Help & Support</span>
+                    </Link>
+                  </div>
+                  
+                  <div className={styles.header__menuFooter}>
+                    <button className={styles.header__logoutBtn}>
+                      <Icon name="log-out" className={styles.header__menuIcon} />
+                      <span>Logout</span>
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
-
-      <AnimatePresence>
-        {showNotifications && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.2 }}
-            className={`${styles.header__dropdown} ${styles["header__dropdown--notifications"]}`}
-          >
-            <NotificationsMenu onClose={() => setShowNotifications(false)} />
-          </motion.div>
-        )}
-
-        {showProfileMenu && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.2 }}
-            className={`${styles.header__dropdown} ${styles["header__dropdown--profile"]}`}
-          >
-            <ProfileMenu onClose={() => setShowProfileMenu(false)} />
-          </motion.div>
-        )}
-      </AnimatePresence>
     </header>
   );
 }

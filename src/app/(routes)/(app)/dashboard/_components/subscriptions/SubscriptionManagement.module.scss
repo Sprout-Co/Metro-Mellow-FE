@@ -3,932 +3,264 @@
 @import "@/styles/abstracts/functions";
 
 .subscriptions {
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: spacing("xl") spacing("lg");
-
-  // Header
   &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include flex-between;
     margin-bottom: spacing("xl");
-
-    @include breakpoint-down("md") {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: spacing("md");
-    }
+    flex-wrap: wrap;
+    gap: spacing("md");
   }
 
   &__title {
-    font-family: $font-family-heading;
-    font-size: map-get($font-sizes, "3xl");
-    font-weight: map-get($font-weights, "bold");
+    font-size: font-size("xl");
+    font-weight: font-weight("semibold");
     color: color("neutral", "black");
-    margin-bottom: spacing("xs");
+    display: flex;
+    align-items: center;
   }
 
-  &__subtitle {
-    font-size: map-get($font-sizes, "base");
-    color: color("neutral", "dark");
-    max-width: 600px;
+  &__count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    font-size: font-size("xs");
+    width: 24px;
+    height: 24px;
+    border-radius: border-radius("full");
+    margin-left: spacing("xs");
   }
 
   &__addBtn {
-    display: flex;
+    @include button-primary;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: spacing("xs");
-    padding: spacing("sm") spacing("lg");
-    background-color: color("primary", "base");
-    color: color("neutral", "white");
-    border: none;
-    border-radius: map-get($border-radius, "md");
-    font-weight: map-get($font-weights, "medium");
-    cursor: pointer;
-    transition: $transition-fast;
-
-    &:hover {
-      background-color: color("primary", "dark");
-    }
 
     svg {
-      width: 18px;
-      height: 18px;
-    }
-
-    @include breakpoint-down("md") {
-      width: 100%;
+      margin-right: spacing("xs");
     }
   }
 
-  &__backBtn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: spacing("xs");
-    padding: spacing("sm") spacing("lg");
-    background-color: color("neutral", "lighter");
-    color: color("neutral", "darker");
-    border: none;
-    border-radius: map-get($border-radius, "md");
-    font-weight: map-get($font-weights, "medium");
-    cursor: pointer;
-    transition: $transition-fast;
-
-    &:hover {
-      background-color: color("neutral", "light");
-    }
-
-    svg {
-      width: 18px;
-      height: 18px;
-    }
-
-    @include breakpoint-down("md") {
-      width: 100%;
-    }
-  }
-
-  // Toolbar
-  &__toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: spacing("lg");
-
-    @include breakpoint-down("md") {
-      flex-direction: column;
-      gap: spacing("md");
-      align-items: stretch;
-    }
-  }
-
-  &__filters {
-    display: flex;
-    gap: spacing("sm");
-    overflow-x: auto;
-    padding-bottom: spacing("xs");
-
-    &::-webkit-scrollbar {
-      height: 2px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: color("neutral", "lighter");
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: color("primary", "light");
-    }
-
-    @include breakpoint-down("md") {
-      width: 100%;
-    }
-  }
-
-  &__filterBtn {
-    white-space: nowrap;
-    background: none;
-    border: none;
-    padding: spacing("sm") spacing("md");
-    font-size: map-get($font-sizes, "sm");
-    color: color("neutral", "dark");
-    border-radius: map-get($border-radius, "md");
-    cursor: pointer;
-    transition: $transition-base;
-
-    &:hover {
-      background-color: color("neutral", "lighter");
-      color: color("primary", "base");
-    }
-
-    &--active {
-      background-color: rgba(color("primary", "base"), 0.1);
-      color: color("primary", "base");
-      font-weight: map-get($font-weights, "medium");
-    }
-  }
-
-  &__sort {
-    display: flex;
-    align-items: center;
-    gap: spacing("sm");
-
-    @include breakpoint-down("md") {
-      width: 100%;
-    }
-  }
-
-  &__sortLabel {
-    font-size: map-get($font-sizes, "sm");
-    color: color("neutral", "dark");
-  }
-
-  &__sortSelect {
-    padding: spacing("xs") spacing("sm");
-    border: 1px solid color("neutral", "lighter");
-    border-radius: map-get($border-radius, "md");
-    font-size: map-get($font-sizes, "sm");
-    color: color("neutral", "darker");
-    background-color: color("neutral", "white");
-    cursor: pointer;
-
-    &:focus {
-      outline: none;
-      border-color: color("primary", "light");
-    }
-
-    @include breakpoint-down("md") {
-      flex-grow: 1;
-    }
-  }
-
-  // Subscription cards
   &__list {
     display: flex;
     flex-direction: column;
-    gap: spacing("md");
+    gap: spacing("lg");
   }
 
   &__card {
     background-color: color("neutral", "white");
-    border-radius: map-get($border-radius, "lg");
-    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    box-shadow: shadow("sm");
     overflow: hidden;
     transition: $transition-base;
 
     &:hover {
-      box-shadow: map-get($shadows, "sm");
+      box-shadow: shadow("md");
     }
   }
 
   &__cardHeader {
+    @include flex-between;
     padding: spacing("lg");
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-
-    @include breakpoint-down("md") {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: spacing("md");
-    }
-  }
-
-  &__serviceWrap {
-    display: flex;
-    align-items: center;
-    gap: spacing("md");
-  }
-
-  &__iconWrapper {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-
-    svg {
-      width: 24px;
-      height: 24px;
-      color: color("neutral", "white");
-    }
-
-    &--cleaning {
-      background-color: color("status", "success");
-    }
-
-    &--laundry {
-      background-color: color("status", "info");
-    }
-
-    &--cooking {
-      background-color: color("status", "warning");
-    }
-
-    &--pest_control {
-      background-color: color("secondary", "base");
-    }
-  }
-
-  &__details {
-    min-width: 0;
-  }
-
-  &__name {
-    font-weight: map-get($font-weights, "semibold");
-    color: color("neutral", "black");
-    margin-bottom: 2px;
-    @include truncate;
-  }
-
-  &__schedule {
-    font-size: map-get($font-sizes, "sm");
-    color: color("neutral", "dark");
-    @include truncate;
-  }
-
-  &__meta {
-    display: flex;
-    align-items: center;
-    gap: spacing("xl");
-
-    @include breakpoint-down("md") {
-      width: 100%;
-      justify-content: space-between;
-      gap: spacing("md");
-    }
+    border-bottom: 1px solid color("neutral", "lighter");
 
     @include breakpoint-down("sm") {
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("sm");
     }
+  }
+
+  &__cardInfo {
+    flex: 1;
+  }
+
+  &__cardTitle {
+    font-size: font-size("lg");
+    font-weight: font-weight("semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+  }
+
+  &__cardMeta {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
   }
 
   &__status {
     display: inline-flex;
     align-items: center;
-    gap: spacing("xs");
-    padding: spacing("xxs") spacing("sm");
-    border-radius: map-get($border-radius, "full");
-    font-size: map-get($font-sizes, "xs");
-    font-weight: map-get($font-weights, "medium");
-    white-space: nowrap;
-
-    &::before {
-      content: "";
-      display: block;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-    }
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("full");
+    font-size: font-size("xs");
+    font-weight: font-weight("medium");
+    text-transform: capitalize;
 
     &--active {
-      background-color: rgba(color("status", "success"), 0.1);
+      background-color: color-alpha("status", "success", 0.1);
       color: color("status", "success");
-
-      &::before {
-        background-color: color("status", "success");
-      }
     }
 
-    &--suspended {
-      background-color: rgba(color("status", "warning"), 0.1);
+    &--paused {
+      background-color: color-alpha("status", "warning", 0.1);
       color: color("status", "warning");
-
-      &::before {
-        background-color: color("status", "warning");
-      }
     }
 
     &--cancelled {
-      background-color: rgba(color("status", "error"), 0.1);
+      background-color: color-alpha("status", "error", 0.1);
       color: color("status", "error");
-
-      &::before {
-        background-color: color("status", "error");
-      }
-    }
-
-    &--expired {
-      background-color: rgba(color("neutral", "dark"), 0.1);
-      color: color("neutral", "dark");
-
-      &::before {
-        background-color: color("neutral", "dark");
-      }
     }
   }
 
-  &__next {
-    display: flex;
-    flex-direction: column;
+  &__frequency {
+    font-size: font-size("xs");
+    color: color("neutral", "dark");
+    text-transform: capitalize;
+  }
+
+  &__cardPrice {
+    text-align: right;
 
     @include breakpoint-down("sm") {
-      flex-direction: row;
-      align-items: center;
-      gap: spacing("xs");
+      text-align: left;
     }
   }
 
-  &__nextLabel {
-    font-size: map-get($font-sizes, "xs");
-    color: color("neutral", "dark");
-    margin-bottom: 2px;
-
-    @include breakpoint-down("sm") {
-      margin-bottom: 0;
-    }
-  }
-
-  &__nextDate {
-    font-weight: map-get($font-weights, "medium");
+  &__priceAmount {
+    font-size: font-size("2xl");
+    font-weight: font-weight("bold");
     color: color("neutral", "black");
-    white-space: nowrap;
   }
 
-  &__price {
-    font-weight: map-get($font-weights, "semibold");
-    font-size: map-get($font-sizes, "lg");
-    color: color("neutral", "black");
-    white-space: nowrap;
-  }
-
-  &__term {
-    font-size: map-get($font-sizes, "xs");
+  &__priceFrequency {
+    font-size: font-size("sm");
     color: color("neutral", "dark");
-    font-weight: map-get($font-weights, "regular");
   }
 
-  &__expandBtn {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background-color: color("neutral", "lighter");
-    border: none;
-    cursor: pointer;
-    transition: $transition-base;
-
-    &:hover {
-      background-color: color("primary", "light");
-      color: color("neutral", "white");
-    }
-
-    svg {
-      width: 18px;
-      height: 18px;
-    }
-  }
-
-  // Expanded card content
   &__cardContent {
-    padding: spacing("xl");
-    border-top: 1px solid color("neutral", "lighter");
-    overflow: hidden;
-  }
-
-  &__infoGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: spacing("xl");
-    margin-bottom: spacing("xl");
-  }
-
-  &__infoSection {
-    h4 {
-      display: flex;
-      align-items: center;
-      gap: spacing("xs");
-      font-size: map-get($font-sizes, "base");
-      font-weight: map-get($font-weights, "semibold");
-      color: color("neutral", "black");
-      margin-bottom: spacing("md");
-
-      svg {
-        color: color("primary", "base");
-      }
-    }
-  }
-
-  &__infoList {
-    display: flex;
-    flex-direction: column;
-    gap: spacing("xs");
-  }
-
-  &__infoItem {
-    display: flex;
-    justify-content: space-between;
-    padding: spacing("xs") 0;
-
-    &:not(:last-child) {
-      border-bottom: 1px dashed color("neutral", "lighter");
-    }
-  }
-
-  &__infoLabel {
-    color: color("neutral", "dark");
-    font-size: map-get($font-sizes, "sm");
-  }
-
-  &__infoValue {
-    font-weight: map-get($font-weights, "medium");
-    color: color("neutral", "black");
-    font-size: map-get($font-sizes, "sm");
-  }
-
-  // Services section
-  &__servicesSection {
-    margin-bottom: spacing("xl");
-
-    h4 {
-      display: flex;
-      align-items: center;
-      gap: spacing("xs");
-      font-size: map-get($font-sizes, "base");
-      font-weight: map-get($font-weights, "semibold");
-      color: color("neutral", "black");
-      margin-bottom: spacing("md");
-
-      svg {
-        color: color("primary", "base");
-      }
-    }
-  }
-
-  &__servicesList {
-    display: flex;
-    flex-direction: column;
+    padding: spacing("lg");
+    @include flex-between;
+    flex-wrap: wrap;
     gap: spacing("md");
   }
 
-  &__serviceItem {
+  &__billingInfo {
     display: flex;
     align-items: center;
-    padding: spacing("md");
-    background-color: color("neutral", "lighter");
-    border-radius: map-get($border-radius, "lg");
-  }
-
-  &__serviceIcon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: spacing("md");
-    flex-shrink: 0;
-
-    svg {
-      width: 20px;
-      height: 20px;
-      color: color("neutral", "white");
-    }
-
-    &--cleaning {
-      background-color: color("status", "success");
-    }
-
-    &--laundry {
-      background-color: color("status", "info");
-    }
-
-    &--cooking {
-      background-color: color("status", "warning");
-    }
-
-    &--pest_control {
-      background-color: color("secondary", "base");
-    }
-  }
-
-  &__serviceInfo {
-    flex: 1;
-    min-width: 0;
-  }
-
-  &__serviceName {
-    font-weight: map-get($font-weights, "medium");
-    font-size: map-get($font-sizes, "base");
-    color: color("neutral", "black");
-    margin-bottom: 2px;
-  }
-
-  &__serviceSchedule {
-    font-size: map-get($font-sizes, "xs");
     color: color("neutral", "dark");
+    font-size: font-size("sm");
   }
 
-  &__servicePrice {
-    font-weight: map-get($font-weights, "semibold");
-    color: color("neutral", "black");
-    margin-left: spacing("md");
+  &__icon {
+    margin-right: spacing("xs");
+    color: color("primary", "base");
   }
 
-  // Action buttons
   &__actions {
     display: flex;
-    gap: spacing("md");
-    border-top: 1px solid color("neutral", "lighter");
-    padding-top: spacing("lg");
-
-    @include breakpoint-down("sm") {
-      flex-direction: column;
-    }
+    gap: spacing("sm");
+    flex-wrap: wrap;
   }
 
   &__actionBtn {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: spacing("xs");
-    padding: spacing("sm") spacing("md");
-    font-size: map-get($font-sizes, "sm");
-    font-weight: map-get($font-weights, "medium");
-    border-radius: map-get($border-radius, "md");
-    background-color: color("neutral", "lighter");
-    color: color("neutral", "darker");
-    border: none;
-    cursor: pointer;
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("md");
+    font-size: font-size("sm");
+    font-weight: font-weight("medium");
     transition: $transition-base;
 
     svg {
+      margin-left: spacing("xs");
       width: 16px;
       height: 16px;
     }
 
-    &:hover {
-      background-color: color("neutral", "light");
+    &--primary {
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
+
+      &:hover {
+        background-color: color("primary", "dark");
+      }
+    }
+
+    &--secondary {
+      background-color: color-alpha("primary", "light", 0.1);
+      color: color("primary", "base");
+
+      &:hover {
+        background-color: color-alpha("primary", "light", 0.2);
+      }
     }
 
     &--danger {
-      background-color: rgba(color("status", "error"), 0.1);
+      background-color: color-alpha("status", "error", 0.1);
       color: color("status", "error");
 
       &:hover {
-        background-color: rgba(color("status", "error"), 0.2);
+        background-color: color-alpha("status", "error", 0.2);
       }
     }
-
-    &--success {
-      background-color: rgba(color("status", "success"), 0.1);
-      color: color("status", "success");
-
-      &:hover {
-        background-color: rgba(color("status", "success"), 0.2);
-      }
-    }
-
-    @include breakpoint-down("sm") {
-      width: 100%;
-    }
   }
 
-  // Empty state
-  &__empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: spacing("3xl") spacing("xl");
-    background-color: color("neutral", "white");
-    border-radius: map-get($border-radius, "lg");
-    border: 1px dashed color("neutral", "medium");
+  &__details {
+    padding: spacing("lg");
+    border-top: 1px solid color("neutral", "lighter");
+    background-color: color("neutral", "lightest");
   }
 
-  &__emptyIcon {
-    width: 80px;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(color("primary", "base"), 0.1);
-    border-radius: 50%;
-    margin-bottom: spacing("xl");
-
-    svg {
-      width: 40px;
-      height: 40px;
-      color: color("primary", "base");
-    }
-  }
-
-  &__emptyTitle {
-    font-size: map-get($font-sizes, "2xl");
-    font-weight: map-get($font-weights, "bold");
+  &__detailsTitle {
+    font-size: font-size("base");
+    font-weight: font-weight("medium");
     color: color("neutral", "black");
     margin-bottom: spacing("md");
   }
 
-  &__emptyText {
-    color: color("neutral", "dark");
-    max-width: 400px;
-    margin-bottom: spacing("xl");
-  }
-
-  &__emptyBtn {
-    display: inline-flex;
-    align-items: center;
-    gap: spacing("xs");
-    background-color: color("primary", "base");
-    color: color("neutral", "white");
-    border: none;
-    border-radius: map-get($border-radius, "md");
-    padding: spacing("md") spacing("xl");
-    font-weight: map-get($font-weights, "medium");
-    cursor: pointer;
-    transition: $transition-base;
-
-    &:hover {
-      background-color: color("primary", "dark");
-    }
-
-    svg {
-      width: 18px;
-      height: 18px;
-    }
-  }
-
-  // Loading state
-  &__loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 300px;
-  }
-
-  &__loader {
-    width: 48px;
-    height: 48px;
-    border: 3px solid rgba(color("primary", "base"), 0.1);
-    border-radius: 50%;
-    border-top-color: color("primary", "base");
-    animation: spinner 1s linear infinite;
-    margin-bottom: spacing("md");
-  }
-
-  &__loadingText {
-    color: color("neutral", "dark");
-    font-size: map-get($font-sizes, "lg");
-  }
-
-  @keyframes spinner {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  // Confirmation Dialog
-  &__overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(color("neutral", "black"), 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: z-index("modal");
-    padding: spacing("md");
-  }
-
-  &__confirmationDialog {
-    background-color: color("neutral", "white");
-    border-radius: map-get($border-radius, "lg");
-    padding: spacing("xl");
-    max-width: 500px;
-    width: 100%;
-    box-shadow: map-get($shadows, "lg");
-  }
-
-  &__confirmationTitle {
-    font-size: map-get($font-sizes, "xl");
-    font-weight: map-get($font-weights, "bold");
-    color: color("neutral", "black");
-    margin-bottom: spacing("md");
-  }
-
-  &__confirmationMessage {
-    margin-bottom: spacing("xl");
-    color: color("neutral", "dark");
-
-    p {
-      margin-bottom: spacing("md");
-    }
-  }
-
-  &__confirmationDetails {
-    background-color: color("neutral", "lighter");
-    border-radius: map-get($border-radius, "md");
-    padding: spacing("md");
-    margin-top: spacing("md");
-
-    h4 {
-      font-size: map-get($font-sizes, "sm");
-      font-weight: map-get($font-weights, "semibold");
-      margin-bottom: spacing("xs");
-      color: color("neutral", "black");
-    }
-
-    ul {
-      padding-left: spacing("lg");
-      margin: 0;
-
-      li {
-        margin-bottom: spacing("xs");
-        font-size: map-get($font-sizes, "sm");
-
-        &:last-child {
-          margin-bottom: 0;
-        }
-      }
-    }
-  }
-
-  &__confirmationActions {
-    display: flex;
-    justify-content: flex-end;
+  &__servicesList {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: spacing("md");
+    margin-bottom: spacing("lg");
 
     @include breakpoint-down("sm") {
-      flex-direction: column;
+      grid-template-columns: 1fr;
     }
   }
 
-  &__confirmationCancel {
-    padding: spacing("sm") spacing("lg");
-    background-color: color("neutral", "lighter");
-    border: none;
-    border-radius: map-get($border-radius, "md");
-    font-weight: map-get($font-weights, "medium");
-    color: color("neutral", "darker");
-    cursor: pointer;
-    transition: $transition-base;
-
-    &:hover {
-      background-color: color("neutral", "light");
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    @include breakpoint-down("sm") {
-      order: 2;
-    }
-  }
-
-  &__confirmationConfirm {
-    padding: spacing("sm") spacing("lg");
-    background-color: color("primary", "base");
-    border: none;
-    border-radius: map-get($border-radius, "md");
-    font-weight: map-get($font-weights, "medium");
-    color: color("neutral", "white");
-    cursor: pointer;
-    transition: $transition-base;
-    display: inline-flex;
+  &__serviceItem {
+    display: flex;
     align-items: center;
-    justify-content: center;
-    gap: spacing("xs");
-    min-width: 160px;
+    font-size: font-size("sm");
+    color: color("neutral", "black");
 
-    &:hover {
-      background-color: color("primary", "dark");
-    }
-
-    &:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-
-    @include breakpoint-down("sm") {
-      order: 1;
-      margin-bottom: spacing("xs");
+    &--disabled {
+      color: color("neutral", "dark");
+      text-decoration: line-through;
     }
   }
 
-  &__buttonLoader {
+  &__serviceIcon {
+    margin-right: spacing("xs");
     width: 16px;
     height: 16px;
-    border: 2px solid rgba(color("neutral", "white"), 0.3);
-    border-radius: 50%;
-    border-top-color: color("neutral", "white");
-    animation: spinner 1s linear infinite;
-  }
 
-  &__bookingsInfo {
-    margin-bottom: spacing("xl");
+    &--included {
+      color: color("status", "success");
+    }
 
-    h4 {
-      display: flex;
-      align-items: center;
-      gap: spacing("xs");
-      font-size: map-get($font-sizes, "base");
-      font-weight: map-get($font-weights, "semibold");
-      color: color("neutral", "black");
-      margin-bottom: spacing("md");
-
-      svg {
-        color: color("primary", "base");
-      }
+    &--excluded {
+      color: color("status", "error");
     }
   }
 
-  &__bookingsNote {
-    font-size: map-get($font-sizes, "sm");
-    color: color("neutral", "dark");
-    background-color: rgba(color("status", "info"), 0.1);
-    border-left: 3px solid color("status", "info");
-    padding: spacing("md");
-    border-radius: 0 map-get($border-radius, "md") map-get($border-radius, "md")
-      0;
-  }
-
-  // Error state
-  &__error {
+  &__detailsActions {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: spacing("2xl");
-    background-color: rgba(color("status", "error"), 0.05);
-    border-radius: map-get($border-radius, "lg");
-  }
-
-  &__errorIcon {
-    color: color("status", "error");
-    margin-bottom: spacing("md");
-
-    svg {
-      width: 48px;
-      height: 48px;
-    }
-  }
-
-  &__errorTitle {
-    font-size: map-get($font-sizes, "xl");
-    font-weight: map-get($font-weights, "semibold");
-    color: color("status", "error");
-    margin-bottom: spacing("md");
-  }
-
-  &__errorMessage {
-    color: color("neutral", "dark");
-    margin-bottom: spacing("xl");
-  }
-
-  &__retryButton {
-    display: inline-flex;
-    align-items: center;
-    gap: spacing("xs");
-    background-color: color("status", "error");
-    color: color("neutral", "white");
-    padding: spacing("md") spacing("xl");
-    border: none;
-    border-radius: map-get($border-radius, "md");
-    font-weight: map-get($font-weights, "medium");
-    cursor: pointer;
-    transition: $transition-base;
-
-    &:hover {
-      background-color: darken(color("status", "error"), 10%);
-    }
-
-    svg {
-      width: 18px;
-      height: 18px;
-    }
+    flex-wrap: wrap;
+    gap: spacing("sm");
+    padding-top: spacing("md");
+    border-top: 1px solid color("neutral", "lighter");
   }
 }

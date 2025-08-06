@@ -20,89 +20,58 @@
     align-items: center;
     justify-content: center;
     padding: spacing("md");
-    border-radius: border-radius("md");
-    background-color: color("neutral", "lighter");
-    border: none;
-    cursor: pointer;
-    text-align: center;
+    border-radius: border-radius("lg");
+    background-color: color("neutral", "white");
+    box-shadow: shadow("sm");
     transition: $transition-base;
+    height: 100%;
+    min-height: 120px;
 
     &:hover {
-      transform: translateY(-3px);
+      box-shadow: shadow("md");
     }
 
     &--primary {
-      color: color("primary", "base");
-      &:hover {
-        background-color: rgba(
-          map-get(map-get($colors, "primary"), "base"),
-          0.1
-        );
-      }
+      border-left: 4px solid color("primary", "base");
     }
 
     &--secondary {
-      color: color("secondary", "base");
-      &:hover {
-        background-color: rgba(
-          map-get(map-get($colors, "secondary"), "base"),
-          0.1
-        );
-      }
+      border-left: 4px solid color("secondary", "base");
     }
 
     &--info {
-      color: color("status", "info");
-      &:hover {
-        background-color: color-alpha("status", "info", 0.1);
-      }
+      border-left: 4px solid color("status", "info");
     }
 
     &--success {
-      color: color("status", "success");
-      &:hover {
-        background-color: color-alpha("status", "success", 0.1);
-      }
+      border-left: 4px solid color("status", "success");
     }
 
     &--warning {
-      color: color("status", "warning");
-      &:hover {
-        background-color: color-alpha("status", "warning", 0.1);
-      }
+      border-left: 4px solid color("status", "warning");
     }
 
     &--neutral {
-      color: color("neutral", "darker");
-      &:hover {
-        background-color: rgba(
-          map-get(map-get($colors, "neutral"), "darker"),
-          0.1
-        );
-      }
+      border-left: 4px solid color("neutral", "dark");
     }
   }
 
   &__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     width: 48px;
     height: 48px;
     border-radius: border-radius("full");
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-bottom: spacing("sm");
-    font-size: map-get($font-sizes, "xl");
 
     &--primary {
-      background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+      background-color: color-alpha("primary", "light", 0.1);
       color: color("primary", "base");
     }
 
     &--secondary {
-      background-color: rgba(
-        map-get(map-get($colors, "secondary"), "base"),
-        0.1
-      );
+      background-color: color-alpha("secondary", "light", 0.1);
       color: color("secondary", "base");
     }
 
@@ -122,98 +91,98 @@
     }
 
     &--neutral {
-      background-color: rgba(map-get(map-get($colors, "neutral"), "dark"), 0.1);
-      color: color("neutral", "darker");
+      background-color: color-alpha("neutral", "lighter", 0.5);
+      color: color("neutral", "dark");
     }
   }
 
   &__label {
-    font-size: map-get($font-sizes, "sm");
-    font-weight: map-get($font-weights, "medium");
+    font-size: font-size("base");
+    font-weight: font-weight("medium");
+    color: color("neutral", "black");
+    text-align: center;
   }
 
   &__bookService {
-    background-color: rgba(map-get(map-get($colors, "primary"), "light"), 0.1);
-    border-radius: border-radius("lg");
-    padding: spacing("md");
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("md");
+    background: linear-gradient(135deg, color("primary", "light") 0%, color("primary", "base") 100%);
+    border-radius: border-radius("lg");
+    color: color("neutral", "white");
 
-    @include breakpoint-up("sm") {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      text-align: center;
     }
   }
 
   &__bookContent {
     display: flex;
     align-items: center;
-    margin-bottom: spacing("md");
 
-    @include breakpoint-up("sm") {
-      margin-bottom: 0;
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      margin-bottom: spacing("md");
     }
   }
 
   &__bookIcon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     width: 48px;
     height: 48px;
     border-radius: border-radius("full");
-    background-color: color("primary", "base");
-    color: color("neutral", "white");
+    background-color: color-alpha("neutral", "white", 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-right: spacing("md");
-    font-size: map-get($font-sizes, "xl");
-    flex-shrink: 0;
+
+    @include breakpoint-down("md") {
+      margin-right: 0;
+      margin-bottom: spacing("sm");
+    }
   }
 
   &__bookText {
-    flex: 1;
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("md");
+    }
   }
 
   &__bookTitle {
-    font-size: map-get($font-sizes, "lg");
-    font-weight: map-get($font-weights, "semibold");
-    color: color("neutral", "black");
+    font-size: font-size("lg");
+    font-weight: font-weight("semibold");
     margin-bottom: spacing("xxs");
   }
 
   &__bookDescription {
-    font-size: map-get($font-sizes, "sm");
-    color: color("neutral", "dark");
+    font-size: font-size("sm");
+    opacity: 0.9;
   }
 
   &__bookButton {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
     padding: spacing("sm") spacing("md");
-    background-color: color("primary", "base");
-    color: color("neutral", "white");
+    background-color: color("neutral", "white");
+    color: color("primary", "base");
     border-radius: border-radius("md");
-    font-weight: map-get($font-weights, "medium");
-    border: none;
-    cursor: pointer;
+    font-weight: font-weight("medium");
     transition: $transition-base;
+    flex-shrink: 0;
 
     svg {
       margin-left: spacing("xs");
-      transition: $transition-base;
     }
 
     &:hover {
-      background-color: color("primary", "dark");
-
-      svg {
-        transform: translateX(4px);
-      }
+      background-color: color-alpha("neutral", "white", 0.9);
+      transform: translateY(-2px);
     }
 
-    @include breakpoint-up("sm") {
-      flex-shrink: 0;
+    &:active {
+      transform: translateY(0);
     }
   }
 }

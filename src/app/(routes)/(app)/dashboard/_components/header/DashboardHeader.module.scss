@@ -4,189 +4,331 @@
 
 .header {
   background-color: color("neutral", "white");
-  box-shadow: map-get($shadows, "sm");
-  padding: spacing("md") 0;
-  position: sticky;
-  top: 0;
-  z-index: z-index("sticky");
+  box-shadow: shadow("sm");
+  position: relative;
+  z-index: z-index("banner");
 
   &__container {
     @include container;
     @include flex-between;
+    padding-top: spacing("md");
+    padding-bottom: spacing("md");
+    height: 80px;
   }
 
   &__logo {
     display: flex;
     align-items: center;
 
-    &Text {
-      font-family: $font-family-heading;
-      font-weight: map-get($font-weights, "semibold");
-      font-size: map-get($font-sizes, "lg");
-      color: color("primary", "dark");
-      margin-left: spacing("xs");
-
-      @include breakpoint-down("md") {
-        display: none;
-      }
-    }
-  }
-
-  &__search {
-    position: relative;
-    width: 100%;
-    max-width: 400px;
-    margin: 0 spacing("xl");
-
-    @include breakpoint-down("lg") {
-      margin: 0 spacing("md");
-      max-width: 300px;
-    }
-
-    @include breakpoint-down("md") {
-      display: none;
-    }
-
-    &Icon {
-      position: absolute;
-      left: spacing("sm");
-      top: 50%;
-      transform: translateY(-50%);
-      color: color("neutral", "dark");
-      font-size: map-get($font-sizes, "lg");
-      pointer-events: none;
-    }
-
-    &Input {
-      width: 100%;
-      padding: spacing("sm") spacing("sm") spacing("sm") spacing("2xl");
-      border-radius: border-radius("full");
-      border: none;
-      background-color: color("neutral", "lighter");
-      color: color("neutral", "darker");
-      font-size: map-get($font-sizes, "base");
-
-      &::placeholder {
-        color: color("neutral", "dark");
-      }
-
-      &:focus {
-        outline: none;
-        box-shadow: 0 0 0 2px
-          rgba(map-get(map-get($colors, "primary"), "base"), 0.2);
-      }
+    &Image {
+      height: auto;
+      object-fit: contain;
     }
   }
 
   &__actions {
     display: flex;
     align-items: center;
+    gap: spacing("md");
   }
 
-  &__actionBtn {
+  &__actionItem {
     position: relative;
-    background: none;
-    border: none;
+  }
+
+  &__notificationBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 40px;
     height: 40px;
     border-radius: border-radius("full");
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: color("neutral", "darker");
-    font-size: map-get($font-sizes, "lg");
-    cursor: pointer;
-    transition: $transition-base;
-    margin-right: spacing("sm");
-
-    &:hover {
-      background-color: color("neutral", "lighter");
-    }
-  }
-
-  &__notificationIndicator {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 8px;
-    height: 8px;
-    border-radius: border-radius("full");
-    background-color: color("status", "error");
-  }
-
-  &__user {
-    position: relative;
-  }
-
-  &__userBtn {
-    display: flex;
-    align-items: center;
-    padding: spacing("xs") spacing("sm");
-    border-radius: border-radius("full");
-    border: none;
-    background: none;
-    cursor: pointer;
-    transition: $transition-base;
-
-    &:hover {
-      background-color: color("neutral", "lighter");
-    }
-  }
-
-  &__avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: border-radius("full");
-    background-color: color("primary", "light");
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: color("neutral", "white");
-    font-weight: map-get($font-weights, "semibold");
-    font-size: map-get($font-sizes, "sm");
-  }
-
-  &__userName {
-    margin: 0 spacing("xs");
-    font-size: map-get($font-sizes, "base");
-    color: color("neutral", "darker");
-
-    @include breakpoint-down("sm") {
-      display: none;
-    }
-  }
-
-  &__userIcon {
-    font-size: map-get($font-sizes, "sm");
+    background-color: color("neutral", "lightest");
     color: color("neutral", "dark");
+    position: relative;
+    transition: $transition-base;
 
-    @include breakpoint-down("sm") {
-      display: none;
+    &:hover {
+      background-color: color("neutral", "lighter");
+      color: color("primary", "base");
     }
   }
 
-  &__dropdown {
+  &__notificationBadge {
     position: absolute;
+    top: 0;
     right: 0;
-    top: calc(100% + #{spacing("xs")});
+    background-color: color("secondary", "base");
+    color: color("neutral", "white");
+    font-size: font-size("xxs");
+    width: 18px;
+    height: 18px;
+    border-radius: border-radius("full");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: font-weight("bold");
+    border: 2px solid color("neutral", "white");
+  }
+
+  &__notificationsPanel {
+    position: absolute;
+    top: calc(100% + spacing("sm"));
+    right: 0;
+    width: 320px;
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: map-get($shadows, "lg");
+    box-shadow: shadow("xl");
     overflow: hidden;
-    min-width: 280px;
-    z-index: z-index("dropdown");
 
-    &--notifications {
-      width: 320px;
+    @include breakpoint-down("sm") {
+      width: 280px;
+      right: -80px;
+    }
+  }
 
-      @include breakpoint-down("sm") {
-        width: 300px;
-        right: -100px;
-      }
+  &__notificationsHeader {
+    @include flex-between;
+    padding: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    h3 {
+      font-size: font-size("lg");
+      font-weight: font-weight("semibold");
+      color: color("neutral", "black");
+    }
+  }
+
+  &__markAllBtn {
+    font-size: font-size("xs");
+    color: color("primary", "base");
+    font-weight: font-weight("medium");
+    transition: $transition-base;
+
+    &:hover {
+      color: color("primary", "dark");
+      text-decoration: underline;
+    }
+  }
+
+  &__notificationsList {
+    max-height: 320px;
+    overflow-y: auto;
+  }
+
+  &__notificationItem {
+    display: flex;
+    padding: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color("neutral", "lightest");
     }
 
-    &--profile {
-      width: 240px;
+    &--unread {
+      background-color: color-alpha("primary", "lighter", 0.2);
+
+      &:hover {
+        background-color: color-alpha("primary", "lighter", 0.3);
+      }
+    }
+  }
+
+  &__notificationIcon {
+    width: 36px;
+    height: 36px;
+    border-radius: border-radius("lg");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: spacing("sm");
+    flex-shrink: 0;
+
+    &--info {
+      background-color: color-alpha("status", "info", 0.1);
+      color: color("status", "info");
+    }
+
+    &--success {
+      background-color: color-alpha("status", "success", 0.1);
+      color: color("status", "success");
+    }
+
+    &--warning {
+      background-color: color-alpha("status", "warning", 0.1);
+      color: color("status", "warning");
+    }
+
+    &--error {
+      background-color: color-alpha("status", "error", 0.1);
+      color: color("status", "error");
+    }
+  }
+
+  &__notificationContent {
+    flex: 1;
+  }
+
+  &__notificationText {
+    font-size: font-size("sm");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+    line-height: line-height("normal");
+  }
+
+  &__notificationTime {
+    font-size: font-size("xs");
+    color: color("neutral", "dark");
+  }
+
+  &__notificationsFooter {
+    padding: spacing("sm");
+    border-top: 1px solid color("neutral", "lighter");
+    text-align: center;
+  }
+
+  &__viewAllLink {
+    display: inline-flex;
+    align-items: center;
+    font-size: font-size("sm");
+    color: color("primary", "base");
+    font-weight: font-weight("medium");
+    transition: $transition-base;
+
+    svg {
+      margin-left: spacing("xs");
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      color: color("primary", "dark");
+      text-decoration: underline;
+    }
+  }
+
+  &__profileBtn {
+    display: flex;
+    align-items: center;
+    padding: spacing("xs");
+    border-radius: border-radius("lg");
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color("neutral", "lightest");
+    }
+  }
+
+  &__profileInfo {
+    margin-right: spacing("sm");
+    text-align: right;
+
+    @include breakpoint-down("sm") {
+      display: none;
+    }
+  }
+
+  &__profileName {
+    font-size: font-size("sm");
+    font-weight: font-weight("medium");
+    color: color("neutral", "black");
+  }
+
+  &__profileAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: border-radius("full");
+    overflow: hidden;
+    background-color: color("neutral", "lighter");
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__profileMenu {
+    position: absolute;
+    top: calc(100% + spacing("sm"));
+    right: 0;
+    width: 280px;
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    box-shadow: shadow("xl");
+    overflow: hidden;
+  }
+
+  &__profileHeader {
+    padding: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
+    display: flex;
+    align-items: center;
+
+    .header__profileAvatar {
+      width: 60px;
+      height: 60px;
+      margin-right: spacing("md");
+    }
+  }
+
+  &__profileDetails {
+    flex: 1;
+  }
+
+  &__profileFullName {
+    font-size: font-size("lg");
+    font-weight: font-weight("semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__profileEmail {
+    font-size: font-size("xs");
+    color: color("neutral", "dark");
+  }
+
+  &__menuItems {
+    padding: spacing("xs") 0;
+  }
+
+  &__menuItem {
+    display: flex;
+    align-items: center;
+    padding: spacing("sm") spacing("md");
+    color: color("neutral", "black");
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color("neutral", "lightest");
+      color: color("primary", "base");
+    }
+  }
+
+  &__menuIcon {
+    margin-right: spacing("sm");
+    width: 18px;
+    height: 18px;
+  }
+
+  &__menuFooter {
+    padding: spacing("sm");
+    border-top: 1px solid color("neutral", "lighter");
+  }
+
+  &__logoutBtn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: spacing("sm");
+    color: color("status", "error");
+    font-weight: font-weight("medium");
+    border-radius: border-radius("md");
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color-alpha("status", "error", 0.1);
     }
   }
 }

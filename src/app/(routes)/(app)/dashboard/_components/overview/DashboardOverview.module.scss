@@ -11,101 +11,23 @@
 
   &__title {
     font-family: $font-family-heading;
-    font-size: map-get($font-sizes, "3xl");
-    font-weight: map-get($font-weights, "bold");
+    font-size: font-size("3xl");
+    font-weight: font-weight("bold");
     color: color("neutral", "black");
     margin-bottom: spacing("xs");
 
     @include breakpoint-down("md") {
-      font-size: map-get($font-sizes, "2xl");
+      font-size: font-size("2xl");
     }
   }
 
   &__subtitle {
-    font-size: map-get($font-sizes, "lg");
+    font-size: font-size("lg");
     color: color("neutral", "dark");
 
     @include breakpoint-down("md") {
-      font-size: map-get($font-sizes, "base");
+      font-size: font-size("base");
     }
-  }
-
-  &__quickStats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: spacing("md");
-    margin-bottom: spacing("xl");
-
-    @include breakpoint-down("lg") {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    @include breakpoint-down("sm") {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  &__statCard {
-    display: flex;
-    align-items: center;
-    background-color: color("neutral", "white");
-    padding: spacing("md");
-    border-radius: border-radius("lg");
-    box-shadow: map-get($shadows, "sm");
-    transition: $transition-base;
-
-    &:hover {
-      transform: translateY(-3px);
-      box-shadow: map-get($shadows, "md");
-    }
-  }
-
-  &__statIcon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    border-radius: border-radius("lg");
-    margin-right: spacing("md");
-    font-size: map-get($font-sizes, "xl");
-
-    &--upcoming {
-      background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
-      color: color("primary", "base");
-    }
-
-    &--active {
-      background-color: color-alpha("status", "info", 0.1);
-      color: color("status", "info");
-    }
-
-    &--rewards {
-      background-color: color-alpha("status", "warning", 0.1);
-      color: color("status", "warning");
-    }
-
-    &--completed {
-      background-color: color-alpha("status", "success", 0.1);
-      color: color("status", "success");
-    }
-  }
-
-  &__statContent {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &__statValue {
-    font-size: map-get($font-sizes, "2xl");
-    font-weight: map-get($font-weights, "bold");
-    color: color("neutral", "black");
-    line-height: 1.2;
-  }
-
-  &__statLabel {
-    font-size: map-get($font-sizes, "sm");
-    color: color("neutral", "dark");
   }
 
   &__main {
@@ -127,20 +49,20 @@
   &__section {
     background-color: color("neutral", "white");
     border-radius: border-radius("lg");
-    box-shadow: map-get($shadows, "sm");
+    box-shadow: shadow("sm");
     padding: spacing("lg");
   }
 
   &__sectionTitle {
     display: flex;
     align-items: center;
-    font-size: map-get($font-sizes, "xl");
-    font-weight: map-get($font-weights, "semibold");
+    font-size: font-size("xl");
+    font-weight: font-weight("semibold");
     color: color("neutral", "black");
     margin-bottom: spacing("md");
 
     @include breakpoint-down("md") {
-      font-size: map-get($font-sizes, "lg");
+      font-size: font-size("lg");
     }
   }
 

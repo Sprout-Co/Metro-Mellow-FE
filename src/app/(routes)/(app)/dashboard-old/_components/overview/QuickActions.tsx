@@ -1,39 +1,62 @@
-'use client';
-import { motion } from 'framer-motion';
-import { useState } from 'react';
-import Icon from '../common/Icon';
-import styles from './QuickActions.module.scss';
+"use client";
+import { motion } from "framer-motion";
+import Icon from "../common/Icon";
+import { useAppDispatch } from "@/lib/redux/hooks";
+import { openModal } from "@/lib/redux";
+import BookServiceModal from "./BookServiceModal";
+import RescheduleServiceModal from "./RescheduleServiceModal";
+import styles from "./QuickActions.module.scss";
+import { useState } from "react";
 
 const quickActions = [
   {
-    id: 'book',
-    label: 'Book a Service',
-    icon: 'calendar-plus',
-    color: 'primary',
+    id: "book",
+    label: "Book Service",
+    icon: "calendar-plus",
+    color: "primary",
   },
   {
-    id: 'reschedule',
-    label: 'Reschedule',
-    icon: 'calendar',
-    color: 'secondary',
+    id: "reschedule",
+    label: "Reschedule",
+    icon: "calendar",
+    color: "secondary",
   },
   {
-    id: 'contact',
-    label: 'Contact us',
-    icon: 'headphones',
-    color: 'info',
+    id: "contact",
+    label: "Contact Support",
+    icon: "headphones",
+    color: "info",
   },
   {
-    id: 'whatsapp',
-    label: 'Chat on Whatsapp',
-    icon: 'message-circle',
-    color: 'success',
+    id: "Whatsapp",
+    label: "Talk on Whatsapp",
+    icon: "headphones",
+    color: "info",
   },
+  // {
+  //   id: 'manage',
+  //   label: 'Manage Subscriptions',
+  //   icon: 'refresh-cw',
+  //   color: 'success'
+  // },
+  // {
+  //   id: 'track',
+  //   label: 'Track Provider',
+  //   icon: 'map-pin',
+  //   color: 'warning'
+  // },
+  // {
+  //   id: 'settings',
+  //   label: 'Account Settings',
+  //   icon: 'settings',
+  //   color: 'neutral'
+  // }
 ];
 
 export default function QuickActions() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  
+  const dispatch = useAppDispatch();
+  const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
+  const [isBookServiceModalOpen, setIsBookServiceModalOpen] = useState(false);
   const itemVariants = {
     hidden: { opacity: 0, scale: 0.9 },
     visible: (i: number) => ({
@@ -42,7 +65,7 @@ export default function QuickActions() {
       transition: {
         delay: i * 0.05,
         duration: 0.3,
-        type: 'spring',
+        type: "spring",
         stiffness: 300,
         damping: 20,
       },
@@ -50,25 +73,13 @@ export default function QuickActions() {
   };
 
   const handleActionClick = (actionId: string) => {
-    console.log(`Action clicked: ${actionId}`);
-    
-    switch (actionId) {
-      case 'book':
-        setIsModalOpen(true);
-        break;
-      case 'reschedule':
-        // Handle reschedule action
-        break;
-      case 'contact':
-        // Handle contact action
-        break;
-      case 'whatsapp':
-        // Handle whatsapp action
-        window.open('https://wa.me/1234567890', '_blank');
-        break;
-      default:
-        break;
+    if (actionId === "book") {
+      dispatch(openModal({ type: "book-service" }));
+      setIsBookServiceModalOpen(true);
+    } else if (actionId === "reschedule") {
+      setIsRescheduleModalOpen(true);
     }
+    // Handle other actions here
   };
 
   return (
@@ -118,12 +129,21 @@ export default function QuickActions() {
         </div>
         <button
           className={styles.actions__bookButton}
-          onClick={() => handleActionClick('book')}
+          onClick={() => handleActionClick("book")}
         >
           Book Now
           <Icon name="arrow-right" />
         </button>
       </motion.div>
+      <BookServiceModal
+        isOpen={isBookServiceModalOpen}
+        onClose={() => setIsBookServiceModalOpen(false)}
+      />
+      <RescheduleServiceModal
+        isOpen={isRescheduleModalOpen}
+        onClose={() => setIsRescheduleModalOpen(false)}
+        bookingId={""}
+      />
     </div>
   );
 }

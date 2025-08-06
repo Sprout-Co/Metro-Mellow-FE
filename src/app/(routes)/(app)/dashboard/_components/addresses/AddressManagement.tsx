@@ -1,135 +1,142 @@
-"use client";
+'use client';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import Icon from '../common/Icon';
+import styles from './AddressManagement.module.scss';
+import EmptyState from '../overview/EmptyState';
 
-import { useState } from "react";
-import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
-
-interface Address {
-  street: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
-}
+// Mock data for addresses
+const mockAddresses = [
+  {
+    id: '1',
+    name: 'Home',
+    isPrimary: true,
+    street: '123 Main Street',
+    city: 'New York',
+    state: 'NY',
+    zipCode: '10001',
+    instructions: 'Gate code: 1234. Please ring doorbell.'
+  },
+  {
+    id: '2',
+    name: 'Office',
+    isPrimary: false,
+    street: '456 Park Avenue',
+    city: 'New York',
+    state: 'NY',
+    zipCode: '10022',
+    instructions: 'Ask for John at the front desk.'
+  }
+];
 
 export default function AddressManagement() {
-  const { handleAddAddress } = useAuthOperations();
-  const [addresses, setAddresses] = useState<Address[]>([]);
-  const [formData, setFormData] = useState<Address>({
-    street: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    country: "",
-  });
+  const [addresses] = useState(mockAddresses);
+  const [editingAddress, setEditingAddress] = useState<string | null>(null);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleEditClick = (addressId: string) => {
+    setEditingAddress(addressId);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await handleAddAddress({
-        street: formData.street,
-        city: formData.city,
-        state: formData.state,
-        zipCode: formData.zipCode,
-        country: formData.country,
-        label: "Default",
-      });
-      setAddresses((prev) => [...prev, formData]);
-      setFormData({
-        street: "",
-        city: "",
-        state: "",
-        zipCode: "",
-        country: "",
-      });
-    } catch (error) {
-      console.error("Failed to save address:", error);
-    }
+  const handleDeleteClick = (addressId: string) => {
+    console.log(`Delete address ${addressId}`);
   };
+
+  const handleSetPrimaryClick = (addressId: string) => {
+    console.log(`Set address ${addressId} as primary`);
+  };
+
+  if (!addresses || addresses.length === 0) {
+    return (
+      <EmptyState 
+        type="upcoming"
+        onAction={() => console.log('Add address clicked')}
+      />
+    );
+  }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Manage Addresses</h2>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <label htmlFor="street">Street Address</label>
-          <input
-            id="street"
-            name="street"
-            value={formData.street}
-            onChange={handleInputChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div className="space-y-2">
-          <label htmlFor="city">City</label>
-          <input
-            id="city"
-            name="city"
-            value={formData.city}
-            onChange={handleInputChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div className="space-y-2">
-          <label htmlFor="state">State</label>
-          <input
-            id="state"
-            name="state"
-            value={formData.state}
-            onChange={handleInputChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div className="space-y-2">
-          <label htmlFor="zipCode">ZIP Code</label>
-          <input
-            id="zipCode"
-            name="zipCode"
-            value={formData.zipCode}
-            onChange={handleInputChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div className="space-y-2">
-          <label htmlFor="country">Country</label>
-          <input
-            id="country"
-            name="country"
-            value={formData.country}
-            onChange={handleInputChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-        >
-          Add Address
+    <div className={styles.addresses}>
+      <header className={styles.addresses__header}>
+        <h2 className={styles.addresses__title}>
+          Your Addresses
+          <span className={styles.addresses__count}>{addresses.length}</span>
+        </h2>
+        <button className={styles.addresses__addBtn}>
+          <Icon name="plus" />
+          Add New Address
         </button>
-      </form>
+      </header>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {addresses.map((address, index) => (
-          <div key={index} className="border rounded p-4">
-            <h3 className="font-medium">{address.street}</h3>
-            <p className="text-sm text-gray-600">
-              {address.city}, {address.state} {address.zipCode}
-            </p>
-            <p className="text-sm text-gray-600">{address.country}</p>
-          </div>
+      <div className={styles.addresses__list}>
+        {addresses.map((address) => (
+          <motion.div 
+            key={address.id}
+            className={styles.addresses__card}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ 
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
+              delay: addresses.findIndex(a => a.id === address.id) * 0.1
+            }}
+          >
+            <div className={styles.addresses__cardHeader}>
+              <div className={styles.addresses__cardInfo}>
+                <h3 className={styles.addresses__cardTitle}>
+                  {address.name}
+                  {address.isPrimary && (
+                    <span className={styles.addresses__primaryBadge}>Primary</span>
+                  )}
+                </h3>
+              </div>
+            </div>
+
+            <div className={styles.addresses__cardContent}>
+              <div className={styles.addresses__addressDetails}>
+                <div className={styles.addresses__addressLine}>
+                  <Icon name="map-pin" className={styles.addresses__icon} />
+                  <span>{address.street}</span>
+                </div>
+                <div className={styles.addresses__addressLine}>
+                  <Icon name="map" className={styles.addresses__icon} />
+                  <span>{address.city}, {address.state} {address.zipCode}</span>
+                </div>
+                {address.instructions && (
+                  <div className={styles.addresses__addressLine}>
+                    <Icon name="info" className={styles.addresses__icon} />
+                    <span>{address.instructions}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className={styles.addresses__actions}>
+                <button 
+                  className={`${styles.addresses__actionBtn} ${styles['addresses__actionBtn--secondary']}`}
+                  onClick={() => handleEditClick(address.id)}
+                >
+                  <Icon name="edit-2" />
+                  Edit
+                </button>
+                {!address.isPrimary && (
+                  <button 
+                    className={`${styles.addresses__actionBtn} ${styles['addresses__actionBtn--primary']}`}
+                    onClick={() => handleSetPrimaryClick(address.id)}
+                  >
+                    <Icon name="star" />
+                    Set as Primary
+                  </button>
+                )}
+                <button 
+                  className={`${styles.addresses__actionBtn} ${styles['addresses__actionBtn--danger']}`}
+                  onClick={() => handleDeleteClick(address.id)}
+                >
+                  <Icon name="trash-2" />
+                  Delete
+                </button>
+              </div>
+            </div>
+          </motion.div>
         ))}
       </div>
     </div>

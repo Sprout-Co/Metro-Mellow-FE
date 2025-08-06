@@ -1,10 +1,15 @@
 'use client';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import styles from './Dashboard.module.scss';
 import DashboardHeader from './_components/header/DashboardHeader';
 import TabNavigation from './_components/navigation/TabNavigation';
 import DashboardOverview from './_components/overview/DashboardOverview';
+import PaymentBilling from './_components/billing/PaymentBilling';
+import ProviderInteraction from './_components/providers/ProviderInteraction';
+import AccountSettings from './_components/settings/AccountSettings';
+import RewardsLoyalty from './_components/rewards/RewardsLoyalty';
+import HelpSupport from './_components/support/HelpSupport';
+import styles from './Dashboard.module.scss';
 import SubscriptionManagement from './_components/subscriptions/SubscriptionManagement';
 import AddressManagement from './_components/addresses/AddressManagement';
 
@@ -20,6 +25,11 @@ const dashboardTabs: TabType[] = [
   { id: 'overview', label: 'Overview', icon: 'home' },
   { id: 'subscription', label: 'Subscription', icon: 'calendar' },
   { id: 'addresses', label: 'Addresses', icon: 'building' },
+  // { id: 'billing', label: 'Billing', icon: 'credit-card' },
+  // { id: 'providers', label: 'Providers', icon: 'users' },
+  // { id: 'settings', label: 'Settings', icon: 'settings' },
+  // { id: 'rewards', label: 'Rewards', icon: 'gift' },
+  // { id: 'help', label: 'Help', icon: 'help-circle' },
 ];
 
 export default function Dashboard() {
@@ -70,6 +80,11 @@ export default function Dashboard() {
               {activeTab === 'overview' && <DashboardOverview />}
               {activeTab === 'subscription' && <SubscriptionManagement />}
               {activeTab === 'addresses' && <AddressManagement />}
+              {activeTab === 'billing' && <PaymentBilling />}
+              {activeTab === 'providers' && <ProviderInteraction />}
+              {activeTab === 'settings' && <AccountSettings />}
+              {activeTab === 'rewards' && <RewardsLoyalty />}
+              {activeTab === 'help' && <HelpSupport />}
             </motion.div>
           </AnimatePresence>
         </div>

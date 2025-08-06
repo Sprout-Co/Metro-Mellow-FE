@@ -3,79 +3,72 @@
 @import "@/styles/abstracts/functions";
 
 .tabs {
-  background-color: color("neutral", "white");
-  border-radius: border-radius("lg");
-  box-shadow: map-get($shadows, "sm");
-  overflow: hidden;
-  position: sticky;
-  top: spacing("lg");
-  z-index: z-index("sticky");
+  margin-bottom: spacing("xl");
+  border-bottom: 1px solid color("neutral", "lighter");
 
   &__container {
     display: flex;
+    gap: spacing("md");
     overflow-x: auto;
-    scrollbar-width: none; // Hide scrollbar for Firefox
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 
     &::-webkit-scrollbar {
-      display: none; // Hide scrollbar for Chrome, Safari, and Opera
+      display: none;
+    }
+
+    @include breakpoint-down("md") {
+      gap: spacing("sm");
     }
   }
 
   &__tab {
     display: flex;
     align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: spacing("md") spacing("lg");
-    min-width: 6rem;
+    padding: spacing("md") spacing("md");
+    font-weight: font-weight("medium");
+    color: color("neutral", "dark");
     position: relative;
-    border: none;
-    background: none;
-    cursor: pointer;
     transition: $transition-base;
     white-space: nowrap;
-
-    @include breakpoint-up("md") {
-      flex-direction: row;
-      padding: spacing("md") spacing("xl");
-
-      .tabs__tabIcon {
-        margin-right: spacing("xs");
-        margin-bottom: 0;
-      }
-    }
+    border-radius: border-radius("md") border-radius("md") 0 0;
 
     &:hover {
-      background-color: color("neutral", "lighter");
+      color: color("primary", "base");
+      background-color: color("neutral", "lightest");
     }
 
     &--active {
       color: color("primary", "base");
-      font-weight: map-get($font-weights, "medium");
+      font-weight: font-weight("semibold");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("sm") spacing("sm");
     }
   }
 
-  &__tabIcon {
-    margin-bottom: spacing("xxs");
-    font-size: map-get($font-sizes, "lg");
-  }
+  &__icon {
+    margin-right: spacing("xs");
 
-  &__tabLabel {
-    font-size: map-get($font-sizes, "sm");
-
-    @include breakpoint-up("md") {
-      font-size: map-get($font-sizes, "base");
+    @include breakpoint-down("xs") {
+      margin-right: 0;
     }
   }
 
-  &__tabIndicator {
+  &__label {
+    @include breakpoint-down("xs") {
+      display: none;
+    }
+  }
+
+  &__indicator {
     position: absolute;
-    bottom: 0;
+    bottom: -1px;
     left: 0;
     right: 0;
     height: 3px;
     background-color: color("primary", "base");
-    border-top-left-radius: border-radius("full");
-    border-top-right-radius: border-radius("full");
+    border-radius: border-radius("sm") border-radius("sm") 0 0;
   }
 }
