@@ -31,7 +31,6 @@ const nextConfig: NextConfig = {
       "res.cloudinary.com",
       "firebasestorage.googleapis.com",
       "storage.googleapis.com",
-      "i.pravatar.cc",
     ], // Add your image domains here if needed
     minimumCacheTTL: 60,
   },

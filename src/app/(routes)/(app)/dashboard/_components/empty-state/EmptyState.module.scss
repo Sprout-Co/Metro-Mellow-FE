@@ -1,0 +1,40 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.emptyState {
+  width: 100%;
+  padding: spacing("lg");
+  border: 1px dashed color("neutral", "light");
+  border-radius: border-radius("lg");
+  background-color: color("neutral", "white");
+  
+  &__content {
+    @include flex-column-center;
+    text-align: center;
+    gap: spacing("md");
+  }
+  
+  &__imageContainer {
+    width: 213px;
+    height: 213px;
+    position: relative;
+    border: 1px solid color("primary", "lighter");
+    border-radius: border-radius("md");
+    padding: spacing("md");
+    margin-bottom: spacing("sm");
+  }
+  
+  &__image {
+    object-fit: contain;
+  }
+  
+  &__message {
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
