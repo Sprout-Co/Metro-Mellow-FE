@@ -74,7 +74,7 @@ export default function ServiceCard({
               onClick={toggleExpand}
               aria-expanded="true"
             >
-              SHOW LESS ▲
+              Show Less ▲
             </button>
           ) : (
             <button 
@@ -82,7 +82,7 @@ export default function ServiceCard({
               onClick={toggleExpand}
               aria-expanded="false"
             >
-              SHOW MORE ▼
+              Show More ▼
             </button>
           )}
         </div>
