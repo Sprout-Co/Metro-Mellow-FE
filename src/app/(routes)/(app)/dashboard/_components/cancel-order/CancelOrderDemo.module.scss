@@ -1,0 +1,69 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.cancelOrderDemo {
+  padding: spacing("lg");
+  
+  &__title {
+    @include font-secondary;
+    @include font-size("xl");
+    @include font-weight("bold");
+    margin-bottom: spacing("lg");
+    color: color("primary", "base");
+  }
+  
+  &__card {
+    width: 100%;
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+    padding: spacing("lg");
+    margin-bottom: spacing("md");
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+  
+  &__info {
+    flex: 1;
+  }
+  
+  &__serviceName {
+    @include font-secondary;
+    @include font-size("lg");
+    @include font-weight("semibold");
+    margin-bottom: spacing("xs");
+    color: color("neutral", "darkest");
+  }
+  
+  &__date {
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+  }
+  
+  &__actions {
+    width: 120px;
+    
+    @include breakpoint-down("sm") {
+      width: 100%;
+      margin-top: spacing("md");
+    }
+  }
+  
+  &__note {
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("regular");
+    color: color("neutral", "dark");
+    margin-top: spacing("md");
+    font-style: italic;
+  }
+}

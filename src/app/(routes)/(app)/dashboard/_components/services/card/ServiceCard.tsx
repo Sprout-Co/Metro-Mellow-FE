@@ -5,6 +5,7 @@ import Button from '@/components/ui/Button/Button';
 import styles from './ServiceCard.module.scss';
 import * as LucideIcons from "lucide-react";
 import { IconName } from '@/constants/services';
+import CancelOrderButton from '../../cancel-order/CancelOrderButton';
 
 export interface ServiceCardProps {
   id: string;
@@ -39,9 +40,7 @@ export default function ServiceCard({
     setExpanded(!expanded);
   };
 
-  const handleCancel = () => {
-    console.log(`Canceling service ${id}`);
-  };
+  // Cancel functionality moved to CancelOrderButton component
 
   const handleReschedule = () => {
     console.log(`Rescheduling service ${id}`);
@@ -156,14 +155,10 @@ export default function ServiceCard({
                 >
                   Reschedule
                 </Button>
-                <Button 
+                <CancelOrderButton
+                  orderId={id}
                   className={styles.serviceCard__cancelButton}
-                  onClick={handleCancel}
-                  variant="secondary"
-                  fullWidth
-                >
-                  Cancel
-                </Button>
+                />
               </div>
             )}
           </div>
