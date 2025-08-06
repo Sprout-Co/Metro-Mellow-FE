@@ -3,190 +3,106 @@
 @import "@/styles/abstracts/functions";
 
 .header {
+  width: 100%;
   background-color: color("neutral", "white");
   box-shadow: map-get($shadows, "sm");
-  padding: spacing("md") 0;
   position: sticky;
   top: 0;
-  z-index: z-index("sticky");
-
+  z-index: map-get($z-index, "sticky");
+  
   &__container {
     @include container;
     @include flex-between;
+    max-width: map-get($container-max-widths, "xl");
+    height: 70px;
   }
-
+  
   &__logo {
     display: flex;
     align-items: center;
-
-    &Text {
-      font-family: $font-family-heading;
-      font-weight: map-get($font-weights, "semibold");
-      font-size: map-get($font-sizes, "lg");
-      color: color("primary", "dark");
-      margin-left: spacing("xs");
-
-      @include breakpoint-down("md") {
-        display: none;
-      }
-    }
   }
-
-  &__search {
-    position: relative;
-    width: 100%;
-    max-width: 400px;
-    margin: 0 spacing("xl");
-
-    @include breakpoint-down("lg") {
-      margin: 0 spacing("md");
-      max-width: 300px;
-    }
-
-    @include breakpoint-down("md") {
-      display: none;
-    }
-
-    &Icon {
-      position: absolute;
-      left: spacing("sm");
-      top: 50%;
-      transform: translateY(-50%);
-      color: color("neutral", "dark");
-      font-size: map-get($font-sizes, "lg");
-      pointer-events: none;
-    }
-
-    &Input {
-      width: 100%;
-      padding: spacing("sm") spacing("sm") spacing("sm") spacing("2xl");
-      border-radius: border-radius("full");
-      border: none;
-      background-color: color("neutral", "lighter");
-      color: color("neutral", "darker");
-      font-size: map-get($font-sizes, "base");
-
-      &::placeholder {
-        color: color("neutral", "dark");
-      }
-
-      &:focus {
-        outline: none;
-        box-shadow: 0 0 0 2px
-          rgba(map-get(map-get($colors, "primary"), "base"), 0.2);
-      }
-    }
+  
+  &__logoImage {
+    height: auto;
+    object-fit: contain;
   }
-
+  
   &__actions {
     display: flex;
     align-items: center;
+    gap: spacing("md");
   }
-
-  &__actionBtn {
+  
+  &__notification {
     position: relative;
-    background: none;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: border-radius("full");
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: color("neutral", "darker");
-    font-size: map-get($font-sizes, "lg");
     cursor: pointer;
-    transition: $transition-base;
-    margin-right: spacing("sm");
-
-    &:hover {
-      background-color: color("neutral", "lighter");
-    }
   }
-
-  &__notificationIndicator {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 8px;
-    height: 8px;
-    border-radius: border-radius("full");
-    background-color: color("status", "error");
+  
+  &__notificationIcon {
+    font-size: font-size("xl");
   }
-
+  
   &__user {
     position: relative;
-  }
-
-  &__userBtn {
-    display: flex;
-    align-items: center;
-    padding: spacing("xs") spacing("sm");
-    border-radius: border-radius("full");
-    border: none;
-    background: none;
     cursor: pointer;
-    transition: $transition-base;
-
-    &:hover {
-      background-color: color("neutral", "lighter");
-    }
   }
-
-  &__avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: border-radius("full");
-    background-color: color("primary", "light");
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: color("neutral", "white");
-    font-weight: map-get($font-weights, "semibold");
-    font-size: map-get($font-sizes, "sm");
+  
+  &__userInfo {
+    @include flex-center;
+    gap: spacing("xs");
   }
-
-  &__userName {
-    margin: 0 spacing("xs");
-    font-size: map-get($font-sizes, "base");
-    color: color("neutral", "darker");
-
-    @include breakpoint-down("sm") {
-      display: none;
-    }
+  
+  &__greeting {
+    @include font-secondary;
+    @include font-size("body-2");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
   }
-
-  &__userIcon {
-    font-size: map-get($font-sizes, "sm");
+  
+  &__chevron {
+    font-size: font-size("xxs");
     color: color("neutral", "dark");
-
-    @include breakpoint-down("sm") {
-      display: none;
-    }
   }
-
+  
   &__dropdown {
     position: absolute;
+    top: 100%;
     right: 0;
-    top: calc(100% + #{spacing("xs")});
+    margin-top: spacing("xs");
     background-color: color("neutral", "white");
-    border-radius: border-radius("lg");
+    border-radius: border-radius("md");
     box-shadow: map-get($shadows, "lg");
+    min-width: 200px;
     overflow: hidden;
-    min-width: 280px;
-    z-index: z-index("dropdown");
-
-    &--notifications {
-      width: 320px;
-
-      @include breakpoint-down("sm") {
-        width: 300px;
-        right: -100px;
-      }
+  }
+  
+  &__menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  &__menuItem {
+    @include flex;
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("medium");
+    padding: spacing("sm") spacing("md");
+    color: color("neutral", "darkest");
+    cursor: pointer;
+    gap: spacing("sm");
+    
+    &:hover {
+      background-color: color("neutral", "lightest");
     }
-
-    &--profile {
-      width: 240px;
+    
+    &--logout {
+      color: color("status", "error");
+      border-top: 1px solid color("neutral", "lighter");
     }
+  }
+  
+  &__menuIcon {
+    font-size: font-size("base");
   }
 }

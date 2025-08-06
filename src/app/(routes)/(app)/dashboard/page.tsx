@@ -1,94 +1,56 @@
 'use client';
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
+import { useEffect } from 'react';
 import DashboardHeader from './_components/header/DashboardHeader';
-import TabNavigation from './_components/navigation/TabNavigation';
-import DashboardOverview from './_components/overview/DashboardOverview';
-import PaymentBilling from './_components/billing/PaymentBilling';
-import ProviderInteraction from './_components/providers/ProviderInteraction';
-import AccountSettings from './_components/settings/AccountSettings';
-import RewardsLoyalty from './_components/rewards/RewardsLoyalty';
-import HelpSupport from './_components/support/HelpSupport';
+import DashboardBanner from './_components/banner/DashboardBanner';
+import NavigationTabs from './_components/navigation/NavigationTabs';
+import ServicesSection from './_components/services/ServicesSection';
+import AllOrdersSection from './_components/all-orders/AllOrdersSection';
+import QuickActions from './_components/quick-actions/QuickActions';
+import CTAButton from './_components/cta/CTAButton';
+
 import styles from './Dashboard.module.scss';
-import SubscriptionManagement from './_components/subscriptions/SubscriptionManagement';
-import AddressManagement from './_components/addresses/AddressManagement';
-
-// Tab type definition
-type TabType = {
-  id: string;
-  label: string;
-  icon: string;
-};
-
-// Dashboard tabs configuration
-const dashboardTabs: TabType[] = [
-  { id: 'overview', label: 'Overview', icon: 'home' },
-  { id: 'subscription', label: 'Subscription', icon: 'calendar' },
-  { id: 'addresses', label: 'Addresses', icon: 'building' },
-  // { id: 'billing', label: 'Billing', icon: 'credit-card' },
-  // { id: 'providers', label: 'Providers', icon: 'users' },
-  // { id: 'settings', label: 'Settings', icon: 'settings' },
-  // { id: 'rewards', label: 'Rewards', icon: 'gift' },
-  // { id: 'help', label: 'Help', icon: 'help-circle' },
-];
 
 export default function Dashboard() {
-  const [activeTab, setActiveTab] = useState('overview');
+  // This would typically be fetched from an API
+  const hasServices = true;
 
-  // Animation variants for tab content
-  const tabContentVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { 
-        duration: 0.4, 
-        ease: 'easeOut' 
-      } 
-    },
-    exit: { 
-      opacity: 0, 
-      y: -20,
-      transition: { 
-        duration: 0.3, 
-        ease: 'easeIn' 
-      } 
-    }
-  };
+  const EmptyState = () => (
+    <div className={styles.dashboard__emptyState}>
+      <p>No services found.</p>
+    </div>
+  );
 
   return (
     <div className={styles.dashboard}>
       <DashboardHeader />
+      <DashboardBanner />
       
-      <main className={styles.dashboard__main}>
-        <TabNavigation 
-          tabs={dashboardTabs} 
-          activeTab={activeTab} 
-          onTabChange={setActiveTab} 
-        />
-        
-        <div className={styles.dashboard__content}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              variants={tabContentVariants}
-              className={styles.dashboard__tabContent}
-            >
-              {activeTab === 'overview' && <DashboardOverview />}
-              {activeTab === 'subscription' && <SubscriptionManagement />}
-              {activeTab === 'addresses' && <AddressManagement />}
-              {activeTab === 'billing' && <PaymentBilling />}
-              {activeTab === 'providers' && <ProviderInteraction />}
-              {activeTab === 'settings' && <AccountSettings />}
-              {activeTab === 'rewards' && <RewardsLoyalty />}
-              {activeTab === 'help' && <HelpSupport />}
-            </motion.div>
-          </AnimatePresence>
+      <div className={styles.dashboard__content}>
+        <div className={styles.dashboard__container}>
+          <NavigationTabs 
+            tabs={[
+              { id: 'overview', label: 'OVERVIEW', isActive: true },
+              { id: 'subscription', label: 'SUBSCRIPTION', isActive: false },
+              { id: 'address', label: 'ADDRESS', isActive: false },
+            ]} 
+          />
+          
+          <div className={styles.dashboard__main}>
+            <div className={styles.dashboard__services}>
+              {hasServices ? <AllOrdersSection /> : <EmptyState />}
+            </div>
+            
+            <div className={styles.dashboard__sidebar}>
+              <QuickActions />
+            </div>
+          </div>
+          
+          <div className={styles.dashboard__cta}>
+            <CTAButton />
+          </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
