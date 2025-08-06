@@ -119,17 +119,25 @@
   }
   
   &__toggleButton {
-    background: none;
-    border: none;
+    background: none !important;
+    border: none !important;
     @include font-secondary;
     @include font-size("xs");
     @include font-weight("semibold");
-    color: color("primary", "base");
+    color: color("primary", "base") !important;
     cursor: pointer;
-    padding: 0;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
     
     &:hover {
       text-decoration: underline;
+      background: none !important;
+      transform: none !important;
+    }
+    
+    &:active {
+      transform: none !important;
     }
   }
   
@@ -244,13 +252,14 @@
   }
   
   &__cancelButton {
-    background-color: color("neutral", "white");
-    color: color("status", "error");
+    background-color: color("status", "error") !important;
+    color: color("neutral", "white") !important;
+    border-color: color("status", "error") !important;
     
     &:hover {
-      background-color: color("status", "error");
-      color: color("neutral", "white");
-      border-color: color("status", "error");
+      background-color: color("neutral", "white") !important;
+      color: color("status", "error") !important;
+      border-color: color("status", "error") !important;
     }
   }
   

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Button from '@/components/ui/Button/Button';
 import styles from './ServiceCard.module.scss';
 
 export interface ServiceCardProps {
@@ -69,21 +70,25 @@ export default function ServiceCard({
 
         <div className={styles.serviceCard__actions}>
           {expanded ? (
-            <button 
+            <Button 
               className={styles.serviceCard__toggleButton} 
               onClick={toggleExpand}
               aria-expanded="true"
+              variant="ghost"
+              size="sm"
             >
               Show Less ▲
-            </button>
+            </Button>
           ) : (
-            <button 
+            <Button 
               className={styles.serviceCard__toggleButton} 
               onClick={toggleExpand}
               aria-expanded="false"
+              variant="ghost"
+              size="sm"
             >
               Show More ▼
-            </button>
+            </Button>
           )}
         </div>
       </div>
@@ -121,18 +126,21 @@ export default function ServiceCard({
             
             {status === 'upcoming' && (
               <div className={styles.serviceCard__buttonGroup}>
-                <button 
-                  className={styles.serviceCard__rescheduleButton} 
+                <Button 
+                  className={styles.serviceCard__rescheduleButton}
                   onClick={handleReschedule}
+                  fullWidth
                 >
                   Reschedule
-                </button>
-                <button 
-                  className={styles.serviceCard__cancelButton} 
+                </Button>
+                <Button 
+                  className={styles.serviceCard__cancelButton}
                   onClick={handleCancel}
+                  variant="secondary"
+                  fullWidth
                 >
                   Cancel
-                </button>
+                </Button>
               </div>
             )}
           </div>
