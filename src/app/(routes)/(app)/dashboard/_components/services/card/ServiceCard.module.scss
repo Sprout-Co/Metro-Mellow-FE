@@ -26,12 +26,44 @@
     border-radius: border-radius("full");
     background-color: color("accent", "lighter");
     @include flex-center;
+    
+    &--upcoming {
+      background-color: color("status", "upcoming-bg");
+    }
+    
+    &--completed {
+      background-color: color("status", "success");
+    }
+    
+    &--canceled {
+      background-color: color("status", "error");
+    }
+    
+    &--paused {
+      background-color: color("status", "warning");
+    }
   }
   
   &__serviceIcon {
     width: 24px;
     height: 24px;
     color: color("accent", "dark");
+    
+    &--upcoming {
+      color: color("status", "upcoming-text");
+    }
+    
+    &--completed {
+      color: color("neutral", "white");
+    }
+    
+    &--canceled {
+      color: color("neutral", "white");
+    }
+    
+    &--paused {
+      color: color("neutral", "white");
+    }
   }
   
   &__emoji {

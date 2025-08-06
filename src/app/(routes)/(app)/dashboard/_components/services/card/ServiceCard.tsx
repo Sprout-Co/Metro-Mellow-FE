@@ -66,9 +66,9 @@ export default function ServiceCard({
     <div className={styles.serviceCard}>
       <div className={styles.serviceCard__header}>
         <div className={styles.serviceCard__iconContainer}>
-          <div className={styles.serviceCard__icon}>
+          <div className={`${styles.serviceCard__icon} ${styles[`serviceCard__icon--${status}`]}`}>
             {IconComponent ? (
-              <IconComponent className={styles.serviceCard__serviceIcon} />
+              <IconComponent className={`${styles.serviceCard__serviceIcon} ${styles[`serviceCard__serviceIcon--${status}`]}`} />
             ) : (
               <span className={styles.serviceCard__emoji}>🧹</span>
             )}
