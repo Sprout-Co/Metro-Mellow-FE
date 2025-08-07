@@ -70,33 +70,30 @@ export default function SubscriptionCard({
           </div>
           
           <div className={styles.subscriptionCard__details}>
-            <div className={styles.subscriptionCard__titleRow}>
-              <h3 className={styles.subscriptionCard__title}>{serviceType}</h3>
-              <div className={styles.subscriptionCard__frequencies}>
-                {frequency.map((freq, index) => (
-                  <span key={index} className={styles.subscriptionCard__frequency}>• {freq}</span>
-                ))}
-              </div>
+            <h3 className={styles.subscriptionCard__title}>{serviceType}</h3>
+            <div className={styles.subscriptionCard__frequencies}>
+              {frequency.map((freq, index) => (
+                <span key={index} className={styles.subscriptionCard__frequency}>• {freq}</span>
+              ))}
             </div>
           </div>
         </div>
         
-        {/* Center section with status badge */}
-        <div className={styles.subscriptionCard__center}>
+        {/* Status badge */}
+        <div className={styles.subscriptionCard__statusContainer}>
           <span className={`${styles.subscriptionCard__badge} ${styles[`subscriptionCard__badge--${status}`]}`}>
             • {status.charAt(0).toUpperCase() + status.slice(1)}
           </span>
         </div>
         
-        {/* Right section with billing info and actions */}
-        <div className={styles.subscriptionCard__right}>
-          <div className={styles.subscriptionCard__billing}>
-            <div className={styles.subscriptionCard__nextBilling}>
-              <span className={styles.subscriptionCard__label}>Next Billing:</span>
-              <span className={styles.subscriptionCard__date}>{nextBillingDate}</span>
-            </div>
-          </div>
-          
+        {/* Billing info */}
+        <div className={styles.subscriptionCard__billingInfo}>
+          <span className={styles.subscriptionCard__label}>Next Billing:</span>
+          <span className={styles.subscriptionCard__date}>{nextBillingDate}</span>
+        </div>
+        
+        {/* Price */}
+        <div className={styles.subscriptionCard__priceContainer}>
           <div className={styles.subscriptionCard__price}>
             {formatCurrency(amount)}
             <span className={styles.subscriptionCard__frequency}>/Monthly</span>
@@ -110,6 +107,7 @@ export default function SubscriptionCard({
             onClick={handleShowMore}
             variant="ghost"
             size="sm"
+            rightIcon={<span className={styles.subscriptionCard__chevron}>▼</span>}
           >
             SHOW MORE
           </Button>

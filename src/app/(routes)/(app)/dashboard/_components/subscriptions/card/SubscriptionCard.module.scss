@@ -5,18 +5,26 @@
 .subscriptionCard {
   width: 100%;
   background-color: color("neutral", "white");
-  border-radius: border-radius("lg");
+  border-radius: border-radius("md");
   border: 1px solid color("neutral", "lighter");
-  padding: spacing("md");
+  padding: spacing("md") spacing("lg");
   margin-bottom: spacing("md");
   
   &__content {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(250px, 2fr) 120px 200px 160px 120px;
     align-items: center;
-    gap: spacing("md");
+    
+    @include breakpoint-down("lg") {
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: auto auto;
+      gap: spacing("md");
+    }
     
     @include breakpoint-down("md") {
-      flex-wrap: wrap;
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(5, auto);
+      gap: spacing("sm");
     }
   }
   
@@ -24,11 +32,6 @@
     display: flex;
     align-items: center;
     gap: spacing("md");
-    flex: 1;
-    
-    @include breakpoint-down("md") {
-      width: 100%;
-    }
   }
   
   &__iconContainer {
@@ -36,10 +39,10 @@
   }
   
   &__icon {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     border-radius: border-radius("full");
-    background-color: color("accent", "lighter");
+    background-color: color("primary", "base");
     @include flex-center;
     
     &--active {
@@ -56,8 +59,8 @@
   }
   
   &__serviceIcon {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     color: color("neutral", "white");
   }
   
@@ -65,14 +68,9 @@
     min-width: 0;
   }
   
-  &__titleRow {
-    display: flex;
-    flex-direction: column;
-  }
-  
   &__title {
     @include font-secondary;
-    @include font-size("base");
+    @include font-size("lg");
     @include font-weight("semibold");
     color: color("neutral", "black");
     margin: 0;
@@ -81,8 +79,7 @@
   
   &__frequencies {
     display: flex;
-    flex-wrap: wrap;
-    gap: spacing("sm");
+    gap: spacing("xs");
   }
   
   &__frequency {
@@ -93,9 +90,10 @@
     white-space: nowrap;
   }
   
-  &__center {
+  &__statusContainer {
+    justify-self: flex-start;
+    
     @include breakpoint-down("md") {
-      width: 100%;
       margin-top: spacing("xs");
     }
   }
@@ -104,66 +102,61 @@
     @include font-secondary;
     @include font-size("xs");
     @include font-weight("medium");
-    padding: spacing("xxs") spacing("xs");
-    border-radius: border-radius("sm");
+    padding: spacing("xs") spacing("md");
+    border-radius: border-radius("full");
     display: inline-flex;
     align-items: center;
     
     &--active {
-      background-color: color("status", "success");
-      color: color("neutral", "white");
+      background-color: rgba(color("status", "success"), 0.2);
+      color: color("status", "success");
     }
     
     &--canceled {
-      background-color: color("status", "error");
-      color: color("neutral", "white");
+      background-color: rgba(color("status", "error"), 0.2);
+      color: color("status", "error");
     }
     
     &--suspended {
-      background-color: color("status", "warning");
-      color: color("neutral", "white");
+      background-color: rgba(color("status", "warning"), 0.2);
+      color: color("status", "warning");
     }
   }
   
-  &__right {
+  &__billingInfo {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: spacing("xs");
-    margin-left: auto;
-    margin-right: spacing("md");
-    min-width: 150px;
     
     @include breakpoint-down("md") {
-      width: 100%;
-      margin-top: spacing("sm");
-      margin-right: 0;
+      margin-top: spacing("xs");
     }
-  }
-  
-  &__billing {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  &__nextBilling {
-    display: flex;
-    align-items: center;
-    gap: spacing("xs");
   }
   
   &__label {
     @include font-secondary;
-    @include font-size("xs");
+    @include font-size("sm");
     @include font-weight("medium");
     color: color("neutral", "dark");
+    margin-bottom: spacing("xxs");
   }
   
   &__date {
     @include font-secondary;
-    @include font-size("sm");
-    @include font-weight("semibold");
+    @include font-size("base");
+    @include font-weight("bold");
     color: color("neutral", "darkest");
+  }
+  
+  &__priceContainer {
+    justify-self: flex-end;
+    
+    @include breakpoint-down("lg") {
+      justify-self: flex-start;
+    }
+    
+    @include breakpoint-down("md") {
+      margin-top: spacing("xs");
+    }
   }
   
   &__price {
@@ -173,21 +166,21 @@
     color: color("neutral", "black");
     display: flex;
     align-items: center;
-    gap: spacing("xxs");
+    white-space: nowrap;
     
     .subscriptionCard__frequency {
-      @include font-size("xs");
+      @include font-size("sm");
       @include font-weight("medium");
       color: color("neutral", "dark");
+      margin-left: spacing("xxs");
     }
   }
   
   &__actions {
+    justify-self: flex-end;
+    
     @include breakpoint-down("md") {
-      width: 100%;
-      margin-top: spacing("sm");
-      display: flex;
-      justify-content: flex-end;
+      margin-top: spacing("xs");
     }
   }
   
@@ -200,9 +193,12 @@
     padding: 0 !important;
     border-radius: 0 !important;
     box-shadow: none !important;
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
     
     &:hover {
-      text-decoration: underline;
+      text-decoration: none;
       background: none !important;
       transform: none !important;
     }
@@ -210,6 +206,11 @@
     &:active {
       transform: none !important;
     }
+  }
+  
+  &__chevron {
+    font-size: spacing("xs");
+    color: color("primary", "base");
   }
   
   &__additionalInfo {
