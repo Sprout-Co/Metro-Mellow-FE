@@ -1,0 +1,60 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.duration {
+  margin-top: spacing("xl");
+  margin-bottom: spacing("xl");
+
+  &__title {
+    @include heading-5;
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("md");
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: spacing("sm");
+    margin-bottom: spacing("sm");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    min-width: 80px;
+    padding: 0 spacing("md");
+    border-radius: border-radius("full");
+    font-size: font-size("sm");
+    font-weight: font-weight("medium");
+    background-color: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: $transition-base;
+    box-shadow: shadow("sm");
+
+    &_active {
+      background-color: color("primary", "dark");
+      color: color("neutral", "white");
+      border-color: color("primary", "dark");
+      box-shadow: 0 4px 8px color-alpha("primary", "dark", 0.2);
+    }
+
+    &:hover:not(.duration__option_active) {
+      border-color: color("primary", "light");
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &__helper {
+    font-size: font-size("xs");
+    color: color("neutral", "dark");
+  }
+}

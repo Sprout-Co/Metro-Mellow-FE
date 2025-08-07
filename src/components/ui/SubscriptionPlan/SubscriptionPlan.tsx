@@ -6,21 +6,25 @@ import { BillingCycle } from '@/graphql/api';
 import FrequencySelector from './FrequencySelector/FrequencySelector';
 import QuantitySelector from './QuantitySelector/QuantitySelector';
 import ServiceSelector, { ServiceItem } from './ServiceSelector/ServiceSelector';
+import DurationSelector from './DurationSelector/DurationSelector';
 import PlanSummary from './PlanSummary/PlanSummary';
 
 export interface SubscriptionPlanProps {
   onServiceSelect?: (serviceId: string) => void;
   onFrequencyChange?: (frequency: BillingCycle) => void;
   onQuantityChange?: (quantity: number) => void;
+  onDurationChange?: (duration: number) => void;
 }
 
 const SubscriptionPlan: React.FC<SubscriptionPlanProps> = ({
   onServiceSelect,
   onFrequencyChange,
-  onQuantityChange
+  onQuantityChange,
+  onDurationChange
 }) => {
   const [activeFrequency, setActiveFrequency] = useState<BillingCycle>(BillingCycle.Monthly);
   const [quantity, setQuantity] = useState<number>(1);
+  const [duration, setDuration] = useState<number>(1);
   const [services, setServices] = useState<ServiceItem[]>([
     { id: 'cleaning', name: 'Cleaning', selected: true },
     { id: 'laundry', name: 'Laundry', selected: false },
@@ -52,6 +56,13 @@ const SubscriptionPlan: React.FC<SubscriptionPlanProps> = ({
       onServiceSelect(serviceId);
     }
   };
+
+  const handleDurationChange = (newDuration: number) => {
+    setDuration(newDuration);
+    if (onDurationChange) {
+      onDurationChange(newDuration);
+    }
+  };
   
   return (
     <div className={styles.subscription__container}>
@@ -70,6 +81,12 @@ const SubscriptionPlan: React.FC<SubscriptionPlanProps> = ({
           services={services}
           onServiceSelect={handleServiceSelect}
         />
+        
+        <DurationSelector 
+          billingCycle={activeFrequency}
+          duration={duration}
+          onDurationChange={handleDurationChange}
+        />
       </div>
       
       <div className={styles.subscription__right}>
@@ -77,6 +94,7 @@ const SubscriptionPlan: React.FC<SubscriptionPlanProps> = ({
           services={services}
           activeFrequency={activeFrequency}
           quantity={quantity}
+          duration={duration}
         />
       </div>
     </div>

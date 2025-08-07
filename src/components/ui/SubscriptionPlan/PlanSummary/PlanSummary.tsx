@@ -9,19 +9,21 @@ interface PlanSummaryProps {
   services: ServiceItem[];
   activeFrequency: BillingCycle;
   quantity: number;
+  duration: number;
 }
 
 const PlanSummary: React.FC<PlanSummaryProps> = ({ 
   services,
   activeFrequency,
-  quantity
+  quantity,
+  duration
 }) => {
   // Check if any services are selected
   const selectedServices = services.filter(service => service.selected);
   const hasSelectedServices = selectedServices.length > 0;
   
-  // Calculate total price (using a placeholder price of 15000 per service)
-  const totalPrice = quantity * selectedServices.length * 15000;
+  // Calculate total price (using a placeholder price of 0 per service as requested)
+  const totalPrice = quantity * selectedServices.length * 0;
 
   return (
     <div className={styles.summary}>
@@ -44,7 +46,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
           </ul>
           <div className={styles.summary__total}>
             <span className={styles.summary__total_label}>
-              {activeFrequency === BillingCycle.Monthly ? 'Monthly' : 'Quarterly'} Total:
+              {activeFrequency === BillingCycle.Monthly ? 'Monthly' : 'Quarterly'} Total ({duration} {duration === 1 ? 'month' : 'months'}):
             </span>
             <span className={styles.summary__total_price}>
               ₦{totalPrice.toLocaleString()}
