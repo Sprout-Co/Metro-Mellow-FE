@@ -107,9 +107,8 @@ export default function SubscriptionCard({
             onClick={handleShowMore}
             variant="ghost"
             size="sm"
-            rightIcon={<span className={styles.subscriptionCard__chevron}>▼</span>}
           >
-            SHOW MORE
+            SHOW MORE ▼
           </Button>
         </div>
       </div>

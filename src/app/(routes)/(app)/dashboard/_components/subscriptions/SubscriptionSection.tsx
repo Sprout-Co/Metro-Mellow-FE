@@ -4,8 +4,8 @@ import { useState } from 'react';
 import SectionHeader from '../common/SectionHeader';
 import FilterTabs, { FilterTab } from '../common/FilterTabs';
 import EmptyState from '../common/EmptyState';
-import SubscriptionList from './list';
-import { SubscriptionCardProps } from './card';
+import SubscriptionList from './list/SubscriptionList';
+import { SubscriptionCardProps } from './card/SubscriptionCard';
 import Button from '@/components/ui/Button/Button';
 import styles from './SubscriptionSection.module.scss';
 

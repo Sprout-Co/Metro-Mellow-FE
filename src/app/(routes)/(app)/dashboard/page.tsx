@@ -8,7 +8,7 @@ import ServicesSection from './_components/services/ServicesSection';
 import AllOrdersSection from './_components/all-orders/AllOrdersSection';
 import QuickActions from './_components/quick-actions/QuickActions';
 import CTAButton from './_components/cta/CTAButton';
-import { SubscriptionSection } from './_components/subscriptions';
+import SubscriptionSection from './_components/subscriptions/SubscriptionSection';
 import EmptyState from './_components/common/EmptyState';
 import Button from '@/components/ui/Button/Button';
 
