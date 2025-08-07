@@ -91,55 +91,63 @@ export default function SubscriptionDetails({
         </div>
       </div>
 
-      <div className={styles.details__grid}>
-        <div className={styles.details__cell}>
-          <span className={styles.details__label}>Status:</span>
-          <span className={`${styles.details__status} ${styles[`details__status--${status}`]}`}>
-            {status === 'active' ? 'Active' : status.charAt(0).toUpperCase() + status.slice(1)}
-          </span>
-        </div>
-        <div className={styles.details__cell}>
-          <span className={styles.details__label}>Next Billing:</span>
-          <span className={styles.details__value}>{nextBillingDate}</span>
-        </div>
-        {startDate && (
-          <div className={styles.details__cell}>
-            <span className={styles.details__label}>Start Date:</span>
-            <span className={styles.details__value}>{startDate}</span>
-          </div>
-        )}
-        {endDate && (
-          <div className={styles.details__cell}>
-            <span className={styles.details__label}>End Date:</span>
-            <span className={styles.details__value}>{endDate}</span>
-          </div>
-        )}
-        {typeof totalPrice === 'number' && (
-          <div className={styles.details__cell}>
-            <span className={styles.details__label}>Total Price:</span>
-            <span className={styles.details__value}>
-              {formatCurrency(totalPrice, currency)}<span className={styles.details__period}>/{billingPeriodLabel}</span>
+      {/* Four equal columns, each with two fields, matching the reference layout */}
+      <div className={styles.details__grid}
+        role="group"
+        aria-label="Subscription summary details"
+      >
+        <div className={styles.details__col}>
+          <div className={styles.details__field}>
+            <span className={styles.details__label}>Status:</span>
+            <span className={`${styles.details__status} ${styles[`details__status--${status}`]}`}>
+              {status === 'active' ? 'Active' : status.charAt(0).toUpperCase() + status.slice(1)}
             </span>
           </div>
-        )}
-        {lastBilledDate && (
-          <div className={styles.details__cell}>
+          <div className={styles.details__field}>
+            <span className={styles.details__label}>Next Billing:</span>
+            <span className={styles.details__value}>{nextBillingDate}</span>
+          </div>
+        </div>
+
+        <div className={styles.details__col}>
+          <div className={styles.details__field}>
+            <span className={styles.details__label}>Start Date:</span>
+            <span className={styles.details__value}>{startDate ?? '-'}</span>
+          </div>
+          <div className={styles.details__field}>
+            <span className={styles.details__label}>Total Price</span>
+            {typeof totalPrice === 'number' ? (
+              <span className={styles.details__value}>
+                {formatCurrency(totalPrice, currency)}
+                <span className={styles.details__period}>/{billingPeriodLabel}</span>
+              </span>
+            ) : (
+              <span className={styles.details__value}>-</span>
+            )}
+          </div>
+        </div>
+
+        <div className={styles.details__col}>
+          <div className={styles.details__field}>
+            <span className={styles.details__label}>End Date:</span>
+            <span className={styles.details__value}>{endDate ?? '-'}</span>
+          </div>
+          <div className={styles.details__field}>
             <span className={styles.details__label}>Last Billed:</span>
-            <span className={styles.details__value}>{lastBilledDate}</span>
+            <span className={styles.details__value}>{lastBilledDate ?? '-'}</span>
           </div>
-        )}
-        {typeof durationWeeks === 'number' && (
-          <div className={styles.details__cell}>
+        </div>
+
+        <div className={styles.details__col}>
+          <div className={styles.details__field}>
             <span className={styles.details__label}>Duration</span>
-            <span className={styles.details__value}>{durationWeeks} weeks</span>
+            <span className={styles.details__value}>{typeof durationWeeks === 'number' ? `${durationWeeks} weeks` : '-'}</span>
           </div>
-        )}
-        {typeof autoRenew === 'boolean' && (
-          <div className={styles.details__cell}>
+          <div className={styles.details__field}>
             <span className={styles.details__label}>Auto-renew:</span>
-            <span className={styles.details__value}>{autoRenew ? 'Yes' : 'No'}</span>
+            <span className={styles.details__value}>{typeof autoRenew === 'boolean' ? (autoRenew ? 'Yes' : 'No') : '-'}</span>
           </div>
-        )}
+        </div>
       </div>
 
       {items.length > 0 && (
@@ -147,8 +155,8 @@ export default function SubscriptionDetails({
           {items.map((item, idx) => (
             <div key={`${item.name}-${idx}`} className={styles.details__itemRow}>
               <div className={styles.details__itemLeft}>
-                <div className={styles.details__miniIcon} />
-                <div>
+                <div className={`${styles.details__miniIcon} ${styles[`details__miniIcon--variant-${(idx % 3) + 1}`]}`}></div>
+                <div className={styles.details__itemText}>
                   <div className={styles.details__itemName}>{item.name}</div>
                   <div className={styles.details__itemFreqRow}>
                     {item.frequency.map((f, i) => (
@@ -157,7 +165,10 @@ export default function SubscriptionDetails({
                   </div>
                 </div>
               </div>
-              <div className={styles.details__itemPrice}>{formatCurrency(item.price, currency)}</div>
+              <div className={styles.details__itemRight}>
+                <div className={styles.details__itemPriceLabel}>Price</div>
+                <div className={styles.details__itemPrice}>{formatCurrency(item.price, currency)}</div>
+              </div>
             </div>
           ))}
         </div>

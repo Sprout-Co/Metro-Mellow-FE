@@ -72,13 +72,20 @@
   &__grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: spacing("lg");
+    column-gap: spacing("2xl");
+    row-gap: spacing("xl");
+    padding-bottom: spacing("lg");
+    border-bottom: 1px solid color("neutral", "lighter");
 
-    @include breakpoint-down("lg") { grid-template-columns: repeat(2, 1fr); }
+    @include breakpoint-down("lg") {
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: spacing("xl");
+    }
     @include breakpoint-down("md") { grid-template-columns: 1fr; }
   }
 
-  &__cell { display: flex; flex-direction: column; }
+  &__col { display: flex; flex-direction: column; gap: spacing("xl"); }
+  &__field { display: flex; flex-direction: column; }
 
   &__label {
     @include font-secondary;
@@ -118,31 +125,52 @@
 
   &__itemRow {
     @include flex-between;
-    padding: spacing("md") 0;
-    border-top: 1px solid color("neutral", "lighter");
-
-    &:first-child { border-top: none; padding-top: 0; }
+    align-items: center;
+    padding: spacing("lg") spacing("md");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    background-color: color("neutral", "white");
+    box-shadow: map-get($shadows, "sm");
+    margin-bottom: spacing("md");
   }
 
   &__itemLeft { @include flex($align: center); gap: spacing("md"); }
-  &__miniIcon { width: 40px; height: 40px; border-radius: border-radius("full"); background: color("accent", "base"); }
+  &__miniIcon { width: 48px; height: 48px; border-radius: border-radius("full"); background: color("primary", "base"); }
+  &__miniIcon--variant-1 { background: color("primary", "base"); }
+  &__miniIcon--variant-2 { background: color("status", "warning"); }
+  &__miniIcon--variant-3 { background: color("status", "error"); }
+  &__itemText { display: flex; flex-direction: column; }
   &__itemName { @include font-secondary; @include font-weight("semibold"); color: color("neutral", "black"); }
   &__itemFreqRow { @include flex($align: center); gap: spacing("xs"); margin-top: spacing("xxs"); }
   &__itemFreq { @include font-secondary; @include font-size("sm"); color: color("neutral", "dark"); }
+  &__itemRight { text-align: right; }
+  &__itemPriceLabel { @include font-secondary; @include font-size("sm"); color: color("neutral", "dark"); margin-bottom: spacing("xxs"); }
   &__itemPrice { @include font-secondary; @include font-weight("bold"); color: color("neutral", "black"); }
 
   &__actions {
     @include flex-between;
-    gap: spacing("md");
-    margin-top: spacing("xl");
+    gap: spacing("xl");
+    margin-top: spacing("2xl");
 
     @include breakpoint-down("sm") {
       flex-direction: column-reverse;
+      gap: spacing("md");
     }
   }
 
-  &__cancel { @include button-primary(); min-width: 240px; }
-  &__pause { @include button-secondary(); min-width: 240px; }
+  &__cancel {
+    @include button-base("xl");
+    background-color: color("secondary", "base");
+    border-color: color("secondary", "base");
+    color: color("neutral", "white");
+    min-width: 320px;
+
+    &:hover { background-color: color-darken("secondary", "base", 5%); border-color: color-darken("secondary", "base", 5%); }
+  }
+  &__pause {
+    @include button-secondary("xl");
+    min-width: 320px;
+  }
 }
 
 
