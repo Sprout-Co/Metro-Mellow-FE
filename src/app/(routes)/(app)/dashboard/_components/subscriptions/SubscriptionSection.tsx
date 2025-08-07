@@ -134,10 +134,22 @@ export default function SubscriptionSection() {
   
   return (
     <section className={styles.subscription}>
-      <SectionHeader 
-        title="Subscription" 
-        subtitle="Here are a list of your subscription plans:"
-      />
+      <div className={styles.subscription__header}>
+        <div className={styles.subscription__headerContent}>
+          <div className={styles.subscription__titleSection}>
+            <h2 className={styles.subscription__title}>Subscription</h2>
+            <p className={styles.subscription__subtitle}>Here are a list of your subscription plans:</p>
+          </div>
+          <Button 
+            variant="primary"
+            size="lg"
+            onClick={() => console.log('New subscription')}
+            className={styles.subscription__newButton}
+          >
+            NEW SUBSCRIPTION
+          </Button>
+        </div>
+      </div>
       
       <div className={styles.subscription__headerRow}>
         <FilterTabs 
@@ -177,16 +189,6 @@ export default function SubscriptionSection() {
           className={styles.subscription__emptyState}
         />
       )}
-      
-      <div className={styles.subscription__actionContainer}>
-        <Button 
-          variant="primary"
-          size="lg"
-          onClick={() => console.log('New subscription')}
-        >
-          NEW SUBSCRIPTION
-        </Button>
-      </div>
     </section>
   );
 }
