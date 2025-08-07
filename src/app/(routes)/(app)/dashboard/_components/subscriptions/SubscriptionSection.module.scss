@@ -28,13 +28,17 @@
   }
 
   &__title {
-    @include heading-3;
+    // Match SectionHeader title style
+    @include font-size("title");
+    @include font-weight("bold");
+    font-family: $font-family-heading;
     color: color("neutral", "black");
-    margin: 0 0 spacing("xs") 0;
+    margin: 0 0 spacing("sm") 0;
   }
 
   &__subtitle {
-    @include body-2;
+    // Match SectionHeader subtitle style
+    @include body-1;
     color: color("neutral", "dark");
     margin: 0;
   }
@@ -116,7 +120,8 @@
   }
 
   &__emptyState {
-    // Custom styles for subscription empty state if needed
+    // Reserved for subscription empty state styles
+    margin-top: spacing("xl");
   }
   
   &__actionContainer {
