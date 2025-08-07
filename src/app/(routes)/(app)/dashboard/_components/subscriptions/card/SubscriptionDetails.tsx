@@ -155,7 +155,15 @@ export default function SubscriptionDetails({
           {items.map((item, idx) => (
             <div key={`${item.name}-${idx}`} className={styles.details__itemRow}>
               <div className={styles.details__itemLeft}>
-                <div className={`${styles.details__miniIcon} ${styles[`details__miniIcon--variant-${(idx % 3) + 1}`]}`}></div>
+                {(() => {
+                  const itemIconName = getIconByService(item.name, icon);
+                  const ItemIcon = (LucideIcons[itemIconName] as React.ElementType) || undefined;
+                  return (
+                    <div className={`${styles.details__miniIcon} ${styles[`details__miniIcon--variant-${(idx % 3) + 1}`]}`}>
+                      {ItemIcon ? <ItemIcon className={styles.details__miniIconIcon} /> : null}
+                    </div>
+                  );
+                })()}
                 <div className={styles.details__itemText}>
                   <div className={styles.details__itemName}>{item.name}</div>
                   <div className={styles.details__itemFreqRow}>

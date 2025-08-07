@@ -135,7 +135,20 @@
   }
 
   &__itemLeft { @include flex($align: center); gap: spacing("md"); }
-  &__miniIcon { width: 48px; height: 48px; border-radius: border-radius("full"); background: color("primary", "base"); }
+  &__miniIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("full");
+    background: color("primary", "base");
+    @include flex-center;
+    flex-shrink: 0;
+  }
+  &__miniIconIcon {
+    width: 24px;
+    height: 24px;
+    color: color("neutral", "white");
+    display: block;
+  }
   &__miniIcon--variant-1 { background: color("primary", "base"); }
   &__miniIcon--variant-2 { background: color("status", "warning"); }
   &__miniIcon--variant-3 { background: color("status", "error"); }
