@@ -133,4 +133,24 @@
       justify-content: center;
     }
   }
+
+  &__form {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    box-shadow: shadow("md");
+    overflow: hidden;
+  }
+
+  &__backButton {
+    color: color("primary", "base") !important;
+    font-weight: font-weight("medium") !important;
+    
+    &:hover {
+      background-color: color-alpha("primary", "lighter", 0.1) !important;
+    }
+  }
+
+  &__formContent {
+    padding: spacing("xl");
+  }
 }

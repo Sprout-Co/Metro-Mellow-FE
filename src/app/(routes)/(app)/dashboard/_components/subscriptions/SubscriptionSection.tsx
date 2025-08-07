@@ -7,6 +7,7 @@ import EmptyState from '../common/EmptyState';
 import SubscriptionList from './list/SubscriptionList';
 import { SubscriptionCardProps } from './card/SubscriptionCard';
 import Button from '@/components/ui/Button/Button';
+import SubscriptionPlan from '@/components/ui/SubscriptionPlan/SubscriptionPlan';
 import styles from './SubscriptionSection.module.scss';
 
 // Sort option type
@@ -16,6 +17,9 @@ interface SortOption {
 }
 
 export default function SubscriptionSection() {
+  // State for showing subscription plan form
+  const [showSubscriptionForm, setShowSubscriptionForm] = useState(false);
+  
   // Initial filter tabs
   const [filterTabs] = useState<FilterTab[]>([
     { id: 'all', label: 'ALL', isActive: true },
@@ -131,63 +135,100 @@ export default function SubscriptionSection() {
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedSort(e.target.value);
   };
+
+  // Handle new subscription button click
+  const handleNewSubscription = () => {
+    setShowSubscriptionForm(true);
+  };
+
+  // Handle close subscription form
+  const handleCloseSubscriptionForm = () => {
+    setShowSubscriptionForm(false);
+  };
   
   return (
     <section className={styles.subscription}>
       <div className={styles.subscription__header}>
         <div className={styles.subscription__headerContent}>
           <div className={styles.subscription__titleSection}>
-            <h2 className={styles.subscription__title}>Subscription</h2>
-            <p className={styles.subscription__subtitle}>Here are a list of your subscription plans:</p>
+            <h2 className={styles.subscription__title}>
+              {showSubscriptionForm ? 'Create a Subscription Plan' : 'Subscription'}
+            </h2>
+            <p className={styles.subscription__subtitle}>
+              {showSubscriptionForm ? 'Here are a list of your subscription plans:' : 'Here are a list of your subscription plans:'}
+            </p>
           </div>
-          <Button 
-            variant="primary"
-            size="lg"
-            onClick={() => console.log('New subscription')}
-            className={styles.subscription__newButton}
-          >
-            NEW SUBSCRIPTION
-          </Button>
-        </div>
-      </div>
-      
-      <div className={styles.subscription__headerRow}>
-        <FilterTabs 
-          tabs={filterTabs} 
-          onTabChange={handleTabChange}
-          className={styles.subscription__filterTabs}
-        />
-        
-        <div className={styles.subscription__sortContainer}>
-          <div className={styles.subscription__sortBy}>
-            <span className={styles.subscription__sortByLabel}>Sort by:</span>
-            <select 
-              className={styles.subscription__sortBySelect}
-              value={selectedSort}
-              onChange={handleSortChange}
+          {showSubscriptionForm ? (
+            <Button 
+              variant="ghost"
+              size="lg"
+              onClick={handleCloseSubscriptionForm}
+              className={styles.subscription__backButton}
             >
-              {sortOptions.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
+              ← Back to Subscriptions
+            </Button>
+          ) : (
+            <Button 
+              variant="primary"
+              size="lg"
+              onClick={handleNewSubscription}
+              className={styles.subscription__newButton}
+            >
+              NEW SUBSCRIPTION
+            </Button>
+          )}
         </div>
       </div>
       
-      {hasSubscriptions ? (
-        <SubscriptionList 
-          subscriptions={mockSubscriptions} 
-          activeTab={activeTab} 
-        />
+      {!showSubscriptionForm && (
+        <div className={styles.subscription__headerRow}>
+          <FilterTabs 
+            tabs={filterTabs} 
+            onTabChange={handleTabChange}
+            className={styles.subscription__filterTabs}
+          />
+          
+          <div className={styles.subscription__sortContainer}>
+            <div className={styles.subscription__sortBy}>
+              <span className={styles.subscription__sortByLabel}>Sort by:</span>
+              <select 
+                className={styles.subscription__sortBySelect}
+                value={selectedSort}
+                onChange={handleSortChange}
+              >
+                {sortOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {showSubscriptionForm ? (
+        <div className={styles.subscription__form}>
+          <div className={styles.subscription__formContent}>
+            <SubscriptionPlan />
+          </div>
+        </div>
       ) : (
-        <EmptyState 
-          imageSrc="/images/general/sign.png"
-          imageAlt="No subscriptions"
-          message="Sorry, you currently do not have any subscription, but no fuss, you can easily just..."
-          className={styles.subscription__emptyState}
-        />
+        <>
+          {hasSubscriptions ? (
+            <SubscriptionList 
+              subscriptions={mockSubscriptions} 
+              activeTab={activeTab} 
+            />
+          ) : (
+            <EmptyState 
+              imageSrc="/images/general/sign.png"
+              imageAlt="No subscriptions"
+              message="Sorry, you currently do not have any subscription, but no fuss, you can easily just..."
+              className={styles.subscription__emptyState}
+            />
+          )}
+        </>
       )}
     </section>
   );
