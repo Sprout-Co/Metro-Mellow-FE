@@ -42,6 +42,27 @@
   &__newButton {
     flex-shrink: 0;
     align-self: center;
+    background-color: color("primary", "base") !important;
+    color: color("neutral", "white") !important;
+    border: none !important;
+    border-radius: border-radius("xl") !important;
+    padding: spacing("md") spacing("xl") !important;
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("medium");
+    text-transform: uppercase;
+    letter-spacing: map-get($letter-spacing, "wide");
+    box-shadow: none !important;
+    
+    &:hover {
+      background-color: color("primary", "dark") !important;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+    
+    &:active {
+      transform: none !important;
+    }
   }
 
   &__headerRow {
