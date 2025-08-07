@@ -81,8 +81,6 @@ export default function SubscriptionSection() {
           imageSrc="/images/general/sign.png"
           imageAlt="No subscriptions"
           message="Sorry, you currently do not have any subscription, but no fuss, you can easily just..."
-          actionLabel="SUBSCRIBE TO A PLAN"
-          onAction={() => console.log('Subscribe action')}
           className={styles.subscription__emptyState}
         />
       )}

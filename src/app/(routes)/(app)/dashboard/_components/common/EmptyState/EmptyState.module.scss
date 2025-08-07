@@ -7,14 +7,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: spacing("5xl") spacing("xl");
+  padding: spacing("3xl") spacing("xl");
   text-align: center;
   
   &__image {
     width: 100%;
-    max-width: 200px;
+    max-width: 180px;
     height: auto;
-    margin-bottom: spacing("xl");
+    margin-bottom: spacing("lg");
   }
   
   &__text {
@@ -22,7 +22,7 @@
     @include font-size("body-2");
     color: color("neutral", "dark");
     max-width: 400px;
-    margin-bottom: spacing("xl");
+    margin-bottom: spacing("md");
   }
   
   &__button {

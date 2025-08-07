@@ -10,6 +10,7 @@ import QuickActions from './_components/quick-actions/QuickActions';
 import CTAButton from './_components/cta/CTAButton';
 import { SubscriptionSection } from './_components/subscriptions';
 import EmptyState from './_components/common/EmptyState';
+import Button from '@/components/ui/Button/Button';
 
 import styles from './Dashboard.module.scss';
 
@@ -75,9 +76,23 @@ export default function Dashboard() {
             </div>
           )}
           
-          <div className={styles.dashboard__cta}>
-            <CTAButton />
-          </div>
+          {activeTab === 'overview' && (
+            <div className={styles.dashboard__cta}>
+              <CTAButton />
+            </div>
+          )}
+          
+          {activeTab === 'subscription' && (
+            <div className={styles.dashboard__cta}>
+              <Button 
+                variant="primary"
+                size="lg"
+                onClick={() => console.log('Subscribe to a plan clicked')}
+              >
+                SUBSCRIBE TO A PLAN
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>
