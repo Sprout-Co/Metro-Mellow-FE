@@ -9,6 +9,7 @@ import AllOrdersSection from './_components/all-orders/AllOrdersSection';
 import QuickActions from './_components/quick-actions/QuickActions';
 import CTAButton from './_components/cta/CTAButton';
 import { SubscriptionSection } from './_components/subscriptions';
+import EmptyState from './_components/common/EmptyState';
 
 import styles from './Dashboard.module.scss';
 
@@ -17,11 +18,10 @@ export default function Dashboard() {
   const hasServices = true;
   const [activeTab, setActiveTab] = useState('overview');
 
-  const EmptyState = () => (
-    <div className={styles.dashboard__emptyState}>
-      <p>No services found.</p>
-    </div>
-  );
+  // Helper function for handling add service action
+  const handleAddService = () => {
+    console.log('Add service action');
+  };
   
   // Handle tab click
   const handleTabClick = (tabId: string) => {
@@ -47,7 +47,16 @@ export default function Dashboard() {
           {activeTab === 'overview' && (
             <div className={styles.dashboard__main}>
               <div className={styles.dashboard__services}>
-                {hasServices ? <AllOrdersSection /> : <EmptyState />}
+                {hasServices ? <AllOrdersSection /> : (
+                  <EmptyState
+                    imageSrc="/images/general/sign.png"
+                    imageAlt="No services"
+                    message="You don't have any services yet. Get started by adding a service."
+                    actionLabel="ADD A SERVICE"
+                    onAction={handleAddService}
+                    className={styles.dashboard__emptyState}
+                  />
+                )}
               </div>
               
               <div className={styles.dashboard__sidebar}>

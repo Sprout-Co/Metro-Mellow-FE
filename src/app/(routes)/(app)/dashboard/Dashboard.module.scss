@@ -48,4 +48,9 @@
     display: flex;
     justify-content: center;
   }
+  
+  &__emptyState {
+    // Custom styles for dashboard empty state if needed
+    width: 100%;
+  }
 }

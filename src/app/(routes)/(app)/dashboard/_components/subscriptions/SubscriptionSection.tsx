@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import SectionHeader from '../common/SectionHeader';
 import FilterTabs, { FilterTab } from '../common/FilterTabs';
+import EmptyState from '../common/EmptyState';
 import styles from './SubscriptionSection.module.scss';
 
 // Sort option type
@@ -77,23 +77,14 @@ export default function SubscriptionSection() {
       )}
       
       {!hasSubscriptions && (
-        <div className={styles.subscription__emptyState}>
-          <div className={styles.subscription__emptyStateImage}>
-            <Image 
-              src="/images/general/sign.png"
-              alt="No subscriptions" 
-              width={200}
-              height={200}
-              priority
-            />
-          </div>
-          <p className={styles.subscription__emptyStateText}>
-            Sorry, you currently do not have any subscription, but no fuss, you can easily just...
-          </p>
-          <button className={styles.subscription__button}>
-            SUBSCRIBE TO A PLAN
-          </button>
-        </div>
+        <EmptyState 
+          imageSrc="/images/general/sign.png"
+          imageAlt="No subscriptions"
+          message="Sorry, you currently do not have any subscription, but no fuss, you can easily just..."
+          actionLabel="SUBSCRIBE TO A PLAN"
+          onAction={() => console.log('Subscribe action')}
+          className={styles.subscription__emptyState}
+        />
       )}
     </section>
   );
