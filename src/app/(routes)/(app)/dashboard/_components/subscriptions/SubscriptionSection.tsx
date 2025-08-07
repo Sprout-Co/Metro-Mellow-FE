@@ -4,6 +4,9 @@ import { useState } from 'react';
 import SectionHeader from '../common/SectionHeader';
 import FilterTabs, { FilterTab } from '../common/FilterTabs';
 import EmptyState from '../common/EmptyState';
+import SubscriptionList from './list';
+import { SubscriptionCardProps } from './card';
+import Button from '@/components/ui/Button/Button';
 import styles from './SubscriptionSection.module.scss';
 
 // Sort option type
@@ -31,8 +34,73 @@ export default function SubscriptionSection() {
   const [selectedSort, setSelectedSort] = useState(sortOptions[0].value);
   const [activeTab, setActiveTab] = useState<string>('all');
   
-  // Mock data - in a real scenario, this would come from API
-  const hasSubscriptions = false;
+  // Mock subscription data - in a real scenario, this would come from API
+  const mockSubscriptions: SubscriptionCardProps[] = [
+    {
+      id: '1',
+      serviceType: 'Cleaning',
+      status: 'active',
+      nextBillingDate: 'Tue, Jan 2',
+      amount: 60000,
+      frequency: ['Weekly', 'Monthly'],
+      icon: 'Sparkles',
+      additionalInfo: ['Laundry', 'Food', 'Pest Control'],
+      onClick: () => console.log('Show more details for subscription 1')
+    },
+    {
+      id: '2',
+      serviceType: 'Cleaning',
+      status: 'active',
+      nextBillingDate: 'Tue, Jan 2',
+      amount: 60000,
+      frequency: ['Weekly', 'Monthly'],
+      icon: 'Sparkles',
+      additionalInfo: ['Laundry', 'Food', 'Pest Control'],
+      onClick: () => console.log('Show more details for subscription 2')
+    },
+    {
+      id: '3',
+      serviceType: 'Cleaning',
+      status: 'active',
+      nextBillingDate: 'Tue, Jan 2',
+      amount: 60000,
+      frequency: ['Weekly', 'Monthly'],
+      icon: 'Sparkles',
+      onClick: () => console.log('Show more details for subscription 3')
+    },
+    {
+      id: '4',
+      serviceType: 'Cleaning',
+      status: 'active',
+      nextBillingDate: 'Tue, Jan 2',
+      amount: 60000,
+      frequency: ['Weekly', 'Monthly'],
+      icon: 'Sparkles',
+      onClick: () => console.log('Show more details for subscription 4')
+    },
+    {
+      id: '5',
+      serviceType: 'Cleaning',
+      status: 'active',
+      nextBillingDate: 'Tue, Jan 2',
+      amount: 60000,
+      frequency: ['Weekly', 'Monthly'],
+      icon: 'Sparkles',
+      onClick: () => console.log('Show more details for subscription 5')
+    },
+    {
+      id: '6',
+      serviceType: 'Cleaning',
+      status: 'active',
+      nextBillingDate: 'Tue, Jan 2',
+      amount: 60000,
+      frequency: ['Weekly', 'Monthly'],
+      icon: 'Sparkles',
+      onClick: () => console.log('Show more details for subscription 6')
+    }
+  ];
+  
+  const hasSubscriptions = mockSubscriptions.length > 0;
   
   // Handle tab change
   const handleTabChange = (tabId: string) => {
@@ -76,7 +144,12 @@ export default function SubscriptionSection() {
         </div>
       </div>
       
-      {!hasSubscriptions && (
+      {hasSubscriptions ? (
+        <SubscriptionList 
+          subscriptions={mockSubscriptions} 
+          activeTab={activeTab} 
+        />
+      ) : (
         <EmptyState 
           imageSrc="/images/general/sign.png"
           imageAlt="No subscriptions"
@@ -84,6 +157,16 @@ export default function SubscriptionSection() {
           className={styles.subscription__emptyState}
         />
       )}
+      
+      <div className={styles.subscription__actionContainer}>
+        <Button 
+          variant="primary"
+          size="lg"
+          onClick={() => console.log('New subscription')}
+        >
+          NEW SUBSCRIPTION
+        </Button>
+      </div>
     </section>
   );
 }

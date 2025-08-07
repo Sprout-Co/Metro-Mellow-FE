@@ -1,0 +1,220 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.subscriptionCard {
+  width: 100%;
+  background-color: color("neutral", "white");
+  border-radius: border-radius("lg");
+  border: 1px solid color("neutral", "lighter");
+  padding: spacing("md");
+  margin-bottom: spacing("md");
+  
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    
+    @include breakpoint-down("md") {
+      flex-wrap: wrap;
+    }
+  }
+  
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    flex: 1;
+    
+    @include breakpoint-down("md") {
+      width: 100%;
+    }
+  }
+  
+  &__iconContainer {
+    flex-shrink: 0;
+  }
+  
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("full");
+    background-color: color("accent", "lighter");
+    @include flex-center;
+    
+    &--active {
+      background-color: color("primary", "base");
+    }
+    
+    &--canceled {
+      background-color: color("status", "error");
+    }
+    
+    &--suspended {
+      background-color: color("status", "warning");
+    }
+  }
+  
+  &__serviceIcon {
+    width: 24px;
+    height: 24px;
+    color: color("neutral", "white");
+  }
+  
+  &__details {
+    min-width: 0;
+  }
+  
+  &__titleRow {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &__title {
+    @include font-secondary;
+    @include font-size("base");
+    @include font-weight("semibold");
+    color: color("neutral", "black");
+    margin: 0;
+    margin-bottom: spacing("xxs");
+  }
+  
+  &__frequencies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing("sm");
+  }
+  
+  &__frequency {
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    white-space: nowrap;
+  }
+  
+  &__center {
+    @include breakpoint-down("md") {
+      width: 100%;
+      margin-top: spacing("xs");
+    }
+  }
+  
+  &__badge {
+    @include font-secondary;
+    @include font-size("xs");
+    @include font-weight("medium");
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("sm");
+    display: inline-flex;
+    align-items: center;
+    
+    &--active {
+      background-color: color("status", "success");
+      color: color("neutral", "white");
+    }
+    
+    &--canceled {
+      background-color: color("status", "error");
+      color: color("neutral", "white");
+    }
+    
+    &--suspended {
+      background-color: color("status", "warning");
+      color: color("neutral", "white");
+    }
+  }
+  
+  &__right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: spacing("xs");
+    margin-left: auto;
+    margin-right: spacing("md");
+    min-width: 150px;
+    
+    @include breakpoint-down("md") {
+      width: 100%;
+      margin-top: spacing("sm");
+      margin-right: 0;
+    }
+  }
+  
+  &__billing {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &__nextBilling {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+  }
+  
+  &__label {
+    @include font-secondary;
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+  }
+  
+  &__date {
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+  
+  &__price {
+    @include font-secondary;
+    @include font-size("lg");
+    @include font-weight("bold");
+    color: color("neutral", "black");
+    display: flex;
+    align-items: center;
+    gap: spacing("xxs");
+    
+    .subscriptionCard__frequency {
+      @include font-size("xs");
+      @include font-weight("medium");
+      color: color("neutral", "dark");
+    }
+  }
+  
+  &__actions {
+    @include breakpoint-down("md") {
+      width: 100%;
+      margin-top: spacing("sm");
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+  
+  &__toggleButton {
+    @include font-secondary;
+    @include font-size("xs");
+    @include font-weight("semibold");
+    color: color("primary", "base") !important;
+    cursor: pointer;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    
+    &:hover {
+      text-decoration: underline;
+      background: none !important;
+      transform: none !important;
+    }
+    
+    &:active {
+      transform: none !important;
+    }
+  }
+  
+  &__additionalInfo {
+    margin-top: spacing("md");
+    padding-top: spacing("md");
+    border-top: 1px solid color("neutral", "lighter");
+  }
+}
