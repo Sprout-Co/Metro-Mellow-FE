@@ -1,0 +1,148 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.details {
+  width: 100%;
+  background-color: color("neutral", "white");
+  border: 1px solid color("neutral", "lighter");
+  border-radius: border-radius("md");
+  padding: spacing("lg");
+  box-shadow: map-get($shadows, "md");
+
+  &__headerRow {
+    @include flex-between;
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
+  }
+
+  &__left {
+    @include flex($align: center);
+    gap: spacing("md");
+    min-width: 0;
+  }
+
+  &__icon {
+    width: 56px;
+    height: 56px;
+    border-radius: border-radius("full");
+    @include flex-center;
+    background-color: color("primary", "base");
+
+    &--active { background-color: color("primary", "base"); }
+    &--canceled { background-color: color("status", "error"); }
+    &--suspended { background-color: color("status", "warning"); }
+  }
+
+  &__serviceIcon {
+    width: 28px;
+    height: 28px;
+    color: color("neutral", "white");
+  }
+
+  &__titleWrap { min-width: 0; }
+
+  &__title {
+    @include font-secondary;
+    @include font-size("title");
+    @include font-weight("bold");
+    color: color("neutral", "black");
+    margin: 0 0 spacing("xxs");
+  }
+
+  &__freqRow { @include flex($align: center); gap: spacing("xs"); }
+  &__freq {
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    white-space: nowrap;
+  }
+
+  &__toggleButton {
+    @include font-secondary;
+    @include font-size("xs");
+    @include font-weight("semibold");
+    color: color("primary", "base") !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: spacing("lg");
+
+    @include breakpoint-down("lg") { grid-template-columns: repeat(2, 1fr); }
+    @include breakpoint-down("md") { grid-template-columns: 1fr; }
+  }
+
+  &__cell { display: flex; flex-direction: column; }
+
+  &__label {
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__value {
+    @include font-secondary;
+    @include font-size("base");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+  }
+
+  &__period {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    margin-left: spacing("xxs");
+  }
+
+  &__status {
+    @extend .details__value;
+    padding: spacing("xs") spacing("md");
+    border-radius: border-radius("full");
+    display: inline-flex;
+    align-items: center;
+
+    &--active { background-color: rgba(color("status", "success"), 0.12); color: color("status", "success"); }
+    &--canceled { background-color: rgba(color("status", "error"), 0.12); color: color("status", "error"); }
+    &--suspended { background-color: rgba(color("status", "warning"), 0.12); color: color("status", "warning"); }
+  }
+
+  &__items { margin-top: spacing("lg"); }
+
+  &__itemRow {
+    @include flex-between;
+    padding: spacing("md") 0;
+    border-top: 1px solid color("neutral", "lighter");
+
+    &:first-child { border-top: none; padding-top: 0; }
+  }
+
+  &__itemLeft { @include flex($align: center); gap: spacing("md"); }
+  &__miniIcon { width: 40px; height: 40px; border-radius: border-radius("full"); background: color("accent", "base"); }
+  &__itemName { @include font-secondary; @include font-weight("semibold"); color: color("neutral", "black"); }
+  &__itemFreqRow { @include flex($align: center); gap: spacing("xs"); margin-top: spacing("xxs"); }
+  &__itemFreq { @include font-secondary; @include font-size("sm"); color: color("neutral", "dark"); }
+  &__itemPrice { @include font-secondary; @include font-weight("bold"); color: color("neutral", "black"); }
+
+  &__actions {
+    @include flex-between;
+    gap: spacing("md");
+    margin-top: spacing("xl");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column-reverse;
+    }
+  }
+
+  &__cancel { @include button-primary(); min-width: 240px; }
+  &__pause { @include button-secondary(); min-width: 240px; }
+}
+
+

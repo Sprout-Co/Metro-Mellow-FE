@@ -1,10 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import * as LucideIcons from 'lucide-react';
 import Button from '@/components/ui/Button/Button';
 import { IconName } from '@/constants/services';
 import styles from './SubscriptionCard.module.scss';
+import SubscriptionDetails from './SubscriptionDetails';
 
 export interface SubscriptionCardProps {
   id: string;
@@ -17,6 +18,14 @@ export interface SubscriptionCardProps {
   icon?: IconName;
   additionalInfo?: string[];
   onClick?: () => void;
+  // Optional fields for expanded details
+  startDate?: string;
+  endDate?: string;
+  lastBilledDate?: string;
+  durationWeeks?: number;
+  autoRenew?: boolean;
+  billingPeriodLabel?: string;
+  items?: { name: string; frequency: string[]; price: number }[];
 }
 
 export default function SubscriptionCard({
@@ -29,8 +38,16 @@ export default function SubscriptionCard({
   frequency,
   icon = 'Sparkles',
   additionalInfo,
-  onClick
+  onClick,
+  startDate,
+  endDate,
+  lastBilledDate,
+  durationWeeks,
+  autoRenew,
+  billingPeriodLabel,
+  items,
 }: SubscriptionCardProps) {
+  const [expanded, setExpanded] = useState(false);
   const getServiceIcon = () => {
     // Map service types to icons - reusing existing mapping logic
     const iconMap: Record<string, IconName> = {
@@ -53,8 +70,11 @@ export default function SubscriptionCard({
   };
 
   const handleShowMore = () => {
+    setExpanded(true);
     if (onClick) onClick();
   };
+
+  const handleShowLess = () => setExpanded(false);
 
   return (
     <div className={styles.subscriptionCard}>
@@ -102,21 +122,49 @@ export default function SubscriptionCard({
         
         {/* Action button */}
         <div className={styles.subscriptionCard__actions}>
-          <Button 
-            className={styles.subscriptionCard__toggleButton} 
-            onClick={handleShowMore}
-            variant="ghost"
-            size="sm"
-          >
-            SHOW MORE ▼
-          </Button>
+          {expanded ? (
+            <Button
+              className={styles.subscriptionCard__toggleButton}
+              onClick={handleShowLess}
+              variant="ghost"
+              size="sm"
+            >
+              SHOW LESS ▲
+            </Button>
+          ) : (
+            <Button
+              className={styles.subscriptionCard__toggleButton}
+              onClick={handleShowMore}
+              variant="ghost"
+              size="sm"
+            >
+              SHOW MORE ▼
+            </Button>
+          )}
         </div>
       </div>
       
-      {/* Additional info would go here when expanded */}
-      {additionalInfo && additionalInfo.length > 0 && (
+      {expanded && (
         <div className={styles.subscriptionCard__additionalInfo}>
-          {/* This would be implemented later */}
+          <SubscriptionDetails
+            serviceType={serviceType}
+            status={status}
+            nextBillingDate={nextBillingDate}
+            startDate={startDate}
+            endDate={endDate}
+            totalPrice={amount}
+            currency={currency}
+            billingPeriodLabel={billingPeriodLabel ?? 'Monthly'}
+            lastBilledDate={lastBilledDate ?? nextBillingDate}
+            durationWeeks={durationWeeks}
+            autoRenew={autoRenew}
+            frequency={frequency}
+            icon={serviceIcon}
+            items={items ?? (additionalInfo || []).map((name) => ({ name, frequency, price: amount }))}
+            onCancel={() => {}}
+            onPause={() => {}}
+            onShowLess={handleShowLess}
+          />
         </div>
       )}
     </div>
