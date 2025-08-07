@@ -51,13 +51,13 @@ export default function SubscriptionSection() {
         subtitle="Here are a list of your subscription plans:"
       />
       
-      <FilterTabs 
-        tabs={filterTabs} 
-        onTabChange={handleTabChange}
-        className={styles.subscription__filterTabs}
-      />
-      
-      {hasSubscriptions && (
+      <div className={styles.subscription__headerRow}>
+        <FilterTabs 
+          tabs={filterTabs} 
+          onTabChange={handleTabChange}
+          className={styles.subscription__filterTabs}
+        />
+        
         <div className={styles.subscription__sortContainer}>
           <div className={styles.subscription__sortBy}>
             <span className={styles.subscription__sortByLabel}>Sort by:</span>
@@ -74,7 +74,7 @@ export default function SubscriptionSection() {
             </select>
           </div>
         </div>
-      )}
+      </div>
       
       {!hasSubscriptions && (
         <EmptyState 

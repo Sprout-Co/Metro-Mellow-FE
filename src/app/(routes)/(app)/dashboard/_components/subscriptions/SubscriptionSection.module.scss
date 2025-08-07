@@ -5,14 +5,26 @@
 .subscription {
   padding: spacing("lg") 0;
 
-  &__filterTabs {
+  &__headerRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: spacing("xl");
+    
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+    }
+  }
+
+  &__filterTabs {
+    flex: 1;
   }
 
   &__sortContainer {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: spacing("md");
   }
 
   &__sortBy {
