@@ -153,4 +153,8 @@
   &__formContent {
     padding: spacing("xl");
   }
+  
+  &__form {
+    min-height: 500px;
+  }
 }

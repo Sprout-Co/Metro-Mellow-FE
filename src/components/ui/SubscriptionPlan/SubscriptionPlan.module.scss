@@ -4,19 +4,25 @@
 @import "@/styles/abstracts/functions";
 
 .subscription {
-  &__header {
-    margin-bottom: spacing("xl");
+  &__container {
+    display: flex;
+    gap: spacing("xl");
+    
+    @include breakpoint-down("lg") {
+      flex-direction: column;
+    }
   }
 
-  &__title {
-    @include heading-3;
-    color: color("neutral", "black");
-    margin-bottom: spacing("xs");
+  &__left {
+    flex: 3;
   }
 
-  &__subtitle {
-    @include body-2;
-    color: color("neutral", "dark");
+  &__right {
+    flex: 2;
+    
+    @include breakpoint-down("lg") {
+      margin-top: spacing("xl");
+    }
   }
 
   &__frequency {
@@ -172,5 +178,91 @@
     font-size: font-size("sm");
     font-weight: font-weight("medium");
     color: color("neutral", "darkest");
+  }
+  
+  &__summary {
+    height: 100%;
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    padding: spacing("xl");
+    background-color: color("neutral", "white");
+    box-shadow: shadow("sm");
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    
+    &_image {
+      width: 150px;
+      height: 150px;
+      margin-bottom: spacing("lg");
+      
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+    
+    &_text {
+      @include body-1;
+      color: color("neutral", "dark");
+    }
+  }
+  
+  &__details {
+    width: 100%;
+    
+    &_title {
+      @include heading-5;
+      margin-bottom: spacing("md");
+    }
+    
+    &_list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 spacing("xl") 0;
+    }
+    
+    &_item {
+      @include body-2;
+      padding: spacing("sm") 0;
+      border-bottom: 1px solid color("neutral", "lighter");
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+  
+  &__total {
+    border-top: 2px solid color("neutral", "light");
+    padding-top: spacing("md");
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: spacing("md");
+    
+    &_label {
+      @include body-1;
+      font-weight: font-weight("bold");
+    }
+    
+    &_price {
+      @include heading-5;
+      color: color("primary", "base");
+    }
   }
 }
