@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { SubscriptionCard, SubscriptionCardProps } from '../card';
+import SubscriptionCard, { SubscriptionCardProps } from '../card/SubscriptionCard';
 import styles from './SubscriptionList.module.scss';
 
 interface SubscriptionListProps {
