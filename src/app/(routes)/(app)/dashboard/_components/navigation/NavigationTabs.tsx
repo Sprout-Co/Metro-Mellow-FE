@@ -11,9 +11,10 @@ interface Tab {
 
 interface NavigationTabsProps {
   tabs: Tab[];
+  onTabClick?: (tabId: string) => void;
 }
 
-export default function NavigationTabs({ tabs: initialTabs }: NavigationTabsProps) {
+export default function NavigationTabs({ tabs: initialTabs, onTabClick }: NavigationTabsProps) {
   const [tabs, setTabs] = useState(initialTabs);
   
   const handleTabClick = (clickedTabId: string) => {
@@ -23,6 +24,11 @@ export default function NavigationTabs({ tabs: initialTabs }: NavigationTabsProp
     }));
     
     setTabs(updatedTabs);
+    
+    // Call the parent component's onTabClick if provided
+    if (onTabClick) {
+      onTabClick(clickedTabId);
+    }
   };
   
   return (

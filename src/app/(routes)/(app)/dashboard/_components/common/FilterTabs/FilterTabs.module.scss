@@ -1,0 +1,51 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.filterTabs {
+  display: flex;
+  overflow-x: auto;
+  margin-bottom: spacing("md");
+  
+  @include scrollbar-hidden;
+  
+  @include breakpoint-down("sm") {
+    padding-bottom: spacing("xs");
+  }
+  
+  &__tab {
+    @include font-secondary;
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    background: none;
+    border: none;
+    padding: spacing("sm") spacing("md");
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+    
+    &:first-child {
+      padding-left: 0;
+    }
+    
+    &:hover {
+      color: color("primary", "base");
+    }
+    
+    &--active {
+      color: color("primary", "base");
+      font-weight: 600;
+      
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: color("primary", "base");
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardHeader from './_components/header/DashboardHeader';
 import DashboardBanner from './_components/banner/DashboardBanner';
 import NavigationTabs from './_components/navigation/NavigationTabs';
@@ -8,18 +8,25 @@ import ServicesSection from './_components/services/ServicesSection';
 import AllOrdersSection from './_components/all-orders/AllOrdersSection';
 import QuickActions from './_components/quick-actions/QuickActions';
 import CTAButton from './_components/cta/CTAButton';
+import { SubscriptionSection } from './_components/subscriptions';
 
 import styles from './Dashboard.module.scss';
 
 export default function Dashboard() {
   // This would typically be fetched from an API
   const hasServices = true;
+  const [activeTab, setActiveTab] = useState('overview');
 
   const EmptyState = () => (
     <div className={styles.dashboard__emptyState}>
       <p>No services found.</p>
     </div>
   );
+  
+  // Handle tab click
+  const handleTabClick = (tabId: string) => {
+    setActiveTab(tabId);
+  };
 
   return (
     <div className={styles.dashboard}>
@@ -30,21 +37,34 @@ export default function Dashboard() {
         <div className={styles.dashboard__container}>
           <NavigationTabs 
             tabs={[
-              { id: 'overview', label: 'OVERVIEW', isActive: true },
-              { id: 'subscription', label: 'SUBSCRIPTION', isActive: false },
-              { id: 'address', label: 'ADDRESS', isActive: false },
+              { id: 'overview', label: 'OVERVIEW', isActive: activeTab === 'overview' },
+              { id: 'subscription', label: 'SUBSCRIPTION', isActive: activeTab === 'subscription' },
+              { id: 'address', label: 'ADDRESS', isActive: activeTab === 'address' },
             ]} 
+            onTabClick={handleTabClick}
           />
           
-          <div className={styles.dashboard__main}>
-            <div className={styles.dashboard__services}>
-              {hasServices ? <AllOrdersSection /> : <EmptyState />}
+          {activeTab === 'overview' && (
+            <div className={styles.dashboard__main}>
+              <div className={styles.dashboard__services}>
+                {hasServices ? <AllOrdersSection /> : <EmptyState />}
+              </div>
+              
+              <div className={styles.dashboard__sidebar}>
+                <QuickActions />
+              </div>
             </div>
-            
-            <div className={styles.dashboard__sidebar}>
-              <QuickActions />
+          )}
+          
+          {activeTab === 'subscription' && (
+            <SubscriptionSection />
+          )}
+          
+          {activeTab === 'address' && (
+            <div className={styles.dashboard__main}>
+              <p>Address section content will go here</p>
             </div>
-          </div>
+          )}
           
           <div className={styles.dashboard__cta}>
             <CTAButton />
