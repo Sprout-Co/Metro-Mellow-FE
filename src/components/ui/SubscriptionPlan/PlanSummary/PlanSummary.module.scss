@@ -11,7 +11,7 @@
   box-shadow: shadow("sm");
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 
   &__empty {
@@ -75,15 +75,19 @@
     justify-content: space-between;
     align-items: center;
     margin-top: spacing("md");
+    flex-wrap: nowrap;
     
     &_label {
       @include body-1;
       font-weight: font-weight("bold");
+      white-space: nowrap;
+      margin-right: spacing("sm");
     }
     
     &_price {
       @include heading-5;
       color: color("primary", "base");
+      white-space: nowrap;
     }
   }
 }

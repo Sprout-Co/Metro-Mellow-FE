@@ -15,11 +15,9 @@ const DurationSelector: React.FC<DurationSelectorProps> = ({
   duration,
   onDurationChange
 }) => {
-  // For weekly plans, show weeks. For monthly/quarterly, show months
-  const isWeekly = billingCycle === BillingCycle.Monthly; // We'll need to add Weekly to the enum
-  const maxDuration = isWeekly ? 8 : 12;
-  const durationOptions = Array.from({ length: maxDuration }, (_, i) => i + 1);
-  const durationLabel = isWeekly ? 'Week' : 'Month';
+  // Show only 1, 2, 3 weeks
+  const durationOptions = [1, 2, 3];
+  const durationLabel = 'Week';
 
   return (
     <div className={styles.duration}>
@@ -36,7 +34,7 @@ const DurationSelector: React.FC<DurationSelectorProps> = ({
         ))}
       </div>
       <p className={styles.duration__helper}>
-        You can have up to a {maxDuration}-{durationLabel.toLowerCase()} plan
+        You can have up to a 3-week plan
       </p>
     </div>
   );
