@@ -7,7 +7,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: spacing("3xl") spacing("xl");
+  padding: spacing("xxs") spacing("xl");
   text-align: center;
   
   &__image {
@@ -22,7 +22,7 @@
     @include font-size("body-2");
     color: color("neutral", "dark");
     max-width: 400px;
-    margin-bottom: spacing("md");
+  
   }
   
   &__button {
