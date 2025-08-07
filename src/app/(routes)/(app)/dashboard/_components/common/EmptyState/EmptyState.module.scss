@@ -19,7 +19,7 @@
   
   &__text {
     @include font-secondary;
-    @include font-size("body-1");
+    @include font-size("body-2");
     color: color("neutral", "dark");
     max-width: 400px;
     margin-bottom: spacing("xl");
