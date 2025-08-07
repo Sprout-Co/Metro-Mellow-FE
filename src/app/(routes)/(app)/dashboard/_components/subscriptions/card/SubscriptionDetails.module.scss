@@ -148,12 +148,16 @@
   &__itemPrice { @include font-secondary; @include font-weight("bold"); color: color("neutral", "black"); }
 
   &__actions {
-    @include flex-between;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     gap: spacing("xl");
     margin-top: spacing("2xl");
+    width: 100%;
 
     @include breakpoint-down("sm") {
       flex-direction: column-reverse;
+      align-items: stretch;
       gap: spacing("md");
     }
   }
@@ -163,13 +167,20 @@
     background-color: color("secondary", "base");
     border-color: color("secondary", "base");
     color: color("neutral", "white");
-    min-width: 320px;
+    min-width: 220px;
+    border-radius: border-radius("xl") !important;
 
     &:hover { background-color: color-darken("secondary", "base", 5%); border-color: color-darken("secondary", "base", 5%); }
   }
   &__pause {
-    @include button-secondary("xl");
-    min-width: 320px;
+    @include button-base("xl");
+    background-color: color("neutral", "lighter");
+    color: color("neutral", "black");
+    border-color: color("neutral", "light");
+    min-width: 220px;
+    border-radius: border-radius("xl") !important;
+
+    &:hover { box-shadow: map-get($shadows, "md"); }
   }
 }
 
