@@ -4,6 +4,7 @@
 
 .subscription {
   padding: spacing("lg") 0;
+  position: relative;
 
   &__headerRow {
     display: flex;
@@ -57,5 +58,15 @@
 
   &__emptyState {
     // Custom styles for subscription empty state if needed
+  }
+  
+  &__actionContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: spacing("xl");
+    
+    @include breakpoint-down("md") {
+      justify-content: center;
+    }
   }
 }
