@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import DashboardHeader from './_components/header/DashboardHeader';
-import DashboardBanner from './_components/banner/DashboardBanner';
+import DashboardLayout from './_components/layout/DashboardLayout';
 import NavigationTabs from './_components/navigation/NavigationTabs';
 import ServicesSection from './_components/services/ServicesSection';
 import AllOrdersSection from './_components/all-orders/AllOrdersSection';
@@ -31,20 +30,15 @@ export default function Dashboard() {
   };
 
   return (
-    <div className={styles.dashboard}>
-      <DashboardHeader />
-      <DashboardBanner />
-      
-      <div className={styles.dashboard__content}>
-        <div className={styles.dashboard__container}>
-          <NavigationTabs 
-            tabs={[
-              { id: 'overview', label: 'OVERVIEW', isActive: activeTab === 'overview' },
-              { id: 'subscription', label: 'SUBSCRIPTION', isActive: activeTab === 'subscription' },
-              { id: 'address', label: 'ADDRESS', isActive: activeTab === 'address' },
-            ]} 
-            onTabClick={handleTabClick}
-          />
+    <DashboardLayout>
+      <NavigationTabs 
+        tabs={[
+          { id: 'overview', label: 'OVERVIEW', isActive: activeTab === 'overview' },
+          { id: 'subscription', label: 'SUBSCRIPTION', isActive: activeTab === 'subscription' },
+          { id: 'address', label: 'ADDRESS', isActive: activeTab === 'address' },
+        ]} 
+        onTabClick={handleTabClick}
+      />
           
           {activeTab === 'overview' && (
             <div className={styles.dashboard__main}>
@@ -94,8 +88,6 @@ export default function Dashboard() {
               </Button>
             </div>
           )}
-        </div>
-      </div>
-    </div>
+    </DashboardLayout>
   );
 }

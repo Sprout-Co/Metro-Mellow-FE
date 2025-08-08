@@ -3,18 +3,6 @@
 @import "@/styles/abstracts/functions";
 
 .profilePage {
-  min-height: 100vh;
-  background-color: color("neutral", "lightest");
-
-  &__content {
-    padding-top: spacing("xl");
-    padding-bottom: spacing("xl");
-  }
-
-  &__container {
-    @include container;
-    max-width: map-get($container-max-widths, "xl");
-  }
 
   &__header {
     margin-bottom: spacing("xl");
@@ -157,6 +145,39 @@
       outline: none;
       border-color: color("primary", "base");
       box-shadow: map-get($shadows, "focus");
+    }
+  }
+
+  &__passwordHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: spacing("md");
+  }
+
+  &__passwordInfo {
+    flex: 1;
+  }
+
+  &__passwordSubtitle {
+    @include caption;
+    color: color("neutral", "dark");
+    margin-top: spacing("xs");
+  }
+
+  &__resetPassword {
+    background: none;
+    border: none;
+    color: color("status", "error");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "semibold");
+    cursor: pointer;
+    text-decoration: none;
+    transition: $transition-base;
+    white-space: nowrap;
+
+    &:hover {
+      text-decoration: underline;
     }
   }
 

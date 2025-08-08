@@ -1,14 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import DashboardBanner from '../_components/banner/DashboardBanner';
+import DashboardLayout from '../_components/layout/DashboardLayout';
 import styles from './ProfileSettings.module.scss';
 import NavigationTabs from '../_components/navigation/NavigationTabs';
 import Button from '@/components/ui/Button/Button';
+import ChangePasswordModal from './ChangePasswordModal';
 
 export default function ProfileSettingsPage() {
   const [activeTab, setActiveTab] = useState('profile');
   const [isLoading, setIsLoading] = useState(false);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     fullName: 'Dele Ja',
     email: 'Dele.Ja@example.com',
@@ -45,15 +47,11 @@ export default function ProfileSettingsPage() {
   };
 
   return (
-    <div className={styles.profilePage}>
-      <DashboardBanner />
-      
-      <div className={styles.profilePage__content}>
-        <div className={styles.profilePage__container}>
-          <div className={styles.profilePage__header}>
-            <h1 className={styles.profilePage__title}>Account Settings</h1>
-            <p className={styles.profilePage__subtitle}>Everything you need to manage your account</p>
-          </div>
+    <DashboardLayout>
+      <div className={styles.profilePage__header}>
+        <h1 className={styles.profilePage__title}>Account Settings</h1>
+        <p className={styles.profilePage__subtitle}>Everything you need to manage your account</p>
+      </div>
           
           <NavigationTabs 
             tabs={[
@@ -145,6 +143,26 @@ export default function ProfileSettingsPage() {
                         </select>
                       </div>
                       
+                      <div className={styles.profilePage__formGroup}>
+                        <div className={styles.profilePage__passwordHeader}>
+                          <div className={styles.profilePage__passwordInfo}>
+                            <label className={styles.profilePage__label}>
+                              Password
+                            </label>
+                            <p className={styles.profilePage__passwordSubtitle}>
+                              Set a unique password.
+                            </p>
+                          </div>
+                          <button 
+                            type="button" 
+                            className={styles.profilePage__resetPassword}
+                            onClick={() => setIsPasswordModalOpen(true)}
+                          >
+                            RESET PASSWORD
+                          </button>
+                        </div>
+                      </div>
+                      
                       <div className={styles.profilePage__formActions}>
                         <Button 
                           type="submit" 
@@ -177,8 +195,11 @@ export default function ProfileSettingsPage() {
               <p>This section is coming soon!</p>
             </div>
           )}
-        </div>
-      </div>
-    </div>
+      
+      <ChangePasswordModal
+        isOpen={isPasswordModalOpen}
+        onClose={() => setIsPasswordModalOpen(false)}
+      />
+    </DashboardLayout>
   );
 }
