@@ -45,7 +45,7 @@
   &__profileHeader {
     display: flex;
     align-items: flex-start;
-    gap: spacing("xl");
+    gap: spacing("6xl");
 
     @include breakpoint-down("md") {
       flex-direction: column;
@@ -55,8 +55,6 @@
 
   &__profilePicture {
     flex-shrink: 0;
-    order: 2;
-    margin-left: auto;
   }
 
   &__uploadContainer {
