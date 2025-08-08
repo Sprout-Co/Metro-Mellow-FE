@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import DashboardLayout from './_components/layout/DashboardLayout';
 import NavigationTabs from './_components/navigation/NavigationTabs';
 import ServicesSection from './_components/services/ServicesSection';
@@ -17,7 +18,16 @@ import styles from './Dashboard.module.scss';
 export default function Dashboard() {
   // This would typically be fetched from an API
   const hasServices = true;
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState('overview');
+
+  // Set initial tab based on URL parameter
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam && ['overview', 'subscription', 'address'].includes(tabParam)) {
+      setActiveTab(tabParam);
+    }
+  }, [searchParams]);
 
   // Helper function for handling add service action
   const handleAddService = () => {
