@@ -1,0 +1,105 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.addressSection {
+  width: 100%;
+
+  &__container {
+    width: 100%;
+  }
+
+  &__title {
+    @include heading-4;
+    margin-bottom: spacing("xs");
+  }
+
+  &__subtitle {
+    @include body-2;
+    color: color("neutral", "dark");
+    margin-bottom: spacing("lg");
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: row;
+    gap: spacing("xl");
+    
+    @include breakpoint-down("lg") {
+      flex-direction: column;
+    }
+  }
+
+  &__form {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    padding: spacing("lg");
+    box-shadow: shadow("sm");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+    width: 100%;
+    max-width: 500px;
+    flex-shrink: 0;
+    
+    @include breakpoint-down("lg") {
+      max-width: 100%;
+    }
+  }
+
+  &__cards {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+    flex-grow: 1;
+    
+    @include breakpoint-down("lg") {
+      width: 100%;
+    }
+  }
+
+  &__formField {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__label {
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+  }
+
+  &__input,
+  &__select,
+  &__textarea {
+    @include input("md");
+    border: border-width("thin") solid color("neutral", "light");
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    width: 100%;
+    height: auto;
+  }
+
+  &__select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right spacing("md") center;
+    background-size: 16px 12px;
+    padding-right: spacing("xl");
+  }
+
+  &__textarea {
+    @include textarea("md");
+    resize: vertical;
+  }
+
+  &__saveButton {
+    margin-top: spacing("md");
+    align-self: stretch;
+    background-color: color("primary", "base");
+    text-transform: uppercase;
+  }
+}

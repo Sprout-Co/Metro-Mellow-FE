@@ -1,0 +1,84 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.addressCard {
+  background-color: color("neutral", "lightest");
+  border-radius: border-radius("lg");
+  padding: spacing("lg");
+  display: flex;
+  justify-content: space-between;
+  gap: spacing("md");
+  transition: $transition-base;
+  border: border-width("thin") solid color("neutral", "lighter");
+  width: 100%;
+
+  &:hover {
+    box-shadow: shadow("sm");
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__details {
+    display: flex;
+    gap: spacing("sm");
+    align-items: flex-start;
+  }
+
+  &__icon {
+    color: color("primary", "base");
+    margin-top: spacing("xxs");
+    flex-shrink: 0;
+  }
+
+  &__address {
+    @include body-2;
+    color: color("neutral", "darkest");
+    flex: 1;
+  }
+
+  &__contact {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__contactItem {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+  }
+
+  &__contactIcon {
+    color: color("primary", "base");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  &__editButton {
+    color: color("primary", "base");
+    text-transform: uppercase;
+    @include font-weight("bold");
+    @include font-size("sm");
+    min-width: 80px;
+    
+    &:hover {
+      background-color: color("primary", "lighter");
+    }
+  }
+}

@@ -9,6 +9,7 @@ import AllOrdersSection from './_components/all-orders/AllOrdersSection';
 import QuickActions from './_components/quick-actions/QuickActions';
 import CTAButton from './_components/cta/CTAButton';
 import SubscriptionSection from './_components/subscriptions/SubscriptionSection';
+import AddressSection from './_components/address/AddressSection';
 import EmptyState from './_components/common/EmptyState';
 import Button from '@/components/ui/Button/Button';
 
@@ -72,7 +73,7 @@ export default function Dashboard() {
           
           {activeTab === 'address' && (
             <div className={styles.dashboard__main}>
-              <p>Address section content will go here</p>
+              <AddressSection />
             </div>
           )}
           
