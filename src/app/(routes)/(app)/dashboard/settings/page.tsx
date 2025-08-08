@@ -7,6 +7,7 @@ import NavigationTabs from '../_components/navigation/NavigationTabs';
 import Button from '@/components/ui/Button/Button';
 import ChangePasswordModal from './ChangePasswordModal';
 import PreferencesSection from './PreferencesSection';
+import BillingSection from './BillingSection';
 
 export default function ProfileSettingsPage() {
   const [activeTab, setActiveTab] = useState('profile');
@@ -57,6 +58,17 @@ export default function ProfileSettingsPage() {
     setTimeout(() => {
       setIsLoading(false);
       console.log('Preferences updated:', preferences);
+    }, 1000);
+  };
+
+  // Handle billing save
+  const handleBillingSave = (billing: any) => {
+    setIsLoading(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      setIsLoading(false);
+      console.log('Billing updated:', billing);
     }, 1000);
   };
 
@@ -211,7 +223,14 @@ export default function ProfileSettingsPage() {
             />
           )}
 
-          {activeTab !== 'profile' && activeTab !== 'preferences' && (
+          {activeTab === 'billing' && (
+            <BillingSection
+              onSave={handleBillingSave}
+              isLoading={isLoading}
+            />
+          )}
+
+          {activeTab !== 'profile' && activeTab !== 'preferences' && activeTab !== 'billing' && (
             <div className={styles.profilePage__comingSoon}>
               <p>This section is coming soon!</p>
             </div>
