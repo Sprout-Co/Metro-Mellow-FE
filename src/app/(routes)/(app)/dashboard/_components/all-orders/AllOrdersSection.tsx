@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import ServiceList from '../services/list/ServiceList';
 import { ServiceCardProps } from '../services/card/ServiceCard';
+import SectionHeader from '../common/SectionHeader';
+import FilterTabs, { FilterTab } from '../common/FilterTabs';
 import styles from './AllOrdersSection.module.scss';
 
 // Mock data for services with different service types
@@ -113,14 +115,8 @@ const mockAllOrders: ServiceCardProps[] = [
   }
 ];
 
-interface Tab {
-  id: string;
-  label: string;
-  isActive: boolean;
-}
-
 export default function AllOrdersSection() {
-  const [serviceFilterTabs, setServiceFilterTabs] = useState<Tab[]>([
+  const [serviceFilterTabs] = useState<FilterTab[]>([
     { id: 'upcoming', label: 'UPCOMING', isActive: false },
     { id: 'completed', label: 'COMPLETED', isActive: false },
     { id: 'canceled', label: 'CANCELED', isActive: false },
@@ -128,34 +124,27 @@ export default function AllOrdersSection() {
     { id: 'all', label: 'ALL', isActive: true },
   ]);
   
-  const activeServiceFilterTab = serviceFilterTabs.find(tab => tab.isActive)?.id || 'all';
+  const [activeTab, setActiveTab] = useState<string>('all');
   
-  const handleServiceFilterTabClick = (clickedTabId: string) => {
-    const updatedTabs = serviceFilterTabs.map(tab => ({
-      ...tab,
-      isActive: tab.id === clickedTabId
-    }));
-    
-    setServiceFilterTabs(updatedTabs);
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId);
   };
   
   return (
     <div className={styles.allOrders}>
+      <SectionHeader 
+        title="Overview" 
+        subtitle="Here are a list of your orders and bookings:"
+      />
       
-      <div className={styles.allOrders__serviceFilterTabs}>
-        {serviceFilterTabs.map(tab => (
-          <button
-            key={tab.id}
-            className={`${styles.allOrders__serviceFilterTab} ${tab.isActive ? styles['allOrders__serviceFilterTab--active'] : ''}`}
-            onClick={() => handleServiceFilterTabClick(tab.id)}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+      <FilterTabs 
+        tabs={serviceFilterTabs}
+        onTabChange={handleTabChange}
+        className={styles.allOrders__filterTabs}
+      />
       
       <div className={styles.allOrders__content}>
-        <ServiceList services={mockAllOrders} activeTab={activeServiceFilterTab} />
+        <ServiceList services={mockAllOrders} activeTab={activeTab} />
       </div>
     </div>
   );

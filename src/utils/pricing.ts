@@ -236,7 +236,7 @@ function calculatePestControlPrice(
   const { areas, severity, treatmentType } = config.pestControl;
 
   // Calculate area costs
-  let totalAreaCost = basePrice;
+  const totalAreaCost = basePrice;
   //   areas.forEach((area) => {
   //     const areaPrice = PEST_CONTROL_AREA_PRICES[area] || 1000; // Default ₦1000
   //     totalAreaCost += areaPrice;

@@ -1,0 +1,27 @@
+// SubscriptionPlan.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.subscription {
+  &__container {
+    display: flex;
+    gap: spacing("xl");
+    
+    @include breakpoint-down("lg") {
+      flex-direction: column;
+    }
+  }
+
+  &__left {
+    flex: 3;
+  }
+
+  &__right {
+    flex: 2;
+    
+    @include breakpoint-down("lg") {
+      margin-top: spacing("xl");
+    }
+  }
+}

@@ -42,7 +42,7 @@ const generateDefaultServiceConfiguration = (
   // Set sensible defaults for each category
   let frequency = SubscriptionFrequency.Weekly;
   let scheduledDays = [ScheduleDays.Monday];
-  let preferredTimeSlot = TimeSlot.Morning;
+  const preferredTimeSlot = TimeSlot.Morning;
 
   switch (service.category) {
     case ServiceCategory.Cleaning:
