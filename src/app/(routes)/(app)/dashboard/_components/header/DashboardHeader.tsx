@@ -50,20 +50,32 @@ export default function DashboardHeader() {
               <div className={styles.header__dropdown}>
                 <ul className={styles.header__menu}>
                   <li className={styles.header__menuItem}>
-                    <span className={styles.header__menuIcon}>📋</span>
-                    SERVICES
+                    <Link href="/dashboard" className={styles.header__menuLink} onClick={() => setIsMenuOpen(false)}>
+                      <span className={styles.header__menuIcon}>📋</span>
+                      SERVICES
+                    </Link>
                   </li>
                   <li className={styles.header__menuItem}>
-                    <span className={styles.header__menuIcon}>📦</span>
-                    MY SUBSCRIPTION
+                    <Link href="/dashboard?tab=subscription" className={styles.header__menuLink} onClick={() => setIsMenuOpen(false)}>
+                      <span className={styles.header__menuIcon}>📦</span>
+                      MY SUBSCRIPTION
+                    </Link>
                   </li>
                   <li className={styles.header__menuItem}>
-                    <span className={styles.header__menuIcon}>⚙️</span>
-                    SETTINGS
+                    <Link href="/dashboard/settings" className={styles.header__menuLink} onClick={() => setIsMenuOpen(false)}>
+                      <span className={styles.header__menuIcon}>⚙️</span>
+                      SETTINGS
+                    </Link>
                   </li>
                   <li className={`${styles.header__menuItem} ${styles['header__menuItem--logout']}`}>
-                    <span className={styles.header__menuIcon}>🚪</span>
-                    LOGOUT
+                    <button className={styles.header__menuLink} onClick={() => {
+                      setIsMenuOpen(false);
+                      // Handle logout logic here
+                      console.log('Logout clicked');
+                    }}>
+                      <span className={styles.header__menuIcon}>🚪</span>
+                      LOGOUT
+                    </button>
                   </li>
                 </ul>
               </div>

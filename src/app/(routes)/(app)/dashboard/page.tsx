@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import DashboardHeader from './_components/header/DashboardHeader';
-import DashboardBanner from './_components/banner/DashboardBanner';
+import { useSearchParams } from 'next/navigation';
+import DashboardLayout from './_components/layout/DashboardLayout';
 import NavigationTabs from './_components/navigation/NavigationTabs';
 import ServicesSection from './_components/services/ServicesSection';
 import AllOrdersSection from './_components/all-orders/AllOrdersSection';
@@ -18,7 +18,16 @@ import styles from './Dashboard.module.scss';
 export default function Dashboard() {
   // This would typically be fetched from an API
   const hasServices = true;
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState('overview');
+
+  // Set initial tab based on URL parameter
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam && ['overview', 'subscription', 'address'].includes(tabParam)) {
+      setActiveTab(tabParam);
+    }
+  }, [searchParams]);
 
   // Helper function for handling add service action
   const handleAddService = () => {
@@ -31,20 +40,15 @@ export default function Dashboard() {
   };
 
   return (
-    <div className={styles.dashboard}>
-      <DashboardHeader />
-      <DashboardBanner />
-      
-      <div className={styles.dashboard__content}>
-        <div className={styles.dashboard__container}>
-          <NavigationTabs 
-            tabs={[
-              { id: 'overview', label: 'OVERVIEW', isActive: activeTab === 'overview' },
-              { id: 'subscription', label: 'SUBSCRIPTION', isActive: activeTab === 'subscription' },
-              { id: 'address', label: 'ADDRESS', isActive: activeTab === 'address' },
-            ]} 
-            onTabClick={handleTabClick}
-          />
+    <DashboardLayout>
+      <NavigationTabs 
+        tabs={[
+          { id: 'overview', label: 'OVERVIEW', isActive: activeTab === 'overview' },
+          { id: 'subscription', label: 'SUBSCRIPTION', isActive: activeTab === 'subscription' },
+          { id: 'address', label: 'ADDRESS', isActive: activeTab === 'address' },
+        ]} 
+        onTabClick={handleTabClick}
+      />
           
           {activeTab === 'overview' && (
             <div className={styles.dashboard__main}>
@@ -94,8 +98,6 @@ export default function Dashboard() {
               </Button>
             </div>
           )}
-        </div>
-      </div>
-    </div>
+    </DashboardLayout>
   );
 }

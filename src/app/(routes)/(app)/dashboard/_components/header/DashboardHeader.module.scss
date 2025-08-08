@@ -105,4 +105,30 @@
   &__menuIcon {
     font-size: font-size("base");
   }
+
+  &__menuLink {
+    @include flex;
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("medium");
+    width: 100%;
+    padding: spacing("sm") spacing("md");
+    color: color("neutral", "darkest");
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    gap: spacing("sm");
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color("neutral", "lightest");
+      text-decoration: none;
+    }
+
+    &:focus {
+      outline: none;
+      background-color: color("neutral", "lightest");
+    }
+  }
 }
