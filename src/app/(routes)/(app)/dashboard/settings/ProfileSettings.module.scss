@@ -144,6 +144,10 @@
     width: 100%;
     border: 1px solid color("neutral", "medium");
     transition: $transition-base;
+    height: auto;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     
     &:hover {
       border-color: color("primary", "light");
