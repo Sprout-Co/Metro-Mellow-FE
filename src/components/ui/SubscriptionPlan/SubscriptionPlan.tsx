@@ -178,6 +178,12 @@ const SubscriptionPlan: React.FC<SubscriptionPlanProps> = ({
             // This will trigger editing mode - you can implement the logic here
             console.log('Edit service clicked');
           }}
+          onProceed={() => {
+            // This will handle proceeding to payment - you can implement the logic here
+            console.log('Proceed to payment clicked');
+            console.log('Selected services:', detailedServices);
+            console.log('Total amount:', detailedServices.reduce((total, service) => total + service.price, 0));
+          }}
         />
       </div>
     </div>

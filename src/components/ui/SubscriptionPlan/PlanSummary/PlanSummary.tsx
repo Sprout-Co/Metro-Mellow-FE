@@ -141,7 +141,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({ services, onProceed, onEdit }
             variant="primary"
             fullWidth
           >
-            PROCEED TO
+            PROCEED TO PAYMENT
           </Button>
         </div>
       )}
