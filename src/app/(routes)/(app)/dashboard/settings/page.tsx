@@ -6,6 +6,7 @@ import styles from './ProfileSettings.module.scss';
 import NavigationTabs from '../_components/navigation/NavigationTabs';
 import Button from '@/components/ui/Button/Button';
 import ChangePasswordModal from './ChangePasswordModal';
+import PreferencesSection from './PreferencesSection';
 
 export default function ProfileSettingsPage() {
   const [activeTab, setActiveTab] = useState('profile');
@@ -18,6 +19,8 @@ export default function ProfileSettingsPage() {
     address: '',
     lga: ''
   });
+
+
 
   // Handle tab click
   const handleTabClick = (tabId: string) => {
@@ -43,6 +46,17 @@ export default function ProfileSettingsPage() {
       setIsLoading(false);
       // Show success message or handle success state
       console.log('Profile updated:', formData);
+    }, 1000);
+  };
+
+  // Handle preferences save
+  const handlePreferencesSave = (preferences: any) => {
+    setIsLoading(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      setIsLoading(false);
+      console.log('Preferences updated:', preferences);
     }, 1000);
   };
 
@@ -190,7 +204,14 @@ export default function ProfileSettingsPage() {
             </div>
           )}
           
-          {activeTab !== 'profile' && (
+          {activeTab === 'preferences' && (
+            <PreferencesSection
+              onSave={handlePreferencesSave}
+              isLoading={isLoading}
+            />
+          )}
+
+          {activeTab !== 'profile' && activeTab !== 'preferences' && (
             <div className={styles.profilePage__comingSoon}>
               <p>This section is coming soon!</p>
             </div>
