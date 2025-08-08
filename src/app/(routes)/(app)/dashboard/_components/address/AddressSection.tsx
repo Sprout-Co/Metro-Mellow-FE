@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import styles from './AddressSection.module.scss';
 import Button from '@/components/ui/Button/Button';
+import SectionHeader from '../common/SectionHeader/SectionHeader';
 // @ts-ignore
 import AddressCard from './AddressCard';
 
@@ -111,8 +112,10 @@ const AddressSection = () => {
   return (
     <div className={styles.addressSection}>
       <div className={styles.addressSection__container}>
-        <h2 className={styles.addressSection__title}>Addresses</h2>
-        <p className={styles.addressSection__subtitle}>Here are a list of your addresses:</p>
+        <SectionHeader 
+          title="Addresses"
+          subtitle="Manage your addresses:"
+        />
         
         <div className={styles.addressSection__content}>
           <div className={styles.addressSection__form}>
