@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import DashboardBanner from '../../_components/banner/DashboardBanner';
+import DashboardBanner from '../_components/banner/DashboardBanner';
 import styles from './ProfileSettings.module.scss';
-import NavigationTabs from '../../_components/navigation/NavigationTabs';
+import NavigationTabs from '../_components/navigation/NavigationTabs';
 import Button from '@/components/ui/Button/Button';
 
 export default function ProfileSettingsPage() {
@@ -69,15 +69,6 @@ export default function ProfileSettingsPage() {
             <div className={styles.profilePage__main}>
               <div className={styles.profilePage__profileContent}>
                 <div className={styles.profilePage__profileHeader}>
-                  <div className={styles.profilePage__profilePicture}>
-                    <div className={styles.profilePage__uploadContainer}>
-                      <div className={styles.profilePage__profileImage}>
-                        {/* Profile image would be here */}
-                        <span>UPLOAD</span>
-                      </div>
-                    </div>
-                  </div>
-                  
                   <div className={styles.profilePage__profileForm}>
                     <form onSubmit={handleSubmit}>
                       <div className={styles.profilePage__formGroup}>
@@ -166,6 +157,15 @@ export default function ProfileSettingsPage() {
                         </Button>
                       </div>
                     </form>
+                  </div>
+                  
+                  <div className={styles.profilePage__profilePicture}>
+                    <div className={styles.profilePage__uploadContainer}>
+                      <div className={styles.profilePage__profileImage}>
+                        {/* Profile image would be here */}
+                        <span>UPLOAD</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

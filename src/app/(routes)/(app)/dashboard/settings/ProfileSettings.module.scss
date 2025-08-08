@@ -45,21 +45,23 @@
   &__profileHeader {
     display: flex;
     align-items: flex-start;
-    gap: spacing("2xl");
+    gap: spacing("xl");
 
     @include breakpoint-down("md") {
       flex-direction: column;
+      gap: spacing("lg");
     }
   }
 
   &__profilePicture {
     flex-shrink: 0;
-    margin-bottom: spacing("xl");
+    order: 2;
+    margin-left: auto;
   }
 
   &__uploadContainer {
-    width: 120px;
-    height: 120px;
+    width: 200px;
+    height: 200px;
     position: relative;
     border-radius: border-radius("full");
     overflow: hidden;
@@ -101,8 +103,8 @@
   }
 
   &__profileForm {
-    flex: 1;
-    margin-top: spacing("lg");
+    flex: 0 0 400px;
+    max-width: 400px;
   }
 
   &__formGroup {
