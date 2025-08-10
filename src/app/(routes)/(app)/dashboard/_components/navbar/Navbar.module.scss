@@ -50,6 +50,7 @@
     gap: spacing("xs");
     color: color("neutral", "darkest");
     margin-left: spacing("lg");
+    cursor: pointer;
 
     svg {
       color: color("primary", "base");
