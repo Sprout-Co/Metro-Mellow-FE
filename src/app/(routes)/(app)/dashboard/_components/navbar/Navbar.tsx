@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "./Navbar.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
+import { Bell, ChevronDown, MapPin } from "lucide-react";
 
 // Icons (you can replace these with your preferred icon library)
 const NotificationIcon = () => (
@@ -97,26 +98,11 @@ const Navbar: React.FC = () => {
             </div>
           </Link>
           <motion.div className={styles.navbar__location}>
-            <LocationIcon />
+            <MapPin />
             <span className={styles.navbar__locationText}>
               Anike Ologuntoye Avenue, Lagos, Nigeria
             </span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              style={{ marginLeft: 4, verticalAlign: "middle" }}
-              aria-hidden="true"
-              focusable="false"
-            >
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
+            <ChevronDown />
           </motion.div>
         </div>
         {/* Navigation Links - Desktop */}
@@ -150,7 +136,7 @@ const Navbar: React.FC = () => {
           </FnButton>
           {/* Notification */}
           <motion.div className={styles.navbar__iconButton}>
-            <NotificationIcon />
+            <Bell />
           </motion.div>
 
           {/* Cart */}
