@@ -193,7 +193,8 @@
     width: 2.5rem;
     height: 2.5rem;
     border-radius: border-radius("full");
-    background-color: color("primary", "light");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
     @include flex-center;
 
     @include breakpoint-down("sm") {
@@ -202,10 +203,15 @@
     }
   }
 
-  &__profileInitial {
-    @include font-size("lg");
-    @include font-weight("semibold");
-    color: color("primary", "base");
+  &__menuIcon {
+    @include flex-center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: border-radius("xl");
+    color: color("neutral", "white");
+    background-color: color("primary", "base");
+    cursor: pointer;
+    transition: $transition-base;
   }
 
   // Mobile menu button

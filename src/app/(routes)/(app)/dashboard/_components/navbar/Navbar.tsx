@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "./Navbar.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
-import { Bell, ChevronDown, MapPin } from "lucide-react";
+import { Bell, ChevronDown, MapPin, Menu, User } from "lucide-react";
 import AddAddressModal from "./AddAddressModal/AddAddressModal";
 
 // Icons (you can replace these with your preferred icon library)
@@ -112,19 +112,23 @@ const Navbar: React.FC = () => {
           </motion.div>
 
           {/* Cart */}
-          <motion.div className={styles.navbar__iconButton}>
+          {/* <motion.div className={styles.navbar__iconButton}>
             <div className={styles.navbar__cartContainer}>
               <CartIcon />
               <div className={styles.navbar__cartBadge}>0</div>
             </div>
-          </motion.div>
+          </motion.div> */}
 
           {/* User Profile */}
           <motion.div className={styles.navbar__profile}>
             <span className={styles.navbar__profileGreeting}>Hi, Sarah</span>
             <div className={styles.navbar__profileAvatar}>
-              <div className={styles.navbar__profileInitial}>S</div>
+              <User />
             </div>
+          </motion.div>
+
+          <motion.div className={styles.navbar__menuIcon}>
+            <Menu />
           </motion.div>
 
           {/* Mobile Menu Button */}
