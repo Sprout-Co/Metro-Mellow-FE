@@ -227,6 +227,16 @@ $semantic-breakpoints: (
   font-family: $font-family-secondary;
 }
 
+@mixin font-family($family) {
+  @if $family == "primary" {
+    font-family: $font-family-primary;
+  } @else if $family == "secondary" {
+    font-family: $font-family-secondary;
+  } @else if $family == "heading" {
+    font-family: $font-family-heading;
+  }
+}
+
 @mixin heading-base {
   font-family: $font-family-heading;
   line-height: map-get($line-heights, "tight");
@@ -721,11 +731,11 @@ $semantic-breakpoints: (
 // ===================================
 
 @mixin scrollbar-hidden {
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
-  
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+
   &::-webkit-scrollbar {
-    display: none;  /* Safari and Chrome */
+    display: none; /* Safari and Chrome */
   }
 }
 
