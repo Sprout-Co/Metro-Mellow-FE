@@ -1,0 +1,16 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.dashboardLayout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: color("neutral", "lightest");
+
+  &__main {
+    flex: 1;
+    padding: spacing("xl") 0;
+    @include container;
+  }
+}
