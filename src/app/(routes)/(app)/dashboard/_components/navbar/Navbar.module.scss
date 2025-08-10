@@ -23,6 +23,11 @@
   }
 
   // Logo styles
+  &__logoContainer {
+    @include flex-center;
+    gap: spacing("sm");
+  }
+
   &__logo {
     @include flex-center;
     text-decoration: none;
@@ -37,6 +42,29 @@
 
   &__logoTextHighlight {
     color: color("primary", "base");
+  }
+
+  &__location {
+    @include flex;
+    align-items: center;
+    gap: spacing("xs");
+    color: color("neutral", "darkest");
+    margin-left: spacing("lg");
+
+    svg {
+      color: color("primary", "base");
+      width: 20px;
+      height: 20px;
+    }
+
+    @include breakpoint-down("lg") {
+      display: none;
+    }
+  }
+
+  &__locationText {
+    @include font-size("sm");
+    white-space: nowrap;
   }
 
   // Navigation links
@@ -99,29 +127,6 @@
       gap: spacing("sm");
     }
   }
-
-  &__location {
-    @include flex;
-    align-items: center;
-    gap: spacing("xs");
-    color: color("neutral", "darkest");
-
-    svg {
-      color: color("primary", "base");
-      width: 20px;
-      height: 20px;
-    }
-
-    @include breakpoint-down("lg") {
-      display: none;
-    }
-  }
-
-  &__locationText {
-    @include font-size("sm");
-    white-space: nowrap;
-  }
-
   &__iconButton {
     @include flex-center;
     width: 2.5rem;

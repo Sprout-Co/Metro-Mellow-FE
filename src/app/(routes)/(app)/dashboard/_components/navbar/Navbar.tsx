@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./Navbar.module.scss";
+import FnButton from "@/components/ui/Button/FnButton";
 
 // Icons (you can replace these with your preferred icon library)
 const NotificationIcon = () => (
@@ -84,17 +85,22 @@ const Navbar: React.FC = () => {
     <nav className={styles.navbar}>
       <div className={styles.navbar__container}>
         {/* Logo */}
-        <Link href="/dashboard" className={styles.navbar__logo}>
-          <div>
-            <span className={styles.navbar__logoText}>
-              Metro{" "}
-              <span className={styles.navbar__logoTextHighlight}>Mellow</span>
-            </span>
-          </div>
-        </Link>
-
+        <div className={styles.navbar__logoContainer}>
+          <Link href="/dashboard" className={styles.navbar__logo}>
+            <div>
+              <span className={styles.navbar__logoText}>
+                Metro{" "}
+                <span className={styles.navbar__logoTextHighlight}>Mellow</span>
+              </span>
+            </div>
+          </Link>
+          <motion.div className={styles.navbar__location}>
+            <LocationIcon />
+            <span className={styles.navbar__locationText}>Lagos, Nigeria</span>
+          </motion.div>
+        </div>
         {/* Navigation Links - Desktop */}
-        <div className={styles.navbar__links}>
+        {/* <div className={styles.navbar__links}>
           <motion.div className={styles.navbar__linkContainer}>
             {["overview", "services", "bookings", "history"].map((tab) => (
               <motion.div
@@ -114,16 +120,14 @@ const Navbar: React.FC = () => {
               </motion.div>
             ))}
           </motion.div>
-        </div>
+        </div> */}
 
         {/* Right Section */}
         <div className={styles.navbar__actions}>
           {/* Location */}
-          <motion.div className={styles.navbar__location}>
-            <LocationIcon />
-            <span className={styles.navbar__locationText}>Lagos, Nigeria</span>
-          </motion.div>
-
+          <FnButton variant="primary" size="sm">
+            Order Now!
+          </FnButton>
           {/* Notification */}
           <motion.div className={styles.navbar__iconButton}>
             <NotificationIcon />
