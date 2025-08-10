@@ -6,24 +6,9 @@ import Image from "next/image";
 import styles from "./Navbar.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import { Bell, ChevronDown, MapPin } from "lucide-react";
+import AddAddressModal from "./AddAddressModal/AddAddressModal";
 
 // Icons (you can replace these with your preferred icon library)
-const NotificationIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-  </svg>
-);
 
 const CartIcon = () => (
   <svg
@@ -61,25 +46,9 @@ const MenuIcon = () => (
   </svg>
 );
 
-const LocationIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-    <circle cx="12" cy="10" r="3"></circle>
-  </svg>
-);
-
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
@@ -97,7 +66,10 @@ const Navbar: React.FC = () => {
               />
             </div>
           </Link>
-          <motion.div className={styles.navbar__location}>
+          <motion.div
+            className={styles.navbar__location}
+            onClick={() => setIsAddAddressModalOpen(true)}
+          >
             <MapPin />
             <span className={styles.navbar__locationText}>
               Anike Ologuntoye Avenue, Lagos, Nigeria
@@ -184,6 +156,11 @@ const Navbar: React.FC = () => {
           ))}
         </div>
       )}
+
+      <AddAddressModal
+        isOpen={isAddAddressModalOpen}
+        onClose={() => setIsAddAddressModalOpen(false)}
+      />
     </nav>
   );
 };
