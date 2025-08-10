@@ -1,0 +1,215 @@
+// Dashboard Functional Button Component Styles
+
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: map-get($border-radius, 'lg');
+  font-family: $font-family-base;
+  font-weight: map-get($font-weights, 'medium');
+  font-size: map-get($font-sizes, 'button');
+  line-height: map-get($line-heights, 'normal');
+  letter-spacing: map-get($letter-spacing, 'normal');
+  text-decoration: none;
+  cursor: pointer;
+  transition: $transition-base;
+  user-select: none;
+  outline: none;
+  overflow: hidden;
+
+  &:focus-visible {
+    box-shadow: map-get($shadows, 'focus');
+  }
+
+  // Variants
+  &--primary {
+    background-color: color('primary', 'base');
+    color: color('neutral', 'white');
+    
+    &:hover:not(:disabled) {
+      background-color: color('primary', 'dark');
+      transform: translateY(-1px);
+      box-shadow: map-get($shadows, 'md');
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: map-get($shadows, 'sm');
+    }
+  }
+
+  &--secondary {
+    background-color: color('secondary', 'base');
+    color: color('neutral', 'white');
+    
+    &:hover:not(:disabled) {
+      background-color: color('secondary', 'dark');
+      transform: translateY(-1px);
+      box-shadow: map-get($shadows, 'md');
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: map-get($shadows, 'sm');
+    }
+  }
+
+  &--outline {
+    background-color: transparent;
+    color: color('primary', 'base');
+    border: map-get($border-width, 'medium') solid color('primary', 'base');
+    
+    &:hover:not(:disabled) {
+      background-color: color('primary', 'base');
+      color: color('neutral', 'white');
+      transform: translateY(-1px);
+      box-shadow: map-get($shadows, 'md');
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: map-get($shadows, 'sm');
+    }
+  }
+
+  &--ghost {
+    background-color: transparent;
+    color: color('primary', 'base');
+    
+    &:hover:not(:disabled) {
+      background-color: color('primary', 'lighter');
+      color: color('primary', 'dark');
+    }
+
+    &:active:not(:disabled) {
+      background-color: color('primary', 'light');
+    }
+  }
+
+  &--danger {
+    background-color: color('status', 'error');
+    color: color('neutral', 'white');
+    
+    &:hover:not(:disabled) {
+      background-color: darken(color('status', 'error'), 10%);
+      transform: translateY(-1px);
+      box-shadow: map-get($shadows, 'md');
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: map-get($shadows, 'sm');
+    }
+  }
+
+  // Sizes
+  &--sm {
+    height: map-get($button-height, 'sm');
+    padding: map-get($button-padding, 'sm');
+    font-size: map-get($font-sizes, 'sm');
+  }
+
+  &--md {
+    height: map-get($button-height, 'md');
+    padding: map-get($button-padding, 'md');
+    font-size: map-get($font-sizes, 'button');
+  }
+
+  &--lg {
+    height: map-get($button-height, 'lg');
+    padding: map-get($button-padding, 'lg');
+    font-size: map-get($font-sizes, 'lg');
+  }
+
+  // States
+  &--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  &--loading {
+    cursor: not-allowed;
+    
+    .button__content {
+      opacity: 0.7;
+    }
+  }
+
+  &--full-width {
+    width: 100%;
+  }
+
+  &--icon-only {
+    aspect-ratio: 1;
+    padding: 0;
+    
+    &.button--sm {
+      width: map-get($button-height, 'sm');
+    }
+    
+    &.button--md {
+      width: map-get($button-height, 'md');
+    }
+    
+    &.button--lg {
+      width: map-get($button-height, 'lg');
+    }
+  }
+}
+
+// Content wrapper
+.button__content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: spacing('xs');
+  transition: opacity map-get($transition-duration, 'fast') ease;
+}
+
+// Icons
+.button__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  &--left {
+    margin-right: spacing('xs');
+  }
+
+  &--right {
+    margin-left: spacing('xs');
+  }
+}
+
+// Loading spinner
+.button__loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
