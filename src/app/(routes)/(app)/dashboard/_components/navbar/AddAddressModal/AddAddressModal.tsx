@@ -108,17 +108,8 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Delivery Address">
       <div className={styles["address-modal"]}>
-        <Input
-          placeholder="Search for an address"
-          value={searchValue}
-          onChange={handleInputChange}
-          autoFocus
-          fullWidth
-          leftIcon={<Search />}
-          rightIcon={<X />}
-        />
         <div className={styles["address-modal__search-container"]}>
-          <Search className={styles["address-modal__search-icon"]} />
+          {/* <Search className={styles["address-modal__search-icon"]} />
           <input
             type="text"
             className={styles["address-modal__search-input"]}
@@ -134,7 +125,15 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
             >
               <X />
             </button>
-          )}
+          )} */}
+          <Input
+            placeholder="Search for an address"
+            value={searchValue}
+            onChange={handleInputChange}
+            autoFocus
+            fullWidth
+            leftIcon={<Search />}
+          />
         </div>
 
         <AnimatePresence>
@@ -176,7 +175,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
           )}
         </AnimatePresence>
 
-        <motion.button
+        {/* <motion.button
           className={styles["address-modal__location-button"]}
           onClick={handleUseCurrentLocation}
           whileTap={{ scale: 0.98 }}
@@ -189,7 +188,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
           <span className={styles["address-modal__location-text"]}>
             Share your current location
           </span>
-        </motion.button>
+        </motion.button> */}
 
         <FnButton
           variant="primary"
