@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import styles from "./AddAddressModal.module.scss";
 import { MapPin, Navigation, Search, X } from "lucide-react";
 import { FnButton } from "@/components/ui/Button/FnButton";
+import Input from "@/components/ui/Input";
 
 interface AddressOption {
   id: string;
@@ -107,6 +108,15 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Delivery Address">
       <div className={styles["address-modal"]}>
+        <Input
+          placeholder="Search for an address"
+          value={searchValue}
+          onChange={handleInputChange}
+          autoFocus
+          fullWidth
+          leftIcon={<Search />}
+          rightIcon={<X />}
+        />
         <div className={styles["address-modal__search-container"]}>
           <Search className={styles["address-modal__search-icon"]} />
           <input

@@ -1,0 +1,313 @@
+@import "@/styles/abstracts/_variables.scss";
+@import "@/styles/abstracts/_functions.scss";
+@import "@/styles/abstracts/_mixins.scss";
+
+.input {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("xs");
+  width: fit-content;
+
+  // Variants
+  &--default {
+    .input__wrapper {
+      border: 1px solid color("primary", "lighter");
+      background-color: color("neutral", "white");
+
+      &:hover:not(.input--disabled) {
+        border-color: color("primary", "base");
+      }
+    }
+
+    &.input--focused .input__wrapper {
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.1);
+    }
+
+    &.input--error .input__wrapper {
+      border-color: color("status", "error");
+      box-shadow: 0 0 0 3px rgba(251, 34, 34, 0.1);
+    }
+  }
+
+  &--bordered {
+    .input__wrapper {
+      border: 2px solid color("primary", "lighter");
+      background-color: color("neutral", "white");
+
+      &:hover:not(.input--disabled) {
+        border-color: color("primary", "base");
+      }
+    }
+
+    &.input--focused .input__wrapper {
+      border-color: color("primary", "base");
+    }
+
+    &.input--error .input__wrapper {
+      border-color: color("status", "error");
+    }
+  }
+
+  &--filled {
+    .input__wrapper {
+      border: 1px solid transparent;
+      background-color: color("neutral", "lighter");
+
+      &:hover:not(.input--disabled) {
+        background-color: color("neutral", "light");
+      }
+    }
+
+    &.input--focused .input__wrapper {
+      background-color: color("neutral", "white");
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.1);
+    }
+
+    &.input--error .input__wrapper {
+      background-color: color("neutral", "white");
+      border-color: color("status", "error");
+      box-shadow: 0 0 0 3px rgba(251, 34, 34, 0.1);
+    }
+  }
+
+  // Sizes
+  &--sm {
+    .input__wrapper {
+      height: button-height("sm");
+      border-radius: border-radius("md");
+    }
+
+    .input__field {
+      font-size: font-size("small");
+      padding: 0 spacing("sm");
+    }
+
+    .input__icon_left,
+    .input__icon_right {
+      width: 16px;
+      height: 16px;
+    }
+
+    .input__icon_left {
+      margin-left: spacing("sm");
+    }
+
+    .input__icon_right {
+      margin-right: spacing("sm");
+    }
+
+    &.input__wrapper--with-left-icon .input__field {
+      padding-left: calc(16px + #{spacing("sm")} + #{spacing("xs")});
+    }
+
+    &.input__wrapper--with-right-icon .input__field {
+      padding-right: calc(16px + #{spacing("sm")} + #{spacing("xs")});
+    }
+  }
+
+  &--md {
+    .input__wrapper {
+      height: button-height("md");
+      border-radius: border-radius("md");
+    }
+
+    .input__field {
+      font-size: font-size("button");
+      padding: 0 spacing("md");
+    }
+
+    .input__icon_left,
+    .input__icon_right {
+      width: 20px;
+      height: 20px;
+    }
+
+    .input__icon_left {
+      margin-left: spacing("md");
+    }
+
+    .input__icon_right {
+      margin-right: spacing("md");
+    }
+
+    &.input__wrapper--with-left-icon .input__field {
+      padding-left: calc(20px + #{spacing("md")} + #{spacing("xs")});
+    }
+
+    &.input__wrapper--with-right-icon .input__field {
+      padding-right: calc(20px + #{spacing("md")} + #{spacing("xs")});
+    }
+  }
+
+  &--lg {
+    .input__wrapper {
+      height: button-height("lg");
+      border-radius: border-radius("lg");
+    }
+
+    .input__field {
+      font-size: font-size("body-2");
+      padding: 0 spacing("lg");
+    }
+
+    .input__icon_left,
+    .input__icon_right {
+      width: 24px;
+      height: 24px;
+    }
+
+    .input__icon_left {
+      margin-left: spacing("lg");
+    }
+
+    .input__icon_right {
+      margin-right: spacing("lg");
+    }
+
+    &.input__wrapper--with-left-icon .input__field {
+      padding-left: calc(24px + #{spacing("lg")} + #{spacing("xs")});
+    }
+
+    &.input__wrapper--with-right-icon .input__field {
+      padding-right: calc(24px + #{spacing("lg")} + #{spacing("xs")});
+    }
+  }
+
+  // States
+  &--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+
+    .input__wrapper {
+      background-color: color("neutral", "light");
+      border-color: color("neutral", "light");
+    }
+
+    .input__field {
+      cursor: not-allowed;
+    }
+  }
+
+  &--full-width {
+    width: 100%;
+
+    .input__wrapper {
+      width: 100%;
+    }
+  }
+
+  // Elements
+  &__label {
+    font-size: font-size("small");
+    font-weight: font-weight("medium");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__required {
+    color: color("status", "error");
+    margin-left: spacing("xxs");
+  }
+
+  &__wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    transition: $transition-base;
+    width: 100%;
+  }
+
+  &__field {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: color("neutral", "darkest");
+    font-family: inherit;
+    width: 100%;
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      color: color("neutral", "medium");
+    }
+  }
+
+  &__icon_left,
+  &__icon_right {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("neutral", "medium");
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
+  &__icon_left {
+    left: 0;
+  }
+
+  &__icon_right {
+    right: 0;
+  }
+
+  &__password_toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: color("neutral", "medium");
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color $transition-base;
+    pointer-events: all;
+
+    &:hover:not(:disabled) {
+      color: color("neutral", "darkest");
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  }
+
+  &__message {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+  }
+
+  &__error {
+    font-size: font-size("xs");
+    color: color("status", "error");
+    margin: 0;
+  }
+
+  &__helper {
+    font-size: font-size("xs");
+    color: color("neutral", "medium");
+    margin: 0;
+  }
+}
+
+// Focus styles for better accessibility
+.input__field:focus {
+  outline: none;
+}
+
+// Ensure proper stacking of icons over input field
+.input__wrapper--with-left-icon,
+.input__wrapper--with-right-icon {
+  .input__icon_left,
+  .input__icon_right {
+    z-index: 1;
+  }
+}
