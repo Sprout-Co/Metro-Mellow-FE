@@ -11,7 +11,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
   onClose,
 }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} title="Add Address">
       <h2>Add Address Modal</h2>
       {/* Modal content goes here */}
     </Modal>

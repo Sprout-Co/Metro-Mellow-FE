@@ -99,7 +99,11 @@ const Modal: React.FC<ModalProps> = ({
                   headerContent
                 ) : (
                   <>
-                    {title && <h2 className={styles.modal__title}>{title}</h2>}
+                    {title ? (
+                      <h2 className={styles.modal__title}>{title}</h2>
+                    ) : (
+                      <div className={styles.modal__title} />
+                    )}
                     {showCloseButton && (
                       <button className={styles.modal__close} onClick={onClose}>
                         <svg

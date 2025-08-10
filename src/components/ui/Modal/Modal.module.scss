@@ -42,12 +42,12 @@
     border-bottom: 1px solid color("neutral", "lighter");
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    background: linear-gradient(
-      to right,
-      color-alpha("primary", "base", 0.03),
-      color-alpha("primary", "light", 0.05)
-    );
+    justify-content: space-between;
+    // background: linear-gradient(
+    //   to right,
+    //   color-alpha("primary", "base", 0.03),
+    //   color-alpha("primary", "light", 0.05)
+    // );
   }
 
   &__title {
