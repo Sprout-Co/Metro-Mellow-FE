@@ -3,365 +3,373 @@
 @import "@/styles/abstracts/mixins";
 
 .ctaSection {
-  background: white;
-  border-radius: 0.5rem;
-  margin: spacing("lg") 0;
+  padding: spacing("lg") 0;
+  background: color("neutral", "white");
+
+  @include breakpoint-down("md") {
+    padding: spacing("md") 0;
+  }
 }
 
-.serviceCardIcon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
+// Simple Header
+.header {
+  margin-bottom: spacing("xl");
+
+  &__title {
+    @include font-size("subtitle-2");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xs");
+
+    @include breakpoint-down("md") {
+      @include font-size("lg");
+    }
+  }
+
+  &__subtitle {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    line-height: line-height("relaxed");
+  }
 }
 
-.serviceCardTitle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  color: #000;
-}
-
-.serviceCardTitleText {
-  font-family: $font-family-heading;
-  font-size: font-size("body-1");
-  font-weight: map-get($font-weights, "bold");
-  color: #000;
-}
-
-// Service Section
-.serviceSection {
-  margin-bottom: 1rem;
-}
-
-.sectionTitle {
-  font-family: $font-family-heading;
-  font-size: map-get($font-sizes, "body-1");
-  font-weight: map-get($font-weights, "bold");
-  color: $color-darko-base;
-  text-align: center;
-  margin-bottom: 1rem;
-  line-height: 1.2;
-}
-
-.serviceCards {
+// Quick Services Grid - Simplified
+.quickServices {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: spacing("md");
-  margin-bottom: 1rem;
+  margin-bottom: spacing("xl");
+
+  @include breakpoint-down("lg") {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include breakpoint-down("sm") {
+    grid-template-columns: 1fr;
+    gap: spacing("sm");
+  }
 }
 
+// Minimal Service Card
 .serviceCard {
-  background: $color-midnight-green-base;
-  border-radius: 0.5rem;
-  padding: 0.75rem;
   position: relative;
-  overflow: hidden;
-  cursor: pointer;
+  background: color("neutral", "white");
+  border: 1px solid color("neutral", "lighter");
+  border-radius: border-radius("lg");
+  padding: spacing("lg");
   transition: all 0.2s ease;
-  min-height: 120px;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-height: 140px;
 
   &:hover {
+    border-color: color("primary", "base");
+    background: color("neutral", "lightest");
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    .serviceCard__icon {
+      transform: scale(1.1);
+      background: color("primary", "base");
+      color: color("neutral", "white");
+    }
+
+    .serviceCard__arrow {
+      opacity: 1;
+      transform: translateX(2px);
+    }
   }
-}
 
-.cardContent {
-  position: relative;
-  z-index: 2;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("full");
+    background: color("neutral", "lightest");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: spacing("sm");
+    transition: all 0.2s ease;
+    color: color("neutral", "dark");
 
-.cardHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 0.5rem;
-}
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
 
-.cardTitle {
-  font-family: $font-family-heading;
-  font-size: map-get($font-sizes, "small");
-  font-weight: map-get($font-weights, "bold");
-  color: white;
-  line-height: 1.2;
-  flex: 1;
-  margin-right: 0.5rem;
-}
+  &__title {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xxs");
+    line-height: line-height("tight");
+  }
 
-.arrowIcon {
-  color: white;
-  opacity: 0.8;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-
-  svg {
+  &__arrow {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
     width: 16px;
     height: 16px;
+    color: color("neutral", "medium");
+    opacity: 0;
+    transition: all 0.2s ease;
+  }
+
+  // Subtle color accents for each service
+  &--cleaning {
+    .serviceCard__icon {
+      color: color("primary", "base");
+    }
+  }
+
+  &--laundry {
+    .serviceCard__icon {
+      color: #6366f1;
+    }
+  }
+
+  &--food {
+    .serviceCard__icon {
+      color: color("secondary", "base");
+    }
+  }
+
+  &--pest {
+    .serviceCard__icon {
+      color: #10b981;
+    }
   }
 }
 
-.serviceCard:hover .arrowIcon {
-  opacity: 1;
-  transform: translateX(2px);
-}
-
-.cardIllustration {
+// Simplified Subscription Banner
+.subscriptionBanner {
+  background: linear-gradient(
+    135deg,
+    color("primary", "base"),
+    color("primary", "dark")
+  );
+  border-radius: border-radius("lg");
+  padding: spacing("xl");
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   position: relative;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0.25rem 0;
-  min-height: 60px;
-}
+  overflow: hidden;
 
-.iconWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 50%;
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
+  @include breakpoint-down("md") {
+    flex-direction: column;
+    text-align: center;
+    padding: spacing("lg");
+  }
 
-.serviceIcon {
-  font-size: 1.25rem;
-}
-
-.starPattern {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-}
-
-.star {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: $color-sand-yellow-base;
-  border-radius: 50%;
-  animation: twinkle 1.5s ease-in-out infinite;
-
-  &::before {
+  // Subtle pattern overlay
+  &::after {
     content: "";
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 6px;
-    height: 6px;
-    background: $color-sand-yellow-base;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0.3;
+    top: 0;
+    right: -20%;
+    width: 40%;
+    height: 100%;
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.05) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
   }
-}
-
-@keyframes twinkle {
-  0%,
-  100% {
-    opacity: 0.3;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.1);
-  }
-}
-
-// Subscription Section
-.subscriptionSection {
-  background: white;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid $color-wheat-60;
 }
 
 .subscriptionContent {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 1rem;
-  align-items: center;
-}
-
-.subscriptionText {
-  flex: 1;
-}
-
-.subscriptionTitle {
-  font-family: $font-family-heading;
-  font-size: map-get($font-sizes, "body-1");
-  font-weight: map-get($font-weights, "bold");
-  color: $color-darko-base;
-  line-height: 1.2;
-  margin-bottom: 0.5rem;
-}
-
-.subscriptionDescription {
-  font-family: $font-family-base;
-  font-size: map-get($font-sizes, "small");
-  color: $color-darko-40;
-  line-height: 1.4;
-  margin-bottom: 1rem;
-}
-
-.subscriptionButton {
-  font-family: $font-family-heading;
-  font-weight: map-get($font-weights, "bold");
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  font-size: map-get($font-sizes, "small");
-}
-
-.subscriptionImages {
-  flex-shrink: 0;
-}
-
-.imageStack {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 120px;
-  height: 160px;
-}
+  z-index: 1;
+  flex: 1;
 
-.appImage {
-  position: absolute;
-  border-radius: 0.5rem;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  &__title {
+    @include font-size("lg");
+    @include font-weight("semibold");
+    color: color("neutral", "white");
+    margin-bottom: spacing("xs");
+    line-height: line-height("tight");
 
-  &.imageBack {
-    width: 80px;
-    height: 120px;
-    background: linear-gradient(
-      135deg,
-      $color-orange-20 0%,
-      $color-orange-40 100%
-    );
-    transform: translateX(-8px) translateY(8px) rotate(-3deg);
-    z-index: 1;
+    @include breakpoint-down("md") {
+      @include font-size("body-1");
+    }
   }
 
-  &.imageFront {
-    width: 90px;
-    height: 130px;
-    background: linear-gradient(
-      135deg,
-      $color-midnight-green-20 0%,
-      $color-midnight-green-40 100%
-    );
-    transform: translateX(8px) translateY(-8px) rotate(3deg);
-    z-index: 2;
-  }
-}
+  &__description {
+    @include font-size("sm");
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: spacing("md");
+    max-width: 400px;
 
-.imagePlaceholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(5px);
-}
-
-.imageIcon {
-  font-size: 1.5rem;
-  opacity: 0.7;
-}
-
-// Responsive adjustments
-@include respond-to("mobile") {
-  .serviceCards {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("lg");
+      max-width: none;
+    }
   }
 
-  .serviceCard {
-    padding: 0.5rem;
-    min-height: 100px;
-  }
+  &__benefits {
+    display: flex;
+    gap: spacing("lg");
+    @include font-size("xs");
+    color: rgba(255, 255, 255, 0.9);
 
-  .cardTitle {
-    font-size: map-get($font-sizes, "xs");
-  }
-
-  .subscriptionContent {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
-
-  .subscriptionTitle {
-    font-size: map-get($font-sizes, "small");
-  }
-
-  .subscriptionDescription {
-    font-size: map-get($font-sizes, "xs");
-  }
-
-  .imageStack {
-    width: 100px;
-    height: 120px;
-  }
-
-  .appImage {
-    &.imageBack {
-      width: 60px;
-      height: 90px;
+    @include breakpoint-down("md") {
+      justify-content: center;
+      margin-bottom: spacing("md");
     }
 
-    &.imageFront {
-      width: 70px;
-      height: 100px;
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: center;
+      gap: spacing("xs");
+    }
+  }
+
+  &__benefit {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+
+    svg {
+      width: 14px;
+      height: 14px;
+      color: color("accent", "base");
     }
   }
 }
 
-@include respond-to("tablet") {
-  .serviceCards {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.75rem;
-  }
+.subscriptionAction {
+  position: relative;
+  z-index: 1;
 
-  .subscriptionContent {
-    grid-template-columns: 1fr auto;
-    gap: 1rem;
+  &__button {
+    @include button-base;
+    background: color("neutral", "white");
+    color: color("primary", "base");
+    padding: spacing("sm") spacing("lg");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xs");
+
+    &:hover {
+      background: color("neutral", "lightest");
+      transform: translateX(2px);
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.2s ease;
+    }
+
+    &:hover svg {
+      transform: translateX(2px);
+    }
+
+    @include breakpoint-down("sm") {
+      width: 100%;
+      justify-content: center;
+    }
   }
 }
 
-// Dark mode support
-@media (prefers-color-scheme: dark) {
-  .ctaSection {
-    background: $color-darko-80;
+// Divider
+.divider {
+  height: 1px;
+  background: color("neutral", "lighter");
+  margin: spacing("lg") 0;
+}
+
+// Alternative Minimal Layout
+.minimalLayout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: spacing("lg");
+  align-items: start;
+
+  @include breakpoint-down("lg") {
+    grid-template-columns: 1fr;
+  }
+}
+
+.servicesWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("md");
+}
+
+// Inline Service Option
+.inlineService {
+  display: flex;
+  align-items: center;
+  gap: spacing("md");
+  padding: spacing("md");
+  background: color("neutral", "white");
+  border: 1px solid color("neutral", "lighter");
+  border-radius: border-radius("md");
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    border-color: color("primary", "base");
+    background: color("neutral", "lightest");
+
+    .inlineService__icon {
+      background: color("primary", "base");
+      color: color("neutral", "white");
+    }
   }
 
-  .subscriptionSection {
-    background: $color-darko-80;
-    border-color: $color-darko-40;
+  &__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: border-radius("md");
+    background: color("neutral", "lightest");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    color: color("neutral", "dark");
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 
-  .subscriptionTitle {
-    color: white;
+  &__content {
+    flex: 1;
+    min-width: 0;
   }
 
-  .subscriptionDescription {
-    color: $color-wheat-60;
+  &__title {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xxs");
+    @include truncate;
+  }
+
+  &__description {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+    @include truncate;
+  }
+
+  &__action {
+    width: 20px;
+    height: 20px;
+    color: color("neutral", "medium");
+    flex-shrink: 0;
   }
 }

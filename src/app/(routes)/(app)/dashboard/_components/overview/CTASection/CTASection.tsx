@@ -1,131 +1,147 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/Button/Button";
+import Link from "next/link";
+import {
+  ArrowRight,
+  Check,
+  Home,
+  Droplets,
+  Utensils,
+  Bug,
+  Plus,
+  ChevronRight,
+} from "lucide-react";
 import styles from "./CTASection.module.scss";
 
-// Service card data
-const serviceCards = [
-  {
-    id: "laundry",
-    title: "Pickup your laundry",
-    icon: "👕",
-    href: "/services/laundry",
-  },
+interface ServiceOption {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  href: string;
+}
+
+const serviceOptions: ServiceOption[] = [
   {
     id: "cleaning",
-    title: "Order A Cleaning Service",
-    icon: "🧹",
-    href: "/services/cleaning",
+    title: "Book Cleaning",
+    description: "Professional home cleaning",
+    icon: <Home />,
+    href: "/dashboard/book-service?type=cleaning",
+  },
+  {
+    id: "laundry",
+    title: "Schedule Laundry",
+    description: "Pickup and delivery",
+    icon: <Droplets />,
+    href: "/dashboard/book-service?type=laundry",
   },
   {
     id: "food",
-    title: "Food Delivery",
-    icon: "🍔",
-    href: "/services/food-delivery",
+    title: "Order Cooking",
+    description: "Meal preparation service",
+    icon: <Utensils />,
+    href: "/dashboard/book-service?type=food",
   },
   {
-    id: "pest-control",
+    id: "pest",
     title: "Pest Control",
-    icon: "🐜",
-    href: "/services/pest-control",
+    description: "Safe pest management",
+    icon: <Bug />,
+    href: "/dashboard/book-service?type=pest",
   },
 ];
 
-const CTASection: React.FC = () => {
+// Alternative Ultra-Clean Layout
+const CTASectionAlternative: React.FC = () => {
   return (
     <div className={styles.ctaSection}>
-      {/* Service Selection Section */}
-      <div className={styles.serviceSection}>
-        <h2 className={styles.sectionTitle}>
-          Order a service or start a subscription
-        </h2>
+      <div className={styles.minimalLayout}>
+        {/* Services Column */}
+        <div className={styles.servicesWrapper}>
+          <div className={styles.header}>
+            <h2 className={styles.header__title}>Book a Service</h2>
+            <p className={styles.header__subtitle}>
+              Choose from our available services
+            </p>
+          </div>
 
-        <div className={styles.serviceCards}>
-          {serviceCards.map((service) => (
+          {serviceOptions.map((service, index) => (
             <motion.div
               key={service.id}
-              className={styles.serviceCard}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{
+                duration: 0.2,
+                delay: index * 0.05,
+              }}
             >
-              <div className={styles.cardContent}>
-                <div className={styles.cardHeader}>
-                  <h3 className={styles.cardTitle}>{service.title}</h3>
-                  <div className={styles.arrowIcon}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M5 12H19M19 12L12 5M19 12L12 19"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+              <Link href={service.href}>
+                <motion.div
+                  className={styles.inlineService}
+                  whileHover={{ x: 4 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div className={styles.inlineService__icon}>
+                    {service.icon}
                   </div>
-                </div>
-
-                <div className={styles.cardIllustration}>
-                  <div className={styles.iconWrapper}>
-                    <span className={styles.serviceIcon}>{service.icon}</span>
+                  <div className={styles.inlineService__content}>
+                    <h3 className={styles.inlineService__title}>
+                      {service.title}
+                    </h3>
+                    <p className={styles.inlineService__description}>
+                      {service.description}
+                    </p>
                   </div>
-                  <div className={styles.starPattern}>
-                    {[...Array(4)].map((_, i) => (
-                      <div
-                        key={i}
-                        className={styles.star}
-                        style={{
-                          left: `${20 + i * 20}%`,
-                          top: `${30 + i * 15}%`,
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
+                  <ChevronRight className={styles.inlineService__action} />
+                </motion.div>
+              </Link>
             </motion.div>
           ))}
         </div>
-      </div>
 
-      {/* Subscription Section */}
-      <div className={styles.subscriptionSection}>
-        <div className={styles.subscriptionContent}>
-          <div className={styles.subscriptionText}>
-            <h2 className={styles.subscriptionTitle}>
-              Start a subscription for recurring services.
-            </h2>
-            <p className={styles.subscriptionDescription}>
-              Simplify your household chores with our premium subscription
-              services. Choose from flexible monthly plans (1–6 months).
-            </p>
-            <Button
-              variant="primary"
-              size="md"
-              className={styles.subscriptionButton}
-              href="/subscription"
-            >
-              Begin subscription plan
-            </Button>
-          </div>
-
-          <div className={styles.subscriptionImages}>
-            <div className={styles.imageStack}>
-              <div className={`${styles.appImage} ${styles.imageBack}`}>
-                <div className={styles.imagePlaceholder}>
-                  <span className={styles.imageIcon}>📱</span>
+        {/* Subscription Sidebar */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
+          <div className={styles.subscriptionBanner}>
+            <div className={styles.subscriptionContent}>
+              <h3 className={styles.subscriptionContent__title}>
+                Save with Subscription
+              </h3>
+              <p className={styles.subscriptionContent__description}>
+                Monthly plans from ₦25,000
+              </p>
+              <div className={styles.subscriptionContent__benefits}>
+                <div className={styles.subscriptionContent__benefit}>
+                  <Check />
+                  <span>30% savings</span>
                 </div>
-              </div>
-              <div className={`${styles.appImage} ${styles.imageFront}`}>
-                <div className={styles.imagePlaceholder}>
-                  <span className={styles.imageIcon}>🏠</span>
+                <div className={styles.subscriptionContent__benefit}>
+                  <Check />
+                  <span>Priority booking</span>
                 </div>
               </div>
             </div>
+            <div className={styles.subscriptionAction}>
+              <Link href="/dashboard/subscriptions">
+                <motion.button
+                  className={styles.subscriptionAction__button}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Plus size={16} />
+                  Get Started
+                </motion.button>
+              </Link>
+            </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
 };
 
-export default CTASection;
+export default CTASectionAlternative;
