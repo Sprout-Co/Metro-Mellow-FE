@@ -7,7 +7,7 @@ import styles from "./FnButton.module.scss";
 
 export interface FnButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "ghost" | "white";
+  variant?: "primary" | "secondary" | "ghost" | "white" | "accent";
   /** Button size */
   size?: "sm" | "md" | "lg";
   /** Loading state */

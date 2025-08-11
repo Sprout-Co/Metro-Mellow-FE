@@ -42,6 +42,11 @@
   &--white {
     @include button-white;
   }
+
+  &--accent {
+    @include button-accent;
+  }
+
   border-radius: border-radius("lg") !important;
   font-weight: font-weight("regular") !important;
 

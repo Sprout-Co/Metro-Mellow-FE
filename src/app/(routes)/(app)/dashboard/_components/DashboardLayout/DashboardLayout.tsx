@@ -22,7 +22,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       <Navbar handleSidebarToggle={handleSidebarToggle} />
       <div className={styles.dashboardLayout__content}>
         <Sidebar
-          isOpen={!isSidebarCollapsed}
+          isOpen={isSidebarCollapsed}
           onClose={() => handleSidebarToggle(true)}
         />
         <motion.main

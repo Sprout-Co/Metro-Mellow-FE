@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { BookingStatus, TimeSlot, ServiceCategory } from "@/graphql/api";
 import styles from "./WelcomeHeader.module.scss";
+import FnButton from "@/components/ui/Button/FnButton";
 
 interface WelcomeHeaderProps {
   firstName?: string;
@@ -203,7 +204,8 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            {getGreeting()}, {firstName}
+            {getGreeting()},{" "}
+            <span className={styles.welcomeHeader__name}>{firstName}</span>
           </motion.h1>
           <motion.p
             className={styles.welcomeHeader__subtitle}
@@ -282,26 +284,32 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
             >
-              <Link
+              <FnButton variant="accent">
+                {upcomingService
+                  ? "Manage Subscriptions"
+                  : "Start Subscription"}
+              </FnButton>
+              {/* <Link
                 href="/dashboard/book-service"
                 className={styles.welcomeHeader__ctaButton}
               >
                 {upcomingService ? "Book Another" : "Book a Service"}
-              </Link>
+              </Link> */}
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.6 }}
             >
-              <Link
-                href="/dashboard/subscriptions"
-                className={styles.welcomeHeader__ctaButtonSecondary}
-              >
+              <FnButton variant="secondary">
                 {upcomingService
                   ? "Manage Subscriptions"
                   : "Start Subscription"}
-              </Link>
+              </FnButton>
+              {/* <Link
+                href="/dashboard/subscriptions"
+                className={styles.welcomeHeader__ctaButtonSecondary}
+              ></Link> */}
             </motion.div>
           </div>
         </div>

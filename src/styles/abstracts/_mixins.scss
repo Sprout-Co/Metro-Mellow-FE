@@ -459,15 +459,17 @@ $semantic-breakpoints: (
 @mixin button-secondary($size: "md") {
   @include button-base($size);
   background-color: transparent;
-  color: color("secondary", "base");
+  color: color("neutral", "white");
   border-color: color("secondary", "base");
+  background-color: color("secondary", "base");
 
   &:hover:not(:disabled) {
     background-color: color("secondary", "base");
-    color: color("neutral", "white");
-    border-color: color("primary", "base");
+    color: color("secondary", "base");
+    border-color: color("secondary", "base");
     transform: translateY(-1px);
     box-shadow: map-get($shadows, "md");
+    background-color: color("neutral", "white");
   }
 
   &:focus:not(:disabled) {
@@ -513,6 +515,29 @@ $semantic-breakpoints: (
 
   &:focus:not(:disabled) {
     box-shadow: map-get($shadows, "focus");
+  }
+}
+
+@mixin button-accent($size: "md") {
+  @include button-base($size);
+  background-color: color("accent", "base");
+  color: color("neutral", "white");
+  border-color: color("accent", "base");
+
+  &:hover:not(:disabled) {
+    background-color: color("neutral", "white");
+    color: color("accent", "base");
+    border-color: color("accent", "base");
+    box-shadow: map-get($shadows, "md");
+  }
+
+  &:focus:not(:disabled) {
+    box-shadow: map-get($shadows, "focus");
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: map-get($shadows, "sm");
   }
 }
 
