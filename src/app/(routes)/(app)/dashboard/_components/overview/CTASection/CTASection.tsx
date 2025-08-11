@@ -7,21 +7,27 @@ import styles from "./CTASection.module.scss";
 const serviceCards = [
   {
     id: "laundry",
-    title: "Schedule Laundry Pickup",
+    title: "Pickup your laundry",
     icon: "👕",
     href: "/services/laundry",
   },
   {
     id: "cleaning",
-    title: "Book A Cleaning Session",
+    title: "Order A Cleaning Service",
     icon: "🧹",
     href: "/services/cleaning",
   },
   {
-    id: "giftcard",
-    title: "Send A Giftcard",
-    icon: "🎁",
-    href: "/giftcards",
+    id: "food",
+    title: "Food Delivery",
+    icon: "🍔",
+    href: "/services/food-delivery",
+  },
+  {
+    id: "pest-control",
+    title: "Pest Control",
+    icon: "🐜",
+    href: "/services/pest-control",
   },
 ];
 
@@ -30,7 +36,9 @@ const CTASection: React.FC = () => {
     <div className={styles.ctaSection}>
       {/* Service Selection Section */}
       <div className={styles.serviceSection}>
-        <h2 className={styles.sectionTitle}>What do you need? Tap it.</h2>
+        <h2 className={styles.sectionTitle}>
+          Order a service or start a subscription
+        </h2>
 
         <div className={styles.serviceCards}>
           {serviceCards.map((service) => (
@@ -84,12 +92,11 @@ const CTASection: React.FC = () => {
         <div className={styles.subscriptionContent}>
           <div className={styles.subscriptionText}>
             <h2 className={styles.subscriptionTitle}>
-              Get our mobile application for recurring services.
+              Start a subscription for recurring services.
             </h2>
             <p className={styles.subscriptionDescription}>
-              Automate your household tasks with our premium services. Select
-              from weekly plans (1-3 weeks) or extended monthly options (1-6
-              months).
+              Simplify your household chores with our premium subscription
+              services. Choose from flexible monthly plans (1–6 months).
             </p>
             <Button
               variant="primary"

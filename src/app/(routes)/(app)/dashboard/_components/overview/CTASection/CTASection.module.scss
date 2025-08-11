@@ -3,10 +3,33 @@
 @import "@/styles/abstracts/mixins";
 
 .ctaSection {
-  padding: 1rem;
   background: white;
   border-radius: 0.5rem;
-  margin: 0.5rem 0;
+  margin: spacing("lg") 0;
+}
+
+.serviceCardIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+}
+
+.serviceCardTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  color: #000;
+}
+
+.serviceCardTitleText {
+  font-family: $font-family-heading;
+  font-size: font-size("body-1");
+  font-weight: map-get($font-weights, "bold");
+  color: #000;
 }
 
 // Service Section
@@ -26,8 +49,8 @@
 
 .serviceCards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: spacing("md");
   margin-bottom: 1rem;
 }
 
