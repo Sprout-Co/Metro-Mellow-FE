@@ -5,10 +5,16 @@ import { motion } from "framer-motion";
 import Navbar from "./navbar/Navbar";
 import Sidebar from "./sidebar/Sidebar";
 import styles from "./DashboardLayout.module.scss";
+import Breadcrumb from "./breadcrumb/Breadcrumb";
 
 interface DashboardLayoutProps {
   children: ReactNode;
 }
+
+const breadcrumbItems = [
+  { label: "Home", href: "/" },
+  { label: "Dashboard", href: "/dashboard" },
+];
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -20,6 +26,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   return (
     <div className={styles.dashboardLayout}>
       <Navbar handleSidebarToggle={handleSidebarToggle} />
+
       <div className={styles.dashboardLayout__content}>
         <Sidebar
           isOpen={isSidebarCollapsed}
@@ -31,7 +38,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.3 }}
         >
-          {children}
+          <>
+            <Breadcrumb items={breadcrumbItems} />
+            {children}
+          </>
         </motion.main>
       </div>
     </div>
