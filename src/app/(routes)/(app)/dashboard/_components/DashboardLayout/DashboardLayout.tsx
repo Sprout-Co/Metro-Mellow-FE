@@ -2,8 +2,8 @@
 
 import React, { ReactNode, useState } from "react";
 import { motion } from "framer-motion";
-import Navbar from "../navbar/Navbar";
-import Sidebar from "../sidebar/Sidebar";
+import Navbar from "./navbar/Navbar";
+import Sidebar from "./sidebar/Sidebar";
 import styles from "./DashboardLayout.module.scss";
 
 interface DashboardLayoutProps {
@@ -19,7 +19,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
   return (
     <div className={styles.dashboardLayout}>
-      <Navbar />
+      <Navbar handleSidebarToggle={handleSidebarToggle} />
       <div className={styles.dashboardLayout__content}>
         <Sidebar
           isOpen={!isSidebarCollapsed}

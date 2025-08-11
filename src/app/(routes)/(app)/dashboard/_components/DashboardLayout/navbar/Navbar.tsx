@@ -46,7 +46,11 @@ const MenuIcon = () => (
   </svg>
 );
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  handleSidebarToggle: (collapsed: boolean) => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
@@ -127,7 +131,10 @@ const Navbar: React.FC = () => {
             </div>
           </motion.div>
 
-          <motion.div className={styles.navbar__menuIcon}>
+          <motion.div
+            className={styles.navbar__menuIcon}
+            onClick={() => handleSidebarToggle(false)}
+          >
             <Menu />
           </motion.div>
 
