@@ -11,11 +11,12 @@
   }
 }
 
-// Simple Header
+// Header
 .header {
   margin-bottom: spacing("xl");
 
   &__title {
+    @include font-family("heading");
     @include font-size("subtitle-2");
     @include font-weight("semibold");
     color: color("neutral", "darkest");
@@ -27,157 +28,321 @@
   }
 
   &__subtitle {
+    @include font-secondary;
     @include font-size("sm");
     color: color("neutral", "dark");
     line-height: line-height("relaxed");
   }
 }
 
-// Quick Services Grid - Simplified
-.quickServices {
+// Layout
+.minimalLayout {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: spacing("md");
-  margin-bottom: spacing("xl");
+  grid-template-columns: 2fr 1fr;
+  gap: spacing("xl");
+  align-items: start;
 
   @include breakpoint-down("lg") {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @include breakpoint-down("sm") {
     grid-template-columns: 1fr;
-    gap: spacing("sm");
+    gap: spacing("lg");
   }
 }
 
-// Minimal Service Card
-.serviceCard {
-  position: relative;
+.servicesWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("md");
+}
+
+// Accordion Container
+.accordionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("sm");
+}
+
+// Accordion Item
+.accordionItem {
   background: color("neutral", "white");
   border: 1px solid color("neutral", "lighter");
   border-radius: border-radius("lg");
-  padding: spacing("lg");
-  transition: all 0.2s ease;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  min-height: 140px;
+  overflow: hidden;
+  transition: all 0.3s ease;
 
   &:hover {
-    border-color: color("primary", "base");
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+}
+
+// Accordion Header
+.accordionHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: spacing("md");
+  padding: spacing("md") spacing("lg");
+  background: color("neutral", "white");
+  border: none;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+
+  @include breakpoint-down("sm") {
+    padding: spacing("md");
+    gap: spacing("sm");
+  }
+
+  &:hover {
     background: color("neutral", "lightest");
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
 
-    .serviceCard__icon {
-      transform: scale(1.1);
-      background: color("primary", "base");
-      color: color("neutral", "white");
-    }
-
-    .serviceCard__arrow {
-      opacity: 1;
-      transform: translateX(2px);
-    }
+  &--active {
+    background: linear-gradient(to right, rgba(7, 80, 86, 0.03), transparent);
   }
 
   &__icon {
-    width: 48px;
-    height: 48px;
-    border-radius: border-radius("full");
+    width: 44px;
+    height: 44px;
+    border-radius: border-radius("lg");
     background: color("neutral", "lightest");
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: spacing("sm");
-    transition: all 0.2s ease;
-    color: color("neutral", "dark");
+    transition: all 0.3s ease;
+    flex-shrink: 0;
 
     svg {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
+      transition: transform 0.2s ease;
+    }
+
+    @include breakpoint-down("sm") {
+      width: 40px;
+      height: 40px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
     }
   }
 
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
   &__title {
-    @include font-size("sm");
-    @include font-weight("medium");
+    @include font-family("heading");
+    @include font-size("body-2");
+    @include font-weight("semibold");
     color: color("neutral", "darkest");
     margin-bottom: spacing("xxs");
     line-height: line-height("tight");
   }
 
+  &__description {
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("regular");
+    color: color("neutral", "dark");
+    line-height: line-height("snug");
+  }
+
   &__arrow {
-    position: absolute;
-    top: spacing("md");
-    right: spacing("md");
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     color: color("neutral", "medium");
-    opacity: 0;
-    transition: all 0.2s ease;
-  }
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  // Subtle color accents for each service
-  &--cleaning {
-    .serviceCard__icon {
-      color: color("primary", "base");
-    }
-  }
-
-  &--laundry {
-    .serviceCard__icon {
-      color: #6366f1;
-    }
-  }
-
-  &--food {
-    .serviceCard__icon {
-      color: color("secondary", "base");
-    }
-  }
-
-  &--pest {
-    .serviceCard__icon {
-      color: #10b981;
+    svg {
+      width: 20px;
+      height: 20px;
     }
   }
 }
 
-// Simplified Subscription Banner
+// Accordion Content
+.accordionContent {
+  overflow: hidden;
+  background: color("neutral", "lightest");
+  border-top: 1px solid color("neutral", "lighter");
+}
+
+// Sub Services List
+.subServicesList {
+  padding: spacing("lg");
+  display: flex;
+  flex-direction: column;
+  gap: spacing("md");
+
+  @include breakpoint-down("sm") {
+    padding: spacing("md");
+    gap: spacing("sm");
+  }
+}
+
+// Sub Service Item
+.subServiceItem {
+  display: flex;
+  gap: spacing("md");
+  padding: spacing("sm");
+  background: color("neutral", "white");
+  border-radius: border-radius("md");
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  &__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: border-radius("md");
+    background: color("neutral", "lightest");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: color("neutral", "dark");
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xxs");
+    line-height: line-height("tight");
+  }
+
+  &__description {
+    @include font-secondary;
+    @include font-size("xs");
+    @include font-weight("regular");
+    color: color("neutral", "dark");
+    line-height: line-height("snug");
+    margin-bottom: spacing("xs");
+  }
+
+  &__duration {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xxs");
+    @include font-secondary;
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("primary", "base");
+    padding: 2px spacing("xs");
+    background: color("primary", "lighter");
+    background: rgba(7, 80, 86, 0.08);
+    border-radius: border-radius("sm");
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  &__btn {
+    display: block;
+  }
+}
+
+// Book Service Button
+.bookServiceButton {
+  @include button-base;
+  @include font-secondary;
+  width: 100%;
+  margin-top: spacing("sm");
+  background: color("primary", "base");
+  color: color("neutral", "white");
+  padding: spacing("sm") spacing("lg");
+  @include font-size("sm");
+  @include font-weight("semibold");
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: spacing("xs");
+  border-radius: border-radius("lg");
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    gap: spacing("sm");
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover svg {
+    transform: translateX(2px);
+  }
+}
+
+// Subscription Banner
 .subscriptionBanner {
   background: linear-gradient(
     135deg,
     color("primary", "base"),
     color("primary", "dark")
   );
-  border-radius: border-radius("lg");
+  border-radius: border-radius("xl");
   padding: spacing("xl");
-  //   display: flex;
-  //   align-items: center;
-  //   justify-content: space-between;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 10px 30px rgba(7, 80, 86, 0.2);
 
   @include breakpoint-down("md") {
-    flex-direction: column;
-    text-align: center;
     padding: spacing("lg");
   }
 
-  // Subtle pattern overlay
+  // Decorative pattern
+  &::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 60%;
+    height: 200%;
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.08) 0%,
+      transparent 60%
+    );
+    pointer-events: none;
+  }
+
   &::after {
     content: "";
     position: absolute;
-    top: 0;
-    right: -20%;
+    bottom: -30%;
+    left: -10%;
     width: 40%;
-    height: 100%;
+    height: 80%;
     background: radial-gradient(
       circle at center,
-      rgba(255, 255, 255, 0.05) 0%,
+      rgba(254, 91, 4, 0.1) 0%,
       transparent 70%
     );
     pointer-events: none;
@@ -187,11 +352,11 @@
 .subscriptionContent {
   position: relative;
   z-index: 1;
-  flex: 1;
 
   &__title {
+    @include font-family("heading");
     @include font-size("lg");
-    @include font-weight("semibold");
+    @include font-weight("bold");
     color: color("neutral", "white");
     margin-bottom: spacing("xs");
     line-height: line-height("tight");
@@ -202,32 +367,26 @@
   }
 
   &__description {
+    @include font-secondary;
     @include font-size("sm");
-    color: rgba(255, 255, 255, 0.9);
+    @include font-weight("regular");
+    color: rgba(255, 255, 255, 0.95);
     margin-bottom: spacing("md");
-    max-width: 400px;
+    line-height: line-height("relaxed");
 
     @include breakpoint-down("md") {
       margin-bottom: spacing("lg");
-      max-width: none;
     }
   }
 
   &__benefits {
     display: flex;
-    gap: spacing("lg");
-    @include font-size("xs");
-    color: rgba(255, 255, 255, 0.9);
+    flex-direction: column;
+    gap: spacing("xs");
+    margin-bottom: spacing("lg");
 
     @include breakpoint-down("md") {
-      justify-content: center;
       margin-bottom: spacing("md");
-    }
-
-    @include breakpoint-down("sm") {
-      flex-direction: column;
-      align-items: center;
-      gap: spacing("xs");
     }
   }
 
@@ -235,11 +394,16 @@
     display: flex;
     align-items: center;
     gap: spacing("xs");
+    @include font-secondary;
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: rgba(255, 255, 255, 0.95);
 
     svg {
       width: 14px;
       height: 14px;
       color: color("accent", "base");
+      flex-shrink: 0;
     }
   }
 }
@@ -250,6 +414,7 @@
 
   &__button {
     @include button-base;
+    @include font-secondary;
     background: color("neutral", "white");
     color: color("primary", "base");
     padding: spacing("sm") spacing("lg");
@@ -259,10 +424,14 @@
     display: inline-flex;
     align-items: center;
     gap: spacing("xs");
+    border-radius: border-radius("pill");
+    transition: all 0.2s ease;
 
     &:hover {
       background: color("neutral", "lightest");
-      transform: translateX(2px);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      gap: spacing("sm");
     }
 
     svg {
@@ -272,104 +441,12 @@
     }
 
     &:hover svg {
-      transform: translateX(2px);
+      transform: rotate(90deg);
     }
 
     @include breakpoint-down("sm") {
       width: 100%;
       justify-content: center;
     }
-  }
-}
-
-// Divider
-.divider {
-  height: 1px;
-  background: color("neutral", "lighter");
-  margin: spacing("lg") 0;
-}
-
-// Alternative Minimal Layout
-.minimalLayout {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: spacing("lg");
-  align-items: start;
-
-  @include breakpoint-down("lg") {
-    grid-template-columns: 1fr;
-  }
-}
-
-.servicesWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: spacing("md");
-}
-
-// Inline Service Option
-.inlineService {
-  display: flex;
-  align-items: center;
-  gap: spacing("md");
-  padding: spacing("md");
-  background: color("neutral", "white");
-  border: 1px solid color("neutral", "lighter");
-  border-radius: border-radius("md");
-  transition: all 0.2s ease;
-  cursor: pointer;
-
-  &:hover {
-    border-color: color("primary", "base");
-    background: color("neutral", "lightest");
-
-    .inlineService__icon {
-      background: color("primary", "base");
-      color: color("neutral", "white");
-    }
-  }
-
-  &__icon {
-    width: 40px;
-    height: 40px;
-    border-radius: border-radius("md");
-    background: color("neutral", "lightest");
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-    color: color("neutral", "dark");
-
-    svg {
-      width: 20px;
-      height: 20px;
-    }
-  }
-
-  &__content {
-    flex: 1;
-    min-width: 0;
-  }
-
-  &__title {
-    @include font-size("sm");
-    @include font-weight("medium");
-    color: color("neutral", "darkest");
-    margin-bottom: spacing("xxs");
-    @include truncate;
-  }
-
-  &__description {
-    @include font-size("xs");
-    color: color("neutral", "dark");
-    @include truncate;
-  }
-
-  &__action {
-    width: 20px;
-    height: 20px;
-    color: color("neutral", "medium");
-    flex-shrink: 0;
   }
 }

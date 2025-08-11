@@ -44,8 +44,8 @@ $color-error: #fb2222;
 $color-success: #059669; // Darker green for better contrast
 $color-warning: #d97706; // Darker amber/orange for better contrast
 $color-info: #2293fb;
-$color-upcoming-bg: #FFF2E7; // Light orange background for upcoming status
-$color-upcoming-text: #F2994A; // Orange text for upcoming status
+$color-upcoming-bg: #fff2e7; // Light orange background for upcoming status
+$color-upcoming-text: #f2994a; // Orange text for upcoming status
 
 // Semantic Color Mapping
 $colors: (
@@ -394,6 +394,8 @@ $transition-slow: all map-get($transition-duration, "slow")
 
 // Buttons
 $button-height: (
+  "xs": 1.5rem,
+  // 24px
   "sm": 2rem,
   // 32px
   "md": 2.5rem,

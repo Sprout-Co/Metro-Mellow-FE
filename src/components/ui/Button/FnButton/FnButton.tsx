@@ -9,7 +9,7 @@ export interface FnButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "ghost" | "white" | "accent";
   /** Button size */
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
   /** Loading state */
   loading?: boolean;
   /** Full width button */
