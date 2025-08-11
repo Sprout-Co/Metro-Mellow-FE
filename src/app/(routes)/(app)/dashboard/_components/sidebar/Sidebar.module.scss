@@ -8,7 +8,7 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 320px;
+  width: 25rem;
   height: 100vh;
   background-color: color("neutral", "white");
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
@@ -146,8 +146,6 @@
     }
 
     &--active {
-      background-color: color-alpha("primary", "light", 0.1);
-
       .sidebar__navLink {
         color: color("primary", "base");
         font-weight: 600;
@@ -163,9 +161,10 @@
     display: flex;
     align-items: center;
     padding: spacing("sm") spacing("md");
+    padding-left: 0;
     text-decoration: none;
     color: color("neutral", "darkest");
-    @include font-size("body-2");
+    @include font-size("sm");
     @include font-weight("medium");
     width: 100%;
   }

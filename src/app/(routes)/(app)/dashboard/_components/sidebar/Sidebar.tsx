@@ -1,4 +1,3 @@
-// src/app/(routes)/(app)/dashboard/_components/sidebar/Sidebar.tsx
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -14,13 +13,12 @@ import {
   User,
   MessageSquare,
   ChevronRight,
-  ChevronLeft,
+  List,
   MapPin,
   Heart,
   Bell,
   Settings,
   LogOut,
-  List,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -28,9 +26,75 @@ interface SidebarProps {
   onClose: () => void;
 }
 
+interface NavLink {
+  href: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+}
+
+interface NavSection {
+  title: string | null;
+  links: NavLink[];
+}
+
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const pathname = usePathname();
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+
+  const navSections: NavSection[] = [
+    {
+      title: null,
+      links: [
+        { href: "/dashboard", label: "Home", icon: Home },
+        {
+          href: "/dashboard/bookings",
+          label: "My Bookings",
+          icon: CalendarDays,
+        },
+        {
+          href: "/dashboard/subscriptions",
+          label: "Subscriptions",
+          icon: Repeat,
+        },
+      ],
+    },
+    {
+      title: "My Account",
+      links: [
+        {
+          href: "/dashboard/account",
+          label: "Personal Info",
+          icon: User,
+        },
+        {
+          href: "/dashboard/account/addresses",
+          label: "Address Book",
+          icon: MapPin,
+        },
+
+        {
+          href: "/dashboard/payments",
+          label: "Payment Methods",
+          icon: CreditCard,
+        },
+        { href: "/dashboard/rewards", label: "Loyalty Program", icon: Gift },
+        {
+          href: "/dashboard/rewards/refer",
+          label: "Refer a Friend",
+          icon: User,
+        },
+      ],
+    },
+    {
+      title: "Support & Settings",
+      links: [
+        { href: "/dashboard/settings", label: "Settings", icon: Settings },
+        { href: "/dashboard/support", label: "Support", icon: MessageSquare },
+
+        { href: "/logout", label: "Log Out", icon: LogOut },
+      ],
+    },
+  ];
 
   const toggleSection = (section: string) => {
     if (expandedSection === section) {
@@ -40,7 +104,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  // Animation variants
   const sidebarVariants = {
     open: {
       x: 0,
@@ -86,7 +149,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   };
 
   const isActive = (path: string) => {
-    return pathname === path;
+    return pathname === path || pathname.includes(path);
   };
 
   return (
@@ -140,222 +203,38 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             </motion.div>
 
             <nav className={styles.sidebar__nav}>
-              <motion.ul
-                className={styles.sidebar__navSection}
-                variants={itemVariants}
-              >
-                <motion.li
-                  className={`${styles.sidebar__navItem} ${isActive("/dashboard") ? styles["sidebar__navItem--active"] : ""}`}
-                  variants={itemVariants}
-                >
-                  <Link href="/dashboard" className={styles.sidebar__navLink}>
-                    <Home className={styles.sidebar__icon} />
-                    <span>Home</span>
-                  </Link>
-                </motion.li>
-
-                <motion.li
-                  className={`${styles.sidebar__navItem} ${pathname.includes("/dashboard/services") ? styles["sidebar__navItem--active"] : ""}`}
-                  variants={itemVariants}
-                >
-                  <Link
-                    href="/dashboard/services"
-                    className={styles.sidebar__navLink}
+              {navSections.map((section, index) => (
+                <div key={section.title || `section-${index}`}>
+                  {section.title && (
+                    <motion.div
+                      className={styles.sidebar__sectionTitle}
+                      variants={itemVariants}
+                    >
+                      {section.title}
+                    </motion.div>
+                  )}
+                  <motion.ul
+                    className={styles.sidebar__navSection}
+                    variants={itemVariants}
                   >
-                    <List className={styles.sidebar__icon} />
-                    <span>My Services</span>
-                  </Link>
-                </motion.li>
-
-                <motion.li
-                  className={`${styles.sidebar__navItem} ${pathname.includes("/dashboard/bookings") ? styles["sidebar__navItem--active"] : ""}`}
-                  variants={itemVariants}
-                >
-                  <Link
-                    href="/dashboard/bookings"
-                    className={styles.sidebar__navLink}
-                  >
-                    <CalendarDays className={styles.sidebar__icon} />
-                    <span>My Bookings</span>
-                  </Link>
-                </motion.li>
-
-                <motion.li
-                  className={`${styles.sidebar__navItem} ${pathname.includes("/dashboard/support") ? styles["sidebar__navItem--active"] : ""}`}
-                  variants={itemVariants}
-                >
-                  <Link
-                    href="/dashboard/support"
-                    className={styles.sidebar__navLink}
-                  >
-                    <MessageSquare className={styles.sidebar__icon} />
-                    <span>Support</span>
-                  </Link>
-                </motion.li>
-              </motion.ul>
-
-              <motion.div
-                className={styles.sidebar__sectionTitle}
-                variants={itemVariants}
-              >
-                My Account
-              </motion.div>
-
-              <motion.ul
-                className={styles.sidebar__navSection}
-                variants={itemVariants}
-              >
-                <motion.li
-                  className={`${styles.sidebar__navItem} ${isActive("/dashboard/account") ? styles["sidebar__navItem--active"] : ""}`}
-                  variants={itemVariants}
-                >
-                  <Link
-                    href="/dashboard/account"
-                    className={styles.sidebar__navLink}
-                  >
-                    <User className={styles.sidebar__icon} />
-                    <span>Personal Information</span>
-                  </Link>
-                </motion.li>
-
-                <motion.li
-                  className={`${styles.sidebar__navItem} ${isActive("/dashboard/account/addresses") ? styles["sidebar__navItem--active"] : ""}`}
-                  variants={itemVariants}
-                >
-                  <Link
-                    href="/dashboard/account/addresses"
-                    className={styles.sidebar__navLink}
-                  >
-                    <MapPin className={styles.sidebar__icon} />
-                    <span>Address Book</span>
-                  </Link>
-                </motion.li>
-
-                <motion.li
-                  className={`${styles.sidebar__navItem} ${isActive("/dashboard/account/favorites") ? styles["sidebar__navItem--active"] : ""}`}
-                  variants={itemVariants}
-                >
-                  <Link
-                    href="/dashboard/account/favorites"
-                    className={styles.sidebar__navLink}
-                  >
-                    <Heart className={styles.sidebar__icon} />
-                    <span>Favorite Services</span>
-                  </Link>
-                </motion.li>
-
-                <motion.li
-                  className={`${styles.sidebar__navItem} ${isActive("/dashboard/subscriptions") ? styles["sidebar__navItem--active"] : ""}`}
-                  variants={itemVariants}
-                >
-                  <Link
-                    href="/dashboard/subscriptions"
-                    className={styles.sidebar__navLink}
-                  >
-                    <Repeat className={styles.sidebar__icon} />
-                    <span>Subscriptions</span>
-                  </Link>
-                </motion.li>
-
-                <motion.li
-                  className={`${styles.sidebar__navItem} ${isActive("/dashboard/payments") ? styles["sidebar__navItem--active"] : ""}`}
-                  variants={itemVariants}
-                >
-                  <Link
-                    href="/dashboard/payments"
-                    className={styles.sidebar__navLink}
-                  >
-                    <CreditCard className={styles.sidebar__icon} />
-                    <span>Payment Methods</span>
-                  </Link>
-                </motion.li>
-
-                <motion.li
-                  className={`${styles.sidebar__navItem} ${isActive("/dashboard/notifications") ? styles["sidebar__navItem--active"] : ""}`}
-                  variants={itemVariants}
-                >
-                  <Link
-                    href="/dashboard/notifications"
-                    className={styles.sidebar__navLink}
-                  >
-                    <Bell className={styles.sidebar__icon} />
-                    <span>Notifications</span>
-                  </Link>
-                </motion.li>
-              </motion.ul>
-
-              <motion.div
-                className={styles.sidebar__sectionTitle}
-                variants={itemVariants}
-              >
-                Rewards & Referrals
-              </motion.div>
-
-              <motion.ul
-                className={styles.sidebar__navSection}
-                variants={itemVariants}
-              >
-                <motion.li
-                  className={`${styles.sidebar__navItem} ${isActive("/dashboard/rewards") ? styles["sidebar__navItem--active"] : ""}`}
-                  variants={itemVariants}
-                >
-                  <Link
-                    href="/dashboard/rewards"
-                    className={styles.sidebar__navLink}
-                  >
-                    <Gift className={styles.sidebar__icon} />
-                    <span>Loyalty Program</span>
-                  </Link>
-                </motion.li>
-
-                <motion.li
-                  className={`${styles.sidebar__navItem} ${isActive("/dashboard/rewards/refer") ? styles["sidebar__navItem--active"] : ""}`}
-                  variants={itemVariants}
-                >
-                  <Link
-                    href="/dashboard/rewards/refer"
-                    className={styles.sidebar__navLink}
-                  >
-                    <User className={styles.sidebar__icon} />
-                    <span>Refer a Friend</span>
-                  </Link>
-                </motion.li>
-              </motion.ul>
-
-              <motion.div
-                className={styles.sidebar__sectionTitle}
-                variants={itemVariants}
-              >
-                Support & Settings
-              </motion.div>
-
-              <motion.ul
-                className={styles.sidebar__navSection}
-                variants={itemVariants}
-              >
-                <motion.li
-                  className={`${styles.sidebar__navItem} ${isActive("/dashboard/settings") ? styles["sidebar__navItem--active"] : ""}`}
-                  variants={itemVariants}
-                >
-                  <Link
-                    href="/dashboard/settings"
-                    className={styles.sidebar__navLink}
-                  >
-                    <Settings className={styles.sidebar__icon} />
-                    <span>Settings</span>
-                  </Link>
-                </motion.li>
-
-                <motion.li
-                  className={styles.sidebar__navItem}
-                  variants={itemVariants}
-                >
-                  <Link href="/logout" className={styles.sidebar__navLink}>
-                    <LogOut className={styles.sidebar__icon} />
-                    <span>Log Out</span>
-                  </Link>
-                </motion.li>
-              </motion.ul>
+                    {section.links.map((link) => (
+                      <motion.li
+                        key={link.href}
+                        className={`${styles.sidebar__navItem} ${isActive(link.href) ? styles["sidebar__navItem--active"] : ""}`}
+                        variants={itemVariants}
+                      >
+                        <Link
+                          href={link.href}
+                          className={styles.sidebar__navLink}
+                        >
+                          <link.icon className={styles.sidebar__icon} />
+                          <span>{link.label}</span>
+                        </Link>
+                      </motion.li>
+                    ))}
+                  </motion.ul>
+                </div>
+              ))}
             </nav>
 
             <motion.div
