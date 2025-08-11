@@ -1,3 +1,4 @@
+// src/app/(routes)/(app)/dashboard/_components/DashboardLayout/DashboardLayout.module.scss
 @import "@/styles/abstracts/variables";
 @import "@/styles/abstracts/functions";
 @import "@/styles/abstracts/mixins";
@@ -8,9 +9,29 @@
   min-height: 100vh;
   background-color: color("neutral", "lightest");
 
+  &__content {
+    display: flex;
+    flex: 1;
+    position: relative;
+  }
+
   &__main {
     flex: 1;
-    padding: spacing("xl") 0;
-    @include container;
+    padding: spacing("xl");
+    margin-left: 16rem; // Match sidebar width
+    transition: margin-left 0.3s ease;
+
+    &--expanded {
+      margin-left: 5rem; // Match collapsed sidebar width
+    }
+
+    @include breakpoint-down("md") {
+      margin-left: 0;
+      padding: spacing("lg") spacing("md");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md");
+    }
   }
 }

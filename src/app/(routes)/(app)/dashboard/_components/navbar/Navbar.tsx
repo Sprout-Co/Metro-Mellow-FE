@@ -48,7 +48,7 @@ const MenuIcon = () => (
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(true);
+  const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
