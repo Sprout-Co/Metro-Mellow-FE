@@ -3,7 +3,6 @@
 import React, { useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { BookingStatus, TimeSlot, ServiceCategory } from "@/graphql/api";
 import styles from "./WelcomeHeader.module.scss";
 
@@ -11,19 +10,123 @@ interface WelcomeHeaderProps {
   firstName?: string;
 }
 
-const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({ firstName = "Customer" }) => {
-  const { handleGetCustomerBookings, currentCustomerBookings, loading } = useBookingOperations();
+// Mock data that matches the GraphQL API structure
+const mockCustomerBookings = [
+  {
+    id: "booking-1",
+    date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // Tomorrow
+    timeSlot: TimeSlot.Morning,
+    status: BookingStatus.Confirmed,
+    service: {
+      id: "service-1",
+      name: "Deep Cleaning Service",
+      category: ServiceCategory.Cleaning,
+      icon: "cleaning",
+      price: 120,
+    },
+    serviceType: ServiceCategory.Cleaning,
+    staff: {
+      id: "staff-1",
+      firstName: "Maria",
+      lastName: "Rodriguez",
+      email: "maria@metromellow.com",
+    },
+    customer: {
+      id: "customer-1",
+      firstName: "John",
+      lastName: "Doe",
+      email: "john@example.com",
+    },
+    address: {
+      id: "address-1",
+      street: "123 Main St",
+      city: "New York",
+      state: "NY",
+      zipCode: "10001",
+    },
+    totalPrice: 120,
+    paymentStatus: "PAID",
+    notes: "Please focus on kitchen and bathrooms",
+    serviceOption: "Deep Clean",
+    serviceDetails: {},
+    createdAt: "2024-08-10T00:00:00Z",
+    updatedAt: "2024-08-10T00:00:00Z",
+  },
+  {
+    id: "booking-2",
+    date: "2024-08-18T00:00:00Z",
+    timeSlot: TimeSlot.Afternoon,
+    status: BookingStatus.Confirmed,
+    service: {
+      id: "service-2",
+      name: "Premium Laundry Service",
+      category: ServiceCategory.Laundry,
+      icon: "laundry",
+      price: 45,
+    },
+    serviceType: ServiceCategory.Laundry,
+    staff: {
+      id: "staff-2",
+      firstName: "Carlos",
+      lastName: "Smith",
+      email: "carlos@metromellow.com",
+    },
+    customer: {
+      id: "customer-1",
+      firstName: "John",
+      lastName: "Doe",
+      email: "john@example.com",
+    },
+    address: {
+      id: "address-1",
+      street: "123 Main St",
+      city: "New York",
+      state: "NY",
+      zipCode: "10001",
+    },
+    totalPrice: 45,
+    paymentStatus: "PAID",
+    notes: "Wash and fold",
+    serviceOption: "Wash & Fold",
+    serviceDetails: {},
+    createdAt: "2024-08-10T00:00:00Z",
+    updatedAt: "2024-08-10T00:00:00Z",
+  },
+];
 
-  useEffect(() => {
-    handleGetCustomerBookings();
-  }, [handleGetCustomerBookings]);
+// Mock the useBookingOperations hook
+const useMockBookingOperations = () => {
+  return {
+    currentCustomerBookings: mockCustomerBookings,
+    loading: false,
+    error: null,
+    handleGetCustomerBookings: () => {
+      // Mock function - no actual API call
+      console.log("Mock: Getting customer bookings...");
+    },
+  };
+};
 
+// Toggle this to show/hide upcoming services for testing
+const HAS_UPCOMING_SERVICES = true;
+
+const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
+  firstName = "Sarah",
+}) => {
+  // Use mock GraphQL hook
+  // const { handleGetCustomerBookings, currentCustomerBookings, loading } = useMockBookingOperations();
+
+  // useEffect(() => {
+  //   handleGetCustomerBookings();
+  // }, [handleGetCustomerBookings]);
+  const currentCustomerBookings = mockCustomerBookings;
+  // Filter and sort upcoming bookings (same logic as real GraphQL version)
   const upcomingService = useMemo(() => {
-    if (!currentCustomerBookings?.length) return null;
+    if (!HAS_UPCOMING_SERVICES) return null;
 
     const now = new Date();
     const upcomingBookings = currentCustomerBookings
-      .filter(booking => {
+      .filter((booking) => {
         const bookingDate = new Date(booking.date);
         return (
           booking.status !== BookingStatus.Completed &&
@@ -51,15 +154,19 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({ firstName = "Customer" })
     } else if (diffDays <= 7) {
       dateLabel = `In ${diffDays} days`;
     } else {
-      dateLabel = bookingDate.toLocaleDateString('en-US', { 
-        month: 'short', 
-        day: 'numeric' 
+      dateLabel = bookingDate.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
       });
     }
 
-    const timeLabel = timeSlot === TimeSlot.Morning ? "Morning" : 
-                      timeSlot === TimeSlot.Afternoon ? "Afternoon" : "Evening";
-    
+    const timeLabel =
+      timeSlot === TimeSlot.Morning
+        ? "Morning"
+        : timeSlot === TimeSlot.Afternoon
+          ? "Afternoon"
+          : "Evening";
+
     return `${dateLabel} - ${timeLabel}`;
   };
 
@@ -69,7 +176,7 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({ firstName = "Customer" })
       [ServiceCategory.Laundry]: "👕",
       [ServiceCategory.Cooking]: "🍳",
       [ServiceCategory.PestControl]: "🐛",
-      [ServiceCategory.Errands]: "📦"
+      [ServiceCategory.Errands]: "📦",
     };
     return icons[serviceType] || "🏠";
   };
@@ -104,10 +211,9 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({ firstName = "Customer" })
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            {upcomingService ? 
-              `Your next service is ${formatServiceDate(upcomingService.date, upcomingService.timeSlot)}` :
-              "Ready to book your next home service?"
-            }
+            {upcomingService
+              ? `Your next service is ${formatServiceDate(upcomingService.date, upcomingService.timeSlot)}`
+              : "Ready to book your next home service?"}
           </motion.p>
         </div>
 
@@ -120,21 +226,34 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({ firstName = "Customer" })
               transition={{ duration: 0.5, delay: 0.4 }}
             >
               <div className={styles.welcomeHeader__serviceIcon}>
-                {upcomingService.icon}
+                {getServiceIcon(upcomingService.serviceType)}
               </div>
               <div className={styles.welcomeHeader__serviceInfo}>
                 <h3 className={styles.welcomeHeader__serviceName}>
-                  {upcomingService.serviceName}
+                  {upcomingService.service.name}
                 </h3>
                 <p className={styles.welcomeHeader__serviceDate}>
-                  {formatServiceDate(upcomingService.date, upcomingService.timeSlot)}
+                  {formatServiceDate(
+                    upcomingService.date,
+                    upcomingService.timeSlot
+                  )}
                 </p>
-                <p className={styles.welcomeHeader__serviceStaff}>
-                  with {upcomingService.staffName}
-                </p>
+                {upcomingService.staff && (
+                  <p className={styles.welcomeHeader__serviceStaff}>
+                    with {upcomingService.staff.firstName}
+                  </p>
+                )}
               </div>
               <div className={styles.welcomeHeader__serviceStatus}>
-                <span className={styles.welcomeHeader__statusBadge}>Confirmed</span>
+                <span className={styles.welcomeHeader__statusBadge}>
+                  {upcomingService.status === BookingStatus.Confirmed
+                    ? "Confirmed"
+                    : upcomingService.status === BookingStatus.Pending
+                      ? "Pending"
+                      : upcomingService.status === BookingStatus.InProgress
+                        ? "In Progress"
+                        : "Scheduled"}
+                </span>
               </div>
             </motion.div>
           ) : (
@@ -150,7 +269,8 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({ firstName = "Customer" })
                   No upcoming services
                 </h3>
                 <p className={styles.welcomeHeader__noServiceText}>
-                  Book your first service or set up a subscription to get started!
+                  Book your first service or set up a subscription to get
+                  started!
                 </p>
               </div>
             </motion.div>
@@ -162,7 +282,10 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({ firstName = "Customer" })
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
             >
-              <Link href="/dashboard/book-service" className={styles.welcomeHeader__ctaButton}>
+              <Link
+                href="/dashboard/book-service"
+                className={styles.welcomeHeader__ctaButton}
+              >
                 {upcomingService ? "Book Another" : "Book a Service"}
               </Link>
             </motion.div>
@@ -171,8 +294,13 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({ firstName = "Customer" })
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.6 }}
             >
-              <Link href="/dashboard/subscriptions" className={styles.welcomeHeader__ctaButtonSecondary}>
-                {upcomingService ? "Manage Subscriptions" : "Start Subscription"}
+              <Link
+                href="/dashboard/subscriptions"
+                className={styles.welcomeHeader__ctaButtonSecondary}
+              >
+                {upcomingService
+                  ? "Manage Subscriptions"
+                  : "Start Subscription"}
               </Link>
             </motion.div>
           </div>
