@@ -115,16 +115,6 @@ const CTASectionAlternative: React.FC = () => {
                 Monthly plans from ₦25,000 and enjoy 30% savings in total
                 subscription discounts
               </p>
-              {/* <div className={styles.subscriptionContent__benefits}>
-                <div className={styles.subscriptionContent__benefit}>
-                  <Check />
-                  <span>30% savings</span>
-                </div>
-                <div className={styles.subscriptionContent__benefit}>
-                  <Check />
-                  <span>Priority booking</span>
-                </div>
-              </div> */}
             </div>
             <div className={styles.subscriptionAction}>
               <Link href="/dashboard/subscriptions">
