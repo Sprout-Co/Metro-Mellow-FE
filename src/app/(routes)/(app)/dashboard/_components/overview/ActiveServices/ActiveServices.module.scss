@@ -1,3 +1,214 @@
-.container {
-  // Active services styles will be implemented here
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.activeServices {
+  background-color: color("neutral", "white");
+  border-radius: border-radius("lg");
+  box-shadow: shadow("sm");
+  overflow: hidden;
+
+  &__header {
+    @include flex-between;
+    padding: spacing("lg") spacing("xl");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+
+  &__title {
+    @include font-size("subtitle-2");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    margin: 0;
+  }
+
+  &__manageBtn {
+    background: none;
+    border: none;
+    color: color("primary", "base");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    cursor: pointer;
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("md");
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+    }
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: spacing("lg");
+    padding: spacing("xl");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+      padding: spacing("md");
+    }
+  }
+
+  &__card {
+    background-color: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    padding: spacing("lg");
+    transition: $transition-base;
+
+    &:hover {
+      border-color: color("primary", "lighter");
+      box-shadow: shadow("md");
+    }
+  }
+
+  &__cardHeader {
+    @include flex-between;
+    margin-bottom: spacing("md");
+
+    @include breakpoint-down("xs") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("xs");
+    }
+  }
+
+  &__cardTitle {
+    @include font-size("body-1");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0;
+  }
+
+  &__cardFrequency {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xs") spacing("sm");
+    background-color: color("neutral", "light");
+    color: color("primary", "base");
+    border-radius: border-radius("pill");
+    @include font-size("xs");
+    @include font-weight("semibold");
+  }
+
+  &__progressContainer {
+    margin-bottom: spacing("lg");
+  }
+
+  &__progressInfo {
+    @include flex-between;
+    margin-bottom: spacing("xs");
+
+    @include breakpoint-down("xs") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("xs");
+    }
+  }
+
+  &__nextService {
+    @include font-size("sm");
+    color: color("neutral", "darkest");
+    @include font-weight("medium");
+  }
+
+  &__daysLeft {
+    @include font-size("sm");
+    color: color("secondary", "base");
+    @include font-weight("semibold");
+  }
+
+  &__progressBar {
+    width: 100%;
+    height: 8px;
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("pill");
+    overflow: hidden;
+    margin-top: spacing("sm");
+  }
+
+  &__progressFill {
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      color("primary", "base") 0%,
+      color("neutral", "light") 100%
+    );
+    border-radius: border-radius("pill");
+  }
+
+  &__cardActions {
+    display: flex;
+    justify-content: space-between;
+    gap: spacing("sm");
+    margin-top: spacing("lg");
+  }
+
+  &__actionBtn {
+    flex: 1;
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("md");
+    padding: spacing("sm") spacing("md");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &--secondary {
+      background-color: transparent;
+      color: color("neutral", "darkest");
+      border: 1px solid color("neutral", "light");
+
+      &:hover {
+        background-color: color("neutral", "lighter");
+      }
+    }
+  }
+
+  &__addCard {
+    background-color: color("neutral", "lightest");
+    border: 1px dashed color("neutral", "light");
+    border-radius: border-radius("lg");
+    padding: spacing("xl");
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      border-color: color("primary", "lighter");
+      background-color: color("neutral", "lighter");
+    }
+  }
+
+  &__addIcon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: color("neutral", "white");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("primary", "base");
+    margin-bottom: spacing("md");
+    box-shadow: shadow("sm");
+  }
+
+  &__addTitle {
+    @include font-size("body-1");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xs") 0;
+  }
+
+  &__addText {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
 }
