@@ -7,16 +7,18 @@ import ActiveServices from "./ActiveServices/ActiveServices";
 import NotificationsPanel from "./NotificationsPanel/NotificationsPanel";
 import RewardsWidget from "./RewardsWidget/RewardsWidget";
 import styles from "./DashboardOverview.module.scss";
+import CTASection from "./CTASection/CTASection";
 
 const DashboardOverview: React.FC = () => {
   return (
     <div className={styles.dashboardOverview}>
       <div className={styles.dashboardOverview__container}>
         <WelcomeHeader />
+        <CTASection />
 
         <div className={styles.dashboardOverview__grid}>
           {/* Left column - 2/3 width */}
-          <div className={styles.dashboardOverview__mainColumn}>
+          {/* <div className={styles.dashboardOverview__mainColumn}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -32,10 +34,10 @@ const DashboardOverview: React.FC = () => {
             >
               <ActiveServices />
             </motion.div>
-          </div>
+          </div> */}
 
           {/* Right column - 1/3 width */}
-          <div className={styles.dashboardOverview__sideColumn}>
+          {/* <div className={styles.dashboardOverview__sideColumn}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -59,7 +61,7 @@ const DashboardOverview: React.FC = () => {
             >
               <RewardsWidget />
             </motion.div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
