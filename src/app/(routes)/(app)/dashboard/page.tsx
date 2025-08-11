@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import DashboardLayout from "./_components/DashboardLayout/DashboardLayout";
 import FnButton from "@/components/ui/Button/FnButton";

@@ -1,3 +1,119 @@
-.container {
-  // Welcome header styles will be implemented here
+// src/app/(routes)/(app)/dashboard/_components/overview/WelcomeHeader/WelcomeHeader.module.scss
+@import "src/styles/abstracts/variables";
+@import "src/styles/abstracts/functions";
+@import "src/styles/abstracts/mixins";
+
+.welcomeHeader {
+  width: 100%;
+  padding: spacing("xl") spacing("xl");
+  background: linear-gradient(
+    120deg,
+    color("primary", "base") 0%,
+    color("primary", "dark") 100%
+  );
+  border-radius: border-radius("lg");
+  color: color("neutral", "white");
+  box-shadow: shadow("md");
+  overflow: hidden;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30%;
+    height: 100%;
+    background: url("/images/pattern-dots.svg") no-repeat right center;
+    background-size: contain;
+    opacity: 0.1;
+
+    @include breakpoint-down("md") {
+      display: none;
+    }
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("lg");
+    }
+  }
+
+  &__greeting {
+    margin-bottom: spacing("md");
+  }
+
+  &__title {
+    @include heading-3;
+    color: color("neutral", "white");
+    margin-bottom: spacing("xs");
+  }
+
+  &__subtitle {
+    @include font-size("body-1");
+    opacity: 0.9;
+    max-width: 80%;
+
+    @include breakpoint-down("md") {
+      max-width: 100%;
+    }
+  }
+
+  &__stats {
+    display: flex;
+    gap: spacing("xl");
+
+    @include breakpoint-down("md") {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      gap: spacing("md");
+    }
+  }
+
+  &__statItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: spacing("md");
+    border-radius: border-radius("md");
+    min-width: 140px;
+    backdrop-filter: blur(5px);
+    transition: $transition-base;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    @include breakpoint-down("md") {
+      min-width: 0;
+      flex: 1;
+    }
+  }
+
+  &__statValue {
+    @include font-size("h5");
+    @include font-weight("bold");
+    margin-bottom: spacing("xs");
+    text-align: center;
+
+    @include breakpoint-down("sm") {
+      @include font-size("h6");
+    }
+  }
+
+  &__statLabel {
+    @include font-size("caption");
+    opacity: 0.8;
+    text-align: center;
+  }
 }

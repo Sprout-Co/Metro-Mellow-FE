@@ -1,3 +1,54 @@
-.container {
-  // Dashboard overview styles will be implemented here
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.dashboardOverview {
+  width: 100%;
+  min-height: calc(100vh - 4.5rem); // Account for navbar height
+
+  &__container {
+    @include container;
+    max-width: container-width("xl");
+    padding: spacing("xl") spacing("md");
+
+    @include breakpoint-down("md") {
+      padding: spacing("lg") spacing("md");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md") spacing("sm");
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: spacing("xl");
+    margin-top: spacing("xl");
+
+    @include breakpoint-down("lg") {
+      grid-template-columns: 1fr;
+      gap: spacing("lg");
+    }
+  }
+
+  &__mainColumn {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xl");
+
+    @include breakpoint-down("md") {
+      gap: spacing("lg");
+    }
+  }
+
+  &__sideColumn {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xl");
+
+    @include breakpoint-down("md") {
+      gap: spacing("lg");
+    }
+  }
 }
