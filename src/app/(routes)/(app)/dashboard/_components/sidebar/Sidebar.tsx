@@ -19,6 +19,10 @@ import {
   Bell,
   Settings,
   LogOut,
+  PlusCircle,
+  HelpCircle,
+  Wallet,
+  Clock,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -37,9 +41,43 @@ interface NavSection {
   links: NavLink[];
 }
 
+interface QuickAction {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  href: string;
+  color: string;
+}
+
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const pathname = usePathname();
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+
+  const quickActions: QuickAction[] = [
+    {
+      icon: PlusCircle,
+      label: "New Booking",
+      href: "/dashboard/bookings/new",
+      color: styles.quickActionPrimary,
+    },
+    {
+      icon: Repeat,
+      label: "New Subscription",
+      href: "/dashboard/notifications",
+      color: styles.quickActionSecondary,
+    },
+    {
+      icon: HelpCircle,
+      label: "Get Help",
+      href: "/dashboard/support",
+      color: styles.quickActionAccent,
+    },
+    {
+      icon: Clock,
+      label: "Reschedule",
+      href: "/dashboard/bookings",
+      color: styles.quickActionNeutral,
+    },
+  ];
 
   const navSections: NavSection[] = [
     {
@@ -190,16 +228,40 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             </div>
 
             <motion.div
-              className={styles.sidebar__balanceCard}
+              className={styles.sidebar__quickActions}
               variants={itemVariants}
             >
-              <div className={styles.sidebar__balanceInfo}>
-                <span className={styles.sidebar__balanceLabel}>
-                  Rewards Points
-                </span>
-                <span className={styles.sidebar__balanceAmount}>320</span>
+              <h3 className={styles.sidebar__quickActionsTitle}>
+                Quick Actions
+              </h3>
+              <div className={styles.sidebar__quickActionsGrid}>
+                {quickActions.map((action) => (
+                  <Link
+                    key={action.href}
+                    href={action.href}
+                    className={styles.sidebar__quickAction}
+                  >
+                    <motion.div
+                      className={`${styles.sidebar__quickActionItem} ${action.color}`}
+                      whileHover={{
+                        y: -4,
+                        boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                      }}
+                      whileTap={{
+                        y: 0,
+                        boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
+                      }}
+                    >
+                      <action.icon
+                        className={styles.sidebar__quickActionIcon}
+                      />
+                      <span className={styles.sidebar__quickActionLabel}>
+                        {action.label}
+                      </span>
+                    </motion.div>
+                  </Link>
+                ))}
               </div>
-              <ChevronRight className={styles.sidebar__balanceIcon} />
             </motion.div>
 
             <nav className={styles.sidebar__nav}>

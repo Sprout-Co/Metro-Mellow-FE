@@ -60,47 +60,50 @@
     }
   }
 
-  &__balanceCard {
-    background: linear-gradient(
-      120deg,
-      color("primary", "base") 0%,
-      color("primary", "dark") 100%
-    );
-    border-radius: border-radius("lg");
-    padding: spacing("lg");
+  &__quickActions {
     margin-bottom: spacing("xl");
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: color("neutral", "white");
-    cursor: pointer;
-    transition: transform 0.2s ease;
-
-    &:hover {
-      transform: translateY(-2px);
-    }
   }
 
-  &__balanceInfo {
+  &__quickActionsTitle {
+    @include font-size("sm");
+    @include font-weight("bold");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("sm");
+  }
+
+  &__quickActionsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: spacing("sm");
+  }
+
+  &__quickAction {
+    text-decoration: none;
+  }
+
+  &__quickActionItem {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("md");
+    border-radius: border-radius("lg");
+    transition: all 0.2s ease;
+    background-color: color("neutral", "lightest");
+    height: 5.5rem;
   }
 
-  &__balanceLabel {
-    @include font-size("sm");
-    opacity: 0.9;
+  &__quickActionIcon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-bottom: spacing("xs");
   }
 
-  &__balanceAmount {
-    @include font-size("h5");
-    @include font-weight("bold");
-    margin-top: spacing("xs");
-  }
-
-  &__balanceIcon {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: border-radius("full");
-    padding: spacing("xs");
+  &__quickActionLabel {
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    text-align: center;
   }
 
   &__nav {
@@ -229,6 +232,43 @@
   }
 }
 
+// Quick action colors
+.quickActionPrimary {
+  background-color: color-alpha("primary", "lighter", 0.3);
+  color: color("primary", "base");
+
+  .sidebar__quickActionIcon {
+    color: color("primary", "base");
+  }
+}
+
+.quickActionSecondary {
+  background-color: color-alpha("secondary", "lighter", 0.3);
+  color: color("secondary", "base");
+
+  .sidebar__quickActionIcon {
+    color: color("secondary", "base");
+  }
+}
+
+.quickActionAccent {
+  background-color: color-alpha("accent", "lighter", 0.3);
+  color: color("primary", "dark");
+
+  .sidebar__quickActionIcon {
+    color: color("accent", "dark");
+  }
+}
+
+.quickActionNeutral {
+  background-color: color-alpha("neutral", "lighter", 0.5);
+  color: color("neutral", "darkest");
+
+  .sidebar__quickActionIcon {
+    color: color("neutral", "darkest");
+  }
+}
+
 // Mobile adjustments
 @include breakpoint-down("md") {
   .sidebar {
@@ -236,6 +276,10 @@
 
     &__navLink {
       padding: spacing("sm") spacing("sm");
+    }
+
+    &__quickActionsGrid {
+      grid-template-columns: 1fr;
     }
   }
 }
