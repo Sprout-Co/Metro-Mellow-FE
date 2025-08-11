@@ -18,12 +18,13 @@
   &__main {
     flex: 1;
     padding: spacing("xl");
-    margin-left: 16rem; // Match sidebar width
+    @include container;
+    // margin-left: 16rem; // Match sidebar width
     transition: margin-left 0.3s ease;
 
-    &--expanded {
-      margin-left: 5rem; // Match collapsed sidebar width
-    }
+    // &--expanded {
+    //   margin-left: 5rem; // Match collapsed sidebar width
+    // }
 
     @include breakpoint-down("md") {
       margin-left: 0;
