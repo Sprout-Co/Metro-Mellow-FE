@@ -14,7 +14,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const handleSidebarToggle = (collapsed: boolean) => {
-    setIsSidebarCollapsed(collapsed);
+    setIsSidebarCollapsed(!isSidebarCollapsed);
   };
 
   return (
@@ -23,7 +23,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       <div className={styles.dashboardLayout__content}>
         <Sidebar
           isOpen={isSidebarCollapsed}
-          onClose={() => handleSidebarToggle(true)}
+          onClose={() => handleSidebarToggle(!isSidebarCollapsed)}
         />
         <motion.main
           className={`${styles.dashboardLayout__main} ${isSidebarCollapsed ? styles["dashboardLayout__main--expanded"] : ""}`}

@@ -285,9 +285,7 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
               transition={{ duration: 0.5, delay: 0.5 }}
             >
               <FnButton variant="accent">
-                {upcomingService
-                  ? "Manage Subscriptions"
-                  : "Start Subscription"}
+                {upcomingService ? "Book Another" : "Book a Service"}
               </FnButton>
               {/* <Link
                 href="/dashboard/book-service"
