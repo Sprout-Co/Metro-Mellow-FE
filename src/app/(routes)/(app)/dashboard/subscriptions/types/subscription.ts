@@ -23,28 +23,58 @@ export enum SubscriptionFrequency {
   Quarterly = "Quarterly",
 }
 
-export interface Subscription {
+export interface SubscriptionService {
   id: string;
   serviceName: string;
   serviceType: ServiceCategory;
-  status: SubscriptionStatus;
-  frequency: SubscriptionFrequency;
-  nextServiceDate: Date;
   price: number;
+  frequency: SubscriptionFrequency;
+  scheduledDays: string[];
+  completedServices: number;
+  totalServices: number;
+  nextServiceDate: Date;
+  provider?: string;
+  notes?: string;
+}
+
+export interface UpcomingBooking {
+  id: string;
+  serviceName: string;
+  serviceType: ServiceCategory;
+  date: Date;
+  time: string;
+  provider: string;
+  address: string;
+  status: "scheduled" | "confirmed" | "in_progress";
+}
+
+export interface Subscription {
+  id: string;
+  name: string;
+  status: SubscriptionStatus;
+  billingCycle: "monthly" | "quarterly" | "annually";
+  totalPrice: number;
   startDate: Date;
   endDate?: Date;
-  provider?: string;
   address: string;
-  notes?: string;
-  totalServices: number;
-  completedServices: number;
-  remainingServices: number;
   autoRenewal: boolean;
-  billingCycle: "monthly" | "quarterly" | "annually";
   lastPaymentDate: Date;
   nextBillingDate: Date;
   paymentMethod: string;
   discount?: number;
+  
+  // Included services in this subscription
+  services: SubscriptionService[];
+  
+  // Upcoming bookings from all services
+  upcomingBookings: UpcomingBooking[];
+  
+  // Calculated fields
+  totalServices: number;
+  completedServices: number;
+  remainingServices: number;
+  nextServiceDate?: Date;
+  primaryProvider?: string;
 }
 
 export interface FilterOption {

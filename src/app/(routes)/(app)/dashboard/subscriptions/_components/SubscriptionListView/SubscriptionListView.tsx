@@ -191,6 +191,10 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
     const isHovered = hoveredId === subscription.id;
     const progress = calculateProgress(subscription);
 
+    // Get primary service for display
+    const primaryService = subscription.services[0];
+    const serviceIcons = subscription.services.slice(0, 3); // Show max 3 service icons
+
     return (
       <motion.div
         layout
@@ -202,7 +206,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
         {/* Service Type Indicator */}
         <div
           className={styles.subscriptionCard__indicator}
-          style={{ backgroundColor: getServiceColor(subscription.serviceType) }}
+          style={{ backgroundColor: primaryService ? getServiceColor(primaryService.serviceType) : '#6b7280' }}
         />
 
         {/* Main Content Grid */}
@@ -210,36 +214,55 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
           {/* Left Section - Service Info */}
           <div className={styles.subscriptionCard__left}>
             <div className={styles.subscriptionCard__serviceHeader}>
-              <div
-                className={styles.subscriptionCard__serviceIcon}
-                style={{
-                  backgroundColor: `${getServiceColor(subscription.serviceType)}15`,
-                }}
-              >
-                <span>{getServiceIcon(subscription.serviceType)}</span>
+              {/* Multiple Service Icons */}
+              <div className={styles.subscriptionCard__serviceIcons}>
+                {serviceIcons.map((service, index) => (
+                  <div
+                    key={service.id}
+                    className={styles.subscriptionCard__serviceIcon}
+                    style={{
+                      backgroundColor: `${getServiceColor(service.serviceType)}15`,
+                      zIndex: serviceIcons.length - index,
+                      marginLeft: index > 0 ? '-8px' : '0',
+                    }}
+                  >
+                    <span>{getServiceIcon(service.serviceType)}</span>
+                  </div>
+                ))}
+                {subscription.services.length > 3 && (
+                  <div className={styles.subscriptionCard__moreServices}>
+                    +{subscription.services.length - 3}
+                  </div>
+                )}
               </div>
+              
               <div className={styles.subscriptionCard__serviceDetails}>
                 <h3 className={styles.subscriptionCard__serviceName}>
-                  {subscription.serviceName}
+                  {subscription.name}
                   <span className={styles.subscriptionCard__frequencyBadge}>
                     <Repeat size={12} />
-                    {subscription.frequency}
+                    {subscription.billingCycle}
                   </span>
                 </h3>
                 <p className={styles.subscriptionCard__serviceType}>
-                  {subscription.serviceType}
+                  {subscription.services.length === 1 
+                    ? subscription.services[0].serviceName
+                    : `${subscription.services.length} services included`
+                  }
                 </p>
               </div>
             </div>
 
             <div className={styles.subscriptionCard__info}>
-              <div className={styles.subscriptionCard__infoItem}>
-                <Calendar size={14} />
-                <span>Next: {formatDate(subscription.nextServiceDate)} at {formatTime(subscription.nextServiceDate)}</span>
-              </div>
+              {subscription.nextServiceDate && (
+                <div className={styles.subscriptionCard__infoItem}>
+                  <Calendar size={14} />
+                  <span>Next: {formatDate(subscription.nextServiceDate)} at {formatTime(subscription.nextServiceDate)}</span>
+                </div>
+              )}
               <div className={styles.subscriptionCard__infoItem}>
                 <User size={14} />
-                <span>{subscription.provider || "Provider not assigned"}</span>
+                <span>{subscription.primaryProvider || "Multiple providers"}</span>
               </div>
               <div className={styles.subscriptionCard__infoItem}>
                 <MapPin size={14} />
@@ -264,7 +287,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
                   className={styles.subscriptionCard__progressFill}
                   style={{ 
                     width: `${progress}%`,
-                    backgroundColor: getServiceColor(subscription.serviceType)
+                    backgroundColor: primaryService ? getServiceColor(primaryService.serviceType) : '#6b7280'
                   }}
                 />
               </div>
@@ -285,10 +308,10 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
               </span>
               <div className={styles.subscriptionCard__pricing}>
                 <span className={styles.subscriptionCard__price}>
-                  {formatPrice(subscription.price)}
+                  {formatPrice(subscription.totalPrice)}
                 </span>
                 <span className={styles.subscriptionCard__billingCycle}>
-                  per {subscription.frequency.toLowerCase()}
+                  per {subscription.billingCycle}
                 </span>
               </div>
               {subscription.discount && (

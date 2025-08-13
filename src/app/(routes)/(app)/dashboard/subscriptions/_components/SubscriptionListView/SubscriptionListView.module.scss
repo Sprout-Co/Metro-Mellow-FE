@@ -191,6 +191,12 @@
     gap: spacing("md");
   }
 
+  &__serviceIcons {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
   &__serviceIcon {
     width: 48px;
     height: 48px;
@@ -199,6 +205,8 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    border: 2px solid color("neutral", "white");
+    position: relative;
 
     span {
       font-size: 24px;
@@ -212,6 +220,21 @@
         font-size: 20px;
       }
     }
+  }
+
+  &__moreServices {
+    width: 32px;
+    height: 32px;
+    border-radius: border-radius("full");
+    background: color("neutral", "light");
+    border: 2px solid color("neutral", "white");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include font-size("xs");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin-left: -8px;
   }
 
   &__serviceDetails {

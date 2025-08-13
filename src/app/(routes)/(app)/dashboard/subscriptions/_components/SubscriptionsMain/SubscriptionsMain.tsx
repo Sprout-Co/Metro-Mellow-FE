@@ -32,151 +32,281 @@ import {
 import SubscriptionListView from "../SubscriptionListView/SubscriptionListView";
 import AppointmentCard from "@/components/ui/AppointmentCard";
 
-// Mock data
+// Mock data with multiple services per subscription
 const mockSubscriptions: Subscription[] = [
   {
     id: "1",
-    serviceName: "Deep Home Cleaning",
-    serviceType: ServiceCategory.Cleaning,
+    name: "Complete Home Care Package",
     status: SubscriptionStatus.Active,
-    frequency: SubscriptionFrequency.Weekly,
-    nextServiceDate: new Date(2024, 7, 20, 10, 0),
-    price: 25000,
+    billingCycle: "monthly",
+    totalPrice: 45000,
     startDate: new Date(2024, 5, 1),
-    provider: "Maria Rodriguez",
     address: "24 Emmanuel Osakwe Street, Lagos",
-    notes: "Focus on kitchen and bathrooms",
-    totalServices: 52,
-    completedServices: 12,
-    remainingServices: 40,
     autoRenewal: true,
-    billingCycle: "monthly",
-    lastPaymentDate: new Date(2024, 6, 1),
-    nextBillingDate: new Date(2024, 7, 1),
-    paymentMethod: "Credit Card ****4242",
-  },
-  {
-    id: "2",
-    serviceName: "Laundry Service",
-    serviceType: ServiceCategory.Laundry,
-    status: SubscriptionStatus.Active,
-    frequency: SubscriptionFrequency.BiWeekly,
-    nextServiceDate: new Date(2024, 7, 22, 14, 0),
-    price: 8000,
-    startDate: new Date(2024, 6, 15),
-    provider: "QuickWash Team",
-    address: "24 Emmanuel Osakwe Street, Lagos",
-    notes: "3 bags of laundry, no starch",
-    totalServices: 26,
-    completedServices: 4,
-    remainingServices: 22,
-    autoRenewal: true,
-    billingCycle: "monthly",
-    lastPaymentDate: new Date(2024, 6, 15),
-    nextBillingDate: new Date(2024, 7, 15),
-    paymentMethod: "Debit Card ****8901",
-    discount: 10,
-  },
-  {
-    id: "3",
-    serviceName: "Meal Preparation",
-    serviceType: ServiceCategory.Cooking,
-    status: SubscriptionStatus.Paused,
-    frequency: SubscriptionFrequency.Weekly,
-    nextServiceDate: new Date(2024, 8, 5, 17, 0),
-    price: 15000,
-    startDate: new Date(2024, 4, 1),
-    provider: "Chef Kemi",
-    address: "24 Emmanuel Osakwe Street, Lagos",
-    notes: "Vegetarian meals only, paused due to travel",
-    totalServices: 52,
-    completedServices: 20,
-    remainingServices: 32,
-    autoRenewal: true,
-    billingCycle: "monthly",
     lastPaymentDate: new Date(2024, 6, 1),
     nextBillingDate: new Date(2024, 8, 1),
     paymentMethod: "Credit Card ****4242",
+    discount: 15,
+    services: [
+      {
+        id: "s1",
+        serviceName: "Deep Home Cleaning",
+        serviceType: ServiceCategory.Cleaning,
+        price: 25000,
+        frequency: SubscriptionFrequency.Weekly,
+        scheduledDays: ["Monday"],
+        completedServices: 12,
+        totalServices: 52,
+        nextServiceDate: new Date(2024, 7, 19, 10, 0),
+        provider: "Maria Rodriguez",
+        notes: "Focus on kitchen and bathrooms"
+      },
+      {
+        id: "s2",
+        serviceName: "Laundry Service",
+        serviceType: ServiceCategory.Laundry,
+        price: 8000,
+        frequency: SubscriptionFrequency.BiWeekly,
+        scheduledDays: ["Wednesday"],
+        completedServices: 6,
+        totalServices: 26,
+        nextServiceDate: new Date(2024, 7, 21, 14, 0),
+        provider: "QuickWash Team",
+        notes: "3 bags of laundry, no starch"
+      },
+      {
+        id: "s3",
+        serviceName: "Meal Preparation",
+        serviceType: ServiceCategory.Cooking,
+        price: 15000,
+        frequency: SubscriptionFrequency.Weekly,
+        scheduledDays: ["Sunday"],
+        completedServices: 10,
+        totalServices: 52,
+        nextServiceDate: new Date(2024, 7, 18, 17, 0),
+        provider: "Chef Kemi",
+        notes: "Vegetarian meals preferred"
+      }
+    ],
+    upcomingBookings: [
+      {
+        id: "b1",
+        serviceName: "Meal Preparation",
+        serviceType: ServiceCategory.Cooking,
+        date: new Date(2024, 7, 18),
+        time: "5:00 PM",
+        provider: "Chef Kemi",
+        address: "24 Emmanuel Osakwe Street, Lagos",
+        status: "confirmed"
+      },
+      {
+        id: "b2",
+        serviceName: "Deep Home Cleaning",
+        serviceType: ServiceCategory.Cleaning,
+        date: new Date(2024, 7, 19),
+        time: "10:00 AM",
+        provider: "Maria Rodriguez",
+        address: "24 Emmanuel Osakwe Street, Lagos",
+        status: "scheduled"
+      },
+      {
+        id: "b3",
+        serviceName: "Laundry Service",
+        serviceType: ServiceCategory.Laundry,
+        date: new Date(2024, 7, 21),
+        time: "2:00 PM",
+        provider: "QuickWash Team",
+        address: "24 Emmanuel Osakwe Street, Lagos",
+        status: "scheduled"
+      }
+    ],
+    totalServices: 130,
+    completedServices: 28,
+    remainingServices: 102,
+    nextServiceDate: new Date(2024, 7, 18, 17, 0),
+    primaryProvider: "Maria Rodriguez"
+  },
+  {
+    id: "2",
+    name: "Professional Office Maintenance",
+    status: SubscriptionStatus.Active,
+    billingCycle: "monthly",
+    totalPrice: 55000,
+    startDate: new Date(2024, 6, 15),
+    address: "Metro Office, Victoria Island",
+    autoRenewal: true,
+    lastPaymentDate: new Date(2024, 6, 15),
+    nextBillingDate: new Date(2024, 7, 15),
+    paymentMethod: "Corporate Card ****1234",
+    services: [
+      {
+        id: "s4",
+        serviceName: "Office Deep Cleaning",
+        serviceType: ServiceCategory.Cleaning,
+        price: 35000,
+        frequency: SubscriptionFrequency.BiWeekly,
+        scheduledDays: ["Friday"],
+        completedServices: 4,
+        totalServices: 26,
+        nextServiceDate: new Date(2024, 7, 23, 18, 0),
+        provider: "CleanPro Team",
+        notes: "After hours cleaning only"
+      },
+      {
+        id: "s5",
+        serviceName: "Pest Control",
+        serviceType: ServiceCategory.PestControl,
+        price: 20000,
+        frequency: SubscriptionFrequency.Monthly,
+        scheduledDays: ["Last Friday"],
+        completedServices: 2,
+        totalServices: 12,
+        nextServiceDate: new Date(2024, 7, 30, 19, 0),
+        provider: "PestPro Team",
+        notes: "Quarterly deep treatment"
+      }
+    ],
+    upcomingBookings: [
+      {
+        id: "b4",
+        serviceName: "Office Deep Cleaning",
+        serviceType: ServiceCategory.Cleaning,
+        date: new Date(2024, 7, 23),
+        time: "6:00 PM",
+        provider: "CleanPro Team",
+        address: "Metro Office, Victoria Island",
+        status: "scheduled"
+      },
+      {
+        id: "b5",
+        serviceName: "Pest Control",
+        serviceType: ServiceCategory.PestControl,
+        date: new Date(2024, 7, 30),
+        time: "7:00 PM",
+        provider: "PestPro Team",
+        address: "Metro Office, Victoria Island",
+        status: "scheduled"
+      }
+    ],
+    totalServices: 38,
+    completedServices: 6,
+    remainingServices: 32,
+    nextServiceDate: new Date(2024, 7, 23, 18, 0),
+    primaryProvider: "CleanPro Team"
+  },
+  {
+    id: "3",
+    name: "Essential Home Services",
+    status: SubscriptionStatus.Paused,
+    billingCycle: "monthly",
+    totalPrice: 20000,
+    startDate: new Date(2024, 4, 1),
+    address: "45 Admiralty Way, Lekki",
+    autoRenewal: true,
+    lastPaymentDate: new Date(2024, 6, 1),
+    nextBillingDate: new Date(2024, 8, 1),
+    paymentMethod: "Debit Card ****8901",
+    services: [
+      {
+        id: "s6",
+        serviceName: "Basic Cleaning",
+        serviceType: ServiceCategory.Cleaning,
+        price: 15000,
+        frequency: SubscriptionFrequency.BiWeekly,
+        scheduledDays: ["Saturday"],
+        completedServices: 8,
+        totalServices: 26,
+        nextServiceDate: new Date(2024, 8, 5, 9, 0),
+        provider: "Home Helpers",
+        notes: "Paused due to travel"
+      },
+      {
+        id: "s7",
+        serviceName: "Grocery Run",
+        serviceType: ServiceCategory.Errands,
+        price: 5000,
+        frequency: SubscriptionFrequency.Weekly,
+        scheduledDays: ["Thursday"],
+        completedServices: 12,
+        totalServices: 52,
+        nextServiceDate: new Date(2024, 8, 7, 11, 0),
+        provider: "Shopping Assistant",
+        notes: "Weekly grocery shopping"
+      }
+    ],
+    upcomingBookings: [],
+    totalServices: 78,
+    completedServices: 20,
+    remainingServices: 58,
+    nextServiceDate: new Date(2024, 8, 5, 9, 0),
+    primaryProvider: "Home Helpers"
   },
   {
     id: "4",
-    serviceName: "Pest Control Treatment",
-    serviceType: ServiceCategory.PestControl,
+    name: "Premium Laundry Care",
     status: SubscriptionStatus.Active,
-    frequency: SubscriptionFrequency.Monthly,
-    nextServiceDate: new Date(2024, 7, 25, 8, 0),
-    price: 20000,
-    startDate: new Date(2024, 0, 1),
-    provider: "PestPro Team",
-    address: "24 Emmanuel Osakwe Street, Lagos",
-    notes: "Monthly prevention service",
-    totalServices: 12,
-    completedServices: 8,
-    remainingServices: 4,
-    autoRenewal: false,
     billingCycle: "quarterly",
+    totalPrice: 24000,
+    startDate: new Date(2024, 0, 1),
+    address: "12 Ozumba Mbadiwe, Victoria Island",
+    autoRenewal: false,
     lastPaymentDate: new Date(2024, 6, 1),
     nextBillingDate: new Date(2024, 9, 1),
     paymentMethod: "Bank Transfer",
-  },
-  {
-    id: "5",
-    serviceName: "Grocery Shopping",
-    serviceType: ServiceCategory.Errands,
-    status: SubscriptionStatus.Expired,
-    frequency: SubscriptionFrequency.Weekly,
-    nextServiceDate: new Date(2024, 6, 30, 9, 0),
-    price: 5000,
-    startDate: new Date(2024, 3, 1),
-    endDate: new Date(2024, 6, 30),
-    provider: "Shopping Assistant",
-    address: "Shoprite, Ikeja",
-    notes: "Weekly grocery runs - expired and needs renewal",
-    totalServices: 16,
-    completedServices: 16,
-    remainingServices: 0,
-    autoRenewal: false,
-    billingCycle: "monthly",
-    lastPaymentDate: new Date(2024, 5, 1),
-    nextBillingDate: new Date(2024, 7, 1),
-    paymentMethod: "Credit Card ****4242",
-  },
-  {
-    id: "6",
-    serviceName: "Office Cleaning",
-    serviceType: ServiceCategory.Cleaning,
-    status: SubscriptionStatus.PendingActivation,
-    frequency: SubscriptionFrequency.BiWeekly,
-    nextServiceDate: new Date(2024, 7, 25, 18, 0),
-    price: 35000,
-    startDate: new Date(2024, 7, 25),
-    provider: "CleanPro Team",
-    address: "Metro Office, Victoria Island",
-    notes: "New subscription starting soon",
-    totalServices: 26,
-    completedServices: 0,
-    remainingServices: 26,
-    autoRenewal: true,
-    billingCycle: "monthly",
-    lastPaymentDate: new Date(2024, 7, 15),
-    nextBillingDate: new Date(2024, 8, 15),
-    paymentMethod: "Corporate Card ****1234",
-  },
+    services: [
+      {
+        id: "s8",
+        serviceName: "Premium Laundry",
+        serviceType: ServiceCategory.Laundry,
+        price: 12000,
+        frequency: SubscriptionFrequency.Weekly,
+        scheduledDays: ["Tuesday", "Friday"],
+        completedServices: 32,
+        totalServices: 104,
+        nextServiceDate: new Date(2024, 7, 20, 8, 0),
+        provider: "Elite Laundry",
+        notes: "Dry cleaning included"
+      }
+    ],
+    upcomingBookings: [
+      {
+        id: "b6",
+        serviceName: "Premium Laundry",
+        serviceType: ServiceCategory.Laundry,
+        date: new Date(2024, 7, 20),
+        time: "8:00 AM",
+        provider: "Elite Laundry",
+        address: "12 Ozumba Mbadiwe, Victoria Island",
+        status: "confirmed"
+      },
+      {
+        id: "b7",
+        serviceName: "Premium Laundry",
+        serviceType: ServiceCategory.Laundry,
+        date: new Date(2024, 7, 23),
+        time: "8:00 AM",
+        provider: "Elite Laundry",
+        address: "12 Ozumba Mbadiwe, Victoria Island",
+        status: "scheduled"
+      }
+    ],
+    totalServices: 104,
+    completedServices: 32,
+    remainingServices: 72,
+    nextServiceDate: new Date(2024, 7, 20, 8, 0),
+    primaryProvider: "Elite Laundry"
+  }
 ];
 
 const SubscriptionsMain: React.FC = () => {
-  const [selectedServiceType, setSelectedServiceType] = useState<
-    ServiceCategory | "all"
-  >("all");
   const [selectedStatus, setSelectedStatus] = useState<
     SubscriptionStatus | "all"
   >("all");
   const [selectedFrequency, setSelectedFrequency] = useState<
-    SubscriptionFrequency | "all"
+    string | "all"
   >("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [subscriptions] = useState<Subscription[]>(mockSubscriptions);
-  const [showNotifications, setShowNotifications] = useState(false);
 
   // Filter subscriptions
   const filteredSubscriptions = useMemo(() => {
@@ -186,15 +316,13 @@ const SubscriptionsMain: React.FC = () => {
     if (searchQuery) {
       filtered = filtered.filter(
         (s) =>
-          s.serviceName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          s.provider?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          s.services.some(service => 
+            service.serviceName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            service.provider?.toLowerCase().includes(searchQuery.toLowerCase())
+          ) ||
           s.address.toLowerCase().includes(searchQuery.toLowerCase())
       );
-    }
-
-    // Filter by service type
-    if (selectedServiceType !== "all") {
-      filtered = filtered.filter((s) => s.serviceType === selectedServiceType);
     }
 
     // Filter by status
@@ -202,15 +330,14 @@ const SubscriptionsMain: React.FC = () => {
       filtered = filtered.filter((s) => s.status === selectedStatus);
     }
 
-    // Filter by frequency
+    // Filter by billing cycle
     if (selectedFrequency !== "all") {
-      filtered = filtered.filter((s) => s.frequency === selectedFrequency);
+      filtered = filtered.filter((s) => s.billingCycle === selectedFrequency);
     }
 
     return filtered;
   }, [
     subscriptions,
-    selectedServiceType,
     selectedStatus,
     selectedFrequency,
     searchQuery,
@@ -219,17 +346,13 @@ const SubscriptionsMain: React.FC = () => {
   // Get next upcoming service
   const nextSubscription = useMemo(() => {
     const now = new Date();
-    const active = subscriptions
-      .filter((s) => {
-        const serviceDate = new Date(s.nextServiceDate);
-        return serviceDate > now && s.status === SubscriptionStatus.Active;
-      })
-      .sort(
-        (a, b) =>
-          new Date(a.nextServiceDate).getTime() -
-          new Date(b.nextServiceDate).getTime()
+    const activeWithServices = subscriptions
+      .filter((s) => s.status === SubscriptionStatus.Active && s.nextServiceDate)
+      .filter((s) => new Date(s.nextServiceDate!).getTime() > now.getTime())
+      .sort((a, b) => 
+        new Date(a.nextServiceDate!).getTime() - new Date(b.nextServiceDate!).getTime()
       );
-    return active[0] || null;
+    return activeWithServices[0] || null;
   }, [subscriptions]);
 
   // Calculate subscription stats
@@ -247,12 +370,11 @@ const SubscriptionsMain: React.FC = () => {
       .filter((s) => s.status === SubscriptionStatus.Active)
       .reduce((sum, s) => {
         const multiplier = {
-          [SubscriptionFrequency.Weekly]: 4.33,
-          [SubscriptionFrequency.BiWeekly]: 2.17,
-          [SubscriptionFrequency.Monthly]: 1,
-          [SubscriptionFrequency.Quarterly]: 0.33,
+          "monthly": 1,
+          "quarterly": 0.33,
+          "annually": 0.083,
         };
-        return sum + s.price * multiplier[s.frequency];
+        return sum + (s.totalPrice * (multiplier[s.billingCycle] || 1));
       }, 0);
 
     return { active, paused, expired, totalMonthlyValue };
@@ -266,16 +388,12 @@ const SubscriptionsMain: React.FC = () => {
     console.log("Export subscriptions data");
   };
 
-  const handleServiceTypeChange = (value: string) => {
-    setSelectedServiceType(value as ServiceCategory | "all");
-  };
-
   const handleStatusChange = (value: string) => {
     setSelectedStatus(value as SubscriptionStatus | "all");
   };
 
   const handleFrequencyChange = (value: string) => {
-    setSelectedFrequency(value as SubscriptionFrequency | "all");
+    setSelectedFrequency(value);
   };
 
   return (
@@ -296,13 +414,11 @@ const SubscriptionsMain: React.FC = () => {
           {nextSubscription && (
             <div className={styles.subscriptionsMain__upcomingService}>
               <AppointmentCard
-                serviceName={nextSubscription.serviceName}
-                serviceType={nextSubscription.serviceType as any}
-                date={nextSubscription.nextServiceDate}
-                status="Confirmed"
-                as
-                any
-                provider={nextSubscription.provider}
+                serviceName={`${nextSubscription.name} - Next Service`}
+                serviceType={nextSubscription.services[0]?.serviceType as any}
+                date={nextSubscription.nextServiceDate!}
+                status="Confirmed" as any
+                provider={nextSubscription.primaryProvider}
                 variant="header"
               />
             </div>
@@ -337,19 +453,6 @@ const SubscriptionsMain: React.FC = () => {
           {/* Filters */}
           <div className={styles.subscriptionsMain__filters}>
             <FilterDropdown
-              label="Service"
-              value={selectedServiceType}
-              onChange={handleServiceTypeChange}
-              options={[
-                { value: "all", label: "All Services" },
-                { value: ServiceCategory.Cleaning, label: "Cleaning" },
-                { value: ServiceCategory.Laundry, label: "Laundry" },
-                { value: ServiceCategory.Cooking, label: "Cooking" },
-                { value: ServiceCategory.Errands, label: "Errands" },
-                { value: ServiceCategory.PestControl, label: "Pest Control" },
-              ]}
-            />
-            <FilterDropdown
               label="Status"
               value={selectedStatus}
               onChange={handleStatusChange}
@@ -366,15 +469,14 @@ const SubscriptionsMain: React.FC = () => {
               ]}
             />
             <FilterDropdown
-              label="Frequency"
+              label="Billing"
               value={selectedFrequency}
               onChange={handleFrequencyChange}
               options={[
-                { value: "all", label: "All Frequencies" },
-                { value: SubscriptionFrequency.Weekly, label: "Weekly" },
-                { value: SubscriptionFrequency.BiWeekly, label: "Bi-weekly" },
-                { value: SubscriptionFrequency.Monthly, label: "Monthly" },
-                { value: SubscriptionFrequency.Quarterly, label: "Quarterly" },
+                { value: "all", label: "All Billing Cycles" },
+                { value: "monthly", label: "Monthly" },
+                { value: "quarterly", label: "Quarterly" },
+                { value: "annually", label: "Annually" },
               ]}
             />
           </div>
