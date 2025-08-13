@@ -202,8 +202,6 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
       <motion.div
         layout
         className={styles.bookingCard}
-        // onHoverStart={() => setHoveredId(booking.id)}
-        // onHoverEnd={() => setHoveredId(null)}
         onClick={() => handleCardClick(booking)}
       >
         {/* Service Type Indicator */}
@@ -279,57 +277,6 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
                 {formatPrice(booking.price)}
               </span>
             </div>
-
-            {/* Quick Actions */}
-            <AnimatePresence>
-              {isHovered && (
-                <motion.div
-                  className={styles.bookingCard__quickActions}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                >
-                  {(booking.status === BookingStatus.Upcoming ||
-                    booking.status === BookingStatus.Confirmed) && (
-                    <>
-                      <motion.button
-                        className={styles.bookingCard__quickBtn}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          console.log("Call provider");
-                        }}
-                      >
-                        <Phone size={16} />
-                      </motion.button>
-                      <motion.button
-                        className={styles.bookingCard__quickBtn}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          console.log("Reschedule");
-                        }}
-                      >
-                        <RefreshCw size={16} />
-                      </motion.button>
-                    </>
-                  )}
-                  <motion.button
-                    className={styles.bookingCard__quickBtn}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCardClick(booking);
-                    }}
-                  >
-                    <Eye size={16} />
-                  </motion.button>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
 
           {/* Menu Button */}

@@ -140,7 +140,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   overflow: visible;
-  padding: spacing("sm") 0;
+  padding: spacing("md") 0;
 
   &:hover {
     border-color: color("primary", "lighter");
