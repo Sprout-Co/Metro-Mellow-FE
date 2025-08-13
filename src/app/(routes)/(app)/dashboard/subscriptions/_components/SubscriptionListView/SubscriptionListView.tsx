@@ -29,7 +29,11 @@ import {
   TrendingUp,
 } from "lucide-react";
 import styles from "./SubscriptionListView.module.scss";
-import { ServiceCategory, SubscriptionStatus, Subscription } from "../../types/subscription";
+import {
+  ServiceCategory,
+  SubscriptionStatus,
+  Subscription,
+} from "../../types/subscription";
 import SubscriptionDetailModal from "../SubscriptionDetailModal/SubscriptionDetailModal";
 
 interface SubscriptionListViewProps {
@@ -38,8 +42,11 @@ interface SubscriptionListViewProps {
 
 type TabType = "active" | "paused" | "expired";
 
-const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptions }) => {
-  const [selectedSubscription, setSelectedSubscription] = useState<Subscription | null>(null);
+const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
+  subscriptions,
+}) => {
+  const [selectedSubscription, setSelectedSubscription] =
+    useState<Subscription | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -47,7 +54,9 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
 
   // Sort subscriptions by next service date
   const sortedSubscriptions = [...subscriptions].sort(
-    (a, b) => new Date(a.nextServiceDate).getTime() - new Date(b.nextServiceDate).getTime()
+    (a, b) =>
+      new Date(a.nextServiceDate).getTime() -
+      new Date(b.nextServiceDate).getTime()
   );
 
   // Group subscriptions by status
@@ -57,7 +66,9 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
         s.status === SubscriptionStatus.Active ||
         s.status === SubscriptionStatus.PendingActivation
     ),
-    paused: sortedSubscriptions.filter((s) => s.status === SubscriptionStatus.Paused),
+    paused: sortedSubscriptions.filter(
+      (s) => s.status === SubscriptionStatus.Paused
+    ),
     expired: sortedSubscriptions.filter(
       (s) =>
         s.status === SubscriptionStatus.Expired ||
@@ -162,7 +173,9 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
 
   // Calculate subscription progress
   const calculateProgress = (subscription: Subscription) => {
-    return Math.round((subscription.completedServices / subscription.totalServices) * 100);
+    return Math.round(
+      (subscription.completedServices / subscription.totalServices) * 100
+    );
   };
 
   // Handle card click
@@ -186,7 +199,9 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
     }
   }, [activeMenuId]);
 
-  const SubscriptionCard: React.FC<{ subscription: Subscription }> = ({ subscription }) => {
+  const SubscriptionCard: React.FC<{ subscription: Subscription }> = ({
+    subscription,
+  }) => {
     const isMenuOpen = activeMenuId === subscription.id;
     const isHovered = hoveredId === subscription.id;
     const progress = calculateProgress(subscription);
@@ -206,7 +221,11 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
         {/* Service Type Indicator */}
         <div
           className={styles.subscriptionCard__indicator}
-          style={{ backgroundColor: primaryService ? getServiceColor(primaryService.serviceType) : '#6b7280' }}
+          style={{
+            backgroundColor: primaryService
+              ? getServiceColor(primaryService.serviceType)
+              : "#6b7280",
+          }}
         />
 
         {/* Main Content Grid */}
@@ -223,7 +242,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
                     style={{
                       backgroundColor: `${getServiceColor(service.serviceType)}15`,
                       zIndex: serviceIcons.length - index,
-                      marginLeft: index > 0 ? '-8px' : '0',
+                      marginLeft: index > 0 ? "-8px" : "0",
                     }}
                   >
                     <span>{getServiceIcon(service.serviceType)}</span>
@@ -235,7 +254,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
                   </div>
                 )}
               </div>
-              
+
               <div className={styles.subscriptionCard__serviceDetails}>
                 <h3 className={styles.subscriptionCard__serviceName}>
                   {subscription.name}
@@ -245,10 +264,9 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
                   </span>
                 </h3>
                 <p className={styles.subscriptionCard__serviceType}>
-                  {subscription.services.length === 1 
+                  {subscription.services.length === 1
                     ? subscription.services[0].serviceName
-                    : `${subscription.services.length} services included`
-                  }
+                    : `${subscription.services.length} services included`}
                 </p>
               </div>
             </div>
@@ -257,37 +275,49 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
               {subscription.nextServiceDate && (
                 <div className={styles.subscriptionCard__infoItem}>
                   <Calendar size={14} />
-                  <span>Next: {formatDate(subscription.nextServiceDate)} at {formatTime(subscription.nextServiceDate)}</span>
+                  <span>
+                    Next: {formatDate(subscription.nextServiceDate)} at{" "}
+                    {formatTime(subscription.nextServiceDate)}
+                  </span>
                 </div>
               )}
-              <div className={styles.subscriptionCard__infoItem}>
+              {/* <div className={styles.subscriptionCard__infoItem}>
                 <User size={14} />
-                <span>{subscription.primaryProvider || "Multiple providers"}</span>
-              </div>
+                <span>
+                  {subscription.primaryProvider || "Multiple providers"}
+                </span>
+              </div> */}
               <div className={styles.subscriptionCard__infoItem}>
                 <MapPin size={14} />
                 <span>{subscription.address}</span>
               </div>
-              <div className={styles.subscriptionCard__infoItem}>
+              {/* <div className={styles.subscriptionCard__infoItem}>
                 <CreditCard size={14} />
-                <span>Next billing: {formatDate(subscription.nextBillingDate)}</span>
-              </div>
+                <span>
+                  Next billing: {formatDate(subscription.nextBillingDate)}
+                </span>
+              </div> */}
             </div>
 
             {/* Progress Bar */}
             <div className={styles.subscriptionCard__progress}>
               <div className={styles.subscriptionCard__progressHeader}>
                 <span className={styles.subscriptionCard__progressText}>
-                  {subscription.completedServices} of {subscription.totalServices} services completed
+                  {subscription.completedServices} of{" "}
+                  {subscription.totalServices} services completed
                 </span>
-                <span className={styles.subscriptionCard__progressPercent}>{progress}%</span>
+                <span className={styles.subscriptionCard__progressPercent}>
+                  {progress}%
+                </span>
               </div>
               <div className={styles.subscriptionCard__progressBar}>
                 <div
                   className={styles.subscriptionCard__progressFill}
-                  style={{ 
+                  style={{
                     width: `${progress}%`,
-                    backgroundColor: primaryService ? getServiceColor(primaryService.serviceType) : '#6b7280'
+                    backgroundColor: primaryService
+                      ? getServiceColor(primaryService.serviceType)
+                      : "#6b7280",
                   }}
                 />
               </div>
@@ -314,18 +344,6 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
                   per {subscription.billingCycle}
                 </span>
               </div>
-              {subscription.discount && (
-                <div className={styles.subscriptionCard__discount}>
-                  <TrendingUp size={12} />
-                  {subscription.discount}% discount
-                </div>
-              )}
-              {subscription.autoRenewal && (
-                <div className={styles.subscriptionCard__autoRenewal}>
-                  <RefreshCw size={12} />
-                  Auto-renewal enabled
-                </div>
-              )}
             </div>
           </div>
 
@@ -377,7 +395,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
                       Resume Subscription
                     </button>
                   )}
-                  {(subscription.status === SubscriptionStatus.Expired || 
+                  {(subscription.status === SubscriptionStatus.Expired ||
                     subscription.status === SubscriptionStatus.Cancelled) && (
                     <button className={styles.subscriptionCard__menuItem}>
                       <RefreshCw size={14} />
@@ -455,7 +473,9 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
               >
                 <IconComponent size={18} />
                 <span>{tab.label}</span>
-                <span className={styles.subscriptionListView__tabCount}>{tab.count}</span>
+                <span className={styles.subscriptionListView__tabCount}>
+                  {tab.count}
+                </span>
               </motion.button>
             );
           })}
@@ -479,7 +499,10 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({ subscriptio
               ) : (
                 <div className={styles.subscriptionListView__subscriptions}>
                   {groupedSubscriptions[activeTab].map((subscription) => (
-                    <SubscriptionCard key={subscription.id} subscription={subscription} />
+                    <SubscriptionCard
+                      key={subscription.id}
+                      subscription={subscription}
+                    />
                   ))}
                 </div>
               )}
