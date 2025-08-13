@@ -202,10 +202,6 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
       <motion.div
         layout
         className={styles.bookingCard}
-        // initial={{ opacity: 0, y: 20 }}
-        // animate={{ opacity: 1, y: 0 }}
-        // exit={{ opacity: 0, y: -20 }}
-        // whileHover={{ y: -2 }}
         onHoverStart={() => setHoveredId(booking.id)}
         onHoverEnd={() => setHoveredId(null)}
         onClick={() => handleCardClick(booking)}
@@ -457,8 +453,6 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
                   isActive ? styles["listView__tab--active"] : ""
                 }`}
                 onClick={() => setActiveTab(tab.id)}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
               >
                 <IconComponent size={18} />
                 <span>{tab.label}</span>
