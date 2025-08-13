@@ -8,8 +8,16 @@ import {
   List,
   Plus,
   Filter,
-  ChevronDown,
+  Search,
   CalendarDays,
+  Grid3x3,
+  Clock,
+  TrendingUp,
+  AlertCircle,
+  CheckCircle2,
+  XCircle,
+  Download,
+  Bell,
 } from "lucide-react";
 import styles from "./BookingsMain.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
@@ -17,8 +25,12 @@ import CalendarView from "../CalendarView/CalendarView";
 import FilterDropdown from "../FilterDropdown/FilterDropdown";
 import { BookingStatus, ServiceCategory } from "../../types/booking";
 import ListView from "../ListView/ListView";
+import TimelineView from "../TimelineView/TimelineView";
+import BookingStats from "../BookingStats/BookingStats";
+import UpcomingBookingCard from "../UpcomingBookingCard/UpcomingBookingCard";
+import QuickActions from "../QuickActions/QuickActions";
 
-// Mock data
+// Mock data (same as before)
 const mockBookings = [
   {
     id: "1",
@@ -132,7 +144,7 @@ interface Booking {
   rating?: number;
 }
 
-type ViewMode = "calendar" | "list";
+type ViewMode = "calendar" | "list" | "timeline";
 
 const BookingsMain: React.FC = () => {
   const [viewMode, setViewMode] = useState<ViewMode>("list");
@@ -143,11 +155,23 @@ const BookingsMain: React.FC = () => {
     "all"
   );
   const [selectedDateRange, setSelectedDateRange] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [bookings] = useState<Booking[]>(mockBookings);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   // Filter bookings
   const filteredBookings = useMemo(() => {
     let filtered = [...bookings];
+
+    // Filter by search query
+    if (searchQuery) {
+      filtered = filtered.filter(
+        (b) =>
+          b.serviceName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          b.provider.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          b.address.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
 
     // Filter by service type
     if (selectedServiceType !== "all") {
@@ -183,31 +207,38 @@ const BookingsMain: React.FC = () => {
     }
 
     return filtered;
-  }, [bookings, selectedServiceType, selectedStatus, selectedDateRange]);
+  }, [
+    bookings,
+    selectedServiceType,
+    selectedStatus,
+    selectedDateRange,
+    searchQuery,
+  ]);
 
-  // Calculate stats
-  const stats = useMemo(() => {
-    const upcoming = bookings.filter(
-      (b) => b.status === BookingStatus.Upcoming
-    ).length;
-    const confirmed = bookings.filter(
-      (b) => b.status === BookingStatus.Confirmed
-    ).length;
-    const completed = bookings.filter(
-      (b) => b.status === BookingStatus.Completed
-    ).length;
-    const thisMonth = bookings.filter((b) => {
-      const bookingMonth = new Date(b.date).getMonth();
-      const currentMonth = new Date().getMonth();
-      return bookingMonth === currentMonth;
-    }).length;
-
-    return { upcoming, confirmed, completed, thisMonth };
+  // Get next upcoming booking
+  const nextBooking = useMemo(() => {
+    const now = new Date();
+    const upcoming = bookings
+      .filter((b) => {
+        const bookingDate = new Date(b.date);
+        return (
+          bookingDate > now &&
+          (b.status === BookingStatus.Upcoming ||
+            b.status === BookingStatus.Confirmed)
+        );
+      })
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    return upcoming[0] || null;
   }, [bookings]);
 
   const handleAddBooking = () => {
     console.log("Add new booking");
     // Navigate to booking form or open modal
+  };
+
+  const handleExportData = () => {
+    console.log("Export bookings data");
+    // Implement export functionality
   };
 
   const handleServiceTypeChange = (value: string) => {
@@ -224,43 +255,101 @@ const BookingsMain: React.FC = () => {
 
   return (
     <div className={styles.bookingsMain}>
+      {/* Header Section */}
       <div className={styles.bookingsMain__header}>
-        <h1 className={styles.bookingsMain__title}>Bookings & Appointments</h1>
-        <p className={styles.bookingsMain__subtitle}>
-          Manage all your scheduled services in one place
-        </p>
+        <div className={styles.bookingsMain__headerContent}>
+          <h1 className={styles.bookingsMain__title}>My Bookings</h1>
+          <p className={styles.bookingsMain__subtitle}>
+            Manage and track all your service appointments
+          </p>
+        </div>
+        <div className={styles.bookingsMain__headerActions}>
+          <motion.button
+            className={styles.bookingsMain__notificationBtn}
+            onClick={() => setShowNotifications(!showNotifications)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Bell />
+            <span className={styles.bookingsMain__notificationBadge}>3</span>
+          </motion.button>
+          <FnButton variant="primary" size="md" onClick={handleAddBooking}>
+            <Plus size={18} />
+            Book Service
+          </FnButton>
+        </div>
       </div>
 
+      {/* Quick Stats Overview */}
+      {/* <BookingStats bookings={bookings} /> */}
+
+      {/* Upcoming Booking Card */}
+      {nextBooking && <UpcomingBookingCard booking={nextBooking} />}
+
+      {/* Quick Actions */}
+      <QuickActions />
+
+      {/* Controls Section */}
       <div className={styles.bookingsMain__controls}>
-        <div className={styles.bookingsMain__viewToggle}>
-          <motion.button
-            className={`${styles.bookingsMain__viewBtn} ${
-              viewMode === "calendar"
-                ? styles["bookingsMain__viewBtn--active"]
-                : ""
-            }`}
-            onClick={() => setViewMode("calendar")}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Calendar />
-            Calendar
-          </motion.button>
-          <motion.button
-            className={`${styles.bookingsMain__viewBtn} ${
-              viewMode === "list" ? styles["bookingsMain__viewBtn--active"] : ""
-            }`}
-            onClick={() => setViewMode("list")}
-            whileTap={{ scale: 0.95 }}
-          >
-            <List />
-            List
-          </motion.button>
+        <div className={styles.bookingsMain__controlsLeft}>
+          {/* Search Bar */}
+          <div className={styles.bookingsMain__searchContainer}>
+            <Search className={styles.bookingsMain__searchIcon} />
+            <input
+              type="text"
+              placeholder="Search bookings..."
+              className={styles.bookingsMain__searchInput}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          {/* View Toggle */}
+          <div className={styles.bookingsMain__viewToggle}>
+            <motion.button
+              className={`${styles.bookingsMain__viewBtn} ${
+                viewMode === "list"
+                  ? styles["bookingsMain__viewBtn--active"]
+                  : ""
+              }`}
+              onClick={() => setViewMode("list")}
+              whileTap={{ scale: 0.95 }}
+            >
+              <List />
+              <span>List</span>
+            </motion.button>
+            <motion.button
+              className={`${styles.bookingsMain__viewBtn} ${
+                viewMode === "calendar"
+                  ? styles["bookingsMain__viewBtn--active"]
+                  : ""
+              }`}
+              onClick={() => setViewMode("calendar")}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Calendar />
+              <span>Calendar</span>
+            </motion.button>
+            <motion.button
+              className={`${styles.bookingsMain__viewBtn} ${
+                viewMode === "timeline"
+                  ? styles["bookingsMain__viewBtn--active"]
+                  : ""
+              }`}
+              onClick={() => setViewMode("timeline")}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Grid3x3 />
+              <span>Timeline</span>
+            </motion.button>
+          </div>
         </div>
 
-        <div className={styles.bookingsMain__filters}>
-          <div className={styles.bookingsMain__filterGroup}>
+        <div className={styles.bookingsMain__controlsRight}>
+          {/* Filters */}
+          <div className={styles.bookingsMain__filters}>
             <FilterDropdown
-              label="Service Type"
+              label="Service"
               value={selectedServiceType}
               onChange={handleServiceTypeChange}
               options={[
@@ -287,7 +376,7 @@ const BookingsMain: React.FC = () => {
               ]}
             />
             <FilterDropdown
-              label="Date Range"
+              label="Date"
               value={selectedDateRange}
               onChange={handleDateRangeChange}
               options={[
@@ -299,46 +388,21 @@ const BookingsMain: React.FC = () => {
             />
           </div>
 
+          {/* Export Button */}
           <motion.button
-            className={styles.bookingsMain__addBookingBtn}
-            onClick={handleAddBooking}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            className={styles.bookingsMain__exportBtn}
+            onClick={handleExportData}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <Plus />
-            New Booking
+            <Download size={16} />
+            Export
           </motion.button>
         </div>
       </div>
 
+      {/* Main Content Area */}
       <div className={styles.bookingsMain__content}>
-        <div className={styles.bookingsMain__statsBar}>
-          <div className={styles.bookingsMain__stat}>
-            <span className={styles.bookingsMain__statValue}>
-              {stats.upcoming}
-            </span>
-            <span className={styles.bookingsMain__statLabel}>Upcoming</span>
-          </div>
-          <div className={styles.bookingsMain__stat}>
-            <span className={styles.bookingsMain__statValue}>
-              {stats.confirmed}
-            </span>
-            <span className={styles.bookingsMain__statLabel}>Confirmed</span>
-          </div>
-          <div className={styles.bookingsMain__stat}>
-            <span className={styles.bookingsMain__statValue}>
-              {stats.completed}
-            </span>
-            <span className={styles.bookingsMain__statLabel}>Completed</span>
-          </div>
-          <div className={styles.bookingsMain__stat}>
-            <span className={styles.bookingsMain__statValue}>
-              {stats.thisMonth}
-            </span>
-            <span className={styles.bookingsMain__statLabel}>This Month</span>
-          </div>
-        </div>
-
         <AnimatePresence mode="wait">
           {viewMode === "calendar" ? (
             <motion.div
@@ -349,6 +413,16 @@ const BookingsMain: React.FC = () => {
               transition={{ duration: 0.3 }}
             >
               <CalendarView bookings={filteredBookings} />
+            </motion.div>
+          ) : viewMode === "timeline" ? (
+            <motion.div
+              key="timeline"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <TimelineView bookings={filteredBookings} />
             </motion.div>
           ) : (
             <motion.div
@@ -372,7 +446,8 @@ const BookingsMain: React.FC = () => {
               No bookings found
             </h3>
             <p className={styles.bookingsMain__emptyText}>
-              {selectedServiceType !== "all" ||
+              {searchQuery ||
+              selectedServiceType !== "all" ||
               selectedStatus !== "all" ||
               selectedDateRange !== "all"
                 ? "Try adjusting your filters to see more bookings"
@@ -380,7 +455,7 @@ const BookingsMain: React.FC = () => {
             </p>
             <FnButton variant="primary" onClick={handleAddBooking}>
               <Plus size={18} />
-              Book a Service
+              Book Your First Service
             </FnButton>
           </div>
         )}

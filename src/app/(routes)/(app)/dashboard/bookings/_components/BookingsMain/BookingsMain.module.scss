@@ -8,14 +8,53 @@
   padding: spacing("xl") 0;
 
   &__header {
-    margin-bottom: spacing("xl");
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: spacing("2xl");
+    padding: spacing("xl");
+    background: linear-gradient(
+      135deg,
+      color("primary", "base"),
+      color("primary", "dark")
+    );
+    border-radius: border-radius("xl");
+    color: color("neutral", "white");
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 40%;
+      height: 200%;
+      background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.1) 0%,
+        transparent 60%
+      );
+      pointer-events: none;
+    }
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      gap: spacing("lg");
+      padding: spacing("lg");
+    }
+  }
+
+  &__headerContent {
+    position: relative;
+    z-index: 1;
   }
 
   &__title {
     @include font-size("h4");
     @include font-weight("bold");
     font-family: $font-family-heading;
-    color: color("neutral", "darkest");
+    color: color("neutral", "white");
     margin: 0 0 spacing("xs") 0;
 
     @include breakpoint-down("md") {
@@ -25,16 +64,71 @@
 
   &__subtitle {
     @include font-size("body-2");
-    color: color("neutral", "dark");
+    color: rgba(255, 255, 255, 0.9);
     margin: 0;
+  }
+
+  &__headerActions {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    position: relative;
+    z-index: 1;
+
+    @include breakpoint-down("sm") {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  &__notificationBtn {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: border-radius("full");
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("neutral", "white");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &__notificationBadge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    background: color("secondary", "base");
+    color: color("neutral", "white");
+    border-radius: border-radius("full");
+    @include font-size("xs");
+    @include font-weight("bold");
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &__controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: spacing("lg");
-    gap: spacing("md");
+    margin-bottom: spacing("xl");
+    gap: spacing("lg");
+    flex-wrap: wrap;
 
     @include breakpoint-down("lg") {
       flex-direction: column;
@@ -42,49 +136,110 @@
     }
   }
 
+  &__controlsLeft {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    flex: 1;
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+    }
+  }
+
+  &__searchContainer {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+
+    @include breakpoint-down("md") {
+      max-width: none;
+    }
+  }
+
+  &__searchIcon {
+    position: absolute;
+    left: spacing("md");
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: color("neutral", "medium");
+    pointer-events: none;
+  }
+
+  &__searchInput {
+    width: 100%;
+    height: 44px;
+    padding: 0 spacing("md") 0 spacing("xl") * 2;
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("pill");
+    @include font-size("sm");
+    color: color("neutral", "darkest");
+    transition: $transition-base;
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.05);
+    }
+  }
+
   &__viewToggle {
     display: flex;
-    gap: spacing("xs");
-    background-color: color("neutral", "lightest");
-    padding: spacing("xs");
-    border-radius: border-radius("lg");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("pill");
+    padding: 4px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
   }
 
   &__viewBtn {
     display: flex;
     align-items: center;
     gap: spacing("xs");
-    padding: spacing("sm") spacing("md");
+    padding: spacing("xs") spacing("md");
     background: transparent;
     border: none;
-    border-radius: border-radius("md");
-    color: color("neutral", "darkest");
+    border-radius: border-radius("pill");
+    color: color("neutral", "dark");
     @include font-size("sm");
     @include font-weight("medium");
     cursor: pointer;
     transition: $transition-base;
 
     &--active {
-      background-color: color("neutral", "white");
+      background: color("neutral", "white");
       color: color("primary", "base");
-      box-shadow: shadow("sm");
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
     &:hover:not(&--active) {
-      background-color: color("neutral", "lighter");
+      color: color("neutral", "darkest");
     }
 
     svg {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
+    }
+
+    span {
+      @include breakpoint-down("sm") {
+        display: none;
+      }
     }
   }
 
-  &__filters {
+  &__controlsRight {
     display: flex;
-    gap: spacing("md");
     align-items: center;
-    flex-wrap: wrap;
+    gap: spacing("md");
 
     @include breakpoint-down("md") {
       width: 100%;
@@ -92,85 +247,56 @@
     }
 
     @include breakpoint-down("sm") {
-      flex-direction: column;
-      align-items: stretch;
+      flex-wrap: wrap;
     }
   }
 
-  &__filterGroup {
+  &__filters {
     display: flex;
     gap: spacing("sm");
     align-items: center;
 
     @include breakpoint-down("sm") {
-      width: 100%;
+      flex: 1;
+      justify-content: space-between;
     }
   }
 
-  &__addBookingBtn {
-    @include button-primary("md");
+  &__exportBtn {
     display: flex;
     align-items: center;
     gap: spacing("xs");
+    padding: spacing("xs") spacing("md");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    color: color("neutral", "darkest");
+    @include font-size("sm");
+    @include font-weight("medium");
+    cursor: pointer;
+    transition: $transition-base;
 
-    svg {
-      width: 18px;
-      height: 18px;
+    &:hover {
+      background: color("neutral", "lightest");
+      border-color: color("neutral", "light");
     }
 
-    @include breakpoint-down("sm") {
-      width: 100%;
-      justify-content: center;
+    svg {
+      width: 16px;
+      height: 16px;
     }
   }
 
   &__content {
-    background-color: color("neutral", "white");
+    background: color("neutral", "white");
     border-radius: border-radius("xl");
-    box-shadow: shadow("sm");
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     overflow: hidden;
-  }
-
-  &__statsBar {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1px;
-    background-color: color("neutral", "lighter");
-    border-bottom: 1px solid color("neutral", "lighter");
-  }
-
-  &__stat {
-    background-color: color("neutral", "white");
-    padding: spacing("md") spacing("lg");
-    text-align: center;
-
-    @include breakpoint-down("sm") {
-      padding: spacing("sm") spacing("md");
-    }
-  }
-
-  &__statValue {
-    @include font-size("h5");
-    @include font-weight("bold");
-    color: color("neutral", "darkest");
-    display: block;
-    margin-bottom: spacing("xxs");
-
-    @include breakpoint-down("sm") {
-      @include font-size("subtitle-1");
-    }
-  }
-
-  &__statLabel {
-    @include font-size("xs");
-    @include font-weight("medium");
-    color: color("neutral", "dark");
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    min-height: 400px;
   }
 
   &__emptyState {
-    padding: spacing("3xl") spacing("xl");
+    padding: spacing("4xl") spacing("xl");
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -182,7 +308,11 @@
     width: 120px;
     height: 120px;
     border-radius: border-radius("full");
-    background-color: color("neutral", "lightest");
+    background: linear-gradient(
+      135deg,
+      rgba(7, 80, 86, 0.05),
+      rgba(7, 80, 86, 0.1)
+    );
     display: flex;
     align-items: center;
     justify-content: center;
@@ -191,7 +321,7 @@
     svg {
       width: 60px;
       height: 60px;
-      color: color("neutral", "medium");
+      color: color("primary", "base");
     }
   }
 
