@@ -6,6 +6,7 @@ import Link from "next/link";
 import { BookingStatus, TimeSlot, ServiceCategory } from "@/graphql/api";
 import styles from "./WelcomeHeader.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
+import AppointmentCard from "@/components/ui/AppointmentCard";
 
 interface WelcomeHeaderProps {
   firstName?: string;
@@ -141,46 +142,6 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
     return upcomingBookings[0] || null;
   }, [currentCustomerBookings]);
 
-  const formatServiceDate = (date: string, timeSlot: TimeSlot) => {
-    const bookingDate = new Date(date);
-    const now = new Date();
-    const diffTime = bookingDate.getTime() - now.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    let dateLabel = "";
-    if (diffDays === 0) {
-      dateLabel = "Today";
-    } else if (diffDays === 1) {
-      dateLabel = "Tomorrow";
-    } else if (diffDays <= 7) {
-      dateLabel = `In ${diffDays} days`;
-    } else {
-      dateLabel = bookingDate.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      });
-    }
-
-    const timeLabel =
-      timeSlot === TimeSlot.Morning
-        ? "Morning"
-        : timeSlot === TimeSlot.Afternoon
-          ? "Afternoon"
-          : "Evening";
-
-    return `${dateLabel} - ${timeLabel}`;
-  };
-
-  const getServiceIcon = (serviceType: ServiceCategory) => {
-    const icons = {
-      [ServiceCategory.Cleaning]: "🧹",
-      [ServiceCategory.Laundry]: "👕",
-      [ServiceCategory.Cooking]: "🍳",
-      [ServiceCategory.PestControl]: "🐛",
-      [ServiceCategory.Errands]: "📦",
-    };
-    return icons[serviceType] || "🏠";
-  };
   // Get current time to determine greeting
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -214,50 +175,28 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             {upcomingService
-              ? `Your next service is ${formatServiceDate(upcomingService.date, upcomingService.timeSlot)}`
+              ? "Here's your upcoming service"
               : "Ready to book your next home service?"}
           </motion.p>
         </div>
 
         <div className={styles.welcomeHeader__content__bottom}>
           {upcomingService ? (
-            <motion.div
-              className={styles.welcomeHeader__upcomingService}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-              <div className={styles.welcomeHeader__serviceIcon}>
-                {getServiceIcon(upcomingService.serviceType)}
-              </div>
-              <div className={styles.welcomeHeader__serviceInfo}>
-                <h3 className={styles.welcomeHeader__serviceName}>
-                  {upcomingService.service.name}
-                </h3>
-                <p className={styles.welcomeHeader__serviceDate}>
-                  {formatServiceDate(
-                    upcomingService.date,
-                    upcomingService.timeSlot
-                  )}
-                </p>
-                {upcomingService.staff && (
-                  <p className={styles.welcomeHeader__serviceStaff}>
-                    with {upcomingService.staff.firstName}
-                  </p>
-                )}
-              </div>
-              <div className={styles.welcomeHeader__serviceStatus}>
-                <span className={styles.welcomeHeader__statusBadge}>
-                  {upcomingService.status === BookingStatus.Confirmed
-                    ? "Confirmed"
-                    : upcomingService.status === BookingStatus.Pending
-                      ? "Pending"
-                      : upcomingService.status === BookingStatus.InProgress
-                        ? "In Progress"
-                        : "Scheduled"}
-                </span>
-              </div>
-            </motion.div>
+            <AppointmentCard
+              serviceName={upcomingService.service.name}
+              serviceType={upcomingService.serviceType}
+              date={upcomingService.date}
+              timeSlot={
+                upcomingService.timeSlot === TimeSlot.Morning
+                  ? "Morning"
+                  : upcomingService.timeSlot === TimeSlot.Afternoon
+                    ? "Afternoon"
+                    : "Evening"
+              }
+              status={upcomingService.status}
+              provider={upcomingService.staff?.firstName}
+              variant="header"
+            />
           ) : (
             <motion.div
               className={styles.welcomeHeader__noService}
