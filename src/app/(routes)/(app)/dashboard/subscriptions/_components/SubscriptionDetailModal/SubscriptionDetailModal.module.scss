@@ -7,13 +7,14 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 420px;
+  width: 460px;
   height: 100vh;
   background-color: color("neutral", "white");
-  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+  box-shadow: -8px 0 40px rgba(0, 0, 0, 0.2), -2px 0 16px rgba(0, 0, 0, 0.1);
   z-index: z-index("modal");
   display: flex;
   flex-direction: column;
+  backdrop-filter: blur(1px);
 
   @include breakpoint-down("sm") {
     width: 100%;
@@ -33,8 +34,9 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding: spacing("lg");
+    padding: spacing("xl");
     border-bottom: 1px solid color("neutral", "lighter");
+    background: linear-gradient(135deg, color("neutral", "white"), color("neutral", "lightest"));
   }
 
   &__headerLeft {
@@ -44,56 +46,61 @@
   }
 
   &__serviceIcon {
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: color("neutral", "lightest");
-    border-radius: border-radius("md");
-    font-size: 20px;
+    border-radius: border-radius("xl");
+    font-size: 24px;
     flex-shrink: 0;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid color("neutral", "white");
   }
 
   &__title {
-    @include font-size("body-1");
-    @include font-weight("semibold");
+    @include font-size("xl");
+    @include font-weight("bold");
     color: color("neutral", "darkest");
-    margin: 0 0 spacing("xxs") 0;
+    margin: 0 0 spacing("xs") 0;
     display: flex;
     align-items: center;
-    gap: spacing("xs");
+    gap: spacing("sm");
+    line-height: 1.3;
   }
 
   &__subtitle {
-    @include font-size("xs");
-    color: color("neutral", "medium");
+    @include font-size("sm");
+    color: color("neutral", "dark");
     margin: 0;
+    @include font-weight("medium");
   }
 
   &__closeBtn {
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: transparent;
     border: none;
-    border-radius: border-radius("sm");
+    border-radius: border-radius("full");
     color: color("neutral", "medium");
     cursor: pointer;
-    transition: $transition-fast;
+    transition: all 0.2s ease;
 
     &:hover {
-      background-color: color("neutral", "lighter");
-      color: color("neutral", "dark");
+      background-color: color("neutral", "lightest");
+      color: color("neutral", "darkest");
+      transform: scale(1.1);
     }
   }
 
   &__body {
     flex: 1;
     overflow-y: auto;
-    padding: spacing("lg");
+    padding: spacing("xl");
 
     &::-webkit-scrollbar {
       width: 4px;
@@ -109,78 +116,101 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: spacing("sm");
-    background-color: color("neutral", "lightest");
-    border-radius: border-radius("md");
-    margin-bottom: spacing("lg");
+    padding: spacing("md");
+    background: linear-gradient(135deg, color("neutral", "lightest"), rgba(255, 255, 255, 0.5));
+    border-radius: border-radius("xl");
+    margin-bottom: spacing("xl");
+    border: 1px solid color("neutral", "lighter");
   }
 
   &__status {
     display: inline-flex;
     align-items: center;
-    gap: spacing("xxs");
+    gap: spacing("xs");
     @include font-size("xs");
-    @include font-weight("semibold");
-    padding: spacing("xxs") spacing("sm");
-    border-radius: border-radius("sm");
+    @include font-weight("bold");
+    padding: spacing("xs") spacing("md");
+    border-radius: border-radius("pill");
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
+    border: 1px solid transparent;
 
     &--active {
-      background-color: rgba(5, 150, 105, 0.1);
-      color: #059669;
+      background: linear-gradient(135deg, rgba(5, 150, 105, 0.15), rgba(5, 150, 105, 0.25));
+      color: #047857;
+      border-color: rgba(5, 150, 105, 0.3);
     }
 
     &--paused {
-      background-color: rgba(217, 119, 6, 0.1);
-      color: #d97706;
+      background: linear-gradient(135deg, rgba(217, 119, 6, 0.15), rgba(217, 119, 6, 0.25));
+      color: #b45309;
+      border-color: rgba(217, 119, 6, 0.3);
     }
 
     &--cancelled,
     &--expired {
-      background-color: rgba(251, 34, 34, 0.1);
-      color: #fb2222;
+      background: linear-gradient(135deg, rgba(251, 34, 34, 0.15), rgba(251, 34, 34, 0.25));
+      color: #dc2626;
+      border-color: rgba(251, 34, 34, 0.3);
     }
 
     &--pendingactivation {
-      background-color: rgba(242, 153, 74, 0.1);
-      color: #f2994a;
+      background: linear-gradient(135deg, rgba(242, 153, 74, 0.15), rgba(242, 153, 74, 0.25));
+      color: #ea580c;
+      border-color: rgba(242, 153, 74, 0.3);
     }
   }
 
   &__subscriptionId {
     @include font-size("xs");
-    color: color("neutral", "medium");
+    color: color("neutral", "dark");
+    @include font-weight("semibold");
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
   }
 
   &__sections {
     display: flex;
     flex-direction: column;
-    gap: spacing("lg");
+    gap: spacing("xl");
   }
 
   &__section {
     display: flex;
     flex-direction: column;
-    gap: spacing("sm");
+    gap: spacing("md");
   }
 
   &__sectionTitle {
-    @include font-size("xs");
-    @include font-weight("semibold");
-    color: color("neutral", "dark");
+    @include font-size("sm");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin: 0;
+    letter-spacing: 1px;
+    margin: 0 0 spacing("xs") 0;
+    position: relative;
+    padding-bottom: spacing("xs");
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 24px;
+      height: 2px;
+      background: color("primary", "base");
+      border-radius: border-radius("pill");
+    }
   }
 
   &__progressCard {
-    padding: spacing("sm");
-    background-color: color("neutral", "lightest");
-    border-radius: border-radius("md");
+    padding: spacing("md");
+    background: linear-gradient(135deg, color("neutral", "lightest"), rgba(255, 255, 255, 0.5));
+    border-radius: border-radius("xl");
     display: flex;
     flex-direction: column;
-    gap: spacing("xs");
+    gap: spacing("sm");
+    border: 1px solid color("neutral", "lighter");
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   }
 
   &__progressInfo {
@@ -201,21 +231,30 @@
   }
 
   &__progressBar {
-    height: 6px;
+    height: 8px;
     background: color("neutral", "lighter");
     border-radius: border-radius("pill");
     overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 
   &__progressFill {
     height: 100%;
     background: linear-gradient(
-      135deg,
+      90deg,
       color("primary", "base"),
-      color("primary", "dark")
+      color("primary", "dark"),
+      color("primary", "base")
     );
     border-radius: border-radius("pill");
-    transition: width 0.3s ease;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
   }
 
   &__info {
@@ -372,27 +411,37 @@
   &__servicesList {
     display: flex;
     flex-direction: column;
-    gap: spacing("md");
+    gap: spacing("lg");
   }
 
   &__serviceItem {
-    background: color("neutral", "lightest");
-    border-radius: border-radius("md");
-    padding: spacing("md");
+    background: linear-gradient(135deg, color("neutral", "lightest"), rgba(255, 255, 255, 0.8));
+    border-radius: border-radius("xl");
+    padding: spacing("lg");
     display: flex;
-    gap: spacing("sm");
+    gap: spacing("md");
     border: 1px solid color("neutral", "lighter");
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      border-color: color("primary", "lighter");
+    }
   }
 
   &__serviceItemIcon {
-    width: 40px;
-    height: 40px;
-    border-radius: border-radius("md");
+    width: 44px;
+    height: 44px;
+    border-radius: border-radius("xl");
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 22px;
     flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid color("neutral", "white");
   }
 
   &__serviceItemContent {
@@ -409,16 +458,18 @@
   }
 
   &__serviceItemName {
-    @include font-size("sm");
-    @include font-weight("semibold");
+    @include font-size("body-2");
+    @include font-weight("bold");
     color: color("neutral", "darkest");
     margin: 0;
+    line-height: 1.4;
   }
 
   &__serviceItemPrice {
-    @include font-size("sm");
+    @include font-size("body-2");
     @include font-weight("bold");
     color: color("primary", "base");
+    letter-spacing: -0.3px;
   }
 
   &__serviceItemDetails {
@@ -460,43 +511,65 @@
   }
 
   &__serviceItemProgressBar {
-    height: 4px;
+    height: 6px;
     background: color("neutral", "lighter");
     border-radius: border-radius("pill");
     overflow: hidden;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 
   &__serviceItemProgressFill {
     height: 100%;
     border-radius: border-radius("pill");
-    transition: width 0.3s ease;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      animation: shimmer 2s infinite;
+    }
   }
 
   // Bookings List Styles
   &__bookingsList {
     display: flex;
     flex-direction: column;
-    gap: spacing("sm");
+    gap: spacing("md");
   }
 
   &__bookingItem {
-    background: color("neutral", "lightest");
-    border-radius: border-radius("md");
-    padding: spacing("sm");
+    background: linear-gradient(135deg, color("neutral", "lightest"), rgba(255, 255, 255, 0.8));
+    border-radius: border-radius("lg");
+    padding: spacing("md");
     display: flex;
-    gap: spacing("sm");
+    gap: spacing("md");
     align-items: flex-start;
+    border: 1px solid color("neutral", "lighter");
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateX(2px);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+    }
   }
 
   &__bookingIcon {
-    width: 32px;
-    height: 32px;
-    border-radius: border-radius("md");
+    width: 36px;
+    height: 36px;
+    border-radius: border-radius("lg");
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 18px;
     flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   &__bookingContent {
@@ -513,16 +586,20 @@
   }
 
   &__bookingName {
-    @include font-size("sm");
-    @include font-weight("semibold");
+    @include font-size("body-2");
+    @include font-weight("bold");
     color: color("neutral", "darkest");
     margin: 0;
+    line-height: 1.4;
   }
 
   &__bookingStatus {
     @include font-size("xs");
-    @include font-weight("semibold");
+    @include font-weight("bold");
     text-transform: capitalize;
+    padding: 2px spacing("xs");
+    border-radius: border-radius("pill");
+    background: rgba(255, 255, 255, 0.5);
   }
 
   &__bookingDetails {
@@ -547,24 +624,27 @@
 
   &__footer {
     display: flex;
-    gap: spacing("xs");
-    padding: spacing("lg");
+    gap: spacing("sm");
+    padding: spacing("xl");
     border-top: 1px solid color("neutral", "lighter");
+    background: linear-gradient(135deg, color("neutral", "white"), color("neutral", "lightest"));
   }
 
   &__footerBtn {
     flex: 1;
-    padding: spacing("sm");
+    padding: spacing("md");
     border: none;
-    border-radius: border-radius("md");
-    @include font-size("xs");
-    @include font-weight("medium");
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("semibold");
     cursor: pointer;
-    transition: $transition-fast;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: spacing("xxs");
+    gap: spacing("xs");
+    position: relative;
+    overflow: hidden;
 
     svg {
       width: 14px;
@@ -572,32 +652,50 @@
     }
 
     &--primary {
-      background-color: color("primary", "base");
+      background: linear-gradient(135deg, color("primary", "base"), color("primary", "dark"));
       color: color("neutral", "white");
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 
       &:hover {
-        background-color: color("primary", "dark");
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      }
+      
+      &:active {
+        transform: translateY(0);
       }
     }
 
     &--secondary {
-      background-color: transparent;
+      background: linear-gradient(135deg, color("neutral", "white"), color("neutral", "lightest"));
       color: color("neutral", "darkest");
       border: 1px solid color("neutral", "light");
 
       &:hover {
-        background-color: color("neutral", "lighter");
+        background: linear-gradient(135deg, color("neutral", "lightest"), color("neutral", "lighter"));
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      &:active {
+        transform: translateY(0);
       }
     }
 
     &--danger {
-      background-color: transparent;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.2));
       color: color("status", "error");
       border: 1px solid color("status", "error");
 
       &:hover {
-        background-color: color("status", "error");
+        background: linear-gradient(135deg, color("status", "error"), #dc2626);
         color: color("neutral", "white");
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+      }
+      
+      &:active {
+        transform: translateY(0);
       }
     }
   }
