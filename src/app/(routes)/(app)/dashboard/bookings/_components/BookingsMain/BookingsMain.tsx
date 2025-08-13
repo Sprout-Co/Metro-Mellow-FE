@@ -270,6 +270,46 @@ const BookingsMain: React.FC = () => {
     setSelectedDateRange(value);
   };
 
+  // Helper functions for upcoming service display
+  const getServiceIcon = (serviceType: ServiceCategory) => {
+    const icons = {
+      [ServiceCategory.Cleaning]: "🧹",
+      [ServiceCategory.Laundry]: "👕",
+      [ServiceCategory.Cooking]: "🍳",
+      [ServiceCategory.Errands]: "📦",
+      [ServiceCategory.PestControl]: "🐛",
+    };
+    return icons[serviceType] || "🏠";
+  };
+
+  const formatServiceDate = (date: Date) => {
+    const now = new Date();
+    const diffTime = date.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    let dateLabel = "";
+    if (diffDays === 0) {
+      dateLabel = "Today";
+    } else if (diffDays === 1) {
+      dateLabel = "Tomorrow";
+    } else if (diffDays <= 7) {
+      dateLabel = `In ${diffDays} days`;
+    } else {
+      dateLabel = date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      });
+    }
+
+    const timeLabel = date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+
+    return `${dateLabel} - ${timeLabel}`;
+  };
+
   return (
     <div className={styles.bookingsMain}>
       {/* Header Section */}
@@ -280,6 +320,41 @@ const BookingsMain: React.FC = () => {
             Manage and track all your service appointments
           </p>
         </div>
+
+        {/* Upcoming Service Banner */}
+        {nextBooking && (
+          <div className={styles.bookingsMain__upcomingService}>
+            <div className={styles.bookingsMain__serviceIcon}>
+              {getServiceIcon(nextBooking.serviceType)}
+            </div>
+            <div className={styles.bookingsMain__serviceInfo}>
+              <h3 className={styles.bookingsMain__serviceName}>
+                {nextBooking.serviceName}
+              </h3>
+              <p className={styles.bookingsMain__serviceDate}>
+                {formatServiceDate(nextBooking.date)}
+              </p>
+              {nextBooking.provider &&
+                nextBooking.provider !== "Pending Assignment" && (
+                  <p className={styles.bookingsMain__serviceStaff}>
+                    with {nextBooking.provider}
+                  </p>
+                )}
+            </div>
+            <div className={styles.bookingsMain__serviceStatus}>
+              <span className={styles.bookingsMain__statusBadge}>
+                {nextBooking.status === BookingStatus.Confirmed
+                  ? "Confirmed"
+                  : nextBooking.status === BookingStatus.Pending
+                    ? "Pending"
+                    : nextBooking.status === BookingStatus.Upcoming
+                      ? "Upcoming"
+                      : "Scheduled"}
+              </span>
+            </div>
+          </div>
+        )}
+
         <div className={styles.bookingsMain__headerActions}>
           <FnButton variant="white" size="md" onClick={handleAddBooking}>
             <Plus size={18} />
@@ -290,9 +365,6 @@ const BookingsMain: React.FC = () => {
 
       {/* Quick Stats Overview */}
       {/* <BookingStats bookings={bookings} /> */}
-
-      {/* Upcoming Booking Card */}
-      {nextBooking && <UpcomingBookingCard booking={nextBooking} />}
 
       {/* Quick Actions */}
       <QuickActions />

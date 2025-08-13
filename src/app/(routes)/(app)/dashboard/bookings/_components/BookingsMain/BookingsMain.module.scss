@@ -38,16 +38,25 @@
       pointer-events: none;
     }
 
-    @include breakpoint-down("md") {
+    @include breakpoint-down("lg") {
       flex-direction: column;
       gap: spacing("lg");
       padding: spacing("lg");
+    }
+
+    @include breakpoint-down("md") {
+      padding: spacing("md");
     }
   }
 
   &__headerContent {
     position: relative;
     z-index: 1;
+    flex-shrink: 0;
+
+    @include breakpoint-down("lg") {
+      order: 1;
+    }
   }
 
   &__title {
@@ -74,11 +83,108 @@
     gap: spacing("md");
     position: relative;
     z-index: 1;
+    flex-shrink: 0;
+
+    @include breakpoint-down("lg") {
+      order: 3;
+      width: 100%;
+      justify-content: center;
+    }
 
     @include breakpoint-down("sm") {
-      width: 100%;
       justify-content: space-between;
     }
+  }
+
+  // Upcoming service banner styles
+  &__upcomingService {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    background: color-alpha("neutral", "white", 0.15);
+    padding: spacing("lg");
+    border-radius: border-radius("lg");
+    backdrop-filter: blur(10px);
+    border: 1px solid color-alpha("neutral", "white", 0.3);
+    flex: 1;
+    max-width: 500px;
+    position: relative;
+    overflow: hidden;
+    margin: 0 spacing("xl");
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: color("accent", "base");
+      border-radius: 2px 0 0 2px;
+    }
+
+    @include breakpoint-down("lg") {
+      margin: spacing("lg") 0;
+      max-width: 100%;
+      order: 2;
+    }
+
+    @include breakpoint-down("md") {
+      margin: spacing("md") 0;
+      padding: spacing("md");
+    }
+  }
+
+  &__serviceIcon {
+    @include font-size("3xl");
+    line-height: 1;
+    min-width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__serviceInfo {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__serviceName {
+    @include font-size("lg");
+    @include font-weight("semibold");
+    margin-bottom: spacing("xxs");
+    color: color("neutral", "white");
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__serviceDate {
+    @include font-size("sm");
+    opacity: 0.9;
+    margin-bottom: spacing("xxs");
+    @include font-weight("medium");
+  }
+
+  &__serviceStaff {
+    @include font-size("xs");
+    opacity: 0.8;
+  }
+
+  &__serviceStatus {
+    display: flex;
+    align-items: center;
+  }
+
+  &__statusBadge {
+    background: color("status", "success");
+    color: color("neutral", "white");
+    padding: spacing("xxs") spacing("sm");
+    border-radius: border-radius("md");
+    @include font-size("xs");
+    @include font-weight("medium");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 
   &__notificationBtn {
