@@ -281,22 +281,10 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
                   </span>
                 </div>
               )}
-              {/* <div className={styles.subscriptionCard__infoItem}>
-                <User size={14} />
-                <span>
-                  {subscription.primaryProvider || "Multiple providers"}
-                </span>
-              </div> */}
               <div className={styles.subscriptionCard__infoItem}>
                 <MapPin size={14} />
                 <span>{subscription.address}</span>
               </div>
-              {/* <div className={styles.subscriptionCard__infoItem}>
-                <CreditCard size={14} />
-                <span>
-                  Next billing: {formatDate(subscription.nextBillingDate)}
-                </span>
-              </div> */}
             </div>
 
             {/* Progress Bar */}

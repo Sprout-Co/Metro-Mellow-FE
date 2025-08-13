@@ -150,41 +150,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
             </div>
 
             <div className={styles.modal__body}>
-              {/* Status Bar */}
-              {/* <div className={styles.modal__statusBar}>
-                <span
-                  className={`${styles.modal__status} ${styles[`modal__status--${subscription.status.toLowerCase().replace(/\s+/g, "")}`]}`}
-                >
-                  {subscription.status}
-                </span>
-                <span className={styles.modal__subscriptionId}>
-                  Sub ID: #{subscription.id.slice(0, 6).toUpperCase()}
-                </span>
-              </div> */}
-
               <div className={styles.modal__sections}>
-                {/* Progress Section */}
-                {/* <div className={styles.modal__section}>
-                  <h3 className={styles.modal__sectionTitle}>Progress</h3>
-                  <div className={styles.modal__progressCard}>
-                    <div className={styles.modal__progressInfo}>
-                      <span className={styles.modal__progressText}>
-                        {subscription.completedServices} of{" "}
-                        {subscription.totalServices} services completed
-                      </span>
-                      <span className={styles.modal__progressPercent}>
-                        {calculateProgress()}%
-                      </span>
-                    </div>
-                    <div className={styles.modal__progressBar}>
-                      <div
-                        className={styles.modal__progressFill}
-                        style={{ width: `${calculateProgress()}%` }}
-                      />
-                    </div>
-                  </div>
-                </div> */}
-
                 {/* Included Services Section */}
                 <div className={styles.modal__section}>
                   <h3 className={styles.modal__sectionTitle}>
