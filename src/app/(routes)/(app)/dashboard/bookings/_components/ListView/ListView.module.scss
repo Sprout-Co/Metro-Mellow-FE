@@ -13,34 +13,84 @@
     padding: spacing("sm");
   }
 
-  &__section {
-    margin-bottom: spacing("2xl");
+  &__tabs {
+    display: flex;
+    gap: spacing("xs");
+    margin-bottom: spacing("xl");
+    padding-bottom: spacing("md");
+    border-bottom: 2px solid color("neutral", "lighter");
 
-    &:last-child {
-      margin-bottom: 0;
+    @include breakpoint-down("sm") {
+      gap: spacing("xxs");
+      margin-bottom: spacing("lg");
     }
   }
 
-  &__sectionHeader {
+  &__tab {
     display: flex;
     align-items: center;
     gap: spacing("sm");
-    margin-bottom: spacing("lg");
-    padding-bottom: spacing("sm");
-    border-bottom: 2px solid color("neutral", "lighter");
-  }
-
-  &__sectionTitle {
-    @include font-size("lg");
-    @include font-weight("semibold");
-    color: color("neutral", "darkest");
-    margin: 0;
-  }
-
-  &__count {
-    @include font-size("sm");
+    padding: spacing("md") spacing("lg");
+    background: transparent;
+    border: none;
+    border-radius: border-radius("lg") border-radius("lg") 0 0;
+    @include font-size("body-2");
     @include font-weight("medium");
-    padding: 2px spacing("sm");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    min-width: 120px;
+    justify-content: center;
+
+    @include breakpoint-down("sm") {
+      padding: spacing("sm") spacing("md");
+      min-width: 100px;
+      gap: spacing("xs");
+    }
+
+    &:hover {
+      color: color("primary", "base");
+      background: color("neutral", "lightest");
+    }
+
+    &--active {
+      color: color("primary", "base");
+      background: color("neutral", "white");
+      border-bottom: 2px solid color("primary", "base");
+      margin-bottom: -2px;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: color("primary", "base");
+      }
+    }
+
+    svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+
+      @include breakpoint-down("sm") {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    span {
+      white-space: nowrap;
+    }
+  }
+
+  &__tabCount {
+    @include font-size("xs");
+    @include font-weight("semibold");
+    padding: 2px spacing("xs");
     background: linear-gradient(
       135deg,
       color("primary", "base"),
@@ -48,8 +98,17 @@
     );
     color: color("neutral", "white");
     border-radius: border-radius("pill");
-    min-width: 24px;
+    min-width: 20px;
     text-align: center;
+    line-height: 1;
+  }
+
+  &__content {
+    min-height: 400px;
+  }
+
+  &__tabPanel {
+    width: 100%;
   }
 
   &__bookings {

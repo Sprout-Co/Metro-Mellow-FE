@@ -47,11 +47,14 @@ interface ListViewProps {
   bookings: Booking[];
 }
 
+type TabType = "active" | "pending" | "past";
+
 const ListView: React.FC<ListViewProps> = ({ bookings }) => {
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<TabType>("active");
 
   // Sort bookings by date
   const sortedBookings = [...bookings].sort(
@@ -73,6 +76,28 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
         b.status === BookingStatus.Cancelled
     ),
   };
+
+  // Tab configuration
+  const tabs = [
+    {
+      id: "active" as TabType,
+      label: "Active",
+      count: groupedBookings.active.length,
+      icon: CheckCircle,
+    },
+    {
+      id: "pending" as TabType,
+      label: "Pending",
+      count: groupedBookings.pending.length,
+      icon: Clock,
+    },
+    {
+      id: "past" as TabType,
+      label: "Past",
+      count: groupedBookings.past.length,
+      icon: Calendar,
+    },
+  ];
 
   // Get service icon
   const getServiceIcon = (serviceType: ServiceCategory) => {
@@ -406,53 +431,68 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
     );
   };
 
-  // Render section
-  const renderSection = (
-    title: string,
-    bookings: Booking[],
-    emptyMessage: string
-  ) => {
-    if (bookings.length === 0) {
-      return (
-        <div className={styles.listView__emptySection}>
-          <p>{emptyMessage}</p>
-        </div>
-      );
-    }
-
-    return (
-      <div className={styles.listView__section}>
-        <div className={styles.listView__sectionHeader}>
-          <h2 className={styles.listView__sectionTitle}>{title}</h2>
-          <span className={styles.listView__count}>{bookings.length}</span>
-        </div>
-        <div className={styles.listView__bookings}>
-          {bookings.map((booking) => (
-            <BookingCard key={booking.id} booking={booking} />
-          ))}
-        </div>
-      </div>
-    );
+  // Get empty message for current tab
+  const getEmptyMessage = (tabId: TabType) => {
+    const messages = {
+      active: "No active bookings",
+      pending: "No pending bookings",
+      past: "No past bookings",
+    };
+    return messages[tabId];
   };
 
   return (
     <>
       <div className={styles.listView}>
-        {renderSection(
-          "Active Bookings",
-          groupedBookings.active,
-          "No active bookings"
-        )}
-        {renderSection(
-          "Pending Confirmation",
-          groupedBookings.pending,
-          "No pending bookings"
-        )}
-        {renderSection(
-          "Past Bookings",
-          groupedBookings.past,
-          "No past bookings"
-        )}
+        {/* Tabs */}
+        <div className={styles.listView__tabs}>
+          {tabs.map((tab) => {
+            const IconComponent = tab.icon;
+            const isActive = activeTab === tab.id;
+
+            return (
+              <motion.button
+                key={tab.id}
+                className={`${styles.listView__tab} ${
+                  isActive ? styles["listView__tab--active"] : ""
+                }`}
+                onClick={() => setActiveTab(tab.id)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <IconComponent size={18} />
+                <span>{tab.label}</span>
+                <span className={styles.listView__tabCount}>{tab.count}</span>
+              </motion.button>
+            );
+          })}
+        </div>
+
+        {/* Tab Content */}
+        <div className={styles.listView__content}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              className={styles.listView__tabPanel}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              {groupedBookings[activeTab].length === 0 ? (
+                <div className={styles.listView__emptySection}>
+                  <p>{getEmptyMessage(activeTab)}</p>
+                </div>
+              ) : (
+                <div className={styles.listView__bookings}>
+                  {groupedBookings[activeTab].map((booking) => (
+                    <BookingCard key={booking.id} booking={booking} />
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
 
       <BookingDetailModal
