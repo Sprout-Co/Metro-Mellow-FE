@@ -25,10 +25,13 @@ import CalendarView from "../CalendarView/CalendarView";
 import FilterDropdown from "../FilterDropdown/FilterDropdown";
 import { BookingStatus, ServiceCategory } from "../../types/booking";
 import ListView from "../ListView/ListView";
-import TimelineView from "../TimelineView/TimelineView";
-import BookingStats from "../BookingStats/BookingStats";
 import UpcomingBookingCard from "../UpcomingBookingCard/UpcomingBookingCard";
 import QuickActions from "../QuickActions/QuickActions";
+import TimelineView from "../TimelineView/TimelineView";
+// import TimelineView from "../TimelineView/TimelineView";
+// import BookingStats from "../BookingStats/BookingStats";
+// import UpcomingBookingCard from "../UpcomingBookingCard/UpcomingBookingCard";
+// import QuickActions from "../QuickActions/QuickActions";
 
 // Mock data (same as before)
 const mockBookings = [
@@ -125,6 +128,20 @@ const mockBookings = [
     price: 12000,
     notes: "Customer cancelled - rescheduled",
     recurring: false,
+  },
+  {
+    id: "8",
+    serviceName: "Office Cleaning",
+    serviceType: ServiceCategory.Cleaning,
+    date: new Date(new Date().setDate(new Date().getDate() + 1)), //tomorrow
+    endTime: new Date(new Date().setDate(new Date().getDate() + 1)),
+    status: BookingStatus.Upcoming,
+    provider: "CleanPro Team",
+    address: "Metro Office, Victoria Island",
+    price: 35000,
+    notes: "Deep clean completed successfully",
+    recurring: false,
+    rating: 5,
   },
 ];
 
@@ -264,16 +281,7 @@ const BookingsMain: React.FC = () => {
           </p>
         </div>
         <div className={styles.bookingsMain__headerActions}>
-          <motion.button
-            className={styles.bookingsMain__notificationBtn}
-            onClick={() => setShowNotifications(!showNotifications)}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Bell />
-            <span className={styles.bookingsMain__notificationBadge}>3</span>
-          </motion.button>
-          <FnButton variant="primary" size="md" onClick={handleAddBooking}>
+          <FnButton variant="white" size="md" onClick={handleAddBooking}>
             <Plus size={18} />
             Book Service
           </FnButton>

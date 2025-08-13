@@ -541,6 +541,45 @@ $semantic-breakpoints: (
   }
 }
 
+@mixin button-primary-outline($size: "md") {
+  @include button-base($size);
+  background-color: transparent;
+  color: color("primary", "base");
+  border-color: color("primary", "base");
+
+  &:hover:not(:disabled) {
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border-color: color("primary", "base");
+  }
+}
+
+@mixin button-secondary-outline($size: "md") {
+  @include button-base($size);
+  background-color: transparent;
+  color: color("secondary", "base");
+  border-color: color("secondary", "base");
+
+  &:hover:not(:disabled) {
+    background-color: color("secondary", "base");
+    color: color("secondary", "base");
+    border-color: color("secondary", "base");
+  }
+}
+
+@mixin button-accent-outline($size: "md") {
+  @include button-base($size);
+  background-color: transparent;
+  color: color("accent", "base");
+  border-color: color("accent", "base");
+
+  &:hover:not(:disabled) {
+    background-color: color("accent", "base");
+    color: color("accent", "base");
+    border-color: color("accent", "base");
+  }
+}
+
 // ===================================
 // FORM MIXINS
 // ===================================

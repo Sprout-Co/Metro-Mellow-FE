@@ -42,22 +42,6 @@ const QuickActions: React.FC = () => {
       onClick: () => console.log("Set recurring"),
     },
     {
-      id: "calendar",
-      icon: <Calendar />,
-      title: "Sync Calendar",
-      description: "Export to calendar",
-      color: "success",
-      onClick: () => console.log("Sync calendar"),
-    },
-    {
-      id: "invoice",
-      icon: <FileText />,
-      title: "View Invoices",
-      description: "Download receipts",
-      color: "info",
-      onClick: () => console.log("View invoices"),
-    },
-    {
       id: "review",
       icon: <Star />,
       title: "Leave Review",

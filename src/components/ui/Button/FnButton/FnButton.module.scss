@@ -47,6 +47,18 @@
     @include button-accent;
   }
 
+  &--primary-outline {
+    @include button-primary-outline;
+  }
+
+  &--secondary-outline {
+    @include button-secondary-outline;
+  }
+
+  &--accent-outline {
+    @include button-accent-outline;
+  }
+
   border-radius: border-radius("lg") !important;
   font-weight: font-weight("regular") !important;
 
