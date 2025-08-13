@@ -139,7 +139,7 @@
   position: relative;
   cursor: pointer;
   transition: all 0.3s ease;
-  overflow: hidden;
+  overflow: visible;
   padding: spacing("sm") 0;
 
   &:hover {
@@ -416,6 +416,7 @@
 
   &__menuContainer {
     position: relative;
+    z-index: 9999;
   }
 
   &__menuBtn {
@@ -447,7 +448,7 @@
     border: 1px solid color("neutral", "lighter");
     border-radius: border-radius("lg");
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    z-index: z-index("dropdown");
+    z-index: 10000;
     overflow: hidden;
     padding: spacing("xs");
   }

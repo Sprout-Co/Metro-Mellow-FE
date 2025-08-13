@@ -202,8 +202,8 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
       <motion.div
         layout
         className={styles.bookingCard}
-        onHoverStart={() => setHoveredId(booking.id)}
-        onHoverEnd={() => setHoveredId(null)}
+        // onHoverStart={() => setHoveredId(booking.id)}
+        // onHoverEnd={() => setHoveredId(null)}
         onClick={() => handleCardClick(booking)}
       >
         {/* Service Type Indicator */}
