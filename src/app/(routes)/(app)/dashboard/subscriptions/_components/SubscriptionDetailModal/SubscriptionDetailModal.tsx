@@ -3,7 +3,21 @@
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Calendar, CreditCard, User, MapPin, Clock, Repeat, TrendingUp, MessageSquare, Edit, Pause, Play, RefreshCw } from "lucide-react";
+import {
+  X,
+  Calendar,
+  CreditCard,
+  User,
+  MapPin,
+  Clock,
+  Repeat,
+  TrendingUp,
+  MessageSquare,
+  Edit,
+  Pause,
+  Play,
+  RefreshCw,
+} from "lucide-react";
 import styles from "./SubscriptionDetailModal.module.scss";
 import { Subscription, ServiceCategory } from "../../types/subscription";
 import FnButton from "@/components/ui/Button/FnButton";
@@ -63,7 +77,9 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
 
   // Calculate subscription progress
   const calculateProgress = () => {
-    return Math.round((subscription.completedServices / subscription.totalServices) * 100);
+    return Math.round(
+      (subscription.completedServices / subscription.totalServices) * 100
+    );
   };
 
   return (
@@ -90,8 +106,12 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                   {getServiceIcon(subscription.serviceType)}
                 </div>
                 <div className={styles.modal__headerContent}>
-                  <h2 className={styles.modal__title}>{subscription.serviceName}</h2>
-                  <p className={styles.modal__subtitle}>{subscription.serviceType} • {subscription.frequency}</p>
+                  <h2 className={styles.modal__title}>
+                    {subscription.serviceName}
+                  </h2>
+                  <p className={styles.modal__subtitle}>
+                    {subscription.serviceType} • {subscription.frequency}
+                  </p>
                 </div>
               </div>
               <button className={styles.modal__closeBtn} onClick={onClose}>
@@ -103,7 +123,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
               {/* Status Bar */}
               <div className={styles.modal__statusBar}>
                 <span
-                  className={`${styles.modal__status} ${styles[`modal__status--${subscription.status.toLowerCase().replace(/\s+/g, '')}`]}`}
+                  className={`${styles.modal__status} ${styles[`modal__status--${subscription.status.toLowerCase().replace(/\s+/g, "")}`]}`}
                 >
                   {subscription.status}
                 </span>
@@ -119,9 +139,12 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                   <div className={styles.modal__progressCard}>
                     <div className={styles.modal__progressInfo}>
                       <span className={styles.modal__progressText}>
-                        {subscription.completedServices} of {subscription.totalServices} services completed
+                        {subscription.completedServices} of{" "}
+                        {subscription.totalServices} services completed
                       </span>
-                      <span className={styles.modal__progressPercent}>{calculateProgress()}%</span>
+                      <span className={styles.modal__progressPercent}>
+                        {calculateProgress()}%
+                      </span>
                     </div>
                     <div className={styles.modal__progressBar}>
                       <div
@@ -175,7 +198,9 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
 
                 {/* Service Provider Section */}
                 <div className={styles.modal__section}>
-                  <h3 className={styles.modal__sectionTitle}>Service Provider</h3>
+                  <h3 className={styles.modal__sectionTitle}>
+                    Service Provider
+                  </h3>
                   <div className={styles.modal__providerCard}>
                     <div className={styles.modal__providerAvatar}>
                       <User size={16} />
@@ -228,7 +253,9 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                     <div className={styles.modal__infoItem}>
                       <CreditCard size={14} />
                       <div>
-                        <span className={styles.modal__infoLabel}>Payment Method</span>
+                        <span className={styles.modal__infoLabel}>
+                          Payment Method
+                        </span>
                         <span className={styles.modal__infoValue}>
                           {subscription.paymentMethod}
                         </span>
@@ -237,7 +264,9 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                     <div className={styles.modal__infoItem}>
                       <Calendar size={14} />
                       <div>
-                        <span className={styles.modal__infoLabel}>Next Billing</span>
+                        <span className={styles.modal__infoLabel}>
+                          Next Billing
+                        </span>
                         <span className={styles.modal__infoValue}>
                           {formatDate(subscription.nextBillingDate)}
                         </span>
@@ -249,7 +278,9 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                 {/* Notes */}
                 {subscription.notes && (
                   <div className={styles.modal__section}>
-                    <h3 className={styles.modal__sectionTitle}>Special Instructions</h3>
+                    <h3 className={styles.modal__sectionTitle}>
+                      Special Instructions
+                    </h3>
                     <div className={styles.modal__notes}>
                       <MessageSquare size={14} />
                       <p>{subscription.notes}</p>
@@ -290,7 +321,8 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                   Resume
                 </motion.button>
               )}
-              {(subscription.status === "Expired" || subscription.status === "Cancelled") && (
+              {(subscription.status === "Expired" ||
+                subscription.status === "Cancelled") && (
                 <motion.button
                   className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
                   whileHover={{ scale: 1.02 }}
