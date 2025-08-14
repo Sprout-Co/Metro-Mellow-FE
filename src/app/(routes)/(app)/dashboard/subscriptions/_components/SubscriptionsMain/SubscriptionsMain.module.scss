@@ -380,4 +380,15 @@
     margin: 0 0 spacing("xl") 0;
     max-width: 400px;
   }
+
+  &__viewToggle {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+  }
+
+  &__viewBtn {
+    width: 32px;
+    height: 32px;
+  }
 }

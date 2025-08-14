@@ -1,0 +1,285 @@
+// src/app/(routes)/(app)/dashboard/subscriptions/_components/SubscriptionGridView/SubscriptionGridView.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.gridView {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: spacing("lg");
+
+  @include breakpoint-down("sm") {
+    grid-template-columns: 1fr;
+    gap: spacing("md");
+  }
+
+  &__card {
+    background: color("neutral", "white");
+    border-radius: border-radius("2xl");
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+      .gridView__viewMore {
+        opacity: 1;
+        transform: translateX(2px);
+      }
+    }
+  }
+
+  &__cardHeader {
+    padding: spacing("lg") spacing("lg") 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  &__serviceIcons {
+    display: flex;
+    align-items: center;
+  }
+
+  &__serviceIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: border-radius("xl");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid color("neutral", "white");
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    span {
+      font-size: 20px;
+    }
+  }
+
+  &__moreServices {
+    width: 40px;
+    height: 40px;
+    border-radius: border-radius("xl");
+    background: color("neutral", "lighter");
+    border: 3px solid color("neutral", "white");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include font-size("xs");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    margin-left: -12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &__menuBtn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: border-radius("lg");
+    color: color("neutral", "medium");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("neutral", "lightest");
+      color: color("neutral", "darkest");
+    }
+  }
+
+  &__menu {
+    position: absolute;
+    top: spacing("xl");
+    right: spacing("lg");
+    min-width: 160px;
+    background: color("neutral", "white");
+    border-radius: border-radius("lg");
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+    overflow: hidden;
+    padding: spacing("xs");
+  }
+
+  &__menuItem {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    width: 100%;
+    padding: spacing("sm");
+    background: none;
+    border: none;
+    text-align: left;
+    @include font-size("sm");
+    color: color("neutral", "darkest");
+    cursor: pointer;
+    border-radius: border-radius("md");
+    transition: all 0.15s ease;
+
+    &:hover {
+      background: color("neutral", "lightest");
+    }
+
+    &--danger {
+      color: color("status", "error");
+
+      &:hover {
+        background: rgba(251, 34, 34, 0.05);
+      }
+    }
+
+    svg {
+      flex-shrink: 0;
+    }
+  }
+
+  &__cardBody {
+    padding: spacing("lg");
+    padding-top: spacing("md");
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__name {
+    @include font-size("subtitle-2");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  &__status {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xs");
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("pill");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-self: flex-start;
+  }
+
+  &__services {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+  }
+
+  &__separator {
+    opacity: 0.5;
+  }
+
+  &__progress {
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    padding: spacing("md");
+    margin-top: auto;
+  }
+
+  &__progressHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("sm");
+  }
+
+  &__progressLabel {
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "medium");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__progressValue {
+    @include font-size("sm");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+  }
+
+  &__progressBar {
+    height: 6px;
+    background: color("neutral", "lighter");
+    border-radius: border-radius("pill");
+    overflow: hidden;
+    margin-bottom: spacing("sm");
+  }
+
+  &__progressFill {
+    height: 100%;
+    border-radius: border-radius("pill");
+    transition: width 0.5s ease;
+  }
+
+  &__progressStats {
+    display: flex;
+    justify-content: space-between;
+    @include font-size("xs");
+    color: color("neutral", "medium");
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__infoItem {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    @include font-size("sm");
+    color: color("neutral", "dark");
+
+    svg {
+      color: color("neutral", "medium");
+      flex-shrink: 0;
+    }
+  }
+
+  &__cardFooter {
+    padding: spacing("lg");
+    padding-top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid color("neutral", "lighter");
+  }
+
+  &__price {
+    display: flex;
+    align-items: baseline;
+    gap: spacing("xxs");
+  }
+
+  &__priceAmount {
+    @include font-size("subtitle-2");
+    @include font-weight("bold");
+    color: color("primary", "base");
+  }
+
+  &__pricePeriod {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+  }
+
+  &__viewMore {
+    color: color("primary", "base");
+    opacity: 0.5;
+    transition: all 0.2s ease;
+  }
+}

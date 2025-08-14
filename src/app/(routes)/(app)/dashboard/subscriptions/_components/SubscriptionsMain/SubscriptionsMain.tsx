@@ -19,6 +19,7 @@ import {
   RefreshCw,
   Pause,
   Play,
+  Grid3X3,
 } from "lucide-react";
 import styles from "./SubscriptionsMain.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
@@ -31,6 +32,7 @@ import {
 } from "../../types/subscription";
 import SubscriptionListView from "../SubscriptionListView/SubscriptionListView";
 import AppointmentCard from "@/components/ui/AppointmentCard";
+import SubscriptionGridView from "../SubscriptionGridView/SubscriptionGridView";
 
 // Mock data with multiple services per subscription
 const mockSubscriptions: Subscription[] = [
@@ -59,7 +61,7 @@ const mockSubscriptions: Subscription[] = [
         totalServices: 52,
         nextServiceDate: new Date(2024, 7, 19, 10, 0),
         provider: "Maria Rodriguez",
-        notes: "Focus on kitchen and bathrooms"
+        notes: "Focus on kitchen and bathrooms",
       },
       {
         id: "s2",
@@ -72,7 +74,7 @@ const mockSubscriptions: Subscription[] = [
         totalServices: 26,
         nextServiceDate: new Date(2024, 7, 21, 14, 0),
         provider: "QuickWash Team",
-        notes: "3 bags of laundry, no starch"
+        notes: "3 bags of laundry, no starch",
       },
       {
         id: "s3",
@@ -85,8 +87,8 @@ const mockSubscriptions: Subscription[] = [
         totalServices: 52,
         nextServiceDate: new Date(2024, 7, 18, 17, 0),
         provider: "Chef Kemi",
-        notes: "Vegetarian meals preferred"
-      }
+        notes: "Vegetarian meals preferred",
+      },
     ],
     upcomingBookings: [
       {
@@ -97,7 +99,7 @@ const mockSubscriptions: Subscription[] = [
         time: "5:00 PM",
         provider: "Chef Kemi",
         address: "24 Emmanuel Osakwe Street, Lagos",
-        status: "confirmed"
+        status: "confirmed",
       },
       {
         id: "b2",
@@ -107,7 +109,7 @@ const mockSubscriptions: Subscription[] = [
         time: "10:00 AM",
         provider: "Maria Rodriguez",
         address: "24 Emmanuel Osakwe Street, Lagos",
-        status: "scheduled"
+        status: "scheduled",
       },
       {
         id: "b3",
@@ -117,14 +119,14 @@ const mockSubscriptions: Subscription[] = [
         time: "2:00 PM",
         provider: "QuickWash Team",
         address: "24 Emmanuel Osakwe Street, Lagos",
-        status: "scheduled"
-      }
+        status: "scheduled",
+      },
     ],
     totalServices: 130,
     completedServices: 28,
     remainingServices: 102,
     nextServiceDate: new Date(2024, 7, 18, 17, 0),
-    primaryProvider: "Maria Rodriguez"
+    primaryProvider: "Maria Rodriguez",
   },
   {
     id: "2",
@@ -150,7 +152,7 @@ const mockSubscriptions: Subscription[] = [
         totalServices: 26,
         nextServiceDate: new Date(2024, 7, 23, 18, 0),
         provider: "CleanPro Team",
-        notes: "After hours cleaning only"
+        notes: "After hours cleaning only",
       },
       {
         id: "s5",
@@ -163,8 +165,8 @@ const mockSubscriptions: Subscription[] = [
         totalServices: 12,
         nextServiceDate: new Date(2024, 7, 30, 19, 0),
         provider: "PestPro Team",
-        notes: "Quarterly deep treatment"
-      }
+        notes: "Quarterly deep treatment",
+      },
     ],
     upcomingBookings: [
       {
@@ -175,7 +177,7 @@ const mockSubscriptions: Subscription[] = [
         time: "6:00 PM",
         provider: "CleanPro Team",
         address: "Metro Office, Victoria Island",
-        status: "scheduled"
+        status: "scheduled",
       },
       {
         id: "b5",
@@ -185,14 +187,14 @@ const mockSubscriptions: Subscription[] = [
         time: "7:00 PM",
         provider: "PestPro Team",
         address: "Metro Office, Victoria Island",
-        status: "scheduled"
-      }
+        status: "scheduled",
+      },
     ],
     totalServices: 38,
     completedServices: 6,
     remainingServices: 32,
     nextServiceDate: new Date(2024, 7, 23, 18, 0),
-    primaryProvider: "CleanPro Team"
+    primaryProvider: "CleanPro Team",
   },
   {
     id: "3",
@@ -218,7 +220,7 @@ const mockSubscriptions: Subscription[] = [
         totalServices: 26,
         nextServiceDate: new Date(2024, 8, 5, 9, 0),
         provider: "Home Helpers",
-        notes: "Paused due to travel"
+        notes: "Paused due to travel",
       },
       {
         id: "s7",
@@ -231,15 +233,15 @@ const mockSubscriptions: Subscription[] = [
         totalServices: 52,
         nextServiceDate: new Date(2024, 8, 7, 11, 0),
         provider: "Shopping Assistant",
-        notes: "Weekly grocery shopping"
-      }
+        notes: "Weekly grocery shopping",
+      },
     ],
     upcomingBookings: [],
     totalServices: 78,
     completedServices: 20,
     remainingServices: 58,
     nextServiceDate: new Date(2024, 8, 5, 9, 0),
-    primaryProvider: "Home Helpers"
+    primaryProvider: "Home Helpers",
   },
   {
     id: "4",
@@ -265,8 +267,8 @@ const mockSubscriptions: Subscription[] = [
         totalServices: 104,
         nextServiceDate: new Date(2024, 7, 20, 8, 0),
         provider: "Elite Laundry",
-        notes: "Dry cleaning included"
-      }
+        notes: "Dry cleaning included",
+      },
     ],
     upcomingBookings: [
       {
@@ -277,7 +279,7 @@ const mockSubscriptions: Subscription[] = [
         time: "8:00 AM",
         provider: "Elite Laundry",
         address: "12 Ozumba Mbadiwe, Victoria Island",
-        status: "confirmed"
+        status: "confirmed",
       },
       {
         id: "b7",
@@ -287,26 +289,31 @@ const mockSubscriptions: Subscription[] = [
         time: "8:00 AM",
         provider: "Elite Laundry",
         address: "12 Ozumba Mbadiwe, Victoria Island",
-        status: "scheduled"
-      }
+        status: "scheduled",
+      },
     ],
     totalServices: 104,
     completedServices: 32,
     remainingServices: 72,
     nextServiceDate: new Date(2024, 7, 20, 8, 0),
-    primaryProvider: "Elite Laundry"
-  }
+    primaryProvider: "Elite Laundry",
+  },
 ];
 
 const SubscriptionsMain: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<
     SubscriptionStatus | "all"
   >("all");
-  const [selectedFrequency, setSelectedFrequency] = useState<
-    string | "all"
-  >("all");
+  const [selectedFrequency, setSelectedFrequency] = useState<string | "all">(
+    "all"
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [subscriptions] = useState<Subscription[]>(mockSubscriptions);
+  const [viewType, setViewType] = useState<"list" | "grid">("list");
+
+  const handleViewChange = (type: "list" | "grid") => {
+    setViewType(type);
+  };
 
   // Filter subscriptions
   const filteredSubscriptions = useMemo(() => {
@@ -317,9 +324,14 @@ const SubscriptionsMain: React.FC = () => {
       filtered = filtered.filter(
         (s) =>
           s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          s.services.some(service => 
-            service.serviceName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            service.provider?.toLowerCase().includes(searchQuery.toLowerCase())
+          s.services.some(
+            (service) =>
+              service.serviceName
+                .toLowerCase()
+                .includes(searchQuery.toLowerCase()) ||
+              service.provider
+                ?.toLowerCase()
+                .includes(searchQuery.toLowerCase())
           ) ||
           s.address.toLowerCase().includes(searchQuery.toLowerCase())
       );
@@ -336,21 +348,20 @@ const SubscriptionsMain: React.FC = () => {
     }
 
     return filtered;
-  }, [
-    subscriptions,
-    selectedStatus,
-    selectedFrequency,
-    searchQuery,
-  ]);
+  }, [subscriptions, selectedStatus, selectedFrequency, searchQuery]);
 
   // Get next upcoming service
   const nextSubscription = useMemo(() => {
     const now = new Date();
     const activeWithServices = subscriptions
-      .filter((s) => s.status === SubscriptionStatus.Active && s.nextServiceDate)
+      .filter(
+        (s) => s.status === SubscriptionStatus.Active && s.nextServiceDate
+      )
       .filter((s) => new Date(s.nextServiceDate!).getTime() > now.getTime())
-      .sort((a, b) => 
-        new Date(a.nextServiceDate!).getTime() - new Date(b.nextServiceDate!).getTime()
+      .sort(
+        (a, b) =>
+          new Date(a.nextServiceDate!).getTime() -
+          new Date(b.nextServiceDate!).getTime()
       );
     return activeWithServices[0] || null;
   }, [subscriptions]);
@@ -370,11 +381,11 @@ const SubscriptionsMain: React.FC = () => {
       .filter((s) => s.status === SubscriptionStatus.Active)
       .reduce((sum, s) => {
         const multiplier = {
-          "monthly": 1,
-          "quarterly": 0.33,
-          "annually": 0.083,
+          monthly: 1,
+          quarterly: 0.33,
+          annually: 0.083,
         };
-        return sum + (s.totalPrice * (multiplier[s.billingCycle] || 1));
+        return sum + s.totalPrice * (multiplier[s.billingCycle] || 1);
       }, 0);
 
     return { active, paused, expired, totalMonthlyValue };
@@ -417,7 +428,7 @@ const SubscriptionsMain: React.FC = () => {
                 serviceName={`${nextSubscription.name} - Next Service`}
                 serviceType={nextSubscription.services[0]?.serviceType as any}
                 date={nextSubscription.nextServiceDate!}
-                status="Confirmed" as any
+                status={"Confirmed" as any}
                 provider={nextSubscription.primaryProvider}
                 variant="header"
               />
@@ -481,23 +492,43 @@ const SubscriptionsMain: React.FC = () => {
             />
           </div>
 
-          {/* Export Button */}
-          <motion.button
-            className={styles.subscriptionsMain__exportBtn}
-            onClick={handleExportData}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Download size={16} />
-            Export
-          </motion.button>
+          <div className={styles.subscriptionsMain__viewToggle}>
+            <motion.button
+              className={`${styles.subscriptionsMain__viewBtn} ${
+                viewType === "list"
+                  ? styles["subscriptionsMain__viewBtn--active"]
+                  : ""
+              }`}
+              onClick={() => handleViewChange("list")}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <List size={18} />
+            </motion.button>
+            <motion.button
+              className={`${styles.subscriptionsMain__viewBtn} ${
+                viewType === "grid"
+                  ? styles["subscriptionsMain__viewBtn--active"]
+                  : ""
+              }`}
+              onClick={() => handleViewChange("grid")}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Grid3X3 size={18} />
+            </motion.button>
+          </div>
         </div>
       </div>
 
       {/* Main Content Area */}
       <div className={styles.subscriptionsMain__content}>
         {filteredSubscriptions.length > 0 ? (
-          <SubscriptionListView subscriptions={filteredSubscriptions} />
+          viewType === "list" ? (
+            <SubscriptionListView subscriptions={filteredSubscriptions} />
+          ) : (
+            <SubscriptionGridView subscriptions={filteredSubscriptions} />
+          )
         ) : (
           <div className={styles.subscriptionsMain__emptyState}>
             <div className={styles.subscriptionsMain__emptyIcon}>
@@ -508,7 +539,6 @@ const SubscriptionsMain: React.FC = () => {
             </h3>
             <p className={styles.subscriptionsMain__emptyText}>
               {searchQuery ||
-              selectedServiceType !== "all" ||
               selectedStatus !== "all" ||
               selectedFrequency !== "all"
                 ? "Try adjusting your filters to see more subscriptions"
