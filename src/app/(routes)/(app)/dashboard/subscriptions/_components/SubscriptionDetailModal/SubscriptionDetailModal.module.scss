@@ -105,6 +105,76 @@
 
   &__body {
     flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__tabs {
+    display: flex;
+    padding: 0 spacing("xl") spacing("lg");
+    border-bottom: 1px solid color("neutral", "lighter");
+    background: linear-gradient(
+      135deg,
+      color("neutral", "white"),
+      color("neutral", "lightest")
+    );
+  }
+
+  &__tab {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    padding: spacing("sm") spacing("lg");
+    background: transparent;
+    border: none;
+    border-radius: border-radius("lg") border-radius("lg") 0 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "medium");
+    position: relative;
+    margin-right: spacing("xs");
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      background-color: color("neutral", "lightest");
+      color: color("neutral", "darkest");
+    }
+
+    &--active {
+      background: linear-gradient(
+        135deg,
+        color("neutral", "white"),
+        color("neutral", "lightest")
+      );
+      color: color("primary", "base");
+      border-bottom: 2px solid color("primary", "base");
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: color("primary", "base");
+        border-radius: border-radius("pill");
+      }
+
+      svg {
+        color: color("primary", "base");
+      }
+    }
+  }
+
+  &__tabContent {
+    flex: 1;
     overflow-y: auto;
     padding: spacing("xl");
 
@@ -436,6 +506,99 @@
     p {
       @include font-size("sm");
       color: color("neutral", "dark");
+      margin: 0;
+      line-height: 1.4;
+    }
+  }
+
+  // Overview Grid Styles
+  &__overviewGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__overviewCard {
+    background: linear-gradient(
+      135deg,
+      color("neutral", "lightest"),
+      rgba(255, 255, 255, 0.8)
+    );
+    border-radius: border-radius("xl");
+    padding: spacing("lg");
+    border: 1px solid color("neutral", "lighter");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      border-color: color("primary", "lighter");
+    }
+  }
+
+  &__overviewCardHeader {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "medium");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+      color: color("neutral", "medium");
+    }
+  }
+
+  &__overviewCardValue {
+    @include font-size("xl");
+    @include font-weight("bold");
+    color: color("primary", "base");
+    line-height: 1.2;
+  }
+
+  // Empty State Styles
+  &__emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("2xl");
+    text-align: center;
+    background: linear-gradient(
+      135deg,
+      color("neutral", "lightest"),
+      rgba(255, 255, 255, 0.8)
+    );
+    border-radius: border-radius("xl");
+    border: 1px solid color("neutral", "lighter");
+
+    svg {
+      color: color("neutral", "light");
+      margin-bottom: spacing("md");
+    }
+
+    h4 {
+      @include font-size("lg");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xs") 0;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "medium");
       margin: 0;
       line-height: 1.4;
     }
