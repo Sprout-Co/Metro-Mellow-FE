@@ -113,11 +113,11 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
   // Get service color
   const getServiceColor = (serviceType: ServiceCategory) => {
     const colors = {
-      [ServiceCategory.Cleaning]: "#075056",
-      [ServiceCategory.Laundry]: "#6366f1",
-      [ServiceCategory.Cooking]: "#fe5b04",
-      [ServiceCategory.Errands]: "#10b981",
-      [ServiceCategory.PestControl]: "#ec4899",
+      [ServiceCategory.Cleaning]: "#075056", //"#075056",
+      [ServiceCategory.Laundry]: "#075056", //"#6366f1",
+      [ServiceCategory.Cooking]: "#075056", //"#fe5b04",
+      [ServiceCategory.Errands]: "#075056", //"#10b981",
+      [ServiceCategory.PestControl]: "#075056",
     };
     return colors[serviceType] || "#6b7280";
   };
@@ -219,14 +219,14 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
         onMouseLeave={() => setHoveredId(null)}
       >
         {/* Service Type Indicator */}
-        <div
+        {/* <div
           className={styles.subscriptionCard__indicator}
           style={{
             backgroundColor: primaryService
               ? getServiceColor(primaryService.serviceType)
               : "#6b7280",
           }}
-        />
+        /> */}
 
         {/* Main Content Grid */}
         <div className={styles.subscriptionCard__grid}>
@@ -303,9 +303,10 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
                   className={styles.subscriptionCard__progressFill}
                   style={{
                     width: `${progress}%`,
-                    backgroundColor: primaryService
-                      ? getServiceColor(primaryService.serviceType)
-                      : "#6b7280",
+                    backgroundColor: "#075056",
+                    // backgroundColor: primaryService
+                    //   ? getServiceColor(primaryService.serviceType)
+                    //   : "#6b7280",
                   }}
                 />
               </div>

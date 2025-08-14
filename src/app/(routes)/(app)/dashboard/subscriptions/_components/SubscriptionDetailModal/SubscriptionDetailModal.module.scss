@@ -621,6 +621,308 @@
     }
   }
 
+  // Billing Card Styles (Greeting Card Design)
+  &__billingCard {
+    background: linear-gradient(
+      135deg,
+      color("primary", "base"),
+      color("primary", "dark")
+    );
+    backdrop-filter: blur(20px);
+    border: 1px solid color-alpha("neutral", "white", 0.3);
+    border-radius: border-radius("xl");
+    padding: spacing("xl");
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    color: color("neutral", "white");
+
+    // &::before {
+    //   content: "";
+    //   position: absolute;
+    //   top: 0;
+    //   left: 0;
+    //   width: 4px;
+    //   height: 100%;
+    //   background: color("accent", "base");
+    //   border-radius: 2px 0 0 2px;
+    // }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(
+        circle,
+        color-alpha("neutral", "white", 0.1) 0%,
+        transparent 70%
+      );
+      pointer-events: none;
+    }
+  }
+
+  &__billingCardHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
+  }
+
+  &__billingCardTitle {
+    @include font-size("lg");
+    @include font-weight("bold");
+    color: color("neutral", "white");
+    margin: 0 0 spacing("xxs") 0;
+  }
+
+  &__billingCardSubtitle {
+    @include font-size("sm");
+    color: color("neutral", "white");
+    margin: 0;
+    opacity: 0.9;
+  }
+
+  &__billingCardContent {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+  }
+
+  &__billingAmount {
+    text-align: center;
+    padding: spacing("lg");
+    background: color-alpha("neutral", "white", 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid color-alpha("neutral", "white", 0.3);
+    border-radius: border-radius("lg");
+    color: color("neutral", "white");
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  &__billingAmountLabel {
+    display: block;
+    @include font-size("sm");
+    opacity: 0.9;
+    margin-bottom: spacing("xs");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__billingAmountValue {
+    @include font-size("2xl");
+    @include font-weight("bold");
+    display: block;
+
+    small {
+      @include font-size("sm");
+      opacity: 0.8;
+      @include font-weight("medium");
+    }
+  }
+
+  &__billingDiscount {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("sm");
+    background: color-alpha("neutral", "white", 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid color-alpha("neutral", "white", 0.2);
+    border-radius: border-radius("md");
+
+    svg {
+      color: color("neutral", "white");
+      flex-shrink: 0;
+    }
+
+    span {
+      @include font-size("sm");
+      @include font-weight("medium");
+      color: color("neutral", "white");
+    }
+  }
+
+  &__billingDetails {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__billingDetail {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+
+    svg {
+      width: 14px;
+      height: 14px;
+      color: color("neutral", "white");
+      flex-shrink: 0;
+    }
+
+    div {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: spacing("xxs");
+    }
+  }
+
+  &__billingDetailLabel {
+    @include font-size("xs");
+    color: color("neutral", "white");
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__billingDetailValue {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "white");
+  }
+
+  // Service Breakdown Styles
+  &__serviceBreakdown {
+    background: linear-gradient(
+      135deg,
+      color("neutral", "lightest"),
+      rgba(255, 255, 255, 0.8)
+    );
+    border-radius: border-radius("lg");
+    padding: spacing("lg");
+    border: 1px solid color("neutral", "lighter");
+  }
+
+  &__serviceBreakdownItem {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("md") 0;
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: spacing("md");
+    }
+  }
+
+  &__serviceBreakdownIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: border-radius("md");
+    background: color("neutral", "lightest");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  &__serviceBreakdownInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+  }
+
+  &__serviceBreakdownName {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  &__serviceBreakdownFreq {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+    text-transform: capitalize;
+  }
+
+  &__serviceBreakdownPrice {
+    @include font-size("sm");
+    @include font-weight("bold");
+    color: color("primary", "base");
+  }
+
+  &__serviceBreakdownTotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: spacing("md");
+    border-top: 2px solid color("primary", "base");
+    @include font-size("md");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+
+    span:last-child {
+      color: color("primary", "base");
+    }
+  }
+
+  // Billing History Styles
+  &__billingHistory {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__billingHistoryItem {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("md");
+    border: 1px solid color("neutral", "lighter");
+  }
+
+  &__billingHistoryIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: border-radius("full");
+    background: color("status", "success");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    svg {
+      color: color("status", "success");
+    }
+  }
+
+  &__billingHistoryInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+  }
+
+  &__billingHistoryDate {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+  }
+
+  &__billingHistoryAmount {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+  }
+
+  &__billingHistoryStatus {
+    @include font-size("xs");
+    @include font-weight("bold");
+    padding: spacing("xxs") spacing("sm");
+    border-radius: border-radius("pill");
+    background: color("status", "success");
+    color: color("status", "success");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
   // Services List Styles
   &__servicesList {
     display: flex;

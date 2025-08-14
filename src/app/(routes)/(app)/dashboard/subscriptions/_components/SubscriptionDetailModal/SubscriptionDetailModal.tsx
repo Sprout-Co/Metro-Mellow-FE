@@ -193,89 +193,99 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                       exit={{ opacity: 0, y: -20 }}
                       transition={{ duration: 0.2, ease: "easeInOut" }}
                     >
-                  <div className={styles.modal__sections}>
-                    <div className={styles.modal__section}>
-                      <h3 className={styles.modal__sectionTitle}>Overview</h3>
-                      <div className={styles.modal__overviewGrid}>
-                        <div className={styles.modal__overviewCard}>
-                          <div className={styles.modal__overviewCardHeader}>
-                            <Package size={16} />
-                            <span>Services</span>
-                          </div>
-                          <div className={styles.modal__overviewCardValue}>
-                            {subscription.services.length}
+                      <div className={styles.modal__sections}>
+                        <div className={styles.modal__section}>
+                          <h3 className={styles.modal__sectionTitle}>
+                            Overview
+                          </h3>
+                          <div className={styles.modal__overviewGrid}>
+                            <div className={styles.modal__overviewCard}>
+                              <div className={styles.modal__overviewCardHeader}>
+                                <Package size={16} />
+                                <span>Services</span>
+                              </div>
+                              <div className={styles.modal__overviewCardValue}>
+                                {subscription.services.length}
+                              </div>
+                            </div>
+                            <div className={styles.modal__overviewCard}>
+                              <div className={styles.modal__overviewCardHeader}>
+                                <CheckCircle size={16} />
+                                <span>Progress</span>
+                              </div>
+                              <div className={styles.modal__overviewCardValue}>
+                                {calculateProgress()}%
+                              </div>
+                            </div>
+                            <div className={styles.modal__overviewCard}>
+                              <div className={styles.modal__overviewCardHeader}>
+                                <CreditCard size={16} />
+                                <span>Total Price</span>
+                              </div>
+                              <div className={styles.modal__overviewCardValue}>
+                                {formatPrice(subscription.totalPrice)}
+                              </div>
+                            </div>
+                            <div className={styles.modal__overviewCard}>
+                              <div className={styles.modal__overviewCardHeader}>
+                                <Calendar size={16} />
+                                <span>Next Billing</span>
+                              </div>
+                              <div className={styles.modal__overviewCardValue}>
+                                {
+                                  formatDate(
+                                    subscription.nextBillingDate
+                                  ).split(", ")[0]
+                                }
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <div className={styles.modal__overviewCard}>
-                          <div className={styles.modal__overviewCardHeader}>
-                            <CheckCircle size={16} />
-                            <span>Progress</span>
-                          </div>
-                          <div className={styles.modal__overviewCardValue}>
-                            {calculateProgress()}%
-                          </div>
-                        </div>
-                        <div className={styles.modal__overviewCard}>
-                          <div className={styles.modal__overviewCardHeader}>
-                            <CreditCard size={16} />
-                            <span>Total Price</span>
-                          </div>
-                          <div className={styles.modal__overviewCardValue}>
-                            {formatPrice(subscription.totalPrice)}
-                          </div>
-                        </div>
-                        <div className={styles.modal__overviewCard}>
-                          <div className={styles.modal__overviewCardHeader}>
-                            <Calendar size={16} />
-                            <span>Next Billing</span>
-                          </div>
-                          <div className={styles.modal__overviewCardValue}>
-                            {formatDate(subscription.nextBillingDate).split(", ")[0]}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
 
-                    {/* Quick Info */}
-                    <div className={styles.modal__section}>
-                      <h3 className={styles.modal__sectionTitle}>Quick Info</h3>
-                      <div className={styles.modal__info}>
-                        <div className={styles.modal__infoItem}>
-                          <MapPin size={14} />
-                          <div>
-                            <span className={styles.modal__infoLabel}>
-                              Service Address
-                            </span>
-                            <span className={styles.modal__infoValue}>
-                              {subscription.address}
-                            </span>
-                          </div>
-                        </div>
-                        <div className={styles.modal__infoItem}>
-                          <RefreshCw size={14} />
-                          <div>
-                            <span className={styles.modal__infoLabel}>
-                              Auto-renewal
-                            </span>
-                            <span className={styles.modal__infoValue}>
-                              {subscription.autoRenewal ? "Enabled" : "Disabled"}
-                            </span>
-                          </div>
-                        </div>
-                        <div className={styles.modal__infoItem}>
-                          <Repeat size={14} />
-                          <div>
-                            <span className={styles.modal__infoLabel}>
-                              Billing Cycle
-                            </span>
-                            <span className={styles.modal__infoValue}>
-                              {subscription.billingCycle}
-                            </span>
+                        {/* Quick Info */}
+                        <div className={styles.modal__section}>
+                          <h3 className={styles.modal__sectionTitle}>
+                            Quick Info
+                          </h3>
+                          <div className={styles.modal__info}>
+                            <div className={styles.modal__infoItem}>
+                              <MapPin size={14} />
+                              <div>
+                                <span className={styles.modal__infoLabel}>
+                                  Service Address
+                                </span>
+                                <span className={styles.modal__infoValue}>
+                                  {subscription.address}
+                                </span>
+                              </div>
+                            </div>
+                            <div className={styles.modal__infoItem}>
+                              <RefreshCw size={14} />
+                              <div>
+                                <span className={styles.modal__infoLabel}>
+                                  Auto-renewal
+                                </span>
+                                <span className={styles.modal__infoValue}>
+                                  {subscription.autoRenewal
+                                    ? "Enabled"
+                                    : "Disabled"}
+                                </span>
+                              </div>
+                            </div>
+                            <div className={styles.modal__infoItem}>
+                              <Repeat size={14} />
+                              <div>
+                                <span className={styles.modal__infoLabel}>
+                                  Billing Cycle
+                                </span>
+                                <span className={styles.modal__infoValue}>
+                                  {subscription.billingCycle}
+                                </span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
                     </motion.div>
                   )}
 
@@ -289,82 +299,110 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                       transition={{ duration: 0.2, ease: "easeInOut" }}
                     >
                       <div className={styles.modal__sections}>
-                    <div className={styles.modal__section}>
-                      <h3 className={styles.modal__sectionTitle}>
-                        Included Services
-                      </h3>
-                      <div className={styles.modal__servicesList}>
-                        {subscription.services.map((service) => (
-                          <div
-                            key={service.id}
-                            className={styles.modal__serviceItem}
-                          >
-                            <div
-                              className={styles.modal__serviceItemIcon}
-                              style={{
-                                backgroundColor: `${getServiceColor(service.serviceType)}15`,
-                                color: getServiceColor(service.serviceType),
-                              }}
-                            >
-                              {getServiceIcon(service.serviceType)}
-                            </div>
-                            <div className={styles.modal__serviceItemContent}>
-                              <div className={styles.modal__serviceItemHeader}>
-                                <h4 className={styles.modal__serviceItemName}>
-                                  {service.serviceName}
-                                </h4>
-                                <span className={styles.modal__serviceItemPrice}>
-                                  {formatPrice(service.price)}
-                                </span>
-                              </div>
-                              <div className={styles.modal__serviceItemDetails}>
-                                <div className={styles.modal__serviceItemDetail}>
-                                  <Repeat size={12} />
-                                  <span>{service.frequency}</span>
-                                </div>
-                                <div className={styles.modal__serviceItemDetail}>
-                                  <Calendar size={12} />
-                                  <span>{service.scheduledDays.join(", ")}</span>
-                                </div>
-                              </div>
-                              <div className={styles.modal__serviceItemProgress}>
+                        <div className={styles.modal__section}>
+                          <h3 className={styles.modal__sectionTitle}>
+                            Included Services
+                          </h3>
+                          <div className={styles.modal__servicesList}>
+                            {subscription.services.map((service) => (
+                              <div
+                                key={service.id}
+                                className={styles.modal__serviceItem}
+                              >
                                 <div
-                                  className={styles.modal__serviceItemProgressText}
+                                  className={styles.modal__serviceItemIcon}
+                                  style={{
+                                    backgroundColor: `${getServiceColor(service.serviceType)}15`,
+                                    color: getServiceColor(service.serviceType),
+                                  }}
                                 >
-                                  <span>
-                                    {service.completedServices}/
-                                    {service.totalServices} completed
-                                  </span>
-                                  <span>
-                                    {Math.round(
-                                      (service.completedServices /
-                                        service.totalServices) *
-                                        100
-                                    )}
-                                    %
-                                  </span>
+                                  {getServiceIcon(service.serviceType)}
                                 </div>
                                 <div
-                                  className={styles.modal__serviceItemProgressBar}
+                                  className={styles.modal__serviceItemContent}
                                 >
                                   <div
+                                    className={styles.modal__serviceItemHeader}
+                                  >
+                                    <h4
+                                      className={styles.modal__serviceItemName}
+                                    >
+                                      {service.serviceName}
+                                    </h4>
+                                    <span
+                                      className={styles.modal__serviceItemPrice}
+                                    >
+                                      {formatPrice(service.price)}
+                                    </span>
+                                  </div>
+                                  <div
+                                    className={styles.modal__serviceItemDetails}
+                                  >
+                                    <div
+                                      className={
+                                        styles.modal__serviceItemDetail
+                                      }
+                                    >
+                                      <Repeat size={12} />
+                                      <span>{service.frequency}</span>
+                                    </div>
+                                    <div
+                                      className={
+                                        styles.modal__serviceItemDetail
+                                      }
+                                    >
+                                      <Calendar size={12} />
+                                      <span>
+                                        {service.scheduledDays.join(", ")}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div
                                     className={
-                                      styles.modal__serviceItemProgressFill
+                                      styles.modal__serviceItemProgress
                                     }
-                                    style={{
-                                      width: `${(service.completedServices / service.totalServices) * 100}%`,
-                                      backgroundColor: getServiceColor(
-                                        service.serviceType
-                                      ),
-                                    }}
-                                  />
+                                  >
+                                    <div
+                                      className={
+                                        styles.modal__serviceItemProgressText
+                                      }
+                                    >
+                                      <span>
+                                        {service.completedServices}/
+                                        {service.totalServices} completed
+                                      </span>
+                                      <span>
+                                        {Math.round(
+                                          (service.completedServices /
+                                            service.totalServices) *
+                                            100
+                                        )}
+                                        %
+                                      </span>
+                                    </div>
+                                    <div
+                                      className={
+                                        styles.modal__serviceItemProgressBar
+                                      }
+                                    >
+                                      <div
+                                        className={
+                                          styles.modal__serviceItemProgressFill
+                                        }
+                                        style={{
+                                          width: `${(service.completedServices / service.totalServices) * 100}%`,
+                                          backgroundColor: getServiceColor(
+                                            service.serviceType
+                                          ),
+                                        }}
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
+                            ))}
                           </div>
-                        ))}
-                      </div>
-                    </div>
+                        </div>
                       </div>
                     </motion.div>
                   )}
@@ -379,63 +417,76 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                       transition={{ duration: 0.2, ease: "easeInOut" }}
                     >
                       <div className={styles.modal__sections}>
-                    {subscription.upcomingBookings.length > 0 ? (
-                      <div className={styles.modal__section}>
-                        <h3 className={styles.modal__sectionTitle}>
-                          Upcoming Bookings
-                        </h3>
-                        <div className={styles.modal__bookingsList}>
-                          {subscription.upcomingBookings.map((booking) => (
-                            <div
-                              key={booking.id}
-                              className={styles.modal__bookingItem}
-                            >
-                              <div
-                                className={styles.modal__bookingIcon}
-                                style={{
-                                  backgroundColor: `${getServiceColor(booking.serviceType)}15`,
-                                }}
-                              >
-                                {getServiceIcon(booking.serviceType)}
-                              </div>
-                              <div className={styles.modal__bookingContent}>
-                                <div className={styles.modal__bookingHeader}>
-                                  <h4 className={styles.modal__bookingName}>
-                                    {booking.serviceName}
-                                  </h4>
-                                  <span
-                                    className={styles.modal__bookingStatus}
+                        {subscription.upcomingBookings.length > 0 ? (
+                          <div className={styles.modal__section}>
+                            <h3 className={styles.modal__sectionTitle}>
+                              Upcoming Bookings
+                            </h3>
+                            <div className={styles.modal__bookingsList}>
+                              {subscription.upcomingBookings.map((booking) => (
+                                <div
+                                  key={booking.id}
+                                  className={styles.modal__bookingItem}
+                                >
+                                  <div
+                                    className={styles.modal__bookingIcon}
                                     style={{
-                                      color: getBookingStatusColor(booking.status),
+                                      backgroundColor: `${getServiceColor(booking.serviceType)}15`,
                                     }}
                                   >
-                                    {booking.status}
-                                  </span>
-                                </div>
-                                <div className={styles.modal__bookingDetails}>
-                                  <div className={styles.modal__bookingDetail}>
-                                    <Calendar size={12} />
-                                    <span>{formatDate(booking.date)}</span>
+                                    {getServiceIcon(booking.serviceType)}
                                   </div>
-                                  <div className={styles.modal__bookingDetail}>
-                                    <Clock size={12} />
-                                    <span>{booking.time}</span>
+                                  <div className={styles.modal__bookingContent}>
+                                    <div
+                                      className={styles.modal__bookingHeader}
+                                    >
+                                      <h4 className={styles.modal__bookingName}>
+                                        {booking.serviceName}
+                                      </h4>
+                                      <span
+                                        className={styles.modal__bookingStatus}
+                                        style={{
+                                          color: getBookingStatusColor(
+                                            booking.status
+                                          ),
+                                        }}
+                                      >
+                                        {booking.status}
+                                      </span>
+                                    </div>
+                                    <div
+                                      className={styles.modal__bookingDetails}
+                                    >
+                                      <div
+                                        className={styles.modal__bookingDetail}
+                                      >
+                                        <Calendar size={12} />
+                                        <span>{formatDate(booking.date)}</span>
+                                      </div>
+                                      <div
+                                        className={styles.modal__bookingDetail}
+                                      >
+                                        <Clock size={12} />
+                                        <span>{booking.time}</span>
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
+                              ))}
                             </div>
-                          ))}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className={styles.modal__section}>
-                        <div className={styles.modal__emptyState}>
-                          <Calendar size={48} />
-                          <h4>No upcoming bookings</h4>
-                          <p>Your next bookings will appear here when scheduled.</p>
-                        </div>
-                      </div>
-                    )}
+                          </div>
+                        ) : (
+                          <div className={styles.modal__section}>
+                            <div className={styles.modal__emptyState}>
+                              <Calendar size={48} />
+                              <h4>No upcoming bookings</h4>
+                              <p>
+                                Your next bookings will appear here when
+                                scheduled.
+                              </p>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </motion.div>
                   )}
@@ -450,63 +501,230 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                       transition={{ duration: 0.2, ease: "easeInOut" }}
                     >
                       <div className={styles.modal__sections}>
-                    <div className={styles.modal__section}>
-                      <h3 className={styles.modal__sectionTitle}>Pricing</h3>
-                      <div className={styles.modal__priceCard}>
-                        <div className={styles.modal__priceRow}>
-                          <span className={styles.modal__priceLabel}>
-                            Total Price
-                          </span>
-                          <span className={styles.modal__priceValue}>
-                            {formatPrice(subscription.totalPrice)}
-                          </span>
-                        </div>
-                        <div className={styles.modal__priceRow}>
-                          <span className={styles.modal__priceLabel}>
-                            Billing Cycle
-                          </span>
-                          <span className={styles.modal__priceValue}>
-                            {subscription.billingCycle}
-                          </span>
-                        </div>
-                        {subscription.discount && (
-                          <div className={styles.modal__priceNote}>
-                            <TrendingUp size={12} />
-                            <span>{subscription.discount}% discount applied</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
+                        {/* Billing Summary Card - Greeting Card Style */}
+                        <div className={styles.modal__section}>
+                          <div className={styles.modal__billingCard}>
+                            <div className={styles.modal__billingCardHeader}>
+                              <div>
+                                <h3 className={styles.modal__billingCardTitle}>
+                                  Subscription Billing Summary
+                                </h3>
+                                <p
+                                  className={styles.modal__billingCardSubtitle}
+                                >
+                                  {subscription.billingCycle} billing •
+                                  Auto-renewal{" "}
+                                  {subscription.autoRenewal
+                                    ? "enabled"
+                                    : "disabled"}
+                                </p>
+                              </div>
+                            </div>
 
-                    <div className={styles.modal__section}>
-                      <h3 className={styles.modal__sectionTitle}>
-                        Payment Details
-                      </h3>
-                      <div className={styles.modal__info}>
-                        <div className={styles.modal__infoItem}>
-                          <CreditCard size={14} />
-                          <div>
-                            <span className={styles.modal__infoLabel}>
-                              Payment Method
-                            </span>
-                            <span className={styles.modal__infoValue}>
-                              {subscription.paymentMethod}
-                            </span>
+                            <div className={styles.modal__billingCardContent}>
+                              <div className={styles.modal__billingAmount}>
+                                <span
+                                  className={styles.modal__billingAmountLabel}
+                                >
+                                  Total Amount
+                                </span>
+                                <span
+                                  className={styles.modal__billingAmountValue}
+                                >
+                                  {formatPrice(subscription.totalPrice)}
+                                  <small>/{subscription.billingCycle}</small>
+                                </span>
+                              </div>
+
+                              {subscription.discount && (
+                                <div className={styles.modal__billingDiscount}>
+                                  <TrendingUp size={14} />
+                                  <span>
+                                    You're saving {subscription.discount}% with
+                                    this subscription!
+                                  </span>
+                                </div>
+                              )}
+
+                              <div className={styles.modal__billingDetails}>
+                                <div className={styles.modal__billingDetail}>
+                                  <CreditCard size={14} />
+                                  <div>
+                                    <span
+                                      className={
+                                        styles.modal__billingDetailLabel
+                                      }
+                                    >
+                                      Payment Method
+                                    </span>
+                                    <span
+                                      className={
+                                        styles.modal__billingDetailValue
+                                      }
+                                    >
+                                      {subscription.paymentMethod}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div className={styles.modal__billingDetail}>
+                                  <Calendar size={14} />
+                                  <div>
+                                    <span
+                                      className={
+                                        styles.modal__billingDetailLabel
+                                      }
+                                    >
+                                      Next Billing Date
+                                    </span>
+                                    <span
+                                      className={
+                                        styles.modal__billingDetailValue
+                                      }
+                                    >
+                                      {formatDate(subscription.nextBillingDate)}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div className={styles.modal__billingDetail}>
+                                  <Clock size={14} />
+                                  <div>
+                                    <span
+                                      className={
+                                        styles.modal__billingDetailLabel
+                                      }
+                                    >
+                                      Last Payment
+                                    </span>
+                                    <span
+                                      className={
+                                        styles.modal__billingDetailValue
+                                      }
+                                    >
+                                      {subscription.lastPaymentDate
+                                        ? formatDate(
+                                            subscription.lastPaymentDate
+                                          )
+                                        : "No previous payment"}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <div className={styles.modal__infoItem}>
-                          <Calendar size={14} />
-                          <div>
-                            <span className={styles.modal__infoLabel}>
-                              Next Billing Date
-                            </span>
-                            <span className={styles.modal__infoValue}>
-                              {formatDate(subscription.nextBillingDate)}
-                            </span>
+
+                        {/* Service Breakdown */}
+                        <div className={styles.modal__section}>
+                          <h3 className={styles.modal__sectionTitle}>
+                            Service Breakdown
+                          </h3>
+                          <div className={styles.modal__serviceBreakdown}>
+                            {subscription.services.map((service) => (
+                              <div
+                                key={service.id}
+                                className={styles.modal__serviceBreakdownItem}
+                              >
+                                <div
+                                  className={styles.modal__serviceBreakdownIcon}
+                                >
+                                  {getServiceIcon(service.serviceType)}
+                                </div>
+                                <div
+                                  className={styles.modal__serviceBreakdownInfo}
+                                >
+                                  <span
+                                    className={
+                                      styles.modal__serviceBreakdownName
+                                    }
+                                  >
+                                    {service.serviceName}
+                                  </span>
+                                  <span
+                                    className={
+                                      styles.modal__serviceBreakdownFreq
+                                    }
+                                  >
+                                    {service.frequency}
+                                  </span>
+                                </div>
+                                <span
+                                  className={
+                                    styles.modal__serviceBreakdownPrice
+                                  }
+                                >
+                                  {formatPrice(service.price)}
+                                </span>
+                              </div>
+                            ))}
+
+                            <div
+                              className={styles.modal__serviceBreakdownTotal}
+                            >
+                              <span>Total</span>
+                              <span>
+                                {formatPrice(subscription.totalPrice)}
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
+
+                        {/* Billing History Preview */}
+                        <div className={styles.modal__section}>
+                          <h3 className={styles.modal__sectionTitle}>
+                            Recent Billing
+                          </h3>
+                          <div className={styles.modal__billingHistory}>
+                            <div className={styles.modal__billingHistoryItem}>
+                              <div className={styles.modal__billingHistoryIcon}>
+                                <CheckCircle size={16} />
+                              </div>
+                              <div className={styles.modal__billingHistoryInfo}>
+                                <span
+                                  className={styles.modal__billingHistoryDate}
+                                >
+                                  {subscription.lastPaymentDate
+                                    ? formatDate(subscription.lastPaymentDate)
+                                    : "No payment yet"}
+                                </span>
+                                <span
+                                  className={styles.modal__billingHistoryAmount}
+                                >
+                                  {formatPrice(subscription.totalPrice)}
+                                </span>
+                              </div>
+                              <span
+                                className={styles.modal__billingHistoryStatus}
+                              >
+                                Paid
+                              </span>
+                            </div>
+
+                            <div className={styles.modal__billingHistoryItem}>
+                              <div className={styles.modal__billingHistoryIcon}>
+                                <Calendar size={16} />
+                              </div>
+                              <div className={styles.modal__billingHistoryInfo}>
+                                <span
+                                  className={styles.modal__billingHistoryDate}
+                                >
+                                  {formatDate(subscription.nextBillingDate)}
+                                </span>
+                                <span
+                                  className={styles.modal__billingHistoryAmount}
+                                >
+                                  {formatPrice(subscription.totalPrice)}
+                                </span>
+                              </div>
+                              <span
+                                className={styles.modal__billingHistoryStatus}
+                              >
+                                Upcoming
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </motion.div>
                   )}
