@@ -7,29 +7,19 @@
   position: fixed;
   top: 0;
   right: 0;
-  transform: translate(-50%, -50%);
-  width: 90%;
-  max-width: 720px;
+  width: 460px;
   height: 100vh;
-  max-height: 100vh;
-  background: color("neutral", "white");
-  // border-radius: border-radius("2xl");
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  background-color: color("neutral", "white");
+  box-shadow:
+    -8px 0 40px rgba(0, 0, 0, 0.2),
+    -2px 0 16px rgba(0, 0, 0, 0.1);
   z-index: z-index("modal");
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-
-  @include breakpoint-down("md") {
-    width: 95%;
-    max-height: 90vh;
-  }
+  backdrop-filter: blur(1px);
 
   @include breakpoint-down("sm") {
     width: 100%;
-    height: 100%;
-    max-height: 100vh;
-    border-radius: 0;
   }
 
   &__overlay {
@@ -38,13 +28,14 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
+    background-color: rgba(0, 0, 0, 0.4);
     z-index: z-index("overlay");
   }
 
-  // Header
   &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
     padding: spacing("xl");
     border-bottom: 1px solid color("neutral", "lighter");
     background: linear-gradient(
@@ -52,258 +43,210 @@
       color("neutral", "white"),
       color("neutral", "lightest")
     );
-
-    @include breakpoint-down("sm") {
-      padding: spacing("lg");
-    }
   }
 
-  &__headerContent {
+  &__headerLeft {
     display: flex;
-    flex-direction: column;
-    gap: spacing("xs");
+    gap: spacing("sm");
+    flex: 1;
+  }
+
+  &__serviceIcon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("xl");
+    font-size: 24px;
+    flex-shrink: 0;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid color("neutral", "white");
   }
 
   &__title {
-    @include font-size("h5");
+    @include font-size("xl");
     @include font-weight("bold");
     color: color("neutral", "darkest");
-    margin: 0;
-    line-height: 1.2;
-
-    @include breakpoint-down("sm") {
-      @include font-size("subtitle-1");
-    }
+    margin: 0 0 spacing("xs") 0;
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    line-height: 1.3;
   }
 
   &__subtitle {
-    display: flex;
-    align-items: center;
-    gap: spacing("md");
-  }
-
-  &__status {
-    display: inline-flex;
-    align-items: center;
-    gap: spacing("xxs");
-    padding: 4px spacing("sm");
-    border-radius: border-radius("pill");
-    @include font-size("xs");
-    @include font-weight("semibold");
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  &__id {
     @include font-size("sm");
-    color: color("neutral", "medium");
-    font-family: "SF Mono", "Monaco", "Inconsolata", monospace;
+    color: color("neutral", "dark");
+    margin: 0;
+    @include font-weight("medium");
   }
 
   &__closeBtn {
-    position: absolute;
-    top: spacing("lg");
-    right: spacing("lg");
     width: 36px;
     height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: color("neutral", "white");
-    border: 1px solid color("neutral", "lighter");
-    border-radius: border-radius("lg");
-    color: color("neutral", "medium");
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: color("neutral", "lightest");
-      color: color("neutral", "darkest");
-      transform: rotate(90deg);
-    }
-
-    @include breakpoint-down("sm") {
-      top: spacing("md");
-      right: spacing("md");
-    }
-  }
-
-  // Tabs
-  &__tabs {
-    display: flex;
-    gap: spacing("xs");
-    padding: 0 spacing("xl");
-    background: color("neutral", "lightest");
-    border-bottom: 1px solid color("neutral", "lighter");
-    overflow-x: auto;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-
-    @include breakpoint-down("sm") {
-      padding: 0 spacing("lg");
-    }
-  }
-
-  &__tab {
-    display: flex;
-    align-items: center;
-    gap: spacing("xs");
-    padding: spacing("md") spacing("lg");
-    background: transparent;
+    background-color: transparent;
     border: none;
-    border-bottom: 2px solid transparent;
-    @include font-size("sm");
-    @include font-weight("medium");
+    border-radius: border-radius("full");
     color: color("neutral", "medium");
     cursor: pointer;
     transition: all 0.2s ease;
-    white-space: nowrap;
-    position: relative;
 
     &:hover {
+      background-color: color("neutral", "lightest");
       color: color("neutral", "darkest");
-      background: color("neutral", "white");
-    }
-
-    &--active {
-      color: color("primary", "base");
-      background: color("neutral", "white");
-      border-bottom-color: color("primary", "base");
-    }
-
-    svg {
-      flex-shrink: 0;
+      transform: scale(1.1);
     }
   }
 
-  // Body
   &__body {
     flex: 1;
     overflow-y: auto;
-    background: color("neutral", "white");
+    padding: spacing("xl");
 
     &::-webkit-scrollbar {
-      width: 6px;
+      width: 4px;
     }
 
     &::-webkit-scrollbar-thumb {
-      background: color("neutral", "light");
-      border-radius: 3px;
-
-      &:hover {
-        background: color("neutral", "medium");
-      }
+      background-color: color("neutral", "light");
+      border-radius: 4px;
     }
   }
 
-  &__tabContent {
-    padding: spacing("xl");
-
-    @include breakpoint-down("sm") {
-      padding: spacing("lg");
-    }
-  }
-
-  // Stats Grid
-  &__statsGrid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: spacing("md");
-    margin-bottom: spacing("xl");
-
-    @include breakpoint-down("sm") {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  &__statCard {
+  &__statusBar {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: spacing("md");
-    padding: spacing("lg");
-    background: color("neutral", "lightest");
-    border-radius: border-radius("xl");
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: linear-gradient(
-        135deg,
-        color("neutral", "lightest"),
-        color("neutral", "lighter")
-      );
-      transform: translateY(-2px);
-    }
-  }
-
-  &__statIcon {
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: color("neutral", "white");
-    border-radius: border-radius("lg");
-    color: color("primary", "base");
-    flex-shrink: 0;
-  }
-
-  &__statContent {
-    display: flex;
-    flex-direction: column;
-    gap: spacing("xxs");
-  }
-
-  &__statValue {
-    @include font-size("subtitle-2");
-    @include font-weight("bold");
-    color: color("neutral", "darkest");
-    line-height: 1;
-  }
-
-  &__statLabel {
-    @include font-size("xs");
-    color: color("neutral", "medium");
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  // Sections
-  &__section {
-    margin-bottom: spacing("xl");
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  &__sectionTitle {
-    @include font-size("sm");
-    @include font-weight("semibold");
-    color: color("neutral", "medium");
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin: 0 0 spacing("md") 0;
-  }
-
-  // Progress Card
-  &__progressCard {
+    padding: spacing("md");
     background: linear-gradient(
       135deg,
       color("neutral", "lightest"),
       rgba(255, 255, 255, 0.5)
     );
     border-radius: border-radius("xl");
-    padding: spacing("lg");
+    margin-bottom: spacing("xl");
     border: 1px solid color("neutral", "lighter");
+  }
+
+  &__status {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xs");
+    @include font-size("xs");
+    @include font-weight("bold");
+    padding: spacing("xs") spacing("md");
+    border-radius: border-radius("pill");
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border: 1px solid transparent;
+
+    &--active {
+      background: linear-gradient(
+        135deg,
+        rgba(5, 150, 105, 0.15),
+        rgba(5, 150, 105, 0.25)
+      );
+      color: #047857;
+      border-color: rgba(5, 150, 105, 0.3);
+    }
+
+    &--paused {
+      background: linear-gradient(
+        135deg,
+        rgba(217, 119, 6, 0.15),
+        rgba(217, 119, 6, 0.25)
+      );
+      color: #b45309;
+      border-color: rgba(217, 119, 6, 0.3);
+    }
+
+    &--cancelled,
+    &--expired {
+      background: linear-gradient(
+        135deg,
+        rgba(251, 34, 34, 0.15),
+        rgba(251, 34, 34, 0.25)
+      );
+      color: #dc2626;
+      border-color: rgba(251, 34, 34, 0.3);
+    }
+
+    &--pendingactivation {
+      background: linear-gradient(
+        135deg,
+        rgba(242, 153, 74, 0.15),
+        rgba(242, 153, 74, 0.25)
+      );
+      color: #ea580c;
+      border-color: rgba(242, 153, 74, 0.3);
+    }
+  }
+
+  &__subscriptionId {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+    @include font-weight("semibold");
+    font-family: "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace;
+  }
+
+  &__sections {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xl");
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__sectionTitle {
+    @include font-size("sm");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 spacing("xs") 0;
+    position: relative;
+    padding-bottom: spacing("xs");
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 24px;
+      height: 2px;
+      background: color("primary", "base");
+      border-radius: border-radius("pill");
+    }
+  }
+
+  &__progressCard {
+    padding: spacing("md");
+    background: linear-gradient(
+      135deg,
+      color("neutral", "lightest"),
+      rgba(255, 255, 255, 0.5)
+    );
+    border-radius: border-radius("xl");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+    border: 1px solid color("neutral", "lighter");
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   }
 
   &__progressInfo {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: spacing("sm");
   }
 
   &__progressText {
@@ -312,8 +255,8 @@
   }
 
   &__progressPercent {
-    @include font-size("body-2");
-    @include font-weight("bold");
+    @include font-size("sm");
+    @include font-weight("semibold");
     color: color("primary", "base");
   }
 
@@ -322,6 +265,7 @@
     background: color("neutral", "lighter");
     border-radius: border-radius("pill");
     overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 
   &__progressFill {
@@ -329,33 +273,43 @@
     background: linear-gradient(
       90deg,
       color("primary", "base"),
-      color("primary", "light")
+      color("primary", "dark"),
+      color("primary", "base")
     );
     border-radius: border-radius("pill");
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
   }
 
-  // Info Grid
-  &__infoGrid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: spacing("lg");
-
-    @include breakpoint-down("sm") {
-      grid-template-columns: 1fr;
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
     }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
   }
 
   &__infoItem {
     display: flex;
-    gap: spacing("md");
+    gap: spacing("sm");
 
     svg {
+      width: 14px;
+      height: 14px;
       color: color("neutral", "medium");
-      flex-shrink: 0;
       margin-top: 2px;
+      flex-shrink: 0;
     }
 
-    > div {
+    div {
       display: flex;
       flex-direction: column;
       gap: spacing("xxs");
@@ -365,8 +319,6 @@
   &__infoLabel {
     @include font-size("xs");
     color: color("neutral", "medium");
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
   }
 
   &__infoValue {
@@ -376,318 +328,442 @@
     line-height: 1.3;
   }
 
-  // Services List
-  &__servicesList {
-    display: flex;
-    flex-direction: column;
-    gap: spacing("md");
-  }
-
-  &__serviceCard {
-    background: color("neutral", "lightest");
-    border-radius: border-radius("xl");
-    overflow: hidden;
-    transition: all 0.2s ease;
-
-    &:hover {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
-  }
-
-  &__serviceHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: spacing("lg");
-    cursor: pointer;
-    transition: background 0.2s ease;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.5);
-    }
-  }
-
-  &__serviceLeft {
+  &__providerCard {
     display: flex;
     align-items: center;
-    gap: spacing("md");
-    flex: 1;
+    gap: spacing("sm");
+    padding: spacing("sm");
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("md");
   }
 
-  &__serviceIcon {
-    width: 40px;
-    height: 40px;
-    border-radius: border-radius("lg");
+  &__providerAvatar {
+    width: 36px;
+    height: 36px;
+    border-radius: border-radius("full");
+    background-color: color("primary", "lighter");
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    color: color("primary", "base");
     flex-shrink: 0;
   }
 
-  &__serviceInfo {
+  &__providerInfo {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: spacing("xxs");
   }
 
-  &__serviceName {
-    @include font-size("body-2");
+  &__providerName {
+    @include font-size("sm");
     @include font-weight("semibold");
     color: color("neutral", "darkest");
-    margin: 0;
   }
 
-  &__serviceMeta {
-    @include font-size("sm");
-    color: color("neutral", "medium");
-  }
-
-  &__serviceRight {
+  &__providerContact {
     display: flex;
     align-items: center;
-    gap: spacing("md");
+    gap: spacing("xxs");
+    @include font-size("xs");
+    color: color("neutral", "dark");
+
+    svg {
+      width: 12px;
+      height: 12px;
+      color: color("neutral", "medium");
+    }
   }
 
-  &__servicePrice {
+  &__priceCard {
+    padding: spacing("sm");
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("md");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__priceRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__priceLabel {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+  }
+
+  &__priceValue {
     @include font-size("body-2");
     @include font-weight("bold");
     color: color("primary", "base");
   }
 
-  &__serviceExpand {
-    color: color("neutral", "medium");
-    transition: transform 0.2s ease;
-  }
-
-  &__serviceDetails {
-    overflow: hidden;
-    background: rgba(255, 255, 255, 0.5);
-    border-top: 1px solid color("neutral", "lighter");
-  }
-
-  &__serviceProgress {
-    padding: spacing("lg");
-    padding-top: 0;
-  }
-
-  &__progressHeader {
+  &__priceNote {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: spacing("sm");
+    gap: spacing("xxs");
+    @include font-size("xs");
+    color: color("neutral", "medium");
+    padding-top: spacing("xs");
+    border-top: 1px solid color("neutral", "lighter");
 
-    span {
-      @include font-size("xs");
-      @include font-weight("medium");
-      color: color("neutral", "medium");
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-
-      &:last-child {
-        @include font-weight("bold");
-        color: color("neutral", "darkest");
-      }
+    svg {
+      width: 12px;
+      height: 12px;
+      color: #059669;
     }
   }
 
-  &__progressStats {
+  &__notes {
     display: flex;
-    justify-content: space-between;
-    margin-top: spacing("sm");
-    @include font-size("xs");
-    color: color("neutral", "medium");
-  }
-
-  &__serviceProvider,
-  &__serviceNotes {
-    padding: 0 spacing("lg") spacing("md");
-    display: flex;
-    align-items: flex-start;
-    gap: spacing("xs");
-    @include font-size("sm");
-    color: color("neutral", "dark");
+    gap: spacing("sm");
+    padding: spacing("sm");
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("md");
 
     svg {
+      width: 14px;
+      height: 14px;
       color: color("neutral", "medium");
       flex-shrink: 0;
       margin-top: 2px;
     }
-  }
 
-  &__notesLabel {
-    @include font-weight("medium");
-    color: color("neutral", "medium");
-  }
-
-  // Billing
-  &__billingCard {
-    background: linear-gradient(
-      135deg,
-      color("primary", "base"),
-      color("primary", "dark")
-    );
-    color: color("neutral", "white");
-    border-radius: border-radius("xl");
-    padding: spacing("xl");
-    margin-bottom: spacing("lg");
-  }
-
-  &__billingHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: spacing("lg");
-
-    @include breakpoint-down("sm") {
-      flex-direction: column;
-      gap: spacing("sm");
+    p {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      margin: 0;
+      line-height: 1.4;
     }
   }
 
-  &__billingTitle {
-    @include font-size("body-2");
-    @include font-weight("medium");
-    margin: 0;
-    opacity: 0.9;
-  }
-
-  &__billingAmount {
-    @include font-size("h5");
-    @include font-weight("bold");
+  // Services List Styles
+  &__servicesList {
     display: flex;
-    align-items: baseline;
-    gap: spacing("xs");
+    flex-direction: column;
+    gap: spacing("lg");
   }
 
-  &__billingPeriod {
-    @include font-size("body-2");
-    @include font-weight("medium");
-    opacity: 0.8;
+  &__serviceItem {
+    background: linear-gradient(
+      135deg,
+      color("neutral", "lightest"),
+      rgba(255, 255, 255, 0.8)
+    );
+    border-radius: border-radius("xl");
+    padding: spacing("lg");
+    display: flex;
+    gap: spacing("md");
+    border: 1px solid color("neutral", "lighter");
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      border-color: color("primary", "lighter");
+    }
   }
 
-  &__discount {
-    display: inline-flex;
+  &__serviceItemIcon {
+    width: 44px;
+    height: 44px;
+    border-radius: border-radius("xl");
+    display: flex;
     align-items: center;
-    gap: spacing("xs");
-    padding: spacing("xs") spacing("md");
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: border-radius("pill");
-    @include font-size("sm");
-    margin-bottom: spacing("lg");
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid color("neutral", "white");
   }
 
-  &__billingDetails {
+  &__serviceItemContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__serviceItemHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  &__serviceItemName {
+    @include font-size("body-2");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  &__serviceItemPrice {
+    @include font-size("body-2");
+    @include font-weight("bold");
+    color: color("primary", "base");
+    letter-spacing: -0.3px;
+  }
+
+  &__serviceItemDetails {
+    display: flex;
+    gap: spacing("md");
+    flex-wrap: wrap;
+  }
+
+  &__serviceItemDetail {
+    display: flex;
+    align-items: center;
+    gap: spacing("xxs");
+    @include font-size("xs");
+    color: color("neutral", "medium");
+
+    svg {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+    }
+  }
+
+  &__serviceItemProgress {
+    margin-top: spacing("xs");
+  }
+
+  &__serviceItemProgressText {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("xxs");
+    @include font-size("xs");
+    color: color("neutral", "dark");
+
+    span:last-child {
+      @include font-weight("semibold");
+      color: color("primary", "base");
+    }
+  }
+
+  &__serviceItemProgressBar {
+    height: 6px;
+    background: color("neutral", "lighter");
+    border-radius: border-radius("pill");
+    overflow: hidden;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  &__serviceItemProgressFill {
+    height: 100%;
+    border-radius: border-radius("pill");
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+      );
+      animation: shimmer 2s infinite;
+    }
+  }
+
+  // Bookings List Styles
+  &__bookingsList {
     display: flex;
     flex-direction: column;
     gap: spacing("md");
   }
 
-  &__billingItem {
+  &__bookingItem {
+    background: linear-gradient(
+      135deg,
+      color("neutral", "lightest"),
+      rgba(255, 255, 255, 0.8)
+    );
+    border-radius: border-radius("lg");
+    padding: spacing("md");
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: spacing("sm");
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    gap: spacing("md");
+    align-items: flex-start;
+    border: 1px solid color("neutral", "lighter");
+    transition: all 0.3s ease;
 
-    &:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
+    &:hover {
+      transform: translateX(2px);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
     }
   }
 
-  &__billingLabel {
-    @include font-size("sm");
-    opacity: 0.8;
-  }
-
-  &__billingValue {
-    @include font-size("sm");
-    @include font-weight("medium");
-  }
-
-  &__billingAction {
+  &__bookingIcon {
+    width: 36px;
+    height: 36px;
+    border-radius: border-radius("lg");
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: spacing("sm");
-    width: 100%;
-    padding: spacing("md");
-    background: color("neutral", "white");
-    border: 2px solid color("neutral", "lighter");
-    border-radius: border-radius("lg");
-    @include font-size("sm");
-    @include font-weight("medium");
-    color: color("neutral", "darkest");
-    cursor: pointer;
-    transition: all 0.2s ease;
+    font-size: 18px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
 
-    &:hover {
-      background: color("neutral", "lightest");
-      border-color: color("primary", "base");
-      color: color("primary", "base");
+  &__bookingContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+  }
+
+  &__bookingHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__bookingName {
+    @include font-size("body-2");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  &__bookingStatus {
+    @include font-size("xs");
+    @include font-weight("bold");
+    text-transform: capitalize;
+    padding: 2px spacing("xs");
+    border-radius: border-radius("pill");
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  &__bookingDetails {
+    display: flex;
+    gap: spacing("md");
+    flex-wrap: wrap;
+  }
+
+  &__bookingDetail {
+    display: flex;
+    align-items: center;
+    gap: spacing("xxs");
+    @include font-size("xs");
+    color: color("neutral", "medium");
+
+    svg {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
     }
   }
 
-  // Footer
   &__footer {
     display: flex;
-    gap: spacing("md");
+    gap: spacing("sm");
     padding: spacing("xl");
-    background: color("neutral", "lightest");
     border-top: 1px solid color("neutral", "lighter");
-
-    @include breakpoint-down("sm") {
-      padding: spacing("lg");
-      flex-direction: column;
-    }
+    background: linear-gradient(
+      135deg,
+      color("neutral", "white"),
+      color("neutral", "lightest")
+    );
   }
 
   &__footerBtn {
     flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: spacing("xs");
     padding: spacing("md");
-    background: color("primary", "base");
-    color: color("neutral", "white");
     border: none;
     border-radius: border-radius("lg");
     @include font-size("sm");
     @include font-weight("semibold");
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+    position: relative;
+    overflow: hidden;
 
-    &:hover {
-      background: color("primary", "dark");
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    &--primary {
+      background: linear-gradient(
+        135deg,
+        color("primary", "base"),
+        color("primary", "dark")
+      );
+      color: color("neutral", "white");
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
     }
 
     &--secondary {
-      background: color("neutral", "white");
+      background: linear-gradient(
+        135deg,
+        color("neutral", "white"),
+        color("neutral", "lightest")
+      );
       color: color("neutral", "darkest");
-      border: 2px solid color("neutral", "lighter");
+      border: 1px solid color("neutral", "light");
 
       &:hover {
-        background: color("neutral", "lightest");
-        border-color: color("neutral", "light");
+        background: linear-gradient(
+          135deg,
+          color("neutral", "lightest"),
+          color("neutral", "lighter")
+        );
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      &:active {
+        transform: translateY(0);
       }
     }
 
-    &--outline {
-      background: transparent;
-      color: color("neutral", "darkest");
-      border: 2px solid color("neutral", "lighter");
+    &--danger {
+      background: linear-gradient(
+        135deg,
+        rgba(239, 68, 68, 0.1),
+        rgba(239, 68, 68, 0.2)
+      );
+      color: color("status", "error");
+      border: 1px solid color("status", "error");
 
       &:hover {
-        background: color("neutral", "lightest");
+        background: linear-gradient(135deg, color("status", "error"), #dc2626);
+        color: color("neutral", "white");
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
       }
-    }
 
-    svg {
-      flex-shrink: 0;
+      &:active {
+        transform: translateY(0);
+      }
     }
   }
 }
