@@ -248,7 +248,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
         {/* Image Section */}
         <div className={styles.modal__imageSection}>
           <Image
-            src={serviceImage}
+            src={serviceOption?.imageUrl || ""}
             alt={serviceTitle}
             width={500}
             height={500}

@@ -63,6 +63,7 @@ query GetSubscriptionById($id: ID!) {
           description
           price
           inclusions
+          imageUrl
           extraItems {
             name
             items
@@ -187,6 +188,7 @@ query GetSubscriptions($status: SubscriptionStatus) {
           description
           price
           inclusions
+          imageUrl
           extraItems {
             name
             items
@@ -311,6 +313,7 @@ query GetCustomerSubscriptions {
           description
           price
           inclusions
+          imageUrl
           extraItems {
             name
             items

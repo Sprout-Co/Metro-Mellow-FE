@@ -32,6 +32,7 @@ query GetBookings($status: BookingStatus) {
         description
         price
         inclusions
+        imageUrl
         extraItems {
           name
           items
@@ -144,6 +145,7 @@ query GetBookingById($id: ID!) {
         description
         price
         inclusions
+        imageUrl
         extraItems {
           name
           items
@@ -256,6 +258,7 @@ query GetCustomerBookings {
         description
         price
         inclusions
+        imageUrl
         extraItems {
           name
           items
@@ -368,6 +371,7 @@ query GetStaffBookings {
         description
         price
         inclusions
+        imageUrl
         extraItems {
           name
           items
