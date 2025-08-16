@@ -24,6 +24,7 @@ import {
   Wallet,
   Clock,
 } from "lucide-react";
+import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -191,7 +192,97 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <AnimatePresence>
+    <ModalDrawer isOpen={isOpen} onClose={onClose} width="sm">
+      <div className={styles.sidebar__header}>
+        <motion.h2 className={styles.sidebar__title} variants={itemVariants}>
+          Menu
+        </motion.h2>
+        <motion.button
+          className={styles.sidebar__closeButton}
+          onClick={onClose}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          variants={itemVariants}
+        >
+          &times;
+        </motion.button>
+      </div>
+
+      <motion.div
+        className={styles.sidebar__quickActions}
+        variants={itemVariants}
+      >
+        <h3 className={styles.sidebar__quickActionsTitle}>Quick Actions</h3>
+        <div className={styles.sidebar__quickActionsGrid}>
+          {quickActions.map((action) => (
+            <Link
+              key={action.href}
+              href={action.href}
+              className={styles.sidebar__quickAction}
+            >
+              <motion.div
+                className={`${styles.sidebar__quickActionItem} ${action.color}`}
+                whileHover={{
+                  y: -4,
+                  boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                }}
+                whileTap={{
+                  y: 0,
+                  boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
+                }}
+              >
+                <action.icon className={styles.sidebar__quickActionIcon} />
+                <span className={styles.sidebar__quickActionLabel}>
+                  {action.label}
+                </span>
+              </motion.div>
+            </Link>
+          ))}
+        </div>
+      </motion.div>
+
+      <nav className={styles.sidebar__nav}>
+        {navSections.map((section, index) => (
+          <div key={section.title || `section-${index}`}>
+            {section.title && (
+              <motion.div
+                className={styles.sidebar__sectionTitle}
+                variants={itemVariants}
+              >
+                {section.title}
+              </motion.div>
+            )}
+            <motion.ul
+              className={styles.sidebar__navSection}
+              variants={itemVariants}
+            >
+              {section.links.map((link) => (
+                <motion.li
+                  key={link.href}
+                  className={`${styles.sidebar__navItem} ${isActive(link.href) ? styles["sidebar__navItem--active"] : ""}`}
+                  variants={itemVariants}
+                >
+                  <Link href={link.href} className={styles.sidebar__navLink}>
+                    <link.icon className={styles.sidebar__icon} />
+                    <span>{link.label}</span>
+                  </Link>
+                </motion.li>
+              ))}
+            </motion.ul>
+          </div>
+        ))}
+      </nav>
+
+      <motion.div className={styles.sidebar__footer} variants={itemVariants}>
+        <Image
+          src="/images/brand/brand-logo/transparent-bg/green.png"
+          alt="Metro Mellow"
+          width={120}
+          height={40}
+          className={styles.sidebar__footerLogo}
+        />
+      </motion.div>
+      {/* <AnimatePresence>
       {isOpen && (
         <>
           <motion.div
@@ -209,112 +300,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             exit="closed"
             variants={sidebarVariants}
           >
-            <div className={styles.sidebar__header}>
-              <motion.h2
-                className={styles.sidebar__title}
-                variants={itemVariants}
-              >
-                Menu
-              </motion.h2>
-              <motion.button
-                className={styles.sidebar__closeButton}
-                onClick={onClose}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                variants={itemVariants}
-              >
-                &times;
-              </motion.button>
-            </div>
-
-            <motion.div
-              className={styles.sidebar__quickActions}
-              variants={itemVariants}
-            >
-              <h3 className={styles.sidebar__quickActionsTitle}>
-                Quick Actions
-              </h3>
-              <div className={styles.sidebar__quickActionsGrid}>
-                {quickActions.map((action) => (
-                  <Link
-                    key={action.href}
-                    href={action.href}
-                    className={styles.sidebar__quickAction}
-                  >
-                    <motion.div
-                      className={`${styles.sidebar__quickActionItem} ${action.color}`}
-                      whileHover={{
-                        y: -4,
-                        boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                      }}
-                      whileTap={{
-                        y: 0,
-                        boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
-                      }}
-                    >
-                      <action.icon
-                        className={styles.sidebar__quickActionIcon}
-                      />
-                      <span className={styles.sidebar__quickActionLabel}>
-                        {action.label}
-                      </span>
-                    </motion.div>
-                  </Link>
-                ))}
-              </div>
-            </motion.div>
-
-            <nav className={styles.sidebar__nav}>
-              {navSections.map((section, index) => (
-                <div key={section.title || `section-${index}`}>
-                  {section.title && (
-                    <motion.div
-                      className={styles.sidebar__sectionTitle}
-                      variants={itemVariants}
-                    >
-                      {section.title}
-                    </motion.div>
-                  )}
-                  <motion.ul
-                    className={styles.sidebar__navSection}
-                    variants={itemVariants}
-                  >
-                    {section.links.map((link) => (
-                      <motion.li
-                        key={link.href}
-                        className={`${styles.sidebar__navItem} ${isActive(link.href) ? styles["sidebar__navItem--active"] : ""}`}
-                        variants={itemVariants}
-                      >
-                        <Link
-                          href={link.href}
-                          className={styles.sidebar__navLink}
-                        >
-                          <link.icon className={styles.sidebar__icon} />
-                          <span>{link.label}</span>
-                        </Link>
-                      </motion.li>
-                    ))}
-                  </motion.ul>
-                </div>
-              ))}
-            </nav>
-
-            <motion.div
-              className={styles.sidebar__footer}
-              variants={itemVariants}
-            >
-              <Image
-                src="/images/brand/brand-logo/transparent-bg/green.png"
-                alt="Metro Mellow"
-                width={120}
-                height={40}
-                className={styles.sidebar__footerLogo}
-              />
-            </motion.div>
+        
           </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+          </>
+        )}
+      </AnimatePresence> */}
+    </ModalDrawer>
   );
 };
 

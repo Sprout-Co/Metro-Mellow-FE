@@ -4,36 +4,12 @@
 @import "@/styles/abstracts/mixins";
 
 .modal {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 420px;
-  height: 100vh;
-  background-color: color("neutral", "white");
-  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
-  z-index: z-index("modal");
-  display: flex;
-  flex-direction: column;
-
-  @include breakpoint-down("sm") {
-    width: 100%;
-  }
-
-  &__overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    z-index: z-index("overlay");
-  }
-
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding: spacing("lg");
+    // padding: spacing("lg");
+    padding-bottom: spacing("sm");
     border-bottom: 1px solid color("neutral", "lighter");
   }
 
@@ -110,7 +86,8 @@
   &__body {
     flex: 1;
     overflow-y: auto;
-    padding: spacing("lg");
+    margin-top: spacing("lg");
+    // padding: spacing("lg");
 
     &::-webkit-scrollbar {
       width: 4px;
@@ -432,24 +409,31 @@
 
   &__footer {
     display: flex;
-    gap: spacing("xs");
-    padding: spacing("lg");
+    gap: spacing("sm");
+    // padding: spacing("xl");
     border-top: 1px solid color("neutral", "lighter");
+    background: linear-gradient(
+      135deg,
+      color("neutral", "white"),
+      color("neutral", "lightest")
+    );
   }
 
   &__footerBtn {
     flex: 1;
-    padding: spacing("sm");
+    padding: spacing("md");
     border: none;
-    border-radius: border-radius("md");
-    @include font-size("xs");
-    @include font-weight("medium");
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("semibold");
     cursor: pointer;
-    transition: $transition-fast;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: spacing("xxs");
+    gap: spacing("xs");
+    position: relative;
+    overflow: hidden;
 
     svg {
       width: 14px;
@@ -457,32 +441,66 @@
     }
 
     &--primary {
-      background-color: color("primary", "base");
+      background: linear-gradient(
+        135deg,
+        color("primary", "base"),
+        color("primary", "dark")
+      );
       color: color("neutral", "white");
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 
       &:hover {
-        background-color: color("primary", "dark");
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      &:active {
+        transform: translateY(0);
       }
     }
 
     &--secondary {
-      background-color: transparent;
+      background: linear-gradient(
+        135deg,
+        color("neutral", "white"),
+        color("neutral", "lightest")
+      );
       color: color("neutral", "darkest");
       border: 1px solid color("neutral", "light");
 
       &:hover {
-        background-color: color("neutral", "lighter");
+        background: linear-gradient(
+          135deg,
+          color("neutral", "lightest"),
+          color("neutral", "lighter")
+        );
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      &:active {
+        transform: translateY(0);
       }
     }
 
     &--danger {
-      background-color: transparent;
+      background: linear-gradient(
+        135deg,
+        rgba(239, 68, 68, 0.1),
+        rgba(239, 68, 68, 0.2)
+      );
       color: color("status", "error");
       border: 1px solid color("status", "error");
 
       &:hover {
-        background-color: color("status", "error");
+        background: linear-gradient(135deg, color("status", "error"), #dc2626);
         color: color("neutral", "white");
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+      }
+
+      &:active {
+        transform: translateY(0);
       }
     }
   }

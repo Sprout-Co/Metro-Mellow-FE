@@ -36,7 +36,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding: spacing("xl");
+    // padding: spacing("xl");
     border-bottom: 1px solid color("neutral", "lighter");
     background: linear-gradient(
       135deg,
@@ -113,7 +113,8 @@
   &__tabs {
     display: flex;
     flex-wrap: wrap;
-    padding: spacing("md") spacing("lg") spacing("md");
+    // padding: spacing("md") spacing("lg") spacing("md");
+    margin: spacing("lg") 0;
     border-bottom: 1px solid color("neutral", "lighter");
     background: linear-gradient(
       135deg,
@@ -193,7 +194,8 @@
   &__tabContent {
     flex: 1;
     overflow-y: auto;
-    padding: spacing("xl");
+    // padding: spacing("xl");
+    margin: spacing("lg") 0;
 
     &::-webkit-scrollbar {
       width: 4px;
@@ -1154,7 +1156,7 @@
   &__footer {
     display: flex;
     gap: spacing("sm");
-    padding: spacing("xl");
+    // padding: spacing("xl");
     border-top: 1px solid color("neutral", "lighter");
     background: linear-gradient(
       135deg,
