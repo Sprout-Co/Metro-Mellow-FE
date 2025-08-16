@@ -77,26 +77,6 @@ const ModalDrawer: React.FC<ModalDrawerProps> = ({
     },
   };
 
-  const itemVariants = {
-    open: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
-      },
-    },
-    closed: {
-      x: 20,
-      opacity: 0,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
-      },
-    },
-  };
 
   const modalDrawerClasses = [
     styles.modalDrawer,
