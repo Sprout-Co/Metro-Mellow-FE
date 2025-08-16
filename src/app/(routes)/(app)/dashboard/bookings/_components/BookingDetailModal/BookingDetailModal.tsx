@@ -109,7 +109,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
   };
 
   return (
-    <ModalDrawer isOpen={isOpen} onClose={onClose} width="md">
+    <ModalDrawer isOpen={isOpen} onClose={onClose} width="lg">
       <div className={styles.modal__header}>
         <div className={styles.modal__headerLeft}>
           <div className={styles.modal__serviceIcon}>

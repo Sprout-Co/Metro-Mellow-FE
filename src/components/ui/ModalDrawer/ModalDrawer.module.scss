@@ -18,6 +18,22 @@
   display: flex;
   flex-direction: column;
 
+  &--sm {
+    width: 25rem;
+  }
+
+  &--md {
+    width: 30rem;
+  }
+
+  &--lg {
+    width: 45rem;
+  }
+
+  &--full-screen {
+    width: 100vw;
+  }
+
   &__overlay {
     position: fixed;
     top: 0;
@@ -77,13 +93,17 @@
 @include breakpoint-down("md") {
   .modalDrawer {
     width: 280px;
+  }
+}
 
-    &__navLink {
-      padding: spacing("sm") spacing("sm");
-    }
+@include breakpoint-down("sm") {
+  .modalDrawer {
+    width: 100%;
+  }
+}
 
-    &__quickActionsGrid {
-      grid-template-columns: 1fr;
-    }
+@include breakpoint-down("lg") {
+  .modalDrawer {
+    width: 35rem;
   }
 }

@@ -124,7 +124,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   };
 
   return (
-    <ModalDrawer isOpen={isOpen} onClose={onClose} width="md">
+    <ModalDrawer isOpen={isOpen} onClose={onClose} width="lg">
       <>
         <div className={styles.modal__header}>
           <div className={styles.modal__headerLeft}>

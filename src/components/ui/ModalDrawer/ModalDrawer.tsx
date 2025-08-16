@@ -30,7 +30,7 @@ interface ModalDrawerProps {
   onClose: () => void;
   footer?: React.ReactNode;
   children: React.ReactNode;
-  width?: "sm" | "md" | "lg";
+  width?: "sm" | "md" | "lg" | "full-screen";
 }
 
 const ModalDrawer: React.FC<ModalDrawerProps> = ({
@@ -38,6 +38,7 @@ const ModalDrawer: React.FC<ModalDrawerProps> = ({
   onClose,
   footer,
   children,
+  width = "md",
 }) => {
   const sidebarVariants = {
     open: {
@@ -83,6 +84,13 @@ const ModalDrawer: React.FC<ModalDrawerProps> = ({
     },
   };
 
+  const modalDrawerClasses = [
+    styles.modalDrawer,
+    styles[`modalDrawer--${width}`],
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -96,7 +104,7 @@ const ModalDrawer: React.FC<ModalDrawerProps> = ({
           />
 
           <motion.div
-            className={styles.modalDrawer}
+            className={modalDrawerClasses}
             initial="closed"
             animate="open"
             exit="closed"
