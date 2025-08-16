@@ -1,0 +1,296 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.securitySection {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("xl");
+
+  &__card {
+    background: color("neutral", "white");
+    border-radius: border-radius("xl");
+    border: 1px solid color("neutral", "lighter");
+    padding: spacing("xl");
+
+    @include breakpoint-down("sm") {
+      padding: spacing("lg");
+    }
+  }
+
+  &__cardHeader {
+    display: flex;
+    gap: spacing("md");
+    margin-bottom: spacing("xl");
+    padding-bottom: spacing("lg");
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+    }
+  }
+
+  &__cardIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("lg");
+    background: linear-gradient(
+      135deg,
+      rgba(7, 80, 86, 0.1),
+      rgba(7, 80, 86, 0.05)
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("primary", "base");
+    flex-shrink: 0;
+  }
+
+  &__cardTitle {
+    @include font-size("lg");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xs") 0;
+  }
+
+  &__cardSubtitle {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    margin: 0;
+  }
+
+  // Password Form
+  &__passwordForm {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+    max-width: 500px;
+  }
+
+  &__formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__label {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+  }
+
+  &__inputWrapper {
+    position: relative;
+  }
+
+  &__input {
+    @include input;
+    width: 100%;
+    padding-right: spacing("xl") * 2;
+    background: color("neutral", "lightest");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    transition: all 0.2s ease;
+
+    &:focus {
+      background: color("neutral", "white");
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.1);
+    }
+
+    &--error {
+      border-color: color("status", "error");
+
+      &:focus {
+        border-color: color("status", "error");
+        box-shadow: 0 0 0 3px rgba(251, 34, 34, 0.1);
+      }
+    }
+  }
+
+  &__togglePassword {
+    position: absolute;
+    right: spacing("md");
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: color("neutral", "medium");
+    cursor: pointer;
+    padding: spacing("xs");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: border-radius("md");
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("neutral", "lighter");
+      color: color("neutral", "dark");
+    }
+  }
+
+  &__error {
+    @include font-size("xs");
+    color: color("status", "error");
+    margin-top: spacing("xs");
+  }
+
+  // Password Requirements
+  &__requirements {
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__requirement {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    @include font-size("xs");
+    color: color("neutral", "medium");
+    transition: all 0.2s ease;
+
+    svg {
+      flex-shrink: 0;
+    }
+
+    &--met {
+      color: color("status", "success");
+
+      svg {
+        color: color("status", "success");
+      }
+    }
+  }
+
+  // Two-Factor Authentication
+  &__twoFactor {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: spacing("lg");
+    padding: spacing("lg");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  &__twoFactorInfo {
+    display: flex;
+    gap: spacing("md");
+    flex: 1;
+  }
+
+  &__twoFactorIcon {
+    color: color("primary", "base");
+    flex-shrink: 0;
+  }
+
+  &__twoFactorText {
+    @include font-size("body-2");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xs") 0;
+
+    strong {
+      color: color("primary", "base");
+    }
+  }
+
+  &__twoFactorDescription {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    margin: 0;
+  }
+
+  // Sessions
+  &__sessions {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__session {
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("neutral", "lighter");
+    }
+  }
+
+  &__sessionInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  &__sessionDevice {
+    display: flex;
+    gap: spacing("md");
+    align-items: center;
+
+    svg {
+      color: color("primary", "base");
+      flex-shrink: 0;
+    }
+  }
+
+  &__sessionName {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xxs") 0;
+  }
+
+  &__sessionDetails {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+    margin: 0;
+  }
+
+  &__sessionBadge {
+    @include font-size("xs");
+    @include font-weight("semibold");
+    padding: spacing("xs") spacing("sm");
+    background: linear-gradient(
+      135deg,
+      rgba(5, 150, 105, 0.1),
+      rgba(5, 150, 105, 0.15)
+    );
+    color: color("status", "success");
+    border-radius: border-radius("pill");
+  }
+
+  &__sessionRevoke {
+    @include font-size("sm");
+    @include font-weight("medium");
+    padding: spacing("xs") spacing("md");
+    background: transparent;
+    border: 1px solid color("status", "error");
+    color: color("status", "error");
+    border-radius: border-radius("md");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("status", "error");
+      color: color("neutral", "white");
+    }
+  }
+}

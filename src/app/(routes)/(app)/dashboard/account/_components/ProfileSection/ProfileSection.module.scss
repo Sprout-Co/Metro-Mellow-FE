@@ -1,0 +1,233 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.profileSection {
+  background: color("neutral", "white");
+  border-radius: border-radius("xl");
+  border: 1px solid color("neutral", "lighter");
+  padding: spacing("xl");
+
+  @include breakpoint-down("md") {
+    padding: spacing("lg");
+  }
+
+  @include breakpoint-down("sm") {
+    padding: spacing("md");
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("xl");
+    padding-bottom: spacing("lg");
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      gap: spacing("md");
+      align-items: flex-start;
+    }
+  }
+
+  &__title {
+    @include font-size("lg");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0;
+  }
+
+  &__actions {
+    display: flex;
+    gap: spacing("sm");
+  }
+
+  &__spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid color("neutral", "lighter");
+    border-top-color: color("neutral", "white");
+    border-radius: 50%;
+  }
+
+  // Image Section
+  &__imageSection {
+    display: flex;
+    align-items: center;
+    gap: spacing("lg");
+    padding: spacing("xl");
+    background: linear-gradient(
+      135deg,
+      color("neutral", "lightest"),
+      rgba(255, 255, 255, 0.5)
+    );
+    border-radius: border-radius("lg");
+    margin-bottom: spacing("xl");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      text-align: center;
+      padding: spacing("lg");
+    }
+  }
+
+  &__imageContainer {
+    position: relative;
+  }
+
+  &__image,
+  &__imagePlaceholder {
+    width: 100px;
+    height: 100px;
+    border-radius: border-radius("full");
+    object-fit: cover;
+    border: 3px solid color("neutral", "white");
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &__imagePlaceholder {
+    background: linear-gradient(
+      135deg,
+      color("primary", "light"),
+      color("primary", "base")
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("neutral", "white");
+  }
+
+  &__imageUpload {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    background: color("primary", "base");
+    border-radius: border-radius("full");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("neutral", "white");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid color("neutral", "white");
+
+    &:hover {
+      transform: scale(1.1);
+      background: color("primary", "dark");
+    }
+  }
+
+  &__imageInfo {
+    flex: 1;
+  }
+
+  &__imageName {
+    @include font-size("lg");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xs") 0;
+  }
+
+  &__imageEmail {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    margin: 0;
+  }
+
+  &__imageHint {
+    @include font-size("xs");
+    color: color("primary", "base");
+    margin: spacing("xs") 0 0;
+  }
+
+  // Form
+  &__form {
+    margin-bottom: spacing("xl");
+  }
+
+  &__formGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+      gap: spacing("md");
+    }
+  }
+
+  &__formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+
+    &--full {
+      grid-column: 1 / -1;
+    }
+  }
+
+  &__label {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+
+    svg {
+      color: color("neutral", "medium");
+    }
+  }
+
+  &__input {
+    @include input;
+    background: color("neutral", "lightest");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    padding: spacing("sm") spacing("md");
+    @include font-size("sm");
+    transition: all 0.2s ease;
+
+    &:focus {
+      background: color("neutral", "white");
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.1);
+    }
+
+    &:disabled {
+      background: color("neutral", "lightest");
+      color: color("neutral", "darkest");
+      cursor: not-allowed;
+      opacity: 1;
+    }
+  }
+
+  // Info Section
+  &__info {
+    padding: spacing("md");
+    background: linear-gradient(
+      135deg,
+      rgba(7, 80, 86, 0.05),
+      rgba(7, 80, 86, 0.02)
+    );
+    border-radius: border-radius("lg");
+    border: 1px solid rgba(7, 80, 86, 0.1);
+  }
+
+  &__infoItem {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("sm");
+    @include font-size("sm");
+    color: color("primary", "dark");
+
+    svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: color("primary", "base");
+    }
+  }
+}
