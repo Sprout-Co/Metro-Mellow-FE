@@ -186,7 +186,7 @@ const RescheduleDrawer: React.FC<RescheduleDrawerProps> = ({
   };
 
   return (
-    <ModalDrawer isOpen={isOpen} onClose={resetAndClose} width="sm">
+    <ModalDrawer isOpen={isOpen} onClose={resetAndClose} width="lg">
       <div className={styles.drawer}>
         {/* Header */}
         <div className={styles.drawer__header}>

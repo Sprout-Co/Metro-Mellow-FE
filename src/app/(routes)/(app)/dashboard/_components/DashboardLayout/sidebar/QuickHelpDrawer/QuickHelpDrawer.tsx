@@ -158,7 +158,7 @@ const QuickHelpDrawer: React.FC<QuickHelpDrawerProps> = ({
   };
 
   return (
-    <ModalDrawer isOpen={isOpen} onClose={onClose} width="sm">
+    <ModalDrawer isOpen={isOpen} onClose={onClose} width="lg">
       <div className={styles.drawer}>
         {/* Header */}
         <div className={styles.drawer__header}>
