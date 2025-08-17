@@ -405,26 +405,34 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </>
         )}
       </AnimatePresence> */}
-      <QuickAddressDrawer
-        isOpen={isAddressDrawerOpen}
-        onClose={() => setIsAddressDrawerOpen(false)}
-        onAddressSelect={(address) => {
-          setSelectedAddress(address);
-          console.log("Selected address:", address);
-        }}
-      />
-      <RescheduleDrawer
-        isOpen={isRescheduleDrawerOpen}
-        onClose={() => setIsRescheduleDrawerOpen(false)}
-      />
-      <ServicesListDrawer
-        isOpen={isServicesListDrawerOpen}
-        onClose={() => setIsServicesListDrawerOpen(false)}
-      />
-      <QuickHelpDrawer
-        isOpen={isQuickHelpDrawerOpen}
-        onClose={() => setIsQuickHelpDrawerOpen(false)}
-      />
+      {isAddressDrawerOpen && (
+        <QuickAddressDrawer
+          isOpen={isAddressDrawerOpen}
+          onClose={() => setIsAddressDrawerOpen(false)}
+          onAddressSelect={(address) => {
+            setSelectedAddress(address);
+            console.log("Selected address:", address);
+          }}
+        />
+      )}
+      {isRescheduleDrawerOpen && (
+        <RescheduleDrawer
+          isOpen={isRescheduleDrawerOpen}
+          onClose={() => setIsRescheduleDrawerOpen(false)}
+        />
+      )}
+      {isServicesListDrawerOpen && (
+        <ServicesListDrawer
+          isOpen={isServicesListDrawerOpen}
+          onClose={() => setIsServicesListDrawerOpen(false)}
+        />
+      )}
+      {isQuickHelpDrawerOpen && (
+        <QuickHelpDrawer
+          isOpen={isQuickHelpDrawerOpen}
+          onClose={() => setIsQuickHelpDrawerOpen(false)}
+        />
+      )}
     </ModalDrawer>
   );
 };

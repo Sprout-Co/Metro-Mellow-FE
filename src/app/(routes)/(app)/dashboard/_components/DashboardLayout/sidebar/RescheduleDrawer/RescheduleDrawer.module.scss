@@ -12,7 +12,9 @@
     display: flex;
     align-items: center;
     gap: spacing("md");
-    padding: spacing("lg");
+    // padding: spacing("lg");
+    margin-bottom: spacing("md");
+    padding-bottom: spacing("md");
     border-bottom: 1px solid color("neutral", "lighter");
     background: linear-gradient(
       to bottom,
@@ -177,7 +179,7 @@
     transition: all 0.2s ease;
 
     &:hover {
-      border-color: color("primary", "lighter");
+      border-color: color("primary", "base");
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       transform: translateY(-2px);
 
@@ -436,7 +438,7 @@
       color("neutral", "lightest")
     );
     border-radius: border-radius("xl");
-    border: 1px solid color("neutral", "lighter");
+    border: 1px solid color("primary", "base");
     text-align: center;
   }
 
