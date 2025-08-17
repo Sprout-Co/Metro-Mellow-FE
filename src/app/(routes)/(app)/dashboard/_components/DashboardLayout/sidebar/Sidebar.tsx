@@ -46,12 +46,16 @@ interface NavSection {
 interface QuickAction {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
-  href: string;
+  href?: string;
   color: string;
+  onClick?: () => void;
 }
 
 import AddressSelector from "@/components/ui/AddressSelector/AddressSelector";
 import AddressModal from "../../../addresses/_components/AddressModal";
+import RescheduleDrawer from "./RescheduleDrawer/RescheduleDrawer";
+import ServicesListDrawer from "./ServicesListDrawer/ServicesListDrawer";
+import QuickHelpDrawer from "./QuickHelpDrawer/QuickHelpDrawer";
 
 // Mock addresses data
 const mockAddresses = [
@@ -133,29 +137,39 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const [isAddressDrawerOpen, setIsAddressDrawerOpen] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
 
+  // States for the new drawers
+  const [isRescheduleDrawerOpen, setIsRescheduleDrawerOpen] = useState(false);
+  const [isServicesListDrawerOpen, setIsServicesListDrawerOpen] =
+    useState(false);
+  const [isQuickHelpDrawerOpen, setIsQuickHelpDrawerOpen] = useState(false);
+
   const quickActions: QuickAction[] = [
     {
       icon: PlusCircle,
       label: "New Booking",
-      href: "/dashboard/bookings/new",
+      // href: "/dashboard/bookings/new",
       color: styles.quickActionPrimary,
+      onClick: () => setIsServicesListDrawerOpen(true),
     },
     {
       icon: Repeat,
       label: "New Subscription",
       href: "/dashboard/notifications",
       color: styles.quickActionSecondary,
+      onClick: () => setIsServicesListDrawerOpen(true),
     },
     {
       icon: HelpCircle,
       label: "Get Help",
-      href: "/dashboard/support",
+      // href: "/dashboard/support",
+      onClick: () => setIsQuickHelpDrawerOpen(true),
       color: styles.quickActionAccent,
     },
     {
       icon: Clock,
       label: "Reschedule",
-      href: "/dashboard/bookings",
+      // href: "/dashboard/bookings",
+      onClick: () => setIsRescheduleDrawerOpen(true),
       color: styles.quickActionNeutral,
     },
   ];
@@ -264,30 +278,56 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       >
         <h3 className={styles.sidebar__quickActionsTitle}>Quick Actions</h3>
         <div className={styles.sidebar__quickActionsGrid}>
-          {quickActions.map((action) => (
-            <Link
-              key={action.href}
-              href={action.href}
-              className={styles.sidebar__quickAction}
-            >
-              <motion.div
-                className={`${styles.sidebar__quickActionItem} ${action.color}`}
-                whileHover={{
-                  y: -4,
-                  boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                }}
-                whileTap={{
-                  y: 0,
-                  boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
-                }}
+          {quickActions.map((action) =>
+            action.href ? (
+              <Link
+                key={action.href}
+                href={action.href}
+                className={styles.sidebar__quickAction}
               >
-                <action.icon className={styles.sidebar__quickActionIcon} />
-                <span className={styles.sidebar__quickActionLabel}>
-                  {action.label}
-                </span>
-              </motion.div>
-            </Link>
-          ))}
+                <motion.div
+                  className={`${styles.sidebar__quickActionItem} ${action.color}`}
+                  whileHover={{
+                    y: -4,
+                    boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                  }}
+                  whileTap={{
+                    y: 0,
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  <action.icon className={styles.sidebar__quickActionIcon} />
+                  <span className={styles.sidebar__quickActionLabel}>
+                    {action.label}
+                  </span>
+                </motion.div>
+              </Link>
+            ) : (
+              <div
+                key={action.label}
+                className={styles.sidebar__quickAction}
+                onClick={action.onClick}
+              >
+                <motion.div
+                  className={`${styles.sidebar__quickActionItem} ${action.color}`}
+                  onClick={action.onClick}
+                  whileHover={{
+                    y: -4,
+                    boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                  }}
+                  whileTap={{
+                    y: 0,
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  <action.icon className={styles.sidebar__quickActionIcon} />
+                  <span className={styles.sidebar__quickActionLabel}>
+                    {action.label}
+                  </span>
+                </motion.div>
+              </div>
+            )
+          )}
         </div>
       </motion.div>
 
@@ -372,6 +412,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           setSelectedAddress(address);
           console.log("Selected address:", address);
         }}
+      />
+      <RescheduleDrawer
+        isOpen={isRescheduleDrawerOpen}
+        onClose={() => setIsRescheduleDrawerOpen(false)}
+      />
+      <ServicesListDrawer
+        isOpen={isServicesListDrawerOpen}
+        onClose={() => setIsServicesListDrawerOpen(false)}
+      />
+      <QuickHelpDrawer
+        isOpen={isQuickHelpDrawerOpen}
+        onClose={() => setIsQuickHelpDrawerOpen(false)}
       />
     </ModalDrawer>
   );

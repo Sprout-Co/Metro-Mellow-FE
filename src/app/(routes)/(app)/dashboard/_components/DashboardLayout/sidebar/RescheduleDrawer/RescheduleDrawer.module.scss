@@ -1,0 +1,295 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.rescheduleDrawer {
+  padding: spacing("lg");
+  display: flex;
+  flex-direction: column;
+  gap: spacing("xl");
+
+  &__header {
+    text-align: center;
+    padding-bottom: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+
+  &__title {
+    @include font-size("xl");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xs") 0;
+  }
+
+  &__subtitle {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    margin: 0;
+  }
+
+  &__sectionTitle {
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("md") 0;
+  }
+
+  // Current Service Card
+  &__currentService {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__serviceCard {
+    background: linear-gradient(
+      135deg,
+      color("neutral", "lightest"),
+      rgba(255, 255, 255, 0.8)
+    );
+    border-radius: border-radius("lg");
+    padding: spacing("md");
+    border: 1px solid color("neutral", "lighter");
+  }
+
+  &__serviceItem {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("sm");
+    padding: spacing("xs") 0;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid color("neutral", "lighter");
+      padding-bottom: spacing("sm");
+      margin-bottom: spacing("sm");
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: spacing("xxs");
+      flex: 1;
+    }
+  }
+
+  &__serviceIcon {
+    width: 20px;
+    height: 20px;
+    color: color("primary", "base");
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  &__label {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__value {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+  }
+
+  // Date Selection
+  &__dateSection {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__dateGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: spacing("sm");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  &__dateCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: spacing("xxs");
+    padding: spacing("sm");
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: color("primary", "lighter");
+      background: color("neutral", "lightest");
+    }
+
+    &--selected {
+      background: linear-gradient(
+        135deg,
+        color("primary", "base"),
+        color("primary", "dark")
+      );
+      border-color: color("primary", "base");
+      color: color("neutral", "white");
+
+      .rescheduleDrawer__dateDay,
+      .rescheduleDrawer__dateNumber,
+      .rescheduleDrawer__dateMonth {
+        color: color("neutral", "white");
+      }
+    }
+  }
+
+  &__dateDay {
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "medium");
+    text-transform: uppercase;
+  }
+
+  &__dateNumber {
+    @include font-size("lg");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+  }
+
+  &__dateMonth {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+    text-transform: uppercase;
+  }
+
+  // Time Selection
+  &__timeSection {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+    overflow: hidden;
+  }
+
+  &__timeGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: spacing("sm");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__timeSlot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+    padding: spacing("sm") spacing("md");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+
+    &:hover:not(&--unavailable) {
+      border-color: color("primary", "base");
+      background: color("neutral", "lightest");
+    }
+
+    &--selected {
+      background: color("primary", "base");
+      border-color: color("primary", "base");
+      color: color("neutral", "white");
+
+      .rescheduleDrawer__timeIcon {
+        color: color("neutral", "white");
+      }
+    }
+
+    &--unavailable {
+      background: color("neutral", "lighter");
+      color: color("neutral", "medium");
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  }
+
+  &__timeIcon {
+    color: color("neutral", "medium");
+  }
+
+  // Confirmation
+  &__confirmation {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+  }
+
+  &__confirmationCard {
+    background: linear-gradient(
+      135deg,
+      rgba(254, 91, 4, 0.05),
+      rgba(254, 91, 4, 0.1)
+    );
+    border-radius: border-radius("xl");
+    padding: spacing("xl");
+    text-align: center;
+    border: 1px solid rgba(254, 91, 4, 0.2);
+  }
+
+  &__confirmationIcon {
+    display: flex;
+    justify-content: center;
+    margin-bottom: spacing("md");
+    color: color("secondary", "base");
+  }
+
+  &__confirmationTitle {
+    @include font-size("lg");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("md") 0;
+  }
+
+  &__confirmationText {
+    @include font-size("body-2");
+    color: color("neutral", "dark");
+    line-height: 1.6;
+    margin: 0 0 spacing("lg") 0;
+
+    strong {
+      color: color("neutral", "darkest");
+      @include font-weight("semibold");
+    }
+  }
+
+  &__confirmationNote {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("sm");
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: border-radius("md");
+    @include font-size("sm");
+    color: color("neutral", "dark");
+
+    svg {
+      color: color("status", "warning");
+      flex-shrink: 0;
+    }
+  }
+
+  // Footer
+  &__footer {
+    display: flex;
+    gap: spacing("md");
+    padding-top: spacing("lg");
+    border-top: 1px solid color("neutral", "lighter");
+    margin-top: auto;
+  }
+}

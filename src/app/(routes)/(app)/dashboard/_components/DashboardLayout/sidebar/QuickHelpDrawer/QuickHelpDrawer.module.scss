@@ -1,0 +1,385 @@
+// src/app/(routes)/(app)/dashboard/_components/DashboardLayout/sidebar/QuickHelpDrawer/QuickHelpDrawer.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.helpDrawer {
+  padding: spacing("lg");
+  display: flex;
+  flex-direction: column;
+  gap: spacing("lg");
+
+  &__header {
+    text-align: center;
+    padding-bottom: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+
+  &__title {
+    @include font-size("xl");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xs") 0;
+  }
+
+  &__subtitle {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    margin: 0;
+  }
+
+  &__search {
+    margin-bottom: spacing("md");
+  }
+
+  // Tabs
+  &__tabs {
+    display: flex;
+    gap: spacing("xs");
+    padding-bottom: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+
+  &__tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+    padding: spacing("sm");
+    background: transparent;
+    border: none;
+    border-radius: border-radius("md");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "medium");
+
+    &:hover {
+      background: color("neutral", "lightest");
+      color: color("neutral", "darkest");
+    }
+
+    &--active {
+      background: color("primary", "base");
+      color: color("neutral", "white");
+
+      svg {
+        color: color("neutral", "white");
+      }
+    }
+
+    svg {
+      flex-shrink: 0;
+    }
+  }
+
+  // Content Container
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    max-height: calc(100vh - 500px);
+    padding-right: spacing("xs");
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: color("neutral", "light");
+      border-radius: 4px;
+    }
+  }
+
+  // Help Topics
+  &__topics {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__topicCard {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("md");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: color("primary", "lighter");
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+
+      .helpDrawer__topicArrow {
+        transform: translateX(4px);
+      }
+    }
+  }
+
+  &__topicIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("lg");
+    background: linear-gradient(
+      135deg,
+      rgba(7, 80, 86, 0.1),
+      rgba(7, 80, 86, 0.05)
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: color("primary", "base");
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__topicInfo {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__topicTitle {
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xxs") 0;
+  }
+
+  &__topicDesc {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    margin: 0 0 spacing("xs") 0;
+    line-height: 1.4;
+  }
+
+  &__topicArticles {
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("primary", "base");
+  }
+
+  &__topicArrow {
+    color: color("neutral", "medium");
+    transition: transform 0.2s ease;
+  }
+
+  // FAQs
+  &__faqs {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__faqItem {
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    overflow: hidden;
+  }
+
+  &__faqQuestion {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("md");
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+
+    &:hover {
+      background: color("neutral", "lightest");
+    }
+
+    svg:last-child {
+      margin-left: auto;
+      color: color("neutral", "medium");
+    }
+  }
+
+  &__faqIcon {
+    color: color("primary", "base");
+    flex-shrink: 0;
+  }
+
+  &__faqAnswer {
+    overflow: hidden;
+    background: color("neutral", "lightest");
+    border-top: 1px solid color("neutral", "lighter");
+
+    p {
+      padding: spacing("md");
+      margin: 0;
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      line-height: 1.6;
+    }
+  }
+
+  // Tutorials
+  &__tutorials {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__tutorialCard {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("md");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateX(4px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  &__tutorialIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: border-radius("md");
+    background: color("neutral", "lightest");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: color("neutral", "dark");
+  }
+
+  &__tutorialInfo {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__tutorialTitle {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xs") 0;
+  }
+
+  &__tutorialMeta {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+  }
+
+  &__tutorialDuration {
+    display: flex;
+    align-items: center;
+    gap: spacing("xxs");
+    @include font-size("xs");
+    color: color("neutral", "medium");
+
+    svg {
+      flex-shrink: 0;
+    }
+  }
+
+  &__tutorialDifficulty {
+    @include font-size("xs");
+    @include font-weight("semibold");
+    text-transform: capitalize;
+  }
+
+  &__tutorialLink {
+    color: color("neutral", "medium");
+    flex-shrink: 0;
+  }
+
+  // Support Section
+  &__support {
+    margin-top: auto;
+    padding-top: spacing("lg");
+    border-top: 1px solid color("neutral", "lighter");
+  }
+
+  &__supportCard {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("md");
+    background: linear-gradient(
+      135deg,
+      rgba(7, 80, 86, 0.05),
+      rgba(7, 80, 86, 0.02)
+    );
+    border-radius: border-radius("lg");
+    margin-bottom: spacing("md");
+  }
+
+  &__supportIcon {
+    width: 40px;
+    height: 40px;
+    color: color("primary", "base");
+    flex-shrink: 0;
+  }
+
+  &__supportInfo {
+    flex: 1;
+  }
+
+  &__supportTitle {
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xxs") 0;
+  }
+
+  &__supportDesc {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    margin: 0;
+  }
+
+  &__supportActions {
+    display: flex;
+    gap: spacing("sm");
+    margin-bottom: spacing("md");
+  }
+
+  &__supportContact {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("md");
+    @include font-size("xs");
+    color: color("neutral", "medium");
+
+    a {
+      display: flex;
+      align-items: center;
+      gap: spacing("xxs");
+      color: color("primary", "base");
+      text-decoration: none;
+      transition: all 0.2s ease;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      svg {
+        flex-shrink: 0;
+      }
+    }
+  }
+}

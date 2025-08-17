@@ -1,0 +1,284 @@
+// src/app/(routes)/(app)/dashboard/_components/DashboardLayout/sidebar/ServicesListDrawer/ServicesListDrawer.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.servicesDrawer {
+  padding: spacing("lg");
+  display: flex;
+  flex-direction: column;
+  gap: spacing("lg");
+
+  &__header {
+    text-align: center;
+    padding-bottom: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+
+  &__title {
+    @include font-size("xl");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xs") 0;
+  }
+
+  &__subtitle {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    margin: 0;
+  }
+
+  &__search {
+    margin-bottom: spacing("md");
+  }
+
+  // Categories List
+  &__categories {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+    max-height: calc(100vh - 300px);
+    overflow-y: auto;
+    padding-right: spacing("xs");
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: color("neutral", "light");
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+  }
+
+  &__category {
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  &__categoryHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("md");
+    background: color("neutral", "white");
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+
+    &:hover {
+      background: color("neutral", "lightest");
+    }
+
+    &--expanded {
+      background: linear-gradient(to right, rgba(7, 80, 86, 0.03), transparent);
+      border-bottom: 1px solid color("neutral", "lighter");
+    }
+  }
+
+  &__categoryIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("lg");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__categoryInfo {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__categoryName {
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xxs") 0;
+  }
+
+  &__categoryDesc {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  &__categoryArrow {
+    width: 24px;
+    height: 24px;
+    color: color("neutral", "medium");
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // Sub Services
+  &__subServices {
+    background: color("neutral", "lightest");
+    overflow: hidden;
+  }
+
+  &__service {
+    display: flex;
+    gap: spacing("md");
+    padding: spacing("md");
+    margin: spacing("xs");
+    background: color("neutral", "white");
+    border-radius: border-radius("md");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+
+    &:hover {
+      transform: translateX(4px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      border-color: color("primary", "lighter");
+    }
+
+    &--selected {
+      background: linear-gradient(
+        135deg,
+        rgba(7, 80, 86, 0.05),
+        rgba(7, 80, 86, 0.02)
+      );
+      border-color: color("primary", "base");
+
+      .servicesDrawer__serviceName {
+        color: color("primary", "base");
+      }
+    }
+  }
+
+  &__serviceIcon {
+    width: 36px;
+    height: 36px;
+    border-radius: border-radius("md");
+    background: color("neutral", "lightest");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: color("neutral", "dark");
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &__serviceInfo {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__serviceHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("xxs");
+  }
+
+  &__serviceName {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0;
+  }
+
+  &__serviceCheck {
+    width: 20px;
+    height: 20px;
+    border-radius: border-radius("full");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__serviceDesc {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("xs") 0;
+    line-height: 1.4;
+  }
+
+  &__serviceDetails {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+  }
+
+  &__servicePrice {
+    @include font-size("sm");
+    @include font-weight("bold");
+    color: color("primary", "base");
+  }
+
+  &__serviceDuration {
+    display: flex;
+    align-items: center;
+    gap: spacing("xxs");
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "medium");
+    padding: 2px spacing("xs");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("sm");
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  // Empty State
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("2xl");
+    text-align: center;
+    color: color("neutral", "medium");
+
+    svg {
+      color: color("neutral", "light");
+      margin-bottom: spacing("md");
+    }
+
+    h3 {
+      @include font-size("lg");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xs") 0;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "medium");
+      margin: 0;
+    }
+  }
+}
