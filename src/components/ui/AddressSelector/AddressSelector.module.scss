@@ -1,0 +1,268 @@
+// src/components/ui/AddressSelector/AddressSelector.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.addressSelector {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("lg");
+
+  // Variant: Drawer (for sidebar)
+  &--drawer {
+    padding: spacing("lg");
+    background: color("neutral", "white");
+    border-radius: border-radius("xl");
+  }
+
+  // Variant: Inline (for booking flow)
+  &--inline {
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    padding: spacing("md");
+  }
+
+  // Variant: Compact (minimal space)
+  &--compact {
+    .addressSelector__item {
+      padding: spacing("sm") spacing("md");
+    }
+
+    .addressSelector__info {
+      gap: spacing("xxs");
+    }
+
+    .addressSelector__address,
+    .addressSelector__city {
+      display: none;
+    }
+  }
+
+  &__header {
+    padding-bottom: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+
+  &__title {
+    @include font-size("lg");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xs") 0;
+  }
+
+  &__subtitle {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    margin: 0;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__item {
+    position: relative;
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    overflow: hidden;
+
+    &:hover {
+      border-color: color("primary", "lighter");
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    &--selected {
+      border-color: color("primary", "base");
+      background: linear-gradient(to right, rgba(7, 80, 86, 0.02), transparent);
+
+      &:hover {
+        border-color: color("primary", "base");
+      }
+    }
+  }
+
+  &__itemContent {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("md") spacing("lg");
+  }
+
+  &__selectedBar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: color("primary", "base");
+  }
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: border-radius("lg");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+  }
+
+  &__labelRow {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+  }
+
+  &__label {
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  &__defaultBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xxs");
+    padding: 2px spacing("xs");
+    background: linear-gradient(
+      135deg,
+      color("accent", "base"),
+      color("accent", "dark")
+    );
+    color: color("neutral", "darkest");
+    border-radius: border-radius("pill");
+    @include font-size("xs");
+    @include font-weight("semibold");
+
+    svg {
+      width: 10px;
+      height: 10px;
+    }
+  }
+
+  &__address {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    @include truncate;
+  }
+
+  &__city {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+  }
+
+  &__indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  &__checkmark {
+    width: 24px;
+    height: 24px;
+    border-radius: border-radius("full");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__arrow {
+    color: color("neutral", "medium");
+    transition: all 0.2s ease;
+  }
+
+  // Add New Address
+  &__addNew {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("md") spacing("lg");
+    background: linear-gradient(
+      135deg,
+      color("neutral", "lightest"),
+      rgba(255, 255, 255, 0.5)
+    );
+    border: 2px dashed color("neutral", "light");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: color("primary", "lighter");
+      background: color("neutral", "lighter");
+
+      .addressSelector__addNewIcon {
+        background: color("primary", "base");
+        color: color("neutral", "white");
+      }
+    }
+  }
+
+  &__addNewIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: border-radius("lg");
+    background: color("neutral", "lighter");
+    color: color("neutral", "medium");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  &__addNewText {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+  }
+
+  &__addNewTitle {
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    color: color("primary", "base");
+  }
+
+  &__addNewSubtitle {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+  }
+
+  // Empty State
+  &__empty {
+    text-align: center;
+    padding: spacing("xl");
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: spacing("md");
+
+    svg {
+      color: color("neutral", "medium");
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      margin: 0;
+    }
+  }
+}

@@ -32,9 +32,10 @@ interface SidebarProps {
 }
 
 interface NavLink {
-  href: string;
+  href?: string;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
+  onClick?: any;
 }
 
 interface NavSection {
@@ -49,9 +50,88 @@ interface QuickAction {
   color: string;
 }
 
+import AddressSelector from "@/components/ui/AddressSelector/AddressSelector";
+import AddressModal from "../../../addresses/_components/AddressModal";
+
+// Mock addresses data
+const mockAddresses = [
+  {
+    id: "1",
+    label: "Home",
+    type: "home" as const,
+    street: "24 Emmanuel Osakwe Street",
+    area: "Chevron Drive",
+    city: "Lekki",
+    isDefault: true,
+  },
+  {
+    id: "2",
+    label: "Office",
+    type: "work" as const,
+    street: "45 Admiralty Way",
+    area: "Admiralty",
+    city: "Lekki Phase 1",
+    isDefault: false,
+  },
+];
+
+interface QuickAddressDrawerProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onAddressSelect: (address: any) => void;
+}
+
+const QuickAddressDrawer: React.FC<QuickAddressDrawerProps> = ({
+  isOpen,
+  onClose,
+  onAddressSelect,
+}) => {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [selectedAddressId, setSelectedAddressId] = useState<string>("1");
+
+  const handleSelectAddress = (address: any) => {
+    setSelectedAddressId(address.id);
+    onAddressSelect(address);
+    // Optionally close the drawer after selection
+    setTimeout(() => onClose(), 300);
+  };
+
+  const handleAddNewAddress = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const handleSaveNewAddress = (addressData: any) => {
+    // Handle saving new address
+    console.log("New address:", addressData);
+    setIsAddModalOpen(false);
+  };
+
+  return (
+    <>
+      <ModalDrawer isOpen={isOpen} onClose={onClose} width="sm">
+        <AddressSelector
+          addresses={mockAddresses}
+          selectedAddressId={selectedAddressId}
+          onSelectAddress={handleSelectAddress}
+          onAddNewAddress={handleAddNewAddress}
+          variant="drawer"
+        />
+      </ModalDrawer>
+
+      <AddressModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSave={handleSaveNewAddress}
+      />
+    </>
+  );
+};
+
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const pathname = usePathname();
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [isAddressDrawerOpen, setIsAddressDrawerOpen] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState<any>(null);
 
   const quickActions: QuickAction[] = [
     {
@@ -106,9 +186,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           icon: User,
         },
         {
-          href: "/dashboard/account/addresses",
+          // href: "/dashboard/account/addresses",
           label: "Address Book",
           icon: MapPin,
+          onClick: () => setIsAddressDrawerOpen(true),
         },
 
         {
@@ -134,37 +215,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       ],
     },
   ];
-
-  const toggleSection = (section: string) => {
-    if (expandedSection === section) {
-      setExpandedSection(null);
-    } else {
-      setExpandedSection(section);
-    }
-  };
-
-  const sidebarVariants = {
-    open: {
-      x: 0,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
-        staggerChildren: 0.05,
-        delayChildren: 0.1,
-      },
-    },
-    closed: {
-      x: "100%",
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
-        staggerChildren: 0.05,
-        staggerDirection: -1,
-      },
-    },
-  };
 
   const itemVariants = {
     open: {
@@ -258,14 +308,24 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             >
               {section.links.map((link) => (
                 <motion.li
-                  key={link.href}
-                  className={`${styles.sidebar__navItem} ${isActive(link.href) ? styles["sidebar__navItem--active"] : ""}`}
+                  key={link.href ?? link.label}
+                  className={`${styles.sidebar__navItem} ${link.href && isActive(link.href) ? styles["sidebar__navItem--active"] : ""}`}
                   variants={itemVariants}
                 >
-                  <Link href={link.href} className={styles.sidebar__navLink}>
-                    <link.icon className={styles.sidebar__icon} />
-                    <span>{link.label}</span>
-                  </Link>
+                  {link.href ? (
+                    <Link href={link.href} className={styles.sidebar__navLink}>
+                      <link.icon className={styles.sidebar__icon} />
+                      <span>{link.label}</span>
+                    </Link>
+                  ) : (
+                    <div
+                      className={styles.sidebar__navLink}
+                      onClick={link.onClick}
+                    >
+                      <link.icon className={styles.sidebar__icon} />
+                      <span>{link.label}</span>
+                    </div>
+                  )}
                 </motion.li>
               ))}
             </motion.ul>
@@ -305,6 +365,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </>
         )}
       </AnimatePresence> */}
+      <QuickAddressDrawer
+        isOpen={isAddressDrawerOpen}
+        onClose={() => setIsAddressDrawerOpen(false)}
+        onAddressSelect={(address) => {
+          setSelectedAddress(address);
+          console.log("Selected address:", address);
+        }}
+      />
     </ModalDrawer>
   );
 };
