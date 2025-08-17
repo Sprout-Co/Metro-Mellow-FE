@@ -1,0 +1,445 @@
+// src/app/(routes)/(app)/dashboard/payments/PaymentMethods.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.paymentMethods {
+  margin: spacing("xl") 0;
+  // margin: 0 auto;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: spacing("2xl");
+    padding: spacing("xl");
+    background: linear-gradient(
+      135deg,
+      color("primary", "base"),
+      color("primary", "dark")
+    );
+    border-radius: border-radius("xl");
+    color: color("neutral", "white");
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 40%;
+      height: 200%;
+      background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.1) 0%,
+        transparent 60%
+      );
+      pointer-events: none;
+    }
+
+    @include breakpoint-down("lg") {
+      flex-direction: column;
+      gap: spacing("lg");
+      padding: spacing("lg");
+    }
+
+    @include breakpoint-down("md") {
+      padding: spacing("md");
+    }
+  }
+
+  &__headerContent {
+    flex: 1;
+  }
+
+  &__title {
+    @include font-size("h4");
+    @include font-weight("bold");
+    color: color("neutral", "white");
+    margin: 0 0 spacing("xs") 0;
+    font-family: $font-family-heading;
+  }
+
+  &__subtitle {
+    @include font-size("body-2");
+    color: color("neutral", "white");
+    margin: 0;
+  }
+
+  &__notice {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("md");
+    padding: spacing("lg");
+    background: linear-gradient(
+      135deg,
+      color("primary", "lighter") 0%,
+      rgba(7, 80, 86, 0.05) 100%
+    );
+    border-radius: border-radius("xl");
+    border: 1px solid color("primary", "lighter");
+    margin-bottom: spacing("xl");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+    }
+  }
+
+  &__noticeIcon {
+    width: 24px;
+    height: 24px;
+    color: color("primary", "base");
+    flex-shrink: 0;
+  }
+
+  &__noticeContent {
+    flex: 1;
+
+    h3 {
+      @include font-size("body-1");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xs") 0;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: spacing("lg");
+    margin-bottom: spacing("2xl");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+      gap: spacing("md");
+    }
+  }
+}
+
+// Payment Card Styles
+.paymentCard {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("md");
+
+  &__visual {
+    position: relative;
+    height: 220px;
+    border-radius: border-radius("xl");
+    padding: spacing("lg");
+    color: color("neutral", "white");
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 60%;
+      height: 200%;
+      background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.1) 0%,
+        transparent 70%
+      );
+      pointer-events: none;
+    }
+
+    &:hover {
+      transform: scale(1.02);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  &__defaultBadge {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+    padding: spacing("xs") spacing("sm");
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: border-radius("pill");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__chip {
+    width: 50px;
+    height: 40px;
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    border-radius: border-radius("md");
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 35px;
+      height: 25px;
+      border: 2px solid rgba(0, 0, 0, 0.2);
+      border-radius: border-radius("sm");
+    }
+  }
+
+  &__number {
+    @include font-size("lg");
+    @include font-weight("medium");
+    letter-spacing: 2px;
+    margin: spacing("md") 0;
+  }
+
+  &__details {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      gap: spacing("xxs");
+    }
+  }
+
+  &__label {
+    @include font-size("xs");
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__value {
+    @include font-size("sm");
+    @include font-weight("semibold");
+  }
+
+  &__brand {
+    position: absolute;
+    bottom: spacing("lg");
+    right: spacing("lg");
+    @include font-size("lg");
+    @include font-weight("bold");
+    opacity: 0.9;
+    text-transform: uppercase;
+  }
+
+  &__actions {
+    display: flex;
+    gap: spacing("sm");
+  }
+
+  &__actionBtn {
+    flex: 1;
+    padding: spacing("sm");
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+
+    &:hover {
+      border-color: color("primary", "base");
+      color: color("primary", "base");
+      background: color("primary", "lighter");
+    }
+
+    &--danger {
+      &:hover {
+        border-color: color("status", "error");
+        color: color("status", "error");
+        background: rgba(251, 34, 34, 0.05);
+      }
+    }
+  }
+
+  &__add {
+    min-height: 280px;
+    border: 2px dashed color("neutral", "light");
+    border-radius: border-radius("xl");
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: color("neutral", "lightest");
+
+    &:hover {
+      border-color: color("primary", "base");
+      background: color("primary", "lighter");
+      transform: scale(1.02);
+
+      .paymentCard__addIcon {
+        background: color("primary", "base");
+        color: color("neutral", "white");
+      }
+    }
+
+    h3 {
+      @include font-size("body-1");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: spacing("sm") 0 spacing("xs") 0;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "medium");
+      margin: 0;
+    }
+  }
+
+  &__addIcon {
+    width: 60px;
+    height: 60px;
+    border-radius: border-radius("full");
+    background: color("neutral", "white");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("primary", "base");
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Billing History
+.billingHistory {
+  background: color("neutral", "white");
+  border-radius: border-radius("xl");
+  padding: spacing("xl");
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+  &__title {
+    @include font-size("subtitle-2");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("lg") 0;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+}
+
+.transaction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: spacing("md");
+  background: color("neutral", "lightest");
+  border-radius: border-radius("lg");
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: color("neutral", "lighter");
+    transform: translateX(4px);
+  }
+
+  &__info {
+    flex: 1;
+
+    h4 {
+      @include font-size("body-2");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xxs") 0;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "medium");
+      margin: 0;
+    }
+  }
+
+  &__amount {
+    &--success {
+      @include font-size("body-1");
+      @include font-weight("bold");
+      color: color("status", "success");
+    }
+  }
+}
+
+// Modal Styles
+.addForm {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("lg");
+  padding: spacing("md");
+
+  &__row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: spacing("md");
+    margin-top: spacing("lg");
+    padding-top: spacing("lg");
+    border-top: 1px solid color("neutral", "lighter");
+  }
+}
+
+.deleteModal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: spacing("lg");
+
+  &__icon {
+    width: 60px;
+    height: 60px;
+    color: color("status", "error");
+    margin-bottom: spacing("lg");
+  }
+
+  &__message {
+    @include font-size("body-2");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("xl") 0;
+    line-height: 1.5;
+  }
+
+  &__actions {
+    display: flex;
+    gap: spacing("md");
+  }
+}
