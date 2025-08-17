@@ -4,50 +4,34 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+  ArrowLeft,
   Search,
   HelpCircle,
   MessageSquare,
   Phone,
   Mail,
-  ChevronRight,
   BookOpen,
   Video,
   FileText,
-  ExternalLink,
   Clock,
-  CheckCircle,
-  AlertCircle,
-  Settings,
+  ChevronDown,
+  Zap,
+  Shield,
   CreditCard,
   Calendar,
   Users,
+  Settings,
+  ExternalLink,
 } from "lucide-react";
 import styles from "./QuickHelpDrawer.module.scss";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 import FnButton from "@/components/ui/Button/FnButton";
-import Input from "@/components/ui/Input";
-
-interface HelpTopic {
-  id: string;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  articles: number;
-}
 
 interface FAQ {
   id: string;
   question: string;
   answer: string;
   category: string;
-}
-
-interface Tutorial {
-  id: string;
-  title: string;
-  duration: string;
-  type: "video" | "article";
-  difficulty: "beginner" | "intermediate" | "advanced";
 }
 
 interface QuickHelpDrawerProps {
@@ -61,383 +45,299 @@ const QuickHelpDrawer: React.FC<QuickHelpDrawerProps> = ({
   onClose,
   onContactSupport,
 }) => {
-  const [activeTab, setActiveTab] = useState<"topics" | "faqs" | "tutorials">(
-    "topics"
-  );
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedFAQ, setExpandedFAQ] = useState<string | null>(null);
 
-  // Mock help topics
-  const helpTopics: HelpTopic[] = [
+  // Help categories
+  const helpCategories = [
     {
-      id: "booking",
-      title: "Booking Services",
-      description: "How to book, reschedule, and cancel services",
-      icon: <Calendar />,
-      articles: 12,
+      id: "getting-started",
+      title: "Getting Started",
+      icon: <Zap />,
+      color: "#10b981",
+      articles: [
+        "How to create an account",
+        "Setting up your profile",
+        "Adding your first address",
+        "Understanding our services",
+      ],
     },
     {
-      id: "subscriptions",
-      title: "Subscriptions",
-      description: "Managing your recurring service plans",
-      icon: <Settings />,
-      articles: 8,
+      id: "bookings",
+      title: "Bookings & Services",
+      icon: <Calendar />,
+      color: "#075056",
+      articles: [
+        "How to book a service",
+        "Rescheduling appointments",
+        "Cancellation policy",
+        "Service areas covered",
+      ],
     },
     {
       id: "payments",
       title: "Payments & Billing",
-      description: "Payment methods, invoices, and refunds",
       icon: <CreditCard />,
-      articles: 15,
+      color: "#6366f1",
+      articles: [
+        "Payment methods",
+        "Understanding invoices",
+        "Refund policy",
+        "Subscription billing",
+      ],
     },
     {
-      id: "providers",
-      title: "Service Providers",
-      description: "Working with our service professionals",
-      icon: <Users />,
-      articles: 6,
+      id: "account",
+      title: "Account & Settings",
+      icon: <Settings />,
+      color: "#fe5b04",
+      articles: [
+        "Managing your profile",
+        "Password reset",
+        "Notification preferences",
+        "Privacy settings",
+      ],
     },
   ];
 
-  // Mock FAQs
+  // FAQs
   const faqs: FAQ[] = [
     {
       id: "1",
-      question: "How do I book a service?",
+      question: "How far in advance can I book a service?",
       answer:
-        "To book a service, navigate to the 'Book Service' section from your dashboard. Select your desired service type, choose a date and time, and complete the booking form. You'll receive a confirmation email once your booking is confirmed.",
-      category: "booking",
+        "You can book services up to 30 days in advance. For same-day bookings, please book at least 4 hours before your preferred time slot.",
+      category: "bookings",
     },
     {
       id: "2",
-      question: "Can I reschedule my service?",
+      question: "What is your cancellation policy?",
       answer:
-        "Yes, you can reschedule your service up to 24 hours before the scheduled time. Go to 'My Bookings', select the service you want to reschedule, and click on 'Reschedule'. Choose a new date and time that works for you.",
-      category: "booking",
+        "You can cancel or reschedule your service free of charge up to 24 hours before the scheduled time. Cancellations within 24 hours may incur a fee.",
+      category: "bookings",
     },
     {
       id: "3",
-      question: "What payment methods do you accept?",
+      question: "Which payment methods do you accept?",
       answer:
-        "We accept various payment methods including credit/debit cards, bank transfers, and mobile money. You can manage your payment methods in the 'Payment Methods' section of your account settings.",
+        "We accept all major credit and debit cards, bank transfers, and mobile money payments. You can manage your payment methods in your account settings.",
       category: "payments",
     },
     {
       id: "4",
-      question: "How do subscriptions work?",
+      question: "How does the subscription service work?",
       answer:
-        "Subscriptions allow you to schedule recurring services at discounted rates. Choose your services, set your preferred frequency (weekly, bi-weekly, or monthly), and enjoy automatic scheduling and billing. You can pause or cancel anytime.",
+        "Subscriptions allow you to schedule recurring services at discounted rates. Choose your services, set your frequency, and enjoy automatic scheduling with up to 30% savings.",
       category: "subscriptions",
     },
     {
       id: "5",
       question: "What if I'm not satisfied with the service?",
       answer:
-        "Your satisfaction is our priority. If you're not happy with a service, please contact us within 24 hours. We'll either arrange a re-service at no extra cost or provide a refund according to our satisfaction guarantee policy.",
+        "Your satisfaction is our priority. If you're not happy with a service, contact us within 24 hours and we'll either re-do the service at no cost or provide a full refund.",
       category: "quality",
     },
-  ];
-
-  // Mock tutorials
-  const tutorials: Tutorial[] = [
     {
-      id: "1",
-      title: "Getting Started with Metro Mellow",
-      duration: "5 min",
-      type: "video",
-      difficulty: "beginner",
-    },
-    {
-      id: "2",
-      title: "How to Set Up a Subscription",
-      duration: "3 min",
-      type: "video",
-      difficulty: "beginner",
-    },
-    {
-      id: "3",
-      title: "Managing Multiple Properties",
-      duration: "10 min read",
-      type: "article",
-      difficulty: "intermediate",
-    },
-    {
-      id: "4",
-      title: "Advanced Scheduling Tips",
-      duration: "7 min read",
-      type: "article",
-      difficulty: "advanced",
+      id: "6",
+      question: "Are your service providers background checked?",
+      answer:
+        "Yes, all our service providers undergo thorough background checks, skill assessments, and regular training to ensure quality and safety.",
+      category: "safety",
     },
   ];
 
-  // Filter content based on search
-  const filteredTopics = helpTopics.filter(
-    (topic) =>
-      topic.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      topic.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
+  // Filter FAQs based on search
   const filteredFAQs = faqs.filter(
     (faq) =>
       faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
       faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const filteredTutorials = tutorials.filter((tutorial) =>
-    tutorial.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   const toggleFAQ = (faqId: string) => {
     setExpandedFAQ(expandedFAQ === faqId ? null : faqId);
   };
 
-  const getDifficultyColor = (difficulty: Tutorial["difficulty"]) => {
-    const colors = {
-      beginner: "#10b981",
-      intermediate: "#f59e0b",
-      advanced: "#ef4444",
-    };
-    return colors[difficulty];
-  };
-
   return (
-    <ModalDrawer isOpen={isOpen} onClose={onClose} width="md">
-      <div className={styles.helpDrawer}>
+    <ModalDrawer isOpen={isOpen} onClose={onClose} width="sm">
+      <div className={styles.drawer}>
         {/* Header */}
-        <div className={styles.helpDrawer__header}>
-          <h2 className={styles.helpDrawer__title}>Help Center</h2>
-          <p className={styles.helpDrawer__subtitle}>
-            Find answers and get support
-          </p>
+        <div className={styles.drawer__header}>
+          <button className={styles.drawer__backBtn} onClick={onClose}>
+            <ArrowLeft size={20} />
+          </button>
+          <div className={styles.drawer__headerText}>
+            <h2 className={styles.drawer__title}>Help & Support</h2>
+            <p className={styles.drawer__subtitle}>
+              How can we help you today?
+            </p>
+          </div>
         </div>
 
-        {/* Search Bar */}
-        <div className={styles.helpDrawer__search}>
-          <Input
-            placeholder="Search for help..."
+        {/* Search */}
+        <div className={styles.drawer__search}>
+          <Search className={styles.drawer__searchIcon} size={18} />
+          <input
+            type="text"
+            placeholder="Search for answers..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            fullWidth
-            leftIcon={<Search size={18} />}
+            className={styles.drawer__searchInput}
           />
         </div>
 
-        {/* Tabs */}
-        <div className={styles.helpDrawer__tabs}>
-          <button
-            className={`${styles.helpDrawer__tab} ${
-              activeTab === "topics" ? styles["helpDrawer__tab--active"] : ""
-            }`}
-            onClick={() => setActiveTab("topics")}
-          >
-            <BookOpen size={16} />
-            Topics
-          </button>
-          <button
-            className={`${styles.helpDrawer__tab} ${
-              activeTab === "faqs" ? styles["helpDrawer__tab--active"] : ""
-            }`}
-            onClick={() => setActiveTab("faqs")}
-          >
-            <HelpCircle size={16} />
-            FAQs
-          </button>
-          <button
-            className={`${styles.helpDrawer__tab} ${
-              activeTab === "tutorials" ? styles["helpDrawer__tab--active"] : ""
-            }`}
-            onClick={() => setActiveTab("tutorials")}
-          >
-            <Video size={16} />
-            Tutorials
-          </button>
-        </div>
-
         {/* Content */}
-        <div className={styles.helpDrawer__content}>
-          <AnimatePresence mode="wait">
-            {/* Help Topics */}
-            {activeTab === "topics" && (
-              <motion.div
-                key="topics"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className={styles.helpDrawer__topics}
-              >
-                {filteredTopics.map((topic) => (
+        <div className={styles.drawer__content}>
+          {/* Quick Links */}
+          {!searchQuery && (
+            <div className={styles.drawer__section}>
+              <h3 className={styles.drawer__sectionTitle}>Browse Topics</h3>
+              <div className={styles.drawer__categories}>
+                {helpCategories.map((category) => (
                   <motion.div
-                    key={topic.id}
-                    className={styles.helpDrawer__topicCard}
+                    key={category.id}
+                    className={styles.drawer__categoryCard}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <div className={styles.helpDrawer__topicIcon}>
-                      {topic.icon}
-                    </div>
-                    <div className={styles.helpDrawer__topicInfo}>
-                      <h3 className={styles.helpDrawer__topicTitle}>
-                        {topic.title}
-                      </h3>
-                      <p className={styles.helpDrawer__topicDesc}>
-                        {topic.description}
-                      </p>
-                      <span className={styles.helpDrawer__topicArticles}>
-                        {topic.articles} articles
+                    <div
+                      className={styles.drawer__categoryIcon}
+                      style={{ backgroundColor: `${category.color}15` }}
+                    >
+                      <span style={{ color: category.color }}>
+                        {category.icon}
                       </span>
                     </div>
-                    <ChevronRight className={styles.helpDrawer__topicArrow} />
-                  </motion.div>
-                ))}
-              </motion.div>
-            )}
-
-            {/* FAQs */}
-            {activeTab === "faqs" && (
-              <motion.div
-                key="faqs"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className={styles.helpDrawer__faqs}
-              >
-                {filteredFAQs.map((faq) => (
-                  <div key={faq.id} className={styles.helpDrawer__faqItem}>
-                    <motion.button
-                      className={styles.helpDrawer__faqQuestion}
-                      onClick={() => toggleFAQ(faq.id)}
-                      whileHover={{ x: 2 }}
-                    >
-                      <HelpCircle
-                        size={18}
-                        className={styles.helpDrawer__faqIcon}
-                      />
-                      <span>{faq.question}</span>
-                      <motion.div
-                        animate={{ rotate: expandedFAQ === faq.id ? 90 : 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <ChevronRight size={18} />
-                      </motion.div>
-                    </motion.button>
-                    <AnimatePresence>
-                      {expandedFAQ === faq.id && (
-                        <motion.div
-                          className={styles.helpDrawer__faqAnswer}
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <p>{faq.answer}</p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ))}
-              </motion.div>
-            )}
-
-            {/* Tutorials */}
-            {activeTab === "tutorials" && (
-              <motion.div
-                key="tutorials"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className={styles.helpDrawer__tutorials}
-              >
-                {filteredTutorials.map((tutorial) => (
-                  <motion.div
-                    key={tutorial.id}
-                    className={styles.helpDrawer__tutorialCard}
-                    whileHover={{ x: 4 }}
-                  >
-                    <div className={styles.helpDrawer__tutorialIcon}>
-                      {tutorial.type === "video" ? (
-                        <Video size={20} />
-                      ) : (
-                        <FileText size={20} />
-                      )}
-                    </div>
-                    <div className={styles.helpDrawer__tutorialInfo}>
-                      <h4 className={styles.helpDrawer__tutorialTitle}>
-                        {tutorial.title}
+                    <div className={styles.drawer__categoryInfo}>
+                      <h4 className={styles.drawer__categoryTitle}>
+                        {category.title}
                       </h4>
-                      <div className={styles.helpDrawer__tutorialMeta}>
-                        <span className={styles.helpDrawer__tutorialDuration}>
-                          <Clock size={12} />
-                          {tutorial.duration}
-                        </span>
-                        <span
-                          className={styles.helpDrawer__tutorialDifficulty}
-                          style={{
-                            color: getDifficultyColor(tutorial.difficulty),
-                          }}
-                        >
-                          {tutorial.difficulty}
-                        </span>
-                      </div>
+                      <span className={styles.drawer__categoryCount}>
+                        {category.articles.length} articles
+                      </span>
                     </div>
-                    <ExternalLink
-                      size={16}
-                      className={styles.helpDrawer__tutorialLink}
-                    />
                   </motion.div>
                 ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+              </div>
+            </div>
+          )}
 
-        {/* Contact Support Section */}
-        <div className={styles.helpDrawer__support}>
-          <div className={styles.helpDrawer__supportCard}>
-            <MessageSquare className={styles.helpDrawer__supportIcon} />
-            <div className={styles.helpDrawer__supportInfo}>
-              <h3 className={styles.helpDrawer__supportTitle}>
-                Still need help?
-              </h3>
-              <p className={styles.helpDrawer__supportDesc}>
-                Our support team is available 24/7 to assist you
-              </p>
+          {/* FAQs */}
+          <div className={styles.drawer__section}>
+            <h3 className={styles.drawer__sectionTitle}>
+              Frequently Asked Questions
+            </h3>
+            <div className={styles.drawer__faqs}>
+              {filteredFAQs.map((faq, index) => (
+                <motion.div
+                  key={faq.id}
+                  className={styles.drawer__faqItem}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                >
+                  <button
+                    className={styles.drawer__faqQuestion}
+                    onClick={() => toggleFAQ(faq.id)}
+                  >
+                    <HelpCircle size={18} className={styles.drawer__faqIcon} />
+                    <span>{faq.question}</span>
+                    <motion.div
+                      className={styles.drawer__faqArrow}
+                      animate={{ rotate: expandedFAQ === faq.id ? 180 : 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ChevronDown size={18} />
+                    </motion.div>
+                  </button>
+                  <AnimatePresence>
+                    {expandedFAQ === faq.id && (
+                      <motion.div
+                        className={styles.drawer__faqAnswer}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <p>{faq.answer}</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              ))}
             </div>
           </div>
-          <div className={styles.helpDrawer__supportActions}>
-            <FnButton
-              variant="secondary"
-              size="sm"
-              onClick={() => {
-                if (onContactSupport) onContactSupport();
-              }}
-            >
-              <Phone size={16} />
-              Call Support
-            </FnButton>
-            <FnButton
-              variant="primary"
-              size="sm"
-              onClick={() => {
-                if (onContactSupport) onContactSupport();
-              }}
-            >
-              <MessageSquare size={16} />
-              Start Chat
-            </FnButton>
-          </div>
-          <div className={styles.helpDrawer__supportContact}>
-            <a href="mailto:support@metromellow.com">
-              <Mail size={14} />
-              support@metromellow.com
-            </a>
-            <span>•</span>
-            <a href="tel:+2348012345678">
-              <Phone size={14} />
-              +234 801 234 5678
-            </a>
+
+          {/* Contact Support */}
+          <div className={styles.drawer__support}>
+            <div className={styles.drawer__supportCard}>
+              <div className={styles.drawer__supportHeader}>
+                <MessageSquare className={styles.drawer__supportIcon} />
+                <div>
+                  <h3 className={styles.drawer__supportTitle}>
+                    Need more help?
+                  </h3>
+                  <p className={styles.drawer__supportDesc}>
+                    Our support team is available 24/7
+                  </p>
+                </div>
+              </div>
+
+              <div className={styles.drawer__supportOptions}>
+                <button
+                  className={styles.drawer__supportOption}
+                  onClick={onContactSupport}
+                >
+                  <div className={styles.drawer__supportOptionIcon}>
+                    <MessageSquare size={20} />
+                  </div>
+                  <div className={styles.drawer__supportOptionInfo}>
+                    <span className={styles.drawer__supportOptionTitle}>
+                      Live Chat
+                    </span>
+                    <span className={styles.drawer__supportOptionDesc}>
+                      Chat with our team
+                    </span>
+                  </div>
+                  <ExternalLink size={16} />
+                </button>
+
+                <button
+                  className={styles.drawer__supportOption}
+                  onClick={onContactSupport}
+                >
+                  <div className={styles.drawer__supportOptionIcon}>
+                    <Phone size={20} />
+                  </div>
+                  <div className={styles.drawer__supportOptionInfo}>
+                    <span className={styles.drawer__supportOptionTitle}>
+                      Call Us
+                    </span>
+                    <span className={styles.drawer__supportOptionDesc}>
+                      +234 801 234 5678
+                    </span>
+                  </div>
+                  <ExternalLink size={16} />
+                </button>
+
+                <button
+                  className={styles.drawer__supportOption}
+                  onClick={onContactSupport}
+                >
+                  <div className={styles.drawer__supportOptionIcon}>
+                    <Mail size={20} />
+                  </div>
+                  <div className={styles.drawer__supportOptionInfo}>
+                    <span className={styles.drawer__supportOptionTitle}>
+                      Email
+                    </span>
+                    <span className={styles.drawer__supportOptionDesc}>
+                      support@metromellow.com
+                    </span>
+                  </div>
+                  <ExternalLink size={16} />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

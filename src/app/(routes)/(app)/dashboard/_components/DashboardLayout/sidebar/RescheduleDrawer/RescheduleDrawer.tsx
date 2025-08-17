@@ -4,61 +4,109 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+  ArrowLeft,
   Calendar,
   Clock,
   User,
   MapPin,
   ChevronRight,
-  AlertCircle,
   Check,
+  Home,
+  Droplets,
+  Utensils,
+  Bug,
+  Package,
 } from "lucide-react";
 import styles from "./RescheduleDrawer.module.scss";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 import FnButton from "@/components/ui/Button/FnButton";
 
-interface ServiceDetails {
+interface UpcomingService {
   id: string;
   name: string;
-  currentDate: Date;
-  currentTime: string;
+  type: string;
+  date: Date;
+  time: string;
   provider: string;
   address: string;
+  icon: React.ReactNode;
+  color: string;
 }
 
 interface RescheduleDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  service?: ServiceDetails | null;
   onReschedule?: (serviceId: string, newDate: Date, newTime: string) => void;
 }
 
 const RescheduleDrawer: React.FC<RescheduleDrawerProps> = ({
   isOpen,
   onClose,
-  service,
   onReschedule,
 }) => {
+  const [step, setStep] = useState<
+    "select-service" | "select-datetime" | "confirm"
+  >("select-service");
+  const [selectedService, setSelectedService] =
+    useState<UpcomingService | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedTime, setSelectedTime] = useState<string>("");
-  const [confirmationStep, setConfirmationStep] = useState(false);
 
-  // Mock available time slots
+  // Mock upcoming services
+  const upcomingServices: UpcomingService[] = [
+    {
+      id: "1",
+      name: "Deep Home Cleaning",
+      type: "Cleaning",
+      date: new Date(2024, 7, 20),
+      time: "10:00 AM",
+      provider: "Maria Rodriguez",
+      address: "24 Emmanuel Osakwe Street, Lagos",
+      icon: <Home />,
+      color: "#075056",
+    },
+    {
+      id: "2",
+      name: "Laundry Service",
+      type: "Laundry",
+      date: new Date(2024, 7, 22),
+      time: "2:00 PM",
+      provider: "QuickWash Team",
+      address: "24 Emmanuel Osakwe Street, Lagos",
+      icon: <Droplets />,
+      color: "#6366f1",
+    },
+    {
+      id: "3",
+      name: "Meal Preparation",
+      type: "Cooking",
+      date: new Date(2024, 7, 24),
+      time: "5:00 PM",
+      provider: "Chef Kemi",
+      address: "24 Emmanuel Osakwe Street, Lagos",
+      icon: <Utensils />,
+      color: "#fe5b04",
+    },
+  ];
+
+  // Time slots
   const timeSlots = [
     { value: "09:00", label: "9:00 AM", available: true },
     { value: "10:00", label: "10:00 AM", available: true },
     { value: "11:00", label: "11:00 AM", available: false },
+    { value: "12:00", label: "12:00 PM", available: true },
     { value: "14:00", label: "2:00 PM", available: true },
     { value: "15:00", label: "3:00 PM", available: true },
-    { value: "16:00", label: "4:00 PM", available: true },
-    { value: "17:00", label: "5:00 PM", available: false },
+    { value: "16:00", label: "4:00 PM", available: false },
+    { value: "17:00", label: "5:00 PM", available: true },
     { value: "18:00", label: "6:00 PM", available: true },
   ];
 
-  // Get next 7 days for date selection
+  // Get next 14 days
   const getAvailableDates = () => {
     const dates = [];
     const today = new Date();
-    for (let i = 1; i <= 7; i++) {
+    for (let i = 1; i <= 14; i++) {
       const date = new Date(today);
       date.setDate(today.getDate() + i);
       dates.push(date);
@@ -74,250 +122,370 @@ const RescheduleDrawer: React.FC<RescheduleDrawerProps> = ({
     });
   };
 
+  const handleServiceSelect = (service: UpcomingService) => {
+    setSelectedService(service);
+    setStep("select-datetime");
+  };
+
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date.toISOString());
-    setSelectedTime(""); // Reset time when date changes
   };
 
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
   };
 
-  const handleConfirm = () => {
-    if (!confirmationStep) {
-      setConfirmationStep(true);
+  const handleBack = () => {
+    if (step === "confirm") {
+      setStep("select-datetime");
+    } else if (step === "select-datetime") {
+      setStep("select-service");
+      setSelectedDate("");
+      setSelectedTime("");
     } else {
-      if (service && selectedDate && selectedTime && onReschedule) {
-        onReschedule(service.id, new Date(selectedDate), selectedTime);
-        onClose();
-        // Reset state
-        setSelectedDate("");
-        setSelectedTime("");
-        setConfirmationStep(false);
-      }
+      onClose();
     }
   };
 
-  const handleCancel = () => {
-    if (confirmationStep) {
-      setConfirmationStep(false);
-    } else {
+  const handleContinue = () => {
+    if (step === "select-datetime" && selectedDate && selectedTime) {
+      setStep("confirm");
+    }
+  };
+
+  const handleConfirm = () => {
+    if (selectedService && selectedDate && selectedTime && onReschedule) {
+      onReschedule(selectedService.id, new Date(selectedDate), selectedTime);
       onClose();
       // Reset state
+      setStep("select-service");
+      setSelectedService(null);
       setSelectedDate("");
       setSelectedTime("");
     }
   };
 
+  const resetAndClose = () => {
+    setStep("select-service");
+    setSelectedService(null);
+    setSelectedDate("");
+    setSelectedTime("");
+    onClose();
+  };
+
   const availableDates = getAvailableDates();
+  const isToday = (date: Date) => {
+    const today = new Date();
+    return date.toDateString() === today.toDateString();
+  };
+
+  const isTomorrow = (date: Date) => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return date.toDateString() === tomorrow.toDateString();
+  };
 
   return (
-    <ModalDrawer isOpen={isOpen} onClose={handleCancel} width="sm">
-      <div className={styles.rescheduleDrawer}>
+    <ModalDrawer isOpen={isOpen} onClose={resetAndClose} width="sm">
+      <div className={styles.drawer}>
         {/* Header */}
-        <div className={styles.rescheduleDrawer__header}>
-          <h2 className={styles.rescheduleDrawer__title}>Reschedule Service</h2>
-          <p className={styles.rescheduleDrawer__subtitle}>
-            Select a new date and time for your service
-          </p>
+        <div className={styles.drawer__header}>
+          <button className={styles.drawer__backBtn} onClick={handleBack}>
+            <ArrowLeft size={20} />
+          </button>
+          <div className={styles.drawer__headerText}>
+            <h2 className={styles.drawer__title}>
+              {step === "select-service" && "Select Service"}
+              {step === "select-datetime" && "Choose New Time"}
+              {step === "confirm" && "Confirm Changes"}
+            </h2>
+            <p className={styles.drawer__subtitle}>
+              {step === "select-service" &&
+                "Choose which service to reschedule"}
+              {step === "select-datetime" && "Pick a new date and time"}
+              {step === "confirm" && "Review and confirm your changes"}
+            </p>
+          </div>
         </div>
 
-        {/* Current Service Details */}
-        {service && (
-          <div className={styles.rescheduleDrawer__currentService}>
-            <h3 className={styles.rescheduleDrawer__sectionTitle}>
-              Current Booking
-            </h3>
-            <div className={styles.rescheduleDrawer__serviceCard}>
-              <div className={styles.rescheduleDrawer__serviceItem}>
-                <Calendar className={styles.rescheduleDrawer__serviceIcon} />
-                <div>
-                  <span className={styles.rescheduleDrawer__label}>
-                    Service
-                  </span>
-                  <span className={styles.rescheduleDrawer__value}>
-                    {service.name}
-                  </span>
-                </div>
-              </div>
-              <div className={styles.rescheduleDrawer__serviceItem}>
-                <Clock className={styles.rescheduleDrawer__serviceIcon} />
-                <div>
-                  <span className={styles.rescheduleDrawer__label}>
-                    Current Time
-                  </span>
-                  <span className={styles.rescheduleDrawer__value}>
-                    {formatDate(service.currentDate)} at {service.currentTime}
-                  </span>
-                </div>
-              </div>
-              <div className={styles.rescheduleDrawer__serviceItem}>
-                <User className={styles.rescheduleDrawer__serviceIcon} />
-                <div>
-                  <span className={styles.rescheduleDrawer__label}>
-                    Provider
-                  </span>
-                  <span className={styles.rescheduleDrawer__value}>
-                    {service.provider}
-                  </span>
-                </div>
-              </div>
-            </div>
+        {/* Progress Indicator */}
+        <div className={styles.drawer__progress}>
+          <div
+            className={`${styles.drawer__progressStep} ${styles["drawer__progressStep--active"]}`}
+          >
+            <span className={styles.drawer__progressNumber}>1</span>
+            <span className={styles.drawer__progressLabel}>Service</span>
           </div>
-        )}
+          <div
+            className={`${styles.drawer__progressLine} ${step !== "select-service" ? styles["drawer__progressLine--active"] : ""}`}
+          />
+          <div
+            className={`${styles.drawer__progressStep} ${step !== "select-service" ? styles["drawer__progressStep--active"] : ""}`}
+          >
+            <span className={styles.drawer__progressNumber}>2</span>
+            <span className={styles.drawer__progressLabel}>Schedule</span>
+          </div>
+          <div
+            className={`${styles.drawer__progressLine} ${step === "confirm" ? styles["drawer__progressLine--active"] : ""}`}
+          />
+          <div
+            className={`${styles.drawer__progressStep} ${step === "confirm" ? styles["drawer__progressStep--active"] : ""}`}
+          >
+            <span className={styles.drawer__progressNumber}>3</span>
+            <span className={styles.drawer__progressLabel}>Confirm</span>
+          </div>
+        </div>
 
-        <AnimatePresence mode="wait">
-          {!confirmationStep ? (
-            <motion.div
-              key="selection"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.2 }}
-            >
-              {/* Date Selection */}
-              <div className={styles.rescheduleDrawer__dateSection}>
-                <h3 className={styles.rescheduleDrawer__sectionTitle}>
-                  Select New Date
+        {/* Content */}
+        <div className={styles.drawer__content}>
+          <AnimatePresence mode="wait">
+            {/* Step 1: Select Service */}
+            {step === "select-service" && (
+              <motion.div
+                key="select-service"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.2 }}
+                className={styles.drawer__services}
+              >
+                <h3 className={styles.drawer__sectionTitle}>
+                  Your Upcoming Services
                 </h3>
-                <div className={styles.rescheduleDrawer__dateGrid}>
-                  {availableDates.map((date) => {
-                    const dateStr = date.toISOString();
-                    const isSelected = selectedDate === dateStr;
-                    return (
-                      <motion.button
-                        key={dateStr}
-                        className={`${styles.rescheduleDrawer__dateCard} ${
-                          isSelected
-                            ? styles["rescheduleDrawer__dateCard--selected"]
-                            : ""
-                        }`}
-                        onClick={() => handleDateSelect(date)}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                <div className={styles.drawer__servicesList}>
+                  {upcomingServices.map((service) => (
+                    <motion.div
+                      key={service.id}
+                      className={styles.drawer__serviceCard}
+                      onClick={() => handleServiceSelect(service)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <div
+                        className={styles.drawer__serviceIcon}
+                        style={{ backgroundColor: `${service.color}15` }}
                       >
-                        <span className={styles.rescheduleDrawer__dateDay}>
-                          {date.toLocaleDateString("en-US", {
-                            weekday: "short",
-                          })}
+                        <span style={{ color: service.color }}>
+                          {service.icon}
                         </span>
-                        <span className={styles.rescheduleDrawer__dateNumber}>
-                          {date.getDate()}
-                        </span>
-                        <span className={styles.rescheduleDrawer__dateMonth}>
-                          {date.toLocaleDateString("en-US", { month: "short" })}
-                        </span>
-                      </motion.button>
-                    );
-                  })}
+                      </div>
+                      <div className={styles.drawer__serviceInfo}>
+                        <h4 className={styles.drawer__serviceName}>
+                          {service.name}
+                        </h4>
+                        <div className={styles.drawer__serviceMeta}>
+                          <span>
+                            <Calendar size={14} />
+                            {formatDate(service.date)}
+                          </span>
+                          <span>
+                            <Clock size={14} />
+                            {service.time}
+                          </span>
+                        </div>
+                        <p className={styles.drawer__serviceProvider}>
+                          <User size={14} />
+                          {service.provider}
+                        </p>
+                      </div>
+                      <ChevronRight className={styles.drawer__serviceArrow} />
+                    </motion.div>
+                  ))}
                 </div>
-              </div>
+              </motion.div>
+            )}
 
-              {/* Time Selection */}
-              {selectedDate && (
-                <motion.div
-                  className={styles.rescheduleDrawer__timeSection}
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <h3 className={styles.rescheduleDrawer__sectionTitle}>
-                    Select Time Slot
-                  </h3>
-                  <div className={styles.rescheduleDrawer__timeGrid}>
-                    {timeSlots.map((slot) => (
-                      <motion.button
-                        key={slot.value}
-                        className={`${styles.rescheduleDrawer__timeSlot} ${
-                          !slot.available
-                            ? styles["rescheduleDrawer__timeSlot--unavailable"]
-                            : ""
-                        } ${
-                          selectedTime === slot.value
-                            ? styles["rescheduleDrawer__timeSlot--selected"]
-                            : ""
-                        }`}
-                        onClick={() =>
-                          slot.available && handleTimeSelect(slot.value)
-                        }
-                        disabled={!slot.available}
-                        whileHover={slot.available ? { scale: 1.05 } : {}}
-                        whileTap={slot.available ? { scale: 0.95 } : {}}
-                      >
-                        <Clock
-                          size={14}
-                          className={styles.rescheduleDrawer__timeIcon}
-                        />
-                        <span>{slot.label}</span>
-                      </motion.button>
-                    ))}
+            {/* Step 2: Select Date & Time */}
+            {step === "select-datetime" && selectedService && (
+              <motion.div
+                key="select-datetime"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.2 }}
+                className={styles.drawer__datetime}
+              >
+                {/* Current Schedule Info */}
+                <div className={styles.drawer__currentInfo}>
+                  <div className={styles.drawer__currentInfoIcon}>
+                    <Calendar size={16} />
                   </div>
-                </motion.div>
-              )}
-            </motion.div>
-          ) : (
-            <motion.div
-              key="confirmation"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.2 }}
-              className={styles.rescheduleDrawer__confirmation}
-            >
-              <div className={styles.rescheduleDrawer__confirmationCard}>
-                <div className={styles.rescheduleDrawer__confirmationIcon}>
-                  <AlertCircle size={48} />
+                  <div className={styles.drawer__currentInfoText}>
+                    <span className={styles.drawer__currentInfoLabel}>
+                      Current Schedule
+                    </span>
+                    <span className={styles.drawer__currentInfoValue}>
+                      {formatDate(selectedService.date)} at{" "}
+                      {selectedService.time}
+                    </span>
+                  </div>
                 </div>
-                <h3 className={styles.rescheduleDrawer__confirmationTitle}>
-                  Confirm Reschedule
-                </h3>
-                <p className={styles.rescheduleDrawer__confirmationText}>
-                  Are you sure you want to reschedule your {service?.name} from{" "}
-                  <strong>
-                    {service && formatDate(service.currentDate)} at{" "}
-                    {service?.currentTime}
-                  </strong>{" "}
-                  to{" "}
-                  <strong>
-                    {selectedDate && formatDate(new Date(selectedDate))} at{" "}
-                    {timeSlots.find((t) => t.value === selectedTime)?.label}
-                  </strong>
-                  ?
-                </p>
-                <div className={styles.rescheduleDrawer__confirmationNote}>
-                  <AlertCircle size={16} />
-                  <span>
-                    You can reschedule up to 24 hours before the service
-                  </span>
+
+                {/* Date Selection */}
+                <div className={styles.drawer__dateSection}>
+                  <h3 className={styles.drawer__sectionTitle}>Select Date</h3>
+                  <div className={styles.drawer__dateGrid}>
+                    {availableDates.map((date) => {
+                      const dateStr = date.toISOString();
+                      const isSelected = selectedDate === dateStr;
+                      return (
+                        <motion.button
+                          key={dateStr}
+                          className={`${styles.drawer__dateCard} ${
+                            isSelected
+                              ? styles["drawer__dateCard--selected"]
+                              : ""
+                          }`}
+                          onClick={() => handleDateSelect(date)}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <span className={styles.drawer__dateWeekday}>
+                            {date.toLocaleDateString("en-US", {
+                              weekday: "short",
+                            })}
+                          </span>
+                          <span className={styles.drawer__dateDay}>
+                            {date.getDate()}
+                          </span>
+                          {isTomorrow(date) && (
+                            <span className={styles.drawer__dateLabel}>
+                              Tomorrow
+                            </span>
+                          )}
+                        </motion.button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+
+                {/* Time Selection */}
+                {selectedDate && (
+                  <motion.div
+                    className={styles.drawer__timeSection}
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <h3 className={styles.drawer__sectionTitle}>Select Time</h3>
+                    <div className={styles.drawer__timeGrid}>
+                      {timeSlots.map((slot) => (
+                        <motion.button
+                          key={slot.value}
+                          className={`${styles.drawer__timeSlot} ${
+                            !slot.available
+                              ? styles["drawer__timeSlot--unavailable"]
+                              : ""
+                          } ${
+                            selectedTime === slot.value
+                              ? styles["drawer__timeSlot--selected"]
+                              : ""
+                          }`}
+                          onClick={() =>
+                            slot.available && handleTimeSelect(slot.value)
+                          }
+                          disabled={!slot.available}
+                          whileHover={slot.available ? { scale: 1.05 } : {}}
+                          whileTap={slot.available ? { scale: 0.95 } : {}}
+                        >
+                          {slot.label}
+                        </motion.button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </motion.div>
+            )}
+
+            {/* Step 3: Confirm */}
+            {step === "confirm" && selectedService && (
+              <motion.div
+                key="confirm"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.2 }}
+                className={styles.drawer__confirm}
+              >
+                <div className={styles.drawer__confirmCard}>
+                  <div className={styles.drawer__confirmIcon}>
+                    <Check size={24} />
+                  </div>
+                  <h3 className={styles.drawer__confirmTitle}>
+                    Ready to Reschedule?
+                  </h3>
+
+                  <div className={styles.drawer__confirmDetails}>
+                    <div className={styles.drawer__confirmItem}>
+                      <span className={styles.drawer__confirmLabel}>
+                        Service
+                      </span>
+                      <span className={styles.drawer__confirmValue}>
+                        {selectedService.name}
+                      </span>
+                    </div>
+                    <div className={styles.drawer__confirmDivider} />
+                    <div className={styles.drawer__confirmItem}>
+                      <span className={styles.drawer__confirmLabel}>From</span>
+                      <span className={styles.drawer__confirmValue}>
+                        {formatDate(selectedService.date)} at{" "}
+                        {selectedService.time}
+                      </span>
+                    </div>
+                    <div className={styles.drawer__confirmDivider} />
+                    <div className={styles.drawer__confirmItem}>
+                      <span className={styles.drawer__confirmLabel}>To</span>
+                      <span className={styles.drawer__confirmValue}>
+                        {selectedDate && formatDate(new Date(selectedDate))} at{" "}
+                        {timeSlots.find((t) => t.value === selectedTime)?.label}
+                      </span>
+                    </div>
+                  </div>
+
+                  <p className={styles.drawer__confirmNote}>
+                    You'll receive a confirmation email once the change is
+                    processed.
+                  </p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
         {/* Footer Actions */}
-        <div className={styles.rescheduleDrawer__footer}>
-          <FnButton variant="ghost" onClick={handleCancel} fullWidth>
-            {confirmationStep ? "Back" : "Cancel"}
-          </FnButton>
-          <FnButton
-            variant="primary"
-            onClick={handleConfirm}
-            disabled={!selectedDate || !selectedTime}
-            fullWidth
-          >
-            {confirmationStep ? (
-              <>
-                <Check size={18} />
-                Confirm Reschedule
-              </>
-            ) : (
-              <>
+        <div className={styles.drawer__footer}>
+          {step === "select-service" && (
+            <FnButton variant="ghost" onClick={onClose} fullWidth>
+              Cancel
+            </FnButton>
+          )}
+
+          {step === "select-datetime" && (
+            <>
+              <FnButton variant="ghost" onClick={handleBack} fullWidth>
+                Back
+              </FnButton>
+              <FnButton
+                variant="primary"
+                onClick={handleContinue}
+                disabled={!selectedDate || !selectedTime}
+                fullWidth
+              >
                 Continue
-                <ChevronRight size={18} />
-              </>
-            )}
-          </FnButton>
+              </FnButton>
+            </>
+          )}
+
+          {step === "confirm" && (
+            <>
+              <FnButton variant="ghost" onClick={handleBack} fullWidth>
+                Back
+              </FnButton>
+              <FnButton variant="primary" onClick={handleConfirm} fullWidth>
+                Confirm Changes
+              </FnButton>
+            </>
+          )}
         </div>
       </div>
     </ModalDrawer>

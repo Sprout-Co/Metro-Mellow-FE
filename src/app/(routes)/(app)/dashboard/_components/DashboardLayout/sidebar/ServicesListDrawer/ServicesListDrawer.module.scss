@@ -3,23 +3,54 @@
 @import "@/styles/abstracts/functions";
 @import "@/styles/abstracts/mixins";
 
-.servicesDrawer {
-  padding: spacing("lg");
+.drawer {
   display: flex;
   flex-direction: column;
-  gap: spacing("lg");
+  height: 100%;
 
   &__header {
-    text-align: center;
-    padding-bottom: spacing("md");
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("lg");
     border-bottom: 1px solid color("neutral", "lighter");
+    background: linear-gradient(
+      to bottom,
+      color("neutral", "white"),
+      color("neutral", "lightest")
+    );
+  }
+
+  &__backBtn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("full");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: color("neutral", "dark");
+    flex-shrink: 0;
+
+    &:hover {
+      background: color("neutral", "lightest");
+      border-color: color("neutral", "light");
+      transform: translateX(-2px);
+    }
+  }
+
+  &__headerText {
+    flex: 1;
   }
 
   &__title {
-    @include font-size("xl");
+    @include font-size("lg");
     @include font-weight("bold");
     color: color("neutral", "darkest");
-    margin: 0 0 spacing("xs") 0;
+    margin: 0 0 spacing("xxs") 0;
   }
 
   &__subtitle {
@@ -28,18 +59,48 @@
     margin: 0;
   }
 
+  // Search
   &__search {
-    margin-bottom: spacing("md");
+    position: relative;
+    padding: 0 spacing("lg") spacing("lg");
+    background: color("neutral", "lightest");
   }
 
-  // Categories List
-  &__categories {
-    display: flex;
-    flex-direction: column;
-    gap: spacing("md");
-    max-height: calc(100vh - 300px);
+  &__searchIcon {
+    position: absolute;
+    left: calc(spacing("lg") + spacing("md"));
+    top: 50%;
+    transform: translateY(-50%);
+    color: color("neutral", "medium");
+    pointer-events: none;
+  }
+
+  &__searchInput {
+    width: 100%;
+    padding: spacing("sm") spacing("md") spacing("sm") spacing("xl");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("pill");
+    @include font-size("sm");
+    color: color("neutral", "darkest");
+    transition: all 0.2s ease;
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.1);
+    }
+  }
+
+  // Content
+  &__content {
+    flex: 1;
     overflow-y: auto;
-    padding-right: spacing("xs");
+    padding: spacing("lg");
 
     &::-webkit-scrollbar {
       width: 4px;
@@ -49,58 +110,74 @@
       background-color: color("neutral", "light");
       border-radius: 4px;
     }
-
-    &::-webkit-scrollbar-track {
-      background-color: transparent;
-    }
   }
 
-  &__category {
-    background: color("neutral", "white");
-    border: 1px solid color("neutral", "lighter");
-    border-radius: border-radius("lg");
-    overflow: hidden;
-    transition: all 0.3s ease;
-
-    &:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-    }
+  // Categories
+  &__categories {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
   }
 
-  &__categoryHeader {
-    width: 100%;
+  &__categoryCard {
     display: flex;
     align-items: center;
     gap: spacing("md");
-    padding: spacing("md");
+    padding: spacing("lg");
     background: color("neutral", "white");
-    border: none;
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("xl");
     cursor: pointer;
     transition: all 0.2s ease;
-    text-align: left;
+    position: relative;
+    overflow: hidden;
 
-    &:hover {
-      background: color("neutral", "lightest");
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: transparent;
+      transition: all 0.2s ease;
     }
 
-    &--expanded {
-      background: linear-gradient(to right, rgba(7, 80, 86, 0.03), transparent);
-      border-bottom: 1px solid color("neutral", "lighter");
+    &:hover {
+      border-color: color("primary", "lighter");
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transform: translateX(4px);
+
+      &::before {
+        background: color("primary", "base");
+      }
+
+      .drawer__categoryArrow {
+        transform: translateX(4px);
+        color: color("primary", "base");
+      }
     }
   }
 
   &__categoryIcon {
-    width: 48px;
-    height: 48px;
-    border-radius: border-radius("lg");
+    width: 64px;
+    height: 64px;
+    border-radius: border-radius("xl");
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
 
-    svg {
-      width: 24px;
-      height: 24px;
+    span {
+      font-size: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        width: 32px;
+        height: 32px;
+      }
     }
   }
 
@@ -110,8 +187,8 @@
   }
 
   &__categoryName {
-    @include font-size("body-2");
-    @include font-weight("semibold");
+    @include font-size("body-1");
+    @include font-weight("bold");
     color: color("neutral", "darkest");
     margin: 0 0 spacing("xxs") 0;
   }
@@ -119,166 +196,134 @@
   &__categoryDesc {
     @include font-size("sm");
     color: color("neutral", "medium");
-    margin: 0;
-    line-height: 1.4;
-  }
-
-  &__categoryArrow {
-    width: 24px;
-    height: 24px;
-    color: color("neutral", "medium");
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  // Sub Services
-  &__subServices {
-    background: color("neutral", "lightest");
-    overflow: hidden;
-  }
-
-  &__service {
-    display: flex;
-    gap: spacing("md");
-    padding: spacing("md");
-    margin: spacing("xs");
-    background: color("neutral", "white");
-    border-radius: border-radius("md");
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: 2px solid transparent;
-
-    &:hover {
-      transform: translateX(4px);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      border-color: color("primary", "lighter");
-    }
-
-    &--selected {
-      background: linear-gradient(
-        135deg,
-        rgba(7, 80, 86, 0.05),
-        rgba(7, 80, 86, 0.02)
-      );
-      border-color: color("primary", "base");
-
-      .servicesDrawer__serviceName {
-        color: color("primary", "base");
-      }
-    }
-  }
-
-  &__serviceIcon {
-    width: 36px;
-    height: 36px;
-    border-radius: border-radius("md");
-    background: color("neutral", "lightest");
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    color: color("neutral", "dark");
-
-    svg {
-      width: 18px;
-      height: 18px;
-    }
-  }
-
-  &__serviceInfo {
-    flex: 1;
-    min-width: 0;
-  }
-
-  &__serviceHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: spacing("xxs");
-  }
-
-  &__serviceName {
-    @include font-size("sm");
-    @include font-weight("semibold");
-    color: color("neutral", "darkest");
-    margin: 0;
-  }
-
-  &__serviceCheck {
-    width: 20px;
-    height: 20px;
-    border-radius: border-radius("full");
-    background: color("primary", "base");
-    color: color("neutral", "white");
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__serviceDesc {
-    @include font-size("xs");
-    color: color("neutral", "dark");
     margin: 0 0 spacing("xs") 0;
     line-height: 1.4;
   }
 
-  &__serviceDetails {
-    display: flex;
-    align-items: center;
-    gap: spacing("md");
-  }
-
-  &__servicePrice {
-    @include font-size("sm");
-    @include font-weight("bold");
+  &__categoryCount {
+    @include font-size("xs");
+    @include font-weight("semibold");
     color: color("primary", "base");
   }
 
-  &__serviceDuration {
-    display: flex;
-    align-items: center;
-    gap: spacing("xxs");
-    @include font-size("xs");
-    @include font-weight("medium");
-    color: color("neutral", "medium");
-    padding: 2px spacing("xs");
-    background: color("neutral", "lightest");
-    border-radius: border-radius("sm");
+  &__categoryArrow {
+    color: color("neutral", "light");
+    transition: all 0.2s ease;
+  }
 
-    svg {
-      width: 12px;
-      height: 12px;
+  // Services
+  &__services {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+  }
+
+  &__serviceCard {
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("xl");
+    padding: spacing("lg");
+    position: relative;
+    transition: all 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
     }
   }
 
-  // Empty State
-  &__empty {
+  &__popularBadge {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+    padding: spacing("xxs") spacing("sm");
+    background: linear-gradient(
+      135deg,
+      color("secondary", "base"),
+      color("secondary", "dark")
+    );
+    color: color("neutral", "white");
+    @include font-size("xs");
+    @include font-weight("bold");
+    border-radius: border-radius("pill");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__serviceHeader {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: spacing("md");
+    margin-bottom: spacing("md");
+  }
+
+  &__serviceIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("lg");
+    background: color("neutral", "lightest");
+    display: flex;
     align-items: center;
     justify-content: center;
-    padding: spacing("2xl");
-    text-align: center;
-    color: color("neutral", "medium");
+    color: color("primary", "base");
+    flex-shrink: 0;
 
     svg {
-      color: color("neutral", "light");
-      margin-bottom: spacing("md");
+      width: 24px;
+      height: 24px;
     }
+  }
 
-    h3 {
-      @include font-size("lg");
-      @include font-weight("semibold");
-      color: color("neutral", "darkest");
-      margin: 0 0 spacing("xs") 0;
-    }
+  &__serviceName {
+    @include font-size("body-2");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    margin: 0;
+    flex: 1;
+  }
 
-    p {
-      @include font-size("sm");
+  &__serviceDesc {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    line-height: 1.5;
+    margin: 0 0 spacing("lg") 0;
+  }
+
+  &__serviceDetails {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("md");
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    margin-bottom: spacing("lg");
+  }
+
+  &__servicePrice,
+  &__serviceDuration {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__serviceLabel {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__serviceValue {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+
+    svg {
+      flex-shrink: 0;
       color: color("neutral", "medium");
-      margin: 0;
     }
   }
 }

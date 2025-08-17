@@ -4,8 +4,8 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ChevronDown,
-  Check,
+  ArrowLeft,
+  Search,
   Home,
   Droplets,
   Utensils,
@@ -20,19 +20,21 @@ import {
   Shield,
   Zap,
   Leaf,
-  Search,
+  ArrowRight,
+  Clock,
 } from "lucide-react";
 import styles from "./ServicesListDrawer.module.scss";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
-import Input from "@/components/ui/Input";
+import FnButton from "@/components/ui/Button/FnButton";
 
-interface SubService {
+interface Service {
   id: string;
   name: string;
   description: string;
   price: string;
   duration: string;
   icon: React.ReactNode;
+  popular?: boolean;
 }
 
 interface ServiceCategory {
@@ -41,7 +43,7 @@ interface ServiceCategory {
   description: string;
   icon: React.ReactNode;
   color: string;
-  subServices: SubService[];
+  services: Service[];
 }
 
 interface ServicesListDrawerProps {
@@ -55,44 +57,40 @@ const ServicesListDrawer: React.FC<ServicesListDrawerProps> = ({
   onClose,
   onServiceSelect,
 }) => {
-  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
-  const [selectedService, setSelectedService] = useState<{
-    categoryId: string;
-    serviceId: string;
-  } | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Mock services data
+  // Service categories data
   const serviceCategories: ServiceCategory[] = [
     {
       id: "cleaning",
-      name: "Professional Cleaning",
-      description: "Complete home & office cleaning solutions",
+      name: "Cleaning",
+      description: "Professional home & office cleaning",
       icon: <Home />,
       color: "#075056",
-      subServices: [
+      services: [
         {
           id: "deep-clean",
           name: "Deep Cleaning",
-          description:
-            "Thorough cleaning of all areas including hard-to-reach spots",
-          price: "₦25,000",
+          description: "Comprehensive cleaning including hard-to-reach areas",
+          price: "From ₦25,000",
           duration: "4-6 hours",
           icon: <Sparkles />,
+          popular: true,
         },
         {
           id: "regular-clean",
-          name: "Regular Maintenance",
-          description: "Weekly or bi-weekly standard cleaning service",
-          price: "₦15,000",
+          name: "Regular Cleaning",
+          description: "Standard cleaning for maintained homes",
+          price: "From ₦15,000",
           duration: "2-3 hours",
           icon: <Timer />,
         },
         {
-          id: "move-in-out",
-          name: "Move-in/Move-out",
+          id: "move-clean",
+          name: "Move-in/out Cleaning",
           description: "Complete property cleaning for moving",
-          price: "₦35,000",
+          price: "From ₦35,000",
           duration: "5-7 hours",
           icon: <Package />,
         },
@@ -100,31 +98,32 @@ const ServicesListDrawer: React.FC<ServicesListDrawerProps> = ({
     },
     {
       id: "laundry",
-      name: "Laundry Services",
-      description: "Professional washing, drying & ironing",
+      name: "Laundry",
+      description: "Wash, dry, fold & iron services",
       icon: <Droplets />,
       color: "#6366f1",
-      subServices: [
+      services: [
         {
           id: "wash-fold",
           name: "Wash & Fold",
-          description: "Standard laundry service with folding",
+          description: "Professional washing and folding service",
           price: "₦5,000/bag",
           duration: "24-48 hours",
           icon: <Shirt />,
+          popular: true,
         },
         {
           id: "dry-clean",
           name: "Dry Cleaning",
-          description: "Special care for delicate & formal wear",
+          description: "Special care for delicate fabrics",
           price: "₦2,000/item",
           duration: "2-3 days",
           icon: <Sparkles />,
         },
         {
-          id: "iron-press",
+          id: "iron",
           name: "Ironing Service",
-          description: "Professional pressing and steaming",
+          description: "Professional pressing service",
           price: "₦500/item",
           duration: "Same day",
           icon: <Timer />,
@@ -133,15 +132,15 @@ const ServicesListDrawer: React.FC<ServicesListDrawerProps> = ({
     },
     {
       id: "cooking",
-      name: "Cooking & Meals",
-      description: "Professional meal preparation services",
+      name: "Cooking",
+      description: "Meal prep & catering services",
       icon: <Utensils />,
       color: "#fe5b04",
-      subServices: [
+      services: [
         {
           id: "meal-prep",
           name: "Weekly Meal Prep",
-          description: "Prepared meals for the entire week",
+          description: "Healthy meals prepared for the week",
           price: "₦30,000/week",
           duration: "Every Sunday",
           icon: <Calendar />,
@@ -149,15 +148,16 @@ const ServicesListDrawer: React.FC<ServicesListDrawerProps> = ({
         {
           id: "daily-cook",
           name: "Daily Cooking",
-          description: "Fresh meals prepared daily",
+          description: "Fresh home-cooked meals daily",
           price: "₦8,000/day",
-          duration: "2-3 hours daily",
+          duration: "2-3 hours",
           icon: <Soup />,
+          popular: true,
         },
         {
-          id: "event-catering",
+          id: "catering",
           name: "Event Catering",
-          description: "Catering for parties and events",
+          description: "Professional catering for events",
           price: "Custom quote",
           duration: "As scheduled",
           icon: <Coffee />,
@@ -167,226 +167,224 @@ const ServicesListDrawer: React.FC<ServicesListDrawerProps> = ({
     {
       id: "pest",
       name: "Pest Control",
-      description: "Safe & effective pest management",
+      description: "Safe pest management solutions",
       icon: <Bug />,
       color: "#10b981",
-      subServices: [
+      services: [
         {
           id: "inspection",
           name: "Pest Inspection",
-          description: "Thorough property assessment",
+          description: "Comprehensive property assessment",
           price: "₦10,000",
           duration: "1-2 hours",
           icon: <Shield />,
         },
         {
           id: "treatment",
-          name: "Treatment Service",
-          description: "Safe pest elimination",
+          name: "Pest Treatment",
+          description: "Targeted pest elimination",
           price: "₦20,000",
           duration: "2-4 hours",
           icon: <Zap />,
         },
         {
           id: "prevention",
-          name: "Prevention Plan",
-          description: "Monthly prevention service",
+          name: "Monthly Prevention",
+          description: "Regular preventive treatments",
           price: "₦15,000/month",
-          duration: "Monthly visits",
+          duration: "Monthly",
           icon: <Leaf />,
         },
       ],
     },
   ];
 
-  const toggleCategory = (categoryId: string) => {
-    setExpandedCategory(expandedCategory === categoryId ? null : categoryId);
+  const handleCategorySelect = (categoryId: string) => {
+    setSelectedCategory(categoryId);
   };
 
-  const handleServiceSelect = (categoryId: string, serviceId: string) => {
-    setSelectedService({ categoryId, serviceId });
-    if (onServiceSelect) {
-      onServiceSelect(categoryId, serviceId);
+  const handleBack = () => {
+    if (selectedCategory) {
+      setSelectedCategory(null);
+    } else {
+      onClose();
     }
   };
 
-  const isServiceSelected = (categoryId: string, serviceId: string) => {
-    return (
-      selectedService?.categoryId === categoryId &&
-      selectedService?.serviceId === serviceId
-    );
+  const handleServiceClick = (categoryId: string, serviceId: string) => {
+    if (onServiceSelect) {
+      onServiceSelect(categoryId, serviceId);
+    }
+    onClose();
   };
 
   // Filter services based on search
-  const filteredCategories = serviceCategories
-    .map((category) => ({
-      ...category,
-      subServices: category.subServices.filter(
+  const filteredCategories = serviceCategories.filter(
+    (category) =>
+      category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      category.services.some(
         (service) =>
           service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           service.description.toLowerCase().includes(searchQuery.toLowerCase())
-      ),
-    }))
-    .filter(
-      (category) =>
-        category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        category.subServices.length > 0
-    );
+      )
+  );
+
+  const selectedCategoryData = serviceCategories.find(
+    (cat) => cat.id === selectedCategory
+  );
 
   return (
-    <ModalDrawer isOpen={isOpen} onClose={onClose} width="md">
-      <div className={styles.servicesDrawer}>
+    <ModalDrawer isOpen={isOpen} onClose={onClose} width="sm">
+      <div className={styles.drawer}>
         {/* Header */}
-        <div className={styles.servicesDrawer__header}>
-          <h2 className={styles.servicesDrawer__title}>Our Services</h2>
-          <p className={styles.servicesDrawer__subtitle}>
-            Browse and select from our comprehensive service offerings
-          </p>
+        <div className={styles.drawer__header}>
+          <button className={styles.drawer__backBtn} onClick={handleBack}>
+            <ArrowLeft size={20} />
+          </button>
+          <div className={styles.drawer__headerText}>
+            <h2 className={styles.drawer__title}>
+              {selectedCategory && selectedCategoryData
+                ? selectedCategoryData.name
+                : "Our Services"}
+            </h2>
+            <p className={styles.drawer__subtitle}>
+              {selectedCategory && selectedCategoryData
+                ? selectedCategoryData.description
+                : "Choose a service category to explore"}
+            </p>
+          </div>
         </div>
 
-        {/* Search Bar */}
-        <div className={styles.servicesDrawer__search}>
-          <Input
-            placeholder="Search services..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            fullWidth
-            leftIcon={<Search size={18} />}
-          />
-        </div>
-
-        {/* Services List */}
-        <div className={styles.servicesDrawer__categories}>
-          {filteredCategories.map((category) => (
-            <div key={category.id} className={styles.servicesDrawer__category}>
-              <motion.button
-                className={`${styles.servicesDrawer__categoryHeader} ${
-                  expandedCategory === category.id
-                    ? styles["servicesDrawer__categoryHeader--expanded"]
-                    : ""
-                }`}
-                onClick={() => toggleCategory(category.id)}
-                whileHover={{ x: 2 }}
-                whileTap={{ scale: 0.99 }}
-              >
-                <div
-                  className={styles.servicesDrawer__categoryIcon}
-                  style={{ backgroundColor: `${category.color}15` }}
-                >
-                  <span style={{ color: category.color }}>{category.icon}</span>
-                </div>
-                <div className={styles.servicesDrawer__categoryInfo}>
-                  <h3 className={styles.servicesDrawer__categoryName}>
-                    {category.name}
-                  </h3>
-                  <p className={styles.servicesDrawer__categoryDesc}>
-                    {category.description}
-                  </p>
-                </div>
-                <motion.div
-                  className={styles.servicesDrawer__categoryArrow}
-                  animate={{
-                    rotate: expandedCategory === category.id ? 180 : 0,
-                  }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <ChevronDown size={20} />
-                </motion.div>
-              </motion.button>
-
-              <AnimatePresence>
-                {expandedCategory === category.id && (
-                  <motion.div
-                    className={styles.servicesDrawer__subServices}
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {category.subServices.map((service) => {
-                      const isSelected = isServiceSelected(
-                        category.id,
-                        service.id
-                      );
-                      return (
-                        <motion.div
-                          key={service.id}
-                          className={`${styles.servicesDrawer__service} ${
-                            isSelected
-                              ? styles["servicesDrawer__service--selected"]
-                              : ""
-                          }`}
-                          onClick={() =>
-                            handleServiceSelect(category.id, service.id)
-                          }
-                          whileHover={{ x: 4 }}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <div className={styles.servicesDrawer__serviceIcon}>
-                            {service.icon}
-                          </div>
-                          <div className={styles.servicesDrawer__serviceInfo}>
-                            <div
-                              className={styles.servicesDrawer__serviceHeader}
-                            >
-                              <h4
-                                className={styles.servicesDrawer__serviceName}
-                              >
-                                {service.name}
-                              </h4>
-                              {isSelected && (
-                                <motion.div
-                                  initial={{ scale: 0 }}
-                                  animate={{ scale: 1 }}
-                                  className={
-                                    styles.servicesDrawer__serviceCheck
-                                  }
-                                >
-                                  <Check size={16} />
-                                </motion.div>
-                              )}
-                            </div>
-                            <p className={styles.servicesDrawer__serviceDesc}>
-                              {service.description}
-                            </p>
-                            <div
-                              className={styles.servicesDrawer__serviceDetails}
-                            >
-                              <span
-                                className={styles.servicesDrawer__servicePrice}
-                              >
-                                {service.price}
-                              </span>
-                              <span
-                                className={
-                                  styles.servicesDrawer__serviceDuration
-                                }
-                              >
-                                <Timer size={12} />
-                                {service.duration}
-                              </span>
-                            </div>
-                          </div>
-                        </motion.div>
-                      );
-                    })}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ))}
-        </div>
-
-        {/* Empty State */}
-        {filteredCategories.length === 0 && (
-          <div className={styles.servicesDrawer__empty}>
-            <Search size={48} />
-            <h3>No services found</h3>
-            <p>Try adjusting your search terms</p>
+        {/* Search Bar (only on main view) */}
+        {!selectedCategory && (
+          <div className={styles.drawer__search}>
+            <Search className={styles.drawer__searchIcon} size={18} />
+            <input
+              type="text"
+              placeholder="Search services..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={styles.drawer__searchInput}
+            />
           </div>
         )}
+
+        {/* Content */}
+        <div className={styles.drawer__content}>
+          <AnimatePresence mode="wait">
+            {!selectedCategory ? (
+              // Categories View
+              <motion.div
+                key="categories"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.2 }}
+                className={styles.drawer__categories}
+              >
+                {filteredCategories.map((category, index) => (
+                  <motion.div
+                    key={category.id}
+                    className={styles.drawer__categoryCard}
+                    onClick={() => handleCategorySelect(category.id)}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <div
+                      className={styles.drawer__categoryIcon}
+                      style={{ backgroundColor: `${category.color}15` }}
+                    >
+                      <span style={{ color: category.color }}>
+                        {category.icon}
+                      </span>
+                    </div>
+                    <div className={styles.drawer__categoryInfo}>
+                      <h3 className={styles.drawer__categoryName}>
+                        {category.name}
+                      </h3>
+                      <p className={styles.drawer__categoryDesc}>
+                        {category.description}
+                      </p>
+                      <span className={styles.drawer__categoryCount}>
+                        {category.services.length} services available
+                      </span>
+                    </div>
+                    <ArrowRight className={styles.drawer__categoryArrow} />
+                  </motion.div>
+                ))}
+              </motion.div>
+            ) : (
+              // Services View
+              <motion.div
+                key="services"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+                className={styles.drawer__services}
+              >
+                {selectedCategoryData?.services.map((service, index) => (
+                  <motion.div
+                    key={service.id}
+                    className={styles.drawer__serviceCard}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    {service.popular && (
+                      <span className={styles.drawer__popularBadge}>
+                        Popular
+                      </span>
+                    )}
+                    <div className={styles.drawer__serviceHeader}>
+                      <div className={styles.drawer__serviceIcon}>
+                        {service.icon}
+                      </div>
+                      <h3 className={styles.drawer__serviceName}>
+                        {service.name}
+                      </h3>
+                    </div>
+                    <p className={styles.drawer__serviceDesc}>
+                      {service.description}
+                    </p>
+                    <div className={styles.drawer__serviceDetails}>
+                      <div className={styles.drawer__servicePrice}>
+                        <span className={styles.drawer__serviceLabel}>
+                          Price
+                        </span>
+                        <span className={styles.drawer__serviceValue}>
+                          {service.price}
+                        </span>
+                      </div>
+                      <div className={styles.drawer__serviceDuration}>
+                        <span className={styles.drawer__serviceLabel}>
+                          Duration
+                        </span>
+                        <span className={styles.drawer__serviceValue}>
+                          <Clock size={14} />
+                          {service.duration}
+                        </span>
+                      </div>
+                    </div>
+                    <FnButton
+                      variant="primary"
+                      size="sm"
+                      fullWidth
+                      onClick={() =>
+                        handleServiceClick(selectedCategory, service.id)
+                      }
+                    >
+                      Book This Service
+                    </FnButton>
+                  </motion.div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </ModalDrawer>
   );
