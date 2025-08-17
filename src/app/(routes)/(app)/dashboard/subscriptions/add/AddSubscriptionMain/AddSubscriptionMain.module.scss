@@ -1,0 +1,536 @@
+.container {
+  min-height: 100vh;
+  background-color: #fbfbfb;
+  padding: 2rem 1rem;
+}
+
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #1b1c22;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-baloo2), sans-serif;
+}
+
+.subtitle {
+  font-size: 1.125rem;
+  color: #6e6e6e;
+  font-family: var(--font-montserrat), sans-serif;
+}
+
+.progress {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.progressStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  position: relative;
+}
+
+.progressNumber {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f1f1f1;
+  color: #6e6e6e;
+  font-weight: bold;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+
+  &.active {
+    background-color: #075056;
+    color: white;
+    box-shadow: 0 4px 12px rgba(7, 80, 86, 0.3);
+  }
+
+  &.completed {
+    background-color: #059669;
+    color: white;
+  }
+}
+
+.progressLabel {
+  font-size: 0.875rem;
+  color: #6e6e6e;
+  font-weight: 500;
+}
+
+.content {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  min-height: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.stepHeader {
+  margin-bottom: 2rem;
+}
+
+.stepTitle {
+  font-size: 1.875rem;
+  font-weight: bold;
+  color: #1b1c22;
+  margin-bottom: 0.5rem;
+}
+
+.stepDescription {
+  font-size: 1rem;
+  color: #6e6e6e;
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.serviceCard {
+  background-color: white;
+  border: 2px solid #f1f1f1;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+
+  &.selected {
+    border-color: #075056;
+    background-color: rgba(7, 80, 86, 0.02);
+  }
+}
+
+.serviceIcon {
+  width: 60px;
+  height: 60px;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.serviceTitle {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #1b1c22;
+  margin-bottom: 0.5rem;
+}
+
+.serviceDescription {
+  font-size: 0.875rem;
+  color: #6e6e6e;
+  margin-bottom: 1rem;
+}
+
+.servicePrice {
+  font-size: 0.875rem;
+  color: #075056;
+  font-weight: 600;
+}
+
+.selectedBadge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: #059669;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  padding: 1.5rem 2rem;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  font-size: 1rem;
+
+  &.primary {
+    background-color: #075056;
+    color: white;
+  }
+
+  &.ghost {
+    background-color: transparent;
+    color: #6e6e6e;
+    border: 1px solid #f1f1f1;
+  }
+
+  &.accent {
+    background-color: #fe5b04;
+    color: white;
+  }
+}
+
+.footerPrice {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: #1b1c22;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modalContent {
+  background-color: white;
+  border-radius: 1rem;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.modalTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1b1c22;
+}
+
+.modalBody {
+  padding: 1.5rem;
+}
+
+.configField {
+  margin-bottom: 1.5rem;
+}
+
+.configLabel {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #343439;
+  margin-bottom: 0.5rem;
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s;
+}
+
+.numberInput {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.numberButton {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #f1f1f1;
+  background-color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.priceModifier {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: #fe5b04;
+  font-weight: 600;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-top: 1px solid #f1f1f1;
+}
+
+.configuredService {
+  background-color: #fbfbfb;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.configuredHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.configuredInfo {
+  flex: 1;
+}
+
+.configuredTitle {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: #1b1c22;
+}
+
+.configuredPrice {
+  font-size: 0.875rem;
+  color: #075056;
+  font-weight: 600;
+}
+
+.editButton {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  background-color: white;
+  border: 1px solid #f1f1f1;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: #6e6e6e;
+  transition: all 0.2s;
+}
+
+.configuredDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.configuredDetail {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.detailLabel {
+  color: #6e6e6e;
+}
+
+.detailValue {
+  color: #1b1c22;
+  font-weight: 500;
+}
+
+.scheduleService {
+  background-color: #fbfbfb;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.scheduleHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.scheduleOptions {
+  display: grid;
+  gap: 1rem;
+}
+
+.scheduleField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.scheduleDays {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.dayButton {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #f1f1f1;
+  background-color: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+
+  &.selected {
+    background-color: #075056;
+    color: white;
+    border-color: #075056;
+  }
+}
+
+.select {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #f1f1f1;
+  background-color: white;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.invoice {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  border: 1px solid #f1f1f1;
+}
+
+.invoiceHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f1f1f1;
+}
+
+.invoiceTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1b1c22;
+}
+
+.invoiceServices {
+  margin-bottom: 2rem;
+}
+
+.invoiceService {
+  padding: 1rem 0;
+  border-bottom: 1px solid #f8f8f8;
+}
+
+.invoiceServiceHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.invoiceServiceInfo {
+  flex: 1;
+}
+
+.invoiceServiceName {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1b1c22;
+  margin-bottom: 0.25rem;
+}
+
+.invoiceServiceSchedule {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #6e6e6e;
+}
+
+.invoiceServicePrice {
+  text-align: right;
+}
+
+.invoiceTotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.invoiceSavings {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #059669;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.benefitsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.benefit {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #343439;
+  font-size: 0.875rem;
+}
