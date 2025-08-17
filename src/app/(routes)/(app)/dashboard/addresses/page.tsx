@@ -17,6 +17,8 @@ import {
   Filter,
   Navigation,
   Check,
+  List,
+  Grid3X3,
 } from "lucide-react";
 import FnButton from "@/components/ui/Button/FnButton";
 import styles from "./AddressManagement.module.scss";
@@ -24,6 +26,7 @@ import styles from "./AddressManagement.module.scss";
 import Input from "@/components/ui/Input";
 import DashboardLayout from "../_components/DashboardLayout/DashboardLayout";
 import AddressModal from "./_components/AddressModal";
+import AddressListView from "./_components/AddressListView";
 
 // Types
 export interface Address {
@@ -99,6 +102,12 @@ const AddressManagementPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
+  const [viewType, setViewType] = useState<"list" | "grid">("grid");
+
+  // Handle view change
+  const handleViewChange = (type: "list" | "grid") => {
+    setViewType(type);
+  };
 
   // Filter addresses
   const filteredAddresses = addresses.filter((address) => {
@@ -225,186 +234,174 @@ const AddressManagementPage: React.FC = () => {
 
         {/* Controls */}
         <div className={styles.addressManagement__controls}>
-          <div className={styles.addressManagement__search}>
-            <Input
-              placeholder="Search addresses..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              leftIcon={<Search size={18} />}
-            />
+          <div className={styles.addressManagement__controlsLeft}>
+            <div className={styles.addressManagement__search}>
+              <Input
+                placeholder="Search addresses..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                leftIcon={<Search size={18} />}
+              />
+            </div>
           </div>
 
-          <div className={styles.addressManagement__filters}>
-            <button
-              className={`${styles.addressManagement__filterBtn} ${
-                selectedType === "all"
-                  ? styles["addressManagement__filterBtn--active"]
-                  : ""
-              }`}
-              onClick={() => setSelectedType("all")}
-            >
-              All
-            </button>
-            <button
-              className={`${styles.addressManagement__filterBtn} ${
-                selectedType === "home"
-                  ? styles["addressManagement__filterBtn--active"]
-                  : ""
-              }`}
-              onClick={() => setSelectedType("home")}
-            >
-              <Home size={16} />
-              Home
-            </button>
-            <button
-              className={`${styles.addressManagement__filterBtn} ${
-                selectedType === "work"
-                  ? styles["addressManagement__filterBtn--active"]
-                  : ""
-              }`}
-              onClick={() => setSelectedType("work")}
-            >
-              <Briefcase size={16} />
-              Work
-            </button>
-            <button
-              className={`${styles.addressManagement__filterBtn} ${
-                selectedType === "other"
-                  ? styles["addressManagement__filterBtn--active"]
-                  : ""
-              }`}
-              onClick={() => setSelectedType("other")}
-            >
-              <Heart size={16} />
-              Other
-            </button>
+          <div className={styles.addressManagement__controlsRight}>
+            <div className={styles.addressManagement__filters}></div>
+
+            <div className={styles.addressManagement__viewToggle}>
+              <motion.button
+                className={`${styles.addressManagement__viewBtn} ${
+                  viewType === "list"
+                    ? styles["addressManagement__viewBtn--active"]
+                    : ""
+                }`}
+                onClick={() => handleViewChange("list")}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <List size={18} />
+              </motion.button>
+              <motion.button
+                className={`${styles.addressManagement__viewBtn} ${
+                  viewType === "grid"
+                    ? styles["addressManagement__viewBtn--active"]
+                    : ""
+                }`}
+                onClick={() => handleViewChange("grid")}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Grid3X3 size={18} />
+              </motion.button>
+            </div>
           </div>
         </div>
 
-        {/* Address Grid */}
+        {/* Address Display */}
         {filteredAddresses.length > 0 ? (
-          <motion.div
-            className={styles.addressManagement__grid}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-          >
-            <AnimatePresence>
-              {filteredAddresses.map((address, index) => (
-                <motion.div
-                  key={address.id}
-                  className={styles.addressCard}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ delay: index * 0.05 }}
-                  whileHover={{ y: -4 }}
-                >
-                  {/* Card Header */}
-                  <div className={styles.addressCard__header}>
-                    <div
-                      className={styles.addressCard__icon}
-                      style={{
-                        backgroundColor: `${getAddressColor(address.type)}15`,
-                        color: getAddressColor(address.type),
-                      }}
-                    >
-                      {getAddressIcon(address.type)}
-                    </div>
-                    <div className={styles.addressCard__headerInfo}>
-                      <h3 className={styles.addressCard__label}>
-                        {address.label}
-                        {address.isDefault && (
-                          <span className={styles.addressCard__defaultBadge}>
-                            <Star size={12} />
-                            Default
-                          </span>
-                        )}
-                      </h3>
-                      <span className={styles.addressCard__type}>
-                        {address.type.charAt(0).toUpperCase() +
-                          address.type.slice(1)}{" "}
-                        Address
-                      </span>
-                    </div>
-                    <div className={styles.addressCard__menuContainer}>
-                      <button
-                        className={styles.addressCard__menuBtn}
-                        onClick={(e) => toggleMenu(address.id, e)}
+          viewType === "grid" ? (
+            <motion.div
+              className={styles.addressManagement__grid}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <AnimatePresence>
+                {filteredAddresses.map((address, index) => (
+                  <motion.div
+                    key={address.id}
+                    className={styles.addressCard}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ delay: index * 0.05 }}
+                    whileHover={{ y: -4 }}
+                  >
+                    {/* Card Header */}
+                    <div className={styles.addressCard__header}>
+                      <div
+                        className={styles.addressCard__icon}
+                        style={{
+                          backgroundColor: `${getAddressColor(address.type)}15`,
+                          color: getAddressColor(address.type),
+                        }}
                       >
-                        <MoreVertical size={18} />
-                      </button>
+                        {getAddressIcon(address.type)}
+                      </div>
+                      <div className={styles.addressCard__headerInfo}>
+                        <h3 className={styles.addressCard__label}>
+                          {address.label}
+                          {address.isDefault && (
+                            <span className={styles.addressCard__defaultBadge}>
+                              <Star size={12} />
+                              Default
+                            </span>
+                          )}
+                        </h3>
+                        <span className={styles.addressCard__type}>
+                          {address.type.charAt(0).toUpperCase() +
+                            address.type.slice(1)}{" "}
+                          Address
+                        </span>
+                      </div>
+                      <div className={styles.addressCard__menuContainer}>
+                        <button
+                          className={styles.addressCard__menuBtn}
+                          onClick={(e) => toggleMenu(address.id, e)}
+                        >
+                          <MoreVertical size={18} />
+                        </button>
 
-                      <AnimatePresence>
-                        {activeMenuId === address.id && (
-                          <motion.div
-                            className={styles.addressCard__menu}
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            transition={{ duration: 0.1 }}
-                          >
-                            <button
-                              className={styles.addressCard__menuItem}
-                              onClick={() => {
-                                setEditingAddress(address);
-                                setIsModalOpen(true);
-                                setActiveMenuId(null);
-                              }}
+                        <AnimatePresence>
+                          {activeMenuId === address.id && (
+                            <motion.div
+                              className={styles.addressCard__menu}
+                              initial={{ opacity: 0, scale: 0.95 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.95 }}
+                              transition={{ duration: 0.1 }}
                             >
-                              <Edit2 size={14} />
-                              Edit
-                            </button>
-                            {!address.isDefault && (
                               <button
                                 className={styles.addressCard__menuItem}
-                                onClick={() => handleSetDefault(address.id)}
+                                onClick={() => {
+                                  setEditingAddress(address);
+                                  setIsModalOpen(true);
+                                  setActiveMenuId(null);
+                                }}
                               >
-                                <Star size={14} />
-                                Set as Default
+                                <Edit2 size={14} />
+                                Edit
                               </button>
-                            )}
-                            <button
-                              className={`${styles.addressCard__menuItem} ${
-                                styles["addressCard__menuItem--danger"]
-                              }`}
-                              onClick={() => handleDeleteAddress(address.id)}
-                            >
-                              <Trash2 size={14} />
-                              Delete
-                            </button>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  </div>
-
-                  {/* Card Content */}
-                  <div className={styles.addressCard__content}>
-                    <div className={styles.addressCard__address}>
-                      <MapPin size={16} />
-                      <div>
-                        <p className={styles.addressCard__streetAddress}>
-                          {address.street}
-                        </p>
-                        <p className={styles.addressCard__areaAddress}>
-                          {address.area}, {address.city}
-                        </p>
-                        <p className={styles.addressCard__regionAddress}>
-                          {address.state}, {address.country}{" "}
-                          {address.postalCode}
-                        </p>
+                              {!address.isDefault && (
+                                <button
+                                  className={styles.addressCard__menuItem}
+                                  onClick={() => handleSetDefault(address.id)}
+                                >
+                                  <Star size={14} />
+                                  Set as Default
+                                </button>
+                              )}
+                              <button
+                                className={`${styles.addressCard__menuItem} ${
+                                  styles["addressCard__menuItem--danger"]
+                                }`}
+                                onClick={() => handleDeleteAddress(address.id)}
+                              >
+                                <Trash2 size={14} />
+                                Delete
+                              </button>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
                     </div>
 
-                    {address.landmark && (
-                      <div className={styles.addressCard__detail}>
-                        <Navigation size={14} />
-                        <span>{address.landmark}</span>
+                    {/* Card Content */}
+                    <div className={styles.addressCard__content}>
+                      <div className={styles.addressCard__address}>
+                        <MapPin size={16} />
+                        <div>
+                          <p className={styles.addressCard__streetAddress}>
+                            {address.street}
+                          </p>
+                          <p className={styles.addressCard__areaAddress}>
+                            {address.area}, {address.city}
+                          </p>
+                          <p className={styles.addressCard__regionAddress}>
+                            {address.state}, {address.country}{" "}
+                            {address.postalCode}
+                          </p>
+                        </div>
                       </div>
-                    )}
 
-                    {/* {address.phoneNumber && (
+                      {address.landmark && (
+                        <div className={styles.addressCard__detail}>
+                          <Navigation size={14} />
+                          <span>{address.landmark}</span>
+                        </div>
+                      )}
+
+                      {/* {address.phoneNumber && (
                       <div className={styles.addressCard__detail}>
                         <span className={styles.addressCard__detailLabel}>
                           Contact:
@@ -412,10 +409,10 @@ const AddressManagementPage: React.FC = () => {
                         <span>{address.phoneNumber}</span>
                       </div>
                     )} */}
-                  </div>
+                    </div>
 
-                  {/* Card Footer */}
-                  {/* <div className={styles.addressCard__footer}>
+                    {/* Card Footer */}
+                    {/* <div className={styles.addressCard__footer}>
                     <FnButton
                       variant="ghost"
                       size="sm"
@@ -439,10 +436,24 @@ const AddressManagementPage: React.FC = () => {
                       Use This Address
                     </FnButton>
                   </div> */}
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          ) : (
+            <AddressListView
+              addresses={filteredAddresses}
+              onEdit={(address) => {
+                setEditingAddress(address);
+                setIsModalOpen(true);
+                setActiveMenuId(null);
+              }}
+              onDelete={handleDeleteAddress}
+              onSetDefault={handleSetDefault}
+              activeMenuId={activeMenuId}
+              onToggleMenu={toggleMenu}
+            />
+          )
         ) : (
           <div className={styles.addressManagement__empty}>
             <div className={styles.addressManagement__emptyIcon}>
