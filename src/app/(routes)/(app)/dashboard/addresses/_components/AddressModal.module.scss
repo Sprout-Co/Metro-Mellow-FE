@@ -12,11 +12,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(
-      to bottom,
-      color("neutral", "lightest"),
-      color("neutral", "white")
-    );
 
     @include breakpoint-down("sm") {
       padding: spacing("lg");
