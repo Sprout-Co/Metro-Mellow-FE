@@ -1,11 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import WelcomeHeader from "./WelcomeHeader/WelcomeHeader";
-import UpcomingServices from "./UpcomingServices/UpcomingServices";
-import QuickActions from "./QuickActions/QuickActions";
-import ActiveServices from "./ActiveServices/ActiveServices";
-import NotificationsPanel from "./NotificationsPanel/NotificationsPanel";
-import RewardsWidget from "./RewardsWidget/RewardsWidget";
 import styles from "./DashboardOverview.module.scss";
 import CTASection from "./CTASection/CTASection";
 
