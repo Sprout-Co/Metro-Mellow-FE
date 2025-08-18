@@ -1,5 +1,5 @@
 import DashboardLayout from "../../_components/DashboardLayout/DashboardLayout";
-import AddSubscriptionMain from "./AddSubscriptionMain/AddSubscriptionMain";
+import AddSubscriptionMain from "./_components/AddSubscriptionMain/AddSubscriptionMain";
 
 export default function AddSubscriptionPage() {
   return (

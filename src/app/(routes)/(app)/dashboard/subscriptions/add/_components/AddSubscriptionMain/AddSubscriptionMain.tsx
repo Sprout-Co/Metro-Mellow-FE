@@ -12,14 +12,12 @@ import {
   ChevronLeft,
   Calendar,
   Edit2,
-  Plus,
-  Minus,
-  X,
   CreditCard,
   TrendingUp,
   CheckCircle,
 } from "lucide-react";
 import styles from "./AddSubscriptionMain.module.scss";
+import ConfigurationModal from "../ConfigurationModal/ConfigurationModal";
 
 // Service Types
 interface ServiceOption {
@@ -208,7 +206,6 @@ export default function AddSubscriptionMain() {
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [currentConfigService, setCurrentConfigService] =
     useState<ServiceOption | null>(null);
-  const [tempConfig, setTempConfig] = useState<Record<string, any>>({});
 
   // Calculate total price
   const totalPrice = useMemo(() => {
@@ -232,7 +229,6 @@ export default function AddSubscriptionMain() {
       const service = services.find((s) => s.id === serviceId);
       if (service) {
         setCurrentConfigService(service);
-        setTempConfig({});
         setShowConfigModal(true);
       }
     }
@@ -266,13 +262,13 @@ export default function AddSubscriptionMain() {
   };
 
   // Save service configuration
-  const saveServiceConfig = () => {
+  const saveServiceConfig = (config: Record<string, any>) => {
     if (!currentConfigService) return;
 
-    const price = calculateServicePrice(currentConfigService, tempConfig);
+    const price = calculateServicePrice(currentConfigService, config);
     const newService: SelectedService = {
       serviceId: currentConfigService.id,
-      config: tempConfig,
+      config: config,
       schedule: {
         frequency: "weekly",
         days: ["Mon"],
@@ -292,7 +288,6 @@ export default function AddSubscriptionMain() {
 
     setShowConfigModal(false);
     setCurrentConfigService(null);
-    setTempConfig({});
   };
 
   // Edit service
@@ -302,7 +297,6 @@ export default function AddSubscriptionMain() {
     if (service && serviceOption) {
       setEditingService(serviceId);
       setCurrentConfigService(serviceOption);
-      setTempConfig(service.config);
       setShowConfigModal(true);
     }
   };
@@ -853,219 +847,19 @@ export default function AddSubscriptionMain() {
         </div>
 
         {/* Configuration Modal */}
-        <AnimatePresence>
-          {showConfigModal && currentConfigService && (
-            <motion.div
-              className={styles.modal}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <motion.div
-                className={styles.modalContent}
-                initial={{ scale: 0.9, y: 20 }}
-                animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.9, y: 20 }}
-              >
-                <div className={styles.modalHeader}>
-                  <h2 className={styles.modalTitle}>
-                    Configure {currentConfigService.name}
-                  </h2>
-                  <button
-                    onClick={() => setShowConfigModal(false)}
-                    className={styles.modalCloseButton}
-                    style={{
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <X size={24} />
-                  </button>
-                </div>
-
-                <div className={styles.modalBody}>
-                  {currentConfigService.configOptions.map((option) => (
-                    <div key={option.id} className={styles.configField}>
-                      <label className={styles.configLabel}>
-                        {option.label}
-                      </label>
-
-                      {option.type === "radio" && (
-                        <div className={styles.radioGroup}>
-                          {option.options?.map((opt) => (
-                            <label
-                              key={opt.value}
-                              className={styles.radioLabel}
-                            >
-                              <input
-                                type="radio"
-                                name={option.id}
-                                value={opt.value}
-                                checked={tempConfig[option.id] === opt.value}
-                                onChange={(e) =>
-                                  setTempConfig((prev) => ({
-                                    ...prev,
-                                    [option.id]: e.target.value,
-                                  }))
-                                }
-                              />
-                              <span>{opt.label}</span>
-                              {opt.price !== undefined && opt.price !== 0 && (
-                                <span className={styles.priceModifier}>
-                                  {opt.price > 0 ? "+" : ""}₦
-                                  {opt.price.toLocaleString()}
-                                </span>
-                              )}
-                            </label>
-                          ))}
-                        </div>
-                      )}
-
-                      {option.type === "number" && (
-                        <div className={styles.numberInput}>
-                          <button
-                            className={styles.numberButton}
-                            onClick={() =>
-                              setTempConfig((prev) => ({
-                                ...prev,
-                                [option.id]: Math.max(
-                                  option.min || 1,
-                                  (prev[option.id] || option.min || 1) - 1
-                                ),
-                              }))
-                            }
-                          >
-                            <Minus size={16} />
-                          </button>
-                          <input
-                            type="number"
-                            value={tempConfig[option.id] || option.min || 1}
-                            onChange={(e) =>
-                              setTempConfig((prev) => ({
-                                ...prev,
-                                [option.id]:
-                                  parseInt(e.target.value) || option.min || 1,
-                              }))
-                            }
-                            min={option.min}
-                            max={option.max}
-                            style={{
-                              width: "60px",
-                              textAlign: "center" as const,
-                              padding: "0.5rem",
-                              border: "1px solid #f1f1f1",
-                              borderRadius: "0.5rem",
-                            }}
-                          />
-                          <button
-                            className={styles.numberButton}
-                            onClick={() =>
-                              setTempConfig((prev) => ({
-                                ...prev,
-                                [option.id]: Math.min(
-                                  option.max || 10,
-                                  (prev[option.id] || option.min || 1) + 1
-                                ),
-                              }))
-                            }
-                          >
-                            <Plus size={16} />
-                          </button>
-                        </div>
-                      )}
-
-                      {option.type === "checkbox" && (
-                        <div className={styles.checkboxGroup}>
-                          {option.options?.map((opt) => (
-                            <label
-                              key={opt.value}
-                              className={styles.radioLabel}
-                            >
-                              <input
-                                type="checkbox"
-                                value={opt.value}
-                                checked={(tempConfig[option.id] || []).includes(
-                                  opt.value
-                                )}
-                                onChange={(e) => {
-                                  const values = tempConfig[option.id] || [];
-                                  if (e.target.checked) {
-                                    setTempConfig((prev) => ({
-                                      ...prev,
-                                      [option.id]: [...values, opt.value],
-                                    }));
-                                  } else {
-                                    setTempConfig((prev) => ({
-                                      ...prev,
-                                      [option.id]: values.filter(
-                                        (v: string) => v !== opt.value
-                                      ),
-                                    }));
-                                  }
-                                }}
-                              />
-                              <span>{opt.label}</span>
-                              {opt.price !== undefined && opt.price !== 0 && (
-                                <span className={styles.priceModifier}>
-                                  {opt.price > 0 ? "+" : ""}₦
-                                  {opt.price.toLocaleString()}
-                                </span>
-                              )}
-                            </label>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      marginTop: "2rem",
-                      padding: "1rem",
-                      backgroundColor: "#fbfbfb",
-                      borderRadius: "0.5rem",
-                    }}
-                  >
-                    <span style={{ fontWeight: "600" }}>Service Price</span>
-                    <span
-                      style={{
-                        fontSize: "1.25rem",
-                        fontWeight: "bold",
-                        color: "#075056",
-                      }}
-                    >
-                      ₦
-                      {calculateServicePrice(
-                        currentConfigService,
-                        tempConfig
-                      ).toLocaleString()}
-                      /month
-                    </span>
-                  </div>
-                </div>
-
-                <div className={styles.modalFooter}>
-                  <button
-                    className={`${styles.button} ${styles.buttonGhost}`}
-                    onClick={() => setShowConfigModal(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className={`${styles.button} ${styles.buttonPrimary}`}
-                    onClick={saveServiceConfig}
-                  >
-                    Save Configuration
-                  </button>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <ConfigurationModal
+          isOpen={showConfigModal}
+          service={currentConfigService}
+          initialConfig={
+            editingService && currentConfigService
+              ? selectedServices.find((s) => s.serviceId === editingService)
+                  ?.config || {}
+              : {}
+          }
+          onClose={() => setShowConfigModal(false)}
+          onSave={saveServiceConfig}
+          calculateServicePrice={calculateServicePrice}
+        />
       </div>
     </div>
   );
