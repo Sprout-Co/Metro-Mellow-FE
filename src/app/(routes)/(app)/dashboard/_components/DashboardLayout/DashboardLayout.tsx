@@ -11,11 +11,6 @@ interface DashboardLayoutProps {
   children: ReactNode;
 }
 
-const breadcrumbItems = [
-  { label: "Home", href: "/" },
-  { label: "Dashboard", href: "/dashboard" },
-];
-
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
@@ -39,7 +34,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           transition={{ delay: 0.2, duration: 0.3 }}
         >
           <>
-            <Breadcrumb items={breadcrumbItems} />
+            <Breadcrumb />
             {children}
           </>
         </motion.main>

@@ -81,16 +81,18 @@
     display: flex;
     align-items: center;
     gap: spacing("xs");
-    color: color("neutral", "darkest");
+    color: color("neutral", "medium");
     @include font-secondary;
     @include font-size("sm");
     @include font-weight("regular");
     padding: spacing("xxs") spacing("xs");
+    opacity: 0.7;
 
     &--active {
-      color: color("neutral", "darkest");
-      @include font-weight("semibold");
+      color: color("neutral", "medium");
+      @include font-weight("regular");
       position: relative;
+      opacity: 0.6;
 
       // Optional: Add a subtle indicator for the current page
       &::after {
@@ -100,9 +102,9 @@
         left: spacing("xs");
         right: spacing("xs");
         height: 2px;
-        background-color: color("primary", "base");
+        background-color: color("neutral", "medium");
         border-radius: border-radius("sm");
-        opacity: 0;
+        opacity: 0.4;
         animation: fadeIn 0.3s ease-out forwards;
       }
     }
@@ -120,6 +122,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: color("neutral", "dark");
 
     @include breakpoint-down("md") {
       max-width: 150px;

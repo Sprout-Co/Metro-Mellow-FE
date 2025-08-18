@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { ChevronRight, Home } from "lucide-react";
 import styles from "./Breadcrumb.module.scss";
@@ -11,10 +12,11 @@ export interface BreadcrumbItem {
 }
 
 interface BreadcrumbProps {
-  items: BreadcrumbItem[];
+  items?: BreadcrumbItem[];
   separator?: React.ReactNode;
   showHomeIcon?: boolean;
   className?: string;
+  autoGenerate?: boolean;
 }
 
 const Breadcrumb: React.FC<BreadcrumbProps> = ({
@@ -22,7 +24,44 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
   separator = <ChevronRight size={16} />,
   showHomeIcon = true,
   className = "",
+  autoGenerate = true,
 }) => {
+  const pathname = usePathname();
+
+  // Generate breadcrumb items from pathname if autoGenerate is true and no items provided
+  const breadcrumbItems = React.useMemo(() => {
+    if (items) return items;
+
+    if (!autoGenerate) return [];
+
+    const pathSegments = pathname.split("/").filter(Boolean);
+    const generatedItems: BreadcrumbItem[] = [];
+
+    // Add home item
+    generatedItems.push({ label: "Home", href: "/" });
+
+    // Build breadcrumb items from path segments
+    let currentPath = "";
+    pathSegments.forEach((segment, index) => {
+      currentPath += `/${segment}`;
+
+      // Convert segment to readable label
+      const label = segment
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+
+      // Don't add href for the last item (current page)
+      const isLast = index === pathSegments.length - 1;
+      generatedItems.push({
+        label,
+        href: isLast ? undefined : currentPath,
+      });
+    });
+
+    return generatedItems;
+  }, [pathname, items, autoGenerate]);
+
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -57,8 +96,8 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
         initial="hidden"
         animate="visible"
       >
-        {items.map((item, index) => {
-          const isLast = index === items.length - 1;
+        {breadcrumbItems.map((item, index) => {
+          const isLast = index === breadcrumbItems.length - 1;
           const isFirst = index === 0;
 
           return (
