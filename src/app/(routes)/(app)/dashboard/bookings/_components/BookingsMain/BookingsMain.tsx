@@ -28,6 +28,7 @@ import ListView from "../ListView/ListView";
 import AppointmentCard from "@/components/ui/AppointmentCard";
 import QuickActions from "../QuickActions/QuickActions";
 import TimelineView from "../TimelineView/TimelineView";
+import DashboardHeader from "../../../_components/DashboardHeader/DashboardHeader";
 // import TimelineView from "../TimelineView/TimelineView";
 // import BookingStats from "../BookingStats/BookingStats";
 // import QuickActions from "../QuickActions/QuickActions";
@@ -272,40 +273,24 @@ const BookingsMain: React.FC = () => {
   return (
     <div className={styles.bookingsMain}>
       {/* Header Section */}
-      <div className={styles.bookingsMain__header}>
-        <div>
-          <div className={styles.bookingsMain__headerContent}>
-            <h1 className={styles.bookingsMain__title}>My Bookings</h1>
-            <p className={styles.bookingsMain__subtitle}>
-              Manage and track all your service appointments
-            </p>
-          </div>
-
-          {/* Upcoming Service Banner */}
-          {nextBooking && (
-            <div className={styles.bookingsMain__upcomingService}>
-              <AppointmentCard
-                serviceName={nextBooking.serviceName}
-                serviceType={nextBooking.serviceType as any}
-                date={nextBooking.date}
-                status={nextBooking.status as any}
-                provider={nextBooking.provider}
-                variant="header"
-              />
-            </div>
-          )}
-        </div>
-
-        <div className={styles.bookingsMain__headerActions}>
-          <FnButton variant="white" size="md" onClick={handleAddBooking}>
-            <Plus size={18} />
-            Book Service
-          </FnButton>
-        </div>
-      </div>
-
-      {/* Quick Stats Overview */}
-      {/* <BookingStats bookings={bookings} /> */}
+      <DashboardHeader
+        title="My Bookings"
+        subtitle="Manage and track all your service appointments"
+        actionBtnText="Book Service"
+        actionBtnIcon={<Plus size={18} />}
+        onActionButtonClick={handleAddBooking}
+        upcomingService={
+          nextBooking
+            ? {
+                serviceName: nextBooking.serviceName,
+                serviceType: nextBooking.serviceType,
+                date: nextBooking.date.toISOString(),
+                status: nextBooking.status,
+                provider: nextBooking.provider,
+              }
+            : undefined
+        }
+      />
 
       {/* Quick Actions */}
       <QuickActions />
