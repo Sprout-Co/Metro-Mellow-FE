@@ -2,6 +2,14 @@
 import React from "react";
 import { motion } from "framer-motion";
 import styles from "./UpcomingServices.module.scss";
+import {
+  Sparkles,
+  Scissors,
+  ChefHat,
+  Phone,
+  Bug,
+  HelpCircle,
+} from "lucide-react";
 
 // Mock upcoming services data
 const upcomingServices = [
@@ -39,111 +47,17 @@ const UpcomingServices: React.FC = () => {
   const getServiceIcon = (type: string) => {
     switch (type.toLowerCase()) {
       case "cleaning":
-        return (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-            <line x1="12" y1="22.08" x2="12" y2="12"></line>
-          </svg>
-        );
+        return <Sparkles size={24} />;
       case "laundry":
-        return (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-            <circle cx="12" cy="12" r="4"></circle>
-            <circle cx="12" cy="12" r="1"></circle>
-          </svg>
-        );
+        return <Scissors size={24} />;
       case "cooking":
-        return (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M8 3v3a2 2 0 0 1-2 2H3m3 3h6m4-3h3a2 2 0 0 1 2 2v3"></path>
-            <rect x="3" y="10" width="18" height="10" rx="2"></rect>
-          </svg>
-        );
+        return <ChefHat size={24} />;
       case "errands":
-        return (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-          </svg>
-        );
+        return <Phone size={24} />;
       case "pest control":
-        return (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M16 16s0-2 4-2 4 2 4 2"></path>
-            <path d="M8 10s0-2 4-2 4 2 4 2"></path>
-            <path d="M4 22s0-2 4-2 4 2 4 2"></path>
-            <path d="M13 5h6M13 8h3"></path>
-          </svg>
-        );
+        return <Bug size={24} />;
       default:
-        return (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-            <line x1="12" y1="17" x2="12.01" y2="17"></line>
-          </svg>
-        );
+        return <HelpCircle size={24} />;
     }
   };
 

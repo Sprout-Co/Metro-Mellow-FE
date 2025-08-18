@@ -98,19 +98,6 @@ const mockCustomerBookings = [
   },
 ];
 
-// Mock the useBookingOperations hook
-const useMockBookingOperations = () => {
-  return {
-    currentCustomerBookings: mockCustomerBookings,
-    loading: false,
-    error: null,
-    handleGetCustomerBookings: () => {
-      // Mock function - no actual API call
-      console.log("Mock: Getting customer bookings...");
-    },
-  };
-};
-
 // Toggle this to show/hide upcoming services for testing
 const HAS_UPCOMING_SERVICES = true;
 
@@ -118,12 +105,7 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
   firstName = "Sarah",
 }) => {
   const dispatch = useDispatch();
-  // Use mock GraphQL hook
-  // const { handleGetCustomerBookings, currentCustomerBookings, loading } = useMockBookingOperations();
 
-  // useEffect(() => {
-  //   handleGetCustomerBookings();
-  // }, [handleGetCustomerBookings]);
   const currentCustomerBookings = mockCustomerBookings;
   // Filter and sort upcoming bookings (same logic as real GraphQL version)
   const upcomingService = useMemo(() => {
@@ -232,12 +214,6 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
               >
                 {upcomingService ? "Book Another" : "Book a Service"}
               </FnButton>
-              {/* <Link
-                href="/dashboard/book-service"
-                className={styles.welcomeHeader__ctaButton}
-              >
-                {upcomingService ? "Book Another" : "Book a Service"}
-              </Link> */}
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -249,10 +225,6 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
                   ? "Manage Subscriptions"
                   : "Start Subscription"}
               </FnButton>
-              {/* <Link
-                href="/dashboard/subscriptions"
-                className={styles.welcomeHeader__ctaButtonSecondary}
-              ></Link> */}
             </motion.div>
           </div>
         </div>
