@@ -33,6 +33,7 @@ import {
 import SubscriptionListView from "../SubscriptionListView/SubscriptionListView";
 import AppointmentCard from "@/components/ui/AppointmentCard";
 import SubscriptionGridView from "../SubscriptionGridView/SubscriptionGridView";
+import DashboardHeader from "../../../_components/DashboardHeader/DashboardHeader";
 
 // Mock data with multiple services per subscription
 const mockSubscriptions: Subscription[] = [
@@ -410,39 +411,13 @@ const SubscriptionsMain: React.FC = () => {
   return (
     <div className={styles.subscriptionsMain}>
       {/* Header Section */}
-      <div className={styles.subscriptionsMain__header}>
-        <div>
-          <div className={styles.subscriptionsMain__headerContent}>
-            <h1 className={styles.subscriptionsMain__title}>
-              My Subscriptions
-            </h1>
-            <p className={styles.subscriptionsMain__subtitle}>
-              Manage your recurring service subscriptions
-            </p>
-          </div>
-
-          {/* Next Service Banner */}
-          {nextSubscription && (
-            <div className={styles.subscriptionsMain__upcomingService}>
-              <AppointmentCard
-                serviceName={`${nextSubscription.name} - Next Service`}
-                serviceType={nextSubscription.services[0]?.serviceType as any}
-                date={nextSubscription.nextServiceDate!}
-                status={"Confirmed" as any}
-                provider={nextSubscription.primaryProvider}
-                variant="header"
-              />
-            </div>
-          )}
-        </div>
-
-        <div className={styles.subscriptionsMain__headerActions}>
-          <FnButton variant="white" size="md" onClick={handleAddSubscription}>
-            <Plus size={18} />
-            Add Subscription
-          </FnButton>
-        </div>
-      </div>
+      <DashboardHeader
+        title="My Subscriptions"
+        subtitle="Manage your recurring service subscriptions"
+        actionBtnText="Add Subscription"
+        actionBtnIcon={<Plus size={18} />}
+        onActionButtonClick={handleAddSubscription}
+      />
 
       {/* Controls Section */}
       <div className={styles.subscriptionsMain__controls}>
