@@ -22,6 +22,7 @@ import styles from "./ReferFriend.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import Input from "@/components/ui/Input/Input";
 import DashboardLayout from "../_components/DashboardLayout/DashboardLayout";
+import DashboardHeader from "../_components/DashboardHeader/DashboardHeader";
 
 interface Referral {
   id: string;
@@ -114,23 +115,16 @@ export default function ReferFriendPage() {
   return (
     <DashboardLayout>
       <div className={styles.refer}>
-        {/* Header */}
-        <div className={styles.refer__header}>
-          <motion.div
-            className={styles.refer__headerContent}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <Users className={styles.refer__headerIcon} />
-            <div>
-              <h1 className={styles.refer__title}>Refer a Friend</h1>
-              <p className={styles.refer__subtitle}>
-                Share Metro Mellow with friends and earn rewards together
-              </p>
-            </div>
-          </motion.div>
-        </div>
-
+        <DashboardHeader
+          title="Refer a Friend"
+          subtitle="Share Metro Mellow with friends and earn rewards together"
+          actionBtnText="Share"
+          actionBtnIcon={<Share2 size={18} />}
+          onActionButtonClick={() => {
+            // Handle share action
+            console.log("Sharing referral link");
+          }}
+        />
         {/* Stats Overview */}
         <motion.div
           className={styles.statsOverview}

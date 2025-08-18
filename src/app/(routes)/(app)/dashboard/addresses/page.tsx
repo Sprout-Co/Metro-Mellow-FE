@@ -27,6 +27,7 @@ import Input from "@/components/ui/Input";
 import DashboardLayout from "../_components/DashboardLayout/DashboardLayout";
 import AddressModal from "./_components/AddressModal";
 import AddressListView from "./_components/AddressListView";
+import DashboardHeader from "../_components/DashboardHeader/DashboardHeader";
 
 // Types
 export interface Address {
@@ -213,24 +214,10 @@ const AddressManagementPage: React.FC = () => {
     <DashboardLayout>
       <div className={styles.addressManagement}>
         {/* Header */}
-        <div className={styles.addressManagement__header}>
-          <div className={styles.addressManagement__headerContent}>
-            <h1 className={styles.addressManagement__title}>Address Book</h1>
-            <p className={styles.addressManagement__subtitle}>
-              Manage your delivery addresses for quick and easy service bookings
-            </p>
-          </div>
-          <FnButton
-            variant="white"
-            onClick={() => {
-              setEditingAddress(null);
-              setIsModalOpen(true);
-            }}
-          >
-            <Plus size={18} />
-            Add New Address
-          </FnButton>
-        </div>
+        <DashboardHeader
+          title="Address Book"
+          subtitle="Manage your delivery addresses for quick and easy service bookings"
+        />
 
         {/* Controls */}
         <div className={styles.addressManagement__controls}>

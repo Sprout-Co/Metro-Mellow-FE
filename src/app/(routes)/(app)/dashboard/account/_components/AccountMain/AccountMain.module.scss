@@ -7,60 +7,6 @@
   flex-direction: column;
   gap: spacing("xl");
 
-  &__header {
-    background: linear-gradient(
-      135deg,
-      color("primary", "base"),
-      color("primary", "dark")
-    );
-    border-radius: border-radius("2xl");
-    padding: spacing("2xl");
-    position: relative;
-    overflow: hidden;
-
-    &::before {
-      content: "";
-      position: absolute;
-      top: -50%;
-      right: -10%;
-      width: 40%;
-      height: 200%;
-      background: radial-gradient(
-        circle,
-        rgba(255, 255, 255, 0.1) 0%,
-        transparent 60%
-      );
-      pointer-events: none;
-    }
-
-    @include breakpoint-down("md") {
-      padding: spacing("lg");
-    }
-  }
-
-  &__headerContent {
-    position: relative;
-    z-index: 1;
-  }
-
-  &__title {
-    @include font-size("2xl");
-    @include font-weight("bold");
-    @include font-family("heading");
-    color: color("neutral", "white");
-    margin: 0 0 spacing("xs") 0;
-
-    @include breakpoint-down("md") {
-      @include font-size("xl");
-    }
-  }
-
-  &__subtitle {
-    @include font-size("body-2");
-    color: rgba(255, 255, 255, 0.9);
-    margin: 0;
-  }
-
   &__container {
     display: grid;
     grid-template-columns: 280px 1fr;

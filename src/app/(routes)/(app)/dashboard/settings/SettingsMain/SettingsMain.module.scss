@@ -6,34 +6,6 @@
   width: 100%;
   min-height: calc(100vh - 4.5rem);
 
-  &__header {
-    padding: spacing("xl");
-    background: linear-gradient(
-      135deg,
-      color("primary", "base"),
-      color("primary", "dark")
-    );
-    border-radius: border-radius("2xl");
-    color: color("neutral", "white");
-    margin-bottom: spacing("xl");
-
-    @include breakpoint-down("md") {
-      padding: spacing("lg");
-      margin-bottom: spacing("lg");
-    }
-  }
-
-  &__title {
-    @include font-size("2xl");
-    @include font-weight("bold");
-    margin: 0 0 spacing("xs") 0;
-  }
-
-  &__subtitle {
-    @include font-size("body-2");
-    opacity: 0.9;
-  }
-
   &__container {
     display: grid;
     grid-template-columns: 280px 1fr;

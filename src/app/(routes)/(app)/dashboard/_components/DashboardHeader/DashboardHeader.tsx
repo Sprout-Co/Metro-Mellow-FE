@@ -35,6 +35,7 @@ interface DashboardHeaderProps {
     status: string;
     provider: string;
   };
+  extraContent?: React.ReactNode;
 }
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({
@@ -44,6 +45,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   actionBtnIcon,
   onActionButtonClick,
   upcomingService,
+  extraContent,
 }) => {
   return (
     <div className={styles.dashboardHeader}>
@@ -79,6 +81,11 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           </div>
         )}
       </div>
+      {extraContent && (
+        <div className={styles.dashboardHeader__extraContent}>
+          {extraContent}
+        </div>
+      )}
     </div>
   );
 };

@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import styles from "./SettingsMain.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
+import DashboardHeader from "../../_components/DashboardHeader/DashboardHeader";
 
 type TabType =
   | "profile"
@@ -592,12 +593,10 @@ const SettingsMain: React.FC = () => {
 
   return (
     <div className={styles.settings}>
-      <div className={styles.settings__header}>
-        <h1 className={styles.settings__title}>Settings</h1>
-        <p className={styles.settings__subtitle}>
-          Manage your account settings and preferences
-        </p>
-      </div>
+      <DashboardHeader
+        title="Settings"
+        subtitle="Manage your account settings and preferences"
+      />
 
       <div className={styles.settings__container}>
         {/* Sidebar Navigation */}

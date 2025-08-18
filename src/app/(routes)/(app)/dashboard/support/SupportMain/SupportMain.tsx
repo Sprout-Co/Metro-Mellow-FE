@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import styles from "./SupportMain.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
+import DashboardHeader from "../../_components/DashboardHeader/DashboardHeader";
 
 type TabType = "help" | "tickets" | "contact";
 
@@ -514,29 +515,10 @@ const SupportMain: React.FC = () => {
 
   return (
     <div className={styles.support}>
-      <div className={styles.support__header}>
-        <div className={styles.support__headerContent}>
-          <h1 className={styles.support__title}>Support Center</h1>
-          <p className={styles.support__subtitle}>
-            We're here to help you with any questions or issues
-          </p>
-        </div>
-
-        <div className={styles.support__headerStats}>
-          <div className={styles.support__stat}>
-            <span className={styles.support__statValue}>24/7</span>
-            <span className={styles.support__statLabel}>Support</span>
-          </div>
-          <div className={styles.support__stat}>
-            <span className={styles.support__statValue}> 2hr</span>
-            <span className={styles.support__statLabel}>Response Time</span>
-          </div>
-          <div className={styles.support__stat}>
-            <span className={styles.support__statValue}>98%</span>
-            <span className={styles.support__statLabel}>Satisfaction</span>
-          </div>
-        </div>
-      </div>
+      <DashboardHeader
+        title="Support Center"
+        subtitle="We're here to help you with any questions or issues"
+      />
 
       {/* Tab Navigation */}
       <div className={styles.support__tabs}>

@@ -18,6 +18,7 @@ import styles from "./PaymentMethods.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import Modal from "@/components/ui/Modal/Modal";
 import Input from "@/components/ui/Input/Input";
+import DashboardHeader from "../_components/DashboardHeader/DashboardHeader";
 
 interface PaymentMethod {
   id: string;
@@ -134,18 +135,13 @@ export default function PaymentMethodsPage() {
     <DashboardLayout>
       <div className={styles.paymentMethods}>
         {/* Header */}
-        <div className={styles.paymentMethods__header}>
-          <div className={styles.paymentMethods__headerContent}>
-            <h1 className={styles.paymentMethods__title}>Payment Methods</h1>
-            <p className={styles.paymentMethods__subtitle}>
-              Manage your payment methods and billing information
-            </p>
-          </div>
-          <FnButton variant="white" onClick={() => setIsAddModalOpen(true)}>
-            <Plus size={18} />
-            Add Payment Method
-          </FnButton>
-        </div>
+        <DashboardHeader
+          title="Payment Methods"
+          subtitle="Manage your payment methods and billing information"
+          actionBtnText="Add Payment Method"
+          actionBtnIcon={<Plus size={18} />}
+          onActionButtonClick={() => setIsAddModalOpen(true)}
+        />
 
         {/* Security Notice */}
         <motion.div

@@ -30,6 +30,7 @@ import ProfileSection from "../ProfileSection/ProfileSection";
 import SecuritySection from "../SecuritySection/SecuritySection";
 import NotificationSettings from "../NotificationSettings/NotificationSettings";
 import AccountStats from "../AccountStats/AccountStats";
+import DashboardHeader from "../../../_components/DashboardHeader/DashboardHeader";
 
 export type TabType = "profile" | "security" | "notifications";
 
@@ -67,14 +68,18 @@ const AccountMain: React.FC = () => {
   return (
     <div className={styles.accountMain}>
       {/* Header Section */}
-      <div className={styles.accountMain__header}>
+      <DashboardHeader
+        title="My Account"
+        subtitle="Manage your profile, security settings, and preferences"
+      />
+      {/* <div className={styles.accountMain__header}>
         <div className={styles.accountMain__headerContent}>
           <h1 className={styles.accountMain__title}>My Account</h1>
           <p className={styles.accountMain__subtitle}>
             Manage your profile, security settings, and preferences
           </p>
         </div>
-      </div>
+      </div> */}
 
       {/* Account Stats */}
       <AccountStats userData={userData} />
