@@ -56,6 +56,8 @@ import AddressModal from "../../../addresses/_components/AddressModal";
 import RescheduleDrawer from "./RescheduleDrawer/RescheduleDrawer";
 import ServicesListDrawer from "./ServicesListDrawer/ServicesListDrawer";
 import QuickHelpDrawer from "./QuickHelpDrawer/QuickHelpDrawer";
+import { openServicesListDrawer } from "@/lib/redux/slices/uiSlice";
+import { useDispatch } from "react-redux";
 
 // Mock addresses data
 const mockAddresses = [
@@ -136,7 +138,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [isAddressDrawerOpen, setIsAddressDrawerOpen] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
-
+  const dispatch = useDispatch();
   // States for the new drawers
   const [isRescheduleDrawerOpen, setIsRescheduleDrawerOpen] = useState(false);
   const [isServicesListDrawerOpen, setIsServicesListDrawerOpen] =
@@ -149,14 +151,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       label: "New Booking",
       // href: "/dashboard/bookings/new",
       color: styles.quickActionPrimary,
-      onClick: () => setIsServicesListDrawerOpen(true),
+      onClick: () => dispatch(openServicesListDrawer()),
     },
     {
       icon: Repeat,
       label: "New Subscription",
       href: "/dashboard/notifications",
       color: styles.quickActionSecondary,
-      onClick: () => setIsServicesListDrawerOpen(true),
+      onClick: () => dispatch(openServicesListDrawer()),
     },
     {
       icon: HelpCircle,
@@ -421,12 +423,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           onClose={() => setIsRescheduleDrawerOpen(false)}
         />
       )}
-      {isServicesListDrawerOpen && (
+      {/* {isServicesListDrawerOpen && (
         <ServicesListDrawer
           isOpen={isServicesListDrawerOpen}
           onClose={() => setIsServicesListDrawerOpen(false)}
         />
-      )}
+      )} */}
       {isQuickHelpDrawerOpen && (
         <QuickHelpDrawer
           isOpen={isQuickHelpDrawerOpen}

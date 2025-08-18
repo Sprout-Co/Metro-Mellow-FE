@@ -7,6 +7,8 @@ import styles from "./Navbar.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import { Bell, ChevronDown, MapPin, Menu, User } from "lucide-react";
 import AddAddressModal from "./AddAddressModal/AddAddressModal";
+import { useDispatch } from "react-redux";
+import { openServicesListDrawer } from "@/lib/redux/slices/uiSlice";
 
 // Icons (you can replace these with your preferred icon library)
 
@@ -54,7 +56,7 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
-
+  const dispatch = useDispatch();
   return (
     <nav className={styles.navbar}>
       <div className={styles.navbar__container}>
@@ -81,33 +83,14 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
             <ChevronDown />
           </motion.div>
         </div>
-        {/* Navigation Links - Desktop */}
-        {/* <div className={styles.navbar__links}>
-          <motion.div className={styles.navbar__linkContainer}>
-            {["overview", "services", "bookings", "history"].map((tab) => (
-              <motion.div
-                key={tab}
-                className={`${styles.navbar__linkItem} ${activeTab === tab ? styles["navbar__linkItem--active"] : ""}`}
-                onClick={() => setActiveTab(tab)}
-              >
-                <Link href={`/dashboard/${tab === "overview" ? "" : tab}`}>
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                </Link>
-                {activeTab === tab && (
-                  <motion.div
-                    className={styles.navbar__linkIndicator}
-                    layoutId="indicator"
-                  />
-                )}
-              </motion.div>
-            ))}
-          </motion.div>
-        </div> */}
-
         {/* Right Section */}
         <div className={styles.navbar__actions}>
           {/* Location */}
-          <FnButton variant="primary" size="sm">
+          <FnButton
+            variant="primary"
+            size="sm"
+            onClick={() => dispatch(openServicesListDrawer())}
+          >
             Order Now!
           </FnButton>
           {/* Notification */}

@@ -295,7 +295,16 @@ const CTASection: React.FC = () => {
                                 </span>
                               )}
                               <div>
-                                <FnButton size="xs" variant="primary">
+                                <FnButton
+                                  size="xs"
+                                  variant="primary"
+                                  onClick={() => {
+                                    console.log(
+                                      "Booking service:",
+                                      subService.id
+                                    );
+                                  }}
+                                >
                                   Book Now
                                 </FnButton>
                               </div>

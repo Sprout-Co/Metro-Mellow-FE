@@ -6,6 +6,10 @@ import Navbar from "./navbar/Navbar";
 import Sidebar from "./sidebar/Sidebar";
 import styles from "./DashboardLayout.module.scss";
 import Breadcrumb from "./breadcrumb/Breadcrumb";
+import ServicesListDrawer from "./sidebar/ServicesListDrawer/ServicesListDrawer";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/lib/redux/store";
+import { closeServicesListDrawer } from "@/lib/redux/slices/uiSlice";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -13,8 +17,12 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const dispatch = useDispatch();
+  const isServicesListDrawerOpen = useSelector(
+    (state: RootState) => state.ui.isServicesListDrawerOpen
+  );
 
-  const handleSidebarToggle = (collapsed: boolean) => {
+  const handleSidebarToggle = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
   };
 
@@ -25,7 +33,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       <div className={styles.dashboardLayout__content}>
         <Sidebar
           isOpen={isSidebarCollapsed}
-          onClose={() => handleSidebarToggle(!isSidebarCollapsed)}
+          onClose={() => handleSidebarToggle()}
         />
         <motion.main
           className={`${styles.dashboardLayout__main} ${isSidebarCollapsed ? styles["dashboardLayout__main--expanded"] : ""}`}
@@ -39,6 +47,16 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           </>
         </motion.main>
       </div>
+
+      <ServicesListDrawer
+        isOpen={isServicesListDrawerOpen}
+        onClose={() => dispatch(closeServicesListDrawer())}
+        onServiceSelect={(categoryId, serviceId) => {
+          console.log("Selected category:", categoryId);
+          console.log("Selected service:", serviceId);
+          dispatch(closeServicesListDrawer());
+        }}
+      />
     </div>
   );
 };

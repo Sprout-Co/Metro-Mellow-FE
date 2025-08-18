@@ -7,6 +7,8 @@ import { BookingStatus, TimeSlot, ServiceCategory } from "@/graphql/api";
 import styles from "./WelcomeHeader.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import AppointmentCard from "@/components/ui/AppointmentCard";
+import { openServicesListDrawer } from "@/lib/redux/slices/uiSlice";
+import { useDispatch } from "react-redux";
 
 interface WelcomeHeaderProps {
   firstName?: string;
@@ -115,6 +117,7 @@ const HAS_UPCOMING_SERVICES = true;
 const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
   firstName = "Sarah",
 }) => {
+  const dispatch = useDispatch();
   // Use mock GraphQL hook
   // const { handleGetCustomerBookings, currentCustomerBookings, loading } = useMockBookingOperations();
 
@@ -223,7 +226,10 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
             >
-              <FnButton variant="accent">
+              <FnButton
+                variant="accent"
+                onClick={() => dispatch(openServicesListDrawer())}
+              >
                 {upcomingService ? "Book Another" : "Book a Service"}
               </FnButton>
               {/* <Link
