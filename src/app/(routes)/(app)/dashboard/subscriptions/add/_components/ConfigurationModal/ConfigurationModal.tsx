@@ -61,22 +61,24 @@ const ConfigurationModal: React.FC<ConfigurationModalProps> = ({
   return (
     <ModalDrawer isOpen={isOpen} onClose={onClose} width="md">
       <motion.div
-        className={styles.modal}
+        className={styles.configurationModal}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
         <motion.div
-          className={styles.modalContent}
+          className={styles.configurationModal__content}
           initial={{ scale: 0.9, y: 20 }}
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 20 }}
         >
-          <div className={styles.modalHeader}>
-            <h2 className={styles.modalTitle}>Configure {service.name}</h2>
+          <div className={styles.configurationModal__header}>
+            <h2 className={styles.configurationModal__title}>
+              Configure {service.name}
+            </h2>
             <button
               onClick={onClose}
-              className={styles.modalCloseButton}
+              className={styles.configurationModal__closeButton}
               style={{
                 background: "none",
                 border: "none",
@@ -87,15 +89,20 @@ const ConfigurationModal: React.FC<ConfigurationModalProps> = ({
             </button>
           </div>
 
-          <div className={styles.modalBody}>
+          <div className={styles.configurationModal__body}>
             {service.configOptions.map((option) => (
-              <div key={option.id} className={styles.configField}>
-                <label className={styles.configLabel}>{option.label}</label>
+              <div key={option.id} className={styles.configurationModal__field}>
+                <label className={styles.configurationModal__label}>
+                  {option.label}
+                </label>
 
                 {option.type === "radio" && (
-                  <div className={styles.radioGroup}>
+                  <div className={styles.configurationModal__radioGroup}>
                     {option.options?.map((opt) => (
-                      <label key={opt.value} className={styles.radioLabel}>
+                      <label
+                        key={opt.value}
+                        className={styles.configurationModal__radioLabel}
+                      >
                         <input
                           type="radio"
                           name={option.id}
@@ -110,7 +117,9 @@ const ConfigurationModal: React.FC<ConfigurationModalProps> = ({
                         />
                         <span>{opt.label}</span>
                         {opt.price !== undefined && opt.price !== 0 && (
-                          <span className={styles.priceModifier}>
+                          <span
+                            className={styles.configurationModal__priceModifier}
+                          >
                             {opt.price > 0 ? "+" : ""}₦
                             {opt.price.toLocaleString()}
                           </span>
@@ -121,9 +130,9 @@ const ConfigurationModal: React.FC<ConfigurationModalProps> = ({
                 )}
 
                 {option.type === "number" && (
-                  <div className={styles.numberInput}>
+                  <div className={styles.configurationModal__numberInput}>
                     <button
-                      className={styles.numberButton}
+                      className={styles.configurationModal__numberButton}
                       onClick={() =>
                         setTempConfig((prev) => ({
                           ...prev,
@@ -148,16 +157,10 @@ const ConfigurationModal: React.FC<ConfigurationModalProps> = ({
                       }
                       min={option.min}
                       max={option.max}
-                      style={{
-                        width: "60px",
-                        textAlign: "center" as const,
-                        padding: "0.5rem",
-                        border: "1px solid #f1f1f1",
-                        borderRadius: "0.5rem",
-                      }}
+                      className={styles.configurationModal__numberInputField}
                     />
                     <button
-                      className={styles.numberButton}
+                      className={styles.configurationModal__numberButton}
                       onClick={() =>
                         setTempConfig((prev) => ({
                           ...prev,
@@ -174,9 +177,12 @@ const ConfigurationModal: React.FC<ConfigurationModalProps> = ({
                 )}
 
                 {option.type === "checkbox" && (
-                  <div className={styles.checkboxGroup}>
+                  <div className={styles.configurationModal__checkboxGroup}>
                     {option.options?.map((opt) => (
-                      <label key={opt.value} className={styles.radioLabel}>
+                      <label
+                        key={opt.value}
+                        className={styles.configurationModal__checkboxLabel}
+                      >
                         <input
                           type="checkbox"
                           value={opt.value}
@@ -202,7 +208,9 @@ const ConfigurationModal: React.FC<ConfigurationModalProps> = ({
                         />
                         <span>{opt.label}</span>
                         {opt.price !== undefined && opt.price !== 0 && (
-                          <span className={styles.priceModifier}>
+                          <span
+                            className={styles.configurationModal__priceModifier}
+                          >
                             {opt.price > 0 ? "+" : ""}₦
                             {opt.price.toLocaleString()}
                           </span>
@@ -214,40 +222,26 @@ const ConfigurationModal: React.FC<ConfigurationModalProps> = ({
               </div>
             ))}
 
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: "2rem",
-                padding: "1rem",
-                backgroundColor: "#fbfbfb",
-                borderRadius: "0.5rem",
-              }}
-            >
-              <span style={{ fontWeight: "600" }}>Service Price</span>
-              <span
-                style={{
-                  fontSize: "1.25rem",
-                  fontWeight: "bold",
-                  color: "#075056",
-                }}
-              >
+            <div className={styles.configurationModal__priceBox}>
+              <span className={styles.configurationModal__priceLabel}>
+                Service Price
+              </span>
+              <span className={styles.configurationModal__priceAmount}>
                 ₦{calculateServicePrice(service, tempConfig).toLocaleString()}
                 /month
               </span>
             </div>
           </div>
 
-          <div className={styles.modalFooter}>
+          <div className={styles.configurationModal__footer}>
             <button
-              className={`${styles.button} ${styles.buttonGhost}`}
+              className={`${styles.configurationModal__button} ${styles["configurationModal__button--ghost"]}`}
               onClick={onClose}
             >
               Cancel
             </button>
             <button
-              className={`${styles.button} ${styles.buttonPrimary}`}
+              className={`${styles.configurationModal__button} ${styles["configurationModal__button--primary"]}`}
               onClick={handleSave}
             >
               Save Configuration

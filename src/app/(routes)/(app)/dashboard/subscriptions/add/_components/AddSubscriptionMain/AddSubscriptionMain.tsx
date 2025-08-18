@@ -313,8 +313,8 @@ export default function AddSubscriptionMain() {
 
   return (
     <div className={styles.addSubscriptionMain}>
-      <div className={styles.container}>
-        <div className={styles.wrapper}>
+      <div className={styles.addSubscriptionMain__container}>
+        <div className={styles.addSubscriptionMain__wrapper}>
           {/* Header Section */}
           <div className={styles.addSubscriptionMain__header}>
             <div>
@@ -330,21 +330,23 @@ export default function AddSubscriptionMain() {
           </div>
 
           {/* Progress Indicator */}
-          <div className={styles.progress}>
+          <div className={styles.addSubscriptionMain__progress}>
             {[1, 2, 3, 4].map((step) => (
               <div
                 key={step}
-                className={styles.progressStep}
+                className={styles.addSubscriptionMain__progressStep}
                 onClick={() => step <= currentStep && setCurrentStep(step)}
               >
                 <div
-                  className={`${styles.progressNumber} ${
-                    step === currentStep ? styles.active : ""
-                  } ${step < currentStep ? styles.completed : ""}`}
+                  className={`${styles.addSubscriptionMain__progressNumber} ${
+                    step === currentStep
+                      ? styles["addSubscriptionMain__progressNumber--active"]
+                      : ""
+                  } ${step < currentStep ? styles["addSubscriptionMain__progressNumber--completed"] : ""}`}
                 >
                   {step < currentStep ? <Check size={16} /> : step}
                 </div>
-                <span className={styles.progressLabel}>
+                <span className={styles.addSubscriptionMain__progressLabel}>
                   {step === 1
                     ? "Services"
                     : step === 2
@@ -358,7 +360,7 @@ export default function AddSubscriptionMain() {
           </div>
 
           {/* Step Content */}
-          <div className={styles.content}>
+          <div className={styles.addSubscriptionMain__content}>
             <AnimatePresence mode="wait">
               {/* Step 1: Choose Services */}
               {currentStep === 1 && (
@@ -368,15 +370,17 @@ export default function AddSubscriptionMain() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                 >
-                  <div className={styles.stepHeader}>
-                    <h2 className={styles.stepTitle}>Choose Your Services</h2>
-                    <p className={styles.stepDescription}>
+                  <div className={styles.addSubscriptionMain__stepHeader}>
+                    <h2 className={styles.addSubscriptionMain__stepTitle}>
+                      Choose Your Services
+                    </h2>
+                    <p className={styles.addSubscriptionMain__stepDescription}>
                       Select the services you'd like to include in your
                       subscription
                     </p>
                   </div>
 
-                  <div className={styles.servicesGrid}>
+                  <div className={styles.addSubscriptionMain__servicesGrid}>
                     {services.map((service) => {
                       const isSelected = selectedServices.some(
                         (s) => s.serviceId === service.id
@@ -385,15 +389,19 @@ export default function AddSubscriptionMain() {
                       return (
                         <motion.div
                           key={service.id}
-                          className={`${styles.serviceCard} ${
-                            isSelected ? styles.selected : ""
+                          className={`${styles.addSubscriptionMain__serviceCard} ${
+                            isSelected
+                              ? styles[
+                                  "addSubscriptionMain__serviceCard--selected"
+                                ]
+                              : ""
                           }`}
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => toggleService(service.id)}
                         >
                           <div
-                            className={styles.serviceIcon}
+                            className={styles.addSubscriptionMain__serviceIcon}
                             style={{
                               backgroundColor: `${service.color}15`,
                               color: service.color,
@@ -401,18 +409,30 @@ export default function AddSubscriptionMain() {
                           >
                             {service.icon}
                           </div>
-                          <h3 className={styles.serviceTitle}>
+                          <h3
+                            className={styles.addSubscriptionMain__serviceTitle}
+                          >
                             {service.name}
                           </h3>
-                          <p className={styles.serviceDescription}>
+                          <p
+                            className={
+                              styles.addSubscriptionMain__serviceDescription
+                            }
+                          >
                             {service.description}
                           </p>
-                          <div className={styles.servicePrice}>
+                          <div
+                            className={styles.addSubscriptionMain__servicePrice}
+                          >
                             Starting from ₦{service.basePrice.toLocaleString()}
                             /month
                           </div>
                           {isSelected && (
-                            <div className={styles.selectedBadge}>
+                            <div
+                              className={
+                                styles.addSubscriptionMain__selectedBadge
+                              }
+                            >
                               <CheckCircle size={16} />
                               Selected
                             </div>
@@ -432,11 +452,11 @@ export default function AddSubscriptionMain() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                 >
-                  <div className={styles.stepHeader}>
-                    <h2 className={styles.stepTitle}>
+                  <div className={styles.addSubscriptionMain__stepHeader}>
+                    <h2 className={styles.addSubscriptionMain__stepTitle}>
                       Configure Your Services
                     </h2>
-                    <p className={styles.stepDescription}>
+                    <p className={styles.addSubscriptionMain__stepDescription}>
                       Customize each service to match your needs
                     </p>
                   </div>
@@ -450,11 +470,17 @@ export default function AddSubscriptionMain() {
                     return (
                       <div
                         key={selected.serviceId}
-                        className={styles.configuredService}
+                        className={
+                          styles.addSubscriptionMain__configuredService
+                        }
                       >
-                        <div className={styles.configuredHeader}>
+                        <div
+                          className={
+                            styles.addSubscriptionMain__configuredHeader
+                          }
+                        >
                           <div
-                            className={styles.serviceIcon}
+                            className={styles.addSubscriptionMain__serviceIcon}
                             style={{
                               backgroundColor: `${service.color}15`,
                               color: service.color,
@@ -462,16 +488,28 @@ export default function AddSubscriptionMain() {
                           >
                             {service.icon}
                           </div>
-                          <div className={styles.configuredInfo}>
-                            <h3 className={styles.configuredTitle}>
+                          <div
+                            className={
+                              styles.addSubscriptionMain__configuredInfo
+                            }
+                          >
+                            <h3
+                              className={
+                                styles.addSubscriptionMain__configuredTitle
+                              }
+                            >
                               {service.name}
                             </h3>
-                            <div className={styles.configuredPrice}>
+                            <div
+                              className={
+                                styles.addSubscriptionMain__configuredPrice
+                              }
+                            >
                               ₦{selected.price.toLocaleString()}/month
                             </div>
                           </div>
                           <button
-                            className={styles.editButton}
+                            className={styles.addSubscriptionMain__editButton}
                             onClick={() => editService(selected.serviceId)}
                           >
                             <Edit2 size={18} />
@@ -479,7 +517,11 @@ export default function AddSubscriptionMain() {
                           </button>
                         </div>
 
-                        <div className={styles.configuredDetails}>
+                        <div
+                          className={
+                            styles.addSubscriptionMain__configuredDetails
+                          }
+                        >
                           {Object.entries(selected.config).map(
                             ([key, value]) => {
                               const option = service.configOptions.find(
@@ -505,12 +547,22 @@ export default function AddSubscriptionMain() {
                               return (
                                 <div
                                   key={key}
-                                  className={styles.configuredDetail}
+                                  className={
+                                    styles.addSubscriptionMain__configuredDetail
+                                  }
                                 >
-                                  <span className={styles.detailLabel}>
+                                  <span
+                                    className={
+                                      styles.addSubscriptionMain__detailLabel
+                                    }
+                                  >
                                     {option.label}:
                                   </span>
-                                  <span className={styles.detailValue}>
+                                  <span
+                                    className={
+                                      styles.addSubscriptionMain__detailValue
+                                    }
+                                  >
                                     {displayValue}
                                   </span>
                                 </div>
@@ -532,9 +584,11 @@ export default function AddSubscriptionMain() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                 >
-                  <div className={styles.stepHeader}>
-                    <h2 className={styles.stepTitle}>Set Your Schedule</h2>
-                    <p className={styles.stepDescription}>
+                  <div className={styles.addSubscriptionMain__stepHeader}>
+                    <h2 className={styles.addSubscriptionMain__stepTitle}>
+                      Set Your Schedule
+                    </h2>
+                    <p className={styles.addSubscriptionMain__stepDescription}>
                       Choose when you'd like each service to be performed
                     </p>
                   </div>
@@ -548,11 +602,13 @@ export default function AddSubscriptionMain() {
                     return (
                       <div
                         key={selected.serviceId}
-                        className={styles.scheduleService}
+                        className={styles.addSubscriptionMain__scheduleService}
                       >
-                        <div className={styles.scheduleHeader}>
+                        <div
+                          className={styles.addSubscriptionMain__scheduleHeader}
+                        >
                           <div
-                            className={styles.serviceIcon}
+                            className={styles.addSubscriptionMain__serviceIcon}
                             style={{
                               backgroundColor: `${service.color}15`,
                               color: service.color,
@@ -560,18 +616,34 @@ export default function AddSubscriptionMain() {
                           >
                             {service.icon}
                           </div>
-                          <h3 className={styles.configuredTitle}>
+                          <h3
+                            className={
+                              styles.addSubscriptionMain__configuredTitle
+                            }
+                          >
                             {service.name}
                           </h3>
                         </div>
 
-                        <div className={styles.scheduleOptions}>
-                          <div className={styles.scheduleField}>
-                            <label className={styles.configLabel}>
+                        <div
+                          className={
+                            styles.addSubscriptionMain__scheduleOptions
+                          }
+                        >
+                          <div
+                            className={
+                              styles.addSubscriptionMain__scheduleField
+                            }
+                          >
+                            <label
+                              className={
+                                styles.addSubscriptionMain__scheduleLabel
+                              }
+                            >
                               Frequency
                             </label>
                             <select
-                              className={styles.select}
+                              className={styles.addSubscriptionMain__select}
                               value={selected.schedule.frequency}
                               onChange={(e) => {
                                 setSelectedServices((prev) =>
@@ -597,17 +669,31 @@ export default function AddSubscriptionMain() {
                             </select>
                           </div>
 
-                          <div className={styles.scheduleField}>
-                            <label className={styles.configLabel}>
+                          <div
+                            className={
+                              styles.addSubscriptionMain__scheduleField
+                            }
+                          >
+                            <label
+                              className={
+                                styles.addSubscriptionMain__scheduleLabel
+                              }
+                            >
                               Preferred Days
                             </label>
-                            <div className={styles.scheduleDays}>
+                            <div
+                              className={
+                                styles.addSubscriptionMain__scheduleDays
+                              }
+                            >
                               {daysOfWeek.map((day) => (
                                 <button
                                   key={day}
-                                  className={`${styles.dayButton} ${
+                                  className={`${styles.addSubscriptionMain__dayButton} ${
                                     selected.schedule.days?.includes(day)
-                                      ? styles.dayButtonSelected
+                                      ? styles[
+                                          "addSubscriptionMain__dayButton--selected"
+                                        ]
                                       : ""
                                   }`}
                                   onClick={() => {
@@ -636,12 +722,20 @@ export default function AddSubscriptionMain() {
                             </div>
                           </div>
 
-                          <div className={styles.scheduleField}>
-                            <label className={styles.configLabel}>
+                          <div
+                            className={
+                              styles.addSubscriptionMain__scheduleField
+                            }
+                          >
+                            <label
+                              className={
+                                styles.addSubscriptionMain__scheduleLabel
+                              }
+                            >
                               Preferred Time
                             </label>
                             <select
-                              className={styles.select}
+                              className={styles.addSubscriptionMain__select}
                               value={selected.schedule.time}
                               onChange={(e) => {
                                 setSelectedServices((prev) =>
@@ -681,24 +775,26 @@ export default function AddSubscriptionMain() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                 >
-                  <div className={styles.stepHeader}>
-                    <h2 className={styles.stepTitle}>
+                  <div className={styles.addSubscriptionMain__stepHeader}>
+                    <h2 className={styles.addSubscriptionMain__stepTitle}>
                       Review Your Subscription
                     </h2>
-                    <p className={styles.stepDescription}>
+                    <p className={styles.addSubscriptionMain__stepDescription}>
                       Confirm your selections and proceed to checkout
                     </p>
                   </div>
 
-                  <div className={styles.invoice}>
-                    <div className={styles.invoiceHeader}>
-                      <h3 className={styles.invoiceTitle}>
+                  <div className={styles.addSubscriptionMain__invoice}>
+                    <div className={styles.addSubscriptionMain__invoiceHeader}>
+                      <h3 className={styles.addSubscriptionMain__invoiceTitle}>
                         Subscription Summary
                       </h3>
                       <div>Starting: {new Date().toLocaleDateString()}</div>
                     </div>
 
-                    <div className={styles.invoiceServices}>
+                    <div
+                      className={styles.addSubscriptionMain__invoiceServices}
+                    >
                       {selectedServices.map((selected) => {
                         const service = services.find(
                           (s) => s.id === selected.serviceId
@@ -711,11 +807,19 @@ export default function AddSubscriptionMain() {
                         return (
                           <div
                             key={selected.serviceId}
-                            className={styles.invoiceService}
+                            className={
+                              styles.addSubscriptionMain__invoiceService
+                            }
                           >
-                            <div className={styles.invoiceServiceHeader}>
+                            <div
+                              className={
+                                styles.addSubscriptionMain__invoiceServiceHeader
+                              }
+                            >
                               <div
-                                className={styles.serviceIcon}
+                                className={
+                                  styles.addSubscriptionMain__serviceIcon
+                                }
                                 style={{
                                   backgroundColor: `${service.color}15`,
                                   color: service.color,
@@ -723,11 +827,23 @@ export default function AddSubscriptionMain() {
                               >
                                 {service.icon}
                               </div>
-                              <div className={styles.invoiceServiceInfo}>
-                                <h4 className={styles.invoiceServiceName}>
+                              <div
+                                className={
+                                  styles.addSubscriptionMain__invoiceServiceInfo
+                                }
+                              >
+                                <h4
+                                  className={
+                                    styles.addSubscriptionMain__invoiceServiceName
+                                  }
+                                >
                                   {service.name}
                                 </h4>
-                                <div className={styles.invoiceServiceSchedule}>
+                                <div
+                                  className={
+                                    styles.addSubscriptionMain__invoiceServiceSchedule
+                                  }
+                                >
                                   <Calendar size={14} />
                                   {frequency?.label} •{" "}
                                   {selected.schedule.days?.join(", ")} •{" "}
@@ -735,13 +851,19 @@ export default function AddSubscriptionMain() {
                                 </div>
                               </div>
                               <div
-                                className={styles.invoiceServicePriceContainer}
+                                className={
+                                  styles.addSubscriptionMain__invoiceServicePriceContainer
+                                }
                               >
                                 <div>
                                   ₦{selected.price.toLocaleString()} ×{" "}
                                   {frequency?.multiplier}
                                 </div>
-                                <div className={styles.invoiceServicePrice}>
+                                <div
+                                  className={
+                                    styles.addSubscriptionMain__invoiceServicePrice
+                                  }
+                                >
                                   ₦
                                   {(
                                     selected.price *
@@ -756,22 +878,26 @@ export default function AddSubscriptionMain() {
                     </div>
 
                     <div>
-                      <div className={styles.invoiceTotal}>
+                      <div className={styles.addSubscriptionMain__invoiceTotal}>
                         <span>Total Monthly Cost</span>
                         <span>₦{totalPrice.toLocaleString()}</span>
                       </div>
-                      <div className={styles.invoiceSavings}>
+                      <div
+                        className={styles.addSubscriptionMain__invoiceSavings}
+                      >
                         <TrendingUp size={16} />
                         You save 30% with subscription!
                       </div>
                     </div>
                   </div>
 
-                  <div className={styles.benefitsContainer}>
-                    <h3 className={styles.benefitsTitle}>
+                  <div
+                    className={styles.addSubscriptionMain__benefitsContainer}
+                  >
+                    <h3 className={styles.addSubscriptionMain__benefitsTitle}>
                       Subscription Benefits
                     </h3>
-                    <div className={styles.benefitsList}>
+                    <div className={styles.addSubscriptionMain__benefitsList}>
                       {[
                         "30% savings on all services",
                         "Priority scheduling",
@@ -779,7 +905,10 @@ export default function AddSubscriptionMain() {
                         "Flexible rescheduling",
                         "Cancel anytime",
                       ].map((benefit) => (
-                        <div key={benefit} className={styles.benefit}>
+                        <div
+                          key={benefit}
+                          className={styles.addSubscriptionMain__benefit}
+                        >
                           <CheckCircle size={20} color="#059669" />
                           <span>{benefit}</span>
                         </div>
@@ -792,9 +921,9 @@ export default function AddSubscriptionMain() {
           </div>
 
           {/* Footer Actions */}
-          <div className={styles.footer}>
+          <div className={styles.addSubscriptionMain__footer}>
             <button
-              className={`${styles.button} ${styles.buttonGhost}`}
+              className={`${styles.addSubscriptionMain__button} ${styles["addSubscriptionMain__button--ghost"]}`}
               style={{
                 opacity: currentStep === 1 ? 0.5 : 1,
                 cursor: currentStep === 1 ? "not-allowed" : "pointer",
@@ -808,7 +937,7 @@ export default function AddSubscriptionMain() {
 
             <div>
               {currentStep < 4 && selectedServices.length > 0 && (
-                <div className={styles.footerPrice}>
+                <div className={styles.addSubscriptionMain__footerPrice}>
                   Total: ₦{totalPrice.toLocaleString()}/month
                 </div>
               )}
@@ -816,7 +945,7 @@ export default function AddSubscriptionMain() {
 
             {currentStep < 4 ? (
               <button
-                className={`${styles.button} ${styles.buttonPrimary}`}
+                className={`${styles.addSubscriptionMain__button} ${styles["addSubscriptionMain__button--primary"]}`}
                 style={{
                   opacity:
                     currentStep === 1 && selectedServices.length === 0
@@ -835,7 +964,7 @@ export default function AddSubscriptionMain() {
               </button>
             ) : (
               <button
-                className={`${styles.button} ${styles.buttonAccent}`}
+                className={`${styles.addSubscriptionMain__button} ${styles["addSubscriptionMain__button--accent"]}`}
                 style={{}}
                 onClick={() => console.log("Proceed to checkout")}
               >

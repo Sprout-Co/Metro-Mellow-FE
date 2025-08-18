@@ -1,218 +1,173 @@
-// .modal {
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   right: 0;
-//   bottom: 0;
-//   background-color: rgba(0, 0, 0, 0.5);
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   z-index: 1000;
-//   padding: 1rem;
-// }
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
 
-.modalContent {
-  //   background: white;
-  //   border-radius: 1rem;
-  //   max-width: 500px;
-  //   width: 100%;
-  //   max-height: 90vh;
-  //   overflow-y: auto;
-  //   box-shadow:
-  //     0 20px 25px -5px rgba(0, 0, 0, 0.1),
-  //     0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
-.modalHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
-  border-bottom: 1px solid #f1f1f1;
-}
-
-.modalTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #1f2937;
-  margin: 0;
-}
-
-.modalCloseButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #6b7280;
-  transition: color 0.2s;
-
-  &:hover {
-    color: #374151;
-  }
-}
-
-.modalBody {
-  padding: 1.5rem;
-}
-
-.configField {
-  margin-bottom: 1.5rem;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.configLabel {
-  display: block;
-  font-weight: 500;
-  color: #374151;
-  margin-bottom: 0.5rem;
-  font-size: 0.875rem;
-}
-
-.radioGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.radioLabel {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  padding: 0.75rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  transition: all 0.2s;
-
-  &:hover {
-    border-color: #075056;
-    background-color: #f0f9ff;
+.configurationModal {
+  &__content {
+    // Content styles handled by ModalDrawer component
   }
 
-  input[type="radio"],
-  input[type="checkbox"] {
+  &__header {
+    @include flex-between;
+    padding: spacing("xl");
+    border-bottom: map-get($border-width, "thin") solid color("neutral", "lighter");
+  }
+
+  &__title {
+    @include heading-4;
+    color: color("neutral", "darkest");
     margin: 0;
-    accent-color: #075056;
   }
 
-  span {
-    flex: 1;
-    font-size: 0.875rem;
-  }
-}
+  &__closeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: color("neutral", "medium");
+    transition: $transition-fast;
 
-.priceModifier {
-  font-weight: 600;
-  color: #059669;
-  font-size: 0.75rem;
-  background-color: #ecfdf5;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-}
-
-.numberInput {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.numberButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  border: 1px solid #e5e7eb;
-  background: white;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  color: #6b7280;
-
-  &:hover {
-    border-color: #075056;
-    color: #075056;
-    background-color: #f0f9ff;
+    &:hover {
+      color: color("neutral", "darker");
+    }
   }
 
-  &:active {
-    transform: scale(0.95);
+  &__body {
+    padding: spacing("xl");
   }
-}
 
-.checkboxGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
+  &__field {
+    margin-bottom: spacing("xl");
 
-.modalFooter {
-  display: flex;
-  gap: 1rem;
-  padding: 1.5rem;
-  border-top: 1px solid #f1f1f1;
-  justify-content: flex-end;
-}
-
-.button {
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: none;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
-}
 
-.buttonGhost {
-  background: transparent;
-  color: #6b7280;
-  border: 1px solid #e5e7eb;
-
-  &:hover:not(:disabled) {
-    background-color: #f9fafb;
-    border-color: #d1d5db;
+  &__label {
+    display: block;
+    @include font-weight("medium");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("sm");
+    @include font-size("sm");
   }
-}
 
-.buttonPrimary {
-  background: #075056;
-  color: white;
-
-  &:hover:not(:disabled) {
-    background: #064e56;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  &__radioGroup {
+    @include flex-column;
+    gap: spacing("md");
   }
-}
 
-.buttonAccent {
-  background: #059669;
-  color: white;
-
-  &:hover:not(:disabled) {
-    background: #047857;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  }
-}
-.modal {
-  &__footer {
-    display: flex;
+  &__radioLabel,
+  &__checkboxLabel {
+    @include flex;
+    align-items: center;
     gap: spacing("sm");
-    // padding: spacing("xl");
-    border-top: 1px solid color("neutral", "lighter");
+    cursor: pointer;
+    padding: spacing("md");
+    border: map-get($border-width, "thin") solid color("neutral", "light");
+    border-radius: border-radius("lg");
+    transition: $transition-fast;
+
+    &:hover {
+      border-color: color("primary", "base");
+      background-color: color("primary", "lighter");
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin: 0;
+      accent-color: color("primary", "base");
+    }
+
+    span {
+      flex: 1;
+      @include font-size("sm");
+    }
+  }
+
+  &__priceModifier {
+    @include font-weight("semibold");
+    color: color("status", "success");
+    @include font-size("xs");
+    background-color: rgba(color("status", "success"), 0.1);
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("md");
+  }
+
+  &__numberInput {
+    @include flex;
+    align-items: center;
+    gap: spacing("sm");
+  }
+
+  &__numberButton {
+    @include flex-center;
+    width: 2rem;
+    height: 2rem;
+    border: map-get($border-width, "thin") solid color("neutral", "light");
+    background: color("neutral", "white");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: $transition-fast;
+    color: color("neutral", "medium");
+
+    &:hover {
+      border-color: color("primary", "base");
+      color: color("primary", "base");
+      background-color: color("primary", "lighter");
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  &__numberInputField {
+    width: 60px;
+    text-align: center;
+    padding: spacing("sm");
+    border: map-get($border-width, "thin") solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    outline: none;
+    transition: $transition-fast;
+
+    &:focus {
+      border-color: color("primary", "base");
+      box-shadow: map-get($shadows, "focus");
+    }
+  }
+
+  &__checkboxGroup {
+    @include flex-column;
+    gap: spacing("md");
+  }
+
+  &__priceBox {
+    @include flex-between;
+    align-items: center;
+    margin-top: spacing("2xl");
+    padding: spacing("lg");
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+  }
+
+  &__priceLabel {
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  &__priceAmount {
+    @include font-size("xl");
+    @include font-weight("bold");
+    color: color("primary", "base");
+  }
+
+  &__footer {
+    @include flex;
+    gap: spacing("lg");
+    padding: spacing("xl");
+    border-top: map-get($border-width, "thin") solid color("neutral", "lighter");
+    justify-content: flex-end;
     background: linear-gradient(
       135deg,
       color("neutral", "white"),
@@ -220,88 +175,42 @@
     );
   }
 
-  &__footerBtn {
-    flex: 1;
-    padding: spacing("md");
-    border: none;
-    border-radius: border-radius("lg");
+  &__button {
+    @include button-base;
     @include font-size("sm");
-    @include font-weight("semibold");
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: spacing("xs");
-    position: relative;
-    overflow: hidden;
+    border: none;
 
-    svg {
-      width: 14px;
-      height: 14px;
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &--ghost {
+      @include button-ghost;
+      color: color("neutral", "medium");
+      border: map-get($border-width, "thin") solid color("neutral", "light");
+
+      &:hover:not(:disabled) {
+        background-color: color("neutral", "lightest");
+        border-color: color("neutral", "medium");
+      }
     }
 
     &--primary {
-      background: linear-gradient(
-        135deg,
-        color("primary", "base"),
-        color("primary", "dark")
-      );
-      color: color("neutral", "white");
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      @include button-primary;
 
-      &:hover {
+      &:hover:not(:disabled) {
         transform: translateY(-1px);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-      }
-
-      &:active {
-        transform: translateY(0);
+        box-shadow: map-get($shadows, "md");
       }
     }
 
-    &--secondary {
-      background: linear-gradient(
-        135deg,
-        color("neutral", "white"),
-        color("neutral", "lightest")
-      );
-      color: color("neutral", "darkest");
-      border: 1px solid color("neutral", "light");
+    &--accent {
+      @include button-accent;
 
-      &:hover {
-        background: linear-gradient(
-          135deg,
-          color("neutral", "lightest"),
-          color("neutral", "lighter")
-        );
+      &:hover:not(:disabled) {
         transform: translateY(-1px);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      }
-
-      &:active {
-        transform: translateY(0);
-      }
-    }
-
-    &--danger {
-      background: linear-gradient(
-        135deg,
-        rgba(239, 68, 68, 0.1),
-        rgba(239, 68, 68, 0.2)
-      );
-      color: color("status", "error");
-      border: 1px solid color("status", "error");
-
-      &:hover {
-        background: linear-gradient(135deg, color("status", "error"), #dc2626);
-        color: color("neutral", "white");
-        transform: translateY(-1px);
-        box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
-      }
-
-      &:active {
-        transform: translateY(0);
+        box-shadow: map-get($shadows, "md");
       }
     }
   }

@@ -4,11 +4,23 @@
 
 .addSubscriptionMain {
   width: 100%;
-  //   padding: spacing("xl") 0;
+
+  &__container {
+    min-height: 100vh;
+    background-color: color("neutral", "lightest");
+    padding: spacing("2xl") spacing("lg");
+
+    @include breakpoint-down("md") {
+      padding: spacing("xl") spacing("md");
+    }
+  }
+
+  &__wrapper {
+    @include container;
+  }
 
   &__header {
-    display: flex;
-    justify-content: space-between;
+    @include flex-between;
     align-items: flex-start;
     margin-bottom: spacing("2xl");
     padding: spacing("xl");
@@ -38,7 +50,7 @@
     }
 
     @include breakpoint-down("lg") {
-      flex-direction: column;
+      @include flex-column;
       gap: spacing("lg");
       padding: spacing("lg");
     }
@@ -59,500 +71,432 @@
   }
 
   &__title {
-    @include font-size("h4");
-    @include font-weight("bold");
-    font-family: $font-family-heading;
+    @include heading-4;
+    @include font-family("heading");
     color: color("neutral", "white");
     margin: 0 0 spacing("xs") 0;
 
     @include breakpoint-down("md") {
-      @include font-size("h5");
+      @include heading-5;
     }
   }
 
   &__subtitle {
-    @include font-size("body-2");
+    @include body-2;
     color: rgba(255, 255, 255, 0.9);
     margin: 0;
   }
-}
 
-.container {
-  min-height: 100vh;
-  background-color: #fbfbfb;
-  padding: 2rem 1rem;
-}
-
-.wrapper {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-// .header {
-//   text-align: center;
-//   margin-bottom: 3rem;
-// }
-
-// .title {
-//   font-size: 2.5rem;
-//   font-weight: bold;
-//   color: #1b1c22;
-//   margin-bottom: 0.5rem;
-//   font-family: var(--font-baloo2), sans-serif;
-// }
-
-// .subtitle {
-//   font-size: 1.125rem;
-//   color: #6e6e6e;
-//   font-family: var(--font-montserrat), sans-serif;
-// }
-
-.progress {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-bottom: 3rem;
-  flex-wrap: wrap;
-}
-
-.progressStep {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  position: relative;
-}
-
-.progressNumber {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f1f1f1;
-  color: #6e6e6e;
-  font-weight: bold;
-  border: 2px solid transparent;
-  transition: all 0.3s ease;
-
-  &.active {
-    background-color: #075056;
-    color: white;
-    box-shadow: 0 4px 12px rgba(7, 80, 86, 0.3);
+  &__progress {
+    @include flex;
+    justify-content: center;
+    gap: spacing("2xl");
+    margin-bottom: spacing("3xl");
+    flex-wrap: wrap;
   }
 
-  &.completed {
-    background-color: #059669;
-    color: white;
-  }
-}
-
-.progressLabel {
-  font-size: 0.875rem;
-  color: #6e6e6e;
-  font-weight: 500;
-}
-
-.content {
-  background-color: white;
-  border-radius: 1rem;
-  padding: 2rem;
-  min-height: 400px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.stepHeader {
-  margin-bottom: 2rem;
-}
-
-.stepTitle {
-  font-size: 1.875rem;
-  font-weight: bold;
-  color: #1b1c22;
-  margin-bottom: 0.5rem;
-}
-
-.stepDescription {
-  font-size: 1rem;
-  color: #6e6e6e;
-}
-
-.servicesGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.serviceCard {
-  background-color: white;
-  border: 2px solid #f1f1f1;
-  border-radius: 1rem;
-  padding: 1.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-
-  &.selected {
-    border-color: #075056;
-    background-color: rgba(7, 80, 86, 0.02);
-  }
-}
-
-.serviceIcon {
-  width: 60px;
-  height: 60px;
-  border-radius: 0.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.serviceTitle {
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: #1b1c22;
-  margin-bottom: 0.5rem;
-}
-
-.serviceDescription {
-  font-size: 0.875rem;
-  color: #6e6e6e;
-  margin-bottom: 1rem;
-}
-
-.servicePrice {
-  font-size: 0.875rem;
-  color: #075056;
-  font-weight: 600;
-}
-
-.selectedBadge {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  background-color: #059669;
-  color: white;
-  padding: 0.25rem 0.75rem;
-  border-radius: 1rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 2rem;
-  padding: 1.5rem 2rem;
-  background-color: white;
-  border-radius: 1rem;
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.button {
-  padding: 0.75rem 1.5rem;
-  border-radius: 2rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  border: none;
-  font-size: 1rem;
-
-  &.primary {
-    background-color: #075056;
-    color: white;
+  &__progressStep {
+    @include flex-column;
+    align-items: center;
+    gap: spacing("sm");
+    cursor: pointer;
+    position: relative;
   }
 
-  &.ghost {
-    background-color: transparent;
-    color: #6e6e6e;
-    border: 1px solid #f1f1f1;
+  &__progressNumber {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    @include flex-center;
+    background-color: color("neutral", "lighter");
+    color: color("neutral", "medium");
+    @include font-weight("bold");
+    border: map-get($border-width, "medium") solid transparent;
+    transition: $transition-base;
+
+    &--active {
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
+      box-shadow: 0 4px 12px rgba(color("primary", "base"), 0.3);
+    }
+
+    &--completed {
+      background-color: color("status", "success");
+      color: color("neutral", "white");
+    }
   }
 
-  &.accent {
-    background-color: #fe5b04;
-    color: white;
+  &__progressLabel {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    @include font-weight("medium");
   }
-}
 
-.footerPrice {
-  font-size: 1.125rem;
-  font-weight: bold;
-  color: #1b1c22;
-}
+  &__content {
+    @include card;
+    padding: spacing("2xl");
+    min-height: 400px;
 
-.configuredService {
-  background-color: #fbfbfb;
-  border-radius: 1rem;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.configuredHeader {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.configuredInfo {
-  flex: 1;
-}
-
-.configuredTitle {
-  font-size: 1.125rem;
-  font-weight: bold;
-  color: #1b1c22;
-}
-
-.configuredPrice {
-  font-size: 0.875rem;
-  color: #075056;
-  font-weight: 600;
-}
-
-.editButton {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.5rem 1rem;
-  background-color: white;
-  border: 1px solid #f1f1f1;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  font-size: 0.875rem;
-  color: #6e6e6e;
-  transition: all 0.2s;
-}
-
-.configuredDetails {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.configuredDetail {
-  display: flex;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-}
-
-.detailLabel {
-  color: #6e6e6e;
-}
-
-.detailValue {
-  color: #1b1c22;
-  font-weight: 500;
-}
-
-.scheduleService {
-  background-color: #fbfbfb;
-  border-radius: 1rem;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.scheduleHeader {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.scheduleOptions {
-  display: grid;
-  gap: 1rem;
-}
-
-.scheduleField {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.scheduleDays {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.dayButton {
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.5rem;
-  border: 1px solid #f1f1f1;
-  background-color: white;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: all 0.2s;
-
-  &.selected {
-    background-color: #075056;
-    color: white;
-    border-color: #075056;
+    @include breakpoint-down("md") {
+      padding: spacing("lg");
+    }
   }
-}
 
-.select {
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  border: 1px solid #f1f1f1;
-  background-color: white;
-  font-size: 0.875rem;
-  cursor: pointer;
-}
+  &__stepHeader {
+    margin-bottom: spacing("2xl");
+  }
 
-.invoice {
-  background-color: white;
-  border-radius: 1rem;
-  padding: 2rem;
-  border: 1px solid #f1f1f1;
-}
+  &__stepTitle {
+    @include heading-3;
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("sm");
+  }
 
-.invoiceHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid #f1f1f1;
-}
+  &__stepDescription {
+    @include body-1;
+    color: color("neutral", "medium");
+  }
 
-.invoiceTitle {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #1b1c22;
-}
+  &__servicesGrid {
+    @include grid-responsive(1, 2, 2, 3, spacing("xl"));
+    margin-bottom: spacing("2xl");
+  }
 
-.invoiceServices {
-  margin-bottom: 2rem;
-}
+  &__serviceCard {
+    @include card;
+    @include card-hover;
+    padding: spacing("xl");
+    cursor: pointer;
+    transition: $transition-base;
+    position: relative;
+    border: map-get($border-width, "medium") solid color("neutral", "lighter");
 
-.invoiceService {
-  padding: 1rem 0;
-  border-bottom: 1px solid #f8f8f8;
-}
+    &--selected {
+      border-color: color("primary", "base");
+      background-color: rgba(color("primary", "base"), 0.02);
+    }
+  }
 
-.invoiceServiceHeader {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
+  &__serviceIcon {
+    width: 60px;
+    height: 60px;
+    border-radius: border-radius("xl");
+    @include flex-center;
+    margin-bottom: spacing("lg");
+  }
 
-.invoiceServiceInfo {
-  flex: 1;
-}
+  &__serviceTitle {
+    @include heading-5;
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("sm");
+  }
 
-.invoiceServiceName {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #1b1c22;
-  margin-bottom: 0.25rem;
-}
+  &__serviceDescription {
+    @include caption;
+    color: color("neutral", "medium");
+    margin-bottom: spacing("lg");
+  }
 
-.invoiceServiceSchedule {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  color: #6e6e6e;
-}
+  &__servicePrice {
+    @include font-size("sm");
+    color: color("primary", "base");
+    @include font-weight("semibold");
+  }
 
-.invoiceServicePrice {
-  text-align: right;
-}
+  &__selectedBadge {
+    position: absolute;
+    top: spacing("lg");
+    right: spacing("lg");
+    @include flex;
+    align-items: center;
+    gap: spacing("xs");
+    background-color: color("status", "success");
+    color: color("neutral", "white");
+    padding: spacing("xs") spacing("md");
+    border-radius: border-radius("pill");
+    @include font-size("xs");
+    @include font-weight("semibold");
+  }
 
-.invoiceTotal {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
+  &__configuredService {
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    padding: spacing("xl");
+    margin-bottom: spacing("lg");
+  }
 
-.invoiceSavings {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #059669;
-  font-size: 0.875rem;
-  font-weight: 600;
-}
+  &__configuredHeader {
+    @include flex;
+    align-items: center;
+    gap: spacing("lg");
+    margin-bottom: spacing("lg");
+  }
 
-.benefitsList {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 1rem;
-}
+  &__configuredInfo {
+    flex: 1;
+  }
 
-.benefit {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #343439;
-  font-size: 0.875rem;
-}
+  &__configuredTitle {
+    @include heading-6;
+    color: color("neutral", "darkest");
+  }
 
-.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+  &__configuredPrice {
+    @include font-size("sm");
+    color: color("primary", "base");
+    @include font-weight("semibold");
+  }
 
-.numberInputField {
-  width: 60px;
-  text-align: center;
-  padding: 0.5rem;
-  border: 1px solid #f1f1f1;
-  border-radius: 0.5rem;
-}
+  &__editButton {
+    @include flex;
+    align-items: center;
+    gap: spacing("xs");
+    padding: spacing("sm") spacing("lg");
+    background-color: color("neutral", "white");
+    border: map-get($border-width, "thin") solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    transition: $transition-fast;
 
-.servicePriceBox {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 2rem;
-  padding: 1rem;
-  background-color: #fbfbfb;
-  border-radius: 0.5rem;
-}
+    &:hover {
+      border-color: color("primary", "base");
+      color: color("primary", "base");
+    }
+  }
 
-.servicePriceLabel {
-  font-weight: 600;
-}
+  &__configuredDetails {
+    @include flex-column;
+    gap: spacing("sm");
+  }
 
-.servicePriceAmount {
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: #075056;
-}
+  &__configuredDetail {
+    @include flex;
+    gap: spacing("sm");
+    @include font-size("sm");
+  }
 
-.benefitsSection {
-  margin-top: 2rem;
-}
+  &__detailLabel {
+    color: color("neutral", "medium");
+  }
 
-.benefitsSectionTitle {
-  margin-bottom: 1rem;
-}
+  &__detailValue {
+    color: color("neutral", "darkest");
+    @include font-weight("medium");
+  }
 
-.closeButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
+  &__scheduleService {
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    padding: spacing("xl");
+    margin-bottom: spacing("lg");
+  }
 
-.invoiceServiceTotalPrice {
-  font-weight: bold;
-  margin-top: 0.25rem;
+  &__scheduleHeader {
+    @include flex;
+    align-items: center;
+    gap: spacing("lg");
+    margin-bottom: spacing("xl");
+  }
+
+  &__scheduleOptions {
+    @include grid;
+    gap: spacing("lg");
+  }
+
+  &__scheduleField {
+    @include flex-column;
+    gap: spacing("sm");
+  }
+
+  &__scheduleLabel {
+    display: block;
+    @include font-weight("medium");
+    color: color("neutral", "darker");
+    @include font-size("sm");
+  }
+
+  &__scheduleDays {
+    @include flex;
+    gap: spacing("sm");
+    flex-wrap: wrap;
+  }
+
+  &__dayButton {
+    padding: spacing("sm") spacing("md");
+    border-radius: border-radius("lg");
+    border: map-get($border-width, "thin") solid color("neutral", "lighter");
+    background-color: color("neutral", "white");
+    cursor: pointer;
+    @include font-size("sm");
+    transition: $transition-fast;
+
+    &--selected {
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
+      border-color: color("primary", "base");
+    }
+
+    &:hover:not(&--selected) {
+      border-color: color("primary", "base");
+      background-color: color("primary", "lighter");
+    }
+  }
+
+  &__select {
+    @include select;
+  }
+
+  &__invoice {
+    @include card;
+    padding: spacing("2xl");
+    border: map-get($border-width, "thin") solid color("neutral", "lighter");
+    margin-bottom: spacing("2xl");
+  }
+
+  &__invoiceHeader {
+    @include flex-between;
+    align-items: center;
+    margin-bottom: spacing("2xl");
+    padding-bottom: spacing("lg");
+    border-bottom: map-get($border-width, "medium") solid color("neutral", "lighter");
+  }
+
+  &__invoiceTitle {
+    @include heading-4;
+    color: color("neutral", "darkest");
+  }
+
+  &__invoiceServices {
+    margin-bottom: spacing("2xl");
+  }
+
+  &__invoiceService {
+    padding: spacing("lg") 0;
+    border-bottom: map-get($border-width, "thin") solid color("neutral", "lightest");
+  }
+
+  &__invoiceServiceHeader {
+    @include flex;
+    align-items: center;
+    gap: spacing("lg");
+  }
+
+  &__invoiceServiceInfo {
+    flex: 1;
+  }
+
+  &__invoiceServiceName {
+    @include heading-6;
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xs");
+  }
+
+  &__invoiceServiceSchedule {
+    @include flex;
+    align-items: center;
+    gap: spacing("sm");
+    @include font-size("sm");
+    color: color("neutral", "medium");
+  }
+
+  &__invoiceServicePriceContainer {
+    text-align: right;
+  }
+
+  &__invoiceServicePrice {
+    @include font-weight("bold");
+    margin-top: spacing("xs");
+  }
+
+  &__invoiceTotal {
+    @include flex-between;
+    align-items: center;
+    @include font-size("xl");
+    @include font-weight("bold");
+    margin-bottom: spacing("lg");
+  }
+
+  &__invoiceSavings {
+    @include flex;
+    align-items: center;
+    gap: spacing("sm");
+    color: color("status", "success");
+    @include font-size("sm");
+    @include font-weight("semibold");
+  }
+
+  &__benefitsContainer {
+    margin-top: spacing("2xl");
+  }
+
+  &__benefitsTitle {
+    @include heading-5;
+    margin-bottom: spacing("lg");
+  }
+
+  &__benefitsList {
+    @include flex-column;
+    gap: spacing("md");
+  }
+
+  &__benefit {
+    @include flex;
+    align-items: center;
+    gap: spacing("sm");
+    color: color("neutral", "darker");
+    @include font-size("sm");
+  }
+
+  &__footer {
+    @include flex-between;
+    align-items: center;
+    margin-top: spacing("2xl");
+    padding: spacing("xl") spacing("2xl");
+    @include card;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+
+    @include breakpoint-down("md") {
+      @include flex-column;
+      gap: spacing("lg");
+      padding: spacing("lg");
+    }
+  }
+
+  &__footerPrice {
+    @include font-size("lg");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+  }
+
+  &__button {
+    @include button-base;
+    @include font-size("base");
+    border: none;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &--primary {
+      @include button-primary;
+    }
+
+    &--ghost {
+      @include button-ghost;
+      color: color("neutral", "medium");
+      border: map-get($border-width, "thin") solid color("neutral", "lighter");
+
+      &:hover:not(:disabled) {
+        background-color: color("neutral", "lightest");
+        border-color: color("neutral", "medium");
+      }
+    }
+
+    &--accent {
+      @include button-accent;
+    }
+  }
 }
