@@ -6,131 +6,248 @@
 .selector {
   &__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: spacing("lg");
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: spacing("xl");
 
-    @include breakpoint-down("sm") {
+    @include breakpoint-down("md") {
       grid-template-columns: 1fr;
+      gap: spacing("lg");
     }
   }
 
   &__card {
     position: relative;
     background: color("neutral", "white");
-    border: 2px solid color("neutral", "lighter");
     border-radius: border-radius("xl");
-    padding: spacing("xl");
-    transition: all 0.3s ease;
+    border: 1px solid color("neutral", "lighter");
     overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(
+        90deg,
+        color("primary", "base"),
+        color("primary", "dark")
+      );
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
 
     &:hover {
-      border-color: color("primary", "light");
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+
+      &::before {
+        transform: scaleX(1);
+      }
     }
 
     &--configured {
-      border-color: color("primary", "base");
       background: linear-gradient(
-        to bottom right,
+        to bottom,
         rgba(color("primary", "base"), 0.02),
-        transparent
+        color("neutral", "white")
       );
+      border-color: color("primary", "light");
+
+      &::before {
+        transform: scaleX(1);
+        background: color("primary", "base");
+      }
+    }
+
+    // Service category color variations
+    &--cleaning {
+      .selector__icon {
+        background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+        color: #1976d2;
+      }
+    }
+
+    &--laundry {
+      .selector__icon {
+        background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+        color: #7b1fa2;
+      }
+    }
+
+    &--cooking {
+      .selector__icon {
+        background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+        color: #f57c00;
+      }
+    }
+
+    &--pest {
+      .selector__icon {
+        background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        color: #388e3c;
+      }
     }
   }
 
-  &__configuredBadge {
+  &__badge {
     position: absolute;
     top: spacing("md");
     right: spacing("md");
     display: flex;
     align-items: center;
     gap: spacing("xxs");
-    padding: spacing("xxs") spacing("sm");
+    padding: spacing("xs") spacing("sm");
     background: color("primary", "base");
     color: color("neutral", "white");
     border-radius: border-radius("pill");
     @include font-size("xs");
     @include font-weight("semibold");
+    z-index: 1;
   }
 
-  &__cardContent {
+  &__header {
     display: flex;
-    flex-direction: column;
-    gap: spacing("sm");
+    align-items: flex-start;
+    gap: spacing("md");
+    padding: spacing("xl") spacing("xl") 0;
   }
 
   &__icon {
     width: 48px;
     height: 48px;
     border-radius: border-radius("lg");
-    background: linear-gradient(
-      135deg,
-      rgba(color("primary", "base"), 0.1),
-      rgba(color("primary", "light"), 0.05)
-    );
     display: flex;
     align-items: center;
     justify-content: center;
-    color: color("primary", "base");
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
   }
 
-  &__serviceName {
+  &__info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
     @include font-size("lg");
     @include font-weight("semibold");
     color: color("neutral", "darkest");
+    margin: 0 0 spacing("xxs") 0;
   }
 
-  &__serviceDesc {
+  &__category {
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.7;
+  }
+
+  &__body {
+    padding: spacing("lg") spacing("xl");
+  }
+
+  &__description {
     @include font-size("sm");
     color: color("neutral", "dark");
     line-height: line-height("relaxed");
+    margin-bottom: spacing("lg");
   }
 
-  &__servicePrice {
-    @include font-size("base");
-    @include font-weight("semibold");
-    color: color("primary", "base");
-  }
-
-  &__configSummary {
+  &__pricing {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: spacing("sm");
+    flex-direction: column;
+    gap: spacing("xxs");
+    padding: spacing("md");
     background: color("neutral", "lightest");
     border-radius: border-radius("lg");
-    margin-top: spacing("sm");
+  }
+
+  &__priceLabel {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__price {
+    @include font-size("xl");
+    @include font-weight("bold");
+    color: color("primary", "dark");
+    display: flex;
+    align-items: baseline;
+    gap: spacing("xs");
+  }
+
+  &__priceUnit {
+    @include font-size("sm");
+    @include font-weight("normal");
+    color: color("neutral", "dark");
+  }
+
+  &__config {
+    margin-top: spacing("md");
+    padding: spacing("md");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
   }
 
   &__configItem {
     display: flex;
     align-items: center;
-    gap: spacing("xs");
+    gap: spacing("sm");
     @include font-size("sm");
     color: color("neutral", "dark");
 
     svg {
       color: color("primary", "base");
+      flex-shrink: 0;
     }
   }
 
+  &__configDivider {
+    height: 1px;
+    background: color("neutral", "lighter");
+    margin: spacing("xs") 0;
+  }
+
   &__configPrice {
-    @include font-size("sm");
-    @include font-weight("semibold");
-    color: color("primary", "dark");
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    span {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+    }
+
+    strong {
+      @include font-size("base");
+      @include font-weight("bold");
+      color: color("primary", "dark");
+    }
   }
 
-  &__cardActions {
-    margin-top: spacing("lg");
+  &__footer {
+    padding: 0 spacing("xl") spacing("xl");
   }
 
-  &__addButton {
+  &__addBtn {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: spacing("sm");
-    padding: spacing("sm") spacing("md");
+    padding: spacing("sm") spacing("lg");
     background: color("primary", "base");
     color: color("neutral", "white");
     border: none;
@@ -142,23 +259,22 @@
 
     &:hover {
       background: color("primary", "dark");
-      transform: translateY(-1px);
     }
   }
 
-  &__configuredActions {
+  &__actions {
     display: flex;
     gap: spacing("sm");
   }
 
-  &__editButton {
+  &__editBtn {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: spacing("xs");
     padding: spacing("sm");
-    background: color("neutral", "lightest");
+    background: color("neutral", "white");
     border: 1px solid color("neutral", "lighter");
     border-radius: border-radius("lg");
     @include font-size("sm");
@@ -168,19 +284,19 @@
     transition: all 0.2s ease;
 
     &:hover {
-      background: color("primary", "base");
-      color: color("neutral", "white");
       border-color: color("primary", "base");
+      color: color("primary", "base");
+      background: rgba(color("primary", "base"), 0.05);
     }
   }
 
-  &__removeButton {
+  &__removeBtn {
     width: 40px;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: color("neutral", "lightest");
+    background: color("neutral", "white");
     border: 1px solid color("neutral", "lighter");
     border-radius: border-radius("lg");
     color: color("status", "error");
@@ -194,66 +310,55 @@
     }
   }
 
-  &__hoverOverlay {
+  &__overlay {
     position: absolute;
     inset: 0;
     background: linear-gradient(
       to bottom,
-      transparent,
+      transparent 60%,
       rgba(color("primary", "base"), 0.95)
     );
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: spacing("xs");
-    color: color("neutral", "white");
-    @include font-size("sm");
-    @include font-weight("medium");
+    align-items: flex-end;
+    padding: spacing("xl");
     pointer-events: none;
   }
 
-  &__emptyTip {
+  &__overlayContent {
     display: flex;
     align-items: center;
+    gap: spacing("sm");
+    color: color("neutral", "white");
+    @include font-size("sm");
+    @include font-weight("medium");
+    width: 100%;
+    justify-content: center;
+  }
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: spacing("md");
-    padding: spacing("lg");
+    padding: spacing("2xl");
     background: linear-gradient(
-      to right,
-      rgba(color("primary", "base"), 0.02),
+      135deg,
+      rgba(color("primary", "base"), 0.03),
       transparent
     );
-    border-radius: border-radius("lg");
-    border-left: 3px solid color("primary", "base");
+    border-radius: border-radius("xl");
+    border: 2px dashed color("neutral", "light");
+    text-align: center;
     margin-top: spacing("xl");
+
+    svg {
+      color: color("primary", "base");
+    }
 
     p {
       @include font-size("base");
       color: color("neutral", "dark");
+      max-width: 400px;
     }
-  }
-
-  &__tipIcon {
-    width: 36px;
-    height: 36px;
-    border-radius: border-radius("full");
-    background: color("primary", "base");
-    color: color("neutral", "white");
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: pulse 2s infinite;
-  }
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.8;
   }
 }

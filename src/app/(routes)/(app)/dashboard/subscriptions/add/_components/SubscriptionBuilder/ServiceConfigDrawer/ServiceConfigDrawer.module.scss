@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  background: color("neutral", "white");
 
   &__header {
     display: flex;
@@ -14,20 +15,34 @@
     align-items: center;
     padding: spacing("xl");
     border-bottom: 1px solid color("neutral", "lighter");
+    background: linear-gradient(
+      135deg,
+      rgba(color("primary", "base"), 0.03),
+      transparent
+    );
+  }
 
+  &__headerContent {
     h2 {
       @include font-size("xl");
       @include font-weight("semibold");
       color: color("neutral", "darkest");
+      margin: 0 0 spacing("xxs") 0;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      margin: 0;
     }
   }
 
-  &__close {
-    width: 36px;
-    height: 36px;
+  &__closeBtn {
+    width: 40px;
+    height: 40px;
     border-radius: border-radius("full");
-    background: color("neutral", "lightest");
-    border: none;
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
     display: flex;
     align-items: center;
     justify-content: center;
@@ -36,7 +51,7 @@
     color: color("neutral", "dark");
 
     &:hover {
-      background: color("neutral", "lighter");
+      background: color("neutral", "lightest");
       transform: rotate(90deg);
     }
   }
@@ -45,29 +60,28 @@
     display: flex;
     padding: spacing("lg") spacing("xl");
     background: color("neutral", "lightest");
-    gap: spacing("xs");
+    border-bottom: 1px solid color("neutral", "lighter");
   }
 
-  &__step {
+  &__progressStep {
     flex: 1;
     display: flex;
     align-items: center;
     gap: spacing("sm");
     padding: spacing("sm");
-    border-radius: border-radius("lg");
-    cursor: pointer;
-    transition: all 0.2s ease;
     position: relative;
+    opacity: 0.5;
+    transition: all 0.3s ease;
 
     &::after {
       content: "";
       position: absolute;
-      right: -spacing("xs");
       top: 50%;
-      transform: translateY(-50%);
-      width: spacing("xs");
+      right: -50%;
+      width: 100%;
       height: 2px;
       background: color("neutral", "light");
+      transform: translateY(-50%);
     }
 
     &:last-child::after {
@@ -75,124 +89,169 @@
     }
 
     &--active {
-      background: color("neutral", "white");
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      opacity: 1;
 
-      .drawer__stepIcon {
+      .drawer__progressIcon {
         background: color("primary", "base");
         color: color("neutral", "white");
+        transform: scale(1.1);
       }
 
-      span {
+      .drawer__progressLabel {
         color: color("primary", "dark");
         @include font-weight("semibold");
       }
     }
 
     &--completed {
-      .drawer__stepIcon {
+      opacity: 1;
+
+      .drawer__progressIcon {
         background: color("status", "success");
         color: color("neutral", "white");
       }
-    }
 
-    span {
-      @include font-size("sm");
-      color: color("neutral", "dark");
-      white-space: nowrap;
-
-      @include breakpoint-down("sm") {
-        display: none;
+      &::after {
+        background: color("status", "success");
       }
     }
   }
 
-  &__stepIcon {
-    width: 32px;
-    height: 32px;
+  &__progressIcon {
+    width: 36px;
+    height: 36px;
     border-radius: border-radius("full");
-    background: color("neutral", "lighter");
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
     display: flex;
     align-items: center;
     justify-content: center;
     color: color("neutral", "dark");
     flex-shrink: 0;
+    transition: all 0.3s ease;
+  }
+
+  &__progressLabel {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    transition: all 0.3s ease;
+
+    @include breakpoint-down("sm") {
+      display: none;
+    }
   }
 
   &__content {
     flex: 1;
-    padding: spacing("xl");
+    padding: spacing("2xl");
     overflow-y: auto;
+
+    @include breakpoint-down("sm") {
+      padding: spacing("xl");
+    }
   }
 
   &__stepContent {
+    animation: fadeIn 0.3s ease;
+  }
+
+  &__stepHeader {
+    margin-bottom: spacing("2xl");
+
     h3 {
       @include font-size("lg");
       @include font-weight("semibold");
       color: color("neutral", "darkest");
-      margin-bottom: spacing("xl");
-    }
-  }
-
-  &__field {
-    margin-bottom: spacing("xl");
-
-    label {
-      display: block;
-      @include font-size("sm");
-      @include font-weight("medium");
-      color: color("neutral", "darker");
-      margin-bottom: spacing("sm");
-    }
-  }
-
-  &__optionCard {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: spacing("lg");
-    background: color("neutral", "white");
-    border: 2px solid color("neutral", "lighter");
-    border-radius: border-radius("lg");
-    margin-bottom: spacing("md");
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    h4 {
-      @include font-size("base");
-      @include font-weight("semibold");
-      color: color("neutral", "darkest");
-      margin-bottom: spacing("xxs");
+      margin: 0 0 spacing("xs") 0;
     }
 
     p {
       @include font-size("sm");
       color: color("neutral", "dark");
-      margin-bottom: spacing("xs");
+      margin: 0;
     }
+  }
+
+  &__section {
+    margin-bottom: spacing("2xl");
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__label {
+    display: block;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("md");
+  }
+
+  // Frequency Step
+  &__frequencyGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: spacing("md");
+  }
+
+  &__frequencyCard {
+    position: relative;
+    padding: spacing("lg");
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("xl");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
 
     &:hover {
       border-color: color("primary", "light");
+      transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
-    &--selected {
+    &--active {
       border-color: color("primary", "base");
       background: linear-gradient(
         to bottom right,
-        rgba(color("primary", "base"), 0.02),
+        rgba(color("primary", "base"), 0.03),
         transparent
       );
     }
   }
 
-  &__optionPrice {
-    @include font-size("sm");
+  &__popularTag {
+    position: absolute;
+    top: -10px;
+    right: spacing("md");
+    padding: spacing("xxs") spacing("sm");
+    background: color("accent", "base");
+    color: color("neutral", "darkest");
+    border-radius: border-radius("pill");
+    @include font-size("xs");
     @include font-weight("semibold");
-    color: color("primary", "base");
   }
 
-  &__optionCheck {
+  &__frequencyContent {
+    h4 {
+      @include font-size("base");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xxs") 0;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      margin: 0;
+    }
+  }
+
+  &__checkmark {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
     width: 24px;
     height: 24px;
     border-radius: border-radius("full");
@@ -201,83 +260,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
   }
 
-  &__frequencyOptions {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: spacing("sm");
-  }
-
-  &__frequencyOption {
-    padding: spacing("sm");
-    background: color("neutral", "white");
-    border: 2px solid color("neutral", "lighter");
-    border-radius: border-radius("lg");
-    @include font-size("sm");
-    @include font-weight("medium");
-    color: color("neutral", "dark");
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: center;
-
-    &:hover {
-      border-color: color("primary", "light");
-    }
-
-    &--active {
-      border-color: color("primary", "base");
-      background: color("primary", "base");
-      color: color("neutral", "white");
-    }
-  }
-
+  // Schedule Step
   &__daysGrid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: spacing("sm");
 
     @include breakpoint-down("sm") {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 
-  &__dayButton {
-    aspect-ratio: 1;
+  &__dayCard {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    background: color("neutral", "white");
-    border: 2px solid color("neutral", "lighter");
-    border-radius: border-radius("lg");
-    @include font-size("sm");
-    @include font-weight("medium");
-    color: color("neutral", "dark");
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:hover {
-      border-color: color("primary", "light");
-    }
-
-    &--active {
-      border-color: color("primary", "base");
-      background: color("primary", "base");
-      color: color("neutral", "white");
-    }
-  }
-
-  &__timeSlots {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: spacing("sm");
-  }
-
-  &__timeSlot {
-    display: flex;
-    align-items: center;
-    gap: spacing("md");
+    gap: spacing("xxs");
     padding: spacing("md");
     background: color("neutral", "white");
     border: 2px solid color("neutral", "lighter");
@@ -285,66 +285,108 @@
     cursor: pointer;
     transition: all 0.2s ease;
 
-    svg {
-      color: color("neutral", "dark");
+    &:hover {
+      border-color: color("primary", "light");
+      transform: translateY(-2px);
     }
 
-    div {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: spacing("xxs");
+    &--active {
+      border-color: color("primary", "base");
+      background: color("primary", "base");
+      color: color("neutral", "white");
     }
+  }
 
-    strong {
-      @include font-size("sm");
-      @include font-weight("semibold");
-      color: color("neutral", "darkest");
-    }
+  &__dayShort {
+    @include font-size("base");
+    @include font-weight("semibold");
+  }
 
-    span {
-      @include font-size("xs");
-      color: color("neutral", "dark");
+  &__dayFull {
+    @include font-size("xs");
+    opacity: 0.8;
+
+    @include breakpoint-down("sm") {
+      display: none;
     }
+  }
+
+  &__timeGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: spacing("md");
+  }
+
+  &__timeCard {
+    display: flex;
+    gap: spacing("md");
+    padding: spacing("md");
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
 
     &:hover {
       border-color: color("primary", "light");
+      transform: translateY(-2px);
     }
 
     &--active {
       border-color: color("primary", "base");
       background: linear-gradient(
         to right,
-        rgba(color("primary", "base"), 0.02),
+        rgba(color("primary", "base"), 0.03),
         transparent
       );
-
-      svg {
-        color: color("primary", "base");
-      }
     }
   }
 
-  &__propertyTypes {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: spacing("sm");
+  &__timeIcon {
+    @include font-size("2xl");
   }
 
-  &__propertyType {
-    padding: spacing("md");
+  &__timeInfo {
+    flex: 1;
+
+    h4 {
+      @include font-size("base");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xxs") 0;
+    }
+
+    p {
+      @include font-size("xs");
+      color: color("neutral", "dark");
+      margin: 0;
+    }
+  }
+
+  // Details Step
+  &__propertyGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: spacing("md");
+  }
+
+  &__propertyCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("lg");
     background: color("neutral", "white");
     border: 2px solid color("neutral", "lighter");
     border-radius: border-radius("lg");
-    @include font-size("sm");
-    @include font-weight("medium");
-    color: color("neutral", "dark");
     cursor: pointer;
     transition: all 0.2s ease;
     text-align: center;
 
     &:hover {
       border-color: color("primary", "light");
+      transform: translateY(-2px);
     }
 
     &--active {
@@ -352,54 +394,78 @@
       background: color("primary", "base");
       color: color("neutral", "white");
     }
-  }
-
-  &__rooms {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: spacing("sm");
-  }
-
-  &__roomControl {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: spacing("sm");
-    background: color("neutral", "lightest");
-    border-radius: border-radius("lg");
 
     span {
       @include font-size("sm");
       @include font-weight("medium");
-      color: color("neutral", "darkest");
     }
   }
 
-  &__counter {
+  &__propertyIcon {
+    @include font-size("2xl");
+  }
+
+  &__roomsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: spacing("md");
+  }
+
+  &__roomCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+  }
+
+  &__roomInfo {
     display: flex;
     align-items: center;
-    gap: spacing("md");
+    gap: spacing("sm");
+  }
+
+  &__roomIcon {
+    @include font-size("lg");
+  }
+
+  &__roomLabel {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+  }
+
+  &__roomCounter {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    background: color("neutral", "white");
+    border-radius: border-radius("lg");
+    padding: spacing("xxs");
 
     button {
       width: 28px;
       height: 28px;
       border-radius: border-radius("md");
-      background: color("neutral", "white");
-      border: 1px solid color("neutral", "lighter");
+      background: transparent;
+      border: none;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.2s ease;
-      color: color("neutral", "dark");
+      color: color("primary", "base");
+      @include font-size("lg");
+      @include font-weight("semibold");
 
       &:hover:not(:disabled) {
-        border-color: color("primary", "base");
-        color: color("primary", "base");
+        background: color("primary", "base");
+        color: color("neutral", "white");
       }
 
       &:disabled {
-        opacity: 0.5;
+        opacity: 0.3;
         cursor: not-allowed;
       }
     }
@@ -409,95 +475,73 @@
       text-align: center;
       @include font-size("sm");
       @include font-weight("semibold");
+      color: color("neutral", "darkest");
     }
   }
 
-  &__reviewCard {
-    background: color("neutral", "lightest");
-    border-radius: border-radius("xl");
-    padding: spacing("xl");
+  &__optionsGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: spacing("md");
   }
 
-  &__reviewSection {
-    margin-bottom: spacing("lg");
-    padding-bottom: spacing("lg");
-    border-bottom: 1px solid color("neutral", "lighter");
+  &__optionCard {
+    padding: spacing("lg");
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
 
-    &:last-child {
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: none;
+    &:hover {
+      border-color: color("primary", "light");
+      transform: translateY(-2px);
+    }
+
+    &--active {
+      border-color: color("primary", "base");
+      background: linear-gradient(
+        to bottom right,
+        rgba(color("primary", "base"), 0.03),
+        transparent
+      );
     }
 
     h4 {
-      @include font-size("sm");
-      @include font-weight("medium");
-      color: color("neutral", "dark");
-      margin-bottom: spacing("sm");
-    }
-
-    p {
       @include font-size("base");
       @include font-weight("semibold");
       color: color("neutral", "darkest");
+      margin: 0 0 spacing("xs") 0;
     }
-  }
 
-  &__badge {
-    display: inline-block;
-    padding: spacing("xxs") spacing("sm");
-    background: color("primary", "base");
-    color: color("neutral", "white");
-    border-radius: border-radius("pill");
-    @include font-size("xs");
-    @include font-weight("medium");
-    margin-top: spacing("xs");
-  }
-
-  &__reviewItems {
-    display: flex;
-    flex-direction: column;
-    gap: spacing("xs");
-
-    div {
-      display: flex;
-      align-items: center;
-      gap: spacing("sm");
+    p {
       @include font-size("sm");
-      color: color("neutral", "darkest");
-
-      svg {
-        color: color("primary", "base");
-      }
-    }
-  }
-
-  &__reviewRooms {
-    display: flex;
-    flex-wrap: wrap;
-    gap: spacing("xs");
-    margin-top: spacing("sm");
-
-    span {
-      padding: spacing("xxs") spacing("sm");
-      background: color("neutral", "white");
-      border-radius: border-radius("pill");
-      @include font-size("xs");
       color: color("neutral", "dark");
+      margin: 0 0 spacing("sm") 0;
     }
   }
 
-  &__reviewPrice {
+  &__optionPrice {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("primary", "base");
+  }
+
+  // Footer
+  &__footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: spacing("md");
-    background: linear-gradient(
-      to right,
-      rgba(color("primary", "base"), 0.05),
-      transparent
-    );
-    border-radius: border-radius("lg");
+    padding: spacing("xl");
+    border-top: 1px solid color("neutral", "lighter");
+    background: color("neutral", "lightest");
+  }
+
+  &__footerPrice {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
 
     span {
       @include font-size("sm");
@@ -511,16 +555,15 @@
     }
   }
 
-  &__footer {
+  &__footerActions {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: spacing("xl");
-    border-top: 1px solid color("neutral", "lighter");
-    background: color("neutral", "lightest");
+    gap: spacing("md");
   }
 
-  &__backButton {
+  &__backBtn {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
     padding: spacing("sm") spacing("lg");
     background: color("neutral", "white");
     border: 1px solid color("neutral", "lighter");
@@ -533,6 +576,7 @@
 
     &:hover:not(:disabled) {
       border-color: color("neutral", "medium");
+      background: color("neutral", "lightest");
     }
 
     &:disabled {
@@ -541,12 +585,12 @@
     }
   }
 
-  &__nextButton,
-  &__saveButton {
+  &__nextBtn,
+  &__saveBtn {
     display: flex;
     align-items: center;
     gap: spacing("sm");
-    padding: spacing("sm") spacing("lg");
+    padding: spacing("sm") spacing("xl");
     background: color("primary", "base");
     color: color("neutral", "white");
     border: none;
@@ -556,17 +600,33 @@
     cursor: pointer;
     transition: all 0.2s ease;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: color("primary", "dark");
       transform: translateY(-1px);
     }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   }
 
-  &__saveButton {
+  &__saveBtn {
     background: linear-gradient(
       135deg,
       color("primary", "base"),
       color("primary", "dark")
     );
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
