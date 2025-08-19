@@ -28,7 +28,7 @@ import {
 } from "@/graphql/api";
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
 import { Icon } from "@/components/ui/Icon/Icon";
-import CheckoutModal from "./CheckoutModal/CheckoutModal";
+import CheckoutSummary from "./CheckoutSummary/CheckoutSummary";
 
 export type DurationType = 1 | 2 | 3 | 6 | 12;
 
@@ -39,6 +39,9 @@ interface ConfiguredService {
 
 const SubscriptionBuilder: React.FC = () => {
   // State management
+  const [currentView, setCurrentView] = useState<"builder" | "checkout">(
+    "builder"
+  );
   const [billingCycle, setBillingCycle] = useState<BillingCycle>(
     BillingCycle.Monthly
   );
@@ -53,7 +56,6 @@ const SubscriptionBuilder: React.FC = () => {
   const [editingServiceId, setEditingServiceId] = useState<string | null>(null);
   const [servicesLoading, setServicesLoading] = useState(false);
   const [servicesError, setServicesError] = useState<string | null>(null);
-  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const { handleGetServices } = useServiceOperations();
 
   // Fetch services
@@ -167,6 +169,21 @@ const SubscriptionBuilder: React.FC = () => {
     );
   }
 
+  if (currentView === "checkout") {
+    return (
+      <CheckoutSummary
+        configuredServices={configuredServices}
+        billingCycle={billingCycle}
+        duration={duration}
+        onBack={() => setCurrentView("builder")}
+        onConfirmCheckout={() => {
+          // Handle checkout completion
+          console.log("Checkout completed");
+        }}
+      />
+    );
+  }
+
   return (
     <div className={styles.builder}>
       {/* Hero Section */}
@@ -252,7 +269,7 @@ const SubscriptionBuilder: React.FC = () => {
             total={calculateTotal()}
             onServiceEdit={handleServiceEdit}
             onServiceRemove={handleServiceRemove}
-            onCheckout={() => setIsCheckoutModalOpen(true)}
+            onCheckout={() => setCurrentView("checkout")}
           />
         </div>
       </div>
@@ -274,15 +291,6 @@ const SubscriptionBuilder: React.FC = () => {
             : undefined
         }
         onSave={handleServiceConfigSave}
-      />
-
-      <CheckoutModal
-        isOpen={isCheckoutModalOpen}
-        onClose={() => setIsCheckoutModalOpen(false)}
-        configuredServices={configuredServices}
-        billingCycle={billingCycle}
-        duration={duration}
-        onConfirmCheckout={() => setIsCheckoutModalOpen(false)}
       />
     </div>
   );
