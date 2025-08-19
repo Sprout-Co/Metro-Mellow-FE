@@ -32,6 +32,7 @@ interface SubscriptionSummaryProps {
   total: number;
   onServiceEdit: (serviceId: string) => void;
   onServiceRemove: (serviceId: string) => void;
+  onCheckout: () => void;
 }
 
 const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
@@ -41,6 +42,7 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
   total,
   onServiceEdit,
   onServiceRemove,
+  onCheckout,
 }) => {
   const monthlyTotal = configuredServices.reduce(
     (sum, cs) => sum + (cs.configuration.price || 0),
@@ -217,6 +219,7 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
             className={styles.summary__cta}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            onClick={onCheckout}
           >
             <span>Proceed to Checkout</span>
             <ArrowRight size={18} />

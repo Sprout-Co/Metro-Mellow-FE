@@ -12,6 +12,9 @@ import {
   ChevronLeft,
   Check,
   Info,
+  Sparkles,
+  CreditCard,
+  Shield,
 } from "lucide-react";
 import styles from "./ServiceConfigDrawer.module.scss";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
@@ -32,6 +35,7 @@ interface ServiceConfigDrawerProps {
   service: Service | null;
   existingConfiguration?: SubscriptionServiceInput;
   onSave: (configuration: SubscriptionServiceInput) => void;
+  onProceedToCheckout?: (configuration: SubscriptionServiceInput) => void;
 }
 
 const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
@@ -40,6 +44,7 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
   service,
   existingConfiguration,
   onSave,
+  onProceedToCheckout,
 }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [configuration, setConfiguration] = useState<SubscriptionServiceInput>({
@@ -114,9 +119,10 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
   }, [service, existingConfiguration, isOpen]);
 
   const steps = [
+    { id: "details", label: "Details", icon: <Home size={18} /> },
     { id: "frequency", label: "Frequency", icon: <Calendar size={18} /> },
     { id: "schedule", label: "Schedule", icon: <Clock size={18} /> },
-    { id: "details", label: "Details", icon: <Home size={18} /> },
+    { id: "summary", label: "Summary", icon: <Sparkles size={18} /> },
   ];
 
   const frequencies = [
@@ -232,6 +238,16 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
     let basePrice = service.price;
     const daysCount = configuration.scheduledDays?.length || 0;
 
+    // Add service option price
+    if (configuration.serviceDetails.serviceOption && service.options) {
+      const selectedOption = service.options.find(
+        (opt) => opt.id === configuration.serviceDetails.serviceOption
+      );
+      if (selectedOption) {
+        basePrice += selectedOption.price;
+      }
+    }
+
     if (
       service.category === ServiceCategory.Cleaning &&
       configuration.serviceDetails.cleaning
@@ -274,33 +290,192 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
     onClose();
   };
 
+  const handleCheckout = () => {
+    if (onProceedToCheckout) {
+      onProceedToCheckout(configuration);
+    }
+  };
+
   const canProceed = () => {
     switch (activeStep) {
-      case 0:
+      case 0: // Details step
+        return true; // Can always proceed from details
+      case 1: // Frequency step
         return configuration.frequency;
-      case 1:
+      case 2: // Schedule step
         return (
           configuration.scheduledDays && configuration.scheduledDays.length > 0
         );
-      case 2:
+      case 3: // Summary step
         return true;
       default:
         return false;
     }
   };
 
+  const getFrequencyLabel = (frequency: SubscriptionFrequency) => {
+    switch (frequency) {
+      case SubscriptionFrequency.Weekly:
+        return "Weekly";
+      case SubscriptionFrequency.BiWeekly:
+        return "Bi-Weekly";
+      case SubscriptionFrequency.Monthly:
+        return "Monthly";
+      default:
+        return frequency;
+    }
+  };
+
+  const getSelectedOptionDetails = () => {
+    if (!service?.options || !configuration.serviceDetails.serviceOption) {
+      return null;
+    }
+    return service.options.find(
+      (opt) => opt.id === configuration.serviceDetails.serviceOption
+    );
+  };
+
   const renderStepContent = () => {
     switch (activeStep) {
       case 0:
-        return renderFrequencyStep();
-      case 1:
-        return renderScheduleStep();
-      case 2:
         return renderDetailsStep();
+      case 1:
+        return renderFrequencyStep();
+      case 2:
+        return renderScheduleStep();
+      case 3:
+        return renderSummaryStep();
       default:
         return null;
     }
   };
+
+  const renderDetailsStep = () => (
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      className={styles.drawer__stepContent}
+    >
+      <div className={styles.drawer__stepHeader}>
+        <h3>Service details</h3>
+        <p>Customize your service requirements</p>
+      </div>
+
+      {/* Service Options - Now First */}
+      {service?.options && service.options.length > 0 && (
+        <div className={styles.drawer__section}>
+          <label className={styles.drawer__label}>Service Package</label>
+          <div className={styles.drawer__optionsGrid}>
+            {service.options.map((option) => (
+              <motion.button
+                key={option.id}
+                className={`${styles.drawer__optionCard} ${
+                  configuration.serviceDetails.serviceOption === option.id
+                    ? styles["drawer__optionCard--active"]
+                    : ""
+                }`}
+                onClick={() =>
+                  setConfiguration((prev) => ({
+                    ...prev,
+                    serviceDetails: {
+                      ...prev.serviceDetails,
+                      serviceOption: option.id,
+                    },
+                  }))
+                }
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <h4>{option.label}</h4>
+                <p>{option.description}</p>
+                <span className={styles.drawer__optionPrice}>
+                  +₦{option.price.toLocaleString()}
+                </span>
+              </motion.button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {service?.category === ServiceCategory.Cleaning && (
+        <>
+          {/* Property Type */}
+          <div className={styles.drawer__section}>
+            <label className={styles.drawer__label}>Property Type</label>
+            <div className={styles.drawer__propertyGrid}>
+              {propertyTypes.map((type) => (
+                <motion.button
+                  key={type.value}
+                  className={`${styles.drawer__propertyCard} ${
+                    configuration.serviceDetails.cleaning?.houseType ===
+                    type.value
+                      ? styles["drawer__propertyCard--active"]
+                      : ""
+                  }`}
+                  onClick={() =>
+                    setConfiguration((prev) => ({
+                      ...prev,
+                      serviceDetails: {
+                        ...prev.serviceDetails,
+                        cleaning: {
+                          ...prev.serviceDetails.cleaning!,
+                          houseType: type.value,
+                        },
+                      },
+                    }))
+                  }
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <span className={styles.drawer__propertyIcon}>
+                    {type.icon}
+                  </span>
+                  <span>{type.label}</span>
+                </motion.button>
+              ))}
+            </div>
+          </div>
+
+          {/* Room Configuration */}
+          <div className={styles.drawer__section}>
+            <label className={styles.drawer__label}>Room Configuration</label>
+            <div className={styles.drawer__roomsGrid}>
+              {roomTypes.map((room) => (
+                <div key={room.key} className={styles.drawer__roomCard}>
+                  <div className={styles.drawer__roomInfo}>
+                    <span className={styles.drawer__roomIcon}>{room.icon}</span>
+                    <span className={styles.drawer__roomLabel}>
+                      {room.label}
+                    </span>
+                  </div>
+                  <div className={styles.drawer__roomCounter}>
+                    <button
+                      onClick={() => updateRoomCount(room.key, false)}
+                      disabled={
+                        !configuration.serviceDetails.cleaning?.rooms?.[
+                          room.key as keyof typeof configuration.serviceDetails.cleaning.rooms
+                        ]
+                      }
+                    >
+                      −
+                    </button>
+                    <span>
+                      {configuration.serviceDetails.cleaning?.rooms?.[
+                        room.key as keyof typeof configuration.serviceDetails.cleaning.rooms
+                      ] || 0}
+                    </span>
+                    <button onClick={() => updateRoomCount(room.key, true)}>
+                      +
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+    </motion.div>
+  );
 
   const renderFrequencyStep = () => (
     <motion.div
@@ -418,132 +593,159 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
     </motion.div>
   );
 
-  const renderDetailsStep = () => (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      className={styles.drawer__stepContent}
-    >
-      <div className={styles.drawer__stepHeader}>
-        <h3>Service details</h3>
-        <p>Customize your service requirements</p>
-      </div>
+  const renderSummaryStep = () => {
+    const selectedOption = getSelectedOptionDetails();
+    const roomCount = configuration.serviceDetails.cleaning?.rooms
+      ? Object.values(configuration.serviceDetails.cleaning.rooms).reduce(
+          (sum, count) => sum + (count || 0),
+          0
+        )
+      : 0;
 
-      {service?.category === ServiceCategory.Cleaning && (
-        <>
-          {/* Property Type */}
-          <div className={styles.drawer__section}>
-            <label className={styles.drawer__label}>Property Type</label>
-            <div className={styles.drawer__propertyGrid}>
-              {propertyTypes.map((type) => (
-                <motion.button
-                  key={type.value}
-                  className={`${styles.drawer__propertyCard} ${
-                    configuration.serviceDetails.cleaning?.houseType ===
-                    type.value
-                      ? styles["drawer__propertyCard--active"]
-                      : ""
-                  }`}
-                  onClick={() =>
-                    setConfiguration((prev) => ({
-                      ...prev,
-                      serviceDetails: {
-                        ...prev.serviceDetails,
-                        cleaning: {
-                          ...prev.serviceDetails.cleaning!,
-                          houseType: type.value,
-                        },
-                      },
-                    }))
-                  }
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <span className={styles.drawer__propertyIcon}>
-                    {type.icon}
-                  </span>
-                  <span>{type.label}</span>
-                </motion.button>
-              ))}
-            </div>
-          </div>
+    return (
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className={styles.drawer__stepContent}
+      >
+        <div className={styles.drawer__stepHeader}>
+          <h3>Configuration Summary</h3>
+          <p>Review your service configuration</p>
+        </div>
 
-          {/* Room Configuration */}
-          <div className={styles.drawer__section}>
-            <label className={styles.drawer__label}>Room Configuration</label>
-            <div className={styles.drawer__roomsGrid}>
-              {roomTypes.map((room) => (
-                <div key={room.key} className={styles.drawer__roomCard}>
-                  <div className={styles.drawer__roomInfo}>
-                    <span className={styles.drawer__roomIcon}>{room.icon}</span>
-                    <span className={styles.drawer__roomLabel}>
-                      {room.label}
-                    </span>
-                  </div>
-                  <div className={styles.drawer__roomCounter}>
-                    <button
-                      onClick={() => updateRoomCount(room.key, false)}
-                      disabled={
-                        !configuration.serviceDetails.cleaning?.rooms?.[
-                          room.key as keyof typeof configuration.serviceDetails.cleaning.rooms
-                        ]
-                      }
-                    >
-                      −
-                    </button>
-                    <span>
-                      {configuration.serviceDetails.cleaning?.rooms?.[
-                        room.key as keyof typeof configuration.serviceDetails.cleaning.rooms
-                      ] || 0}
-                    </span>
-                    <button onClick={() => updateRoomCount(room.key, true)}>
-                      +
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* Service Options */}
-      {service?.options && service.options.length > 0 && (
-        <div className={styles.drawer__section}>
-          <label className={styles.drawer__label}>Service Option</label>
-          <div className={styles.drawer__optionsGrid}>
-            {service.options.map((option) => (
-              <motion.button
-                key={option.id}
-                className={`${styles.drawer__optionCard} ${
-                  configuration.serviceDetails.serviceOption === option.id
-                    ? styles["drawer__optionCard--active"]
-                    : ""
-                }`}
-                onClick={() =>
-                  setConfiguration((prev) => ({
-                    ...prev,
-                    serviceDetails: {
-                      ...prev.serviceDetails,
-                      serviceOption: option.id,
-                    },
-                  }))
-                }
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <h4>{option.label}</h4>
-                <p>{option.description}</p>
-                <span className={styles.drawer__optionPrice}>
-                  +₦{option.price.toLocaleString()}
+        {/* Service Details Summary */}
+        <div className={styles.drawer__summarySection}>
+          <h4 className={styles.drawer__summaryTitle}>
+            <Home size={16} />
+            Service Details
+          </h4>
+          <div className={styles.drawer__summaryContent}>
+            {selectedOption && (
+              <div className={styles.drawer__summaryItem}>
+                <span className={styles.drawer__summaryLabel}>Package:</span>
+                <span className={styles.drawer__summaryValue}>
+                  {selectedOption.label}
                 </span>
-              </motion.button>
-            ))}
+              </div>
+            )}
+            {service?.category === ServiceCategory.Cleaning && (
+              <>
+                <div className={styles.drawer__summaryItem}>
+                  <span className={styles.drawer__summaryLabel}>
+                    Property Type:
+                  </span>
+                  <span className={styles.drawer__summaryValue}>
+                    {configuration.serviceDetails.cleaning?.houseType ===
+                    HouseType.Flat
+                      ? "Flat/Apartment"
+                      : "Duplex/House"}
+                  </span>
+                </div>
+                <div className={styles.drawer__summaryItem}>
+                  <span className={styles.drawer__summaryLabel}>Rooms:</span>
+                  <span className={styles.drawer__summaryValue}>
+                    {roomCount} room{roomCount !== 1 ? "s" : ""}
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         </div>
-      )}
-    </motion.div>
-  );
+
+        {/* Schedule Summary */}
+        <div className={styles.drawer__summarySection}>
+          <h4 className={styles.drawer__summaryTitle}>
+            <Calendar size={16} />
+            Schedule & Frequency
+          </h4>
+          <div className={styles.drawer__summaryContent}>
+            <div className={styles.drawer__summaryItem}>
+              <span className={styles.drawer__summaryLabel}>Frequency:</span>
+              <span className={styles.drawer__summaryValue}>
+                {getFrequencyLabel(configuration.frequency)}
+              </span>
+            </div>
+            <div className={styles.drawer__summaryItem}>
+              <span className={styles.drawer__summaryLabel}>Days:</span>
+              <span className={styles.drawer__summaryValue}>
+                {configuration.scheduledDays
+                  ?.map((day) => daysOfWeek.find((d) => d.value === day)?.short)
+                  .join(", ") || "Not selected"}
+              </span>
+            </div>
+            <div className={styles.drawer__summaryItem}>
+              <span className={styles.drawer__summaryLabel}>Time:</span>
+              <span className={styles.drawer__summaryValue}>
+                {
+                  timeSlots.find(
+                    (slot) => slot.value === configuration.preferredTimeSlot
+                  )?.label
+                }{" "}
+                (
+                {
+                  timeSlots.find(
+                    (slot) => slot.value === configuration.preferredTimeSlot
+                  )?.time
+                }
+                )
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Pricing Summary */}
+        <div className={styles.drawer__summarySection}>
+          <h4 className={styles.drawer__summaryTitle}>
+            <CreditCard size={16} />
+            Billing Details
+          </h4>
+          <div className={styles.drawer__summaryContent}>
+            <div className={styles.drawer__summaryItem}>
+              <span className={styles.drawer__summaryLabel}>Base Service:</span>
+              <span className={styles.drawer__summaryValue}>
+                ₦{service?.price.toLocaleString()}
+              </span>
+            </div>
+            {selectedOption && (
+              <div className={styles.drawer__summaryItem}>
+                <span className={styles.drawer__summaryLabel}>
+                  Package Add-on:
+                </span>
+                <span className={styles.drawer__summaryValue}>
+                  +₦{selectedOption.price.toLocaleString()}
+                </span>
+              </div>
+            )}
+            <div className={styles.drawer__summaryDivider} />
+            <div className={styles.drawer__summaryTotal}>
+              <span className={styles.drawer__summaryLabel}>
+                Monthly Total:
+              </span>
+              <span className={styles.drawer__summaryTotalValue}>
+                ₦{calculatePrice().toLocaleString()}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Benefits */}
+        <div className={styles.drawer__summaryBenefits}>
+          <div className={styles.drawer__summaryBenefit}>
+            <Shield size={16} />
+            <span>Price lock guarantee</span>
+          </div>
+          <div className={styles.drawer__summaryBenefit}>
+            <Check size={16} />
+            <span>Flexible scheduling</span>
+          </div>
+          <div className={styles.drawer__summaryBenefit}>
+            <Sparkles size={16} />
+            <span>Priority booking</span>
+          </div>
+        </div>
+      </motion.div>
+    );
+  };
 
   if (!service) return null;
 
@@ -570,7 +772,11 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
                 index === activeStep
                   ? styles["drawer__progressStep--active"]
                   : ""
-              } ${index < activeStep ? styles["drawer__progressStep--completed"] : ""}`}
+              } ${
+                index < activeStep
+                  ? styles["drawer__progressStep--completed"]
+                  : ""
+              }`}
             >
               <div className={styles.drawer__progressIcon}>{step.icon}</div>
               <span className={styles.drawer__progressLabel}>{step.label}</span>
@@ -608,14 +814,19 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
                 <ChevronRight size={18} />
               </button>
             ) : (
-              <button
-                className={styles.drawer__saveBtn}
-                onClick={handleSave}
-                disabled={!canProceed()}
-              >
-                <Check size={18} />
-                Save Configuration
-              </button>
+              <div className={styles.drawer__finalActions}>
+                <button className={styles.drawer__saveBtn} onClick={handleSave}>
+                  <Check size={18} />
+                  Save & Continue
+                </button>
+                <button
+                  className={styles.drawer__checkoutBtn}
+                  onClick={handleCheckout}
+                >
+                  <CreditCard size={18} />
+                  Proceed to Checkout
+                </button>
+              </div>
             )}
           </div>
         </div>

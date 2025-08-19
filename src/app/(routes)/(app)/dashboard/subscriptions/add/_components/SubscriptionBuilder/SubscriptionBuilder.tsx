@@ -28,6 +28,7 @@ import {
 } from "@/graphql/api";
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
 import { Icon } from "@/components/ui/Icon/Icon";
+import CheckoutModal from "./CheckoutModal/CheckoutModal";
 
 export type DurationType = 1 | 2 | 3 | 6 | 12;
 
@@ -52,7 +53,7 @@ const SubscriptionBuilder: React.FC = () => {
   const [editingServiceId, setEditingServiceId] = useState<string | null>(null);
   const [servicesLoading, setServicesLoading] = useState(false);
   const [servicesError, setServicesError] = useState<string | null>(null);
-
+  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const { handleGetServices } = useServiceOperations();
 
   // Fetch services
@@ -251,6 +252,7 @@ const SubscriptionBuilder: React.FC = () => {
             total={calculateTotal()}
             onServiceEdit={handleServiceEdit}
             onServiceRemove={handleServiceRemove}
+            onCheckout={() => setIsCheckoutModalOpen(true)}
           />
         </div>
       </div>
@@ -272,6 +274,15 @@ const SubscriptionBuilder: React.FC = () => {
             : undefined
         }
         onSave={handleServiceConfigSave}
+      />
+
+      <CheckoutModal
+        isOpen={isCheckoutModalOpen}
+        onClose={() => setIsCheckoutModalOpen(false)}
+        configuredServices={configuredServices}
+        billingCycle={billingCycle}
+        duration={duration}
+        onConfirmCheckout={() => setIsCheckoutModalOpen(false)}
       />
     </div>
   );
