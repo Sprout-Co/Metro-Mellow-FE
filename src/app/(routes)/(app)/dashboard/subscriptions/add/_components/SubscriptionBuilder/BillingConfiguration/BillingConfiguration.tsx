@@ -82,7 +82,6 @@ const BillingConfiguration: React.FC<BillingConfigurationProps> = ({
               <strong>Quarterly</strong>
               <span>Billed every 3 months</span>
             </div>
-            <div className={styles.config__savingBadge}>Save 5%</div>
             {billingCycle === BillingCycle.Quarterly && (
               <motion.div
                 className={styles.config__checkmark}
@@ -113,21 +112,21 @@ const BillingConfiguration: React.FC<BillingConfigurationProps> = ({
                 whileHover={{ y: -4 }}
                 whileTap={{ scale: 0.98 }}
               >
-                {isPopular && (
+                {/* {isPopular && (
                   <div className={styles.config__popularBadge}>
                     <Award size={14} />
                     Most Popular
                   </div>
-                )}
+                )} */}
                 <div className={styles.config__durationValue}>{dur}</div>
                 <div className={styles.config__durationLabel}>
                   {dur === 1 ? "Month" : "Months"}
                 </div>
-                {savings > 0 && (
+                {/* {savings > 0 && (
                   <div className={styles.config__durationSaving}>
                     Save {savings}%
                   </div>
-                )}
+                )} */}
               </motion.button>
             );
           })}
@@ -135,7 +134,7 @@ const BillingConfiguration: React.FC<BillingConfigurationProps> = ({
       </div>
 
       {/* Benefits */}
-      <div className={styles.config__benefits}>
+      {/* <div className={styles.config__benefits}>
         <div className={styles.config__benefit}>
           <Clock size={16} />
           <span>Cancel anytime after commitment period</span>
@@ -144,7 +143,7 @@ const BillingConfiguration: React.FC<BillingConfigurationProps> = ({
           <TrendingUp size={16} />
           <span>Lock in current prices for entire duration</span>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
