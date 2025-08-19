@@ -1,7 +1,6 @@
-// src/app/(routes)/(site)/bookings/_components/SubscriptionBuilder/ServiceSelector/ServiceSelector.tsx
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus,
@@ -14,11 +13,10 @@ import {
   Droplets,
   Utensils,
   Bug,
-  ArrowRight,
   Sparkles,
 } from "lucide-react";
 import styles from "./ServiceSelector.module.scss";
-import { Service, ServiceCategory } from "@/graphql/api";
+import { Service } from "@/graphql/api";
 
 interface ConfiguredService {
   service: Service;
@@ -40,8 +38,6 @@ const ServiceSelector: React.FC<ServiceSelectorProps> = ({
   onServiceEdit,
   onServiceRemove,
 }) => {
-  const [hoveredService, setHoveredService] = useState<string | null>(null);
-
   const getServiceIcon = (category: string) => {
     const iconProps = { size: 24, strokeWidth: 1.5 };
     switch (category) {
@@ -113,8 +109,6 @@ const ServiceSelector: React.FC<ServiceSelectorProps> = ({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.3 }}
-              onMouseEnter={() => setHoveredService(service._id)}
-              onMouseLeave={() => setHoveredService(null)}
             >
               {/* Configured Badge */}
               <AnimatePresence>
@@ -238,24 +232,6 @@ const ServiceSelector: React.FC<ServiceSelectorProps> = ({
                   </div>
                 )}
               </div>
-
-              {/* Hover Overlay */}
-              <AnimatePresence>
-                {hoveredService === service._id && !configured && (
-                  <motion.div
-                    className={styles.selector__overlay}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <div className={styles.selector__overlayContent}>
-                      <ArrowRight size={20} />
-                      <span>Click to configure</span>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </motion.div>
           );
         })}
