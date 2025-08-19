@@ -618,6 +618,150 @@
       color("primary", "dark")
     );
   }
+
+  // Summary Section Styles
+  &__summarySection {
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("xl");
+    padding: spacing("xl");
+    margin-bottom: spacing("lg");
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      border-color: color("primary", "lighter");
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__summaryTitle {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    margin-bottom: spacing("lg");
+    @include font-size("lg");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+
+    svg {
+      color: color("primary", "base");
+      flex-shrink: 0;
+    }
+  }
+
+  &__summaryContent {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__summaryItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: spacing("sm") 0;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid color("neutral", "lightest");
+    }
+  }
+
+  &__summaryLabel {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    flex: 1;
+    margin-right: spacing("md");
+  }
+
+  &__summaryValue {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  &__summaryDivider {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color("neutral", "light"),
+      transparent
+    );
+    margin: spacing("md") 0;
+  }
+
+  &__summaryTotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("md") spacing("lg");
+    background: linear-gradient(
+      135deg,
+      rgba(color("primary", "base"), 0.05),
+      rgba(color("primary", "light"), 0.03)
+    );
+    border: 1px solid color("primary", "lighter");
+    border-radius: border-radius("lg");
+    margin-top: spacing("sm");
+
+    .drawer__summaryLabel {
+      @include font-size("md");
+      @include font-weight("semibold");
+      color: color("primary", "dark");
+      margin-right: 0;
+    }
+  }
+
+  &__summaryTotalValue {
+    @include font-size("xl");
+    @include font-weight("bold");
+    color: color("primary", "dark");
+    background: linear-gradient(
+      135deg,
+      color("primary", "base"),
+      color("primary", "dark")
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  &__summaryBenefits {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+    margin-top: spacing("xl");
+    padding: spacing("lg");
+    background: linear-gradient(
+      135deg,
+      rgba(color("status", "success"), 0.05),
+      rgba(color("primary", "light"), 0.03)
+    );
+    border: 1px solid rgba(color("status", "success"), 0.2);
+    border-radius: border-radius("lg");
+  }
+
+  &__summaryBenefit {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("status", "success");
+
+    svg {
+      color: color("status", "success");
+      flex-shrink: 0;
+    }
+  }
 }
 
 @keyframes fadeIn {
