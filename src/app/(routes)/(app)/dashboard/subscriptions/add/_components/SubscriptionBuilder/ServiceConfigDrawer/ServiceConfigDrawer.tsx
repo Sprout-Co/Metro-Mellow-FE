@@ -26,6 +26,8 @@ import {
   SubscriptionServiceInput,
   PropertyType,
   ServiceId,
+  HouseType,
+  CleaningType,
 } from "@/graphql/api";
 
 interface ServiceConfigDrawerProps {
@@ -52,23 +54,27 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
     price: 0,
     category: ServiceCategory.Cleaning,
     serviceDetails: {
-      propertyType: PropertyType.Flat,
-      roomQuantities: {
-        bedroom: 2,
-        livingRoom: 1,
-        bathroom: 1,
-        kitchen: 1,
-        balcony: 0,
-        studyRoom: 0,
+      cleaning: {
+        cleaningType: CleaningType.StandardCleaning,
+        houseType: HouseType.Flat,
+        rooms: {
+          bedroom: 2,
+          livingRoom: 1,
+          bathroom: 1,
+          kitchen: 1,
+          balcony: 0,
+          studyRoom: 0,
+          lobby: 0,
+          other: 0,
+          outdoor: 0,
+        },
       },
+      serviceOption: "",
     },
-    serviceOption: "",
   });
 
   // Service-specific state
-  const [propertyType, setPropertyType] = useState<PropertyType>(
-    PropertyType.Flat
-  );
+  const [propertyType, setPropertyType] = useState<HouseType>(HouseType.Flat);
   const [roomQuantities, setRoomQuantities] = useState({
     bedroom: 2,
     livingRoom: 1,
@@ -76,6 +82,9 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
     kitchen: 1,
     balcony: 0,
     studyRoom: 0,
+    lobby: 0,
+    other: 0,
+    outdoor: 0,
   });
   const [serviceOption, setServiceOption] = useState<string>("");
 
@@ -86,10 +95,29 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
       } else {
         setConfiguration({
           serviceId: service._id,
+          category: service.category,
           frequency: SubscriptionFrequency.Weekly,
           scheduledDays: [],
           preferredTimeSlot: TimeSlot.Morning,
           price: service.price,
+          serviceDetails: {
+            cleaning: {
+              cleaningType: CleaningType.StandardCleaning,
+              houseType: HouseType.Flat,
+              rooms: {
+                bedroom: 2,
+                livingRoom: 1,
+                bathroom: 1,
+                kitchen: 1,
+                balcony: 0,
+                studyRoom: 0,
+                lobby: 0,
+                other: 0,
+                outdoor: 0,
+              },
+            },
+            serviceOption: "",
+          },
         });
       }
     }
@@ -144,7 +172,7 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
         0
       );
       basePrice = (service.price / 3) * roomCount; // Base price per room
-      if (propertyType === PropertyType.Duplex) {
+      if (propertyType === HouseType.Duplex) {
         basePrice *= 1.5;
       }
     }
@@ -166,8 +194,11 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
     onSave({
       ...configuration,
       serviceDetails: {
-        propertyType,
-        roomQuantities,
+        cleaning: {
+          cleaningType: CleaningType.StandardCleaning,
+          houseType: propertyType as HouseType,
+          rooms: roomQuantities,
+        },
         serviceOption,
       },
     });
@@ -328,21 +359,21 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
             <div className={styles.drawer__propertyTypes}>
               <button
                 className={`${styles.drawer__propertyType} ${
-                  propertyType === PropertyType.Flat
+                  propertyType === HouseType.Flat
                     ? styles["drawer__propertyType--active"]
                     : ""
                 }`}
-                onClick={() => setPropertyType(PropertyType.Flat)}
+                onClick={() => setPropertyType(HouseType.Flat)}
               >
                 Flat/Apartment
               </button>
               <button
                 className={`${styles.drawer__propertyType} ${
-                  propertyType === PropertyType.Duplex
+                  propertyType === HouseType.Duplex
                     ? styles["drawer__propertyType--active"]
                     : ""
                 }`}
-                onClick={() => setPropertyType(PropertyType.Duplex)}
+                onClick={() => setPropertyType(HouseType.Duplex)}
               >
                 Duplex/House
               </button>

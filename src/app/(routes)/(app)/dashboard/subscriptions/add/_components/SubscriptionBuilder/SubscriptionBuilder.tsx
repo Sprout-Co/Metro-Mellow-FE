@@ -50,13 +50,16 @@ const SubscriptionBuilder: React.FC = () => {
     useState<Service | null>(null);
   const [isConfigDrawerOpen, setIsConfigDrawerOpen] = useState(false);
   const [editingServiceId, setEditingServiceId] = useState<string | null>(null);
+  const [servicesLoading, setServicesLoading] = useState(false);
+  const [servicesError, setServicesError] = useState<string | null>(null);
 
-  const { handleGetServices, servicesLoading, servicesError } =
-    useServiceOperations();
+  const { handleGetServices } = useServiceOperations();
 
   // Fetch services
   useEffect(() => {
     const fetchServices = async () => {
+      setServicesLoading(true);
+      setServicesError(null);
       try {
         const apiServices = await handleGetServices(
           undefined,
@@ -67,6 +70,11 @@ const SubscriptionBuilder: React.FC = () => {
         }
       } catch (error) {
         console.error("Error fetching services:", error);
+        setServicesError(
+          error instanceof Error ? error.message : "Failed to fetch services"
+        );
+      } finally {
+        setServicesLoading(false);
       }
     };
     fetchServices();
