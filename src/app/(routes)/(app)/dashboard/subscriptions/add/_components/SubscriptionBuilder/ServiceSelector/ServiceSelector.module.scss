@@ -1,0 +1,259 @@
+// src/app/(routes)/(site)/bookings/_components/SubscriptionBuilder/ServiceSelector/ServiceSelector.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.selector {
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__card {
+    position: relative;
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("xl");
+    padding: spacing("xl");
+    transition: all 0.3s ease;
+    overflow: hidden;
+
+    &:hover {
+      border-color: color("primary", "light");
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    &--configured {
+      border-color: color("primary", "base");
+      background: linear-gradient(
+        to bottom right,
+        rgba(color("primary", "base"), 0.02),
+        transparent
+      );
+    }
+  }
+
+  &__configuredBadge {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+    display: flex;
+    align-items: center;
+    gap: spacing("xxs");
+    padding: spacing("xxs") spacing("sm");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    border-radius: border-radius("pill");
+    @include font-size("xs");
+    @include font-weight("semibold");
+  }
+
+  &__cardContent {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("lg");
+    background: linear-gradient(
+      135deg,
+      rgba(color("primary", "base"), 0.1),
+      rgba(color("primary", "light"), 0.05)
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("primary", "base");
+  }
+
+  &__serviceName {
+    @include font-size("lg");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  &__serviceDesc {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    line-height: line-height("relaxed");
+  }
+
+  &__servicePrice {
+    @include font-size("base");
+    @include font-weight("semibold");
+    color: color("primary", "base");
+  }
+
+  &__configSummary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("sm");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    margin-top: spacing("sm");
+  }
+
+  &__configItem {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    @include font-size("sm");
+    color: color("neutral", "dark");
+
+    svg {
+      color: color("primary", "base");
+    }
+  }
+
+  &__configPrice {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("primary", "dark");
+  }
+
+  &__cardActions {
+    margin-top: spacing("lg");
+  }
+
+  &__addButton {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("sm");
+    padding: spacing("sm") spacing("md");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("primary", "dark");
+      transform: translateY(-1px);
+    }
+  }
+
+  &__configuredActions {
+    display: flex;
+    gap: spacing("sm");
+  }
+
+  &__editButton {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+    padding: spacing("sm");
+    background: color("neutral", "lightest");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("primary", "base");
+      color: color("neutral", "white");
+      border-color: color("primary", "base");
+    }
+  }
+
+  &__removeButton {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color("neutral", "lightest");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    color: color("status", "error");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("status", "error");
+      color: color("neutral", "white");
+      border-color: color("status", "error");
+    }
+  }
+
+  &__hoverOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(color("primary", "base"), 0.95)
+    );
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+    color: color("neutral", "white");
+    @include font-size("sm");
+    @include font-weight("medium");
+    pointer-events: none;
+  }
+
+  &__emptyTip {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("lg");
+    background: linear-gradient(
+      to right,
+      rgba(color("primary", "base"), 0.02),
+      transparent
+    );
+    border-radius: border-radius("lg");
+    border-left: 3px solid color("primary", "base");
+    margin-top: spacing("xl");
+
+    p {
+      @include font-size("base");
+      color: color("neutral", "dark");
+    }
+  }
+
+  &__tipIcon {
+    width: 36px;
+    height: 36px;
+    border-radius: border-radius("full");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 2s infinite;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
