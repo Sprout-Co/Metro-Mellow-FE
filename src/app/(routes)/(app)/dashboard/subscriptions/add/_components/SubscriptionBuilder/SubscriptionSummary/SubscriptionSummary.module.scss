@@ -349,25 +349,4 @@
       }
     }
   }
-
-  &__benefits {
-    display: flex;
-    justify-content: center;
-    gap: spacing("xl");
-    padding: spacing("md") spacing("xl") spacing("xl");
-    margin-top: -spacing("sm");
-  }
-
-  &__benefit {
-    display: flex;
-    align-items: center;
-    gap: spacing("xs");
-    @include font-size("xs");
-    color: color("neutral", "dark");
-
-    svg {
-      color: color("primary", "base");
-      flex-shrink: 0;
-    }
-  }
 }

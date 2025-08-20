@@ -37,6 +37,172 @@
     }
   }
 
+  // Validation styles
+  &__required {
+    color: #ef4444;
+    font-weight: 600;
+  }
+
+  &__label {
+    &--error {
+      color: #ef4444 !important;
+      font-weight: 600;
+    }
+  }
+
+  &__optionsGrid {
+    &--error {
+      border: 2px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 8px;
+      background: rgba(239, 68, 68, 0.05);
+    }
+  }
+
+  &__daysGrid {
+    &--error {
+      border: 2px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 8px;
+      background: rgba(239, 68, 68, 0.05);
+    }
+  }
+
+  &__roomsGrid {
+    &--error {
+      border: 2px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 8px;
+      background: rgba(239, 68, 68, 0.05);
+    }
+  }
+
+  &__mealsGrid {
+    &--error {
+      border: 2px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 8px;
+      background: rgba(239, 68, 68, 0.05);
+    }
+  }
+
+  &__mealIcon {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  &__sectionDescription {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+
+  &__mealsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+  }
+
+  &__mealCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: white;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: #d1d5db;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &__mealDayInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  &__mealCounter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    button {
+      width: 28px;
+      height: 28px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+
+      &:hover:not(:disabled) {
+        background: #f9fafb;
+        border-color: #9ca3af;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    span {
+      min-width: 20px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 14px;
+    }
+  }
+
+  &__mealSchedule {
+    margin-top: 16px;
+    
+    h6 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #374151;
+      margin: 0 0 8px 0;
+    }
+  }
+
+  &__mealScheduleList {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__mealScheduleItem {
+    display: flex;
+    justify-content: between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #f8fafc;
+    border-radius: 6px;
+    font-size: 13px;
+
+    span {
+      color: #6b7280;
+      margin-right: 8px;
+    }
+
+    strong {
+      color: #111827;
+      margin-left: auto;
+    }
+  }
+
   &__closeBtn {
     width: 40px;
     height: 40px;

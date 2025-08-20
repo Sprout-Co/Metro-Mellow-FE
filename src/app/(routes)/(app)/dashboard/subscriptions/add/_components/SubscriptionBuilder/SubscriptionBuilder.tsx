@@ -18,6 +18,7 @@ import ServiceSelector from "./ServiceSelector/ServiceSelector";
 import BillingConfiguration from "./BillingConfiguration/BillingConfiguration";
 import SubscriptionSummary from "./SubscriptionSummary/SubscriptionSummary";
 import ServiceConfigDrawer from "./ServiceConfigDrawer/ServiceConfigDrawer";
+import ValidationErrors from "./components/ValidationErrors";
 import {
   Service,
   ServiceCategory,
@@ -29,6 +30,12 @@ import {
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
 import { Icon } from "@/components/ui/Icon/Icon";
 import CheckoutSummary from "./CheckoutSummary/CheckoutSummary";
+import {
+  validateSubscription,
+  validateServiceConfiguration,
+  validateBillingConfiguration,
+  ValidationError,
+} from "./validation";
 
 export type DurationType = 1 | 2 | 3 | 6 | 12;
 
@@ -56,6 +63,11 @@ const SubscriptionBuilder: React.FC = () => {
   const [editingServiceId, setEditingServiceId] = useState<string | null>(null);
   const [servicesLoading, setServicesLoading] = useState(false);
   const [servicesError, setServicesError] = useState<string | null>(null);
+  
+  // Validation state
+  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
+  const [showValidationErrors, setShowValidationErrors] = useState(false);
+  
   const { handleGetServices } = useServiceOperations();
 
   // Fetch services
@@ -113,6 +125,14 @@ const SubscriptionBuilder: React.FC = () => {
   const handleServiceConfigSave = (configuration: SubscriptionServiceInput) => {
     if (!selectedServiceForConfig) return;
 
+    // Validate the configuration before saving
+    const validation = validateServiceConfiguration(configuration, selectedServiceForConfig);
+    if (!validation.isValid) {
+      setValidationErrors(validation.errors);
+      setShowValidationErrors(true);
+      return;
+    }
+
     if (editingServiceId) {
       // Update existing configuration
       setConfiguredServices((prev) =>
@@ -131,6 +151,9 @@ const SubscriptionBuilder: React.FC = () => {
       ]);
     }
 
+    // Clear validation errors on successful save
+    setValidationErrors([]);
+    setShowValidationErrors(false);
     setIsConfigDrawerOpen(false);
     setSelectedServiceForConfig(null);
     setEditingServiceId(null);
@@ -143,6 +166,26 @@ const SubscriptionBuilder: React.FC = () => {
       0
     );
     return monthlyTotal * duration;
+  };
+
+  // Validate checkout requirements
+  const validateCheckout = (): boolean => {
+    const validation = validateSubscription(configuredServices, billingCycle, duration);
+    if (!validation.isValid) {
+      setValidationErrors(validation.errors);
+      setShowValidationErrors(true);
+      return false;
+    }
+    setValidationErrors([]);
+    setShowValidationErrors(false);
+    return true;
+  };
+
+  // Handle checkout with validation
+  const handleCheckout = () => {
+    if (validateCheckout()) {
+      setCurrentView("checkout");
+    }
   };
 
   if (servicesLoading) {
@@ -207,6 +250,14 @@ const SubscriptionBuilder: React.FC = () => {
         </motion.div>
       </div>
 
+      {/* Validation Errors */}
+      {showValidationErrors && validationErrors.length > 0 && (
+        <ValidationErrors
+          errors={validationErrors}
+          onDismiss={() => setShowValidationErrors(false)}
+        />
+      )}
+
       {/* Main Content */}
       <div className={styles.builder__container}>
         <div className={styles.builder__main}>
@@ -269,7 +320,7 @@ const SubscriptionBuilder: React.FC = () => {
             total={calculateTotal()}
             onServiceEdit={handleServiceEdit}
             onServiceRemove={handleServiceRemove}
-            onCheckout={() => setCurrentView("checkout")}
+            onCheckout={handleCheckout}
           />
         </div>
       </div>

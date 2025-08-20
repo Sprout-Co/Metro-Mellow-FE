@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import styles from "./ServiceConfigDrawer.module.scss";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
+import ValidationErrors from "../components/ValidationErrors";
 import {
   Service,
   ServiceCategory,
@@ -31,7 +32,14 @@ import {
   SubscriptionServiceInput,
   HouseType,
   CleaningType,
+  MealType,
 } from "@/graphql/api";
+import {
+  validateServiceConfiguration,
+  ValidationError,
+  hasFieldError,
+  getFieldError,
+} from "../validation";
 
 interface ServiceConfigDrawerProps {
   isOpen: boolean;
@@ -51,6 +59,8 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
   onProceedToCheckout,
 }) => {
   const [activeStep, setActiveStep] = useState(0);
+  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
+  const [showValidationErrors, setShowValidationErrors] = useState(false);
   const [configuration, setConfiguration] = useState<SubscriptionServiceInput>({
     serviceId: "",
     frequency: SubscriptionFrequency.Weekly,
@@ -74,6 +84,10 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
           outdoor: 0,
         },
       },
+      cooking: {
+        mealType: MealType.Basic,
+        mealsPerDelivery: [],
+      },
       serviceOption: "",
     },
   });
@@ -92,7 +106,7 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
         setConfiguration(existingConfiguration);
       } else {
         // Initialize with proper defaults based on service
-        setConfiguration({
+        const baseConfig = {
           serviceId: service._id,
           category: service.category,
           frequency: SubscriptionFrequency.Weekly,
@@ -100,7 +114,8 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
           preferredTimeSlot: TimeSlot.Morning,
           price: service.price,
           serviceDetails: {
-            cleaning: {
+            serviceOption: service.options?.[0]?.id || "",
+            cleaning: service.category === ServiceCategory.Cleaning ? {
               cleaningType: CleaningType.StandardCleaning,
               houseType: HouseType.Flat,
               rooms: {
@@ -114,10 +129,14 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
                 other: 0,
                 outdoor: 0,
               },
-            },
-            serviceOption: service.options?.[0]?.id || "",
+            } : undefined,
+            cooking: service.category === ServiceCategory.Cooking ? {
+              mealType: MealType.Basic,
+              mealsPerDelivery: [],
+            } : undefined,
           },
-        });
+        };
+        setConfiguration(baseConfig);
       }
     }
   }, [service, existingConfiguration, isOpen]);
@@ -195,6 +214,22 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
     { key: "studyRoom", label: "Study Room", icon: "📚" },
   ];
 
+  const mealTypes = [
+    {
+      value: MealType.Basic,
+      label: "Basic Meals",
+      description: "Simple, nutritious home-style cooking",
+      icon: "🍳",
+    },
+    {
+      value: MealType.Standard,
+      label: "Standard Meals",
+      description: "Varied menu with premium ingredients",
+      icon: "🍽️",
+      popular: true,
+    },
+  ];
+
   const toggleDay = (day: ScheduleDays) => {
     setConfiguration((prev) => ({
       ...prev,
@@ -234,6 +269,44 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
         },
       },
     }));
+  };
+
+  const updateMealCount = (day: ScheduleDays, count: number) => {
+    setConfiguration((prev) => {
+      const currentMeals = prev.serviceDetails.cooking?.mealsPerDelivery || [];
+      const existingIndex = currentMeals.findIndex(meal => meal.day === day);
+      
+      let updatedMeals;
+      if (count === 0) {
+        // Remove the meal delivery for this day
+        updatedMeals = currentMeals.filter(meal => meal.day !== day);
+      } else if (existingIndex >= 0) {
+        // Update existing meal delivery
+        updatedMeals = currentMeals.map((meal, index) =>
+          index === existingIndex ? { ...meal, count } : meal
+        );
+      } else {
+        // Add new meal delivery
+        updatedMeals = [...currentMeals, { day, count }];
+      }
+
+      return {
+        ...prev,
+        serviceDetails: {
+          ...prev.serviceDetails,
+          cooking: {
+            mealType: prev.serviceDetails.cooking?.mealType || MealType.Basic,
+            mealsPerDelivery: updatedMeals,
+          },
+        },
+      };
+    });
+  };
+
+  const getMealCountForDay = (day: ScheduleDays): number => {
+    const meals = configuration.serviceDetails.cooking?.mealsPerDelivery || [];
+    const meal = meals.find(m => m.day === day);
+    return meal?.count || 0;
   };
 
   const calculatePrice = () => {
@@ -300,10 +373,40 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
     }
   };
 
+  const validateCurrentStep = () => {
+    if (!service) return { isValid: false, errors: [] };
+    
+    const validation = validateServiceConfiguration(configuration, service);
+    setValidationErrors(validation.errors);
+    setShowValidationErrors(!validation.isValid);
+    return validation;
+  };
+
   const canProceed = () => {
     switch (activeStep) {
       case 0: // Details step
-        return true; // Can always proceed from details
+        if (service?.options && service.options.length > 0) {
+          const hasServiceOption = !!configuration.serviceDetails.serviceOption;
+          if (!hasServiceOption) return false;
+        }
+        
+        // Cooking service specific validation
+        if (service?.category === ServiceCategory.Cooking) {
+          const hasMealType = !!configuration.serviceDetails.cooking?.mealType;
+          const hasMealDeliveries = configuration.serviceDetails.cooking?.mealsPerDelivery && 
+            configuration.serviceDetails.cooking.mealsPerDelivery.length > 0;
+          return hasMealType && hasMealDeliveries;
+        }
+        
+        // Cleaning service specific validation
+        if (service?.category === ServiceCategory.Cleaning) {
+          const hasHouseType = !!configuration.serviceDetails.cleaning?.houseType;
+          const hasRooms = configuration.serviceDetails.cleaning?.rooms &&
+            Object.values(configuration.serviceDetails.cleaning.rooms).reduce((sum, count) => sum + (count || 0), 0) > 0;
+          return hasHouseType && hasRooms;
+        }
+        
+        return true;
       case 1: // Frequency step
         return configuration.frequency;
       case 2: // Schedule step
@@ -368,8 +471,14 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
       {/* Service Options - Now First */}
       {service?.options && service.options.length > 0 && (
         <div className={styles.drawer__section}>
-          <label className={styles.drawer__label}>Service Package</label>
-          <div className={styles.drawer__optionsGrid}>
+          <label className={`${styles.drawer__label} ${
+            hasFieldError(validationErrors, "serviceOption") ? styles["drawer__label--error"] : ""
+          }`}>
+            Service Package <span className={styles.drawer__required}>*</span>
+          </label>
+          <div className={`${styles.drawer__optionsGrid} ${
+            hasFieldError(validationErrors, "serviceOption") ? styles["drawer__optionsGrid--error"] : ""
+          }`}>
             {service.options.map((option) => (
               <motion.button
                 key={option.id}
@@ -478,6 +587,91 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
           </div>
         </>
       )}
+
+      {service?.category === ServiceCategory.Cooking && (
+        <>
+          {/* Meal Type Selection */}
+          <div className={styles.drawer__section}>
+            <label className={`${styles.drawer__label} ${
+              hasFieldError(validationErrors, "mealType") ? styles["drawer__label--error"] : ""
+            }`}>
+              Meal Plan Type <span className={styles.drawer__required}>*</span>
+            </label>
+            <div className={`${styles.drawer__optionsGrid} ${
+              hasFieldError(validationErrors, "mealType") ? styles["drawer__optionsGrid--error"] : ""
+            }`}>
+              {mealTypes.map((mealType) => (
+                <motion.button
+                  key={mealType.value}
+                  className={`${styles.drawer__optionCard} ${
+                    configuration.serviceDetails.cooking?.mealType === mealType.value
+                      ? styles["drawer__optionCard--active"]
+                      : ""
+                  }`}
+                  onClick={() =>
+                    setConfiguration((prev) => ({
+                      ...prev,
+                      serviceDetails: {
+                        ...prev.serviceDetails,
+                        cooking: {
+                          ...prev.serviceDetails.cooking,
+                          mealType: mealType.value,
+                          mealsPerDelivery: prev.serviceDetails.cooking?.mealsPerDelivery || [],
+                        },
+                      },
+                    }))
+                  }
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {mealType.popular && (
+                    <span className={styles.drawer__popularTag}>Most Popular</span>
+                  )}
+                  <span className={styles.drawer__mealIcon}>{mealType.icon}</span>
+                  <h4>{mealType.label}</h4>
+                  <p>{mealType.description}</p>
+                </motion.button>
+              ))}
+            </div>
+          </div>
+
+          {/* Meal Deliveries Configuration */}
+          <div className={styles.drawer__section}>
+            <label className={`${styles.drawer__label} ${
+              hasFieldError(validationErrors, "mealsPerDelivery") ? styles["drawer__label--error"] : ""
+            }`}>
+              Meals Per Delivery Day <span className={styles.drawer__required}>*</span>
+            </label>
+            <p className={styles.drawer__sectionDescription}>
+              Select which days you want meals delivered and how many meals per day
+            </p>
+            <div className={`${styles.drawer__mealsGrid} ${
+              hasFieldError(validationErrors, "mealsPerDelivery") ? styles["drawer__mealsGrid--error"] : ""
+            }`}>
+              {daysOfWeek.map((day) => (
+                <div key={day.value} className={styles.drawer__mealCard}>
+                  <div className={styles.drawer__mealDayInfo}>
+                    <span className={styles.drawer__dayShort}>{day.short}</span>
+                    <span className={styles.drawer__dayFull}>{day.label}</span>
+                  </div>
+                  <div className={styles.drawer__mealCounter}>
+                    <button
+                      onClick={() => updateMealCount(day.value, Math.max(0, getMealCountForDay(day.value) - 1))}
+                      disabled={getMealCountForDay(day.value) === 0}
+                    >
+                      −
+                    </button>
+                    <span>{getMealCountForDay(day.value)}</span>
+                    <button onClick={() => updateMealCount(day.value, getMealCountForDay(day.value) + 1)}>
+                      +
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </motion.div>
   );
 
@@ -543,8 +737,14 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
 
       {/* Days Selection */}
       <div className={styles.drawer__section}>
-        <label className={styles.drawer__label}>Select Days</label>
-        <div className={styles.drawer__daysGrid}>
+        <label className={`${styles.drawer__label} ${
+          hasFieldError(validationErrors, "scheduledDays") ? styles["drawer__label--error"] : ""
+        }`}>
+          Select Days <span className={styles.drawer__required}>*</span>
+        </label>
+        <div className={`${styles.drawer__daysGrid} ${
+          hasFieldError(validationErrors, "scheduledDays") ? styles["drawer__daysGrid--error"] : ""
+        }`}>
           {daysOfWeek.map((day) => (
             <motion.button
               key={day.value}
@@ -721,6 +921,60 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
                     <strong>{roomCount} room{roomCount !== 1 ? "s" : ""}</strong>
                   </div>
                 </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Meal Details (for Cooking) */}
+          {service?.category === ServiceCategory.Cooking && (
+            <motion.div 
+              className={styles.drawer__configCard}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 }}
+            >
+              <div className={styles.drawer__configHeader}>
+                <div className={styles.drawer__configIcon}>
+                  <Utensils size={18} />
+                </div>
+                <h5>Meal Configuration</h5>
+              </div>
+              <div className={styles.drawer__configContent}>
+                <div className={styles.drawer__propertyGrid}>
+                  <div className={styles.drawer__propertyItem}>
+                    <span>Plan Type:</span>
+                    <strong>
+                      {configuration.serviceDetails.cooking?.mealType === MealType.Basic
+                        ? "Basic Meals"
+                        : "Standard Meals"}
+                    </strong>
+                  </div>
+                  <div className={styles.drawer__propertyItem}>
+                    <span>Total Weekly Meals:</span>
+                    <strong>
+                      {configuration.serviceDetails.cooking?.mealsPerDelivery?.reduce(
+                        (sum, delivery) => sum + delivery.count, 0
+                      ) || 0} meals
+                    </strong>
+                  </div>
+                </div>
+                {configuration.serviceDetails.cooking?.mealsPerDelivery && 
+                 configuration.serviceDetails.cooking.mealsPerDelivery.length > 0 && (
+                  <div className={styles.drawer__mealSchedule}>
+                    <h6>Delivery Schedule:</h6>
+                    <div className={styles.drawer__mealScheduleList}>
+                      {configuration.serviceDetails.cooking.mealsPerDelivery.map((delivery) => {
+                        const dayName = daysOfWeek.find(d => d.value === delivery.day)?.label || "Unknown";
+                        return (
+                          <div key={delivery.day} className={styles.drawer__mealScheduleItem}>
+                            <span>{dayName}:</span>
+                            <strong>{delivery.count} meal{delivery.count !== 1 ? 's' : ''}</strong>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
             </motion.div>
           )}
@@ -903,6 +1157,14 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
           ))}
         </div>
 
+        {/* Validation Errors */}
+        {showValidationErrors && validationErrors.length > 0 && (
+          <ValidationErrors
+            errors={validationErrors}
+            onDismiss={() => setShowValidationErrors(false)}
+          />
+        )}
+
         {/* Content */}
         <div className={styles.drawer__content}>
           <AnimatePresence mode="wait">{renderStepContent()}</AnimatePresence>
@@ -926,15 +1188,30 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
             {activeStep < steps.length - 1 ? (
               <button
                 className={styles.drawer__nextBtn}
-                onClick={() => setActiveStep(activeStep + 1)}
-                disabled={!canProceed()}
+                onClick={() => {
+                  if (canProceed()) {
+                    setActiveStep(activeStep + 1);
+                    setShowValidationErrors(false);
+                  } else {
+                    validateCurrentStep();
+                  }
+                }}
+                disabled={false}
               >
                 Continue
                 <ChevronRight size={18} />
               </button>
             ) : (
               <div className={styles.drawer__finalActions}>
-                <button className={styles.drawer__saveBtn} onClick={handleSave}>
+                <button 
+                  className={styles.drawer__saveBtn} 
+                  onClick={() => {
+                    const validation = validateCurrentStep();
+                    if (validation.isValid) {
+                      handleSave();
+                    }
+                  }}
+                >
                   <Check size={18} />
                   Save & Continue
                 </button>

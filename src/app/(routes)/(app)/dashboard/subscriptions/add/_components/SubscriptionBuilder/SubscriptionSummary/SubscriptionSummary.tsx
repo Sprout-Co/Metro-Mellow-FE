@@ -19,6 +19,7 @@ import {
 import styles from "./SubscriptionSummary.module.scss";
 import { BillingCycle } from "@/graphql/api";
 import { DurationType } from "../SubscriptionBuilder";
+import FnButton from "@/components/ui/Button/FnButton";
 
 interface ConfiguredService {
   service: any;
@@ -215,7 +216,7 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
           </div>
 
           {/* CTA Button */}
-          <motion.button
+          {/* <motion.button
             className={styles.summary__cta}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -223,10 +224,18 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
           >
             <span>Proceed to Checkout</span>
             <ArrowRight size={18} />
-          </motion.button>
-
+          </motion.button> */}
+          <FnButton
+            onClick={onCheckout}
+            className={styles.summary__cta}
+            variant="primary"
+            size="lg"
+          >
+            Proceed to Checkout
+            <ArrowRight size={18} />
+          </FnButton>
           {/* Benefits */}
-          <div className={styles.summary__benefits}>
+          {/* <div className={styles.summary__benefits}>
             <div className={styles.summary__benefit}>
               <Shield size={14} />
               <span>Cancel anytime</span>
@@ -235,7 +244,7 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
               <Info size={14} />
               <span>Price lock guarantee</span>
             </div>
-          </div>
+          </div> */}
         </>
       )}
     </motion.div>
