@@ -7,6 +7,10 @@ import ApolloWrapper from "@/components/providers/ApolloWrapper";
 import ReduxProvider from "@/components/providers/ReduxProvider";
 import { AuthInitializer } from "@/components/providers/AuthInitializer";
 import ModalProvider from "./_components/ModalProvider";
+import {
+  GoogleTagManagerScript,
+  GoogleTagManager,
+} from "@/components/common/GoogleTagManager";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,12 +32,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID || "GTM-MKLFNGFF";
+
   return (
     <html lang="en">
+      <head>
+        <GoogleTagManagerScript gtmId={gtmId} />
+      </head>
       <body
         className={`${baloo2.variable} ${montserrat.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning={true}
       >
+        {/* Google Tag Manager (noscript) - placed immediately after opening body tag */}
+        <GoogleTagManager gtmId={gtmId} />
+
         <ReduxProvider>
           <ApolloWrapper>
             <AuthInitializer>
