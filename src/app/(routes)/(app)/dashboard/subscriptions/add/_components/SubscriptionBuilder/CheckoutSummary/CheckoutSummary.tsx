@@ -25,6 +25,11 @@ import {
   Gift,
   Award,
   ArrowLeft,
+  CalendarDays,
+  Timer,
+  Star,
+  Users,
+  Zap,
 } from "lucide-react";
 import styles from "./CheckoutSummary.module.scss";
 import { BillingCycle } from "@/graphql/api";
@@ -43,6 +48,11 @@ interface CheckoutSummary {
   onConfirmCheckout: () => void;
 }
 
+interface StartDatePickerProps {
+  selectedDate: Date | null;
+  onDateChange: (date: Date | null) => void;
+}
+
 const CheckoutSummary: React.FC<CheckoutSummary> = ({
   configuredServices,
   billingCycle,
@@ -51,6 +61,12 @@ const CheckoutSummary: React.FC<CheckoutSummary> = ({
   onConfirmCheckout,
 }) => {
   const [activeSection, setActiveSection] = useState<string | null>("services");
+  const [startDate, setStartDate] = useState<Date | null>(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow;
+  });
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   const getServiceIcon = (category: string) => {
     const iconProps = { size: 20, strokeWidth: 1.5 };
@@ -127,6 +143,61 @@ const CheckoutSummary: React.FC<CheckoutSummary> = ({
     }
   };
 
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const generateDateOptions = () => {
+    const options = [];
+    const today = new Date();
+    for (let i = 1; i <= 30; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      options.push(date);
+    }
+    return options;
+  };
+
+  const getServiceCategoryDetails = (category: string) => {
+    switch (category) {
+      case "CLEANING":
+        return {
+          icon: <Home size={20} />,
+          color: "#3B82F6",
+          features: ["Professional equipment", "Eco-friendly products", "Quality guarantee"]
+        };
+      case "LAUNDRY":
+        return {
+          icon: <Droplets size={20} />,
+          color: "#06B6D4",
+          features: ["Pick up & delivery", "Premium detergents", "Fabric care expertise"]
+        };
+      case "COOKING":
+        return {
+          icon: <Utensils size={20} />,
+          color: "#F59E0B",
+          features: ["Custom meal plans", "Fresh ingredients", "Dietary accommodations"]
+        };
+      case "PEST_CONTROL":
+        return {
+          icon: <Bug size={20} />,
+          color: "#EF4444",
+          features: ["Safe treatments", "Prevention strategies", "Follow-up inspections"]
+        };
+      default:
+        return {
+          icon: <Package size={20} />,
+          color: "#6B7280",
+          features: ["Professional service", "Quality assurance", "Customer support"]
+        };
+    }
+  };
+
   return (
     <div className={styles.checkout}>
       {/* Header */}
@@ -153,7 +224,82 @@ const CheckoutSummary: React.FC<CheckoutSummary> = ({
       {/* Main Content */}
       <div className={styles.checkout__body}>
         <div className={styles.checkout__main}>
-          {/* Services Breakdown */}
+          {/* Start Date Selection */}
+          <motion.section
+            className={styles.checkout__section}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+          >
+            <div className={styles.checkout__sectionHeader}>
+              <div className={styles.checkout__sectionTitle}>
+                <CalendarDays size={20} />
+                <h3>Choose Your Start Date</h3>
+              </div>
+            </div>
+            <div className={styles.checkout__sectionContent}>
+              <div className={styles.checkout__datePickerContainer}>
+                <div className={styles.checkout__selectedDate}>
+                  <Calendar size={18} />
+                  <div>
+                    <h4>Service Start Date</h4>
+                    <p>{startDate ? formatDate(startDate) : 'Select a date'}</p>
+                  </div>
+                  <button 
+                    className={styles.checkout__changeDateBtn}
+                    onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
+                  >
+                    Change
+                  </button>
+                </div>
+                <AnimatePresence>
+                  {isDatePickerOpen && (
+                    <motion.div
+                      className={styles.checkout__datePicker}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className={styles.checkout__dateGrid}>
+                        {generateDateOptions().map((date, index) => (
+                          <motion.button
+                            key={date.toISOString()}
+                            className={`${styles.checkout__dateOption} ${
+                              startDate && startDate.toDateString() === date.toDateString()
+                                ? styles["checkout__dateOption--selected"]
+                                : ""
+                            }`}
+                            onClick={() => {
+                              setStartDate(date);
+                              setIsDatePickerOpen(false);
+                            }}
+                            whileHover={{ scale: 1.02, y: -2 }}
+                            whileTap={{ scale: 0.98 }}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.02 }}
+                          >
+                            <span className={styles.checkout__dateDay}>
+                              {date.toLocaleDateString('en-US', { weekday: 'short' })}
+                            </span>
+                            <span className={styles.checkout__dateNumber}>
+                              {date.getDate()}
+                            </span>
+                            <span className={styles.checkout__dateMonth}>
+                              {date.toLocaleDateString('en-US', { month: 'short' })}
+                            </span>
+                          </motion.button>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+          </motion.section>
+
+          {/* Enhanced Services Breakdown */}
           <motion.section
             className={styles.checkout__section}
             initial={{ opacity: 0, y: 20 }}
@@ -169,8 +315,8 @@ const CheckoutSummary: React.FC<CheckoutSummary> = ({
               }
             >
               <div className={styles.checkout__sectionTitle}>
-                <Package size={20} />
-                <h3>Selected Services ({configuredServices.length})</h3>
+                <Sparkles size={20} />
+                <h3>Your Selected Services ({configuredServices.length})</h3>
               </div>
               <ChevronRight
                 className={`${styles.checkout__sectionToggle} ${
@@ -190,78 +336,110 @@ const CheckoutSummary: React.FC<CheckoutSummary> = ({
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                 >
-                  {configuredServices.map((cs, index) => (
-                    <div key={index} className={styles.checkout__serviceCard}>
-                      <div className={styles.checkout__serviceHeader}>
-                        <div className={styles.checkout__serviceIcon}>
-                          {getServiceIcon(cs.service.category)}
-                        </div>
-                        <div className={styles.checkout__serviceInfo}>
-                          <h4>{cs.service.name}</h4>
-                          <p>{cs.service.description}</p>
-                        </div>
-                      </div>
-                      <div className={styles.checkout__serviceDetails}>
-                        <div className={styles.checkout__serviceDetail}>
-                          <Calendar size={14} />
-                          <span>
-                            {cs.configuration.frequency?.replace(/_/g, " ")}
-                          </span>
-                        </div>
-                        <div className={styles.checkout__serviceDetail}>
-                          <Clock size={14} />
-                          <span>
-                            {getDaysOfWeek(
-                              cs.configuration.scheduledDays || []
-                            )}
-                          </span>
-                        </div>
-                        {cs.configuration.preferredTimeSlot && (
-                          <div className={styles.checkout__serviceDetail}>
-                            <Clock size={14} />
-                            <span>
-                              {getTimeSlotDescription(
-                                cs.configuration.preferredTimeSlot
-                              )}
-                            </span>
+                  {configuredServices.map((cs, index) => {
+                    const categoryDetails = getServiceCategoryDetails(cs.service.category);
+                    return (
+                      <motion.div 
+                        key={index} 
+                        className={styles.checkout__enhancedServiceCard}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        <div className={styles.checkout__serviceHeader}>
+                          <div 
+                            className={styles.checkout__serviceIcon}
+                            style={{ background: `${categoryDetails.color}15`, color: categoryDetails.color }}
+                          >
+                            {categoryDetails.icon}
                           </div>
-                        )}
-                      </div>
-                      <div className={styles.checkout__servicePrice}>
-                        <span>Monthly</span>
-                        <strong>
-                          ₦{(cs.configuration.price || 0).toLocaleString()}
-                        </strong>
-                      </div>
-                    </div>
-                  ))}
+                          <div className={styles.checkout__serviceInfo}>
+                            <div className={styles.checkout__serviceTitleRow}>
+                              <h4>{cs.service.name}</h4>
+                              <span className={styles.checkout__serviceCategory}>
+                                {cs.service.category.replace('_', ' ')}
+                              </span>
+                            </div>
+                            <p>{cs.service.description}</p>
+                          </div>
+                          <div className={styles.checkout__servicePrice}>
+                            <span>Monthly</span>
+                            <strong style={{ color: categoryDetails.color }}>
+                              ₦{(cs.configuration.price || 0).toLocaleString()}
+                            </strong>
+                          </div>
+                        </div>
+                        
+                        <div className={styles.checkout__serviceFeatures}>
+                          {categoryDetails.features.map((feature, featureIndex) => (
+                            <div key={featureIndex} className={styles.checkout__serviceFeature}>
+                              <Check size={14} />
+                              <span>{feature}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className={styles.checkout__serviceSchedule}>
+                          <div className={styles.checkout__scheduleDetail}>
+                            <Timer size={16} />
+                            <div>
+                              <span className={styles.checkout__scheduleLabel}>Frequency:</span>
+                              <span className={styles.checkout__scheduleValue}>
+                                {cs.configuration.frequency?.replace(/_/g, " ")}
+                              </span>
+                            </div>
+                          </div>
+                          <div className={styles.checkout__scheduleDetail}>
+                            <Calendar size={16} />
+                            <div>
+                              <span className={styles.checkout__scheduleLabel}>Days:</span>
+                              <span className={styles.checkout__scheduleValue}>
+                                {getDaysOfWeek(cs.configuration.scheduledDays || [])}
+                              </span>
+                            </div>
+                          </div>
+                          {cs.configuration.preferredTimeSlot && (
+                            <div className={styles.checkout__scheduleDetail}>
+                              <Clock size={16} />
+                              <div>
+                                <span className={styles.checkout__scheduleLabel}>Time:</span>
+                                <span className={styles.checkout__scheduleValue}>
+                                  {getTimeSlotDescription(cs.configuration.preferredTimeSlot)}
+                                </span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </motion.div>
+                    );
+                  })}
                 </motion.div>
               )}
             </AnimatePresence>
           </motion.section>
 
-          {/* Delivery Schedule */}
+          {/* Enhanced Service Details & What's Included */}
           <motion.section
             className={styles.checkout__section}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.15 }}
           >
             <div
               className={styles.checkout__sectionHeader}
               onClick={() =>
                 setActiveSection(
-                  activeSection === "delivery" ? null : "delivery"
+                  activeSection === "details" ? null : "details"
                 )
               }
             >
               <div className={styles.checkout__sectionTitle}>
-                <Truck size={20} />
-                <h3>Service Delivery Schedule</h3>
+                <Star size={20} />
+                <h3>What's Included in Your Plan</h3>
               </div>
               <ChevronRight
                 className={`${styles.checkout__sectionToggle} ${
-                  activeSection === "delivery"
+                  activeSection === "details"
                     ? styles["checkout__sectionToggle--active"]
                     : ""
                 }`}
@@ -270,55 +448,75 @@ const CheckoutSummary: React.FC<CheckoutSummary> = ({
             </div>
 
             <AnimatePresence>
-              {activeSection === "delivery" && (
+              {activeSection === "details" && (
                 <motion.div
                   className={styles.checkout__sectionContent}
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                 >
-                  <div className={styles.checkout__deliveryInfo}>
-                    <div className={styles.checkout__deliveryItem}>
-                      <div className={styles.checkout__deliveryIcon}>
-                        <MapPin size={16} />
+                  <div className={styles.checkout__inclusionsGrid}>
+                    <div className={styles.checkout__inclusionCard}>
+                      <div className={styles.checkout__inclusionIcon}>
+                        <Users size={18} />
                       </div>
                       <div>
-                        <h5>Service Location</h5>
-                        <p>
-                          Your registered address will be used for all services
-                        </p>
+                        <h5>Professional Staff</h5>
+                        <p>Trained, vetted, and insured service professionals</p>
                       </div>
                     </div>
-                    <div className={styles.checkout__deliveryItem}>
-                      <div className={styles.checkout__deliveryIcon}>
-                        <Calendar size={16} />
+                    <div className={styles.checkout__inclusionCard}>
+                      <div className={styles.checkout__inclusionIcon}>
+                        <Zap size={18} />
                       </div>
                       <div>
-                        <h5>Service Start Date</h5>
-                        <p>
-                          Your first service will begin within 48 hours of
-                          subscription
-                        </p>
+                        <h5>Premium Equipment</h5>
+                        <p>Latest tools and eco-friendly supplies included</p>
                       </div>
                     </div>
-                    <div className={styles.checkout__deliveryItem}>
-                      <div className={styles.checkout__deliveryIcon}>
-                        <Clock size={16} />
+                    <div className={styles.checkout__inclusionCard}>
+                      <div className={styles.checkout__inclusionIcon}>
+                        <Shield size={18} />
                       </div>
                       <div>
-                        <h5>Service Windows</h5>
-                        <p>
-                          Our team will arrive within your selected time slots
-                        </p>
+                        <h5>100% Guarantee</h5>
+                        <p>Satisfaction guaranteed or we'll make it right</p>
                       </div>
                     </div>
-                    <div className={styles.checkout__deliveryItem}>
-                      <div className={styles.checkout__deliveryIcon}>
-                        <Shield size={16} />
+                    <div className={styles.checkout__inclusionCard}>
+                      <div className={styles.checkout__inclusionIcon}>
+                        <MapPin size={18} />
                       </div>
                       <div>
-                        <h5>Service Guarantee</h5>
-                        <p>100% satisfaction guarantee or your money back</p>
+                        <h5>Flexible Locations</h5>
+                        <p>Service at your registered address or location of choice</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className={styles.checkout__serviceTimeline}>
+                    <h5 className={styles.checkout__timelineTitle}>Your Service Journey</h5>
+                    <div className={styles.checkout__timelineSteps}>
+                      <div className={styles.checkout__timelineStep}>
+                        <div className={styles.checkout__timelineNumber}>1</div>
+                        <div>
+                          <h6>Confirmation</h6>
+                          <p>Instant booking confirmation and team assignment</p>
+                        </div>
+                      </div>
+                      <div className={styles.checkout__timelineStep}>
+                        <div className={styles.checkout__timelineNumber}>2</div>
+                        <div>
+                          <h6>First Service</h6>
+                          <p>Service starts on {startDate ? formatDate(startDate) : 'your selected date'}</p>
+                        </div>
+                      </div>
+                      <div className={styles.checkout__timelineStep}>
+                        <div className={styles.checkout__timelineNumber}>3</div>
+                        <div>
+                          <h6>Regular Schedule</h6>
+                          <p>Ongoing service based on your selected frequency</p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -440,19 +638,37 @@ const CheckoutSummary: React.FC<CheckoutSummary> = ({
               </div>
             </div>
 
-            {/* Billing Info */}
+            {/* Enhanced Billing Info */}
             <div className={styles.checkout__billingInfo}>
               <div className={styles.checkout__billingItem}>
+                <CalendarDays size={16} />
+                <div>
+                  <span className={styles.checkout__billingLabel}>Start Date:</span>
+                  <span className={styles.checkout__billingValue}>
+                    {startDate ? startDate.toLocaleDateString() : 'Not selected'}
+                  </span>
+                </div>
+              </div>
+              <div className={styles.checkout__billingItem}>
                 <Calendar size={16} />
-                <span>Billing: {billingCycle}</span>
+                <div>
+                  <span className={styles.checkout__billingLabel}>Billing:</span>
+                  <span className={styles.checkout__billingValue}>{billingCycle}</span>
+                </div>
               </div>
               <div className={styles.checkout__billingItem}>
                 <Clock size={16} />
-                <span>Duration: {duration} months</span>
+                <div>
+                  <span className={styles.checkout__billingLabel}>Duration:</span>
+                  <span className={styles.checkout__billingValue}>{duration} months</span>
+                </div>
               </div>
               <div className={styles.checkout__billingItem}>
                 <CreditCard size={16} />
-                <span>Payment: Due on subscription</span>
+                <div>
+                  <span className={styles.checkout__billingLabel}>Payment:</span>
+                  <span className={styles.checkout__billingValue}>Secure online payment</span>
+                </div>
               </div>
             </div>
 

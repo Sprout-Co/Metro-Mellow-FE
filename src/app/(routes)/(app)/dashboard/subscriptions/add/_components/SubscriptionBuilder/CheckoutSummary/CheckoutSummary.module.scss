@@ -178,7 +178,241 @@
     background: color("neutral", "white");
   }
 
-  // Service Cards
+  // Date Picker Styles
+  &__datePickerContainer {
+    background: color("neutral", "lightest");
+    border-radius: border-radius("xl");
+    padding: spacing("xl");
+    border: 2px solid color("neutral", "lighter");
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: color("primary", "light");
+      box-shadow: 0 4px 20px rgba(color("primary", "base"), 0.1);
+    }
+  }
+
+  &__selectedDate {
+    display: flex;
+    align-items: center;
+    gap: spacing("lg");
+    margin-bottom: spacing("lg");
+
+    svg {
+      color: color("primary", "base");
+      flex-shrink: 0;
+    }
+
+    div {
+      flex: 1;
+
+      h4 {
+        @include font-size("base");
+        @include font-weight("semibold");
+        color: color("neutral", "darkest");
+        margin: 0 0 spacing("xxs") 0;
+      }
+
+      p {
+        @include font-size("sm");
+        color: color("neutral", "dark");
+        margin: 0;
+      }
+    }
+  }
+
+  &__changeDateBtn {
+    padding: spacing("sm") spacing("lg");
+    background: linear-gradient(135deg, color("primary", "base"), color("primary", "dark"));
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(color("primary", "base"), 0.3);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(color("primary", "base"), 0.4);
+    }
+  }
+
+  &__datePicker {
+    overflow: hidden;
+  }
+
+  &__dateGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: spacing("md");
+    padding: spacing("md") 0;
+  }
+
+  &__dateOption {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: spacing("xxs");
+    padding: spacing("md");
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+
+    &:hover {
+      border-color: color("primary", "base");
+      background: rgba(color("primary", "base"), 0.05);
+    }
+
+    &--selected {
+      background: linear-gradient(135deg, color("primary", "base"), color("primary", "dark"));
+      border-color: color("primary", "dark");
+      color: color("neutral", "white");
+      box-shadow: 0 4px 12px rgba(color("primary", "base"), 0.3);
+    }
+  }
+
+  &__dateDay {
+    @include font-size("xs");
+    @include font-weight("medium");
+    opacity: 0.8;
+  }
+
+  &__dateNumber {
+    @include font-size("lg");
+    @include font-weight("bold");
+  }
+
+  &__dateMonth {
+    @include font-size("xs");
+    @include font-weight("medium");
+    opacity: 0.8;
+  }
+
+  // Enhanced Service Cards
+  &__enhancedServiceCard {
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("xl");
+    padding: spacing("xl");
+    margin-bottom: spacing("lg");
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, color("primary", "base"), color("primary", "light"));
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &:hover {
+      border-color: color("primary", "light");
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &__serviceTitleRow {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    margin-bottom: spacing("xs");
+
+    h4 {
+      margin: 0;
+      flex: 1;
+    }
+  }
+
+  &__serviceCategory {
+    padding: spacing("xxs") spacing("sm");
+    background: color("accent", "base");
+    color: color("neutral", "darkest");
+    border-radius: border-radius("pill");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    text-transform: capitalize;
+  }
+
+  &__serviceFeatures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: spacing("sm");
+    margin: spacing("lg") 0;
+    padding: spacing("lg");
+    background: rgba(color("status", "success"), 0.05);
+    border-radius: border-radius("lg");
+    border: 1px solid rgba(color("status", "success"), 0.2);
+  }
+
+  &__serviceFeature {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("status", "success");
+
+    svg {
+      flex-shrink: 0;
+    }
+  }
+
+  &__serviceSchedule {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: spacing("md");
+    padding: spacing("lg");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    margin-top: spacing("lg");
+  }
+
+  &__scheduleDetail {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+
+    svg {
+      color: color("primary", "base");
+      flex-shrink: 0;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: spacing("xxs");
+    }
+  }
+
+  &__scheduleLabel {
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__scheduleValue {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  // Service Cards (Legacy)
   &__serviceCard {
     padding: spacing("lg");
     background: color("neutral", "lightest");
@@ -254,36 +488,146 @@
 
   &__servicePrice {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: spacing("md");
-    border-top: 1px solid color("neutral", "light");
-    padding-left: calc(40px + #{spacing("md")});
+    flex-direction: column;
+    align-items: flex-end;
+    gap: spacing("xxs");
+    margin-left: auto;
 
     span {
-      @include font-size("sm");
+      @include font-size("xs");
+      @include font-weight("medium");
       color: color("neutral", "dark");
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     strong {
-      @include font-size("lg");
+      @include font-size("xl");
       @include font-weight("bold");
       color: color("primary", "dark");
     }
   }
 
-  // Delivery Info
-  &__deliveryInfo {
+  // What's Included Section
+  &__inclusionsGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: spacing("lg");
+    margin-bottom: spacing("xl");
   }
 
-  &__deliveryItem {
+  &__inclusionCard {
     display: flex;
     gap: spacing("md");
+    padding: spacing("lg");
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: color("primary", "light");
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
 
     h5 {
+      @include font-size("sm");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xs") 0;
+    }
+
+    p {
+      @include font-size("xs");
+      color: color("neutral", "dark");
+      margin: 0;
+      line-height: line-height("relaxed");
+    }
+  }
+
+  &__inclusionIcon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(
+      135deg,
+      rgba(color("primary", "base"), 0.15),
+      rgba(color("primary", "light"), 0.08)
+    );
+    border-radius: border-radius("xl");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: color("primary", "base");
+  }
+
+  &__serviceTimeline {
+    padding: spacing("xl");
+    background: linear-gradient(
+      135deg,
+      rgba(color("primary", "base"), 0.05),
+      rgba(color("primary", "light"), 0.03)
+    );
+    border: 2px solid rgba(color("primary", "base"), 0.1);
+    border-radius: border-radius("xl");
+  }
+
+  &__timelineTitle {
+    @include font-size("base");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("lg") 0;
+    text-align: center;
+  }
+
+  &__timelineSteps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        color("primary", "base"),
+        color("primary", "light")
+      );
+      z-index: 1;
+    }
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      gap: spacing("lg");
+
+      &::before {
+        display: none;
+      }
+    }
+  }
+
+  &__timelineStep {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("md");
+    flex: 1;
+    background: color("neutral", "white");
+    padding: spacing("md");
+    border-radius: border-radius("lg");
+    position: relative;
+    z-index: 2;
+    max-width: 200px;
+
+    @include breakpoint-down("md") {
+      max-width: none;
+    }
+
+    h6 {
       @include font-size("sm");
       @include font-weight("semibold");
       color: color("neutral", "darkest");
@@ -298,20 +642,23 @@
     }
   }
 
-  &__deliveryIcon {
+  &__timelineNumber {
     width: 32px;
     height: 32px;
     background: linear-gradient(
       135deg,
-      rgba(color("primary", "base"), 0.1),
-      rgba(color("primary", "light"), 0.05)
+      color("primary", "base"),
+      color("primary", "dark")
     );
-    border-radius: border-radius("lg");
+    color: color("neutral", "white");
+    border-radius: border-radius("full");
     display: flex;
     align-items: center;
     justify-content: center;
+    @include font-size("sm");
+    @include font-weight("bold");
     flex-shrink: 0;
-    color: color("primary", "base");
+    box-shadow: 0 4px 12px rgba(color("primary", "base"), 0.3);
   }
 
   // Benefits
@@ -445,13 +792,32 @@
   &__billingItem {
     display: flex;
     align-items: center;
-    gap: spacing("sm");
+    gap: spacing("md");
     @include font-size("sm");
     color: color("neutral", "dark");
 
     svg {
       color: color("primary", "base");
+      flex-shrink: 0;
     }
+
+    div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      gap: spacing("md");
+    }
+  }
+
+  &__billingLabel {
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+  }
+
+  &__billingValue {
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
   }
 
   &__terms {

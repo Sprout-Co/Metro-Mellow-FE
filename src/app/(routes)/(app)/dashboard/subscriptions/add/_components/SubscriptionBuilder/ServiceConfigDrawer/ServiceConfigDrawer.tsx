@@ -15,6 +15,10 @@ import {
   Sparkles,
   CreditCard,
   Shield,
+  Package,
+  Droplets,
+  Utensils,
+  Bug,
 } from "lucide-react";
 import styles from "./ServiceConfigDrawer.module.scss";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
@@ -602,6 +606,23 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
         )
       : 0;
 
+    const getServiceIcon = () => {
+      switch (service?.category) {
+        case ServiceCategory.Cleaning:
+          return { icon: <Home size={24} />, color: "#3B82F6", bgColor: "rgba(59, 130, 246, 0.1)" };
+        case ServiceCategory.Laundry:
+          return { icon: <Droplets size={24} />, color: "#06B6D4", bgColor: "rgba(6, 182, 212, 0.1)" };
+        case ServiceCategory.Cooking:
+          return { icon: <Utensils size={24} />, color: "#F59E0B", bgColor: "rgba(245, 158, 11, 0.1)" };
+        case ServiceCategory.PestControl:
+          return { icon: <Bug size={24} />, color: "#EF4444", bgColor: "rgba(239, 68, 68, 0.1)" };
+        default:
+          return { icon: <Package size={24} />, color: "#6B7280", bgColor: "rgba(107, 114, 128, 0.1)" };
+      }
+    };
+
+    const serviceIcon = getServiceIcon();
+
     return (
       <motion.div
         initial={{ opacity: 0, x: 20 }}
@@ -609,140 +630,238 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
         className={styles.drawer__stepContent}
       >
         <div className={styles.drawer__stepHeader}>
-          <h3>Configuration Summary</h3>
-          <p>Review your service configuration</p>
+          <h3>Perfect! Let's Review</h3>
+          <p>Your personalized service configuration is ready</p>
         </div>
 
-        {/* Service Details Summary */}
-        <div className={styles.drawer__summarySection}>
-          <h4 className={styles.drawer__summaryTitle}>
-            <Home size={16} />
-            Service Details
-          </h4>
-          <div className={styles.drawer__summaryContent}>
-            {selectedOption && (
-              <div className={styles.drawer__summaryItem}>
-                <span className={styles.drawer__summaryLabel}>Package:</span>
-                <span className={styles.drawer__summaryValue}>
-                  {selectedOption.label}
-                </span>
+        {/* Service Overview Card */}
+        <motion.div 
+          className={styles.drawer__serviceOverview}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <div className={styles.drawer__serviceHeader}>
+            <div 
+              className={styles.drawer__serviceIconLarge}
+              style={{ background: serviceIcon.bgColor, color: serviceIcon.color }}
+            >
+              {serviceIcon.icon}
+            </div>
+            <div className={styles.drawer__serviceHeaderInfo}>
+              <h4>{service?.name}</h4>
+              <p>{service?.description}</p>
+              <div className={styles.drawer__serviceBadge}>
+                <Sparkles size={14} />
+                <span>Premium Service</span>
               </div>
-            )}
-            {service?.category === ServiceCategory.Cleaning && (
-              <>
-                <div className={styles.drawer__summaryItem}>
-                  <span className={styles.drawer__summaryLabel}>
-                    Property Type:
-                  </span>
-                  <span className={styles.drawer__summaryValue}>
-                    {configuration.serviceDetails.cleaning?.houseType ===
-                    HouseType.Flat
-                      ? "Flat/Apartment"
-                      : "Duplex/House"}
-                  </span>
-                </div>
-                <div className={styles.drawer__summaryItem}>
-                  <span className={styles.drawer__summaryLabel}>Rooms:</span>
-                  <span className={styles.drawer__summaryValue}>
-                    {roomCount} room{roomCount !== 1 ? "s" : ""}
-                  </span>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* Schedule Summary */}
-        <div className={styles.drawer__summarySection}>
-          <h4 className={styles.drawer__summaryTitle}>
-            <Calendar size={16} />
-            Schedule & Frequency
-          </h4>
-          <div className={styles.drawer__summaryContent}>
-            <div className={styles.drawer__summaryItem}>
-              <span className={styles.drawer__summaryLabel}>Frequency:</span>
-              <span className={styles.drawer__summaryValue}>
-                {getFrequencyLabel(configuration.frequency)}
-              </span>
             </div>
-            <div className={styles.drawer__summaryItem}>
-              <span className={styles.drawer__summaryLabel}>Days:</span>
-              <span className={styles.drawer__summaryValue}>
-                {configuration.scheduledDays
-                  ?.map((day) => daysOfWeek.find((d) => d.value === day)?.short)
-                  .join(", ") || "Not selected"}
-              </span>
-            </div>
-            <div className={styles.drawer__summaryItem}>
-              <span className={styles.drawer__summaryLabel}>Time:</span>
-              <span className={styles.drawer__summaryValue}>
-                {
-                  timeSlots.find(
-                    (slot) => slot.value === configuration.preferredTimeSlot
-                  )?.label
-                }{" "}
-                (
-                {
-                  timeSlots.find(
-                    (slot) => slot.value === configuration.preferredTimeSlot
-                  )?.time
-                }
-                )
-              </span>
+            <div className={styles.drawer__servicePriceCard}>
+              <span>Monthly Rate</span>
+              <strong style={{ color: serviceIcon.color }}>₦{calculatePrice().toLocaleString()}</strong>
+              <small>All inclusive</small>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Pricing Summary */}
-        <div className={styles.drawer__summarySection}>
-          <h4 className={styles.drawer__summaryTitle}>
-            <CreditCard size={16} />
-            Billing Details
-          </h4>
-          <div className={styles.drawer__summaryContent}>
-            <div className={styles.drawer__summaryItem}>
-              <span className={styles.drawer__summaryLabel}>Base Service:</span>
-              <span className={styles.drawer__summaryValue}>
-                ₦{service?.price.toLocaleString()}
-              </span>
-            </div>
-            {selectedOption && (
-              <div className={styles.drawer__summaryItem}>
-                <span className={styles.drawer__summaryLabel}>
-                  Package Add-on:
-                </span>
-                <span className={styles.drawer__summaryValue}>
-                  +₦{selectedOption.price.toLocaleString()}
-                </span>
+        {/* Configuration Details Grid */}
+        <div className={styles.drawer__configGrid}>
+          {/* Service Package */}
+          {selectedOption && (
+            <motion.div 
+              className={styles.drawer__configCard}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <div className={styles.drawer__configHeader}>
+                <div className={styles.drawer__configIcon}>
+                  <Package size={18} />
+                </div>
+                <h5>Service Package</h5>
               </div>
-            )}
-            <div className={styles.drawer__summaryDivider} />
-            <div className={styles.drawer__summaryTotal}>
-              <span className={styles.drawer__summaryLabel}>
-                Monthly Total:
-              </span>
-              <span className={styles.drawer__summaryTotalValue}>
-                ₦{calculatePrice().toLocaleString()}
-              </span>
+              <div className={styles.drawer__configContent}>
+                <div className={styles.drawer__packageDetails}>
+                  <h6>{selectedOption.label}</h6>
+                  <p>{selectedOption.description}</p>
+                  <div className={styles.drawer__packagePrice}>
+                    <span>Add-on: +₦{selectedOption.price.toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Property Details (for Cleaning) */}
+          {service?.category === ServiceCategory.Cleaning && (
+            <motion.div 
+              className={styles.drawer__configCard}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 }}
+            >
+              <div className={styles.drawer__configHeader}>
+                <div className={styles.drawer__configIcon}>
+                  <Home size={18} />
+                </div>
+                <h5>Property Details</h5>
+              </div>
+              <div className={styles.drawer__configContent}>
+                <div className={styles.drawer__propertyGrid}>
+                  <div className={styles.drawer__propertyItem}>
+                    <span>Type:</span>
+                    <strong>
+                      {configuration.serviceDetails.cleaning?.houseType === HouseType.Flat
+                        ? "Flat/Apartment"
+                        : "Duplex/House"}
+                    </strong>
+                  </div>
+                  <div className={styles.drawer__propertyItem}>
+                    <span>Rooms:</span>
+                    <strong>{roomCount} room{roomCount !== 1 ? "s" : ""}</strong>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Schedule Configuration */}
+          <motion.div 
+            className={styles.drawer__configCard}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <div className={styles.drawer__configHeader}>
+              <div className={styles.drawer__configIcon}>
+                <Calendar size={18} />
+              </div>
+              <h5>Service Schedule</h5>
             </div>
-          </div>
+            <div className={styles.drawer__configContent}>
+              <div className={styles.drawer__scheduleGrid}>
+                <div className={styles.drawer__scheduleItem}>
+                  <div className={styles.drawer__scheduleLabel}>
+                    <Clock size={14} />
+                    <span>Frequency</span>
+                  </div>
+                  <strong>{getFrequencyLabel(configuration.frequency)}</strong>
+                </div>
+                <div className={styles.drawer__scheduleItem}>
+                  <div className={styles.drawer__scheduleLabel}>
+                    <Calendar size={14} />
+                    <span>Days</span>
+                  </div>
+                  <strong>
+                    {configuration.scheduledDays
+                      ?.map((day) => daysOfWeek.find((d) => d.value === day)?.short)
+                      .join(", ") || "Not selected"}
+                  </strong>
+                </div>
+                <div className={styles.drawer__scheduleItem}>
+                  <div className={styles.drawer__scheduleLabel}>
+                    <Clock size={14} />
+                    <span>Time Slot</span>
+                  </div>
+                  <strong>
+                    {timeSlots.find(slot => slot.value === configuration.preferredTimeSlot)?.time || "Not selected"}
+                  </strong>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Pricing Breakdown */}
+          <motion.div 
+            className={styles.drawer__configCard}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+          >
+            <div className={styles.drawer__configHeader}>
+              <div className={styles.drawer__configIcon}>
+                <CreditCard size={18} />
+              </div>
+              <h5>Pricing Breakdown</h5>
+            </div>
+            <div className={styles.drawer__configContent}>
+              <div className={styles.drawer__pricingBreakdown}>
+                <div className={styles.drawer__pricingItem}>
+                  <span>Base Service</span>
+                  <span>₦{service?.price.toLocaleString()}</span>
+                </div>
+                {selectedOption && (
+                  <div className={styles.drawer__pricingItem}>
+                    <span>Package Add-on</span>
+                    <span>+₦{selectedOption.price.toLocaleString()}</span>
+                  </div>
+                )}
+                {service?.category === ServiceCategory.Cleaning && roomCount > 3 && (
+                  <div className={styles.drawer__pricingItem}>
+                    <span>Additional Rooms</span>
+                    <span>Included in calculation</span>
+                  </div>
+                )}
+                <div className={styles.drawer__pricingDivider} />
+                <div className={styles.drawer__pricingTotal}>
+                  <span>Monthly Total</span>
+                  <strong>₦{calculatePrice().toLocaleString()}</strong>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
 
-        {/* Benefits */}
-        <div className={styles.drawer__summaryBenefits}>
-          <div className={styles.drawer__summaryBenefit}>
-            <Shield size={16} />
-            <span>Price lock guarantee</span>
+        {/* Enhanced Benefits */}
+        <motion.div 
+          className={styles.drawer__benefitsSection}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <h5 className={styles.drawer__benefitsTitle}>
+            <Sparkles size={18} />
+            What You Get With This Service
+          </h5>
+          <div className={styles.drawer__benefitsGrid}>
+            <div className={styles.drawer__benefitCard}>
+              <div className={styles.drawer__benefitIcon}>
+                <Shield size={16} />
+              </div>
+              <div>
+                <h6>100% Satisfaction Guarantee</h6>
+                <p>Not happy? We'll make it right or refund your money</p>
+              </div>
+            </div>
+            <div className={styles.drawer__benefitCard}>
+              <div className={styles.drawer__benefitIcon}>
+                <Check size={16} />
+              </div>
+              <div>
+                <h6>Flexible Scheduling</h6>
+                <p>Easy rescheduling and cancellation options</p>
+              </div>
+            </div>
+            <div className={styles.drawer__benefitCard}>
+              <div className={styles.drawer__benefitIcon}>
+                <Sparkles size={16} />
+              </div>
+              <div>
+                <h6>Premium Quality</h6>
+                <p>Professional staff with premium equipment and supplies</p>
+              </div>
+            </div>
+            <div className={styles.drawer__benefitCard}>
+              <div className={styles.drawer__benefitIcon}>
+                <CreditCard size={16} />
+              </div>
+              <div>
+                <h6>Locked-in Pricing</h6>
+                <p>Your rate stays the same throughout your subscription</p>
+              </div>
+            </div>
           </div>
-          <div className={styles.drawer__summaryBenefit}>
-            <Check size={16} />
-            <span>Flexible scheduling</span>
-          </div>
-          <div className={styles.drawer__summaryBenefit}>
-            <Sparkles size={16} />
-            <span>Priority booking</span>
-          </div>
-        </div>
+        </motion.div>
       </motion.div>
     );
   };
@@ -819,13 +938,19 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
                   <Check size={18} />
                   Save & Continue
                 </button>
-                <button
+                <motion.button
                   className={styles.drawer__checkoutBtn}
                   onClick={handleCheckout}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
                 >
-                  <CreditCard size={18} />
-                  Proceed to Checkout
-                </button>
+                  <div className={styles.drawer__checkoutBtnContent}>
+                    <CreditCard size={18} />
+                    <span>Proceed to Checkout</span>
+                  </div>
+                  <div className={styles.drawer__checkoutBtnGlow} />
+                </motion.button>
               </div>
             )}
           </div>
