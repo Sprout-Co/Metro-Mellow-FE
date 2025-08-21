@@ -40,6 +40,25 @@ export const validateServiceConfiguration = (
     errors.push({ field: "scheduledDays", message: "At least one day must be selected" });
   }
 
+  // Validate day selection restrictions based on frequency and service type
+  if (configuration.scheduledDays && configuration.scheduledDays.length > 0) {
+    const shouldLimitToOneDay = configuration.frequency === SubscriptionFrequency.Monthly || 
+                               service.category === ServiceCategory.PestControl;
+    
+    if (shouldLimitToOneDay && configuration.scheduledDays.length > 1) {
+      if (service.category === ServiceCategory.PestControl) {
+        errors.push({ field: "scheduledDays", message: "Pest control services can only be scheduled on one day" });
+      } else if (configuration.frequency === SubscriptionFrequency.Monthly) {
+        errors.push({ field: "scheduledDays", message: "Monthly frequency allows only one service day" });
+      }
+    }
+  }
+
+  // Validate frequency restrictions for pest control
+  if (service.category === ServiceCategory.PestControl && configuration.frequency !== SubscriptionFrequency.Monthly) {
+    errors.push({ field: "frequency", message: "Pest control services only support monthly frequency" });
+  }
+
   if (!configuration.preferredTimeSlot) {
     errors.push({ field: "preferredTimeSlot", message: "Time slot is required" });
   }

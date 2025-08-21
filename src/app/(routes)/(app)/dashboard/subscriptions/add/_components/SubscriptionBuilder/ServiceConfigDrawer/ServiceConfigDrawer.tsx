@@ -59,7 +59,9 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
   onProceedToCheckout,
 }) => {
   const [activeStep, setActiveStep] = useState(0);
-  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
+  const [validationErrors, setValidationErrors] = useState<ValidationError[]>(
+    []
+  );
   const [showValidationErrors, setShowValidationErrors] = useState(false);
   const [configuration, setConfiguration] = useState<SubscriptionServiceInput>({
     serviceId: "",
@@ -92,10 +94,16 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
     },
   });
 
-  // Reset to step 0 when drawer opens
+  // Reset to step 0 and clear validation errors when drawer opens/closes
   useEffect(() => {
     if (isOpen) {
       setActiveStep(0);
+      setValidationErrors([]);
+      setShowValidationErrors(false);
+    } else {
+      // Clear validation errors when drawer closes
+      setValidationErrors([]);
+      setShowValidationErrors(false);
     }
   }, [isOpen]);
 
@@ -115,25 +123,31 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
           price: service.price,
           serviceDetails: {
             serviceOption: service.options?.[0]?.id || "",
-            cleaning: service.category === ServiceCategory.Cleaning ? {
-              cleaningType: CleaningType.StandardCleaning,
-              houseType: HouseType.Flat,
-              rooms: {
-                bedroom: 1,
-                livingRoom: 1,
-                bathroom: 1,
-                kitchen: 1,
-                balcony: 0,
-                studyRoom: 0,
-                lobby: 0,
-                other: 0,
-                outdoor: 0,
-              },
-            } : undefined,
-            cooking: service.category === ServiceCategory.Cooking ? {
-              mealType: MealType.Basic,
-              mealsPerDelivery: [],
-            } : undefined,
+            cleaning:
+              service.category === ServiceCategory.Cleaning
+                ? {
+                    cleaningType: CleaningType.StandardCleaning,
+                    houseType: HouseType.Flat,
+                    rooms: {
+                      bedroom: 1,
+                      livingRoom: 1,
+                      bathroom: 1,
+                      kitchen: 1,
+                      balcony: 0,
+                      studyRoom: 0,
+                      lobby: 0,
+                      other: 0,
+                      outdoor: 0,
+                    },
+                  }
+                : undefined,
+            cooking:
+              service.category === ServiceCategory.Cooking
+                ? {
+                    mealType: MealType.Basic,
+                    mealsPerDelivery: [],
+                  }
+                : undefined,
           },
         };
         setConfiguration(baseConfig);
@@ -148,26 +162,37 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
     { id: "summary", label: "Summary", icon: <Sparkles size={18} /> },
   ];
 
-  const frequencies = [
-    {
-      value: SubscriptionFrequency.Weekly,
-      label: "Weekly",
-      description: "Service every week",
-      popular: true,
-    },
-    {
-      value: SubscriptionFrequency.BiWeekly,
-      label: "Bi-Weekly",
-      description: "Service every 2 weeks",
-      popular: false,
-    },
-    {
-      value: SubscriptionFrequency.Monthly,
-      label: "Monthly",
-      description: "Service once a month",
-      popular: false,
-    },
-  ];
+  const getAvailableFrequencies = () => {
+    const baseFrequencies = [
+      {
+        value: SubscriptionFrequency.Weekly,
+        label: "Weekly",
+        description: "Service every week",
+        popular: true,
+      },
+      {
+        value: SubscriptionFrequency.BiWeekly,
+        label: "Bi-Weekly",
+        description: "Service every 2 weeks",
+        popular: false,
+      },
+      {
+        value: SubscriptionFrequency.Monthly,
+        label: "Monthly",
+        description: "Service once a month",
+        popular: false,
+      },
+    ];
+
+    // For pest control, only allow monthly
+    if (service?.category === ServiceCategory.PestControl) {
+      return baseFrequencies.filter(freq => freq.value === SubscriptionFrequency.Monthly);
+    }
+
+    return baseFrequencies;
+  };
+
+  const frequencies = getAvailableFrequencies();
 
   const daysOfWeek = [
     { value: ScheduleDays.Monday, label: "Monday", short: "Mon" },
@@ -231,12 +256,39 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
   ];
 
   const toggleDay = (day: ScheduleDays) => {
-    setConfiguration((prev) => ({
-      ...prev,
-      scheduledDays: prev.scheduledDays?.includes(day)
-        ? prev.scheduledDays.filter((d) => d !== day)
-        : [...(prev.scheduledDays || []), day],
-    }));
+    setConfiguration((prev) => {
+      const currentDays = prev.scheduledDays || [];
+      const isCurrentlySelected = currentDays.includes(day);
+      
+      // Check if we need to enforce single day selection
+      const shouldLimitToOneDay = prev.frequency === SubscriptionFrequency.Monthly || 
+                                  service?.category === ServiceCategory.PestControl;
+
+      if (shouldLimitToOneDay) {
+        // For monthly frequency or pest control: only allow one day
+        if (isCurrentlySelected) {
+          // Remove the selected day
+          return {
+            ...prev,
+            scheduledDays: currentDays.filter((d) => d !== day),
+          };
+        } else {
+          // Replace all days with just this one
+          return {
+            ...prev,
+            scheduledDays: [day],
+          };
+        }
+      } else {
+        // For weekly/bi-weekly: allow multiple days
+        return {
+          ...prev,
+          scheduledDays: isCurrentlySelected
+            ? currentDays.filter((d) => d !== day)
+            : [...currentDays, day],
+        };
+      }
+    });
   };
 
   const updateRoomCount = (room: string, increment: boolean) => {
@@ -274,12 +326,12 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
   const updateMealCount = (day: ScheduleDays, count: number) => {
     setConfiguration((prev) => {
       const currentMeals = prev.serviceDetails.cooking?.mealsPerDelivery || [];
-      const existingIndex = currentMeals.findIndex(meal => meal.day === day);
-      
+      const existingIndex = currentMeals.findIndex((meal) => meal.day === day);
+
       let updatedMeals;
       if (count === 0) {
         // Remove the meal delivery for this day
-        updatedMeals = currentMeals.filter(meal => meal.day !== day);
+        updatedMeals = currentMeals.filter((meal) => meal.day !== day);
       } else if (existingIndex >= 0) {
         // Update existing meal delivery
         updatedMeals = currentMeals.map((meal, index) =>
@@ -305,7 +357,7 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
 
   const getMealCountForDay = (day: ScheduleDays): number => {
     const meals = configuration.serviceDetails.cooking?.mealsPerDelivery || [];
-    const meal = meals.find(m => m.day === day);
+    const meal = meals.find((m) => m.day === day);
     return meal?.count || 0;
   };
 
@@ -352,6 +404,24 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
     return Math.round(basePrice * daysCount * multiplier);
   };
 
+  // Auto-adjust selected days when frequency changes
+  useEffect(() => {
+    setConfiguration((prev) => {
+      const shouldLimitToOneDay = prev.frequency === SubscriptionFrequency.Monthly || 
+                                  service?.category === ServiceCategory.PestControl;
+      
+      if (shouldLimitToOneDay && prev.scheduledDays && prev.scheduledDays.length > 1) {
+        // Keep only the first selected day
+        return {
+          ...prev,
+          scheduledDays: [prev.scheduledDays[0]],
+        };
+      }
+      
+      return prev;
+    });
+  }, [configuration.frequency, service?.category]);
+
   useEffect(() => {
     const price = calculatePrice();
     setConfiguration((prev) => ({ ...prev, price }));
@@ -375,7 +445,7 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
 
   const validateCurrentStep = () => {
     if (!service) return { isValid: false, errors: [] };
-    
+
     const validation = validateServiceConfiguration(configuration, service);
     setValidationErrors(validation.errors);
     setShowValidationErrors(!validation.isValid);
@@ -389,23 +459,29 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
           const hasServiceOption = !!configuration.serviceDetails.serviceOption;
           if (!hasServiceOption) return false;
         }
-        
+
         // Cooking service specific validation
         if (service?.category === ServiceCategory.Cooking) {
           const hasMealType = !!configuration.serviceDetails.cooking?.mealType;
-          const hasMealDeliveries = configuration.serviceDetails.cooking?.mealsPerDelivery && 
+          const hasMealDeliveries =
+            configuration.serviceDetails.cooking?.mealsPerDelivery &&
             configuration.serviceDetails.cooking.mealsPerDelivery.length > 0;
           return hasMealType && hasMealDeliveries;
         }
-        
+
         // Cleaning service specific validation
         if (service?.category === ServiceCategory.Cleaning) {
-          const hasHouseType = !!configuration.serviceDetails.cleaning?.houseType;
-          const hasRooms = configuration.serviceDetails.cleaning?.rooms &&
-            Object.values(configuration.serviceDetails.cleaning.rooms).reduce((sum, count) => sum + (count || 0), 0) > 0;
+          const hasHouseType =
+            !!configuration.serviceDetails.cleaning?.houseType;
+          const hasRooms =
+            configuration.serviceDetails.cleaning?.rooms &&
+            Object.values(configuration.serviceDetails.cleaning.rooms).reduce(
+              (sum, count) => sum + (count || 0),
+              0
+            ) > 0;
           return hasHouseType && hasRooms;
         }
-        
+
         return true;
       case 1: // Frequency step
         return configuration.frequency;
@@ -471,14 +547,22 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
       {/* Service Options - Now First */}
       {service?.options && service.options.length > 0 && (
         <div className={styles.drawer__section}>
-          <label className={`${styles.drawer__label} ${
-            hasFieldError(validationErrors, "serviceOption") ? styles["drawer__label--error"] : ""
-          }`}>
+          <label
+            className={`${styles.drawer__label} ${
+              hasFieldError(validationErrors, "serviceOption")
+                ? styles["drawer__label--error"]
+                : ""
+            }`}
+          >
             Service Package <span className={styles.drawer__required}>*</span>
           </label>
-          <div className={`${styles.drawer__optionsGrid} ${
-            hasFieldError(validationErrors, "serviceOption") ? styles["drawer__optionsGrid--error"] : ""
-          }`}>
+          <div
+            className={`${styles.drawer__optionsGrid} ${
+              hasFieldError(validationErrors, "serviceOption")
+                ? styles["drawer__optionsGrid--error"]
+                : ""
+            }`}
+          >
             {service.options.map((option) => (
               <motion.button
                 key={option.id}
@@ -592,19 +676,28 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
         <>
           {/* Meal Type Selection */}
           <div className={styles.drawer__section}>
-            <label className={`${styles.drawer__label} ${
-              hasFieldError(validationErrors, "mealType") ? styles["drawer__label--error"] : ""
-            }`}>
+            <label
+              className={`${styles.drawer__label} ${
+                hasFieldError(validationErrors, "mealType")
+                  ? styles["drawer__label--error"]
+                  : ""
+              }`}
+            >
               Meal Plan Type <span className={styles.drawer__required}>*</span>
             </label>
-            <div className={`${styles.drawer__optionsGrid} ${
-              hasFieldError(validationErrors, "mealType") ? styles["drawer__optionsGrid--error"] : ""
-            }`}>
+            <div
+              className={`${styles.drawer__optionsGrid} ${
+                hasFieldError(validationErrors, "mealType")
+                  ? styles["drawer__optionsGrid--error"]
+                  : ""
+              }`}
+            >
               {mealTypes.map((mealType) => (
                 <motion.button
                   key={mealType.value}
                   className={`${styles.drawer__optionCard} ${
-                    configuration.serviceDetails.cooking?.mealType === mealType.value
+                    configuration.serviceDetails.cooking?.mealType ===
+                    mealType.value
                       ? styles["drawer__optionCard--active"]
                       : ""
                   }`}
@@ -616,7 +709,8 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
                         cooking: {
                           ...prev.serviceDetails.cooking,
                           mealType: mealType.value,
-                          mealsPerDelivery: prev.serviceDetails.cooking?.mealsPerDelivery || [],
+                          mealsPerDelivery:
+                            prev.serviceDetails.cooking?.mealsPerDelivery || [],
                         },
                       },
                     }))
@@ -625,9 +719,13 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
                   whileTap={{ scale: 0.98 }}
                 >
                   {mealType.popular && (
-                    <span className={styles.drawer__popularTag}>Most Popular</span>
+                    <span className={styles.drawer__popularTag}>
+                      Most Popular
+                    </span>
                   )}
-                  <span className={styles.drawer__mealIcon}>{mealType.icon}</span>
+                  <span className={styles.drawer__mealIcon}>
+                    {mealType.icon}
+                  </span>
                   <h4>{mealType.label}</h4>
                   <p>{mealType.description}</p>
                 </motion.button>
@@ -637,17 +735,27 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
 
           {/* Meal Deliveries Configuration */}
           <div className={styles.drawer__section}>
-            <label className={`${styles.drawer__label} ${
-              hasFieldError(validationErrors, "mealsPerDelivery") ? styles["drawer__label--error"] : ""
-            }`}>
-              Meals Per Delivery Day <span className={styles.drawer__required}>*</span>
+            <label
+              className={`${styles.drawer__label} ${
+                hasFieldError(validationErrors, "mealsPerDelivery")
+                  ? styles["drawer__label--error"]
+                  : ""
+              }`}
+            >
+              Meals Per Delivery Day{" "}
+              <span className={styles.drawer__required}>*</span>
             </label>
             <p className={styles.drawer__sectionDescription}>
-              Select which days you want meals delivered and how many meals per day
+              Select which days you want meals delivered and how many meals per
+              day
             </p>
-            <div className={`${styles.drawer__mealsGrid} ${
-              hasFieldError(validationErrors, "mealsPerDelivery") ? styles["drawer__mealsGrid--error"] : ""
-            }`}>
+            <div
+              className={`${styles.drawer__mealsGrid} ${
+                hasFieldError(validationErrors, "mealsPerDelivery")
+                  ? styles["drawer__mealsGrid--error"]
+                  : ""
+              }`}
+            >
               {daysOfWeek.map((day) => (
                 <div key={day.value} className={styles.drawer__mealCard}>
                   <div className={styles.drawer__mealDayInfo}>
@@ -656,13 +764,25 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
                   </div>
                   <div className={styles.drawer__mealCounter}>
                     <button
-                      onClick={() => updateMealCount(day.value, Math.max(0, getMealCountForDay(day.value) - 1))}
+                      onClick={() =>
+                        updateMealCount(
+                          day.value,
+                          Math.max(0, getMealCountForDay(day.value) - 1)
+                        )
+                      }
                       disabled={getMealCountForDay(day.value) === 0}
                     >
                       −
                     </button>
                     <span>{getMealCountForDay(day.value)}</span>
-                    <button onClick={() => updateMealCount(day.value, getMealCountForDay(day.value) + 1)}>
+                    <button
+                      onClick={() =>
+                        updateMealCount(
+                          day.value,
+                          getMealCountForDay(day.value) + 1
+                        )
+                      }
+                    >
                       +
                     </button>
                   </div>
@@ -733,18 +853,31 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
       <div className={styles.drawer__stepHeader}>
         <h3>Set your schedule</h3>
         <p>Select days and preferred time for the service</p>
+        {(configuration.frequency === SubscriptionFrequency.Monthly || service?.category === ServiceCategory.PestControl) && (
+          <div className={styles.drawer__scheduleNote}>
+            <p>📅 {service?.category === ServiceCategory.PestControl ? 'Pest control services' : 'Monthly frequency'} allows only one service day per month</p>
+          </div>
+        )}
       </div>
 
       {/* Days Selection */}
       <div className={styles.drawer__section}>
-        <label className={`${styles.drawer__label} ${
-          hasFieldError(validationErrors, "scheduledDays") ? styles["drawer__label--error"] : ""
-        }`}>
+        <label
+          className={`${styles.drawer__label} ${
+            hasFieldError(validationErrors, "scheduledDays")
+              ? styles["drawer__label--error"]
+              : ""
+          }`}
+        >
           Select Days <span className={styles.drawer__required}>*</span>
         </label>
-        <div className={`${styles.drawer__daysGrid} ${
-          hasFieldError(validationErrors, "scheduledDays") ? styles["drawer__daysGrid--error"] : ""
-        }`}>
+        <div
+          className={`${styles.drawer__daysGrid} ${
+            hasFieldError(validationErrors, "scheduledDays")
+              ? styles["drawer__daysGrid--error"]
+              : ""
+          }`}
+        >
           {daysOfWeek.map((day) => (
             <motion.button
               key={day.value}
@@ -809,15 +942,35 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
     const getServiceIcon = () => {
       switch (service?.category) {
         case ServiceCategory.Cleaning:
-          return { icon: <Home size={24} />, color: "#3B82F6", bgColor: "rgba(59, 130, 246, 0.1)" };
+          return {
+            icon: <Home size={24} />,
+            color: "#3B82F6",
+            bgColor: "rgba(59, 130, 246, 0.1)",
+          };
         case ServiceCategory.Laundry:
-          return { icon: <Droplets size={24} />, color: "#06B6D4", bgColor: "rgba(6, 182, 212, 0.1)" };
+          return {
+            icon: <Droplets size={24} />,
+            color: "#06B6D4",
+            bgColor: "rgba(6, 182, 212, 0.1)",
+          };
         case ServiceCategory.Cooking:
-          return { icon: <Utensils size={24} />, color: "#F59E0B", bgColor: "rgba(245, 158, 11, 0.1)" };
+          return {
+            icon: <Utensils size={24} />,
+            color: "#F59E0B",
+            bgColor: "rgba(245, 158, 11, 0.1)",
+          };
         case ServiceCategory.PestControl:
-          return { icon: <Bug size={24} />, color: "#EF4444", bgColor: "rgba(239, 68, 68, 0.1)" };
+          return {
+            icon: <Bug size={24} />,
+            color: "#EF4444",
+            bgColor: "rgba(239, 68, 68, 0.1)",
+          };
         default:
-          return { icon: <Package size={24} />, color: "#6B7280", bgColor: "rgba(107, 114, 128, 0.1)" };
+          return {
+            icon: <Package size={24} />,
+            color: "#6B7280",
+            bgColor: "rgba(107, 114, 128, 0.1)",
+          };
       }
     };
 
@@ -835,16 +988,19 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
         </div>
 
         {/* Service Overview Card */}
-        <motion.div 
+        <motion.div
           className={styles.drawer__serviceOverview}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
           <div className={styles.drawer__serviceHeader}>
-            <div 
+            <div
               className={styles.drawer__serviceIconLarge}
-              style={{ background: serviceIcon.bgColor, color: serviceIcon.color }}
+              style={{
+                background: serviceIcon.bgColor,
+                color: serviceIcon.color,
+              }}
             >
               {serviceIcon.icon}
             </div>
@@ -858,7 +1014,9 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
             </div>
             <div className={styles.drawer__servicePriceCard}>
               <span>Monthly Rate</span>
-              <strong style={{ color: serviceIcon.color }}>₦{calculatePrice().toLocaleString()}</strong>
+              <strong style={{ color: serviceIcon.color }}>
+                ₦{calculatePrice().toLocaleString()}
+              </strong>
               <small>All inclusive</small>
             </div>
           </div>
@@ -868,7 +1026,7 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
         <div className={styles.drawer__configGrid}>
           {/* Service Package */}
           {selectedOption && (
-            <motion.div 
+            <motion.div
               className={styles.drawer__configCard}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -885,7 +1043,9 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
                   <h6>{selectedOption.label}</h6>
                   <p>{selectedOption.description}</p>
                   <div className={styles.drawer__packagePrice}>
-                    <span>Add-on: +₦{selectedOption.price.toLocaleString()}</span>
+                    <span>
+                      Add-on: +₦{selectedOption.price.toLocaleString()}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -894,7 +1054,7 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
 
           {/* Property Details (for Cleaning) */}
           {service?.category === ServiceCategory.Cleaning && (
-            <motion.div 
+            <motion.div
               className={styles.drawer__configCard}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -911,14 +1071,17 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
                   <div className={styles.drawer__propertyItem}>
                     <span>Type:</span>
                     <strong>
-                      {configuration.serviceDetails.cleaning?.houseType === HouseType.Flat
+                      {configuration.serviceDetails.cleaning?.houseType ===
+                      HouseType.Flat
                         ? "Flat/Apartment"
                         : "Duplex/House"}
                     </strong>
                   </div>
                   <div className={styles.drawer__propertyItem}>
                     <span>Rooms:</span>
-                    <strong>{roomCount} room{roomCount !== 1 ? "s" : ""}</strong>
+                    <strong>
+                      {roomCount} room{roomCount !== 1 ? "s" : ""}
+                    </strong>
                   </div>
                 </div>
               </div>
@@ -927,7 +1090,7 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
 
           {/* Meal Details (for Cooking) */}
           {service?.category === ServiceCategory.Cooking && (
-            <motion.div 
+            <motion.div
               className={styles.drawer__configCard}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -944,7 +1107,8 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
                   <div className={styles.drawer__propertyItem}>
                     <span>Plan Type:</span>
                     <strong>
-                      {configuration.serviceDetails.cooking?.mealType === MealType.Basic
+                      {configuration.serviceDetails.cooking?.mealType ===
+                      MealType.Basic
                         ? "Basic Meals"
                         : "Standard Meals"}
                     </strong>
@@ -953,34 +1117,47 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
                     <span>Total Weekly Meals:</span>
                     <strong>
                       {configuration.serviceDetails.cooking?.mealsPerDelivery?.reduce(
-                        (sum, delivery) => sum + delivery.count, 0
-                      ) || 0} meals
+                        (sum, delivery) => sum + delivery.count,
+                        0
+                      ) || 0}{" "}
+                      meals
                     </strong>
                   </div>
                 </div>
-                {configuration.serviceDetails.cooking?.mealsPerDelivery && 
-                 configuration.serviceDetails.cooking.mealsPerDelivery.length > 0 && (
-                  <div className={styles.drawer__mealSchedule}>
-                    <h6>Delivery Schedule:</h6>
-                    <div className={styles.drawer__mealScheduleList}>
-                      {configuration.serviceDetails.cooking.mealsPerDelivery.map((delivery) => {
-                        const dayName = daysOfWeek.find(d => d.value === delivery.day)?.label || "Unknown";
-                        return (
-                          <div key={delivery.day} className={styles.drawer__mealScheduleItem}>
-                            <span>{dayName}:</span>
-                            <strong>{delivery.count} meal{delivery.count !== 1 ? 's' : ''}</strong>
-                          </div>
-                        );
-                      })}
+                {configuration.serviceDetails.cooking?.mealsPerDelivery &&
+                  configuration.serviceDetails.cooking.mealsPerDelivery.length >
+                    0 && (
+                    <div className={styles.drawer__mealSchedule}>
+                      <h6>Delivery Schedule:</h6>
+                      <div className={styles.drawer__mealScheduleList}>
+                        {configuration.serviceDetails.cooking.mealsPerDelivery.map(
+                          (delivery) => {
+                            const dayName =
+                              daysOfWeek.find((d) => d.value === delivery.day)
+                                ?.label || "Unknown";
+                            return (
+                              <div
+                                key={delivery.day}
+                                className={styles.drawer__mealScheduleItem}
+                              >
+                                <span>{dayName}:</span>
+                                <strong>
+                                  {delivery.count} meal
+                                  {delivery.count !== 1 ? "s" : ""}
+                                </strong>
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
               </div>
             </motion.div>
           )}
 
           {/* Schedule Configuration */}
-          <motion.div 
+          <motion.div
             className={styles.drawer__configCard}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1008,7 +1185,9 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
                   </div>
                   <strong>
                     {configuration.scheduledDays
-                      ?.map((day) => daysOfWeek.find((d) => d.value === day)?.short)
+                      ?.map(
+                        (day) => daysOfWeek.find((d) => d.value === day)?.short
+                      )
                       .join(", ") || "Not selected"}
                   </strong>
                 </div>
@@ -1018,7 +1197,9 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
                     <span>Time Slot</span>
                   </div>
                   <strong>
-                    {timeSlots.find(slot => slot.value === configuration.preferredTimeSlot)?.time || "Not selected"}
+                    {timeSlots.find(
+                      (slot) => slot.value === configuration.preferredTimeSlot
+                    )?.time || "Not selected"}
                   </strong>
                 </div>
               </div>
@@ -1026,7 +1207,7 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
           </motion.div>
 
           {/* Pricing Breakdown */}
-          <motion.div 
+          <motion.div
             className={styles.drawer__configCard}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1050,12 +1231,13 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
                     <span>+₦{selectedOption.price.toLocaleString()}</span>
                   </div>
                 )}
-                {service?.category === ServiceCategory.Cleaning && roomCount > 3 && (
-                  <div className={styles.drawer__pricingItem}>
-                    <span>Additional Rooms</span>
-                    <span>Included in calculation</span>
-                  </div>
-                )}
+                {service?.category === ServiceCategory.Cleaning &&
+                  roomCount > 3 && (
+                    <div className={styles.drawer__pricingItem}>
+                      <span>Additional Rooms</span>
+                      <span>Included in calculation</span>
+                    </div>
+                  )}
                 <div className={styles.drawer__pricingDivider} />
                 <div className={styles.drawer__pricingTotal}>
                   <span>Monthly Total</span>
@@ -1067,7 +1249,7 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
         </div>
 
         {/* Enhanced Benefits */}
-        <motion.div 
+        <motion.div
           className={styles.drawer__benefitsSection}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1203,8 +1385,8 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
               </button>
             ) : (
               <div className={styles.drawer__finalActions}>
-                <button 
-                  className={styles.drawer__saveBtn} 
+                <button
+                  className={styles.drawer__saveBtn}
                   onClick={() => {
                     const validation = validateCurrentStep();
                     if (validation.isValid) {
@@ -1215,19 +1397,6 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
                   <Check size={18} />
                   Save & Continue
                 </button>
-                <motion.button
-                  className={styles.drawer__checkoutBtn}
-                  onClick={handleCheckout}
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  <div className={styles.drawer__checkoutBtnContent}>
-                    <CreditCard size={18} />
-                    <span>Proceed to Checkout</span>
-                  </div>
-                  <div className={styles.drawer__checkoutBtnGlow} />
-                </motion.button>
               </div>
             )}
           </div>
