@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import WelcomeHeader from "./WelcomeHeader/WelcomeHeader";
 import styles from "./DashboardOverview.module.scss";
 import CTASection from "./CTASection/CTASection";

@@ -58,6 +58,7 @@ import ServicesListDrawer from "./ServicesListDrawer/ServicesListDrawer";
 import QuickHelpDrawer from "./QuickHelpDrawer/QuickHelpDrawer";
 import { openServicesListDrawer } from "@/lib/redux/slices/uiSlice";
 import { useDispatch } from "react-redux";
+import { Routes } from "@/constants/routes";
 
 // Mock addresses data
 const mockAddresses = [
@@ -156,21 +157,19 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     {
       icon: Repeat,
       label: "New Subscription",
-      href: "/dashboard/notifications",
+      href: Routes.DASHBOARD_SUBSCRIPTIONS_ADD,
       color: styles.quickActionSecondary,
       onClick: () => dispatch(openServicesListDrawer()),
     },
     {
       icon: HelpCircle,
       label: "Get Help",
-      // href: "/dashboard/support",
       onClick: () => setIsQuickHelpDrawerOpen(true),
       color: styles.quickActionAccent,
     },
     {
       icon: Clock,
       label: "Reschedule",
-      // href: "/dashboard/bookings",
       onClick: () => setIsRescheduleDrawerOpen(true),
       color: styles.quickActionNeutral,
     },

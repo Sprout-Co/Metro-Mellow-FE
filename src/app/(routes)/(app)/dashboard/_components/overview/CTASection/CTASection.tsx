@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import styles from "./CTASection.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
+import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
 
 interface SubService {
   id: string;
@@ -173,6 +174,7 @@ const serviceOptions: ServiceOption[] = [
 
 const CTASection: React.FC = () => {
   const [expandedService, setExpandedService] = useState<string | null>(null);
+  const { handleGetServices } = useServiceOperations();
 
   const toggleService = (serviceId: string) => {
     setExpandedService(expandedService === serviceId ? null : serviceId);
