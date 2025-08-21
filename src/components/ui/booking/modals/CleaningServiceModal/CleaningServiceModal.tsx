@@ -187,7 +187,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
     try {
       const completeOrder: CreateBookingInput = {
         serviceId: service._id,
-        serviceType: service.category,
+        service_category: service.category,
         serviceOption: serviceOption?.service_id || "",
         date: formData.date,
         timeSlot: formData.timeSlot,
@@ -366,7 +366,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
         isOpen={isCheckoutModalOpen}
         onClose={handleCheckoutClose}
         onContinue={handleCheckoutComplete}
-        serviceType="Cleaning"
+        service_category="Cleaning"
         submitting={isCreatingBooking}
       />
 
@@ -381,7 +381,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
         serviceImage={serviceImage}
         apartmentType={apartmentType}
         roomCount={getTotalRoomCount()}
-        serviceType="Cleaning"
+        service_category="Cleaning"
         includedFeatures={includedFeatures}
       />
 

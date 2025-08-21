@@ -165,7 +165,7 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
     try {
       const completeOrder: CreateBookingInput = {
         serviceId: service._id,
-        serviceType: service.category,
+        service_category: service.category,
         serviceOption: serviceOption?.service_id || "",
         date: formData.date,
         timeSlot: formData.timeSlot,
@@ -351,7 +351,7 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
         isOpen={isCheckoutModalOpen}
         onClose={handleCheckoutClose}
         onContinue={handleCheckoutComplete}
-        serviceType="Pest Control"
+        service_category="Pest Control"
         submitting={isCreatingBooking}
       />
 
@@ -364,7 +364,7 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
         serviceDescription={serviceDescription}
         servicePrice={calculateTotalPrice()}
         serviceImage={serviceImage}
-        serviceType="Pest Control"
+        service_category="Pest Control"
         includedFeatures={includedFeatures}
         apartmentType={undefined}
         roomCount={getSelectedAreasCount()}

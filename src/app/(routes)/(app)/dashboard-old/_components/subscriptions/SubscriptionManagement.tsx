@@ -500,7 +500,7 @@ export default function SubscriptionManagement() {
                   {subscription.subscriptionServices.map((service, idx) => (
                     <div
                       key={service.id}
-                      className={`${styles.subscriptions__iconWrapper} ${styles[`subscriptions__iconWrapper--${service.serviceType.toLowerCase()}`]}`}
+                      className={`${styles.subscriptions__iconWrapper} ${styles[`subscriptions__iconWrapper--${service.service_category.toLowerCase()}`]}`}
                       style={{
                         zIndex: subscription.subscriptionServices.length - idx,
                         marginLeft: idx > 0 ? "-8px" : "0",
@@ -674,7 +674,7 @@ export default function SubscriptionManagement() {
                             className={styles.subscriptions__serviceItem}
                           >
                             <div
-                              className={`${styles.subscriptions__serviceIcon} ${styles[`subscriptions__serviceIcon--${service.serviceType.toLowerCase()}`]}`}
+                              className={`${styles.subscriptions__serviceIcon} ${styles[`subscriptions__serviceIcon--${service.service_category.toLowerCase()}`]}`}
                             >
                               <Icon
                                 name={getSubscriptionIcon(service.service.name)}

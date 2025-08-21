@@ -311,7 +311,7 @@ export default function AddBookingPage() {
       setIsSubmitting(true);
       setError(null);
 
-      const getServiceType = (serviceId: string): ServiceCategory => {
+      const getservice_category = (serviceId: string): ServiceCategory => {
         switch (serviceId) {
           case ServiceId.Cleaning:
             return ServiceCategory.Cleaning;
@@ -329,7 +329,7 @@ export default function AddBookingPage() {
       const bookingData: CreateBookingInput = {
         customerId: selectedCustomerId,
         serviceId: selectedService._id,
-        serviceType: getServiceType(selectedService.service_id),
+        service_category: getservice_category(selectedService.service_id),
         serviceOption: selectedOption?.service_id || ("" as string),
         date: new Date(selectedDate),
         timeSlot: selectedTime as TimeSlot,

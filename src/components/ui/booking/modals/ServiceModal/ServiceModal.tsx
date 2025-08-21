@@ -38,7 +38,7 @@ export interface ServiceModalProps {
   serviceDescription?: string;
   servicePrice?: number;
   serviceConfiguration?: ServiceConfiguration;
-  serviceType?: string;
+  service_category?: string;
   includedFeatures?: string[];
   // Optional sections to show/hide
   showImageSection?: boolean;
@@ -59,7 +59,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
   serviceDescription = "Service description",
   servicePrice = 0,
   serviceConfiguration,
-  serviceType = "Service",
+  service_category = "Service",
   includedFeatures,
   showImageSection = true,
   showPriceSection = true,
@@ -313,7 +313,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
         isOpen={isCheckoutModalOpen}
         onClose={handleCheckoutClose}
         onContinue={handleCheckoutComplete}
-        serviceType={serviceType}
+        service_category={service_category}
       />
 
       {/* Service Details Slide Panel */}
@@ -329,7 +329,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
           selectedCategories.apartmentType as "flat" | "duplex" | undefined
         }
         roomCount={getTotalCount()}
-        serviceType={serviceType}
+        service_category={service_category}
         includedFeatures={includedFeatures}
       />
     </Modal>

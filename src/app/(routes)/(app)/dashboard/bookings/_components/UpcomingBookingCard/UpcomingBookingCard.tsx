@@ -19,7 +19,7 @@ import FnButton from "@/components/ui/Button/FnButton";
 interface Booking {
   id: string;
   serviceName: string;
-  serviceType: ServiceCategory;
+  service_category: ServiceCategory;
   date: Date;
   endTime: Date;
   status: BookingStatus;
@@ -65,7 +65,7 @@ const UpcomingBookingCard: React.FC<UpcomingBookingCardProps> = ({
     return "soon";
   };
 
-  const getServiceIcon = (serviceType: ServiceCategory) => {
+  const getServiceIcon = (service_category: ServiceCategory) => {
     const icons = {
       [ServiceCategory.Cleaning]: "🧹",
       [ServiceCategory.Laundry]: "👕",
@@ -73,10 +73,10 @@ const UpcomingBookingCard: React.FC<UpcomingBookingCardProps> = ({
       [ServiceCategory.Errands]: "📦",
       [ServiceCategory.PestControl]: "🐛",
     };
-    return icons[serviceType] || "🏠";
+    return icons[service_category] || "🏠";
   };
 
-  const getServiceColor = (serviceType: ServiceCategory) => {
+  const getServiceColor = (service_category: ServiceCategory) => {
     const colors = {
       [ServiceCategory.Cleaning]: "#075056",
       [ServiceCategory.Laundry]: "#6366f1",
@@ -84,7 +84,7 @@ const UpcomingBookingCard: React.FC<UpcomingBookingCardProps> = ({
       [ServiceCategory.Errands]: "#10b981",
       [ServiceCategory.PestControl]: "#ec4899",
     };
-    return colors[serviceType] || "#6b7280";
+    return colors[service_category] || "#6b7280";
   };
 
   return (
@@ -121,17 +121,17 @@ const UpcomingBookingCard: React.FC<UpcomingBookingCardProps> = ({
           <div
             className={styles.upcomingCard__serviceIcon}
             style={{
-              backgroundColor: `${getServiceColor(booking.serviceType)}15`,
+              backgroundColor: `${getServiceColor(booking.service_category)}15`,
             }}
           >
-            <span>{getServiceIcon(booking.serviceType)}</span>
+            <span>{getServiceIcon(booking.service_category)}</span>
           </div>
           <div className={styles.upcomingCard__serviceInfo}>
             <h4 className={styles.upcomingCard__serviceName}>
               {booking.serviceName}
             </h4>
-            <p className={styles.upcomingCard__serviceType}>
-              {booking.serviceType}
+            <p className={styles.upcomingCard__service_category}>
+              {booking.service_category}
             </p>
           </div>
         </div>

@@ -158,20 +158,20 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({
       }
 
       // Determine service type based on service ID or category
-      let serviceType: "cleaning" | "food" | "laundry";
+      let service_category: "cleaning" | "food" | "laundry";
       if (isCleaningService(service)) {
-        serviceType = "cleaning";
+        service_category = "cleaning";
       } else if (isFoodService(service)) {
-        serviceType = "food";
+        service_category = "food";
       } else {
-        serviceType = "laundry";
+        service_category = "laundry";
       }
 
       // Create extended service with default details
       return {
         ...service,
-        type: serviceType,
-        details: DEFAULT_SERVICE_DETAILS[serviceType],
+        type: service_category,
+        details: DEFAULT_SERVICE_DETAILS[service_category],
       } as ExtendedService;
     });
 

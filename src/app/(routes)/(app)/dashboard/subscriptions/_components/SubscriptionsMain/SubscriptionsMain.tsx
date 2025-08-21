@@ -54,7 +54,7 @@ const mockSubscriptions: Subscription[] = [
       {
         id: "s1",
         serviceName: "Deep Home Cleaning",
-        serviceType: ServiceCategory.Cleaning,
+        service_category: ServiceCategory.Cleaning,
         price: 25000,
         frequency: SubscriptionFrequency.Weekly,
         scheduledDays: ["Monday"],
@@ -67,7 +67,7 @@ const mockSubscriptions: Subscription[] = [
       {
         id: "s2",
         serviceName: "Laundry Service",
-        serviceType: ServiceCategory.Laundry,
+        service_category: ServiceCategory.Laundry,
         price: 8000,
         frequency: SubscriptionFrequency.BiWeekly,
         scheduledDays: ["Wednesday"],
@@ -80,7 +80,7 @@ const mockSubscriptions: Subscription[] = [
       {
         id: "s3",
         serviceName: "Meal Preparation",
-        serviceType: ServiceCategory.Cooking,
+        service_category: ServiceCategory.Cooking,
         price: 15000,
         frequency: SubscriptionFrequency.Weekly,
         scheduledDays: ["Sunday"],
@@ -95,7 +95,7 @@ const mockSubscriptions: Subscription[] = [
       {
         id: "b1",
         serviceName: "Meal Preparation",
-        serviceType: ServiceCategory.Cooking,
+        service_category: ServiceCategory.Cooking,
         date: new Date(2024, 7, 18),
         time: "5:00 PM",
         provider: "Chef Kemi",
@@ -105,7 +105,7 @@ const mockSubscriptions: Subscription[] = [
       {
         id: "b2",
         serviceName: "Deep Home Cleaning",
-        serviceType: ServiceCategory.Cleaning,
+        service_category: ServiceCategory.Cleaning,
         date: new Date(2024, 7, 19),
         time: "10:00 AM",
         provider: "Maria Rodriguez",
@@ -115,7 +115,7 @@ const mockSubscriptions: Subscription[] = [
       {
         id: "b3",
         serviceName: "Laundry Service",
-        serviceType: ServiceCategory.Laundry,
+        service_category: ServiceCategory.Laundry,
         date: new Date(2024, 7, 21),
         time: "2:00 PM",
         provider: "QuickWash Team",
@@ -145,7 +145,7 @@ const mockSubscriptions: Subscription[] = [
       {
         id: "s4",
         serviceName: "Office Deep Cleaning",
-        serviceType: ServiceCategory.Cleaning,
+        service_category: ServiceCategory.Cleaning,
         price: 35000,
         frequency: SubscriptionFrequency.BiWeekly,
         scheduledDays: ["Friday"],
@@ -158,7 +158,7 @@ const mockSubscriptions: Subscription[] = [
       {
         id: "s5",
         serviceName: "Pest Control",
-        serviceType: ServiceCategory.PestControl,
+        service_category: ServiceCategory.PestControl,
         price: 20000,
         frequency: SubscriptionFrequency.Monthly,
         scheduledDays: ["Last Friday"],
@@ -173,7 +173,7 @@ const mockSubscriptions: Subscription[] = [
       {
         id: "b4",
         serviceName: "Office Deep Cleaning",
-        serviceType: ServiceCategory.Cleaning,
+        service_category: ServiceCategory.Cleaning,
         date: new Date(2024, 7, 23),
         time: "6:00 PM",
         provider: "CleanPro Team",
@@ -183,7 +183,7 @@ const mockSubscriptions: Subscription[] = [
       {
         id: "b5",
         serviceName: "Pest Control",
-        serviceType: ServiceCategory.PestControl,
+        service_category: ServiceCategory.PestControl,
         date: new Date(2024, 7, 30),
         time: "7:00 PM",
         provider: "PestPro Team",
@@ -213,7 +213,7 @@ const mockSubscriptions: Subscription[] = [
       {
         id: "s6",
         serviceName: "Basic Cleaning",
-        serviceType: ServiceCategory.Cleaning,
+        service_category: ServiceCategory.Cleaning,
         price: 15000,
         frequency: SubscriptionFrequency.BiWeekly,
         scheduledDays: ["Saturday"],
@@ -226,7 +226,7 @@ const mockSubscriptions: Subscription[] = [
       {
         id: "s7",
         serviceName: "Grocery Run",
-        serviceType: ServiceCategory.Errands,
+        service_category: ServiceCategory.Errands,
         price: 5000,
         frequency: SubscriptionFrequency.Weekly,
         scheduledDays: ["Thursday"],
@@ -260,7 +260,7 @@ const mockSubscriptions: Subscription[] = [
       {
         id: "s8",
         serviceName: "Premium Laundry",
-        serviceType: ServiceCategory.Laundry,
+        service_category: ServiceCategory.Laundry,
         price: 12000,
         frequency: SubscriptionFrequency.Weekly,
         scheduledDays: ["Tuesday", "Friday"],
@@ -275,7 +275,7 @@ const mockSubscriptions: Subscription[] = [
       {
         id: "b6",
         serviceName: "Premium Laundry",
-        serviceType: ServiceCategory.Laundry,
+        service_category: ServiceCategory.Laundry,
         date: new Date(2024, 7, 20),
         time: "8:00 AM",
         provider: "Elite Laundry",
@@ -285,7 +285,7 @@ const mockSubscriptions: Subscription[] = [
       {
         id: "b7",
         serviceName: "Premium Laundry",
-        serviceType: ServiceCategory.Laundry,
+        service_category: ServiceCategory.Laundry,
         date: new Date(2024, 7, 23),
         time: "8:00 AM",
         provider: "Elite Laundry",

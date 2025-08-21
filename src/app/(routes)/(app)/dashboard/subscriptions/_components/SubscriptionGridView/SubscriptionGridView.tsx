@@ -41,7 +41,7 @@ const SubscriptionGridView: React.FC<SubscriptionGridViewProps> = ({
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
 
   // Get service icon
-  const getServiceIcon = (serviceType: ServiceCategory) => {
+  const getServiceIcon = (service_category: ServiceCategory) => {
     const icons = {
       [ServiceCategory.Cleaning]: "🧹",
       [ServiceCategory.Laundry]: "👕",
@@ -49,11 +49,11 @@ const SubscriptionGridView: React.FC<SubscriptionGridViewProps> = ({
       [ServiceCategory.Errands]: "📦",
       [ServiceCategory.PestControl]: "🐛",
     };
-    return icons[serviceType] || "🏠";
+    return icons[service_category] || "🏠";
   };
 
   // Get service color
-  const getServiceColor = (serviceType: ServiceCategory) => {
+  const getServiceColor = (service_category: ServiceCategory) => {
     const colors = {
       [ServiceCategory.Cleaning]: "#075056",
       [ServiceCategory.Laundry]: "#6366f1",
@@ -61,7 +61,7 @@ const SubscriptionGridView: React.FC<SubscriptionGridViewProps> = ({
       [ServiceCategory.Errands]: "#10b981",
       [ServiceCategory.PestControl]: "#ec4899",
     };
-    return colors[serviceType] || "#6b7280";
+    return colors[service_category] || "#6b7280";
   };
 
   // Get status config
@@ -204,12 +204,12 @@ const SubscriptionGridView: React.FC<SubscriptionGridViewProps> = ({
                       key={service.id}
                       className={styles.gridView__serviceIcon}
                       style={{
-                        backgroundColor: `${getServiceColor(service.serviceType)}15`,
+                        backgroundColor: `${getServiceColor(service.service_category)}15`,
                         marginLeft: index > 0 ? "-12px" : "0",
                         zIndex: 3 - index,
                       }}
                     >
-                      <span>{getServiceIcon(service.serviceType)}</span>
+                      <span>{getServiceIcon(service.service_category)}</span>
                     </div>
                   ))}
                   {subscription.services.length > 3 && (
@@ -325,7 +325,7 @@ const SubscriptionGridView: React.FC<SubscriptionGridViewProps> = ({
                       transition={{ delay: 0.2, duration: 0.5 }}
                       style={{
                         backgroundColor: primaryService
-                          ? getServiceColor(primaryService.serviceType)
+                          ? getServiceColor(primaryService.service_category)
                           : "#6b7280",
                       }}
                     />

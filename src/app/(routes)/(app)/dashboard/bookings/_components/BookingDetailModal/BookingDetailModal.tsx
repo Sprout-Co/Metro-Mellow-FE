@@ -27,7 +27,7 @@ import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 interface Booking {
   id: string;
   serviceName: string;
-  serviceType: ServiceCategory;
+  service_category: ServiceCategory;
   date: Date;
   endTime: Date;
   status: BookingStatus;
@@ -97,7 +97,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
   };
 
   // Get service icon
-  const getServiceIcon = (serviceType: ServiceCategory) => {
+  const getServiceIcon = (service_category: ServiceCategory) => {
     const icons = {
       [ServiceCategory.Cleaning]: "🧹",
       [ServiceCategory.Laundry]: "👕",
@@ -105,7 +105,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
       [ServiceCategory.Errands]: "📦",
       [ServiceCategory.PestControl]: "🐛",
     };
-    return icons[serviceType] || "🏠";
+    return icons[service_category] || "🏠";
   };
 
   return (
@@ -113,7 +113,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
       <div className={styles.modal__header}>
         <div className={styles.modal__headerLeft}>
           <div className={styles.modal__serviceIcon}>
-            {getServiceIcon(booking.serviceType)}
+            {getServiceIcon(booking.service_category)}
           </div>
           <div>
             <h2 className={styles.modal__title}>
@@ -125,7 +125,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                 </span>
               )}
             </h2>
-            <p className={styles.modal__subtitle}>{booking.serviceType}</p>
+            <p className={styles.modal__subtitle}>{booking.service_category}</p>
           </div>
         </div>
         <button className={styles.modal__closeBtn} onClick={onClose}>

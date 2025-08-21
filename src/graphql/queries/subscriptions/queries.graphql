@@ -71,7 +71,7 @@ query GetSubscriptionById($id: ID!) {
           }
         }
       }
-      serviceType
+      service_category
       frequency
       price
       serviceDetails {
@@ -196,7 +196,7 @@ query GetSubscriptions($status: SubscriptionStatus) {
           }
         }
       }
-      serviceType
+      service_category
       frequency
       price
       serviceDetails {
@@ -321,7 +321,7 @@ query GetCustomerSubscriptions {
           }
         }
       }
-      serviceType
+      service_category
       frequency
       price
       serviceDetails {

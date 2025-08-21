@@ -30,7 +30,7 @@ interface DashboardHeaderProps {
   onActionButtonClick?: () => void;
   upcomingService?: {
     serviceName: string;
-    serviceType: string;
+    service_category: string;
     date: string;
     status: string;
     provider: string;
@@ -62,7 +62,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             <div className={styles.dashboardHeader__upcomingService}>
               <AppointmentCard
                 serviceName={upcomingService.serviceName}
-                serviceType={upcomingService.serviceType as any}
+                service_category={upcomingService.service_category as any}
                 date={upcomingService.date}
                 status={upcomingService.status as any}
                 provider={upcomingService.provider}

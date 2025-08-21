@@ -26,7 +26,7 @@ export enum SubscriptionFrequency {
 export interface SubscriptionService {
   id: string;
   serviceName: string;
-  serviceType: ServiceCategory;
+  service_category: ServiceCategory;
   price: number;
   frequency: SubscriptionFrequency;
   scheduledDays: string[];
@@ -40,7 +40,7 @@ export interface SubscriptionService {
 export interface UpcomingBooking {
   id: string;
   serviceName: string;
-  serviceType: ServiceCategory;
+  service_category: ServiceCategory;
   date: Date;
   time: string;
   provider: string;
@@ -62,13 +62,13 @@ export interface Subscription {
   nextBillingDate: Date;
   paymentMethod: string;
   discount?: number;
-  
+
   // Included services in this subscription
   services: SubscriptionService[];
-  
+
   // Upcoming bookings from all services
   upcomingBookings: UpcomingBooking[];
-  
+
   // Calculated fields
   totalServices: number;
   completedServices: number;

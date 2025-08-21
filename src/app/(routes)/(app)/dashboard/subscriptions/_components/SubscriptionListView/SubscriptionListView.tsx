@@ -99,7 +99,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
   ];
 
   // Get service icon
-  const getServiceIcon = (serviceType: ServiceCategory) => {
+  const getServiceIcon = (service_category: ServiceCategory) => {
     const icons = {
       [ServiceCategory.Cleaning]: "🧹",
       [ServiceCategory.Laundry]: "👕",
@@ -107,11 +107,11 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
       [ServiceCategory.Errands]: "📦",
       [ServiceCategory.PestControl]: "🐛",
     };
-    return icons[serviceType] || "🏠";
+    return icons[service_category] || "🏠";
   };
 
   // Get service color
-  const getServiceColor = (serviceType: ServiceCategory) => {
+  const getServiceColor = (service_category: ServiceCategory) => {
     const colors = {
       [ServiceCategory.Cleaning]: "#075056", //"#075056",
       [ServiceCategory.Laundry]: "#075056", //"#6366f1",
@@ -119,7 +119,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
       [ServiceCategory.Errands]: "#075056", //"#10b981",
       [ServiceCategory.PestControl]: "#075056",
     };
-    return colors[serviceType] || "#6b7280";
+    return colors[service_category] || "#6b7280";
   };
 
   // Get status style
@@ -223,7 +223,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
           className={styles.subscriptionCard__indicator}
           style={{
             backgroundColor: primaryService
-              ? getServiceColor(primaryService.serviceType)
+              ? getServiceColor(primaryService.service_category)
               : "#6b7280",
           }}
         /> */}
@@ -240,12 +240,12 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
                     key={service.id}
                     className={styles.subscriptionCard__serviceIcon}
                     style={{
-                      backgroundColor: `${getServiceColor(service.serviceType)}15`,
+                      backgroundColor: `${getServiceColor(service.service_category)}15`,
                       zIndex: serviceIcons.length - index,
                       marginLeft: index > 0 ? "-8px" : "0",
                     }}
                   >
-                    <span>{getServiceIcon(service.serviceType)}</span>
+                    <span>{getServiceIcon(service.service_category)}</span>
                   </div>
                 ))}
                 {subscription.services.length > 3 && (
@@ -263,7 +263,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
                     {subscription.billingCycle}
                   </span>
                 </h3>
-                <p className={styles.subscriptionCard__serviceType}>
+                <p className={styles.subscriptionCard__service_category}>
                   {subscription.services.length === 1
                     ? subscription.services[0].serviceName
                     : `${subscription.services.length} services included`}
@@ -305,7 +305,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
                     width: `${progress}%`,
                     backgroundColor: "#075056",
                     // backgroundColor: primaryService
-                    //   ? getServiceColor(primaryService.serviceType)
+                    //   ? getServiceColor(primaryService.service_category)
                     //   : "#6b7280",
                   }}
                 />

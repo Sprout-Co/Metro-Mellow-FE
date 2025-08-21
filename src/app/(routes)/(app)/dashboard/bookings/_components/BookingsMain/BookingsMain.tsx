@@ -38,7 +38,7 @@ const mockBookings = [
   {
     id: "1",
     serviceName: "Deep Home Cleaning",
-    serviceType: ServiceCategory.Cleaning,
+    service_category: ServiceCategory.Cleaning,
     date: new Date(2024, 7, 15, 10, 0),
     endTime: new Date(2024, 7, 15, 12, 0),
     status: BookingStatus.Confirmed,
@@ -51,7 +51,7 @@ const mockBookings = [
   {
     id: "2",
     serviceName: "Laundry Service",
-    serviceType: ServiceCategory.Laundry,
+    service_category: ServiceCategory.Laundry,
     date: new Date(2024, 7, 16, 14, 0),
     endTime: new Date(2024, 7, 16, 15, 0),
     status: BookingStatus.Upcoming,
@@ -65,7 +65,7 @@ const mockBookings = [
   {
     id: "3",
     serviceName: "Meal Preparation",
-    serviceType: ServiceCategory.Cooking,
+    service_category: ServiceCategory.Cooking,
     date: new Date(2024, 7, 18, 17, 0),
     endTime: new Date(2024, 7, 18, 19, 0),
     status: BookingStatus.Upcoming,
@@ -78,7 +78,7 @@ const mockBookings = [
   {
     id: "4",
     serviceName: "Grocery Shopping",
-    serviceType: ServiceCategory.Errands,
+    service_category: ServiceCategory.Errands,
     date: new Date(2024, 7, 20, 9, 0),
     endTime: new Date(2024, 7, 20, 11, 0),
     status: BookingStatus.Pending,
@@ -91,7 +91,7 @@ const mockBookings = [
   {
     id: "5",
     serviceName: "Pest Control Treatment",
-    serviceType: ServiceCategory.PestControl,
+    service_category: ServiceCategory.PestControl,
     date: new Date(2024, 7, 25, 8, 0),
     endTime: new Date(2024, 7, 25, 10, 0),
     status: BookingStatus.Upcoming,
@@ -105,7 +105,7 @@ const mockBookings = [
   {
     id: "6",
     serviceName: "Office Cleaning",
-    serviceType: ServiceCategory.Cleaning,
+    service_category: ServiceCategory.Cleaning,
     date: new Date(2024, 7, 10, 18, 0),
     endTime: new Date(2024, 7, 10, 20, 0),
     status: BookingStatus.Completed,
@@ -119,7 +119,7 @@ const mockBookings = [
   {
     id: "7",
     serviceName: "Dry Cleaning",
-    serviceType: ServiceCategory.Laundry,
+    service_category: ServiceCategory.Laundry,
     date: new Date(2024, 7, 5, 10, 0),
     endTime: new Date(2024, 7, 5, 11, 0),
     status: BookingStatus.Cancelled,
@@ -132,7 +132,7 @@ const mockBookings = [
   {
     id: "8",
     serviceName: "Office Cleaning",
-    serviceType: ServiceCategory.Cleaning,
+    service_category: ServiceCategory.Cleaning,
     date: new Date(new Date().setDate(new Date().getDate() + 1)), //tomorrow
     endTime: new Date(new Date().setDate(new Date().getDate() + 1)),
     status: BookingStatus.Upcoming,
@@ -148,7 +148,7 @@ const mockBookings = [
 interface Booking {
   id: string;
   serviceName: string;
-  serviceType: ServiceCategory;
+  service_category: ServiceCategory;
   date: Date;
   endTime: Date;
   status: BookingStatus;
@@ -165,7 +165,7 @@ type ViewMode = "calendar" | "list" | "timeline";
 
 const BookingsMain: React.FC = () => {
   const [viewMode, setViewMode] = useState<ViewMode>("list");
-  const [selectedServiceType, setSelectedServiceType] = useState<
+  const [selectedservice_category, setSelectedservice_category] = useState<
     ServiceCategory | "all"
   >("all");
   const [selectedStatus, setSelectedStatus] = useState<BookingStatus | "all">(
@@ -191,8 +191,10 @@ const BookingsMain: React.FC = () => {
     }
 
     // Filter by service type
-    if (selectedServiceType !== "all") {
-      filtered = filtered.filter((b) => b.serviceType === selectedServiceType);
+    if (selectedservice_category !== "all") {
+      filtered = filtered.filter(
+        (b) => b.service_category === selectedservice_category
+      );
     }
 
     // Filter by status
@@ -226,7 +228,7 @@ const BookingsMain: React.FC = () => {
     return filtered;
   }, [
     bookings,
-    selectedServiceType,
+    selectedservice_category,
     selectedStatus,
     selectedDateRange,
     searchQuery,
@@ -258,8 +260,8 @@ const BookingsMain: React.FC = () => {
     // Implement export functionality
   };
 
-  const handleServiceTypeChange = (value: string) => {
-    setSelectedServiceType(value as ServiceCategory | "all");
+  const handleservice_categoryChange = (value: string) => {
+    setSelectedservice_category(value as ServiceCategory | "all");
   };
 
   const handleStatusChange = (value: string) => {
@@ -283,7 +285,7 @@ const BookingsMain: React.FC = () => {
           nextBooking
             ? {
                 serviceName: nextBooking.serviceName,
-                serviceType: nextBooking.serviceType,
+                service_category: nextBooking.service_category,
                 date: nextBooking.date.toISOString(),
                 status: nextBooking.status,
                 provider: nextBooking.provider,
@@ -356,8 +358,8 @@ const BookingsMain: React.FC = () => {
           <div className={styles.bookingsMain__filters}>
             <FilterDropdown
               label="Service"
-              value={selectedServiceType}
-              onChange={handleServiceTypeChange}
+              value={selectedservice_category}
+              onChange={handleservice_categoryChange}
               options={[
                 { value: "all", label: "All Services" },
                 { value: ServiceCategory.Cleaning, label: "Cleaning" },
@@ -453,7 +455,7 @@ const BookingsMain: React.FC = () => {
             </h3>
             <p className={styles.bookingsMain__emptyText}>
               {searchQuery ||
-              selectedServiceType !== "all" ||
+              selectedservice_category !== "all" ||
               selectedStatus !== "all" ||
               selectedDateRange !== "all"
                 ? "Try adjusting your filters to see more bookings"

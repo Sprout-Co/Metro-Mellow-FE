@@ -729,7 +729,7 @@ const ServiceCatalog: FC = () => {
         //     selectedCategory,
         //     selectedService
         //   )}
-        //   serviceType={selectedCategory}
+        //   service_category={selectedCategory}
         //   includedFeatures={getIncludedFeatures(
         //     selectedCategory,
         //     selectedService

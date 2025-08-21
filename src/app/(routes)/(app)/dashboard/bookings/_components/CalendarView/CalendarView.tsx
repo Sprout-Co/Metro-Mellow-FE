@@ -27,7 +27,7 @@ import FnButton from "@/components/ui/Button/FnButton";
 interface Booking {
   id: string;
   serviceName: string;
-  serviceType: ServiceCategory;
+  service_category: ServiceCategory;
   date: Date;
   endTime: Date;
   status: BookingStatus;
@@ -134,7 +134,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
   };
 
   // Service colors
-  const getServiceColor = (serviceType: ServiceCategory) => {
+  const getServiceColor = (service_category: ServiceCategory) => {
     const colors = {
       [ServiceCategory.Cleaning]: "#075056",
       [ServiceCategory.Laundry]: "#6366f1",
@@ -142,7 +142,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
       [ServiceCategory.Errands]: "#10b981",
       [ServiceCategory.PestControl]: "#ec4899",
     };
-    return colors[serviceType] || "#6b7280";
+    return colors[service_category] || "#6b7280";
   };
 
   // Check if date is today
@@ -354,7 +354,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
                                       className={styles.calendarView__dot}
                                       style={{
                                         backgroundColor: getServiceColor(
-                                          booking.serviceType
+                                          booking.service_category
                                         ),
                                       }}
                                     />
@@ -406,7 +406,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
                               key={booking.id}
                               className={styles.calendarView__weekBooking}
                               style={{
-                                backgroundColor: `${getServiceColor(booking.serviceType)}15`,
+                                backgroundColor: `${getServiceColor(booking.service_category)}15`,
                               }}
                               onClick={() => handleBookingClick(booking)}
                               whileHover={{ scale: 1.02 }}
@@ -467,7 +467,9 @@ const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
                       <div
                         className={styles.calendarView__bookingIndicator}
                         style={{
-                          backgroundColor: getServiceColor(booking.serviceType),
+                          backgroundColor: getServiceColor(
+                            booking.service_category
+                          ),
                         }}
                       />
 

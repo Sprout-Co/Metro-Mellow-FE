@@ -117,7 +117,8 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
     }
 
     // Price calculation: base price * meals * type * frequency
-    totalPrice = service.price * totalMeals * typeMultiplier * frequencyMultiplier;
+    totalPrice =
+      service.price * totalMeals * typeMultiplier * frequencyMultiplier;
 
     return totalPrice;
   };
@@ -175,18 +176,18 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
     try {
       const completeOrder: CreateBookingInput = {
         serviceId: service._id,
-        serviceType: service.category,
+        service_category: service.category,
         serviceOption: serviceOption?.service_id || "",
         date: formData.date,
         timeSlot: formData.timeSlot,
         address: formData.addressId || "",
-        notes: `Meal Type: ${mealType}, Frequency: ${deliveryFrequency}, Meals: ${meals.map(m => `${m.name}(${m.count})`).join(', ')}`,
+        notes: `Meal Type: ${mealType}, Frequency: ${deliveryFrequency}, Meals: ${meals.map((m) => `${m.name}(${m.count})`).join(", ")}`,
         serviceDetails: {
           serviceOption: serviceOption?.service_id || "",
           cooking: {
             mealType,
             deliveryFrequency,
-            meals: meals.filter(meal => meal.count > 0),
+            meals: meals.filter((meal) => meal.count > 0),
           },
         },
         totalPrice: calculateTotalPrice(),
@@ -415,7 +416,7 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
         isOpen={isCheckoutModalOpen}
         onClose={handleCheckoutClose}
         onContinue={handleCheckoutComplete}
-        serviceType="Cooking"
+        service_category="Cooking"
         submitting={isCreatingBooking}
       />
 
@@ -428,7 +429,7 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
         serviceDescription={serviceDescription}
         servicePrice={calculateTotalPrice()}
         serviceImage={serviceImage}
-        serviceType="Cooking"
+        service_category="Cooking"
         includedFeatures={includedFeatures}
         apartmentType={undefined}
         roomCount={getTotalMealCount()}

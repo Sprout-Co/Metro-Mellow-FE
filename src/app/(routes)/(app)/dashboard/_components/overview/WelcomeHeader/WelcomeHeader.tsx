@@ -29,7 +29,7 @@ const mockCustomerBookings = [
       icon: "cleaning",
       price: 120,
     },
-    serviceType: ServiceCategory.Cleaning,
+    service_category: ServiceCategory.Cleaning,
     staff: {
       id: "staff-1",
       firstName: "Maria",
@@ -69,7 +69,7 @@ const mockCustomerBookings = [
       icon: "laundry",
       price: 45,
     },
-    serviceType: ServiceCategory.Laundry,
+    service_category: ServiceCategory.Laundry,
     staff: {
       id: "staff-2",
       firstName: "Carlos",
@@ -170,7 +170,7 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = () => {
           {upcomingService ? (
             <AppointmentCard
               serviceName={upcomingService.service.name}
-              serviceType={upcomingService.serviceType}
+              service_category={upcomingService.service_category}
               date={upcomingService.date}
               timeSlot={
                 upcomingService.timeSlot === TimeSlot.Morning

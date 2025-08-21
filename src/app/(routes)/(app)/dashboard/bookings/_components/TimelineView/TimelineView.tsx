@@ -22,7 +22,7 @@ import BookingDetailModal from "../BookingDetailModal/BookingDetailModal";
 interface Booking {
   id: string;
   serviceName: string;
-  serviceType: ServiceCategory;
+  service_category: ServiceCategory;
   date: Date;
   endTime: Date;
   status: BookingStatus;
@@ -86,7 +86,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ bookings }) => {
     setIsModalOpen(true);
   };
 
-  const getServiceIcon = (serviceType: ServiceCategory) => {
+  const getServiceIcon = (service_category: ServiceCategory) => {
     const icons = {
       [ServiceCategory.Cleaning]: "🧹",
       [ServiceCategory.Laundry]: "👕",
@@ -94,7 +94,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ bookings }) => {
       [ServiceCategory.Errands]: "📦",
       [ServiceCategory.PestControl]: "🐛",
     };
-    return icons[serviceType] || "🏠";
+    return icons[service_category] || "🏠";
   };
 
   const getStatusIcon = (status: BookingStatus) => {
@@ -237,14 +237,18 @@ const TimelineView: React.FC<TimelineViewProps> = ({ bookings }) => {
                         <div className={styles.timelineView__cardHeader}>
                           <div className={styles.timelineView__serviceInfo}>
                             <div className={styles.timelineView__serviceIcon}>
-                              {getServiceIcon(booking.serviceType)}
+                              {getServiceIcon(booking.service_category)}
                             </div>
                             <div>
                               <h4 className={styles.timelineView__serviceName}>
                                 {booking.serviceName}
                               </h4>
-                              <p className={styles.timelineView__serviceType}>
-                                {booking.serviceType}
+                              <p
+                                className={
+                                  styles.timelineView__service_category
+                                }
+                              >
+                                {booking.service_category}
                               </p>
                             </div>
                           </div>

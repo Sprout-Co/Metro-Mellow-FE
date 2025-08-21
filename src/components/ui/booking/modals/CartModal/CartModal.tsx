@@ -270,7 +270,7 @@ export const CartModal: React.FC<CartModalProps> = ({
         isOpen={showShippingModal}
         onClose={handleShippingModalClose}
         onContinue={handleCheckoutComplete}
-        serviceType="Food"
+        service_category="Food"
         submitting={false}
       />
     </>

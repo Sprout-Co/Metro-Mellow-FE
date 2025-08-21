@@ -128,7 +128,7 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
       }
       const completeOrder: CreateBookingInput = {
         serviceId: service._id,
-        serviceType: service.category,
+        service_category: service.category,
         serviceOption: serviceOption?.service_id || "",
         date: formData.date,
         timeSlot: formData.timeSlot,
@@ -288,7 +288,7 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
         isOpen={isCheckoutModalOpen}
         onClose={handleCheckoutClose}
         onContinue={handleCheckoutComplete}
-        serviceType="Laundry"
+        service_category="Laundry"
         submitting={isCreatingBooking}
       />
 
@@ -301,7 +301,7 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
         serviceDescription={serviceDescription}
         servicePrice={calculateTotalPrice()}
         serviceImage={serviceImage}
-        serviceType="Laundry"
+        service_category="Laundry"
         includedFeatures={includedFeatures}
         apartmentType={undefined}
         roomCount={bags}

@@ -28,7 +28,7 @@ enum LocalBookingStatus {
 
 interface AppointmentCardProps {
   serviceName: string;
-  serviceType: GraphQLServiceCategory | LocalServiceCategory;
+  service_category: GraphQLServiceCategory | LocalServiceCategory;
   date: string | Date;
   timeSlot?: string;
   status: GraphQLBookingStatus | LocalBookingStatus;
@@ -39,7 +39,7 @@ interface AppointmentCardProps {
 
 const AppointmentCard: React.FC<AppointmentCardProps> = ({
   serviceName,
-  serviceType,
+  service_category,
   date,
   timeSlot,
   status,
@@ -48,7 +48,7 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
   variant = "header",
 }) => {
   const getServiceIcon = (
-    serviceType: GraphQLServiceCategory | LocalServiceCategory
+    service_category: GraphQLServiceCategory | LocalServiceCategory
   ) => {
     const icons = {
       [GraphQLServiceCategory.Cleaning]: "🧹",
@@ -62,7 +62,7 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
       [GraphQLServiceCategory.PestControl]: "🐛",
       [LocalServiceCategory.PestControl]: "🐛",
     };
-    return icons[serviceType] || "🏠";
+    return icons[service_category] || "🏠";
   };
 
   const formatServiceDate = (date: string | Date, timeSlot?: string) => {
@@ -160,7 +160,7 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
       whileHover={{ y: -2 }}
     >
       <div className={styles.appointmentCard__icon}>
-        {getServiceIcon(serviceType)}
+        {getServiceIcon(service_category)}
       </div>
       <div className={styles.appointmentCard__info}>
         <h3 className={styles.appointmentCard__serviceName}>{serviceName}</h3>

@@ -17,7 +17,7 @@ interface ServiceDetailsSlidePanelProps {
   serviceImage: string;
   apartmentType?: HouseType;
   roomCount?: number;
-  serviceType?: string;
+  service_category?: string;
   includedFeatures?: string[];
 }
 
@@ -31,7 +31,7 @@ const ServiceDetailsSlidePanel: React.FC<ServiceDetailsSlidePanelProps> = ({
   serviceImage,
   apartmentType,
   roomCount,
-  serviceType = "Cleaning",
+  service_category = "Cleaning",
   includedFeatures = [
     "Professional cleaning supplies included",
     "Experienced and vetted cleaning professionals",
@@ -126,7 +126,7 @@ const ServiceDetailsSlidePanel: React.FC<ServiceDetailsSlidePanelProps> = ({
               />
               <div className={styles.slidePanel__imageOverlay}>
                 <h3 className={styles.slidePanel__imageTitle}>
-                  Your {serviceType} Service
+                  Your {service_category} Service
                 </h3>
               </div>
             </div>

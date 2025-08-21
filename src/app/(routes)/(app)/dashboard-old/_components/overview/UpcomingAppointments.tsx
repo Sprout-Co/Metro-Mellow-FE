@@ -597,7 +597,7 @@ export default function UpcomingAppointments() {
                                       styles.appointments__providerRole
                                     }
                                   >
-                                    Professional {appointment.serviceType}{" "}
+                                    Professional {appointment.service_category}{" "}
                                     Specialist
                                   </span>
                                 </div>

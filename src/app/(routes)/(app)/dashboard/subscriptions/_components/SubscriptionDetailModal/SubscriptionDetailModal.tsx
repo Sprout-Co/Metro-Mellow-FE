@@ -55,7 +55,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   ];
 
   // Get service icon
-  const getServiceIcon = (serviceType: ServiceCategory) => {
+  const getServiceIcon = (service_category: ServiceCategory) => {
     const icons = {
       [ServiceCategory.Cleaning]: "🧹",
       [ServiceCategory.Laundry]: "👕",
@@ -63,11 +63,11 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
       [ServiceCategory.Errands]: "📦",
       [ServiceCategory.PestControl]: "🐛",
     };
-    return icons[serviceType] || "🏠";
+    return icons[service_category] || "🏠";
   };
 
   // Get service color
-  const getServiceColor = (serviceType: ServiceCategory) => {
+  const getServiceColor = (service_category: ServiceCategory) => {
     const colors = {
       [ServiceCategory.Cleaning]: "#075056",
       [ServiceCategory.Laundry]: "#6366f1",
@@ -75,7 +75,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
       [ServiceCategory.Errands]: "#10b981",
       [ServiceCategory.PestControl]: "#ec4899",
     };
-    return colors[serviceType] || "#6b7280";
+    return colors[service_category] || "#6b7280";
   };
 
   // Format date
@@ -130,7 +130,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
           <div className={styles.modal__headerLeft}>
             <div className={styles.modal__serviceIcon}>
               {subscription.services[0]
-                ? getServiceIcon(subscription.services[0].serviceType)
+                ? getServiceIcon(subscription.services[0].service_category)
                 : "🏠"}
             </div>
             <div className={styles.modal__headerContent}>
@@ -294,11 +294,13 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                             <div
                               className={styles.modal__serviceItemIcon}
                               style={{
-                                backgroundColor: `${getServiceColor(service.serviceType)}15`,
-                                color: getServiceColor(service.serviceType),
+                                backgroundColor: `${getServiceColor(service.service_category)}15`,
+                                color: getServiceColor(
+                                  service.service_category
+                                ),
                               }}
                             >
-                              {getServiceIcon(service.serviceType)}
+                              {getServiceIcon(service.service_category)}
                             </div>
                             <div className={styles.modal__serviceItemContent}>
                               <div className={styles.modal__serviceItemHeader}>
@@ -360,7 +362,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                                     style={{
                                       width: `${(service.completedServices / service.totalServices) * 100}%`,
                                       backgroundColor: getServiceColor(
-                                        service.serviceType
+                                        service.service_category
                                       ),
                                     }}
                                   />
@@ -399,10 +401,10 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                               <div
                                 className={styles.modal__bookingIcon}
                                 style={{
-                                  backgroundColor: `${getServiceColor(booking.serviceType)}15`,
+                                  backgroundColor: `${getServiceColor(booking.service_category)}15`,
                                 }}
                               >
-                                {getServiceIcon(booking.serviceType)}
+                                {getServiceIcon(booking.service_category)}
                               </div>
                               <div className={styles.modal__bookingContent}>
                                 <div className={styles.modal__bookingHeader}>
@@ -565,7 +567,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                             className={styles.modal__serviceBreakdownItem}
                           >
                             <div className={styles.modal__serviceBreakdownIcon}>
-                              {getServiceIcon(service.serviceType)}
+                              {getServiceIcon(service.service_category)}
                             </div>
                             <div className={styles.modal__serviceBreakdownInfo}>
                               <span

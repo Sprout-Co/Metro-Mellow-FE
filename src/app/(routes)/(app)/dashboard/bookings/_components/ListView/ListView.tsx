@@ -30,7 +30,7 @@ import BookingDetailModal from "../BookingDetailModal/BookingDetailModal";
 interface Booking {
   id: string;
   serviceName: string;
-  serviceType: ServiceCategory;
+  service_category: ServiceCategory;
   date: Date;
   endTime: Date;
   status: BookingStatus;
@@ -100,7 +100,7 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
   ];
 
   // Get service icon
-  const getServiceIcon = (serviceType: ServiceCategory) => {
+  const getServiceIcon = (service_category: ServiceCategory) => {
     const icons = {
       [ServiceCategory.Cleaning]: "🧹",
       [ServiceCategory.Laundry]: "👕",
@@ -108,11 +108,11 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
       [ServiceCategory.Errands]: "📦",
       [ServiceCategory.PestControl]: "🐛",
     };
-    return icons[serviceType] || "🏠";
+    return icons[service_category] || "🏠";
   };
 
   // Get service color
-  const getServiceColor = (serviceType: ServiceCategory) => {
+  const getServiceColor = (service_category: ServiceCategory) => {
     const colors = {
       [ServiceCategory.Cleaning]: "#075056",
       [ServiceCategory.Laundry]: "#6366f1",
@@ -120,7 +120,7 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
       [ServiceCategory.Errands]: "#10b981",
       [ServiceCategory.PestControl]: "#ec4899",
     };
-    return colors[serviceType] || "#6b7280";
+    return colors[service_category] || "#6b7280";
   };
 
   // Get status style
@@ -207,7 +207,7 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
         {/* Service Type Indicator */}
         <div
           className={styles.bookingCard__indicator}
-          style={{ backgroundColor: getServiceColor(booking.serviceType) }}
+          style={{ backgroundColor: getServiceColor(booking.service_category) }}
         />
 
         {/* Main Content Grid */}
@@ -218,10 +218,10 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
               <div
                 className={styles.bookingCard__serviceIcon}
                 style={{
-                  backgroundColor: `${getServiceColor(booking.serviceType)}15`,
+                  backgroundColor: `${getServiceColor(booking.service_category)}15`,
                 }}
               >
-                <span>{getServiceIcon(booking.serviceType)}</span>
+                <span>{getServiceIcon(booking.service_category)}</span>
               </div>
               <div className={styles.bookingCard__serviceDetails}>
                 <h3 className={styles.bookingCard__serviceName}>
@@ -233,8 +233,8 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
                     </span>
                   )}
                 </h3>
-                <p className={styles.bookingCard__serviceType}>
-                  {booking.serviceType}
+                <p className={styles.bookingCard__service_category}>
+                  {booking.service_category}
                 </p>
               </div>
             </div>

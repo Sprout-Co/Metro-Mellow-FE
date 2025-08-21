@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Button from '@/components/ui/Button/Button';
-import styles from './ServiceCard.module.scss';
+import React, { useState } from "react";
+import Button from "@/components/ui/Button/Button";
+import styles from "./ServiceCard.module.scss";
 import * as LucideIcons from "lucide-react";
-import { IconName } from '@/constants/services';
-import CancelOrderButton from '../../cancel-order/CancelOrderButton';
+import { IconName } from "@/constants/services";
+import CancelOrderButton from "../../cancel-order/CancelOrderButton";
 
 export interface ServiceCardProps {
   id: string;
-  serviceType: string;
-  status: 'upcoming' | 'completed' | 'canceled' | 'paused';
+  service_category: string;
+  status: "upcoming" | "completed" | "canceled" | "paused";
   date: string;
   time: string;
   timeOfDay: string;
@@ -23,7 +23,7 @@ export interface ServiceCardProps {
 
 export default function ServiceCard({
   id,
-  serviceType,
+  service_category,
   status,
   date,
   time,
@@ -32,7 +32,7 @@ export default function ServiceCard({
   additionalInfo,
   frequency,
   isAssigned = false,
-  icon = 'House'
+  icon = "House",
 }: ServiceCardProps) {
   const [expanded, setExpanded] = useState(false);
 
@@ -45,19 +45,19 @@ export default function ServiceCard({
   const handleReschedule = () => {
     console.log(`Rescheduling service ${id}`);
   };
-  
+
   const getServiceIcon = () => {
     // Map service types to icons
     const iconMap: Record<string, IconName> = {
-      'Cleaning': 'Sparkles',
-      'Laundry': 'Shirt',
-      'Food': 'CookingPot',
-      'Pest Control': 'BugOff',
+      Cleaning: "Sparkles",
+      Laundry: "Shirt",
+      Food: "CookingPot",
+      "Pest Control": "BugOff",
     };
-    
-    return iconMap[serviceType] || icon;
+
+    return iconMap[service_category] || icon;
   };
-  
+
   const serviceIcon = getServiceIcon();
   const IconComponent = LucideIcons[serviceIcon] as React.ElementType;
 
@@ -65,35 +65,43 @@ export default function ServiceCard({
     <div className={styles.serviceCard}>
       <div className={styles.serviceCard__header}>
         <div className={styles.serviceCard__iconContainer}>
-          <div className={`${styles.serviceCard__icon} ${styles[`serviceCard__icon--${status}`]}`}>
+          <div
+            className={`${styles.serviceCard__icon} ${styles[`serviceCard__icon--${status}`]}`}
+          >
             {IconComponent ? (
-              <IconComponent className={`${styles.serviceCard__serviceIcon} ${styles[`serviceCard__serviceIcon--${status}`]}`} />
+              <IconComponent
+                className={`${styles.serviceCard__serviceIcon} ${styles[`serviceCard__serviceIcon--${status}`]}`}
+              />
             ) : (
               <span className={styles.serviceCard__emoji}>🧹</span>
             )}
           </div>
         </div>
-        
+
         <div className={styles.serviceCard__info}>
           <div className={styles.serviceCard__titleRow}>
-            <h3 className={styles.serviceCard__title}>{serviceType}</h3>
-            <span className={`${styles.serviceCard__badge} ${styles[`serviceCard__badge--${status.toLowerCase()}`]}`}>
+            <h3 className={styles.serviceCard__title}>{service_category}</h3>
+            <span
+              className={`${styles.serviceCard__badge} ${styles[`serviceCard__badge--${status.toLowerCase()}`]}`}
+            >
               {status.charAt(0).toUpperCase() + status.slice(1)}
             </span>
           </div>
-          
+
           <div className={styles.serviceCard__details}>
             <div className={styles.serviceCard__dateTime}>
               <span className={styles.serviceCard__date}>• {date}</span>
-              <span className={styles.serviceCard__time}>• {time} ({timeOfDay})</span>
+              <span className={styles.serviceCard__time}>
+                • {time} ({timeOfDay})
+              </span>
             </div>
           </div>
         </div>
 
         <div className={styles.serviceCard__actions}>
           {expanded ? (
-            <Button 
-              className={styles.serviceCard__toggleButton} 
+            <Button
+              className={styles.serviceCard__toggleButton}
               onClick={toggleExpand}
               aria-expanded="true"
               variant="ghost"
@@ -102,8 +110,8 @@ export default function ServiceCard({
               Show Less ▲
             </Button>
           ) : (
-            <Button 
-              className={styles.serviceCard__toggleButton} 
+            <Button
+              className={styles.serviceCard__toggleButton}
               onClick={toggleExpand}
               aria-expanded="false"
               variant="ghost"
@@ -114,7 +122,7 @@ export default function ServiceCard({
           )}
         </div>
       </div>
-      
+
       {expanded && (
         <div className={styles.serviceCard__expandedContent}>
           <div className={styles.serviceCard__detailsGrid}>
@@ -122,33 +130,37 @@ export default function ServiceCard({
               <span className={styles.serviceCard__label}>Location</span>
               <span className={styles.serviceCard__value}>{location}</span>
             </div>
-            
+
             {additionalInfo && (
               <div className={styles.serviceCard__detailItem}>
                 <span className={styles.serviceCard__label}>Notes</span>
-                <span className={styles.serviceCard__value}>{additionalInfo}</span>
+                <span className={styles.serviceCard__value}>
+                  {additionalInfo}
+                </span>
               </div>
             )}
-            
+
             <div className={styles.serviceCard__detailItem}>
               <span className={styles.serviceCard__label}>Frequency</span>
               <span className={styles.serviceCard__value}>{frequency}</span>
             </div>
           </div>
-          
+
           <div className={styles.serviceCard__sidebar}>
-            {!isAssigned && status === 'upcoming' && (
+            {!isAssigned && status === "upcoming" && (
               <div className={styles.serviceCard__status}>
                 <div className={styles.serviceCard__statusIcon}>
                   <div className={styles.serviceCard__loadingSpinner}></div>
                 </div>
-                <span className={styles.serviceCard__statusText}>waiting to be assigned</span>
+                <span className={styles.serviceCard__statusText}>
+                  waiting to be assigned
+                </span>
               </div>
             )}
-            
-            {status === 'upcoming' && (
+
+            {status === "upcoming" && (
               <div className={styles.serviceCard__buttonGroup}>
-                <Button 
+                <Button
                   className={styles.serviceCard__rescheduleButton}
                   onClick={handleReschedule}
                   fullWidth

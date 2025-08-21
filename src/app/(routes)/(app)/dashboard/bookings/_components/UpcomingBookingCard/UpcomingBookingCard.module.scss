@@ -130,7 +130,7 @@
     margin: 0 0 spacing("xxs") 0;
   }
 
-  &__serviceType {
+  &__service_category {
     @include font-size("sm");
     color: color("neutral", "dark");
   }

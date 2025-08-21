@@ -443,7 +443,7 @@ export default function BookServiceModal({
     try {
       setIsSubmitting(true);
       // Determine the service type based on service ID
-      const getServiceType = (serviceId: string): ServiceCategory => {
+      const getservice_category = (serviceId: string): ServiceCategory => {
         switch (serviceId) {
           case ServiceId.Cleaning:
             return ServiceCategory.Cleaning;
@@ -461,7 +461,7 @@ export default function BookServiceModal({
       // Format booking data
       const bookingData: CreateBookingInput = {
         serviceId: selectedService._id,
-        serviceType: getServiceType(selectedService.service_id),
+        service_category: getservice_category(selectedService.service_id),
         serviceOption: selectedOption?.service_id || ("" as string),
         date: new Date(selectedDate),
         timeSlot: selectedTime,
