@@ -282,6 +282,7 @@ const SubscriptionBuilder: React.FC = () => {
               setBillingCycle={setBillingCycle}
               duration={duration}
               setDuration={setDuration}
+              configuredServices={configuredServices}
             />
           </motion.section>
 
@@ -307,6 +308,7 @@ const SubscriptionBuilder: React.FC = () => {
               onServiceSelect={handleServiceSelect}
               onServiceEdit={handleServiceEdit}
               onServiceRemove={handleServiceRemove}
+              currentBillingCycle={billingCycle}
             />
           </motion.section>
         </div>

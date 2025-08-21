@@ -16,7 +16,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import styles from "./ServiceSelector.module.scss";
-import { Service } from "@/graphql/api";
+import { Service, ServiceCategory } from "@/graphql/api";
 
 interface ConfiguredService {
   service: Service;
@@ -29,6 +29,7 @@ interface ServiceSelectorProps {
   onServiceSelect: (service: Service) => void;
   onServiceEdit: (serviceId: string) => void;
   onServiceRemove: (serviceId: string) => void;
+  currentBillingCycle: string;
 }
 
 const ServiceSelector: React.FC<ServiceSelectorProps> = ({
@@ -37,7 +38,20 @@ const ServiceSelector: React.FC<ServiceSelectorProps> = ({
   onServiceSelect,
   onServiceEdit,
   onServiceRemove,
+  currentBillingCycle,
 }) => {
+  // Determine if a service should be disabled based on current billing cycle
+  const isServiceDisabled = (service: Service): { disabled: boolean; reason?: string } => {
+    // If quarterly billing is selected, only allow pest control services
+    if (currentBillingCycle === "QUARTERLY" && service.category !== ServiceCategory.PestControl) {
+      return { 
+        disabled: true, 
+        reason: "Quarterly billing is only available for pest control services. Switch to monthly billing to add other services." 
+      };
+    }
+
+    return { disabled: false };
+  };
   const getServiceIcon = (category: string) => {
     const iconProps = { size: 24, strokeWidth: 1.5 };
     switch (category) {
@@ -99,16 +113,20 @@ const ServiceSelector: React.FC<ServiceSelectorProps> = ({
           const configured = isServiceConfigured(service._id);
           const configuredData = getConfiguredService(service._id);
           const colorClass = getServiceColor(service.category);
+          const { disabled, reason } = isServiceDisabled(service);
 
           return (
             <motion.div
               key={service._id}
               className={`${styles.selector__card} ${
                 styles[`selector__card--${colorClass}`]
-              } ${configured ? styles["selector__card--configured"] : ""}`}
+              } ${configured ? styles["selector__card--configured"] : ""} ${
+                disabled ? styles["selector__card--disabled"] : ""
+              }`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.3 }}
+              title={disabled ? reason : undefined}
             >
               {/* Configured Badge */}
               <AnimatePresence>
@@ -201,15 +219,22 @@ const ServiceSelector: React.FC<ServiceSelectorProps> = ({
               {/* Card Footer */}
               <div className={styles.selector__footer}>
                 {!configured ? (
-                  <motion.button
-                    className={styles.selector__addBtn}
-                    onClick={() => onServiceSelect(service)}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <Plus size={18} />
-                    <span>Add Service</span>
-                  </motion.button>
+                  disabled ? (
+                    <div className={styles.selector__disabledBtn}>
+                      <span>Cannot Add</span>
+                      {reason && <small>{reason}</small>}
+                    </div>
+                  ) : (
+                    <motion.button
+                      className={styles.selector__addBtn}
+                      onClick={() => onServiceSelect(service)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <Plus size={18} />
+                      <span>Add Service</span>
+                    </motion.button>
+                  )
                 ) : (
                   <div className={styles.selector__actions}>
                     <motion.button

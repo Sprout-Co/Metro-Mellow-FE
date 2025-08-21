@@ -147,6 +147,21 @@ export const validateSubscription = (
     errors.push({ field: "services", message: "At least one service must be configured" });
   }
 
+  // Validate billing cycle restrictions based on service types
+  if (configuredServices.length > 0) {
+    const hasNonPestControlServices = configuredServices.some(
+      (cs) => cs.service.category !== ServiceCategory.PestControl
+    );
+
+    // If there are non-pest control services (cleaning, laundry, cooking) and quarterly billing is selected
+    if (hasNonPestControlServices && billingCycle === "QUARTERLY") {
+      errors.push({ 
+        field: "billingCycle", 
+        message: "Cleaning, laundry, and cooking services only support monthly billing" 
+      });
+    }
+  }
+
   // Validate each service configuration
   configuredServices.forEach((configuredService, index) => {
     const serviceValidation = validateServiceConfiguration(
