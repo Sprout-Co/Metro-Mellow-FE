@@ -27,8 +27,16 @@ import {
 import styles from "./CTASection.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
-import { Service, ServiceCategory, ServiceStatus } from "@/graphql/api";
+import {
+  Service,
+  ServiceCategory,
+  ServiceOption,
+  ServiceStatus,
+} from "@/graphql/api";
 import CleaningServiceModal from "@/components/ui/booking/modals/CleaningServiceModal";
+import LaundryServiceModal from "@/components/ui/booking/modals/LaundryServiceModal";
+import CookingServiceModal from "@/components/ui/booking/modals/CookingServiceModal";
+import PestControlServiceModal from "@/components/ui/booking/modals/PestControlServiceModal";
 
 // Helper function to get icon for service category
 const getServiceIcon = (category: ServiceCategory) => {
@@ -82,6 +90,8 @@ const CTASection: React.FC = () => {
   const { handleGetServices } = useServiceOperations();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [selectedServiceOption, setSelectedServiceOption] =
+    useState<ServiceOption | null>(null);
   // Fetch services on component mount
   useEffect(() => {
     const fetchServices = async () => {
@@ -109,12 +119,60 @@ const CTASection: React.FC = () => {
     setExpandedService(expandedService === serviceId ? null : serviceId);
   };
 
-  const handleBookService = (serviceId: string) => {
+  const renderServiceModal = () => {
+    if (!selectedService || !selectedServiceOption) return null;
+    switch (selectedService?.category) {
+      case ServiceCategory.Cleaning:
+        return (
+          <CleaningServiceModal
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            service={selectedService}
+            serviceOption={selectedServiceOption}
+          />
+        );
+      case ServiceCategory.Laundry:
+        return (
+          <LaundryServiceModal
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            service={selectedService}
+            serviceOption={selectedServiceOption}
+          />
+        );
+      case ServiceCategory.Cooking:
+        return (
+          <CookingServiceModal
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            service={selectedService}
+            serviceOption={selectedServiceOption}
+          />
+        );
+      case ServiceCategory.PestControl:
+        return (
+          <PestControlServiceModal
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            service={selectedService}
+            serviceOption={selectedServiceOption}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
+  const handleBookService = (serviceId: string, serviceOptionId: string) => {
     console.log("Booking service:", serviceId);
     console.log("Booking service:", services);
-    setSelectedService(
-      services.find((service) => service._id === serviceId) || null
-    );
+    const service = services.find((service) => service._id === serviceId);
+    if (service) {
+      setSelectedService(service);
+      setSelectedServiceOption(
+        service.options?.find((option) => option.id === serviceOptionId) || null
+      );
+    }
     setIsOpen(true);
   };
 
@@ -293,7 +351,10 @@ const CTASection: React.FC = () => {
                                       size="xs"
                                       variant="primary"
                                       onClick={() =>
-                                        handleBookService(option.id)
+                                        handleBookService(
+                                          service._id,
+                                          option.id
+                                        )
                                       }
                                     >
                                       Book Now
@@ -402,13 +463,7 @@ const CTASection: React.FC = () => {
         </motion.div>
       </div>
 
-      {selectedService && (
-        <CleaningServiceModal
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          service={selectedService}
-        />
-      )}
+      {renderServiceModal()}
     </div>
   );
 };
