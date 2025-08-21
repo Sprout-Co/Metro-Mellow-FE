@@ -48,6 +48,55 @@
   }
 }
 
+// Loading States
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: spacing("xl");
+  text-align: center;
+  
+  p {
+    @include font-secondary;
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    margin-top: spacing("md");
+  }
+}
+
+.loadingSpinner {
+  animation: spin 1s linear infinite;
+  color: color("primary", "base");
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Error States
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: spacing("xl");
+  text-align: center;
+  gap: spacing("md");
+}
+
+.errorMessage {
+  @include font-secondary;
+  @include font-size("sm");
+  color: color("status", "error");
+  margin: 0;
+}
+
 .servicesWrapper {
   display: flex;
   flex-direction: column;

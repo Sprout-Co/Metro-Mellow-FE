@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
@@ -22,163 +22,130 @@ import {
   Zap,
   MousePointer2,
   Leaf,
+  Loader2,
 } from "lucide-react";
 import styles from "./CTASection.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
+import { Service, ServiceCategory, ServiceStatus } from "@/graphql/api";
 
-interface SubService {
-  id: string;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  duration?: string;
-}
+// Helper function to get icon for service category
+const getServiceIcon = (category: ServiceCategory) => {
+  switch (category) {
+    case ServiceCategory.Cleaning:
+      return <Home />;
+    case ServiceCategory.Laundry:
+      return <Droplets />;
+    case ServiceCategory.Cooking:
+      return <Utensils />;
+    case ServiceCategory.PestControl:
+      return <Bug />;
+    default:
+      return <Package />;
+  }
+};
 
-interface ServiceOption {
-  id: string;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  href: string;
-  color: string;
-  subServices: SubService[];
-}
+// Helper function to get color for service category
+const getServiceColor = (category: ServiceCategory) => {
+  switch (category) {
+    case ServiceCategory.Cleaning:
+      return "#075056";
+    case ServiceCategory.Laundry:
+      return "#6366f1";
+    case ServiceCategory.Cooking:
+      return "#fe5b04";
+    case ServiceCategory.PestControl:
+      return "#10b981";
+    default:
+      return "#6b7280";
+  }
+};
 
-const serviceOptions: ServiceOption[] = [
-  {
-    id: "cleaning",
-    title: "Professional Cleaning",
-    description: "Comprehensive home & office cleaning services",
-    icon: <Home />,
-    href: "/dashboard/book-service?type=cleaning",
-    color: "#075056",
-    subServices: [
-      {
-        id: "deep-clean",
-        title: "Deep Cleaning",
-        description: "Thorough cleaning of all areas",
-        icon: <Sparkles />,
-        duration: "4-6 hours",
-      },
-      {
-        id: "regular-clean",
-        title: "Regular Maintenance",
-        description: "Weekly or bi-weekly cleaning",
-        icon: <Timer />,
-        duration: "2-3 hours",
-      },
-      {
-        id: "move-in-out",
-        title: "Move-in/Move-out",
-        description: "Complete property cleaning",
-        icon: <Package />,
-        duration: "5-7 hours",
-      },
-    ],
-  },
-  {
-    id: "laundry",
-    title: "Laundry Services",
-    description: "Pickup, wash, fold & delivery",
-    icon: <Droplets />,
-    href: "/dashboard/book-service?type=laundry",
-    color: "#6366f1",
-    subServices: [
-      {
-        id: "wash-fold",
-        title: "Wash & Fold",
-        description: "Standard laundry service",
-        icon: <Shirt />,
-        duration: "24-48 hours",
-      },
-      {
-        id: "dry-clean",
-        title: "Dry Cleaning",
-        description: "Delicate & formal wear",
-        icon: <Sparkles />,
-        duration: "2-3 days",
-      },
-      {
-        id: "iron-press",
-        title: "Ironing Service",
-        description: "Professional pressing",
-        icon: <Timer />,
-        duration: "Same day",
-      },
-    ],
-  },
-  {
-    id: "food",
-    title: "Cooking & Meals",
-    description: "Professional meal preparation services",
-    icon: <Utensils />,
-    href: "/dashboard/book-service?type=food",
-    color: "#fe5b04",
-    subServices: [
-      {
-        id: "meal-prep",
-        title: "Weekly Meal Prep",
-        description: "Prepared meals for the week",
-        icon: <Calendar />,
-        duration: "Every Sunday",
-      },
-      {
-        id: "daily-cook",
-        title: "Daily Cooking",
-        description: "Fresh meals daily",
-        icon: <Soup />,
-        duration: "2-3 hours daily",
-      },
-      {
-        id: "event-catering",
-        title: "Event Catering",
-        description: "Party & event meals",
-        icon: <Coffee />,
-        duration: "As scheduled",
-      },
-    ],
-  },
-  {
-    id: "pest",
-    title: "Pest Control",
-    description: "Safe & effective pest management",
-    icon: <Bug />,
-    href: "/dashboard/book-service?type=pest",
-    color: "#10b981",
-    subServices: [
-      {
-        id: "inspection",
-        title: "Pest Inspection",
-        description: "Thorough property assessment",
-        icon: <Shield />,
-        duration: "1-2 hours",
-      },
-      {
-        id: "treatment",
-        title: "Treatment Service",
-        description: "Safe pest elimination",
-        icon: <Zap />,
-        duration: "2-4 hours",
-      },
-      {
-        id: "prevention",
-        title: "Prevention Plan",
-        description: "Monthly prevention service",
-        icon: <Leaf />,
-        duration: "Monthly visits",
-      },
-    ],
-  },
-];
+// Helper function to get service options with icons
+const getServiceOptions = (options: Service["options"] = []) => {
+  return options.map((option) => ({
+    id: option.id,
+    title: option.label,
+    description: option.description,
+    icon: <Package />, // Default icon for service options
+    price: option.price,
+  }));
+};
 
 const CTASection: React.FC = () => {
   const [expandedService, setExpandedService] = useState<string | null>(null);
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { handleGetServices } = useServiceOperations();
+
+  // Fetch services on component mount
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        // Fetch only active services
+        const fetchedServices = await handleGetServices(undefined, ServiceStatus.Active);
+        setServices(fetchedServices || []);
+      } catch (err) {
+        console.error("Failed to fetch services:", err);
+        setError("Failed to load services. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, [handleGetServices]);
 
   const toggleService = (serviceId: string) => {
     setExpandedService(expandedService === serviceId ? null : serviceId);
   };
+
+  if (loading) {
+    return (
+      <div className={styles.ctaSection}>
+        <div className={styles.minimalLayout}>
+          <div className={styles.servicesWrapper}>
+            <div className={styles.header}>
+              <h2 className={styles.header__title}>Book a Service</h2>
+              <p className={styles.header__subtitle}>Loading available services...</p>
+            </div>
+            <div className={styles.loadingContainer}>
+              <Loader2 className={styles.loadingSpinner} size={32} />
+              <p>Fetching services...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.ctaSection}>
+        <div className={styles.minimalLayout}>
+          <div className={styles.servicesWrapper}>
+            <div className={styles.header}>
+              <h2 className={styles.header__title}>Book a Service</h2>
+              <p className={styles.header__subtitle}>Something went wrong</p>
+            </div>
+            <div className={styles.errorContainer}>
+              <p className={styles.errorMessage}>{error}</p>
+              <FnButton 
+                onClick={() => window.location.reload()} 
+                variant="primary" 
+                size="sm"
+              >
+                Try Again
+              </FnButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.ctaSection}>
@@ -193,9 +160,14 @@ const CTASection: React.FC = () => {
           </div>
 
           <div className={styles.accordionContainer}>
-            {serviceOptions.map((service, index) => (
+            {services.map((service, index) => {
+              const serviceIcon = getServiceIcon(service.category);
+              const serviceColor = getServiceColor(service.category);
+              const serviceOptions = getServiceOptions(service.options);
+              
+              return (
               <motion.div
-                key={service.id}
+                key={service._id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
@@ -206,17 +178,17 @@ const CTASection: React.FC = () => {
               >
                 <motion.button
                   className={`${styles.accordionHeader} ${
-                    expandedService === service.id
+                    expandedService === service._id
                       ? styles["accordionHeader--active"]
                       : ""
                   }`}
-                  onClick={() => toggleService(service.id)}
+                  onClick={() => toggleService(service._id)}
                   whileHover={{ x: 2 }}
                   whileTap={{ scale: 0.99 }}
                   style={{
                     borderLeftColor:
-                      expandedService === service.id
-                        ? service.color
+                      expandedService === service._id
+                        ? serviceColor
                         : "transparent",
                   }}
                 >
@@ -224,20 +196,20 @@ const CTASection: React.FC = () => {
                     className={styles.accordionHeader__icon}
                     style={{
                       backgroundColor:
-                        expandedService === service.id
-                          ? service.color
+                        expandedService === service._id
+                          ? serviceColor
                           : undefined,
                       color:
-                        expandedService === service.id
+                        expandedService === service._id
                           ? "#ffffff"
-                          : service.color,
+                          : serviceColor,
                     }}
                   >
-                    {service.icon}
+                    {serviceIcon}
                   </div>
                   <div className={styles.accordionHeader__content}>
                     <h3 className={styles.accordionHeader__title}>
-                      {service.title}
+                      {service.name}
                     </h3>
                     <p className={styles.accordionHeader__description}>
                       {service.description}
@@ -246,7 +218,7 @@ const CTASection: React.FC = () => {
                   <motion.div
                     className={styles.accordionHeader__arrow}
                     animate={{
-                      rotate: expandedService === service.id ? 180 : 0,
+                      rotate: expandedService === service._id ? 180 : 0,
                     }}
                     transition={{ duration: 0.2 }}
                   >
@@ -255,7 +227,7 @@ const CTASection: React.FC = () => {
                 </motion.button>
 
                 <AnimatePresence>
-                  {expandedService === service.id && (
+                  {expandedService === service._id && (
                     <motion.div
                       className={styles.accordionContent}
                       initial={{ height: 0, opacity: 0 }}
@@ -267,72 +239,97 @@ const CTASection: React.FC = () => {
                       }}
                     >
                       <div className={styles.subServicesList}>
-                        {service.subServices.map((subService, subIndex) => (
+                        {serviceOptions.length > 0 ? (
+                          serviceOptions.map((option, optionIndex) => (
+                            <motion.div
+                              key={option.id}
+                              className={styles.subServiceItem}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{
+                                duration: 0.2,
+                                delay: optionIndex * 0.05,
+                              }}
+                            >
+                              <div className={styles.subServiceItem__icon}>
+                                {option.icon}
+                              </div>
+                              <div className={styles.subServiceItem__content}>
+                                <h4 className={styles.subServiceItem__title}>
+                                  {option.title}
+                                </h4>
+                                <p className={styles.subServiceItem__description}>
+                                  {option.description}
+                                </p>
+                                <span className={styles.subServiceItem__duration}>
+                                  <Timer size={12} />
+                                  From ₦{option.price.toLocaleString()}
+                                </span>
+                                <div>
+                                  <Link href={`/dashboard/subscriptions/add?service=${service._id}`}>
+                                    <FnButton
+                                      size="xs"
+                                      variant="primary"
+                                      onClick={() => {
+                                        console.log(
+                                          "Booking service option:",
+                                          option.id
+                                        );
+                                      }}
+                                    >
+                                      Book Now
+                                    </FnButton>
+                                  </Link>
+                                </div>
+                              </div>
+                            </motion.div>
+                          ))
+                        ) : (
                           <motion.div
-                            key={subService.id}
                             className={styles.subServiceItem}
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
-                            transition={{
-                              duration: 0.2,
-                              delay: subIndex * 0.05,
-                            }}
                           >
                             <div className={styles.subServiceItem__icon}>
-                              {subService.icon}
+                              <Package />
                             </div>
                             <div className={styles.subServiceItem__content}>
                               <h4 className={styles.subServiceItem__title}>
-                                {subService.title}
+                                {service.name}
                               </h4>
                               <p className={styles.subServiceItem__description}>
-                                {subService.description}
+                                {service.description}
                               </p>
-                              {subService.duration && (
-                                <span
-                                  className={styles.subServiceItem__duration}
-                                >
-                                  <Timer size={12} />
-                                  {subService.duration}
-                                </span>
-                              )}
+                              <span className={styles.subServiceItem__duration}>
+                                <Timer size={12} />
+                                From ₦{service.price.toLocaleString()}
+                              </span>
                               <div>
-                                <FnButton
-                                  size="xs"
-                                  variant="primary"
-                                  onClick={() => {
-                                    console.log(
-                                      "Booking service:",
-                                      subService.id
-                                    );
-                                  }}
-                                >
-                                  Book Now
-                                </FnButton>
+                                <Link href={`/dashboard/subscriptions/add?service=${service._id}`}>
+                                  <FnButton
+                                    size="xs"
+                                    variant="primary"
+                                    onClick={() => {
+                                      console.log(
+                                        "Booking service:",
+                                        service._id
+                                      );
+                                    }}
+                                  >
+                                    Book Now
+                                  </FnButton>
+                                </Link>
                               </div>
                             </div>
                           </motion.div>
-                        ))}
-                        {/* 
-                        <Link href={service.href}>
-                          <motion.button
-                            className={styles.bookServiceButton}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            style={{
-                              backgroundColor: service.color,
-                            }}
-                          >
-                            Book {service.title.split(" ")[0]} Service
-                            <ArrowRight size={16} />
-                          </motion.button>
-                        </Link> */}
+                        )}
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </motion.div>
-            ))}
+            );
+            })}
           </div>
         </div>
 
