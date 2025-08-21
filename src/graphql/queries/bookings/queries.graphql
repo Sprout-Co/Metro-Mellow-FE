@@ -66,7 +66,7 @@ query GetBookings($status: BookingStatus) {
     paymentStatus
     createdAt
     updatedAt
-    serviceType
+    service_category
     serviceOption
     serviceDetails {
       cleaning {
@@ -179,7 +179,7 @@ query GetBookingById($id: ID!) {
     paymentStatus
     createdAt
     updatedAt
-    serviceType
+    service_category
     serviceOption
     serviceDetails {
       cleaning {
@@ -292,7 +292,7 @@ query GetCustomerBookings {
     paymentStatus
     createdAt
     updatedAt
-    serviceType
+    service_category
     serviceOption
     serviceDetails {
       cleaning {
@@ -405,7 +405,7 @@ query GetStaffBookings {
     paymentStatus
     createdAt
     updatedAt
-    serviceType
+    service_category
     serviceOption
     serviceDetails {
       cleaning {

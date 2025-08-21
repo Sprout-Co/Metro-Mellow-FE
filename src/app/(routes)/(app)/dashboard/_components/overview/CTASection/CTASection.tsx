@@ -28,6 +28,7 @@ import styles from "./CTASection.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
 import { Service, ServiceCategory, ServiceStatus } from "@/graphql/api";
+import CleaningServiceModal from "@/components/ui/booking/modals/CleaningServiceModal";
 
 // Helper function to get icon for service category
 const getServiceIcon = (category: ServiceCategory) => {
@@ -63,6 +64,7 @@ const getServiceColor = (category: ServiceCategory) => {
 
 // Helper function to get service options with icons
 const getServiceOptions = (options: Service["options"] = []) => {
+  if (!options) return [];
   return options.map((option) => ({
     id: option.id,
     title: option.label,
@@ -78,7 +80,8 @@ const CTASection: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { handleGetServices } = useServiceOperations();
-
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
   // Fetch services on component mount
   useEffect(() => {
     const fetchServices = async () => {
@@ -86,7 +89,10 @@ const CTASection: React.FC = () => {
         setLoading(true);
         setError(null);
         // Fetch only active services
-        const fetchedServices = await handleGetServices(undefined, ServiceStatus.Active);
+        const fetchedServices = await handleGetServices(
+          undefined,
+          ServiceStatus.Active
+        );
         setServices(fetchedServices || []);
       } catch (err) {
         console.error("Failed to fetch services:", err);
@@ -103,6 +109,15 @@ const CTASection: React.FC = () => {
     setExpandedService(expandedService === serviceId ? null : serviceId);
   };
 
+  const handleBookService = (serviceId: string) => {
+    console.log("Booking service:", serviceId);
+    console.log("Booking service:", services);
+    setSelectedService(
+      services.find((service) => service._id === serviceId) || null
+    );
+    setIsOpen(true);
+  };
+
   if (loading) {
     return (
       <div className={styles.ctaSection}>
@@ -110,7 +125,9 @@ const CTASection: React.FC = () => {
           <div className={styles.servicesWrapper}>
             <div className={styles.header}>
               <h2 className={styles.header__title}>Book a Service</h2>
-              <p className={styles.header__subtitle}>Loading available services...</p>
+              <p className={styles.header__subtitle}>
+                Loading available services...
+              </p>
             </div>
             <div className={styles.loadingContainer}>
               <Loader2 className={styles.loadingSpinner} size={32} />
@@ -133,9 +150,9 @@ const CTASection: React.FC = () => {
             </div>
             <div className={styles.errorContainer}>
               <p className={styles.errorMessage}>{error}</p>
-              <FnButton 
-                onClick={() => window.location.reload()} 
-                variant="primary" 
+              <FnButton
+                onClick={() => window.location.reload()}
+                variant="primary"
                 size="sm"
               >
                 Try Again
@@ -164,116 +181,162 @@ const CTASection: React.FC = () => {
               const serviceIcon = getServiceIcon(service.category);
               const serviceColor = getServiceColor(service.category);
               const serviceOptions = getServiceOptions(service.options);
-              
+
               return (
-              <motion.div
-                key={service._id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.3,
-                  delay: index * 0.05,
-                }}
-                className={styles.accordionItem}
-              >
-                <motion.button
-                  className={`${styles.accordionHeader} ${
-                    expandedService === service._id
-                      ? styles["accordionHeader--active"]
-                      : ""
-                  }`}
-                  onClick={() => toggleService(service._id)}
-                  whileHover={{ x: 2 }}
-                  whileTap={{ scale: 0.99 }}
-                  style={{
-                    borderLeftColor:
-                      expandedService === service._id
-                        ? serviceColor
-                        : "transparent",
+                <motion.div
+                  key={service._id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    delay: index * 0.05,
                   }}
+                  className={styles.accordionItem}
                 >
-                  <div
-                    className={styles.accordionHeader__icon}
+                  <motion.button
+                    className={`${styles.accordionHeader} ${
+                      expandedService === service._id
+                        ? styles["accordionHeader--active"]
+                        : ""
+                    }`}
+                    onClick={() => toggleService(service._id)}
+                    whileHover={{ x: 2 }}
+                    whileTap={{ scale: 0.99 }}
                     style={{
-                      backgroundColor:
+                      borderLeftColor:
                         expandedService === service._id
                           ? serviceColor
-                          : undefined,
-                      color:
-                        expandedService === service._id
-                          ? "#ffffff"
-                          : serviceColor,
+                          : "transparent",
                     }}
                   >
-                    {serviceIcon}
-                  </div>
-                  <div className={styles.accordionHeader__content}>
-                    <h3 className={styles.accordionHeader__title}>
-                      {service.name}
-                    </h3>
-                    <p className={styles.accordionHeader__description}>
-                      {service.description}
-                    </p>
-                  </div>
-                  <motion.div
-                    className={styles.accordionHeader__arrow}
-                    animate={{
-                      rotate: expandedService === service._id ? 180 : 0,
-                    }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <ChevronDown />
-                  </motion.div>
-                </motion.button>
-
-                <AnimatePresence>
-                  {expandedService === service._id && (
-                    <motion.div
-                      className={styles.accordionContent}
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{
-                        duration: 0.3,
-                        ease: "easeInOut",
+                    <div
+                      className={styles.accordionHeader__icon}
+                      style={{
+                        backgroundColor:
+                          expandedService === service._id
+                            ? serviceColor
+                            : undefined,
+                        color:
+                          expandedService === service._id
+                            ? "#ffffff"
+                            : serviceColor,
                       }}
                     >
-                      <div className={styles.subServicesList}>
-                        {serviceOptions.length > 0 ? (
-                          serviceOptions.map((option, optionIndex) => (
+                      {serviceIcon}
+                    </div>
+                    <div className={styles.accordionHeader__content}>
+                      <h3 className={styles.accordionHeader__title}>
+                        {service.name}
+                      </h3>
+                      <p className={styles.accordionHeader__description}>
+                        {service.description}
+                      </p>
+                    </div>
+                    <motion.div
+                      className={styles.accordionHeader__arrow}
+                      animate={{
+                        rotate: expandedService === service._id ? 180 : 0,
+                      }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ChevronDown />
+                    </motion.div>
+                  </motion.button>
+
+                  <AnimatePresence>
+                    {expandedService === service._id && (
+                      <motion.div
+                        className={styles.accordionContent}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{
+                          duration: 0.3,
+                          ease: "easeInOut",
+                        }}
+                      >
+                        <div className={styles.subServicesList}>
+                          {serviceOptions.length > 0 ? (
+                            serviceOptions.map((option, optionIndex) => (
+                              <motion.div
+                                key={option.id}
+                                className={styles.subServiceItem}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{
+                                  duration: 0.2,
+                                  delay: optionIndex * 0.05,
+                                }}
+                              >
+                                <div className={styles.subServiceItem__icon}>
+                                  {option.icon}
+                                </div>
+                                <div className={styles.subServiceItem__content}>
+                                  <h4 className={styles.subServiceItem__title}>
+                                    {option.title}
+                                  </h4>
+                                  <p
+                                    className={
+                                      styles.subServiceItem__description
+                                    }
+                                  >
+                                    {option.description}
+                                  </p>
+                                  <span
+                                    className={styles.subServiceItem__duration}
+                                  >
+                                    <Timer size={12} />
+                                    From ₦{option.price.toLocaleString()}
+                                  </span>
+                                  <div>
+                                    <FnButton
+                                      size="xs"
+                                      variant="primary"
+                                      onClick={() =>
+                                        handleBookService(option.id)
+                                      }
+                                    >
+                                      Book Now
+                                    </FnButton>
+                                  </div>
+                                </div>
+                              </motion.div>
+                            ))
+                          ) : (
                             <motion.div
-                              key={option.id}
                               className={styles.subServiceItem}
                               initial={{ opacity: 0, x: -10 }}
                               animate={{ opacity: 1, x: 0 }}
-                              transition={{
-                                duration: 0.2,
-                                delay: optionIndex * 0.05,
-                              }}
                             >
                               <div className={styles.subServiceItem__icon}>
-                                {option.icon}
+                                <Package />
                               </div>
                               <div className={styles.subServiceItem__content}>
                                 <h4 className={styles.subServiceItem__title}>
-                                  {option.title}
+                                  {service.name}
                                 </h4>
-                                <p className={styles.subServiceItem__description}>
-                                  {option.description}
+                                <p
+                                  className={styles.subServiceItem__description}
+                                >
+                                  {service.description}
                                 </p>
-                                <span className={styles.subServiceItem__duration}>
+                                <span
+                                  className={styles.subServiceItem__duration}
+                                >
                                   <Timer size={12} />
-                                  From ₦{option.price.toLocaleString()}
+                                  From ₦{service.price.toLocaleString()}
                                 </span>
                                 <div>
-                                  <Link href={`/dashboard/subscriptions/add?service=${service._id}`}>
+                                  <Link
+                                    href={`/dashboard/subscriptions/add?service=${service._id}`}
+                                  >
                                     <FnButton
                                       size="xs"
                                       variant="primary"
                                       onClick={() => {
                                         console.log(
-                                          "Booking service option:",
-                                          option.id
+                                          "Booking service:",
+                                          service._id
                                         );
                                       }}
                                     >
@@ -283,52 +346,13 @@ const CTASection: React.FC = () => {
                                 </div>
                               </div>
                             </motion.div>
-                          ))
-                        ) : (
-                          <motion.div
-                            className={styles.subServiceItem}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                          >
-                            <div className={styles.subServiceItem__icon}>
-                              <Package />
-                            </div>
-                            <div className={styles.subServiceItem__content}>
-                              <h4 className={styles.subServiceItem__title}>
-                                {service.name}
-                              </h4>
-                              <p className={styles.subServiceItem__description}>
-                                {service.description}
-                              </p>
-                              <span className={styles.subServiceItem__duration}>
-                                <Timer size={12} />
-                                From ₦{service.price.toLocaleString()}
-                              </span>
-                              <div>
-                                <Link href={`/dashboard/subscriptions/add?service=${service._id}`}>
-                                  <FnButton
-                                    size="xs"
-                                    variant="primary"
-                                    onClick={() => {
-                                      console.log(
-                                        "Booking service:",
-                                        service._id
-                                      );
-                                    }}
-                                  >
-                                    Book Now
-                                  </FnButton>
-                                </Link>
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            );
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              );
             })}
           </div>
         </div>
@@ -377,6 +401,14 @@ const CTASection: React.FC = () => {
           </div>
         </motion.div>
       </div>
+
+      {selectedService && (
+        <CleaningServiceModal
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          service={selectedService}
+        />
+      )}
     </div>
   );
 };
