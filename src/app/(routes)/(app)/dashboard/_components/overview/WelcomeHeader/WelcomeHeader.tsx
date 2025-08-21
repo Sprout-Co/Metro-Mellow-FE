@@ -8,7 +8,8 @@ import styles from "./WelcomeHeader.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import AppointmentCard from "@/components/ui/AppointmentCard";
 import { openServicesListDrawer } from "@/lib/redux/slices/uiSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/lib/redux";
 
 interface WelcomeHeaderProps {
   firstName?: string;
@@ -101,10 +102,10 @@ const mockCustomerBookings = [
 // Toggle this to show/hide upcoming services for testing
 const HAS_UPCOMING_SERVICES = true;
 
-const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
-  firstName = "Sarah",
-}) => {
+const WelcomeHeader: React.FC<WelcomeHeaderProps> = () => {
   const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.auth);
+  const firstName = user?.firstName;
 
   const currentCustomerBookings = mockCustomerBookings;
   // Filter and sort upcoming bookings (same logic as real GraphQL version)

@@ -7,8 +7,9 @@ import styles from "./Navbar.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import { Bell, ChevronDown, MapPin, Menu, User } from "lucide-react";
 import AddAddressModal from "./AddAddressModal/AddAddressModal";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openServicesListDrawer } from "@/lib/redux/slices/uiSlice";
+import { RootState } from "@/lib/redux/store";
 
 // Icons (you can replace these with your preferred icon library)
 
@@ -56,6 +57,7 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
+  const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   return (
     <nav className={styles.navbar}>
@@ -99,16 +101,18 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
           </motion.div>
 
           {/* Cart */}
-          {/* <motion.div className={styles.navbar__iconButton}>
+          <motion.div className={styles.navbar__iconButton}>
             <div className={styles.navbar__cartContainer}>
               <CartIcon />
               <div className={styles.navbar__cartBadge}>0</div>
             </div>
-          </motion.div> */}
+          </motion.div>
 
           {/* User Profile */}
           <motion.div className={styles.navbar__profile}>
-            <span className={styles.navbar__profileGreeting}>Hi, Sarah</span>
+            <span className={styles.navbar__profileGreeting}>
+              Hi, {user?.firstName}
+            </span>
             <div className={styles.navbar__profileAvatar}>
               <User />
             </div>
