@@ -46,6 +46,54 @@
     flex: 1;
   }
 
+  // Loading and Error States
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xl");
+    text-align: center;
+    
+    p {
+      @include font-secondary;
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      margin-top: spacing("md");
+    }
+  }
+
+  &__loadingSpinner {
+    animation: spin 1s linear infinite;
+    color: color("primary", "base");
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  &__error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xl");
+    text-align: center;
+    gap: spacing("md");
+  }
+
+  &__errorMessage {
+    @include font-secondary;
+    @include font-size("sm");
+    color: color("status", "error");
+    margin: 0;
+  }
+
   &__title {
     @include font-size("lg");
     @include font-weight("bold");
@@ -215,20 +263,18 @@
   &__services {
     display: flex;
     flex-direction: column;
-    gap: spacing("lg");
+    gap: spacing("sm");
   }
 
   &__serviceCard {
     background: color("neutral", "white");
     border: 1px solid color("neutral", "lighter");
-    border-radius: border-radius("xl");
-    padding: spacing("lg");
-    position: relative;
-    transition: all 0.2s ease;
+    border-radius: border-radius("lg");
+    overflow: hidden;
+    transition: all 0.3s ease;
 
     &:hover {
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     }
   }
 
@@ -251,79 +297,188 @@
   }
 
   &__serviceHeader {
+    width: 100%;
     display: flex;
     align-items: center;
     gap: spacing("md");
-    margin-bottom: spacing("md");
+    padding: spacing("md") spacing("lg");
+    background: color("neutral", "white");
+    border: none;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md");
+      gap: spacing("sm");
+    }
+
+    &:hover {
+      background: color("neutral", "lightest");
+    }
+
+    &--active {
+      background: linear-gradient(to right, rgba(7, 80, 86, 0.03), transparent);
+    }
   }
 
   &__serviceIcon {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     border-radius: border-radius("lg");
     background: color("neutral", "lightest");
     display: flex;
     align-items: center;
     justify-content: center;
-    color: color("primary", "base");
+    transition: all 0.3s ease;
     flex-shrink: 0;
 
     svg {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
+      transition: transform 0.2s ease;
+    }
+
+    @include breakpoint-down("sm") {
+      width: 40px;
+      height: 40px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
     }
   }
 
-  &__serviceName {
-    @include font-size("body-2");
-    @include font-weight("bold");
-    color: color("neutral", "darkest");
-    margin: 0;
+  &__serviceInfo {
     flex: 1;
+    min-width: 0;
+  }
+
+  &__serviceName {
+    @include font-family("heading");
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xxs");
+    line-height: line-height("tight");
   }
 
   &__serviceDesc {
+    @include font-secondary;
     @include font-size("sm");
+    @include font-weight("regular");
     color: color("neutral", "dark");
-    line-height: 1.5;
-    margin: 0 0 spacing("lg") 0;
+    line-height: line-height("snug");
   }
 
-  &__serviceDetails {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: spacing("md");
-    padding: spacing("md");
+  &__serviceArrow {
+    width: 20px;
+    height: 20px;
+    color: color("neutral", "medium");
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  // Service Options (similar to accordion content)
+  &__serviceOptions {
+    overflow: hidden;
     background: color("neutral", "lightest");
-    border-radius: border-radius("lg");
-    margin-bottom: spacing("lg");
+    border-top: 1px solid color("neutral", "lighter");
   }
 
-  &__servicePrice,
-  &__serviceDuration {
+  // Options List (similar to sub services list)
+  &__optionsList {
+    padding: spacing("lg");
     display: flex;
     flex-direction: column;
-    gap: spacing("xs");
+    gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md");
+      gap: spacing("sm");
+    }
   }
 
-  &__serviceLabel {
-    @include font-size("xs");
-    color: color("neutral", "medium");
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+  // Option Item (similar to sub service item)
+  &__optionItem {
+    display: flex;
+    gap: spacing("md");
+    padding: spacing("sm");
+    background: color("neutral", "white");
+    border-radius: border-radius("md");
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateX(4px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
   }
 
-  &__serviceValue {
+  &__optionIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: border-radius("md");
+    background: color("neutral", "lightest");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: color("neutral", "dark");
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__optionContent {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__optionTitle {
+    @include font-secondary;
     @include font-size("sm");
     @include font-weight("semibold");
     color: color("neutral", "darkest");
-    display: flex;
+    margin-bottom: spacing("xxs");
+    line-height: line-height("tight");
+  }
+
+  &__optionDesc {
+    @include font-secondary;
+    @include font-size("xs");
+    @include font-weight("regular");
+    color: color("neutral", "dark");
+    line-height: line-height("snug");
+    margin-bottom: spacing("xs");
+  }
+
+  &__optionPrice {
+    display: inline-flex;
     align-items: center;
-    gap: spacing("xs");
+    gap: spacing("xxs");
+    @include font-secondary;
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("primary", "base");
+    padding: 2px spacing("xs");
+    background: color("primary", "lighter");
+    background: rgba(7, 80, 86, 0.08);
+    border-radius: border-radius("sm");
 
     svg {
-      flex-shrink: 0;
-      color: color("neutral", "medium");
+      width: 12px;
+      height: 12px;
     }
   }
 }
