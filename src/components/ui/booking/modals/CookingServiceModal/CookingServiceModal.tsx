@@ -229,22 +229,11 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      maxWidth="1200px"
+      maxWidth="800px"
       showCloseButton={true}
       className={styles.cookingServiceModal}
     >
       <div className={styles.modal__container}>
-        {/* Image Section */}
-        <div className={styles.modal__imageSection}>
-          <Image
-            src={serviceImage}
-            alt={serviceTitle}
-            width={500}
-            height={500}
-            className={styles.modal__image}
-          />
-        </div>
-
         {/* Details Section */}
         <div className={styles.modal__detailsSection}>
           {/* Service Title and Description */}

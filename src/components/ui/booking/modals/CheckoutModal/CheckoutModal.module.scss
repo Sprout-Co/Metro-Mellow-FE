@@ -16,7 +16,7 @@
 
   // On desktop, don't cover the slide panel area
   @include breakpoint-up("md") {
-    width: calc(100% - 450px); // Match the backdrop width
+    // width: calc(100% - 450px); // Match the backdrop width
   }
 
   &__backdrop {

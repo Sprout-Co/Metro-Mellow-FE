@@ -240,13 +240,13 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      maxWidth="1200px"
+      maxWidth="800px"
       showCloseButton={true}
       className={styles.cleaningServiceModal}
     >
       <div className={styles.modal__container}>
         {/* Image Section */}
-        <div className={styles.modal__imageSection}>
+        {/* <div className={styles.modal__imageSection}>
           <Image
             src={serviceOption?.imageUrl || ""}
             alt={serviceTitle}
@@ -254,7 +254,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
             height={500}
             className={styles.modal__image}
           />
-        </div>
+        </div> */}
 
         {/* Details Section */}
         <div className={styles.modal__detailsSection}>
