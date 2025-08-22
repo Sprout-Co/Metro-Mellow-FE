@@ -13,11 +13,7 @@
   &__container {
     display: flex;
     flex-direction: column;
-    background: linear-gradient(
-      135deg,
-      color("neutral", "white") 0%,
-      color("neutral", "lightest") 100%
-    );
+    background: color("neutral", "white");
 
     @include breakpoint-up("md") {
       flex-direction: row;
@@ -38,7 +34,7 @@
   }
 
   &__header {
-    margin-bottom: spacing("lg");
+    margin-bottom: spacing("xl");
     text-align: center;
 
     @include breakpoint-up("lg") {
@@ -68,26 +64,11 @@
     align-items: center;
     justify-content: space-between;
     padding: spacing("lg");
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    background: color("primary", "base");
     border-radius: border-radius("xl");
-    margin: spacing("lg") 0;
+    margin: spacing("xl") 0;
     position: relative;
     overflow: hidden;
-
-    &::after {
-      content: "";
-      position: absolute;
-      top: -50%;
-      right: -10%;
-      width: 40%;
-      height: 200%;
-      background: radial-gradient(
-        circle at center,
-        rgba(255, 255, 255, 0.08) 0%,
-        transparent 60%
-      );
-      pointer-events: none;
-    }
   }
 
   &__priceLabel {
@@ -119,10 +100,15 @@
     &::-webkit-scrollbar-thumb {
       background-color: color("neutral", "light");
       border-radius: 6px;
+
+      &:hover {
+        background-color: color("neutral", "medium");
+      }
     }
 
     &::-webkit-scrollbar-track {
       background: color("neutral", "lighter");
+      border-radius: 6px;
     }
   }
 }
@@ -133,12 +119,12 @@
   border-radius: border-radius("xl");
   padding: spacing("lg");
   margin-bottom: spacing("lg");
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   border: 1px solid color("neutral", "lighter");
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 
   &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -155,7 +141,7 @@
     content: "";
     width: 4px;
     height: 20px;
-    background: linear-gradient(180deg, #10b981 0%, #34d399 100%);
+    background: color("primary", "base");
     border-radius: border-radius("full");
   }
 }
@@ -176,67 +162,21 @@
   border: 2px solid color("neutral", "lighter");
   border-radius: border-radius("lg");
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 100%;
-    transition: width 0.3s ease;
-    z-index: 0;
-  }
-
-  &:nth-child(1)::before {
-    background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
-  }
-
-  &:nth-child(2)::before {
-    background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
-  }
-
-  &:nth-child(3)::before {
-    background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
-  }
 
   &:hover {
-    transform: translateX(4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-
-    &:nth-child(1) {
-      border-color: #10b981;
-    }
-    &:nth-child(2) {
-      border-color: #f59e0b;
-    }
-    &:nth-child(3) {
-      border-color: #ef4444;
-    }
+    border-color: color("primary", "light");
+    background: color("neutral", "white");
+    transform: translateX(2px);
   }
 
   &.selected {
-    &::before {
-      width: 100%;
-    }
+    border-color: color("primary", "base");
+    background: color("primary", "base");
 
     span {
       color: color("neutral", "white");
-      position: relative;
-      z-index: 1;
-    }
-
-    &:nth-child(1) {
-      border-color: #10b981;
-    }
-    &:nth-child(2) {
-      border-color: #f59e0b;
-    }
-    &:nth-child(3) {
-      border-color: #ef4444;
     }
   }
 
@@ -244,9 +184,7 @@
     @include font-size("sm");
     @include font-weight("medium");
     color: color("neutral", "darkest");
-    position: relative;
-    z-index: 1;
-    transition: color 0.3s ease;
+    transition: color 0.2s ease;
   }
 }
 
@@ -270,20 +208,19 @@
   border: 2px solid color("neutral", "lighter");
   border-radius: border-radius("lg");
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   text-align: center;
 
   &:hover {
-    border-color: #10b981;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+    border-color: color("primary", "light");
+    background: color("neutral", "white");
+    transform: translateY(-1px);
   }
 
   &.selected {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    border-color: transparent;
+    background: color("primary", "base");
+    border-color: color("primary", "base");
     color: color("neutral", "white");
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
   }
 
   span {
@@ -299,17 +236,13 @@
 .selectedAreasCount {
   margin-top: spacing("lg");
   padding: spacing("md");
-  background: linear-gradient(
-    135deg,
-    rgba(16, 185, 129, 0.1) 0%,
-    rgba(5, 150, 105, 0.05) 100%
-  );
+  background: color("neutral", "lightest");
   border-radius: border-radius("lg");
   text-align: center;
   @include font-size("body-2");
   @include font-weight("semibold");
-  color: #059669;
-  border: 1px solid #10b981;
+  color: color("primary", "base");
+  border: 1px solid color("primary", "light");
 }
 
 // Order Button
@@ -328,7 +261,7 @@
 .modal__orderButton {
   min-width: 200px;
   padding: spacing("md") spacing("xl");
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: color("primary", "base");
   color: color("neutral", "white");
   border: none;
   border-radius: border-radius("pill");
@@ -337,12 +270,12 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+  transition: all 0.2s ease;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+    background: color("primary", "dark");
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(7, 80, 86, 0.2);
   }
 
   &:active {

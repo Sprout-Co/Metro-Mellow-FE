@@ -12,12 +12,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  pointer-events: none; // Allow events to pass through
-
-  // On desktop, don't cover the slide panel area
-  @include breakpoint-up("md") {
-    // width: calc(100% - 450px); // Match the backdrop width
-  }
+  pointer-events: none;
 
   &__backdrop {
     position: absolute;
@@ -27,12 +22,7 @@
     height: 100%;
     background-color: color-alpha("neutral", "black", 0.6);
     backdrop-filter: blur(spacing("xs"));
-    pointer-events: auto; // Re-enable pointer events for backdrop
-
-    // On desktop, backdrop should cover full height but not the slide panel width
-    @include breakpoint-up("md") {
-      width: 100%; // Full width of the reduced modal container
-    }
+    pointer-events: auto;
   }
 
   &__container {
@@ -46,7 +36,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    pointer-events: auto; // Re-enable pointer events for the modal content
+    pointer-events: auto;
 
     @include breakpoint-down("sm") {
       width: 95%;
@@ -62,11 +52,7 @@
     padding: spacing("lg") spacing("xl");
     border-bottom: map-get($border-width, "thin") solid
       color("neutral", "lighter");
-    background: linear-gradient(
-      135deg,
-      color-alpha("primary", "base", 0.02),
-      color-alpha("primary", "light", 0.03)
-    );
+    background: color("neutral", "white");
     flex-shrink: 0;
   }
 
@@ -84,13 +70,13 @@
     align-items: center;
     justify-content: center;
     color: color("neutral", "dark");
-    background-color: color-alpha("neutral", "medium", 0.1);
+    background-color: color("neutral", "lightest");
     border: none;
     cursor: pointer;
     transition: $transition-fast;
 
     &:hover {
-      background-color: color-alpha("neutral", "medium", 0.2);
+      background-color: color("neutral", "lighter");
       color: color("neutral", "black");
       transform: rotate(90deg);
     }
@@ -106,22 +92,22 @@
     padding: spacing("xl");
     overflow-y: auto;
 
-    // Custom scrollbar
     &::-webkit-scrollbar {
       width: spacing("xs");
     }
 
     &::-webkit-scrollbar-track {
       background: color("neutral", "lightest");
+      border-radius: border-radius("full");
     }
 
     &::-webkit-scrollbar-thumb {
       background: color("neutral", "light");
       border-radius: border-radius("full");
-    }
 
-    &::-webkit-scrollbar-thumb:hover {
-      background: color("neutral", "medium");
+      &:hover {
+        background: color("neutral", "medium");
+      }
     }
   }
 
@@ -175,7 +161,7 @@
 
     &:focus {
       border-color: color("primary", "base");
-      box-shadow: map-get($shadows, "focus");
+      box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.1);
       outline: none;
     }
 
@@ -185,7 +171,6 @@
       cursor: not-allowed;
     }
 
-    // Date input specific styles
     &[type="date"] {
       padding-right: spacing("2xl");
 
@@ -221,7 +206,6 @@
     cursor: pointer;
     height: auto;
 
-    // Custom dropdown arrow
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
     background-position: right spacing("md") center;
     background-repeat: no-repeat;
@@ -230,7 +214,7 @@
 
     &:focus {
       border-color: color("primary", "base");
-      box-shadow: map-get($shadows, "focus");
+      box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.1);
       outline: none;
     }
 
@@ -312,56 +296,6 @@
     @include font-weight("bold");
   }
 
-  // Animation states
-  &__container {
-    // Ensure smooth animations
-    will-change: transform;
-  }
-
-  // Loading states
-  &__form {
-    &--loading {
-      pointer-events: none;
-      opacity: 0.7;
-    }
-  }
-
-  // Error states
-  &__input,
-  &__select {
-    &--error {
-      border-color: color("status", "error");
-
-      &:focus {
-        border-color: color("status", "error");
-        box-shadow: map-get($shadows, "focus-error");
-      }
-    }
-  }
-
-  // Success states
-  &__input,
-  &__select {
-    &--success {
-      border-color: color("status", "success");
-    }
-  }
-
-  // Responsive adjustments
-  @include breakpoint-down("md") {
-    &__container {
-      max-width: 420px;
-    }
-
-    &__content {
-      padding: spacing("lg");
-    }
-
-    &__header {
-      padding: spacing("md") spacing("lg");
-    }
-  }
-
   // Address list styles
   &__addressList {
     display: flex;
@@ -389,13 +323,13 @@
 
     &:hover {
       border-color: color("primary", "light");
-      background-color: color-alpha("primary", "lighter", 0.1);
+      background-color: color("neutral", "lightest");
     }
 
     &__selected {
       border-color: color("primary", "base");
-      background-color: color-alpha("primary", "lighter", 0.2);
-      box-shadow: map-get($shadows, "sm");
+      background-color: color("primary", "lighter");
+      box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.1);
     }
   }
 
@@ -418,8 +352,8 @@
 
   &__addressCardDefault {
     @include caption;
-    background-color: color("primary", "lighter");
-    color: color("primary", "dark");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
     padding: spacing("xxs") spacing("xs");
     border-radius: border-radius("sm");
     @include font-weight("medium");
@@ -440,7 +374,7 @@
   }
 
   &__noAddress {
-    background-color: color-alpha("neutral", "lightest", 0.5);
+    background-color: color("neutral", "lightest");
     border: map-get($border-width, "thin") dashed color("neutral", "light");
     border-radius: border-radius("lg");
     padding: spacing("lg");

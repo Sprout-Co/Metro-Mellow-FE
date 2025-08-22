@@ -11,7 +11,7 @@
   height: 100vh;
   background-color: color("neutral", "white");
   box-shadow: map-get($shadows, "xl");
-  z-index: z-index("popover"); // Higher than modal to ensure it's above checkout modal
+  z-index: z-index("popover");
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -64,7 +64,7 @@
     padding: spacing("md") spacing("sm");
     cursor: pointer;
     transition: $transition-fast;
-    z-index: z-index("popover"); // Same as slide panel to stay above checkout modal
+    z-index: z-index("popover");
     display: flex;
     align-items: center;
     gap: spacing("xs");
@@ -138,23 +138,23 @@
     flex: 1;
     padding: spacing("xl");
     overflow-y: auto;
-    
-    // Custom scrollbar
+
     &::-webkit-scrollbar {
       width: spacing("xs");
     }
 
     &::-webkit-scrollbar-track {
       background: color("neutral", "lightest");
+      border-radius: border-radius("full");
     }
 
     &::-webkit-scrollbar-thumb {
       background: color("neutral", "light");
       border-radius: border-radius("full");
-    }
 
-    &::-webkit-scrollbar-thumb:hover {
-      background: color("neutral", "medium");
+      &:hover {
+        background: color("neutral", "medium");
+      }
     }
   }
 
@@ -184,14 +184,10 @@
   &__configuration {
     margin-bottom: spacing("xl");
     padding: spacing("xl");
-    background: linear-gradient(
-      135deg,
-      color("neutral", "white"),
-      color("neutral", "lightest")
-    );
+    background: color("neutral", "white");
     border-radius: border-radius("xl");
     border: map-get($border-width, "thin") solid color("neutral", "lighter");
-    box-shadow: map-get($shadows, "sm");
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     position: relative;
 
     &::before {
@@ -201,11 +197,7 @@
       left: 0;
       right: 0;
       height: spacing("xs");
-      background: linear-gradient(
-        90deg,
-        color("primary", "base"),
-        color("primary", "light")
-      );
+      background: color("primary", "base");
       border-radius: border-radius("xl") border-radius("xl") 0 0;
     }
   }
@@ -235,14 +227,14 @@
     justify-content: space-between;
     align-items: center;
     padding: spacing("md");
-    background-color: color("neutral", "white");
+    background-color: color("neutral", "lightest");
     border-radius: border-radius("lg");
     border: map-get($border-width, "thin") solid color("neutral", "lighter");
     transition: $transition-fast;
 
     &:hover {
       transform: translateY(-1px);
-      box-shadow: map-get($shadows, "sm");
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
     }
   }
 
@@ -265,7 +257,7 @@
     @include body-2;
     color: color("primary", "base");
     @include font-weight("bold");
-    background-color: color("primary", "lighter");
+    background-color: color("neutral", "white");
     padding: spacing("xs") spacing("sm");
     border-radius: border-radius("md");
     border: map-get($border-width, "thin") solid color("primary", "light");
@@ -306,14 +298,6 @@
     }
   }
 
-  // Animation states
-  &__imageContainer,
-  &__content {
-    // Ensure smooth animations
-    will-change: transform;
-  }
-
-  // Responsive adjustments
   @include breakpoint-down("md") {
     &__content {
       padding: spacing("lg");
@@ -343,4 +327,4 @@
       gap: spacing("xs");
     }
   }
-} 
+}
