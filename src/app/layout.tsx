@@ -11,6 +11,7 @@ import {
   GoogleTagManagerScript,
   GoogleTagManager,
 } from "@/components/common/GoogleTagManager";
+import { CommonInitializer } from "@/components/providers/CommonProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -49,7 +50,7 @@ export default function RootLayout({
         <ReduxProvider>
           <ApolloWrapper>
             <AuthInitializer>
-              {children}
+              <CommonInitializer>{children}</CommonInitializer>
               {/* <ModalProvider /> */}
             </AuthInitializer>
           </ApolloWrapper>

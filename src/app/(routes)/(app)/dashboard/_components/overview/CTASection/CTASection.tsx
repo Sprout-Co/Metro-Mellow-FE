@@ -5,50 +5,23 @@ import { ArrowRight, Check, Plus, Loader2 } from "lucide-react";
 import styles from "./CTASection.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import ServiceAccordion from "@/components/ui/ServiceAccordion";
-import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
-import {
-  Service,
-  ServiceCategory,
-  ServiceOption,
-  ServiceStatus,
-} from "@/graphql/api";
+import { Service, ServiceCategory, ServiceOption } from "@/graphql/api";
 import CleaningServiceModal from "@/components/ui/booking/modals/CleaningServiceModal";
 import LaundryServiceModal from "@/components/ui/booking/modals/LaundryServiceModal";
 import CookingServiceModal from "@/components/ui/booking/modals/CookingServiceModal";
 import PestControlServiceModal from "@/components/ui/booking/modals/PestControlServiceModal";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/redux/store";
 
 const CTASection: React.FC = () => {
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const { handleGetServices } = useServiceOperations();
+  // Services are now initialized at app level, so we just need to access the state
+  const { services, loading, error } = useSelector(
+    (state: RootState) => state.services
+  );
   const [isOpen, setIsOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedServiceOption, setSelectedServiceOption] =
     useState<ServiceOption | null>(null);
-  
-  // Fetch services on component mount
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        // Fetch only active services
-        const fetchedServices = await handleGetServices(
-          undefined,
-          ServiceStatus.Active
-        );
-        setServices(fetchedServices || []);
-      } catch (err) {
-        console.error("Failed to fetch services:", err);
-        setError("Failed to load services. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchServices();
-  }, [handleGetServices]);
 
   const renderServiceModal = () => {
     if (!selectedService || !selectedServiceOption) return null;

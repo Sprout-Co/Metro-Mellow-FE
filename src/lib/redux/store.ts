@@ -1,9 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { persistStore, persistReducer } from 'redux-persist';
-import { combineReducers } from '@reduxjs/toolkit';
-import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
-import authReducer from './slices/authSlice';
-import uiReducer from './slices/uiSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import { combineReducers } from "@reduxjs/toolkit";
+import createWebStorage from "redux-persist/lib/storage/createWebStorage";
+import authReducer from "./slices/authSlice";
+import uiReducer from "./slices/uiSlice";
+import servicesReducer from "./slices/servicesSlice";
 
 // Create a noop storage for SSR compatibility
 const createNoopStorage = () => {
@@ -21,22 +22,23 @@ const createNoopStorage = () => {
 };
 
 // Use noop storage in SSR environment, otherwise use localStorage
-const storage = typeof window !== "undefined" 
-  ? createWebStorage("local") 
-  : createNoopStorage();
+const storage =
+  typeof window !== "undefined"
+    ? createWebStorage("local")
+    : createNoopStorage();
 
 // Persist configuration for auth slice
 const authPersistConfig = {
-  key: 'auth',
+  key: "auth",
   storage,
-  whitelist: ['user', 'token', 'isAuthenticated'], // Only persist these fields
+  whitelist: ["user", "token", "isAuthenticated"], // Only persist these fields
 };
 
-// Persist configuration for UI slice  
+// Persist configuration for UI slice
 const uiPersistConfig = {
-  key: 'ui',
+  key: "ui",
   storage,
-  whitelist: ['activeTab', 'isSidebarOpen'], // Persist UI preferences
+  whitelist: ["activeTab", "isSidebarOpen"], // Persist UI preferences
 };
 
 // Create persisted reducers
@@ -47,6 +49,7 @@ const persistedUiReducer = persistReducer(uiPersistConfig, uiReducer);
 const rootReducer = combineReducers({
   auth: persistedAuthReducer,
   ui: persistedUiReducer,
+  services: servicesReducer, // No persistence for services - keep it simple
 });
 
 // Configure store with Redux Toolkit
@@ -55,10 +58,10 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
       },
     }),
-  devTools: process.env.NODE_ENV !== 'production',
+  devTools: process.env.NODE_ENV !== "production",
 });
 
 // Create persistor for redux-persist
