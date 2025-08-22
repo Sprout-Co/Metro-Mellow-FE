@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
 import {
   ChevronDown,
   Timer,
@@ -9,10 +8,17 @@ import {
   Droplets,
   Utensils,
   Bug,
+  Loader2,
 } from "lucide-react";
 import styles from "./ServiceAccordion.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import { Service, ServiceCategory, ServiceOption } from "@/graphql/api";
+import CleaningServiceModal from "../booking/modals/CleaningServiceModal";
+import LaundryServiceModal from "../booking/modals/LaundryServiceModal";
+import CookingServiceModal from "../booking/modals/CookingServiceModal";
+import PestControlServiceModal from "../booking/modals/PestControlServiceModal";
+import { RootState } from "@/lib/redux/store";
+import { useSelector } from "react-redux";
 
 // Helper function to get icon for service category
 const getServiceIcon = (category: ServiceCategory) => {
@@ -59,39 +65,144 @@ const getServiceOptions = (options: Service["options"] = []) => {
 };
 
 interface ServiceAccordionProps {
-  services: Service[];
-  onBookService?: (serviceId: string, serviceOptionId: string) => void;
-  onBookServiceWithoutOption?: (serviceId: string) => void;
+  searchQuery?: string;
   className?: string;
 }
 
 const ServiceAccordion: React.FC<ServiceAccordionProps> = ({
-  services,
-  onBookService,
-  onBookServiceWithoutOption,
+  searchQuery,
   className,
 }) => {
   const [expandedService, setExpandedService] = useState<string | null>(null);
+  const { services, loading, error } = useSelector(
+    (state: RootState) => state.services
+  );
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [selectedServiceOption, setSelectedServiceOption] =
+    useState<ServiceOption | null>(null);
+
+  const filteredServices = services.filter(
+    (service) =>
+      service.name.toLowerCase().includes(searchQuery?.toLowerCase() || "") ||
+      service.description
+        .toLowerCase()
+        .includes(searchQuery?.toLowerCase() || "")
+  );
 
   const toggleService = (serviceId: string) => {
     setExpandedService(expandedService === serviceId ? null : serviceId);
   };
 
   const handleBookService = (serviceId: string, serviceOptionId: string) => {
-    if (onBookService) {
-      onBookService(serviceId, serviceOptionId);
+    // if (onBookService) {
+    //   onBookService(serviceId, serviceOptionId);
+    // }
+    console.log("Booking service:", serviceId);
+    console.log("Booking service:", services);
+    const service = services.find((service) => service._id === serviceId);
+    if (service) {
+      setSelectedService(service);
+      setSelectedServiceOption(
+        service.options?.find((option) => option.id === serviceOptionId) || null
+      );
+    }
+    setIsOpen(true);
+  };
+
+  const renderServiceModal = () => {
+    if (!selectedService || !selectedServiceOption) return null;
+    switch (selectedService?.category) {
+      case ServiceCategory.Cleaning:
+        return (
+          <CleaningServiceModal
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            service={selectedService}
+            serviceOption={selectedServiceOption}
+          />
+        );
+      case ServiceCategory.Laundry:
+        return (
+          <LaundryServiceModal
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            service={selectedService}
+            serviceOption={selectedServiceOption}
+          />
+        );
+      case ServiceCategory.Cooking:
+        return (
+          <CookingServiceModal
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            service={selectedService}
+            serviceOption={selectedServiceOption}
+          />
+        );
+      case ServiceCategory.PestControl:
+        return (
+          <PestControlServiceModal
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            service={selectedService}
+            serviceOption={selectedServiceOption}
+          />
+        );
+      default:
+        return null;
     }
   };
 
-  const handleBookServiceWithoutOption = (serviceId: string) => {
-    if (onBookServiceWithoutOption) {
-      onBookServiceWithoutOption(serviceId);
-    }
-  };
+  if (loading) {
+    return (
+      <div className={styles.ctaSection}>
+        <div className={styles.minimalLayout}>
+          <div className={styles.servicesWrapper}>
+            <div className={styles.header}>
+              <h2 className={styles.header__title}>Book a Service</h2>
+              <p className={styles.header__subtitle}>
+                Loading available services...
+              </p>
+            </div>
+            <div className={styles.loadingContainer}>
+              <Loader2 className={styles.loadingSpinner} size={32} />
+              <p>Fetching services...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.ctaSection}>
+        <div className={styles.minimalLayout}>
+          <div className={styles.servicesWrapper}>
+            <div className={styles.header}>
+              <h2 className={styles.header__title}>Book a Service</h2>
+              <p className={styles.header__subtitle}>Something went wrong</p>
+            </div>
+            <div className={styles.errorContainer}>
+              <p className={styles.errorMessage}>{error}</p>
+              <FnButton
+                onClick={() => window.location.reload()}
+                variant="primary"
+                size="sm"
+              >
+                Try Again
+              </FnButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`${styles.accordionContainer} ${className || ""}`}>
-      {services.map((service, index) => {
+      {filteredServices.map((service, index) => {
         const serviceIcon = getServiceIcon(service.category);
         const serviceColor = getServiceColor(service.category);
         const serviceOptions = getServiceOptions(service.options);
@@ -227,19 +338,9 @@ const ServiceAccordion: React.FC<ServiceAccordionProps> = ({
                             From ₦{service.price.toLocaleString()}
                           </span>
                           <div>
-                            <Link
-                              href={`/dashboard/subscriptions/add?service=${service._id}`}
-                            >
-                              <FnButton
-                                size="xs"
-                                variant="primary"
-                                onClick={() => {
-                                  handleBookServiceWithoutOption(service._id);
-                                }}
-                              >
-                                Book Now
-                              </FnButton>
-                            </Link>
+                            <FnButton size="xs" variant="primary">
+                              Book Now
+                            </FnButton>
                           </div>
                         </div>
                       </motion.div>
@@ -251,6 +352,8 @@ const ServiceAccordion: React.FC<ServiceAccordionProps> = ({
           </motion.div>
         );
       })}
+
+      {renderServiceModal()}
     </div>
   );
 };

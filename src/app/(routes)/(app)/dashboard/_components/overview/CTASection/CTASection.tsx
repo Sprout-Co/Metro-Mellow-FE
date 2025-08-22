@@ -1,131 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Check, Plus, Loader2 } from "lucide-react";
+import { Check, Plus } from "lucide-react";
 import styles from "./CTASection.module.scss";
-import FnButton from "@/components/ui/Button/FnButton";
 import ServiceAccordion from "@/components/ui/ServiceAccordion";
-import { Service, ServiceCategory, ServiceOption } from "@/graphql/api";
-import CleaningServiceModal from "@/components/ui/booking/modals/CleaningServiceModal";
-import LaundryServiceModal from "@/components/ui/booking/modals/LaundryServiceModal";
-import CookingServiceModal from "@/components/ui/booking/modals/CookingServiceModal";
-import PestControlServiceModal from "@/components/ui/booking/modals/PestControlServiceModal";
-import { useSelector } from "react-redux";
-import { RootState } from "@/lib/redux/store";
 
 const CTASection: React.FC = () => {
-  // Services are now initialized at app level, so we just need to access the state
-  const { services, loading, error } = useSelector(
-    (state: RootState) => state.services
-  );
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<Service | null>(null);
-  const [selectedServiceOption, setSelectedServiceOption] =
-    useState<ServiceOption | null>(null);
-
-  const renderServiceModal = () => {
-    if (!selectedService || !selectedServiceOption) return null;
-    switch (selectedService?.category) {
-      case ServiceCategory.Cleaning:
-        return (
-          <CleaningServiceModal
-            isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
-            service={selectedService}
-            serviceOption={selectedServiceOption}
-          />
-        );
-      case ServiceCategory.Laundry:
-        return (
-          <LaundryServiceModal
-            isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
-            service={selectedService}
-            serviceOption={selectedServiceOption}
-          />
-        );
-      case ServiceCategory.Cooking:
-        return (
-          <CookingServiceModal
-            isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
-            service={selectedService}
-            serviceOption={selectedServiceOption}
-          />
-        );
-      case ServiceCategory.PestControl:
-        return (
-          <PestControlServiceModal
-            isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
-            service={selectedService}
-            serviceOption={selectedServiceOption}
-          />
-        );
-      default:
-        return null;
-    }
-  };
-
-  const handleBookService = (serviceId: string, serviceOptionId: string) => {
-    console.log("Booking service:", serviceId);
-    console.log("Booking service:", services);
-    const service = services.find((service) => service._id === serviceId);
-    if (service) {
-      setSelectedService(service);
-      setSelectedServiceOption(
-        service.options?.find((option) => option.id === serviceOptionId) || null
-      );
-    }
-    setIsOpen(true);
-  };
-
-  if (loading) {
-    return (
-      <div className={styles.ctaSection}>
-        <div className={styles.minimalLayout}>
-          <div className={styles.servicesWrapper}>
-            <div className={styles.header}>
-              <h2 className={styles.header__title}>Book a Service</h2>
-              <p className={styles.header__subtitle}>
-                Loading available services...
-              </p>
-            </div>
-            <div className={styles.loadingContainer}>
-              <Loader2 className={styles.loadingSpinner} size={32} />
-              <p>Fetching services...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className={styles.ctaSection}>
-        <div className={styles.minimalLayout}>
-          <div className={styles.servicesWrapper}>
-            <div className={styles.header}>
-              <h2 className={styles.header__title}>Book a Service</h2>
-              <p className={styles.header__subtitle}>Something went wrong</p>
-            </div>
-            <div className={styles.errorContainer}>
-              <p className={styles.errorMessage}>{error}</p>
-              <FnButton
-                onClick={() => window.location.reload()}
-                variant="primary"
-                size="sm"
-              >
-                Try Again
-              </FnButton>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className={styles.ctaSection}>
       <div className={styles.minimalLayout}>
@@ -138,13 +18,7 @@ const CTASection: React.FC = () => {
             </p>
           </div>
 
-          <ServiceAccordion
-            services={services}
-            onBookService={handleBookService}
-            onBookServiceWithoutOption={(serviceId) => {
-              console.log("Booking service:", serviceId);
-            }}
-          />
+          <ServiceAccordion />
         </div>
 
         {/* Subscription Sidebar */}
@@ -191,8 +65,6 @@ const CTASection: React.FC = () => {
           </div>
         </motion.div>
       </div>
-
-      {renderServiceModal()}
     </div>
   );
 };
