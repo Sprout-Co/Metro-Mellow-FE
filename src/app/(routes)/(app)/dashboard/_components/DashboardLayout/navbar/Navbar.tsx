@@ -10,6 +10,7 @@ import AddAddressModal from "./AddAddressModal/AddAddressModal";
 import { useDispatch, useSelector } from "react-redux";
 import { openServicesListDrawer } from "@/lib/redux/slices/uiSlice";
 import { RootState } from "@/lib/redux/store";
+import CartModal from "@/components/ui/booking/modals/CartModal/CartModal";
 
 // Icons (you can replace these with your preferred icon library)
 
@@ -55,10 +56,14 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCartModalOpen, setIsCartModalOpen] = useState(false);
   const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
+  const openCartModal = () => {
+    setIsCartModalOpen(true);
+  };
   return (
     <nav className={styles.navbar}>
       <div className={styles.navbar__container}>
@@ -102,7 +107,10 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
 
           {/* Cart */}
           <motion.div className={styles.navbar__iconButton}>
-            <div className={styles.navbar__cartContainer}>
+            <div
+              className={styles.navbar__cartContainer}
+              onClick={() => openCartModal()}
+            >
               <CartIcon />
               <div className={styles.navbar__cartBadge}>0</div>
             </div>
@@ -158,6 +166,13 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
       <AddAddressModal
         isOpen={isAddAddressModalOpen}
         onClose={() => setIsAddAddressModalOpen(false)}
+      />
+      <CartModal
+        isOpen={isCartModalOpen}
+        onClose={() => setIsCartModalOpen(false)}
+        items={[]}
+        onUpdateQuantity={() => {}}
+        onRemoveItem={() => {}}
       />
     </nav>
   );

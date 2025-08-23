@@ -9,24 +9,24 @@ import styles from "./CartModal.module.scss";
 import CheckoutModal, {
   CheckoutFormData,
 } from "../CheckoutModal/CheckoutModal";
+import { Service, ServiceOption } from "@/graphql/api";
 
-export interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
+// Cart item that extends the Service type with cart-specific properties
+export interface CartServiceItem extends Service {
   quantity: number;
-  variants: string[];
+  selectedOptions?: ServiceOption[];
+  selectedVariants?: string[]; // For additional customizations
 }
 
 interface CartModalProps {
   isOpen: boolean;
   onClose: () => void;
   onContinue?: (formData?: CheckoutFormData) => void;
-  items: CartItem[];
+  items: CartServiceItem[];
   onUpdateQuantity: (id: string, quantity: number) => void;
   onRemoveItem: (id: string) => void;
   onRemoveVariant?: (itemId: string, variant: string) => void;
+  onRemoveOption?: (itemId: string, optionId: string) => void;
 }
 
 export const CartModal: React.FC<CartModalProps> = ({
@@ -37,14 +37,19 @@ export const CartModal: React.FC<CartModalProps> = ({
   onUpdateQuantity,
   onRemoveItem,
   onRemoveVariant,
+  onRemoveOption,
 }) => {
   const [showShippingModal, setShowShippingModal] = useState(false);
 
-  // Calculate subtotal
-  const subtotal = items.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  // Calculate subtotal including selected options
+  const subtotal = items.reduce((sum, item) => {
+    const basePrice = item.price * item.quantity;
+    const optionsPrice =
+      item.selectedOptions?.reduce((optSum, option) => {
+        return optSum + option.price * item.quantity;
+      }, 0) || 0;
+    return sum + basePrice + optionsPrice;
+  }, 0);
 
   // Format price with NGN currency
   const formatPrice = (price: number) => {
@@ -99,10 +104,13 @@ export const CartModal: React.FC<CartModalProps> = ({
             <>
               <div className={styles.cartModal__items}>
                 {items.map((item) => (
-                  <div key={item.id} className={styles.cartModal__item}>
+                  <div key={item._id} className={styles.cartModal__item}>
                     <div className={styles.cartModal__itemImage}>
                       <Image
-                        src={item.image}
+                        src={
+                          item.imageUrl ||
+                          `/images/services/${item.service_id.toLowerCase()}.jpg`
+                        }
                         alt={item.name}
                         width={80}
                         height={80}
@@ -116,30 +124,56 @@ export const CartModal: React.FC<CartModalProps> = ({
                       </h3>
 
                       <div className={styles.cartModal__itemPrice}>
-                        NGN {item.price.toLocaleString()}
+                        {formatPrice(item.price)}
                       </div>
 
-                      {item.variants.length > 0 && (
-                        <div className={styles.cartModal__itemVariants}>
-                          {item.variants.map((variant, index) => (
-                            <div
-                              key={index}
-                              className={styles.cartModal__itemVariant}
-                            >
-                              {variant}
-                              <button
-                                className={styles.cartModal__variantRemove}
-                                aria-label={`Remove ${variant}`}
-                                onClick={() =>
-                                  onRemoveVariant?.(item.id, variant)
-                                }
+                      {/* Display selected options */}
+                      {item.selectedOptions &&
+                        item.selectedOptions.length > 0 && (
+                          <div className={styles.cartModal__itemVariants}>
+                            {item.selectedOptions.map((option) => (
+                              <div
+                                key={option.id}
+                                className={styles.cartModal__itemVariant}
                               >
-                                ✕
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                                {option.label} (+{formatPrice(option.price)})
+                                <button
+                                  className={styles.cartModal__variantRemove}
+                                  aria-label={`Remove ${option.label}`}
+                                  onClick={() =>
+                                    onRemoveOption?.(item._id, option.id)
+                                  }
+                                >
+                                  ✕
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                      {/* Display selected variants */}
+                      {item.selectedVariants &&
+                        item.selectedVariants.length > 0 && (
+                          <div className={styles.cartModal__itemVariants}>
+                            {item.selectedVariants.map((variant, index) => (
+                              <div
+                                key={index}
+                                className={styles.cartModal__itemVariant}
+                              >
+                                {variant}
+                                <button
+                                  className={styles.cartModal__variantRemove}
+                                  aria-label={`Remove ${variant}`}
+                                  onClick={() =>
+                                    onRemoveVariant?.(item._id, variant)
+                                  }
+                                >
+                                  ✕
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
 
                       <div className={styles.cartModal__itemActions}>
                         <div className={styles.cartModal__quantityControls}>
@@ -148,12 +182,12 @@ export const CartModal: React.FC<CartModalProps> = ({
                             onClick={() => {
                               console.log(
                                 "Decrement clicked for item:",
-                                item.id,
+                                item._id,
                                 "current quantity:",
                                 item.quantity
                               );
                               onUpdateQuantity(
-                                item.id,
+                                item._id,
                                 Math.max(1, item.quantity - 1)
                               );
                             }}
@@ -184,11 +218,11 @@ export const CartModal: React.FC<CartModalProps> = ({
                             onClick={() => {
                               console.log(
                                 "Increment clicked for item:",
-                                item.id,
+                                item._id,
                                 "current quantity:",
                                 item.quantity
                               );
-                              onUpdateQuantity(item.id, item.quantity + 1);
+                              onUpdateQuantity(item._id, item.quantity + 1);
                             }}
                             type="button"
                           >
@@ -212,7 +246,7 @@ export const CartModal: React.FC<CartModalProps> = ({
 
                         <button
                           className={styles.cartModal__itemRemove}
-                          onClick={() => onRemoveItem(item.id)}
+                          onClick={() => onRemoveItem(item._id)}
                           aria-label="Remove item"
                         >
                           <svg
@@ -242,7 +276,7 @@ export const CartModal: React.FC<CartModalProps> = ({
                   Sub-total
                 </span>
                 <span className={styles.cartModal__subtotalAmount}>
-                  NGN {subtotal.toLocaleString()}
+                  {formatPrice(subtotal)}
                 </span>
               </div>
 
@@ -261,11 +295,6 @@ export const CartModal: React.FC<CartModalProps> = ({
         </div>
       </Modal>
 
-      {/* <ShippingDetailsModal
-        isOpen={showShippingModal && isOpen}
-        onClose={handleShippingModalClose}
-        onContinue={handleShippingDetailsSubmit}
-      /> */}
       <CheckoutModal
         isOpen={showShippingModal}
         onClose={handleShippingModalClose}

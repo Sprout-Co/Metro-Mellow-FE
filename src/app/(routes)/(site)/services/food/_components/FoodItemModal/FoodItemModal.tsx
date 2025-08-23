@@ -5,16 +5,25 @@ import Image from "next/image";
 import Modal from "@/components/ui/Modal/Modal";
 import { Button } from "@/components/ui/Button/Button";
 import styles from "./FoodItemModal.module.scss";
+import { ServiceCategory, ServiceId } from "@/graphql/api";
 
 // Food item interface (should match with FoodMenuModal)
 interface FoodItem {
-  id: string;
+  _id: string;
   name: string;
   description: string;
   price: number;
-  image: string;
+  imageUrl: string;
   isSpicy: boolean;
   isTopRated: boolean;
+  category: ServiceCategory;
+  service_id: ServiceId;
+  label: string;
+  icon: string;
+  displayPrice: string;
+  status: string;
+  features?: string[];
+  inclusions?: string[];
 }
 
 interface FoodItemModalProps {
@@ -29,7 +38,9 @@ const FoodItemModal: React.FC<FoodItemModalProps> = ({
   foodItem,
 }) => {
   const [quantity, setQuantity] = useState(1);
-  const [selectedSpiceLevel, setSelectedSpiceLevel] = useState<"small" | "plenty" | null>(null);
+  const [selectedSpiceLevel, setSelectedSpiceLevel] = useState<
+    "small" | "plenty" | null
+  >(null);
   const [selectedProtein, setSelectedProtein] = useState<string | null>(null);
 
   const incrementQuantity = () => {
@@ -70,7 +81,7 @@ const FoodItemModal: React.FC<FoodItemModalProps> = ({
       <div className={styles.modal__content}>
         <div className={styles.modal__imageContainer}>
           <Image
-            src={foodItem.image}
+            src={foodItem.imageUrl}
             alt={foodItem.name}
             width={500}
             height={500}
@@ -97,18 +108,18 @@ const FoodItemModal: React.FC<FoodItemModalProps> = ({
           </div>
 
           <h2 className={styles.modal__title}>{foodItem.name}</h2>
-          
+
           <p className={styles.modal__description}>{foodItem.description}</p>
-          
+
           <div className={styles.modal__priceContainer}>
-            <div className={styles.modal__price}>
-              NGN {foodItem.price}
-            </div>
+            <div className={styles.modal__price}>NGN {foodItem.price}</div>
           </div>
-          
+
           <div className={styles.modal__options}>
-            <h3 className={styles.modal__optionsTitle}>Extras you might like</h3>
-            
+            <h3 className={styles.modal__optionsTitle}>
+              Extras you might like
+            </h3>
+
             <div className={styles.modal__spiceOptions}>
               <Button
                 type="button"
@@ -130,29 +141,29 @@ const FoodItemModal: React.FC<FoodItemModalProps> = ({
               </Button>
             </div>
           </div>
-          
+
           <div className={styles.modal__actionControls}>
             <div className={styles.modal__quantitySection}>
-              <button 
-                className={styles.modal__quantityButton} 
+              <button
+                className={styles.modal__quantityButton}
                 onClick={incrementQuantity}
                 aria-label="Increase quantity"
               >
                 +
               </button>
-              
+
               <span className={styles.modal__quantity}>{quantity}</span>
-              
-              <button 
-                className={styles.modal__quantityButton} 
+
+              <button
+                className={styles.modal__quantityButton}
                 onClick={decrementQuantity}
                 aria-label="Decrease quantity"
               >
                 -
               </button>
             </div>
-            
-            <Button 
+
+            <Button
               variant="primary"
               size="lg"
               onClick={handleOrder}
@@ -161,13 +172,15 @@ const FoodItemModal: React.FC<FoodItemModalProps> = ({
               ORDER
             </Button>
           </div>
-          
+
           <div className={styles.modal__proteinOptions}>
             {["Beef", "Chicken", "Turkey", "Salad"].map((protein) => (
               <button
                 key={protein}
                 className={`${styles.modal__proteinOption} ${
-                  selectedProtein === protein ? styles.modal__proteinOption_selected : ""
+                  selectedProtein === protein
+                    ? styles.modal__proteinOption_selected
+                    : ""
                 }`}
                 onClick={() => handleProteinSelect(protein)}
               >
@@ -181,4 +194,4 @@ const FoodItemModal: React.FC<FoodItemModalProps> = ({
   );
 };
 
-export default FoodItemModal; 
+export default FoodItemModal;
