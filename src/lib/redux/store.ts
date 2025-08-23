@@ -5,6 +5,7 @@ import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import authReducer from "./slices/authSlice";
 import uiReducer from "./slices/uiSlice";
 import servicesReducer from "./slices/servicesSlice";
+import cartReducer from "./slices/cartSlice";
 
 // Create a noop storage for SSR compatibility
 const createNoopStorage = () => {
@@ -41,15 +42,24 @@ const uiPersistConfig = {
   whitelist: ["activeTab", "isSidebarOpen"], // Persist UI preferences
 };
 
+// Persist configuration for cart slice
+const cartPersistConfig = {
+  key: "cart",
+  storage,
+  whitelist: ["items"], // Persist cart items
+};
+
 // Create persisted reducers
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 const persistedUiReducer = persistReducer(uiPersistConfig, uiReducer);
+const persistedCartReducer = persistReducer(cartPersistConfig, cartReducer);
 
 // Combine all reducers
 const rootReducer = combineReducers({
   auth: persistedAuthReducer,
   ui: persistedUiReducer,
   services: servicesReducer, // No persistence for services - keep it simple
+  cart: persistedCartReducer,
 });
 
 // Configure store with Redux Toolkit
