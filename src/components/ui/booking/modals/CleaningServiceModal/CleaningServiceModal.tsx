@@ -127,9 +127,11 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
       roomQuantities,
     };
 
-    if (onOrderSubmit) {
-      onOrderSubmit(configuration);
-    }
+    console.log("configuration", configuration);
+
+    // if (onOrderSubmit) {
+    //   onOrderSubmit(configuration);
+    // }
 
     setIsCheckoutModalOpen(true);
     setIsSlidePanelOpen(true);
@@ -185,16 +187,18 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   // Handle checkout completion
   const handleCheckoutComplete = async (formData: CheckoutFormData) => {
     try {
+      console.log("starting");
       const completeOrder: CreateBookingInput = {
         serviceId: service._id,
         service_category: service.category,
-        serviceOption: serviceOption?.service_id || "",
+        serviceOption: serviceOption?.service_id || ServiceId.StandardCleaning,
         date: formData.date,
         timeSlot: formData.timeSlot,
         address: formData.addressId || "",
         notes: `Frequency`,
         serviceDetails: {
-          serviceOption: serviceOption?.service_id || "",
+          serviceOption:
+            serviceOption?.service_id || ServiceId.StandardCleaning,
           cleaning: {
             cleaningType: serviceOption?.service_id as unknown as CleaningType,
             houseType: apartmentType,
@@ -245,17 +249,6 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
       className={styles.cleaningServiceModal}
     >
       <div className={styles.modal__container}>
-        {/* Image Section */}
-        {/* <div className={styles.modal__imageSection}>
-          <Image
-            src={serviceOption?.imageUrl || ""}
-            alt={serviceTitle}
-            width={500}
-            height={500}
-            className={styles.modal__image}
-          />
-        </div> */}
-
         {/* Details Section */}
         <div className={styles.modal__detailsSection}>
           {/* Service Title and Description */}

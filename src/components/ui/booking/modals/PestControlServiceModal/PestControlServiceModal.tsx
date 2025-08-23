@@ -166,7 +166,8 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
       const completeOrder: CreateBookingInput = {
         serviceId: service._id,
         service_category: service.category,
-        serviceOption: serviceOption?.service_id || "",
+        serviceOption:
+          serviceOption?.service_id || ServiceId.PestControlResidential,
         date: formData.date,
         timeSlot: formData.timeSlot,
         address: formData.addressId || "",
@@ -175,10 +176,10 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
           .map((a) => a.name)
           .join(", ")}`,
         serviceDetails: {
-          serviceOption: serviceOption?.service_id || "",
+          serviceOption:
+            serviceOption?.service_id || ServiceId.PestControlResidential,
           pestControl: {
-            treatmentType:
-              serviceOption?.service_id as unknown as TreatmentType,
+            treatmentType,
             severity,
             areas: areas.filter((area) => area.selected).map((area) => area.id),
           },
@@ -317,6 +318,47 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
               </div>
               <div className={styles.selectedAreasCount}>
                 Selected Areas: {getSelectedAreasCount()}
+              </div>
+            </div>
+
+            {/* Treatment Type */}
+            <div className={styles.section}>
+              <h3 className={styles.sectionTitle}>Treatment Type</h3>
+              <div className={styles.treatmentTypeOptions}>
+                <label
+                  className={`${styles.treatmentTypeOption} ${
+                    treatmentType === TreatmentType.Residential
+                      ? styles.selected
+                      : ""
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="treatmentType"
+                    value={TreatmentType.Residential}
+                    checked={treatmentType === TreatmentType.Residential}
+                    onChange={() => setTreatmentType(TreatmentType.Residential)}
+                    className={styles.radioInput}
+                  />
+                  <span>Residential - Home treatment</span>
+                </label>
+                <label
+                  className={`${styles.treatmentTypeOption} ${
+                    treatmentType === TreatmentType.Commercial
+                      ? styles.selected
+                      : ""
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="treatmentType"
+                    value={TreatmentType.Commercial}
+                    checked={treatmentType === TreatmentType.Commercial}
+                    onChange={() => setTreatmentType(TreatmentType.Commercial)}
+                    className={styles.radioInput}
+                  />
+                  <span>Commercial - Business treatment</span>
+                </label>
               </div>
             </div>
           </div>

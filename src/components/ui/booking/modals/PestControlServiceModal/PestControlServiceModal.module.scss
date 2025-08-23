@@ -192,6 +192,48 @@
   display: none;
 }
 
+// Treatment Type Options
+.treatmentTypeOptions {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("sm");
+}
+
+.treatmentTypeOption {
+  display: flex;
+  align-items: center;
+  gap: spacing("md");
+  padding: spacing("md") spacing("lg");
+  background: color("neutral", "lightest");
+  border: 2px solid color("neutral", "lighter");
+  border-radius: border-radius("lg");
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+
+  &:hover {
+    border-color: color("primary", "light");
+    background: color("neutral", "white");
+    transform: translateX(2px);
+  }
+
+  &.selected {
+    border-color: color("primary", "base");
+    background: color("primary", "base");
+
+    span {
+      color: color("neutral", "white");
+    }
+  }
+
+  span {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    transition: color 0.2s ease;
+  }
+}
+
 // Areas Grid
 .areasGrid {
   display: grid;
