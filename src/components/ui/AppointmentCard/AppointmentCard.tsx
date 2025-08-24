@@ -4,63 +4,29 @@ import React from "react";
 import { motion } from "framer-motion";
 import styles from "./AppointmentCard.module.scss";
 import {
+  Booking,
   ServiceCategory as GraphQLServiceCategory,
   BookingStatus as GraphQLBookingStatus,
 } from "@/graphql/api";
 
-// Local types for backward compatibility
-enum LocalServiceCategory {
-  Cleaning = "Cleaning",
-  Laundry = "Laundry",
-  Cooking = "Cooking",
-  Errands = "Errands",
-  PestControl = "Pest Control",
-}
-
-enum LocalBookingStatus {
-  Upcoming = "Upcoming",
-  Confirmed = "Confirmed",
-  Pending = "Pending",
-  InProgress = "In Progress",
-  Completed = "Completed",
-  Cancelled = "Cancelled",
-}
-
 interface AppointmentCardProps {
-  serviceName: string;
-  service_category: GraphQLServiceCategory | LocalServiceCategory;
-  date: string | Date;
-  timeSlot?: string;
-  status: GraphQLBookingStatus | LocalBookingStatus;
-  provider?: string;
+  booking: Booking;
   className?: string;
   variant?: "header" | "standalone";
 }
 
 const AppointmentCard: React.FC<AppointmentCardProps> = ({
-  serviceName,
-  service_category,
-  date,
-  timeSlot,
-  status,
-  provider,
+  booking,
   className = "",
   variant = "header",
 }) => {
-  const getServiceIcon = (
-    service_category: GraphQLServiceCategory | LocalServiceCategory
-  ) => {
+  const getServiceIcon = (service_category: GraphQLServiceCategory) => {
     const icons = {
       [GraphQLServiceCategory.Cleaning]: "🧹",
-      [LocalServiceCategory.Cleaning]: "🧹",
       [GraphQLServiceCategory.Laundry]: "👕",
-      [LocalServiceCategory.Laundry]: "👕",
       [GraphQLServiceCategory.Cooking]: "🍳",
-      [LocalServiceCategory.Cooking]: "🍳",
       [GraphQLServiceCategory.Errands]: "📦",
-      [LocalServiceCategory.Errands]: "📦",
       [GraphQLServiceCategory.PestControl]: "🐛",
-      [LocalServiceCategory.PestControl]: "🐛",
     };
     return icons[service_category] || "🏠";
   };
@@ -99,24 +65,17 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
     return `${dateLabel} - ${timeLabel}`;
   };
 
-  const getStatusText = (status: GraphQLBookingStatus | LocalBookingStatus) => {
+  const getStatusText = (status: GraphQLBookingStatus) => {
     switch (status) {
       case GraphQLBookingStatus.Confirmed:
-      case LocalBookingStatus.Confirmed:
         return "Confirmed";
       case GraphQLBookingStatus.Pending:
-      case LocalBookingStatus.Pending:
         return "Pending";
-      case LocalBookingStatus.Upcoming:
-        return "Upcoming";
       case GraphQLBookingStatus.InProgress:
-      case LocalBookingStatus.InProgress:
         return "In Progress";
       case GraphQLBookingStatus.Completed:
-      case LocalBookingStatus.Completed:
         return "Completed";
       case GraphQLBookingStatus.Cancelled:
-      case LocalBookingStatus.Cancelled:
         return "Cancelled";
       case GraphQLBookingStatus.Paused:
         return "Paused";
@@ -125,31 +84,33 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
     }
   };
 
-  const getStatusColor = (
-    status: GraphQLBookingStatus | LocalBookingStatus
-  ) => {
+  const getStatusColor = (status: GraphQLBookingStatus) => {
     switch (status) {
       case GraphQLBookingStatus.Confirmed:
-      case LocalBookingStatus.Confirmed:
-      case LocalBookingStatus.Upcoming:
         return "success";
       case GraphQLBookingStatus.Pending:
-      case LocalBookingStatus.Pending:
         return "warning";
       case GraphQLBookingStatus.InProgress:
-      case LocalBookingStatus.InProgress:
         return "info";
       case GraphQLBookingStatus.Completed:
-      case LocalBookingStatus.Completed:
         return "success";
       case GraphQLBookingStatus.Cancelled:
-      case LocalBookingStatus.Cancelled:
       case GraphQLBookingStatus.Paused:
         return "error";
       default:
         return "neutral";
     }
   };
+
+  // Extract data from booking object
+  const serviceName = booking.service?.name || booking.serviceOption;
+  const serviceCategory = booking.service_category;
+  const date = booking.date;
+  const timeSlot = booking.timeSlot;
+  const status = booking.status;
+  const provider = booking.staff
+    ? `${booking.staff.firstName} ${booking.staff.lastName}`
+    : undefined;
 
   return (
     <motion.div
@@ -160,7 +121,7 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
       whileHover={{ y: -2 }}
     >
       <div className={styles.appointmentCard__icon}>
-        {getServiceIcon(service_category)}
+        {getServiceIcon(serviceCategory)}
       </div>
       <div className={styles.appointmentCard__info}>
         <h3 className={styles.appointmentCard__serviceName}>{serviceName}</h3>

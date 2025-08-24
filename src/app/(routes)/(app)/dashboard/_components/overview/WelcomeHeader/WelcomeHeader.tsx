@@ -1,119 +1,59 @@
 "use client";
 
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { BookingStatus, TimeSlot, ServiceCategory } from "@/graphql/api";
+import {
+  BookingStatus,
+  TimeSlot,
+  ServiceCategory,
+  Booking,
+} from "@/graphql/api";
 import styles from "./WelcomeHeader.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
-import AppointmentCard from "@/components/ui/AppointmentCard";
+import AppointmentCard from "@/components/ui/AppointmentCard/AppointmentCard";
 import { openServicesListDrawer } from "@/lib/redux/slices/uiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/redux";
+import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 
 interface WelcomeHeaderProps {
   firstName?: string;
 }
-
-// Mock data that matches the GraphQL API structure
-const mockCustomerBookings = [
-  {
-    id: "booking-1",
-    date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // Tomorrow
-    timeSlot: TimeSlot.Morning,
-    status: BookingStatus.Confirmed,
-    service: {
-      id: "service-1",
-      name: "Deep Cleaning Service",
-      category: ServiceCategory.Cleaning,
-      icon: "cleaning",
-      price: 120,
-    },
-    service_category: ServiceCategory.Cleaning,
-    staff: {
-      id: "staff-1",
-      firstName: "Maria",
-      lastName: "Rodriguez",
-      email: "maria@metromellow.com",
-    },
-    customer: {
-      id: "customer-1",
-      firstName: "John",
-      lastName: "Doe",
-      email: "john@example.com",
-    },
-    address: {
-      id: "address-1",
-      street: "123 Main St",
-      city: "New York",
-      state: "NY",
-      zipCode: "10001",
-    },
-    totalPrice: 120,
-    paymentStatus: "PAID",
-    notes: "Please focus on kitchen and bathrooms",
-    serviceOption: "Deep Clean",
-    serviceDetails: {},
-    createdAt: "2024-08-10T00:00:00Z",
-    updatedAt: "2024-08-10T00:00:00Z",
-  },
-  {
-    id: "booking-2",
-    date: "2024-08-18T00:00:00Z",
-    timeSlot: TimeSlot.Afternoon,
-    status: BookingStatus.Confirmed,
-    service: {
-      id: "service-2",
-      name: "Premium Laundry Service",
-      category: ServiceCategory.Laundry,
-      icon: "laundry",
-      price: 45,
-    },
-    service_category: ServiceCategory.Laundry,
-    staff: {
-      id: "staff-2",
-      firstName: "Carlos",
-      lastName: "Smith",
-      email: "carlos@metromellow.com",
-    },
-    customer: {
-      id: "customer-1",
-      firstName: "John",
-      lastName: "Doe",
-      email: "john@example.com",
-    },
-    address: {
-      id: "address-1",
-      street: "123 Main St",
-      city: "New York",
-      state: "NY",
-      zipCode: "10001",
-    },
-    totalPrice: 45,
-    paymentStatus: "PAID",
-    notes: "Wash and fold",
-    serviceOption: "Wash & Fold",
-    serviceDetails: {},
-    createdAt: "2024-08-10T00:00:00Z",
-    updatedAt: "2024-08-10T00:00:00Z",
-  },
-];
-
-// Toggle this to show/hide upcoming services for testing
-const HAS_UPCOMING_SERVICES = true;
 
 const WelcomeHeader: React.FC<WelcomeHeaderProps> = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
   const firstName = user?.firstName;
 
-  const currentCustomerBookings = mockCustomerBookings;
-  // Filter and sort upcoming bookings (same logic as real GraphQL version)
+  const { handleGetCustomerBookings } = useBookingOperations();
+  const [customerBookings, setCustomerBookings] = useState<Booking[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch customer bookings on component mount
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        setIsLoading(true);
+        const bookings = await handleGetCustomerBookings();
+        setCustomerBookings((bookings as Booking[]) || []);
+      } catch (error) {
+        console.error("Failed to fetch customer bookings:", error);
+        setCustomerBookings([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBookings();
+  }, [handleGetCustomerBookings]);
+
+  // Filter and sort upcoming bookings
   const upcomingService = useMemo(() => {
-    if (!HAS_UPCOMING_SERVICES) return null;
+    if (isLoading || !customerBookings.length) return null;
 
     const now = new Date();
-    const upcomingBookings = currentCustomerBookings
+    const upcomingBookings = customerBookings
       .filter((booking) => {
         const bookingDate = new Date(booking.date);
         return (
@@ -126,7 +66,7 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = () => {
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
     return upcomingBookings[0] || null;
-  }, [currentCustomerBookings]);
+  }, [customerBookings, isLoading]);
 
   // Get current time to determine greeting
   const getGreeting = () => {
@@ -168,21 +108,7 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = () => {
 
         <div className={styles.welcomeHeader__content__bottom}>
           {upcomingService ? (
-            <AppointmentCard
-              serviceName={upcomingService.service.name}
-              service_category={upcomingService.service_category}
-              date={upcomingService.date}
-              timeSlot={
-                upcomingService.timeSlot === TimeSlot.Morning
-                  ? "Morning"
-                  : upcomingService.timeSlot === TimeSlot.Afternoon
-                    ? "Afternoon"
-                    : "Evening"
-              }
-              status={upcomingService.status}
-              provider={upcomingService.staff?.firstName}
-              variant="header"
-            />
+            <AppointmentCard booking={upcomingService} variant="header" />
           ) : (
             <motion.div
               className={styles.welcomeHeader__noService}

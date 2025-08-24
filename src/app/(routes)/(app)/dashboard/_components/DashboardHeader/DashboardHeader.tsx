@@ -61,11 +61,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           {upcomingService && (
             <div className={styles.dashboardHeader__upcomingService}>
               <AppointmentCard
-                serviceName={upcomingService.serviceName}
-                service_category={upcomingService.service_category as any}
-                date={upcomingService.date}
-                status={upcomingService.status as any}
-                provider={upcomingService.provider}
+                booking={upcomingService as any}
                 variant="header"
               />
             </div>
