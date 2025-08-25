@@ -16,24 +16,8 @@ import {
   MoreVertical,
 } from "lucide-react";
 import styles from "./TimelineView.module.scss";
-import { ServiceCategory, BookingStatus } from "../../types/booking";
+import { ServiceCategory, BookingStatus, Booking } from "@/graphql/api";
 import BookingDetailModal from "../BookingDetailModal/BookingDetailModal";
-
-interface Booking {
-  id: string;
-  serviceName: string;
-  service_category: ServiceCategory;
-  date: Date;
-  endTime: Date;
-  status: BookingStatus;
-  provider: string;
-  address: string;
-  price: number;
-  notes?: string;
-  recurring: boolean;
-  frequency?: string;
-  rating?: number;
-}
 
 interface TimelineViewProps {
   bookings: Booking[];
@@ -112,7 +96,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ bookings }) => {
 
   const getStatusColor = (status: BookingStatus) => {
     const colors = {
-      [BookingStatus.Upcoming]: "upcoming",
+      [BookingStatus.Paused]: "paused",
       [BookingStatus.Confirmed]: "confirmed",
       [BookingStatus.Pending]: "pending",
       [BookingStatus.InProgress]: "inProgress",
@@ -241,7 +225,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ bookings }) => {
                             </div>
                             <div>
                               <h4 className={styles.timelineView__serviceName}>
-                                {booking.serviceName}
+                                {booking.service.name}
                               </h4>
                               <p
                                 className={
@@ -266,24 +250,24 @@ const TimelineView: React.FC<TimelineViewProps> = ({ bookings }) => {
                         <div className={styles.timelineView__cardDetails}>
                           <div className={styles.timelineView__detail}>
                             <Clock size={14} />
-                            <span>
-                              {formatTime(booking.date)} -{" "}
-                              {formatTime(booking.endTime)}
-                            </span>
+                            <span>{booking.timeSlot}</span>
                           </div>
                           <div className={styles.timelineView__detail}>
                             <User size={14} />
-                            <span>{booking.provider}</span>
+                            <span>
+                              {booking.staff?.firstName}{" "}
+                              {booking.staff?.lastName}
+                            </span>
                           </div>
                           <div className={styles.timelineView__detail}>
                             <MapPin size={14} />
-                            <span>{booking.address}</span>
+                            <span>{booking.address.street}</span>
                           </div>
                         </div>
 
                         <div className={styles.timelineView__cardFooter}>
                           <span className={styles.timelineView__price}>
-                            {formatPrice(booking.price)}
+                            {formatPrice(booking.totalPrice)}
                           </span>
                           <button
                             className={styles.timelineView__moreBtn}

@@ -3,14 +3,10 @@
 import React from "react";
 import { motion } from "framer-motion";
 import styles from "./AppointmentCard.module.scss";
-import {
-  Booking,
-  ServiceCategory as GraphQLServiceCategory,
-  BookingStatus as GraphQLBookingStatus,
-} from "@/graphql/api";
+import { Booking, ServiceCategory, BookingStatus } from "@/graphql/api";
 
 interface AppointmentCardProps {
-  booking: Booking;
+  booking?: Booking | null;
   className?: string;
   variant?: "header" | "standalone";
 }
@@ -20,13 +16,13 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
   className = "",
   variant = "header",
 }) => {
-  const getServiceIcon = (service_category: GraphQLServiceCategory) => {
+  const getServiceIcon = (service_category: ServiceCategory) => {
     const icons = {
-      [GraphQLServiceCategory.Cleaning]: "🧹",
-      [GraphQLServiceCategory.Laundry]: "👕",
-      [GraphQLServiceCategory.Cooking]: "🍳",
-      [GraphQLServiceCategory.Errands]: "📦",
-      [GraphQLServiceCategory.PestControl]: "🐛",
+      [ServiceCategory.Cleaning]: "🧹",
+      [ServiceCategory.Laundry]: "👕",
+      [ServiceCategory.Cooking]: "🍳",
+      [ServiceCategory.Errands]: "📦",
+      [ServiceCategory.PestControl]: "🐛",
     };
     return icons[service_category] || "🏠";
   };
@@ -65,43 +61,62 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
     return `${dateLabel} - ${timeLabel}`;
   };
 
-  const getStatusText = (status: GraphQLBookingStatus) => {
+  const getStatusText = (status: BookingStatus) => {
     switch (status) {
-      case GraphQLBookingStatus.Confirmed:
+      case BookingStatus.Confirmed:
         return "Confirmed";
-      case GraphQLBookingStatus.Pending:
+      case BookingStatus.Pending:
         return "Pending";
-      case GraphQLBookingStatus.InProgress:
+      case BookingStatus.InProgress:
         return "In Progress";
-      case GraphQLBookingStatus.Completed:
+      case BookingStatus.Completed:
         return "Completed";
-      case GraphQLBookingStatus.Cancelled:
+      case BookingStatus.Cancelled:
         return "Cancelled";
-      case GraphQLBookingStatus.Paused:
+      case BookingStatus.Paused:
         return "Paused";
       default:
         return "Scheduled";
     }
   };
 
-  const getStatusColor = (status: GraphQLBookingStatus) => {
+  const getStatusColor = (status: BookingStatus) => {
     switch (status) {
-      case GraphQLBookingStatus.Confirmed:
+      case BookingStatus.Confirmed:
         return "success";
-      case GraphQLBookingStatus.Pending:
+      case BookingStatus.Pending:
         return "warning";
-      case GraphQLBookingStatus.InProgress:
+      case BookingStatus.InProgress:
         return "info";
-      case GraphQLBookingStatus.Completed:
+      case BookingStatus.Completed:
         return "success";
-      case GraphQLBookingStatus.Cancelled:
-      case GraphQLBookingStatus.Paused:
+      case BookingStatus.Cancelled:
+      case BookingStatus.Paused:
         return "error";
       default:
         return "neutral";
     }
   };
 
+  if (!booking)
+    return (
+      <motion.div
+        className={styles.appointmentCard}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
+        <div className={styles.appointmentCard__icon}>🏠</div>
+        <div className={styles.appointmentCard__info}>
+          <h3 className={styles.appointmentCard__serviceName}>
+            No upcoming services
+          </h3>
+          <p className={styles.appointmentCard__serviceDate}>
+            Book your first service or set up a subscription to get started!
+          </p>
+        </div>
+      </motion.div>
+    );
   // Extract data from booking object
   const serviceName = booking.service?.name || booking.serviceOption;
   const serviceCategory = booking.service_category;

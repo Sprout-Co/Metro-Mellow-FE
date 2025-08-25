@@ -24,24 +24,8 @@ import {
   ChevronRight,
 } from "lucide-react";
 import styles from "./ListView.module.scss";
-import { ServiceCategory, BookingStatus } from "../../types/booking";
+import { ServiceCategory, BookingStatus, Booking } from "@/graphql/api";
 import BookingDetailModal from "../BookingDetailModal/BookingDetailModal";
-
-interface Booking {
-  id: string;
-  serviceName: string;
-  service_category: ServiceCategory;
-  date: Date;
-  endTime: Date;
-  status: BookingStatus;
-  provider: string;
-  address: string;
-  price: number;
-  notes?: string;
-  recurring: boolean;
-  frequency?: string;
-  rating?: number;
-}
 
 interface ListViewProps {
   bookings: Booking[];
@@ -65,11 +49,13 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
   const groupedBookings = {
     active: sortedBookings.filter(
       (b) =>
-        b.status === BookingStatus.Upcoming ||
         b.status === BookingStatus.Confirmed ||
         b.status === BookingStatus.InProgress
     ),
-    pending: sortedBookings.filter((b) => b.status === BookingStatus.Pending),
+    pending: sortedBookings.filter(
+      (b) =>
+        b.status === BookingStatus.Pending || b.status === BookingStatus.Paused
+    ),
     past: sortedBookings.filter(
       (b) =>
         b.status === BookingStatus.Completed ||
@@ -126,7 +112,7 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
   // Get status style
   const getStatusStyle = (status: BookingStatus) => {
     const styles = {
-      [BookingStatus.Upcoming]: "upcoming",
+      [BookingStatus.Paused]: "paused",
       [BookingStatus.Confirmed]: "confirmed",
       [BookingStatus.Pending]: "pending",
       [BookingStatus.InProgress]: "inProgress",
@@ -137,17 +123,18 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
   };
 
   // Format date
-  const formatDate = (date: Date) => {
+  const formatDate = (date: string | Date) => {
+    const dateObj = typeof date === "string" ? new Date(date) : date;
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    if (date.toDateString() === today.toDateString()) {
+    if (dateObj.toDateString() === today.toDateString()) {
       return "Today";
-    } else if (date.toDateString() === tomorrow.toDateString()) {
+    } else if (dateObj.toDateString() === tomorrow.toDateString()) {
       return "Tomorrow";
     } else {
-      return date.toLocaleDateString("en-US", {
+      return dateObj.toLocaleDateString("en-US", {
         weekday: "short",
         month: "short",
         day: "numeric",
@@ -225,13 +212,13 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
               </div>
               <div className={styles.bookingCard__serviceDetails}>
                 <h3 className={styles.bookingCard__serviceName}>
-                  {booking.serviceName}
-                  {booking.recurring && (
+                  {booking.service.name}
+                  {/* {booking.serviceDetails.recurring && (
                     <span className={styles.bookingCard__recurringBadge}>
                       <Repeat size={12} />
-                      {booking.frequency}
+                      {booking.serviceDetails.frequency}
                     </span>
-                  )}
+                  )} */}
                 </h3>
                 <p className={styles.bookingCard__service_category}>
                   {booking.service_category}
@@ -246,17 +233,17 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
               </div>
               <div className={styles.bookingCard__infoItem}>
                 <Clock size={14} />
-                <span>
-                  {formatTime(booking.date)} - {formatTime(booking.endTime)}
-                </span>
+                <span>{booking.timeSlot}</span>
               </div>
               <div className={styles.bookingCard__infoItem}>
                 <User size={14} />
-                <span>{booking.provider}</span>
+                <span>
+                  {booking.staff?.firstName} {booking.staff?.lastName}
+                </span>
               </div>
               <div className={styles.bookingCard__infoItem}>
                 <MapPin size={14} />
-                <span>{booking.address}</span>
+                <span>{booking.address.street}</span>
               </div>
             </div>
           </div>
@@ -274,7 +261,7 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
                 {booking.status}
               </span>
               <span className={styles.bookingCard__price}>
-                {formatPrice(booking.price)}
+                {formatPrice(booking.totalPrice)}
               </span>
             </div>
           </div>
@@ -332,7 +319,7 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
                         <FileText size={14} />
                         Download Invoice
                       </button>
-                      {!booking.rating && (
+                      {!booking.feedback && (
                         <button className={styles.bookingCard__menuItem}>
                           <Star size={14} />
                           Leave Review
@@ -436,11 +423,13 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
         </div>
       </div>
 
-      <BookingDetailModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        booking={selectedBooking}
-      />
+      {selectedBooking && (
+        <BookingDetailModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          booking={selectedBooking}
+        />
+      )}
     </>
   );
 };

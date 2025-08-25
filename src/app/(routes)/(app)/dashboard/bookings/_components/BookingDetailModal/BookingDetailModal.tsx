@@ -21,26 +21,26 @@ import {
   AlertCircle,
 } from "lucide-react";
 import styles from "./BookingDetailModal.module.scss";
-import { ServiceCategory, BookingStatus } from "../../types/booking";
+import { ServiceCategory, BookingStatus, Booking } from "@/graphql/api";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 
-interface Booking {
-  id: string;
-  serviceName: string;
-  service_category: ServiceCategory;
-  date: Date;
-  endTime: Date;
-  status: BookingStatus;
-  provider: string;
-  providerPhone?: string;
-  providerEmail?: string;
-  address: string;
-  price: number;
-  notes?: string;
-  recurring: boolean;
-  frequency?: string;
-  rating?: number;
-}
+// interface Booking {
+//   id: string;
+//   serviceName: string;
+//   service_category: ServiceCategory;
+//   date: Date;
+//   endTime: Date;
+//   status: BookingStatus;
+//   provider: string;
+//   providerPhone?: string;
+//   providerEmail?: string;
+//   address: string;
+//   price: number;
+//   notes?: string;
+//   recurring: boolean;
+//   frequency?: string;
+//   rating?: number;
+// }
 
 interface BookingDetailModalProps {
   isOpen: boolean;
@@ -86,7 +86,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
   // Get status color
   const getStatusColor = (status: BookingStatus) => {
     const colors = {
-      [BookingStatus.Upcoming]: "upcoming",
+      [BookingStatus.Paused]: "paused",
       [BookingStatus.Confirmed]: "confirmed",
       [BookingStatus.Pending]: "pending",
       [BookingStatus.InProgress]: "inProgress",
@@ -117,13 +117,13 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
           </div>
           <div>
             <h2 className={styles.modal__title}>
-              {booking.serviceName}
-              {booking.recurring && (
+              {booking.service.name}
+              {/* {booking.recurring && (
                 <span className={styles.modal__recurringBadge}>
                   <Repeat size={12} />
-                  {booking.frequency}
+                  {booking.serviceDetails.frequency}
                 </span>
-              )}
+              )} */}
             </h2>
             <p className={styles.modal__subtitle}>{booking.service_category}</p>
           </div>
@@ -172,7 +172,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                 <div>
                   <span className={styles.modal__infoLabel}>Time</span>
                   <span className={styles.modal__infoValue}>
-                    {formatTime(booking.date)} - {formatTime(booking.endTime)}
+                    {booking.timeSlot}
                   </span>
                 </div>
               </div>
@@ -188,7 +188,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                 <div>
                   <span className={styles.modal__infoLabel}>Address</span>
                   <span className={styles.modal__infoValue}>
-                    {booking.address}
+                    {booking.address.street}
                   </span>
                 </div>
               </div>
@@ -204,24 +204,24 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
               </div>
               <div className={styles.modal__providerInfo}>
                 <span className={styles.modal__providerName}>
-                  {booking.provider}
+                  {booking.staff?.firstName} {booking.staff?.lastName}
                 </span>
-                {booking.providerPhone && (
+                {booking.staff?.phone && (
                   <div className={styles.modal__providerContact}>
                     <Phone size={12} />
-                    <span>{booking.providerPhone || "+234 801 234 5678"}</span>
+                    <span>{booking.staff?.phone || "+234 801 234 5678"}</span>
                   </div>
                 )}
-                {booking.providerEmail && (
+                {booking.staff?.email && (
                   <div className={styles.modal__providerContact}>
                     <Mail size={12} />
                     <span>
-                      {booking.providerEmail || "provider@metromellow.com"}
+                      {booking.staff?.email || "provider@metromellow.com"}
                     </span>
                   </div>
                 )}
               </div>
-              {booking.status === BookingStatus.Upcoming ||
+              {booking.status === BookingStatus.Paused ||
               booking.status === BookingStatus.Confirmed ? (
                 <button className={styles.modal__contactBtn}>Contact</button>
               ) : null}
@@ -235,15 +235,15 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
               <div className={styles.modal__priceRow}>
                 <span className={styles.modal__priceLabel}>Service Fee</span>
                 <span className={styles.modal__priceValue}>
-                  {formatPrice(booking.price)}
+                  {formatPrice(booking.totalPrice)}
                 </span>
               </div>
-              {booking.recurring && (
+              {/* {booking.serviceDetails.recurring && (
                 <div className={styles.modal__priceNote}>
                   <AlertCircle size={12} />
                   <span>Billed {booking.frequency?.toLowerCase()}</span>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
 
@@ -264,7 +264,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
           {booking.status === BookingStatus.Completed && (
             <div className={styles.modal__section}>
               <h3 className={styles.modal__sectionTitle}>Service Rating</h3>
-              {booking.rating ? (
+              {booking.feedback ? (
                 <div className={styles.modal__rating}>
                   <div className={styles.modal__stars}>
                     {[1, 2, 3, 4, 5].map((star) => (
@@ -272,7 +272,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                         key={star}
                         size={16}
                         className={
-                          star <= booking.rating!
+                          star <= booking.feedback?.rating!
                             ? styles["modal__star--filled"]
                             : ""
                         }
@@ -280,7 +280,8 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                     ))}
                   </div>
                   <span className={styles.modal__ratingText}>
-                    {booking.rating}/5 - Service completed successfully
+                    {booking.feedback?.rating}/5 - Service completed
+                    successfully
                   </span>
                 </div>
               ) : (
@@ -295,7 +296,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
       </div>
 
       <div className={styles.modal__footer}>
-        {booking.status === BookingStatus.Upcoming ||
+        {booking.status === BookingStatus.Paused ||
         booking.status === BookingStatus.Confirmed ? (
           <>
             <motion.button

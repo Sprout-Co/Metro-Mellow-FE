@@ -36,7 +36,7 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = () => {
       try {
         setIsLoading(true);
         const bookings = await handleGetCustomerBookings();
-        setCustomerBookings((bookings as Booking[]) || []);
+        setCustomerBookings(bookings.data || []);
       } catch (error) {
         console.error("Failed to fetch customer bookings:", error);
         setCustomerBookings([]);
@@ -107,27 +107,7 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = () => {
         </div>
 
         <div className={styles.welcomeHeader__content__bottom}>
-          {upcomingService ? (
-            <AppointmentCard booking={upcomingService} variant="header" />
-          ) : (
-            <motion.div
-              className={styles.welcomeHeader__noService}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-              <div className={styles.welcomeHeader__noServiceIcon}>🏠</div>
-              <div className={styles.welcomeHeader__noServiceContent}>
-                <h3 className={styles.welcomeHeader__noServiceTitle}>
-                  No upcoming services
-                </h3>
-                <p className={styles.welcomeHeader__noServiceText}>
-                  Book your first service or set up a subscription to get
-                  started!
-                </p>
-              </div>
-            </motion.div>
-          )}
+          <AppointmentCard booking={upcomingService} variant="header" />
 
           <div className={styles.welcomeHeader__actions}>
             <motion.div

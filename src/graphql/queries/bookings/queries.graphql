@@ -61,6 +61,7 @@ query GetBookings($status: BookingStatus) {
       state
       zipCode
       country
+      label
     }
     totalPrice
     paymentStatus
@@ -69,6 +70,7 @@ query GetBookings($status: BookingStatus) {
     service_category
     serviceOption
     serviceDetails {
+      serviceOption
       cleaning {
         cleaningType
         houseType
@@ -174,6 +176,7 @@ query GetBookingById($id: ID!) {
       state
       zipCode
       country
+      label
     }
     totalPrice
     paymentStatus
@@ -182,6 +185,7 @@ query GetBookingById($id: ID!) {
     service_category
     serviceOption
     serviceDetails {
+      serviceOption
       cleaning {
         cleaningType
         houseType
@@ -287,6 +291,7 @@ query GetCustomerBookings {
       state
       zipCode
       country
+      label
     }
     totalPrice
     paymentStatus
@@ -295,6 +300,7 @@ query GetCustomerBookings {
     service_category
     serviceOption
     serviceDetails {
+      serviceOption
       cleaning {
         cleaningType
         houseType
@@ -400,6 +406,7 @@ query GetStaffBookings {
       state
       zipCode
       country
+      label
     }
     totalPrice
     paymentStatus

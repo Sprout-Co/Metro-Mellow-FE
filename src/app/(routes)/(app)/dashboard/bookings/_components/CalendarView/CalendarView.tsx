@@ -20,24 +20,24 @@ import {
   MoreHorizontal,
 } from "lucide-react";
 import styles from "./CalendarView.module.scss";
-import { ServiceCategory, BookingStatus } from "../../types/booking";
+import { ServiceCategory, BookingStatus, Booking } from "@/graphql/api";
 import BookingDetailModal from "../BookingDetailModal/BookingDetailModal";
 import FnButton from "@/components/ui/Button/FnButton";
 
-interface Booking {
-  id: string;
-  serviceName: string;
-  service_category: ServiceCategory;
-  date: Date;
-  endTime: Date;
-  status: BookingStatus;
-  provider: string;
-  address: string;
-  price: number;
-  notes?: string;
-  recurring: boolean;
-  frequency?: string;
-}
+// interface Booking {
+//   id: string;
+//   serviceName: string;
+//   service_category: ServiceCategory;
+//   date: Date;
+//   endTime: Date;
+//   status: BookingStatus;
+//   provider: string;
+//   address: string;
+//   price: number;
+//   notes?: string;
+//   recurring: boolean;
+//   frequency?: string;
+// }
 
 interface CalendarViewProps {
   bookings: Booking[];
@@ -419,7 +419,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
                               <span
                                 className={styles.calendarView__weekBookingName}
                               >
-                                {booking.serviceName}
+                                {booking.service?.name}
                               </span>
                             </motion.div>
                           ))}
@@ -475,7 +475,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
 
                       <div className={styles.calendarView__bookingContent}>
                         <div className={styles.calendarView__bookingHeader}>
-                          <h4>{booking.serviceName}</h4>
+                          <h4>{booking.service.name}</h4>
                           <span className={styles.calendarView__bookingStatus}>
                             {booking.status}
                           </span>
@@ -484,18 +484,15 @@ const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
                         <div className={styles.calendarView__bookingDetails}>
                           <div className={styles.calendarView__bookingDetail}>
                             <Clock size={14} />
-                            <span>
-                              {formatTime(booking.date)} -{" "}
-                              {formatTime(booking.endTime)}
-                            </span>
+                            <span>{booking.timeSlot}</span>
                           </div>
-                          <div className={styles.calendarView__bookingDetail}>
+                          {/* <div className={styles.calendarView__bookingDetail}>
                             <User size={14} />
                             <span>{booking.provider}</span>
-                          </div>
+                          </div> */}
                           <div className={styles.calendarView__bookingDetail}>
                             <MapPin size={14} />
-                            <span>{booking.address}</span>
+                            <span>{booking.address.street}</span>
                           </div>
                         </div>
 

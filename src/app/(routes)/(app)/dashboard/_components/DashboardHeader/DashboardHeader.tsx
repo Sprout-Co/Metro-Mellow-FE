@@ -21,6 +21,7 @@ import {
 import styles from "./DashboardHeader.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import AppointmentCard from "@/components/ui/AppointmentCard/AppointmentCard";
+import { Booking } from "@/graphql/api";
 
 interface DashboardHeaderProps {
   title: string;
@@ -35,6 +36,7 @@ interface DashboardHeaderProps {
     status: string;
     provider: string;
   };
+  booking: Booking;
   extraContent?: React.ReactNode;
 }
 
@@ -45,6 +47,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   actionBtnIcon,
   onActionButtonClick,
   upcomingService,
+  booking,
   extraContent,
 }) => {
   return (
@@ -58,14 +61,9 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           </div>
 
           {/* Upcoming Service Banner */}
-          {upcomingService && (
-            <div className={styles.dashboardHeader__upcomingService}>
-              <AppointmentCard
-                booking={upcomingService as any}
-                variant="header"
-              />
-            </div>
-          )}
+          <div className={styles.dashboardHeader__upcomingService}>
+            <AppointmentCard booking={booking} variant="header" />
+          </div>
         </div>
 
         {actionBtnText && (

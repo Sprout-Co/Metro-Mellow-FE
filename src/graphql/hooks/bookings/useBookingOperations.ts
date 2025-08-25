@@ -57,13 +57,13 @@ export const useBookingOperations = () => {
 
   const handleGetCustomerBookings = useCallback(async () => {
     try {
-      const { data, errors } = await getCustomerBookings();
+      const { data, errors, loading } = await getCustomerBookings();
 
       if (errors) {
         throw new Error(errors[0].message);
       }
 
-      return data?.customerBookings;
+      return { data: data?.customerBookings, loading };
     } catch (error) {
       console.error("Customer bookings fetch error:", error);
       if (error instanceof Error) {
