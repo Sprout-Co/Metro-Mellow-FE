@@ -26,24 +26,6 @@ import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 import RescheduleModal from "../RescheduleModal/RescheduleModal";
 import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
 
-// interface Booking {
-//   id: string;
-//   serviceName: string;
-//   service_category: ServiceCategory;
-//   date: Date;
-//   endTime: Date;
-//   status: BookingStatus;
-//   provider: string;
-//   providerPhone?: string;
-//   providerEmail?: string;
-//   address: string;
-//   price: number;
-//   notes?: string;
-//   recurring: boolean;
-//   frequency?: string;
-//   rating?: number;
-// }
-
 interface BookingDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -108,6 +90,36 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
   const renderFooterButtons = () => {
     switch (booking.status) {
       case BookingStatus.Paused:
+        return (
+          <>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setIsRescheduleModalOpen(true)}
+            >
+              <RefreshCw size={14} />
+              Reschedule
+            </motion.button>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Edit size={14} />
+              Resume Booking
+            </motion.button>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--danger"]}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setIsConfirmActionModalOpen(true)}
+            >
+              <X size={14} />
+              Cancel
+            </motion.button>
+          </>
+        );
       case BookingStatus.Confirmed:
         return (
           <>
