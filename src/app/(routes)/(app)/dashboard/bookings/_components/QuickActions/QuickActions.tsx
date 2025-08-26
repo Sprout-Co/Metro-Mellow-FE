@@ -15,7 +15,15 @@ import {
 } from "lucide-react";
 import styles from "./QuickActions.module.scss";
 
-const QuickActions: React.FC = () => {
+interface QuickActionsProps {
+  onAddBooking: () => void;
+  onReschedule: () => void;
+}
+
+const QuickActions: React.FC<QuickActionsProps> = ({
+  onAddBooking,
+  onReschedule,
+}) => {
   const actions = [
     {
       id: "book",
@@ -23,7 +31,7 @@ const QuickActions: React.FC = () => {
       title: "Book Service",
       description: "Schedule a new service",
       color: "primary",
-      onClick: () => console.log("Book service"),
+      onClick: onAddBooking,
     },
     {
       id: "reschedule",
@@ -31,7 +39,7 @@ const QuickActions: React.FC = () => {
       title: "Reschedule",
       description: "Change appointment time",
       color: "secondary",
-      onClick: () => console.log("Reschedule"),
+      onClick: onReschedule,
     },
     {
       id: "recurring",

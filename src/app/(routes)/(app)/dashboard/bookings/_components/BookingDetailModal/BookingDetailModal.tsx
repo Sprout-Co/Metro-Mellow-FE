@@ -91,6 +91,13 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
     return icons[service_category] || "🏠";
   };
 
+  function handleConfirmAction(
+    actionType: "pause" | "cancel" | "resume" | "reschedule"
+  ) {
+    setConfirmationActionType(actionType);
+    setIsConfirmActionModalOpen(true);
+  }
+
   const renderFooterButtons = () => {
     switch (booking.status) {
       case BookingStatus.Paused:
@@ -117,10 +124,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--danger"]}`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => {
-                setConfirmationActionType("pause");
-                setIsConfirmActionModalOpen(true);
-              }}
+              onClick={() => handleConfirmAction("cancel")}
             >
               <X size={14} />
               Cancel
@@ -128,6 +132,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
           </>
         );
       case BookingStatus.Confirmed:
+      case BookingStatus.Pending:
         return (
           <>
             <motion.button
@@ -143,10 +148,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => {
-                setConfirmationActionType("pause");
-                setIsConfirmActionModalOpen(true);
-              }}
+              onClick={() => handleConfirmAction("pause")}
             >
               <Pause size={14} />
               Pause
@@ -155,10 +157,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--danger"]}`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => {
-                setConfirmationActionType("cancel");
-                setIsConfirmActionModalOpen(true);
-              }}
+              onClick={() => handleConfirmAction("cancel")}
             >
               <X size={14} />
               Cancel
@@ -186,27 +185,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
             </motion.button>
           </>
         );
-      case BookingStatus.Pending:
-        return (
-          <>
-            <motion.button
-              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <CheckCircle size={14} />
-              Confirm Booking
-            </motion.button>
-            <motion.button
-              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Edit size={14} />
-              Modify
-            </motion.button>
-          </>
-        );
+
       default:
         return (
           <>

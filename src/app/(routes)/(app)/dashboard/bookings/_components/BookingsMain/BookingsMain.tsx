@@ -30,6 +30,9 @@ import TimelineView from "../TimelineView/TimelineView";
 import DashboardHeader from "../../../_components/DashboardHeader/DashboardHeader";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { Booking, ServiceCategory, BookingStatus } from "@/graphql/api";
+import ServicesListDrawer from "../../../_components/DashboardLayout/sidebar/ServicesListDrawer/ServicesListDrawer";
+import RescheduleModal from "../RescheduleModal/RescheduleModal";
+import RescheduleDrawer from "../../../_components/DashboardLayout/sidebar/RescheduleDrawer/RescheduleDrawer";
 
 type ViewMode = "calendar" | "list" | "timeline";
 
@@ -46,7 +49,9 @@ const BookingsMain: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [customerBookings, setCustomerBookings] = useState<Booking[]>([]);
-
+  const [isServicesListDrawerOpen, setIsServicesListDrawerOpen] =
+    useState(false);
+  const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -146,8 +151,7 @@ const BookingsMain: React.FC = () => {
   }, [customerBookings, isLoading, handleGetCustomerBookings]);
 
   const handleAddBooking = () => {
-    console.log("Add new booking");
-    // Navigate to booking form or open modal
+    setIsServicesListDrawerOpen(true);
   };
 
   const handleExportData = () => {
@@ -177,21 +181,13 @@ const BookingsMain: React.FC = () => {
         actionBtnIcon={<Plus size={18} />}
         onActionButtonClick={handleAddBooking}
         booking={upcomingService || undefined}
-        // upcomingService={
-        //   upcomingService
-        //     ? {
-        //         serviceName: upcomingService.service?.name || "",
-        //         service_category: upcomingService.service_category,
-        //         date: upcomingService.date.toISOString(),
-        //         status: upcomingService.status,
-        //         provider: upcomingService.staff?.firstName || "",
-        //       }
-        //     : undefined
-        // }
       />
 
       {/* Quick Actions */}
-      <QuickActions />
+      <QuickActions
+        onAddBooking={handleAddBooking}
+        onReschedule={() => setIsRescheduleModalOpen(true)}
+      />
 
       {/* Controls Section */}
       <div className={styles.bookingsMain__controls}>
@@ -364,6 +360,16 @@ const BookingsMain: React.FC = () => {
           </div>
         )}
       </div>
+
+      <ServicesListDrawer
+        isOpen={isServicesListDrawerOpen}
+        onClose={() => setIsServicesListDrawerOpen(false)}
+      />
+      <RescheduleDrawer
+        isOpen={isRescheduleModalOpen}
+        onClose={() => setIsRescheduleModalOpen(false)}
+        // booking={null}
+      />
     </div>
   );
 };
