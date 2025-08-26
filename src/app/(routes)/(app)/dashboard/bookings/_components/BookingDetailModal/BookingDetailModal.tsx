@@ -127,7 +127,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
               onClick={() => handleConfirmAction("cancel")}
             >
               <X size={14} />
-              Cancel
+              Cancel Booking
             </motion.button>
           </>
         );
@@ -160,7 +160,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
               onClick={() => handleConfirmAction("cancel")}
             >
               <X size={14} />
-              Cancel
+              Cancel Booking
             </motion.button>
           </>
         );

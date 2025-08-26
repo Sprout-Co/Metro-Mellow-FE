@@ -350,6 +350,40 @@
     }
   }
 
+  &__error {
+    display: flex;
+    gap: spacing("sm");
+    margin: 0 spacing("xl") spacing("lg");
+    padding: spacing("md");
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: border-radius("md");
+
+    svg {
+      flex-shrink: 0;
+      color: #ef4444;
+      margin-top: 2px;
+    }
+
+    div {
+      flex: 1;
+
+      strong {
+        @include font-size("sm");
+        @include font-weight("semibold");
+        color: color("neutral", "darkest");
+        display: block;
+        margin-bottom: spacing("xs");
+      }
+
+      p {
+        @include font-size("xs");
+        color: color("neutral", "dark");
+        margin: 0;
+      }
+    }
+  }
+
   &__footer {
     display: flex;
     gap: spacing("md");

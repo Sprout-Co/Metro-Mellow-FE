@@ -1,4 +1,3 @@
-// src/app/(routes)/(app)/dashboard/bookings/_components/ConfirmActionModal/ConfirmActionModal.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -16,8 +15,9 @@ import {
   X,
 } from "lucide-react";
 import styles from "./ConfirmActionModal.module.scss";
-import { Booking } from "@/graphql/api";
+import { Booking, BookingStatus } from "@/graphql/api";
 import Portal from "@/components/ui/Portal/Portal";
+import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 
 type ActionType = "pause" | "cancel" | "resume" | "reschedule" | null;
 
@@ -46,6 +46,9 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
   const [customReason, setCustomReason] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { handleCancelBooking, handleUpdateBookingStatus } =
+    useBookingOperations();
 
   if (!booking) return null;
 
@@ -101,10 +104,20 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
     if (!finalReason) return;
 
     setIsProcessing(true);
+    setError(null);
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsProcessing(false);
+    try {
+      switch (actionType) {
+        case "cancel":
+          await handleCancelBooking(booking.id);
+          break;
+        case "pause":
+          await handleUpdateBookingStatus(booking.id, BookingStatus.Paused);
+          break;
+        default:
+          break;
+      }
+
       setShowSuccess(true);
 
       if (onConfirm) {
@@ -117,7 +130,13 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
         setSelectedReason("");
         setCustomReason("");
       }, 2000);
-    }, 1500);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to process request"
+      );
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   // Get action details
@@ -279,6 +298,24 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
                 ))}
               </ul>
             </div>
+
+            {/* Error Message */}
+            <AnimatePresence>
+              {error && (
+                <motion.div
+                  className={styles.modal__error}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                >
+                  <AlertTriangle size={16} />
+                  <div>
+                    <strong>Error:</strong>
+                    <p>{error}</p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Success Message */}
             <AnimatePresence>

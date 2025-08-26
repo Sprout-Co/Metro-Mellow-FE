@@ -24,15 +24,12 @@ import FnButton from "@/components/ui/Button/FnButton";
 import CalendarView from "../CalendarView/CalendarView";
 import FilterDropdown from "../FilterDropdown/FilterDropdown";
 import ListView from "../ListView/ListView";
-import AppointmentCard from "@/components/ui/AppointmentCard";
 import QuickActions from "../QuickActions/QuickActions";
 import TimelineView from "../TimelineView/TimelineView";
 import DashboardHeader from "../../../_components/DashboardHeader/DashboardHeader";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { Booking, ServiceCategory, BookingStatus } from "@/graphql/api";
 import ServicesListDrawer from "../../../_components/DashboardLayout/sidebar/ServicesListDrawer/ServicesListDrawer";
-import RescheduleModal from "../RescheduleModal/RescheduleModal";
-// Removed RescheduleDrawer import - using RescheduleModal instead
 
 type ViewMode = "calendar" | "list" | "timeline";
 
@@ -365,7 +362,6 @@ const BookingsMain: React.FC = () => {
         isOpen={isServicesListDrawerOpen}
         onClose={() => setIsServicesListDrawerOpen(false)}
       />
-      {/* Removed RescheduleDrawer - using RescheduleModal instead */}
     </div>
   );
 };
