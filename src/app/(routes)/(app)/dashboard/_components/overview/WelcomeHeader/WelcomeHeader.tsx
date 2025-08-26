@@ -76,6 +76,8 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = () => {
     return "Good Evening";
   };
 
+  console.log(upcomingService, "upcomingService WelcomeHeader");
+
   return (
     <motion.div
       className={styles.welcomeHeader}

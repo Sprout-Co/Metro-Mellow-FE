@@ -23,7 +23,6 @@ import styles from "./BookingsMain.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import CalendarView from "../CalendarView/CalendarView";
 import FilterDropdown from "../FilterDropdown/FilterDropdown";
-// import { BookingStatus, ServiceCategory } from "../../types/booking";
 import ListView from "../ListView/ListView";
 import AppointmentCard from "@/components/ui/AppointmentCard";
 import QuickActions from "../QuickActions/QuickActions";
@@ -31,137 +30,6 @@ import TimelineView from "../TimelineView/TimelineView";
 import DashboardHeader from "../../../_components/DashboardHeader/DashboardHeader";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { Booking, ServiceCategory, BookingStatus } from "@/graphql/api";
-// import TimelineView from "../TimelineView/TimelineView";
-// import BookingStats from "../BookingStats/BookingStats";
-// import QuickActions from "../QuickActions/QuickActions";
-
-// Mock data (same as before)
-// const mockBookings = [
-//   {
-//     id: "1",
-//     serviceName: "Deep Home Cleaning",
-//     service_category: ServiceCategory.Cleaning,
-//     date: new Date(2024, 7, 15, 10, 0),
-//     endTime: new Date(2024, 7, 15, 12, 0),
-//     status: BookingStatus.Confirmed,
-//     provider: "Maria Rodriguez",
-//     address: "24 Emmanuel Osakwe Street, Lagos",
-//     price: 25000,
-//     notes: "Please focus on kitchen and bathrooms",
-//     recurring: false,
-//   },
-//   {
-//     id: "2",
-//     serviceName: "Laundry Service",
-//     service_category: ServiceCategory.Laundry,
-//     date: new Date(2024, 7, 16, 14, 0),
-//     endTime: new Date(2024, 7, 16, 15, 0),
-//     status: BookingStatus.Upcoming,
-//     provider: "Pending Assignment",
-//     address: "24 Emmanuel Osakwe Street, Lagos",
-//     price: 8000,
-//     notes: "3 bags of laundry",
-//     recurring: true,
-//     frequency: "Weekly",
-//   },
-//   {
-//     id: "3",
-//     serviceName: "Meal Preparation",
-//     service_category: ServiceCategory.Cooking,
-//     date: new Date(2024, 7, 18, 17, 0),
-//     endTime: new Date(2024, 7, 18, 19, 0),
-//     status: BookingStatus.Upcoming,
-//     provider: "Chef Kemi",
-//     address: "24 Emmanuel Osakwe Street, Lagos",
-//     price: 15000,
-//     notes: "Vegetarian meals only",
-//     recurring: false,
-//   },
-//   {
-//     id: "4",
-//     serviceName: "Grocery Shopping",
-//     service_category: ServiceCategory.Errands,
-//     date: new Date(2024, 7, 20, 9, 0),
-//     endTime: new Date(2024, 7, 20, 11, 0),
-//     status: BookingStatus.Pending,
-//     provider: "James O.",
-//     address: "Shoprite, Ikeja",
-//     price: 5000,
-//     notes: "Shopping list shared via email",
-//     recurring: false,
-//   },
-//   {
-//     id: "5",
-//     serviceName: "Pest Control Treatment",
-//     service_category: ServiceCategory.PestControl,
-//     date: new Date(2024, 7, 25, 8, 0),
-//     endTime: new Date(2024, 7, 25, 10, 0),
-//     status: BookingStatus.Upcoming,
-//     provider: "PestPro Team",
-//     address: "24 Emmanuel Osakwe Street, Lagos",
-//     price: 20000,
-//     notes: "Monthly prevention service",
-//     recurring: true,
-//     frequency: "Monthly",
-//   },
-//   {
-//     id: "6",
-//     serviceName: "Office Cleaning",
-//     service_category: ServiceCategory.Cleaning,
-//     date: new Date(2024, 7, 10, 18, 0),
-//     endTime: new Date(2024, 7, 10, 20, 0),
-//     status: BookingStatus.Completed,
-//     provider: "CleanPro Team",
-//     address: "Metro Office, Victoria Island",
-//     price: 35000,
-//     notes: "Deep clean completed successfully",
-//     recurring: false,
-//     rating: 5,
-//   },
-//   {
-//     id: "7",
-//     serviceName: "Dry Cleaning",
-//     service_category: ServiceCategory.Laundry,
-//     date: new Date(2024, 7, 5, 10, 0),
-//     endTime: new Date(2024, 7, 5, 11, 0),
-//     status: BookingStatus.Cancelled,
-//     provider: "Express Laundry",
-//     address: "24 Emmanuel Osakwe Street, Lagos",
-//     price: 12000,
-//     notes: "Customer cancelled - rescheduled",
-//     recurring: false,
-//   },
-//   {
-//     id: "8",
-//     serviceName: "Office Cleaning",
-//     service_category: ServiceCategory.Cleaning,
-//     date: new Date(new Date().setDate(new Date().getDate() + 1)), //tomorrow
-//     endTime: new Date(new Date().setDate(new Date().getDate() + 1)),
-//     status: BookingStatus.Upcoming,
-//     provider: "CleanPro Team",
-//     address: "Metro Office, Victoria Island",
-//     price: 35000,
-//     notes: "Deep clean completed successfully",
-//     recurring: false,
-//     rating: 5,
-//   },
-// ];
-
-// interface Booking {
-//   id: string;
-//   serviceName: string;
-//   service_category: ServiceCategory;
-//   date: Date;
-//   endTime: Date;
-//   status: BookingStatus;
-//   provider: string;
-//   address: string;
-//   price: number;
-//   notes?: string;
-//   recurring: boolean;
-//   frequency?: string;
-//   rating?: number;
-// }
 
 type ViewMode = "calendar" | "list" | "timeline";
 
@@ -176,8 +44,6 @@ const BookingsMain: React.FC = () => {
   );
   const [selectedDateRange, setSelectedDateRange] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [bookings, setBookings] = useState<Booking[]>([]);
-  const [showNotifications, setShowNotifications] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [customerBookings, setCustomerBookings] = useState<Booking[]>([]);
 
@@ -185,8 +51,9 @@ const BookingsMain: React.FC = () => {
     const fetchBookings = async () => {
       try {
         setIsLoading(true);
-        const { data, loading } = await handleGetCustomerBookings();
-        setBookings(data || []);
+        const result = await handleGetCustomerBookings();
+        const { data, loading } = result;
+        setCustomerBookings(data || []);
         setIsLoading(loading);
       } catch (error) {
         console.error("Failed to fetch customer bookings:", error);
@@ -201,7 +68,7 @@ const BookingsMain: React.FC = () => {
 
   // Filter bookings
   const filteredBookings = useMemo(() => {
-    let filtered = [...bookings];
+    let filtered = [...customerBookings];
 
     // Filter by search query
     if (searchQuery) {
@@ -252,24 +119,31 @@ const BookingsMain: React.FC = () => {
 
     return filtered;
   }, [
-    bookings,
+    customerBookings,
     selectedservice_category,
     selectedStatus,
     selectedDateRange,
     searchQuery,
   ]);
 
-  // Get next upcoming booking
-  const nextBooking = useMemo(() => {
+  const upcomingService = useMemo(() => {
+    if (isLoading || !customerBookings.length) return null;
+
     const now = new Date();
-    const upcoming = bookings
-      .filter((b) => {
-        const bookingDate = new Date(b.date);
-        return bookingDate > now && b.status === BookingStatus.Confirmed;
+    const upcomingBookings = customerBookings
+      .filter((booking) => {
+        const bookingDate = new Date(booking.date);
+        return (
+          booking.status !== BookingStatus.Completed &&
+          booking.status !== BookingStatus.Cancelled &&
+          booking.status !== BookingStatus.Paused &&
+          bookingDate > now
+        );
       })
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-    return upcoming[0] || null;
-  }, [bookings]);
+
+    return upcomingBookings[0] || null;
+  }, [customerBookings, isLoading, handleGetCustomerBookings]);
 
   const handleAddBooking = () => {
     console.log("Add new booking");
@@ -302,18 +176,18 @@ const BookingsMain: React.FC = () => {
         actionBtnText="Book Service"
         actionBtnIcon={<Plus size={18} />}
         onActionButtonClick={handleAddBooking}
-        booking={nextBooking || bookings[0] || ({} as Booking)}
-        upcomingService={
-          nextBooking
-            ? {
-                serviceName: nextBooking.service?.name || "",
-                service_category: nextBooking.service_category,
-                date: nextBooking.date.toISOString(),
-                status: nextBooking.status,
-                provider: nextBooking.staff?.firstName || "",
-              }
-            : undefined
-        }
+        booking={upcomingService || undefined}
+        // upcomingService={
+        //   upcomingService
+        //     ? {
+        //         serviceName: upcomingService.service?.name || "",
+        //         service_category: upcomingService.service_category,
+        //         date: upcomingService.date.toISOString(),
+        //         status: upcomingService.status,
+        //         provider: upcomingService.staff?.firstName || "",
+        //       }
+        //     : undefined
+        // }
       />
 
       {/* Quick Actions */}

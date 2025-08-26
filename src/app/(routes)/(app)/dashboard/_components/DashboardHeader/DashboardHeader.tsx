@@ -29,14 +29,8 @@ interface DashboardHeaderProps {
   actionBtnText?: string;
   actionBtnIcon?: React.ReactNode;
   onActionButtonClick?: () => void;
-  upcomingService?: {
-    serviceName: string;
-    service_category: string;
-    date: string;
-    status: string;
-    provider: string;
-  };
-  booking: Booking;
+  upcomingService?: Booking;
+  booking?: Booking;
   extraContent?: React.ReactNode;
 }
 
