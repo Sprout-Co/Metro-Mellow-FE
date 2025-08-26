@@ -28,6 +28,7 @@ import RescheduleModal from "../RescheduleModal/RescheduleModal";
 import ConfirmActionModal, {
   ActionType,
 } from "../ConfirmActionModal/ConfirmActionModal";
+import FeedbackModal from "../FeedbackModal/FeedbackModal";
 
 interface BookingDetailModalProps {
   isOpen: boolean;
@@ -45,6 +46,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
     useState(false);
   const [confirmationActionType, setConfirmationActionType] =
     useState<ActionType>(null);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   if (!booking) return null;
 
   // Format date
@@ -98,6 +100,28 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
     setConfirmationActionType(actionType);
     setIsConfirmActionModalOpen(true);
   }
+
+  const handleFeedbackSubmit = async (rating: number, comment: string) => {
+    try {
+      // TODO: Implement GraphQL mutation for feedback submission
+      console.log("Submitting feedback:", {
+        rating,
+        comment,
+        bookingId: booking?.id,
+      });
+
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // For now, just log the feedback
+      alert(
+        `Feedback submitted successfully!\nRating: ${rating}/5\nComment: ${comment}`
+      );
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      throw new Error("Failed to submit feedback. Please try again.");
+    }
+  };
 
   const renderFooterButtons = () => {
     switch (booking.status) {
@@ -181,6 +205,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              onClick={() => setIsFeedbackModalOpen(true)}
             >
               <MessageSquare size={14} />
               Leave Feedback
@@ -422,6 +447,12 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
         isOpen={isConfirmActionModalOpen}
         onClose={() => setIsConfirmActionModalOpen(false)}
         booking={booking}
+      />
+      <FeedbackModal
+        isOpen={true}
+        onClose={() => setIsFeedbackModalOpen(false)}
+        booking={booking}
+        onSubmit={handleFeedbackSubmit}
       />
     </ModalDrawer>
   );
