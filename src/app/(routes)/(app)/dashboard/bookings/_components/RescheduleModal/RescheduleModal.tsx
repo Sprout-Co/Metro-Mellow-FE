@@ -7,6 +7,7 @@ import {
   Calendar,
   Clock,
   ChevronRight,
+  ChevronLeft,
   AlertCircle,
   CheckCircle,
   Info,
@@ -38,25 +39,53 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
 
   if (!isOpen || !booking) return null;
 
-  // Generate next 30 days
-  const generateDates = () => {
-    const dates = [];
+  // Calendar navigation
+  const navigateMonth = (direction: "prev" | "next") => {
+    const newMonth = new Date(currentMonth);
+    newMonth.setMonth(newMonth.getMonth() + (direction === "next" ? 1 : -1));
+    setCurrentMonth(newMonth);
+  };
+
+  const goToToday = () => {
     const today = new Date();
-    for (let i = 1; i <= 30; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-      dates.push(date);
+    setCurrentMonth(today);
+  };
+
+  // Get calendar days for current month
+  const getCalendarDays = () => {
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startingDayOfWeek = firstDay.getDay();
+
+    const days: (Date | null)[] = [];
+
+    // Add empty days for the start of the month
+    for (let i = 0; i < startingDayOfWeek; i++) {
+      days.push(null);
     }
-    return dates;
+
+    // Add all days of the month
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push(new Date(year, month, i));
+    }
+
+    // Add empty days to complete the last week
+    const remainingDays = 42 - days.length; // 6 weeks * 7 days
+    for (let i = 0; i < remainingDays; i++) {
+      days.push(null);
+    }
+
+    return days;
   };
 
-  const dates = generateDates();
-  const timeSlots = Object.values(TimeSlot); //generateTimeSlots();
+  const calendarDays = getCalendarDays();
+  const timeSlots = Object.values(TimeSlot);
 
-  // Get weekday name
-  const getWeekdayName = (date: Date) => {
-    return date.toLocaleDateString("en-US", { weekday: "short" });
-  };
+  // Get weekday names
+  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   // Format date
   const formatDate = (date: Date) => {
@@ -73,10 +102,25 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
     return day === 0 || day === 6;
   };
 
+  // Check if date is today
+  const isToday = (date: Date) => {
+    const today = new Date();
+    return date.toDateString() === today.toDateString();
+  };
+
+  // Check if date is in the past
+  const isPastDate = (date: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
+  };
+
   // Handle date selection
   const handleDateSelect = (date: Date) => {
-    setSelectedDate(date);
-    setSelectedTime(null); // Reset time when date changes
+    if (!isPastDate(date)) {
+      setSelectedDate(date);
+      setSelectedTime(null); // Reset time when date changes
+    }
   };
 
   // Handle time selection
@@ -194,46 +238,104 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
                   </div>
                 </div>
 
-                {/* Date Selection */}
+                {/* Calendar Date Selection */}
                 <div className={styles.modal__section}>
                   <div className={styles.modal__sectionTitle}>
                     Select New Date
                   </div>
-                  <div className={styles.modal__dateGrid}>
-                    {dates.slice(0, 14).map((date, index) => {
-                      const isSelected =
-                        selectedDate?.toDateString() === date.toDateString();
-                      const weekend = isWeekend(date);
 
-                      return (
-                        <motion.button
-                          key={index}
-                          className={`${styles.modal__dateCard} ${
-                            isSelected
-                              ? styles["modal__dateCard--selected"]
-                              : ""
-                          } ${weekend ? styles["modal__dateCard--weekend"] : ""}`}
-                          onClick={() => handleDateSelect(date)}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.02 }}
-                        >
-                          <span className={styles.modal__dateDay}>
-                            {getWeekdayName(date)}
-                          </span>
-                          <span className={styles.modal__dateNumber}>
+                  {/* Calendar Header */}
+                  <div className={styles.modal__calendarHeader}>
+                    <button
+                      className={styles.modal__calendarNavBtn}
+                      onClick={() => navigateMonth("prev")}
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+                    <div className={styles.modal__calendarTitle}>
+                      {currentMonth.toLocaleDateString("en-US", {
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </div>
+                    <button
+                      className={styles.modal__calendarNavBtn}
+                      onClick={() => navigateMonth("next")}
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+                  </div>
+
+                  {/* Today Button */}
+                  <div className={styles.modal__todayContainer}>
+                    <button
+                      className={styles.modal__todayBtn}
+                      onClick={goToToday}
+                    >
+                      Today
+                    </button>
+                  </div>
+
+                  {/* Calendar Grid */}
+                  <div className={styles.modal__calendar}>
+                    {/* Week Days Header */}
+                    <div className={styles.modal__weekDays}>
+                      {weekDays.map((day) => (
+                        <div key={day} className={styles.modal__weekDay}>
+                          {day}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Calendar Days */}
+                    <div className={styles.modal__calendarDays}>
+                      {calendarDays.map((date, index) => {
+                        if (!date) {
+                          return (
+                            <div
+                              key={`empty-${index}`}
+                              className={styles.modal__calendarDayEmpty}
+                            />
+                          );
+                        }
+
+                        const isSelected =
+                          selectedDate?.toDateString() === date.toDateString();
+                        const isPast = isPastDate(date);
+                        const weekend = isWeekend(date);
+                        const today = isToday(date);
+
+                        return (
+                          <motion.button
+                            key={date.toISOString()}
+                            className={`${styles.modal__calendarDay} ${
+                              isSelected
+                                ? styles["modal__calendarDay--selected"]
+                                : ""
+                            } ${
+                              isPast
+                                ? styles["modal__calendarDay--disabled"]
+                                : ""
+                            } ${
+                              weekend
+                                ? styles["modal__calendarDay--weekend"]
+                                : ""
+                            } ${
+                              today ? styles["modal__calendarDay--today"] : ""
+                            }`}
+                            onClick={() => handleDateSelect(date)}
+                            disabled={isPast}
+                            whileHover={!isPast ? { scale: 1.05 } : {}}
+                            whileTap={!isPast ? { scale: 0.95 } : {}}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: index * 0.01 }}
+                          >
                             {date.getDate()}
-                          </span>
-                          {weekend && (
-                            <span className={styles.modal__weekendBadge}>
-                              Weekend
-                            </span>
-                          )}
-                        </motion.button>
-                      );
-                    })}
+                          </motion.button>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
 

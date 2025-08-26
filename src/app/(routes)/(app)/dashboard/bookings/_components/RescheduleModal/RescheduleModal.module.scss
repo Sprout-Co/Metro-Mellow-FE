@@ -174,6 +174,162 @@
     margin-bottom: spacing("xl");
   }
 
+  // Calendar Styles
+  &__calendarHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: spacing("md");
+    padding: spacing("sm") spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+  }
+
+  &__calendarNavBtn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "light");
+    border-radius: border-radius("md");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("primary", "lighter");
+      border-color: color("primary", "base");
+      color: color("primary", "base");
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__calendarTitle {
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    text-align: center;
+    flex: 1;
+  }
+
+  &__todayContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: spacing("md");
+  }
+
+  &__todayBtn {
+    padding: spacing("xs") spacing("md");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("medium");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("primary", "dark");
+      transform: translateY(-1px);
+    }
+  }
+
+  &__calendar {
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    overflow: hidden;
+  }
+
+  &__weekDays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: color("neutral", "lightest");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+
+  &__weekDay {
+    padding: spacing("sm");
+    text-align: center;
+    @include font-size("xs");
+    @include font-weight("semibold");
+    color: color("neutral", "dark");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__calendarDays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  &__calendarDay {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color("neutral", "white");
+    border: none;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:hover:not(&--disabled) {
+      background: color("primary", "lighter");
+      color: color("primary", "base");
+    }
+
+    &--selected {
+      background: color("primary", "base");
+      color: color("neutral", "white");
+      font-weight: map-get($font-weights, "semibold");
+
+      &:hover {
+        background: color("primary", "dark");
+      }
+    }
+
+    &--disabled {
+      background: color("neutral", "lighter");
+      color: color("neutral", "medium");
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    &--weekend {
+      color: color("accent", "base");
+    }
+
+    &--today {
+      background: color("secondary", "lighter");
+      color: color("secondary", "base");
+      font-weight: map-get($font-weights, "semibold");
+      border: 2px solid color("secondary", "base");
+
+      &:hover:not(&--disabled) {
+        background: color("secondary", "base");
+        color: color("neutral", "white");
+      }
+    }
+  }
+
+  &__calendarDayEmpty {
+    aspect-ratio: 1;
+    background: color("neutral", "lightest");
+  }
+
+  // Legacy date grid styles (keeping for backward compatibility)
   &__dateGrid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
