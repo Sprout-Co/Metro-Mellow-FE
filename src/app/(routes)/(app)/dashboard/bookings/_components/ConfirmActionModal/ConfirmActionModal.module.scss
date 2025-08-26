@@ -7,11 +7,11 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
-  z-index: z-index("modal");
+  z-index: 9998;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,11 +24,35 @@
   transform: translate(-50%, -50%);
   width: 90%;
   max-width: 520px;
+  max-height: 90vh;
   background-color: color("neutral", "white");
   border-radius: border-radius("2xl");
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  z-index: calc(z-index("modal") + 1);
-  overflow: hidden;
+  z-index: 9999;
+  overflow-y: auto;
+
+  /* Custom scrollbar styling to maintain border radius */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 0 border-radius("2xl") border-radius("2xl") 0;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  /* Firefox scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
 
   &--cancel {
     .modal__iconWrapper {
@@ -375,7 +399,11 @@
 @include breakpoint-down("sm") {
   .modal {
     width: 95%;
-    max-height: 90vh;
-    overflow-y: auto;
+    max-height: 95vh;
+    margin: 2.5vh auto;
+  }
+
+  .backdrop {
+    padding: 10px;
   }
 }

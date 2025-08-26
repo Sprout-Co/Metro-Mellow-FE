@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import styles from "./ConfirmActionModal.module.scss";
 import { Booking } from "@/graphql/api";
+import Portal from "@/components/ui/Portal/Portal";
 
 type ActionType = "pause" | "cancel";
 
@@ -56,11 +57,6 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
             id: "schedule_conflict",
             label: "Schedule Conflict",
             description: "I'm not available at this time",
-          },
-          {
-            id: "provider_issue",
-            label: "Provider Issue",
-            description: "Issues with the service provider",
           },
           {
             id: "no_longer_needed",
@@ -196,7 +192,7 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
   const actionDetails = getActionDetails();
 
   return (
-    <>
+    <Portal>
       {/* Backdrop */}
       <AnimatePresence>
         {isOpen && (
@@ -215,10 +211,10 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
         {isOpen && (
           <motion.div
             className={`${styles.modal} ${actionDetails.iconColor}`}
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            // initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            // animate={{ opacity: 1, scale: 1, y: 0 }}
+            // exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            // transition={{ type: "spring", damping: 25, stiffness: 300 }}
           >
             {/* Header */}
             <div className={styles.modal__header}>
@@ -234,33 +230,6 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
             <div className={styles.modal__titleSection}>
               <h2 className={styles.modal__title}>{actionDetails.title}</h2>
               <p className={styles.modal__subtitle}>{actionDetails.subtitle}</p>
-            </div>
-
-            {/* Booking Details */}
-            <div className={styles.modal__bookingInfo}>
-              <div className={styles.modal__bookingCard}>
-                <h4>{booking.service.name}</h4>
-                <div className={styles.modal__bookingDetails}>
-                  <span>
-                    <Calendar size={14} />
-                    {formatDate(booking.date)}
-                  </span>
-                  <span>
-                    <Clock size={14} />
-                    {booking.timeSlot}
-                  </span>
-                  {booking.staff && (
-                    <span>
-                      <User size={14} />
-                      {booking.staff.firstName} {booking.staff.lastName}
-                    </span>
-                  )}
-                  <span className={styles.modal__price}>
-                    {formatPrice(booking.totalPrice)}
-                    {booking.recurring && ` / ${booking.frequency}`}
-                  </span>
-                </div>
-              </div>
             </div>
 
             {/* Reason Selection */}
@@ -394,7 +363,7 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </Portal>
   );
 };
 
