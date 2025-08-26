@@ -15,19 +15,13 @@ import {
   MapPin,
 } from "lucide-react";
 import styles from "./RescheduleModal.module.scss";
-import { Booking } from "@/graphql/api";
+import { Booking, TimeSlot } from "@/graphql/api";
 
 interface RescheduleModalProps {
   isOpen: boolean;
   onClose: () => void;
   booking: Booking | null;
   onConfirm?: (date: string, time: string) => void;
-}
-
-interface TimeSlot {
-  time: string;
-  available: boolean;
-  popular?: boolean;
 }
 
 const RescheduleModal: React.FC<RescheduleModalProps> = ({
@@ -56,24 +50,8 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
     return dates;
   };
 
-  // Generate time slots
-  const generateTimeSlots = (): TimeSlot[] => {
-    return [
-      { time: "8:00 AM", available: true, popular: false },
-      { time: "9:00 AM", available: true, popular: true },
-      { time: "10:00 AM", available: false, popular: true },
-      { time: "11:00 AM", available: true, popular: false },
-      { time: "12:00 PM", available: true, popular: false },
-      { time: "1:00 PM", available: false, popular: false },
-      { time: "2:00 PM", available: true, popular: true },
-      { time: "3:00 PM", available: true, popular: false },
-      { time: "4:00 PM", available: true, popular: false },
-      { time: "5:00 PM", available: true, popular: false },
-    ];
-  };
-
   const dates = generateDates();
-  const timeSlots = generateTimeSlots();
+  const timeSlots = Object.values(TimeSlot); //generateTimeSlots();
 
   // Get weekday name
   const getWeekdayName = (date: Date) => {
@@ -103,8 +81,8 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
 
   // Handle time selection
   const handleTimeSelect = (slot: TimeSlot) => {
-    if (slot.available) {
-      setSelectedTime(slot.time);
+    if (slot) {
+      setSelectedTime(slot);
     }
   };
 
@@ -271,8 +249,8 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
                       Available Time Slots for {formatDate(selectedDate)}
                     </div>
                     <div className={styles.modal__timeGrid}>
-                      {timeSlots.map((slot, index) => {
-                        const isSelected = selectedTime === slot.time;
+                      {Object.values(TimeSlot).map((slot, index) => {
+                        const isSelected = selectedTime === slot;
 
                         return (
                           <motion.button
@@ -281,26 +259,16 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
                               isSelected
                                 ? styles["modal__timeSlot--selected"]
                                 : ""
-                            } ${!slot.available ? styles["modal__timeSlot--unavailable"] : ""}`}
+                            } ${!slot ? styles["modal__timeSlot--unavailable"] : ""}`}
                             onClick={() => handleTimeSelect(slot)}
-                            disabled={!slot.available}
-                            whileHover={slot.available ? { scale: 1.05 } : {}}
-                            whileTap={slot.available ? { scale: 0.95 } : {}}
+                            disabled={!slot}
+                            whileHover={slot ? { scale: 1.05 } : {}}
+                            whileTap={slot ? { scale: 0.95 } : {}}
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: index * 0.03 }}
                           >
-                            <span>{slot.time}</span>
-                            {slot.popular && slot.available && (
-                              <span className={styles.modal__popularBadge}>
-                                Popular
-                              </span>
-                            )}
-                            {!slot.available && (
-                              <span className={styles.modal__unavailableBadge}>
-                                Booked
-                              </span>
-                            )}
+                            <span>{slot}</span>
                           </motion.button>
                         );
                       })}
