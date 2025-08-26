@@ -1,7 +1,7 @@
 // src/app/(routes)/(app)/dashboard/bookings/_components/BookingDetailModal/BookingDetailModal.tsx
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -23,6 +23,8 @@ import {
 import styles from "./BookingDetailModal.module.scss";
 import { ServiceCategory, BookingStatus, Booking } from "@/graphql/api";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
+import RescheduleModal from "../RescheduleModal/RescheduleModal";
+import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
 
 // interface Booking {
 //   id: string;
@@ -53,6 +55,9 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
   onClose,
   booking,
 }) => {
+  const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
+  const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] =
+    useState(false);
   if (!booking) return null;
 
   // Format date
@@ -305,6 +310,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              onClick={() => setIsRescheduleModalOpen(true)}
             >
               <RefreshCw size={14} />
               Reschedule
@@ -321,6 +327,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--danger"]}`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              onClick={() => setIsConfirmActionModalOpen(true)}
             >
               <X size={14} />
               Cancel
@@ -375,6 +382,18 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
           </motion.button>
         )}
       </div>
+
+      <RescheduleModal
+        isOpen={isRescheduleModalOpen}
+        onClose={() => setIsRescheduleModalOpen(false)}
+        booking={booking}
+      />
+      <ConfirmActionModal
+        actionType="cancel"
+        isOpen={isConfirmActionModalOpen}
+        onClose={() => setIsConfirmActionModalOpen(false)}
+        booking={booking}
+      />
     </ModalDrawer>
   );
 };

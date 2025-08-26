@@ -1,0 +1,381 @@
+// src/app/(routes)/(app)/dashboard/bookings/_components/ConfirmActionModal/ConfirmActionModal.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: z-index("modal");
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 520px;
+  background-color: color("neutral", "white");
+  border-radius: border-radius("2xl");
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  z-index: calc(z-index("modal") + 1);
+  overflow: hidden;
+
+  &--cancel {
+    .modal__iconWrapper {
+      background: linear-gradient(
+        135deg,
+        rgba(251, 34, 34, 0.1),
+        rgba(251, 34, 34, 0.2)
+      );
+      color: color("status", "error");
+    }
+  }
+
+  &--pause {
+    .modal__iconWrapper {
+      background: linear-gradient(
+        135deg,
+        rgba(242, 153, 74, 0.1),
+        rgba(242, 153, 74, 0.2)
+      );
+      color: #f2994a;
+    }
+  }
+
+  &__header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: spacing("xl") spacing("xl") 0;
+  }
+
+  &__iconWrapper {
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: border-radius("full");
+
+    svg {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  &__closeBtn {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    border-radius: border-radius("md");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+      color: color("neutral", "darkest");
+    }
+  }
+
+  &__titleSection {
+    text-align: center;
+    padding: spacing("md") spacing("xl") 0;
+  }
+
+  &__title {
+    @include font-size("xl");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xs") 0;
+  }
+
+  &__subtitle {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
+
+  &__bookingInfo {
+    padding: spacing("lg") spacing("xl");
+  }
+
+  &__bookingCard {
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+
+    h4 {
+      @include font-size("body-2");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("sm") 0;
+    }
+  }
+
+  &__bookingDetails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing("md");
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: spacing("xs");
+      @include font-size("sm");
+      color: color("neutral", "dark");
+
+      svg {
+        width: 14px;
+        height: 14px;
+        color: color("neutral", "medium");
+      }
+    }
+  }
+
+  &__price {
+    @include font-weight("semibold");
+    color: color("primary", "base") !important;
+  }
+
+  &__reasonSection {
+    padding: 0 spacing("xl") spacing("lg");
+  }
+
+  &__sectionTitle {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("md") 0;
+  }
+
+  &__reasons {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__reasonOption {
+    display: flex;
+    align-items: center;
+    padding: spacing("md");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: color("primary", "base");
+      background: color("neutral", "lightest");
+    }
+
+    &--selected {
+      border-color: color("primary", "base");
+      background: rgba(7, 80, 86, 0.05);
+    }
+  }
+
+  &__reasonRadio {
+    width: 18px;
+    height: 18px;
+    margin-right: spacing("md");
+    accent-color: color("primary", "base");
+  }
+
+  &__reasonContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+  }
+
+  &__reasonLabel {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+  }
+
+  &__reasonDescription {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+  }
+
+  &__reasonArrow {
+    color: color("neutral", "medium");
+    transition: $transition-fast;
+
+    .modal__reasonOption:hover & {
+      transform: translateX(4px);
+    }
+  }
+
+  &__customReason {
+    margin-top: spacing("md");
+    overflow: hidden;
+  }
+
+  &__textarea {
+    width: 100%;
+    padding: spacing("md");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    @include font-size("sm");
+    color: color("neutral", "darkest");
+    resize: none;
+    transition: $transition-fast;
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.05);
+    }
+  }
+
+  &__warning {
+    margin: 0 spacing("xl") spacing("lg");
+    padding: spacing("md");
+    background: rgba(254, 91, 4, 0.05);
+    border: 1px solid rgba(254, 91, 4, 0.2);
+    border-radius: border-radius("md");
+  }
+
+  &__warningHeader {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("secondary", "base");
+    margin-bottom: spacing("sm");
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__warningList {
+    margin: 0;
+    padding-left: spacing("lg");
+
+    li {
+      @include font-size("xs");
+      color: color("neutral", "dark");
+      margin-bottom: spacing("xs");
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__success {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    margin: 0 spacing("xl") spacing("lg");
+    padding: spacing("md");
+    background: linear-gradient(
+      135deg,
+      rgba(5, 150, 105, 0.1),
+      rgba(5, 150, 105, 0.05)
+    );
+    border: 1px solid color("status", "success");
+    border-radius: border-radius("md");
+
+    svg {
+      color: color("status", "success");
+      flex-shrink: 0;
+    }
+
+    h4 {
+      @include font-size("sm");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xxs") 0;
+    }
+
+    p {
+      @include font-size("xs");
+      color: color("neutral", "dark");
+      margin: 0;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    gap: spacing("md");
+    padding: spacing("lg") spacing("xl");
+    background: color("neutral", "lightest");
+    border-top: 1px solid color("neutral", "lighter");
+  }
+
+  &__button {
+    flex: 1;
+    padding: spacing("md");
+    border: none;
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &--secondary {
+      background: color("neutral", "white");
+      color: color("neutral", "darkest");
+      border: 1px solid color("neutral", "light");
+
+      &:hover:not(:disabled) {
+        background: color("neutral", "lighter");
+        transform: translateY(-1px);
+      }
+    }
+
+    &--danger {
+      background: linear-gradient(135deg, color("status", "error"), #dc2626);
+      color: color("neutral", "white");
+
+      &:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+@include breakpoint-down("sm") {
+  .modal {
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
