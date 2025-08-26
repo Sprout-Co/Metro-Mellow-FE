@@ -45,14 +45,6 @@ const QuickActions: React.FC<QuickActionsProps> = ({
       color: "accent",
       onClick: () => router.push(Routes.DASHBOARD_SUBSCRIPTIONS_ADD),
     },
-    // {
-    //   id: "review",
-    //   icon: <Star />,
-    //   title: "Leave Review",
-    //   description: "Rate your service",
-    //   color: "warning",
-    //   onClick: () => console.log("Leave review"),
-    // },
     {
       id: "refer",
       icon: <Gift />,
