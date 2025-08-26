@@ -12,8 +12,11 @@ import {
   HelpCircle,
   Star,
   Gift,
+  Route,
 } from "lucide-react";
 import styles from "./QuickActions.module.scss";
+import { useRouter } from "next/navigation";
+import { Routes } from "@/constants/routes";
 
 interface QuickActionsProps {
   onAddBooking: () => void;
@@ -24,6 +27,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({
   onAddBooking,
   onReschedule,
 }) => {
+  const router = useRouter();
   const actions = [
     {
       id: "book",
@@ -39,23 +43,23 @@ const QuickActions: React.FC<QuickActionsProps> = ({
       title: "Set Recurring",
       description: "Create subscription",
       color: "accent",
-      onClick: () => console.log("Set recurring"),
+      onClick: () => router.push(Routes.DASHBOARD_SUBSCRIPTIONS_ADD),
     },
-    {
-      id: "review",
-      icon: <Star />,
-      title: "Leave Review",
-      description: "Rate your service",
-      color: "warning",
-      onClick: () => console.log("Leave review"),
-    },
+    // {
+    //   id: "review",
+    //   icon: <Star />,
+    //   title: "Leave Review",
+    //   description: "Rate your service",
+    //   color: "warning",
+    //   onClick: () => console.log("Leave review"),
+    // },
     {
       id: "refer",
       icon: <Gift />,
       title: "Refer Friend",
       description: "Earn rewards",
       color: "accent",
-      onClick: () => console.log("Refer friend"),
+      onClick: () => router.push(Routes.DASHBOARD_REFER_FRIEND),
     },
     {
       id: "support",
@@ -63,7 +67,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({
       title: "Get Support",
       description: "Contact help center",
       color: "neutral",
-      onClick: () => console.log("Get support"),
+      onClick: () => router.push(Routes.DASHBOARD_SUPPORT),
     },
   ];
 

@@ -20,6 +20,7 @@ import styles from "./ConfirmActionModal.module.scss";
 import { Booking, BookingStatus } from "@/graphql/api";
 import Portal from "@/components/ui/Portal/Portal";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
+import Modal from "@/components/ui/Modal/Modal";
 
 export type ActionType =
   | "pause"
@@ -275,194 +276,165 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
   const actionDetails = getActionDetails();
 
   return (
-    <Portal>
-      {/* Backdrop */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            className={styles.backdrop}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-          />
-        )}
-      </AnimatePresence>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <motion.div className={`${styles.modal} ${actionDetails.iconColor}`}>
+        {/* Header */}
+        <div className={styles.modal__header}>
+          <div className={styles.modal__iconWrapper}>{actionDetails.icon}</div>
+          <button className={styles.modal__closeBtn} onClick={onClose}>
+            <X size={20} />
+          </button>
+        </div>
 
-      {/* Modal */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            className={`${styles.modal} ${actionDetails.iconColor}`}
-            // initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            // animate={{ opacity: 1, scale: 1, y: 0 }}
-            // exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            // transition={{ type: "spring", damping: 25, stiffness: 300 }}
-          >
-            {/* Header */}
-            <div className={styles.modal__header}>
-              <div className={styles.modal__iconWrapper}>
-                {actionDetails.icon}
-              </div>
-              <button className={styles.modal__closeBtn} onClick={onClose}>
-                <X size={20} />
-              </button>
-            </div>
+        {/* Title */}
+        <div className={styles.modal__titleSection}>
+          <h2 className={styles.modal__title}>{actionDetails.title}</h2>
+          <p className={styles.modal__subtitle}>{actionDetails.subtitle}</p>
+        </div>
 
-            {/* Title */}
-            <div className={styles.modal__titleSection}>
-              <h2 className={styles.modal__title}>{actionDetails.title}</h2>
-              <p className={styles.modal__subtitle}>{actionDetails.subtitle}</p>
-            </div>
-
-            {/* Reason Selection */}
-            <div className={styles.modal__reasonSection}>
-              {reasonOptions.length > 0 && (
-                <>
-                  <h3 className={styles.modal__sectionTitle}>
-                    Please select a reason {actionDetails.reasonText}
-                  </h3>
-                </>
-              )}
-              <div className={styles.modal__reasons}>
-                {reasonOptions.map((option) => (
-                  <motion.label
-                    key={option.id}
-                    className={`${styles.modal__reasonOption} ${
-                      selectedReason === option.id
-                        ? styles["modal__reasonOption--selected"]
-                        : ""
-                    }`}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <input
-                      type="radio"
-                      name="reason"
-                      value={option.description}
-                      checked={selectedReason === option.id}
-                      onChange={(e) => setSelectedReason(e.target.value)}
-                      className={styles.modal__reasonRadio}
-                    />
-                    <div className={styles.modal__reasonContent}>
-                      <span className={styles.modal__reasonLabel}>
-                        {option.label}
-                      </span>
-                      {option.description && (
-                        <span className={styles.modal__reasonDescription}>
-                          {option.description}
-                        </span>
-                      )}
-                    </div>
-                    <ChevronRight
-                      size={16}
-                      className={styles.modal__reasonArrow}
-                    />
-                  </motion.label>
-                ))}
-              </div>
-
-              {/* Custom Reason Input */}
-              {selectedReason === "other" && (
-                <motion.div
-                  className={styles.modal__customReason}
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <textarea
-                    placeholder="Please provide more details..."
-                    value={customReason}
-                    onChange={(e) => setCustomReason(e.target.value)}
-                    className={styles.modal__textarea}
-                    rows={3}
-                  />
-                </motion.div>
-              )}
-            </div>
-
-            {/* Warning Box */}
-            <div className={styles.modal__warning}>
-              <div className={styles.modal__warningHeader}>
-                <AlertTriangle size={16} />
-                <span>{actionDetails.warningTitle}</span>
-              </div>
-              <ul className={styles.modal__warningList}>
-                {actionDetails.warnings.map((warning, index) => (
-                  <li key={index}>{warning}</li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Error Message */}
-            <AnimatePresence>
-              {error && (
-                <motion.div
-                  className={styles.modal__error}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                >
-                  <AlertTriangle size={16} />
-                  <div>
-                    <strong>Error:</strong>
-                    <p>{error}</p>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Success Message */}
-            <AnimatePresence>
-              {showSuccess && (
-                <motion.div
-                  className={styles.modal__success}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                >
-                  <CheckCircle size={24} />
-                  <div>
-                    <h4>{actionDetails.successTitle}</h4>
-                    <p>{actionDetails.successMessage}</p>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Footer */}
-            <div className={styles.modal__footer}>
-              <motion.button
-                className={`${styles.modal__button} ${styles["modal__button--secondary"]}`}
-                onClick={onClose}
-                disabled={isProcessing}
+        {/* Reason Selection */}
+        <div className={styles.modal__reasonSection}>
+          {reasonOptions.length > 0 && (
+            <>
+              <h3 className={styles.modal__sectionTitle}>
+                Please select a reason {actionDetails.reasonText}
+              </h3>
+            </>
+          )}
+          <div className={styles.modal__reasons}>
+            {reasonOptions.map((option) => (
+              <motion.label
+                key={option.id}
+                className={`${styles.modal__reasonOption} ${
+                  selectedReason === option.id
+                    ? styles["modal__reasonOption--selected"]
+                    : ""
+                }`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                Keep Booking
-              </motion.button>
-              <motion.button
-                className={`${styles.modal__button} ${styles["modal__button--danger"]}`}
-                onClick={handleConfirm}
-                whileHover={
-                  selectedReason && (selectedReason !== "other" || customReason)
-                    ? { scale: 1.02 }
-                    : {}
-                }
-                whileTap={
-                  selectedReason && (selectedReason !== "other" || customReason)
-                    ? { scale: 0.98 }
-                    : {}
-                }
-              >
-                {isProcessing ? "Processing..." : actionDetails.buttonText}
-              </motion.button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </Portal>
+                <input
+                  type="radio"
+                  name="reason"
+                  value={option.description}
+                  checked={selectedReason === option.id}
+                  onChange={(e) => setSelectedReason(e.target.value)}
+                  className={styles.modal__reasonRadio}
+                />
+                <div className={styles.modal__reasonContent}>
+                  <span className={styles.modal__reasonLabel}>
+                    {option.label}
+                  </span>
+                  {option.description && (
+                    <span className={styles.modal__reasonDescription}>
+                      {option.description}
+                    </span>
+                  )}
+                </div>
+                <ChevronRight size={16} className={styles.modal__reasonArrow} />
+              </motion.label>
+            ))}
+          </div>
+
+          {/* Custom Reason Input */}
+          {selectedReason === "other" && (
+            <motion.div
+              className={styles.modal__customReason}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <textarea
+                placeholder="Please provide more details..."
+                value={customReason}
+                onChange={(e) => setCustomReason(e.target.value)}
+                className={styles.modal__textarea}
+                rows={3}
+              />
+            </motion.div>
+          )}
+        </div>
+
+        {/* Warning Box */}
+        <div className={styles.modal__warning}>
+          <div className={styles.modal__warningHeader}>
+            <AlertTriangle size={16} />
+            <span>{actionDetails.warningTitle}</span>
+          </div>
+          <ul className={styles.modal__warningList}>
+            {actionDetails.warnings.map((warning, index) => (
+              <li key={index}>{warning}</li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Error Message */}
+        <AnimatePresence>
+          {error && (
+            <motion.div
+              className={styles.modal__error}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+            >
+              <AlertTriangle size={16} />
+              <div>
+                <strong>Error:</strong>
+                <p>{error}</p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Success Message */}
+        <AnimatePresence>
+          {showSuccess && (
+            <motion.div
+              className={styles.modal__success}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+            >
+              <CheckCircle size={24} />
+              <div>
+                <h4>{actionDetails.successTitle}</h4>
+                <p>{actionDetails.successMessage}</p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Footer */}
+        <div className={styles.modal__footer}>
+          <motion.button
+            className={`${styles.modal__button} ${styles["modal__button--secondary"]}`}
+            onClick={onClose}
+            disabled={isProcessing}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            Keep Booking
+          </motion.button>
+          <motion.button
+            className={`${styles.modal__button} ${styles["modal__button--danger"]}`}
+            onClick={handleConfirm}
+            whileHover={
+              selectedReason && (selectedReason !== "other" || customReason)
+                ? { scale: 1.02 }
+                : {}
+            }
+            whileTap={
+              selectedReason && (selectedReason !== "other" || customReason)
+                ? { scale: 0.98 }
+                : {}
+            }
+          >
+            {isProcessing ? "Processing..." : actionDetails.buttonText}
+          </motion.button>
+        </div>
+      </motion.div>
+    </Modal>
   );
 };
 

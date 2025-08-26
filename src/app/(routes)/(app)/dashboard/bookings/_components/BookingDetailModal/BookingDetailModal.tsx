@@ -449,7 +449,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
         booking={booking}
       />
       <FeedbackModal
-        isOpen={true}
+        isOpen={isFeedbackModalOpen}
         onClose={() => setIsFeedbackModalOpen(false)}
         booking={booking}
         onSubmit={handleFeedbackSubmit}
