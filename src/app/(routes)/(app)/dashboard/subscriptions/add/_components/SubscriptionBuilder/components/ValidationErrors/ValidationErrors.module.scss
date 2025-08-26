@@ -1,121 +1,145 @@
 @import "src/styles/abstracts/variables";
-@import "src/styles/abstracts/mixins";
+ @import "src/styles/abstracts/mixins";
 
 .validationErrors {
-  background: rgba(239, 68, 68, 0.05);
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 24px;
-  border-left: 4px solid #ef4444;
+  background: color("neutral", "white");
+  border: 2px solid color("status", "error");
+  border-radius: border-radius("xl");
+  padding: spacing("lg");
+  margin-bottom: spacing("xl");
+  box-shadow: 0 4px 12px rgba(color("status", "error"), 0.1);
+  position: relative;
+  animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: color("status", "error");
+    border-radius: border-radius("xl") border-radius("xl") 0 0;
+  }
 
   &__header {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
+    gap: spacing("sm");
+    margin-bottom: spacing("md");
 
     h4 {
-      color: #ef4444;
-      font-size: 14px;
-      font-weight: 600;
+      color: color("status", "error");
+      @include font-size("sm");
+      @include font-weight("semibold");
       margin: 0;
       flex: 1;
     }
   }
 
   &__icon {
-    color: #ef4444;
+    width: 32px;
+    height: 32px;
+    background: rgba(color("status", "error"), 0.1);
+    border-radius: border-radius("full");
     display: flex;
     align-items: center;
     justify-content: center;
+    color: color("status", "error");
+    flex-shrink: 0;
+    animation: pulse 2s infinite;
   }
 
   &__dismiss {
-    background: none;
-    border: none;
-    color: #ef4444;
+    width: 28px;
+    height: 28px;
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("full");
+    color: color("neutral", "dark");
     cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
 
     &:hover {
-      background-color: rgba(239, 68, 68, 0.1);
+      background: color("status", "error");
+      color: color("neutral", "white");
+      border-color: color("status", "error");
+      transform: rotate(90deg);
     }
   }
 
   &__list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: spacing("sm");
   }
 
   &__item {
     display: flex;
     align-items: flex-start;
-    gap: 8px;
-    color: #7f1d1d;
-    font-size: 14px;
+    gap: spacing("sm");
+    padding: spacing("sm");
+    background: rgba(color("status", "error"), 0.05);
+    border-radius: border-radius("lg");
+    color: color("neutral", "darkest");
+    @include font-size("sm");
     line-height: 1.5;
+    animation: fadeIn 0.3s ease;
+
+    &:hover {
+      background: rgba(color("status", "error"), 0.08);
+    }
   }
 
   &__bullet {
-    width: 6px;
-    height: 6px;
-    background-color: #ef4444;
-    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    background: color("status", "error");
+    color: color("neutral", "white");
+    border-radius: border-radius("full");
     flex-shrink: 0;
-    margin-top: 7px;
-  }
-}
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
 
-// Dark mode support
-@media (prefers-color-scheme: dark) {
-  .validationErrors {
-    background: rgba(239, 68, 68, 0.08);
-    border-color: rgba(239, 68, 68, 0.3);
-
-    &__header h4 {
-      color: #fca5a5;
-    }
-
-    &__icon {
-      color: #fca5a5;
-    }
-
-    &__dismiss {
-      color: #fca5a5;
-
-      &:hover {
-        background-color: rgba(239, 68, 68, 0.15);
-      }
-    }
-
-    &__item {
-      color: #fca5a5;
-    }
-
-    &__bullet {
-      background-color: #fca5a5;
+    &::after {
+      content: "!";
     }
   }
 }
 
-// Responsive design
-@media (max-width: 768px) {
-  .validationErrors {
-    padding: 12px;
-    
-    &__header h4 {
-      font-size: 13px;
-    }
-    
-    &__item {
-      font-size: 13px;
-    }
+ @keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+ @keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+ @keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
   }
 }

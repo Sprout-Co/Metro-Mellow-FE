@@ -1,4 +1,3 @@
-// src/app/(routes)/(site)/bookings/_components/SubscriptionBuilder/BillingConfiguration/BillingConfiguration.module.scss
 @import "@/styles/abstracts/variables";
 @import "@/styles/abstracts/mixins";
 @import "@/styles/abstracts/functions";
@@ -9,6 +8,16 @@
     @include font-weight("semibold");
     color: color("neutral", "darkest");
     margin-bottom: spacing("md");
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+
+    &::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color("neutral", "lighter");
+    }
   }
 
   &__billingCycle {
@@ -35,7 +44,7 @@
     border: 2px solid color("neutral", "lighter");
     border-radius: border-radius("xl");
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     text-align: left;
 
     svg {
@@ -70,20 +79,43 @@
     }
 
     &:hover {
-      border-color: color("primary", "light");
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      border-color: color("primary", "base");
+      background: color("neutral", "lightest");
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
     &--active {
       border-color: color("primary", "base");
-      background: linear-gradient(
-        to bottom right,
-        rgba(color("primary", "base"), 0.02),
-        transparent
-      );
+      background: color("neutral", "white");
+      box-shadow: 0 0 0 4px rgba(color("primary", "base"), 0.1);
 
       svg {
         color: color("primary", "base");
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        border-radius: border-radius("xl");
+        border: 2px solid color("primary", "base");
+        opacity: 0.2;
+      }
+    }
+
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: color("neutral", "lightest");
+
+      &:hover {
+        transform: none;
+        border-color: color("neutral", "lighter");
+        box-shadow: none;
       }
     }
   }
@@ -92,14 +124,15 @@
     position: absolute;
     top: spacing("sm");
     right: spacing("sm");
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     border-radius: border-radius("full");
     background: color("primary", "base");
     color: color("neutral", "white");
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     &::after {
       content: "✓";
@@ -110,18 +143,15 @@
 
   &__savingBadge {
     position: absolute;
-    top: spacing("sm");
-    right: spacing("sm");
+    top: -10px;
+    right: spacing("lg");
     padding: spacing("xxs") spacing("sm");
-    background: linear-gradient(
-      135deg,
-      color("accent", "base"),
-      color("accent", "dark")
-    );
+    background: color("accent", "base");
     color: color("neutral", "darkest");
     border-radius: border-radius("pill");
     @include font-size("xs");
     @include font-weight("semibold");
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
   &__duration {
@@ -145,7 +175,7 @@
     border: 2px solid color("neutral", "lighter");
     border-radius: border-radius("lg");
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     text-align: center;
     min-height: 100px;
     display: flex;
@@ -155,53 +185,46 @@
     gap: spacing("xxs");
 
     &:hover {
-      border-color: color("primary", "light");
-      transform: translateY(-4px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+      border-color: color("primary", "base");
+      background: color("neutral", "lightest");
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
     &--active {
       border-color: color("primary", "base");
-      background: linear-gradient(
-        to bottom,
-        rgba(color("primary", "base"), 0.03),
-        transparent
-      );
-      box-shadow: 0 4px 12px rgba(color("primary", "base"), 0.1);
+      background: color("neutral", "white");
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
+
+      .config__durationValue {
+        color: color("primary", "base");
+      }
     }
 
     &--popular {
-      border-color: color("accent", "base");
-      background: linear-gradient(
-        to bottom,
-        rgba(color("accent", "base"), 0.05),
-        transparent
-      );
+      &::before {
+        content: "Popular";
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 2px 8px;
+        background: color("accent", "base");
+        color: color("neutral", "darkest");
+        border-radius: border-radius("pill");
+        @include font-size("xs");
+        @include font-weight("semibold");
+        white-space: nowrap;
+      }
     }
-  }
-
-  &__popularBadge {
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: spacing("xxs");
-    padding: spacing("xxs") spacing("sm");
-    background: color("accent", "base");
-    color: color("neutral", "darkest");
-    border-radius: border-radius("pill");
-    @include font-size("xs");
-    @include font-weight("semibold");
-    white-space: nowrap;
   }
 
   &__durationValue {
     @include font-size("2xl");
     @include font-weight("bold");
-    color: color("primary", "dark");
+    color: color("neutral", "darkest");
     line-height: 1;
+    transition: color 0.2s ease;
   }
 
   &__durationLabel {
@@ -221,34 +244,27 @@
     @include font-weight("semibold");
   }
 
-  &__benefits {
-    display: flex;
-    gap: spacing("xl");
+  &__warning {
     padding: spacing("md");
-    background: linear-gradient(
-      to right,
-      rgba(color("primary", "base"), 0.02),
-      transparent
-    );
+    margin-bottom: spacing("md");
+    background: color("status", "upcoming-bg");
+    border: 1px solid color("status", "upcoming-text");
     border-radius: border-radius("lg");
-    border-left: 3px solid color("primary", "base");
-
-    @include breakpoint-down("sm") {
-      flex-direction: column;
-      gap: spacing("sm");
-    }
-  }
-
-  &__benefit {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: spacing("sm");
-    @include font-size("sm");
-    color: color("neutral", "dark");
 
     svg {
-      color: color("primary", "base");
+      color: color("status", "warning");
       flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    p {
+      margin: 0;
+      @include font-size("sm");
+      color: color("neutral", "darkest");
+      font-weight: 500;
     }
   }
 
@@ -266,21 +282,6 @@
     @include font-size("sm");
     background: rgba(color("status", "error"), 0.05);
     border-radius: border-radius("lg");
-    border: 1px solid rgba(color("status", "error"), 0.2);
-  }
-
-  &__warning {
-    padding: spacing("md");
-    margin-bottom: spacing("md");
-    background: rgba(#f59e0b, 0.1);
-    border: 1px solid rgba(#f59e0b, 0.3);
-    border-radius: border-radius("lg");
-    
-    p {
-      margin: 0;
-      @include font-size("sm");
-      color: #92400e;
-      font-weight: 500;
-    }
+    border: 1px dashed color("status", "error");
   }
 }
