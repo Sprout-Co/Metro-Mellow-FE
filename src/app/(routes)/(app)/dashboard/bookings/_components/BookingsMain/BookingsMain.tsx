@@ -32,7 +32,7 @@ import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperati
 import { Booking, ServiceCategory, BookingStatus } from "@/graphql/api";
 import ServicesListDrawer from "../../../_components/DashboardLayout/sidebar/ServicesListDrawer/ServicesListDrawer";
 import RescheduleModal from "../RescheduleModal/RescheduleModal";
-import RescheduleDrawer from "../../../_components/DashboardLayout/sidebar/RescheduleDrawer/RescheduleDrawer";
+// Removed RescheduleDrawer import - using RescheduleModal instead
 
 type ViewMode = "calendar" | "list" | "timeline";
 
@@ -365,11 +365,7 @@ const BookingsMain: React.FC = () => {
         isOpen={isServicesListDrawerOpen}
         onClose={() => setIsServicesListDrawerOpen(false)}
       />
-      <RescheduleDrawer
-        isOpen={isRescheduleModalOpen}
-        onClose={() => setIsRescheduleModalOpen(false)}
-        // booking={null}
-      />
+      {/* Removed RescheduleDrawer - using RescheduleModal instead */}
     </div>
   );
 };

@@ -34,14 +34,6 @@ const QuickActions: React.FC<QuickActionsProps> = ({
       onClick: onAddBooking,
     },
     {
-      id: "reschedule",
-      icon: <RefreshCw />,
-      title: "Reschedule",
-      description: "Change appointment time",
-      color: "secondary",
-      onClick: onReschedule,
-    },
-    {
       id: "recurring",
       icon: <Copy />,
       title: "Set Recurring",

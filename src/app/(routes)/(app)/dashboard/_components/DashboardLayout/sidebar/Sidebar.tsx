@@ -53,7 +53,7 @@ interface QuickAction {
 
 import AddressSelector from "@/components/ui/AddressSelector/AddressSelector";
 import AddressModal from "../../../addresses/_components/AddressModal";
-import RescheduleDrawer from "./RescheduleDrawer/RescheduleDrawer";
+// Removed RescheduleDrawer import - using RescheduleModal instead
 import ServicesListDrawer from "./ServicesListDrawer/ServicesListDrawer";
 import QuickHelpDrawer from "./QuickHelpDrawer/QuickHelpDrawer";
 import { openServicesListDrawer } from "@/lib/redux/slices/uiSlice";
@@ -141,7 +141,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
   const dispatch = useDispatch();
   // States for the new drawers
-  const [isRescheduleDrawerOpen, setIsRescheduleDrawerOpen] = useState(false);
+  // Removed reschedule drawer state - using modal instead
   const [isServicesListDrawerOpen, setIsServicesListDrawerOpen] =
     useState(false);
   const [isQuickHelpDrawerOpen, setIsQuickHelpDrawerOpen] = useState(false);
@@ -167,12 +167,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       onClick: () => setIsQuickHelpDrawerOpen(true),
       color: styles.quickActionAccent,
     },
-    {
-      icon: Clock,
-      label: "Reschedule",
-      onClick: () => setIsRescheduleDrawerOpen(true),
-      color: styles.quickActionNeutral,
-    },
+    // Removed reschedule quick action - using modal instead
   ];
 
   const navSections: NavSection[] = [
@@ -416,12 +411,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           }}
         />
       )}
-      {isRescheduleDrawerOpen && (
-        <RescheduleDrawer
-          isOpen={isRescheduleDrawerOpen}
-          onClose={() => setIsRescheduleDrawerOpen(false)}
-        />
-      )}
+      {/* Removed RescheduleDrawer - using RescheduleModal instead */}
       {/* {isServicesListDrawerOpen && (
         <ServicesListDrawer
           isOpen={isServicesListDrawerOpen}

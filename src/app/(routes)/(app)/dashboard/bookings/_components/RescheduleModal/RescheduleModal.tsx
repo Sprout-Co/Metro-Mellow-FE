@@ -18,6 +18,7 @@ import {
 import styles from "./RescheduleModal.module.scss";
 import { Booking, TimeSlot } from "@/graphql/api";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
+import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 
 interface RescheduleModalProps {
   isOpen: boolean;
@@ -33,10 +34,13 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
   onConfirm,
 }) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [selectedTime, setSelectedTime] = useState<TimeSlot | null>(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [isConfirming, setIsConfirming] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const { handleRescheduleBooking } = useBookingOperations();
 
   if (!isOpen || !booking) return null;
 
@@ -126,20 +130,37 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
 
   // Handle time selection
   const handleTimeSelect = (slot: TimeSlot) => {
-    if (slot) {
-      setSelectedTime(slot);
+    setSelectedTime(slot);
+  };
+
+  // Format time slot for display
+  const formatTimeSlot = (timeSlot: TimeSlot) => {
+    switch (timeSlot) {
+      case TimeSlot.Morning:
+        return "9:00 AM - 12:00 PM";
+      case TimeSlot.Afternoon:
+        return "12:00 PM - 5:00 PM";
+      case TimeSlot.Evening:
+        return "5:00 PM - 8:00 PM";
+      default:
+        return timeSlot;
     }
   };
 
   // Handle reschedule confirmation
   const handleConfirm = async () => {
-    if (!selectedDate || !selectedTime) return;
+    if (!selectedDate || !selectedTime || !booking) return;
 
     setIsConfirming(true);
+    setError(null);
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsConfirming(false);
+    try {
+      await handleRescheduleBooking(
+        booking.id,
+        selectedDate.toISOString(),
+        selectedTime
+      );
+
       setShowSuccess(true);
 
       if (onConfirm) {
@@ -152,7 +173,13 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
         setSelectedDate(null);
         setSelectedTime(null);
       }, 2000);
-    }, 1500);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to reschedule booking"
+      );
+    } finally {
+      setIsConfirming(false);
+    }
   };
 
   // Get service icon
@@ -204,7 +231,7 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
                     </span>
                     <span>
                       <Clock size={14} />
-                      {booking.timeSlot}
+                      {formatTimeSlot(booking.timeSlot)}
                     </span>
                     <span>
                       <User size={14} />
@@ -334,10 +361,26 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: index * 0.03 }}
                       >
-                        <span>{slot}</span>
+                        <span>{formatTimeSlot(slot)}</span>
                       </motion.button>
                     );
                   })}
+                </div>
+              </motion.div>
+            )}
+
+            {/* Error Message */}
+            {error && (
+              <motion.div
+                className={styles.modal__error}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <AlertCircle size={16} />
+                <div>
+                  <strong>Error:</strong>
+                  <p>{error}</p>
                 </div>
               </motion.div>
             )}
