@@ -36,25 +36,28 @@ interface UpcomingBookingCardProps {
 const UpcomingBookingCard: React.FC<UpcomingBookingCardProps> = ({
   booking,
 }) => {
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString("en-US", {
+  const formatDate = (date: string | Date) => {
+    const dateObj = typeof date === "string" ? new Date(date) : date;
+    return dateObj.toLocaleDateString("en-US", {
       weekday: "long",
       month: "long",
       day: "numeric",
     });
   };
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString("en-US", {
+  const formatTime = (date: string | Date) => {
+    const dateObj = typeof date === "string" ? new Date(date) : date;
+    return dateObj.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "2-digit",
       hour12: true,
     });
   };
 
-  const getTimeUntil = (date: Date) => {
+  const getTimeUntil = (date: string | Date) => {
+    const dateObj = typeof date === "string" ? new Date(date) : date;
     const now = new Date();
-    const diff = date.getTime() - now.getTime();
+    const diff = dateObj.getTime() - now.getTime();
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const days = Math.floor(hours / 24);
 
