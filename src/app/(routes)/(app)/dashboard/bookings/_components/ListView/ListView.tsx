@@ -22,6 +22,10 @@ import {
   Copy,
   FileText,
   ChevronRight,
+  Play,
+  Pause,
+  Ban,
+  List,
 } from "lucide-react";
 import styles from "./ListView.module.scss";
 import { ServiceCategory, BookingStatus, Booking } from "@/graphql/api";
@@ -31,56 +35,84 @@ interface ListViewProps {
   bookings: Booking[];
 }
 
-type TabType = "active" | "pending" | "past";
+type TabType = "all" | "active" | "pending" | "past";
 
 const ListView: React.FC<ListViewProps> = ({ bookings }) => {
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<TabType>("active");
+  const [activeTab, setActiveTab] = useState<TabType>("all");
 
   // Sort bookings by date
   const sortedBookings = [...bookings].sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );
 
-  // Group bookings by status
-  const groupedBookings = {
-    active: sortedBookings.filter(
-      (b) =>
-        b.status === BookingStatus.Confirmed ||
-        b.status === BookingStatus.InProgress
-    ),
-    pending: sortedBookings.filter(
-      (b) =>
-        b.status === BookingStatus.Pending || b.status === BookingStatus.Paused
-    ),
-    past: sortedBookings.filter(
-      (b) =>
-        b.status === BookingStatus.Completed ||
-        b.status === BookingStatus.Cancelled
-    ),
+  // Get filtered bookings based on active tab
+  const getFilteredBookings = (tabId: TabType) => {
+    switch (tabId) {
+      case "all":
+        return sortedBookings;
+      case "active":
+        return sortedBookings.filter(
+          (booking) =>
+            booking.status === BookingStatus.Confirmed ||
+            booking.status === BookingStatus.InProgress
+        );
+      case "pending":
+        return sortedBookings.filter(
+          (booking) =>
+            booking.status === BookingStatus.Pending ||
+            booking.status === BookingStatus.Paused
+        );
+      case "past":
+        return sortedBookings.filter(
+          (booking) =>
+            booking.status === BookingStatus.Completed ||
+            booking.status === BookingStatus.Cancelled
+        );
+      default:
+        return sortedBookings;
+    }
   };
 
-  // Tab configuration
+  // Tab configuration with logical grouping
   const tabs = [
+    {
+      id: "all" as TabType,
+      label: "All",
+      count: sortedBookings.length,
+      icon: List,
+    },
     {
       id: "active" as TabType,
       label: "Active",
-      count: groupedBookings.active.length,
-      icon: CheckCircle,
+      count: sortedBookings.filter(
+        (b) =>
+          b.status === BookingStatus.Confirmed ||
+          b.status === BookingStatus.InProgress
+      ).length,
+      icon: Play,
     },
     {
       id: "pending" as TabType,
       label: "Pending",
-      count: groupedBookings.pending.length,
+      count: sortedBookings.filter(
+        (b) =>
+          b.status === BookingStatus.Pending ||
+          b.status === BookingStatus.Paused
+      ).length,
       icon: Clock,
     },
     {
       id: "past" as TabType,
       label: "Past",
-      count: groupedBookings.past.length,
+      count: sortedBookings.filter(
+        (b) =>
+          b.status === BookingStatus.Completed ||
+          b.status === BookingStatus.Cancelled
+      ).length,
       icon: Calendar,
     },
   ];
@@ -142,15 +174,6 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
     }
   };
 
-  // Format time
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
-
   // Format price
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-NG", {
@@ -191,12 +214,6 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
         className={styles.bookingCard}
         onClick={() => handleCardClick(booking)}
       >
-        {/* Service Type Indicator */}
-        <div
-          className={styles.bookingCard__indicator}
-          style={{ backgroundColor: getServiceColor(booking.service_category) }}
-        />
-
         {/* Main Content Grid */}
         <div className={styles.bookingCard__grid}>
           {/* Left Section - Service Info */}
@@ -234,12 +251,6 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
               <div className={styles.bookingCard__infoItem}>
                 <Clock size={14} />
                 <span>{booking.timeSlot}</span>
-              </div>
-              <div className={styles.bookingCard__infoItem}>
-                <User size={14} />
-                <span>
-                  {booking.staff?.firstName} {booking.staff?.lastName}
-                </span>
               </div>
               <div className={styles.bookingCard__infoItem}>
                 <MapPin size={14} />
@@ -364,11 +375,12 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
   // Get empty message for current tab
   const getEmptyMessage = (tabId: TabType) => {
     const messages = {
+      all: "No bookings found",
       active: "No active bookings",
       pending: "No pending bookings",
       past: "No past bookings",
     };
-    return messages[tabId];
+    return messages[tabId] || "No bookings found";
   };
 
   return (
@@ -407,13 +419,13 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              {groupedBookings[activeTab].length === 0 ? (
+              {getFilteredBookings(activeTab).length === 0 ? (
                 <div className={styles.listView__emptySection}>
                   <p>{getEmptyMessage(activeTab)}</p>
                 </div>
               ) : (
                 <div className={styles.listView__bookings}>
-                  {groupedBookings[activeTab].map((booking) => (
+                  {getFilteredBookings(activeTab).map((booking) => (
                     <BookingCard key={booking.id} booking={booking} />
                   ))}
                 </div>
