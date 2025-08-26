@@ -510,6 +510,7 @@ export type MutationCancelAdminInvitationArgs = {
 
 
 export type MutationCancelBookingArgs = {
+  cancellationReason?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
 };
 
@@ -1676,7 +1677,8 @@ export type UpdateBookingMutationVariables = Exact<{
 export type UpdateBookingMutation = { __typename?: 'Mutation', updateBooking: boolean };
 
 export type CancelBookingMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
+  cancelBookingId: Scalars['ID']['input'];
+  cancellationReason?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -3047,8 +3049,8 @@ export type UpdateBookingMutationHookResult = ReturnType<typeof useUpdateBooking
 export type UpdateBookingMutationResult = Apollo.MutationResult<UpdateBookingMutation>;
 export type UpdateBookingMutationOptions = Apollo.BaseMutationOptions<UpdateBookingMutation, UpdateBookingMutationVariables>;
 export const CancelBookingDocument = gql`
-    mutation CancelBooking($id: ID!) {
-  cancelBooking(id: $id)
+    mutation CancelBooking($cancelBookingId: ID!, $cancellationReason: String) {
+  cancelBooking(id: $cancelBookingId, cancellationReason: $cancellationReason)
 }
     `;
 export type CancelBookingMutationFn = Apollo.MutationFunction<CancelBookingMutation, CancelBookingMutationVariables>;
@@ -3066,7 +3068,8 @@ export type CancelBookingMutationFn = Apollo.MutationFunction<CancelBookingMutat
  * @example
  * const [cancelBookingMutation, { data, loading, error }] = useCancelBookingMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      cancelBookingId: // value for 'cancelBookingId'
+ *      cancellationReason: // value for 'cancellationReason'
  *   },
  * });
  */

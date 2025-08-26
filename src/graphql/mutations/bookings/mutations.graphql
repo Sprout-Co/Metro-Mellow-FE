@@ -3,11 +3,11 @@ mutation CreateBooking($input: CreateBookingInput!) {
 }
 
 mutation UpdateBooking($id: ID!, $input: UpdateBookingInput!) {
-  updateBooking(id: $id, input: $input) 
+  updateBooking(id: $id, input: $input)
 }
 
-mutation CancelBooking($id: ID!) {
-  cancelBooking(id: $id) 
+mutation CancelBooking($cancelBookingId: ID!, $cancellationReason: String) {
+  cancelBooking(id: $cancelBookingId, cancellationReason: $cancellationReason)
 }
 
 mutation CompleteBooking($id: ID!) {
@@ -15,7 +15,7 @@ mutation CompleteBooking($id: ID!) {
 }
 
 mutation AssignStaff($bookingId: ID!, $staffId: ID!) {
-  assignStaff(bookingId: $bookingId, staffId: $staffId) 
+  assignStaff(bookingId: $bookingId, staffId: $staffId)
 }
 
 mutation UpdateBookingStatus($id: ID!, $status: BookingStatus!) {

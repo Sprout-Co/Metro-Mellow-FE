@@ -142,7 +142,7 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
     try {
       switch (actionType) {
         case "cancel":
-          await handleCancelBooking(booking.id);
+          await handleCancelBooking(booking.id, finalReason);
           break;
         case "pause":
           await handleUpdateBookingStatus(booking.id, BookingStatus.Paused);
@@ -339,7 +339,7 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
                     <input
                       type="radio"
                       name="reason"
-                      value={option.id}
+                      value={option.description}
                       checked={selectedReason === option.id}
                       onChange={(e) => setSelectedReason(e.target.value)}
                       className={styles.modal__reasonRadio}

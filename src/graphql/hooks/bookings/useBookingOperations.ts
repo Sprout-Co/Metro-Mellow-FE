@@ -144,10 +144,10 @@ export const useBookingOperations = () => {
    * @throws Error if cancellation fails
    */
   const handleCancelBooking = useCallback(
-    async (id: string) => {
+    async (id: string, cancellationReason?: string) => {
       try {
         const { data, errors } = await cancelBookingMutation({
-          variables: { id },
+          variables: { cancelBookingId: id, cancellationReason },
         });
 
         if (errors) {
