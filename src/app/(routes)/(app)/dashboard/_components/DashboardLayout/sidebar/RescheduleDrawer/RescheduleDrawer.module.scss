@@ -13,11 +13,7 @@
     align-items: center;
     gap: spacing("md");
     padding: spacing("lg");
-    background: linear-gradient(
-      135deg,
-      color("neutral", "white") 0%,
-      color("neutral", "lightest") 100%
-    );
+
     border-bottom: 1px solid color("neutral", "lighter");
   }
 
@@ -68,11 +64,7 @@
     align-items: center;
     justify-content: center;
     padding: spacing("lg");
-    background: linear-gradient(
-      135deg,
-      color("neutral", "lightest") 0%,
-      rgba(244, 245, 247, 0.5) 100%
-    );
+
     border-bottom: 1px solid color("neutral", "lighter");
   }
 
@@ -193,7 +185,6 @@
     flex: 1;
     overflow-y: auto;
     padding: spacing("lg");
-    background: color("neutral", "lightest");
 
     &::-webkit-scrollbar {
       width: 6px;
@@ -216,7 +207,6 @@
     margin-bottom: spacing("lg");
     position: sticky;
     top: -(spacing("lg"));
-    background: color("neutral", "lightest");
     padding: spacing("sm") 0;
     z-index: 10;
   }
@@ -318,16 +308,13 @@
 
     &:hover {
       border-color: color("primary", "base");
+      background: color("neutral", "white");
       color: color("primary", "base");
       transform: translateY(-1px);
     }
 
     &--active {
-      background: linear-gradient(
-        135deg,
-        color("primary", "base") 0%,
-        color("primary", "dark") 100%
-      );
+      background: color("primary", "base");
       color: color("neutral", "white");
       border-color: transparent;
       box-shadow: 0 4px 12px rgba(7, 80, 86, 0.25);
@@ -379,24 +366,6 @@
       height: 100%;
       background: transparent;
       transition: all 0.3s ease;
-    }
-
-    &:hover {
-      border-color: color("primary", "base");
-      transform: translateX(4px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-
-      &::before {
-        background: linear-gradient(
-          180deg,
-          color("primary", "base") 0%,
-          #10b981 100%
-        );
-      }
-
-      .drawer__serviceIcon::after {
-        opacity: 1;
-      }
     }
 
     &--selected {

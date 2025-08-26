@@ -1,7 +1,7 @@
 // src/app/(routes)/(app)/dashboard/_components/DashboardLayout/sidebar/RescheduleDrawer/RescheduleDrawer.tsx
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
@@ -23,26 +23,19 @@ import {
   Star,
   TrendingUp,
   Sparkles,
+  Loader2,
 } from "lucide-react";
 import styles from "./RescheduleDrawer.module.scss";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 import FnButton from "@/components/ui/Button/FnButton";
-
-interface UpcomingService {
-  id: string;
-  name: string;
-  type: string;
-  date: Date;
-  time: string;
-  provider: string;
-  providerRating?: number;
-  address: string;
-  icon: React.ReactNode;
-  color: string;
-  duration: string;
-  isUrgent?: boolean;
-  isRecurring?: boolean;
-}
+import {
+  useGetCustomerBookingsQuery,
+  useRescheduleBookingMutation,
+  Booking,
+  ServiceCategory,
+  TimeSlot,
+} from "@/graphql/api";
+import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 
 interface RescheduleDrawerProps {
   isOpen: boolean;
@@ -60,113 +53,109 @@ const RescheduleDrawer: React.FC<RescheduleDrawerProps> = ({
   const [step, setStep] = useState<
     "select-service" | "select-datetime" | "confirm"
   >("select-service");
-  const [selectedService, setSelectedService] =
-    useState<UpcomingService | null>(null);
+  const [selectedService, setSelectedService] = useState<Booking | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedTime, setSelectedTime] = useState<string>("");
+  const [selectedTime, setSelectedTime] = useState<TimeSlot | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [isRescheduling, setIsRescheduling] = useState(false);
 
-  // Extended mock services with more details
-  const upcomingServices: UpcomingService[] = [
-    {
-      id: "1",
-      name: "Deep Home Cleaning",
-      type: "Cleaning",
-      date: new Date(2024, 7, 20),
-      time: "10:00 AM",
-      provider: "Maria Rodriguez",
-      providerRating: 4.9,
-      address: "24 Emmanuel Osakwe Street, Lagos",
-      icon: <Home />,
-      color: "#075056",
-      duration: "2 hours",
-      isUrgent: true,
-      isRecurring: true,
-    },
-    {
-      id: "2",
-      name: "Laundry Service",
-      type: "Laundry",
-      date: new Date(2024, 7, 22),
-      time: "2:00 PM",
-      provider: "QuickWash Team",
-      providerRating: 4.8,
-      address: "24 Emmanuel Osakwe Street, Lagos",
-      icon: <Droplets />,
-      color: "#6366f1",
-      duration: "1 hour",
-      isRecurring: true,
-    },
-    {
-      id: "3",
-      name: "Meal Preparation",
-      type: "Cooking",
-      date: new Date(2024, 7, 24),
-      time: "5:00 PM",
-      provider: "Chef Kemi",
-      providerRating: 5.0,
-      address: "24 Emmanuel Osakwe Street, Lagos",
-      icon: <Utensils />,
-      color: "#fe5b04",
-      duration: "3 hours",
-      isRecurring: true,
-    },
-    {
-      id: "4",
-      name: "Pest Control Service",
-      type: "Pest Control",
-      date: new Date(2024, 7, 26),
-      time: "11:00 AM",
-      provider: "PestPro Team",
-      providerRating: 4.7,
-      address: "24 Emmanuel Osakwe Street, Lagos",
-      icon: <Bug />,
-      color: "#10b981",
-      duration: "1.5 hours",
-      isRecurring: false,
-    },
-    {
-      id: "5",
-      name: "Grocery Shopping",
-      type: "Errands",
-      date: new Date(2024, 7, 25),
-      time: "3:00 PM",
-      provider: "Express Runners",
-      providerRating: 4.6,
-      address: "24 Emmanuel Osakwe Street, Lagos",
-      icon: <Package />,
-      color: "#ec4899",
-      duration: "1 hour",
-      isRecurring: true,
-    },
-  ];
+  // GraphQL hooks
+  const {
+    data: bookingsData,
+    loading: bookingsLoading,
+    error: bookingsError,
+    refetch,
+  } = useGetCustomerBookingsQuery();
+  const { handleRescheduleBooking } = useBookingOperations();
 
   // Enhanced time slots with popularity indicators
   const timeSlots = [
-    { value: "09:00", label: "9:00 AM", available: true, isPopular: false },
-    { value: "10:00", label: "10:00 AM", available: true, isPopular: true },
-    { value: "11:00", label: "11:00 AM", available: false, isPopular: false },
-    { value: "12:00", label: "12:00 PM", available: true, isPopular: false },
-    { value: "14:00", label: "2:00 PM", available: true, isPopular: true },
-    { value: "15:00", label: "3:00 PM", available: true, isPopular: false },
-    { value: "16:00", label: "4:00 PM", available: false, isPopular: false },
-    { value: "17:00", label: "5:00 PM", available: true, isPopular: true },
-    { value: "18:00", label: "6:00 PM", available: true, isPopular: false },
+    {
+      value: TimeSlot.Morning,
+      label: "9:00 AM - 12:00 PM",
+    },
+    {
+      value: TimeSlot.Afternoon,
+      label: "12:00 PM - 5:00 PM",
+    },
+    {
+      value: TimeSlot.Evening,
+      label: "5:00 PM - 8:00 PM",
+    },
   ];
 
-  // Filter services based on search and filter
-  const filteredServices = useMemo(() => {
-    let filtered = [...upcomingServices];
+  // Helper function to get service icon
+  const getServiceIcon = (category: ServiceCategory) => {
+    switch (category) {
+      case ServiceCategory.Cleaning:
+        return <Home />;
+      case ServiceCategory.Laundry:
+        return <Droplets />;
+      case ServiceCategory.Cooking:
+        return <Utensils />;
+      case ServiceCategory.PestControl:
+        return <Bug />;
+      default:
+        return <Package />;
+    }
+  };
+
+  // Helper function to get service color
+  const getServiceColor = (category: ServiceCategory) => {
+    switch (category) {
+      case ServiceCategory.Cleaning:
+        return "#075056";
+      case ServiceCategory.Laundry:
+        return "#6366f1";
+      case ServiceCategory.Cooking:
+        return "#fe5b04";
+      case ServiceCategory.PestControl:
+        return "#10b981";
+      default:
+        return "#6b7280";
+    }
+  };
+
+  // Helper function to get service duration
+  const getServiceDuration = (category: ServiceCategory) => {
+    switch (category) {
+      case ServiceCategory.Cleaning:
+        return "2-3 hours";
+      case ServiceCategory.Laundry:
+        return "1-2 hours";
+      case ServiceCategory.Cooking:
+        return "2-4 hours";
+      case ServiceCategory.PestControl:
+        return "1-2 hours";
+      default:
+        return "1-2 hours";
+    }
+  };
+
+  // Filter bookings based on search and filter
+  const filteredBookings = useMemo(() => {
+    if (!bookingsData?.customerBookings) return [];
+
+    let filtered = [...bookingsData.customerBookings];
 
     // Apply search filter
     if (searchQuery) {
       filtered = filtered.filter(
-        (service) =>
-          service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          service.provider.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          service.type.toLowerCase().includes(searchQuery.toLowerCase())
+        (booking) =>
+          booking.service.name
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          booking.staff?.firstName
+            ?.toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          booking.staff?.lastName
+            ?.toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          booking.service_category
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
       );
     }
 
@@ -176,35 +165,53 @@ const RescheduleDrawer: React.FC<RescheduleDrawerProps> = ({
 
     switch (activeFilter) {
       case "thisWeek":
-        filtered = filtered.filter(
-          (service) => service.date <= nextWeek && service.date >= today
-        );
+        filtered = filtered.filter((booking) => {
+          const bookingDate = new Date(booking.date);
+          return bookingDate <= nextWeek && bookingDate >= today;
+        });
         break;
       case "urgent":
-        filtered = filtered.filter((service) => service.isUrgent);
+        // Consider bookings within 24 hours as urgent
+        filtered = filtered.filter((booking) => {
+          const bookingDate = new Date(booking.date);
+          const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+          return bookingDate <= tomorrow && bookingDate >= today;
+        });
         break;
       case "recurring":
-        filtered = filtered.filter((service) => service.isRecurring);
+        // Filter for recurring bookings (you might need to add this field to your schema)
+        filtered = filtered.filter((booking) => booking.recurring === true);
         break;
     }
 
     return filtered;
-  }, [searchQuery, activeFilter]);
+  }, [bookingsData?.customerBookings, searchQuery, activeFilter]);
 
   // Get filter counts
   const filterCounts = useMemo(() => {
+    if (!bookingsData?.customerBookings) {
+      return { all: 0, thisWeek: 0, urgent: 0, recurring: 0 };
+    }
+
     const today = new Date();
     const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+    const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
 
     return {
-      all: upcomingServices.length,
-      thisWeek: upcomingServices.filter(
-        (s) => s.date <= nextWeek && s.date >= today
+      all: bookingsData.customerBookings.length,
+      thisWeek: bookingsData.customerBookings.filter((booking) => {
+        const bookingDate = new Date(booking.date);
+        return bookingDate <= nextWeek && bookingDate >= today;
+      }).length,
+      urgent: bookingsData.customerBookings.filter((booking) => {
+        const bookingDate = new Date(booking.date);
+        return bookingDate <= tomorrow && bookingDate >= today;
+      }).length,
+      recurring: bookingsData.customerBookings.filter(
+        (booking) => booking.recurring === true
       ).length,
-      urgent: upcomingServices.filter((s) => s.isUrgent).length,
-      recurring: upcomingServices.filter((s) => s.isRecurring).length,
     };
-  }, []);
+  }, [bookingsData?.customerBookings]);
 
   // Calendar functions
   const getDaysInMonth = (date: Date) => {
@@ -258,12 +265,15 @@ const RescheduleDrawer: React.FC<RescheduleDrawerProps> = ({
   };
 
   const hasExistingBooking = (date: Date) => {
-    return upcomingServices.some(
-      (service) =>
-        service.date.getDate() === date.getDate() &&
-        service.date.getMonth() === date.getMonth() &&
-        service.date.getFullYear() === date.getFullYear()
-    );
+    if (!bookingsData?.customerBookings) return false;
+    return bookingsData.customerBookings.some((booking) => {
+      const bookingDate = new Date(booking.date);
+      return (
+        bookingDate.getDate() === date.getDate() &&
+        bookingDate.getMonth() === date.getMonth() &&
+        bookingDate.getFullYear() === date.getFullYear()
+      );
+    });
   };
 
   const formatMonthYear = (date: Date) => {
@@ -291,8 +301,21 @@ const RescheduleDrawer: React.FC<RescheduleDrawerProps> = ({
     }
   };
 
-  const handleServiceSelect = (service: UpcomingService) => {
-    setSelectedService(service);
+  const formatTimeSlot = (timeSlot: TimeSlot) => {
+    switch (timeSlot) {
+      case TimeSlot.Morning:
+        return "9:00 AM - 12:00 PM";
+      case TimeSlot.Afternoon:
+        return "12:00 PM - 5:00 PM";
+      case TimeSlot.Evening:
+        return "5:00 PM - 8:00 PM";
+      default:
+        return timeSlot;
+    }
+  };
+
+  const handleServiceSelect = (booking: Booking) => {
+    setSelectedService(booking);
     setStep("select-datetime");
   };
 
@@ -300,7 +323,7 @@ const RescheduleDrawer: React.FC<RescheduleDrawerProps> = ({
     setSelectedDate(date);
   };
 
-  const handleTimeSelect = (time: string) => {
+  const handleTimeSelect = (time: TimeSlot) => {
     setSelectedTime(time);
   };
 
@@ -310,7 +333,7 @@ const RescheduleDrawer: React.FC<RescheduleDrawerProps> = ({
     } else if (step === "select-datetime") {
       setStep("select-service");
       setSelectedDate(null);
-      setSelectedTime("");
+      setSelectedTime(null);
     } else {
       onClose();
     }
@@ -322,17 +345,37 @@ const RescheduleDrawer: React.FC<RescheduleDrawerProps> = ({
     }
   };
 
-  const handleConfirm = () => {
-    if (selectedService && selectedDate && selectedTime && onReschedule) {
-      onReschedule(selectedService.id, selectedDate, selectedTime);
-      onClose();
-      // Reset state
-      setStep("select-service");
-      setSelectedService(null);
-      setSelectedDate(null);
-      setSelectedTime("");
-      setSearchQuery("");
-      setActiveFilter("all");
+  const handleConfirm = async () => {
+    if (selectedService && selectedDate && selectedTime) {
+      setIsRescheduling(true);
+      try {
+        await handleRescheduleBooking(
+          selectedService.id,
+          selectedDate.toISOString(),
+          selectedTime
+        );
+
+        // Refetch bookings to update the UI
+        await refetch();
+
+        if (onReschedule) {
+          onReschedule(selectedService.id, selectedDate, selectedTime);
+        }
+
+        onClose();
+        // Reset state
+        setStep("select-service");
+        setSelectedService(null);
+        setSelectedDate(null);
+        setSelectedTime(null);
+        setSearchQuery("");
+        setActiveFilter("all");
+      } catch (error) {
+        console.error("Failed to reschedule booking:", error);
+        // You might want to show an error toast here
+      } finally {
+        setIsRescheduling(false);
+      }
     }
   };
 
@@ -340,13 +383,77 @@ const RescheduleDrawer: React.FC<RescheduleDrawerProps> = ({
     setStep("select-service");
     setSelectedService(null);
     setSelectedDate(null);
-    setSelectedTime("");
+    setSelectedTime(null);
     setSearchQuery("");
     setActiveFilter("all");
     onClose();
   };
 
   const calendarDays = getDaysInMonth(currentMonth);
+
+  // Show loading state
+  if (bookingsLoading) {
+    return (
+      <ModalDrawer isOpen={isOpen} onClose={resetAndClose} width="lg">
+        <div className={styles.drawer}>
+          <div className={styles.drawer__header}>
+            <h2 className={styles.drawer__title}>Reschedule Service</h2>
+          </div>
+          <div className={styles.drawer__content}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "200px",
+              }}
+            >
+              <Loader2 size={32} className="animate-spin" />
+              <span style={{ marginLeft: "12px" }}>
+                Loading your bookings...
+              </span>
+            </div>
+          </div>
+        </div>
+      </ModalDrawer>
+    );
+  }
+
+  // Show error state
+  if (bookingsError) {
+    return (
+      <ModalDrawer isOpen={isOpen} onClose={resetAndClose} width="lg">
+        <div className={styles.drawer}>
+          <div className={styles.drawer__header}>
+            <h2 className={styles.drawer__title}>Reschedule Service</h2>
+          </div>
+          <div className={styles.drawer__content}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "200px",
+                flexDirection: "column",
+              }}
+            >
+              <AlertCircle size={32} color="#ef4444" />
+              <span style={{ marginTop: "12px", color: "#ef4444" }}>
+                Failed to load bookings. Please try again.
+              </span>
+              <FnButton
+                variant="primary"
+                onClick={() => refetch()}
+                style={{ marginTop: "16px" }}
+              >
+                Retry
+              </FnButton>
+            </div>
+          </div>
+        </div>
+      </ModalDrawer>
+    );
+  }
 
   return (
     <ModalDrawer isOpen={isOpen} onClose={resetAndClose} width="lg">
@@ -364,7 +471,7 @@ const RescheduleDrawer: React.FC<RescheduleDrawerProps> = ({
             </h2>
             <p className={styles.drawer__subtitle}>
               {step === "select-service" &&
-                `${filteredServices.length} services available to reschedule`}
+                `${filteredBookings.length} services available to reschedule`}
               {step === "select-datetime" && "Select a date and time slot"}
               {step === "confirm" && "Review your changes"}
             </p>
@@ -515,69 +622,90 @@ const RescheduleDrawer: React.FC<RescheduleDrawerProps> = ({
 
                 {/* Enhanced Services List */}
                 <div className={styles.drawer__servicesList}>
-                  {filteredServices.map((service) => (
-                    <motion.div
-                      key={service.id}
-                      className={styles.drawer__serviceCard}
-                      onClick={() => handleServiceSelect(service)}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                  {filteredBookings.length === 0 ? (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        padding: "40px 20px",
+                        color: "#6b7280",
+                      }}
                     >
-                      <div className={styles.drawer__serviceCardHeader}>
-                        <div
-                          className={styles.drawer__serviceIcon}
-                          style={{
-                            backgroundColor: `${service.color}15`,
-                            color: service.color,
-                          }}
+                      <Package
+                        size={48}
+                        style={{ marginBottom: "16px", opacity: 0.5 }}
+                      />
+                      <p>No bookings found</p>
+                      <p style={{ fontSize: "14px", marginTop: "8px" }}>
+                        {searchQuery
+                          ? "Try adjusting your search terms"
+                          : "You don't have any upcoming bookings to reschedule"}
+                      </p>
+                    </div>
+                  ) : (
+                    filteredBookings.map((booking) => {
+                      const serviceColor = getServiceColor(
+                        booking.service_category as ServiceCategory
+                      );
+                      const serviceIcon = getServiceIcon(
+                        booking.service_category as ServiceCategory
+                      );
+                      const serviceDuration = getServiceDuration(
+                        booking.service_category as ServiceCategory
+                      );
+                      const isUrgent =
+                        new Date(booking.date) <=
+                        new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+                      return (
+                        <motion.div
+                          key={booking.id}
+                          className={styles.drawer__serviceCard}
+                          onClick={() => handleServiceSelect(booking)}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
                         >
-                          {service.icon}
-                        </div>
-                        <div className={styles.drawer__serviceInfo}>
-                          <div className={styles.drawer__serviceName}>
-                            {service.name}
-                            {service.isUrgent && (
-                              <span className={styles.drawer__serviceUrgent}>
-                                <AlertCircle size={12} />
-                                Urgent
-                              </span>
-                            )}
+                          <div className={styles.drawer__serviceCardHeader}>
+                            <div
+                              className={styles.drawer__serviceIcon}
+                              style={{
+                                backgroundColor: `${serviceColor}15`,
+                                color: serviceColor,
+                              }}
+                            >
+                              {serviceIcon}
+                            </div>
+                            <div className={styles.drawer__serviceInfo}>
+                              <div className={styles.drawer__serviceName}>
+                                {booking.service.name}
+                                {isUrgent && (
+                                  <span
+                                    className={styles.drawer__serviceUrgent}
+                                  >
+                                    <AlertCircle size={12} />
+                                    Urgent
+                                  </span>
+                                )}
+                              </div>
+                              <div className={styles.drawer__serviceMeta}>
+                                <span>
+                                  <Calendar size={14} />
+                                  {formatDate(new Date(booking.date))}
+                                </span>
+                                <span>
+                                  <Clock size={14} />
+                                  {formatTimeSlot(booking.timeSlot)}
+                                </span>
+                                <span>
+                                  <Clock size={14} />
+                                  {serviceDuration}
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                          <div className={styles.drawer__serviceMeta}>
-                            <span>
-                              <Calendar size={14} />
-                              {formatDate(service.date)}
-                            </span>
-                            <span>
-                              <Clock size={14} />
-                              {service.time}
-                            </span>
-                            <span>
-                              <Clock size={14} />
-                              {service.duration}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className={styles.drawer__serviceProvider}>
-                        <div className={styles.drawer__providerAvatar}>
-                          {service.provider
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </div>
-                        <span className={styles.drawer__providerName}>
-                          {service.provider}
-                        </span>
-                        {service.providerRating && (
-                          <span className={styles.drawer__providerRating}>
-                            <Star size={14} />
-                            {service.providerRating}
-                          </span>
-                        )}
-                      </div>
-                    </motion.div>
-                  ))}
+                        </motion.div>
+                      );
+                    })
+                  )}
                 </div>
               </motion.div>
             )}
@@ -602,8 +730,8 @@ const RescheduleDrawer: React.FC<RescheduleDrawerProps> = ({
                       Current Schedule
                     </span>
                     <span className={styles.drawer__currentInfoValue}>
-                      {formatDate(selectedService.date)} at{" "}
-                      {selectedService.time}
+                      {formatDate(new Date(selectedService.date))} at{" "}
+                      {formatTimeSlot(selectedService.timeSlot)}
                     </span>
                   </div>
                 </div>
@@ -707,32 +835,13 @@ const RescheduleDrawer: React.FC<RescheduleDrawerProps> = ({
                         <motion.button
                           key={slot.value}
                           className={`${styles.drawer__timeSlot} ${
-                            !slot.available
-                              ? styles["drawer__timeSlot--unavailable"]
-                              : ""
-                          } ${
                             selectedTime === slot.value
                               ? styles["drawer__timeSlot--selected"]
                               : ""
-                          } ${
-                            slot.isPopular
-                              ? styles["drawer__timeSlot--popular"]
-                              : ""
                           }`}
-                          onClick={() =>
-                            slot.available && handleTimeSelect(slot.value)
-                          }
-                          disabled={!slot.available}
-                          whileHover={slot.available ? { scale: 1.05 } : {}}
-                          whileTap={slot.available ? { scale: 0.95 } : {}}
+                          onClick={() => handleTimeSelect(slot.value)}
                         >
                           {slot.label}
-                          {slot.isPopular && (
-                            <TrendingUp
-                              size={12}
-                              className={styles.drawer__popularIcon}
-                            />
-                          )}
                         </motion.button>
                       ))}
                     </div>
@@ -742,95 +851,100 @@ const RescheduleDrawer: React.FC<RescheduleDrawerProps> = ({
             )}
 
             {/* Step 3: Enhanced Confirmation */}
-            {step === "confirm" && selectedService && selectedDate && (
-              <motion.div
-                key="confirm"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.2 }}
-                className={styles.drawer__confirm}
-              >
-                <div className={styles.drawer__confirmCard}>
-                  <motion.div
-                    className={styles.drawer__confirmIcon}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 260,
-                      damping: 20,
-                    }}
-                  >
-                    <Sparkles size={28} />
-                  </motion.div>
-                  <h3 className={styles.drawer__confirmTitle}>
-                    Ready to Reschedule?
-                  </h3>
+            {step === "confirm" &&
+              selectedService &&
+              selectedDate &&
+              selectedTime && (
+                <motion.div
+                  key="confirm"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.2 }}
+                  className={styles.drawer__confirm}
+                >
+                  <div className={styles.drawer__confirmCard}>
+                    <motion.div
+                      className={styles.drawer__confirmIcon}
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 260,
+                        damping: 20,
+                      }}
+                    >
+                      <Sparkles size={28} />
+                    </motion.div>
+                    <h3 className={styles.drawer__confirmTitle}>
+                      Ready to Reschedule?
+                    </h3>
 
-                  <div className={styles.drawer__confirmDetails}>
-                    <div className={styles.drawer__confirmSection}>
-                      <h4 className={styles.drawer__confirmSectionTitle}>
-                        Service Details
-                      </h4>
-                      <div className={styles.drawer__confirmItem}>
-                        <span className={styles.drawer__confirmLabel}>
-                          Service
-                        </span>
-                        <span className={styles.drawer__confirmValue}>
-                          {selectedService.name}
-                        </span>
+                    <div className={styles.drawer__confirmDetails}>
+                      <div className={styles.drawer__confirmSection}>
+                        <h4 className={styles.drawer__confirmSectionTitle}>
+                          Service Details
+                        </h4>
+                        <div className={styles.drawer__confirmItem}>
+                          <span className={styles.drawer__confirmLabel}>
+                            Service
+                          </span>
+                          <span className={styles.drawer__confirmValue}>
+                            {selectedService.service.name}
+                          </span>
+                        </div>
+                        <div className={styles.drawer__confirmItem}>
+                          <span className={styles.drawer__confirmLabel}>
+                            Provider
+                          </span>
+                          <span className={styles.drawer__confirmValue}>
+                            {selectedService.staff
+                              ? `${selectedService.staff.firstName} ${selectedService.staff.lastName}`
+                              : "Staff to be assigned"}
+                          </span>
+                        </div>
                       </div>
-                      <div className={styles.drawer__confirmItem}>
-                        <span className={styles.drawer__confirmLabel}>
-                          Provider
-                        </span>
-                        <span className={styles.drawer__confirmValue}>
-                          {selectedService.provider}
-                        </span>
+
+                      <div className={styles.drawer__confirmDivider} />
+
+                      <div className={styles.drawer__confirmSection}>
+                        <h4 className={styles.drawer__confirmSectionTitle}>
+                          Schedule Changes
+                        </h4>
+                        <div className={styles.drawer__confirmItem}>
+                          <span className={styles.drawer__confirmLabel}>
+                            From
+                          </span>
+                          <span
+                            className={`${styles.drawer__confirmValue} ${styles["drawer__confirmValue--old"]}`}
+                          >
+                            {formatDate(new Date(selectedService.date))} at{" "}
+                            {formatTimeSlot(selectedService.timeSlot)}
+                          </span>
+                        </div>
+                        <div className={styles.drawer__confirmItem}>
+                          <span className={styles.drawer__confirmLabel}>
+                            To
+                          </span>
+                          <span
+                            className={`${styles.drawer__confirmValue} ${styles["drawer__confirmValue--new"]}`}
+                          >
+                            {formatDate(selectedDate)} at{" "}
+                            {formatTimeSlot(selectedTime)}
+                          </span>
+                        </div>
                       </div>
                     </div>
 
-                    <div className={styles.drawer__confirmDivider} />
-
-                    <div className={styles.drawer__confirmSection}>
-                      <h4 className={styles.drawer__confirmSectionTitle}>
-                        Schedule Changes
-                      </h4>
-                      <div className={styles.drawer__confirmItem}>
-                        <span className={styles.drawer__confirmLabel}>
-                          From
-                        </span>
-                        <span
-                          className={`${styles.drawer__confirmValue} ${styles["drawer__confirmValue--old"]}`}
-                        >
-                          {formatDate(selectedService.date)} at{" "}
-                          {selectedService.time}
-                        </span>
-                      </div>
-                      <div className={styles.drawer__confirmItem}>
-                        <span className={styles.drawer__confirmLabel}>To</span>
-                        <span
-                          className={`${styles.drawer__confirmValue} ${styles["drawer__confirmValue--new"]}`}
-                        >
-                          {formatDate(selectedDate)} at{" "}
-                          {
-                            timeSlots.find((t) => t.value === selectedTime)
-                              ?.label
-                          }
-                        </span>
-                      </div>
-                    </div>
+                    <p className={styles.drawer__confirmNote}>
+                      <AlertCircle size={14} />
+                      You'll receive a confirmation email and SMS once the
+                      change is processed. Your provider will be notified
+                      automatically.
+                    </p>
                   </div>
-
-                  <p className={styles.drawer__confirmNote}>
-                    <AlertCircle size={14} />
-                    You'll receive a confirmation email and SMS once the change
-                    is processed. Your provider will be notified automatically.
-                  </p>
-                </div>
-              </motion.div>
-            )}
+                </motion.div>
+              )}
           </AnimatePresence>
         </div>
 
@@ -864,9 +978,23 @@ const RescheduleDrawer: React.FC<RescheduleDrawerProps> = ({
               <FnButton variant="ghost" onClick={handleBack} fullWidth>
                 Back
               </FnButton>
-              <FnButton variant="primary" onClick={handleConfirm} fullWidth>
-                <Check size={16} />
-                Confirm Changes
+              <FnButton
+                variant="primary"
+                onClick={handleConfirm}
+                fullWidth
+                disabled={isRescheduling}
+              >
+                {isRescheduling ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" />
+                    Rescheduling...
+                  </>
+                ) : (
+                  <>
+                    <Check size={16} />
+                    Confirm Changes
+                  </>
+                )}
               </FnButton>
             </>
           )}
