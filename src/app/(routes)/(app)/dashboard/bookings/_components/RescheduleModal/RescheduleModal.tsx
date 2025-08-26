@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import styles from "./RescheduleModal.module.scss";
 import { Booking, TimeSlot } from "@/graphql/api";
+import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 
 interface RescheduleModalProps {
   isOpen: boolean;
@@ -168,287 +169,243 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
 
   return (
     <>
-      {/* Backdrop */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            className={styles.backdrop}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-          />
-        )}
-      </AnimatePresence>
+      <ModalDrawer isOpen={isOpen} onClose={onClose} width="lg">
+        <div className={styles.modal}>
+          <div className={styles.modal__header}>
+            <div className={styles.modal__headerContent}>
+              <h2 className={styles.modal__title}>Reschedule Booking</h2>
+              <p className={styles.modal__subtitle}>
+                Select a new date and time for your service
+              </p>
+            </div>
+            <button className={styles.modal__closeBtn} onClick={onClose}>
+              <X size={20} />
+            </button>
+          </div>
 
-      {/* Modal Drawer */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            className={styles.drawer}
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 30, stiffness: 300 }}
-          >
-            <div className={styles.modal}>
-              <div className={styles.modal__header}>
-                <div className={styles.modal__headerContent}>
-                  <h2 className={styles.modal__title}>Reschedule Booking</h2>
-                  <p className={styles.modal__subtitle}>
-                    Select a new date and time for your service
-                  </p>
+          <div className={styles.modal__body}>
+            {/* Current Booking Info */}
+            <div className={styles.modal__currentBooking}>
+              <div className={styles.modal__sectionTitle}>Current Booking</div>
+              <div className={styles.modal__bookingCard}>
+                <div className={styles.modal__bookingIcon}>
+                  {getServiceIcon(booking.service_category)}
                 </div>
-                <button className={styles.modal__closeBtn} onClick={onClose}>
-                  <X size={20} />
+                <div className={styles.modal__bookingInfo}>
+                  <h4>{booking.service.name}</h4>
+                  <div className={styles.modal__bookingDetails}>
+                    <span>
+                      <Calendar size={14} />
+                      {new Date(booking.date).toLocaleDateString("en-US", {
+                        weekday: "short",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                    <span>
+                      <Clock size={14} />
+                      {booking.timeSlot}
+                    </span>
+                    <span>
+                      <User size={14} />
+                      {booking.staff?.firstName} {booking.staff?.lastName}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Calendar Date Selection */}
+            <div className={styles.modal__section}>
+              <div className={styles.modal__sectionTitle}>Select New Date</div>
+
+              {/* Calendar Header */}
+              <div className={styles.modal__calendarHeader}>
+                <button
+                  className={styles.modal__calendarNavBtn}
+                  onClick={() => navigateMonth("prev")}
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <div className={styles.modal__calendarTitle}>
+                  {currentMonth.toLocaleDateString("en-US", {
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </div>
+                <button
+                  className={styles.modal__calendarNavBtn}
+                  onClick={() => navigateMonth("next")}
+                >
+                  <ChevronRight size={20} />
                 </button>
               </div>
 
-              <div className={styles.modal__body}>
-                {/* Current Booking Info */}
-                <div className={styles.modal__currentBooking}>
-                  <div className={styles.modal__sectionTitle}>
-                    Current Booking
-                  </div>
-                  <div className={styles.modal__bookingCard}>
-                    <div className={styles.modal__bookingIcon}>
-                      {getServiceIcon(booking.service_category)}
-                    </div>
-                    <div className={styles.modal__bookingInfo}>
-                      <h4>{booking.service.name}</h4>
-                      <div className={styles.modal__bookingDetails}>
-                        <span>
-                          <Calendar size={14} />
-                          {new Date(booking.date).toLocaleDateString("en-US", {
-                            weekday: "short",
-                            month: "short",
-                            day: "numeric",
-                          })}
-                        </span>
-                        <span>
-                          <Clock size={14} />
-                          {booking.timeSlot}
-                        </span>
-                        <span>
-                          <User size={14} />
-                          {booking.staff?.firstName} {booking.staff?.lastName}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Calendar Date Selection */}
-                <div className={styles.modal__section}>
-                  <div className={styles.modal__sectionTitle}>
-                    Select New Date
-                  </div>
-
-                  {/* Calendar Header */}
-                  <div className={styles.modal__calendarHeader}>
-                    <button
-                      className={styles.modal__calendarNavBtn}
-                      onClick={() => navigateMonth("prev")}
-                    >
-                      <ChevronLeft size={20} />
-                    </button>
-                    <div className={styles.modal__calendarTitle}>
-                      {currentMonth.toLocaleDateString("en-US", {
-                        month: "long",
-                        year: "numeric",
-                      })}
-                    </div>
-                    <button
-                      className={styles.modal__calendarNavBtn}
-                      onClick={() => navigateMonth("next")}
-                    >
-                      <ChevronRight size={20} />
-                    </button>
-                  </div>
-
-                  {/* Today Button */}
-                  <div className={styles.modal__todayContainer}>
-                    <button
-                      className={styles.modal__todayBtn}
-                      onClick={goToToday}
-                    >
-                      Today
-                    </button>
-                  </div>
-
-                  {/* Calendar Grid */}
-                  <div className={styles.modal__calendar}>
-                    {/* Week Days Header */}
-                    <div className={styles.modal__weekDays}>
-                      {weekDays.map((day) => (
-                        <div key={day} className={styles.modal__weekDay}>
-                          {day}
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Calendar Days */}
-                    <div className={styles.modal__calendarDays}>
-                      {calendarDays.map((date, index) => {
-                        if (!date) {
-                          return (
-                            <div
-                              key={`empty-${index}`}
-                              className={styles.modal__calendarDayEmpty}
-                            />
-                          );
-                        }
-
-                        const isSelected =
-                          selectedDate?.toDateString() === date.toDateString();
-                        const isPast = isPastDate(date);
-                        const weekend = isWeekend(date);
-                        const today = isToday(date);
-
-                        return (
-                          <motion.button
-                            key={date.toISOString()}
-                            className={`${styles.modal__calendarDay} ${
-                              isSelected
-                                ? styles["modal__calendarDay--selected"]
-                                : ""
-                            } ${
-                              isPast
-                                ? styles["modal__calendarDay--disabled"]
-                                : ""
-                            } ${
-                              weekend
-                                ? styles["modal__calendarDay--weekend"]
-                                : ""
-                            } ${
-                              today ? styles["modal__calendarDay--today"] : ""
-                            }`}
-                            onClick={() => handleDateSelect(date)}
-                            disabled={isPast}
-                            whileHover={!isPast ? { scale: 1.05 } : {}}
-                            whileTap={!isPast ? { scale: 0.95 } : {}}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: index * 0.01 }}
-                          >
-                            {date.getDate()}
-                          </motion.button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Time Selection */}
-                {selectedDate && (
-                  <motion.div
-                    className={styles.modal__section}
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className={styles.modal__sectionTitle}>
-                      Available Time Slots for {formatDate(selectedDate)}
-                    </div>
-                    <div className={styles.modal__timeGrid}>
-                      {Object.values(TimeSlot).map((slot, index) => {
-                        const isSelected = selectedTime === slot;
-
-                        return (
-                          <motion.button
-                            key={index}
-                            className={`${styles.modal__timeSlot} ${
-                              isSelected
-                                ? styles["modal__timeSlot--selected"]
-                                : ""
-                            } ${!slot ? styles["modal__timeSlot--unavailable"] : ""}`}
-                            onClick={() => handleTimeSelect(slot)}
-                            disabled={!slot}
-                            whileHover={slot ? { scale: 1.05 } : {}}
-                            whileTap={slot ? { scale: 0.95 } : {}}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: index * 0.03 }}
-                          >
-                            <span>{slot}</span>
-                          </motion.button>
-                        );
-                      })}
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* Important Notes */}
-                <div className={styles.modal__notes}>
-                  <AlertCircle size={16} />
-                  <div>
-                    <strong>Important:</strong>
-                    <ul>
-                      <li>
-                        Rescheduling is free up to 24 hours before your
-                        appointment
-                      </li>
-                      <li>
-                        Your service provider will be notified of the change
-                      </li>
-                      <li>
-                        You'll receive a confirmation email once rescheduled
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-                {/* Success Message */}
-                <AnimatePresence>
-                  {showSuccess && (
-                    <motion.div
-                      className={styles.modal__success}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                    >
-                      <CheckCircle size={24} />
-                      <div>
-                        <h4>Booking Rescheduled Successfully!</h4>
-                        <p>You'll receive a confirmation email shortly.</p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+              {/* Today Button */}
+              <div className={styles.modal__todayContainer}>
+                <button className={styles.modal__todayBtn} onClick={goToToday}>
+                  Today
+                </button>
               </div>
 
-              <div className={styles.modal__footer}>
-                <motion.button
-                  className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
-                  onClick={onClose}
-                  disabled={isConfirming}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Cancel
-                </motion.button>
-                <motion.button
-                  className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
-                  onClick={handleConfirm}
-                  disabled={!selectedDate || !selectedTime || isConfirming}
-                  whileHover={
-                    !isConfirming && selectedDate && selectedTime
-                      ? { scale: 1.02 }
-                      : {}
-                  }
-                  whileTap={
-                    !isConfirming && selectedDate && selectedTime
-                      ? { scale: 0.98 }
-                      : {}
-                  }
-                >
-                  {isConfirming ? "Rescheduling..." : "Confirm Reschedule"}
-                </motion.button>
+              {/* Calendar Grid */}
+              <div className={styles.modal__calendar}>
+                {/* Week Days Header */}
+                <div className={styles.modal__weekDays}>
+                  {weekDays.map((day) => (
+                    <div key={day} className={styles.modal__weekDay}>
+                      {day}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Calendar Days */}
+                <div className={styles.modal__calendarDays}>
+                  {calendarDays.map((date, index) => {
+                    if (!date) {
+                      return (
+                        <div
+                          key={`empty-${index}`}
+                          className={styles.modal__calendarDayEmpty}
+                        />
+                      );
+                    }
+
+                    const isSelected =
+                      selectedDate?.toDateString() === date.toDateString();
+                    const isPast = isPastDate(date);
+                    const weekend = isWeekend(date);
+                    const today = isToday(date);
+
+                    return (
+                      <motion.button
+                        key={date.toISOString()}
+                        className={`${styles.modal__calendarDay} ${
+                          isSelected
+                            ? styles["modal__calendarDay--selected"]
+                            : ""
+                        } ${
+                          isPast ? styles["modal__calendarDay--disabled"] : ""
+                        } ${
+                          weekend ? styles["modal__calendarDay--weekend"] : ""
+                        } ${today ? styles["modal__calendarDay--today"] : ""}`}
+                        onClick={() => handleDateSelect(date)}
+                        disabled={isPast}
+                        whileHover={!isPast ? { scale: 1.05 } : {}}
+                        whileTap={!isPast ? { scale: 0.95 } : {}}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: index * 0.01 }}
+                      >
+                        {date.getDate()}
+                      </motion.button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
+            {/* Time Selection */}
+            {selectedDate && (
+              <motion.div
+                className={styles.modal__section}
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className={styles.modal__sectionTitle}>
+                  Available Time Slots for {formatDate(selectedDate)}
+                </div>
+                <div className={styles.modal__timeGrid}>
+                  {Object.values(TimeSlot).map((slot, index) => {
+                    const isSelected = selectedTime === slot;
+
+                    return (
+                      <motion.button
+                        key={index}
+                        className={`${styles.modal__timeSlot} ${
+                          isSelected ? styles["modal__timeSlot--selected"] : ""
+                        } ${!slot ? styles["modal__timeSlot--unavailable"] : ""}`}
+                        onClick={() => handleTimeSelect(slot)}
+                        disabled={!slot}
+                        whileHover={slot ? { scale: 1.05 } : {}}
+                        whileTap={slot ? { scale: 0.95 } : {}}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: index * 0.03 }}
+                      >
+                        <span>{slot}</span>
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+
+            {/* Important Notes */}
+            <div className={styles.modal__notes}>
+              <AlertCircle size={16} />
+              <div>
+                <strong>Important:</strong>
+                <ul>
+                  <li>
+                    Rescheduling is free up to 24 hours before your appointment
+                  </li>
+                  <li>Your service provider will be notified of the change</li>
+                  <li>You'll receive a confirmation email once rescheduled</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Success Message */}
+            <AnimatePresence>
+              {showSuccess && (
+                <motion.div
+                  className={styles.modal__success}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                >
+                  <CheckCircle size={24} />
+                  <div>
+                    <h4>Booking Rescheduled Successfully!</h4>
+                    <p>You'll receive a confirmation email shortly.</p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <div className={styles.modal__footer}>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
+              onClick={onClose}
+              disabled={isConfirming}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Cancel
+            </motion.button>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
+              onClick={handleConfirm}
+              disabled={!selectedDate || !selectedTime || isConfirming}
+              whileHover={
+                !isConfirming && selectedDate && selectedTime
+                  ? { scale: 1.02 }
+                  : {}
+              }
+              whileTap={
+                !isConfirming && selectedDate && selectedTime
+                  ? { scale: 0.98 }
+                  : {}
+              }
+            >
+              {isConfirming ? "Rescheduling..." : "Confirm Reschedule"}
+            </motion.button>
+          </div>
+        </div>
+      </ModalDrawer>
     </>
   );
 };
