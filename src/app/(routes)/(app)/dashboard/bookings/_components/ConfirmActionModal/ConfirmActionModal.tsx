@@ -129,26 +129,6 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
     }, 1500);
   };
 
-  // Format date
-  const formatDate = (date: string | Date) => {
-    const dateObj = typeof date === "string" ? new Date(date) : date;
-    return dateObj.toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
-
-  // Format price
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-NG", {
-      style: "currency",
-      currency: "NGN",
-      minimumFractionDigits: 0,
-    }).format(price);
-  };
-
   // Get action details
   const getActionDetails = () => {
     if (actionType === "cancel") {

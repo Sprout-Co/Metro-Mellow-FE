@@ -71,16 +71,6 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
     });
   };
 
-  // Format time
-  const formatTime = (date: string | Date) => {
-    const dateObj = typeof date === "string" ? new Date(date) : date;
-    return dateObj.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
-
   // Format price
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-NG", {
@@ -113,6 +103,98 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
       [ServiceCategory.PestControl]: "🐛",
     };
     return icons[service_category] || "🏠";
+  };
+
+  const renderFooterButtons = () => {
+    switch (booking.status) {
+      case BookingStatus.Paused:
+      case BookingStatus.Confirmed:
+        return (
+          <>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setIsRescheduleModalOpen(true)}
+            >
+              <RefreshCw size={14} />
+              Reschedule
+            </motion.button>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Edit size={14} />
+              Edit Details
+            </motion.button>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--danger"]}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setIsConfirmActionModalOpen(true)}
+            >
+              <X size={14} />
+              Cancel
+            </motion.button>
+          </>
+        );
+      case BookingStatus.Completed:
+        return (
+          <>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <RefreshCw size={14} />
+              Book Again
+            </motion.button>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <MessageSquare size={14} />
+              Leave Feedback
+            </motion.button>
+          </>
+        );
+      case BookingStatus.Pending:
+        return (
+          <>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <CheckCircle size={14} />
+              Confirm Booking
+            </motion.button>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Edit size={14} />
+              Modify
+            </motion.button>
+          </>
+        );
+      default:
+        return (
+          <>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
+              onClick={onClose}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Close
+            </motion.button>
+          </>
+        );
+    }
   };
 
   return (
@@ -303,74 +385,14 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
       </div>
 
       <div className={styles.modal__footer}>
-        {booking.status === BookingStatus.Paused ||
+        {renderFooterButtons()}
+        {/* {booking.status === BookingStatus.Paused ||
         booking.status === BookingStatus.Confirmed ? (
-          <>
-            <motion.button
-              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setIsRescheduleModalOpen(true)}
-            >
-              <RefreshCw size={14} />
-              Reschedule
-            </motion.button>
-            <motion.button
-              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Edit size={14} />
-              Edit Details
-            </motion.button>
-            <motion.button
-              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--danger"]}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setIsConfirmActionModalOpen(true)}
-            >
-              <X size={14} />
-              Cancel
-            </motion.button>
-          </>
+      
         ) : booking.status === BookingStatus.Completed ? (
-          <>
-            <motion.button
-              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <RefreshCw size={14} />
-              Book Again
-            </motion.button>
-            <motion.button
-              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <MessageSquare size={14} />
-              Leave Feedback
-            </motion.button>
-          </>
+ 
         ) : booking.status === BookingStatus.Pending ? (
-          <>
-            <motion.button
-              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <CheckCircle size={14} />
-              Confirm Booking
-            </motion.button>
-            <motion.button
-              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Edit size={14} />
-              Modify
-            </motion.button>
-          </>
+   
         ) : (
           <motion.button
             className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
@@ -380,7 +402,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
           >
             Close
           </motion.button>
-        )}
+        )} */}
       </div>
 
       <RescheduleModal
