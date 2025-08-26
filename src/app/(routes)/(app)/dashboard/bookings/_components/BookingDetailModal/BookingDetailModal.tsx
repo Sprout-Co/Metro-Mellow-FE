@@ -19,6 +19,7 @@ import {
   Repeat,
   CheckCircle,
   AlertCircle,
+  Pause,
 } from "lucide-react";
 import styles from "./BookingDetailModal.module.scss";
 import { ServiceCategory, BookingStatus, Booking } from "@/graphql/api";
@@ -40,6 +41,9 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
   const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
   const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] =
     useState(false);
+  const [confirmationActionType, setConfirmationActionType] = useState<
+    "cancel" | "pause" | "resume" | "reschedule" | null
+  >(null);
   if (!booking) return null;
 
   // Format date
@@ -113,7 +117,10 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--danger"]}`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setIsConfirmActionModalOpen(true)}
+              onClick={() => {
+                setConfirmationActionType("pause");
+                setIsConfirmActionModalOpen(true);
+              }}
             >
               <X size={14} />
               Cancel
@@ -136,15 +143,22 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                setConfirmationActionType("pause");
+                setIsConfirmActionModalOpen(true);
+              }}
             >
-              <Edit size={14} />
-              Edit Details
+              <Pause size={14} />
+              Pause
             </motion.button>
             <motion.button
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--danger"]}`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setIsConfirmActionModalOpen(true)}
+              onClick={() => {
+                setConfirmationActionType("cancel");
+                setIsConfirmActionModalOpen(true);
+              }}
             >
               <X size={14} />
               Cancel
@@ -423,7 +437,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
         booking={booking}
       />
       <ConfirmActionModal
-        actionType="cancel"
+        actionType={confirmationActionType}
         isOpen={isConfirmActionModalOpen}
         onClose={() => setIsConfirmActionModalOpen(false)}
         booking={booking}

@@ -19,7 +19,7 @@ import styles from "./ConfirmActionModal.module.scss";
 import { Booking } from "@/graphql/api";
 import Portal from "@/components/ui/Portal/Portal";
 
-type ActionType = "pause" | "cancel";
+type ActionType = "pause" | "cancel" | "resume" | "reschedule" | null;
 
 interface ConfirmActionModalProps {
   isOpen: boolean;
@@ -80,16 +80,7 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
             label: "Going on Vacation",
             description: "Will be away temporarily",
           },
-          {
-            id: "renovation",
-            label: "Home Renovation",
-            description: "Property is being renovated",
-          },
-          {
-            id: "temporary_move",
-            label: "Temporary Relocation",
-            description: "Temporarily moved to another location",
-          },
+
           {
             id: "financial",
             label: "Financial Reasons",
