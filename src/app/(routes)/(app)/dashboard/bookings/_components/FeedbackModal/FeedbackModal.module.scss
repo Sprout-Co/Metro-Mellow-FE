@@ -8,7 +8,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: color-alpha("neutral", "black", 0.6);
   backdrop-filter: blur(4px);
   z-index: 1000;
 }
@@ -18,9 +18,9 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: white;
+  background: color("neutral", "white");
   border-radius: 24px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  box-shadow: shadow("xl");
   z-index: 1001;
   max-width: 500px;
   width: 90vw;
@@ -44,11 +44,11 @@
     width: 48px;
     height: 48px;
     border-radius: 12px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: color("primary", "base");
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: color("neutral", "white");
 
     svg {
       width: 24px;
@@ -61,8 +61,8 @@
     height: 40px;
     border-radius: 10px;
     border: none;
-    background: #f8fafc;
-    color: #64748b;
+    background: color("neutral", "lightest");
+    color: color("neutral", "medium");
     display: flex;
     align-items: center;
     justify-content: center;
@@ -70,8 +70,8 @@
     transition: all 0.2s ease;
 
     &:hover {
-      background: #e2e8f0;
-      color: #475569;
+      background: color("neutral", "lighter");
+      color: color("neutral", "dark");
     }
   }
 
@@ -83,35 +83,35 @@
   &__title {
     font-size: 24px;
     font-weight: 700;
-    color: #1e293b;
+    color: color("neutral", "darkest");
     margin-bottom: 8px;
   }
 
   &__subtitle {
     font-size: 16px;
-    color: #64748b;
+    color: color("neutral", "medium");
     line-height: 1.5;
   }
 
   &__serviceInfo {
-    background: #f8fafc;
+    background: color("neutral", "lightest");
     border-radius: 12px;
     padding: 16px;
     margin-bottom: 32px;
     text-align: center;
-    border: 1px solid #e2e8f0;
+    border: 1px solid color("neutral", "lighter");
   }
 
   &__serviceName {
     font-size: 18px;
     font-weight: 600;
-    color: #1e293b;
+    color: color("neutral", "darkest");
     margin-bottom: 4px;
   }
 
   &__serviceDate {
     font-size: 14px;
-    color: #64748b;
+    color: color("neutral", "medium");
   }
 
   &__ratingSection {
@@ -121,7 +121,7 @@
   &__sectionTitle {
     font-size: 18px;
     font-weight: 600;
-    color: #1e293b;
+    color: color("neutral", "darkest");
     margin-bottom: 16px;
   }
 
@@ -141,14 +141,14 @@
     transition: all 0.2s ease;
 
     &:hover {
-      background: #f1f5f9;
+      background: color("neutral", "lightest");
     }
 
     &--filled {
-      background: #fef3c7;
+      background: color-alpha("accent", "lighter", 0.5);
 
       &:hover {
-        background: #fed7aa;
+        background: color-alpha("accent", "light", 0.7);
       }
     }
   }
@@ -157,7 +157,7 @@
     text-align: center;
     font-size: 16px;
     font-weight: 500;
-    color: #475569;
+    color: color("neutral", "dark");
     min-height: 24px;
   }
 
@@ -168,29 +168,29 @@
   &__textarea {
     width: 100%;
     padding: 16px;
-    border: 2px solid #e2e8f0;
+    border: 2px solid color("neutral", "lighter");
     border-radius: 12px;
     font-size: 16px;
     font-family: inherit;
     resize: vertical;
     transition: border-color 0.2s ease;
-    background: #fafbfc;
+    background: color("neutral", "lightest");
 
     &:focus {
       outline: none;
-      border-color: #667eea;
-      background: white;
+      border-color: color("primary", "base");
+      background: color("neutral", "white");
     }
 
     &::placeholder {
-      color: #94a3b8;
+      color: color("neutral", "medium");
     }
   }
 
   &__characterCount {
     text-align: right;
     font-size: 12px;
-    color: #94a3b8;
+    color: color("neutral", "medium");
     margin-top: 8px;
   }
 
@@ -199,24 +199,24 @@
     align-items: flex-start;
     gap: 12px;
     padding: 16px;
-    background: #fef2f2;
-    border: 1px solid #fecaca;
+    background: color-alpha("status", "error", 0.1);
+    border: 1px solid color-alpha("status", "error", 0.3);
     border-radius: 12px;
     margin-bottom: 24px;
 
     svg {
-      color: #dc2626;
+      color: color("status", "error");
       flex-shrink: 0;
       margin-top: 2px;
     }
 
     strong {
-      color: #dc2626;
+      color: color("status", "error");
       font-weight: 600;
     }
 
     p {
-      color: #991b1b;
+      color: color-darken("status", "error", 10%);
       margin: 0;
       font-size: 14px;
     }
@@ -227,25 +227,25 @@
     align-items: flex-start;
     gap: 12px;
     padding: 16px;
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
+    background: color-alpha("status", "success", 0.1);
+    border: 1px solid color-alpha("status", "success", 0.3);
     border-radius: 12px;
     margin-bottom: 24px;
 
     svg {
-      color: #16a34a;
+      color: color("status", "success");
       flex-shrink: 0;
     }
 
     h4 {
-      color: #16a34a;
+      color: color("status", "success");
       font-weight: 600;
       margin: 0 0 4px 0;
       font-size: 16px;
     }
 
     p {
-      color: #166534;
+      color: color-darken("status", "success", 10%);
       margin: 0;
       font-size: 14px;
     }
@@ -281,27 +281,28 @@
     }
 
     &--secondary {
-      background: #f8fafc;
-      color: #475569;
-      border: 1px solid #e2e8f0;
+      background: color("neutral", "lightest");
+      color: color("neutral", "dark");
+      border: 1px solid color("neutral", "lighter");
 
       &:hover:not(:disabled) {
-        background: #e2e8f0;
-        color: #334155;
+        background: color("neutral", "lighter");
+        color: color("neutral", "darker");
       }
     }
 
     &--primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      background: color("primary", "base");
+      color: color("neutral", "white");
 
       &:hover:not(:disabled) {
         transform: translateY(-1px);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        box-shadow: shadow("lg");
+        background: color("primary", "dark");
       }
 
       &:disabled {
-        background: #94a3b8;
+        background: color("neutral", "medium");
         transform: none;
         box-shadow: none;
       }
