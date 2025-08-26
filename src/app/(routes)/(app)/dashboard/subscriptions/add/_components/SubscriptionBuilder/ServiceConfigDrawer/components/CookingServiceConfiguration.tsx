@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import styles from "../ServiceConfigDrawer.module.scss";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
-import ValidationErrors from "../../components/ValidationErrors";
+import ValidationErrors from "../../ValidationErrors/ValidationErrors";
 import {
   Service,
   ScheduleDays,
@@ -41,7 +41,9 @@ interface CookingServiceConfigurationProps {
   onProceedToCheckout?: (configuration: SubscriptionServiceInput) => void;
 }
 
-const CookingServiceConfiguration: React.FC<CookingServiceConfigurationProps> = ({
+const CookingServiceConfiguration: React.FC<
+  CookingServiceConfigurationProps
+> = ({
   isOpen,
   onClose,
   service,
@@ -50,7 +52,9 @@ const CookingServiceConfiguration: React.FC<CookingServiceConfigurationProps> = 
   onProceedToCheckout,
 }) => {
   const [activeStep, setActiveStep] = useState(0);
-  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
+  const [validationErrors, setValidationErrors] = useState<ValidationError[]>(
+    []
+  );
   const [showValidationErrors, setShowValidationErrors] = useState(false);
   const [configuration, setConfiguration] = useState<SubscriptionServiceInput>({
     serviceId: service._id,
@@ -148,7 +152,7 @@ const CookingServiceConfiguration: React.FC<CookingServiceConfigurationProps> = 
       setActiveStep(0);
       setValidationErrors([]);
       setShowValidationErrors(false);
-      
+
       if (existingConfiguration) {
         setConfiguration(existingConfiguration);
       }
@@ -194,11 +198,15 @@ const CookingServiceConfiguration: React.FC<CookingServiceConfigurationProps> = 
     setConfiguration((prev) => {
       const currentDays = prev.scheduledDays || [];
       const isCurrentlySelected = currentDays.includes(day);
-      const shouldLimitToOneDay = prev.frequency === SubscriptionFrequency.Monthly;
+      const shouldLimitToOneDay =
+        prev.frequency === SubscriptionFrequency.Monthly;
 
       if (shouldLimitToOneDay) {
         if (isCurrentlySelected) {
-          return { ...prev, scheduledDays: currentDays.filter((d) => d !== day) };
+          return {
+            ...prev,
+            scheduledDays: currentDays.filter((d) => d !== day),
+          };
         } else {
           return { ...prev, scheduledDays: [day] };
         }
@@ -238,7 +246,11 @@ const CookingServiceConfiguration: React.FC<CookingServiceConfigurationProps> = 
 
   useEffect(() => {
     setConfiguration((prev) => {
-      if (prev.frequency === SubscriptionFrequency.Monthly && prev.scheduledDays && prev.scheduledDays.length > 1) {
+      if (
+        prev.frequency === SubscriptionFrequency.Monthly &&
+        prev.scheduledDays &&
+        prev.scheduledDays.length > 1
+      ) {
         return { ...prev, scheduledDays: [prev.scheduledDays[0]] };
       }
       return prev;
@@ -268,7 +280,7 @@ const CookingServiceConfiguration: React.FC<CookingServiceConfigurationProps> = 
           const hasServiceOption = !!configuration.serviceDetails.serviceOption;
           if (!hasServiceOption) return false;
         }
-        
+
         const hasMealType = !!configuration.serviceDetails.cooking?.mealType;
         const hasMealDeliveries =
           configuration.serviceDetails.cooking?.mealsPerDelivery &&
@@ -277,7 +289,9 @@ const CookingServiceConfiguration: React.FC<CookingServiceConfigurationProps> = 
       case 1:
         return configuration.frequency;
       case 2:
-        return configuration.scheduledDays && configuration.scheduledDays.length > 0;
+        return (
+          configuration.scheduledDays && configuration.scheduledDays.length > 0
+        );
       case 3:
         return true;
       default:
@@ -361,7 +375,8 @@ const CookingServiceConfiguration: React.FC<CookingServiceConfigurationProps> = 
             <motion.button
               key={mealType.value}
               className={`${styles.drawer__optionCard} ${
-                configuration.serviceDetails.cooking?.mealType === mealType.value
+                configuration.serviceDetails.cooking?.mealType ===
+                mealType.value
                   ? styles["drawer__optionCard--active"]
                   : ""
               }`}
@@ -402,7 +417,8 @@ const CookingServiceConfiguration: React.FC<CookingServiceConfigurationProps> = 
               : ""
           }`}
         >
-          Meals Per Delivery Day <span className={styles.drawer__required}>*</span>
+          Meals Per Delivery Day{" "}
+          <span className={styles.drawer__required}>*</span>
         </label>
         <p className={styles.drawer__sectionDescription}>
           Select which days you want meals delivered and how many meals per day
@@ -417,7 +433,10 @@ const CookingServiceConfiguration: React.FC<CookingServiceConfigurationProps> = 
               <div className={styles.drawer__mealCounter}>
                 <button
                   onClick={() =>
-                    updateMealCount(day.value, Math.max(0, getMealCountForDay(day.value) - 1))
+                    updateMealCount(
+                      day.value,
+                      Math.max(0, getMealCountForDay(day.value) - 1)
+                    )
                   }
                   disabled={getMealCountForDay(day.value) === 0}
                 >
@@ -426,7 +445,10 @@ const CookingServiceConfiguration: React.FC<CookingServiceConfigurationProps> = 
                 <span>{getMealCountForDay(day.value)}</span>
                 <button
                   onClick={() =>
-                    updateMealCount(day.value, getMealCountForDay(day.value) + 1)
+                    updateMealCount(
+                      day.value,
+                      getMealCountForDay(day.value) + 1
+                    )
                   }
                 >
                   +
@@ -506,7 +528,8 @@ const CookingServiceConfiguration: React.FC<CookingServiceConfigurationProps> = 
 
       <div className={styles.drawer__section}>
         <label className={styles.drawer__label}>
-          Select Delivery Days <span className={styles.drawer__required}>*</span>
+          Select Delivery Days{" "}
+          <span className={styles.drawer__required}>*</span>
         </label>
         <div className={styles.drawer__daysGrid}>
           {daysOfWeek.map((day) => (
@@ -623,7 +646,8 @@ const CookingServiceConfiguration: React.FC<CookingServiceConfigurationProps> = 
                 <div className={styles.drawer__propertyItem}>
                   <span>Plan Type:</span>
                   <strong>
-                    {configuration.serviceDetails.cooking?.mealType === MealType.Basic
+                    {configuration.serviceDetails.cooking?.mealType ===
+                    MealType.Basic
                       ? "Basic Meals"
                       : "Standard Meals"}
                   </strong>
@@ -634,7 +658,8 @@ const CookingServiceConfiguration: React.FC<CookingServiceConfigurationProps> = 
                     {configuration.serviceDetails.cooking?.mealsPerDelivery?.reduce(
                       (sum, delivery) => sum + delivery.count,
                       0
-                    ) || 0} meals
+                    ) || 0}{" "}
+                    meals
                   </strong>
                 </div>
               </div>
@@ -706,7 +731,9 @@ const CookingServiceConfiguration: React.FC<CookingServiceConfigurationProps> = 
             <div
               key={step.id}
               className={`${styles.drawer__progressStep} ${
-                index === activeStep ? styles["drawer__progressStep--active"] : ""
+                index === activeStep
+                  ? styles["drawer__progressStep--active"]
+                  : ""
               } ${index < activeStep ? styles["drawer__progressStep--completed"] : ""}`}
             >
               <div className={styles.drawer__progressIcon}>{step.icon}</div>

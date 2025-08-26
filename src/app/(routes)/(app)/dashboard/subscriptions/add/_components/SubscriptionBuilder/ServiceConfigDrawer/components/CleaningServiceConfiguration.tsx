@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import styles from "../ServiceConfigDrawer.module.scss";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
-import ValidationErrors from "../../components/ValidationErrors";
+import ValidationErrors from "../../ValidationErrors/ValidationErrors";
 import {
   Service,
   ScheduleDays,

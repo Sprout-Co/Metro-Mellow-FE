@@ -18,7 +18,7 @@ import ServiceSelector from "./ServiceSelector/ServiceSelector";
 import BillingConfiguration from "./BillingConfiguration/BillingConfiguration";
 import SubscriptionSummary from "./SubscriptionSummary/SubscriptionSummary";
 import ServiceConfigDrawer from "./ServiceConfigDrawer/ServiceConfigDrawer";
-import ValidationErrors from "./components/ValidationErrors";
+import ValidationErrors from "./ValidationErrors/ValidationErrors";
 import {
   Service,
   ServiceCategory,
@@ -36,6 +36,7 @@ import {
   validateBillingConfiguration,
   ValidationError,
 } from "./validation";
+import { ToastContainer } from "../../../../../../../../components/ui/Toast/Toast";
 
 export type DurationType = 1 | 2 | 3 | 6 | 12;
 
@@ -63,11 +64,13 @@ const SubscriptionBuilder: React.FC = () => {
   const [editingServiceId, setEditingServiceId] = useState<string | null>(null);
   const [servicesLoading, setServicesLoading] = useState(false);
   const [servicesError, setServicesError] = useState<string | null>(null);
-  
+
   // Validation state
-  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
+  const [validationErrors, setValidationErrors] = useState<ValidationError[]>(
+    []
+  );
   const [showValidationErrors, setShowValidationErrors] = useState(false);
-  
+
   const { handleGetServices } = useServiceOperations();
 
   // Fetch services
@@ -126,7 +129,10 @@ const SubscriptionBuilder: React.FC = () => {
     if (!selectedServiceForConfig) return;
 
     // Validate the configuration before saving
-    const validation = validateServiceConfiguration(configuration, selectedServiceForConfig);
+    const validation = validateServiceConfiguration(
+      configuration,
+      selectedServiceForConfig
+    );
     if (!validation.isValid) {
       setValidationErrors(validation.errors);
       setShowValidationErrors(true);
@@ -170,7 +176,11 @@ const SubscriptionBuilder: React.FC = () => {
 
   // Validate checkout requirements
   const validateCheckout = (): boolean => {
-    const validation = validateSubscription(configuredServices, billingCycle, duration);
+    const validation = validateSubscription(
+      configuredServices,
+      billingCycle,
+      duration
+    );
     if (!validation.isValid) {
       setValidationErrors(validation.errors);
       setShowValidationErrors(true);

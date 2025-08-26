@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import styles from "../ServiceConfigDrawer.module.scss";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
-import ValidationErrors from "../../components/ValidationErrors";
+import ValidationErrors from "../../ValidationErrors/ValidationErrors";
 import {
   Service,
   ScheduleDays,
@@ -39,7 +39,9 @@ interface PestControlServiceConfigurationProps {
   onProceedToCheckout?: (configuration: SubscriptionServiceInput) => void;
 }
 
-const PestControlServiceConfiguration: React.FC<PestControlServiceConfigurationProps> = ({
+const PestControlServiceConfiguration: React.FC<
+  PestControlServiceConfigurationProps
+> = ({
   isOpen,
   onClose,
   service,
@@ -48,7 +50,9 @@ const PestControlServiceConfiguration: React.FC<PestControlServiceConfigurationP
   onProceedToCheckout,
 }) => {
   const [activeStep, setActiveStep] = useState(0);
-  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
+  const [validationErrors, setValidationErrors] = useState<ValidationError[]>(
+    []
+  );
   const [showValidationErrors, setShowValidationErrors] = useState(false);
   const [configuration, setConfiguration] = useState<SubscriptionServiceInput>({
     serviceId: service._id,
@@ -115,12 +119,15 @@ const PestControlServiceConfiguration: React.FC<PestControlServiceConfigurationP
       setActiveStep(0);
       setValidationErrors([]);
       setShowValidationErrors(false);
-      
+
       if (existingConfiguration) {
         setConfiguration(existingConfiguration);
       } else {
         // Ensure frequency is set to monthly for pest control
-        setConfiguration(prev => ({ ...prev, frequency: SubscriptionFrequency.Monthly }));
+        setConfiguration((prev) => ({
+          ...prev,
+          frequency: SubscriptionFrequency.Monthly,
+        }));
       }
     }
   }, [isOpen, existingConfiguration]);
@@ -183,7 +190,9 @@ const PestControlServiceConfiguration: React.FC<PestControlServiceConfigurationP
       case 1:
         return configuration.frequency === SubscriptionFrequency.Monthly;
       case 2:
-        return configuration.scheduledDays && configuration.scheduledDays.length > 0;
+        return (
+          configuration.scheduledDays && configuration.scheduledDays.length > 0
+        );
       case 3:
         return true;
       default:
@@ -259,8 +268,9 @@ const PestControlServiceConfiguration: React.FC<PestControlServiceConfigurationP
           <div className={styles.drawer__infoContent}>
             <h4>Professional Pest Control</h4>
             <p>
-              Our comprehensive pest control service provides effective treatment 
-              against common household pests with safe, eco-friendly solutions.
+              Our comprehensive pest control service provides effective
+              treatment against common household pests with safe, eco-friendly
+              solutions.
             </p>
             <ul>
               <li>✓ Complete property inspection</li>
@@ -281,8 +291,8 @@ const PestControlServiceConfiguration: React.FC<PestControlServiceConfigurationP
           <div className={styles.drawer__warningContent}>
             <h5>Monthly Service Required</h5>
             <p>
-              Pest control services are most effective when performed monthly 
-              to ensure continuous protection and prevent re-infestation.
+              Pest control services are most effective when performed monthly to
+              ensure continuous protection and prevent re-infestation.
             </p>
           </div>
         </div>
@@ -340,7 +350,8 @@ const PestControlServiceConfiguration: React.FC<PestControlServiceConfigurationP
       <div className={styles.drawer__infoSection}>
         <h5>Why Monthly Treatment?</h5>
         <p>
-          Regular monthly pest control treatments ensure continuous protection by:
+          Regular monthly pest control treatments ensure continuous protection
+          by:
         </p>
         <ul>
           <li>Preventing pest populations from establishing</li>
@@ -490,8 +501,10 @@ const PestControlServiceConfiguration: React.FC<PestControlServiceConfigurationP
                   <span>Service Day:</span>
                   <strong>
                     {configuration.scheduledDays?.length > 0
-                      ? daysOfWeek.find(d => d.value === configuration.scheduledDays![0])?.label
-                      : 'Not selected'}
+                      ? daysOfWeek.find(
+                          (d) => d.value === configuration.scheduledDays![0]
+                        )?.label
+                      : "Not selected"}
                   </strong>
                 </div>
               </div>
@@ -563,7 +576,9 @@ const PestControlServiceConfiguration: React.FC<PestControlServiceConfigurationP
             <div
               key={step.id}
               className={`${styles.drawer__progressStep} ${
-                index === activeStep ? styles["drawer__progressStep--active"] : ""
+                index === activeStep
+                  ? styles["drawer__progressStep--active"]
+                  : ""
               } ${index < activeStep ? styles["drawer__progressStep--completed"] : ""}`}
             >
               <div className={styles.drawer__progressIcon}>{step.icon}</div>

@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import styles from "../ServiceConfigDrawer.module.scss";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
-import ValidationErrors from "../../components/ValidationErrors";
+import ValidationErrors from "../../ValidationErrors/ValidationErrors";
 import {
   Service,
   ScheduleDays,
@@ -39,7 +39,9 @@ interface LaundryServiceConfigurationProps {
   onProceedToCheckout?: (configuration: SubscriptionServiceInput) => void;
 }
 
-const LaundryServiceConfiguration: React.FC<LaundryServiceConfigurationProps> = ({
+const LaundryServiceConfiguration: React.FC<
+  LaundryServiceConfigurationProps
+> = ({
   isOpen,
   onClose,
   service,
@@ -48,7 +50,9 @@ const LaundryServiceConfiguration: React.FC<LaundryServiceConfigurationProps> = 
   onProceedToCheckout,
 }) => {
   const [activeStep, setActiveStep] = useState(0);
-  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
+  const [validationErrors, setValidationErrors] = useState<ValidationError[]>(
+    []
+  );
   const [showValidationErrors, setShowValidationErrors] = useState(false);
   const [configuration, setConfiguration] = useState<SubscriptionServiceInput>({
     serviceId: service._id,
@@ -126,7 +130,7 @@ const LaundryServiceConfiguration: React.FC<LaundryServiceConfigurationProps> = 
       setActiveStep(0);
       setValidationErrors([]);
       setShowValidationErrors(false);
-      
+
       if (existingConfiguration) {
         setConfiguration(existingConfiguration);
       }
@@ -137,11 +141,15 @@ const LaundryServiceConfiguration: React.FC<LaundryServiceConfigurationProps> = 
     setConfiguration((prev) => {
       const currentDays = prev.scheduledDays || [];
       const isCurrentlySelected = currentDays.includes(day);
-      const shouldLimitToOneDay = prev.frequency === SubscriptionFrequency.Monthly;
+      const shouldLimitToOneDay =
+        prev.frequency === SubscriptionFrequency.Monthly;
 
       if (shouldLimitToOneDay) {
         if (isCurrentlySelected) {
-          return { ...prev, scheduledDays: currentDays.filter((d) => d !== day) };
+          return {
+            ...prev,
+            scheduledDays: currentDays.filter((d) => d !== day),
+          };
         } else {
           return { ...prev, scheduledDays: [day] };
         }
@@ -181,7 +189,11 @@ const LaundryServiceConfiguration: React.FC<LaundryServiceConfigurationProps> = 
 
   useEffect(() => {
     setConfiguration((prev) => {
-      if (prev.frequency === SubscriptionFrequency.Monthly && prev.scheduledDays && prev.scheduledDays.length > 1) {
+      if (
+        prev.frequency === SubscriptionFrequency.Monthly &&
+        prev.scheduledDays &&
+        prev.scheduledDays.length > 1
+      ) {
         return { ...prev, scheduledDays: [prev.scheduledDays[0]] };
       }
       return prev;
@@ -215,7 +227,9 @@ const LaundryServiceConfiguration: React.FC<LaundryServiceConfigurationProps> = 
       case 1:
         return configuration.frequency;
       case 2:
-        return configuration.scheduledDays && configuration.scheduledDays.length > 0;
+        return (
+          configuration.scheduledDays && configuration.scheduledDays.length > 0
+        );
       case 3:
         return true;
       default:
@@ -291,7 +305,7 @@ const LaundryServiceConfiguration: React.FC<LaundryServiceConfigurationProps> = 
           <div className={styles.drawer__infoContent}>
             <h4>Professional Laundry Service</h4>
             <p>
-              Our laundry service includes pickup, professional washing, drying, 
+              Our laundry service includes pickup, professional washing, drying,
               and folding with premium detergents and fabric care.
             </p>
             <ul>
@@ -543,7 +557,9 @@ const LaundryServiceConfiguration: React.FC<LaundryServiceConfigurationProps> = 
             <div
               key={step.id}
               className={`${styles.drawer__progressStep} ${
-                index === activeStep ? styles["drawer__progressStep--active"] : ""
+                index === activeStep
+                  ? styles["drawer__progressStep--active"]
+                  : ""
               } ${index < activeStep ? styles["drawer__progressStep--completed"] : ""}`}
             >
               <div className={styles.drawer__progressIcon}>{step.icon}</div>

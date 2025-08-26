@@ -4,8 +4,8 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AlertCircle, X } from "lucide-react";
-import { ValidationError } from "../../validation";
 import styles from "./ValidationErrors.module.scss";
+import { ValidationError } from "../validation";
 
 interface ValidationErrorsProps {
   errors: ValidationError[];
@@ -44,7 +44,7 @@ const ValidationErrors: React.FC<ValidationErrorsProps> = ({
             </button>
           )}
         </div>
-        
+
         <div className={styles.validationErrors__list}>
           {errors.map((error, index) => (
             <motion.div
