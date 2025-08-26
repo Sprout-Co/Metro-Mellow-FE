@@ -25,7 +25,9 @@ import styles from "./BookingDetailModal.module.scss";
 import { ServiceCategory, BookingStatus, Booking } from "@/graphql/api";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 import RescheduleModal from "../RescheduleModal/RescheduleModal";
-import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
+import ConfirmActionModal, {
+  ActionType,
+} from "../ConfirmActionModal/ConfirmActionModal";
 
 interface BookingDetailModalProps {
   isOpen: boolean;
@@ -41,9 +43,8 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
   const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
   const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] =
     useState(false);
-  const [confirmationActionType, setConfirmationActionType] = useState<
-    "cancel" | "pause" | "resume" | "reschedule" | null
-  >(null);
+  const [confirmationActionType, setConfirmationActionType] =
+    useState<ActionType>(null);
   if (!booking) return null;
 
   // Format date
@@ -116,6 +117,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              onClick={() => handleConfirmAction("resume")}
             >
               <Edit size={14} />
               Resume Booking

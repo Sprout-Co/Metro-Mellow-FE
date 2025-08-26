@@ -13,13 +13,21 @@ import {
   ChevronRight,
   CheckCircle,
   X,
+  PlayCircle,
+  CheckCircle2,
 } from "lucide-react";
 import styles from "./ConfirmActionModal.module.scss";
 import { Booking, BookingStatus } from "@/graphql/api";
 import Portal from "@/components/ui/Portal/Portal";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 
-type ActionType = "pause" | "cancel" | "resume" | "reschedule" | null;
+export type ActionType =
+  | "pause"
+  | "cancel"
+  | "resume"
+  | "reschedule"
+  | "complete"
+  | null;
 
 interface ConfirmActionModalProps {
   isOpen: boolean;
@@ -53,9 +61,10 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
   if (!booking) return null;
 
   // Reason options based on action type
-  const reasonOptions: ReasonOption[] =
-    actionType === "cancel"
-      ? [
+  const getReasonOptions = (): ReasonOption[] => {
+    switch (actionType) {
+      case "cancel":
+        return [
           {
             id: "schedule_conflict",
             label: "Schedule Conflict",
@@ -76,14 +85,14 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
             label: "Other",
             description: "Other reason not listed",
           },
-        ]
-      : [
+        ];
+      case "pause":
+        return [
           {
             id: "vacation",
             label: "Going on Vacation",
             description: "Will be away temporarily",
           },
-
           {
             id: "financial",
             label: "Financial Reasons",
@@ -95,13 +104,37 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
             description: "Other reason not listed",
           },
         ];
+      case "complete":
+        return [
+          {
+            id: "service_completed",
+            label: "Service Completed Successfully",
+            description: "The work has been finished",
+          },
+          {
+            id: "satisfied_with_results",
+            label: "Satisfied with Results",
+            description: "Happy with the service provided",
+          },
+          {
+            id: "other",
+            label: "Other",
+            description: "Other reason not listed",
+          },
+        ];
+      default:
+        return [];
+    }
+  };
+
+  const reasonOptions = getReasonOptions();
 
   // Handle confirmation
   const handleConfirm = async () => {
     const finalReason =
       selectedReason === "other" ? customReason : selectedReason;
 
-    if (!finalReason) return;
+    // if (!finalReason) return;
 
     setIsProcessing(true);
     setError(null);
@@ -113,6 +146,12 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
           break;
         case "pause":
           await handleUpdateBookingStatus(booking.id, BookingStatus.Paused);
+          break;
+        case "resume":
+          await handleUpdateBookingStatus(booking.id, BookingStatus.Confirmed);
+          break;
+        case "complete":
+          await handleUpdateBookingStatus(booking.id, BookingStatus.Completed);
           break;
         default:
           break;
@@ -141,41 +180,95 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
 
   // Get action details
   const getActionDetails = () => {
-    if (actionType === "cancel") {
-      return {
-        icon: <XCircle />,
-        iconColor: styles["modal--cancel"],
-        title: "Cancel Booking",
-        subtitle: "Are you sure you want to cancel this booking?",
-        warningTitle: "Important Information",
-        warnings: [
-          "This action cannot be undone",
-          "Cancellation fees may apply if less than 24 hours notice",
-          "You'll need to create a new booking if you change your mind",
-          "Your service provider will be notified immediately",
-        ],
-        buttonText: "Cancel Booking",
-        successTitle: "Booking Cancelled",
-        successMessage: "Your booking has been cancelled successfully.",
-      };
-    } else {
-      return {
-        icon: <PauseCircle />,
-        iconColor: styles["modal--pause"],
-        title: "Pause Booking",
-        subtitle: "Temporarily pause this recurring service",
-        warningTitle: "What happens when you pause",
-        warnings: [
-          "Service will be temporarily suspended",
-          "No charges during the pause period",
-          "You can resume anytime from your dashboard",
-          "Your time slot will be held for up to 30 days",
-        ],
-        buttonText: "Pause Booking",
-        successTitle: "Booking Paused",
-        successMessage:
-          "Your booking has been paused. You can resume it anytime.",
-      };
+    switch (actionType) {
+      case "cancel":
+        return {
+          icon: <XCircle />,
+          iconColor: styles["modal--cancel"],
+          title: "Cancel Booking",
+          subtitle: "Are you sure you want to cancel this booking?",
+          warningTitle: "Important Information",
+          warnings: [
+            "This action cannot be undone",
+            "Cancellation fees may apply if less than 24 hours notice",
+            "You'll need to create a new booking if you change your mind",
+            "Your service provider will be notified immediately",
+          ],
+          buttonText: "Cancel Booking",
+          successTitle: "Booking Cancelled",
+          successMessage: "Your booking has been cancelled successfully.",
+          reasonText: "for cancellation",
+        };
+      case "pause":
+        return {
+          icon: <PauseCircle />,
+          iconColor: styles["modal--pause"],
+          title: "Pause Booking",
+          subtitle: "Temporarily pause this recurring service",
+          warningTitle: "What happens when you pause",
+          warnings: [
+            "Service will be temporarily suspended",
+            "No charges during the pause period",
+            "You can resume anytime from your dashboard",
+            "Your time slot will be held for up to 30 days",
+          ],
+          buttonText: "Pause Booking",
+          successTitle: "Booking Paused",
+          successMessage:
+            "Your booking has been paused. You can resume it anytime.",
+          reasonText: "for pausing",
+        };
+      case "resume":
+        return {
+          icon: <PlayCircle />,
+          iconColor: styles["modal--resume"],
+          title: "Resume Booking",
+          subtitle: "Resume your paused service",
+          warningTitle: "What happens when you resume",
+          warnings: [
+            "Service will be reactivated immediately",
+            "Regular billing schedule will resume",
+            "Your service provider will be notified",
+            "Next appointment will be scheduled based on your preferences",
+          ],
+          buttonText: "Resume Booking",
+          successTitle: "Booking Resumed",
+          successMessage:
+            "Your booking has been resumed successfully. Service will continue as scheduled.",
+          reasonText: "for resuming",
+        };
+      case "complete":
+        return {
+          icon: <CheckCircle2 />,
+          iconColor: styles["modal--complete"],
+          title: "Mark as Complete",
+          subtitle: "Mark this booking as completed",
+          warningTitle: "What happens when you complete",
+          warnings: [
+            "Booking status will be changed to completed",
+            "No further services will be scheduled for this booking",
+            "Final payment will be processed if pending",
+            "You can leave a review after completion",
+          ],
+          buttonText: "Mark Complete",
+          successTitle: "Booking Completed",
+          successMessage:
+            "Your booking has been marked as completed. Thank you for using our service!",
+          reasonText: "for completion",
+        };
+      default:
+        return {
+          icon: <Info />,
+          iconColor: styles["modal--default"],
+          title: "Confirm Action",
+          subtitle: "Please confirm this action",
+          warningTitle: "Important Information",
+          warnings: ["Please review the action details"],
+          buttonText: "Confirm",
+          successTitle: "Action Completed",
+          successMessage: "Action has been completed successfully.",
+          reasonText: "",
+        };
     }
   };
 
@@ -224,10 +317,13 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
 
             {/* Reason Selection */}
             <div className={styles.modal__reasonSection}>
-              <h3 className={styles.modal__sectionTitle}>
-                Please select a reason{" "}
-                {actionType === "cancel" ? "for cancellation" : "for pausing"}
-              </h3>
+              {reasonOptions.length > 0 && (
+                <>
+                  <h3 className={styles.modal__sectionTitle}>
+                    Please select a reason {actionDetails.reasonText}
+                  </h3>
+                </>
+              )}
               <div className={styles.modal__reasons}>
                 {reasonOptions.map((option) => (
                   <motion.label
@@ -349,11 +445,6 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
               <motion.button
                 className={`${styles.modal__button} ${styles["modal__button--danger"]}`}
                 onClick={handleConfirm}
-                disabled={
-                  !selectedReason ||
-                  (selectedReason === "other" && !customReason) ||
-                  isProcessing
-                }
                 whileHover={
                   selectedReason && (selectedReason !== "other" || customReason)
                     ? { scale: 1.02 }
