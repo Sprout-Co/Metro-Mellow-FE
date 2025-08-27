@@ -1,6 +1,20 @@
 query GetBookings($status: BookingStatus) {
   bookings(status: $status) {
     id
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+    service_category
+    serviceOption
+    date
+    timeSlot
+    status
+    notes
+    feedback {
+      rating
+      comment
+    }
     customer {
       id
       email
@@ -50,10 +64,6 @@ query GetBookings($status: BookingStatus) {
       createdAt
       updatedAt
     }
-    date
-    timeSlot
-    status
-    notes
     address {
       id
       street
@@ -63,12 +73,6 @@ query GetBookings($status: BookingStatus) {
       country
       label
     }
-    totalPrice
-    paymentStatus
-    createdAt
-    updatedAt
-    service_category
-    serviceOption
     serviceDetails {
       serviceOption
       cleaning {
@@ -116,6 +120,20 @@ query GetBookings($status: BookingStatus) {
 query GetBookingById($id: ID!) {
   booking(id: $id) {
     id
+    date
+    timeSlot
+    status
+    notes
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+    service_category
+    serviceOption
+    feedback {
+      rating
+      comment
+    }
     customer {
       id
       email
@@ -165,10 +183,6 @@ query GetBookingById($id: ID!) {
       createdAt
       updatedAt
     }
-    date
-    timeSlot
-    status
-    notes
     address {
       id
       street
@@ -178,12 +192,6 @@ query GetBookingById($id: ID!) {
       country
       label
     }
-    totalPrice
-    paymentStatus
-    createdAt
-    updatedAt
-    service_category
-    serviceOption
     serviceDetails {
       serviceOption
       cleaning {
@@ -231,6 +239,20 @@ query GetBookingById($id: ID!) {
 query GetCustomerBookings {
   customerBookings {
     id
+    date
+    timeSlot
+    status
+    notes
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+    service_category
+    serviceOption
+    feedback {
+      rating
+      comment
+    }
     customer {
       id
       email
@@ -280,10 +302,6 @@ query GetCustomerBookings {
       createdAt
       updatedAt
     }
-    date
-    timeSlot
-    status
-    notes
     address {
       id
       street
@@ -293,12 +311,6 @@ query GetCustomerBookings {
       country
       label
     }
-    totalPrice
-    paymentStatus
-    createdAt
-    updatedAt
-    service_category
-    serviceOption
     serviceDetails {
       serviceOption
       cleaning {
