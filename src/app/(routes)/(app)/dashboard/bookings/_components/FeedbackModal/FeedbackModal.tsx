@@ -12,19 +12,18 @@ import {
 import styles from "./FeedbackModal.module.scss";
 import { Booking } from "@/graphql/api";
 import Modal from "@/components/ui/Modal/Modal";
+import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 
 interface FeedbackModalProps {
   isOpen: boolean;
   onClose: () => void;
   booking: Booking | null;
-  onSubmit?: (rating: number, comment: string) => Promise<void>;
 }
 
 const FeedbackModal: React.FC<FeedbackModalProps> = ({
   isOpen,
   onClose,
   booking,
-  onSubmit,
 }) => {
   const [rating, setRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
@@ -32,6 +31,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { handleAddBookingFeedback } = useBookingOperations();
 
   if (!booking) return null;
 
@@ -62,8 +62,11 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
     setError(null);
 
     try {
-      if (onSubmit) {
-        await onSubmit(rating, comment.trim());
+      if (handleAddBookingFeedback) {
+        await handleAddBookingFeedback(booking.id, {
+          rating,
+          comment: comment.trim(),
+        });
       }
 
       setShowSuccess(true);
@@ -74,7 +77,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
         setShowSuccess(false);
         setRating(0);
         setComment("");
-      }, 2000);
+      }, 5000);
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Failed to submit feedback"

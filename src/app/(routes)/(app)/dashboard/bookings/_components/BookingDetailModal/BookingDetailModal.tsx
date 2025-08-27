@@ -101,28 +101,6 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
     setIsConfirmActionModalOpen(true);
   }
 
-  const handleFeedbackSubmit = async (rating: number, comment: string) => {
-    try {
-      // TODO: Implement GraphQL mutation for feedback submission
-      console.log("Submitting feedback:", {
-        rating,
-        comment,
-        bookingId: booking?.id,
-      });
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // For now, just log the feedback
-      alert(
-        `Feedback submitted successfully!\nRating: ${rating}/5\nComment: ${comment}`
-      );
-    } catch (error) {
-      console.error("Error submitting feedback:", error);
-      throw new Error("Failed to submit feedback. Please try again.");
-    }
-  };
-
   const renderFooterButtons = () => {
     switch (booking.status) {
       case BookingStatus.Paused:
@@ -452,7 +430,6 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
         isOpen={isFeedbackModalOpen}
         onClose={() => setIsFeedbackModalOpen(false)}
         booking={booking}
-        onSubmit={handleFeedbackSubmit}
       />
     </ModalDrawer>
   );

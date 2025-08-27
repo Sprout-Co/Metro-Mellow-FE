@@ -311,6 +311,11 @@ export type Feedback = {
   rating?: Maybe<Scalars['Int']['output']>;
 };
 
+export type FeedbackInput = {
+  comment?: InputMaybe<Scalars['String']['input']>;
+  rating: Scalars['Int']['input'];
+};
+
 export enum HouseType {
   Duplex = 'DUPLEX',
   Flat = 'FLAT'
@@ -406,6 +411,7 @@ export type Mutation = {
   _?: Maybe<Scalars['Boolean']['output']>;
   acceptAdminInvitation: AcceptInvitationResponse;
   addAddress: Scalars['Boolean']['output'];
+  addBookingFeedback: Scalars['Boolean']['output'];
   addPaymentMethod: PaymentMethod;
   addServiceToSubscription: Scalars['Boolean']['output'];
   assignStaff: Scalars['Boolean']['output'];
@@ -479,6 +485,12 @@ export type MutationAcceptAdminInvitationArgs = {
 
 export type MutationAddAddressArgs = {
   input: AddressInput;
+};
+
+
+export type MutationAddBookingFeedbackArgs = {
+  feedback: FeedbackInput;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -1715,6 +1727,14 @@ export type RescheduleBookingMutationVariables = Exact<{
 
 
 export type RescheduleBookingMutation = { __typename?: 'Mutation', rescheduleBooking: boolean };
+
+export type AddBookingFeedbackMutationVariables = Exact<{
+  addBookingFeedbackId: Scalars['ID']['input'];
+  feedback: FeedbackInput;
+}>;
+
+
+export type AddBookingFeedbackMutation = { __typename?: 'Mutation', addBookingFeedback: boolean };
 
 export type CreateNotificationMutationVariables = Exact<{
   input: CreateNotificationInput;
@@ -3208,6 +3228,38 @@ export function useRescheduleBookingMutation(baseOptions?: ApolloReactHooks.Muta
 export type RescheduleBookingMutationHookResult = ReturnType<typeof useRescheduleBookingMutation>;
 export type RescheduleBookingMutationResult = Apollo.MutationResult<RescheduleBookingMutation>;
 export type RescheduleBookingMutationOptions = Apollo.BaseMutationOptions<RescheduleBookingMutation, RescheduleBookingMutationVariables>;
+export const AddBookingFeedbackDocument = gql`
+    mutation AddBookingFeedback($addBookingFeedbackId: ID!, $feedback: FeedbackInput!) {
+  addBookingFeedback(id: $addBookingFeedbackId, feedback: $feedback)
+}
+    `;
+export type AddBookingFeedbackMutationFn = Apollo.MutationFunction<AddBookingFeedbackMutation, AddBookingFeedbackMutationVariables>;
+
+/**
+ * __useAddBookingFeedbackMutation__
+ *
+ * To run a mutation, you first call `useAddBookingFeedbackMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddBookingFeedbackMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addBookingFeedbackMutation, { data, loading, error }] = useAddBookingFeedbackMutation({
+ *   variables: {
+ *      addBookingFeedbackId: // value for 'addBookingFeedbackId'
+ *      feedback: // value for 'feedback'
+ *   },
+ * });
+ */
+export function useAddBookingFeedbackMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddBookingFeedbackMutation, AddBookingFeedbackMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<AddBookingFeedbackMutation, AddBookingFeedbackMutationVariables>(AddBookingFeedbackDocument, options);
+      }
+export type AddBookingFeedbackMutationHookResult = ReturnType<typeof useAddBookingFeedbackMutation>;
+export type AddBookingFeedbackMutationResult = Apollo.MutationResult<AddBookingFeedbackMutation>;
+export type AddBookingFeedbackMutationOptions = Apollo.BaseMutationOptions<AddBookingFeedbackMutation, AddBookingFeedbackMutationVariables>;
 export const CreateNotificationDocument = gql`
     mutation CreateNotification($input: CreateNotificationInput!) {
   createNotification(input: $input) {

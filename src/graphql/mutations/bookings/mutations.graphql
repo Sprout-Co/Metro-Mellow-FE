@@ -29,3 +29,10 @@ mutation RescheduleBooking(
 ) {
   rescheduleBooking(id: $id, newDate: $newDate, newTimeSlot: $newTimeSlot)
 }
+
+mutation AddBookingFeedback(
+  $addBookingFeedbackId: ID!
+  $feedback: FeedbackInput!
+) {
+  addBookingFeedback(id: $addBookingFeedbackId, feedback: $feedback)
+}
