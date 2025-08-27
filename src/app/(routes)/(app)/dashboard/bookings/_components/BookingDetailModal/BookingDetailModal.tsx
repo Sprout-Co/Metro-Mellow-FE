@@ -172,14 +172,6 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
         return (
           <>
             <motion.button
-              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <RefreshCw size={14} />
-              Book Again
-            </motion.button>
-            <motion.button
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -187,6 +179,14 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
             >
               <MessageSquare size={14} />
               Leave Feedback
+            </motion.button>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
+              onClick={onClose}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Close
             </motion.button>
           </>
         );
@@ -376,8 +376,16 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                               ? styles["modal__star--filled"]
                               : ""
                           }
-                          fill={star <= booking.feedback?.rating! ? "#FFD700" : "transparent"}
-                          stroke={star <= booking.feedback?.rating! ? "#FFD700" : "#E0E7FF"}
+                          fill={
+                            star <= booking.feedback?.rating!
+                              ? "#FFD700"
+                              : "transparent"
+                          }
+                          stroke={
+                            star <= booking.feedback?.rating!
+                              ? "#FFD700"
+                              : "#E0E7FF"
+                          }
                         />
                       ))}
                     </div>
