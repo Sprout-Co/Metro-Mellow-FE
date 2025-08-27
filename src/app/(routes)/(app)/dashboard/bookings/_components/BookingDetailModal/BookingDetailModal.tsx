@@ -364,24 +364,32 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
             <div className={styles.modal__section}>
               <h3 className={styles.modal__sectionTitle}>Service Rating</h3>
               {booking.feedback ? (
-                <div className={styles.modal__rating}>
-                  <div className={styles.modal__stars}>
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        size={16}
-                        className={
-                          star <= booking.feedback?.rating!
-                            ? styles["modal__star--filled"]
-                            : ""
-                        }
-                      />
-                    ))}
+                <div className={styles.modal__feedback}>
+                  <div className={styles.modal__feedbackHeader}>
+                    <div className={styles.modal__stars}>
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          size={16}
+                          className={
+                            star <= booking.feedback?.rating!
+                              ? styles["modal__star--filled"]
+                              : ""
+                          }
+                          fill={star <= booking.feedback?.rating! ? "#FFD700" : "transparent"}
+                          stroke={star <= booking.feedback?.rating! ? "#FFD700" : "#E0E7FF"}
+                        />
+                      ))}
+                    </div>
+                    <span className={styles.modal__ratingText}>
+                      {booking.feedback?.rating}/5 stars
+                    </span>
                   </div>
-                  <span className={styles.modal__ratingText}>
-                    {booking.feedback?.rating}/5 - Service completed
-                    successfully
-                  </span>
+                  {booking.feedback?.comment && (
+                    <div className={styles.modal__feedbackComment}>
+                      <p>"{booking.feedback.comment}"</p>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <button className={styles.modal__rateBtn}>
