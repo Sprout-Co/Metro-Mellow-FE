@@ -112,7 +112,7 @@ export const useBookingForm = (): [BookingFormState, BookingFormHandlers] => {
   const [laundryBags, setLaundryBags] = useState<number>(1);
   const [severity, setSeverity] = useState<Severity>(Severity.Medium);
   const [treatmentType, setTreatmentType] = useState<TreatmentType>(
-    TreatmentType.Residential
+    TreatmentType.PestControlResidential
   );
 
   // Schedule state
@@ -209,8 +209,8 @@ export const useBookingForm = (): [BookingFormState, BookingFormHandlers] => {
           [Severity.High]: 1.5,
         };
         const treatmentMultiplier = {
-          [TreatmentType.Residential]: 1,
-          [TreatmentType.Commercial]: 1.5,
+          [TreatmentType.PestControlResidential]: 1,
+          [TreatmentType.PestControlCommercial]: 1.5,
         };
         totalPrice =
           basePrice *

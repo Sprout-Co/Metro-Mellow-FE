@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import styles from "./ConfirmActionModal.module.scss";
 import { Booking, BookingStatus } from "@/graphql/api";
-import Portal from "@/components/ui/Portal/Portal";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import Modal from "@/components/ui/Modal/Modal";
 
@@ -306,7 +305,7 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
               <motion.label
                 key={option.id}
                 className={`${styles.modal__reasonOption} ${
-                  selectedReason === option.id
+                  selectedReason === option.description
                     ? styles["modal__reasonOption--selected"]
                     : ""
                 }`}
@@ -317,7 +316,7 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
                   type="radio"
                   name="reason"
                   value={option.description}
-                  checked={selectedReason === option.id}
+                  checked={selectedReason === option.description}
                   onChange={(e) => setSelectedReason(e.target.value)}
                   className={styles.modal__reasonRadio}
                 />

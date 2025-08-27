@@ -130,7 +130,7 @@ export default function BookServiceModal({
   const [laundryBags, setLaundryBags] = useState<number>(1);
   const [severity, setSeverity] = useState<Severity>(Severity.Medium);
   const [treatmentType, setTreatmentType] = useState<TreatmentType>(
-    TreatmentType.Residential
+    TreatmentType.PestControlResidential
   );
 
   // Schedule state
@@ -383,8 +383,8 @@ export default function BookServiceModal({
 
         // Apply treatment type multiplier
         const treatmentMultiplier = {
-          [TreatmentType.Residential]: 1,
-          [TreatmentType.Commercial]: 1.5,
+          [TreatmentType.PestControlResidential]: 1,
+          [TreatmentType.PestControlCommercial]: 1.5,
         };
 
         // Calculate total price
@@ -990,21 +990,25 @@ export default function BookServiceModal({
               <div className={styles.modal__toggleGroup}>
                 <button
                   className={`${styles.modal__toggleButton} ${
-                    treatmentType === TreatmentType.Residential
+                    treatmentType === TreatmentType.PestControlResidential
                       ? styles.modal__toggleButtonSelected
                       : ""
                   }`}
-                  onClick={() => setTreatmentType(TreatmentType.Residential)}
+                  onClick={() =>
+                    setTreatmentType(TreatmentType.PestControlResidential)
+                  }
                 >
                   Residential
                 </button>
                 <button
                   className={`${styles.modal__toggleButton} ${
-                    treatmentType === TreatmentType.Commercial
+                    treatmentType === TreatmentType.PestControlCommercial
                       ? styles.modal__toggleButtonSelected
                       : ""
                   }`}
-                  onClick={() => setTreatmentType(TreatmentType.Commercial)}
+                  onClick={() =>
+                    setTreatmentType(TreatmentType.PestControlCommercial)
+                  }
                 >
                   Commercial
                 </button>
@@ -1349,7 +1353,8 @@ export default function BookServiceModal({
                             <div
                               className={styles.modal__pestControlDetailValue}
                             >
-                              {treatmentType === TreatmentType.Residential
+                              {treatmentType ===
+                              TreatmentType.PestControlResidential
                                 ? "Residential"
                                 : "Commercial"}
                             </div>

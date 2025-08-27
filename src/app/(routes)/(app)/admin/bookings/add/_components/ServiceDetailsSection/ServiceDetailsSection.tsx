@@ -57,8 +57,8 @@ const ServiceDetailsSection: React.FC<ServiceDetailsSectionProps> = ({
   ];
 
   const treatmentTypeOptions = [
-    { value: TreatmentType.Residential, label: "Residential" },
-    { value: TreatmentType.Commercial, label: "Commercial" },
+    { value: TreatmentType.PestControlResidential, label: "Residential" },
+    { value: TreatmentType.PestControlCommercial, label: "Commercial" },
   ];
 
   const roomLabels: Record<keyof RoomQuantitiesInput, string> = {

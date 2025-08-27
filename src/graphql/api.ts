@@ -1413,8 +1413,8 @@ export enum TimeSlot {
 }
 
 export enum TreatmentType {
-  Commercial = 'COMMERCIAL',
-  Residential = 'RESIDENTIAL'
+  PestControlCommercial = 'PEST_CONTROL_COMMERCIAL',
+  PestControlResidential = 'PEST_CONTROL_RESIDENTIAL'
 }
 
 export type UpdateBookingInput = {

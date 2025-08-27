@@ -163,7 +163,8 @@ const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
         areas: updatedAreas,
         severity: config.pestControl?.severity || Severity.Medium,
         treatmentType:
-          config.pestControl?.treatmentType || TreatmentType.Residential,
+          config.pestControl?.treatmentType ||
+          TreatmentType.PestControlResidential,
       },
     };
 
@@ -417,7 +418,7 @@ const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
                 severity: e.target.value as Severity,
                 treatmentType:
                   config.pestControl?.treatmentType ||
-                  TreatmentType.Residential,
+                  TreatmentType.PestControlResidential,
               },
             };
 
@@ -440,7 +441,10 @@ const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
       <div className={styles.service_configuration__field}>
         <label>Treatment Type</label>
         <select
-          value={config.pestControl?.treatmentType || TreatmentType.Residential}
+          value={
+            config.pestControl?.treatmentType ||
+            TreatmentType.PestControlResidential
+          }
           onChange={(e) => {
             const updatedConfig = {
               ...config,
@@ -461,8 +465,12 @@ const ServiceSpecificFields: React.FC<ServiceSpecificFieldsProps> = ({
           }}
           className={styles.service_configuration__select}
         >
-          <option value={TreatmentType.Residential}>Residential</option>
-          <option value={TreatmentType.Commercial}>Commercial</option>
+          <option value={TreatmentType.PestControlResidential}>
+            Residential
+          </option>
+          <option value={TreatmentType.PestControlCommercial}>
+            Commercial
+          </option>
         </select>
       </div>
 

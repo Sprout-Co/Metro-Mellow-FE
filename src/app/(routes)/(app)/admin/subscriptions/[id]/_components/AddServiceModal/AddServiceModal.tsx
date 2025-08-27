@@ -132,7 +132,7 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
         pestControl: {
           areas: [],
           severity: Severity.Medium,
-          treatmentType: TreatmentType.Residential,
+          treatmentType: TreatmentType.PestControlResidential,
         },
       }),
       ...(service.category === ServiceCategory.Cooking && {

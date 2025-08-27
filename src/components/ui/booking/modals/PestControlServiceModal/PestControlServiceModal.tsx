@@ -63,7 +63,7 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
 }) => {
   // State for pest control configuration
   const [treatmentType, setTreatmentType] = useState<TreatmentType>(
-    TreatmentType.Residential
+    TreatmentType.PestControlResidential
   );
   const [severity, setSeverity] = useState<Severity>(Severity.Medium);
   const [areas, setAreas] = useState<TreatmentArea[]>([
@@ -96,10 +96,10 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
     // Base price multiplier based on treatment type
     let typeMultiplier = 1;
     switch (treatmentType) {
-      case TreatmentType.Residential:
+      case TreatmentType.PestControlResidential:
         typeMultiplier = 1;
         break;
-      case TreatmentType.Commercial:
+      case TreatmentType.PestControlCommercial:
         typeMultiplier = 2;
         break;
     }
@@ -295,39 +295,13 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
               </div>
             </div>
 
-            {/* Treatment Areas */}
-            <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Treatment Areas</h3>
-              <div className={styles.areasGrid}>
-                {areas.map((area) => (
-                  <label
-                    key={area.id}
-                    className={`${styles.areaOption} ${
-                      area.selected ? styles.selected : ""
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={area.selected}
-                      onChange={() => handleAreaToggle(area.id)}
-                      className={styles.checkboxInput}
-                    />
-                    <span>{area.name}</span>
-                  </label>
-                ))}
-              </div>
-              <div className={styles.selectedAreasCount}>
-                Selected Areas: {getSelectedAreasCount()}
-              </div>
-            </div>
-
             {/* Treatment Type */}
             <div className={styles.section}>
               <h3 className={styles.sectionTitle}>Treatment Type</h3>
               <div className={styles.treatmentTypeOptions}>
                 <label
                   className={`${styles.treatmentTypeOption} ${
-                    treatmentType === TreatmentType.Residential
+                    treatmentType === TreatmentType.PestControlResidential
                       ? styles.selected
                       : ""
                   }`}
@@ -335,16 +309,20 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
                   <input
                     type="radio"
                     name="treatmentType"
-                    value={TreatmentType.Residential}
-                    checked={treatmentType === TreatmentType.Residential}
-                    onChange={() => setTreatmentType(TreatmentType.Residential)}
+                    value={TreatmentType.PestControlResidential}
+                    checked={
+                      treatmentType === TreatmentType.PestControlResidential
+                    }
+                    onChange={() =>
+                      setTreatmentType(TreatmentType.PestControlResidential)
+                    }
                     className={styles.radioInput}
                   />
                   <span>Residential - Home treatment</span>
                 </label>
                 <label
                   className={`${styles.treatmentTypeOption} ${
-                    treatmentType === TreatmentType.Commercial
+                    treatmentType === TreatmentType.PestControlCommercial
                       ? styles.selected
                       : ""
                   }`}
@@ -352,9 +330,13 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
                   <input
                     type="radio"
                     name="treatmentType"
-                    value={TreatmentType.Commercial}
-                    checked={treatmentType === TreatmentType.Commercial}
-                    onChange={() => setTreatmentType(TreatmentType.Commercial)}
+                    value={TreatmentType.PestControlCommercial}
+                    checked={
+                      treatmentType === TreatmentType.PestControlCommercial
+                    }
+                    onChange={() =>
+                      setTreatmentType(TreatmentType.PestControlCommercial)
+                    }
                     className={styles.radioInput}
                   />
                   <span>Commercial - Business treatment</span>
