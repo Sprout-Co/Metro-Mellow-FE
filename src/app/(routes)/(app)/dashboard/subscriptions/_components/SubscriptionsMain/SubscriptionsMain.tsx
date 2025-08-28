@@ -40,8 +40,7 @@ import SubscriptionGridView from "../SubscriptionGridView/SubscriptionGridView";
 import DashboardHeader from "../../../_components/DashboardHeader/DashboardHeader";
 
 // Type for GraphQL subscription data
-type Subscription = GetCustomerSubscriptionsQuery['customerSubscriptions'][0];
-
+type Subscription = GetCustomerSubscriptionsQuery["customerSubscriptions"][0];
 
 const SubscriptionsMain: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<
@@ -53,10 +52,10 @@ const SubscriptionsMain: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   // Fetch subscriptions from GraphQL
   const { data, loading, error, refetch } = useGetCustomerSubscriptionsQuery({
-    errorPolicy: 'all',
-    fetchPolicy: 'cache-and-network',
+    errorPolicy: "all",
+    fetchPolicy: "cache-and-network",
   });
-  
+
   // Use GraphQL data directly
   const subscriptions = useMemo(() => {
     return data?.customerSubscriptions || [];
@@ -73,17 +72,10 @@ const SubscriptionsMain: React.FC = () => {
 
     // Filter by search query
     if (searchQuery) {
-      filtered = filtered.filter(
-        (s) =>
-          s.subscriptionServices.some(
-            (service) =>
-              service.service.name
-                .toLowerCase()
-                .includes(searchQuery.toLowerCase())
-          ) ||
-          (s.address.street + " " + s.address.city)
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase())
+      filtered = filtered.filter((s) =>
+        s.subscriptionServices.some((service) =>
+          service.service.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
       );
     }
 
@@ -94,58 +86,16 @@ const SubscriptionsMain: React.FC = () => {
 
     // Filter by billing cycle
     if (selectedFrequency !== "all") {
-      filtered = filtered.filter((s) => s.billingCycle.toLowerCase() === selectedFrequency);
+      filtered = filtered.filter(
+        (s) => s.billingCycle.toLowerCase() === selectedFrequency
+      );
     }
 
     return filtered;
   }, [subscriptions, selectedStatus, selectedFrequency, searchQuery]);
 
-  // Get next upcoming service
-  const nextSubscription = useMemo(() => {
-    const now = new Date();
-    const activeWithServices = subscriptions
-      .filter(
-        (s) => s.status === SubscriptionStatus.Active && s.nextBillingDate
-      )
-      .filter((s) => new Date(s.nextBillingDate).getTime() > now.getTime())
-      .sort(
-        (a, b) =>
-          new Date(a.nextBillingDate).getTime() -
-          new Date(b.nextBillingDate).getTime()
-      );
-    return activeWithServices[0] || null;
-  }, [subscriptions]);
-
-  // Calculate subscription stats
-  const subscriptionStats = useMemo(() => {
-    const active = subscriptions.filter(
-      (s) => s.status === SubscriptionStatus.Active
-    ).length;
-    const paused = subscriptions.filter(
-      (s) => s.status === SubscriptionStatus.Paused
-    ).length;
-    const expired = subscriptions.filter(
-      (s) => s.status === SubscriptionStatus.Expired
-    ).length;
-    const totalMonthlyValue = subscriptions
-      .filter((s) => s.status === SubscriptionStatus.Active)
-      .reduce((sum, s) => {
-        const multiplier = {
-          monthly: 1,
-          quarterly: 0.33,
-        };
-        return sum + s.totalPrice * (multiplier[s.billingCycle.toLowerCase() as keyof typeof multiplier] || 1);
-      }, 0);
-
-    return { active, paused, expired, totalMonthlyValue };
-  }, [subscriptions]);
-
   const handleAddSubscription = () => {
     console.log("Add new subscription");
-  };
-
-  const handleExportData = () => {
-    console.log("Export subscriptions data");
   };
 
   const handleStatusChange = (value: string) => {

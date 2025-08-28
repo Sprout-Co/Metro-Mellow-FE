@@ -36,7 +36,7 @@ import {
 } from "@/graphql/api";
 
 // Type for GraphQL subscription data
-type Subscription = GetCustomerSubscriptionsQuery['customerSubscriptions'][0];
+type Subscription = GetCustomerSubscriptionsQuery["customerSubscriptions"][0];
 import SubscriptionDetailModal from "../SubscriptionDetailModal/SubscriptionDetailModal";
 
 interface SubscriptionListViewProps {
@@ -55,11 +55,11 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>("active");
 
-  // Sort subscriptions by next service date
+  // Sort subscriptions by next billing date
   const sortedSubscriptions = [...subscriptions].sort(
     (a, b) =>
-      new Date(a.nextServiceDate).getTime() -
-      new Date(b.nextServiceDate).getTime()
+      new Date(a.nextBillingDate).getTime() -
+      new Date(b.nextBillingDate).getTime()
   );
 
   // Group subscriptions by status
@@ -67,7 +67,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
     active: sortedSubscriptions.filter(
       (s) =>
         s.status === SubscriptionStatus.Active ||
-        s.status === SubscriptionStatus.PendingActivation
+        s.status === SubscriptionStatus.Pending
     ),
     paused: sortedSubscriptions.filter(
       (s) => s.status === SubscriptionStatus.Paused
@@ -132,7 +132,8 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
       [SubscriptionStatus.Paused]: "paused",
       [SubscriptionStatus.Cancelled]: "cancelled",
       [SubscriptionStatus.Expired]: "expired",
-      [SubscriptionStatus.PendingActivation]: "pending",
+      [SubscriptionStatus.Pending]: "pending",
+      [SubscriptionStatus.Suspended]: "paused", // Treat suspended as paused for styling
     };
     return styles[status] || "default";
   };
@@ -157,16 +158,6 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
     }
   };
 
-  // Format time - handle GraphQL date strings
-  const formatTime = (dateValue: string | Date) => {
-    const date = new Date(dateValue);
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
-
   // Format price
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-NG", {
@@ -178,9 +169,35 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
 
   // Calculate subscription progress
   const calculateProgress = (subscription: Subscription) => {
-    // Since GraphQL doesn't have progress data, return a default value
-    // This would need to be calculated from actual booking data
-    return 0;
+    // Calculate progress based on subscription duration and time elapsed
+    const startDate = new Date(subscription.startDate);
+    const endDate = subscription.endDate
+      ? new Date(subscription.endDate)
+      : null;
+    const now = new Date();
+
+    // If subscription has ended, show 100% progress
+    if (endDate && now > endDate) {
+      return 100;
+    }
+
+    // If subscription hasn't started yet, show 0% progress
+    if (now < startDate) {
+      return 0;
+    }
+
+    // Calculate progress based on time elapsed vs total duration
+    const totalDuration = endDate
+      ? endDate.getTime() - startDate.getTime()
+      : subscription.duration * 30 * 24 * 60 * 60 * 1000; // Convert months to milliseconds (approximate)
+
+    const elapsedTime = now.getTime() - startDate.getTime();
+    const progress = Math.min(
+      100,
+      Math.max(0, (elapsedTime / totalDuration) * 100)
+    );
+
+    return Math.round(progress);
   };
 
   // Handle card click
@@ -262,9 +279,10 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
 
               <div className={styles.subscriptionCard__serviceDetails}>
                 <h3 className={styles.subscriptionCard__serviceName}>
-                  {subscription.subscriptionServices.length > 1 ? 
-                    `${subscription.subscriptionServices.length} Services Package` : 
-                    subscription.subscriptionServices[0]?.service.name || "Subscription"}
+                  {subscription.subscriptionServices.length > 1
+                    ? `${subscription.subscriptionServices.length} Services Package`
+                    : subscription.subscriptionServices[0]?.service.name ||
+                      "Subscription"}
                   <span className={styles.subscriptionCard__frequencyBadge}>
                     <Repeat size={12} />
                     {subscription.billingCycle}
@@ -288,7 +306,8 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
               <div className={styles.subscriptionCard__infoItem}>
                 <MapPin size={14} />
                 <span>
-                  {subscription.address?.street || 'Address'}, {subscription.address?.city || 'City'}
+                  {subscription.customer?.firstName || "Customer"}'s
+                  subscription
                 </span>
               </div>
             </div>
@@ -297,7 +316,8 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
             <div className={styles.subscriptionCard__progress}>
               <div className={styles.subscriptionCard__progressHeader}>
                 <span className={styles.subscriptionCard__progressText}>
-                  {subscription.subscriptionServices.length} services in subscription
+                  {subscription.subscriptionServices.length} services in
+                  subscription
                 </span>
                 <span className={styles.subscriptionCard__progressPercent}>
                   {progress}%
