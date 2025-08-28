@@ -26,10 +26,11 @@ import styles from "./SubscriptionDetailModal.module.scss";
 import {
   ServiceCategory,
   GetCustomerSubscriptionsQuery,
+  SubscriptionStatus,
 } from "@/graphql/api";
 
 // Type for GraphQL subscription data
-type Subscription = GetCustomerSubscriptionsQuery['customerSubscriptions'][0];
+type Subscription = GetCustomerSubscriptionsQuery["customerSubscriptions"][0];
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 
 type TabType = "overview" | "services" | "bookings" | "billing";
@@ -112,18 +113,37 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
 
   // Calculate subscription progress
   const calculateProgress = () => {
-    // Since GraphQL doesn't have progress data, return a default value
-    return 0;
-  };
+    if (!subscription) return 0;
 
-  // Get booking status color
-  const getBookingStatusColor = (status: string) => {
-    const colors = {
-      scheduled: "#d97706",
-      confirmed: "#059669",
-      in_progress: "#2293fb",
-    };
-    return colors[status] || "#6b7280";
+    // Calculate progress based on subscription duration and time elapsed
+    const startDate = new Date(subscription.startDate);
+    const endDate = subscription.endDate
+      ? new Date(subscription.endDate)
+      : null;
+    const now = new Date();
+
+    // If subscription has ended, show 100% progress
+    if (endDate && now > endDate) {
+      return 100;
+    }
+
+    // If subscription hasn't started yet, show 0% progress
+    if (now < startDate) {
+      return 0;
+    }
+
+    // Calculate progress based on time elapsed vs total duration
+    const totalDuration = endDate
+      ? endDate.getTime() - startDate.getTime()
+      : subscription.duration * 30 * 24 * 60 * 60 * 1000; // Convert months to milliseconds (approximate)
+
+    const elapsedTime = now.getTime() - startDate.getTime();
+    const progress = Math.min(
+      100,
+      Math.max(0, (elapsedTime / totalDuration) * 100)
+    );
+
+    return Math.round(progress);
   };
 
   return (
@@ -133,14 +153,18 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
           <div className={styles.modal__headerLeft}>
             <div className={styles.modal__serviceIcon}>
               {subscription.subscriptionServices[0]
-                ? getServiceIcon(subscription.subscriptionServices[0].service_category as ServiceCategory)
+                ? getServiceIcon(
+                    subscription.subscriptionServices[0]
+                      .service_category as ServiceCategory
+                  )
                 : "🏠"}
             </div>
             <div className={styles.modal__headerContent}>
               <h2 className={styles.modal__title}>
-                {subscription.subscriptionServices.length > 1 ? 
-                  `${subscription.subscriptionServices.length} Services Package` : 
-                  subscription.subscriptionServices[0]?.service.name || "Subscription"}
+                {subscription.subscriptionServices.length > 1
+                  ? `${subscription.subscriptionServices.length} Services Package`
+                  : subscription.subscriptionServices[0]?.service.name ||
+                    "Subscription"}
               </h2>
               <p className={styles.modal__subtitle}>
                 {subscription.subscriptionServices.length} service
@@ -244,7 +268,8 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                               Service Address
                             </span>
                             <span className={styles.modal__infoValue}>
-                              {subscription.address}
+                              {subscription.address?.street || "Address"},{" "}
+                              {subscription.address?.city || "City"}
                             </span>
                           </div>
                         </div>
@@ -255,9 +280,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                               Auto-renewal
                             </span>
                             <span className={styles.modal__infoValue}>
-                              {subscription.autoRenewal
-                                ? "Enabled"
-                                : "Disabled"}
+                              {subscription.autoRenew ? "Enabled" : "Disabled"}
                             </span>
                           </div>
                         </div>
@@ -307,7 +330,9 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                                 ),
                               }}
                             >
-                              {getServiceIcon(service.service_category as ServiceCategory)}
+                              {getServiceIcon(
+                                service.service_category as ServiceCategory
+                              )}
                             </div>
                             <div className={styles.modal__serviceItemContent}>
                               <div className={styles.modal__serviceItemHeader}>
@@ -325,14 +350,24 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                                   className={styles.modal__serviceItemDetail}
                                 >
                                   <Repeat size={12} />
-                                  <span>{service.frequency.toLowerCase().replace('_', ' ')}</span>
+                                  <span>
+                                    {service.frequency
+                                      .toLowerCase()
+                                      .replace("_", " ")}
+                                  </span>
                                 </div>
                                 <div
                                   className={styles.modal__serviceItemDetail}
                                 >
                                   <Calendar size={12} />
                                   <span>
-                                    {service.scheduledDays.map((day: string) => day.charAt(0) + day.slice(1).toLowerCase()).join(", ")}
+                                    {service.scheduledDays
+                                      .map(
+                                        (day: string) =>
+                                          day.charAt(0) +
+                                          day.slice(1).toLowerCase()
+                                      )
+                                      .join(", ")}
                                   </span>
                                 </div>
                               </div>
@@ -344,12 +379,8 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                                     styles.modal__serviceItemProgressText
                                   }
                                 >
-                                  <span>
-                                    Service active
-                                  </span>
-                                  <span>
-                                    {formatPrice(service.price)}
-                                  </span>
+                                  <span>Service active</span>
+                                  <span>{formatPrice(service.price)}</span>
                                 </div>
                                 <div
                                   className={
@@ -396,7 +427,8 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                         <Calendar size={48} />
                         <h4>No upcoming bookings</h4>
                         <p>
-                          Booking data is not currently available. Check back later for updates.
+                          Booking data is not currently available. Check back
+                          later for updates.
                         </p>
                       </div>
                     </div>
@@ -424,9 +456,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                             </h3>
                             <p className={styles.modal__billingCardSubtitle}>
                               {subscription.billingCycle} billing • Auto-renewal{" "}
-                              {subscription.autoRenewal
-                                ? "enabled"
-                                : "disabled"}
+                              {subscription.autoRenew ? "enabled" : "disabled"}
                             </p>
                           </div>
                         </div>
@@ -442,15 +472,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                             </span>
                           </div>
 
-                          {subscription.discount && (
-                            <div className={styles.modal__billingDiscount}>
-                              <TrendingUp size={14} />
-                              <span>
-                                You're saving {subscription.discount}% with this
-                                subscription!
-                              </span>
-                            </div>
-                          )}
+                          {/* Discount information removed as it's not available in GraphQL data */}
 
                           <div className={styles.modal__billingDetails}>
                             <div className={styles.modal__billingDetail}>
@@ -464,7 +486,10 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                                 <span
                                   className={styles.modal__billingDetailValue}
                                 >
-                                  {subscription.paymentMethod}
+                                  {subscription.paymentMethod?.brand ||
+                                    "No payment method"}{" "}
+                                  ••••{" "}
+                                  {subscription.paymentMethod?.last4 || "****"}
                                 </span>
                               </div>
                             </div>
@@ -496,9 +521,9 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                                 <span
                                   className={styles.modal__billingDetailValue}
                                 >
-                                  {subscription.lastPaymentDate
-                                    ? formatDate(subscription.lastPaymentDate)
-                                    : "No previous payment"}
+                                  {subscription.lastBillingDate
+                                    ? formatDate(subscription.lastBillingDate)
+                                    : "No previous billing"}
                                 </span>
                               </div>
                             </div>
@@ -519,7 +544,9 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                             className={styles.modal__serviceBreakdownItem}
                           >
                             <div className={styles.modal__serviceBreakdownIcon}>
-                              {getServiceIcon(service.service_category as ServiceCategory)}
+                              {getServiceIcon(
+                                service.service_category as ServiceCategory
+                              )}
                             </div>
                             <div className={styles.modal__serviceBreakdownInfo}>
                               <span
@@ -530,7 +557,9 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                               <span
                                 className={styles.modal__serviceBreakdownFreq}
                               >
-                                {service.frequency.toLowerCase().replace('_', ' ')}
+                                {service.frequency
+                                  .toLowerCase()
+                                  .replace("_", " ")}
                               </span>
                             </div>
                             <span
@@ -560,8 +589,8 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                           </div>
                           <div className={styles.modal__billingHistoryInfo}>
                             <span className={styles.modal__billingHistoryDate}>
-                              {subscription.lastPaymentDate
-                                ? formatDate(subscription.lastPaymentDate)
+                              {subscription.lastBillingDate
+                                ? formatDate(subscription.lastBillingDate)
                                 : "No payment yet"}
                             </span>
                             <span
@@ -603,7 +632,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
         </div>
 
         <div className={styles.modal__footer}>
-          {subscription.status === "Active" && (
+          {subscription.status === SubscriptionStatus.Active && (
             <>
               <motion.button
                 className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
@@ -623,7 +652,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
               </motion.button>
             </>
           )}
-          {subscription.status === "Paused" && (
+          {subscription.status === SubscriptionStatus.Paused && (
             <motion.button
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
               whileHover={{ scale: 1.02 }}
@@ -633,8 +662,8 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
               Resume
             </motion.button>
           )}
-          {(subscription.status === "Expired" ||
-            subscription.status === "Cancelled") && (
+          {(subscription.status === SubscriptionStatus.Expired ||
+            subscription.status === SubscriptionStatus.Cancelled) && (
             <motion.button
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
               whileHover={{ scale: 1.02 }}
