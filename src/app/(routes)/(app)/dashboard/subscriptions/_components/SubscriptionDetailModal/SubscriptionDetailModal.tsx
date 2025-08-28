@@ -24,10 +24,12 @@ import {
 } from "lucide-react";
 import styles from "./SubscriptionDetailModal.module.scss";
 import {
-  Subscription,
   ServiceCategory,
-  UpcomingBooking,
-} from "../../types/subscription";
+  GetCustomerSubscriptionsQuery,
+} from "@/graphql/api";
+
+// Type for GraphQL subscription data
+type Subscription = GetCustomerSubscriptionsQuery['customerSubscriptions'][0];
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 
 type TabType = "overview" | "services" | "bookings" | "billing";
@@ -78,8 +80,9 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
     return colors[service_category] || "#6b7280";
   };
 
-  // Format date
-  const formatDate = (date: Date) => {
+  // Format date - handle GraphQL date strings
+  const formatDate = (dateValue: string | Date) => {
+    const date = new Date(dateValue);
     return date.toLocaleDateString("en-US", {
       weekday: "long",
       year: "numeric",
@@ -88,8 +91,9 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
     });
   };
 
-  // Format time
-  const formatTime = (date: Date) => {
+  // Format time - handle GraphQL date strings
+  const formatTime = (dateValue: string | Date) => {
+    const date = new Date(dateValue);
     return date.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "2-digit",
@@ -108,13 +112,12 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
 
   // Calculate subscription progress
   const calculateProgress = () => {
-    return Math.round(
-      (subscription.completedServices / subscription.totalServices) * 100
-    );
+    // Since GraphQL doesn't have progress data, return a default value
+    return 0;
   };
 
   // Get booking status color
-  const getBookingStatusColor = (status: UpcomingBooking["status"]) => {
+  const getBookingStatusColor = (status: string) => {
     const colors = {
       scheduled: "#d97706",
       confirmed: "#059669",
@@ -129,15 +132,19 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
         <div className={styles.modal__header}>
           <div className={styles.modal__headerLeft}>
             <div className={styles.modal__serviceIcon}>
-              {subscription.services[0]
-                ? getServiceIcon(subscription.services[0].service_category)
+              {subscription.subscriptionServices[0]
+                ? getServiceIcon(subscription.subscriptionServices[0].service_category as ServiceCategory)
                 : "🏠"}
             </div>
             <div className={styles.modal__headerContent}>
-              <h2 className={styles.modal__title}>{subscription.name}</h2>
+              <h2 className={styles.modal__title}>
+                {subscription.subscriptionServices.length > 1 ? 
+                  `${subscription.subscriptionServices.length} Services Package` : 
+                  subscription.subscriptionServices[0]?.service.name || "Subscription"}
+              </h2>
               <p className={styles.modal__subtitle}>
-                {subscription.services.length} service
-                {subscription.services.length > 1 ? "s" : ""} •{" "}
+                {subscription.subscriptionServices.length} service
+                {subscription.subscriptionServices.length > 1 ? "s" : ""} •{" "}
                 {subscription.billingCycle}
               </p>
             </div>
@@ -189,7 +196,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                             <span>Services</span>
                           </div>
                           <div className={styles.modal__overviewCardValue}>
-                            {subscription.services.length}
+                            {subscription.subscriptionServices.length}
                           </div>
                         </div>
                         <div className={styles.modal__overviewCard}>
@@ -286,7 +293,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                         Included Services
                       </h3>
                       <div className={styles.modal__servicesList}>
-                        {subscription.services.map((service) => (
+                        {subscription.subscriptionServices.map((service) => (
                           <div
                             key={service.id}
                             className={styles.modal__serviceItem}
@@ -300,12 +307,12 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                                 ),
                               }}
                             >
-                              {getServiceIcon(service.service_category)}
+                              {getServiceIcon(service.service_category as ServiceCategory)}
                             </div>
                             <div className={styles.modal__serviceItemContent}>
                               <div className={styles.modal__serviceItemHeader}>
                                 <h4 className={styles.modal__serviceItemName}>
-                                  {service.serviceName}
+                                  {service.service.name}
                                 </h4>
                                 <span
                                   className={styles.modal__serviceItemPrice}
@@ -318,14 +325,14 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                                   className={styles.modal__serviceItemDetail}
                                 >
                                   <Repeat size={12} />
-                                  <span>{service.frequency}</span>
+                                  <span>{service.frequency.toLowerCase().replace('_', ' ')}</span>
                                 </div>
                                 <div
                                   className={styles.modal__serviceItemDetail}
                                 >
                                   <Calendar size={12} />
                                   <span>
-                                    {service.scheduledDays.join(", ")}
+                                    {service.scheduledDays.map((day: string) => day.charAt(0) + day.slice(1).toLowerCase()).join(", ")}
                                   </span>
                                 </div>
                               </div>
@@ -338,16 +345,10 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                                   }
                                 >
                                   <span>
-                                    {service.completedServices}/
-                                    {service.totalServices} completed
+                                    Service active
                                   </span>
                                   <span>
-                                    {Math.round(
-                                      (service.completedServices /
-                                        service.totalServices) *
-                                        100
-                                    )}
-                                    %
+                                    {formatPrice(service.price)}
                                   </span>
                                 </div>
                                 <div
@@ -360,7 +361,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                                       styles.modal__serviceItemProgressFill
                                     }
                                     style={{
-                                      width: `${(service.completedServices / service.totalServices) * 100}%`,
+                                      width: `100%`,
                                       backgroundColor: getServiceColor(
                                         service.service_category
                                       ),
@@ -387,67 +388,18 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                   transition={{ duration: 0.2, ease: "easeInOut" }}
                 >
                   <div className={styles.modal__sections}>
-                    {subscription.upcomingBookings.length > 0 ? (
-                      <div className={styles.modal__section}>
-                        <h3 className={styles.modal__sectionTitle}>
-                          Upcoming Bookings
-                        </h3>
-                        <div className={styles.modal__bookingsList}>
-                          {subscription.upcomingBookings.map((booking) => (
-                            <div
-                              key={booking.id}
-                              className={styles.modal__bookingItem}
-                            >
-                              <div
-                                className={styles.modal__bookingIcon}
-                                style={{
-                                  backgroundColor: `${getServiceColor(booking.service_category)}15`,
-                                }}
-                              >
-                                {getServiceIcon(booking.service_category)}
-                              </div>
-                              <div className={styles.modal__bookingContent}>
-                                <div className={styles.modal__bookingHeader}>
-                                  <h4 className={styles.modal__bookingName}>
-                                    {booking.serviceName}
-                                  </h4>
-                                  <span
-                                    className={styles.modal__bookingStatus}
-                                    style={{
-                                      color: getBookingStatusColor(
-                                        booking.status
-                                      ),
-                                    }}
-                                  >
-                                    {booking.status}
-                                  </span>
-                                </div>
-                                <div className={styles.modal__bookingDetails}>
-                                  <div className={styles.modal__bookingDetail}>
-                                    <Calendar size={12} />
-                                    <span>{formatDate(booking.date)}</span>
-                                  </div>
-                                  <div className={styles.modal__bookingDetail}>
-                                    <Clock size={12} />
-                                    <span>{booking.time}</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
+                    <div className={styles.modal__section}>
+                      <h3 className={styles.modal__sectionTitle}>
+                        Upcoming Bookings
+                      </h3>
+                      <div className={styles.modal__emptyState}>
+                        <Calendar size={48} />
+                        <h4>No upcoming bookings</h4>
+                        <p>
+                          Booking data is not currently available. Check back later for updates.
+                        </p>
                       </div>
-                    ) : (
-                      <div className={styles.modal__section}>
-                        <div className={styles.modal__emptyState}>
-                          <Calendar size={48} />
-                          <h4>No upcoming bookings</h4>
-                          <p>
-                            Your next bookings will appear here when scheduled.
-                          </p>
-                        </div>
-                      </div>
-                    )}
+                    </div>
                   </div>
                 </motion.div>
               )}
@@ -561,24 +513,24 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                         Service Breakdown
                       </h3>
                       <div className={styles.modal__serviceBreakdown}>
-                        {subscription.services.map((service) => (
+                        {subscription.subscriptionServices.map((service) => (
                           <div
                             key={service.id}
                             className={styles.modal__serviceBreakdownItem}
                           >
                             <div className={styles.modal__serviceBreakdownIcon}>
-                              {getServiceIcon(service.service_category)}
+                              {getServiceIcon(service.service_category as ServiceCategory)}
                             </div>
                             <div className={styles.modal__serviceBreakdownInfo}>
                               <span
                                 className={styles.modal__serviceBreakdownName}
                               >
-                                {service.serviceName}
+                                {service.service.name}
                               </span>
                               <span
                                 className={styles.modal__serviceBreakdownFreq}
                               >
-                                {service.frequency}
+                                {service.frequency.toLowerCase().replace('_', ' ')}
                               </span>
                             </div>
                             <span

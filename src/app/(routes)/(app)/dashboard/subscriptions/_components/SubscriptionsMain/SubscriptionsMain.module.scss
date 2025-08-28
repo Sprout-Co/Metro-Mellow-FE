@@ -193,4 +193,49 @@
     max-width: 400px;
     line-height: 1.5;
   }
+
+  // Loading state styles
+  &__loadingState {
+    @extend .subscriptionsMain__emptyState;
+  }
+
+  &__loadingIcon {
+    @extend .subscriptionsMain__emptyIcon;
+    background: color-alpha("primary", "base", 0.1);
+
+    svg {
+      color: color("primary", "base");
+    }
+  }
+
+  &__loadingTitle {
+    @extend .subscriptionsMain__emptyTitle;
+  }
+
+  &__loadingText {
+    @extend .subscriptionsMain__emptyText;
+  }
+
+  // Error state styles
+  &__errorState {
+    @extend .subscriptionsMain__emptyState;
+  }
+
+  &__errorIcon {
+    @extend .subscriptionsMain__emptyIcon;
+    background: color-alpha("status", "error", 0.1);
+
+    svg {
+      color: color("status", "error");
+    }
+  }
+
+  &__errorTitle {
+    @extend .subscriptionsMain__emptyTitle;
+    color: color("status", "error");
+  }
+
+  &__errorText {
+    @extend .subscriptionsMain__emptyText;
+  }
 }

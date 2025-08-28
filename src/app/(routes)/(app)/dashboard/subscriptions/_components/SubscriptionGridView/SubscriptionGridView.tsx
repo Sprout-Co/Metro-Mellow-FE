@@ -24,8 +24,11 @@ import styles from "./SubscriptionGridView.module.scss";
 import {
   ServiceCategory,
   SubscriptionStatus,
-  Subscription,
-} from "../../types/subscription";
+  GetCustomerSubscriptionsQuery,
+} from "@/graphql/api";
+
+// Type for GraphQL subscription data
+type Subscription = GetCustomerSubscriptionsQuery['customerSubscriptions'][0];
 import SubscriptionDetailModal from "../SubscriptionDetailModal/SubscriptionDetailModal";
 
 interface SubscriptionGridViewProps {
@@ -102,8 +105,9 @@ const SubscriptionGridView: React.FC<SubscriptionGridViewProps> = ({
     );
   };
 
-  // Format date
-  const formatDate = (date: Date) => {
+  // Format date - handle GraphQL date strings
+  const formatDate = (dateValue: string | Date) => {
+    const date = new Date(dateValue);
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -132,9 +136,8 @@ const SubscriptionGridView: React.FC<SubscriptionGridViewProps> = ({
 
   // Calculate progress
   const calculateProgress = (subscription: Subscription) => {
-    return Math.round(
-      (subscription.completedServices / subscription.totalServices) * 100
-    );
+    // Since GraphQL doesn't have progress data, return a default value
+    return 0;
   };
 
   // Handle card click
@@ -182,7 +185,7 @@ const SubscriptionGridView: React.FC<SubscriptionGridViewProps> = ({
         animate="show"
       >
         {subscriptions.map((subscription) => {
-          const primaryService = subscription.services[0];
+          const primaryService = subscription.subscriptionServices[0];
           const statusConfig = getStatusConfig(subscription.status);
           const StatusIcon = statusConfig.icon;
           const progress = calculateProgress(subscription);
@@ -199,7 +202,7 @@ const SubscriptionGridView: React.FC<SubscriptionGridViewProps> = ({
               {/* Card Header */}
               <div className={styles.gridView__cardHeader}>
                 <div className={styles.gridView__serviceIcons}>
-                  {subscription.services.slice(0, 3).map((service, index) => (
+                  {subscription.subscriptionServices.slice(0, 3).map((service, index) => (
                     <div
                       key={service.id}
                       className={styles.gridView__serviceIcon}
@@ -212,9 +215,9 @@ const SubscriptionGridView: React.FC<SubscriptionGridViewProps> = ({
                       <span>{getServiceIcon(service.service_category)}</span>
                     </div>
                   ))}
-                  {subscription.services.length > 3 && (
+                  {subscription.subscriptionServices.length > 3 && (
                     <div className={styles.gridView__moreServices}>
-                      +{subscription.services.length - 3}
+                      +{subscription.subscriptionServices.length - 3}
                     </div>
                   )}
                 </div>
@@ -287,7 +290,11 @@ const SubscriptionGridView: React.FC<SubscriptionGridViewProps> = ({
 
               {/* Card Body */}
               <div className={styles.gridView__cardBody}>
-                <h3 className={styles.gridView__name}>{subscription.name}</h3>
+                <h3 className={styles.gridView__name}>
+            {subscription.subscriptionServices.length > 1 ? 
+              `${subscription.subscriptionServices.length} Services Package` : 
+              subscription.subscriptionServices[0]?.service.name || "Subscription"}
+          </h3>
 
                 <div
                   className={styles.gridView__status}
@@ -301,8 +308,8 @@ const SubscriptionGridView: React.FC<SubscriptionGridViewProps> = ({
                 </div>
 
                 <div className={styles.gridView__services}>
-                  {subscription.services.length} service
-                  {subscription.services.length > 1 ? "s" : ""}
+                  {subscription.subscriptionServices.length} service
+                  {subscription.subscriptionServices.length > 1 ? "s" : ""}
                   <span className={styles.gridView__separator}>•</span>
                   {subscription.billingCycle}
                 </div>
@@ -331,24 +338,24 @@ const SubscriptionGridView: React.FC<SubscriptionGridViewProps> = ({
                     />
                   </div>
                   <div className={styles.gridView__progressStats}>
-                    <span>{subscription.completedServices} completed</span>
-                    <span>{subscription.remainingServices} remaining</span>
+                    <span>{subscription.subscriptionServices.length} services</span>
+                    <span>in subscription</span>
                   </div>
                 </div>
 
                 {/* Info Items */}
                 <div className={styles.gridView__info}>
-                  {subscription.nextServiceDate && (
                     <div className={styles.gridView__infoItem}>
                       <Calendar size={14} />
                       <span>
-                        Next: {formatDate(subscription.nextServiceDate)}
+                        Next billing: {formatDate(subscription.nextBillingDate)}
                       </span>
                     </div>
-                  )}
                   <div className={styles.gridView__infoItem}>
                     <MapPin size={14} />
-                    <span>{subscription.address.split(",")[0]}</span>
+                    <span>
+                      {subscription.address?.street || 'Address'}, {subscription.address?.city || 'City'}
+                    </span>
                   </div>
                 </div>
               </div>

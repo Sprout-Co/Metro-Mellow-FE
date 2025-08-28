@@ -32,8 +32,11 @@ import styles from "./SubscriptionListView.module.scss";
 import {
   ServiceCategory,
   SubscriptionStatus,
-  Subscription,
-} from "../../types/subscription";
+  GetCustomerSubscriptionsQuery,
+} from "@/graphql/api";
+
+// Type for GraphQL subscription data
+type Subscription = GetCustomerSubscriptionsQuery['customerSubscriptions'][0];
 import SubscriptionDetailModal from "../SubscriptionDetailModal/SubscriptionDetailModal";
 
 interface SubscriptionListViewProps {
@@ -134,8 +137,9 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
     return styles[status] || "default";
   };
 
-  // Format date
-  const formatDate = (date: Date) => {
+  // Format date - handle GraphQL date strings
+  const formatDate = (dateValue: string | Date) => {
+    const date = new Date(dateValue);
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -153,8 +157,9 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
     }
   };
 
-  // Format time
-  const formatTime = (date: Date) => {
+  // Format time - handle GraphQL date strings
+  const formatTime = (dateValue: string | Date) => {
+    const date = new Date(dateValue);
     return date.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "2-digit",
@@ -173,9 +178,9 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
 
   // Calculate subscription progress
   const calculateProgress = (subscription: Subscription) => {
-    return Math.round(
-      (subscription.completedServices / subscription.totalServices) * 100
-    );
+    // Since GraphQL doesn't have progress data, return a default value
+    // This would need to be calculated from actual booking data
+    return 0;
   };
 
   // Handle card click
@@ -207,8 +212,8 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
     const progress = calculateProgress(subscription);
 
     // Get primary service for display
-    const primaryService = subscription.services[0];
-    const serviceIcons = subscription.services.slice(0, 3); // Show max 3 service icons
+    const primaryService = subscription.subscriptionServices[0];
+    const serviceIcons = subscription.subscriptionServices.slice(0, 3); // Show max 3 service icons
 
     return (
       <motion.div
@@ -248,42 +253,43 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
                     <span>{getServiceIcon(service.service_category)}</span>
                   </div>
                 ))}
-                {subscription.services.length > 3 && (
+                {subscription.subscriptionServices.length > 3 && (
                   <div className={styles.subscriptionCard__moreServices}>
-                    +{subscription.services.length - 3}
+                    +{subscription.subscriptionServices.length - 3}
                   </div>
                 )}
               </div>
 
               <div className={styles.subscriptionCard__serviceDetails}>
                 <h3 className={styles.subscriptionCard__serviceName}>
-                  {subscription.name}
+                  {subscription.subscriptionServices.length > 1 ? 
+                    `${subscription.subscriptionServices.length} Services Package` : 
+                    subscription.subscriptionServices[0]?.service.name || "Subscription"}
                   <span className={styles.subscriptionCard__frequencyBadge}>
                     <Repeat size={12} />
                     {subscription.billingCycle}
                   </span>
                 </h3>
                 <p className={styles.subscriptionCard__service_category}>
-                  {subscription.services.length === 1
-                    ? subscription.services[0].serviceName
-                    : `${subscription.services.length} services included`}
+                  {subscription.subscriptionServices.length === 1
+                    ? subscription.subscriptionServices[0].service.name
+                    : `${subscription.subscriptionServices.length} services included`}
                 </p>
               </div>
             </div>
 
             <div className={styles.subscriptionCard__info}>
-              {subscription.nextServiceDate && (
-                <div className={styles.subscriptionCard__infoItem}>
-                  <Calendar size={14} />
-                  <span>
-                    Next: {formatDate(subscription.nextServiceDate)} at{" "}
-                    {formatTime(subscription.nextServiceDate)}
-                  </span>
-                </div>
-              )}
+              <div className={styles.subscriptionCard__infoItem}>
+                <Calendar size={14} />
+                <span>
+                  Next billing: {formatDate(subscription.nextBillingDate)}
+                </span>
+              </div>
               <div className={styles.subscriptionCard__infoItem}>
                 <MapPin size={14} />
-                <span>{subscription.address}</span>
+                <span>
+                  {subscription.address?.street || 'Address'}, {subscription.address?.city || 'City'}
+                </span>
               </div>
             </div>
 
@@ -291,8 +297,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
             <div className={styles.subscriptionCard__progress}>
               <div className={styles.subscriptionCard__progressHeader}>
                 <span className={styles.subscriptionCard__progressText}>
-                  {subscription.completedServices} of{" "}
-                  {subscription.totalServices} services completed
+                  {subscription.subscriptionServices.length} services in subscription
                 </span>
                 <span className={styles.subscriptionCard__progressPercent}>
                   {progress}%

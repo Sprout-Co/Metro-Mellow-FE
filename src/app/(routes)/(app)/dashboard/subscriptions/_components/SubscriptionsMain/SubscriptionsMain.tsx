@@ -25,281 +25,23 @@ import styles from "./SubscriptionsMain.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import FilterDropdown from "../../../bookings/_components/FilterDropdown/FilterDropdown";
 import {
+  useGetCustomerSubscriptionsQuery,
   SubscriptionStatus,
   ServiceCategory,
   SubscriptionFrequency,
-  Subscription,
-} from "../../types/subscription";
+  BillingCycle,
+  ScheduleDays,
+  TimeSlot,
+  GetCustomerSubscriptionsQuery,
+} from "@/graphql/api";
 import SubscriptionListView from "../SubscriptionListView/SubscriptionListView";
 import AppointmentCard from "@/components/ui/AppointmentCard";
 import SubscriptionGridView from "../SubscriptionGridView/SubscriptionGridView";
 import DashboardHeader from "../../../_components/DashboardHeader/DashboardHeader";
 
-// Mock data with multiple services per subscription
-const mockSubscriptions: Subscription[] = [
-  {
-    id: "1",
-    name: "Complete Home Care Package",
-    status: SubscriptionStatus.Active,
-    billingCycle: "monthly",
-    totalPrice: 45000,
-    startDate: new Date(2024, 5, 1),
-    address: "24 Emmanuel Osakwe Street, Lagos",
-    autoRenewal: true,
-    lastPaymentDate: new Date(2024, 6, 1),
-    nextBillingDate: new Date(2024, 8, 1),
-    paymentMethod: "Credit Card ****4242",
-    discount: 15,
-    services: [
-      {
-        id: "s1",
-        serviceName: "Deep Home Cleaning",
-        service_category: ServiceCategory.Cleaning,
-        price: 25000,
-        frequency: SubscriptionFrequency.Weekly,
-        scheduledDays: ["Monday"],
-        completedServices: 12,
-        totalServices: 52,
-        nextServiceDate: new Date(2024, 7, 19, 10, 0),
-        provider: "Maria Rodriguez",
-        notes: "Focus on kitchen and bathrooms",
-      },
-      {
-        id: "s2",
-        serviceName: "Laundry Service",
-        service_category: ServiceCategory.Laundry,
-        price: 8000,
-        frequency: SubscriptionFrequency.BiWeekly,
-        scheduledDays: ["Wednesday"],
-        completedServices: 6,
-        totalServices: 26,
-        nextServiceDate: new Date(2024, 7, 21, 14, 0),
-        provider: "QuickWash Team",
-        notes: "3 bags of laundry, no starch",
-      },
-      {
-        id: "s3",
-        serviceName: "Meal Preparation",
-        service_category: ServiceCategory.Cooking,
-        price: 15000,
-        frequency: SubscriptionFrequency.Weekly,
-        scheduledDays: ["Sunday"],
-        completedServices: 10,
-        totalServices: 52,
-        nextServiceDate: new Date(2024, 7, 18, 17, 0),
-        provider: "Chef Kemi",
-        notes: "Vegetarian meals preferred",
-      },
-    ],
-    upcomingBookings: [
-      {
-        id: "b1",
-        serviceName: "Meal Preparation",
-        service_category: ServiceCategory.Cooking,
-        date: new Date(2024, 7, 18),
-        time: "5:00 PM",
-        provider: "Chef Kemi",
-        address: "24 Emmanuel Osakwe Street, Lagos",
-        status: "confirmed",
-      },
-      {
-        id: "b2",
-        serviceName: "Deep Home Cleaning",
-        service_category: ServiceCategory.Cleaning,
-        date: new Date(2024, 7, 19),
-        time: "10:00 AM",
-        provider: "Maria Rodriguez",
-        address: "24 Emmanuel Osakwe Street, Lagos",
-        status: "scheduled",
-      },
-      {
-        id: "b3",
-        serviceName: "Laundry Service",
-        service_category: ServiceCategory.Laundry,
-        date: new Date(2024, 7, 21),
-        time: "2:00 PM",
-        provider: "QuickWash Team",
-        address: "24 Emmanuel Osakwe Street, Lagos",
-        status: "scheduled",
-      },
-    ],
-    totalServices: 130,
-    completedServices: 28,
-    remainingServices: 102,
-    nextServiceDate: new Date(2024, 7, 18, 17, 0),
-    primaryProvider: "Maria Rodriguez",
-  },
-  {
-    id: "2",
-    name: "Professional Office Maintenance",
-    status: SubscriptionStatus.Active,
-    billingCycle: "monthly",
-    totalPrice: 55000,
-    startDate: new Date(2024, 6, 15),
-    address: "Metro Office, Victoria Island",
-    autoRenewal: true,
-    lastPaymentDate: new Date(2024, 6, 15),
-    nextBillingDate: new Date(2024, 7, 15),
-    paymentMethod: "Corporate Card ****1234",
-    services: [
-      {
-        id: "s4",
-        serviceName: "Office Deep Cleaning",
-        service_category: ServiceCategory.Cleaning,
-        price: 35000,
-        frequency: SubscriptionFrequency.BiWeekly,
-        scheduledDays: ["Friday"],
-        completedServices: 4,
-        totalServices: 26,
-        nextServiceDate: new Date(2024, 7, 23, 18, 0),
-        provider: "CleanPro Team",
-        notes: "After hours cleaning only",
-      },
-      {
-        id: "s5",
-        serviceName: "Pest Control",
-        service_category: ServiceCategory.PestControl,
-        price: 20000,
-        frequency: SubscriptionFrequency.Monthly,
-        scheduledDays: ["Last Friday"],
-        completedServices: 2,
-        totalServices: 12,
-        nextServiceDate: new Date(2024, 7, 30, 19, 0),
-        provider: "PestPro Team",
-        notes: "Quarterly deep treatment",
-      },
-    ],
-    upcomingBookings: [
-      {
-        id: "b4",
-        serviceName: "Office Deep Cleaning",
-        service_category: ServiceCategory.Cleaning,
-        date: new Date(2024, 7, 23),
-        time: "6:00 PM",
-        provider: "CleanPro Team",
-        address: "Metro Office, Victoria Island",
-        status: "scheduled",
-      },
-      {
-        id: "b5",
-        serviceName: "Pest Control",
-        service_category: ServiceCategory.PestControl,
-        date: new Date(2024, 7, 30),
-        time: "7:00 PM",
-        provider: "PestPro Team",
-        address: "Metro Office, Victoria Island",
-        status: "scheduled",
-      },
-    ],
-    totalServices: 38,
-    completedServices: 6,
-    remainingServices: 32,
-    nextServiceDate: new Date(2024, 7, 23, 18, 0),
-    primaryProvider: "CleanPro Team",
-  },
-  {
-    id: "3",
-    name: "Essential Home Services",
-    status: SubscriptionStatus.Paused,
-    billingCycle: "monthly",
-    totalPrice: 20000,
-    startDate: new Date(2024, 4, 1),
-    address: "45 Admiralty Way, Lekki",
-    autoRenewal: true,
-    lastPaymentDate: new Date(2024, 6, 1),
-    nextBillingDate: new Date(2024, 8, 1),
-    paymentMethod: "Debit Card ****8901",
-    services: [
-      {
-        id: "s6",
-        serviceName: "Basic Cleaning",
-        service_category: ServiceCategory.Cleaning,
-        price: 15000,
-        frequency: SubscriptionFrequency.BiWeekly,
-        scheduledDays: ["Saturday"],
-        completedServices: 8,
-        totalServices: 26,
-        nextServiceDate: new Date(2024, 8, 5, 9, 0),
-        provider: "Home Helpers",
-        notes: "Paused due to travel",
-      },
-      {
-        id: "s7",
-        serviceName: "Grocery Run",
-        service_category: ServiceCategory.Errands,
-        price: 5000,
-        frequency: SubscriptionFrequency.Weekly,
-        scheduledDays: ["Thursday"],
-        completedServices: 12,
-        totalServices: 52,
-        nextServiceDate: new Date(2024, 8, 7, 11, 0),
-        provider: "Shopping Assistant",
-        notes: "Weekly grocery shopping",
-      },
-    ],
-    upcomingBookings: [],
-    totalServices: 78,
-    completedServices: 20,
-    remainingServices: 58,
-    nextServiceDate: new Date(2024, 8, 5, 9, 0),
-    primaryProvider: "Home Helpers",
-  },
-  {
-    id: "4",
-    name: "Premium Laundry Care",
-    status: SubscriptionStatus.Active,
-    billingCycle: "quarterly",
-    totalPrice: 24000,
-    startDate: new Date(2024, 0, 1),
-    address: "12 Ozumba Mbadiwe, Victoria Island",
-    autoRenewal: false,
-    lastPaymentDate: new Date(2024, 6, 1),
-    nextBillingDate: new Date(2024, 9, 1),
-    paymentMethod: "Bank Transfer",
-    services: [
-      {
-        id: "s8",
-        serviceName: "Premium Laundry",
-        service_category: ServiceCategory.Laundry,
-        price: 12000,
-        frequency: SubscriptionFrequency.Weekly,
-        scheduledDays: ["Tuesday", "Friday"],
-        completedServices: 32,
-        totalServices: 104,
-        nextServiceDate: new Date(2024, 7, 20, 8, 0),
-        provider: "Elite Laundry",
-        notes: "Dry cleaning included",
-      },
-    ],
-    upcomingBookings: [
-      {
-        id: "b6",
-        serviceName: "Premium Laundry",
-        service_category: ServiceCategory.Laundry,
-        date: new Date(2024, 7, 20),
-        time: "8:00 AM",
-        provider: "Elite Laundry",
-        address: "12 Ozumba Mbadiwe, Victoria Island",
-        status: "confirmed",
-      },
-      {
-        id: "b7",
-        serviceName: "Premium Laundry",
-        service_category: ServiceCategory.Laundry,
-        date: new Date(2024, 7, 23),
-        time: "8:00 AM",
-        provider: "Elite Laundry",
-        address: "12 Ozumba Mbadiwe, Victoria Island",
-        status: "scheduled",
-      },
-    ],
-    totalServices: 104,
-    completedServices: 32,
-    remainingServices: 72,
-    nextServiceDate: new Date(2024, 7, 20, 8, 0),
-    primaryProvider: "Elite Laundry",
-  },
-];
+// Type for GraphQL subscription data
+type Subscription = GetCustomerSubscriptionsQuery['customerSubscriptions'][0];
+
 
 const SubscriptionsMain: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<
@@ -309,7 +51,16 @@ const SubscriptionsMain: React.FC = () => {
     "all"
   );
   const [searchQuery, setSearchQuery] = useState("");
-  const [subscriptions] = useState<Subscription[]>(mockSubscriptions);
+  // Fetch subscriptions from GraphQL
+  const { data, loading, error, refetch } = useGetCustomerSubscriptionsQuery({
+    errorPolicy: 'all',
+    fetchPolicy: 'cache-and-network',
+  });
+  
+  // Use GraphQL data directly
+  const subscriptions = useMemo(() => {
+    return data?.customerSubscriptions || [];
+  }, [data]);
   const [viewType, setViewType] = useState<"list" | "grid">("list");
 
   const handleViewChange = (type: "list" | "grid") => {
@@ -324,17 +75,15 @@ const SubscriptionsMain: React.FC = () => {
     if (searchQuery) {
       filtered = filtered.filter(
         (s) =>
-          s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          s.services.some(
+          s.subscriptionServices.some(
             (service) =>
-              service.serviceName
+              service.service.name
                 .toLowerCase()
-                .includes(searchQuery.toLowerCase()) ||
-              service.provider
-                ?.toLowerCase()
                 .includes(searchQuery.toLowerCase())
           ) ||
-          s.address.toLowerCase().includes(searchQuery.toLowerCase())
+          (s.address.street + " " + s.address.city)
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
       );
     }
 
@@ -345,7 +94,7 @@ const SubscriptionsMain: React.FC = () => {
 
     // Filter by billing cycle
     if (selectedFrequency !== "all") {
-      filtered = filtered.filter((s) => s.billingCycle === selectedFrequency);
+      filtered = filtered.filter((s) => s.billingCycle.toLowerCase() === selectedFrequency);
     }
 
     return filtered;
@@ -356,13 +105,13 @@ const SubscriptionsMain: React.FC = () => {
     const now = new Date();
     const activeWithServices = subscriptions
       .filter(
-        (s) => s.status === SubscriptionStatus.Active && s.nextServiceDate
+        (s) => s.status === SubscriptionStatus.Active && s.nextBillingDate
       )
-      .filter((s) => new Date(s.nextServiceDate!).getTime() > now.getTime())
+      .filter((s) => new Date(s.nextBillingDate).getTime() > now.getTime())
       .sort(
         (a, b) =>
-          new Date(a.nextServiceDate!).getTime() -
-          new Date(b.nextServiceDate!).getTime()
+          new Date(a.nextBillingDate).getTime() -
+          new Date(b.nextBillingDate).getTime()
       );
     return activeWithServices[0] || null;
   }, [subscriptions]);
@@ -384,9 +133,8 @@ const SubscriptionsMain: React.FC = () => {
         const multiplier = {
           monthly: 1,
           quarterly: 0.33,
-          annually: 0.083,
         };
-        return sum + s.totalPrice * (multiplier[s.billingCycle] || 1);
+        return sum + s.totalPrice * (multiplier[s.billingCycle.toLowerCase() as keyof typeof multiplier] || 1);
       }, 0);
 
     return { active, paused, expired, totalMonthlyValue };
@@ -449,7 +197,7 @@ const SubscriptionsMain: React.FC = () => {
                 { value: SubscriptionStatus.Cancelled, label: "Cancelled" },
                 { value: SubscriptionStatus.Expired, label: "Expired" },
                 {
-                  value: SubscriptionStatus.PendingActivation,
+                  value: SubscriptionStatus.Pending,
                   label: "Pending",
                 },
               ]}
@@ -498,7 +246,35 @@ const SubscriptionsMain: React.FC = () => {
 
       {/* Main Content Area */}
       <div className={styles.subscriptionsMain__content}>
-        {filteredSubscriptions.length > 0 ? (
+        {loading ? (
+          <div className={styles.subscriptionsMain__loadingState}>
+            <div className={styles.subscriptionsMain__loadingIcon}>
+              <RefreshCw className="animate-spin" />
+            </div>
+            <h3 className={styles.subscriptionsMain__loadingTitle}>
+              Loading subscriptions...
+            </h3>
+            <p className={styles.subscriptionsMain__loadingText}>
+              Please wait while we fetch your subscription data.
+            </p>
+          </div>
+        ) : error ? (
+          <div className={styles.subscriptionsMain__errorState}>
+            <div className={styles.subscriptionsMain__errorIcon}>
+              <AlertCircle />
+            </div>
+            <h3 className={styles.subscriptionsMain__errorTitle}>
+              Unable to load subscriptions
+            </h3>
+            <p className={styles.subscriptionsMain__errorText}>
+              There was an error loading your subscriptions. Please try again.
+            </p>
+            <FnButton variant="primary" onClick={() => refetch()}>
+              <RefreshCw size={18} />
+              Try Again
+            </FnButton>
+          </div>
+        ) : filteredSubscriptions.length > 0 ? (
           viewType === "list" ? (
             <SubscriptionListView subscriptions={filteredSubscriptions} />
           ) : (
