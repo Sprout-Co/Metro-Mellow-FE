@@ -33,6 +33,9 @@ import { calculateSubscriptionProgress } from "../../utils/subscriptionProgress"
 // Type for GraphQL subscription data
 type Subscription = GetCustomerSubscriptionsQuery["customerSubscriptions"][0];
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
+import SubscriptionConfirmActionModal, {
+  SubscriptionActionType,
+} from "../SubscriptionConfirmActionModal/SubscriptionConfirmActionModal";
 
 type TabType = "overview" | "services" | "bookings" | "billing";
 
@@ -48,6 +51,11 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   subscription,
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>("overview");
+  const [confirmationActionType, setConfirmationActionType] = useState<
+    SubscriptionActionType
+  >(null);
+  const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] =
+    useState(false);
 
   if (!subscription) return null;
 
@@ -116,6 +124,97 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   const calculateProgress = () => {
     if (!subscription) return 0;
     return calculateSubscriptionProgress(subscription);
+  };
+
+  function handleConfirmAction(actionType: SubscriptionActionType) {
+    setConfirmationActionType(actionType);
+    setIsConfirmActionModalOpen(true);
+  }
+
+  function handleConfirmActionClose() {
+    setIsConfirmActionModalOpen(false);
+    setConfirmationActionType(null);
+  }
+
+  function handleConfirmActionSuccess(reason?: string) {
+    // Optionally handle the success callback
+    console.log('Subscription action completed:', confirmationActionType, reason);
+    // You might want to refetch subscription data or show a toast notification
+  }
+
+  const renderFooterButtons = () => {
+    switch (subscription.status) {
+      case SubscriptionStatus.Active:
+        return (
+          <>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => handleConfirmAction("pause")}
+            >
+              <Pause size={14} />
+              Pause
+            </motion.button>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--danger"]}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => handleConfirmAction("cancel")}
+            >
+              <X size={14} />
+              Cancel Subscription
+            </motion.button>
+          </>
+        );
+      case SubscriptionStatus.Paused:
+        return (
+          <>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => handleConfirmAction("resume")}
+            >
+              <Play size={14} />
+              Resume
+            </motion.button>
+            <motion.button
+              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--danger"]}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => handleConfirmAction("cancel")}
+            >
+              <X size={14} />
+              Cancel Subscription
+            </motion.button>
+          </>
+        );
+      case SubscriptionStatus.Expired:
+      case SubscriptionStatus.Cancelled:
+        return (
+          <motion.button
+            className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => handleConfirmAction("reactivate")}
+          >
+            <RefreshCw size={14} />
+            Reactivate
+          </motion.button>
+        );
+      default:
+        return (
+          <motion.button
+            className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
+            onClick={onClose}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            Close
+          </motion.button>
+        );
+    }
   };
 
   return (
@@ -603,58 +702,17 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
           </div>
         </div>
 
-        <div className={styles.modal__footer}>
-          {subscription.status === SubscriptionStatus.Active && (
-            <>
-              <motion.button
-                className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Edit size={14} />
-                Modify
-              </motion.button>
-              <motion.button
-                className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Pause size={14} />
-                Pause
-              </motion.button>
-            </>
-          )}
-          {subscription.status === SubscriptionStatus.Paused && (
-            <motion.button
-              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Play size={14} />
-              Resume
-            </motion.button>
-          )}
-          {(subscription.status === SubscriptionStatus.Expired ||
-            subscription.status === SubscriptionStatus.Cancelled) && (
-            <motion.button
-              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <RefreshCw size={14} />
-              Renew
-            </motion.button>
-          )}
-          <motion.button
-            className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
-            onClick={onClose}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            Close
-          </motion.button>
-        </div>
+        <div className={styles.modal__footer}>{renderFooterButtons()}</div>
       </>
+      
+      {/* Confirm Action Modal */}
+      <SubscriptionConfirmActionModal
+        isOpen={isConfirmActionModalOpen}
+        onClose={handleConfirmActionClose}
+        subscription={subscription}
+        actionType={confirmationActionType}
+        onConfirm={handleConfirmActionSuccess}
+      />
     </ModalDrawer>
   );
 };
