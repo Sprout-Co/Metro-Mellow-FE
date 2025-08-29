@@ -279,8 +279,8 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
               <div className={styles.subscriptionCard__infoItem}>
                 <MapPin size={14} />
                 <span>
-                  {subscription.customer?.firstName || "Customer"}'s
-                  subscription
+                  {subscription.address?.street || "Address"},{" "}
+                  {subscription.address?.city || "City"}
                 </span>
               </div>
             </div>
