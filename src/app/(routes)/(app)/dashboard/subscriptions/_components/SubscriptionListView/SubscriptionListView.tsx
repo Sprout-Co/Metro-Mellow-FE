@@ -38,6 +38,7 @@ import {
 // Type for GraphQL subscription data
 type Subscription = GetCustomerSubscriptionsQuery["customerSubscriptions"][0];
 import SubscriptionDetailModal from "../SubscriptionDetailModal/SubscriptionDetailModal";
+import { calculateSubscriptionProgress } from "../../utils/subscriptionProgress";
 
 interface SubscriptionListViewProps {
   subscriptions: Subscription[];
@@ -167,37 +168,9 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
     }).format(price);
   };
 
-  // Calculate subscription progress
+  // Calculate subscription progress using utility function
   const calculateProgress = (subscription: Subscription) => {
-    // Calculate progress based on subscription duration and time elapsed
-    const startDate = new Date(subscription.startDate);
-    const endDate = subscription.endDate
-      ? new Date(subscription.endDate)
-      : null;
-    const now = new Date();
-
-    // If subscription has ended, show 100% progress
-    if (endDate && now > endDate) {
-      return 100;
-    }
-
-    // If subscription hasn't started yet, show 0% progress
-    if (now < startDate) {
-      return 0;
-    }
-
-    // Calculate progress based on time elapsed vs total duration
-    const totalDuration = endDate
-      ? endDate.getTime() - startDate.getTime()
-      : subscription.duration * 30 * 24 * 60 * 60 * 1000; // Convert months to milliseconds (approximate)
-
-    const elapsedTime = now.getTime() - startDate.getTime();
-    const progress = Math.min(
-      100,
-      Math.max(0, (elapsedTime / totalDuration) * 100)
-    );
-
-    return Math.round(progress);
+    return calculateSubscriptionProgress(subscription);
   };
 
   // Handle card click
