@@ -295,6 +295,13 @@
     gap: spacing("md");
   }
 
+  &__sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("md");
+  }
+
   &__sectionTitle {
     @include font-size("sm");
     @include font-weight("bold");
@@ -314,6 +321,53 @@
       height: 2px;
       background: color("primary", "base");
       border-radius: border-radius("pill");
+    }
+  }
+
+  &__filterContainer {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    background: linear-gradient(
+      135deg,
+      color("neutral", "lightest"),
+      rgba(255, 255, 255, 0.8)
+    );
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    padding: spacing("xs") spacing("sm");
+    position: relative;
+
+    svg:first-child {
+      color: color("neutral", "medium");
+    }
+
+    svg:last-child {
+      color: color("neutral", "medium");
+      pointer-events: none;
+    }
+  }
+
+  &__statusFilter {
+    background: transparent;
+    border: none;
+    outline: none;
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    cursor: pointer;
+    appearance: none;
+    padding-right: spacing("xs");
+    min-width: 100px;
+
+    option {
+      background: color("neutral", "white");
+      color: color("neutral", "darkest");
+      padding: spacing("xs");
+    }
+
+    &:focus {
+      outline: none;
     }
   }
 
@@ -1131,6 +1185,66 @@
     padding: 2px spacing("xs");
     border-radius: border-radius("pill");
     background: rgba(255, 255, 255, 0.5);
+
+    &--pending {
+      background: linear-gradient(
+        135deg,
+        rgba(242, 153, 74, 0.15),
+        rgba(242, 153, 74, 0.25)
+      );
+      color: #ea580c;
+      border: 1px solid rgba(242, 153, 74, 0.3);
+    }
+
+    &--confirmed {
+      background: linear-gradient(
+        135deg,
+        rgba(59, 130, 246, 0.15),
+        rgba(59, 130, 246, 0.25)
+      );
+      color: #2563eb;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    &--inprogress {
+      background: linear-gradient(
+        135deg,
+        rgba(168, 85, 247, 0.15),
+        rgba(168, 85, 247, 0.25)
+      );
+      color: #7c3aed;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+
+    &--completed {
+      background: linear-gradient(
+        135deg,
+        rgba(5, 150, 105, 0.15),
+        rgba(5, 150, 105, 0.25)
+      );
+      color: #047857;
+      border: 1px solid rgba(5, 150, 105, 0.3);
+    }
+
+    &--cancelled {
+      background: linear-gradient(
+        135deg,
+        rgba(251, 34, 34, 0.15),
+        rgba(251, 34, 34, 0.25)
+      );
+      color: #dc2626;
+      border: 1px solid rgba(251, 34, 34, 0.3);
+    }
+
+    &--rescheduled {
+      background: linear-gradient(
+        135deg,
+        rgba(217, 119, 6, 0.15),
+        rgba(217, 119, 6, 0.25)
+      );
+      color: #b45309;
+      border: 1px solid rgba(217, 119, 6, 0.3);
+    }
   }
 
   &__bookingDetails {

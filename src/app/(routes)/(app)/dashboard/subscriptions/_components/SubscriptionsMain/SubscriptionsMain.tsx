@@ -38,11 +38,14 @@ import SubscriptionListView from "../SubscriptionListView/SubscriptionListView";
 import AppointmentCard from "@/components/ui/AppointmentCard";
 import SubscriptionGridView from "../SubscriptionGridView/SubscriptionGridView";
 import DashboardHeader from "../../../_components/DashboardHeader/DashboardHeader";
+import { Routes } from "@/constants/routes";
+import { useRouter } from "next/navigation";
 
 // Type for GraphQL subscription data
 type Subscription = GetCustomerSubscriptionsQuery["customerSubscriptions"][0];
 
 const SubscriptionsMain: React.FC = () => {
+  const router = useRouter();
   const [selectedStatus, setSelectedStatus] = useState<
     SubscriptionStatus | "all"
   >("all");
@@ -96,6 +99,7 @@ const SubscriptionsMain: React.FC = () => {
 
   const handleAddSubscription = () => {
     console.log("Add new subscription");
+    router.push(Routes.DASHBOARD_SUBSCRIPTIONS_ADD);
   };
 
   const handleStatusChange = (value: string) => {

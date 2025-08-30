@@ -22,6 +22,8 @@ import {
   Star,
   Info,
   AlertTriangle,
+  Filter,
+  ChevronDown,
 } from "lucide-react";
 import styles from "./SubscriptionDetailModal.module.scss";
 import {
@@ -64,8 +66,12 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   const [subscriptionBookings, setSubscriptionBookings] = useState<Booking[]>(
     []
   );
+  const [allSubscriptionBookings, setAllSubscriptionBookings] = useState<Booking[]>(
+    []
+  );
   const [loadingBookings, setLoadingBookings] = useState(false);
   const [bookingsError, setBookingsError] = useState<string | null>(null);
+  const [selectedBookingStatus, setSelectedBookingStatus] = useState<BookingStatus | 'all'>('all');
 
   const { handleGetCustomerBookings } = useBookingOperations();
 
@@ -75,6 +81,44 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
       fetchSubscriptionBookings();
     }
   }, [isOpen, activeTab, subscription?.id]);
+
+  // Filter bookings when status filter changes
+  useEffect(() => {
+    if (selectedBookingStatus === 'all') {
+      setSubscriptionBookings(allSubscriptionBookings);
+    } else {
+      const filteredByStatus = allSubscriptionBookings.filter(
+        (booking) => booking.status === selectedBookingStatus
+      );
+      setSubscriptionBookings(filteredByStatus);
+    }
+  }, [selectedBookingStatus, allSubscriptionBookings]);
+
+  // Helper function to get booking count by status
+  const getBookingCountByStatus = (status: BookingStatus | 'all'): number => {
+    if (status === 'all') return allSubscriptionBookings.length;
+    return allSubscriptionBookings.filter(booking => booking.status === status).length;
+  };
+
+  // Helper function to format status names
+  const formatStatusName = (status: BookingStatus): string => {
+    switch (status) {
+      case BookingStatus.InProgress:
+        return "In Progress";
+      case BookingStatus.Pending:
+        return "Pending";
+      case BookingStatus.Confirmed:
+        return "Confirmed";
+      case BookingStatus.Completed:
+        return "Completed";
+      case BookingStatus.Cancelled:
+        return "Cancelled";
+      case BookingStatus.Rescheduled:
+        return "Rescheduled";
+      default:
+        return status;
+    }
+  };
 
   const fetchSubscriptionBookings = async () => {
     setLoadingBookings(true);
@@ -106,6 +150,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
           return matchesService && isRecurring;
         });
 
+        setAllSubscriptionBookings(filteredBookings);
         setSubscriptionBookings(filteredBookings);
       }
     } catch (error) {
@@ -552,9 +597,28 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                 >
                   <div className={styles.modal__sections}>
                     <div className={styles.modal__section}>
-                      <h3 className={styles.modal__sectionTitle}>
-                        Subscription Bookings
-                      </h3>
+                      <div className={styles.modal__sectionHeader}>
+                        <h3 className={styles.modal__sectionTitle}>
+                          Subscription Bookings
+                        </h3>
+                        <div className={styles.modal__filterContainer}>
+                          <Filter size={16} />
+                          <select
+                            value={selectedBookingStatus}
+                            onChange={(e) => setSelectedBookingStatus(e.target.value as BookingStatus | 'all')}
+                            className={styles.modal__statusFilter}
+                          >
+                            <option value="all">All Status ({getBookingCountByStatus('all')})</option>
+                            <option value={BookingStatus.Pending}>{formatStatusName(BookingStatus.Pending)} ({getBookingCountByStatus(BookingStatus.Pending)})</option>
+                            <option value={BookingStatus.Confirmed}>{formatStatusName(BookingStatus.Confirmed)} ({getBookingCountByStatus(BookingStatus.Confirmed)})</option>
+                            <option value={BookingStatus.InProgress}>{formatStatusName(BookingStatus.InProgress)} ({getBookingCountByStatus(BookingStatus.InProgress)})</option>
+                            <option value={BookingStatus.Completed}>{formatStatusName(BookingStatus.Completed)} ({getBookingCountByStatus(BookingStatus.Completed)})</option>
+                            <option value={BookingStatus.Cancelled}>{formatStatusName(BookingStatus.Cancelled)} ({getBookingCountByStatus(BookingStatus.Cancelled)})</option>
+                            <option value={BookingStatus.Rescheduled}>{formatStatusName(BookingStatus.Rescheduled)} ({getBookingCountByStatus(BookingStatus.Rescheduled)})</option>
+                          </select>
+                          <ChevronDown size={14} />
+                        </div>
+                      </div>
 
                       {loadingBookings ? (
                         <div className={styles.modal__loadingState}>
@@ -595,7 +659,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                                   <span
                                     className={`${styles.modal__bookingStatus} ${styles[`modal__bookingStatus--${booking.status.toLowerCase()}`]}`}
                                   >
-                                    {booking.status}
+                                    {formatStatusName(booking.status)}
                                   </span>
                                 </div>
                                 <div className={styles.modal__bookingDetails}>
