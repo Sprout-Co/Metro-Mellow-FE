@@ -358,6 +358,13 @@ const CleaningServiceConfiguration: React.FC<
                     ...prev,
                     serviceDetails: {
                       ...prev.serviceDetails,
+                      ...(prev.serviceDetails.cleaning && {
+                        cleaning: {
+                          ...prev.serviceDetails.cleaning,
+                          cleaningType:
+                            option.service_id as unknown as CleaningType,
+                        },
+                      }),
                       serviceOption: option.service_id,
                     },
                   }))

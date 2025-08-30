@@ -26,6 +26,7 @@ import {
   SubscriptionServiceInput,
   MealType,
   ServiceId,
+  CleaningType,
 } from "@/graphql/api";
 import {
   validateServiceConfiguration,
@@ -67,7 +68,36 @@ const CookingServiceConfiguration: React.FC<
     serviceDetails: {
       cooking: {
         mealType: MealType.Basic,
-        mealsPerDelivery: [],
+        mealsPerDelivery: [
+          {
+            day: ScheduleDays.Monday,
+            count: 1,
+          },
+          {
+            day: ScheduleDays.Tuesday,
+            count: 1,
+          },
+          {
+            day: ScheduleDays.Wednesday,
+            count: 1,
+          },
+          {
+            day: ScheduleDays.Thursday,
+            count: 1,
+          },
+          {
+            day: ScheduleDays.Friday,
+            count: 1,
+          },
+          {
+            day: ScheduleDays.Saturday,
+            count: 1,
+          },
+          {
+            day: ScheduleDays.Sunday,
+            count: 1,
+          },
+        ],
       },
       serviceOption:
         service.options?.[0]?.service_id || ServiceId.StandardCooking,
@@ -183,6 +213,7 @@ const CookingServiceConfiguration: React.FC<
           ...prev.serviceDetails,
           cooking: {
             mealType: prev.serviceDetails.cooking?.mealType || MealType.Basic,
+            // ...prev.serviceDetails.cooking,
             mealsPerDelivery: updatedMeals,
           },
         },
@@ -344,6 +375,12 @@ const CookingServiceConfiguration: React.FC<
                     ...prev,
                     serviceDetails: {
                       ...prev.serviceDetails,
+                      ...(prev.serviceDetails.cooking && {
+                        cooking: {
+                          ...prev.serviceDetails.cooking,
+                          mealType: option.service_id as unknown as MealType,
+                        },
+                      }),
                       serviceOption: option.service_id,
                     },
                   }))
@@ -363,7 +400,7 @@ const CookingServiceConfiguration: React.FC<
       )}
 
       {/* Meal Type Selection */}
-      <div className={styles.drawer__section}>
+      {/* <div className={styles.drawer__section}>
         <label
           className={`${styles.drawer__label} ${
             hasFieldError(validationErrors, "mealType")
@@ -409,7 +446,7 @@ const CookingServiceConfiguration: React.FC<
             </motion.button>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Meal Deliveries Configuration */}
       <div className={styles.drawer__section}>
