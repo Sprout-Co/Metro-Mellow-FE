@@ -24,6 +24,7 @@ import {
   SubscriptionFrequency,
   SubscriptionServiceInput,
   ServiceId,
+  LaundryType,
 } from "@/graphql/api";
 import {
   validateServiceConfiguration,
@@ -65,6 +66,17 @@ const LaundryServiceConfiguration: React.FC<
     serviceDetails: {
       serviceOption:
         service.options?.[0]?.service_id || ServiceId.StandardLaundry,
+      laundry: {
+        bags: 1,
+        laundryType: LaundryType.StandardLaundry,
+        items: {
+          shirts: 0,
+          pants: 0,
+          dresses: 0,
+          suits: 0,
+          others: 0,
+        },
+      },
     },
   });
 
@@ -169,10 +181,11 @@ const LaundryServiceConfiguration: React.FC<
   const calculatePrice = () => {
     let basePrice = service.price;
     const daysCount = configuration.scheduledDays?.length || 0;
+    const bagsCount = configuration.serviceDetails.laundry?.bags || 1;
 
     if (configuration.serviceDetails.serviceOption && service.options) {
       const selectedOption = service.options.find(
-        (opt) => opt.id === configuration.serviceDetails.serviceOption
+        (opt) => opt.service_id === configuration.serviceDetails.serviceOption
       );
       if (selectedOption) {
         basePrice += selectedOption.price;
@@ -186,7 +199,7 @@ const LaundryServiceConfiguration: React.FC<
       multiplier = 1;
     }
 
-    return Math.round(basePrice * daysCount * multiplier);
+    return Math.round(basePrice * bagsCount * daysCount * multiplier);
   };
 
   useEffect(() => {
@@ -208,7 +221,8 @@ const LaundryServiceConfiguration: React.FC<
   }, [
     configuration.scheduledDays,
     configuration.frequency,
-    configuration.serviceDetails,
+    configuration.serviceDetails.serviceOption,
+    configuration.serviceDetails.laundry?.bags,
   ]);
 
   const validateCurrentStep = () => {
@@ -282,6 +296,18 @@ const LaundryServiceConfiguration: React.FC<
                     ...prev,
                     serviceDetails: {
                       ...prev.serviceDetails,
+                      laundry: {
+                        laundryType:
+                          option.service_id as unknown as LaundryType,
+                        bags: 1,
+                        items: {
+                          shirts: 1,
+                          pants: 1,
+                          dresses: 1,
+                          suits: 1,
+                          others: 1,
+                        },
+                      },
                       serviceOption: option.service_id,
                     },
                   }))
@@ -299,6 +325,93 @@ const LaundryServiceConfiguration: React.FC<
           </div>
         </div>
       )}
+
+      {/* Laundry Bags Configuration */}
+      <div className={styles.drawer__section}>
+        <label className={styles.drawer__label}>
+          Number of Laundry Bags{" "}
+          <span className={styles.drawer__required}>*</span>
+        </label>
+        <div className={styles.drawer__bagSelector}>
+          <div className={styles.drawer__bagInputWrapper}>
+            <button
+              type="button"
+              className={styles.drawer__bagButton}
+              onClick={() =>
+                setConfiguration((prev) => ({
+                  ...prev,
+                  serviceDetails: {
+                    ...prev.serviceDetails,
+                    laundry: {
+                      ...prev.serviceDetails.laundry,
+                      bags: Math.max(
+                        1,
+                        (prev.serviceDetails.laundry?.bags || 1) - 1
+                      ),
+                      laundryType:
+                        prev.serviceDetails.laundry?.laundryType ||
+                        LaundryType.StandardLaundry,
+                      items: prev.serviceDetails.laundry?.items || {
+                        shirts: 0,
+                        pants: 0,
+                        dresses: 0,
+                        suits: 0,
+                        others: 0,
+                      },
+                    },
+                    // bags: Math.max(
+                    //   1,
+                    //   (prev.serviceDetails.laundry?.bags || 1) - 1
+                    // ),
+                  },
+                }))
+              }
+              disabled={(configuration.serviceDetails.laundry?.bags || 1) <= 1}
+            >
+              -
+            </button>
+            <span className={styles.drawer__bagCount}>
+              {configuration.serviceDetails.laundry?.bags || 1}
+            </span>
+            <button
+              type="button"
+              className={styles.drawer__bagButton}
+              onClick={() =>
+                setConfiguration((prev) => ({
+                  ...prev,
+                  serviceDetails: {
+                    ...prev.serviceDetails,
+                    laundry: {
+                      ...prev.serviceDetails.laundry,
+                      bags: Math.min(
+                        10,
+                        (prev.serviceDetails.laundry?.bags || 1) + 1
+                      ),
+                      laundryType:
+                        prev.serviceDetails.laundry?.laundryType ||
+                        LaundryType.StandardLaundry,
+                      items: prev.serviceDetails.laundry?.items || {
+                        shirts: 0,
+                        pants: 0,
+                        dresses: 0,
+                        suits: 0,
+                        others: 0,
+                      },
+                    },
+                  },
+                }))
+              }
+              disabled={(configuration.serviceDetails.laundry?.bags || 1) >= 10}
+            >
+              +
+            </button>
+          </div>
+          <div className={styles.drawer__bagInfo}>
+            <Package size={16} />
+            <span>Each bag holds approximately 8-10 items</span>
+          </div>
+        </div>
+      </div>
 
       <div className={styles.drawer__section}>
         <div className={styles.drawer__infoCard}>
@@ -446,7 +559,7 @@ const LaundryServiceConfiguration: React.FC<
 
   const renderSummaryStep = () => {
     const selectedOption = service.options?.find(
-      (opt) => opt.id === configuration.serviceDetails.serviceOption
+      (opt) => opt.service_id === configuration.serviceDetails.serviceOption
     );
 
     return (
@@ -494,6 +607,29 @@ const LaundryServiceConfiguration: React.FC<
               </div>
             </div>
           )}
+
+          <div className={styles.drawer__configCard}>
+            <div className={styles.drawer__configHeader}>
+              <div className={styles.drawer__configIcon}>
+                <Package size={18} />
+              </div>
+              <h5>Laundry Bags</h5>
+            </div>
+            <div className={styles.drawer__configContent}>
+              <h6>
+                {configuration.serviceDetails.laundry?.bags || 1} Bag
+                {(configuration.serviceDetails.laundry?.bags || 1) > 1
+                  ? "s"
+                  : ""}
+              </h6>
+              <p>
+                Approximately{" "}
+                {(configuration.serviceDetails.laundry?.bags || 1) * 8}-
+                {(configuration.serviceDetails.laundry?.bags || 1) * 10} items
+                per service
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Benefits */}

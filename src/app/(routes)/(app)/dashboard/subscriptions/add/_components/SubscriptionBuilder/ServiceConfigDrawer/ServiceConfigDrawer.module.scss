@@ -709,6 +709,78 @@
     color: color("primary", "base");
   }
 
+  // Bag Selector
+  &__bagSelector {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__bagInputWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("md");
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("xl");
+    padding: spacing("lg");
+  }
+
+  &__bagButton {
+    width: 36px;
+    height: 36px;
+    border-radius: border-radius("lg");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    @include font-size("lg");
+    @include font-weight("semibold");
+
+    &:hover:not(:disabled) {
+      background: color("primary", "dark");
+      transform: scale(1.05);
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      background: color("neutral", "medium");
+    }
+  }
+
+  &__bagCount {
+    min-width: 60px;
+    text-align: center;
+    @include font-size("xl");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    padding: spacing("sm");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+  }
+
+  &__bagInfo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+    padding: spacing("sm");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    color: color("primary", "dark");
+
+    svg {
+      color: color("primary", "base");
+    }
+  }
+
   // Footer
   &__footer {
     display: flex;
