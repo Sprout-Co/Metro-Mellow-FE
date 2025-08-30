@@ -26,8 +26,10 @@ import {
   BillingCycle,
   CreateSubscriptionInput,
   SubscriptionServiceInput,
+  Address,
 } from "@/graphql/api";
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
+import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
 import { Icon } from "@/components/ui/Icon/Icon";
 import CheckoutSummary from "./CheckoutSummary/CheckoutSummary";
 import {
@@ -36,7 +38,13 @@ import {
   validateBillingConfiguration,
   ValidationError,
 } from "./validation";
-import { ToastContainer } from "../../../../../../../../components/ui/Toast/Toast";
+import {
+  ToastContainer,
+  showToast,
+} from "../../../../../../../../components/ui/Toast/Toast";
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "@/lib/redux/slices/authSlice";
 
 export type DurationType = 1 | 2 | 3 | 6 | 12;
 
@@ -65,13 +73,26 @@ const SubscriptionBuilder: React.FC = () => {
   const [servicesLoading, setServicesLoading] = useState(false);
   const [servicesError, setServicesError] = useState<string | null>(null);
 
+  // Subscription creation state
+  const [startDate, setStartDate] = useState<Date>(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow;
+  });
+  const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
+  const [isCreatingSubscription, setIsCreatingSubscription] = useState(false);
+
   // Validation state
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>(
     []
   );
   const [showValidationErrors, setShowValidationErrors] = useState(false);
 
+  // Hooks
   const { handleGetServices } = useServiceOperations();
+  const { handleCreateSubscription } = useSubscriptionOperations();
+  const router = useRouter();
+  const currentUser = useSelector(selectCurrentUser);
 
   // Fetch services
   useEffect(() => {
@@ -97,6 +118,13 @@ const SubscriptionBuilder: React.FC = () => {
     };
     fetchServices();
   }, [handleGetServices]);
+
+  // Set default address when user data is loaded
+  useEffect(() => {
+    if (currentUser?.defaultAddress && !selectedAddress) {
+      setSelectedAddress(currentUser.defaultAddress);
+    }
+  }, [currentUser, selectedAddress]);
 
   // Handle service selection
   const handleServiceSelect = (service: Service) => {
@@ -198,6 +226,62 @@ const SubscriptionBuilder: React.FC = () => {
     }
   };
 
+  // Handle subscription creation
+  const handleCreateNewSubscription = async () => {
+    setIsCreatingSubscription(true);
+
+    try {
+      // Get the address to use (selected or default)
+      const addressToUse =
+        selectedAddress?.id || currentUser?.defaultAddress?.id;
+
+      if (!addressToUse) {
+        showToast("Please select an address for your subscription", "error");
+        setIsCreatingSubscription(false);
+        return;
+      }
+      // Prepare subscription input
+      const subscriptionInput: CreateSubscriptionInput = {
+        address: addressToUse,
+        autoRenew: true,
+        billingCycle: billingCycle,
+        duration: duration,
+        startDate: startDate.toISOString(),
+        services: configuredServices.map((cs) => ({
+          serviceId: cs.service._id,
+          category: cs.configuration.category,
+          frequency: cs.configuration.frequency,
+          price: cs.configuration.price,
+          preferredTimeSlot: cs.configuration.preferredTimeSlot,
+          scheduledDays: cs.configuration.scheduledDays,
+          serviceDetails: cs.configuration.serviceDetails,
+        })),
+      };
+      console.log(subscriptionInput, "subscriptionInput zzzz");
+      const createdSubscription =
+        await handleCreateSubscription(subscriptionInput);
+
+      if (createdSubscription) {
+        showToast("Subscription created successfully! 🎉", "success");
+
+        // Redirect to subscriptions dashboard after a brief delay
+        setTimeout(() => {
+          router.push("/dashboard/subscriptions");
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("Error creating subscription:", error);
+      showToast(
+        error instanceof Error
+          ? error.message
+          : "Failed to create subscription",
+        "error"
+      );
+    } finally {
+      setIsCreatingSubscription(false);
+    }
+  };
+
   if (servicesLoading) {
     return (
       <div className={styles.builder__loading}>
@@ -228,11 +312,13 @@ const SubscriptionBuilder: React.FC = () => {
         configuredServices={configuredServices}
         billingCycle={billingCycle}
         duration={duration}
+        startDate={startDate}
+        selectedAddress={selectedAddress}
+        onStartDateChange={setStartDate}
+        onAddressChange={setSelectedAddress}
+        isCreatingSubscription={isCreatingSubscription}
         onBack={() => setCurrentView("builder")}
-        onConfirmCheckout={() => {
-          // Handle checkout completion
-          console.log("Checkout completed");
-        }}
+        onConfirmCheckout={handleCreateNewSubscription}
       />
     );
   }

@@ -23,6 +23,7 @@ import {
   TimeSlot,
   SubscriptionFrequency,
   SubscriptionServiceInput,
+  ServiceId,
 } from "@/graphql/api";
 import {
   validateServiceConfiguration,
@@ -62,7 +63,8 @@ const LaundryServiceConfiguration: React.FC<
     price: service.price,
     category: service.category,
     serviceDetails: {
-      serviceOption: service.options?.[0]?.id || "",
+      serviceOption:
+        service.options?.[0]?.service_id || ServiceId.StandardLaundry,
     },
   });
 
@@ -270,7 +272,8 @@ const LaundryServiceConfiguration: React.FC<
               <motion.button
                 key={option.id}
                 className={`${styles.drawer__optionCard} ${
-                  configuration.serviceDetails.serviceOption === option.id
+                  configuration.serviceDetails.serviceOption ===
+                  option.service_id
                     ? styles["drawer__optionCard--active"]
                     : ""
                 }`}
@@ -279,7 +282,7 @@ const LaundryServiceConfiguration: React.FC<
                     ...prev,
                     serviceDetails: {
                       ...prev.serviceDetails,
-                      serviceOption: option.id,
+                      serviceOption: option.service_id,
                     },
                   }))
                 }

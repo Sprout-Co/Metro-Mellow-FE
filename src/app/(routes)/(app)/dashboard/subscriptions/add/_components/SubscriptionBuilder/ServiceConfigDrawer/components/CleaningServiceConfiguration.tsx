@@ -26,6 +26,7 @@ import {
   SubscriptionServiceInput,
   HouseType,
   CleaningType,
+  ServiceId,
 } from "@/graphql/api";
 import {
   validateServiceConfiguration,
@@ -80,7 +81,8 @@ const CleaningServiceConfiguration: React.FC<
           outdoor: 0,
         },
       },
-      serviceOption: service.options?.[0]?.id || "",
+      serviceOption:
+        service.options?.[0]?.service_id || ServiceId.StandardCleaning,
     },
   });
 
@@ -346,7 +348,8 @@ const CleaningServiceConfiguration: React.FC<
               <motion.button
                 key={option.id}
                 className={`${styles.drawer__optionCard} ${
-                  configuration.serviceDetails.serviceOption === option.id
+                  configuration.serviceDetails.serviceOption ===
+                  option.service_id
                     ? styles["drawer__optionCard--active"]
                     : ""
                 }`}
@@ -355,7 +358,7 @@ const CleaningServiceConfiguration: React.FC<
                     ...prev,
                     serviceDetails: {
                       ...prev.serviceDetails,
-                      serviceOption: option.id,
+                      serviceOption: option.service_id,
                     },
                   }))
                 }
@@ -567,7 +570,7 @@ const CleaningServiceConfiguration: React.FC<
 
   const renderSummaryStep = () => {
     const selectedOption = service.options?.find(
-      (opt) => opt.id === configuration.serviceDetails.serviceOption
+      (opt) => opt.service_id === configuration.serviceDetails.serviceOption
     );
     const roomCount = configuration.serviceDetails.cleaning?.rooms
       ? Object.values(configuration.serviceDetails.cleaning.rooms).reduce(

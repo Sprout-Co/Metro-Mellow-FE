@@ -25,6 +25,7 @@ import {
   SubscriptionFrequency,
   SubscriptionServiceInput,
   MealType,
+  ServiceId,
 } from "@/graphql/api";
 import {
   validateServiceConfiguration,
@@ -68,7 +69,8 @@ const CookingServiceConfiguration: React.FC<
         mealType: MealType.Basic,
         mealsPerDelivery: [],
       },
-      serviceOption: service.options?.[0]?.id || "",
+      serviceOption:
+        service.options?.[0]?.service_id || ServiceId.StandardCooking,
     },
   });
 
@@ -332,7 +334,8 @@ const CookingServiceConfiguration: React.FC<
               <motion.button
                 key={option.id}
                 className={`${styles.drawer__optionCard} ${
-                  configuration.serviceDetails.serviceOption === option.id
+                  configuration.serviceDetails.serviceOption ===
+                  option.service_id
                     ? styles["drawer__optionCard--active"]
                     : ""
                 }`}
@@ -341,7 +344,7 @@ const CookingServiceConfiguration: React.FC<
                     ...prev,
                     serviceDetails: {
                       ...prev.serviceDetails,
-                      serviceOption: option.id,
+                      serviceOption: option.service_id,
                     },
                   }))
                 }
