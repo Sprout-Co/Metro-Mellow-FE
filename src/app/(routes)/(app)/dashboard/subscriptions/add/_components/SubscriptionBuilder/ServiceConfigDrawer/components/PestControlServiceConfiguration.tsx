@@ -24,6 +24,8 @@ import {
   SubscriptionFrequency,
   SubscriptionServiceInput,
   ServiceId,
+  CleaningType,
+  TreatmentType,
 } from "@/graphql/api";
 import {
   validateServiceConfiguration,
@@ -245,6 +247,13 @@ const PestControlServiceConfiguration: React.FC<
                     ...prev,
                     serviceDetails: {
                       ...prev.serviceDetails,
+                      ...(prev.serviceDetails.pestControl && {
+                        pestControl: {
+                          ...prev.serviceDetails.pestControl,
+                          treatmentType:
+                            option.service_id as unknown as TreatmentType,
+                        },
+                      }),
                       serviceOption: option.service_id,
                     },
                   }))
