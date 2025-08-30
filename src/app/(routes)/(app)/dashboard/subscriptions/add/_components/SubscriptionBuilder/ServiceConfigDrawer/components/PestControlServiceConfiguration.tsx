@@ -26,6 +26,7 @@ import {
   ServiceId,
   CleaningType,
   TreatmentType,
+  Severity,
 } from "@/graphql/api";
 import {
   validateServiceConfiguration,
@@ -67,6 +68,11 @@ const PestControlServiceConfiguration: React.FC<
     serviceDetails: {
       serviceOption:
         service.options?.[0]?.service_id || ServiceId.PestControlResidential,
+      pestControl: {
+        treatmentType: TreatmentType.PestControlResidential,
+        areas: [],
+        severity: Severity.Medium,
+      },
     },
   });
 
@@ -271,6 +277,80 @@ const PestControlServiceConfiguration: React.FC<
           </div>
         </div>
       )}
+
+      {/* Severity Selection */}
+      <div className={styles.drawer__section}>
+        <label className={styles.drawer__label}>
+          Pest Problem Severity{" "}
+          <span className={styles.drawer__required}>*</span>
+        </label>
+        <div className={styles.drawer__severityGrid}>
+          {[
+            {
+              value: Severity.Low,
+              label: "Low",
+              description: "Minimal pest activity, preventive treatment",
+              icon: "🟢",
+              color: "success",
+            },
+            {
+              value: Severity.Medium,
+              label: "Medium",
+              description: "Moderate pest activity, regular treatment needed",
+              icon: "🟡",
+              color: "warning",
+            },
+            {
+              value: Severity.High,
+              label: "High",
+              description: "Heavy infestation, intensive treatment required",
+              icon: "🔴",
+              color: "danger",
+            },
+          ].map((severity) => (
+            <motion.button
+              key={severity.value}
+              className={`${styles.drawer__severityCard} ${
+                configuration.serviceDetails.pestControl?.severity ===
+                severity.value
+                  ? styles[`drawer__severityCard--${severity.color}`]
+                  : ""
+              }`}
+              onClick={() =>
+                setConfiguration((prev) => ({
+                  ...prev,
+                  serviceDetails: {
+                    ...prev.serviceDetails,
+                    pestControl: {
+                      ...prev.serviceDetails.pestControl!,
+                      severity: severity.value,
+                    },
+                  },
+                }))
+              }
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div className={styles.drawer__severityIcon}>{severity.icon}</div>
+              <div className={styles.drawer__severityContent}>
+                <h4>{severity.label}</h4>
+                <p>{severity.description}</p>
+              </div>
+              {configuration.serviceDetails.pestControl?.severity ===
+                severity.value && (
+                <motion.div
+                  className={styles.drawer__checkmark}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
+                  <Check size={16} />
+                </motion.div>
+              )}
+            </motion.button>
+          ))}
+        </div>
+      </div>
 
       <div className={styles.drawer__section}>
         <div className={styles.drawer__infoCard}>
@@ -518,6 +598,55 @@ const PestControlServiceConfiguration: React.FC<
                         )?.label
                       : "Not selected"}
                   </strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.drawer__configCard}>
+            <div className={styles.drawer__configHeader}>
+              <div className={styles.drawer__configIcon}>
+                <Bug size={18} />
+              </div>
+              <h5>Problem Severity</h5>
+            </div>
+            <div className={styles.drawer__configContent}>
+              <div className={styles.drawer__severitySummary}>
+                <div
+                  className={`${styles.drawer__severityIndicator} ${
+                    configuration.serviceDetails.pestControl?.severity ===
+                    Severity.Low
+                      ? styles["drawer__severityIndicator--success"]
+                      : configuration.serviceDetails.pestControl?.severity ===
+                          Severity.Medium
+                        ? styles["drawer__severityIndicator--warning"]
+                        : styles["drawer__severityIndicator--danger"]
+                  }`}
+                >
+                  {configuration.serviceDetails.pestControl?.severity ===
+                    Severity.Low && "🟢"}
+                  {configuration.serviceDetails.pestControl?.severity ===
+                    Severity.Medium && "🟡"}
+                  {configuration.serviceDetails.pestControl?.severity ===
+                    Severity.High && "🔴"}
+                </div>
+                <div className={styles.drawer__severityInfo}>
+                  <h6>
+                    {configuration.serviceDetails.pestControl?.severity ||
+                      "Medium"}{" "}
+                    Severity
+                  </h6>
+                  <p>
+                    {configuration.serviceDetails.pestControl?.severity ===
+                      Severity.Low &&
+                      "Minimal pest activity, preventive treatment"}
+                    {configuration.serviceDetails.pestControl?.severity ===
+                      Severity.Medium &&
+                      "Moderate pest activity, regular treatment needed"}
+                    {configuration.serviceDetails.pestControl?.severity ===
+                      Severity.High &&
+                      "Heavy infestation, intensive treatment required"}
+                  </p>
                 </div>
               </div>
             </div>
