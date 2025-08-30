@@ -6,24 +6,17 @@ import {
   AlertTriangle,
   PauseCircle,
   XCircle,
-  Calendar,
-  Clock,
-  User,
   Info,
   ChevronRight,
   CheckCircle,
   X,
   PlayCircle,
-  CheckCircle2,
   RefreshCw,
 } from "lucide-react";
 import styles from "./SubscriptionConfirmActionModal.module.scss";
-import { SubscriptionStatus, GetCustomerSubscriptionsQuery } from "@/graphql/api";
+import { Subscription } from "@/graphql/api";
 import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
 import Modal from "@/components/ui/Modal/Modal";
-
-// Type for GraphQL subscription data
-type Subscription = GetCustomerSubscriptionsQuery["customerSubscriptions"][0];
 
 export type SubscriptionActionType =
   | "pause"
@@ -46,19 +39,15 @@ interface ReasonOption {
   description?: string;
 }
 
-const SubscriptionConfirmActionModal: React.FC<SubscriptionConfirmActionModalProps> = ({
-  isOpen,
-  onClose,
-  subscription,
-  actionType,
-  onConfirm,
-}) => {
+const SubscriptionConfirmActionModal: React.FC<
+  SubscriptionConfirmActionModalProps
+> = ({ isOpen, onClose, subscription, actionType, onConfirm }) => {
   const [selectedReason, setSelectedReason] = useState<string>("");
-  const [customReason, setCustomReason] = useState<string>("");
+  const [cancellationReason, setCancellationReason] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const {
     handleCancelSubscription,
     handlePauseSubscription,
@@ -68,113 +57,8 @@ const SubscriptionConfirmActionModal: React.FC<SubscriptionConfirmActionModalPro
 
   if (!subscription) return null;
 
-  // Reason options based on action type
-  const getReasonOptions = (): ReasonOption[] => {
-    switch (actionType) {
-      case "cancel":
-        return [
-          {
-            id: "no_longer_needed",
-            label: "No Longer Needed",
-            description: "I don't need these services anymore",
-          },
-          {
-            id: "moving",
-            label: "Moving/Relocating",
-            description: "I'm moving to a different location",
-          },
-          {
-            id: "price_concern",
-            label: "Price Concern",
-            description: "Services are too expensive",
-          },
-          {
-            id: "service_quality",
-            label: "Service Quality Issues",
-            description: "Not satisfied with service quality",
-          },
-          {
-            id: "other",
-            label: "Other",
-            description: "Other reason not listed",
-          },
-        ];
-      case "pause":
-        return [
-          {
-            id: "vacation",
-            label: "Going on Vacation",
-            description: "Will be away temporarily",
-          },
-          {
-            id: "financial",
-            label: "Financial Reasons",
-            description: "Need to pause temporarily due to budget",
-          },
-          {
-            id: "construction",
-            label: "Home Renovation",
-            description: "Construction/renovation in progress",
-          },
-          {
-            id: "temporary_move",
-            label: "Temporary Relocation",
-            description: "Temporarily staying elsewhere",
-          },
-          {
-            id: "other",
-            label: "Other",
-            description: "Other reason not listed",
-          },
-        ];
-      case "resume":
-        return [
-          {
-            id: "ready_to_resume",
-            label: "Ready to Resume",
-            description: "I'm ready to continue with services",
-          },
-          {
-            id: "back_from_vacation",
-            label: "Back from Vacation",
-            description: "I've returned and need services again",
-          },
-          {
-            id: "other",
-            label: "Other",
-            description: "Other reason not listed",
-          },
-        ];
-      case "reactivate":
-        return [
-          {
-            id: "need_services_again",
-            label: "Need Services Again",
-            description: "I need these services back",
-          },
-          {
-            id: "moved_back",
-            label: "Moved Back",
-            description: "I've moved back and need services",
-          },
-          {
-            id: "other",
-            label: "Other",
-            description: "Other reason not listed",
-          },
-        ];
-      default:
-        return [];
-    }
-  };
-
-  const reasonOptions = getReasonOptions();
-
   // Handle confirmation
   const handleConfirm = async () => {
-    const finalReason =
-      selectedReason === "other" ? customReason : selectedReason;
-
     setIsProcessing(true);
     setError(null);
 
@@ -199,14 +83,14 @@ const SubscriptionConfirmActionModal: React.FC<SubscriptionConfirmActionModalPro
       setShowSuccess(true);
 
       if (onConfirm) {
-        onConfirm(finalReason);
+        onConfirm(cancellationReason);
       }
 
       setTimeout(() => {
         onClose();
         setShowSuccess(false);
         setSelectedReason("");
-        setCustomReason("");
+        setCancellationReason("");
       }, 2000);
     } catch (err) {
       setError(
@@ -323,7 +207,7 @@ const SubscriptionConfirmActionModal: React.FC<SubscriptionConfirmActionModalPro
   const actionDetails = getActionDetails();
 
   // Get subscription display name
-  const subscriptionName = 
+  const subscriptionName =
     subscription.subscriptionServices.length > 1
       ? `${subscription.subscriptionServices.length} Services Package`
       : subscription.subscriptionServices[0]?.service.name || "Subscription";
@@ -334,9 +218,6 @@ const SubscriptionConfirmActionModal: React.FC<SubscriptionConfirmActionModalPro
         {/* Header */}
         <div className={styles.modal__header}>
           <div className={styles.modal__iconWrapper}>{actionDetails.icon}</div>
-          <button className={styles.modal__closeBtn} onClick={onClose}>
-            <X size={20} />
-          </button>
         </div>
 
         {/* Title */}
@@ -348,13 +229,17 @@ const SubscriptionConfirmActionModal: React.FC<SubscriptionConfirmActionModalPro
         {/* Subscription Info */}
         <div className={styles.modal__subscriptionInfo}>
           <div className={styles.modal__subscriptionDetails}>
-            <h3 className={styles.modal__subscriptionName}>{subscriptionName}</h3>
+            <h3 className={styles.modal__subscriptionName}>
+              {subscriptionName}
+            </h3>
             <div className={styles.modal__subscriptionMeta}>
               <span className={styles.modal__subscriptionPrice}>
-                ₦{subscription.totalPrice.toLocaleString()} per {subscription.billingCycle.toLowerCase()}
+                ₦{subscription.totalPrice.toLocaleString()} per{" "}
+                {subscription.billingCycle.toLowerCase()}
               </span>
               <span className={styles.modal__subscriptionServices}>
-                {subscription.subscriptionServices.length} service{subscription.subscriptionServices.length > 1 ? 's' : ''}
+                {subscription.subscriptionServices.length} service
+                {subscription.subscriptionServices.length > 1 ? "s" : ""}
               </span>
             </div>
           </div>
@@ -362,66 +247,24 @@ const SubscriptionConfirmActionModal: React.FC<SubscriptionConfirmActionModalPro
 
         {/* Reason Selection */}
         <div className={styles.modal__reasonSection}>
-          {reasonOptions.length > 0 && (
-            <>
-              <h3 className={styles.modal__sectionTitle}>
-                Please select a reason {actionDetails.reasonText}
-              </h3>
-              <div className={styles.modal__reasons}>
-                {reasonOptions.map((option) => (
-                  <motion.label
-                    key={option.id}
-                    className={`${styles.modal__reasonOption} ${
-                      selectedReason === option.description
-                        ? styles["modal__reasonOption--selected"]
-                        : ""
-                    }`}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <input
-                      type="radio"
-                      name="reason"
-                      value={option.description}
-                      checked={selectedReason === option.description}
-                      onChange={(e) => setSelectedReason(e.target.value)}
-                      className={styles.modal__reasonRadio}
-                    />
-                    <div className={styles.modal__reasonContent}>
-                      <span className={styles.modal__reasonLabel}>
-                        {option.label}
-                      </span>
-                      {option.description && (
-                        <span className={styles.modal__reasonDescription}>
-                          {option.description}
-                        </span>
-                      )}
-                    </div>
-                    <ChevronRight size={16} className={styles.modal__reasonArrow} />
-                  </motion.label>
-                ))}
-              </div>
-
-              {/* Custom Reason Input */}
-              {selectedReason === "Other reason not listed" && (
-                <motion.div
-                  className={styles.modal__customReason}
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <textarea
-                    placeholder="Please provide more details..."
-                    value={customReason}
-                    onChange={(e) => setCustomReason(e.target.value)}
-                    className={styles.modal__textarea}
-                    rows={3}
-                  />
-                </motion.div>
-              )}
-            </>
-          )}
+          <h3 className={styles.modal__sectionTitle}>
+            Please provide a reason for {actionDetails.reasonText} (optional)
+          </h3>
+          <motion.div
+            className={styles.modal__customReason}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <textarea
+              placeholder="Please provide more details..."
+              value={cancellationReason}
+              onChange={(e) => setCancellationReason(e.target.value)}
+              className={styles.modal__textarea}
+              rows={3}
+            />
+          </motion.div>
         </div>
 
         {/* Warning Box */}
@@ -487,25 +330,8 @@ const SubscriptionConfirmActionModal: React.FC<SubscriptionConfirmActionModalPro
           <motion.button
             className={`${styles.modal__button} ${styles["modal__button--danger"]}`}
             onClick={handleConfirm}
-            disabled={
-              isProcessing ||
-              (reasonOptions.length > 0 && 
-                (!selectedReason || (selectedReason === "Other reason not listed" && !customReason.trim())))
-            }
-            whileHover={
-              !isProcessing && 
-              (reasonOptions.length === 0 || selectedReason) && 
-              (selectedReason !== "Other reason not listed" || customReason.trim())
-                ? { scale: 1.02 }
-                : {}
-            }
-            whileTap={
-              !isProcessing && 
-              (reasonOptions.length === 0 || selectedReason) && 
-              (selectedReason !== "Other reason not listed" || customReason.trim())
-                ? { scale: 0.98 }
-                : {}
-            }
+            whileHover={!isProcessing ? { scale: 1.02 } : {}}
+            whileTap={!isProcessing ? { scale: 0.98 } : {}}
           >
             {isProcessing ? "Processing..." : actionDetails.buttonText}
           </motion.button>

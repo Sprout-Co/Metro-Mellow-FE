@@ -410,26 +410,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
         </div>
       </div>
 
-      <div className={styles.modal__footer}>
-        {renderFooterButtons()}
-        {/* {booking.status === BookingStatus.Paused ||
-        booking.status === BookingStatus.Confirmed ? (
-      
-        ) : booking.status === BookingStatus.Completed ? (
- 
-        ) : booking.status === BookingStatus.Pending ? (
-   
-        ) : (
-          <motion.button
-            className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
-            onClick={onClose}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            Close
-          </motion.button>
-        )} */}
-      </div>
+      <div className={styles.modal__footer}>{renderFooterButtons()}</div>
 
       <RescheduleModal
         isOpen={isRescheduleModalOpen}
