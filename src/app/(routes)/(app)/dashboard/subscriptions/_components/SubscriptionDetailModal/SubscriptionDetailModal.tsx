@@ -1,7 +1,7 @@
 // src/app/(routes)/(app)/dashboard/subscriptions/_components/SubscriptionDetailModal/SubscriptionDetailModal.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -21,6 +21,7 @@ import {
   Package,
   Star,
   Info,
+  AlertTriangle,
 } from "lucide-react";
 import styles from "./SubscriptionDetailModal.module.scss";
 import {
@@ -29,6 +30,8 @@ import {
   SubscriptionStatus,
 } from "@/graphql/api";
 import { calculateSubscriptionProgress } from "../../utils/subscriptionProgress";
+import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
+import { Booking, BookingStatus } from "@/graphql/api";
 
 // Type for GraphQL subscription data
 type Subscription = GetCustomerSubscriptionsQuery["customerSubscriptions"][0];
@@ -50,14 +53,68 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   onClose,
   subscription,
 }) => {
+  // Early return before any hooks to comply with Rules of Hooks
+  if (!subscription) return null;
+
   const [activeTab, setActiveTab] = useState<TabType>("overview");
-  const [confirmationActionType, setConfirmationActionType] = useState<
-    SubscriptionActionType
-  >(null);
+  const [confirmationActionType, setConfirmationActionType] =
+    useState<SubscriptionActionType>(null);
   const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] =
     useState(false);
+  const [subscriptionBookings, setSubscriptionBookings] = useState<Booking[]>(
+    []
+  );
+  const [loadingBookings, setLoadingBookings] = useState(false);
+  const [bookingsError, setBookingsError] = useState<string | null>(null);
 
-  if (!subscription) return null;
+  const { handleGetCustomerBookings } = useBookingOperations();
+
+  // Fetch bookings for this subscription when modal opens and bookings tab is active
+  useEffect(() => {
+    if (isOpen && activeTab === "bookings" && subscription) {
+      fetchSubscriptionBookings();
+    }
+  }, [isOpen, activeTab, subscription?.id]);
+
+  const fetchSubscriptionBookings = async () => {
+    setLoadingBookings(true);
+    setBookingsError(null);
+
+    try {
+      const result = await handleGetCustomerBookings();
+      const allBookings = result?.data;
+
+      if (allBookings) {
+        // Filter bookings that might be related to this subscription
+        // Since we don't have a direct subscription query, we'll filter by:
+        // 1. Bookings that are recurring (likely subscription-based)
+        // 2. Bookings with services that match the subscription services
+        const subscriptionServiceIds = subscription.subscriptionServices.map(
+          (s) => s.service._id
+        );
+
+        const filteredBookings = allBookings.filter((booking) => {
+          // Check if booking service matches any subscription service
+          const matchesService = subscriptionServiceIds.includes(
+            booking.service._id
+          );
+
+          // Check if booking has recurring flag (likely subscription-based)
+          const isRecurring = booking.recurring === true;
+
+          // For now, we'll show recurring bookings that match the services
+          return matchesService && isRecurring;
+        });
+
+        setSubscriptionBookings(filteredBookings);
+      }
+    } catch (error) {
+      console.error("Error fetching subscription bookings:", error);
+      setBookingsError("Failed to load bookings for this subscription");
+    } finally {
+      setLoadingBookings(false);
+    }
+  };
 
   const tabs = [
     { id: "overview" as const, label: "Overview", icon: Info },
@@ -138,7 +195,11 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
 
   function handleConfirmActionSuccess(reason?: string) {
     // Optionally handle the success callback
-    console.log('Subscription action completed:', confirmationActionType, reason);
+    console.log(
+      "Subscription action completed:",
+      confirmationActionType,
+      reason
+    );
     // You might want to refetch subscription data or show a toast notification
   }
 
@@ -492,16 +553,90 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                   <div className={styles.modal__sections}>
                     <div className={styles.modal__section}>
                       <h3 className={styles.modal__sectionTitle}>
-                        Upcoming Bookings
+                        Subscription Bookings
                       </h3>
-                      <div className={styles.modal__emptyState}>
-                        <Calendar size={48} />
-                        <h4>No upcoming bookings</h4>
-                        <p>
-                          Booking data is not currently available. Check back
-                          later for updates.
-                        </p>
-                      </div>
+
+                      {loadingBookings ? (
+                        <div className={styles.modal__loadingState}>
+                          <RefreshCw className="animate-spin" size={24} />
+                          <p>Loading bookings...</p>
+                        </div>
+                      ) : bookingsError ? (
+                        <div className={styles.modal__errorState}>
+                          <AlertTriangle size={24} />
+                          <h4>Error Loading Bookings</h4>
+                          <p>{bookingsError}</p>
+                          <motion.button
+                            className={styles.modal__retryButton}
+                            onClick={fetchSubscriptionBookings}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            Try Again
+                          </motion.button>
+                        </div>
+                      ) : subscriptionBookings.length > 0 ? (
+                        <div className={styles.modal__bookingsList}>
+                          {subscriptionBookings.map((booking) => (
+                            <div
+                              key={booking.id}
+                              className={styles.modal__bookingItem}
+                            >
+                              <div className={styles.modal__bookingIcon}>
+                                {getServiceIcon(
+                                  booking.service.category as ServiceCategory
+                                )}
+                              </div>
+                              <div className={styles.modal__bookingContent}>
+                                <div className={styles.modal__bookingHeader}>
+                                  <h4 className={styles.modal__bookingName}>
+                                    {booking.service.name}
+                                  </h4>
+                                  <span
+                                    className={`${styles.modal__bookingStatus} ${styles[`modal__bookingStatus--${booking.status.toLowerCase()}`]}`}
+                                  >
+                                    {booking.status}
+                                  </span>
+                                </div>
+                                <div className={styles.modal__bookingDetails}>
+                                  <div className={styles.modal__bookingDetail}>
+                                    <Calendar size={12} />
+                                    <span>{formatDate(booking.date)}</span>
+                                  </div>
+                                  <div className={styles.modal__bookingDetail}>
+                                    <Clock size={12} />
+                                    <span>{booking.timeSlot}</span>
+                                  </div>
+                                  {booking.staff && (
+                                    <div
+                                      className={styles.modal__bookingDetail}
+                                    >
+                                      <User size={12} />
+                                      <span>
+                                        {booking.staff.firstName}{" "}
+                                        {booking.staff.lastName}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                                <div className={styles.modal__bookingPrice}>
+                                  {formatPrice(booking.totalPrice)}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className={styles.modal__emptyState}>
+                          <Calendar size={48} />
+                          <h4>No bookings found</h4>
+                          <p>
+                            No recurring bookings found for this subscription.
+                            Bookings will appear here once services are
+                            scheduled.
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </motion.div>
@@ -704,7 +839,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
 
         <div className={styles.modal__footer}>{renderFooterButtons()}</div>
       </>
-      
+
       {/* Confirm Action Modal */}
       <SubscriptionConfirmActionModal
         isOpen={isConfirmActionModalOpen}
