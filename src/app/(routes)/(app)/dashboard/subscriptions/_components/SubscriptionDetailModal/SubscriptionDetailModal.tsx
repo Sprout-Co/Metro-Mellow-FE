@@ -66,12 +66,14 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   const [subscriptionBookings, setSubscriptionBookings] = useState<Booking[]>(
     []
   );
-  const [allSubscriptionBookings, setAllSubscriptionBookings] = useState<Booking[]>(
-    []
-  );
+  const [allSubscriptionBookings, setAllSubscriptionBookings] = useState<
+    Booking[]
+  >([]);
   const [loadingBookings, setLoadingBookings] = useState(false);
   const [bookingsError, setBookingsError] = useState<string | null>(null);
-  const [selectedBookingStatus, setSelectedBookingStatus] = useState<BookingStatus | 'all'>('all');
+  const [selectedBookingStatus, setSelectedBookingStatus] = useState<
+    BookingStatus | "all"
+  >("all");
 
   const { handleGetCustomerBookings } = useBookingOperations();
 
@@ -84,7 +86,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
 
   // Filter bookings when status filter changes
   useEffect(() => {
-    if (selectedBookingStatus === 'all') {
+    if (selectedBookingStatus === "all") {
       setSubscriptionBookings(allSubscriptionBookings);
     } else {
       const filteredByStatus = allSubscriptionBookings.filter(
@@ -95,9 +97,11 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   }, [selectedBookingStatus, allSubscriptionBookings]);
 
   // Helper function to get booking count by status
-  const getBookingCountByStatus = (status: BookingStatus | 'all'): number => {
-    if (status === 'all') return allSubscriptionBookings.length;
-    return allSubscriptionBookings.filter(booking => booking.status === status).length;
+  const getBookingCountByStatus = (status: BookingStatus | "all"): number => {
+    if (status === "all") return allSubscriptionBookings.length;
+    return allSubscriptionBookings.filter(
+      (booking) => booking.status === status
+    ).length;
   };
 
   // Helper function to format status names
@@ -113,8 +117,8 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
         return "Completed";
       case BookingStatus.Cancelled:
         return "Cancelled";
-      case BookingStatus.Rescheduled:
-        return "Rescheduled";
+      case BookingStatus.Paused:
+        return "Paused";
       default:
         return status;
     }
@@ -605,16 +609,46 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                           <Filter size={16} />
                           <select
                             value={selectedBookingStatus}
-                            onChange={(e) => setSelectedBookingStatus(e.target.value as BookingStatus | 'all')}
+                            onChange={(e) =>
+                              setSelectedBookingStatus(
+                                e.target.value as BookingStatus | "all"
+                              )
+                            }
                             className={styles.modal__statusFilter}
                           >
-                            <option value="all">All Status ({getBookingCountByStatus('all')})</option>
-                            <option value={BookingStatus.Pending}>{formatStatusName(BookingStatus.Pending)} ({getBookingCountByStatus(BookingStatus.Pending)})</option>
-                            <option value={BookingStatus.Confirmed}>{formatStatusName(BookingStatus.Confirmed)} ({getBookingCountByStatus(BookingStatus.Confirmed)})</option>
-                            <option value={BookingStatus.InProgress}>{formatStatusName(BookingStatus.InProgress)} ({getBookingCountByStatus(BookingStatus.InProgress)})</option>
-                            <option value={BookingStatus.Completed}>{formatStatusName(BookingStatus.Completed)} ({getBookingCountByStatus(BookingStatus.Completed)})</option>
-                            <option value={BookingStatus.Cancelled}>{formatStatusName(BookingStatus.Cancelled)} ({getBookingCountByStatus(BookingStatus.Cancelled)})</option>
-                            <option value={BookingStatus.Rescheduled}>{formatStatusName(BookingStatus.Rescheduled)} ({getBookingCountByStatus(BookingStatus.Rescheduled)})</option>
+                            <option value="all">
+                              All Status ({getBookingCountByStatus("all")})
+                            </option>
+                            <option value={BookingStatus.Pending}>
+                              {formatStatusName(BookingStatus.Pending)} (
+                              {getBookingCountByStatus(BookingStatus.Pending)})
+                            </option>
+                            <option value={BookingStatus.Confirmed}>
+                              {formatStatusName(BookingStatus.Confirmed)} (
+                              {getBookingCountByStatus(BookingStatus.Confirmed)}
+                              )
+                            </option>
+                            <option value={BookingStatus.InProgress}>
+                              {formatStatusName(BookingStatus.InProgress)} (
+                              {getBookingCountByStatus(
+                                BookingStatus.InProgress
+                              )}
+                              )
+                            </option>
+                            <option value={BookingStatus.Completed}>
+                              {formatStatusName(BookingStatus.Completed)} (
+                              {getBookingCountByStatus(BookingStatus.Completed)}
+                              )
+                            </option>
+                            <option value={BookingStatus.Cancelled}>
+                              {formatStatusName(BookingStatus.Cancelled)} (
+                              {getBookingCountByStatus(BookingStatus.Cancelled)}
+                              )
+                            </option>
+                            <option value={BookingStatus.Paused}>
+                              {formatStatusName(BookingStatus.Paused)} (
+                              {getBookingCountByStatus(BookingStatus.Paused)})
+                            </option>
                           </select>
                           <ChevronDown size={14} />
                         </div>

@@ -41,12 +41,18 @@ const ServiceSelector: React.FC<ServiceSelectorProps> = ({
   currentBillingCycle,
 }) => {
   // Determine if a service should be disabled based on current billing cycle
-  const isServiceDisabled = (service: Service): { disabled: boolean; reason?: string } => {
+  const isServiceDisabled = (
+    service: Service
+  ): { disabled: boolean; reason?: string } => {
     // If quarterly billing is selected, only allow pest control services
-    if (currentBillingCycle === "QUARTERLY" && service.category !== ServiceCategory.PestControl) {
-      return { 
-        disabled: true, 
-        reason: "Quarterly billing is only available for pest control services. Switch to monthly billing to add other services." 
+    if (
+      currentBillingCycle === "QUARTERLY" &&
+      service.category !== ServiceCategory.PestControl
+    ) {
+      return {
+        disabled: true,
+        reason:
+          "Quarterly billing is only available for pest control services. Switch to monthly billing to add other services.",
       };
     }
 

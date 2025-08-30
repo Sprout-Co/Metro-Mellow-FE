@@ -88,9 +88,8 @@
     display: grid;
     grid-template-columns: 1fr 400px;
     gap: spacing("2xl");
-    padding-top: spacing("3xl");
-    padding-bottom: spacing("4xl");
     align-items: start;
+    padding: spacing("3xl") 0 spacing("4xl") 0;
 
     @include breakpoint-down("lg") {
       grid-template-columns: 1fr;
