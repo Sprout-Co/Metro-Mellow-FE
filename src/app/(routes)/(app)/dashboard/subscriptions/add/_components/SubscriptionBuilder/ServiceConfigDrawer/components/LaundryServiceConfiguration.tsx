@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -59,7 +59,7 @@ const LaundryServiceConfiguration: React.FC<
   const [configuration, setConfiguration] = useState<SubscriptionServiceInput>({
     serviceId: service._id,
     frequency: SubscriptionFrequency.Weekly,
-    scheduledDays: [],
+    scheduledDays: [ScheduleDays.Monday],
     preferredTimeSlot: TimeSlot.Morning,
     price: service.price,
     category: service.category,
@@ -178,19 +178,15 @@ const LaundryServiceConfiguration: React.FC<
     });
   };
 
-  const calculatePrice = () => {
-    let basePrice = service.price;
+  const calculatePrice = useMemo(() => {
+    const selectedOption = configuration.serviceDetails.serviceOption;
+    let totalPrice =
+      service.options?.find((opt) => opt.service_id === selectedOption)
+        ?.price || 0;
     const daysCount = configuration.scheduledDays?.length || 0;
     const bagsCount = configuration.serviceDetails.laundry?.bags || 1;
 
-    if (configuration.serviceDetails.serviceOption && service.options) {
-      const selectedOption = service.options.find(
-        (opt) => opt.service_id === configuration.serviceDetails.serviceOption
-      );
-      if (selectedOption) {
-        basePrice += selectedOption.price;
-      }
-    }
+    totalPrice *= bagsCount;
 
     let multiplier = 4;
     if (configuration.frequency === SubscriptionFrequency.BiWeekly) {
@@ -199,8 +195,8 @@ const LaundryServiceConfiguration: React.FC<
       multiplier = 1;
     }
 
-    return Math.round(basePrice * bagsCount * daysCount * multiplier);
-  };
+    return totalPrice * daysCount * multiplier;
+  }, [configuration, service]);
 
   useEffect(() => {
     setConfiguration((prev) => {
@@ -216,14 +212,8 @@ const LaundryServiceConfiguration: React.FC<
   }, [configuration.frequency]);
 
   useEffect(() => {
-    const price = calculatePrice();
-    setConfiguration((prev) => ({ ...prev, price }));
-  }, [
-    configuration.scheduledDays,
-    configuration.frequency,
-    configuration.serviceDetails.serviceOption,
-    configuration.serviceDetails.laundry?.bags,
-  ]);
+    setConfiguration((prev) => ({ ...prev, price: calculatePrice }));
+  }, [calculatePrice]);
 
   const validateCurrentStep = () => {
     const validation = validateServiceConfiguration(configuration, service);
@@ -585,7 +575,7 @@ const LaundryServiceConfiguration: React.FC<
             </div>
             <div className={styles.drawer__servicePriceCard}>
               <span>Monthly Rate</span>
-              <strong>₦{calculatePrice().toLocaleString()}</strong>
+              <strong>₦{calculatePrice.toLocaleString()}</strong>
               <small>All inclusive</small>
             </div>
           </div>
@@ -721,7 +711,7 @@ const LaundryServiceConfiguration: React.FC<
         <div className={styles.drawer__footer}>
           <div className={styles.drawer__footerPrice}>
             <span>Estimated Monthly</span>
-            <strong>₦{calculatePrice().toLocaleString()}</strong>
+            <strong>₦{calculatePrice.toLocaleString()}</strong>
           </div>
           <div className={styles.drawer__footerActions}>
             <button

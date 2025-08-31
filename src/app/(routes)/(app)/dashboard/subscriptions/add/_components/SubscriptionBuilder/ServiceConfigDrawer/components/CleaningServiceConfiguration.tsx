@@ -222,18 +222,9 @@ const CleaningServiceConfiguration: React.FC<
   const calculatePrice = useMemo(() => {
     const selectedOption = configuration.serviceDetails.serviceOption;
     let totalPrice = 0 || service.price;
-    // service.options?.find(
-    //   (opt) => opt.service_id === selectedOption
-    // )?.price || service.price;
-    let basePrice = 0;
     const daysCount = configuration.scheduledDays?.length || 0;
     const roomQuantities = configuration.serviceDetails.cleaning?.rooms;
     const propertyType = configuration.serviceDetails.cleaning?.houseType;
-
-    // const roomCount = Object.values(
-    //   configuration.serviceDetails.cleaning?.rooms || {}
-    // ).reduce((sum, count) => sum + (count || 0), 0);
-
     // Calculate total price based on room prices and number of days
     const roomPrices = service.roomPrices || {};
 
@@ -265,7 +256,7 @@ const CleaningServiceConfiguration: React.FC<
         break;
     }
 
-    totalPrice = roomTotal * cleaningTypeMultiplier; //* daysCount;
+    totalPrice = roomTotal * cleaningTypeMultiplier;
     if (propertyType === HouseType.Duplex) {
       totalPrice *= 1.5;
     }

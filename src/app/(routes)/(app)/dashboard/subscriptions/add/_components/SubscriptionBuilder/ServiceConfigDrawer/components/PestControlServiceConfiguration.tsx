@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -156,31 +156,53 @@ const PestControlServiceConfiguration: React.FC<
     });
   };
 
-  const calculatePrice = () => {
-    let basePrice = service.price;
+  const calculatePrice = useMemo(() => {
+    const selectedOption = configuration.serviceDetails.serviceOption;
+    let totalPrice = 0 || service.price;
+    let basePrice = 0;
     const daysCount = configuration.scheduledDays?.length || 0;
+    const severity = configuration.serviceDetails.pestControl?.severity || Severity.Medium;
 
-    if (configuration.serviceDetails.serviceOption && service.options) {
-      const selectedOption = service.options.find(
-        (opt) => opt.id === configuration.serviceDetails.serviceOption
-      );
-      if (selectedOption) {
-        basePrice += selectedOption.price;
-      }
+    let treatmentTypeMultiplier = 1;
+
+    switch (selectedOption) {
+      case ServiceId.PestControlResidential:
+        treatmentTypeMultiplier = 1;
+        break;
+      case ServiceId.PestControlCommercial:
+        treatmentTypeMultiplier = 2;
+        break;
+      case ServiceId.TermiteControl:
+        treatmentTypeMultiplier = 3;
+        break;
+      default:
+        break;
     }
 
+    let severityMultiplier = 1;
+    switch (severity) {
+      case Severity.Low:
+        severityMultiplier = 0.8;
+        break;
+      case Severity.Medium:
+        severityMultiplier = 1;
+        break;
+      case Severity.High:
+        severityMultiplier = 1.5;
+        break;
+      default:
+        break;
+    }
+
+    totalPrice = service.price * treatmentTypeMultiplier * severityMultiplier;
+
     // Monthly frequency (multiplier = 1)
-    return Math.round(basePrice * daysCount * 1);
-  };
+    return totalPrice * daysCount * 1;
+  }, [configuration, service]);
 
   useEffect(() => {
-    const price = calculatePrice();
-    setConfiguration((prev) => ({ ...prev, price }));
-  }, [
-    configuration.scheduledDays,
-    configuration.frequency,
-    configuration.serviceDetails,
-  ]);
+    setConfiguration((prev) => ({ ...prev, price: calculatePrice }));
+  }, [calculatePrice]);
 
   const validateCurrentStep = () => {
     const validation = validateServiceConfiguration(configuration, service);
@@ -553,7 +575,7 @@ const PestControlServiceConfiguration: React.FC<
             </div>
             <div className={styles.drawer__servicePriceCard}>
               <span>Monthly Rate</span>
-              <strong>₦{calculatePrice().toLocaleString()}</strong>
+              <strong>₦{calculatePrice.toLocaleString()}</strong>
               <small>All inclusive</small>
             </div>
           </div>

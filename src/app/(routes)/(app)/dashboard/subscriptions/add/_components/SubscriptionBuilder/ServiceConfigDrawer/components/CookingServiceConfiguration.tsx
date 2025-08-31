@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -254,18 +254,33 @@ const CookingServiceConfiguration: React.FC<
     });
   };
 
-  const calculatePrice = () => {
-    let basePrice = service.price;
+  const calculatePrice = useMemo(() => {
+    const selectedOption = configuration.serviceDetails.serviceOption;
+    let totalPrice = 0 || service.price;
+    let basePrice = 0;
     const daysCount = configuration.scheduledDays?.length || 0;
+    const totalMeals = configuration.serviceDetails.cooking?.mealsPerDelivery?.reduce(
+      (sum, delivery) => sum + delivery.count,
+      0
+    ) || 0;
 
-    if (configuration.serviceDetails.serviceOption && service.options) {
-      const selectedOption = service.options.find(
-        (opt) => opt.id === configuration.serviceDetails.serviceOption
-      );
-      if (selectedOption) {
-        basePrice += selectedOption.price;
-      }
+    let mealTypeMultiplier = 1;
+
+    switch (selectedOption) {
+      case ServiceId.StandardCooking:
+        mealTypeMultiplier = 1;
+        break;
+      case ServiceId.PremiumCooking:
+        mealTypeMultiplier = 1.5;
+        break;
+      case ServiceId.GourmetCooking:
+        mealTypeMultiplier = 2.5;
+        break;
+      default:
+        break;
     }
+
+    totalPrice = service.price * totalMeals * mealTypeMultiplier;
 
     let multiplier = 4;
     if (configuration.frequency === SubscriptionFrequency.BiWeekly) {
@@ -274,8 +289,8 @@ const CookingServiceConfiguration: React.FC<
       multiplier = 1;
     }
 
-    return Math.round(basePrice * daysCount * multiplier);
-  };
+    return totalPrice * daysCount * multiplier;
+  }, [configuration, service]);
 
   useEffect(() => {
     setConfiguration((prev) => {
@@ -291,13 +306,8 @@ const CookingServiceConfiguration: React.FC<
   }, [configuration.frequency]);
 
   useEffect(() => {
-    const price = calculatePrice();
-    setConfiguration((prev) => ({ ...prev, price }));
-  }, [
-    configuration.scheduledDays,
-    configuration.frequency,
-    configuration.serviceDetails,
-  ]);
+    setConfiguration((prev) => ({ ...prev, price: calculatePrice }));
+  }, [calculatePrice]);
 
   const validateCurrentStep = () => {
     const validation = validateServiceConfiguration(configuration, service);
@@ -651,7 +661,7 @@ const CookingServiceConfiguration: React.FC<
             </div>
             <div className={styles.drawer__servicePriceCard}>
               <span>Monthly Rate</span>
-              <strong>₦{calculatePrice().toLocaleString()}</strong>
+              <strong>₦{calculatePrice.toLocaleString()}</strong>
               <small>All inclusive</small>
             </div>
           </div>
