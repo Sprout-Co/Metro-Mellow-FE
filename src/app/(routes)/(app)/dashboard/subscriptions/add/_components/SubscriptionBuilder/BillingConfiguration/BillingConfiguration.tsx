@@ -36,7 +36,7 @@ const BillingConfiguration: React.FC<BillingConfigurationProps> = ({
   const hasPestControl = configuredServices.some(
     (cs) => cs.service.category === ServiceCategory.PestControl
   );
-  
+
   const hasNonPestControlServices = configuredServices.some(
     (cs) => cs.service.category !== ServiceCategory.PestControl
   );
@@ -62,11 +62,19 @@ const BillingConfiguration: React.FC<BillingConfigurationProps> = ({
   React.useEffect(() => {
     if (configuredServices.length > 0) {
       // If non-pest control services are added and quarterly is selected, switch to monthly
-      if (hasNonPestControlServices && billingCycle === BillingCycle.Quarterly) {
+      if (
+        hasNonPestControlServices &&
+        billingCycle === BillingCycle.Quarterly
+      ) {
         setBillingCycle(BillingCycle.Monthly);
       }
     }
-  }, [configuredServices, hasNonPestControlServices, billingCycle, setBillingCycle]);
+  }, [
+    configuredServices,
+    hasNonPestControlServices,
+    billingCycle,
+    setBillingCycle,
+  ]);
 
   return (
     <div className={styles.config}>
@@ -78,77 +86,80 @@ const BillingConfiguration: React.FC<BillingConfigurationProps> = ({
             Select services to see available billing options
           </p>
         )}
-        
-        
+
         {configuredServices.length > 0 && (
           <div>
-            {billingCycle === BillingCycle.Quarterly && hasNonPestControlServices && (
-              <div className={styles.config__warning}>
-                <p>⚠️ Quarterly billing is only available for pest control services. Other services have been restricted.</p>
-              </div>
-            )}
+            {billingCycle === BillingCycle.Quarterly &&
+              hasNonPestControlServices && (
+                <div className={styles.config__warning}>
+                  <p>
+                    ⚠️ Quarterly billing is only available for pest control
+                    services. Other services have been restricted.
+                  </p>
+                </div>
+              )}
             <div className={styles.config__cycleOptions}>
-            {allowMonthly && (
-              <motion.button
-                className={`${styles.config__cycleOption} ${
-                  billingCycle === BillingCycle.Monthly
-                    ? styles["config__cycleOption--active"]
-                    : ""
-                }`}
-                onClick={() => setBillingCycle(BillingCycle.Monthly)}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Calendar size={20} />
-                <div>
-                  <strong>Monthly</strong>
-                  <span>Billed every month</span>
-                  <small>Available for all service types</small>
-                </div>
-                {billingCycle === BillingCycle.Monthly && (
-                  <motion.div
-                    className={styles.config__checkmark}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 500 }}
-                  />
-                )}
-              </motion.button>
-            )}
+              {allowMonthly && (
+                <motion.button
+                  className={`${styles.config__cycleOption} ${
+                    billingCycle === BillingCycle.Monthly
+                      ? styles["config__cycleOption--active"]
+                      : ""
+                  }`}
+                  onClick={() => setBillingCycle(BillingCycle.Monthly)}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Calendar size={20} />
+                  <div>
+                    <strong>Monthly</strong>
+                    <span>Billed every month</span>
+                    <small>Available for all service types</small>
+                  </div>
+                  {billingCycle === BillingCycle.Monthly && (
+                    <motion.div
+                      className={styles.config__checkmark}
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 500 }}
+                    />
+                  )}
+                </motion.button>
+              )}
 
-            {allowQuarterly && (
-              <motion.button
-                className={`${styles.config__cycleOption} ${
-                  billingCycle === BillingCycle.Quarterly
-                    ? styles["config__cycleOption--active"]
-                    : ""
-                }`}
-                onClick={() => setBillingCycle(BillingCycle.Quarterly)}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <TrendingUp size={20} />
-                <div>
-                  <strong>Quarterly</strong>
-                  <span>Billed every 3 months</span>
-                  <small>Only for pest control services</small>
+              {allowQuarterly && (
+                <motion.button
+                  className={`${styles.config__cycleOption} ${
+                    billingCycle === BillingCycle.Quarterly
+                      ? styles["config__cycleOption--active"]
+                      : ""
+                  }`}
+                  onClick={() => setBillingCycle(BillingCycle.Quarterly)}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <TrendingUp size={20} />
+                  <div>
+                    <strong>Quarterly</strong>
+                    <span>Billed every 3 months</span>
+                    <small>Only for pest control services</small>
+                  </div>
+                  {billingCycle === BillingCycle.Quarterly && (
+                    <motion.div
+                      className={styles.config__checkmark}
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 500 }}
+                    />
+                  )}
+                </motion.button>
+              )}
+
+              {!allowMonthly && !allowQuarterly && (
+                <div className={styles.config__noBillingOptions}>
+                  <p>No billing options available for selected services</p>
                 </div>
-                {billingCycle === BillingCycle.Quarterly && (
-                  <motion.div
-                    className={styles.config__checkmark}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 500 }}
-                  />
-                )}
-              </motion.button>
-            )}
-            
-            {!allowMonthly && !allowQuarterly && (
-              <div className={styles.config__noBillingOptions}>
-                <p>No billing options available for selected services</p>
-              </div>
-            )}
+              )}
             </div>
           </div>
         )}
@@ -167,7 +178,7 @@ const BillingConfiguration: React.FC<BillingConfigurationProps> = ({
                 key={dur}
                 className={`${styles.config__durationCard} ${
                   duration === dur ? styles["config__durationCard--active"] : ""
-                } ${isPopular ? styles["config__durationCard--popular"] : ""}`}
+                } `}
                 onClick={() => setDuration(dur)}
                 whileHover={{ y: -4 }}
                 whileTap={{ scale: 0.98 }}

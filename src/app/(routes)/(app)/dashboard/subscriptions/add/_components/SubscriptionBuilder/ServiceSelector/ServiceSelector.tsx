@@ -124,9 +124,7 @@ const ServiceSelector: React.FC<ServiceSelectorProps> = ({
           return (
             <motion.div
               key={service._id}
-              className={`${styles.selector__card} ${
-                styles[`selector__card--${colorClass}`]
-              } ${configured ? styles["selector__card--configured"] : ""} ${
+              className={`${styles.selector__card} ${configured ? styles["selector__card--configured"] : ""} ${
                 disabled ? styles["selector__card--disabled"] : ""
               }`}
               initial={{ opacity: 0, y: 20 }}

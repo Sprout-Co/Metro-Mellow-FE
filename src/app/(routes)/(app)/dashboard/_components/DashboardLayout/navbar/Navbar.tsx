@@ -106,7 +106,7 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
           </motion.div>
 
           {/* Cart */}
-          <motion.div className={styles.navbar__iconButton}>
+          {/* <motion.div className={styles.navbar__iconButton}>
             <div
               className={styles.navbar__cartContainer}
               onClick={() => openCartModal()}
@@ -114,7 +114,7 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
               <CartIcon />
               <div className={styles.navbar__cartBadge}>0</div>
             </div>
-          </motion.div>
+          </motion.div> */}
 
           {/* User Profile */}
           <motion.div className={styles.navbar__profile}>
