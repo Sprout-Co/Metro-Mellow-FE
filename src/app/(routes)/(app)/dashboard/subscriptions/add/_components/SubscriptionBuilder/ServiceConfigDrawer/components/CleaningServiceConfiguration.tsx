@@ -61,7 +61,7 @@ const CleaningServiceConfiguration: React.FC<
   const [configuration, setConfiguration] = useState<SubscriptionServiceInput>({
     serviceId: service._id,
     frequency: SubscriptionFrequency.Weekly,
-    scheduledDays: [],
+    scheduledDays: [ScheduleDays.Monday],
     preferredTimeSlot: TimeSlot.Morning,
     price: service.price,
     category: service.category,
@@ -265,29 +265,19 @@ const CleaningServiceConfiguration: React.FC<
         break;
     }
 
-    totalPrice = roomTotal * cleaningTypeMultiplier;
+    totalPrice = roomTotal * cleaningTypeMultiplier; //* daysCount;
     if (propertyType === HouseType.Duplex) {
       totalPrice *= 1.5;
     }
-    console.log(configuration);
-    console.log(roomPrices);
-    console.log(roomTotal);
-    // console.log((service.price / 3) * Math.max(1, roomCount));
-    // totalPrice = (service.price / 3) * Math.max(1, roomCount);
 
-    // if (configuration.serviceDetails.cleaning?.houseType === HouseType.Duplex) {
-    //   totalPrice *= 1.5;
-    // }
+    let multiplier = 4;
+    if (configuration.frequency === SubscriptionFrequency.BiWeekly) {
+      multiplier = 2;
+    } else if (configuration.frequency === SubscriptionFrequency.Monthly) {
+      multiplier = 1;
+    }
 
-    // let multiplier = 4;
-    // if (configuration.frequency === SubscriptionFrequency.BiWeekly) {
-    //   multiplier = 2;
-    // } else if (configuration.frequency === SubscriptionFrequency.Monthly) {
-    //   multiplier = 1;
-    // }
-
-    // return Math.round(totalPrice * daysCount * multiplier);
-    return totalPrice;
+    return totalPrice * daysCount * multiplier;
   }, [configuration, service]);
 
   useEffect(() => {
