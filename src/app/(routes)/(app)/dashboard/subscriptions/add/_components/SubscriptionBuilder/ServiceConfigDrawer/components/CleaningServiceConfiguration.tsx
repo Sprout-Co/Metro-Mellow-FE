@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -104,7 +104,7 @@ const CleaningServiceConfiguration: React.FC<
     { key: "bathroom", label: "Bathroom", icon: "🚿" },
     { key: "kitchen", label: "Kitchen", icon: "🍳" },
     { key: "balcony", label: "Balcony", icon: "🌿" },
-    { key: "studyRoom", label: "Study Room", icon: "📚" },
+    { key: "study", label: "Study Room", icon: "📚" },
   ];
 
   const frequencies = [
@@ -219,37 +219,76 @@ const CleaningServiceConfiguration: React.FC<
     });
   };
 
-  const calculatePrice = () => {
-    let basePrice = service.price;
+  const calculatePrice = useMemo(() => {
+    const selectedOption = configuration.serviceDetails.serviceOption;
+    let totalPrice = 0 || service.price;
+    // service.options?.find(
+    //   (opt) => opt.service_id === selectedOption
+    // )?.price || service.price;
+    let basePrice = 0;
     const daysCount = configuration.scheduledDays?.length || 0;
+    const roomQuantities = configuration.serviceDetails.cleaning?.rooms;
+    const propertyType = configuration.serviceDetails.cleaning?.houseType;
 
-    if (configuration.serviceDetails.serviceOption && service.options) {
-      const selectedOption = service.options.find(
-        (opt) => opt.id === configuration.serviceDetails.serviceOption
-      );
-      if (selectedOption) {
-        basePrice += selectedOption.price;
-      }
+    // const roomCount = Object.values(
+    //   configuration.serviceDetails.cleaning?.rooms || {}
+    // ).reduce((sum, count) => sum + (count || 0), 0);
+
+    // Calculate total price based on room prices and number of days
+    const roomPrices = service.roomPrices || {};
+
+    // Calculate total price for each room type
+    const roomTotal = Object.entries(roomQuantities || {}).reduce(
+      (total, [room, quantity]) => {
+        const roomPrice = roomPrices[room as keyof typeof roomPrices] || 0;
+        return total + roomPrice * (quantity as number);
+      },
+      0
+    );
+
+    let cleaningTypeMultiplier = 1;
+
+    switch (selectedOption) {
+      case ServiceId.StandardCleaning:
+        cleaningTypeMultiplier = 1;
+        break;
+      case ServiceId.DeepCleaning:
+        cleaningTypeMultiplier = 2.5;
+        break;
+      case ServiceId.PostConstructionCleaning:
+        cleaningTypeMultiplier = 4;
+        break;
+      case ServiceId.MoveInMoveOutCleaning:
+        cleaningTypeMultiplier = 2.5;
+        break;
+      default:
+        break;
     }
 
-    const roomCount = Object.values(
-      configuration.serviceDetails.cleaning?.rooms || {}
-    ).reduce((sum, count) => sum + (count || 0), 0);
-    basePrice = (service.price / 3) * Math.max(1, roomCount);
-
-    if (configuration.serviceDetails.cleaning?.houseType === HouseType.Duplex) {
-      basePrice *= 1.5;
+    totalPrice = roomTotal * cleaningTypeMultiplier;
+    if (propertyType === HouseType.Duplex) {
+      totalPrice *= 1.5;
     }
+    console.log(configuration);
+    console.log(roomPrices);
+    console.log(roomTotal);
+    // console.log((service.price / 3) * Math.max(1, roomCount));
+    // totalPrice = (service.price / 3) * Math.max(1, roomCount);
 
-    let multiplier = 4;
-    if (configuration.frequency === SubscriptionFrequency.BiWeekly) {
-      multiplier = 2;
-    } else if (configuration.frequency === SubscriptionFrequency.Monthly) {
-      multiplier = 1;
-    }
+    // if (configuration.serviceDetails.cleaning?.houseType === HouseType.Duplex) {
+    //   totalPrice *= 1.5;
+    // }
 
-    return Math.round(basePrice * daysCount * multiplier);
-  };
+    // let multiplier = 4;
+    // if (configuration.frequency === SubscriptionFrequency.BiWeekly) {
+    //   multiplier = 2;
+    // } else if (configuration.frequency === SubscriptionFrequency.Monthly) {
+    //   multiplier = 1;
+    // }
+
+    // return Math.round(totalPrice * daysCount * multiplier);
+    return totalPrice;
+  }, [configuration, service]);
 
   useEffect(() => {
     setConfiguration((prev) => {
@@ -265,13 +304,8 @@ const CleaningServiceConfiguration: React.FC<
   }, [configuration.frequency]);
 
   useEffect(() => {
-    const price = calculatePrice();
-    setConfiguration((prev) => ({ ...prev, price }));
-  }, [
-    configuration.scheduledDays,
-    configuration.frequency,
-    configuration.serviceDetails,
-  ]);
+    setConfiguration((prev) => ({ ...prev, price: calculatePrice }));
+  }, [calculatePrice]);
 
   const validateCurrentStep = () => {
     const validation = validateServiceConfiguration(configuration, service);
@@ -609,7 +643,7 @@ const CleaningServiceConfiguration: React.FC<
             </div>
             <div className={styles.drawer__servicePriceCard}>
               <span>Monthly Rate</span>
-              <strong>₦{calculatePrice().toLocaleString()}</strong>
+              <strong>₦{calculatePrice.toLocaleString()}</strong>
               <small>All inclusive</small>
             </div>
           </div>
@@ -750,7 +784,7 @@ const CleaningServiceConfiguration: React.FC<
         <div className={styles.drawer__footer}>
           <div className={styles.drawer__footerPrice}>
             <span>Estimated Monthly</span>
-            <strong>₦{calculatePrice().toLocaleString()}</strong>
+            <strong>₦{calculatePrice.toLocaleString()}</strong>
           </div>
           <div className={styles.drawer__footerActions}>
             <button
