@@ -61,7 +61,7 @@ const PestControlServiceConfiguration: React.FC<
   const [configuration, setConfiguration] = useState<SubscriptionServiceInput>({
     serviceId: service._id,
     frequency: SubscriptionFrequency.Monthly,
-    scheduledDays: [],
+    scheduledDays: [ScheduleDays.Monday],
     preferredTimeSlot: TimeSlot.Morning,
     price: service.price,
     category: service.category,
@@ -158,43 +158,43 @@ const PestControlServiceConfiguration: React.FC<
 
   const calculatePrice = useMemo(() => {
     const selectedOption = configuration.serviceDetails.serviceOption;
-    let totalPrice = 0 || service.price;
-    let basePrice = 0;
+    let totalPrice =
+      service.options?.find((opt) => opt.service_id === selectedOption)
+        ?.price || 0;
     const daysCount = configuration.scheduledDays?.length || 0;
-    const severity = configuration.serviceDetails.pestControl?.severity || Severity.Medium;
+    const severity =
+      configuration.serviceDetails.pestControl?.severity || Severity.Medium;
 
-    let treatmentTypeMultiplier = 1;
+    // let treatmentTypeMultiplier = 1;
 
-    switch (selectedOption) {
-      case ServiceId.PestControlResidential:
-        treatmentTypeMultiplier = 1;
-        break;
-      case ServiceId.PestControlCommercial:
-        treatmentTypeMultiplier = 2;
-        break;
-      case ServiceId.TermiteControl:
-        treatmentTypeMultiplier = 3;
-        break;
-      default:
-        break;
-    }
+    // switch (selectedOption) {
+    //   case ServiceId.PestControlResidential:
+    //     treatmentTypeMultiplier = 1;
+    //     break;
+    //   case ServiceId.PestControlCommercial:
+    //     treatmentTypeMultiplier = 2;
+    //     break;
+    //     break;
+    //   default:
+    //     break;
+    // }
 
     let severityMultiplier = 1;
     switch (severity) {
       case Severity.Low:
-        severityMultiplier = 0.8;
+        severityMultiplier = 1.2;
         break;
       case Severity.Medium:
-        severityMultiplier = 1;
+        severityMultiplier = 1.5;
         break;
       case Severity.High:
-        severityMultiplier = 1.5;
+        severityMultiplier = 2.15;
         break;
       default:
         break;
     }
 
-    totalPrice = service.price * treatmentTypeMultiplier * severityMultiplier;
+    totalPrice *= severityMultiplier; //service.price * treatmentTypeMultiplier * severityMultiplier;
 
     // Monthly frequency (multiplier = 1)
     return totalPrice * daysCount * 1;
@@ -764,7 +764,7 @@ const PestControlServiceConfiguration: React.FC<
         <div className={styles.drawer__footer}>
           <div className={styles.drawer__footerPrice}>
             <span>Monthly Rate</span>
-            <strong>₦{calculatePrice().toLocaleString()}</strong>
+            <strong>₦{calculatePrice.toLocaleString()}</strong>
           </div>
           <div className={styles.drawer__footerActions}>
             <button
