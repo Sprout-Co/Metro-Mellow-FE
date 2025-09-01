@@ -123,6 +123,20 @@
     }
   }
 
+  // Loading State
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("md");
+    padding: spacing("3xl") spacing("xl");
+    color: color("neutral", "medium");
+
+    svg {
+      color: color("primary", "base");
+    }
+  }
+
   // Empty State
   &__empty {
     text-align: center;

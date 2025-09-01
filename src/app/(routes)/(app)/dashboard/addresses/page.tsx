@@ -1,7 +1,7 @@
 // src/app/(routes)/(app)/dashboard/account/addresses/page.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin,
@@ -19,28 +19,30 @@ import {
   Check,
   List,
   Grid3X3,
+  Loader,
 } from "lucide-react";
 import FnButton from "@/components/ui/Button/FnButton";
 import styles from "./AddressManagement.module.scss";
-// import AddressModal from "./_components/AddressModal/AddressModal";
 import Input from "@/components/ui/Input";
 import DashboardLayout from "../_components/DashboardLayout/DashboardLayout";
 import AddressModal from "./_components/AddressModal";
 import AddressListView from "./_components/AddressListView";
 import DashboardHeader from "../_components/DashboardHeader/DashboardHeader";
+import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
+import { useGetCurrentUserQuery, Address as GraphQLAddress, AddressInput } from "@/graphql/api";
 
-// Types
-export interface Address {
+// Types - extended from GraphQL Address type to include additional UI fields
+export interface Address extends Omit<GraphQLAddress, 'zipCode'> {
   id: string;
-  label: string;
+  label?: string | null;
   type: "home" | "work" | "other";
-  street: string;
-  area: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-  isDefault: boolean;
+  street?: string | null;
+  area?: string; // derived from address parts
+  city?: string | null;
+  state?: string | null;
+  postalCode?: string; // renamed from zipCode
+  country?: string | null;
+  isDefault?: boolean | null;
   landmark?: string;
   phoneNumber?: string;
   instructions?: string;
@@ -50,60 +52,48 @@ export interface Address {
   };
 }
 
-// Mock data
-const mockAddresses: Address[] = [
-  {
-    id: "1",
-    label: "Home",
-    type: "home",
-    street: "24 Emmanuel Osakwe Street",
-    area: "Chevron Drive",
-    city: "Lekki",
-    state: "Lagos",
-    postalCode: "101233",
-    country: "Nigeria",
-    isDefault: true,
-    landmark: "Near Chevron Roundabout",
-    phoneNumber: "+234 801 234 5678",
-    instructions: "Gate code: 1234",
-  },
-  {
-    id: "2",
-    label: "Office",
-    type: "work",
-    street: "45 Admiralty Way",
-    area: "Admiralty",
-    city: "Lekki Phase 1",
-    state: "Lagos",
-    postalCode: "101233",
-    country: "Nigeria",
-    isDefault: false,
-    landmark: "Metro Tower, 5th Floor",
-    phoneNumber: "+234 802 345 6789",
-  },
-  {
-    id: "3",
-    label: "Mom's House",
-    type: "other",
-    street: "12 Ozumba Mbadiwe Avenue",
-    area: "Victoria Island",
-    city: "Lagos",
-    state: "Lagos",
-    postalCode: "101241",
-    country: "Nigeria",
-    isDefault: false,
-    phoneNumber: "+234 803 456 7890",
-  },
-];
+// Helper function to transform GraphQL address to UI address
+const transformGraphQLAddress = (address: GraphQLAddress): Address => {
+  return {
+    ...address,
+    type: (address.label?.toLowerCase() === 'home' ? 'home' :
+           address.label?.toLowerCase() === 'office' || address.label?.toLowerCase() === 'work' ? 'work' : 'other') as 'home' | 'work' | 'other',
+    area: '', // Can be derived from street or set separately
+    postalCode: address.zipCode || '',
+    landmark: '',
+    phoneNumber: '',
+    instructions: '',
+  };
+};
 
 const AddressManagementPage: React.FC = () => {
-  const [addresses, setAddresses] = useState<Address[]>(mockAddresses);
+  const [addresses, setAddresses] = useState<Address[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState<string>("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
   const [viewType, setViewType] = useState<"list" | "grid">("grid");
+  const [isLoading, setIsLoading] = useState(false);
+
+  // GraphQL hooks
+  const { data: userData, refetch: refetchUser } = useGetCurrentUserQuery();
+  const {
+    handleAddAddress,
+    handleUpdateAddress,
+    handleSetDefaultAddress,
+    handleRemoveAddress,
+  } = useAuthOperations();
+
+  // Load addresses from GraphQL data
+  useEffect(() => {
+    if (userData?.me?.addresses) {
+      const transformedAddresses = userData.me.addresses
+        .filter((addr): addr is GraphQLAddress => addr !== null)
+        .map(transformGraphQLAddress);
+      setAddresses(transformedAddresses);
+    }
+  }, [userData]);
 
   // Handle view change
   const handleViewChange = (type: "list" | "grid") => {
@@ -113,9 +103,9 @@ const AddressManagementPage: React.FC = () => {
   // Filter addresses
   const filteredAddresses = addresses.filter((address) => {
     const matchesSearch =
-      address.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      address.street.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      address.area.toLowerCase().includes(searchQuery.toLowerCase());
+      address.label?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      address.street?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      address.area?.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesType = selectedType === "all" || address.type === selectedType;
 
@@ -146,53 +136,74 @@ const AddressManagementPage: React.FC = () => {
     }
   };
 
-  // Handle add/edit address
-  const handleSaveAddress = (addressData: Partial<Address>) => {
-    if (editingAddress) {
-      // Update existing address
-      setAddresses((prev) =>
-        prev.map((addr) =>
-          addr.id === editingAddress.id ? { ...addr, ...addressData } : addr
-        )
-      );
-    } else {
-      // Add new address
-      const newAddress: Address = {
-        id: Date.now().toString(),
-        label: addressData.label || "",
-        type: addressData.type || "home",
-        street: addressData.street || "",
-        area: addressData.area || "",
-        city: addressData.city || "",
-        state: addressData.state || "",
-        postalCode: addressData.postalCode || "",
-        country: addressData.country || "Nigeria",
+  // Handle add/edit address with GraphQL
+  const handleSaveAddress = async (addressData: Partial<Address>) => {
+    setIsLoading(true);
+    try {
+      const addressInput: AddressInput = {
+        label: addressData.label || '',
+        street: addressData.street || '',
+        city: addressData.city || '',
+        state: addressData.state || '',
+        zipCode: addressData.postalCode || '',
+        country: addressData.country || 'Nigeria',
         isDefault: addressData.isDefault || false,
-        landmark: addressData.landmark,
-        phoneNumber: addressData.phoneNumber,
-        instructions: addressData.instructions,
       };
-      setAddresses((prev) => [...prev, newAddress]);
+
+      if (editingAddress) {
+        // Update existing address
+        await handleUpdateAddress(editingAddress.id, addressInput);
+        console.log('Address updated successfully');
+      } else {
+        // Add new address
+        await handleAddAddress(addressInput);
+        console.log('Address added successfully');
+      }
+
+      // Refetch user data to get updated addresses
+      await refetchUser();
+      setIsModalOpen(false);
+      setEditingAddress(null);
+    } catch (error) {
+      console.error('Address save error:', error);
+      console.error('Failed to save address:', error instanceof Error ? error.message : 'Unknown error');
+    } finally {
+      setIsLoading(false);
     }
-    setIsModalOpen(false);
-    setEditingAddress(null);
   };
 
-  // Handle delete address
-  const handleDeleteAddress = (id: string) => {
-    setAddresses((prev) => prev.filter((addr) => addr.id !== id));
-    setActiveMenuId(null);
+  // Handle delete address with GraphQL
+  const handleDeleteAddress = async (id: string) => {
+    setIsLoading(true);
+    try {
+      await handleRemoveAddress(id);
+      console.log('Address deleted successfully');
+      // Refetch user data to get updated addresses
+      await refetchUser();
+      setActiveMenuId(null);
+    } catch (error) {
+      console.error('Address delete error:', error);
+      console.error('Failed to delete address:', error instanceof Error ? error.message : 'Unknown error');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // Handle set default
-  const handleSetDefault = (id: string) => {
-    setAddresses((prev) =>
-      prev.map((addr) => ({
-        ...addr,
-        isDefault: addr.id === id,
-      }))
-    );
-    setActiveMenuId(null);
+  // Handle set default with GraphQL
+  const handleSetDefault = async (id: string) => {
+    setIsLoading(true);
+    try {
+      await handleSetDefaultAddress(id);
+      console.log('Default address updated successfully');
+      // Refetch user data to get updated addresses
+      await refetchUser();
+      setActiveMenuId(null);
+    } catch (error) {
+      console.error('Set default address error:', error);
+      console.error('Failed to set default address:', error instanceof Error ? error.message : 'Unknown error');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Toggle menu
@@ -233,7 +244,19 @@ const AddressManagementPage: React.FC = () => {
           </div>
 
           <div className={styles.addressManagement__controlsRight}>
-            <div className={styles.addressManagement__filters}></div>
+            <div className={styles.addressManagement__filters}>
+              <FnButton
+                variant="primary"
+                onClick={() => {
+                  setEditingAddress(null);
+                  setIsModalOpen(true);
+                }}
+                disabled={isLoading}
+              >
+                <Plus size={18} />
+                Add Address
+              </FnButton>
+            </div>
 
             <div className={styles.addressManagement__viewToggle}>
               <motion.button
@@ -263,6 +286,14 @@ const AddressManagementPage: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Loading State */}
+        {isLoading && (
+          <div className={styles.addressManagement__loading}>
+            <Loader className="animate-spin" size={24} />
+            <span>Loading...</span>
+          </div>
+        )}
 
         {/* Address Display */}
         {filteredAddresses.length > 0 ? (
@@ -460,6 +491,7 @@ const AddressManagementPage: React.FC = () => {
                 setEditingAddress(null);
                 setIsModalOpen(true);
               }}
+              disabled={isLoading}
             >
               <Plus size={18} />
               Add Your First Address
