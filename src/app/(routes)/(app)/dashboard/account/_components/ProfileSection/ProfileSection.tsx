@@ -18,20 +18,14 @@ import {
 } from "lucide-react";
 import styles from "./ProfileSection.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
-
-interface UserData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  dateOfBirth: string;
-  gender: string;
-  address: string;
-  profileImage: string | null;
-}
+import {
+  User as GraphQLUser,
+  useUpdateProfileMutation,
+  UpdateUserInput,
+} from "@/graphql/api";
 
 interface ProfileSectionProps {
-  userData: UserData;
+  userData: GraphQLUser;
   isEditing: boolean;
   onEditToggle: () => void;
 }
@@ -41,10 +35,18 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
   isEditing,
   onEditToggle,
 }) => {
-  const [formData, setFormData] = useState(userData);
+  const [formData, setFormData] = useState({
+    firstName: userData.firstName || "",
+    lastName: userData.lastName || "",
+    email: userData.email || "",
+    phone: userData.phone || "",
+  });
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+
+  // GraphQL mutation
+  const [updateProfile] = useUpdateProfileMutation();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -69,18 +71,37 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
 
   const handleSave = async () => {
     setIsSaving(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSaving(false);
-    setSaveSuccess(true);
-    setTimeout(() => {
-      setSaveSuccess(false);
-      onEditToggle();
-    }, 2000);
+    try {
+      const updateInput: UpdateUserInput = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phone: formData.phone,
+      };
+
+      await updateProfile({
+        variables: { input: updateInput },
+      });
+
+      setSaveSuccess(true);
+      setTimeout(() => {
+        setSaveSuccess(false);
+        onEditToggle();
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+      // You might want to show an error message here
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleCancel = () => {
-    setFormData(userData);
+    setFormData({
+      firstName: userData.firstName || "",
+      lastName: userData.lastName || "",
+      email: userData.email || "",
+      phone: userData.phone || "",
+    });
     setProfileImage(null);
     onEditToggle();
   };
@@ -140,9 +161,9 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
       {/* Profile Image Section */}
       <div className={styles.profileSection__imageSection}>
         <div className={styles.profileSection__imageContainer}>
-          {profileImage || userData.profileImage ? (
+          {profileImage ? (
             <img
-              src={profileImage || userData.profileImage || ""}
+              src={profileImage}
               alt="Profile"
               className={styles.profileSection__image}
             />
@@ -222,7 +243,7 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              disabled={!isEditing}
+              disabled={true}
               className={styles.profileSection__input}
             />
           </div>
@@ -243,22 +264,6 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
             />
           </div>
 
-          {/* Date of Birth */}
-          <div className={styles.profileSection__formGroup}>
-            <label className={styles.profileSection__label}>
-              <Calendar size={16} />
-              Date of Birth
-            </label>
-            <input
-              type="date"
-              name="dateOfBirth"
-              value={formData.dateOfBirth}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className={styles.profileSection__input}
-            />
-          </div>
-
           {/* Gender */}
           <div className={styles.profileSection__formGroup}>
             <label className={styles.profileSection__label}>
@@ -267,7 +272,7 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
             </label>
             <select
               name="gender"
-              value={formData.gender}
+              value=""
               onChange={handleInputChange}
               disabled={!isEditing}
               className={styles.profileSection__input}
@@ -278,29 +283,11 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
               <option value="Prefer not to say">Prefer not to say</option>
             </select>
           </div>
-
-          {/* Address */}
-          <div
-            className={`${styles.profileSection__formGroup} ${styles["profileSection__formGroup--full"]}`}
-          >
-            <label className={styles.profileSection__label}>
-              <MapPin size={16} />
-              Address
-            </label>
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className={styles.profileSection__input}
-            />
-          </div>
         </div>
       </div>
 
       {/* Account Info */}
-      {!isEditing && (
+      {!isEditing && userData.emailVerified && (
         <div className={styles.profileSection__info}>
           <div className={styles.profileSection__infoItem}>
             <AlertCircle size={16} />

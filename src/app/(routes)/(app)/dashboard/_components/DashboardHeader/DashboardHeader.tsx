@@ -32,6 +32,7 @@ interface DashboardHeaderProps {
   upcomingService?: Booking;
   booking?: Booking;
   extraContent?: React.ReactNode;
+  showUpcomingBanner?: boolean;
 }
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({
@@ -43,6 +44,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   upcomingService,
   booking,
   extraContent,
+  showUpcomingBanner = true,
 }) => {
   return (
     <div className={styles.dashboardHeader}>
@@ -55,9 +57,11 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           </div>
 
           {/* Upcoming Service Banner */}
-          <div className={styles.dashboardHeader__upcomingService}>
-            <AppointmentCard booking={booking} variant="header" />
-          </div>
+          {showUpcomingBanner && (
+            <div className={styles.dashboardHeader__upcomingService}>
+              <AppointmentCard booking={booking} variant="header" />
+            </div>
+          )}
         </div>
 
         {actionBtnText && (

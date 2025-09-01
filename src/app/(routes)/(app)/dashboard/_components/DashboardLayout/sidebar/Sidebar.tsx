@@ -196,7 +196,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           icon: User,
         },
         {
-          href: "/dashboard/account/addresses",
+          href: Routes.DASHBOARD_ADDRESSES,
           label: "Address Book",
           icon: MapPin,
           // onClick: () => setIsAddressDrawerOpen(true),

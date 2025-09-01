@@ -7,6 +7,7 @@ export enum Routes {
 
   // App routes
   DASHBOARD = "/dashboard",
+  DASHBOARD_ADDRESSES = "/dashboard/addresses",
   DASHBOARD_BOOKINGS = "/dashboard/bookings",
   DASHBOARD_SUBSCRIPTIONS = "/dashboard/subscriptions",
   DASHBOARD_SUBSCRIPTIONS_ADD = "/dashboard/subscriptions/add",

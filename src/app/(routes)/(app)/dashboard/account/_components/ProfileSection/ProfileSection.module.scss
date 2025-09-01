@@ -87,11 +87,7 @@
   }
 
   &__imagePlaceholder {
-    background: linear-gradient(
-      135deg,
-      color("primary", "light"),
-      color("primary", "base")
-    );
+    background: color("primary", "base");
     display: flex;
     align-items: center;
     justify-content: center;
