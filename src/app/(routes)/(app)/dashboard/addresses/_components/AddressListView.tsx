@@ -13,8 +13,8 @@ import {
   Star,
   Navigation,
 } from "lucide-react";
-import { Address } from "../page";
 import styles from "./AddressListView.module.scss";
+import { Address } from "@/graphql/api";
 
 interface AddressListViewProps {
   addresses: Address[];
@@ -78,14 +78,8 @@ const AddressListView: React.FC<AddressListViewProps> = ({
             <div className={styles.addressListItem__main}>
               {/* Icon and Type */}
               <div className={styles.addressListItem__iconSection}>
-                <div
-                  className={styles.addressListItem__icon}
-                  style={{
-                    backgroundColor: `${getAddressColor(address.type)}15`,
-                    color: getAddressColor(address.type),
-                  }}
-                >
-                  {getAddressIcon(address.type)}
+                <div className={styles.addressListItem__icon}>
+                  <Home size={20} />
                 </div>
               </div>
 
@@ -101,29 +95,27 @@ const AddressListView: React.FC<AddressListViewProps> = ({
                       </span>
                     )}
                   </h3>
-                  <span className={styles.addressListItem__type}>
-                    {address.type.charAt(0).toUpperCase() + address.type.slice(1)} Address
-                  </span>
                 </div>
 
                 <div className={styles.addressListItem__address}>
                   <MapPin size={16} />
                   <div className={styles.addressListItem__addressText}>
                     <span className={styles.addressListItem__streetAddress}>
-                      {address.street}, {address.area}
+                      {address.street},
                     </span>
                     <span className={styles.addressListItem__regionAddress}>
-                      {address.city}, {address.state}, {address.country} {address.postalCode}
+                      {address.city}, {address.state}, {address.country}{" "}
+                      {address.zipCode}
                     </span>
                   </div>
                 </div>
 
-                {address.landmark && (
+                {/* {address.landmark && (
                   <div className={styles.addressListItem__landmark}>
                     <Navigation size={14} />
                     <span>{address.landmark}</span>
                   </div>
-                )}
+                )} */}
               </div>
 
               {/* Actions */}
@@ -161,13 +153,13 @@ const AddressListView: React.FC<AddressListViewProps> = ({
                             Set as Default
                           </button>
                         )}
-                        <button
+                        {/* <button
                           className={`${styles.addressListItem__menuItem} ${styles["addressListItem__menuItem--danger"]}`}
                           onClick={() => onDelete(address.id)}
                         >
                           <Trash2 size={14} />
                           Delete
-                        </button>
+                        </button> */}
                       </motion.div>
                     )}
                   </AnimatePresence>

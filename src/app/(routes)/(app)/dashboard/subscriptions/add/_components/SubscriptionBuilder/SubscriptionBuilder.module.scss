@@ -72,6 +72,10 @@
     color: color("neutral", "white");
     margin-bottom: spacing("md");
 
+    span {
+      color: color("accent", "base");
+    }
+
     @include breakpoint-down("md") {
       @include font-size("3xl");
     }

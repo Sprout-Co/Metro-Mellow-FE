@@ -335,7 +335,8 @@ const SubscriptionBuilder: React.FC = () => {
             <span>Save up to 30% with subscriptions</span>
           </div>
           <h1 className={styles.builder__title}>
-            Build Your Perfect Service Plan
+            <span>Build </span>
+            Your Perfect Service Plan
           </h1>
           <p className={styles.builder__subtitle}>
             Combine multiple services into one convenient subscription

@@ -18,13 +18,13 @@ import {
 import styles from "./AddressModal.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import Input from "@/components/ui/Input";
-import { Address } from "../page";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
+import { Address } from "@/graphql/api";
 
 interface AddressModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (address: Partial<Address>) => void;
+  onSave: (address: Partial<Address>) => Promise<void>;
   address?: Address | null;
 }
 
@@ -36,17 +36,12 @@ const AddressModal: React.FC<AddressModalProps> = ({
 }) => {
   const [formData, setFormData] = useState<Partial<Address>>({
     label: "",
-    type: "home",
     street: "",
-    area: "",
     city: "",
     state: "Lagos",
-    postalCode: "",
+    zipCode: "",
     country: "Nigeria",
     isDefault: false,
-    landmark: "",
-    phoneNumber: "",
-    instructions: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -59,17 +54,11 @@ const AddressModal: React.FC<AddressModalProps> = ({
     } else {
       setFormData({
         label: "",
-        type: "home",
         street: "",
-        area: "",
         city: "",
         state: "Lagos",
-        postalCode: "",
         country: "Nigeria",
         isDefault: false,
-        landmark: "",
-        phoneNumber: "",
-        instructions: "",
       });
     }
     setErrors({});
@@ -85,9 +74,6 @@ const AddressModal: React.FC<AddressModalProps> = ({
     if (!formData.street?.trim()) {
       newErrors.street = "Street address is required";
     }
-    if (!formData.area?.trim()) {
-      newErrors.area = "Area is required";
-    }
     if (!formData.city?.trim()) {
       newErrors.city = "City is required";
     }
@@ -100,10 +86,17 @@ const AddressModal: React.FC<AddressModalProps> = ({
   };
 
   // Handle form submission
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    console.log("AddressModal: handleSubmit called");
+    console.log("AddressModal: formData", formData);
+
     if (validateForm()) {
-      onSave(formData);
-      onClose();
+      console.log("AddressModal: Validation passed, calling onSave");
+      await onSave(formData);
+      console.log("AddressModal: onSave completed");
+      // Don't close here - let the parent handle it after async operation
+    } else {
+      console.log("AddressModal: Validation failed", errors);
     }
   };
 
@@ -156,7 +149,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
           </label>
           <Input
             placeholder="e.g., Home, Office, Mom's House"
-            value={formData.label}
+            value={formData.label || ""}
             onChange={(e) => handleChange("label", e.target.value)}
             error={errors.label}
           />
@@ -190,7 +183,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
           </label>
           <Input
             placeholder="House number and street name"
-            value={formData.street}
+            value={formData.street || ""}
             onChange={(e) => handleChange("street", e.target.value)}
             error={errors.street}
           />
@@ -203,24 +196,32 @@ const AddressModal: React.FC<AddressModalProps> = ({
             </label>
             <Input
               placeholder="e.g., Lekki"
-              value={formData.city}
+              value={formData.city || ""}
               onChange={(e) => handleChange("city", e.target.value)}
               error={errors.city}
             />
           </div>
-        </div>
-        {/* Additional Details */}
-        <div className={styles.modal__section}>
-          <label className={styles.modal__label}>Landmark</label>
-          <Input
-            placeholder="e.g., Near Chevron Roundabout"
-            value={formData.landmark}
-            onChange={(e) => handleChange("landmark", e.target.value)}
-            leftIcon={<Navigation size={18} />}
-          />
+          <div className={styles.modal__section}>
+            <label className={styles.modal__label}>
+              State <span className={styles.modal__required}>*</span>
+            </label>
+            <Input placeholder="e.g., Lagos" value="Lagos" disabled />
+          </div>
         </div>
 
-        <div className={styles.modal__section}>
+        <div className={styles.modal__row}>
+          <div className={styles.modal__section}>
+            <label className={styles.modal__label}>Postal Code</label>
+            <Input
+              placeholder="e.g., 101233"
+              value={formData.zipCode || ""}
+              onChange={(e) => handleChange("zipCode", e.target.value)}
+            />
+          </div>
+        </div>
+        {/* Additional Details */}
+
+        {/* <div className={styles.modal__section}>
           <label className={styles.modal__label}>Delivery Instructions</label>
           <textarea
             className={styles.modal__textarea}
@@ -229,14 +230,14 @@ const AddressModal: React.FC<AddressModalProps> = ({
             onChange={(e) => handleChange("instructions", e.target.value)}
             rows={3}
           />
-        </div>
+        </div> */}
 
         {/* Set as Default */}
         <div className={styles.modal__checkbox}>
           <input
             type="checkbox"
             id="setDefault"
-            checked={formData.isDefault}
+            checked={formData.isDefault || false}
             onChange={(e) => handleChange("isDefault", e.target.checked)}
           />
           <label htmlFor="setDefault">Set as default address</label>

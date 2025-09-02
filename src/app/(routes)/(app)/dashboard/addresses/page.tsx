@@ -29,42 +29,52 @@ import AddressModal from "./_components/AddressModal";
 import AddressListView from "./_components/AddressListView";
 import DashboardHeader from "../_components/DashboardHeader/DashboardHeader";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
-import { useGetCurrentUserQuery, Address as GraphQLAddress, AddressInput } from "@/graphql/api";
+import {
+  useGetCurrentUserQuery,
+  Address as GraphQLAddress,
+  AddressInput,
+  Address,
+} from "@/graphql/api";
 
 // Types - extended from GraphQL Address type to include additional UI fields
-export interface Address extends Omit<GraphQLAddress, 'zipCode'> {
-  id: string;
-  label?: string | null;
-  type: "home" | "work" | "other";
-  street?: string | null;
-  area?: string; // derived from address parts
-  city?: string | null;
-  state?: string | null;
-  postalCode?: string; // renamed from zipCode
-  country?: string | null;
-  isDefault?: boolean | null;
-  landmark?: string;
-  phoneNumber?: string;
-  instructions?: string;
-  coordinates?: {
-    lat: number;
-    lng: number;
-  };
-}
+// export interface Address extends Omit<GraphQLAddress, "zipCode"> {
+//   id: string;
+//   label?: string | null;
+//   type: "home" | "work" | "other";
+//   street?: string | null;
+//   area?: string; // derived from address parts
+//   city?: string | null;
+//   state?: string | null;
+//   postalCode?: string; // renamed from zipCode
+//   country?: string | null;
+//   isDefault?: boolean | null;
+//   landmark?: string;
+//   phoneNumber?: string;
+//   instructions?: string;
+//   coordinates?: {
+//     lat: number;
+//     lng: number;
+//   };
+// }
 
 // Helper function to transform GraphQL address to UI address
-const transformGraphQLAddress = (address: GraphQLAddress): Address => {
-  return {
-    ...address,
-    type: (address.label?.toLowerCase() === 'home' ? 'home' :
-           address.label?.toLowerCase() === 'office' || address.label?.toLowerCase() === 'work' ? 'work' : 'other') as 'home' | 'work' | 'other',
-    area: '', // Can be derived from street or set separately
-    postalCode: address.zipCode || '',
-    landmark: '',
-    phoneNumber: '',
-    instructions: '',
-  };
-};
+// const transformGraphQLAddress = (address: GraphQLAddress): Address
+//   => {
+//   return {
+//     ...address,
+//     // type: (address.label?.toLowerCase() === "home"
+//     //   ? "home"
+//     //   : address.label?.toLowerCase() === "office" ||
+//     //       address.label?.toLowerCase() === "work"
+//     //     ? "work"
+//     //     : "other") as "home" | "work" | "other",
+//     // area: "", // Can be derived from street or set separately
+//     postalCode: address.zipCode || "",
+//     landmark: "",
+//     phoneNumber: "",
+//     instructions: "",
+//   };
+// };
 
 const AddressManagementPage: React.FC = () => {
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -88,9 +98,10 @@ const AddressManagementPage: React.FC = () => {
   // Load addresses from GraphQL data
   useEffect(() => {
     if (userData?.me?.addresses) {
-      const transformedAddresses = userData.me.addresses
-        .filter((addr): addr is GraphQLAddress => addr !== null)
-        .map(transformGraphQLAddress);
+      const transformedAddresses = userData.me.addresses.filter(
+        (addr): addr is GraphQLAddress => addr !== null
+      );
+      // .map(transformGraphQLAddress);
       setAddresses(transformedAddresses);
     }
   }, [userData]);
@@ -104,12 +115,9 @@ const AddressManagementPage: React.FC = () => {
   const filteredAddresses = addresses.filter((address) => {
     const matchesSearch =
       address.label?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      address.street?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      address.area?.toLowerCase().includes(searchQuery.toLowerCase());
+      address.street?.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesType = selectedType === "all" || address.type === selectedType;
-
-    return matchesSearch && matchesType;
+    return matchesSearch;
   });
 
   // Get address type icon
@@ -138,26 +146,26 @@ const AddressManagementPage: React.FC = () => {
 
   // Handle add/edit address with GraphQL
   const handleSaveAddress = async (addressData: Partial<Address>) => {
+    console.log("handleSaveAddress called with:", addressData);
     setIsLoading(true);
     try {
       const addressInput: AddressInput = {
-        label: addressData.label || '',
-        street: addressData.street || '',
-        city: addressData.city || '',
-        state: addressData.state || '',
-        zipCode: addressData.postalCode || '',
-        country: addressData.country || 'Nigeria',
+        label: addressData.label || "",
+        street: addressData.street || "",
+        city: addressData.city || "",
+        state: addressData.state || "",
+        zipCode: addressData.zipCode || "",
         isDefault: addressData.isDefault || false,
       };
 
       if (editingAddress) {
         // Update existing address
         await handleUpdateAddress(editingAddress.id, addressInput);
-        console.log('Address updated successfully');
+        console.log("Address updated successfully");
       } else {
         // Add new address
         await handleAddAddress(addressInput);
-        console.log('Address added successfully');
+        console.log("Address added successfully");
       }
 
       // Refetch user data to get updated addresses
@@ -165,8 +173,11 @@ const AddressManagementPage: React.FC = () => {
       setIsModalOpen(false);
       setEditingAddress(null);
     } catch (error) {
-      console.error('Address save error:', error);
-      console.error('Failed to save address:', error instanceof Error ? error.message : 'Unknown error');
+      console.error("Address save error:", error);
+      console.error(
+        "Failed to save address:",
+        error instanceof Error ? error.message : "Unknown error"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -177,13 +188,16 @@ const AddressManagementPage: React.FC = () => {
     setIsLoading(true);
     try {
       await handleRemoveAddress(id);
-      console.log('Address deleted successfully');
+      console.log("Address deleted successfully");
       // Refetch user data to get updated addresses
       await refetchUser();
       setActiveMenuId(null);
     } catch (error) {
-      console.error('Address delete error:', error);
-      console.error('Failed to delete address:', error instanceof Error ? error.message : 'Unknown error');
+      console.error("Address delete error:", error);
+      console.error(
+        "Failed to delete address:",
+        error instanceof Error ? error.message : "Unknown error"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -194,13 +208,16 @@ const AddressManagementPage: React.FC = () => {
     setIsLoading(true);
     try {
       await handleSetDefaultAddress(id);
-      console.log('Default address updated successfully');
+      console.log("Default address updated successfully");
       // Refetch user data to get updated addresses
       await refetchUser();
       setActiveMenuId(null);
     } catch (error) {
-      console.error('Set default address error:', error);
-      console.error('Failed to set default address:', error instanceof Error ? error.message : 'Unknown error');
+      console.error("Set default address error:", error);
+      console.error(
+        "Failed to set default address:",
+        error instanceof Error ? error.message : "Unknown error"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -228,6 +245,7 @@ const AddressManagementPage: React.FC = () => {
         <DashboardHeader
           title="Address Book"
           subtitle="Manage your delivery addresses for quick and easy service bookings"
+          showUpcomingBanner={false}
         />
 
         {/* Controls */}
@@ -319,12 +337,13 @@ const AddressManagementPage: React.FC = () => {
                     <div className={styles.addressCard__header}>
                       <div
                         className={styles.addressCard__icon}
-                        style={{
-                          backgroundColor: `${getAddressColor(address.type)}15`,
-                          color: getAddressColor(address.type),
-                        }}
+                        // style={{
+                        //   backgroundColor: `${getAddressColor(address.type)}15`,
+                        //   color: getAddressColor(address.type),
+                        // }}
                       >
-                        {getAddressIcon(address.type)}
+                        {/* {getAddressIcon(address.type)} */}
+                        <Home size={20} />
                       </div>
                       <div className={styles.addressCard__headerInfo}>
                         <h3 className={styles.addressCard__label}>
@@ -336,11 +355,11 @@ const AddressManagementPage: React.FC = () => {
                             </span>
                           )}
                         </h3>
-                        <span className={styles.addressCard__type}>
+                        {/* <span className={styles.addressCard__type}>
                           {address.type.charAt(0).toUpperCase() +
                             address.type.slice(1)}{" "}
                           Address
-                        </span>
+                        </span> */}
                       </div>
                       <div className={styles.addressCard__menuContainer}>
                         <button
@@ -379,7 +398,7 @@ const AddressManagementPage: React.FC = () => {
                                   Set as Default
                                 </button>
                               )}
-                              <button
+                              {/* <button
                                 className={`${styles.addressCard__menuItem} ${
                                   styles["addressCard__menuItem--danger"]
                                 }`}
@@ -387,7 +406,7 @@ const AddressManagementPage: React.FC = () => {
                               >
                                 <Trash2 size={14} />
                                 Delete
-                              </button>
+                              </button> */}
                             </motion.div>
                           )}
                         </AnimatePresence>
@@ -403,21 +422,20 @@ const AddressManagementPage: React.FC = () => {
                             {address.street}
                           </p>
                           <p className={styles.addressCard__areaAddress}>
-                            {address.area}, {address.city}
+                            {address.city}
                           </p>
                           <p className={styles.addressCard__regionAddress}>
-                            {address.state}, {address.country}{" "}
-                            {address.postalCode}
+                            {address.state}, {address.country} {address.zipCode}
                           </p>
                         </div>
                       </div>
-
+                      {/* 
                       {address.landmark && (
                         <div className={styles.addressCard__detail}>
                           <Navigation size={14} />
                           <span>{address.landmark}</span>
                         </div>
-                      )}
+                      )} */}
 
                       {/* {address.phoneNumber && (
                       <div className={styles.addressCard__detail}>
@@ -431,29 +449,29 @@ const AddressManagementPage: React.FC = () => {
 
                     {/* Card Footer */}
                     {/* <div className={styles.addressCard__footer}>
-                    <FnButton
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        setEditingAddress(address);
-                        setIsModalOpen(true);
-                      }}
-                    >
-                      <Edit2 size={14} />
-                      Edit
-                    </FnButton>
-                    <FnButton
-                      variant="primary"
-                      size="sm"
-                      onClick={() => {
-                        // Handle select address for booking
-                        console.log("Selected address:", address);
-                      }}
-                    >
-                      <Check size={14} />
-                      Use This Address
-                    </FnButton>
-                  </div> */}
+                      <FnButton
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setEditingAddress(address);
+                          setIsModalOpen(true);
+                        }}
+                      >
+                        <Edit2 size={14} />
+                        Edit
+                      </FnButton>
+                      <FnButton
+                        variant="primary"
+                        size="sm"
+                        onClick={() => {
+                          // Handle select address for booking
+                          console.log("Selected address:", address);
+                        }}
+                      >
+                        <Check size={14} />
+                        Use This Address
+                      </FnButton>
+                    </div> */}
                   </motion.div>
                 ))}
               </AnimatePresence>
