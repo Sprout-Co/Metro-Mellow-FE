@@ -202,23 +202,23 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           // onClick: () => setIsAddressDrawerOpen(true),
         },
 
-        {
-          href: "/dashboard/payments",
-          label: "Payment Methods",
-          icon: CreditCard,
-        },
-        { href: "/dashboard/rewards", label: "Loyalty Program", icon: Gift },
-        {
-          href: "/dashboard/rewards/refer",
-          label: "Refer a Friend",
-          icon: User,
-        },
+        // {
+        //   href: "/dashboard/payments",
+        //   label: "Payment Methods",
+        //   icon: CreditCard,
+        // },
+        // { href: "/dashboard/rewards", label: "Loyalty Program", icon: Gift },
+        // {
+        //   href: "/dashboard/rewards/refer",
+        //   label: "Refer a Friend",
+        //   icon: User,
+        // },
       ],
     },
     {
-      title: "Support & Settings",
+      title: "Support",
       links: [
-        { href: "/dashboard/settings", label: "Settings", icon: Settings },
+        // { href: "/dashboard/settings", label: "Settings", icon: Settings },
         { href: "/dashboard/support", label: "Support", icon: MessageSquare },
 
         { href: "/logout", label: "Log Out", icon: LogOut },

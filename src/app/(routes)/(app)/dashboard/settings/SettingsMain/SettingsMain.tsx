@@ -30,13 +30,7 @@ import styles from "./SettingsMain.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import DashboardHeader from "../../_components/DashboardHeader/DashboardHeader";
 
-type TabType =
-  | "profile"
-  | "account"
-  | "notifications"
-  | "security"
-  | "billing"
-  | "preferences";
+type TabType = "profile" | "account" | "security";
 
 const SettingsMain: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>("profile");
@@ -56,10 +50,8 @@ const SettingsMain: React.FC = () => {
   const tabs = [
     { id: "profile" as const, label: "Profile", icon: User },
     { id: "account" as const, label: "Account", icon: Settings },
-    { id: "notifications" as const, label: "Notifications", icon: Bell },
     { id: "security" as const, label: "Security", icon: Shield },
-    { id: "billing" as const, label: "Billing", icon: CreditCard },
-    { id: "preferences" as const, label: "Preferences", icon: Palette },
+    // { id: "preferences" as const, label: "Preferences", icon: Palette },
   ];
 
   const handleNotificationToggle = (key: keyof typeof notifications) => {
@@ -248,140 +240,6 @@ const SettingsMain: React.FC = () => {
     </motion.div>
   );
 
-  // Notifications Tab Content
-  const NotificationsContent = () => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={styles.settings__section}
-    >
-      <div className={styles.settings__notificationGroups}>
-        <div className={styles.settings__notificationGroup}>
-          <h3 className={styles.settings__notificationGroupTitle}>
-            <Mail size={18} />
-            Email Notifications
-          </h3>
-
-          <div className={styles.settings__toggleList}>
-            <div className={styles.settings__toggleItem}>
-              <div>
-                <h4 className={styles.settings__toggleTitle}>
-                  Booking Confirmations
-                </h4>
-                <p className={styles.settings__toggleDescription}>
-                  Receive email confirmations for new bookings
-                </p>
-              </div>
-              <button
-                className={`${styles.settings__toggle} ${
-                  notifications.emailBookings
-                    ? styles["settings__toggle--active"]
-                    : ""
-                }`}
-                onClick={() => handleNotificationToggle("emailBookings")}
-              >
-                <span className={styles.settings__toggleSlider} />
-              </button>
-            </div>
-
-            <div className={styles.settings__toggleItem}>
-              <div>
-                <h4 className={styles.settings__toggleTitle}>
-                  Service Reminders
-                </h4>
-                <p className={styles.settings__toggleDescription}>
-                  Get reminded about upcoming services
-                </p>
-              </div>
-              <button
-                className={`${styles.settings__toggle} ${
-                  notifications.emailReminders
-                    ? styles["settings__toggle--active"]
-                    : ""
-                }`}
-                onClick={() => handleNotificationToggle("emailReminders")}
-              >
-                <span className={styles.settings__toggleSlider} />
-              </button>
-            </div>
-
-            <div className={styles.settings__toggleItem}>
-              <div>
-                <h4 className={styles.settings__toggleTitle}>
-                  Promotions & Offers
-                </h4>
-                <p className={styles.settings__toggleDescription}>
-                  Receive special offers and discounts
-                </p>
-              </div>
-              <button
-                className={`${styles.settings__toggle} ${
-                  notifications.emailPromotions
-                    ? styles["settings__toggle--active"]
-                    : ""
-                }`}
-                onClick={() => handleNotificationToggle("emailPromotions")}
-              >
-                <span className={styles.settings__toggleSlider} />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.settings__notificationGroup}>
-          <h3 className={styles.settings__notificationGroupTitle}>
-            <Smartphone size={18} />
-            SMS Notifications
-          </h3>
-
-          <div className={styles.settings__toggleList}>
-            <div className={styles.settings__toggleItem}>
-              <div>
-                <h4 className={styles.settings__toggleTitle}>
-                  Booking Updates
-                </h4>
-                <p className={styles.settings__toggleDescription}>
-                  SMS updates for booking changes
-                </p>
-              </div>
-              <button
-                className={`${styles.settings__toggle} ${
-                  notifications.smsBookings
-                    ? styles["settings__toggle--active"]
-                    : ""
-                }`}
-                onClick={() => handleNotificationToggle("smsBookings")}
-              >
-                <span className={styles.settings__toggleSlider} />
-              </button>
-            </div>
-
-            <div className={styles.settings__toggleItem}>
-              <div>
-                <h4 className={styles.settings__toggleTitle}>
-                  Service Reminders
-                </h4>
-                <p className={styles.settings__toggleDescription}>
-                  SMS reminders for upcoming services
-                </p>
-              </div>
-              <button
-                className={`${styles.settings__toggle} ${
-                  notifications.smsReminders
-                    ? styles["settings__toggle--active"]
-                    : ""
-                }`}
-                onClick={() => handleNotificationToggle("smsReminders")}
-              >
-                <span className={styles.settings__toggleSlider} />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-
   // Security Tab Content
   const SecurityContent = () => (
     <motion.div
@@ -454,141 +312,10 @@ const SettingsMain: React.FC = () => {
     </motion.div>
   );
 
-  // Billing Tab Content
-  const BillingContent = () => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={styles.settings__section}
-    >
-      <div className={styles.settings__paymentMethods}>
-        <h3 className={styles.settings__subsectionTitle}>Payment Methods</h3>
-
-        <div className={styles.settings__paymentCards}>
-          <div className={styles.settings__paymentCard}>
-            <div className={styles.settings__paymentCardIcon}>
-              <CreditCard />
-            </div>
-            <div className={styles.settings__paymentCardInfo}>
-              <h4 className={styles.settings__paymentCardName}>
-                •••• •••• •••• 4242
-              </h4>
-              <p className={styles.settings__paymentCardExpiry}>
-                Expires 12/25
-              </p>
-            </div>
-            <span className={styles.settings__paymentCardBadge}>Default</span>
-          </div>
-
-          <button className={styles.settings__addPaymentCard}>
-            <span>+</span>
-            Add Payment Method
-          </button>
-        </div>
-      </div>
-
-      <div className={styles.settings__subsection}>
-        <h3 className={styles.settings__subsectionTitle}>
-          Billing Preferences
-        </h3>
-
-        <div className={styles.settings__toggleList}>
-          <div className={styles.settings__toggleItem}>
-            <div>
-              <h4 className={styles.settings__toggleTitle}>Auto-Renewal</h4>
-              <p className={styles.settings__toggleDescription}>
-                Automatically renew subscriptions when they expire
-              </p>
-            </div>
-            <button
-              className={`${styles.settings__toggle} ${
-                autoRenewal ? styles["settings__toggle--active"] : ""
-              }`}
-              onClick={() => setAutoRenewal(!autoRenewal)}
-            >
-              <span className={styles.settings__toggleSlider} />
-            </button>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-
-  // Preferences Tab Content
-  const PreferencesContent = () => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={styles.settings__section}
-    >
-      <div className={styles.settings__subsection}>
-        <h3 className={styles.settings__subsectionTitle}>Appearance</h3>
-
-        <div className={styles.settings__themeSelector}>
-          <button
-            className={`${styles.settings__themeOption} ${
-              !darkMode ? styles["settings__themeOption--active"] : ""
-            }`}
-            onClick={() => setDarkMode(false)}
-          >
-            <Sun size={24} />
-            <span>Light</span>
-          </button>
-          <button
-            className={`${styles.settings__themeOption} ${
-              darkMode ? styles["settings__themeOption--active"] : ""
-            }`}
-            onClick={() => setDarkMode(true)}
-          >
-            <Moon size={24} />
-            <span>Dark</span>
-          </button>
-        </div>
-      </div>
-
-      <div className={styles.settings__subsection}>
-        <h3 className={styles.settings__subsectionTitle}>Language & Region</h3>
-
-        <div className={styles.settings__form}>
-          <div className={styles.settings__formGroup}>
-            <label className={styles.settings__label}>Language</label>
-            <select className={styles.settings__select}>
-              <option>English (US)</option>
-              <option>English (UK)</option>
-              <option>Spanish</option>
-              <option>French</option>
-            </select>
-          </div>
-
-          <div className={styles.settings__formGroup}>
-            <label className={styles.settings__label}>Time Zone</label>
-            <select className={styles.settings__select}>
-              <option>West Africa Time (GMT+1)</option>
-              <option>Central European Time (GMT+1)</option>
-              <option>Eastern Standard Time (GMT-5)</option>
-            </select>
-          </div>
-
-          <div className={styles.settings__formGroup}>
-            <label className={styles.settings__label}>Currency</label>
-            <select className={styles.settings__select}>
-              <option>Nigerian Naira (₦)</option>
-              <option>US Dollar ($)</option>
-              <option>Euro (€)</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-
   const contentMap = {
     profile: <ProfileContent />,
     account: <AccountContent />,
-    notifications: <NotificationsContent />,
     security: <SecurityContent />,
-    billing: <BillingContent />,
-    preferences: <PreferencesContent />,
   };
 
   return (
@@ -596,6 +323,7 @@ const SettingsMain: React.FC = () => {
       <DashboardHeader
         title="Settings"
         subtitle="Manage your account settings and preferences"
+        showUpcomingBanner={false}
       />
 
       <div className={styles.settings__container}>
