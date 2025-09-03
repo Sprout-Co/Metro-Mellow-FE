@@ -3,9 +3,9 @@
 @import "@/styles/abstracts/mixins";
 
 .serviceModal {
-  // Modal specific styles - override global modal padding for custom layout
   :global(.modal__content) {
     padding: 0;
+    overflow: hidden;
   }
 }
 
@@ -13,6 +13,11 @@
   &__container {
     display: flex;
     flex-direction: column;
+    background: linear-gradient(
+      135deg,
+      color("neutral", "white") 0%,
+      color("neutral", "lightest") 100%
+    );
 
     @include breakpoint-up("md") {
       flex-direction: row;
@@ -21,14 +26,33 @@
   }
 
   &__imageSection {
-    flex: 1;
+    flex: 0 0 45%;
     position: relative;
-    height: 230px;
+    height: 300px;
+    background: linear-gradient(
+      135deg,
+      color("primary", "base") 0%,
+      color("primary", "dark") 100%
+    );
+    overflow: hidden;
 
     @include breakpoint-up("md") {
-      height: 480px;
-      max-height: 70vh;
-      max-width: 40%;
+      height: auto;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 60%;
+      height: 200%;
+      background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.1) 0%,
+        transparent 60%
+      );
+      pointer-events: none;
     }
   }
 
@@ -36,38 +60,50 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    opacity: 0.95;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
   }
 
   &__detailsSection {
     flex: 1;
-    padding: spacing("xl");
+    padding: spacing("2xl");
     display: flex;
     flex-direction: column;
-    gap: spacing("lg");
+    position: relative;
+
+    @include breakpoint-down("md") {
+      padding: spacing("xl");
+    }
   }
 
   &__headerContent {
-    margin-bottom: spacing("md");
+    margin-bottom: spacing("lg");
   }
 
   &__title {
-    font-size: font-size("2xl");
-    font-weight: font-weight("bold");
+    @include font-size("h4");
+    @include font-weight("bold");
+    font-family: $font-family-heading;
     color: color("neutral", "darkest");
-    margin-bottom: spacing("xs");
+    margin: 0 0 spacing("sm") 0;
+    line-height: 1.2;
     text-align: center;
 
     @include breakpoint-up("lg") {
-      font-size: font-size("4xl");
       text-align: left;
     }
   }
 
   &__description {
-    font-size: font-size("body-2");
-    color: color("neutral", "darker");
+    @include font-size("body-2");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
     line-height: line-height("relaxed");
-    margin-bottom: spacing("lg");
+    margin: 0 0 spacing("lg") 0;
     text-align: center;
 
     @include breakpoint-up("lg") {
@@ -76,12 +112,44 @@
   }
 
   &__price {
-    font-size: font-size("3xl");
-    font-weight: font-weight("bold");
-    color: color("neutral", "darkest");
-    margin-top: spacing("md");
-    margin-bottom: spacing("xl");
+    @include font-size("h5");
+    @include font-weight("bold");
+    color: color("neutral", "white");
+    margin: spacing("lg") 0;
+    padding: spacing("lg");
+    background: linear-gradient(
+      135deg,
+      color("primary", "base") 0%,
+      color("primary", "dark") 100%
+    );
+    border-radius: border-radius("xl");
     text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(7, 80, 86, 0.2);
+
+    &::before {
+      content: "₦";
+      @include font-size("lg");
+      @include font-weight("medium");
+      margin-right: spacing("xs");
+      opacity: 0.9;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 40%;
+      height: 200%;
+      background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.08) 0%,
+        transparent 60%
+      );
+      pointer-events: none;
+    }
 
     @include breakpoint-up("md") {
       text-align: right;
@@ -89,65 +157,120 @@
   }
 
   &__configurationSection {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: spacing("sm");
     margin-bottom: spacing("lg");
-  }
 
-  &__sectionTitle {
-    font-size: font-size("sm");
-    font-weight: font-weight("medium");
-    color: color("neutral", "dark");
-    margin-bottom: spacing("md");
-    text-align: center;
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
 
-    @include breakpoint-up("lg") {
-      text-align: left;
+    &::-webkit-scrollbar-thumb {
+      background-color: color("neutral", "light");
+      border-radius: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: color("neutral", "lighter");
     }
   }
 
-  // Category Selection Section (Radio buttons)
+  &__sectionTitle {
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("md") 0;
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+
+    &::before {
+      content: "";
+      width: 4px;
+      height: 20px;
+      background: linear-gradient(
+        180deg,
+        color("primary", "base") 0%,
+        color("secondary", "base") 100%
+      );
+      border-radius: border-radius("full");
+    }
+  }
+
+  // Category Selection Section
   &__categorySection {
-    margin-bottom: spacing("xl");
+    background: color("neutral", "white");
+    border-radius: border-radius("xl");
     padding: spacing("lg");
-    background-color: color("neutral", "lighter");
-    border-radius: border-radius("md");
-    width: fit-content;
+    margin-bottom: spacing("lg");
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid color("neutral", "lighter");
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
   }
 
   &__categoryOptions {
     display: flex;
     gap: spacing("md");
     flex-wrap: wrap;
-    justify-content: center;
-
-    @include breakpoint-up("lg") {
-      justify-content: flex-start;
-    }
   }
 
   &__categoryOption {
-    flex: 0 0 auto;
-    width: auto;
+    flex: 1;
     min-width: 140px;
-    max-width: 180px;
     padding: spacing("md") spacing("lg");
-    background-color: color("neutral", "darker");
-    color: color("neutral", "white");
-    border: none;
+    background: color("neutral", "lightest");
+    border: 2px solid color("neutral", "lighter");
     border-radius: border-radius("lg");
     display: flex;
     align-items: center;
     cursor: pointer;
-    transition: $transition-base;
-    font-weight: font-weight("medium");
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        color("primary", "base") 0%,
+        color("primary", "dark") 100%
+      );
+      transition: width 0.3s ease;
+      z-index: 0;
+    }
 
     &:hover {
-      background-color: color("neutral", "darkest");
+      border-color: color("primary", "base");
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(7, 80, 86, 0.15);
     }
 
     &_selected {
-      background-color: color("neutral", "darkest");
-      
+      border-color: color("primary", "base");
+
+      &::before {
+        width: 100%;
+      }
+
+      span {
+        color: color("neutral", "white");
+        position: relative;
+        z-index: 1;
+      }
+
       .modal__radioInput {
+        border-color: color("neutral", "white");
+
         &::before {
           background-color: color("neutral", "white");
         }
@@ -155,89 +278,100 @@
     }
 
     span {
-      color: color("neutral", "white");
-      font-weight: font-weight("medium");
+      @include font-size("sm");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      position: relative;
+      z-index: 1;
+      transition: color 0.3s ease;
     }
   }
 
   &__radioInput {
     margin-right: spacing("sm");
-    width: 16px;
-    height: 16px;
-    min-width: 16px;
-    min-height: 16px;
-    border: 2px solid color("neutral", "light");
+    width: 18px;
+    height: 18px;
+    border: 2px solid color("neutral", "medium");
     border-radius: 50%;
     background-color: transparent;
     position: relative;
     cursor: pointer;
     appearance: none;
     flex-shrink: 0;
-    
+    transition: all 0.3s ease;
+    z-index: 1;
+
     &:checked {
-      border-color: color("neutral", "white");
-      
+      border-color: color("primary", "base");
+
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 6px;
-        height: 6px;
+        width: 8px;
+        height: 8px;
         border-radius: 50%;
-        background-color: color("neutral", "white");
+        background-color: color("primary", "base");
       }
     }
   }
 
-  // Service Options Section (Counters)
+  // Service Options Section
   &__optionsSection {
     margin-top: spacing("lg");
   }
 
   &__optionsGrid {
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: spacing("md");
-    
-    @include breakpoint-up("sm") {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    
-    @include breakpoint-up("lg") {
-      grid-template-columns: repeat(3, 1fr);
-    }
   }
 
   &__optionCounter {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: spacing("md") spacing("lg");
-    border-radius: border-radius("md");
-    border: 0.2px solid color("neutral", "light");
-    margin-bottom: spacing("sm");
+    padding: spacing("md");
+    background: linear-gradient(
+      135deg,
+      color("neutral", "white") 0%,
+      color("neutral", "lightest") 100%
+    );
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: color("primary", "base");
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
   }
 
   &__optionName {
-    font-weight: font-weight("medium");
+    @include font-size("sm");
+    @include font-weight("semibold");
     color: color("neutral", "darkest");
-    margin-right: spacing("md");
   }
 
   &__counterControls {
     display: flex;
     align-items: center;
-    gap: spacing("md");
+    gap: spacing("sm");
   }
 
   &__counterButton {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    border-radius: border-radius("full");
     border: none;
-    background-color: color("neutral", "darker");
+    background: linear-gradient(
+      135deg,
+      color("primary", "base") 0%,
+      color("primary", "dark") 100%
+    );
     color: color("neutral", "white");
     font-weight: font-weight("bold");
     font-size: font-size("lg");
@@ -245,17 +379,25 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: $transition-fast;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(7, 80, 86, 0.2);
 
     &:hover {
-      background-color: color("primary", "base");
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(7, 80, 86, 0.3);
+    }
+
+    &:active {
+      transform: scale(0.95);
     }
   }
 
   &__counterValue {
-    min-width: 20px;
+    min-width: 30px;
     text-align: center;
-    font-weight: font-weight("bold");
+    @include font-size("body-2");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
   }
 
   &__footerContent {
@@ -266,24 +408,45 @@
   &__orderButtonContainer {
     margin-top: spacing("xl");
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
+    gap: spacing("md");
 
-    @include breakpoint-up("md") {
-      justify-content: flex-end;
+    @include breakpoint-down("md") {
+      justify-content: stretch;
+      flex-direction: column;
     }
   }
 
   &__orderButton {
     min-width: 200px;
-    padding-left: spacing("xl");
-    padding-right: spacing("xl");
-    background-color: color("primary", "darker") !important;
-    border-color: color("primary", "darker") !important;
-    
+    padding: spacing("md") spacing("xl");
+    background: linear-gradient(
+      135deg,
+      color("primary", "base") 0%,
+      color("primary", "dark") 100%
+    );
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("pill");
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(7, 80, 86, 0.25);
+
     &:hover {
-      background-color: color("primary", "base") !important;
-      border-color: color("primary", "base") !important;
-      color: color("neutral", "white") !important;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(7, 80, 86, 0.35);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    @include breakpoint-down("md") {
+      width: 100%;
     }
   }
-} 
+}

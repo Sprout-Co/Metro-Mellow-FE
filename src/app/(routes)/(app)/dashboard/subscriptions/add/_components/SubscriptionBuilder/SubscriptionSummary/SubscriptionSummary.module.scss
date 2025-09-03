@@ -1,0 +1,363 @@
+// src/app/(routes)/(site)/bookings/_components/SubscriptionBuilder/SubscriptionSummary/SubscriptionSummary.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.summary {
+  background: color("neutral", "white");
+  border-radius: border-radius("2xl");
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid color("neutral", "lighter");
+  overflow: hidden;
+  position: sticky;
+  top: spacing("xl");
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("xl");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &__headerIcon {
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: border-radius("lg");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &__headerText {
+    flex: 1;
+
+    h3 {
+      @include font-size("lg");
+      @include font-weight("semibold");
+      margin: 0 0 spacing("xxs") 0;
+    }
+
+    p {
+      @include font-size("sm");
+      opacity: 0.9;
+      margin: 0;
+    }
+  }
+
+  &__empty {
+    padding: spacing("3xl") spacing("xl");
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: spacing("md");
+
+    svg {
+      color: color("neutral", "light");
+    }
+
+    h4 {
+      @include font-size("base");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      margin: 0;
+    }
+  }
+
+  &__emptyIcon {
+    width: 80px;
+    height: 80px;
+    background: color("neutral", "lightest");
+    border-radius: border-radius("full");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed color("neutral", "light");
+  }
+
+  &__services {
+    padding: spacing("xl");
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__service {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:hover {
+      background: color("neutral", "white");
+      border-color: color("primary", "light");
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  &__serviceHeader {
+    display: flex;
+    gap: spacing("sm");
+    flex: 1;
+  }
+
+  &__serviceIcon {
+    width: 32px;
+    height: 32px;
+    background: color("neutral", "white");
+    border-radius: border-radius("md");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    @include font-size("lg");
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  &__serviceInfo {
+    flex: 1;
+    min-width: 0;
+
+    h4 {
+      @include font-size("sm");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xxs") 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  &__serviceMeta {
+    display: flex;
+    gap: spacing("md");
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: spacing("xxs");
+      @include font-size("xs");
+      color: color("neutral", "dark");
+
+      svg {
+        color: color("primary", "base");
+      }
+    }
+  }
+
+  &__serviceActions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: spacing("xs");
+  }
+
+  &__servicePrice {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("primary", "dark");
+  }
+
+  &__serviceButtons {
+    display: flex;
+    gap: spacing("xs");
+  }
+
+  &__editBtn,
+  &__removeBtn {
+    width: 24px;
+    height: 24px;
+    border-radius: border-radius("md");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: color("neutral", "dark");
+
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &__editBtn:hover {
+    border-color: color("primary", "base");
+    color: color("primary", "base");
+    background: rgba(color("primary", "base"), 0.05);
+  }
+
+  &__removeBtn:hover {
+    border-color: color("status", "error");
+    color: color("status", "error");
+    background: rgba(color("status", "error"), 0.05);
+  }
+
+  &__billing {
+    margin: spacing("lg") spacing("xl");
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+    border: 1px solid color("neutral", "lighter");
+  }
+
+  &__billingItem {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    @include font-size("sm");
+
+    svg {
+      color: color("primary", "base");
+      flex-shrink: 0;
+    }
+
+    span {
+      flex: 1;
+      color: color("neutral", "dark");
+    }
+
+    strong {
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+    }
+  }
+
+  &__breakdown {
+    padding: spacing("xl");
+    padding-top: spacing("lg");
+    border-top: 1px solid color("neutral", "lighter");
+  }
+
+  &__breakdownRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("sm");
+    @include font-size("sm");
+    color: color("neutral", "dark");
+
+    &--savings {
+      color: color("status", "success");
+      @include font-weight("medium");
+      padding: spacing("xs") spacing("sm");
+      background: rgba(color("status", "success"), 0.05);
+      border-radius: border-radius("md");
+      margin: spacing("sm") -#{spacing("sm")};
+
+      span:first-child {
+        display: flex;
+        align-items: center;
+        gap: spacing("xs");
+      }
+    }
+  }
+
+  &__total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: spacing("md");
+    padding-top: spacing("md");
+    border-top: 2px solid color("primary", "base");
+  }
+
+  &__totalLabel {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+
+    span:first-child {
+      @include font-size("base");
+      @include font-weight("medium");
+      color: color("neutral", "darkest");
+    }
+  }
+
+  &__totalPeriod {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+  }
+
+  &__totalAmount {
+    @include font-size("2xl");
+    @include font-weight("bold");
+    color: color("primary", "dark");
+  }
+
+  &__cta {
+    width: calc(100% - #{spacing("xl")} * 2);
+    margin: 0 spacing("xl") spacing("xl");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("sm");
+    padding: spacing("md");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("lg");
+    @include font-size("base");
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(color("primary", "base"), 0.2);
+
+    &:hover {
+      background: color("primary", "dark");
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(color("primary", "base"), 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+
+      &:hover {
+        transform: none;
+        background: color("primary", "base");
+      }
+    }
+  }
+}

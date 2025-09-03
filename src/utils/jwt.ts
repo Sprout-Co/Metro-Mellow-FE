@@ -19,7 +19,6 @@ export interface JWTPayload {
 export function decodeAndValidateToken(token: string): JWTPayload | null {
   try {
     const decoded = jwtDecode<JWTPayload>(token);
-    console.log("decoded", decoded);
 
     // Check if token has expired
     const currentTime = Math.floor(Date.now() / 1000);

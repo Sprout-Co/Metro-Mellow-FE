@@ -128,7 +128,7 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
       }
       const completeOrder: CreateBookingInput = {
         serviceId: service._id,
-        serviceType: service.category,
+        service_category: service.category,
         serviceOption: serviceOption?.service_id || "",
         date: formData.date,
         timeSlot: formData.timeSlot,
@@ -180,22 +180,11 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      maxWidth="1200px"
+      maxWidth="800px"
       showCloseButton={true}
       className={styles.laundryServiceModal}
     >
       <div className={styles.modal__container}>
-        {/* Image Section */}
-        <div className={styles.modal__imageSection}>
-          <Image
-            src={serviceImage}
-            alt={serviceTitle}
-            width={500}
-            height={500}
-            className={styles.modal__image}
-          />
-        </div>
-
         {/* Details Section */}
         <div className={styles.modal__detailsSection}>
           {/* Service Title and Description */}
@@ -288,7 +277,7 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
         isOpen={isCheckoutModalOpen}
         onClose={handleCheckoutClose}
         onContinue={handleCheckoutComplete}
-        serviceType="Laundry"
+        service_category="Laundry"
         submitting={isCreatingBooking}
       />
 
@@ -301,7 +290,7 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
         serviceDescription={serviceDescription}
         servicePrice={calculateTotalPrice()}
         serviceImage={serviceImage}
-        serviceType="Laundry"
+        service_category="Laundry"
         includedFeatures={includedFeatures}
         apartmentType={undefined}
         roomCount={bags}

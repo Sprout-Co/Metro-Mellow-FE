@@ -129,7 +129,7 @@ const generateDefaultServiceConfiguration = (
       pestControl = {
         areas: ["living room", "kitchen", "bathroom"],
         severity: Severity.Low,
-        treatmentType: TreatmentType.Residential,
+        treatmentType: TreatmentType.PestControlResidential,
       };
       serviceDetails = { ...baseServiceDetails, pestControl };
       break;

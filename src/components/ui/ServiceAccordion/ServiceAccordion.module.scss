@@ -1,0 +1,214 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+// Accordion Container
+.accordionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("sm");
+}
+
+// Accordion Item
+.accordionItem {
+  background: color("neutral", "white");
+  border: 1px solid color("neutral", "lighter");
+  border-radius: border-radius("lg");
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+}
+
+// Accordion Header
+.accordionHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: spacing("md");
+  padding: spacing("md") spacing("lg");
+  background: color("neutral", "white");
+  border: none;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+
+  @include breakpoint-down("sm") {
+    padding: spacing("md");
+    gap: spacing("sm");
+  }
+
+  &:hover {
+    background: color("neutral", "lightest");
+  }
+
+  &--active {
+    background: linear-gradient(to right, rgba(7, 80, 86, 0.03), transparent);
+  }
+
+  &__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: border-radius("lg");
+    background: color("neutral", "lightest");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+
+    svg {
+      width: 22px;
+      height: 22px;
+      transition: transform 0.2s ease;
+    }
+
+    @include breakpoint-down("sm") {
+      width: 40px;
+      height: 40px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    @include font-family("heading");
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xxs");
+    line-height: line-height("tight");
+  }
+
+  &__description {
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("regular");
+    color: color("neutral", "dark");
+    line-height: line-height("snug");
+  }
+
+  &__arrow {
+    width: 20px;
+    height: 20px;
+    color: color("neutral", "medium");
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+// Accordion Content
+.accordionContent {
+  overflow: hidden;
+  background: color("neutral", "lightest");
+  border-top: 1px solid color("neutral", "lighter");
+}
+
+// Sub Services List
+.subServicesList {
+  padding: spacing("lg");
+  display: flex;
+  flex-direction: column;
+  gap: spacing("md");
+
+  @include breakpoint-down("sm") {
+    padding: spacing("md");
+    gap: spacing("sm");
+  }
+}
+
+// Sub Service Item
+.subServiceItem {
+  display: flex;
+  gap: spacing("md");
+  padding: spacing("sm");
+  background: color("neutral", "white");
+  border-radius: border-radius("md");
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  &__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: border-radius("md");
+    background: color("neutral", "lightest");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: color("neutral", "dark");
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xxs");
+    line-height: line-height("tight");
+  }
+
+  &__description {
+    @include font-secondary;
+    @include font-size("xs");
+    @include font-weight("regular");
+    color: color("neutral", "dark");
+    line-height: line-height("snug");
+    margin-bottom: spacing("xs");
+  }
+
+  &__duration {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xxs");
+    @include font-secondary;
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("primary", "base");
+    padding: 2px spacing("xs");
+    background: color("primary", "lighter");
+    background: rgba(7, 80, 86, 0.08);
+    border-radius: border-radius("sm");
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  &__btn {
+    display: block;
+  }
+}

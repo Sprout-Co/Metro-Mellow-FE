@@ -1,0 +1,1087 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.addSubscriptionMain {
+  width: 100%;
+  background: linear-gradient(
+    180deg,
+    color("neutral", "lightest") 0%,
+    color("neutral", "white") 100%
+  );
+  min-height: 100vh;
+
+  &__container {
+    @include container;
+    padding: spacing("xl") spacing("lg");
+
+    @include breakpoint-down("md") {
+      padding: spacing("lg") spacing("md");
+    }
+  }
+
+  &__wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  // Enhanced Header Section
+  &__header {
+    background: linear-gradient(
+      135deg,
+      color("primary", "base") 0%,
+      color("primary", "dark") 100%
+    );
+    border-radius: border-radius("3xl");
+    padding: spacing("3xl") spacing("3xl");
+    margin-bottom: spacing("3xl");
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 60%;
+      height: 200%;
+      background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.08) 0%,
+        transparent 70%
+      );
+      pointer-events: none;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -30%;
+      left: -10%;
+      width: 40%;
+      height: 150%;
+      background: radial-gradient(
+        circle at center,
+        color-alpha("accent", "base", 0.15) 0%,
+        transparent 60%
+      );
+      pointer-events: none;
+    }
+
+    @include breakpoint-down("lg") {
+      padding: spacing("2xl");
+    }
+
+    @include breakpoint-down("md") {
+      padding: spacing("xl");
+      margin-bottom: spacing("2xl");
+    }
+  }
+
+  &__headerContent {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__title {
+    @include heading-2;
+    color: color("neutral", "white");
+    margin: 0 0 spacing("sm") 0;
+    text-align: center;
+
+    @include breakpoint-down("md") {
+      @include heading-3;
+    }
+  }
+
+  &__subtitle {
+    @include body-1;
+    color: color-alpha("neutral", "white", 0.95);
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto spacing("2xl");
+
+    @include breakpoint-down("md") {
+      @include body-2;
+      margin-bottom: spacing("xl");
+    }
+  }
+
+  &__headerStats {
+    display: flex;
+    justify-content: center;
+    gap: spacing("3xl");
+    padding: spacing("xl");
+    background: color-alpha("neutral", "white", 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: border-radius("xl");
+    border: 1px solid color-alpha("neutral", "white", 0.2);
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      gap: spacing("lg");
+      padding: spacing("lg");
+    }
+  }
+
+  &__stat {
+    text-align: center;
+  }
+
+  &__statLabel {
+    display: block;
+    @include font-size("sm");
+    color: color-alpha("neutral", "white", 0.8);
+    margin-bottom: spacing("xs");
+  }
+
+  &__statValue {
+    display: block;
+    @include font-size("2xl");
+    @include font-weight("bold");
+    color: color("neutral", "white");
+  }
+
+  &__statValueGreen {
+    display: block;
+    @include font-size("2xl");
+    @include font-weight("bold");
+    color: color("accent", "base");
+  }
+
+  // Enhanced Progress Stepper
+  &__stepper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: spacing("3xl");
+    padding: spacing("xl");
+    background: color("neutral", "white");
+    border-radius: border-radius("2xl");
+    box-shadow: shadow("sm");
+
+    @include breakpoint-down("md") {
+      flex-wrap: wrap;
+      padding: spacing("lg");
+      margin-bottom: spacing("2xl");
+    }
+  }
+
+  &__step {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    cursor: pointer;
+    transition: $transition-base;
+    padding: spacing("sm") spacing("lg");
+    border-radius: border-radius("pill");
+
+    &--active {
+      background: color-alpha("primary", "base", 0.1);
+
+      .addSubscriptionMain__stepIcon {
+        background: color("primary", "base");
+        color: color("neutral", "white");
+        transform: scale(1.1);
+      }
+
+      .addSubscriptionMain__stepLabel {
+        color: color("primary", "base");
+        @include font-weight("semibold");
+      }
+    }
+
+    &--completed {
+      .addSubscriptionMain__stepIcon {
+        background: color("status", "success");
+        color: color("neutral", "white");
+      }
+
+      .addSubscriptionMain__stepLabel {
+        color: color("status", "success");
+      }
+    }
+
+    &:hover:not(&--active) {
+      background: color("neutral", "lightest");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("xs") spacing("sm");
+    }
+  }
+
+  &__stepIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: border-radius("full");
+    background: color("neutral", "lighter");
+    color: color("neutral", "dark");
+    @include flex-center;
+    transition: $transition-base;
+
+    @include breakpoint-down("sm") {
+      width: 32px;
+      height: 32px;
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+
+  &__stepLabel {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    transition: $transition-base;
+
+    @include breakpoint-down("sm") {
+      display: none;
+    }
+  }
+
+  &__stepConnector {
+    width: 60px;
+    height: 2px;
+    background: color("neutral", "lighter");
+    margin: 0 spacing("xs");
+    transition: $transition-base;
+
+    &--completed {
+      background: color("status", "success");
+    }
+
+    @include breakpoint-down("md") {
+      width: 30px;
+    }
+
+    @include breakpoint-down("sm") {
+      width: 20px;
+    }
+  }
+
+  // Content Section
+  &__content {
+    background: color("neutral", "white");
+    border-radius: border-radius("2xl");
+    padding: spacing("3xl");
+    min-height: 500px;
+    box-shadow: shadow("sm");
+
+    @include breakpoint-down("md") {
+      padding: spacing("2xl");
+      min-height: 400px;
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("lg");
+    }
+  }
+
+  &__stepHeader {
+    text-align: center;
+    margin-bottom: spacing("3xl");
+
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("2xl");
+    }
+  }
+
+  &__stepTitle {
+    @include heading-3;
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("sm") 0;
+
+    @include breakpoint-down("md") {
+      @include heading-4;
+    }
+  }
+
+  &__stepDescription {
+    @include body-1;
+    color: color("neutral", "medium");
+    max-width: 600px;
+    margin: 0 auto;
+
+    @include breakpoint-down("md") {
+      @include body-2;
+    }
+  }
+
+  // Step 1: Services Grid
+  &__servicesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: spacing("xl");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: spacing("lg");
+    }
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__serviceCard {
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("xl");
+    padding: spacing("xl");
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, transparent);
+      transition: $transition-base;
+    }
+
+    &--selected {
+      border-color: color("primary", "base");
+      background: linear-gradient(
+        to bottom,
+        color-alpha("primary", "base", 0.03),
+        transparent
+      );
+
+      &::before {
+        background: linear-gradient(
+          90deg,
+          color("primary", "base"),
+          color("primary", "dark")
+        );
+      }
+    }
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: shadow("lg");
+      border-color: color("primary", "light");
+    }
+
+    @include breakpoint-down("md") {
+      padding: spacing("lg");
+    }
+  }
+
+  &__selectedIndicator {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+    width: 28px;
+    height: 28px;
+    border-radius: border-radius("full");
+    background: color("status", "success");
+    color: color("neutral", "white");
+    @include flex-center;
+    box-shadow: shadow("md");
+  }
+
+  &__serviceIcon {
+    width: 64px;
+    height: 64px;
+    border-radius: border-radius("xl");
+    @include flex-center;
+    margin-bottom: spacing("lg");
+    transition: $transition-base;
+
+    @include breakpoint-down("md") {
+      width: 56px;
+      height: 56px;
+    }
+  }
+
+  &__serviceTitle {
+    @include heading-5;
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("sm") 0;
+  }
+
+  &__serviceDescription {
+    @include body-2;
+    color: color("neutral", "medium");
+    margin: 0 0 spacing("lg") 0;
+    line-height: line-height("relaxed");
+  }
+
+  &__serviceFeatures {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing("xs");
+    margin-bottom: spacing("lg");
+  }
+
+  &__serviceFeature {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xxs");
+    padding: spacing("xs") spacing("sm");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("pill");
+    @include font-size("xs");
+    color: color("neutral", "dark");
+
+    svg {
+      color: color("accent", "base");
+    }
+  }
+
+  &__servicePricing {
+    display: flex;
+    align-items: baseline;
+    gap: spacing("xs");
+    padding-top: spacing("md");
+    border-top: 1px solid color("neutral", "lighter");
+  }
+
+  &__servicePrice {
+    @include font-size("lg");
+    @include font-weight("bold");
+    color: color("primary", "base");
+  }
+
+  &__servicePeriod {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+  }
+
+  // Step 2: Configuration
+  &__configList {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xl");
+  }
+
+  &__configCard {
+    background: color("neutral", "lightest");
+    border-radius: border-radius("xl");
+    padding: spacing("xl");
+    border: 1px solid color("neutral", "lighter");
+    transition: $transition-base;
+
+    &:hover {
+      box-shadow: shadow("md");
+    }
+
+    @include breakpoint-down("md") {
+      padding: spacing("lg");
+    }
+  }
+
+  &__configHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+    }
+  }
+
+  &__configLeft {
+    display: flex;
+    align-items: center;
+    gap: spacing("lg");
+  }
+
+  &__configIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("lg");
+    @include flex-center;
+    flex-shrink: 0;
+  }
+
+  &__configInfo {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__configTitle {
+    @include heading-6;
+    color: color("neutral", "darkest");
+    margin: 0;
+  }
+
+  &__configPrice {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("primary", "base");
+  }
+
+  &__editButton {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    padding: spacing("sm") spacing("lg");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "light");
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      border-color: color("primary", "base");
+      color: color("primary", "base");
+      transform: translateY(-1px);
+    }
+
+    @include breakpoint-down("sm") {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  &__configDetails {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: spacing("md");
+    padding: spacing("lg");
+    background: color("neutral", "white");
+    border-radius: border-radius("lg");
+  }
+
+  &__configDetail {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__configDetailLabel {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+    text-transform: uppercase;
+    letter-spacing: map-get($letter-spacing, "wide");
+  }
+
+  &__configDetailValue {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  &__configEmpty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("sm");
+    padding: spacing("xl");
+    background: color("neutral", "white");
+    border: 1px dashed color("neutral", "light");
+    border-radius: border-radius("lg");
+    color: color("neutral", "medium");
+    @include font-size("sm");
+
+    svg {
+      color: color("status", "info");
+    }
+  }
+
+  // Step 3: Schedule
+  &__scheduleList {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xl");
+  }
+
+  &__scheduleCard {
+    background: color("neutral", "lightest");
+    border-radius: border-radius("xl");
+    padding: spacing("xl");
+    border: 1px solid color("neutral", "lighter");
+
+    @include breakpoint-down("md") {
+      padding: spacing("lg");
+    }
+  }
+
+  &__scheduleHeader {
+    display: flex;
+    align-items: center;
+    gap: spacing("lg");
+    margin-bottom: spacing("xl");
+  }
+
+  &__scheduleIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("lg");
+    @include flex-center;
+    flex-shrink: 0;
+  }
+
+  &__scheduleTitle {
+    @include heading-6;
+    color: color("neutral", "darkest");
+    margin: 0;
+  }
+
+  &__scheduleGrid {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("2xl");
+  }
+
+  &__scheduleField {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__scheduleLabel {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+
+    svg {
+      color: color("primary", "base");
+    }
+  }
+
+  &__frequencyOptions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__frequencyOption {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: spacing("md");
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &--selected {
+      border-color: color("primary", "base");
+      background: color-alpha("primary", "base", 0.05);
+
+      .addSubscriptionMain__frequencyLabel {
+        color: color("primary", "base");
+      }
+    }
+
+    &:hover {
+      border-color: color("primary", "light");
+      transform: translateY(-2px);
+    }
+  }
+
+  &__frequencyLabel {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__frequencyDesc {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+  }
+
+  &__daysGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: spacing("sm");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  &__dayOption {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: spacing("sm");
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &--selected {
+      border-color: color("primary", "base");
+      background: color("primary", "base");
+      color: color("neutral", "white");
+
+      .addSubscriptionMain__dayShort,
+      .addSubscriptionMain__dayFull {
+        color: color("neutral", "white");
+      }
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      border-color: color("primary", "light");
+    }
+  }
+
+  &__dayShort {
+    @include font-size("sm");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+  }
+
+  &__dayFull {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+    display: none;
+
+    @include breakpoint-up("lg") {
+      display: block;
+    }
+  }
+
+  &__timeGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: spacing("sm");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__timeOption {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    padding: spacing("sm");
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &--selected {
+      border-color: color("primary", "base");
+      background: color-alpha("primary", "base", 0.05);
+
+      .addSubscriptionMain__timeValue {
+        color: color("primary", "base");
+        @include font-weight("semibold");
+      }
+    }
+
+    &:hover {
+      border-color: color("primary", "light");
+      transform: translateY(-2px);
+    }
+  }
+
+  &__timeIcon {
+    @include font-size("lg");
+  }
+
+  &__timeValue {
+    @include font-size("sm");
+    color: color("neutral", "darkest");
+  }
+
+  // Step 4: Review
+  &__reviewGrid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: spacing("2xl");
+
+    @include breakpoint-down("lg") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__summaryCard,
+  &__benefitsCard {
+    background: color("neutral", "lightest");
+    border-radius: border-radius("xl");
+    padding: spacing("2xl");
+    border: 1px solid color("neutral", "lighter");
+
+    @include breakpoint-down("md") {
+      padding: spacing("xl");
+    }
+  }
+
+  &__summaryTitle,
+  &__benefitsTitle {
+    @include heading-5;
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xl") 0;
+    padding-bottom: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+
+  &__summaryServices {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+    margin-bottom: spacing("xl");
+  }
+
+  &__summaryService {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+    padding: spacing("lg");
+    background: color("neutral", "white");
+    border-radius: border-radius("lg");
+  }
+
+  &__summaryServiceHeader {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+  }
+
+  &__summaryServiceIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: border-radius("lg");
+    @include flex-center;
+    flex-shrink: 0;
+  }
+
+  &__summaryServiceInfo {
+    flex: 1;
+
+    h4 {
+      @include font-size("body-1");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xs") 0;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "medium");
+      margin: 0;
+    }
+  }
+
+  &__summaryServicePrice {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: spacing("md");
+    border-top: 1px dashed color("neutral", "lighter");
+  }
+
+  &__priceLabel {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+  }
+
+  &__priceValue {
+    @include font-size("body-1");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  &__summaryFooter {
+    padding-top: spacing("xl");
+    border-top: 2px solid color("neutral", "light");
+  }
+
+  &__summaryTotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("md");
+
+    span:first-child {
+      @include font-size("lg");
+      color: color("neutral", "darkest");
+    }
+  }
+
+  &__summaryTotalValue {
+    @include font-size("2xl");
+    @include font-weight("bold");
+    color: color("primary", "base");
+  }
+
+  &__summarySavings {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("sm") spacing("md");
+    background: color-alpha("status", "success", 0.1);
+    border-radius: border-radius("lg");
+    color: color("status", "success");
+    @include font-size("sm");
+    @include font-weight("semibold");
+
+    svg {
+      color: color("accent", "base");
+    }
+  }
+
+  &__benefitsList {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: spacing("md");
+  }
+
+  &__benefitItem {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("sm");
+    color: color("neutral", "darkest");
+    @include font-size("sm");
+    transition: $transition-fast;
+
+    &:hover {
+      padding-left: spacing("md");
+    }
+  }
+
+  &__benefitIcon {
+    color: color("status", "success");
+    flex-shrink: 0;
+  }
+
+  // Enhanced Footer
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: spacing("3xl");
+    padding: spacing("xl");
+    background: color("neutral", "white");
+    border-radius: border-radius("2xl");
+    box-shadow: shadow("md");
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      gap: spacing("lg");
+      padding: spacing("lg");
+      margin-top: spacing("2xl");
+    }
+  }
+
+  &__footerBtn {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("md") spacing("xl");
+    border-radius: border-radius("pill");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: $transition-base;
+    border: none;
+
+    &--primary {
+      background: color("primary", "base");
+      color: color("neutral", "white");
+
+      &:hover:not(:disabled) {
+        background: color("primary", "dark");
+        transform: translateY(-2px);
+        box-shadow: shadow("lg");
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    &--secondary {
+      background: transparent;
+      color: color("neutral", "dark");
+      border: 1px solid color("neutral", "light");
+
+      &:hover:not(:disabled) {
+        background: color("neutral", "lightest");
+        border-color: color("neutral", "medium");
+      }
+
+      &:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+    }
+
+    &--accent {
+      background: color("accent", "base");
+      color: color("primary", "dark");
+
+      &:hover {
+        background: color("accent", "dark");
+        transform: translateY(-2px);
+        box-shadow: shadow("lg");
+      }
+    }
+
+    @include breakpoint-down("md") {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  &__footerCenter {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+
+    @include breakpoint-down("md") {
+      width: 100%;
+    }
+  }
+
+  &__footerPrice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: spacing("sm") spacing("xl");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("pill");
+  }
+
+  &__footerPriceLabel {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+    text-transform: uppercase;
+    letter-spacing: map-get($letter-spacing, "wide");
+  }
+
+  &__footerPriceValue {
+    @include font-size("lg");
+    @include font-weight("bold");
+    color: color("primary", "base");
+  }
+}

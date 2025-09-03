@@ -503,7 +503,8 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
           serviceDetails = {
             pestControl: {
               treatmentType:
-                selectedOption?.service_id || TreatmentType.Residential,
+                selectedOption?.service_id ||
+                TreatmentType.PestControlResidential,
               propertyType: propertyType.toUpperCase(),
               rooms: roomQuantities,
               severity: Severity.Medium, // Default severity

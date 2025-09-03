@@ -1,0 +1,1483 @@
+// src/app/(routes)/(site)/bookings/_components/SubscriptionBuilder/CheckoutModal/CheckoutModal.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.checkout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: color("neutral", "white");
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("xl");
+    border-bottom: 2px solid color("neutral", "lighter");
+    background: linear-gradient(
+      135deg,
+      rgba(color("primary", "base"), 0.03),
+      transparent
+    );
+    gap: spacing("lg");
+  }
+
+  &__headerContent {
+    display: flex;
+    align-items: center;
+    gap: spacing("lg");
+  }
+
+  &__headerIcon {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(
+      135deg,
+      color("primary", "base"),
+      color("primary", "dark")
+    );
+    border-radius: border-radius("xl");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("neutral", "white");
+  }
+
+  &__title {
+    @include font-size("2xl");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xxs") 0;
+  }
+
+  &__subtitle {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
+
+  &__closeBtn {
+    width: 40px;
+    height: 40px;
+    border-radius: border-radius("full");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: color("neutral", "dark");
+
+    &:hover {
+      background: color("neutral", "lightest");
+      transform: rotate(90deg);
+    }
+  }
+
+  &__backBtn {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("sm") spacing("lg");
+    border-radius: border-radius("lg");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: color("neutral", "dark");
+    @include font-size("sm");
+    @include font-weight("medium");
+
+    &:hover {
+      background: color("neutral", "lightest");
+      border-color: color("primary", "base");
+      transform: translateX(-2px);
+    }
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: spacing("2xl");
+    padding: spacing("2xl");
+    overflow-y: auto;
+    flex: 1;
+
+    @include breakpoint-down("lg") {
+      grid-template-columns: 1fr;
+      gap: spacing("xl");
+    }
+
+    @include breakpoint-down("md") {
+      padding: spacing("xl");
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+  }
+
+  &__section {
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("xl");
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  &__sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("lg");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: color("neutral", "lightest");
+
+    &:hover {
+      background: color("neutral", "lighter");
+    }
+  }
+
+  &__sectionTitle {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+
+    h3 {
+      @include font-size("base");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0;
+    }
+
+    svg {
+      color: color("primary", "base");
+    }
+  }
+
+  &__sectionToggle {
+    transition: transform 0.3s ease;
+    color: color("neutral", "dark");
+
+    &--active {
+      transform: rotate(90deg);
+    }
+  }
+
+  &__sectionContent {
+    padding: spacing("lg");
+    background: color("neutral", "white");
+  }
+
+  // Date Picker Styles
+  &__datePickerContainer {
+    background: color("neutral", "lightest");
+    border-radius: border-radius("xl");
+    padding: spacing("xl");
+    border: 2px solid color("neutral", "lighter");
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: color("primary", "light");
+      box-shadow: 0 4px 20px rgba(color("primary", "base"), 0.1);
+    }
+  }
+
+  &__selectedDate {
+    display: flex;
+    align-items: center;
+    gap: spacing("lg");
+    margin-bottom: spacing("lg");
+
+    svg {
+      color: color("primary", "base");
+      flex-shrink: 0;
+    }
+
+    div {
+      flex: 1;
+
+      h4 {
+        @include font-size("base");
+        @include font-weight("semibold");
+        color: color("neutral", "darkest");
+        margin: 0 0 spacing("xxs") 0;
+      }
+
+      p {
+        @include font-size("sm");
+        color: color("neutral", "dark");
+        margin: 0;
+      }
+    }
+  }
+
+  &__changeDateBtn {
+    padding: spacing("sm") spacing("lg");
+    background: linear-gradient(135deg, color("primary", "base"), color("primary", "dark"));
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(color("primary", "base"), 0.3);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(color("primary", "base"), 0.4);
+    }
+  }
+
+  &__datePicker {
+    overflow: hidden;
+  }
+
+  &__dateGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: spacing("md");
+    padding: spacing("md") 0;
+  }
+
+  &__dateOption {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: spacing("xxs");
+    padding: spacing("md");
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+
+    &:hover {
+      border-color: color("primary", "base");
+      background: rgba(color("primary", "base"), 0.05);
+    }
+
+    &--selected {
+      background: linear-gradient(135deg, color("primary", "base"), color("primary", "dark"));
+      border-color: color("primary", "dark");
+      color: color("neutral", "white");
+      box-shadow: 0 4px 12px rgba(color("primary", "base"), 0.3);
+    }
+  }
+
+  &__dateDay {
+    @include font-size("xs");
+    @include font-weight("medium");
+    opacity: 0.8;
+  }
+
+  &__dateNumber {
+    @include font-size("lg");
+    @include font-weight("bold");
+  }
+
+  &__dateMonth {
+    @include font-size("xs");
+    @include font-weight("medium");
+    opacity: 0.8;
+  }
+
+  // Enhanced Service Cards
+  &__enhancedServiceCard {
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("xl");
+    padding: spacing("xl");
+    margin-bottom: spacing("lg");
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, color("primary", "base"), color("primary", "light"));
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &:hover {
+      border-color: color("primary", "light");
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &__serviceTitleRow {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    margin-bottom: spacing("xs");
+
+    h4 {
+      margin: 0;
+      flex: 1;
+    }
+  }
+
+  &__serviceCategory {
+    padding: spacing("xxs") spacing("sm");
+    background: color("accent", "base");
+    color: color("neutral", "darkest");
+    border-radius: border-radius("pill");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    text-transform: capitalize;
+  }
+
+  &__serviceFeatures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: spacing("sm");
+    margin: spacing("lg") 0;
+    padding: spacing("lg");
+    background: rgba(color("status", "success"), 0.05);
+    border-radius: border-radius("lg");
+    border: 1px solid rgba(color("status", "success"), 0.2);
+  }
+
+  &__serviceFeature {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("status", "success");
+
+    svg {
+      flex-shrink: 0;
+    }
+  }
+
+  &__serviceSchedule {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: spacing("md");
+    padding: spacing("lg");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    margin-top: spacing("lg");
+  }
+
+  &__scheduleDetail {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+
+    svg {
+      color: color("primary", "base");
+      flex-shrink: 0;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: spacing("xxs");
+    }
+  }
+
+  &__scheduleLabel {
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__scheduleValue {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  // Service Cards (Legacy)
+  &__serviceCard {
+    padding: spacing("lg");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    margin-bottom: spacing("md");
+    transition: all 0.2s ease;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &:hover {
+      background: color("neutral", "lighter");
+      transform: translateX(4px);
+    }
+  }
+
+  &__serviceHeader {
+    display: flex;
+    gap: spacing("md");
+    margin-bottom: spacing("md");
+  }
+
+  &__serviceIcon {
+    width: 40px;
+    height: 40px;
+    background: color("neutral", "white");
+    border-radius: border-radius("lg");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: color("primary", "base");
+  }
+
+  &__serviceInfo {
+    flex: 1;
+
+    h4 {
+      @include font-size("base");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xxs") 0;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      margin: 0;
+      line-height: line-height("relaxed");
+    }
+  }
+
+  &__serviceDetails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing("md");
+    margin-bottom: spacing("md");
+    padding-left: calc(40px + #{spacing("md")});
+  }
+
+  &__serviceDetail {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    @include font-size("sm");
+    color: color("neutral", "dark");
+
+    svg {
+      color: color("primary", "base");
+    }
+  }
+
+  &__servicePrice {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: spacing("xxs");
+    margin-left: auto;
+
+    span {
+      @include font-size("xs");
+      @include font-weight("medium");
+      color: color("neutral", "dark");
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    strong {
+      @include font-size("xl");
+      @include font-weight("bold");
+      color: color("primary", "dark");
+    }
+  }
+
+  // What's Included Section
+  &__inclusionsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: spacing("lg");
+    margin-bottom: spacing("xl");
+  }
+
+  &__inclusionCard {
+    display: flex;
+    gap: spacing("md");
+    padding: spacing("lg");
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: color("primary", "light");
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    h5 {
+      @include font-size("sm");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xs") 0;
+    }
+
+    p {
+      @include font-size("xs");
+      color: color("neutral", "dark");
+      margin: 0;
+      line-height: line-height("relaxed");
+    }
+  }
+
+  &__inclusionIcon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(
+      135deg,
+      rgba(color("primary", "base"), 0.15),
+      rgba(color("primary", "light"), 0.08)
+    );
+    border-radius: border-radius("xl");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: color("primary", "base");
+  }
+
+  &__serviceTimeline {
+    padding: spacing("xl");
+    background: linear-gradient(
+      135deg,
+      rgba(color("primary", "base"), 0.05),
+      rgba(color("primary", "light"), 0.03)
+    );
+    border: 2px solid rgba(color("primary", "base"), 0.1);
+    border-radius: border-radius("xl");
+  }
+
+  &__timelineTitle {
+    @include font-size("base");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("lg") 0;
+    text-align: center;
+  }
+
+  &__timelineSteps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        color("primary", "base"),
+        color("primary", "light")
+      );
+      z-index: 1;
+    }
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      gap: spacing("lg");
+
+      &::before {
+        display: none;
+      }
+    }
+  }
+
+  &__timelineStep {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("md");
+    flex: 1;
+    background: color("neutral", "white");
+    padding: spacing("md");
+    border-radius: border-radius("lg");
+    position: relative;
+    z-index: 2;
+    max-width: 200px;
+
+    @include breakpoint-down("md") {
+      max-width: none;
+    }
+
+    h6 {
+      @include font-size("sm");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xxs") 0;
+    }
+
+    p {
+      @include font-size("xs");
+      color: color("neutral", "dark");
+      margin: 0;
+      line-height: line-height("relaxed");
+    }
+  }
+
+  &__timelineNumber {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(
+      135deg,
+      color("primary", "base"),
+      color("primary", "dark")
+    );
+    color: color("neutral", "white");
+    border-radius: border-radius("full");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include font-size("sm");
+    @include font-weight("bold");
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(color("primary", "base"), 0.3);
+  }
+
+  // Benefits
+  &__benefits {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: spacing("lg");
+  }
+
+  &__benefit {
+    display: flex;
+    gap: spacing("md");
+
+    svg {
+      color: color("accent", "base");
+      flex-shrink: 0;
+    }
+
+    h5 {
+      @include font-size("sm");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xxs") 0;
+    }
+
+    p {
+      @include font-size("xs");
+      color: color("neutral", "dark");
+      margin: 0;
+    }
+  }
+
+  // Sidebar Summary
+  &__sidebar {
+    position: sticky;
+    top: 0;
+    height: fit-content;
+
+    @include breakpoint-down("lg") {
+      position: static;
+    }
+  }
+
+  &__summary {
+    background: color("neutral", "white");
+    border: 2px solid color("primary", "light");
+    border-radius: border-radius("xl");
+    padding: spacing("xl");
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  &__summaryTitle {
+    @include font-size("lg");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xl") 0;
+    padding-bottom: spacing("md");
+    border-bottom: 2px solid color("neutral", "lighter");
+  }
+
+  &__priceBreakdown {
+    margin-bottom: spacing("xl");
+  }
+
+  &__priceRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("sm") 0;
+    @include font-size("sm");
+    color: color("neutral", "dark");
+
+    &--discount {
+      color: color("status", "success");
+      @include font-weight("medium");
+
+      span:first-child {
+        display: flex;
+        align-items: center;
+        gap: spacing("xs");
+      }
+    }
+  }
+
+  &__priceDivider {
+    height: 1px;
+    background: color("neutral", "lighter");
+    margin: spacing("md") 0;
+  }
+
+  &__priceTotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("md") 0;
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: spacing("xxs");
+
+      span {
+        @include font-size("base");
+        @include font-weight("medium");
+        color: color("neutral", "darkest");
+      }
+
+      small {
+        @include font-size("xs");
+        color: color("neutral", "dark");
+      }
+    }
+
+    strong {
+      @include font-size("2xl");
+      @include font-weight("bold");
+      color: color("primary", "dark");
+    }
+  }
+
+  &__billingInfo {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    margin-bottom: spacing("lg");
+  }
+
+  &__billingItem {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    @include font-size("sm");
+    color: color("neutral", "dark");
+
+    svg {
+      color: color("primary", "base");
+      flex-shrink: 0;
+    }
+
+    div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      gap: spacing("md");
+    }
+  }
+
+  &__billingLabel {
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+  }
+
+  &__billingValue {
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  &__terms {
+    padding: spacing("md");
+    background: linear-gradient(
+      to right,
+      rgba(color("status", "info"), 0.05),
+      transparent
+    );
+    border-left: 3px solid color("status", "info");
+    border-radius: border-radius("md");
+    margin-bottom: spacing("xl");
+
+    p {
+      @include font-size("xs");
+      color: color("neutral", "dark");
+      margin: 0;
+      display: flex;
+      align-items: flex-start;
+      gap: spacing("sm");
+      line-height: line-height("relaxed");
+
+      svg {
+        color: color("status", "info");
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__confirmBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("sm");
+    padding: spacing("md");
+    background: linear-gradient(
+      135deg,
+      color("primary", "base"),
+      color("primary", "dark")
+    );
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("lg");
+    @include font-size("base");
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+      );
+      transition: left 0.5s ease;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(color("primary", "base"), 0.3);
+
+      &::before {
+        left: 100%;
+      }
+    }
+  }
+
+  &__cancelBtn {
+    width: 100%;
+    padding: spacing("sm");
+    background: transparent;
+    color: color("neutral", "dark");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("medium");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("neutral", "lightest");
+      border-color: color("neutral", "medium");
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  // Enhanced Date Picker Styles
+  &__datePickerContainer {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+  }
+
+  &__selectedDate {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("lg");
+    background: linear-gradient(
+      135deg,
+      color("neutral", "lightest"),
+      rgba(255, 255, 255, 0.8)
+    );
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+
+    svg {
+      color: color("primary", "base");
+      flex-shrink: 0;
+    }
+
+    div {
+      flex: 1;
+
+      h4 {
+        @include font-size("sm");
+        @include font-weight("semibold");
+        color: color("neutral", "darkest");
+        margin: 0 0 spacing("xxs") 0;
+      }
+
+      p {
+        @include font-size("xs");
+        color: color("neutral", "medium");
+        margin: 0;
+      }
+    }
+  }
+
+  &__changeDateBtn {
+    padding: spacing("xs") spacing("md");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("md");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("primary", "dark");
+    }
+  }
+
+  &__datePicker {
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  &__calendarHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("md");
+    background: linear-gradient(
+      135deg,
+      color("primary", "base"),
+      color("primary", "dark")
+    );
+    color: color("neutral", "white");
+  }
+
+  &__monthNav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: border-radius("full");
+    color: color("neutral", "white");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
+    }
+  }
+
+  &__monthTitle {
+    @include font-size("lg");
+    @include font-weight("bold");
+    margin: 0;
+    flex: 1;
+    text-align: center;
+  }
+
+  &__calendar {
+    padding: spacing("md");
+  }
+
+  &__calendarDays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: spacing("xs");
+    margin-bottom: spacing("sm");
+  }
+
+  &__dayHeader {
+    padding: spacing("xs");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    color: color("neutral", "medium");
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__calendarGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: spacing("xs");
+  }
+
+  &__calendarDate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: border-radius("md");
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:hover:not(&--disabled) {
+      background: color("primary", "lighter");
+      color: color("primary", "dark");
+      border-color: color("primary", "light");
+    }
+
+    &--otherMonth {
+      color: color("neutral", "light");
+      opacity: 0.5;
+    }
+
+    &--today {
+      background: linear-gradient(
+        135deg,
+        color("accent", "base"),
+        color("accent", "dark")
+      );
+      color: color("neutral", "white");
+      @include font-weight("bold");
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        background: color("neutral", "white");
+        border-radius: border-radius("full");
+      }
+    }
+
+    &--selected {
+      background: linear-gradient(
+        135deg,
+        color("primary", "base"),
+        color("primary", "dark")
+      );
+      color: color("neutral", "white");
+      border-color: color("primary", "base");
+      @include font-weight("bold");
+      box-shadow: 0 2px 8px rgba(color("primary", "base"), 0.3);
+    }
+
+    &--disabled {
+      color: color("neutral", "lighter");
+      cursor: not-allowed;
+      opacity: 0.3;
+
+      &:hover {
+        background: transparent;
+        border-color: transparent;
+      }
+    }
+  }
+
+  &__quickDates {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border-top: 1px solid color("neutral", "lighter");
+  }
+
+  &__quickDatesLabel {
+    @include font-size("xs");
+    @include font-weight("semibold");
+    color: color("neutral", "dark");
+    flex-shrink: 0;
+  }
+
+  &__quickDateButtons {
+    display: flex;
+    gap: spacing("xs");
+    flex-wrap: wrap;
+  }
+
+  &__quickDateBtn {
+    padding: spacing("xxs") spacing("sm");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "light");
+    border-radius: border-radius("pill");
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+
+    &:hover {
+      background: color("primary", "base");
+      color: color("neutral", "white");
+      border-color: color("primary", "base");
+    }
+  }
+
+  // Address Picker Styles
+  &__addressPickerContainer {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+  }
+
+  &__selectedAddress {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("lg");
+    background: linear-gradient(
+      135deg,
+      color("neutral", "lightest"),
+      rgba(255, 255, 255, 0.8)
+    );
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+
+    svg {
+      color: color("primary", "base");
+      flex-shrink: 0;
+    }
+
+    div {
+      flex: 1;
+
+      h4 {
+        @include font-size("sm");
+        @include font-weight("semibold");
+        color: color("neutral", "darkest");
+        margin: 0 0 spacing("xxs") 0;
+      }
+
+      p {
+        @include font-size("xs");
+        color: color("neutral", "medium");
+        margin: 0;
+        line-height: 1.4;
+      }
+    }
+  }
+
+  &__addressLabel {
+    @include font-size("xs");
+    @include font-weight("semibold");
+    color: color("primary", "base");
+    background: color("primary", "lighter");
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("pill");
+    margin-top: spacing("xxs");
+    display: inline-block;
+  }
+
+  &__changeAddressBtn {
+    padding: spacing("xs") spacing("md");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("md");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("primary", "dark");
+    }
+  }
+
+  &__addressPicker {
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  &__addressList {
+    display: flex;
+    flex-direction: column;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  &__addressOption {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("md");
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid color("neutral", "lighter");
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    width: 100%;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background: color("neutral", "lightest");
+    }
+
+    &--selected {
+      background: linear-gradient(
+        135deg,
+        color("primary", "lighter"),
+        rgba(color("primary", "base"), 0.1)
+      );
+      border-color: color("primary", "light");
+    }
+  }
+
+  &__addressOptionIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: color("neutral", "lightest");
+    border-radius: border-radius("md");
+    color: color("neutral", "medium");
+    flex-shrink: 0;
+
+    .checkout__addressOption--selected & {
+      background: color("primary", "base");
+      color: color("neutral", "white");
+    }
+  }
+
+  &__addressOptionContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+  }
+
+  &__addressOptionHeader {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    flex-wrap: wrap;
+  }
+
+  &__addressOptionLabel {
+    @include font-size("xs");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__addressOptionDefault {
+    @include font-size("xs");
+    @include font-weight("semibold");
+    color: color("accent", "base");
+    background: color("accent", "lighter");
+    padding: spacing("xxs") spacing("xs");
+    border-radius: border-radius("pill");
+  }
+
+  &__addressOptionText {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    margin: 0;
+    line-height: 1.4;
+
+    .checkout__addressOption--selected & {
+      color: color("neutral", "darkest");
+    }
+  }
+
+  &__addressOptionSelected {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: color("primary", "base");
+    border-radius: border-radius("full");
+    color: color("neutral", "white");
+    flex-shrink: 0;
+  }
+
+  &__noAddresses {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("2xl");
+    text-align: center;
+    background: linear-gradient(
+      135deg,
+      color("neutral", "lightest"),
+      rgba(255, 255, 255, 0.8)
+    );
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    gap: spacing("md");
+
+    svg {
+      color: color("neutral", "light");
+    }
+
+    h4 {
+      @include font-size("lg");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "medium");
+      margin: 0;
+      line-height: 1.4;
+    }
+  }
+
+  &__addAddressFromEmpty {
+    padding: spacing("sm") spacing("lg");
+    background: linear-gradient(
+      135deg,
+      color("primary", "base"),
+      color("primary", "dark")
+    );
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(color("primary", "base"), 0.3);
+    }
+  }
+
+  &__addAddressSection {
+    border-top: 1px solid color("neutral", "lighter");
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+  }
+
+  &__addAddressDivider {
+    text-align: center;
+    margin-bottom: spacing("sm");
+    position: relative;
+
+    span {
+      @include font-size("xs");
+      color: color("neutral", "medium");
+      background: color("neutral", "lightest");
+      padding: 0 spacing("sm");
+      position: relative;
+      z-index: 1;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: color("neutral", "lighter");
+      z-index: 0;
+    }
+  }
+
+  &__addAddressBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+    padding: spacing("sm");
+    background: color("neutral", "white");
+    border: 2px dashed color("neutral", "light");
+    border-radius: border-radius("md");
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: color("primary", "base");
+      color: color("primary", "base");
+      background: color("primary", "lighter");
+
+      svg {
+        color: color("primary", "base");
+      }
+    }
+
+    svg {
+      color: color("neutral", "medium");
+      transition: color 0.2s ease;
+    }
+  }
+}

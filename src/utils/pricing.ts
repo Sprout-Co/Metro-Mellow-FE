@@ -41,8 +41,8 @@ const PRICING_MULTIPLIERS = {
   [Severity.High]: 1.5,
 
   // Pest control treatment type multipliers
-  [TreatmentType.Residential]: 1.0,
-  [TreatmentType.Commercial]: 1.4,
+  [TreatmentType.PestControlResidential]: 1.0,
+  [TreatmentType.PestControlCommercial]: 1.4,
 };
 
 // Item-specific pricing for laundry

@@ -2,7 +2,7 @@ import * as LucideIcons from "lucide-react";
 
 export type IconName = keyof typeof LucideIcons;
 
-interface ServiceType {
+interface service_category {
   id: number;
   name: string;
   slug: string;
@@ -18,7 +18,7 @@ interface ServiceType {
   };
 }
 
-export const services: ServiceType[] = [
+export const services: service_category[] = [
   {
     id: 1,
     name: "House Cleaning",

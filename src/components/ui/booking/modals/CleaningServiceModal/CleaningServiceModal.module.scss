@@ -3,9 +3,9 @@
 @import "@/styles/abstracts/mixins";
 
 .cleaningServiceModal {
-  // Modal specific styles - override global modal padding for custom layout
   :global(.modal__content) {
     padding: 0;
+    overflow: hidden;
   }
 }
 
@@ -13,6 +13,7 @@
   &__container {
     display: flex;
     flex-direction: column;
+    background: color("neutral", "white");
 
     @include breakpoint-up("md") {
       flex-direction: row;
@@ -20,182 +21,188 @@
     }
   }
 
-  &__imageSection {
-    flex: 1;
-    position: relative;
-    height: 230px;
-
-    @include breakpoint-up("md") {
-      height: 480px;
-      max-height: 70vh;
-      max-width: 40%;
-    }
-  }
-
-  &__image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
   &__detailsSection {
     flex: 1;
-    padding: spacing("xl");
+    padding: spacing("2xl");
     display: flex;
     flex-direction: column;
-    // gap: spacing("lg");
-  }
+    position: relative;
 
-  &__title {
-    font-size: font-size("2xl");
-    font-weight: font-weight("bold");
-    color: color("neutral", "darkest");
-    margin-bottom: spacing("xs");
-    text-align: center;
-
-    @include breakpoint-up("lg") {
-      font-size: font-size("4xl");
-      text-align: left;
+    @include breakpoint-down("md") {
+      padding: spacing("xl");
     }
   }
 
-  &__description {
-    font-size: font-size("body-2");
-    color: color("neutral", "darker");
-    line-height: line-height("relaxed");
-    margin-bottom: spacing("lg");
-    text-align: center;
-
-    @include breakpoint-up("lg") {
-      text-align: left;
-    }
-  }
-
-  &__price {
-    font-size: font-size("3xl");
-    font-weight: font-weight("bold");
-    color: color("neutral", "darkest");
-    margin-top: spacing("md");
+  &__header {
     margin-bottom: spacing("xl");
     text-align: center;
 
-    @include breakpoint-up("md") {
-      text-align: right;
+    @include breakpoint-up("lg") {
+      text-align: left;
     }
+  }
+
+  &__title {
+    @include font-size("h4");
+    @include font-weight("bold");
+    font-family: $font-family-heading;
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("sm") 0;
+    line-height: 1.2;
+  }
+
+  &__description {
+    @include font-size("body-2");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    line-height: line-height("relaxed");
+    margin: 0;
+  }
+
+  &__priceSection {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("lg");
+    background: color("primary", "base");
+    border-radius: border-radius("xl");
+    margin: spacing("xl") 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  &__priceLabel {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: rgba(255, 255, 255, 0.9);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__price {
+    @include font-size("h5");
+    @include font-weight("bold");
+    color: color("neutral", "white");
+    margin: 0;
+    position: relative;
+    z-index: 1;
   }
 
   &__configurationSection {
-    margin-bottom: spacing("lg");
-  }
+    flex: 1;
+    overflow-y: auto;
+    padding-right: spacing("sm");
 
-  &__orderButtonContainer {
-    margin-top: spacing("xl");
-    display: flex;
-    justify-content: center;
-
-    @include breakpoint-up("md") {
-      justify-content: flex-end;
+    &::-webkit-scrollbar {
+      width: 6px;
     }
-  }
 
-  &__orderButton {
-    min-width: 200px;
-    padding-left: spacing("xl");
-    padding-right: spacing("xl");
-    background-color: color("primary", "darker") !important;
-    border-color: color("primary", "darker") !important;
+    &::-webkit-scrollbar-thumb {
+      background-color: color("neutral", "light");
+      border-radius: 6px;
 
-    &:hover {
-      background-color: color("primary", "base") !important;
-      border-color: color("primary", "base") !important;
-      color: color("neutral", "white") !important;
+      &:hover {
+        background-color: color("neutral", "medium");
+      }
+    }
+
+    &::-webkit-scrollbar-track {
+      background: color("neutral", "lighter");
+      border-radius: 6px;
     }
   }
 }
 
-// Configuration styles
+// Configuration Sections
 .section {
-  margin-bottom: spacing("xl");
+  background: color("neutral", "white");
+  border-radius: border-radius("xl");
   padding: spacing("lg");
-  border-radius: border-radius("md");
-  width: 100%;
+  margin-bottom: spacing("lg");
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid color("neutral", "lighter");
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .sectionTitle {
-  font-size: font-size("sm");
-  font-weight: font-weight("medium");
-  color: color("neutral", "dark");
-  margin-bottom: spacing("md");
-  text-align: center;
-
-  @include breakpoint-up("lg") {
-    text-align: left;
-  }
+  @include font-size("body-2");
+  @include font-weight("semibold");
+  color: color("neutral", "darkest");
+  margin: 0 0 spacing("md") 0;
+  display: flex;
+  align-items: center;
+  gap: spacing("sm");
 }
 
+// Apartment Type Options
 .apartmentTypeOptions {
   display: flex;
   gap: spacing("md");
   flex-wrap: wrap;
-  justify-content: center;
-
-  @include breakpoint-up("lg") {
-    justify-content: flex-start;
-  }
 }
 
 .apartmentTypeOption {
-  flex: 0 0 auto;
-  width: auto;
-  //   min-width: 140px;
-  //   max-width: 180px;
+  flex: 1;
+  min-width: 140px;
   padding: spacing("md") spacing("lg");
-  background-color: color("neutral", "darker");
-  color: color("neutral", "white");
-  border: none;
+  background: color("neutral", "lightest");
+  border: 2px solid color("neutral", "lighter");
   border-radius: border-radius("lg");
-  display: flex;
-  align-items: center;
   cursor: pointer;
-  transition: $transition-base;
-  font-weight: font-weight("medium");
+  transition: all 0.2s ease;
+  position: relative;
 
   &:hover {
-    background-color: color("neutral", "darkest");
+    border-color: color("primary", "light");
+    background: color("neutral", "white");
   }
 
   &.selected {
-    background-color: color("neutral", "darkest");
+    border-color: color("primary", "base");
+    background: color("primary", "base");
+
+    span {
+      color: color("neutral", "white");
+    }
 
     .radioInput {
+      border-color: color("neutral", "white");
+      background-color: color("neutral", "white");
+
       &::before {
-        background-color: color("neutral", "white");
+        background-color: color("primary", "base");
       }
     }
   }
 
   span {
-    color: color("neutral", "white");
-    font-weight: font-weight("medium");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    transition: color 0.2s ease;
   }
 }
 
 .radioInput {
   margin-right: spacing("sm");
-  width: 16px;
-  height: 16px;
-  min-width: 16px;
-  min-height: 16px;
-  border: 2px solid color("neutral", "light");
+  width: 18px;
+  height: 18px;
+  border: 2px solid color("neutral", "medium");
   border-radius: 50%;
-  background-color: transparent;
+  background-color: color("neutral", "white");
   position: relative;
   cursor: pointer;
   appearance: none;
   flex-shrink: 0;
+  transition: all 0.2s ease;
 
   &:checked {
-    border-color: color("neutral", "white");
+    border-color: color("primary", "base");
+    background-color: color("neutral", "white");
 
     &::before {
       content: "";
@@ -203,56 +210,55 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 6px;
-      height: 6px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      background-color: color("neutral", "white");
+      background-color: color("primary", "base");
     }
   }
 }
 
+// Rooms Grid
 .roomsGrid {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: spacing("md");
-
-  @include breakpoint-up("sm") {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @include breakpoint-up("lg") {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 
 .roomCounter {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: spacing("md") spacing("lg");
-  border-radius: border-radius("md");
-  border: 0.2px solid color("neutral", "light");
-  margin-bottom: spacing("sm");
+  padding: spacing("md");
+  background: color("neutral", "white");
+  border-radius: border-radius("lg");
+  border: 1px solid color("neutral", "lighter");
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: color("primary", "light");
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
 }
 
 .roomName {
-  font-weight: font-weight("medium");
+  @include font-size("sm");
+  @include font-weight("semibold");
   color: color("neutral", "darkest");
-  margin-right: spacing("md");
 }
 
 .counterControls {
   display: flex;
   align-items: center;
-  gap: spacing("md");
+  gap: spacing("sm");
 }
 
 .counterButton {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border-radius: border-radius("full");
   border: none;
-  background-color: color("neutral", "darker");
+  background: color("primary", "base");
   color: color("neutral", "white");
   font-weight: font-weight("bold");
   font-size: font-size("lg");
@@ -260,25 +266,69 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: $transition-fast;
+  transition: all 0.2s ease;
 
-  &:hover {
-    background-color: color("primary", "base");
+  &:hover:not(:disabled) {
+    background: color("primary", "dark");
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
 }
 
 .counterValue {
-  min-width: 20px;
+  min-width: 30px;
   text-align: center;
-  font-weight: font-weight("bold");
+  @include font-size("body-2");
+  @include font-weight("bold");
+  color: color("neutral", "darkest");
 }
 
-.totalRooms {
-  margin-top: spacing("lg");
-  padding: spacing("md");
-  background-color: color("neutral", "lighter");
-  border-radius: border-radius("md");
-  text-align: center;
-  font-weight: font-weight("medium");
-  color: color("neutral", "dark");
+// Order Button Container
+.modal__orderButtonContainer {
+  padding-top: spacing("xl");
+  display: flex;
+  justify-content: flex-end;
+  gap: spacing("md");
+
+  @include breakpoint-down("md") {
+    justify-content: stretch;
+    flex-direction: column;
+  }
+}
+
+.modal__orderButton {
+  min-width: 200px;
+  padding: spacing("md") spacing("xl");
+  background: color("primary", "base");
+  color: color("neutral", "white");
+  border: none;
+  border-radius: border-radius("pill");
+  @include font-size("body-2");
+  @include font-weight("semibold");
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: color("primary", "dark");
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(7, 80, 86, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @include breakpoint-down("md") {
+    width: 100%;
+  }
 }

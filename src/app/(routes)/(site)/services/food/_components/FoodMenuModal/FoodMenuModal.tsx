@@ -6,21 +6,32 @@ import Image from "next/image";
 import { Button } from "@/components/ui/Button/Button";
 import Modal from "@/components/ui/Modal/Modal";
 import FoodItemModal from "../FoodItemModal";
-import CartModal, { CartItem } from "@/components/ui/booking/modals/CartModal";
+import CartModal, {
+  CartServiceItem,
+} from "@/components/ui/booking/modals/CartModal";
 import CartIcon from "@/components/ui/CartIcon";
 import styles from "./FoodMenuModal.module.scss";
+import { ServiceCategory, ServiceId } from "@/graphql/api";
 
-// Food item interface
+// Food item interface that extends the Service structure
 interface FoodItem {
-  id: string;
+  _id: string;
   name: string;
   description: string;
   price: number;
-  image: string;
+  imageUrl: string;
   isSpicy: boolean;
   isTopRated: boolean;
   variants?: string[];
   quantity?: number;
+  category: ServiceCategory;
+  service_id: ServiceId;
+  label: string;
+  icon: string;
+  displayPrice: string;
+  status: string;
+  features?: string[];
+  inclusions?: string[];
 }
 
 // Modal props interface
@@ -29,247 +40,391 @@ interface FoodMenuModalProps {
   onClose: () => void;
 }
 
-// Sample food data
+// Sample food data adapted to Service structure
 const foodItems: FoodItem[] = [
   {
-    id: "1",
+    _id: "1",
     name: "Fried Rice",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f1.png",
+    imageUrl: "/images/food/f1.png",
     isSpicy: true,
     isTopRated: true,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Fried Rice",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "2",
+    _id: "2",
     name: "Jollof Rice",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/jollof-rice.png",
+    imageUrl: "/images/food/jollof-rice.png",
     isSpicy: true,
     isTopRated: true,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Jollof Rice",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "3",
+    _id: "3",
     name: "Creamy Pasta",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f2.png",
+    imageUrl: "/images/food/f2.png",
     isSpicy: true,
     isTopRated: true,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Creamy Pasta",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "4",
+    _id: "4",
     name: "Jollof Pasta",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f3.jpeg",
+    imageUrl: "/images/food/f3.jpeg",
     isSpicy: true,
     isTopRated: true,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Jollof Pasta",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "5",
+    _id: "5",
     name: "Amala & Ewedu",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/amala-ewedu.png",
+    imageUrl: "/images/food/amala-ewedu.png",
     isSpicy: false,
     isTopRated: true,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Amala & Ewedu",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "6",
+    _id: "6",
     name: "Egusi & Fufu",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/egusi-fufu.png",
+    imageUrl: "/images/food/egusi-fufu.png",
     isSpicy: false,
     isTopRated: false,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Egusi & Fufu",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "7",
+    _id: "7",
     name: "Pounded Yam & Efo Riro",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/pounded-yam-efo-riro.png",
-    isSpicy: true,
+    imageUrl: "/images/food/pounded-yam-efo-riro.png",
+    isSpicy: false,
     isTopRated: false,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Pounded Yam & Efo Riro",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "8",
+    _id: "8",
     name: "Grilled Chicken",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f4.jpeg",
+    imageUrl: "/images/food/f4.jpeg",
     isSpicy: false,
     isTopRated: true,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Grilled Chicken",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "9",
+    _id: "9",
     name: "Beef Stew",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f5.jpeg",
+    imageUrl: "/images/food/f5.jpeg",
     isSpicy: true,
     isTopRated: false,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Beef Stew",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "10",
+    _id: "10",
     name: "Fish Pepper Soup",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f6.jpeg",
+    imageUrl: "/images/food/f6.jpeg",
     isSpicy: true,
     isTopRated: true,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Fish Pepper Soup",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "11",
+    _id: "11",
     name: "Vegetable Salad",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f7.jpeg",
+    imageUrl: "/images/food/f7.jpeg",
     isSpicy: false,
     isTopRated: false,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Vegetable Salad",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "12",
+    _id: "12",
     name: "Chicken Curry",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f8.jpeg",
+    imageUrl: "/images/food/f8.jpeg",
     isSpicy: true,
     isTopRated: false,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Chicken Curry",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "13",
+    _id: "13",
     name: "Moi Moi",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f9.jpeg",
+    imageUrl: "/images/food/f9.jpeg",
     isSpicy: false,
     isTopRated: true,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Moi Moi",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "14",
+    _id: "14",
     name: "Akara",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f10.jpeg",
+    imageUrl: "/images/food/f10.jpeg",
     isSpicy: false,
     isTopRated: false,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Akara",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "15",
+    _id: "15",
     name: "Suya",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f11.jpeg",
+    imageUrl: "/images/food/f11.jpeg",
     isSpicy: true,
     isTopRated: true,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Suya",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "16",
+    _id: "16",
     name: "Pepper Soup",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f12.jpeg",
+    imageUrl: "/images/food/f12.jpeg",
     isSpicy: true,
     isTopRated: false,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Pepper Soup",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "17",
+    _id: "17",
     name: "Efo Riro",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f13.jpeg",
+    imageUrl: "/images/food/f13.jpeg",
     isSpicy: false,
     isTopRated: false,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Efo Riro",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "18",
+    _id: "18",
     name: "Banga Soup",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f14.jpeg",
+    imageUrl: "/images/food/f14.jpeg",
     isSpicy: false,
     isTopRated: true,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Banga Soup",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "19",
+    _id: "19",
     name: "Okro Soup",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f15.jpeg",
+    imageUrl: "/images/food/f15.jpeg",
     isSpicy: false,
     isTopRated: false,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Okro Soup",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "20",
+    _id: "20",
     name: "Ewedu Soup",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f16.jpeg",
+    imageUrl: "/images/food/f16.jpeg",
     isSpicy: false,
     isTopRated: false,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Ewedu Soup",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "21",
+    _id: "21",
     name: "Gbegiri",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f17.png",
+    imageUrl: "/images/food/f17.png",
     isSpicy: false,
     isTopRated: false,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Gbegiri",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "22",
+    _id: "22",
     name: "Efo Elegusi",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f20.jpeg",
+    imageUrl: "/images/food/f20.jpeg",
     isSpicy: true,
     isTopRated: false,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Efo Elegusi",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "23",
+    _id: "23",
     name: "Ogbono Soup",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f21.jpeg",
+    imageUrl: "/images/food/f21.jpeg",
     isSpicy: false,
     isTopRated: false,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Ogbono Soup",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
   {
-    id: "24",
+    _id: "24",
     name: "Afang Soup",
     description:
       "Grilled plantain, Full Grilled mackerel, Sprinkled with utazi, Ugba (optional) and a portion of heavens pepper sauce",
     price: 4950,
-    image: "/images/food/f0.jpeg",
+    imageUrl: "/images/food/f0.jpeg",
     isSpicy: false,
     isTopRated: true,
+    category: ServiceCategory.Cooking,
+    service_id: ServiceId.StandardCooking,
+    label: "Afang Soup",
+    icon: "utensils",
+    displayPrice: "NGN 4,950",
+    status: "ACTIVE",
   },
 ];
 
@@ -322,15 +477,24 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
     setIsCartModalOpen(false);
   };
 
-  // Convert FoodItem to CartItem format
-  const convertToCartItems = (): CartItem[] => {
+  // Convert FoodItem to CartServiceItem format
+  const convertToCartItems = (): CartServiceItem[] => {
     return cartItems.map((item, index) => ({
-      id: `${item.id}-${index}`,
+      _id: `${item._id}-${index}`,
       name: item.name,
+      description: item.description,
       price: item.price,
-      image: item.image,
+      imageUrl: item.imageUrl,
       quantity: item.quantity || 1,
-      variants: item.variants || [],
+      selectedVariants: item.variants || [],
+      category: item.category,
+      service_id: item.service_id,
+      label: item.label,
+      icon: item.icon,
+      displayPrice: item.displayPrice,
+      status: item.status as any,
+      features: item.features,
+      inclusions: item.inclusions,
     }));
   };
 
@@ -344,7 +508,7 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
       const [itemId] = id.split("-");
       setCartItems((prev) =>
         prev.map((item) => {
-          if (item.id === itemId) {
+          if (item._id === itemId) {
             return {
               ...item,
               quantity: quantity,
@@ -359,7 +523,7 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
   // Handle cart item removal
   const handleRemoveItem = (id: string) => {
     const [itemId] = id.split("-");
-    setCartItems((prev) => prev.filter((item) => item.id !== itemId));
+    setCartItems((prev) => prev.filter((item) => item._id !== itemId));
   };
 
   // Handle variant removal
@@ -367,7 +531,7 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
     const [originalItemId] = itemId.split("-");
     setCartItems((prev) =>
       prev.map((item) => {
-        if (item.id === originalItemId) {
+        if (item._id === originalItemId) {
           return {
             ...item,
             variants: item.variants?.filter((v) => v !== variant) || [],
@@ -438,7 +602,7 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
         <div className={styles.modal__foodGrid}>
           {displayedItems.map((item) => (
             <motion.div
-              key={item.id}
+              key={item._id}
               className={styles.modal__foodCard}
               whileHover={{ y: -4 }}
               transition={{ duration: 0.2 }}
@@ -446,7 +610,7 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
             >
               <div className={styles.modal__foodImageContainer}>
                 <Image
-                  src={item.image}
+                  src={item.imageUrl}
                   alt={item.name}
                   width={300}
                   height={300}

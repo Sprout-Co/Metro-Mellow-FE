@@ -1,0 +1,241 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.subscriptionsMain {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 0;
+
+  &__upcomingService {
+    margin-top: 20px;
+  }
+
+  &__controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+
+    @include breakpoint-down("lg") {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 20px;
+    }
+  }
+
+  &__controlsLeft {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+
+    @include breakpoint-down("md") {
+      width: 100%;
+    }
+  }
+
+  &__searchContainer {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+
+    @include breakpoint-down("md") {
+      max-width: none;
+    }
+  }
+
+  &__searchIcon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: color("neutral", "medium");
+    pointer-events: none;
+  }
+
+  &__searchInput {
+    width: 100%;
+    height: 44px;
+    padding: 0 16px 0 48px;
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: 12px;
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "darker");
+    transition: all 0.2s ease;
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px color-alpha("primary", "base", 0.1);
+    }
+  }
+
+  &__controlsRight {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    @include breakpoint-down("md") {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  &__filters {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    @include breakpoint-down("sm") {
+      flex: 1;
+    }
+  }
+
+  &__viewToggle {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    background: color("neutral", "lightest");
+    border-radius: 10px;
+  }
+
+  &__viewBtn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: color("neutral", "medium");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: color("primary", "base");
+      background: color-alpha("primary", "base", 0.1);
+    }
+
+    &--active {
+      background: color("neutral", "white");
+      color: color("primary", "base");
+      box-shadow: 0 1px 3px color-alpha("neutral", "dark", 0.1);
+    }
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &__content {
+    background: color("neutral", "white");
+    border-radius: 20px;
+    border: 1px solid color("neutral", "lighter");
+    overflow: hidden;
+    min-height: 400px;
+  }
+
+  &__emptyState {
+    padding: 80px 32px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    @include breakpoint-down("sm") {
+      padding: 60px 24px;
+    }
+  }
+
+  &__emptyIcon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: color-alpha("primary", "base", 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+
+    svg {
+      width: 50px;
+      height: 50px;
+      color: color("primary", "base");
+    }
+  }
+
+  &__emptyTitle {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("primary", "dark");
+    @include font-family("primary");
+    margin: 0 0 12px 0;
+  }
+
+  &__emptyText {
+    font-size: map-get($font-sizes, "md");
+    color: color("neutral", "medium");
+    margin: 0 0 32px 0;
+    max-width: 400px;
+    line-height: 1.5;
+  }
+
+  // Loading state styles
+  &__loadingState {
+    @extend .subscriptionsMain__emptyState;
+  }
+
+  &__loadingIcon {
+    @extend .subscriptionsMain__emptyIcon;
+    background: color-alpha("primary", "base", 0.1);
+
+    svg {
+      color: color("primary", "base");
+    }
+  }
+
+  &__loadingTitle {
+    @extend .subscriptionsMain__emptyTitle;
+  }
+
+  &__loadingText {
+    @extend .subscriptionsMain__emptyText;
+  }
+
+  // Error state styles
+  &__errorState {
+    @extend .subscriptionsMain__emptyState;
+  }
+
+  &__errorIcon {
+    @extend .subscriptionsMain__emptyIcon;
+    background: color-alpha("status", "error", 0.1);
+
+    svg {
+      color: color("status", "error");
+    }
+  }
+
+  &__errorTitle {
+    @extend .subscriptionsMain__emptyTitle;
+    color: color("status", "error");
+  }
+
+  &__errorText {
+    @extend .subscriptionsMain__emptyText;
+  }
+}

@@ -1,0 +1,484 @@
+// src/app/(routes)/(app)/dashboard/_components/DashboardLayout/sidebar/ServicesListDrawer/ServicesListDrawer.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.drawer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("lg");
+    border-bottom: 1px solid color("neutral", "lighter");
+    background: linear-gradient(
+      to bottom,
+      color("neutral", "white"),
+      color("neutral", "lightest")
+    );
+  }
+
+  &__backBtn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("full");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: color("neutral", "dark");
+    flex-shrink: 0;
+
+    &:hover {
+      background: color("neutral", "lightest");
+      border-color: color("neutral", "light");
+      transform: translateX(-2px);
+    }
+  }
+
+  &__headerText {
+    flex: 1;
+  }
+
+  // Loading and Error States
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xl");
+    text-align: center;
+    
+    p {
+      @include font-secondary;
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      margin-top: spacing("md");
+    }
+  }
+
+  &__loadingSpinner {
+    animation: spin 1s linear infinite;
+    color: color("primary", "base");
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  &__error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xl");
+    text-align: center;
+    gap: spacing("md");
+  }
+
+  &__errorMessage {
+    @include font-secondary;
+    @include font-size("sm");
+    color: color("status", "error");
+    margin: 0;
+  }
+
+  &__title {
+    @include font-size("lg");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xxs") 0;
+  }
+
+  &__subtitle {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    margin: 0;
+  }
+
+  // Search
+  &__search {
+    position: relative;
+    padding: 0 spacing("lg") spacing("lg");
+    background: color("neutral", "lightest");
+  }
+
+  &__searchIcon {
+    position: absolute;
+    left: calc(spacing("lg") + spacing("md"));
+    top: 50%;
+    transform: translateY(-50%);
+    color: color("neutral", "medium");
+    pointer-events: none;
+  }
+
+  &__searchInput {
+    width: 100%;
+    padding: spacing("sm") spacing("md") spacing("sm") spacing("xl");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("pill");
+    @include font-size("sm");
+    color: color("neutral", "darkest");
+    transition: all 0.2s ease;
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.1);
+    }
+  }
+
+  // Content
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: spacing("lg");
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: color("neutral", "light");
+      border-radius: 4px;
+    }
+  }
+
+  // Categories
+  &__categories {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__categoryCard {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("lg");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("xl");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: transparent;
+      transition: all 0.2s ease;
+    }
+
+    &:hover {
+      border-color: color("primary", "lighter");
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transform: translateX(4px);
+
+      &::before {
+        background: color("primary", "base");
+      }
+
+      .drawer__categoryArrow {
+        transform: translateX(4px);
+        color: color("primary", "base");
+      }
+    }
+  }
+
+  &__categoryIcon {
+    width: 64px;
+    height: 64px;
+    border-radius: border-radius("xl");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    span {
+      font-size: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        width: 32px;
+        height: 32px;
+      }
+    }
+  }
+
+  &__categoryInfo {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__categoryName {
+    @include font-size("body-1");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xxs") 0;
+  }
+
+  &__categoryDesc {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    margin: 0 0 spacing("xs") 0;
+    line-height: 1.4;
+  }
+
+  &__categoryCount {
+    @include font-size("xs");
+    @include font-weight("semibold");
+    color: color("primary", "base");
+  }
+
+  &__categoryArrow {
+    color: color("neutral", "light");
+    transition: all 0.2s ease;
+  }
+
+  // Services
+  &__services {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__serviceCard {
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  &__popularBadge {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+    padding: spacing("xxs") spacing("sm");
+    background: linear-gradient(
+      135deg,
+      color("secondary", "base"),
+      color("secondary", "dark")
+    );
+    color: color("neutral", "white");
+    @include font-size("xs");
+    @include font-weight("bold");
+    border-radius: border-radius("pill");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__serviceHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("md") spacing("lg");
+    background: color("neutral", "white");
+    border: none;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md");
+      gap: spacing("sm");
+    }
+
+    &:hover {
+      background: color("neutral", "lightest");
+    }
+
+    &--active {
+      background: linear-gradient(to right, rgba(7, 80, 86, 0.03), transparent);
+    }
+  }
+
+  &__serviceIcon {
+    width: 44px;
+    height: 44px;
+    border-radius: border-radius("lg");
+    background: color("neutral", "lightest");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+
+    svg {
+      width: 22px;
+      height: 22px;
+      transition: transform 0.2s ease;
+    }
+
+    @include breakpoint-down("sm") {
+      width: 40px;
+      height: 40px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  &__serviceInfo {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__serviceName {
+    @include font-family("heading");
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xxs");
+    line-height: line-height("tight");
+  }
+
+  &__serviceDesc {
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("regular");
+    color: color("neutral", "dark");
+    line-height: line-height("snug");
+  }
+
+  &__serviceArrow {
+    width: 20px;
+    height: 20px;
+    color: color("neutral", "medium");
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  // Service Options (similar to accordion content)
+  &__serviceOptions {
+    overflow: hidden;
+    background: color("neutral", "lightest");
+    border-top: 1px solid color("neutral", "lighter");
+  }
+
+  // Options List (similar to sub services list)
+  &__optionsList {
+    padding: spacing("lg");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md");
+      gap: spacing("sm");
+    }
+  }
+
+  // Option Item (similar to sub service item)
+  &__optionItem {
+    display: flex;
+    gap: spacing("md");
+    padding: spacing("sm");
+    background: color("neutral", "white");
+    border-radius: border-radius("md");
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateX(4px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  &__optionIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: border-radius("md");
+    background: color("neutral", "lightest");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: color("neutral", "dark");
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__optionContent {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__optionTitle {
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xxs");
+    line-height: line-height("tight");
+  }
+
+  &__optionDesc {
+    @include font-secondary;
+    @include font-size("xs");
+    @include font-weight("regular");
+    color: color("neutral", "dark");
+    line-height: line-height("snug");
+    margin-bottom: spacing("xs");
+  }
+
+  &__optionPrice {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xxs");
+    @include font-secondary;
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("primary", "base");
+    padding: 2px spacing("xs");
+    background: color("primary", "lighter");
+    background: rgba(7, 80, 86, 0.08);
+    border-radius: border-radius("sm");
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+}

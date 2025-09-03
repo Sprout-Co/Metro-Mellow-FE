@@ -8,6 +8,7 @@ import CheckoutModal, {
   CheckoutFormData,
 } from "@/components/ui/booking/modals/CheckoutModal/CheckoutModal";
 import ServiceDetailsSlidePanel from "@/components/ui/booking/modals/ServiceDetailsSlidePanel/ServiceDetailsSlidePanel";
+import { ReduxCartModal } from "@/components/ui/booking/modals/CartModal";
 import styles from "./CookingServiceModal.module.scss";
 import {
   CreateBookingInput,
@@ -15,12 +16,16 @@ import {
   ServiceCategory,
   ServiceId,
   ServiceOption,
+  MealType,
+  ScheduleDays,
 } from "@/graphql/api";
 import OrderSuccessModal from "../OrderSuccessModal/OrderSuccessModal";
 import { useAppSelector } from "@/lib/redux/hooks";
+import { useCart, useCartActions } from "@/lib/redux/hooks";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { LocalStorageKeys } from "@/utils/localStorage";
 import LoginModal from "@/components/ui/booking/modals/LoginModal/LoginModal";
+import { CartServiceItem } from "@/components/ui/booking/modals/CartModal";
 
 export interface MealOption {
   id: string;
@@ -77,7 +82,11 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
   const [isSlidePanelOpen, setIsSlidePanelOpen] = useState(false);
   const [showOrderSuccessModal, setShowOrderSuccessModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showCartModal, setShowCartModal] = useState(false);
+
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+  const { itemCount } = useCart();
+  const { addToCart, setCartOpen } = useCartActions();
 
   const { handleCreateBooking, isCreatingBooking } = useBookingOperations();
 
@@ -117,7 +126,8 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
     }
 
     // Price calculation: base price * meals * type * frequency
-    totalPrice = service.price * totalMeals * typeMultiplier * frequencyMultiplier;
+    totalPrice =
+      service.price * totalMeals * typeMultiplier * frequencyMultiplier;
 
     return totalPrice;
   };
@@ -154,7 +164,39 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
     return meals.reduce((total, meal) => total + meal.count, 0);
   };
 
-  // Handle order submission
+  // Handle add to cart
+  const handleAddToCart = () => {
+    const configuration: CookingServiceConfiguration = {
+      mealType,
+      deliveryFrequency,
+      meals,
+    };
+
+    // Create cart item with cooking service configuration
+    const cartItem: CartServiceItem = {
+      ...service,
+      quantity: 1,
+      selectedVariants: [
+        `Meal Type: ${mealType}`,
+        `Frequency: ${deliveryFrequency}`,
+        `Total Meals: ${getTotalMealCount()}`,
+        ...meals
+          .filter((meal) => meal.count > 0)
+          .map((meal) => `${meal.name}: ${meal.count}`),
+      ],
+      // Add custom price based on configuration
+      price: calculateTotalPrice(),
+    };
+
+    // Add to cart
+    addToCart(cartItem);
+
+    // Show cart modal
+    setShowCartModal(true);
+    setCartOpen(true);
+  };
+
+  // Handle order submission (direct checkout)
   const handleOrderSubmit = () => {
     const configuration: CookingServiceConfiguration = {
       mealType,
@@ -171,22 +213,27 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
   };
 
   // Handle checkout completion
-  const handleCheckoutComplete = async (formData: CheckoutFormData) => {
+  const handleCheckoutComplete = async (formData?: CheckoutFormData) => {
+    if (!formData) return;
     try {
       const completeOrder: CreateBookingInput = {
         serviceId: service._id,
-        serviceType: service.category,
-        serviceOption: serviceOption?.service_id || "",
+        service_category: service.category,
+        serviceOption: serviceOption?.service_id || ServiceId.StandardCooking,
         date: formData.date,
         timeSlot: formData.timeSlot,
         address: formData.addressId || "",
-        notes: `Meal Type: ${mealType}, Frequency: ${deliveryFrequency}, Meals: ${meals.map(m => `${m.name}(${m.count})`).join(', ')}`,
+        notes: `Meal Type: ${mealType}, Frequency: ${deliveryFrequency}, Meals: ${meals.map((m) => `${m.name}(${m.count})`).join(", ")}`,
         serviceDetails: {
-          serviceOption: serviceOption?.service_id || "",
+          serviceOption: serviceOption?.service_id || ServiceId.StandardCooking,
           cooking: {
-            mealType,
-            deliveryFrequency,
-            meals: meals.filter(meal => meal.count > 0),
+            mealType: mealType === "basic" ? MealType.Basic : MealType.Standard,
+            mealsPerDelivery: meals
+              .filter((meal) => meal.count > 0)
+              .map((meal) => ({
+                count: meal.count,
+                day: ScheduleDays.Monday, // Default to Monday, could be made configurable
+              })),
           },
         },
         totalPrice: calculateTotalPrice(),
@@ -224,234 +271,250 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
     setIsSlidePanelOpen(true);
   };
 
+  // Handle cart modal close
+  const handleCartModalClose = () => {
+    setShowCartModal(false);
+    setCartOpen(false);
+  };
+
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      maxWidth="1200px"
-      showCloseButton={true}
-      className={styles.cookingServiceModal}
-    >
-      <div className={styles.modal__container}>
-        {/* Image Section */}
-        <div className={styles.modal__imageSection}>
-          <Image
-            src={serviceImage}
-            alt={serviceTitle}
-            width={500}
-            height={500}
-            className={styles.modal__image}
-          />
-        </div>
+    <>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        maxWidth="800px"
+        showCloseButton={true}
+        className={styles.cookingServiceModal}
+      >
+        <div className={styles.modal__container}>
+          {/* Details Section */}
+          <div className={styles.modal__detailsSection}>
+            {/* Service Title and Description */}
+            <h2 className={styles.modal__title}>{serviceOption?.label}</h2>
+            <p className={styles.modal__description}>
+              {serviceOption?.description}
+            </p>
 
-        {/* Details Section */}
-        <div className={styles.modal__detailsSection}>
-          {/* Service Title and Description */}
-          <h2 className={styles.modal__title}>{serviceOption?.label}</h2>
-          <p className={styles.modal__description}>
-            {serviceOption?.description}
-          </p>
-
-          {/* Price Section */}
-          <div className={styles.modal__price}>
-            NGN {calculateTotalPrice().toLocaleString()}
-          </div>
-
-          {/* Configuration Section */}
-          <div className={styles.modal__configurationSection}>
-            {/* Meal Type Selection */}
-            <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Meal Type</h3>
-              <div className={styles.mealTypeOptions}>
-                <label
-                  className={`${styles.mealTypeOption} ${
-                    mealType === "basic" ? styles.selected : ""
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="mealType"
-                    value="basic"
-                    checked={mealType === "basic"}
-                    onChange={() => handleMealTypeChange("basic")}
-                    className={styles.radioInput}
-                  />
-                  <span>Basic - Simple, nutritious meals</span>
-                </label>
-                <label
-                  className={`${styles.mealTypeOption} ${
-                    mealType === "standard" ? styles.selected : ""
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="mealType"
-                    value="standard"
-                    checked={mealType === "standard"}
-                    onChange={() => handleMealTypeChange("standard")}
-                    className={styles.radioInput}
-                  />
-                  <span>Standard - Balanced, flavorful meals</span>
-                </label>
-                <label
-                  className={`${styles.mealTypeOption} ${
-                    mealType === "premium" ? styles.selected : ""
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="mealType"
-                    value="premium"
-                    checked={mealType === "premium"}
-                    onChange={() => handleMealTypeChange("premium")}
-                    className={styles.radioInput}
-                  />
-                  <span>Premium - Gourmet, restaurant-quality meals</span>
-                </label>
-              </div>
+            {/* Price Section */}
+            <div className={styles.modal__price}>
+              NGN {calculateTotalPrice().toLocaleString()}
             </div>
 
-            {/* Delivery Frequency */}
-            <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Delivery Frequency</h3>
-              <div className={styles.deliveryFrequencyOptions}>
-                <label
-                  className={`${styles.deliveryFrequencyOption} ${
-                    deliveryFrequency === "daily" ? styles.selected : ""
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="deliveryFrequency"
-                    value="daily"
-                    checked={deliveryFrequency === "daily"}
-                    onChange={() => handleDeliveryFrequencyChange("daily")}
-                    className={styles.radioInput}
-                  />
-                  <span>Daily - Fresh meals every day</span>
-                </label>
-                <label
-                  className={`${styles.deliveryFrequencyOption} ${
-                    deliveryFrequency === "weekly" ? styles.selected : ""
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="deliveryFrequency"
-                    value="weekly"
-                    checked={deliveryFrequency === "weekly"}
-                    onChange={() => handleDeliveryFrequencyChange("weekly")}
-                    className={styles.radioInput}
-                  />
-                  <span>Weekly - Meal prep for the week</span>
-                </label>
-                <label
-                  className={`${styles.deliveryFrequencyOption} ${
-                    deliveryFrequency === "monthly" ? styles.selected : ""
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="deliveryFrequency"
-                    value="monthly"
-                    checked={deliveryFrequency === "monthly"}
-                    onChange={() => handleDeliveryFrequencyChange("monthly")}
-                    className={styles.radioInput}
-                  />
-                  <span>Monthly - Bulk meal planning</span>
-                </label>
+            {/* Configuration Section */}
+            <div className={styles.modal__configurationSection}>
+              {/* Meal Type Selection */}
+              <div className={styles.section}>
+                <h3 className={styles.sectionTitle}>Meal Type</h3>
+                <div className={styles.mealTypeOptions}>
+                  <label
+                    className={`${styles.mealTypeOption} ${
+                      mealType === "basic" ? styles.selected : ""
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="mealType"
+                      value="basic"
+                      checked={mealType === "basic"}
+                      onChange={() => handleMealTypeChange("basic")}
+                      className={styles.radioInput}
+                    />
+                    <span>Basic - Simple, nutritious meals</span>
+                  </label>
+                  <label
+                    className={`${styles.mealTypeOption} ${
+                      mealType === "standard" ? styles.selected : ""
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="mealType"
+                      value="standard"
+                      checked={mealType === "standard"}
+                      onChange={() => handleMealTypeChange("standard")}
+                      className={styles.radioInput}
+                    />
+                    <span>Standard - Balanced, flavorful meals</span>
+                  </label>
+                  <label
+                    className={`${styles.mealTypeOption} ${
+                      mealType === "premium" ? styles.selected : ""
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="mealType"
+                      value="premium"
+                      checked={mealType === "premium"}
+                      onChange={() => handleMealTypeChange("premium")}
+                      className={styles.radioInput}
+                    />
+                    <span>Premium - Gourmet, restaurant-quality meals</span>
+                  </label>
+                </div>
               </div>
-            </div>
 
-            {/* Meal Selection */}
-            <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Select Meals</h3>
-              <div className={styles.mealsGrid}>
-                {meals.map((meal) => (
-                  <div key={meal.id} className={styles.mealCounter}>
-                    <span className={styles.mealName}>{meal.name}</span>
-                    <div className={styles.counterControls}>
-                      <button
-                        className={styles.counterButton}
-                        onClick={() => handleMealCounterChange(meal.id, false)}
-                        aria-label={`Decrement ${meal.name}`}
-                      >
-                        -
-                      </button>
-                      <span className={styles.counterValue}>{meal.count}</span>
-                      <button
-                        className={styles.counterButton}
-                        onClick={() => handleMealCounterChange(meal.id, true)}
-                        aria-label={`Increment ${meal.name}`}
-                      >
-                        +
-                      </button>
+              {/* Delivery Frequency */}
+              <div className={styles.section}>
+                <h3 className={styles.sectionTitle}>Delivery Frequency</h3>
+                <div className={styles.deliveryFrequencyOptions}>
+                  <label
+                    className={`${styles.deliveryFrequencyOption} ${
+                      deliveryFrequency === "daily" ? styles.selected : ""
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="deliveryFrequency"
+                      value="daily"
+                      checked={deliveryFrequency === "daily"}
+                      onChange={() => handleDeliveryFrequencyChange("daily")}
+                      className={styles.radioInput}
+                    />
+                    <span>Daily - Fresh meals every day</span>
+                  </label>
+                  <label
+                    className={`${styles.deliveryFrequencyOption} ${
+                      deliveryFrequency === "weekly" ? styles.selected : ""
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="deliveryFrequency"
+                      value="weekly"
+                      checked={deliveryFrequency === "weekly"}
+                      onChange={() => handleDeliveryFrequencyChange("weekly")}
+                      className={styles.radioInput}
+                    />
+                    <span>Weekly - Meal prep for the week</span>
+                  </label>
+                  <label
+                    className={`${styles.deliveryFrequencyOption} ${
+                      deliveryFrequency === "monthly" ? styles.selected : ""
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="deliveryFrequency"
+                      value="monthly"
+                      checked={deliveryFrequency === "monthly"}
+                      onChange={() => handleDeliveryFrequencyChange("monthly")}
+                      className={styles.radioInput}
+                    />
+                    <span>Monthly - Bulk meal planning</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Meal Selection */}
+              <div className={styles.section}>
+                <h3 className={styles.sectionTitle}>Select Meals</h3>
+                <div className={styles.mealsGrid}>
+                  {meals.map((meal) => (
+                    <div key={meal.id} className={styles.mealCounter}>
+                      <span className={styles.mealName}>{meal.name}</span>
+                      <div className={styles.counterControls}>
+                        <button
+                          className={styles.counterButton}
+                          onClick={() =>
+                            handleMealCounterChange(meal.id, false)
+                          }
+                          aria-label={`Decrement ${meal.name}`}
+                        >
+                          -
+                        </button>
+                        <span className={styles.counterValue}>
+                          {meal.count}
+                        </span>
+                        <button
+                          className={styles.counterButton}
+                          onClick={() => handleMealCounterChange(meal.id, true)}
+                          aria-label={`Increment ${meal.name}`}
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-              <div className={styles.totalMeals}>
-                Total Meals: {getTotalMealCount()}
+                  ))}
+                </div>
+                <div className={styles.totalMeals}>
+                  Total Meals: {getTotalMealCount()}
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Order Button */}
-          <div className={styles.modal__orderButtonContainer}>
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={handleOrderSubmit}
-              className={styles.modal__orderButton}
-            >
-              ORDER COOKING SERVICE
-            </Button>
+            {/* Action Buttons */}
+            <div className={styles.modal__actionButtons}>
+              <Button
+                variant="secondary"
+                size="lg"
+                onClick={handleAddToCart}
+                className={styles.modal__addToCartButton}
+              >
+                ADD TO CART
+              </Button>
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={handleOrderSubmit}
+                className={styles.modal__orderButton}
+              >
+                ORDER NOW
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Checkout Modal */}
-      <CheckoutModal
-        isOpen={isCheckoutModalOpen}
-        onClose={handleCheckoutClose}
-        onContinue={handleCheckoutComplete}
-        serviceType="Cooking"
-        submitting={isCreatingBooking}
-      />
+        {/* Checkout Modal */}
+        <CheckoutModal
+          isOpen={isCheckoutModalOpen}
+          onClose={handleCheckoutClose}
+          onContinue={handleCheckoutComplete}
+          service_category="Cooking"
+          submitting={isCreatingBooking}
+        />
 
-      {/* Service Details Slide Panel */}
-      <ServiceDetailsSlidePanel
-        isOpen={isSlidePanelOpen}
-        onClose={handleSlidePanelClose}
-        onOpen={handleSlidePanelOpen}
-        serviceTitle={serviceTitle}
-        serviceDescription={serviceDescription}
-        servicePrice={calculateTotalPrice()}
-        serviceImage={serviceImage}
-        serviceType="Cooking"
-        includedFeatures={includedFeatures}
-        apartmentType={undefined}
-        roomCount={getTotalMealCount()}
-      />
+        {/* Service Details Slide Panel */}
+        <ServiceDetailsSlidePanel
+          isOpen={isSlidePanelOpen}
+          onClose={handleSlidePanelClose}
+          onOpen={handleSlidePanelOpen}
+          serviceTitle={serviceTitle}
+          serviceDescription={serviceDescription}
+          servicePrice={calculateTotalPrice()}
+          serviceImage={serviceImage}
+          service_category="Cooking"
+          includedFeatures={includedFeatures}
+          apartmentType={undefined}
+          roomCount={getTotalMealCount()}
+        />
 
-      {/* Order Success Modal */}
-      <OrderSuccessModal
-        isOpen={showOrderSuccessModal}
-        onClose={() => {
-          setShowOrderSuccessModal(false);
-          onClose();
-        }}
-      />
-
-      {!isAuthenticated && (
-        <LoginModal
-          isOpen={showLoginModal}
+        {/* Order Success Modal */}
+        <OrderSuccessModal
+          isOpen={showOrderSuccessModal}
           onClose={() => {
-            setShowLoginModal(false);
+            setShowOrderSuccessModal(false);
+            onClose();
           }}
         />
-      )}
-    </Modal>
+
+        {/* Cart Modal */}
+        <ReduxCartModal
+          isOpen={showCartModal}
+          onClose={handleCartModalClose}
+          onContinue={handleCheckoutComplete}
+        />
+
+        {!isAuthenticated && (
+          <LoginModal
+            isOpen={showLoginModal}
+            onClose={() => {
+              setShowLoginModal(false);
+            }}
+          />
+        )}
+      </Modal>
+    </>
   );
 };
 

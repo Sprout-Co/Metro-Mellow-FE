@@ -920,11 +920,11 @@ export default function SubscriptionDetailsPage() {
                                   styles.subscription_details__service_type
                                 }
                               >
-                                {serviceItem.serviceType
-                                  ? serviceItem.serviceType
+                                {serviceItem.service_category
+                                  ? serviceItem.service_category
                                       .charAt(0)
                                       .toUpperCase() +
-                                    serviceItem.serviceType
+                                    serviceItem.service_category
                                       .slice(1)
                                       .toLowerCase()
                                   : "Standard"}{" "}

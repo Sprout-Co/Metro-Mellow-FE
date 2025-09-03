@@ -32,6 +32,8 @@ import {
   TimeSlot,
   GetCustomerBookingsDocument,
   GetStaffBookingsDocument,
+  useAddBookingFeedbackMutation,
+  FeedbackInput,
 } from "@/graphql/api";
 
 export const useBookingOperations = () => {
@@ -46,7 +48,7 @@ export const useBookingOperations = () => {
   const [assignStaffMutation] = useAssignStaffMutation();
   const [updateBookingStatusMutation] = useUpdateBookingStatusMutation();
   const [rescheduleBookingMutation] = useRescheduleBookingMutation();
-
+  const [addBookingFeedbackMutation] = useAddBookingFeedbackMutation();
   // Use lazy query hooks with data destructuring
   const [getBookingById, { data: bookingData }] = useGetBookingByIdLazyQuery();
   const [getBookings, { data: bookingsData }] = useGetBookingsLazyQuery();
@@ -57,13 +59,13 @@ export const useBookingOperations = () => {
 
   const handleGetCustomerBookings = useCallback(async () => {
     try {
-      const { data, errors } = await getCustomerBookings();
+      const { data, errors, loading } = await getCustomerBookings();
 
       if (errors) {
         throw new Error(errors[0].message);
       }
 
-      return data?.customerBookings;
+      return { data: data?.customerBookings, loading };
     } catch (error) {
       console.error("Customer bookings fetch error:", error);
       if (error instanceof Error) {
@@ -144,10 +146,10 @@ export const useBookingOperations = () => {
    * @throws Error if cancellation fails
    */
   const handleCancelBooking = useCallback(
-    async (id: string) => {
+    async (id: string, cancellationReason?: string) => {
       try {
         const { data, errors } = await cancelBookingMutation({
-          variables: { id },
+          variables: { cancelBookingId: id, cancellationReason },
         });
 
         if (errors) {
@@ -231,6 +233,29 @@ export const useBookingOperations = () => {
       }
     },
     [rescheduleBookingMutation, handleGetCustomerBookings]
+  );
+
+  const handleAddBookingFeedback = useCallback(
+    async (id: string, feedback: FeedbackInput) => {
+      try {
+        const { data, errors } = await addBookingFeedbackMutation({
+          variables: { addBookingFeedbackId: id, feedback },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.addBookingFeedback;
+      } catch (error) {
+        console.error("Booking feedback error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [addBookingFeedbackMutation]
   );
 
   /**
@@ -376,6 +401,7 @@ export const useBookingOperations = () => {
     handleCancelBooking,
     handleCompleteBooking,
     handleRescheduleBooking,
+    handleAddBookingFeedback,
     handleAssignStaff,
     handleUpdateBookingStatus,
     handleGetBooking,

@@ -1,0 +1,366 @@
+// src/app/(routes)/(site)/bookings/_components/SubscriptionBuilder/ServiceSelector/ServiceSelector.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.selector {
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: spacing("xl");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+      gap: spacing("lg");
+    }
+  }
+
+  &__card {
+    position: relative;
+    background: color("neutral", "white");
+    border-radius: border-radius("xl");
+    border: 2px solid color("neutral", "lighter");
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover:not(&--disabled) {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+      border-color: color("primary", "base");
+    }
+
+    &--configured {
+      background: color("neutral", "white");
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.08);
+    }
+
+    &--disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background: color("neutral", "lightest");
+
+      &:hover {
+        transform: none;
+        box-shadow: none;
+        border-color: color("neutral", "lighter");
+      }
+    }
+
+    // Service category color accents (top border only)
+    &--cleaning {
+      border-top: 4px solid #3b82f6;
+
+      .selector__icon {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+      }
+    }
+
+    &--laundry {
+      border-top: 4px solid #8b5cf6;
+
+      .selector__icon {
+        background: rgba(139, 92, 246, 0.1);
+        color: #8b5cf6;
+      }
+    }
+
+    &--cooking {
+      border-top: 4px solid #f59e0b;
+
+      .selector__icon {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+      }
+    }
+
+    &--pest {
+      border-top: 4px solid #10b981;
+
+      .selector__icon {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+      }
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+    display: flex;
+    align-items: center;
+    gap: spacing("xxs");
+    padding: spacing("xs") spacing("sm");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    border-radius: border-radius("pill");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    z-index: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("md");
+    padding: spacing("xl") spacing("xl") 0;
+  }
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("lg");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+  }
+
+  &__info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    @include font-size("lg");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xxs") 0;
+  }
+
+  &__category {
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.7;
+  }
+
+  &__body {
+    padding: spacing("lg") spacing("xl");
+  }
+
+  &__description {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    line-height: line-height("relaxed");
+    margin-bottom: spacing("lg");
+  }
+
+  &__pricing {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+  }
+
+  &__priceLabel {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__price {
+    @include font-size("xl");
+    @include font-weight("bold");
+    color: color("primary", "dark");
+    display: flex;
+    align-items: baseline;
+    gap: spacing("xs");
+  }
+
+  &__priceUnit {
+    @include font-size("sm");
+    @include font-weight("normal");
+    color: color("neutral", "dark");
+  }
+
+  &__config {
+    margin-top: spacing("md");
+    padding: spacing("md");
+    background: color("neutral", "white");
+    border: 1px solid color("primary", "light");
+    border-radius: border-radius("lg");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__configItem {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    @include font-size("sm");
+    color: color("neutral", "dark");
+
+    svg {
+      color: color("primary", "base");
+      flex-shrink: 0;
+    }
+  }
+
+  &__configDivider {
+    height: 1px;
+    background: color("neutral", "lighter");
+    margin: spacing("xs") 0;
+  }
+
+  &__configPrice {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: spacing("xs");
+    border-top: 1px solid color("neutral", "lighter");
+
+    span {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+    }
+
+    strong {
+      @include font-size("base");
+      @include font-weight("bold");
+      color: color("primary", "dark");
+    }
+  }
+
+  &__footer {
+    padding: 0 spacing("xl") spacing("xl");
+  }
+
+  &__addBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("sm");
+    padding: spacing("sm") spacing("lg");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(color("primary", "base"), 0.2);
+
+    &:hover {
+      background: color("primary", "dark");
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(color("primary", "base"), 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: spacing("sm");
+  }
+
+  &__editBtn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+    padding: spacing("sm");
+    background: color("neutral", "white");
+    border: 2px solid color("primary", "base");
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("primary", "base");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("primary", "base");
+      color: color("neutral", "white");
+      transform: translateY(-1px);
+    }
+  }
+
+  &__removeBtn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color("neutral", "white");
+    border: 2px solid color("status", "error");
+    border-radius: border-radius("lg");
+    color: color("status", "error");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("status", "error");
+      color: color("neutral", "white");
+      transform: scale(1.05);
+    }
+  }
+
+  &__disabledBtn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border: 2px dashed color("neutral", "light");
+    border-radius: border-radius("lg");
+    color: color("neutral", "dark");
+    text-align: center;
+    cursor: not-allowed;
+    min-height: 48px;
+
+    span {
+      @include font-size("sm");
+      @include font-weight("medium");
+      margin-bottom: 4px;
+    }
+
+    small {
+      @include font-size("xs");
+      color: color("neutral", "dark");
+      line-height: 1.3;
+      max-width: 200px;
+    }
+  }
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("2xl");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("xl");
+    border: 2px dashed color("neutral", "light");
+    text-align: center;
+    margin-top: spacing("xl");
+
+    svg {
+      color: color("primary", "base");
+    }
+
+    p {
+      @include font-size("base");
+      color: color("neutral", "dark");
+      max-width: 400px;
+    }
+  }
+}

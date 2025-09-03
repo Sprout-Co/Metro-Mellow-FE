@@ -63,7 +63,7 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
 }) => {
   // State for pest control configuration
   const [treatmentType, setTreatmentType] = useState<TreatmentType>(
-    TreatmentType.Residential
+    TreatmentType.PestControlResidential
   );
   const [severity, setSeverity] = useState<Severity>(Severity.Medium);
   const [areas, setAreas] = useState<TreatmentArea[]>([
@@ -96,10 +96,10 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
     // Base price multiplier based on treatment type
     let typeMultiplier = 1;
     switch (treatmentType) {
-      case TreatmentType.Residential:
+      case TreatmentType.PestControlResidential:
         typeMultiplier = 1;
         break;
-      case TreatmentType.Commercial:
+      case TreatmentType.PestControlCommercial:
         typeMultiplier = 2;
         break;
     }
@@ -165,8 +165,9 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
     try {
       const completeOrder: CreateBookingInput = {
         serviceId: service._id,
-        serviceType: service.category,
-        serviceOption: serviceOption?.service_id || "",
+        service_category: service.category,
+        serviceOption:
+          serviceOption?.service_id || ServiceId.PestControlResidential,
         date: formData.date,
         timeSlot: formData.timeSlot,
         address: formData.addressId || "",
@@ -175,10 +176,10 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
           .map((a) => a.name)
           .join(", ")}`,
         serviceDetails: {
-          serviceOption: serviceOption?.service_id || "",
+          serviceOption:
+            serviceOption?.service_id || ServiceId.PestControlResidential,
           pestControl: {
-            treatmentType:
-              serviceOption?.service_id as unknown as TreatmentType,
+            treatmentType,
             severity,
             areas: areas.filter((area) => area.selected).map((area) => area.id),
           },
@@ -222,22 +223,11 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      maxWidth="1200px"
+      maxWidth="800px"
       showCloseButton={true}
       className={styles.pestControlServiceModal}
     >
       <div className={styles.modal__container}>
-        {/* Image Section */}
-        <div className={styles.modal__imageSection}>
-          <Image
-            src={serviceImage}
-            alt={serviceTitle}
-            width={500}
-            height={500}
-            className={styles.modal__image}
-          />
-        </div>
-
         {/* Details Section */}
         <div className={styles.modal__detailsSection}>
           {/* Service Title and Description */}
@@ -305,29 +295,52 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
               </div>
             </div>
 
-            {/* Treatment Areas */}
+            {/* Treatment Type */}
             <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Treatment Areas</h3>
-              <div className={styles.areasGrid}>
-                {areas.map((area) => (
-                  <label
-                    key={area.id}
-                    className={`${styles.areaOption} ${
-                      area.selected ? styles.selected : ""
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={area.selected}
-                      onChange={() => handleAreaToggle(area.id)}
-                      className={styles.checkboxInput}
-                    />
-                    <span>{area.name}</span>
-                  </label>
-                ))}
-              </div>
-              <div className={styles.selectedAreasCount}>
-                Selected Areas: {getSelectedAreasCount()}
+              <h3 className={styles.sectionTitle}>Treatment Type</h3>
+              <div className={styles.treatmentTypeOptions}>
+                <label
+                  className={`${styles.treatmentTypeOption} ${
+                    treatmentType === TreatmentType.PestControlResidential
+                      ? styles.selected
+                      : ""
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="treatmentType"
+                    value={TreatmentType.PestControlResidential}
+                    checked={
+                      treatmentType === TreatmentType.PestControlResidential
+                    }
+                    onChange={() =>
+                      setTreatmentType(TreatmentType.PestControlResidential)
+                    }
+                    className={styles.radioInput}
+                  />
+                  <span>Residential - Home treatment</span>
+                </label>
+                <label
+                  className={`${styles.treatmentTypeOption} ${
+                    treatmentType === TreatmentType.PestControlCommercial
+                      ? styles.selected
+                      : ""
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="treatmentType"
+                    value={TreatmentType.PestControlCommercial}
+                    checked={
+                      treatmentType === TreatmentType.PestControlCommercial
+                    }
+                    onChange={() =>
+                      setTreatmentType(TreatmentType.PestControlCommercial)
+                    }
+                    className={styles.radioInput}
+                  />
+                  <span>Commercial - Business treatment</span>
+                </label>
               </div>
             </div>
           </div>
@@ -351,7 +364,7 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
         isOpen={isCheckoutModalOpen}
         onClose={handleCheckoutClose}
         onContinue={handleCheckoutComplete}
-        serviceType="Pest Control"
+        service_category="Pest Control"
         submitting={isCreatingBooking}
       />
 
@@ -364,7 +377,7 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
         serviceDescription={serviceDescription}
         servicePrice={calculateTotalPrice()}
         serviceImage={serviceImage}
-        serviceType="Pest Control"
+        service_category="Pest Control"
         includedFeatures={includedFeatures}
         apartmentType={undefined}
         roomCount={getSelectedAreasCount()}

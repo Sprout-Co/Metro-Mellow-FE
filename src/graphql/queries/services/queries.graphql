@@ -20,6 +20,7 @@ query GetServices($category: ServiceCategory, $status: ServiceStatus) {
       description
       price
       inclusions
+      imageUrl
       extraItems {
         name
         items
@@ -61,6 +62,7 @@ query GetServiceById($id: ID!) {
       description
       price
       inclusions
+      imageUrl
       extraItems {
         name
         items

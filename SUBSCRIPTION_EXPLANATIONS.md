@@ -120,7 +120,7 @@ if (billingCycle === BillingCycle.QUARTERLY && duration < 3) {
 ```typescript
 // Cleaning services: weekly, bi-weekly, or monthly only
 if (
-  serviceType === ServiceCategory.CLEANING &&
+  service_category === ServiceCategory.CLEANING &&
   !["WEEKLY", "BI_WEEKLY", "MONTHLY"].includes(frequency)
 ) {
   throw new ValidationError("Invalid cleaning frequency");
@@ -128,7 +128,7 @@ if (
 
 // Pest control: quarterly only
 if (
-  serviceType === ServiceCategory.PEST_CONTROL &&
+  service_category === ServiceCategory.PEST_CONTROL &&
   frequency !== SubscriptionFrequency.QUARTERLY
 ) {
   throw new ValidationError("Pest control must be quarterly");
@@ -140,7 +140,7 @@ if (
 ```typescript
 // Cleaning services must use monthly billing
 if (
-  serviceType === ServiceCategory.CLEANING &&
+  service_category === ServiceCategory.CLEANING &&
   billingCycle !== BillingCycle.MONTHLY
 ) {
   throw new ValidationError("Cleaning services must use monthly billing");
@@ -148,7 +148,7 @@ if (
 
 // Pest control must use quarterly billing
 if (
-  serviceType === ServiceCategory.PEST_CONTROL &&
+  service_category === ServiceCategory.PEST_CONTROL &&
   billingCycle !== BillingCycle.QUARTERLY
 ) {
   throw new ValidationError("Pest control must use quarterly billing");

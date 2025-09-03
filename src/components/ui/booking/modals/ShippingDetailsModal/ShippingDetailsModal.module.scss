@@ -3,19 +3,59 @@
 @import "@/styles/abstracts/functions";
 
 .shipping {
-  padding: 0 spacing("xl");
+  padding: spacing("xl");
+
+  &__header {
+    background: linear-gradient(
+      135deg,
+      color("primary", "base") 0%,
+      color("primary", "dark") 100%
+    );
+    margin: -(spacing("xl"));
+    margin-bottom: spacing("xl");
+    padding: spacing("xl");
+    border-radius: border-radius("xl") border-radius("xl") 0 0;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 40%;
+      height: 200%;
+      background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.08) 0%,
+        transparent 60%
+      );
+      pointer-events: none;
+    }
+  }
 
   &__title {
-    @include font-size("subtitle-1");
-    @include font-weight("semibold");
-    color: color("neutral", "black");
-    margin-bottom: spacing("lg");
+    @include font-size("h5");
+    @include font-weight("bold");
+    font-family: $font-family-heading;
+    color: color("neutral", "white");
+    margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__subtitle {
+    @include font-size("sm");
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: spacing("xs");
+    position: relative;
+    z-index: 1;
   }
 
   &__form {
     display: flex;
     flex-direction: column;
-    gap: spacing("md");
+    gap: spacing("lg");
   }
 
   &__addressType {
@@ -23,20 +63,71 @@
   }
 
   &__radioGroup {
-    @include flex($direction: row);
-    gap: spacing("xl");
+    display: flex;
+    gap: spacing("md");
 
     @include breakpoint-down("md") {
-      @include flex($direction: column);
-      gap: spacing("md");
+      flex-direction: column;
     }
   }
 
   &__radioLabel {
-    @include flex($align: center);
+    flex: 1;
+    display: flex;
+    align-items: center;
     cursor: pointer;
+    padding: spacing("md") spacing("lg");
+    background: color("neutral", "lightest");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    transition: all 0.3s ease;
     position: relative;
-    padding: spacing("sm") 0;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        color("primary", "base") 0%,
+        color("primary", "dark") 100%
+      );
+      transition: width 0.3s ease;
+      z-index: 0;
+    }
+
+    &:hover {
+      border-color: color("primary", "base");
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(7, 80, 86, 0.15);
+    }
+
+    &:has(.shipping__radioInput:checked) {
+      border-color: color("primary", "base");
+
+      &::before {
+        width: 100%;
+      }
+
+      .shipping__radioText {
+        color: color("neutral", "white");
+        position: relative;
+        z-index: 1;
+      }
+
+      .shipping__radioButton {
+        border-color: color("neutral", "white");
+        background-color: color("neutral", "white");
+
+        &::after {
+          background-color: color("primary", "base");
+        }
+      }
+    }
   }
 
   &__radioInput {
@@ -45,28 +136,19 @@
     cursor: pointer;
     height: 0;
     width: 0;
-
-    &:checked + .shipping__radioButton {
-      border-color: color("primary", "base");
-      background-color: color("primary", "base");
-
-      &::after {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-      }
-    }
   }
 
   &__radioButton {
-    height: spacing("lg");
-    width: spacing("lg");
+    height: 20px;
+    width: 20px;
     border-radius: border-radius("full");
-    border: map-get($border-width, "medium") solid color("neutral", "medium");
+    border: 2px solid color("neutral", "medium");
     display: inline-block;
-    margin-right: spacing("md");
+    margin-right: spacing("sm");
     position: relative;
-    transition: $transition-base;
+    transition: all 0.3s ease;
     background-color: color("neutral", "white");
+    z-index: 1;
 
     &::after {
       content: "";
@@ -74,19 +156,27 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0);
-      width: spacing("sm");
-      height: spacing("sm");
+      width: 10px;
+      height: 10px;
       border-radius: border-radius("full");
-      background-color: color("neutral", "white");
-      transition: $transition-base;
+      background-color: color("primary", "base");
+      transition: all 0.3s ease;
       opacity: 0;
     }
   }
 
+  &__radioInput:checked + .shipping__radioButton::after {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+
   &__radioText {
     @include font-size("body-2");
-    @include font-weight("medium");
+    @include font-weight("semibold");
     color: color("neutral", "darkest");
+    position: relative;
+    z-index: 1;
+    transition: color 0.3s ease;
   }
 
   // Saved address styles
@@ -96,12 +186,18 @@
 
   &__savedAddressCard {
     position: relative;
-    background-color: color-alpha("primary", "lighter", 0.3);
-    padding: spacing("lg") spacing("lg");
-    border-radius: border-radius("lg");
+    background: linear-gradient(
+      135deg,
+      color("neutral", "white") 0%,
+      color("neutral", "lightest") 100%
+    );
+    padding: spacing("lg");
+    border-radius: border-radius("xl");
     display: flex;
     flex-direction: column;
     gap: spacing("md");
+    border: 2px solid color("primary", "light");
+    box-shadow: 0 4px 12px rgba(7, 80, 86, 0.1);
   }
 
   &__editButton {
@@ -111,20 +207,29 @@
     display: flex;
     align-items: center;
     gap: spacing("xs");
-    color: color("primary", "base");
-    background: transparent;
+    color: color("neutral", "white");
+    background: linear-gradient(
+      135deg,
+      color("primary", "base") 0%,
+      color("primary", "dark") 100%
+    );
     border: none;
     cursor: pointer;
-    @include font-size("body-2");
-    @include font-weight("medium");
-    transition: $transition-base;
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("pill");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(7, 80, 86, 0.2);
 
     &:hover {
-      color: color("primary", "dark");
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(7, 80, 86, 0.3);
     }
 
     svg {
-      stroke: currentColor;
+      width: 14px;
+      height: 14px;
     }
   }
 
@@ -134,56 +239,87 @@
     gap: spacing("md");
     color: color("neutral", "darkest");
     @include font-size("body-2");
-    @include font-weight("regular");
+    @include font-weight("medium");
 
     span {
       word-break: break-word;
       padding-right: spacing("xl");
+      line-height: 1.5;
     }
   }
 
   &__savedAddressIcon {
     flex-shrink: 0;
-    color: color("primary", "base");
-    height: 20px;
-    width: 20px;
-    margin-top: spacing("xs");
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(
+      135deg,
+      color("primary", "base") 0%,
+      color("primary", "dark") 100%
+    );
+    color: color("neutral", "white");
+    border-radius: border-radius("md");
+    margin-top: spacing("xxs");
   }
 
   &__formGroup {
     display: flex;
     flex-direction: column;
-    gap: spacing("xs");
+    gap: spacing("sm");
   }
 
   &__label {
-    @include font-size("body-2");
+    @include font-size("sm");
     @include font-weight("semibold");
     color: color("neutral", "darkest");
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+
+    &::before {
+      content: "";
+      width: 3px;
+      height: 16px;
+      background: linear-gradient(
+        180deg,
+        color("primary", "base") 0%,
+        color("secondary", "base") 100%
+      );
+      border-radius: border-radius("full");
+    }
   }
 
   &__input,
   &__select {
     @include input;
     border-radius: border-radius("lg");
-    border: map-get($border-width, "thin") solid color("neutral", "light");
+    border: 2px solid color("neutral", "lighter");
     width: 100%;
-    height: auto;
-    padding: map-get($input-padding, "md");
+    padding: spacing("md");
     @include font-size("body-2");
+    background: color("neutral", "white");
+    transition: all 0.3s ease;
 
     &:focus {
       border-color: color("primary", "base");
-      box-shadow: map-get($shadows, "focus");
+      background: color("neutral", "lightest");
+      box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.1);
+    }
+
+    &::placeholder {
+      color: color("neutral", "medium");
     }
   }
 
   &__select {
     appearance: none;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right spacing("sm") center;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23075056' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right spacing("md") center;
     background-repeat: no-repeat;
-    background-size: 1.5em 1.5em;
+    background-size: 1.2em 1.2em;
     padding-right: spacing("xl");
   }
 
@@ -192,13 +328,31 @@
   }
 
   &__button {
-    @include button-primary("lg");
-    background-color: color("primary", "base");
+    width: 100%;
+    padding: spacing("md") spacing("xl");
+    background: linear-gradient(
+      135deg,
+      color("primary", "base") 0%,
+      color("primary", "dark") 100%
+    );
     color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("pill");
+    @include font-size("body-2");
+    @include font-weight("semibold");
     text-transform: uppercase;
-    @include font-weight("bold");
-    letter-spacing: letter-spacing("wider");
-    padding: spacing("md") spacing("lg");
-    height: button-height("lg");
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(7, 80, 86, 0.25);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(7, 80, 86, 0.35);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
   }
-} 
+}

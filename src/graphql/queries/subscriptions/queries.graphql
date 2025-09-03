@@ -20,6 +20,16 @@ query GetSubscriptionById($id: ID!) {
     nextBillingDate
     lastBillingDate
     autoRenew
+    address {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+    }
     paymentMethod {
       id
       user {
@@ -63,6 +73,7 @@ query GetSubscriptionById($id: ID!) {
           description
           price
           inclusions
+          imageUrl
           extraItems {
             name
             items
@@ -70,7 +81,7 @@ query GetSubscriptionById($id: ID!) {
           }
         }
       }
-      serviceType
+      service_category
       frequency
       price
       serviceDetails {
@@ -144,6 +155,16 @@ query GetSubscriptions($status: SubscriptionStatus) {
     nextBillingDate
     lastBillingDate
     autoRenew
+    address {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+    }
     paymentMethod {
       id
       user {
@@ -187,6 +208,7 @@ query GetSubscriptions($status: SubscriptionStatus) {
           description
           price
           inclusions
+          imageUrl
           extraItems {
             name
             items
@@ -194,7 +216,7 @@ query GetSubscriptions($status: SubscriptionStatus) {
           }
         }
       }
-      serviceType
+      service_category
       frequency
       price
       serviceDetails {
@@ -268,6 +290,16 @@ query GetCustomerSubscriptions {
     nextBillingDate
     lastBillingDate
     autoRenew
+    address {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+    }
     paymentMethod {
       id
       user {
@@ -311,6 +343,7 @@ query GetCustomerSubscriptions {
           description
           price
           inclusions
+          imageUrl
           extraItems {
             name
             items
@@ -318,7 +351,7 @@ query GetCustomerSubscriptions {
           }
         }
       }
-      serviceType
+      service_category
       frequency
       price
       serviceDetails {
