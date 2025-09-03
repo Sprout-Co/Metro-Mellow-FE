@@ -59,6 +59,7 @@ import QuickHelpDrawer from "./QuickHelpDrawer/QuickHelpDrawer";
 import { openServicesListDrawer } from "@/lib/redux/slices/uiSlice";
 import { useDispatch } from "react-redux";
 import { Routes } from "@/constants/routes";
+import { Address } from "@/graphql/api";
 
 // Mock addresses data
 const mockAddresses = [
@@ -88,62 +89,11 @@ interface QuickAddressDrawerProps {
   onAddressSelect: (address: any) => void;
 }
 
-const QuickAddressDrawer: React.FC<QuickAddressDrawerProps> = ({
-  isOpen,
-  onClose,
-  onAddressSelect,
-}) => {
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [selectedAddressId, setSelectedAddressId] = useState<string>("1");
-
-  const handleSelectAddress = (address: any) => {
-    setSelectedAddressId(address.id);
-    onAddressSelect(address);
-    // Optionally close the drawer after selection
-    setTimeout(() => onClose(), 300);
-  };
-
-  const handleAddNewAddress = () => {
-    setIsAddModalOpen(true);
-  };
-
-  const handleSaveNewAddress = (addressData: any) => {
-    // Handle saving new address
-    console.log("New address:", addressData);
-    setIsAddModalOpen(false);
-  };
-
-  return (
-    <>
-      <ModalDrawer isOpen={isOpen} onClose={onClose} width="sm">
-        <AddressSelector
-          addresses={mockAddresses}
-          selectedAddressId={selectedAddressId}
-          onSelectAddress={handleSelectAddress}
-          onAddNewAddress={handleAddNewAddress}
-          variant="drawer"
-        />
-      </ModalDrawer>
-
-      <AddressModal
-        isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
-        onSave={handleSaveNewAddress}
-      />
-    </>
-  );
-};
-
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const pathname = usePathname();
-  const [expandedSection, setExpandedSection] = useState<string | null>(null);
-  const [isAddressDrawerOpen, setIsAddressDrawerOpen] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState<any>(null);
   const dispatch = useDispatch();
   // States for the new drawers
   // Removed reschedule drawer state - using modal instead
-  const [isServicesListDrawerOpen, setIsServicesListDrawerOpen] =
-    useState(false);
   const [isQuickHelpDrawerOpen, setIsQuickHelpDrawerOpen] = useState(false);
 
   const quickActions: QuickAction[] = [
@@ -378,46 +328,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           className={styles.sidebar__footerLogo}
         />
       </motion.div>
-      {/* <AnimatePresence>
-      {isOpen && (
-        <>
-          <motion.div
-            className={styles.sidebar__overlay}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-          />
 
-          <motion.div
-            className={styles.sidebar}
-            initial="closed"
-            animate="open"
-            exit="closed"
-            variants={sidebarVariants}
-          >
-        
-          </motion.div>
-          </>
-        )}
-      </AnimatePresence> */}
-      {isAddressDrawerOpen && (
-        <QuickAddressDrawer
-          isOpen={isAddressDrawerOpen}
-          onClose={() => setIsAddressDrawerOpen(false)}
-          onAddressSelect={(address) => {
-            setSelectedAddress(address);
-            console.log("Selected address:", address);
-          }}
-        />
-      )}
-      {/* Removed RescheduleDrawer - using RescheduleModal instead */}
-      {/* {isServicesListDrawerOpen && (
-        <ServicesListDrawer
-          isOpen={isServicesListDrawerOpen}
-          onClose={() => setIsServicesListDrawerOpen(false)}
-        />
-      )} */}
       {isQuickHelpDrawerOpen && (
         <QuickHelpDrawer
           isOpen={isQuickHelpDrawerOpen}

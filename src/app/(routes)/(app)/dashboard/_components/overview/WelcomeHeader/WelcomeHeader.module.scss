@@ -68,6 +68,7 @@
 
   &__title {
     @include heading-3;
+    font-weight: font-weight("bold");
     color: color("neutral", "white");
     margin-bottom: spacing("xs");
   }

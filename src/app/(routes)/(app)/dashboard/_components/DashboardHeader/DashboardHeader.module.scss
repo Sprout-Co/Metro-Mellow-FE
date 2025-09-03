@@ -62,6 +62,7 @@
   &__title {
     @include font-size("h4");
     @include font-weight("bold");
+    font-weight: 700;
     font-family: $font-family-heading;
     color: color("neutral", "white");
     margin: 0 0 spacing("xs") 0;
