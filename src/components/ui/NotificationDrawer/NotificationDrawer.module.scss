@@ -1,5 +1,5 @@
-@import 'abstracts/variables';
-@import 'abstracts/mixins';
+@import "abstracts/variables";
+@import "abstracts/mixins";
 
 .backdrop {
   position: fixed;
@@ -199,7 +199,7 @@
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    
+
     &:hover {
       background: color("primary", "base");
     }
@@ -260,8 +260,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 // Responsive adjustments
@@ -280,44 +284,5 @@
 
   .connectionBanner {
     padding: spacing("sm") spacing("md");
-  }
-}
-
-// Dark mode support (if implemented)
-@media (prefers-color-scheme: dark) {
-  .backdrop {
-    background: rgba(0, 0, 0, 0.7);
-  }
-
-  .drawer {
-    background: color("neutral", "darkest");
-    border-color: color("neutral", "darker");
-  }
-
-  .header {
-    background: color("neutral", "darkest");
-    border-bottom-color: color("neutral", "darker");
-  }
-
-  .title {
-    color: color("neutral", "white");
-  }
-
-  .closeButton {
-    color: color("neutral", "lighter");
-
-    &:hover {
-      color: color("neutral", "white");
-      background: color("neutral", "darker");
-    }
-  }
-
-  .actions {
-    background: color("neutral", "semidarkest");
-    border-bottom-color: color("neutral", "darker");
-  }
-
-  .content {
-    background: color("neutral", "darkest");
   }
 }

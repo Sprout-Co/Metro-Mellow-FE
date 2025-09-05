@@ -1,5 +1,5 @@
-@import 'abstracts/variables';
-@import 'abstracts/mixins';
+@import "abstracts/variables";
+@import "abstracts/mixins";
 
 .container {
   position: relative;
@@ -137,7 +137,9 @@
   padding: 0.5rem;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
 
   &:hover {
     background: color("primary", "base");
@@ -162,56 +164,11 @@
     margin-left: 0;
     margin-right: 0;
 
-    &.left, &.right {
+    &.left,
+    &.right {
       left: 50% !important;
       right: auto !important;
       transform: translateX(-50%);
-    }
-  }
-}
-
-// Dark mode support (if implemented)
-@media (prefers-color-scheme: dark) {
-  .trigger {
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-  }
-
-  .bellIcon {
-    color: #9ca3af;
-
-    .trigger:hover & {
-      color: #d1d5db;
-    }
-  }
-
-  .dropdown {
-    background: #1f2937;
-    border-color: #374151;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 4px 6px rgba(0, 0, 0, 0.2);
-  }
-
-  .connectionBanner {
-    background: #451a03;
-    border-bottom-color: #92400e;
-  }
-
-  .connectionText {
-    color: #fbbf24;
-  }
-
-  .footer {
-    background: #111827;
-    border-top-color: #374151;
-  }
-
-  .viewAllButton {
-    color: color("primary", "light");
-
-    &:hover {
-      background: color("primary", "base");
-      color: white;
     }
   }
 }
