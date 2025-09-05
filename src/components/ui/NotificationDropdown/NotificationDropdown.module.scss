@@ -1,0 +1,217 @@
+@import 'abstracts/variables';
+@import 'abstracts/mixins';
+
+.container {
+  position: relative;
+  display: inline-block;
+}
+
+.trigger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s;
+  position: relative;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  justify-content: center;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px color("primary", "base");
+  }
+}
+
+.iconContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.bellIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: color("neutral", "dark");
+  transition: color 0.2s;
+  flex-shrink: 0;
+
+  .trigger:hover & {
+    color: color("neutral", "darker");
+  }
+}
+
+.badge {
+  position: absolute;
+  top: -0.375rem;
+  right: -0.375rem;
+  z-index: 1;
+}
+
+.connectionStatus {
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  margin-top: 0.5rem;
+  z-index: z-index("dropdown");
+  width: 384px;
+  max-width: 90vw;
+  background: color("neutral", "white");
+  border-radius: border-radius("xl");
+  box-shadow: shadow("lg");
+  border: 1px solid color("neutral", "lighter");
+  overflow: hidden;
+  animation: dropdownEnter 0.2s ease-out;
+
+  &.left {
+    right: 0;
+  }
+
+  &.right {
+    left: 0;
+  }
+
+  @keyframes dropdownEnter {
+    from {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+}
+
+.connectionBanner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #fef3c7;
+  border-bottom: 1px solid #f59e0b;
+  font-size: 0.875rem;
+}
+
+.connectionIcon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.connectionText {
+  color: #92400e;
+  font-weight: 500;
+}
+
+.notificationList {
+  box-shadow: none;
+  border: none;
+  border-radius: 0;
+}
+
+.footer {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.viewAllButton {
+  width: 100%;
+  background: none;
+  border: none;
+  color: color("primary", "base");
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover {
+    background: color("primary", "base");
+    color: white;
+  }
+
+  &:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: color("primary", "base");
+    ring-opacity: 0.5;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 480px) {
+  .dropdown {
+    width: calc(100vw - 2rem);
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%);
+    margin-left: 0;
+    margin-right: 0;
+
+    &.left, &.right {
+      left: 50% !important;
+      right: auto !important;
+      transform: translateX(-50%);
+    }
+  }
+}
+
+// Dark mode support (if implemented)
+@media (prefers-color-scheme: dark) {
+  .trigger {
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  .bellIcon {
+    color: #9ca3af;
+
+    .trigger:hover & {
+      color: #d1d5db;
+    }
+  }
+
+  .dropdown {
+    background: #1f2937;
+    border-color: #374151;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .connectionBanner {
+    background: #451a03;
+    border-bottom-color: #92400e;
+  }
+
+  .connectionText {
+    color: #fbbf24;
+  }
+
+  .footer {
+    background: #111827;
+    border-top-color: #374151;
+  }
+
+  .viewAllButton {
+    color: color("primary", "light");
+
+    &:hover {
+      background: color("primary", "base");
+      color: white;
+    }
+  }
+}

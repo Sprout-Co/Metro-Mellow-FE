@@ -80,3 +80,7 @@ query GetNotificationStats($userId: ID) {
     }
   }
 }
+
+query IsUserOnline($userId: ID!) {
+  isUserOnline(userId: $userId)
+}
