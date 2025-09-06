@@ -1,4 +1,8 @@
 @import "../styles/main.scss";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/animations";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -25,11 +29,9 @@
 //   }
 // }
 
-// body {
-//   // color: var(--foreground);
-//   // background: var(--background);
-//   font-family: Arial, Helvetica, sans-serif;
-// }
+body {
+  background-color: color("accent", "lighter");
+}
 
 // Auth Loading Styles
 .auth-loading {
