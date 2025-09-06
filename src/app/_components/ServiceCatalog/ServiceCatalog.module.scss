@@ -4,7 +4,7 @@
 
 .catalog {
   padding: spacing("5xl") 0;
-  background-color: color("neutral", "white");
+  // background-color: color("neutral", "white");
 
   &__container {
     @include container;
