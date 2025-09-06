@@ -6,7 +6,7 @@ import Image from "next/image";
 import styles from "./Navbar.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import { Bell, ChevronDown, MapPin, Menu, User } from "lucide-react";
-import { NotificationDropdown } from "@/components/ui/NotificationDropdown/NotificationDropdown";
+import { NotificationButton } from "@/components/ui/NotificationButton/NotificationButton";
 import { NotificationDrawer } from "@/components/ui/NotificationDrawer/NotificationDrawer";
 import AddAddressModal from "./AddAddressModal/AddAddressModal";
 import { useDispatch, useSelector } from "react-redux";
@@ -104,14 +104,13 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
             Order Now!
           </FnButton>
           {/* Notification */}
-          <NotificationDropdown 
+          <NotificationButton 
             className={styles.navbar__notificationDropdown}
             onNotificationClick={(notification) => {
               console.log('Customer notification clicked:', notification);
               // Handle notification click - could navigate to specific page
             }}
             onViewAllClick={() => setIsNotificationDrawerOpen(true)}
-            position="right"
           />
 
           {/* Cart */}
@@ -189,7 +188,6 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
         onNotificationClick={(notification) => {
           console.log('Drawer notification clicked:', notification);
           // Handle notification click - could navigate to specific page
-          // Don't close drawer automatically
         }}
         position="right"
       />

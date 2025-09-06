@@ -7,7 +7,6 @@ import ApolloWrapper from "@/components/providers/ApolloWrapper";
 import ReduxProvider from "@/components/providers/ReduxProvider";
 import { AuthInitializer } from "@/components/providers/AuthInitializer";
 import { NotificationProvider } from "@/components/providers/NotificationProvider";
-import { NotificationToastManager } from "@/components/providers/NotificationToastManager";
 import ModalProvider from "./_components/ModalProvider";
 import {
   GoogleTagManagerScript,
@@ -54,7 +53,6 @@ export default function RootLayout({
             <AuthInitializer>
               <NotificationProvider>
                 <CommonInitializer>{children}</CommonInitializer>
-                <NotificationToastManager />
                 {/* <ModalProvider /> */}
               </NotificationProvider>
             </AuthInitializer>
