@@ -172,8 +172,7 @@ const TasksCarousel: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              Don't waste time
-              <br />
+              Don't waste time {/* <br /> */}
               on tasks we can handle
             </motion.h2>
             <motion.p
@@ -230,7 +229,7 @@ const TasksCarousel: React.FC = () => {
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
                 variants={cardVariants}
-                whileHover={{ y: -8, scale: 1.02 }}
+                whileHover={{ y: -8 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
                 <div className={styles["task-card__content"]}>

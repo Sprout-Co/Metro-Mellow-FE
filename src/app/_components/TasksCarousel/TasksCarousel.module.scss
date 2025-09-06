@@ -10,6 +10,7 @@
     darken(color("primary", "base"), 5%) 0%,
     color("primary", "base") 100%
   );
+  background: color("primary", "base");
   @include section-spacing("6xl");
   position: relative;
   overflow: hidden;
@@ -22,17 +23,17 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-image:
-      radial-gradient(
-        circle at 20% 80%,
-        color-alpha("primary", "light", 0.1) 0%,
-        transparent 50%
-      ),
-      radial-gradient(
-        circle at 80% 20%,
-        color-alpha("primary", "dark", 0.1) 0%,
-        transparent 50%
-      );
+    // background-image:
+    //   radial-gradient(
+    //     circle at 20% 80%,
+    //     color-alpha("primary", "light", 0.1) 0%,
+    //     transparent 50%
+    //   ),
+    //   radial-gradient(
+    //     circle at 80% 20%,
+    //     color-alpha("primary", "dark", 0.1) 0%,
+    //     transparent 50%
+    //   );
     pointer-events: none;
     z-index: 1;
   }
@@ -55,7 +56,7 @@
 
   &__title-wrapper {
     flex: 1;
-    max-width: 600px;
+    // max-width: 600px;
   }
 
   &__title {
@@ -313,26 +314,30 @@
 
   &__icon-wrapper {
     position: absolute;
-    right: spacing("xl");
-    bottom: spacing("xl");
+    transition: $transition-base;
+    right: 15px;
+    bottom: 0;
     width: 180px;
     height: 180px;
-    transition: $transition-base;
     opacity: 0.9;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: flex-end;
 
     @include breakpoint-down("md") {
       width: 150px;
       height: 150px;
-      right: spacing("lg");
-      bottom: spacing("lg");
+      // right: spacing("lg");
+      // bottom: spacing("lg");
     }
 
     @include breakpoint-down("sm") {
       width: 120px;
       height: 120px;
-      right: spacing("md");
-      bottom: spacing("md");
+      // right: spacing("md");
+      // bottom: spacing("md");
     }
 
     img {
