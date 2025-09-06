@@ -1,53 +1,53 @@
-'use client';
+"use client";
 
-import React, { useEffect } from 'react';
-import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useNotifications } from '@/components/providers/NotificationProvider';
-import { NotificationList } from '@/components/ui/NotificationList/NotificationList';
-import { NotificationPayload } from '@/lib/services/socket-notification';
-import { X } from 'lucide-react';
-import styles from './NotificationDrawer.module.scss';
+import React, { useEffect } from "react";
+import { createPortal } from "react-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { useNotifications } from "@/components/providers/NotificationProvider";
+import { NotificationList } from "@/components/ui/NotificationList/NotificationList";
+import { NotificationPayload } from "@/lib/services/socket-notification";
+import { X } from "lucide-react";
+import styles from "./NotificationDrawer.module.scss";
 
 interface NotificationDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   onNotificationClick?: (notification: NotificationPayload) => void;
-  position?: 'left' | 'right';
+  position?: "left" | "right";
 }
 
 export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
   isOpen,
   onClose,
   onNotificationClick,
-  position = 'right'
+  position = "right",
 }) => {
-  const { 
-    notifications, 
-    unreadCount, 
+  const {
+    notifications,
+    unreadCount,
     isConnected,
     connectionStatus,
     markAllAsRead,
-    connectSocket 
+    connectSocket,
   } = useNotifications();
 
   // Handle escape key
   useEffect(() => {
     const handleEscapeKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isOpen) {
+      if (event.key === "Escape" && isOpen) {
         onClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscapeKey);
+      document.addEventListener("keydown", handleEscapeKey);
       // Prevent body scroll when drawer is open
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscapeKey);
-      document.body.style.overflow = '';
+      document.removeEventListener("keydown", handleEscapeKey);
+      document.body.style.overflow = "";
     };
   }, [isOpen, onClose]);
 
@@ -60,7 +60,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
     try {
       await markAllAsRead();
     } catch (error) {
-      console.error('Failed to mark all as read:', error);
+      console.error("Failed to mark all as read:", error);
     }
   };
 
@@ -70,14 +70,14 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
 
   const getConnectionStatusText = () => {
     switch (connectionStatus) {
-      case 'connected':
-        return 'Connected to real-time notifications';
-      case 'connecting':
-        return 'Connecting to notifications...';
-      case 'disconnected':
-        return 'Notifications disconnected';
+      case "connected":
+        return "Connected to real-time notifications";
+      case "connecting":
+        return "Connecting to notifications...";
+      case "disconnected":
+        return "Notifications disconnected";
       default:
-        return 'Unknown connection status';
+        return "Unknown connection status";
     }
   };
 
@@ -94,17 +94,17 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
             onClick={onClose}
             transition={{ duration: 0.2 }}
           />
-          
+
           {/* Drawer */}
           <motion.div
             className={`${styles.drawer} ${styles[position]}`}
-            initial={{ x: position === 'right' ? '100%' : '-100%' }}
+            initial={{ x: position === "right" ? "100%" : "-100%" }}
             animate={{ x: 0 }}
-            exit={{ x: position === 'right' ? '100%' : '-100%' }}
-            transition={{ 
-              type: 'spring',
+            exit={{ x: position === "right" ? "100%" : "-100%" }}
+            transition={{
+              type: "spring",
               damping: 25,
-              stiffness: 200
+              stiffness: 200,
             }}
           >
             {/* Header */}
@@ -112,12 +112,10 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
               <div className={styles.headerContent}>
                 <h2 className={styles.title}>Notifications</h2>
                 {unreadCount > 0 && (
-                  <div className={styles.unreadBadge}>
-                    {unreadCount}
-                  </div>
+                  <div className={styles.unreadBadge}>{unreadCount}</div>
                 )}
               </div>
-              
+
               <button
                 onClick={onClose}
                 className={styles.closeButton}
@@ -133,20 +131,19 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
               <div className={styles.connectionBanner}>
                 <div className={styles.bannerContent}>
                   <div className={styles.bannerIcon}>
-                    {connectionStatus === 'connecting' ? '🟡' : '🔴'}
+                    {connectionStatus === "connecting" ? "🟡" : "🔴"}
                   </div>
                   <div className={styles.bannerText}>
                     <p className={styles.bannerTitle}>
-                      {connectionStatus === 'connecting' 
-                        ? 'Connecting...' 
-                        : 'Connection Lost'
-                      }
+                      {connectionStatus === "connecting"
+                        ? "Connecting..."
+                        : "Connection Lost"}
                     </p>
                     <p className={styles.bannerDescription}>
                       {getConnectionStatusText()}
                     </p>
                   </div>
-                  {connectionStatus === 'disconnected' && (
+                  {connectionStatus === "disconnected" && (
                     <button
                       onClick={handleReconnect}
                       className={styles.reconnectButton}
@@ -190,7 +187,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
   );
 
   // Render drawer in portal to body
-  return typeof window !== 'undefined' 
+  return typeof window !== "undefined"
     ? createPortal(drawerContent, document.body)
     : null;
 };

@@ -1,11 +1,7 @@
-'use client';
+"use client";
 
-import React, { 
-  createContext, 
-  useContext, 
-  ReactNode 
-} from 'react';
-import { useNotificationOperations } from '@/graphql/hooks/notifications/useNotificationOperations';
+import React, { createContext, useContext, ReactNode } from "react";
+import { useNotificationOperations } from "@/graphql/hooks/notifications/useNotificationOperations";
 
 interface NotificationContextType {
   notifications: any[];
@@ -19,7 +15,7 @@ interface NotificationContextType {
   getUnreadNotifications: () => any[];
   // Socket-related properties for compatibility with NotificationDrawer
   isConnected: boolean;
-  connectionStatus: 'connected' | 'connecting' | 'disconnected';
+  connectionStatus: "connected" | "connecting" | "disconnected";
   connectSocket: () => Promise<void>;
 }
 
@@ -29,15 +25,17 @@ interface NotificationProviderProps {
   children: ReactNode;
 }
 
-export const NotificationProvider: React.FC<NotificationProviderProps> = ({ children }) => {
-  const { 
+export const NotificationProvider: React.FC<NotificationProviderProps> = ({
+  children,
+}) => {
+  const {
     notifications,
     unreadCount,
     refetchNotifications,
     refetchUnreadCount,
     handleMarkNotificationAsRead,
     handleMarkNotificationsAsRead,
-    handleDeleteNotification 
+    handleDeleteNotification,
   } = useNotificationOperations();
 
   // Mark notification as read
@@ -45,19 +43,21 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
     try {
       await handleMarkNotificationAsRead(id);
     } catch (err) {
-      console.error('Failed to mark as read:', err);
+      console.error("Failed to mark as read:", err);
     }
   };
 
   // Mark all as read
   const markAllAsRead = async () => {
-    const unreadIds = notifications.filter((n: any) => !n.isRead).map((n: any) => n.id);
+    const unreadIds = notifications
+      .filter((n: any) => !n.isRead)
+      .map((n: any) => n.id);
     if (unreadIds.length === 0) return;
 
     try {
       await handleMarkNotificationsAsRead(unreadIds);
     } catch (err) {
-      console.error('Failed to mark all as read:', err);
+      console.error("Failed to mark all as read:", err);
     }
   };
 
@@ -66,7 +66,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
     try {
       await handleDeleteNotification(id);
     } catch (err) {
-      console.error('Failed to delete notification:', err);
+      console.error("Failed to delete notification:", err);
     }
   };
 
@@ -83,8 +83,8 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
 
   // Mock socket functions for compatibility (no real-time features)
   const connectSocket = async () => {
-    // No-op since we're using polling instead of WebSocket
-    console.log('Socket connection not needed in simplified mode');
+    // integrate with socket-notification.ts
+    console.log("Socket connection not needed in simplified mode");
   };
 
   const contextValue: NotificationContextType = {
@@ -97,10 +97,10 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
     deleteNotification,
     refetch,
     getUnreadNotifications,
-    // Mock socket properties for compatibility
+    // integrate with socket-notification.ts
     isConnected: true, // Always show as connected since we use GraphQL
-    connectionStatus: 'connected',
-    connectSocket
+    connectionStatus: "connected",
+    connectSocket,
   };
 
   return (
@@ -113,7 +113,9 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
 export const useNotifications = (): NotificationContextType => {
   const context = useContext(NotificationContext);
   if (!context) {
-    throw new Error('useNotifications must be used within a NotificationProvider');
+    throw new Error(
+      "useNotifications must be used within a NotificationProvider"
+    );
   }
   return context;
 };

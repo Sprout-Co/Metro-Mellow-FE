@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import { useNotifications } from '@/components/providers/NotificationProvider';
-import { NotificationBadge } from '../NotificationBadge/NotificationBadge';
-import { NotificationList } from '../NotificationList/NotificationList';
-import { NotificationPayload } from '@/lib/services/socket-notification';
-import styles from './NotificationDropdown.module.scss';
+import React, { useState, useRef, useEffect } from "react";
+import { useNotifications } from "@/components/providers/NotificationProvider";
+import { NotificationBadge } from "../NotificationBadge/NotificationBadge";
+import { NotificationList } from "../NotificationList/NotificationList";
+import { NotificationPayload } from "@/lib/services/socket-notification";
+import styles from "./NotificationDropdown.module.scss";
 
 interface NotificationDropdownProps {
   className?: string;
@@ -14,24 +14,24 @@ interface NotificationDropdownProps {
   onNotificationClick?: (notification: NotificationPayload) => void;
   onViewAllClick?: () => void;
   maxHeight?: string;
-  position?: 'left' | 'right';
+  position?: "left" | "right";
   customTrigger?: React.ReactNode;
 }
 
 export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
-  className = '',
-  buttonClassName = '',
-  dropdownClassName = '',
+  className = "",
+  buttonClassName = "",
+  dropdownClassName = "",
   onNotificationClick,
   onViewAllClick,
-  maxHeight = '400px',
-  position = 'right',
-  customTrigger
+  maxHeight = "400px",
+  position = "right",
+  customTrigger,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  
+
   const { unreadCount, connectionStatus, isConnected } = useNotifications();
 
   // Close dropdown when clicking outside
@@ -48,25 +48,25 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
     };
 
     const handleEscapeKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isOpen) {
+      if (event.key === "Escape" && isOpen) {
         setIsOpen(false);
         buttonRef.current?.focus();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('keydown', handleEscapeKey);
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleEscapeKey);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscapeKey);
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscapeKey);
     };
   }, [isOpen]);
 
   const handleToggle = () => {
-    console.log('Notification dropdown toggled:', !isOpen);
+    console.log("Notification dropdown toggled:", !isOpen);
     setIsOpen(!isOpen);
   };
 
@@ -77,14 +77,14 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
 
   const getConnectionStatusIcon = () => {
     switch (connectionStatus) {
-      case 'connected':
-        return '🟢';
-      case 'connecting':
-        return '🟡';
-      case 'disconnected':
-        return '🔴';
+      case "connected":
+        return "🟢";
+      case "connecting":
+        return "🟡";
+      case "disconnected":
+        return "🔴";
       default:
-        return '⚫';
+        return "⚫";
     }
   };
 
@@ -101,11 +101,11 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            console.log('Bell icon clicked!');
+            console.log("Bell icon clicked!");
             handleToggle();
           }}
           className={`${styles.trigger} ${buttonClassName}`}
-          aria-label={`Notifications ${unreadCount > 0 ? `(${unreadCount} unread)` : ''}`}
+          aria-label={`Notifications ${unreadCount > 0 ? `(${unreadCount} unread)` : ""}`}
           aria-expanded={isOpen}
           aria-haspopup="true"
           type="button"
@@ -126,7 +126,7 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
                 d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
               />
             </svg>
-            
+
             {/* Notification Badge */}
             <NotificationBadge
               className={styles.badge}
@@ -136,8 +136,8 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
           </div>
 
           {/* Connection Status Indicator */}
-          {process.env.NODE_ENV === 'development' && (
-            <div 
+          {process.env.NODE_ENV === "development" && (
+            <div
               className={styles.connectionStatus}
               title={`WebSocket: ${connectionStatus}`}
             >
@@ -164,10 +164,9 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
             <div className={styles.connectionBanner}>
               <span className={styles.connectionIcon}>⚠️</span>
               <span className={styles.connectionText}>
-                {connectionStatus === 'connecting' 
-                  ? 'Connecting to real-time notifications...'
-                  : 'Real-time notifications disconnected'
-                }
+                {connectionStatus === "connecting"
+                  ? "Connecting to real-time notifications..."
+                  : "Real-time notifications disconnected"}
               </span>
             </div>
           )}

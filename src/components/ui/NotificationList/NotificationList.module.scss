@@ -1,5 +1,5 @@
-@import 'abstracts/variables';
-@import 'abstracts/mixins';
+@import "abstracts/variables";
+@import "abstracts/mixins";
 
 .container {
   background: white;
@@ -23,7 +23,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  
+
   h3 {
     margin: 0;
     font-size: 1.125rem;
@@ -91,20 +91,20 @@
 
 .listContainer {
   overflow-y: auto;
-  
+
   &::-webkit-scrollbar {
     width: 8px;
   }
-  
+
   &::-webkit-scrollbar-track {
     background: #f3f4f6;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background: #d1d5db;
     border-radius: 4px;
   }
-  
+
   &::-webkit-scrollbar-thumb:hover {
     background: #9ca3af;
   }
@@ -174,7 +174,8 @@
   }
 
   @keyframes urgentGlow {
-    0%, 100% {
+    0%,
+    100% {
       background: #fef2f2;
     }
     50% {
@@ -252,7 +253,9 @@
   line-height: 1;
   padding: 0.25rem;
   border-radius: 4px;
-  transition: color 0.2s, background-color 0.2s;
+  transition:
+    color 0.2s,
+    background-color 0.2s;
   flex-shrink: 0;
 
   &:hover {
@@ -295,7 +298,9 @@
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
 
   &:hover:not(:disabled) {
     background: #f9fafb;
