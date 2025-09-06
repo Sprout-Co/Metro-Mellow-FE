@@ -10,6 +10,7 @@ export interface NotificationPayload {
   data?: Record<string, any>;
   createdAt: string;
   user: User;
+  isRead?: boolean;
 }
 
 export interface SocketNotificationEvents {
