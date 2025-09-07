@@ -39,10 +39,33 @@ const authLink = setContext((_, { headers }) => {
 
 export const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          // Cache user data for longer periods
+          getCurrentUser: {
+            merge: true,
+          },
+          // Cache frequently accessed data
+          getCustomerBookings: {
+            merge: false,
+          },
+          getCustomerSubscriptions: {
+            merge: false,
+          },
+        },
+      },
+    },
+  }),
   defaultOptions: {
     watchQuery: {
-      fetchPolicy: "cache-and-network",
+      fetchPolicy: "cache-first", // Use cache first for better performance
+      errorPolicy: "all", // Show partial data even with errors
+    },
+    query: {
+      fetchPolicy: "cache-first",
+      errorPolicy: "all",
     },
   },
 });
