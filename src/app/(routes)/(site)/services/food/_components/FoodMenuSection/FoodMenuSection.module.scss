@@ -9,7 +9,7 @@
   background: color("neutral", "white");
   position: relative;
   overflow: hidden;
-  height: 100vh;
+  min-height: 100vh;
 
   @include breakpoint-down("md") {
     padding: spacing("4xl") 0;
