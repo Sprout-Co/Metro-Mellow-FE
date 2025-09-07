@@ -11,6 +11,7 @@ import CleaningServiceModal, {
 import { GetServicesQuery, ServiceOption } from "@/graphql/api";
 import { Home, Sparkles, Building, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import ServiceShowcaseCard from "../../../_components/common/ServiceShowcaseCard/ServiceShowcaseCard";
 
 interface CleaningServicesShowcaseProps {
   servicesData?: GetServicesQuery["services"];
@@ -134,69 +135,11 @@ const CleaningServicesShowcase: React.FC<CleaningServicesShowcaseProps> = ({
           animate={inView ? "visible" : "hidden"}
         >
           {servicesData?.[0]?.options?.map((service, index) => (
-            <motion.div
+            <ServiceShowcaseCard
               key={service.id}
-              className={styles.showcase__card}
-              variants={cardVariants}
-            >
-              {/* Card Header */}
-              <div className={styles.showcase__cardHeader}>
-                <div className={styles.showcase__iconWrapper}>
-                  <span className={styles.showcase__emoji}>
-                    {getServiceEmoji(service.label)}
-                  </span>
-                </div>
-              </div>
-
-              {/* Card Content */}
-              <div className={styles.showcase__cardContent}>
-                <h3 className={styles.showcase__cardTitle}>{service.label}</h3>
-                <p className={styles.showcase__cardDescription}>
-                  {service.description}
-                </p>
-
-                {/* Price */}
-                <div className={styles.showcase__price}>
-                  <span className={styles.showcase__priceLabel}>
-                    Starting at
-                  </span>
-                  <div className={styles.showcase__priceAmount}>
-                    <span className={styles.showcase__priceCurrency}>₦</span>
-                    <span className={styles.showcase__priceValue}>
-                      {service.price?.toLocaleString()}
-                    </span>
-                    <span className={styles.showcase__priceUnit}>/service</span>
-                  </div>
-                </div>
-
-                {/* Features */}
-                {/* <ul className={styles.showcase__features}>
-                  {service.inclusions?.slice(0, 4).map((feature, idx) => (
-                    <li key={idx} className={styles.showcase__feature}>
-                      <div className={styles.showcase__featureIcon}>✓</div>
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul> */}
-
-                {/* CTA Button */}
-                <Button
-                  variant="primary"
-                  size="md"
-                  fullWidth
-                  onClick={() => handleOpenModal(service)}
-                >
-                  Book Now
-                  <ArrowRight className={styles.showcase__buttonIcon} />
-                </Button>
-              </div>
-
-              {/* Card Footer */}
-              {/* <div className={styles.showcase__cardFooter}>
-                <Clock className={styles.showcase__footerIcon} />
-                <span>Book in 60 seconds</span>
-              </div> */}
-            </motion.div>
+              service={service}
+              onBookNowClick={handleOpenModal}
+            />
           ))}
         </motion.div>
       </div>
