@@ -6,8 +6,9 @@
 .orderSteps {
   position: relative;
   width: 100%;
-  background-color: color("neutral", "white");
+  // background-color: color("neutral", "white");
   @include section-spacing("6xl");
+  @include section-border;
   overflow: hidden;
   padding-top: spacing("3xl");
 
