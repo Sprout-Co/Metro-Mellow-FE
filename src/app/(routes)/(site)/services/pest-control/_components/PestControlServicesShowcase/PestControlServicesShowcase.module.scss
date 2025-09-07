@@ -1,15 +1,22 @@
+// src/app/(routes)/(site)/services/pest-control/_components/PestControlServicesShowcase/PestControlServicesShowcase.module.scss
 @import "@/styles/abstracts/variables";
 @import "@/styles/abstracts/functions";
 @import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/animations";
 
 .showcase {
   width: 100%;
-  // background-color: color('neutral', 'white');
-  @include section-spacing("4xl");
-  overflow: hidden;
-  position: relative;
+  padding: spacing("5xl") 0;
   @include section-border;
+  position: relative;
+  overflow: hidden;
+
+  @include breakpoint-down("md") {
+    padding: spacing("4xl") 0;
+  }
+
+  @include breakpoint-down("sm") {
+    padding: spacing("3xl") 0;
+  }
 
   &__container {
     @include container;
@@ -18,41 +25,91 @@
     align-items: center;
   }
 
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: spacing("md");
+
+    p {
+      color: color("neutral", "dark");
+      font-size: font-size("body-2");
+    }
+  }
+
+  &__loadingIcon {
+    width: 60px;
+    height: 60px;
+    color: color("status", "success");
+    animation: pulse 2s ease-in-out infinite;
+  }
+
   &__header {
-    width: 100%;
     text-align: center;
-    margin-bottom: spacing("3xl");
+    margin-bottom: spacing("2xl");
 
     @include breakpoint-down("md") {
-      margin-bottom: spacing("2xl");
+      margin-bottom: spacing("xl");
     }
+  }
+
+  &__label {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xs");
+    background: rgba(color("status", "success"), 0.1);
+    color: color("status", "success");
+    padding: spacing("xs") spacing("lg");
+    border-radius: border-radius("pill");
+    font-size: font-size("small");
+    font-weight: map-get($font-weights, "semibold");
+    margin-bottom: spacing("md");
+    border: 1px solid rgba(color("status", "success"), 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__labelIcon {
+    width: 18px;
+    height: 18px;
   }
 
   &__title {
     @include heading-1;
-    font-size: font-size("h1");
-    color: color("neutral", "black");
     margin-bottom: spacing("md");
-    line-height: line-height("tight");
+    color: color("neutral", "black");
+    line-height: 1.2;
+
+    @include breakpoint-down("lg") {
+      font-size: 3rem;
+    }
 
     @include breakpoint-down("md") {
-      font-size: font-size("h3");
+      font-size: 2.5rem;
     }
 
     @include breakpoint-down("sm") {
-      font-size: font-size("h4");
+      font-size: 2rem;
     }
+  }
+
+  &__titleAccent {
+    display: block;
+    color: color("status", "success");
+    position: relative;
   }
 
   &__subtitle {
     @include paragraph;
     font-size: font-size("body-1");
-    color: color("neutral", "darker");
+    color: color("neutral", "dark");
+    line-height: 1.6;
     max-width: 600px;
     margin: 0 auto;
-    line-height: line-height("relaxed");
 
-    @include breakpoint-down("sm") {
+    @include breakpoint-down("md") {
       font-size: font-size("body-2");
     }
   }
@@ -62,151 +119,94 @@
     grid-template-columns: repeat(3, 1fr);
     gap: spacing("xl");
     width: 100%;
+    margin-bottom: spacing("3xl");
 
     @include breakpoint-down("lg") {
       grid-template-columns: repeat(2, 1fr);
-      gap: spacing("lg");
     }
 
     @include breakpoint-down("sm") {
       grid-template-columns: 1fr;
-      gap: spacing("md");
+      gap: spacing("lg");
     }
   }
 
-  &__card {
-    // background-color: color("neutral", "white");
-    border-radius: border-radius("lg");
-    padding: spacing("xl");
-    box-shadow: map-get($shadows, "sm");
-    border: 1px solid color("accent", "light");
-    transition: all 0.3s ease;
+  &__cta {
     display: flex;
-    flex-direction: column;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-
-    &:hover {
-      box-shadow: map-get($shadows, "md");
-      border-color: color("primary", "light");
-    }
+    align-items: center;
+    gap: spacing("xl");
+    width: 100%;
+    max-width: 900px;
+    padding: spacing("2xl");
+    background: color("neutral", "white");
+    border-radius: border-radius("2xl");
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 2px solid color("status", "error");
 
     @include breakpoint-down("md") {
-      padding: spacing("lg");
+      flex-direction: column;
+      text-align: center;
+      gap: spacing("lg");
     }
 
     @include breakpoint-down("sm") {
-      padding: spacing("md");
+      padding: spacing("xl");
     }
   }
 
-  &__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  &__ctaIcon {
     width: 60px;
     height: 60px;
-    background-color: color-alpha("primary", "lighter", 0.2);
-    border-radius: border-radius("full");
-    margin-bottom: spacing("lg");
-    align-self: center;
+    color: color("status", "error");
+    flex-shrink: 0;
 
     @include breakpoint-down("sm") {
       width: 50px;
       height: 50px;
-      margin-bottom: spacing("md");
     }
   }
 
-  &__emoji {
-    font-size: font-size("h3");
-
-    @include breakpoint-down("sm") {
-      font-size: font-size("h4");
-    }
-  }
-
-  &__content {
+  &__ctaContent {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
   }
 
-  &__name {
-    @include heading-3;
-    font-size: font-size("subtitle-1");
-    font-weight: map-get($font-weights, "bold");
+  &__ctaTitle {
+    @include heading-4;
+    font-size: font-size("h5");
     color: color("neutral", "black");
-    margin-bottom: spacing("sm");
-    line-height: line-height("tight");
+    margin-bottom: spacing("xs");
 
     @include breakpoint-down("sm") {
-      font-size: font-size("body-1");
+      font-size: font-size("h6");
     }
   }
 
-  &__description {
-    @include paragraph;
+  &__ctaText {
     font-size: font-size("body-2");
-    color: color("neutral", "darker");
-    margin-bottom: spacing("lg");
-    line-height: line-height("relaxed");
-    flex: 1;
+    color: color("neutral", "dark");
 
     @include breakpoint-down("sm") {
       font-size: font-size("small");
-      margin-bottom: spacing("md");
     }
   }
 
-  &__features {
-    list-style-type: none;
-    padding: 0;
-    margin: 0 0 spacing("lg") 0;
-    text-align: left;
-    border-top: 1px dashed color("neutral", "light");
-    border-bottom: 1px dashed color("neutral", "light");
-    padding: spacing("md") 0;
-  }
+  &__ctaButton {
+    flex-shrink: 0;
 
-  &__feature {
-    @include body-2;
-    color: color("neutral", "darkest");
-    padding: spacing("xs") 0;
-    display: flex;
-    align-items: center;
-
-    &:before {
-      content: "✓";
-      color: color("primary", "base");
-      margin-right: spacing("sm");
-      font-weight: map-get($font-weights, "bold");
+    @include breakpoint-down("md") {
+      width: 100%;
     }
   }
+}
 
-  &__priceTag {
-    margin-bottom: spacing("md");
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    gap: spacing("xs");
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
   }
-
-  &__priceValue {
-    @include heading-5;
-    color: color("primary", "dark");
-    font-weight: map-get($font-weights, "bold");
-  }
-
-  &__priceUnit {
-    @include body-2;
-    color: color("neutral", "dark");
-    font-weight: map-get($font-weights, "regular");
-  }
-
-  &__action {
-    margin-top: auto;
+  50% {
+    transform: scale(1.15);
+    opacity: 0.3;
   }
 }
