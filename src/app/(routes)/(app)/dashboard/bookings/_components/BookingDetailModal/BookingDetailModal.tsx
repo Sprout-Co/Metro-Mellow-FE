@@ -34,12 +34,14 @@ interface BookingDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
   booking: Booking | null;
+  refetchBookings?: () => void;
 }
 
 const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
   isOpen,
   onClose,
   booking,
+  refetchBookings,
 }) => {
   const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
   const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] =
@@ -99,6 +101,18 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
   ) {
     setConfirmationActionType(actionType);
     setIsConfirmActionModalOpen(true);
+  }
+
+  function handleConfirmActionSuccess(reason?: string) {
+    console.log("Action completed:", confirmationActionType, reason);
+
+    // Close the detail modal
+    onClose();
+
+    // Refresh the bookings data
+    if (refetchBookings) {
+      refetchBookings();
+    }
   }
 
   const renderFooterButtons = () => {
@@ -422,6 +436,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
         isOpen={isConfirmActionModalOpen}
         onClose={() => setIsConfirmActionModalOpen(false)}
         booking={booking}
+        onConfirm={handleConfirmActionSuccess}
       />
       <FeedbackModal
         isOpen={isFeedbackModalOpen}

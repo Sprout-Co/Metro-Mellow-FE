@@ -329,7 +329,17 @@ const BookingsMain: React.FC = () => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <ListView bookings={filteredBookings} />
+              <ListView
+                bookings={filteredBookings}
+                refetchBookings={() => {
+                  setIsLoading(true);
+                  handleGetCustomerBookings()
+                    .then((result) => {
+                      setCustomerBookings(result.data || []);
+                    })
+                    .finally(() => setIsLoading(false));
+                }}
+              />
             </motion.div>
           )}
         </AnimatePresence>
