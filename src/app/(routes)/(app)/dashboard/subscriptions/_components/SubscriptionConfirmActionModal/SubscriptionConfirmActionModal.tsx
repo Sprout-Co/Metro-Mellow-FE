@@ -14,9 +14,13 @@ import {
   RefreshCw,
 } from "lucide-react";
 import styles from "./SubscriptionConfirmActionModal.module.scss";
-import { Subscription } from "@/graphql/api";
+import { Subscription, GetCustomerSubscriptionsQuery } from "@/graphql/api";
 import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
 import Modal from "@/components/ui/Modal/Modal";
+
+// Type for GraphQL subscription data that matches the one from the list view
+type SubscriptionType =
+  GetCustomerSubscriptionsQuery["customerSubscriptions"][0];
 
 export type SubscriptionActionType =
   | "pause"
@@ -28,7 +32,7 @@ export type SubscriptionActionType =
 interface SubscriptionConfirmActionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  subscription: Subscription | null;
+  subscription: SubscriptionType | null;
   actionType: SubscriptionActionType;
   onConfirm?: (reason?: string) => void;
 }
@@ -63,18 +67,19 @@ const SubscriptionConfirmActionModal: React.FC<
     setError(null);
 
     try {
+      let result;
       switch (actionType) {
         case "cancel":
-          await handleCancelSubscription(subscription.id);
+          result = await handleCancelSubscription(subscription.id);
           break;
         case "pause":
-          await handlePauseSubscription(subscription.id);
+          result = await handlePauseSubscription(subscription.id);
           break;
         case "resume":
-          await handleResumeSubscription(subscription.id);
+          result = await handleResumeSubscription(subscription.id);
           break;
         case "reactivate":
-          await handleReactivateSubscription(subscription.id);
+          result = await handleReactivateSubscription(subscription.id);
           break;
         default:
           break;
@@ -82,6 +87,7 @@ const SubscriptionConfirmActionModal: React.FC<
 
       setShowSuccess(true);
 
+      // Immediately call onConfirm to trigger subscription list refresh
       if (onConfirm) {
         onConfirm(cancellationReason);
       }
