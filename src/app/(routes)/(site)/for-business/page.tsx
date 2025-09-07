@@ -10,6 +10,43 @@ import SuccessStoriesSection from "./_components/SuccessStoriesSection/SuccessSt
 import IntegrationTechnologySection from "./_components/IntegrationTechnologySection";
 import EnterpriseCTA from "./_components/EnterpriseCTA";
 import styles from "./ForBusiness.module.scss";
+import FAQSection from "@/components/ui/FAQSection/FAQSection";
+
+const faqs = [
+  {
+    id: "1",
+    question: "What is Metro Mellow for Business?",
+    answer:
+      "Metro Mellow is a platform that allows you to book services for your home and office.",
+  },
+  {
+    id: "2",
+    question: "How does Metro Mellow for Business work?",
+    answer:
+      "Metro Mellow for Business allows you to book services for your home and office.",
+  },
+
+  {
+    id: "3",
+    question: "How does Metro Mellow for Business work?",
+    answer:
+      "Metro Mellow for Business allows you to book services for your home and office.",
+  },
+
+  {
+    id: "4",
+    question: "How does Metro Mellow for Business work?",
+    answer:
+      "Metro Mellow for Business allows you to book services for your home and office.",
+  },
+
+  {
+    id: "5",
+    question: "How does Metro Mellow for Business work?",
+    answer:
+      "Metro Mellow for Business allows you to book services for your home and office.",
+  },
+];
 
 export default function BusinessPage() {
   return (
@@ -19,9 +56,10 @@ export default function BusinessPage() {
       <BusinessBenefits />
       <EnterpriseFeatures />
       <IntegrationTechnologySection />
-      <PricingTiersSection />
-      <SuccessStoriesSection />
-      <EnterpriseCTA />
+      {/* <PricingTiersSection /> */}
+      {/* <SuccessStoriesSection /> */}
+      {/* <EnterpriseCTA /> */}
+      <FAQSection faqs={faqs} />
     </main>
   );
 }
