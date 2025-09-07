@@ -22,11 +22,7 @@
 
   // Clean Header Section
   &__header {
-    background: linear-gradient(
-      135deg,
-      color("primary", "base"),
-      color("primary", "dark")
-    );
+    background: color("primary", "base");
     padding: spacing("2xl") spacing("3xl");
     color: color("neutral", "white");
     display: flex;
@@ -132,359 +128,250 @@
   &__main {
     display: flex;
     flex-direction: column;
-    gap: spacing("xl");
   }
 
-  // Clean Info Cards
-  &__infoCard {
-    background: color("neutral", "white");
-    border: 1px solid color("neutral", "lighter");
-    border-radius: border-radius("2xl");
-    overflow: hidden;
-    transition: all 0.3s ease;
+  // Clean & Professional Design
+  &__simpleSection {
+    margin-bottom: spacing("xl");
+    border-bottom: 1px solid color("neutral", "lighter");
 
-    &:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
     }
   }
 
-  &__cardHeader {
-    padding: spacing("lg");
-    background: color("neutral", "lightest");
-    border-bottom: 1px solid color("neutral", "lighter");
+  &__simpleSectionHeader {
     display: flex;
     align-items: center;
-    gap: spacing("md");
-  }
+    justify-content: space-between;
+    margin-bottom: spacing("md");
 
-  &__cardIcon {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(
-      135deg,
-      color("primary", "base"),
-      color("primary", "dark")
-    );
-    border-radius: border-radius("lg");
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: color("neutral", "white");
-    flex-shrink: 0;
-  }
-
-  &__cardTitle {
     h3 {
       @include font-size("base");
-      @include font-weight("semibold");
+      @include font-weight("medium");
       color: color("neutral", "darkest");
-      margin: 0 0 2px 0;
-    }
-
-    p {
-      @include font-size("sm");
-      color: color("neutral", "dark");
       margin: 0;
     }
   }
 
-  &__cardContent {
-    padding: spacing("lg");
+  &__simpleLabel {
+    display: block;
+    @include font-size("base");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("md");
   }
 
-  // Selected Info Display
-  &__selectedInfo {
-    display: flex;
-    align-items: center;
-    gap: spacing("md");
-    padding: spacing("md");
-    background: rgba(color("status", "success"), 0.05);
-    border: 1px solid rgba(color("status", "success"), 0.2);
-    border-radius: border-radius("lg");
-  }
-
-  &__selectedIcon {
-    width: 44px;
-    height: 44px;
-    background: color("status", "success");
-    border-radius: border-radius("lg");
-    display: flex;
+  &__simpleCount {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: color("neutral", "white");
-    flex-shrink: 0;
+    height: 24px;
+    min-width: 24px;
+    padding: 0 spacing("xs");
+    border-radius: 12px;
+    background-color: color("primary", "lighter");
+    color: color("primary", "base");
+    @include font-size("xs");
+    @include font-weight("medium");
   }
 
-  &__selectedText {
-    flex: 1;
-
-    h4 {
-      @include font-size("sm");
-      @include font-weight("semibold");
-      color: darken(color("status", "success"), 20%);
-      margin: 0 0 spacing("xxs") 0;
-    }
-
-    p {
-      @include font-size("sm");
-      color: darken(color("status", "success"), 15%);
-      margin: 0;
-    }
+  &__simpleFormGroup {
+    margin-bottom: spacing("md");
   }
 
-  // Date Picker
-  &__datePickerContainer {
-    margin-top: spacing("md");
-  }
-
-  &__datePicker {
+  &__simpleInput {
     width: 100%;
+    max-width: 300px;
     padding: spacing("md");
     border: 1px solid color("neutral", "light");
-    border-radius: border-radius("lg");
+    border-radius: spacing("xs");
     @include font-size("base");
     color: color("neutral", "darkest");
-    background: color("neutral", "white");
-    cursor: pointer;
-    transition: all 0.3s ease;
+    background-color: color("neutral", "white");
 
-    &:hover,
     &:focus {
-      border-color: color("primary", "base");
       outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 2px rgba(color("primary", "base"), 0.1);
     }
   }
 
-  // Address Selector
-  &__addressSelectorContainer {
+  &__simpleDateDisplay {
     margin-top: spacing("md");
-    max-height: 300px;
-    overflow-y: auto;
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    font-style: italic;
   }
 
-  &__addressGrid {
-    display: grid;
-    gap: spacing("sm");
-    margin-top: spacing("md");
-  }
-
-  &__addressCard {
-    display: flex;
-    align-items: center;
-    gap: spacing("sm");
-    padding: spacing("md");
+  // Address Table
+  &__addressTable {
     border: 1px solid color("neutral", "lighter");
-    border-radius: border-radius("lg");
-    background: color("neutral", "white");
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-      border-color: color("primary", "light");
-      background: rgba(color("primary", "lighter"), 0.2);
-      transform: translateY(-2px);
-    }
-
-    &_selected {
-      border-color: color("primary", "base");
-      background: rgba(color("primary", "lighter"), 0.4);
-
-      &:hover {
-        border-color: color("primary", "base");
-      }
-    }
+    border-radius: spacing("xs");
+    overflow: hidden;
   }
 
-  &__addressCardIcon {
-    width: 36px;
-    height: 36px;
-    border-radius: border-radius("md");
-    background: rgba(color("primary", "base"), 0.1);
-    color: color("primary", "base");
+  &__addressRow {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  &__addressCardContent {
-    flex: 1;
-  }
-
-  &__addressCardTitle {
-    @include font-size("sm");
-    @include font-weight("semibold");
-    color: color("neutral", "darkest");
-    margin: 0 0 2px 0;
-    display: flex;
-    align-items: center;
-    gap: spacing("xs");
-  }
-
-  &__addressDefaultBadge {
-    @include font-size("xs");
-    background: color("primary", "lighter");
-    color: color("primary", "dark");
-    padding: 2px spacing("xs");
-    border-radius: border-radius("sm");
-  }
-
-  &__addressCardText {
-    @include font-size("xs");
-    color: color("neutral", "dark");
-    margin: 0;
-  }
-
-  &__addressCardCheck {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: color("primary", "base");
-    color: color("neutral", "white");
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  // Services Grid
-  &__servicesGrid {
-    display: grid;
-    gap: spacing("md");
-  }
-
-  &__serviceCard {
-    background: color("neutral", "white");
-    border: 2px solid color("neutral", "lighter");
-    border-radius: border-radius("xl");
-    padding: spacing("lg");
-    transition: all 0.3s ease;
-    position: relative;
-
-    &::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    &:hover {
-      border-color: color("primary", "base");
-      box-shadow: 0 4px 12px rgba(color("primary", "base"), 0.1);
-
-      &::before {
-        opacity: 1;
-      }
-    }
-
-    &--cleaning::before {
-      background: linear-gradient(90deg, #3b82f6, #60a5fa);
-    }
-    &--laundry::before {
-      background: linear-gradient(90deg, #8b5cf6, #a78bfa);
-    }
-    &--cooking::before {
-      background: linear-gradient(90deg, #f59e0b, #fbbf24);
-    }
-    &--pest::before {
-      background: linear-gradient(90deg, #10b981, #34d399);
-    }
-  }
-
-  &__serviceHeader {
-    display: flex;
-    gap: spacing("md");
-    margin-bottom: spacing("md");
-  }
-
-  &__serviceIcon {
-    width: 48px;
-    height: 48px;
-    background: linear-gradient(
-      135deg,
-      color("neutral", "lightest"),
-      color("neutral", "lighter")
-    );
-    border-radius: border-radius("lg");
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    flex-shrink: 0;
-  }
-
-  &__serviceInfo {
-    flex: 1;
-
-    h4 {
-      @include font-size("base");
-      @include font-weight("semibold");
-      color: color("neutral", "darkest");
-      margin: 0 0 spacing("xxs") 0;
-    }
-  }
-
-  &__serviceBadge {
-    display: inline-block;
-    padding: spacing("xxs") spacing("sm");
-    background: color("accent", "base");
-    color: darken(color("accent", "base"), 40%);
-    border-radius: border-radius("md");
-    @include font-size("xs");
-    @include font-weight("semibold");
-    text-transform: uppercase;
-  }
-
-  &__serviceDetails {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: spacing("sm");
     padding: spacing("md");
-    background: color("neutral", "lightest");
-    border-radius: border-radius("lg");
-    margin-bottom: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: color("neutral", "lightest");
+    }
   }
 
-  &__detailItem {
+  &__addressRowSelected {
+    background-color: rgba(color("primary", "lighter"), 0.5);
+
+    &:hover {
+      background-color: rgba(color("primary", "lighter"), 0.7);
+    }
+  }
+
+  &__addressRowCheck {
+    margin-right: spacing("md");
     display: flex;
-    flex-direction: column;
-    gap: spacing("xxs");
-  }
-
-  &__detailLabel {
-    @include font-size("xs");
-    color: color("neutral", "dark");
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  &__detailValue {
-    @include font-size("sm");
-    @include font-weight("semibold");
-    color: color("neutral", "darkest");
-  }
-
-  &__servicePrice {
-    padding-top: spacing("md");
-    border-top: 1px solid color("neutral", "lighter");
-    display: flex;
-    justify-content: space-between;
     align-items: center;
   }
 
-  &__priceLabel {
+  &__radioOuter {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid color("neutral", "light");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  &__radioOuterSelected {
+    border-color: color("primary", "base");
+  }
+
+  &__radioInner {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: color("primary", "base");
+  }
+
+  &__addressRowContent {
+    flex: 1;
+  }
+
+  &__addressRowTitle {
     @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xs");
+    display: flex;
+    align-items: center;
+  }
+
+  &__addressRowTag {
+    margin-left: spacing("xs");
+    padding: 2px spacing("xs");
+    @include font-size("xs");
+    color: color("primary", "dark");
+    background-color: color("primary", "lighter");
+    border-radius: spacing("xs");
+  }
+
+  &__addressRowText {
+    @include font-size("xs");
     color: color("neutral", "dark");
   }
 
-  &__priceValue {
-    @include font-size("xl");
-    @include font-weight("bold");
-    color: color("primary", "dark");
+  &__noAddressMessage {
+    padding: spacing("lg");
+    text-align: center;
+    border: 1px solid color("neutral", "lighter");
+    border-radius: spacing("xs");
+    color: color("neutral", "dark");
+  }
+
+  // Service Table
+  &__serviceTable {
+    border: 1px solid color("neutral", "lighter");
+    border-radius: spacing("xs");
+    overflow: hidden;
+  }
+
+  &__serviceTableHeader {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr 1fr 1fr;
+    background-color: color("neutral", "lightest");
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    > div {
+      padding: spacing("sm") spacing("md");
+      @include font-size("xs");
+      @include font-weight("medium");
+      color: color("neutral", "dark");
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  &__serviceRow {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr 1fr 1fr;
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: rgba(color("neutral", "lightest"), 0.5);
+    }
+
+    > div {
+      padding: spacing("md");
+      @include font-size("sm");
+      color: color("neutral", "darkest");
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+
+  &__serviceColName {
+    @include font-weight("medium");
+  }
+
+  &__serviceType {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+    margin-top: 2px;
+    font-weight: normal;
+  }
+
+  &__serviceColFrequency,
+  &__serviceColDays,
+  &__serviceColTime {
+    @include font-size("sm");
+  }
+
+  &__serviceColPrice {
+    @include font-weight("semibold");
+  }
+
+  &__pricePeriod {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+    font-weight: normal;
+    margin-left: 2px;
   }
 
   // Order Summary Sidebar

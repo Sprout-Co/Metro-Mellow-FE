@@ -27,6 +27,7 @@ import { BillingCycle, Address } from "@/graphql/api";
 import { DurationType } from "../SubscriptionBuilder";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "@/lib/redux/slices/authSlice";
+import FnButton from "@/components/ui/Button/FnButton";
 
 interface ConfiguredService {
   service: any;
@@ -188,242 +189,158 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
               <p>Confirm your service details and complete checkout</p>
             </div>
           </div>
-          <button onClick={onBack} className={styles.checkout__backBtn}>
+          <FnButton
+            variant="white"
+            onClick={onBack}
+            className={styles.checkout__backBtn}
+          >
             <ArrowLeft size={20} />
             Back to Builder
-          </button>
+          </FnButton>
         </div>
 
-        {/* Main Content Grid */}
+        {/* Main Content Grid - Clean & Professional Design */}
         <div className={styles.checkout__body}>
           <div className={styles.checkout__main}>
-            {/* Start Date Card */}
+            {/* Start Date Section */}
             <motion.div
-              className={styles.checkout__infoCard}
-              initial={{ opacity: 0, y: 20 }}
+              className={styles.checkout__simpleSection}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
             >
-              <div className={styles.checkout__cardHeader}>
-                <div className={styles.checkout__cardIcon}>
-                  <Calendar size={20} />
-                </div>
-                <div className={styles.checkout__cardTitle}>
-                  <h3>Service Start Date</h3>
-                  <p>When would you like your services to begin?</p>
-                </div>
-              </div>
-              <div className={styles.checkout__cardContent}>
-                <div className={styles.checkout__selectedInfo}>
-                  <div className={styles.checkout__selectedIcon}>
-                    <Calendar size={20} />
+              <div className={styles.checkout__simpleFormGroup}>
+                <label className={styles.checkout__simpleLabel}>
+                  Start Date
+                </label>
+                <input
+                  type="date"
+                  value={startDate ? startDate.toISOString().split("T")[0] : ""}
+                  onChange={(e) => {
+                    const newDate = new Date(e.target.value);
+                    onStartDateChange(newDate);
+                  }}
+                  min={new Date().toISOString().split("T")[0]}
+                  className={styles.checkout__simpleInput}
+                  required
+                />
+                {startDate && (
+                  <div className={styles.checkout__simpleDateDisplay}>
+                    {formatDate(startDate)}
                   </div>
-                  <div className={styles.checkout__selectedText}>
-                    <h4>Selected Date</h4>
-                    <p>{startDate ? formatDate(startDate) : "Select a date"}</p>
-                  </div>
-                </div>
-
-                <div className={styles.checkout__datePickerContainer}>
-                  <input
-                    type="date"
-                    value={
-                      startDate ? startDate.toISOString().split("T")[0] : ""
-                    }
-                    onChange={(e) => {
-                      const newDate = new Date(e.target.value);
-                      onStartDateChange(newDate);
-                    }}
-                    min={new Date().toISOString().split("T")[0]}
-                    className={styles.checkout__datePicker}
-                    required
-                  />
-                </div>
+                )}
               </div>
             </motion.div>
 
-            {/* Service Address Card */}
+            {/* Service Address Section */}
             <motion.div
-              className={styles.checkout__infoCard}
-              initial={{ opacity: 0, y: 20 }}
+              className={styles.checkout__simpleSection}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <div className={styles.checkout__cardHeader}>
-                <div className={styles.checkout__cardIcon}>
-                  <MapPin size={20} />
-                </div>
-                <div className={styles.checkout__cardTitle}>
-                  <h3>Service Address</h3>
-                  <p>Where should we deliver the services?</p>
-                </div>
-              </div>
-              <div className={styles.checkout__cardContent}>
-                <div className={styles.checkout__selectedInfo}>
-                  <div className={styles.checkout__selectedIcon}>
-                    <Home size={20} />
-                  </div>
-                  <div className={styles.checkout__selectedText}>
-                    <h4>
-                      {selectedAddress?.label ||
-                        currentUser?.defaultAddress?.label ||
-                        "Address"}
-                      {!selectedAddress &&
-                        currentUser?.defaultAddress?.isDefault &&
-                        " (Default)"}
-                    </h4>
-                    <p>
-                      {selectedAddress
-                        ? formatAddress(selectedAddress)
-                        : currentUser?.defaultAddress
-                          ? formatAddress(currentUser.defaultAddress)
-                          : "No address selected"}
-                    </p>
-                  </div>
-                </div>
+              <label className={styles.checkout__simpleLabel}>
+                Service Address
+              </label>
 
-                {/* Address Selector */}
-                <div className={styles.checkout__addressSelectorContainer}>
-                  {currentUser?.addresses &&
-                    currentUser.addresses.length > 0 && (
-                      <div className={styles.checkout__addressGrid}>
-                        {currentUser.addresses.map((address) => {
-                          if (!address) return null;
-                          return (
-                            <div
-                              key={address.id || "address-" + Math.random()}
-                              className={`${styles.checkout__addressCard} ${
-                                selectedAddress?.id === address.id
-                                  ? styles.checkout__addressCard_selected
-                                  : ""
-                              }`}
-                              onClick={() => onAddressChange(address)}
-                            >
-                              <div className={styles.checkout__addressCardIcon}>
-                                <Home size={18} />
-                              </div>
-                              <div
-                                className={styles.checkout__addressCardContent}
-                              >
-                                <h4
-                                  className={styles.checkout__addressCardTitle}
-                                >
-                                  {address.label || "Address"}
-                                  {address.isDefault && (
-                                    <span
-                                      className={
-                                        styles.checkout__addressDefaultBadge
-                                      }
-                                    >
-                                      Default
-                                    </span>
-                                  )}
-                                </h4>
-                                <p className={styles.checkout__addressCardText}>
-                                  {address
-                                    ? formatAddress(address)
-                                    : "No address details"}
-                                </p>
-                              </div>
-                              {selectedAddress?.id === address.id && (
-                                <div
-                                  className={styles.checkout__addressCardCheck}
-                                >
-                                  <Check size={16} />
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
+              {currentUser?.addresses && currentUser.addresses.length > 0 ? (
+                <div className={styles.checkout__addressTable}>
+                  {currentUser.addresses.map((address) => {
+                    if (!address) return null;
+                    const isSelected = selectedAddress?.id === address.id;
+
+                    return (
+                      <div
+                        key={address.id || "address-" + Math.random()}
+                        className={`${styles.checkout__addressRow} ${
+                          isSelected ? styles.checkout__addressRowSelected : ""
+                        }`}
+                        onClick={() => onAddressChange(address)}
+                      >
+                        <div className={styles.checkout__addressRowCheck}>
+                          <div
+                            className={`${styles.checkout__radioOuter} ${isSelected ? styles.checkout__radioOuterSelected : ""}`}
+                          >
+                            {isSelected && (
+                              <div className={styles.checkout__radioInner} />
+                            )}
+                          </div>
+                        </div>
+                        <div className={styles.checkout__addressRowContent}>
+                          <div className={styles.checkout__addressRowTitle}>
+                            {address.label || "Address"}
+                            {address.isDefault && (
+                              <span className={styles.checkout__addressRowTag}>
+                                Default
+                              </span>
+                            )}
+                          </div>
+                          <div className={styles.checkout__addressRowText}>
+                            {formatAddress(address)}
+                          </div>
+                        </div>
                       </div>
-                    )}
+                    );
+                  })}
                 </div>
-              </div>
+              ) : (
+                <div className={styles.checkout__noAddressMessage}>
+                  No addresses available.
+                </div>
+              )}
             </motion.div>
 
-            {/* Services Overview */}
+            {/* Services Section */}
             <motion.div
-              className={styles.checkout__infoCard}
-              initial={{ opacity: 0, y: 20 }}
+              className={styles.checkout__simpleSection}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <div className={styles.checkout__cardHeader}>
-                <div className={styles.checkout__cardIcon}>
-                  <Sparkles size={20} />
-                </div>
-                <div className={styles.checkout__cardTitle}>
-                  <h3>Your Selected Services</h3>
-                  <p>
-                    {configuredServices.length} services configured for your
-                    subscription
-                  </p>
-                </div>
+              <div className={styles.checkout__simpleSectionHeader}>
+                <h3>Services</h3>
+                <span className={styles.checkout__simpleCount}>
+                  {configuredServices.length}
+                </span>
               </div>
-              <div className={styles.checkout__cardContent}>
-                <div className={styles.checkout__servicesGrid}>
-                  {configuredServices.map((cs, index) => (
-                    <motion.div
-                      key={cs.service._id}
-                      className={`${styles.checkout__serviceCard} ${getServiceCategoryClass(cs.service.category)}`}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.4 + index * 0.1 }}
-                    >
-                      <div className={styles.checkout__serviceHeader}>
-                        <div className={styles.checkout__serviceIcon}>
-                          {getServiceIcon(cs.service.category)}
-                        </div>
-                        <div className={styles.checkout__serviceInfo}>
-                          <h4>{cs.service.name}</h4>
-                          <span className={styles.checkout__serviceBadge}>
-                            {cs.service.category.replace(/_/g, " ")}
-                          </span>
-                        </div>
-                      </div>
 
-                      <div className={styles.checkout__serviceDetails}>
-                        <div className={styles.checkout__detailItem}>
-                          <span className={styles.checkout__detailLabel}>
-                            Frequency
-                          </span>
-                          <span className={styles.checkout__detailValue}>
-                            {getFrequencyLabel(cs.configuration.frequency)}
-                          </span>
-                        </div>
-                        <div className={styles.checkout__detailItem}>
-                          <span className={styles.checkout__detailLabel}>
-                            Days
-                          </span>
-                          <span className={styles.checkout__detailValue}>
-                            {getDaysOfWeek(
-                              cs.configuration.scheduledDays || []
-                            )}
-                          </span>
-                        </div>
-                        <div className={styles.checkout__detailItem}>
-                          <span className={styles.checkout__detailLabel}>
-                            Time
-                          </span>
-                          <span className={styles.checkout__detailValue}>
-                            {getTimeSlotLabel(
-                              cs.configuration.preferredTimeSlot
-                            )}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className={styles.checkout__servicePrice}>
-                        <span className={styles.checkout__priceLabel}>
-                          Monthly Rate
-                        </span>
-                        <span className={styles.checkout__priceValue}>
-                          ₦{(cs.configuration.price || 0).toLocaleString()}
-                        </span>
-                      </div>
-                    </motion.div>
-                  ))}
+              <div className={styles.checkout__serviceTable}>
+                <div className={styles.checkout__serviceTableHeader}>
+                  <div className={styles.checkout__serviceColName}>Service</div>
+                  <div className={styles.checkout__serviceColFrequency}>
+                    Frequency
+                  </div>
+                  <div className={styles.checkout__serviceColDays}>Days</div>
+                  <div className={styles.checkout__serviceColTime}>Time</div>
+                  <div className={styles.checkout__serviceColPrice}>Price</div>
                 </div>
+
+                {configuredServices.map((cs) => (
+                  <div
+                    key={cs.service._id}
+                    className={styles.checkout__serviceRow}
+                  >
+                    <div className={styles.checkout__serviceColName}>
+                      {cs.service.name}
+                      <span className={styles.checkout__serviceType}>
+                        {cs.service.category.replace(/_/g, " ")}
+                      </span>
+                    </div>
+                    <div className={styles.checkout__serviceColFrequency}>
+                      {getFrequencyLabel(cs.configuration.frequency)}
+                    </div>
+                    <div className={styles.checkout__serviceColDays}>
+                      {getDaysOfWeek(cs.configuration.scheduledDays || [])}
+                    </div>
+                    <div className={styles.checkout__serviceColTime}>
+                      {getTimeSlotLabel(cs.configuration.preferredTimeSlot)}
+                    </div>
+                    <div className={styles.checkout__serviceColPrice}>
+                      ₦{(cs.configuration.price || 0).toLocaleString()}
+                      <span className={styles.checkout__pricePeriod}>/mo</span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </motion.div>
           </div>
