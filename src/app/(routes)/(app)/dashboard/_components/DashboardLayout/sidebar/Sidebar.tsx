@@ -8,21 +8,12 @@ import {
   Home,
   CalendarDays,
   Repeat,
-  CreditCard,
-  Gift,
   User,
   MessageSquare,
-  ChevronRight,
-  List,
   MapPin,
-  Heart,
-  Bell,
-  Settings,
   LogOut,
   PlusCircle,
   HelpCircle,
-  Wallet,
-  Clock,
 } from "lucide-react";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 
@@ -51,50 +42,24 @@ interface QuickAction {
   onClick?: () => void;
 }
 
-import AddressSelector from "@/components/ui/AddressSelector/AddressSelector";
-import AddressModal from "../../../addresses/_components/AddressModal";
-// Removed RescheduleDrawer import - using RescheduleModal instead
-import ServicesListDrawer from "./ServicesListDrawer/ServicesListDrawer";
 import QuickHelpDrawer from "./QuickHelpDrawer/QuickHelpDrawer";
 import { openServicesListDrawer } from "@/lib/redux/slices/uiSlice";
 import { useDispatch } from "react-redux";
 import { Routes } from "@/constants/routes";
-import { Address } from "@/graphql/api";
-
-// Mock addresses data
-const mockAddresses = [
-  {
-    id: "1",
-    label: "Home",
-    type: "home" as const,
-    street: "24 Emmanuel Osakwe Street",
-    area: "Chevron Drive",
-    city: "Lekki",
-    isDefault: true,
-  },
-  {
-    id: "2",
-    label: "Office",
-    type: "work" as const,
-    street: "45 Admiralty Way",
-    area: "Admiralty",
-    city: "Lekki Phase 1",
-    isDefault: false,
-  },
-];
-
-interface QuickAddressDrawerProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onAddressSelect: (address: any) => void;
-}
+import { logout } from "@/lib/redux/slices/authSlice";
+import { useRouter } from "next/navigation";
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const pathname = usePathname();
   const dispatch = useDispatch();
-  // States for the new drawers
-  // Removed reschedule drawer state - using modal instead
+  const router = useRouter();
   const [isQuickHelpDrawerOpen, setIsQuickHelpDrawerOpen] = useState(false);
+
+  const handleLogout = (e: React.MouseEvent) => {
+    e.preventDefault();
+    dispatch(logout());
+    router.push(Routes.GET_STARTED);
+  };
 
   const quickActions: QuickAction[] = [
     {
@@ -171,7 +136,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         // { href: "/dashboard/settings", label: "Settings", icon: Settings },
         { href: "/dashboard/support", label: "Support", icon: MessageSquare },
 
-        { href: "/logout", label: "Log Out", icon: LogOut },
+        // Logout link with onClick handler instead of href
+        {
+          label: "Log Out",
+          icon: LogOut,
+          onClick: handleLogout,
+        },
       ],
     },
   ];
