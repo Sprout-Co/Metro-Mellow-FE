@@ -1,25 +1,26 @@
-// src/app/(routes)/(site)/bookings/_components/SubscriptionBuilder/SubscriptionSummary/SubscriptionSummary.tsx
+// SubscriptionSummary.tsx - Complete Redesign
 "use client";
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ShoppingCart,
+  ShoppingBag,
   Calendar,
-  CreditCard,
+  Clock,
   Edit2,
   X,
   ArrowRight,
-  Shield,
-  Clock,
-  TrendingDown,
   Package,
-  Info,
+  Home,
+  Droplets,
+  Utensils,
+  Bug,
+  Gift,
+  CreditCard,
 } from "lucide-react";
 import styles from "./SubscriptionSummary.module.scss";
 import { BillingCycle } from "@/graphql/api";
 import { DurationType } from "../SubscriptionBuilder";
-import FnButton from "@/components/ui/Button/FnButton";
 
 interface ConfiguredService {
   service: any;
@@ -58,6 +59,22 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
   const finalTotal = total - savingsAmount;
 
   const getServiceIcon = (category: string) => {
+    const iconProps = { size: 20, strokeWidth: 1.5 };
+    switch (category) {
+      case "CLEANING":
+        return <Home {...iconProps} />;
+      case "LAUNDRY":
+        return <Droplets {...iconProps} />;
+      case "COOKING":
+        return <Utensils {...iconProps} />;
+      case "PEST_CONTROL":
+        return <Bug {...iconProps} />;
+      default:
+        return <Package {...iconProps} />;
+    }
+  };
+
+  const getServiceEmoji = (category: string) => {
     switch (category) {
       case "CLEANING":
         return "🏠";
@@ -72,6 +89,25 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
     }
   };
 
+  const getFrequencyLabel = (frequency: string) => {
+    switch (frequency) {
+      case "WEEKLY":
+        return "Weekly";
+      case "BI_WEEKLY":
+        return "Bi-Weekly";
+      case "MONTHLY":
+        return "Monthly";
+      default:
+        return frequency;
+    }
+  };
+
+  const formatStartDate = () => {
+    const date = new Date();
+    date.setDate(date.getDate() + 1);
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  };
+
   return (
     <motion.div
       className={styles.summary}
@@ -79,17 +115,19 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
     >
-      {/* Header */}
+      {/* Modern Header */}
       <div className={styles.summary__header}>
-        <div className={styles.summary__headerIcon}>
-          <ShoppingCart size={20} />
-        </div>
-        <div className={styles.summary__headerText}>
-          <h3>Order Summary</h3>
-          <p>
-            {configuredServices.length} service
-            {configuredServices.length !== 1 ? "s" : ""} selected
-          </p>
+        <div className={styles.summary__headerContent}>
+          <div className={styles.summary__headerIcon}>
+            <ShoppingBag size={24} />
+          </div>
+          <div className={styles.summary__headerText}>
+            <h3>Order Summary</h3>
+            <span className={styles.summary__headerBadge}>
+              {configuredServices.length} service
+              {configuredServices.length !== 1 ? "s" : ""} selected
+            </span>
+          </div>
         </div>
       </div>
 
@@ -97,62 +135,65 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
       {configuredServices.length === 0 ? (
         <div className={styles.summary__empty}>
           <div className={styles.summary__emptyIcon}>
-            <Package size={48} strokeWidth={1} />
+            <Package size={40} strokeWidth={1} />
           </div>
-          <h4>Your cart is empty</h4>
-          <p>Add services to see your subscription summary</p>
+          <h4 className={styles.summary__emptyTitle}>Your cart is empty</h4>
+          <p className={styles.summary__emptyText}>
+            Add services to see your subscription summary
+          </p>
         </div>
       ) : (
         <>
           {/* Services List */}
-          <div className={styles.summary__services}>
+          <div className={styles.summary__servicesList}>
             <AnimatePresence>
               {configuredServices.map((cs, index) => (
                 <motion.div
                   key={cs.service._id}
-                  className={styles.summary__service}
+                  className={styles.summary__serviceItem}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: index * 0.05 }}
                 >
-                  <div className={styles.summary__serviceHeader}>
+                  <div className={styles.summary__serviceContent}>
                     <div className={styles.summary__serviceIcon}>
-                      {getServiceIcon(cs.service.category)}
+                      {getServiceEmoji(cs.service.category)}
                     </div>
-                    <div className={styles.summary__serviceInfo}>
-                      <h4>{cs.service.name}</h4>
+                    <div className={styles.summary__serviceDetails}>
+                      <div className={styles.summary__serviceName}>
+                        {cs.service.name}
+                      </div>
                       <div className={styles.summary__serviceMeta}>
-                        <span>
-                          <Calendar size={12} />
-                          {cs.configuration.frequency?.replace(/_/g, " ")}
+                        <span className={styles.summary__metaItem}>
+                          📅 {getFrequencyLabel(cs.configuration.frequency)}
                         </span>
-                        <span>
-                          <Clock size={12} />
-                          {cs.configuration.scheduledDays?.length || 0}x/week
+                        <span className={styles.summary__metaItem}>
+                          📍 {cs.configuration.scheduledDays?.length || 0}{" "}
+                          days/week
                         </span>
                       </div>
                     </div>
-                  </div>
-                  <div className={styles.summary__serviceActions}>
-                    <span className={styles.summary__servicePrice}>
-                      ₦{(cs.configuration.price || 0).toLocaleString()}
-                    </span>
-                    <div className={styles.summary__serviceButtons}>
-                      <button
-                        className={styles.summary__editBtn}
-                        onClick={() => onServiceEdit(cs.service._id)}
-                        aria-label="Edit service"
-                      >
-                        <Edit2 size={14} />
-                      </button>
-                      <button
-                        className={styles.summary__removeBtn}
-                        onClick={() => onServiceRemove(cs.service._id)}
-                        aria-label="Remove service"
-                      >
-                        <X size={14} />
-                      </button>
+                    <div className={styles.summary__serviceRight}>
+                      <div className={styles.summary__servicePrice}>
+                        ₦{(cs.configuration.price || 0).toLocaleString()}
+                      </div>
+                      <div className={styles.summary__serviceActions}>
+                        <button
+                          className={`${styles.summary__actionBtn} ${styles["summary__actionBtn--edit"]}`}
+                          onClick={() => onServiceEdit(cs.service._id)}
+                          aria-label="Edit service"
+                        >
+                          ✏️
+                        </button>
+                        <button
+                          className={`${styles.summary__actionBtn} ${styles["summary__actionBtn--remove"]}`}
+                          onClick={() => onServiceRemove(cs.service._id)}
+                          aria-label="Remove service"
+                        >
+                          ×
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -161,90 +202,87 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
           </div>
 
           {/* Billing Info */}
-          <div className={styles.summary__billing}>
+          <div className={styles.summary__billingInfo}>
             <div className={styles.summary__billingItem}>
-              <Calendar size={16} />
-              <span>Billing</span>
-              <strong>{billingCycle}</strong>
+              <span className={styles.summary__billingLabel}>Billing</span>
+              <span className={styles.summary__billingValue}>
+                {billingCycle}
+              </span>
             </div>
             <div className={styles.summary__billingItem}>
-              <CreditCard size={16} />
-              <span>Duration</span>
-              <strong>
+              <span className={styles.summary__billingLabel}>Duration</span>
+              <span className={styles.summary__billingValue}>
                 {duration} month{duration !== 1 ? "s" : ""}
-              </strong>
+              </span>
+            </div>
+            <div className={styles.summary__billingItem}>
+              <span className={styles.summary__billingLabel}>Start</span>
+              <span className={styles.summary__billingValue}>
+                {formatStartDate()}
+              </span>
             </div>
           </div>
 
           {/* Price Breakdown */}
-          <div className={styles.summary__breakdown}>
-            <div className={styles.summary__breakdownRow}>
-              <span>Services Total</span>
-              <span>₦{(monthlyTotal * duration).toLocaleString()}</span>
+          <div className={styles.summary__priceSection}>
+            <div className={styles.summary__priceRow}>
+              <span className={styles.summary__priceLabel}>Services Total</span>
+              <span className={styles.summary__priceValue}>
+                ₦{(monthlyTotal * duration).toLocaleString()}
+              </span>
             </div>
 
             {savingsAmount > 0 && (
               <motion.div
-                className={`${styles.summary__breakdownRow} ${styles["summary__breakdownRow--savings"]}`}
+                className={styles.summary__discountRow}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
               >
-                <span>
-                  <TrendingDown size={14} />
-                  Discount ({savingsPercentage}%)
+                <span className={styles.summary__discountLabel}>
+                  🎁
+                  <span>Subscription Discount</span>
+                  <span className={styles.summary__discountBadge}>
+                    {savingsPercentage}% OFF
+                  </span>
                 </span>
-                <span>-₦{savingsAmount.toLocaleString()}</span>
+                <span className={styles.summary__discountValue}>
+                  -₦{savingsAmount.toLocaleString()}
+                </span>
               </motion.div>
             )}
+          </div>
 
-            <div className={styles.summary__total}>
-              <div className={styles.summary__totalLabel}>
-                <span>Total Amount</span>
-                <span className={styles.summary__totalPeriod}>
+          {/* Total Section */}
+          <div className={styles.summary__totalSection}>
+            <div className={styles.summary__totalRow}>
+              <div className={styles.summary__totalLabelGroup}>
+                <span className={styles.summary__totalMainLabel}>
+                  Total Amount
+                </span>
+                <span className={styles.summary__totalSubLabel}>
                   ₦{Math.round(finalTotal / duration).toLocaleString()}/month
                 </span>
               </div>
-              <motion.div
+              <motion.span
                 className={styles.summary__totalAmount}
                 initial={{ scale: 0.8 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 ₦{finalTotal.toLocaleString()}
-              </motion.div>
+              </motion.span>
             </div>
-          </div>
 
-          {/* CTA Button */}
-          {/* <motion.button
-            className={styles.summary__cta}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={onCheckout}
-          >
-            <span>Proceed to Checkout</span>
-            <ArrowRight size={18} />
-          </motion.button> */}
-          <FnButton
-            onClick={onCheckout}
-            className={styles.summary__cta}
-            variant="primary"
-            size="lg"
-          >
-            Proceed to Checkout
-            <ArrowRight size={18} />
-          </FnButton>
-          {/* Benefits */}
-          {/* <div className={styles.summary__benefits}>
-            <div className={styles.summary__benefit}>
-              <Shield size={14} />
-              <span>Cancel anytime</span>
-            </div>
-            <div className={styles.summary__benefit}>
-              <Info size={14} />
-              <span>Price lock guarantee</span>
-            </div>
-          </div> */}
+            <motion.button
+              className={styles.summary__ctaButton}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={onCheckout}
+            >
+              <span>Proceed to Checkout</span>
+              <span>→</span>
+            </motion.button>
+          </div>
         </>
       )}
     </motion.div>
