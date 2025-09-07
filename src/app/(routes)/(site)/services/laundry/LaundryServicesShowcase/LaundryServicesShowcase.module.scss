@@ -5,80 +5,82 @@
 
 .showcase {
   width: 100%;
-  background-color: color('neutral', 'white');
-  @include section-spacing('4xl');
+  // background-color: color('neutral', 'white');
+  @include section-spacing("4xl");
   overflow: hidden;
   position: relative;
+  @include section-border;
 
   &__container {
     @include container;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-bottom: spacing("4xl");
   }
 
   &__header {
     width: 100%;
     text-align: center;
-    margin-bottom: spacing('3xl');
+    margin-bottom: spacing("3xl");
 
-    @include breakpoint-down('md') {
-      margin-bottom: spacing('2xl');
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("2xl");
     }
   }
 
   &__title {
     @include heading-1;
-    font-size: font-size('h1');
-    color: color('neutral', 'black');
-    margin-bottom: spacing('md');
-    line-height: line-height('tight');
+    font-size: font-size("h1");
+    color: color("neutral", "black");
+    margin-bottom: spacing("md");
+    line-height: line-height("tight");
 
-    @include breakpoint-down('md') {
-      font-size: font-size('h3');
+    @include breakpoint-down("md") {
+      font-size: font-size("h3");
     }
 
-    @include breakpoint-down('sm') {
-      font-size: font-size('h4');
+    @include breakpoint-down("sm") {
+      font-size: font-size("h4");
     }
   }
 
   &__subtitle {
     @include paragraph;
-    font-size: font-size('body-1');
-    color: color('neutral', 'darker');
+    font-size: font-size("body-1");
+    color: color("neutral", "darker");
     max-width: 600px;
     margin: 0 auto;
-    line-height: line-height('relaxed');
+    line-height: line-height("relaxed");
 
-    @include breakpoint-down('sm') {
-      font-size: font-size('body-2');
+    @include breakpoint-down("sm") {
+      font-size: font-size("body-2");
     }
   }
 
   &__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: spacing('xl');
+    gap: spacing("xl");
     width: 100%;
 
-    @include breakpoint-down('lg') {
+    @include breakpoint-down("lg") {
       grid-template-columns: repeat(2, 1fr);
-      gap: spacing('lg');
+      gap: spacing("lg");
     }
 
-    @include breakpoint-down('sm') {
+    @include breakpoint-down("sm") {
       grid-template-columns: 1fr;
-      gap: spacing('md');
+      gap: spacing("md");
     }
   }
 
   &__card {
-    background-color: color('neutral', 'white');
-    border-radius: border-radius('lg');
-    padding: spacing('xl');
-    box-shadow: map-get($shadows, 'sm');
-    border: 1px solid color('neutral', 'lightest');
+    // background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    padding: spacing("xl");
+    box-shadow: map-get($shadows, "sm");
+    border: 1px solid color("neutral", "lightest");
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -87,16 +89,16 @@
     overflow: hidden;
 
     &:hover {
-      box-shadow: map-get($shadows, 'md');
-      border-color: color('primary', 'light');
+      box-shadow: map-get($shadows, "md");
+      border-color: color("primary", "light");
     }
 
-    @include breakpoint-down('md') {
-      padding: spacing('lg');
+    @include breakpoint-down("md") {
+      padding: spacing("lg");
     }
 
-    @include breakpoint-down('sm') {
-      padding: spacing('md');
+    @include breakpoint-down("sm") {
+      padding: spacing("md");
     }
   }
 
@@ -106,23 +108,23 @@
     justify-content: center;
     width: 60px;
     height: 60px;
-    background-color: color-alpha('primary', 'lighter', 0.2);
-    border-radius: border-radius('full');
-    margin-bottom: spacing('lg');
+    background-color: color-alpha("primary", "lighter", 0.2);
+    border-radius: border-radius("full");
+    margin-bottom: spacing("lg");
     align-self: center;
 
-    @include breakpoint-down('sm') {
+    @include breakpoint-down("sm") {
       width: 50px;
       height: 50px;
-      margin-bottom: spacing('md');
+      margin-bottom: spacing("md");
     }
   }
 
   &__emoji {
-    font-size: font-size('h3');
-    
-    @include breakpoint-down('sm') {
-      font-size: font-size('h4');
+    font-size: font-size("h3");
+
+    @include breakpoint-down("sm") {
+      font-size: font-size("h4");
     }
   }
 
@@ -135,74 +137,74 @@
 
   &__name {
     @include heading-3;
-    font-size: font-size('subtitle-1');
-    font-weight: map-get($font-weights, 'bold');
-    color: color('neutral', 'black');
-    margin-bottom: spacing('sm');
-    line-height: line-height('tight');
+    font-size: font-size("subtitle-1");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
+    line-height: line-height("tight");
 
-    @include breakpoint-down('sm') {
-      font-size: font-size('body-1');
+    @include breakpoint-down("sm") {
+      font-size: font-size("body-1");
     }
   }
 
   &__description {
     @include paragraph;
-    font-size: font-size('body-2');
-    color: color('neutral', 'darker');
-    margin-bottom: spacing('lg');
-    line-height: line-height('relaxed');
+    font-size: font-size("body-2");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("lg");
+    line-height: line-height("relaxed");
     flex: 1;
 
-    @include breakpoint-down('sm') {
-      font-size: font-size('small');
-      margin-bottom: spacing('md');
+    @include breakpoint-down("sm") {
+      font-size: font-size("small");
+      margin-bottom: spacing("md");
     }
   }
 
   &__features {
     list-style-type: none;
     padding: 0;
-    margin: 0 0 spacing('lg') 0;
+    margin: 0 0 spacing("lg") 0;
     text-align: left;
-    border-top: 1px dashed color('neutral', 'light');
-    border-bottom: 1px dashed color('neutral', 'light');
-    padding: spacing('md') 0;
+    border-top: 1px dashed color("neutral", "light");
+    border-bottom: 1px dashed color("neutral", "light");
+    padding: spacing("md") 0;
   }
 
   &__feature {
     @include body-2;
-    color: color('neutral', 'darkest');
-    padding: spacing('xs') 0;
+    color: color("neutral", "darkest");
+    padding: spacing("xs") 0;
     display: flex;
     align-items: center;
 
     &:before {
       content: "✓";
-      color: color('primary', 'base');
-      margin-right: spacing('sm');
-      font-weight: map-get($font-weights, 'bold');
+      color: color("primary", "base");
+      margin-right: spacing("sm");
+      font-weight: map-get($font-weights, "bold");
     }
   }
-  
+
   &__priceTag {
-    margin-bottom: spacing('md');
+    margin-bottom: spacing("md");
     display: flex;
     align-items: baseline;
     justify-content: center;
-    gap: spacing('xs');
+    gap: spacing("xs");
   }
-  
+
   &__priceValue {
     @include heading-5;
-    color: color('primary', 'dark');
-    font-weight: map-get($font-weights, 'bold');
+    color: color("primary", "dark");
+    font-weight: map-get($font-weights, "bold");
   }
-  
+
   &__priceUnit {
     @include body-2;
-    color: color('neutral', 'dark');
-    font-weight: map-get($font-weights, 'regular');
+    color: color("neutral", "dark");
+    font-weight: map-get($font-weights, "regular");
   }
 
   &__action {
@@ -214,155 +216,155 @@
 .modal {
   display: flex;
   flex-direction: column;
-  
-  @include breakpoint-up('md') {
+
+  @include breakpoint-up("md") {
     flex-direction: row;
   }
-  
+
   &__imageSection {
     width: 100%;
     height: 200px;
     position: relative;
     overflow: hidden;
-    
-    @include breakpoint-up('md') {
+
+    @include breakpoint-up("md") {
       width: 40%;
       height: auto;
     }
   }
-  
+
   &__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  
+
   &__content {
     flex: 1;
-    padding: spacing('xl');
+    padding: spacing("xl");
     display: flex;
     flex-direction: column;
-    
-    @include breakpoint-down('sm') {
-      padding: spacing('lg');
+
+    @include breakpoint-down("sm") {
+      padding: spacing("lg");
     }
   }
-  
+
   &__title {
     @include heading-3;
-    color: color('neutral', 'black');
-    margin-bottom: spacing('sm');
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
   }
-  
+
   &__description {
     @include body-2;
-    color: color('neutral', 'darker');
-    margin-bottom: spacing('lg');
-    line-height: line-height('relaxed');
+    color: color("neutral", "darker");
+    margin-bottom: spacing("lg");
+    line-height: line-height("relaxed");
   }
-  
+
   &__price {
     @include heading-4;
-    color: color('primary', 'base');
-    margin-bottom: spacing('lg');
+    color: color("primary", "base");
+    margin-bottom: spacing("lg");
   }
-  
+
   &__subtitle {
     @include heading-5;
-    color: color('neutral', 'black');
-    margin-bottom: spacing('md');
-    font-size: font-size('body-1');
+    color: color("neutral", "black");
+    margin-bottom: spacing("md");
+    font-size: font-size("body-1");
   }
-  
+
   &__features {
-    margin-bottom: spacing('xl');
+    margin-bottom: spacing("xl");
   }
-  
+
   &__featuresList {
     list-style-type: none;
     padding: 0;
     margin: 0;
   }
-  
+
   &__feature {
     @include body-2;
-    color: color('neutral', 'darkest');
-    padding: spacing('xs') 0;
+    color: color("neutral", "darkest");
+    padding: spacing("xs") 0;
     display: flex;
     align-items: center;
 
     &:before {
       content: "✓";
-      color: color('primary', 'base');
-      margin-right: spacing('sm');
-      font-weight: map-get($font-weights, 'bold');
+      color: color("primary", "base");
+      margin-right: spacing("sm");
+      font-weight: map-get($font-weights, "bold");
     }
   }
-  
+
   &__quantity {
-    margin-bottom: spacing('xl');
+    margin-bottom: spacing("xl");
   }
-  
+
   &__counter {
     display: flex;
     align-items: center;
-    gap: spacing('lg');
+    gap: spacing("lg");
   }
-  
+
   &__counterButton {
     width: 36px;
     height: 36px;
-    border-radius: border-radius('full');
-    background-color: color('primary', 'base');
-    color: color('neutral', 'white');
+    border-radius: border-radius("full");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: font-size('h5');
+    font-size: font-size("h5");
     cursor: pointer;
     transition: $transition-base;
-    
+
     &:hover:not(:disabled) {
-      background-color: color('primary', 'dark');
+      background-color: color("primary", "dark");
       transform: scale(1.05);
     }
-    
+
     &:disabled {
-      background-color: color('neutral', 'light');
+      background-color: color("neutral", "light");
       cursor: not-allowed;
     }
   }
-  
+
   &__counterValue {
     @include heading-5;
-    color: color('neutral', 'black');
+    color: color("neutral", "black");
     min-width: 30px;
     text-align: center;
   }
-  
+
   &__totalSection {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: spacing('md') 0;
-    border-top: 1px solid color('neutral', 'lighter');
-    margin-bottom: spacing('lg');
+    padding: spacing("md") 0;
+    border-top: 1px solid color("neutral", "lighter");
+    margin-bottom: spacing("lg");
   }
-  
+
   &__totalLabel {
     @include body-1;
-    color: color('neutral', 'darkest');
-    font-weight: map-get($font-weights, 'medium');
+    color: color("neutral", "darkest");
+    font-weight: map-get($font-weights, "medium");
   }
-  
+
   &__totalValue {
     @include heading-4;
-    color: color('primary', 'base');
-    font-weight: map-get($font-weights, 'bold');
+    color: color("primary", "base");
+    font-weight: map-get($font-weights, "bold");
   }
-  
+
   &__actions {
     margin-top: auto;
   }
-} 
+}

@@ -838,3 +838,7 @@ $semantic-breakpoints: (
     padding-bottom: spacing("2xl");
   }
 }
+
+@mixin section-border {
+  border-bottom: 1px solid color("neutral", "light");
+}
