@@ -9,7 +9,7 @@ import {
   SubscriptionFrequency,
   Subscription,
 } from "@/graphql/api";
-import SubscriptionModule from "@/app/(routes)/(site)/bookings/_components/SubscriptionModule/SubscriptionModule";
+import SubscriptionModule from "@/app/(routes)/(site)/subscriptions/_components/SubscriptionModule/SubscriptionModule";
 
 type SubscriptionFilterType = "all" | "active" | "cancelled" | "suspended";
 type SubscriptionSortType = "name" | "date" | "price";

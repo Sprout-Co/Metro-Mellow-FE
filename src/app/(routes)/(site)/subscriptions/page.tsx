@@ -2,6 +2,7 @@
 import { Metadata } from "next";
 import BookingHero from "./_components/BookingHero/BookingHero";
 import SubscriptionModule from "./_components/SubscriptionModule/SubscriptionModule";
+import SubscriptionBuilder from "../../(app)/dashboard/subscriptions/add/_components/SubscriptionBuilder/SubscriptionBuilder";
 
 export const metadata: Metadata = {
   title: "Book Services | Metromellow",
@@ -12,8 +13,9 @@ export const metadata: Metadata = {
 export default function BookingPage() {
   return (
     <main className="booking-page">
-      <BookingHero />
-      <SubscriptionModule />
+      <SubscriptionBuilder />
+      {/* <BookingHero />
+      <SubscriptionModule /> */}
     </main>
   );
 }
