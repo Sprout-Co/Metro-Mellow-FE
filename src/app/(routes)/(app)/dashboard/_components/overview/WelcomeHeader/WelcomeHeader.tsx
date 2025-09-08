@@ -16,6 +16,8 @@ import { openServicesListDrawer } from "@/lib/redux/slices/uiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/redux";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
+import { Routes } from "@/constants/routes";
+import { useRouter } from "next/navigation";
 
 interface WelcomeHeaderProps {
   firstName?: string;
@@ -25,7 +27,7 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
   const firstName = user?.firstName;
-
+  const router = useRouter();
   const { handleGetCustomerBookings } = useBookingOperations();
   const [customerBookings, setCustomerBookings] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -128,6 +130,7 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.6 }}
+              onClick={() => router.push(Routes.DASHBOARD_SUBSCRIPTIONS)}
             >
               <FnButton variant="secondary">
                 {upcomingService
