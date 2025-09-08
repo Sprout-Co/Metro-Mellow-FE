@@ -40,7 +40,7 @@ export default function BlogHero() {
         <div className={styles["blog-hero__visual"]}>
           <div className={styles["blog-hero__image-container"]}>
             <Image
-              src="/images/blog/blog-hero-illustration.svg"
+              src="/images/blog/blog-hero.jpg"
               alt="Home services expert tips and guides for Lagos homes"
               className={styles["blog-hero__hero-image"]}
               priority
