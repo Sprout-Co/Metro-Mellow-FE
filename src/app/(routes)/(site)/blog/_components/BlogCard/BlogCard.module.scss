@@ -1,77 +1,66 @@
-@import "abstracts/variables";
-@import "abstracts/mixins";
+// src/app/(routes)/(site)/blog/_components/BlogCard/BlogCard.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
 
-.blog-card {
+.card {
   background: color("neutral", "white");
   border-radius: border-radius("xl");
   overflow: hidden;
-  box-shadow: shadow("sm");
   transition: all 0.3s ease;
-  height: fit-content;
   border: 1px solid color("neutral", "lighter");
-  position: relative;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      135deg,
-      transparent 0%,
-      rgba(color("primary", "base"), 0.02) 100%
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 0;
-  }
+  cursor: pointer;
 
   &:hover {
     transform: translateY(-8px);
-    box-shadow: shadow("xl");
-    border-color: color("primary", "light");
+    box-shadow: 0 20px 40px color-alpha("neutral", "black", 0.1);
 
-    &::before {
-      opacity: 1;
-    }
-
-    .blog-card__image {
+    .card__image {
       transform: scale(1.05);
     }
 
-    .blog-card__category {
-      transform: translateY(-2px);
-      box-shadow: shadow("md");
-    }
-
-    .blog-card__title {
-      color: color("primary", "dark");
+    .card__arrow {
+      transform: translateX(4px);
     }
   }
 
   &--featured {
-    border: 2px solid color("primary", "base");
-    box-shadow: shadow("lg");
+    grid-column: span 2;
 
-    &::before {
-      background: linear-gradient(
-        135deg,
-        rgba(color("primary", "base"), 0.08) 0%,
-        rgba(color("secondary", "base"), 0.04) 100%
-      );
-      opacity: 1;
+    @include breakpoint-down("lg") {
+      grid-column: span 1;
     }
 
-    .blog-card__category {
-      background: color("primary", "base") !important;
-      color: color("neutral", "white");
-      box-shadow: shadow("md");
+    .card__link {
+      @include breakpoint-up("lg") {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+      }
     }
 
-    .blog-card__title {
-      color: color("primary", "dark");
+    .card__image-wrapper {
+      @include breakpoint-up("lg") {
+        aspect-ratio: auto;
+        height: 100%;
+      }
+    }
+
+    .card__content {
+      @include breakpoint-up("lg") {
+        padding: spacing("2xl");
+      }
+    }
+
+    .card__title {
+      @include heading-4;
+
+      @include breakpoint-down("md") {
+        @include heading-5;
+      }
+    }
+
+    .card__excerpt {
+      -webkit-line-clamp: 4;
     }
   }
 
@@ -79,11 +68,10 @@
     text-decoration: none;
     color: inherit;
     display: block;
-    position: relative;
-    z-index: 1;
+    height: 100%;
   }
 
-  &__image-container {
+  &__image-wrapper {
     position: relative;
     width: 100%;
     aspect-ratio: 16/9;
@@ -93,262 +81,142 @@
 
   &__image {
     object-fit: cover;
-    transition: transform 0.4s ease;
-    width: 100%;
-    height: 100%;
+    transition: transform 0.5s ease;
   }
 
   &__category {
     position: absolute;
     top: spacing("md");
     left: spacing("md");
-    @include flex($align: center);
+    display: inline-flex;
+    align-items: center;
     gap: spacing("xs");
     padding: spacing("xs") spacing("sm");
-    border-radius: border-radius("full");
+    border-radius: border-radius("pill");
+    background: color("primary", "base");
     color: color("neutral", "white");
-    @include font-size("sm");
-    @include font-weight("bold");
     backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
     z-index: 2;
-    box-shadow: shadow("sm");
   }
 
   &__category-icon {
-    font-size: 0.9rem;
-    line-height: 1;
+    font-size: 0.875rem;
   }
 
   &__category-name {
-    white-space: nowrap;
+    font-size: font-size("xs");
+    font-weight: map-get($font-weights, "semibold");
+    text-transform: uppercase;
     letter-spacing: letterSpacing("wide");
   }
 
   &__content {
     padding: spacing("xl");
-    position: relative;
-    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
   }
 
-  &__header {
-    margin-bottom: spacing("lg");
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    color: color("neutral", "medium");
+    font-size: font-size("sm");
+  }
+
+  &__date,
+  &__read-time {
+    font-size: font-size("sm");
+  }
+
+  &__divider {
+    color: color("neutral", "light");
   }
 
   &__title {
     @include heading-5;
     color: color("neutral", "black");
-    margin-bottom: spacing("sm");
     line-height: line-height("tight");
-    @include truncate-lines(2);
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: color("primary", "base");
-    }
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0;
   }
 
   &__excerpt {
     @include body-2;
     color: color("neutral", "dark");
     line-height: line-height("relaxed");
-    @include truncate-lines(3);
-    margin-bottom: spacing("md");
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0;
+    flex-grow: 1;
   }
 
   &__footer {
-    position: relative;
-  }
-
-  &__meta {
-    @include flex($justify: space-between, $align: flex-start);
-    gap: spacing("sm");
-    padding-top: spacing("md");
-    border-top: 1px solid color("neutral", "lighter");
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
   }
 
   &__author {
-    @include flex($align: center);
+    display: flex;
+    align-items: center;
     gap: spacing("sm");
-    flex-shrink: 0;
   }
 
   &__author-avatar {
     border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid color("neutral", "white");
-    box-shadow: shadow("sm");
+    border: 2px solid color("neutral", "lighter");
   }
 
   &__author-name {
-    @include caption;
-    color: color("neutral", "black");
-    @include font-weight("semibold");
-  }
-
-  &__details {
-    @include flex-column;
-    align-items: flex-end;
-    gap: spacing("xs");
-    text-align: right;
-  }
-
-  &__date,
-  &__read-time {
-    @include caption;
-    color: color("neutral", "medium");
-    @include font-size("xs");
-    @include font-weight("medium");
-  }
-
-  &__date {
-    position: relative;
-
-    &::before {
-      content: "📅";
-      margin-right: spacing("xs");
-      font-size: 0.8em;
-    }
-  }
-
-  &__read-time {
-    position: relative;
-
-    &::before {
-      content: "⏱️";
-      margin-right: spacing("xs");
-      font-size: 0.8em;
-    }
-  }
-
-  &__tags {
-    padding: 0 spacing("xl") spacing("xl");
-    @include flex($wrap: wrap);
-    gap: spacing("xs");
-    position: relative;
-    z-index: 1;
-  }
-
-  &__tag {
-    @include caption;
-    background: linear-gradient(
-      135deg,
-      color("neutral", "lightest") 0%,
-      rgba(color("neutral", "lighter"), 0.8) 100%
-    );
+    font-size: font-size("sm");
     color: color("neutral", "dark");
-    padding: spacing("xs") spacing("sm");
-    border-radius: border-radius("full");
-    @include font-size("xs");
-    @include font-weight("medium");
-    transition: all 0.3s ease;
-    border: 1px solid transparent;
-
-    &:hover {
-      background: color("primary", "lighter");
-      color: color("primary", "dark");
-      border-color: color("primary", "light");
-      transform: translateY(-1px);
-    }
+    font-weight: map-get($font-weights, "medium");
   }
 
-  // Featured card variant
-  &--featured {
-    .blog-card__title {
-      color: color("primary", "base");
-      @include heading-4;
-    }
-
-    .blog-card__excerpt {
-      @include body-1;
-    }
-
-    .blog-card__content {
-      padding: spacing("2xl");
-    }
-
-    .blog-card__tags {
-      padding: 0 spacing("2xl") spacing("2xl");
-    }
-
-    .blog-card__tag {
-      background: rgba(color("primary", "base"), 0.1);
-      color: color("primary", "dark");
-      border-color: rgba(color("primary", "base"), 0.2);
-
-      &:hover {
-        background: color("primary", "base");
-        color: color("neutral", "white");
-      }
-    }
+  &__arrow {
+    font-size: 1.25rem;
+    color: color("primary", "base");
+    transition: transform 0.3s ease;
+    font-weight: map-get($font-weights, "bold");
   }
 
-  // Responsive design
-  @include breakpoint-down("lg") {
-    &__content {
-      padding: spacing("lg");
-    }
-
-    &__tags {
-      padding: 0 spacing("lg") spacing("lg");
-    }
-
-    &--featured {
-      .blog-card__content {
-        padding: spacing("xl");
-      }
-
-      .blog-card__tags {
-        padding: 0 spacing("xl") spacing("xl");
-      }
-    }
-  }
-
+  // Responsive adjustments
   @include breakpoint-down("md") {
-    border-radius: border-radius("lg");
-
     &__content {
       padding: spacing("lg");
-    }
-
-    &__meta {
-      @include flex-column;
-      align-items: flex-start;
-      gap: spacing("sm");
-    }
-
-    &__details {
-      align-items: flex-start;
-      text-align: left;
-    }
-
-    &__tags {
-      padding: 0 spacing("lg") spacing("lg");
     }
 
     &__title {
       @include heading-6;
     }
-
-    &--featured .blog-card__title {
-      @include heading-5;
-    }
   }
 
   @include breakpoint-down("sm") {
+    &__content {
+      padding: spacing("md");
+      gap: spacing("sm");
+    }
+
     &__category {
       top: spacing("sm");
       left: spacing("sm");
-      padding: spacing("xs") spacing("sm");
-      @include font-size("xs");
+      padding: spacing("xxs") spacing("xs");
     }
 
-    &__content {
-      padding: spacing("md");
+    &__category-name {
+      font-size: font-size("xxs");
     }
 
-    &__tags {
-      padding: 0 spacing("md") spacing("md");
+    &__meta {
+      font-size: font-size("xs");
     }
   }
 }

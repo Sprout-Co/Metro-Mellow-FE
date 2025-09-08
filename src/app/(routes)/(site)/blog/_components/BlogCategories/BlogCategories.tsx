@@ -1,4 +1,9 @@
+// src/app/(routes)/(site)/blog/_components/BlogCategories/BlogCategories.tsx
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { BlogCategory } from "@/lib/services/blog";
 import styles from "./BlogCategories.module.scss";
 
@@ -7,72 +12,109 @@ interface BlogCategoriesProps {
 }
 
 export default function BlogCategories({ categories }: BlogCategoriesProps) {
-  // Convert hex color to RGB for CSS variable
-  const hexToRgb = (hex: string) => {
-    // Remove # if present
-    hex = hex.replace("#", "");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
-    // Parse hex values
-    const r = parseInt(hex.substring(0, 2), 16);
-    const g = parseInt(hex.substring(2, 4), 16);
-    const b = parseInt(hex.substring(4, 6), 16);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
 
-    return `${r}, ${g}, ${b}`;
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
   };
 
   return (
-    <div className={styles["blog-categories"]}>
-      <div className={styles["blog-categories__container"]}>
-        <div className={styles["blog-categories__header"]}>
-          <h2 className={styles["blog-categories__title"]}>
-            Browse by Category
-          </h2>
-          <p className={styles["blog-categories__description"]}>
-            Find expert advice organized by service type
-          </p>
-        </div>
+    <div className={styles["categories"]}>
+      <div className={styles["categories__filter"]}>
+        <button
+          className={`${styles["categories__filter-button"]} ${
+            selectedCategory === "all"
+              ? styles["categories__filter-button--active"]
+              : ""
+          }`}
+          onClick={() => setSelectedCategory("all")}
+        >
+          All Categories
+        </button>
+        {categories.map((category) => (
+          <button
+            key={category.id}
+            className={`${styles["categories__filter-button"]} ${
+              selectedCategory === category.slug
+                ? styles["categories__filter-button--active"]
+                : ""
+            }`}
+            onClick={() => setSelectedCategory(category.slug)}
+            style={
+              {
+                "--category-color": category.color,
+              } as React.CSSProperties
+            }
+          >
+            <span className={styles["categories__filter-icon"]}>
+              {category.icon}
+            </span>
+            {category.name}
+          </button>
+        ))}
+      </div>
 
-        <div className={styles["blog-categories__grid"]}>
-          {categories.map((category) => (
+      <motion.div
+        className={styles["categories__grid"]}
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {categories.map((category, index) => (
+          <motion.div key={category.id} variants={itemVariants}>
             <Link
-              key={category.id}
               href={`/blog/category/${category.slug}`}
-              className={styles["blog-categories__category-card"]}
+              className={styles["categories__card"]}
               style={
                 {
                   "--category-color": category.color,
-                  "--category-color-rgb": hexToRgb(category.color),
                 } as React.CSSProperties
               }
             >
-              <div className={styles["blog-categories__icon-wrapper"]}>
-                <span className={styles["blog-categories__icon"]}>
-                  {category.icon}
+              <div className={styles["categories__card-header"]}>
+                <div
+                  className={styles["categories__icon-wrapper"]}
+                  style={{ backgroundColor: `${category.color}15` }}
+                >
+                  <span
+                    className={styles["categories__icon"]}
+                    style={{ color: category.color }}
+                  >
+                    {category.icon}
+                  </span>
+                </div>
+                <span className={styles["categories__count"]}>
+                  {category.postCount} articles
                 </span>
               </div>
 
-              <div className={styles["blog-categories__content"]}>
-                <h3 className={styles["blog-categories__name"]}>
-                  {category.name}
-                </h3>
-                <p className={styles["blog-categories__category-description"]}>
-                  {category.description}
-                </p>
-              </div>
+              <h3 className={styles["categories__name"]}>{category.name}</h3>
+              <p className={styles["categories__description"]}>
+                {category.description}
+              </p>
 
-              <div className={styles["blog-categories__footer"]}>
-                <div className={styles["blog-categories__post-count"]}>
-                  {category.postCount}{" "}
-                  {category.postCount === 1 ? "article" : "articles"}
-                </div>
-                <div className={styles["blog-categories__arrow-wrapper"]}>
-                  <span className={styles["blog-categories__arrow"]}>→</span>
-                </div>
-              </div>
+              <span className={styles["categories__link"]}>Explore →</span>
             </Link>
-          ))}
-        </div>
-      </div>
+          </motion.div>
+        ))}
+      </motion.div>
     </div>
   );
 }
