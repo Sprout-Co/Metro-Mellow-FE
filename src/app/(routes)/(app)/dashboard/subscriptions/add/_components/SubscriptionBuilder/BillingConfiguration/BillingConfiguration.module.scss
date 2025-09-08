@@ -1,0 +1,287 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.config {
+  &__label {
+    @include font-size("base");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("md");
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+
+    &::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color("neutral", "lighter");
+    }
+  }
+
+  &__billingCycle {
+    margin-bottom: spacing("2xl");
+  }
+
+  &__cycleOptions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__cycleOption {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("lg");
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("xl");
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: left;
+
+    svg {
+      color: color("neutral", "dark");
+      flex-shrink: 0;
+    }
+
+    div:not(.config__checkmark):not(.config__savingBadge) {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: spacing("xxs");
+
+      small {
+        display: block;
+        font-size: 12px;
+        color: color("neutral", "dark");
+        margin-top: 4px;
+        font-weight: normal;
+      }
+    }
+
+    strong {
+      @include font-size("base");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+    }
+
+    span {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+    }
+
+    &:hover {
+      border-color: color("primary", "base");
+      background: color("neutral", "lightest");
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    &--active {
+      border-color: color("primary", "base");
+      background: color("neutral", "white");
+      box-shadow: 0 0 0 4px rgba(color("primary", "base"), 0.1);
+
+      svg {
+        color: color("primary", "base");
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        border-radius: border-radius("xl");
+        border: 2px solid color("primary", "base");
+        opacity: 0.2;
+      }
+    }
+
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: color("neutral", "lightest");
+
+      &:hover {
+        transform: none;
+        border-color: color("neutral", "lighter");
+        box-shadow: none;
+      }
+    }
+  }
+
+  &__checkmark {
+    position: absolute;
+    top: spacing("sm");
+    right: spacing("sm");
+    width: 24px;
+    height: 24px;
+    border-radius: border-radius("full");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    &::after {
+      content: "✓";
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
+
+  &__savingBadge {
+    position: absolute;
+    top: -10px;
+    right: spacing("lg");
+    padding: spacing("xxs") spacing("sm");
+    background: color("accent", "base");
+    color: color("neutral", "darkest");
+    border-radius: border-radius("pill");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &__duration {
+    margin-bottom: spacing("xl");
+  }
+
+  &__durationGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: spacing("sm");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  &__durationCard {
+    position: relative;
+    padding: spacing("md");
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xxs");
+
+    &:hover {
+      border-color: color("primary", "base");
+      background: color("neutral", "lightest");
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    &--active {
+      border-color: color("primary", "base");
+      background: color("neutral", "white");
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
+
+      .config__durationValue {
+        color: color("primary", "base");
+      }
+    }
+
+    &--popular {
+      &::before {
+        content: "Popular";
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 2px 8px;
+        background: color("accent", "base");
+        color: color("neutral", "darkest");
+        border-radius: border-radius("pill");
+        @include font-size("xs");
+        @include font-weight("semibold");
+        white-space: nowrap;
+      }
+    }
+  }
+
+  &__durationValue {
+    @include font-size("2xl");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    line-height: 1;
+    transition: color 0.2s ease;
+  }
+
+  &__durationLabel {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+  }
+
+  &__durationSaving {
+    position: absolute;
+    bottom: spacing("xs");
+    right: spacing("xs");
+    padding: 2px spacing("xs");
+    background: color("status", "success");
+    color: color("neutral", "white");
+    border-radius: border-radius("sm");
+    @include font-size("xs");
+    @include font-weight("semibold");
+  }
+
+  &__warning {
+    padding: spacing("md");
+    margin-bottom: spacing("md");
+    background: color("status", "upcoming-bg");
+    border: 1px solid color("status", "upcoming-text");
+    border-radius: border-radius("lg");
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("sm");
+
+    svg {
+      color: color("status", "warning");
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    p {
+      margin: 0;
+      @include font-size("sm");
+      color: color("neutral", "darkest");
+      font-weight: 500;
+    }
+  }
+
+  &__hint {
+    color: color("neutral", "dark");
+    @include font-size("sm");
+    margin: spacing("sm") 0;
+    font-style: italic;
+  }
+
+  &__noBillingOptions {
+    padding: spacing("xl");
+    text-align: center;
+    color: color("status", "error");
+    @include font-size("sm");
+    background: rgba(color("status", "error"), 0.05);
+    border-radius: border-radius("lg");
+    border: 1px dashed color("status", "error");
+  }
+}

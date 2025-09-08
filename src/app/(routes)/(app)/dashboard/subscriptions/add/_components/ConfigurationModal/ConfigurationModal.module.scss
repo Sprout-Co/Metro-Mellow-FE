@@ -1,0 +1,217 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.configurationModal {
+  &__content {
+    // Content styles handled by ModalDrawer component
+  }
+
+  &__header {
+    @include flex-between;
+    padding: spacing("xl");
+    border-bottom: map-get($border-width, "thin") solid color("neutral", "lighter");
+  }
+
+  &__title {
+    @include heading-4;
+    color: color("neutral", "darkest");
+    margin: 0;
+  }
+
+  &__closeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: color("neutral", "medium");
+    transition: $transition-fast;
+
+    &:hover {
+      color: color("neutral", "darker");
+    }
+  }
+
+  &__body {
+    padding: spacing("xl");
+  }
+
+  &__field {
+    margin-bottom: spacing("xl");
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__label {
+    display: block;
+    @include font-weight("medium");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("sm");
+    @include font-size("sm");
+  }
+
+  &__radioGroup {
+    @include flex-column;
+    gap: spacing("md");
+  }
+
+  &__radioLabel,
+  &__checkboxLabel {
+    @include flex;
+    align-items: center;
+    gap: spacing("sm");
+    cursor: pointer;
+    padding: spacing("md");
+    border: map-get($border-width, "thin") solid color("neutral", "light");
+    border-radius: border-radius("lg");
+    transition: $transition-fast;
+
+    &:hover {
+      border-color: color("primary", "base");
+      background-color: color("primary", "lighter");
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin: 0;
+      accent-color: color("primary", "base");
+    }
+
+    span {
+      flex: 1;
+      @include font-size("sm");
+    }
+  }
+
+  &__priceModifier {
+    @include font-weight("semibold");
+    color: color("status", "success");
+    @include font-size("xs");
+    background-color: rgba(color("status", "success"), 0.1);
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("md");
+  }
+
+  &__numberInput {
+    @include flex;
+    align-items: center;
+    gap: spacing("sm");
+  }
+
+  &__numberButton {
+    @include flex-center;
+    width: 2rem;
+    height: 2rem;
+    border: map-get($border-width, "thin") solid color("neutral", "light");
+    background: color("neutral", "white");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: $transition-fast;
+    color: color("neutral", "medium");
+
+    &:hover {
+      border-color: color("primary", "base");
+      color: color("primary", "base");
+      background-color: color("primary", "lighter");
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  &__numberInputField {
+    width: 60px;
+    text-align: center;
+    padding: spacing("sm");
+    border: map-get($border-width, "thin") solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    outline: none;
+    transition: $transition-fast;
+
+    &:focus {
+      border-color: color("primary", "base");
+      box-shadow: map-get($shadows, "focus");
+    }
+  }
+
+  &__checkboxGroup {
+    @include flex-column;
+    gap: spacing("md");
+  }
+
+  &__priceBox {
+    @include flex-between;
+    align-items: center;
+    margin-top: spacing("2xl");
+    padding: spacing("lg");
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+  }
+
+  &__priceLabel {
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  &__priceAmount {
+    @include font-size("xl");
+    @include font-weight("bold");
+    color: color("primary", "base");
+  }
+
+  &__footer {
+    @include flex;
+    gap: spacing("lg");
+    padding: spacing("xl");
+    border-top: map-get($border-width, "thin") solid color("neutral", "lighter");
+    justify-content: flex-end;
+    background: linear-gradient(
+      135deg,
+      color("neutral", "white"),
+      color("neutral", "lightest")
+    );
+  }
+
+  &__button {
+    @include button-base;
+    @include font-size("sm");
+    border: none;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &--ghost {
+      @include button-ghost;
+      color: color("neutral", "medium");
+      border: map-get($border-width, "thin") solid color("neutral", "light");
+
+      &:hover:not(:disabled) {
+        background-color: color("neutral", "lightest");
+        border-color: color("neutral", "medium");
+      }
+    }
+
+    &--primary {
+      @include button-primary;
+
+      &:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: map-get($shadows, "md");
+      }
+    }
+
+    &--accent {
+      @include button-accent;
+
+      &:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: map-get($shadows, "md");
+      }
+    }
+  }
+}

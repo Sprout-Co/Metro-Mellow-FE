@@ -6,11 +6,13 @@ import "@/styles/main.scss";
 import ApolloWrapper from "@/components/providers/ApolloWrapper";
 import ReduxProvider from "@/components/providers/ReduxProvider";
 import { AuthInitializer } from "@/components/providers/AuthInitializer";
+import { NotificationProvider } from "@/components/providers/NotificationProvider";
 import ModalProvider from "./_components/ModalProvider";
 import {
   GoogleTagManagerScript,
   GoogleTagManager,
 } from "@/components/common/GoogleTagManager";
+import { CommonInitializer } from "@/components/providers/CommonProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -49,8 +51,10 @@ export default function RootLayout({
         <ReduxProvider>
           <ApolloWrapper>
             <AuthInitializer>
-              {children}
-              {/* <ModalProvider /> */}
+              <NotificationProvider>
+                <CommonInitializer>{children}</CommonInitializer>
+                {/* <ModalProvider /> */}
+              </NotificationProvider>
             </AuthInitializer>
           </ApolloWrapper>
         </ReduxProvider>

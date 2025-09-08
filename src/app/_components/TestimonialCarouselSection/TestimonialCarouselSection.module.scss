@@ -1,7 +1,7 @@
-@import '../../../styles/abstracts/variables';
-@import '../../../styles/abstracts/functions';
-@import '../../../styles/abstracts/mixins';
-@import '../../../styles/abstracts/animations';
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/animations";
 
 .section {
   background: map-get(map-get($colors, "neutral"), "black");
@@ -14,11 +14,9 @@
 }
 
 .heading {
-  color: map-get(map-get($colors, "neutral"), "white");
-  font-size: map-get($font-sizes, "h2");
-  font-weight: map-get($font-weights, "bold");
+  @include heading-1;
+  color: color("neutral", "white");
   margin-bottom: map-get($spacing, "3xl");
-  line-height: map-get($line-heights, "tight");
 }
 
 .carousel {

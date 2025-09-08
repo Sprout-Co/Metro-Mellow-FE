@@ -48,7 +48,7 @@ const navItems = [
     dropdownItems: serviceItems,
   },
   { label: "For Business", href: "/for-business" },
-  { label: "Bookings", href: "/bookings" },
+  { label: "Subscriptions", href: "/subscriptions" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -122,7 +122,7 @@ export default function Navbar() {
           <Link href="/" className={styles.navbar__brand}>
             <div className={styles.navbar__logo}>
               <Image
-                src="/images/brand/logo.jpeg"
+                src="/images/brand/brand-logo/transparent-bg/green-on-white.png"
                 alt="Metromellow"
                 width={140}
                 height={40}
@@ -251,7 +251,7 @@ export default function Navbar() {
                 <div className={styles.navbar__mobileHeader}>
                   <div className={styles.navbar__mobileLogo}>
                     <Image
-                      src="/images/brand/logo.jpeg"
+                      src="/images/brand/brand-logo/transparent-bg/green.png"
                       alt="Metro Mellow"
                       width={100}
                       height={30}

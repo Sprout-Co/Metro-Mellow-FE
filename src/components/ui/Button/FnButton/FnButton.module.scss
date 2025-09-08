@@ -1,0 +1,220 @@
+// src/components/ui/Button/Button.module.scss
+@import "@/styles/abstracts/_variables.scss";
+@import "@/styles/abstracts/_functions.scss";
+@import "@/styles/abstracts/_mixins.scss";
+@import "@/styles/abstracts/_animations.scss";
+
+.button {
+  // Base button styles
+  @include button-base("lg");
+  position: relative;
+  overflow: hidden;
+  transition: $transition-base;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: spacing("xs");
+
+  width: fit-content;
+
+  // Disable default button styling
+  -webkit-appearance: none;
+  appearance: none;
+
+  &:focus-visible {
+    outline: 2px solid color("primary", "base");
+    outline-offset: 2px;
+  }
+
+  // Variants
+  &--primary {
+    @include button-primary;
+  }
+
+  &--secondary {
+    @include button-secondary;
+  }
+
+  &--ghost {
+    @include button-ghost;
+  }
+
+  &--white {
+    @include button-white;
+  }
+
+  &--accent {
+    @include button-accent;
+  }
+
+  &--primary-outline {
+    @include button-primary-outline;
+  }
+
+  &--secondary-outline {
+    @include button-secondary-outline;
+  }
+
+  &--accent-outline {
+    @include button-accent-outline;
+  }
+
+  border-radius: border-radius("lg") !important;
+  font-weight: font-weight("regular") !important;
+
+  // Sizes
+  &--xs {
+    height: button-height("xs");
+    padding: 0 spacing("xs");
+    font-size: font-size("xxs");
+
+    .button__icon {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  &--sm {
+    height: button-height("sm");
+    padding: 0 spacing("md");
+    font-size: font-size("small");
+
+    .button__icon {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &--md {
+    height: button-height("md");
+    padding: 0 spacing("lg");
+    font-size: font-size("button");
+
+    .button__icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &--lg {
+    height: button-height("lg");
+    padding: 0 spacing("xl");
+    font-size: font-size("body-2");
+
+    .button__icon {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  // States
+  &--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &--loading {
+    cursor: wait;
+
+    .button__content {
+      visibility: hidden;
+    }
+
+    .button__loader {
+      visibility: visible;
+    }
+  }
+
+  &--full-width {
+    width: 100%;
+  }
+
+  &--icon-only {
+    &.button--sm {
+      width: button-height("sm");
+      padding: 0;
+    }
+
+    &.button--md {
+      width: button-height("md");
+      padding: 0;
+    }
+
+    &.button--lg {
+      width: button-height("lg");
+      padding: 0;
+    }
+  }
+
+  // Elements
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    &--left {
+      margin-right: spacing("xxs");
+    }
+
+    &--right {
+      margin-left: spacing("xxs");
+    }
+  }
+
+  &__loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::after {
+      content: "";
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid transparent;
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+  }
+
+  // Animation states
+  &__ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    background-color: rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+
+    &--active {
+      animation: ripple 0.6s linear;
+    }
+  }
+}
+
+// Animation keyframes
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

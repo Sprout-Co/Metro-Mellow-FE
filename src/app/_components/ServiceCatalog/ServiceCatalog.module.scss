@@ -4,7 +4,7 @@
 
 .catalog {
   padding: spacing("5xl") 0;
-  background-color: color("neutral", "white");
+  // background-color: color("neutral", "white");
 
   &__container {
     @include container;
@@ -106,74 +106,415 @@
     }
   }
 
+  // &__main {
+  //   flex: 1;
+  // }
+
+  // &__mainTitle {
+  //   font-size: map-get($font-sizes, "h5");
+  //   font-weight: map-get($font-weights, "semibold");
+  //   color: color("neutral", "black");
+  //   margin-bottom: spacing("xl");
+  // }
+
+  // &__grid {
+  //   display: grid;
+  //   grid-template-columns: repeat(3, 1fr);
+  //   gap: spacing("lg");
+
+  //   @include breakpoint-down("lg") {
+  //     grid-template-columns: repeat(2, 1fr);
+  //   }
+
+  //   @include breakpoint-down("sm") {
+  //     grid-template-columns: 1fr;
+  //   }
+  // }
+
+  // &__card {
+  //   background-color: color("neutral", "white");
+  //   border-radius: border-radius("md");
+  //   overflow: hidden;
+  //   box-shadow: map-get($shadows, "sm");
+  //   transition: $transition-base;
+
+  //   &:hover {
+  //     box-shadow: map-get($shadows, "md");
+  //     transform: translateY(-5px);
+  //   }
+  // }
+
+  // &__cardImageWrapper {
+  //   width: 100%;
+  //   height: 160px;
+  //   overflow: hidden;
+  // }
+
+  // &__cardImage {
+  //   width: 100%;
+  //   height: 100%;
+  //   object-fit: cover;
+  //   transition: transform 0.3s ease;
+
+  //   &:hover {
+  //     transform: scale(1.05);
+  //   }
+  // }
+
+  // &__cardContent {
+  //   padding: spacing("md");
+  //   display: flex;
+  //   flex-direction: column;
+  //   height: 100%;
+  // }
+
+  // &__cardHeader {
+  //   display: flex;
+  //   justify-content: space-between;
+  //   align-items: flex-start;
+  //   margin-bottom: spacing("xs");
+  // }
+
+  // &__cardTitle {
+  //   font-size: map-get($font-sizes, "body-1");
+  //   font-weight: map-get($font-weights, "bold");
+  //   color: color("neutral", "black");
+  //   margin: 0;
+  //   flex: 1;
+  // }
+
+  // &__cardPrice {
+  //   font-size: map-get($font-sizes, "body-2");
+  //   font-weight: map-get($font-weights, "semibold");
+  //   color: color("primary", "base");
+  //   background: color("primary", "lighter");
+  //   padding: spacing("xs") spacing("sm");
+  //   border-radius: border-radius("sm");
+  //   white-space: nowrap;
+  //   margin-left: spacing("sm");
+  // }
+
+  // &__cardDescription {
+  //   font-size: map-get($font-sizes, "caption");
+  //   color: color("neutral", "darker");
+  //   line-height: 1.4;
+  //   margin-bottom: spacing("sm");
+  //   flex-grow: 1;
+  // }
+
+  // &__cardMeta {
+  //   display: flex;
+  //   gap: spacing("md");
+  //   margin-bottom: spacing("md");
+  // }
+
+  // &__cardMetaItem {
+  //   display: flex;
+  //   align-items: center;
+  //   gap: spacing("xs");
+  //   font-size: map-get($font-sizes, "caption");
+  //   color: color("neutral", "dark");
+
+  //   svg {
+  //     color: color("accent", "base");
+  //     flex-shrink: 0;
+  //   }
+
+  //   &:last-child svg {
+  //     fill: currentColor;
+  //   }
+  // }
+
+  // &__cardActions {
+  //   margin-top: auto;
+  // }
+
+  // &__bookButton {
+  //   width: 100%;
+  //   justify-content: center;
+  //   font-weight: map-get($font-weights, "semibold");
+  // }
   &__main {
     flex: 1;
   }
 
+  &__mainHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: spacing("2xl");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+    }
+  }
+
   &__mainTitle {
+    font-family: $font-family-heading;
     font-size: map-get($font-sizes, "h5");
     font-weight: map-get($font-weights, "semibold");
     color: color("neutral", "black");
-    margin-bottom: spacing("xl");
+
+    @include breakpoint-down("sm") {
+      font-size: map-get($font-sizes, "h6");
+    }
+  }
+
+  &__mainSubtitle {
+    font-family: $font-family-secondary;
+    font-size: map-get($font-sizes, "body-2");
+    color: color("neutral", "dark");
+    max-width: 500px;
   }
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: spacing("lg");
-
-    @include breakpoint-down("lg") {
-      grid-template-columns: repeat(2, 1fr);
-    }
+    grid-template-columns: repeat(auto-fill, minmax(308px, 1fr));
+    gap: spacing("xl");
 
     @include breakpoint-down("sm") {
       grid-template-columns: 1fr;
+      gap: spacing("lg");
     }
   }
 
+  // Service cards
   &__card {
+    position: relative;
     background-color: color("neutral", "white");
-    border-radius: border-radius("md");
+    border-radius: border-radius("2xl");
     overflow: hidden;
-    box-shadow: map-get($shadows, "sm");
+    box-shadow: map-get($shadows, "md");
     transition: $transition-base;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 
     &:hover {
-      box-shadow: map-get($shadows, "md");
-      transform: translateY(-5px);
+      transform: translateY(-6px);
+      box-shadow: map-get($shadows, "lg");
+
+      .catalog__cardImage {
+        transform: scale(1.08);
+      }
     }
   }
 
   &__cardImageWrapper {
+    position: relative;
     width: 100%;
     height: 200px;
     overflow: hidden;
+    border-top-left-radius: border-radius("2xl");
+    border-top-right-radius: border-radius("2xl");
   }
 
   &__cardImage {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.7s ease;
+  }
 
-    &:hover {
-      transform: scale(1.05);
-    }
+  &__cardBadge {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+    background-color: color-alpha("neutral", "black", 0.7);
+    color: color("neutral", "white");
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("full");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    backdrop-filter: blur(4px);
+    z-index: 2;
   }
 
   &__cardContent {
-    padding: spacing("lg");
+    padding: spacing("xl");
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  &__cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: spacing("md");
   }
 
   &__cardTitle {
+    font-family: $font-family-heading;
     font-size: map-get($font-sizes, "body-1");
     font-weight: map-get($font-weights, "bold");
     color: color("neutral", "black");
-    margin-bottom: spacing("xs");
+    margin: 0;
+    flex: 1;
   }
 
   &__cardPrice {
+    font-family: $font-family-secondary;
     font-size: map-get($font-sizes, "body-2");
+    font-weight: map-get($font-weights, "bold");
+    color: color("primary", "base");
+    margin-left: spacing("sm");
+    white-space: nowrap;
+  }
+
+  &__cardDescription {
+    font-family: $font-family-secondary;
+    font-size: map-get($font-sizes, "body-2");
+    color: color("neutral", "dark");
+    line-height: map-get($line-heights, "relaxed");
+    margin-bottom: spacing("lg");
+    flex-grow: 1;
+  }
+
+  &__cardMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
+  }
+
+  &__cardMetaItem {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    font-size: map-get($font-sizes, "small");
     color: color("neutral", "darker");
+
+    svg {
+      color: color("primary", "base");
+      flex-shrink: 0;
+    }
+  }
+
+  &__cardExtra {
+    margin-bottom: spacing("lg");
+    padding: spacing("md");
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("md");
+    border-left: 4px solid color("primary", "base");
+  }
+
+  &__cardExtra h5 {
+    font-family: $font-family-secondary;
+    font-size: map-get($font-sizes, "small");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xs") 0;
+  }
+
+  &__cardExtraItems {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing("xs");
+  }
+
+  &__cardExtraItem {
+    display: inline-block;
+    font-family: $font-family-secondary;
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    color: color("primary", "base");
+    background-color: color-alpha("primary", "base", 0.1);
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("sm");
+    border: 1px solid color-alpha("primary", "base", 0.2);
+  }
+
+  &__cardServiceName {
+    margin-bottom: spacing("md");
+    padding: spacing("xs") spacing("sm");
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("sm");
+    text-align: center;
+
+    small {
+      font-family: $font-family-secondary;
+      font-size: map-get($font-sizes, "xs");
+      color: color("neutral", "dark");
+      font-weight: map-get($font-weights, "medium");
+    }
+  }
+
+  &__cardActions {
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__bookButton {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-family-secondary;
+    font-size: map-get($font-sizes, "body-2");
+    font-weight: map-get($font-weights, "semibold");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("lg");
+    padding: spacing("md") spacing("xl");
+    cursor: pointer;
+    transition: $transition-base;
+    gap: spacing("sm");
+
+    &:hover {
+      background-color: color("primary", "dark");
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    svg {
+      transition: transform 0.3s ease;
+    }
+
+    &:hover svg {
+      transform: translateX(4px);
+    }
+  }
+
+  // Empty state
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: spacing("4xl") spacing("2xl");
+    background-color: color("neutral", "white");
+    border-radius: border-radius("2xl");
+    box-shadow: map-get($shadows, "sm");
+  }
+
+  &__emptyIcon {
+    font-size: 3rem;
+    color: color("neutral", "light");
+    margin-bottom: spacing("lg");
+  }
+
+  &__emptyTitle {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "h6");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("md");
+  }
+
+  &__emptyText {
+    font-family: $font-family-secondary;
+    font-size: map-get($font-sizes, "body-2");
+    color: color("neutral", "dark");
+    max-width: 400px;
+    margin: 0 auto;
   }
 }

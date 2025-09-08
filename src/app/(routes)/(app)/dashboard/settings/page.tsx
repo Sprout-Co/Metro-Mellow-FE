@@ -1,17 +1,15 @@
-import { Metadata } from "next";
-import DashboardHeader from "../_components/header/DashboardHeader";
-import SettingsOverview from "./SettingsOverview";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Settings | Metromellow",
-  description: "Manage your Metromellow account settings and preferences.",
+import React from "react";
+import DashboardLayout from "../_components/DashboardLayout/DashboardLayout";
+import SettingsMain from "./SettingsMain/SettingsMain";
+
+const SettingsPage = () => {
+  return (
+    <DashboardLayout>
+      <SettingsMain />
+    </DashboardLayout>
+  );
 };
 
-export default function SettingsPage() {
-  return (
-    <>
-      <DashboardHeader />
-      <SettingsOverview />
-    </>
-  );
-}
+export default SettingsPage;

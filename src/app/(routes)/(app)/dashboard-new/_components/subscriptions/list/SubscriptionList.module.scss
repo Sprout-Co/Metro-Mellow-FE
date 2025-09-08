@@ -1,0 +1,16 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.subscriptionList {
+  &__empty {
+    padding: spacing("xl") 0;
+    text-align: center;
+    
+    p {
+      @include font-secondary;
+      @include font-size("body-2");
+      color: color("neutral", "dark");
+    }
+  }
+}

@@ -1,6 +1,5 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { isTokenValid } from "@/utils/jwt";
 
 const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL_URL || "http://localhost:4000/graphql",
@@ -39,10 +38,33 @@ const authLink = setContext((_, { headers }) => {
 
 export const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          // Cache user data for longer periods
+          getCurrentUser: {
+            merge: true,
+          },
+          // Cache frequently accessed data
+          getCustomerBookings: {
+            merge: false,
+          },
+          getCustomerSubscriptions: {
+            merge: false,
+          },
+        },
+      },
+    },
+  }),
   defaultOptions: {
     watchQuery: {
-      fetchPolicy: "cache-and-network",
+      fetchPolicy: "cache-first", // Use cache first for better performance
+      errorPolicy: "all", // Show partial data even with errors
+    },
+    query: {
+      fetchPolicy: "cache-first",
+      errorPolicy: "all",
     },
   },
 });

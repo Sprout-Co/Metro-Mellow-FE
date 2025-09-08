@@ -41,8 +41,8 @@ const PRICING_MULTIPLIERS = {
   [Severity.High]: 1.5,
 
   // Pest control treatment type multipliers
-  [TreatmentType.Residential]: 1.0,
-  [TreatmentType.Commercial]: 1.4,
+  [TreatmentType.PestControlResidential]: 1.0,
+  [TreatmentType.PestControlCommercial]: 1.4,
 };
 
 // Item-specific pricing for laundry
@@ -236,7 +236,7 @@ function calculatePestControlPrice(
   const { areas, severity, treatmentType } = config.pestControl;
 
   // Calculate area costs
-  let totalAreaCost = basePrice;
+  const totalAreaCost = basePrice;
   //   areas.forEach((area) => {
   //     const areaPrice = PEST_CONTROL_AREA_PRICES[area] || 1000; // Default ₦1000
   //     totalAreaCost += areaPrice;

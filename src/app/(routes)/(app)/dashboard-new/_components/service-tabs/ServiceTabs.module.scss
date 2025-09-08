@@ -1,0 +1,64 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.serviceTabs {
+  width: 100%;
+  border-bottom: 1px solid color("neutral", "lighter");
+  
+  &__container {
+    display: flex;
+    gap: spacing("md");
+    
+    @include breakpoint-down("md") {
+      gap: spacing("sm");
+      overflow-x: auto;
+      padding-bottom: spacing("xs");
+      
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  }
+  
+  &__tab {
+    @include font-secondary;
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    background: none;
+    border: none;
+    padding: spacing("sm") 0;
+    cursor: pointer;
+    position: relative;
+    transition: $transition-base;
+    white-space: nowrap;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: color("primary", "base");
+      transform: scaleX(0);
+      transition: transform map-get($transition-duration, "fast") map-get($transition-timing, "ease-in-out");
+    }
+    
+    &:hover {
+      color: color("primary", "base");
+    }
+    
+    &--active {
+      color: color("primary", "base");
+      
+      &::after {
+        transform: scaleX(1);
+      }
+    }
+  }
+}

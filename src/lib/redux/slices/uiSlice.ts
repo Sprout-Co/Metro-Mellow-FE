@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UIState {
   activeTab: string;
@@ -6,18 +6,20 @@ interface UIState {
   isModalOpen: boolean;
   modalType: string | null;
   modalData: any;
+  isServicesListDrawerOpen: boolean;
 }
 
 const initialState: UIState = {
-  activeTab: 'dashboard',
+  activeTab: "dashboard",
   isSidebarOpen: true,
   isModalOpen: false,
   modalType: null,
   modalData: null,
+  isServicesListDrawerOpen: false,
 };
 
 const uiSlice = createSlice({
-  name: 'ui',
+  name: "ui",
   initialState,
   reducers: {
     setActiveTab: (state, action: PayloadAction<string>) => {
@@ -39,22 +41,32 @@ const uiSlice = createSlice({
       state.modalType = null;
       state.modalData = null;
     },
+    openServicesListDrawer: (state) => {
+      state.isServicesListDrawerOpen = true;
+    },
+    closeServicesListDrawer: (state) => {
+      state.isServicesListDrawerOpen = false;
+    },
   },
 });
 
 // Export actions
-export const { 
-  setActiveTab, 
-  toggleSidebar, 
-  setSidebarOpen, 
-  openModal, 
-  closeModal 
+export const {
+  setActiveTab,
+  toggleSidebar,
+  setSidebarOpen,
+  openModal,
+  closeModal,
+  openServicesListDrawer,
+  closeServicesListDrawer,
 } = uiSlice.actions;
 
 // Export selectors
 export const selectActiveTab = (state: { ui: UIState }) => state.ui.activeTab;
-export const selectIsSidebarOpen = (state: { ui: UIState }) => state.ui.isSidebarOpen;
-export const selectIsModalOpen = (state: { ui: UIState }) => state.ui.isModalOpen;
+export const selectIsSidebarOpen = (state: { ui: UIState }) =>
+  state.ui.isSidebarOpen;
+export const selectIsModalOpen = (state: { ui: UIState }) =>
+  state.ui.isModalOpen;
 export const selectModalType = (state: { ui: UIState }) => state.ui.modalType;
 export const selectModalData = (state: { ui: UIState }) => state.ui.modalData;
 

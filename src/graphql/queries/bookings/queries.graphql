@@ -1,6 +1,26 @@
 query GetBookings($status: BookingStatus) {
   bookings(status: $status) {
     id
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+    service_category
+    serviceOption
+    date
+    timeSlot
+    status
+    notes
+    recurring
+    cancellationDate
+    cancellationReason
+    resumeDate
+    pauseDate
+    recurringDiscount
+    feedback {
+      rating
+      comment
+    }
     customer {
       id
       email
@@ -32,6 +52,7 @@ query GetBookings($status: BookingStatus) {
         description
         price
         inclusions
+        imageUrl
         extraItems {
           name
           items
@@ -49,10 +70,6 @@ query GetBookings($status: BookingStatus) {
       createdAt
       updatedAt
     }
-    date
-    timeSlot
-    status
-    notes
     address {
       id
       street
@@ -60,14 +77,10 @@ query GetBookings($status: BookingStatus) {
       state
       zipCode
       country
+      label
     }
-    totalPrice
-    paymentStatus
-    createdAt
-    updatedAt
-    serviceType
-    serviceOption
     serviceDetails {
+      serviceOption
       cleaning {
         cleaningType
         houseType
@@ -113,6 +126,26 @@ query GetBookings($status: BookingStatus) {
 query GetBookingById($id: ID!) {
   booking(id: $id) {
     id
+    date
+    timeSlot
+    status
+    notes
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+    service_category
+    serviceOption
+    recurring
+    cancellationDate
+    cancellationReason
+    resumeDate
+    pauseDate
+    recurringDiscount
+    feedback {
+      rating
+      comment
+    }
     customer {
       id
       email
@@ -144,6 +177,7 @@ query GetBookingById($id: ID!) {
         description
         price
         inclusions
+        imageUrl
         extraItems {
           name
           items
@@ -161,10 +195,6 @@ query GetBookingById($id: ID!) {
       createdAt
       updatedAt
     }
-    date
-    timeSlot
-    status
-    notes
     address {
       id
       street
@@ -172,14 +202,10 @@ query GetBookingById($id: ID!) {
       state
       zipCode
       country
+      label
     }
-    totalPrice
-    paymentStatus
-    createdAt
-    updatedAt
-    serviceType
-    serviceOption
     serviceDetails {
+      serviceOption
       cleaning {
         cleaningType
         houseType
@@ -225,6 +251,26 @@ query GetBookingById($id: ID!) {
 query GetCustomerBookings {
   customerBookings {
     id
+    date
+    timeSlot
+    status
+    notes
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+    service_category
+    serviceOption
+    recurring
+    cancellationDate
+    cancellationReason
+    resumeDate
+    pauseDate
+    recurringDiscount
+    feedback {
+      rating
+      comment
+    }
     customer {
       id
       email
@@ -256,6 +302,7 @@ query GetCustomerBookings {
         description
         price
         inclusions
+        imageUrl
         extraItems {
           name
           items
@@ -273,10 +320,6 @@ query GetCustomerBookings {
       createdAt
       updatedAt
     }
-    date
-    timeSlot
-    status
-    notes
     address {
       id
       street
@@ -284,14 +327,10 @@ query GetCustomerBookings {
       state
       zipCode
       country
+      label
     }
-    totalPrice
-    paymentStatus
-    createdAt
-    updatedAt
-    serviceType
-    serviceOption
     serviceDetails {
+      serviceOption
       cleaning {
         cleaningType
         houseType
@@ -368,6 +407,7 @@ query GetStaffBookings {
         description
         price
         inclusions
+        imageUrl
         extraItems {
           name
           items
@@ -396,12 +436,13 @@ query GetStaffBookings {
       state
       zipCode
       country
+      label
     }
     totalPrice
     paymentStatus
     createdAt
     updatedAt
-    serviceType
+    service_category
     serviceOption
     serviceDetails {
       cleaning {

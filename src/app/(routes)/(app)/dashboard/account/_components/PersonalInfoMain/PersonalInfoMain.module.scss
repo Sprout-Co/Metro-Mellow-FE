@@ -1,0 +1,468 @@
+// src/app/(routes)/(app)/dashboard/account/_components/PersonalInfoMain/PersonalInfoMain.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.personalInfoMain {
+  width: 100%;
+  padding: spacing("xl") 0;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: spacing("2xl");
+    padding: spacing("xl");
+    background: linear-gradient(
+      135deg,
+      color("primary", "base"),
+      color("primary", "dark")
+    );
+    border-radius: border-radius("xl");
+    color: color("neutral", "white");
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 40%;
+      height: 200%;
+      background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.1) 0%,
+        transparent 60%
+      );
+      pointer-events: none;
+    }
+
+    @include breakpoint-down("lg") {
+      flex-direction: column;
+      gap: spacing("lg");
+      padding: spacing("lg");
+    }
+
+    @include breakpoint-down("md") {
+      padding: spacing("md");
+    }
+  }
+
+  &__headerContent {
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+
+    @include breakpoint-down("lg") {
+      order: 1;
+    }
+  }
+
+  &__title {
+    @include font-size("h4");
+    @include font-weight("bold");
+    font-family: $font-family-heading;
+    color: color("neutral", "white");
+    margin: 0 0 spacing("xs") 0;
+
+    @include breakpoint-down("md") {
+      @include font-size("h5");
+    }
+  }
+
+  &__subtitle {
+    @include font-size("body-2");
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+  }
+
+  &__headerActions {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+
+    @include breakpoint-down("lg") {
+      order: 3;
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xl");
+    padding: 0 spacing("md");
+
+    @include breakpoint-up("lg") {
+      padding: 0 spacing("xl");
+    }
+  }
+
+  &__card {
+    background: color("neutral", "white");
+    border-radius: border-radius("lg");
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid color("neutral", "lighter");
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow:
+        0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  &__cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("lg");
+    border-bottom: 1px solid color("neutral", "lighter");
+    background: color("neutral", "lightest");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      gap: spacing("md");
+      align-items: flex-start;
+    }
+  }
+
+  &__cardTitle {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+
+    h2 {
+      @include font-size("h6");
+      @include font-weight("semibold");
+      font-family: $font-family-heading;
+      color: color("neutral", "darker");
+      margin: 0;
+    }
+  }
+
+  &__cardIcon {
+    width: 20px;
+    height: 20px;
+    color: color("primary", "base");
+  }
+
+  &__cardContent {
+    padding: spacing("lg");
+  }
+
+  // Status Badge
+  &__statusBadge {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    padding: spacing("xs") spacing("sm");
+    background: rgba(5, 150, 105, 0.1);
+    color: color("status", "success");
+    border-radius: border-radius("full");
+    @include font-size("caption-2");
+    @include font-weight("medium");
+
+    &--warning {
+      background: rgba(217, 119, 6, 0.1);
+      color: color("status", "warning");
+    }
+
+    span {
+      line-height: 1;
+    }
+  }
+
+  &__statusIcon {
+    width: 14px;
+    height: 14px;
+  }
+
+  // Profile Grid
+  &__profileGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+      gap: spacing("md");
+    }
+  }
+
+  &__profileItem {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("sm");
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("md");
+    border: 1px solid color("neutral", "light");
+
+    &:hover {
+      background: color("neutral", "lighter");
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: spacing("xs");
+      flex: 1;
+    }
+  }
+
+  &__profileIcon {
+    width: 18px;
+    height: 18px;
+    color: color("primary", "base");
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  &__profileLabel {
+    @include font-size("caption-1");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__profileValue {
+    @include font-size("body-2");
+    @include font-weight("medium");
+    color: color("neutral", "darker");
+  }
+
+  // Edit Form
+  &__editForm {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+  }
+
+  &__formRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__formLabel {
+    @include font-size("body-3");
+    @include font-weight("medium");
+    color: color("neutral", "darker");
+  }
+
+  &__formInput {
+    padding: spacing("sm") spacing("md");
+    border: 1px solid color("neutral", "light");
+    border-radius: border-radius("md");
+    @include font-size("body-2");
+    background: color("neutral", "white");
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.1);
+    }
+
+    &:hover {
+      border-color: color("neutral", "medium");
+    }
+  }
+
+  &__formActions {
+    display: flex;
+    gap: spacing("md");
+    justify-content: flex-end;
+    padding-top: spacing("md");
+    border-top: 1px solid color("neutral", "light");
+
+    @include breakpoint-down("sm") {
+      justify-content: stretch;
+    }
+  }
+
+  // Address Management
+  &__addressList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__addressCard {
+    border: 1px solid color("neutral", "light");
+    border-radius: border-radius("md");
+    padding: spacing("md");
+    background: color("neutral", "white");
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: color("primary", "base");
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    &--default {
+      border-color: color("primary", "base");
+      background: linear-gradient(
+        135deg,
+        rgba(color("primary", "base"), 0.05),
+        rgba(color("primary", "light"), 0.1)
+      );
+    }
+  }
+
+  &__addressHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("sm");
+  }
+
+  &__addressLabel {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    color: color("neutral", "darker");
+  }
+
+  &__addressTypeIcon {
+    width: 16px;
+    height: 16px;
+    color: color("primary", "base");
+  }
+
+  &__defaultBadge {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    padding: spacing("xs") spacing("sm");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    border-radius: border-radius("full");
+    @include font-size("caption-2");
+    @include font-weight("medium");
+    margin-left: spacing("sm");
+  }
+
+  &__addressActions {
+    display: flex;
+    gap: spacing("xs");
+  }
+
+  &__addressActionBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: color("neutral", "lighter");
+    border: 1px solid color("neutral", "light");
+    border-radius: border-radius("md");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("neutral", "light");
+      color: color("neutral", "darker");
+    }
+
+    &:last-child:hover {
+      background: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
+      border-color: color("status", "error");
+    }
+  }
+
+  &__addressDetails {
+    margin-bottom: spacing("sm");
+  }
+
+  &__addressText {
+    @include font-size("body-3");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("xs") 0;
+    line-height: 1.4;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__addressFooter {
+    padding-top: spacing("sm");
+    border-top: 1px solid color("neutral", "light");
+  }
+
+  &__setDefaultBtn {
+    @include font-size("caption-1");
+    @include font-weight("medium");
+    color: color("primary", "base");
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: color("primary", "dark");
+    }
+  }
+
+  // Empty State
+  &__emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("3xl") spacing("lg");
+    text-align: center;
+  }
+
+  &__emptyIcon {
+    width: 48px;
+    height: 48px;
+    color: color("neutral", "medium");
+    margin-bottom: spacing("lg");
+  }
+
+  &__emptyTitle {
+    @include font-size("h6");
+    @include font-weight("semibold");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("sm") 0;
+  }
+
+  &__emptyText {
+    @include font-size("body-2");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("lg") 0;
+    max-width: 400px;
+  }
+}

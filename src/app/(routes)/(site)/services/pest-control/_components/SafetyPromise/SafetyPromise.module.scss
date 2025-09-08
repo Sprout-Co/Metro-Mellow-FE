@@ -7,8 +7,9 @@
   position: relative;
   width: 100%;
   @include section-spacing("3xl");
-  background-color: color-alpha('primary', 'lighter', 0.5);
+  // background-color: color-alpha('primary', 'lighter', 0.5);
   overflow: hidden;
+  @include section-border;
 
   &__container {
     @include container;
@@ -18,12 +19,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    
+
     @include breakpoint-down("md") {
       padding-top: spacing("xl");
       padding-bottom: spacing("xl");
     }
-    
+
     @include breakpoint-down("sm") {
       padding-top: spacing("lg");
       padding-bottom: spacing("lg");
@@ -36,11 +37,11 @@
     gap: spacing("3xl");
     align-items: center;
     width: 100%;
-    
+
     @include breakpoint-down("lg") {
       gap: spacing("2xl");
     }
-    
+
     @include breakpoint-down("md") {
       grid-template-columns: 1fr;
       gap: spacing("xl");
@@ -52,7 +53,7 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    
+
     @include breakpoint-down("md") {
       align-items: center;
       text-align: center;
@@ -65,16 +66,16 @@
     margin-bottom: spacing("lg");
     line-height: 1.1;
     font-size: font-size("h1") * 1.2;
-    
+
     @include breakpoint-down("lg") {
       font-size: font-size("h2") * 1.2;
     }
-    
+
     @include breakpoint-down("md") {
       font-size: font-size("h3") * 1.2;
       text-align: center;
     }
-    
+
     @include breakpoint-down("sm") {
       font-size: font-size("h4") * 1.2;
       line-height: 1.2;
@@ -95,16 +96,16 @@
     font-size: font-size("body-1");
     margin-bottom: spacing("2xl");
     max-width: 500px;
-    
+
     @include breakpoint-down("lg") {
       font-size: font-size("body-2");
       margin-bottom: spacing("xl");
     }
-    
+
     @include breakpoint-down("md") {
       text-align: center;
     }
-    
+
     @include breakpoint-down("sm") {
       margin-bottom: spacing("lg");
     }
@@ -112,14 +113,14 @@
 
   &__cta {
     margin-top: spacing("xl");
-    
+
     @include breakpoint-down("md") {
       margin-top: spacing("lg");
       width: 100%;
       display: flex;
       justify-content: center;
     }
-    
+
     @include breakpoint-down("sm") {
       margin-top: spacing("md");
     }
@@ -133,7 +134,7 @@
     width: 100%;
     height: 100%;
     min-height: 300px;
-    
+
     @include breakpoint-down("md") {
       min-height: 250px;
     }
@@ -150,15 +151,15 @@
     align-items: center;
     border: 4px solid color("neutral", "lighter");
     box-shadow: 0 10px 30px rgba(color("neutral", "black"), 0.1);
-    
+
     svg {
       width: 80%;
       height: 80%;
       color: color("primary", "base");
     }
-    
+
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       width: 360px;
       height: 360px;
@@ -166,25 +167,25 @@
       border: 2px solid color("neutral", "light");
       z-index: -1;
     }
-    
+
     @include breakpoint-down("lg") {
       width: 200px;
       height: 200px;
-      
+
       &::before {
         width: 240px;
         height: 240px;
       }
     }
-    
+
     @include breakpoint-down("sm") {
       width: 100px;
       height: 100px;
-      
+
       &::before {
         width: 130px;
         height: 130px;
       }
     }
   }
-} 
+}

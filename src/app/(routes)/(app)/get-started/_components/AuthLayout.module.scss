@@ -24,6 +24,10 @@
     z-index: 0;
   }
 
+  &__noImage {
+    background-color: transparent;
+  }
+
   &__container {
     @include container;
     position: relative;

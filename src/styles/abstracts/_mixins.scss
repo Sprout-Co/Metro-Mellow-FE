@@ -227,6 +227,16 @@ $semantic-breakpoints: (
   font-family: $font-family-secondary;
 }
 
+@mixin font-family($family) {
+  @if $family == "primary" {
+    font-family: $font-family-primary;
+  } @else if $family == "secondary" {
+    font-family: $font-family-secondary;
+  } @else if $family == "heading" {
+    font-family: $font-family-heading;
+  }
+}
+
 @mixin heading-base {
   font-family: $font-family-heading;
   line-height: map-get($line-heights, "tight");
@@ -449,15 +459,17 @@ $semantic-breakpoints: (
 @mixin button-secondary($size: "md") {
   @include button-base($size);
   background-color: transparent;
-  color: color("secondary", "base");
+  color: color("neutral", "white");
   border-color: color("secondary", "base");
+  background-color: color("secondary", "base");
 
   &:hover:not(:disabled) {
     background-color: color("secondary", "base");
-    color: color("neutral", "white");
-    border-color: color("primary", "base");
+    color: color("secondary", "base");
+    border-color: color("secondary", "base");
     transform: translateY(-1px);
     box-shadow: map-get($shadows, "md");
+    background-color: color("neutral", "white");
   }
 
   &:focus:not(:disabled) {
@@ -503,6 +515,68 @@ $semantic-breakpoints: (
 
   &:focus:not(:disabled) {
     box-shadow: map-get($shadows, "focus");
+  }
+}
+
+@mixin button-accent($size: "md") {
+  @include button-base($size);
+  background-color: color("accent", "base");
+  color: color("neutral", "white");
+  border-color: color("accent", "base");
+
+  &:hover:not(:disabled) {
+    background-color: color("neutral", "white");
+    color: color("accent", "base");
+    border-color: color("accent", "base");
+    box-shadow: map-get($shadows, "md");
+  }
+
+  &:focus:not(:disabled) {
+    box-shadow: map-get($shadows, "focus");
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: map-get($shadows, "sm");
+  }
+}
+
+@mixin button-primary-outline($size: "md") {
+  @include button-base($size);
+  background-color: transparent;
+  color: color("primary", "base");
+  border-color: color("primary", "base");
+
+  &:hover:not(:disabled) {
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border-color: color("primary", "base");
+  }
+}
+
+@mixin button-secondary-outline($size: "md") {
+  @include button-base($size);
+  background-color: transparent;
+  color: color("secondary", "base");
+  border-color: color("secondary", "base");
+
+  &:hover:not(:disabled) {
+    background-color: color("secondary", "base");
+    color: color("secondary", "base");
+    border-color: color("secondary", "base");
+  }
+}
+
+@mixin button-accent-outline($size: "md") {
+  @include button-base($size);
+  background-color: transparent;
+  color: color("accent", "base");
+  border-color: color("accent", "base");
+
+  &:hover:not(:disabled) {
+    background-color: color("accent", "base");
+    color: color("accent", "base");
+    border-color: color("accent", "base");
   }
 }
 
@@ -716,11 +790,24 @@ $semantic-breakpoints: (
   }
 }
 
+// ===================================
+// SCROLLBAR MIXINS
+// ===================================
+
+@mixin scrollbar-hidden {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+}
+
 //Hero Mixins
-@mixin hero-base {
+@mixin hero-base($height: "100vh") {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  min-height: $height;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -728,6 +815,7 @@ $semantic-breakpoints: (
   background-position: center;
   background-repeat: no-repeat;
   overflow: hidden;
+  background-attachment: fixed;
 }
 
 @mixin hero-container {
@@ -749,4 +837,8 @@ $semantic-breakpoints: (
     padding-top: spacing("2xl");
     padding-bottom: spacing("2xl");
   }
+}
+
+@mixin section-border {
+  border-bottom: 1px solid color("neutral", "light");
 }

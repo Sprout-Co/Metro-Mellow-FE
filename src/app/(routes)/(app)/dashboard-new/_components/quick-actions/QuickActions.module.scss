@@ -1,0 +1,66 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.quickActions {
+  width: 100%;
+  
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("md");
+    
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &__button {
+    @include flex-column-center;
+    background-color: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    padding: spacing("md");
+    cursor: pointer;
+    transition: $transition-base;
+    gap: spacing("sm");
+    height: 100px;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: map-get($shadows, "md");
+    }
+    
+    &:nth-child(1) {
+      background-color: color("neutral", "lightest");
+    }
+    
+    &:nth-child(2) {
+      background-color: color("neutral", "lightest");
+    }
+    
+    &:nth-child(3) {
+      background-color: color("status", "success");
+      color: color("neutral", "white");
+      opacity: 0.8;
+    }
+    
+    &:nth-child(4) {
+      background-color: color("status", "info");
+      color: color("neutral", "white");
+      opacity: 0.8;
+    }
+  }
+  
+  &__icon {
+    font-size: font-size("xl");
+    margin-bottom: spacing("xs");
+  }
+  
+  &__label {
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("medium");
+    text-align: center;
+  }
+}

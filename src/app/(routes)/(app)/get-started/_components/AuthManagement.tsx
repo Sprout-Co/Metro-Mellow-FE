@@ -8,7 +8,11 @@ import RegisterForm from "./RegisterForm";
 
 type AuthMode = "login" | "register";
 
-export default function AuthManagement() {
+export default function AuthManagement({
+  showImage = true,
+}: {
+  showImage?: boolean;
+}) {
   const [authMode, setAuthMode] = useState<AuthMode>("login");
   const router = useRouter();
 
@@ -31,7 +35,7 @@ export default function AuthManagement() {
   };
 
   return (
-    <AuthLayout>
+    <AuthLayout showImage={showImage}>
       {authMode === "login" && (
         <LoginForm
           onSuccess={handleLoginSuccess}

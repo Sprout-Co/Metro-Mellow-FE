@@ -1,0 +1,591 @@
+@import "abstracts/variables";
+@import "abstracts/mixins";
+
+.container {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  border: 1px solid color("neutral", "lighter");
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 1rem;
+  border-bottom: 1px solid color("neutral", "lighter");
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  background: color("neutral", "white");
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: color("neutral", "darkest");
+}
+
+.unreadBadge {
+  background: linear-gradient(
+    135deg,
+    color("primary", "base"),
+    color("primary", "dark")
+  );
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 1rem;
+  min-width: 1.25rem;
+  text-align: center;
+  line-height: 1.25;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filterLabel {
+  font-size: 0.75rem;
+  color: color("neutral", "dark");
+  font-weight: 500;
+}
+
+.filterSelect {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid color("neutral", "light");
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  background: white;
+  cursor: pointer;
+  color: color("neutral", "darkest");
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: color("primary", "lighter");
+  }
+
+  &:focus {
+    outline: none;
+    border-color: color("primary", "base");
+    box-shadow: 0 0 0 2px color("primary", "lighter");
+  }
+}
+
+.markAllButton {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: color("primary", "base");
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  &:hover {
+    background: color("primary", "dark");
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px color("primary", "lighter");
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+.listContainer {
+  overflow-y: auto;
+  flex: 1;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: color("neutral", "light");
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: color("neutral", "medium");
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem;
+  border-bottom: 1px solid color("neutral", "lighter");
+  cursor: pointer;
+  transition: all 0.2s;
+  gap: 0.875rem;
+
+  &:hover {
+    background: color("neutral", "lightest");
+  }
+
+  &:active {
+    background: color("neutral", "lighter");
+  }
+
+  &:focus {
+    outline: none;
+    background: color("neutral", "lightest");
+    box-shadow: inset 0 0 0 2px color("primary", "lighter");
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &.unread {
+    background: color("primary", "lighter");
+
+    &:hover {
+      background: rgba(color("primary", "lighter"), 0.7);
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: color("primary", "base");
+      border-radius: 0 2px 2px 0;
+    }
+  }
+
+  // Priority styling with modern indicators
+  &.low {
+    &.unread::before {
+      background: #10b981;
+    }
+  }
+
+  &.medium {
+    &.unread::before {
+      background: #f59e0b;
+    }
+  }
+
+  &.high {
+    &.unread::before {
+      background: #ef4444;
+    }
+  }
+
+  &.urgent {
+    &.unread {
+      background: rgba(#fef2f2, 0.7);
+
+      &::before {
+        background: #dc2626;
+      }
+
+      animation: urgentGlow 2s infinite;
+    }
+  }
+
+  // Compact mode for dropdown
+  &.compact {
+    padding: 0.75rem;
+    gap: 0.625rem;
+
+    .icon {
+      font-size: 1rem;
+      margin-top: 0.0625rem;
+    }
+
+    .itemTitle {
+      font-size: 0.8125rem;
+      margin-bottom: 0.125rem;
+    }
+
+    .message {
+      font-size: 0.75rem;
+      -webkit-line-clamp: 1;
+    }
+
+    .time {
+      font-size: 0.6875rem;
+    }
+  }
+
+  @keyframes urgentGlow {
+    0%,
+    100% {
+      background: rgba(#fef2f2, 0.7);
+    }
+    50% {
+      background: rgba(#fee2e2, 0.9);
+    }
+  }
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: color("neutral", "lightest");
+  flex-shrink: 0;
+
+  &.low {
+    background: rgba(#10b981, 0.1);
+    color: #10b981;
+  }
+
+  &.medium {
+    background: rgba(#f59e0b, 0.1);
+    color: #f59e0b;
+  }
+
+  &.high {
+    background: rgba(#ef4444, 0.1);
+    color: #ef4444;
+  }
+
+  &.urgent {
+    background: rgba(#dc2626, 0.1);
+    color: #dc2626;
+  }
+
+  .compact & {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.icon {
+  font-size: 1.125rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.itemHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.itemTitle {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: color("neutral", "darkest");
+  line-height: 1.3;
+
+  .unread & {
+    font-weight: 700;
+  }
+}
+
+.itemMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.time {
+  font-size: 0.75rem;
+  color: color("neutral", "dark");
+  white-space: nowrap;
+}
+
+.unreadDot {
+  width: 6px;
+  height: 6px;
+  background: color("primary", "base");
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(color("primary", "base"), 0.2);
+}
+
+.message {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: color("neutral", "dark");
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.actionsContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+
+  .item:hover & {
+    opacity: 1;
+  }
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color("neutral", "lightest");
+  color: color("neutral", "dark");
+  border: 1px solid color("neutral", "lighter");
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: color("neutral", "lighter");
+    color: color("neutral", "darkest");
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px color("primary", "lighter");
+  }
+
+  svg {
+    width: 0.875rem;
+    height: 0.875rem;
+    margin-right: 0.25rem;
+  }
+}
+
+.deleteButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: color("neutral", "medium");
+  cursor: pointer;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  transition: all 0.2s;
+  margin-left: auto;
+  flex-shrink: 0;
+  opacity: 0;
+
+  .item:hover & {
+    opacity: 1;
+  }
+
+  &:hover {
+    color: #ef4444;
+    background: rgba(#ef4444, 0.1);
+    transform: scale(1.1);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(#ef4444, 0.2);
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.emptyState {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: color("neutral", "medium");
+}
+
+.emptyIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  background: color("neutral", "lightest");
+  font-size: 1.5rem;
+}
+
+.emptyText {
+  font-size: 0.9375rem;
+  margin: 0;
+  color: color("neutral", "dark");
+}
+
+.pagination {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid color("neutral", "lighter");
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: color("neutral", "white");
+}
+
+.pageInfo {
+  font-size: 0.875rem;
+  color: color("neutral", "dark");
+  white-space: nowrap;
+}
+
+.paginationControls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.paginationButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color("neutral", "white");
+  border: 1px solid color("neutral", "light");
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: color("neutral", "darkest");
+
+  &:hover:not(:disabled) {
+    background: color("neutral", "lightest");
+    border-color: color("neutral", "medium");
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px color("primary", "lighter");
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 640px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .filters {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .filterGroup {
+    width: 100%;
+
+    .filterSelect {
+      flex: 1;
+    }
+  }
+
+  .markAllButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .item {
+    padding: 0.75rem;
+  }
+
+  .itemHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .itemMeta {
+    align-self: flex-start;
+  }
+
+  .pagination {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+}

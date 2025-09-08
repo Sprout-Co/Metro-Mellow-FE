@@ -52,6 +52,7 @@ import {
   Star,
   Repeat,
   Heart,
+  Edit,
 } from "lucide-react";
 
 // Map of icon names to components
@@ -102,6 +103,7 @@ const icons = {
   star: Star,
   repeat: Repeat,
   heart: Heart,
+  edit: Edit,
   "help-circle": dynamic(() =>
     import("lucide-react").then((mod) => mod.HelpCircle)
   ),

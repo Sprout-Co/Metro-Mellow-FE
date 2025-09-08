@@ -1,0 +1,31 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.accountMain {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("xl");
+
+  &__container {
+    // display: grid;
+    // grid-template-columns: 280px 1fr;
+    // gap: spacing("xl");
+
+    // @include breakpoint-down("lg") {
+    //   grid-template-columns: 240px 1fr;
+    //   gap: spacing("lg");
+    // }
+
+    // @include breakpoint-down("md") {
+    //   grid-template-columns: 1fr;
+    //   gap: spacing("md");
+    // }
+  }
+
+  // Content Area
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+}

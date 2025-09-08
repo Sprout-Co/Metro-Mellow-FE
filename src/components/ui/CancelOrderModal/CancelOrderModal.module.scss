@@ -1,0 +1,90 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.cancelOrderModal {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: spacing("xl") spacing("lg");
+    text-align: center;
+  }
+  
+  &__title {
+    @include font-secondary;
+    @include font-size("2xl");
+    @include font-weight("bold");
+    color: color("primary", "base");
+    margin-bottom: spacing("md");
+  }
+  
+  &__message {
+    @include font-secondary;
+    @include font-size("base");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    max-width: 80%;
+    margin-bottom: spacing("xl");
+  }
+  
+  &__iconContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: spacing("xl");
+  }
+  
+  &__icon {
+    width: 150px;
+    height: auto;
+    object-fit: contain;
+  }
+  
+  &__buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("md");
+    width: 100%;
+    margin-top: spacing("lg");
+    
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &__cancelButton {
+    background-color: color("neutral", "lightest") !important;
+    color: color("neutral", "darkest") !important;
+    border: 1px solid color("neutral", "light") !important;
+    border-radius: border-radius("lg") !important;
+    @include font-secondary;
+    @include font-size("base");
+    @include font-weight("bold");
+    text-transform: uppercase;
+    letter-spacing: map-get($letter-spacing, "wide");
+    padding: spacing("sm") spacing("md") !important;
+    
+    &:hover {
+      background-color: color("neutral", "lighter") !important;
+    }
+  }
+  
+  &__confirmButton {
+    background-color: color("primary", "base") !important;
+    color: color("neutral", "white") !important;
+    border: 1px solid color("primary", "base") !important;
+    border-radius: border-radius("lg") !important;
+    @include font-secondary;
+    @include font-size("base");
+    @include font-weight("bold");
+    text-transform: uppercase;
+    letter-spacing: map-get($letter-spacing, "wide");
+    padding: spacing("sm") spacing("md") !important;
+    
+    &:hover {
+      background-color: color("primary", "dark") !important;
+      border-color: color("primary", "dark") !important;
+    }
+  }
+}

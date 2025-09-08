@@ -3,8 +3,6 @@ import type { NextRequest } from "next/server";
 import { Routes } from "@/constants/routes";
 import {
   decodeAndValidateToken,
-  getUserRoleFromToken,
-  isTokenValid,
 } from "./utils/jwt";
 
 // Define protected routes that require authentication
@@ -44,18 +42,26 @@ export function middleware(request: NextRequest) {
     }
   }
 
+  // Skip JWT processing for public routes and static assets
+  const isPublicRoute = !protectedRoutes.some((route) => pathname.startsWith(route)) && 
+                       !adminRoutes.some((route) => pathname.startsWith(route));
+  
+  if (isPublicRoute) {
+    return NextResponse.next();
+  }
+
   // Get the JWT token from the auth-token cookie
   const authToken = request.cookies.get("auth-token")?.value;
 
-  // Validate JWT token and extract user data
+  // Validate JWT token and extract user data only for protected routes
   let userRole: string | null = null;
-  let isTokenValid = false;
+  let isTokenValidFlag = false;
 
   if (authToken) {
     const decodedToken = decodeAndValidateToken(authToken);
     if (decodedToken) {
       userRole = decodedToken.role;
-      isTokenValid = true;
+      isTokenValidFlag = true;
     }
   }
 
@@ -71,7 +77,7 @@ export function middleware(request: NextRequest) {
   const isDashboardRoute = pathname.startsWith(Routes.DASHBOARD);
 
   // If it's a protected route and there's no valid token, redirect to login
-  if (isProtectedRoute && (!authToken || !isTokenValid)) {
+  if (isProtectedRoute && (!authToken || !isTokenValidFlag)) {
     return NextResponse.redirect(new URL(Routes.GET_STARTED, request.url));
   }
 
@@ -79,7 +85,7 @@ export function middleware(request: NextRequest) {
   if (
     isDashboardRoute &&
     authToken &&
-    isTokenValid &&
+    isTokenValidFlag &&
     userRole !== UserRole.Customer
   ) {
     if (userRole === UserRole.Admin || userRole === UserRole.SuperAdmin) {
@@ -104,7 +110,7 @@ export function middleware(request: NextRequest) {
   // If user is logged in and tries to access auth pages, redirect to dashboard
   if (
     authToken &&
-    isTokenValid &&
+    isTokenValidFlag &&
     (pathname === Routes.GET_STARTED ||
       pathname === Routes.LOGIN ||
       pathname === Routes.REGISTER)

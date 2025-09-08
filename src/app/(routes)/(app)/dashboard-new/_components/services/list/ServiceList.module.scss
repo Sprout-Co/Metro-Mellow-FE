@@ -1,0 +1,23 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.serviceList {
+  width: 100%;
+  margin-top: spacing("md");
+  
+  &__empty {
+    padding: spacing("lg");
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+    text-align: center;
+    
+    p {
+      @include font-secondary;
+      @include font-size("body-2");
+      @include font-weight("medium");
+      color: color("neutral", "dark");
+    }
+  }
+}

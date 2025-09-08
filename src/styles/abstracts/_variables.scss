@@ -21,11 +21,12 @@ $color-orange-40: #ffbd9b;
 $color-orange-20: #ffdecd;
 
 // Secondary Colors
-$color-sand-yellow-base: #f4d47d;
-$color-sand-yellow-80: #f6dd97;
-$color-sand-yellow-60: #f8e5b1;
-$color-sand-yellow-40: #fbeecb;
+$color-sand-yellow-base: #ffcc00;
+$color-sand-yellow-80: #ffd633;
+$color-sand-yellow-60: #ffe066;
+$color-sand-yellow-40: #ffeb99;
 $color-sand-yellow-20: #fdf6e5;
+// $color-sand-yellow-20: #fff5cc; //Blaise's version
 
 $color-darko-base: #000000;
 $color-darko-80: #1b1c22;
@@ -44,6 +45,8 @@ $color-error: #fb2222;
 $color-success: #059669; // Darker green for better contrast
 $color-warning: #d97706; // Darker amber/orange for better contrast
 $color-info: #2293fb;
+$color-upcoming-bg: #fff2e7; // Light orange background for upcoming status
+$color-upcoming-text: #f2994a; // Orange text for upcoming status
 
 // Semantic Color Mapping
 $colors: (
@@ -85,6 +88,8 @@ $colors: (
     "error": $color-error,
     "warning": $color-warning,
     "info": $color-info,
+    "upcoming-bg": $color-upcoming-bg,
+    "upcoming-text": $color-upcoming-text,
   ),
 );
 
@@ -390,6 +395,8 @@ $transition-slow: all map-get($transition-duration, "slow")
 
 // Buttons
 $button-height: (
+  "xs": 1.5rem,
+  // 24px
   "sm": 2rem,
   // 32px
   "md": 2.5rem,

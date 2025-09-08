@@ -7,7 +7,13 @@ export enum Routes {
 
   // App routes
   DASHBOARD = "/dashboard",
+  DASHBOARD_ADDRESSES = "/dashboard/addresses",
+  DASHBOARD_BOOKINGS = "/dashboard/bookings",
+  DASHBOARD_SUBSCRIPTIONS = "/dashboard/subscriptions",
+  DASHBOARD_SUBSCRIPTIONS_ADD = "/dashboard/subscriptions/add",
   PROFILE = "/profile",
+  DASHBOARD_REFER_FRIEND = "/dashboard/refer",
+  DASHBOARD_SUPPORT = "/dashboard/support",
   DASHBOARD_SETTINGS = "/dashboard/settings",
   DASHBOARD_SETTINGS_PROFILE = "/dashboard/settings/profile",
   DASHBOARD_SETTINGS_NOTIFICATIONS = "/dashboard/settings/notifications",
