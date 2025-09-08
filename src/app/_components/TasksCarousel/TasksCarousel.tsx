@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import styles from "./TasksCarousel.module.scss";
 import { Routes } from "@/constants/routes";
+import SignaturePattern from "@/components/ui/SignaturePattern/SignaturePattern";
 
 interface TaskCard {
   id: string;
@@ -162,6 +163,7 @@ const TasksCarousel: React.FC = () => {
 
   return (
     <section className={styles["tasks-carousel"]}>
+      <SignaturePattern />
       <div className={styles["tasks-carousel__container"]}>
         <div className={styles["tasks-carousel__header"]}>
           <div className={styles["tasks-carousel__title-wrapper"]}>

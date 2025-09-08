@@ -8,21 +8,14 @@ import styles from "./Footer.module.scss";
 import { Button } from "@/components/ui/Button";
 import { Routes } from "@/constants/routes";
 import { Instagram } from "lucide-react";
+import SignaturePattern from "@/components/ui/SignaturePattern/SignaturePattern";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
 
   return (
     <footer className={styles.footerSection}>
-      <div className={styles.signaturePattern} aria-hidden="true">
-        <Image
-          src="/images/brand/signature-pattern/Pattern.png"
-          alt=""
-          fill
-          className={styles.patternImage}
-          priority={false}
-        />
-      </div>
+      <SignaturePattern />
       <div className={styles.footerContent}>
         <div className={styles.leftCol}>
           <Link href="/" className={styles.footer__brand}>
