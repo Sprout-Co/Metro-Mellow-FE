@@ -193,3 +193,108 @@ export const createFAQSchema = (
     })),
   };
 };
+
+/**
+ * Create Article schema for blog posts
+ * @param {Object} articleData - Article-specific data
+ * @returns {Object} Article schema object
+ */
+export const createArticleSchema = (articleData: {
+  headline: string;
+  description: string;
+  image: string;
+  author: {
+    name: string;
+    image?: string;
+    bio?: string;
+  };
+  datePublished: string;
+  dateModified: string;
+  url: string;
+  articleSection?: string;
+  keywords?: string;
+  wordCount?: number;
+  timeRequired?: string;
+}) => {
+  return {
+    "@type": "BlogPosting",
+    headline: articleData.headline,
+    description: articleData.description,
+    image: {
+      "@type": "ImageObject",
+      url: articleData.image,
+      width: 1200,
+      height: 630,
+    },
+    author: {
+      "@type": "Person",
+      name: articleData.author.name,
+      image: articleData.author.image,
+      description: articleData.author.bio,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: businessInfo.name,
+      logo: {
+        "@type": "ImageObject",
+        url: businessInfo.logo,
+      },
+    },
+    datePublished: articleData.datePublished,
+    dateModified: articleData.dateModified,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": articleData.url,
+    },
+    articleSection: articleData.articleSection,
+    keywords: articleData.keywords,
+    wordCount: articleData.wordCount,
+    timeRequired: articleData.timeRequired,
+    url: articleData.url,
+  };
+};
+
+/**
+ * Create Blog schema for blog listing pages
+ * @param {Object} blogData - Blog-specific data
+ * @returns {Object} Blog schema object
+ */
+export const createBlogSchema = (blogData: {
+  name: string;
+  description: string;
+  url: string;
+  posts?: Array<{ url: string; title: string }>;
+}) => {
+  return {
+    "@type": "Blog",
+    name: blogData.name,
+    description: blogData.description,
+    url: blogData.url,
+    author: {
+      "@type": "Organization",
+      name: businessInfo.name,
+      url: businessInfo.url,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: businessInfo.name,
+      url: businessInfo.url,
+      logo: {
+        "@type": "ImageObject",
+        url: businessInfo.logo,
+      },
+    },
+    ...(blogData.posts && {
+      mainEntity: {
+        "@type": "ItemList",
+        numberOfItems: blogData.posts.length,
+        itemListElement: blogData.posts.map((post, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          url: post.url,
+          name: post.title,
+        })),
+      },
+    }),
+  };
+};

@@ -1,0 +1,229 @@
+@import "abstracts/variables";
+@import "abstracts/mixins";
+
+.categoryPage {
+  min-height: 100vh;
+
+  .header {
+    @include section-padding;
+    background: linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-primary-100) 100%);
+    border-bottom: 1px solid var(--color-border-light);
+    
+    .container {
+      @include container;
+      max-width: 800px;
+      text-align: center;
+    }
+
+    .breadcrumb {
+      margin-bottom: $spacing-lg;
+      
+      .backLink {
+        @include body-medium;
+        color: var(--color-primary);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s ease;
+        
+        &:hover {
+          color: var(--color-primary-dark);
+        }
+      }
+    }
+
+    .categoryBadge {
+      display: inline-flex;
+      align-items: center;
+      gap: $spacing-sm;
+      padding: $spacing-sm $spacing-lg;
+      border-radius: $border-radius-full;
+      color: white;
+      font-weight: 600;
+      margin-bottom: $spacing-lg;
+      
+      .icon {
+        font-size: 1.25rem;
+      }
+      
+      .name {
+        font-size: $font-size-lg;
+      }
+    }
+
+    .title {
+      @include heading-1;
+      color: var(--color-text-primary);
+      margin-bottom: $spacing-lg;
+    }
+
+    .description {
+      @include body-large;
+      color: var(--color-text-secondary);
+      margin-bottom: $spacing-xl;
+      line-height: 1.6;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: $spacing-xl;
+      
+      .stat {
+        text-align: center;
+        
+        .number {
+          @include heading-3;
+          color: var(--color-primary);
+          display: block;
+          margin-bottom: $spacing-xs;
+        }
+        
+        .label {
+          @include body-small;
+          color: var(--color-text-tertiary);
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  .content {
+    @include section-padding;
+    background: var(--color-background-primary);
+  }
+
+  .otherCategories {
+    @include section-padding;
+    background: var(--color-background-secondary);
+    border-top: 1px solid var(--color-border-light);
+    
+    .container {
+      @include container;
+    }
+    
+    .otherTitle {
+      @include heading-2;
+      color: var(--color-text-primary);
+      text-align: center;
+      margin-bottom: $spacing-2xl;
+    }
+    
+    .categoryLinks {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: $spacing-lg;
+      
+      .categoryLink {
+        background: var(--color-background-primary);
+        border: 2px solid var(--color-border-light);
+        border-radius: $border-radius-lg;
+        padding: $spacing-lg;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: $spacing-md;
+        
+        &:hover {
+          transform: translateY(-2px);
+          border-color: var(--category-color);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+          
+          .linkIcon {
+            transform: scale(1.1);
+          }
+        }
+        
+        .linkIcon {
+          font-size: 1.5rem;
+          transition: transform 0.3s ease;
+        }
+        
+        .linkName {
+          @include body-large;
+          color: var(--color-text-primary);
+          font-weight: 600;
+          flex-grow: 1;
+        }
+        
+        .linkCount {
+          @include body-small;
+          color: var(--category-color);
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}
+
+// Responsive design
+@include mobile {
+  .categoryPage {
+    .header {
+      padding: $spacing-xl $spacing-md;
+      text-align: center;
+      
+      .title {
+        @include heading-2;
+      }
+      
+      .description {
+        @include body-medium;
+      }
+      
+      .stats {
+        gap: $spacing-lg;
+        
+        .stat {
+          .number {
+            @include heading-4;
+          }
+        }
+      }
+    }
+    
+    .content {
+      padding: $spacing-xl $spacing-md;
+    }
+    
+    .otherCategories {
+      padding: $spacing-xl $spacing-md;
+      
+      .otherTitle {
+        @include heading-3;
+      }
+      
+      .categoryLinks {
+        grid-template-columns: 1fr;
+        gap: $spacing-md;
+        
+        .categoryLink {
+          padding: $spacing-md;
+          gap: $spacing-sm;
+          
+          .linkIcon {
+            font-size: 1.25rem;
+          }
+          
+          .linkName {
+            @include body-medium;
+          }
+        }
+      }
+    }
+  }
+}
+
+@include tablet {
+  .categoryPage {
+    .otherCategories {
+      .categoryLinks {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+    }
+  }
+}

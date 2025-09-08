@@ -1,0 +1,130 @@
+@import "abstracts/variables";
+@import "abstracts/mixins";
+
+.blog-grid {
+  &__container {
+    @include container;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("2xl");
+  }
+  
+  &__title {
+    @include heading-2;
+    color: color("neutral", "black");
+    margin-bottom: spacing("md");
+  }
+  
+  &__description {
+    @include body-1;
+    color: color("neutral", "dark");
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  &__grid {
+    @include grid(repeat(auto-fill, minmax(350px, 1fr)), spacing("xl"));
+    margin-bottom: spacing("2xl");
+  }
+
+  &__load-more {
+    @include flex-center;
+  }
+  
+  &__load-more-button {
+    @include button-base;
+    background: color("neutral", "white");
+    color: color("primary", "base");
+    border: 2px solid color("primary", "base");
+    padding: spacing("md") spacing("xl");
+    border-radius: map-get($border-radius, "lg");
+    @include font-weight("semibold");
+    transition: all 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      background: color("primary", "base");
+      color: color("neutral", "white");
+    }
+  }
+
+  &__empty-state {
+    text-align: center;
+    padding: spacing("2xl");
+  }
+  
+  &__empty-icon {
+    font-size: 4rem;
+    margin-bottom: spacing("lg");
+  }
+  
+  &__empty-title {
+    @include heading-3;
+    color: color("neutral", "black");
+    margin-bottom: spacing("md");
+  }
+  
+  &__empty-description {
+    @include body-1;
+    color: color("neutral", "dark");
+    margin-bottom: spacing("lg");
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  &__empty-action {
+    @include button-base;
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    padding: spacing("md") spacing("xl");
+    border-radius: map-get($border-radius, "lg");
+    @include font-weight("semibold");
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s ease;
+    border: none;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      background: color("primary", "dark");
+    }
+  }
+
+  // Responsive design
+  @include respond-to("mobile") {
+    &__header {
+      margin-bottom: spacing("xl");
+    }
+    
+    &__title {
+      @include heading-3;
+    }
+    
+    &__description {
+      @include body-2;
+    }
+    
+    &__grid {
+      @include grid(1fr, spacing("lg"));
+    }
+    
+    &__empty-state {
+      padding: spacing("xl") spacing("md");
+    }
+    
+    &__empty-icon {
+      font-size: 3rem;
+    }
+  }
+
+  @include respond-to("tablet") {
+    &__grid {
+      @include grid(repeat(auto-fill, minmax(300px, 1fr)), spacing("lg"));
+    }
+  }
+}

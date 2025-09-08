@@ -1,0 +1,132 @@
+@import "abstracts/variables";
+@import "abstracts/mixins";
+
+.blog-hero {
+  padding: spacing("2xl") 0;
+  
+  &__container {
+    @include container;
+    @include grid(1fr 1fr, spacing("2xl"));
+    align-items: center;
+  }
+
+  &__content {
+    
+  }
+
+  &__title {
+    @include heading-1;
+    color: color("neutral", "black");
+    margin-bottom: spacing("lg");
+  }
+
+  &__highlight {
+    color: color("primary", "base");
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, color("primary", "base") 0%, color("primary", "light") 100%);
+      border-radius: 2px;
+    }
+  }
+
+  &__description {
+    @include body-1;
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xl");
+    line-height: map-get($line-heights, "relaxed");
+  }
+
+  &__stats {
+    @include flex($justify: flex-start, $align: center);
+    gap: spacing("xl");
+  }
+
+  &__stat {
+    text-align: center;
+  }
+
+  &__stat-number {
+    @include heading-2;
+    color: color("primary", "base");
+    display: block;
+    margin-bottom: spacing("xs");
+  }
+  
+  &__stat-label {
+    @include caption;
+    color: color("neutral", "medium");
+    @include font-weight("medium");
+  }
+
+  &__visual {
+    @include flex-center;
+  }
+
+  &__image-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    aspect-ratio: 1;
+  }
+  
+  &__hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.1));
+  }
+
+  // Responsive design
+  @include respond-to("mobile") {
+    padding: spacing("xl") 0;
+    
+    &__container {
+      @include grid(1fr, spacing("xl"));
+      text-align: center;
+    }
+    
+    &__title {
+      @include heading-2;
+      margin-bottom: spacing("md");
+    }
+    
+    &__description {
+      @include body-2;
+      margin-bottom: spacing("lg");
+    }
+    
+    &__stats {
+      justify-content: center;
+      gap: spacing("lg");
+    }
+    
+    &__stat-number {
+      @include heading-3;
+    }
+    
+    &__visual {
+      order: -1;
+    }
+    
+    &__image-container {
+      max-width: 300px;
+    }
+  }
+
+  @include respond-to("tablet") {
+    &__container {
+      gap: spacing("xl");
+    }
+    
+    &__stats {
+      gap: spacing("lg");
+    }
+  }
+}

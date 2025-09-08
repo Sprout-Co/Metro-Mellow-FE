@@ -25,8 +25,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Metromellow",
-  description: "Your one-stop-shop for all!",
+  title: "Metro Mellow | Professional Home Services in Lagos, Nigeria",
+  description: "Professional home services in Lagos including cleaning, laundry, cooking, and pest control. Tech-enabled solutions for modern Nigerian homes. Launching Q3 2025.",
+  keywords: "home services Lagos, cleaning services Nigeria, laundry Lagos, meal preparation, pest control, domestic help Lagos, Metro Mellow",
+  authors: [{ name: "Metro Mellow Team" }],
+  creator: "Metro Mellow",
+  publisher: "Metro Mellow",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  other: {
+    'google-site-verification': process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+  },
 };
 
 export default function RootLayout({
@@ -40,6 +57,12 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <GoogleTagManagerScript gtmId={gtmId} />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="Metro Mellow Blog RSS Feed"
+          href="/blog/rss.xml"
+        />
       </head>
       <body
         className={`${baloo2.variable} ${montserrat.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}

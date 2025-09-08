@@ -47,6 +47,7 @@ const navItems = [
     hasDropdown: true,
     dropdownItems: serviceItems,
   },
+  { label: "Blog", href: "/blog" },
   { label: "For Business", href: "/for-business" },
   { label: "Subscriptions", href: "/subscriptions" },
   { label: "Contact", href: "/contact" },

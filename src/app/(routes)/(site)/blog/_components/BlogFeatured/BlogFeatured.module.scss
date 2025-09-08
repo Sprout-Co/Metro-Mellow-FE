@@ -1,0 +1,75 @@
+@import "abstracts/variables";
+@import "abstracts/mixins";
+
+.blog-featured {
+  &__container {
+    @include container;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("2xl");
+  }
+  
+  &__title {
+    @include heading-2;
+    color: color("neutral", "black");
+    margin-bottom: spacing("md");
+  }
+  
+  &__description {
+    @include body-1;
+    color: color("neutral", "dark");
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  &__grid {
+    @include grid(2fr 1fr, spacing("lg"));
+    grid-template-rows: auto auto;
+  }
+  
+  &__featured-item {
+    &--primary {
+      grid-row: 1 / 3;
+    }
+  }
+
+  // Responsive design
+  @include respond-to("mobile") {
+    &__header {
+      margin-bottom: spacing("xl");
+    }
+    
+    &__title {
+      @include heading-3;
+    }
+    
+    &__description {
+      @include body-2;
+    }
+    
+    &__grid {
+      @include grid(1fr, spacing("md"));
+      grid-template-rows: auto;
+    }
+    
+    &__featured-item {
+      &--primary {
+        grid-row: auto;
+      }
+    }
+  }
+
+  @include respond-to("tablet") {
+    &__grid {
+      @include grid(1fr, spacing("lg"));
+      
+      .featured-item {
+        &--primary {
+          grid-row: auto;
+        }
+      }
+    }
+  }
+}
