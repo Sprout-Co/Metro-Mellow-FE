@@ -69,9 +69,6 @@ const ComplianceSafety: React.FC = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className={styles.complianceSafety__badge}>
-            Compliance & Safety
-          </span>
           <h2 className={styles.complianceSafety__title}>
             Industry-Leading Safety Standards
           </h2>
@@ -82,7 +79,7 @@ const ComplianceSafety: React.FC = () => {
           </p>
         </motion.div>
 
-        <div className={styles.complianceSafety__grid}>
+        {/* <div className={styles.complianceSafety__grid}>
           {complianceFeatures.map((feature, index) => (
             <motion.div
               key={index}
@@ -107,7 +104,7 @@ const ComplianceSafety: React.FC = () => {
               </ul>
             </motion.div>
           ))}
-        </div>
+        </div> */}
 
         <motion.div
           className={styles.complianceSafety__safety}

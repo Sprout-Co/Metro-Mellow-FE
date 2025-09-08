@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import { ArrowRight, Phone, Calendar } from "lucide-react";
+import { ArrowRight, Phone } from "lucide-react";
 import styles from "./CleaningCTA.module.scss";
 
 const CleaningCTA: React.FC = () => {
@@ -21,7 +21,8 @@ const CleaningCTA: React.FC = () => {
             Ready to Transform Your Workplace?
           </h2>
           <p className={styles.cleaningCTA__subtitle}>
-            Get a free consultation and customized cleaning plan for your business
+            Get a free consultation and customized cleaning plan for your
+            business
           </p>
           <div className={styles.cleaningCTA__buttons}>
             <Button
@@ -31,11 +32,7 @@ const CleaningCTA: React.FC = () => {
             >
               Get Free Quote
             </Button>
-            <Button
-              variant="primary"
-              size="lg"
-              rightIcon={<Phone size={18} />}
-            >
+            <Button variant="primary" size="lg" rightIcon={<Phone size={18} />}>
               Call Now
             </Button>
           </div>

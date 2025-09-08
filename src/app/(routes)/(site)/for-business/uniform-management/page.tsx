@@ -15,10 +15,10 @@ export default function UniformManagementPage() {
     <main className={styles.uniformManagement}>
       <LaundryHero />
       <LaundryServices />
-      <UniformCare />
+      {/* <UniformCare /> */}
       <LaundryProcess />
-      <LaundryPricing />
-      <LaundryTestimonials />
+      {/* <LaundryPricing /> */}
+      {/* <LaundryTestimonials /> */}
       <LaundryCTA />
     </main>
   );

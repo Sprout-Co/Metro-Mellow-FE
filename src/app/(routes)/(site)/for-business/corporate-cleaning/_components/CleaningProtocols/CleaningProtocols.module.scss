@@ -37,7 +37,7 @@
   &__header {
     text-align: center;
     margin-bottom: spacing("4xl");
-    max-width: 800px;
+    // max-width: 800px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -57,9 +57,9 @@
   }
 
   &__title {
-    @include heading-2;
+    @include heading-1;
     margin-bottom: spacing("lg");
-    
+
     @include breakpoint-down("md") {
       @include heading-3;
     }
@@ -78,75 +78,8 @@
   }
 
   &__grid {
-    @include grid-responsive(1, 2, 2, 4, spacing("xl"));
+    @include grid-responsive(1, 2, 2, spacing("xl"));
     margin-bottom: spacing("5xl");
-  }
-
-  &__certifications {
-    text-align: center;
-  }
-
-  &__certificationsTitle {
-    @include heading-3;
-    margin-bottom: spacing("2xl");
-    color: color("neutral", "black");
-  }
-
-  &__certificationsGrid {
-    @include grid-responsive(1, 2, 2, 4, spacing("lg"));
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  &__certification {
-    @include flex($align: center);
-    gap: spacing("md");
-    padding: spacing("lg");
-    background: color("neutral", "white");
-    border-radius: border-radius("lg");
-    box-shadow: shadow("sm");
-    transition: $transition-base;
-    text-align: left;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: shadow("md");
-    }
-
-    @include breakpoint-down("sm") {
-      flex-direction: column;
-      text-align: center;
-      gap: spacing("sm");
-    }
-  }
-
-  &__certificationIcon {
-    width: 40px;
-    height: 40px;
-    @include flex-center;
-    background: color("primary", "lighter");
-    color: color("primary", "base");
-    border-radius: border-radius("lg");
-    flex-shrink: 0;
-  }
-
-  &__certificationContent {
-    flex: 1;
-
-    h4 {
-      @include font-secondary;
-      @include font-size("sm");
-      @include font-weight("semibold");
-      color: color("neutral", "black");
-      margin-bottom: spacing("xs");
-    }
-
-    p {
-      @include font-secondary;
-      @include font-size("xs");
-      color: color("neutral", "dark");
-      margin: 0;
-    }
   }
 }
 
@@ -174,16 +107,6 @@
     transition: $transition-base;
   }
 
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: shadow("xl");
-    border-color: var(--card-accent-color);
-
-    &::before {
-      transform: scaleY(1);
-    }
-  }
-
   &--primary {
     --card-accent-color: #{color("primary", "base")};
   }
@@ -209,19 +132,35 @@
     color: color("neutral", "white");
 
     &--primary {
-      background: linear-gradient(135deg, color("primary", "base"), color("primary", "dark"));
+      background: linear-gradient(
+        135deg,
+        color("primary", "base"),
+        color("primary", "dark")
+      );
     }
 
     &--secondary {
-      background: linear-gradient(135deg, color("secondary", "base"), color("secondary", "dark"));
+      background: linear-gradient(
+        135deg,
+        color("secondary", "base"),
+        color("secondary", "dark")
+      );
     }
 
     &--accent {
-      background: linear-gradient(135deg, color("accent", "base"), color("accent", "dark"));
+      background: linear-gradient(
+        135deg,
+        color("accent", "base"),
+        color("accent", "dark")
+      );
     }
 
     &--success {
-      background: linear-gradient(135deg, color("status", "success"), darken(color("status", "success"), 10%));
+      background: linear-gradient(
+        135deg,
+        color("status", "success"),
+        darken(color("status", "success"), 10%)
+      );
     }
   }
 

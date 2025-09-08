@@ -4,7 +4,7 @@
 
 .cateringHero {
   @include hero-base;
-  background: linear-gradient(135deg, color("secondary", "darker") 0%, color("secondary", "base") 100%);
+  // background: linear-gradient(135deg, color("secondary", "darker") 0%, color("secondary", "base") 100%);
   position: relative;
   overflow: hidden;
 
@@ -14,10 +14,11 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('/images/corporate/cp1.png');
+    background-image: url("/images/corporate/cp1.png");
     background-size: cover;
     background-position: center;
     z-index: 1;
+    background-attachment: fixed;
   }
 
   &__overlay {
@@ -26,7 +27,12 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, color-alpha("secondary", "base", 0.85) 0%, color-alpha("secondary", "darker", 0.75) 100%);
+    background: linear-gradient(
+      to right,
+      color-alpha("neutral", "black", 0.7) 0%,
+      color-alpha("neutral", "black", 0.5) 50%,
+      color-alpha("neutral", "black", 0.7) 100%
+    );
     z-index: 2;
   }
 
@@ -61,13 +67,13 @@
 
   &__title {
     margin-bottom: spacing("xl");
-    
+
     &--accent {
       @include heading-1;
       color: color("accent", "base");
       display: block;
       margin-bottom: spacing("sm");
-      
+
       @include breakpoint-down("md") {
         @include heading-2;
       }
@@ -78,7 +84,7 @@
       color: color("neutral", "white");
       display: block;
       line-height: line-height("tight");
-      
+
       @include breakpoint-down("md") {
         @include heading-2;
       }

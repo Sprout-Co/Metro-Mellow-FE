@@ -3,7 +3,6 @@
 import React from "react";
 import CateringHero from "./_components/CateringHero/CateringHero";
 import MenuShowcase from "./_components/MenuShowcase/MenuShowcase";
-import CateringPackages from "./_components/CateringPackages/CateringPackages";
 import NutritionSustainability from "./_components/NutritionSustainability/NutritionSustainability";
 import EventShowcase from "./_components/EventShowcase/EventShowcase";
 import CateringCTA from "./_components/CateringCTA/CateringCTA";
@@ -14,9 +13,9 @@ export default function CateringServicesPage() {
     <main className={styles.cateringServices}>
       <CateringHero />
       <MenuShowcase />
-      <CateringPackages />
-      <NutritionSustainability />
-      <EventShowcase />
+      {/* <CateringPackages /> */}
+      {/* <NutritionSustainability /> */}
+      {/* <EventShowcase /> */}
       <CateringCTA />
     </main>
   );

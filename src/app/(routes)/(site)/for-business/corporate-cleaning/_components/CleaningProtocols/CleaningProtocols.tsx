@@ -73,12 +73,14 @@ const ProtocolCard: React.FC<ProtocolCardProps> = ({
       initial="hidden"
       animate={controls}
     >
-      <div className={`${styles.protocolCard__iconContainer} ${styles[`protocolCard__iconContainer--${colorScheme}`]}`}>
+      <div
+        className={`${styles.protocolCard__iconContainer} ${styles[`protocolCard__iconContainer--${colorScheme}`]}`}
+      >
         {icon}
       </div>
       <h3 className={styles.protocolCard__title}>{title}</h3>
       <p className={styles.protocolCard__description}>{description}</p>
-      
+
       <div className={styles.protocolCard__steps}>
         {steps.map((step, index) => (
           <motion.div
@@ -138,10 +140,10 @@ const CleaningProtocols: React.FC = () => {
     {
       icon: <Shield size={32} />,
       title: "Health & Safety Standards",
-      description: "Comprehensive health and safety protocols ensuring the wellbeing of your employees and visitors.",
+      description:
+        "Comprehensive health and safety protocols ensuring the wellbeing of your employees and visitors.",
       steps: [
         "COVID-19 sanitization protocols",
-        "OSHA compliance procedures",
         "Personal protective equipment",
         "Chemical safety protocols",
       ],
@@ -150,7 +152,8 @@ const CleaningProtocols: React.FC = () => {
     {
       icon: <Droplets size={32} />,
       title: "Deep Sanitization Process",
-      description: "Advanced sanitization techniques using hospital-grade disinfectants and equipment.",
+      description:
+        "Advanced sanitization techniques using hospital-grade disinfectants and equipment.",
       steps: [
         "Electrostatic spray disinfection",
         "High-touch surface treatment",
@@ -162,7 +165,8 @@ const CleaningProtocols: React.FC = () => {
     {
       icon: <Leaf size={32} />,
       title: "Eco-Friendly Approach",
-      description: "Environmentally responsible cleaning using green products and sustainable practices.",
+      description:
+        "Environmentally responsible cleaning using green products and sustainable practices.",
       steps: [
         "Non-toxic cleaning products",
         "Biodegradable chemicals",
@@ -174,7 +178,8 @@ const CleaningProtocols: React.FC = () => {
     {
       icon: <Award size={32} />,
       title: "Quality Assurance",
-      description: "Rigorous quality control measures to ensure consistent, exceptional cleaning results.",
+      description:
+        "Rigorous quality control measures to ensure consistent, exceptional cleaning results.",
       steps: [
         "Multi-point inspections",
         "Client feedback systems",
@@ -221,15 +226,13 @@ const CleaningProtocols: React.FC = () => {
             Industry-Leading Standards
           </span>
           <h2 className={styles.cleaningProtocols__title}>
-            <span className={styles.cleaningProtocols__highlight}>
-              Proven
-            </span>{" "}
+            <span className={styles.cleaningProtocols__highlight}>Proven</span>{" "}
             Cleaning Protocols & Standards
           </h2>
           <p className={styles.cleaningProtocols__subtitle}>
-            Our systematic approach ensures consistent, exceptional results while
-            maintaining the highest standards of health, safety, and environmental
-            responsibility
+            Our systematic approach ensures consistent, exceptional results
+            while maintaining the highest standards of health, safety, and
+            environmental responsibility
           </p>
         </motion.div>
 
@@ -245,38 +248,6 @@ const CleaningProtocols: React.FC = () => {
             />
           ))}
         </div>
-
-        <motion.div
-          className={styles.cleaningProtocols__certifications}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <h3 className={styles.cleaningProtocols__certificationsTitle}>
-            Our Certifications & Compliance
-          </h3>
-          <div className={styles.cleaningProtocols__certificationsGrid}>
-            {certifications.map((cert, index) => (
-              <motion.div
-                key={index}
-                className={styles.cleaningProtocols__certification}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1, duration: 0.4 }}
-                viewport={{ once: true }}
-              >
-                <div className={styles.cleaningProtocols__certificationIcon}>
-                  {cert.icon}
-                </div>
-                <div className={styles.cleaningProtocols__certificationContent}>
-                  <h4>{cert.title}</h4>
-                  <p>{cert.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </section>
   );

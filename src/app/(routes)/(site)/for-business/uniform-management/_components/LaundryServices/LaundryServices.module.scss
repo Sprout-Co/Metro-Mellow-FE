@@ -16,7 +16,7 @@
   }
 
   &__title {
-    @include heading-2;
+    @include heading-1;
     margin-bottom: spacing("lg");
     color: color("neutral", "black");
   }
@@ -74,7 +74,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    
+
     li {
       @include font-secondary;
       @include font-size("sm");

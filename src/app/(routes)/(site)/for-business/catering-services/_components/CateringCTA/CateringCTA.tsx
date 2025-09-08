@@ -107,35 +107,6 @@ const CateringCTA: React.FC = () => {
         </motion.div>
 
         <motion.div
-          className={styles.contact__section}
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <h3>Get Started Today</h3>
-          <div className={styles.contact__options}>
-            {contactOptions.map((option, index) => (
-              <motion.div
-                key={index}
-                className={styles.contact__option}
-                variants={itemVariants}
-                whileHover={{ y: -4 }}
-              >
-                <div className={styles.option__icon}>{option.icon}</div>
-                <div className={styles.option__content}>
-                  <h4>{option.title}</h4>
-                  <div className={styles.option__subtitle}>
-                    {option.subtitle}
-                  </div>
-                  <p>{option.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        <motion.div
           className={styles.cta__actions}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -144,28 +115,14 @@ const CateringCTA: React.FC = () => {
         >
           <Button
             variant="primary"
-            size="xl"
+            size="lg"
             rightIcon={<ArrowRight size={20} />}
           >
             Schedule Free Tasting
           </Button>
-          <Button variant="outline" size="xl">
+          <Button variant="white" size="lg">
             Get Custom Quote
           </Button>
-        </motion.div>
-
-        <motion.div
-          className={styles.urgency__message}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
-        >
-          <p>
-            <strong>Planning an event soon?</strong> Our calendar fills up
-            quickly during peak seasons. Contact us today to secure your
-            preferred dates.
-          </p>
         </motion.div>
       </div>
     </section>

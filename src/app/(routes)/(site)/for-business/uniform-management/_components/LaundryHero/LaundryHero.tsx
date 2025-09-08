@@ -18,9 +18,6 @@ const LaundryHero: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className={styles.laundryHero__badge}>
-            Professional Laundry & Uniform Services
-          </div>
           <h1 className={styles.laundryHero__title}>
             <span className={styles["laundryHero__title--accent"]}>
               Premium

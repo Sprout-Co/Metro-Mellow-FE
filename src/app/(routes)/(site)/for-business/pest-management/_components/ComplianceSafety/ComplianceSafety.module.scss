@@ -32,6 +32,7 @@
     color: #1e293b;
     margin-bottom: 24px;
     line-height: 1.2;
+    @include heading-1;
 
     @media (max-width: 768px) {
       font-size: 32px;

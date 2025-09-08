@@ -18,9 +18,6 @@ const CateringHero: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className={styles.cateringHero__badge}>
-            Professional Corporate Catering
-          </div>
           <h1 className={styles.cateringHero__title}>
             <span className={styles["cateringHero__title--accent"]}>
               Exceptional

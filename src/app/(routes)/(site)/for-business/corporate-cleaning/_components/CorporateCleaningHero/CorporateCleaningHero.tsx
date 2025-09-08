@@ -86,7 +86,7 @@ const CorporateCleaningHero: React.FC = () => {
       <div className={styles.corporateCleaningHero__overlay} />
       <div className={styles.corporateCleaningHero__container}>
         <div className={styles.corporateCleaningHero__content}>
-          <motion.div
+          {/* <motion.div
             className={styles.corporateCleaningHero__badge}
             initial="hidden"
             animate="visible"
@@ -94,7 +94,7 @@ const CorporateCleaningHero: React.FC = () => {
             variants={textVariants}
           >
             Professional Corporate Cleaning
-          </motion.div>
+          </motion.div> */}
 
           <motion.h1
             className={styles.corporateCleaningHero__title}
