@@ -4,7 +4,7 @@ import BlogGrid from "./_components/BlogGrid/BlogGrid";
 import BlogCategories from "./_components/BlogCategories/BlogCategories";
 import BlogFeatured from "./_components/BlogFeatured/BlogFeatured";
 import StructuredData from "@/components/common/SEO/StructuredData";
-import { 
+import {
   createLocalBusinessSchema,
   createBreadcrumbSchema,
 } from "@/utils/seoHelpers";
@@ -13,7 +13,7 @@ import styles from "./Blog.module.scss";
 
 export const metadata: Metadata = {
   title: "Home Services Blog | Tips & Guides for Lagos Homes | Metro Mellow",
-  description: 
+  description:
     "Expert home services advice for Lagos residents. Get tips on cleaning, laundry, cooking, pest control, and home maintenance. Latest trends and professional insights from Metro Mellow.",
   keywords:
     "home services blog Lagos, cleaning tips Nigeria, laundry guides, cooking tips Lagos, pest control advice, home maintenance Nigeria, domestic help tips, household management",
@@ -40,7 +40,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Home Services Blog | Expert Tips for Lagos Homes",
-    description: "Professional home services advice for Lagos residents - cleaning, laundry, cooking & more.",
+    description:
+      "Professional home services advice for Lagos residents - cleaning, laundry, cooking & more.",
     images: ["/images/blog/blog-hero-og.jpg"],
   },
   other: {
@@ -58,7 +59,8 @@ export default async function BlogPage() {
   const blogPageSchema = {
     "@type": "Blog",
     name: "Metro Mellow Home Services Blog",
-    description: "Expert home services advice and tips for Lagos residents covering cleaning, laundry, cooking, and pest control.",
+    description:
+      "Expert home services advice and tips for Lagos residents covering cleaning, laundry, cooking, and pest control.",
     url: "https://metromellow.com/blog",
     author: {
       "@type": "Organization",
@@ -94,7 +96,7 @@ export default async function BlogPage() {
   return (
     <>
       {/* Structured Data */}
-      <StructuredData type="Blog" data={blogPageSchema} />
+      <StructuredData type="Article" data={blogPageSchema} />
       <StructuredData
         type="BreadcrumbList"
         data={createBreadcrumbSchema(breadcrumbs)}
@@ -102,57 +104,75 @@ export default async function BlogPage() {
       <StructuredData
         type="LocalBusiness"
         data={createLocalBusinessSchema({
-          description: "Metro Mellow blog provides expert home services advice and tips for Lagos residents.",
+          description:
+            "Metro Mellow blog provides expert home services advice and tips for Lagos residents.",
         })}
       />
 
       <main className={styles["blog-page"]}>
         {/* SEO-optimized heading */}
         <h1 className={styles["blog-page__visually-hidden"]}>
-          Home Services Blog - Expert Tips and Guides for Lagos Homes by Metro Mellow
+          Home Services Blog - Expert Tips and Guides for Lagos Homes by Metro
+          Mellow
         </h1>
 
-        <section 
-          id="blog-hero" 
+        <section
+          id="blog-hero"
           aria-label="Blog Introduction"
           className={styles["blog-page__hero-section"]}
         >
           <BlogHero />
         </section>
 
-        <section 
-          id="featured-posts" 
+        <section
+          id="featured-posts"
           aria-label="Featured Blog Posts"
           className={styles["blog-page__featured-section"]}
         >
-          <BlogFeatured posts={blogPosts.slice(0, 3)} />
+          <div className={styles["blog-page__container"]}>
+            <h2 className={styles["blog-page__section-title"]}>
+              Featured Articles
+            </h2>
+            <BlogFeatured posts={blogPosts.slice(0, 3)} />
+          </div>
         </section>
 
-        <section 
-          id="blog-categories" 
+        <section
+          id="blog-categories"
           aria-label="Blog Categories"
           className={styles["blog-page__categories-section"]}
         >
-          <BlogCategories categories={categories} />
+          <div className={styles["blog-page__container"]}>
+            <h2 className={styles["blog-page__section-title"]}>
+              Browse By Category
+            </h2>
+            <BlogCategories categories={categories} />
+          </div>
         </section>
 
-        <section 
-          id="all-posts" 
+        <section
+          id="all-posts"
           aria-label="All Blog Posts"
           className={styles["blog-page__grid-section"]}
         >
-          <BlogGrid posts={blogPosts} />
+          <div className={styles["blog-page__container"]}>
+            <h2 className={styles["blog-page__section-title"]}>
+              Latest Articles
+            </h2>
+            <BlogGrid posts={blogPosts} />
+          </div>
         </section>
 
         {/* Hidden SEO content */}
         <div className={styles["blog-page__visually-hidden"]}>
           <h2>Home Services Expert Content</h2>
           <p>
-            Our blog covers comprehensive home services guidance for Lagos residents, 
-            including professional cleaning techniques, efficient laundry management, 
-            delicious meal preparation, effective pest control strategies, and general 
-            home maintenance tips. Learn from Metro Mellow's experienced professionals 
-            serving Victoria Island, Lekki, Ikeja, and all Lagos neighborhoods.
+            Our blog covers comprehensive home services guidance for Lagos
+            residents, including professional cleaning techniques, efficient
+            laundry management, delicious meal preparation, effective pest
+            control strategies, and general home maintenance tips. Learn from
+            Metro Mellow's experienced professionals serving Victoria Island,
+            Lekki, Ikeja, and all Lagos neighborhoods.
           </p>
           <h3>Popular Home Services Topics</h3>
           <ul>

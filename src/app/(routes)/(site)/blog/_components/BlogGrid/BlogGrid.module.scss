@@ -2,129 +2,145 @@
 @import "abstracts/mixins";
 
 .blog-grid {
+  width: 100%;
+
   &__container {
-    @include container;
+    /* Container is now handled by parent component */
+    width: 100%;
   }
 
   &__header {
-    text-align: center;
-    margin-bottom: spacing("2xl");
-  }
-  
-  &__title {
-    @include heading-2;
-    color: color("neutral", "black");
-    margin-bottom: spacing("md");
-  }
-  
-  &__description {
-    @include body-1;
-    color: color("neutral", "dark");
-    max-width: 600px;
-    margin: 0 auto;
+    /* Removed as section title is now in parent */
+    display: none;
   }
 
   &__grid {
-    @include grid(repeat(auto-fill, minmax(350px, 1fr)), spacing("xl"));
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: spacing("xl");
     margin-bottom: spacing("2xl");
+
+    &::after {
+      content: "";
+      flex: auto;
+    }
   }
 
   &__load-more {
     @include flex-center;
+    margin-top: spacing("xl");
   }
-  
+
   &__load-more-button {
-    @include button-base;
-    background: color("neutral", "white");
-    color: color("primary", "base");
-    border: 2px solid color("primary", "base");
+    @include button-primary-outline;
+    position: relative;
+    overflow: hidden;
     padding: spacing("md") spacing("xl");
-    border-radius: map-get($border-radius, "lg");
-    @include font-weight("semibold");
-    transition: all 0.2s ease;
-    
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: color("primary", "base");
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.4s ease;
+      z-index: -1;
+    }
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: shadow("md");
       color: color("neutral", "white");
+
+      &::before {
+        transform: scaleX(1);
+        transform-origin: left;
+      }
+    }
+
+    &:active {
+      transform: translateY(-1px);
     }
   }
 
   &__empty-state {
     text-align: center;
     padding: spacing("2xl");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    border: 1px dashed color("neutral", "light");
+    margin: spacing("xl") auto;
+    max-width: 600px;
   }
-  
+
   &__empty-icon {
     font-size: 4rem;
     margin-bottom: spacing("lg");
+    display: inline-block;
+    padding: spacing("md");
+    background: color("neutral", "white");
+    border-radius: 50%;
+    box-shadow: shadow("sm");
   }
-  
+
   &__empty-title {
-    @include heading-3;
-    color: color("neutral", "black");
+    @include heading-4;
+    color: color("primary", "dark");
     margin-bottom: spacing("md");
   }
-  
+
   &__empty-description {
-    @include body-1;
+    @include body-2;
     color: color("neutral", "dark");
     margin-bottom: spacing("lg");
     max-width: 400px;
     margin-left: auto;
     margin-right: auto;
   }
-  
+
   &__empty-action {
-    @include button-base;
-    background: color("primary", "base");
-    color: color("neutral", "white");
-    padding: spacing("md") spacing("xl");
-    border-radius: map-get($border-radius, "lg");
-    @include font-weight("semibold");
+    @include button-primary;
     text-decoration: none;
     display: inline-block;
-    transition: all 0.2s ease;
-    border: none;
-    
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-      background: color("primary", "dark");
-    }
+  }
+
+  // Masonry-style grid effects
+  & .blog-card:nth-child(3n + 1) {
+    transform: translateY(-10px);
+  }
+
+  & .blog-card:nth-child(3n + 3) {
+    transform: translateY(10px);
   }
 
   // Responsive design
-  @include respond-to("mobile") {
-    &__header {
-      margin-bottom: spacing("xl");
-    }
-    
-    &__title {
-      @include heading-3;
-    }
-    
-    &__description {
-      @include body-2;
-    }
-    
+  @include breakpoint-down("lg") {
     &__grid {
-      @include grid(1fr, spacing("lg"));
-    }
-    
-    &__empty-state {
-      padding: spacing("xl") spacing("md");
-    }
-    
-    &__empty-icon {
-      font-size: 3rem;
+      grid-template-columns: repeat(2, 1fr);
+      gap: spacing("lg");
     }
   }
 
-  @include respond-to("tablet") {
+  @include breakpoint-down("md") {
     &__grid {
-      @include grid(repeat(auto-fill, minmax(300px, 1fr)), spacing("lg"));
+      grid-template-columns: 1fr;
+    }
+
+    & .blog-card {
+      transform: none !important;
+    }
+
+    &__empty-state {
+      padding: spacing("xl") spacing("md");
+    }
+
+    &__empty-icon {
+      font-size: 3rem;
     }
   }
 }

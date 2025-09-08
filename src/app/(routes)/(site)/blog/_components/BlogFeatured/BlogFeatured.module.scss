@@ -2,72 +2,130 @@
 @import "abstracts/mixins";
 
 .blog-featured {
+  width: 100%;
+  position: relative;
+
   &__container {
-    @include container;
+    /* Container is now handled by parent component */
+    width: 100%;
   }
 
   &__header {
-    text-align: center;
-    margin-bottom: spacing("2xl");
-  }
-  
-  &__title {
-    @include heading-2;
-    color: color("neutral", "black");
-    margin-bottom: spacing("md");
-  }
-  
-  &__description {
-    @include body-1;
-    color: color("neutral", "dark");
-    max-width: 600px;
-    margin: 0 auto;
+    /* Removed as section title is now in parent */
+    display: none;
   }
 
   &__grid {
-    @include grid(2fr 1fr, spacing("lg"));
-    grid-template-rows: auto auto;
-  }
-  
-  &__featured-item {
-    &--primary {
-      grid-row: 1 / 3;
-    }
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: spacing("xl");
+    position: relative;
+    z-index: 1;
   }
 
-  // Responsive design
-  @include respond-to("mobile") {
-    &__header {
-      margin-bottom: spacing("xl");
+  &__featured-item {
+    @include scale-in;
+    animation-delay: calc(var(--order) * 150ms);
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+
+    &:nth-child(1) {
+      --order: 0;
     }
-    
-    &__title {
-      @include heading-3;
+    &:nth-child(2) {
+      --order: 1;
     }
-    
-    &__description {
-      @include body-2;
+    &:nth-child(3) {
+      --order: 2;
     }
-    
-    &__grid {
-      @include grid(1fr, spacing("md"));
-      grid-template-rows: auto;
-    }
-    
-    &__featured-item {
-      &--primary {
-        grid-row: auto;
+
+    &--primary {
+      grid-column: span 3;
+
+      .blog-card {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+
+        &__link {
+          display: grid;
+          grid-template-columns: 1.5fr 1fr;
+        }
+
+        &__image-container {
+          height: 100%;
+          aspect-ratio: auto;
+          border-radius: border-radius("lg") 0 0 border-radius("lg");
+        }
+
+        &__content {
+          padding: spacing("xl");
+        }
+
+        &__title {
+          @include heading-3;
+        }
+
+        &__excerpt {
+          -webkit-line-clamp: 4;
+        }
       }
     }
   }
 
-  @include respond-to("tablet") {
+  // Animation for cards
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  // Responsive design
+  @include breakpoint-down("lg") {
     &__grid {
-      @include grid(1fr, spacing("lg"));
-      
-      .featured-item {
-        &--primary {
-          grid-row: auto;
+      grid-template-columns: 1fr 1fr;
+      gap: spacing("lg");
+    }
+
+    &__featured-item {
+      &--primary {
+        grid-column: span 2;
+
+        .blog-card {
+          &__content {
+            padding: spacing("lg");
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint-down("md") {
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: spacing("md");
+    }
+
+    &__featured-item {
+      &--primary {
+        grid-column: span 1;
+
+        .blog-card {
+          display: block;
+
+          &__link {
+            display: block;
+          }
+
+          &__image-container {
+            aspect-ratio: 16/9;
+            border-radius: border-radius("lg") border-radius("lg") 0 0;
+          }
         }
       }
     }

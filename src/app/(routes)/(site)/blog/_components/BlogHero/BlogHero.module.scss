@@ -2,37 +2,105 @@
 @import "abstracts/mixins";
 
 .blog-hero {
-  padding: spacing("2xl") 0;
-  
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  padding: spacing("3xl") 0;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -10%;
+    right: -5%;
+    width: 40%;
+    height: 70%;
+    background: radial-gradient(
+      circle,
+      rgba(color("primary", "lighter"), 0.3) 0%,
+      rgba(color("primary", "lighter"), 0) 70%
+    );
+    z-index: 0;
+    border-radius: 50%;
+    filter: blur(60px);
+    animation: float 15s infinite alternate ease-in-out;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -10%;
+    left: -5%;
+    width: 30%;
+    height: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(color("secondary", "lighter"), 0.2) 0%,
+      rgba(color("secondary", "lighter"), 0) 70%
+    );
+    z-index: 0;
+    border-radius: 50%;
+    filter: blur(60px);
+    animation: float 20s infinite alternate-reverse ease-in-out;
+  }
+
   &__container {
     @include container;
-    @include grid(1fr 1fr, spacing("2xl"));
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: spacing("4xl");
     align-items: center;
+    position: relative;
+    z-index: 1;
   }
 
   &__content {
-    
+    @include slide-up;
   }
 
   &__title {
     @include heading-1;
     color: color("neutral", "black");
     margin-bottom: spacing("lg");
+    line-height: 1.1;
+    position: relative;
+    display: inline-block;
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background: url("/images/brand/signature-pattern/signature-transparent.png");
+      background-size: contain;
+      opacity: 0.08;
+      top: -20px;
+      right: -40px;
+      z-index: -1;
+      animation: rotate 40s linear infinite;
+    }
   }
 
   &__highlight {
     color: color("primary", "base");
     position: relative;
-    
+    display: inline-block;
+
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       bottom: -4px;
       left: 0;
       right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, color("primary", "base") 0%, color("primary", "light") 100%);
-      border-radius: 2px;
+      height: 4px;
+      background: linear-gradient(
+        90deg,
+        color("primary", "base") 0%,
+        color("secondary", "base") 100%
+      );
+      border-radius: border-radius("full");
+      opacity: 0.7;
     }
   }
 
@@ -40,33 +108,75 @@
     @include body-1;
     color: color("neutral", "dark");
     margin-bottom: spacing("xl");
-    line-height: map-get($line-heights, "relaxed");
+    line-height: line-height("relaxed");
+    max-width: 90%;
+    position: relative;
+    @include slide-up(10px);
+    animation-delay: 150ms;
   }
 
   &__stats {
-    @include flex($justify: flex-start, $align: center);
+    @include flex;
     gap: spacing("xl");
+    @include slide-up(10px);
+    animation-delay: 300ms;
   }
 
   &__stat {
+    padding: spacing("md");
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 255, 255, 0.5)
+    );
+    backdrop-filter: blur(5px);
+    border-radius: border-radius("lg");
+    box-shadow: shadow("sm");
     text-align: center;
+    min-width: 120px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: shadow("md");
+    }
   }
 
   &__stat-number {
-    @include heading-2;
+    @include heading-3;
     color: color("primary", "base");
     display: block;
     margin-bottom: spacing("xs");
   }
-  
+
   &__stat-label {
     @include caption;
     color: color("neutral", "medium");
-    @include font-weight("medium");
+    @include font-weight("semibold");
   }
 
   &__visual {
-    @include flex-center;
+    @include scale-in;
+    animation-delay: 450ms;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(
+        circle,
+        rgba(color("primary", "lighter"), 0.15) 0%,
+        rgba(color("primary", "lighter"), 0) 70%
+      );
+      z-index: -1;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
 
   &__image-container {
@@ -75,58 +185,95 @@
     max-width: 500px;
     aspect-ratio: 1;
   }
-  
+
   &__hero-image {
     width: 100%;
     height: 100%;
     object-fit: contain;
     filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.1));
+    animation: float 6s infinite alternate ease-in-out;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0) rotate(0deg);
+    }
+    100% {
+      transform: translateY(-10px) rotate(2deg);
+    }
+  }
+
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 
   // Responsive design
-  @include respond-to("mobile") {
-    padding: spacing("xl") 0;
-    
+  @include breakpoint-down("lg") {
+    min-height: auto;
+    padding: spacing("2xl") 0;
+
     &__container {
-      @include grid(1fr, spacing("xl"));
+      grid-template-columns: 1fr;
+      gap: spacing("xl");
+    }
+
+    &__content {
       text-align: center;
+      order: 1;
     }
-    
-    &__title {
-      @include heading-2;
-      margin-bottom: spacing("md");
-    }
-    
+
     &__description {
-      @include body-2;
-      margin-bottom: spacing("lg");
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 80%;
     }
-    
+
     &__stats {
       justify-content: center;
-      gap: spacing("lg");
     }
-    
-    &__stat-number {
-      @include heading-3;
-    }
-    
+
     &__visual {
-      order: -1;
+      order: 0;
+      display: flex;
+      justify-content: center;
     }
-    
+
     &__image-container {
-      max-width: 300px;
+      max-width: 400px;
     }
   }
 
-  @include respond-to("tablet") {
-    &__container {
-      gap: spacing("xl");
+  @include breakpoint-down("md") {
+    padding: spacing("xl") 0;
+
+    &__description {
+      @include body-2;
+      margin-bottom: spacing("lg");
+      max-width: 100%;
     }
-    
+
     &__stats {
-      gap: spacing("lg");
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: spacing("md");
+    }
+
+    &__stat {
+      min-width: 100px;
+      padding: spacing("sm");
+    }
+
+    &__stat-number {
+      @include heading-4;
+    }
+
+    &__image-container {
+      max-width: 300px;
     }
   }
 }
