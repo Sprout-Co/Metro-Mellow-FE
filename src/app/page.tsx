@@ -60,77 +60,239 @@ export const metadata = {
   },
 };
 
+// JSON-LD structured data for better SEO
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": "https://metromellow.com",
+  name: "Metro Mellow",
+  description:
+    "Top-rated home services in Lagos including cleaning, laundry, cooking, and pest control.",
+  url: "https://metromellow.com",
+  logo: "https://metromellow.com/images/brand/brand-logo/solid-bg/green-bg.png",
+  image:
+    "https://metromellow.com/images/brand/brand-logo/solid-bg/green-bg.png",
+  telephone: "+2349068249871", // Replace with actual phone
+  email: "team@metromellow.com", // Replace with actual email
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "anike ologuntoye avenue", // Replace with actual street address
+    addressLocality: "Lagos",
+    addressRegion: "Lagos",
+    postalCode: "102213", // Replace with actual postal code
+    addressCountry: "NG",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 6.5244, // Central Lagos coordinates
+    longitude: 3.3792, // Central Lagos coordinates
+  },
+  // Define service area for the entire Lagos state
+  areaServed: {
+    "@type": "State",
+    name: "Lagos State",
+    sameAs: "https://en.wikipedia.org/wiki/Lagos_State",
+  },
+  // Specify service coverage explicitly
+  serviceArea: {
+    "@type": "GeoCircle",
+    geoMidpoint: {
+      "@type": "GeoCoordinates",
+      latitude: 6.5244,
+      longitude: 3.3792,
+    },
+    geoRadius: "50000", // 50km radius to cover all of Lagos State
+  },
+  priceRange: "₦₦-₦₦₦₦",
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+      ],
+      opens: "08:00",
+      closes: "20:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Saturday"],
+      opens: "09:00",
+      closes: "18:00",
+    },
+  ],
+  sameAs: [
+    "https://www.facebook.com/metromellowhq",
+    "https://www.instagram.com/metromellowhq",
+    "https://x.com/metromellowhq",
+    "https://www.youtube.com/@metromellowhq",
+  ],
+  // Service offerings schema
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Home Services",
+    itemListElement: [
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Cleaning Services",
+          description:
+            "Professional home and office cleaning services in Lagos.",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Laundry Services",
+          description: "Comprehensive laundry and dry cleaning services.",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Meal Preparation",
+          description: "Delicious meal preparation and delivery services.",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Pest Control",
+          description:
+            "Effective and safe pest control services for homes and businesses.",
+        },
+      },
+    ],
+  },
+  // Aggregate rating schema
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.8",
+    reviewCount: "150",
+  },
+};
+
 export default function Home() {
   const faqItems: FAQItem[] = [
     {
       id: "1",
-      question: "How do I book a service?",
+      question: "How do I book home cleaning services in Lagos?",
       answer:
-        "You can book a service by clicking the 'Book a service' button on the homepage.",
+        "You can book our professional home cleaning services in Lagos by clicking the 'Book a Service' button on our website or by calling us directly. We offer same-day service for many neighborhoods across Lagos.",
     },
     {
       id: "2",
-      question: "How do I cancel a service?",
+      question: "What laundry and dry cleaning services do you offer?",
       answer:
-        "You can cancel a service by clicking the 'Cancel a service' button on the homepage.",
+        "Our comprehensive laundry services include wash & fold, dry cleaning, ironing, stain removal, and garment repairs. We pick up and deliver throughout Lagos, with eco-friendly options available.",
     },
-
     {
       id: "3",
-      question: "How do I track a service?",
+      question: "Do you offer meal preparation and food delivery in Lagos?",
       answer:
-        "You can track a service by clicking the 'Track a service' button on the homepage.",
+        "Yes, our professional chefs prepare delicious meals with local and international cuisine options. We offer meal plans, one-time cooking services, and food delivery throughout Lagos with customizable dietary options.",
     },
-
     {
       id: "4",
-      question: "How do I rate a service?",
+      question: "How quickly can you respond to pest control emergencies?",
       answer:
-        "You can rate a service by clicking the 'Rate a service' button on the homepage.",
+        "Our pest control experts can respond to emergencies within 24 hours in most Lagos neighborhoods. We use safe, effective treatments for all types of pest issues and offer prevention plans to keep your home pest-free.",
     },
-
     {
       id: "5",
-      question: "How do I leave a review?",
+      question: "Do you offer home service subscriptions or packages?",
       answer:
-        "You can leave a review by clicking the 'Leave a review' button on the homepage.",
+        "Yes, we offer flexible subscription plans that combine our cleaning, laundry, cooking, and pest control services at discounted rates. Our packages can be customized to your specific needs and schedule in Lagos.",
     },
   ];
   return (
     <>
+      {/* Add JSON-LD structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <Navbar />
       <main>
         {/* Hero Section - First impression */}
-        <Hero />
+        <section
+          id="home-services-lagos"
+          aria-label="Professional Home Services in Lagos"
+        >
+          <Hero />
+        </section>
 
         {/* Experience Section - Value proposition */}
-        <ExperienceSection />
+        <section id="why-choose-us" aria-label="Why Choose Metro Mellow">
+          <ExperienceSection />
+        </section>
 
         {/* Services Gallery - Visual showcase */}
-        <ServicesGallery />
+        <section id="services-gallery" aria-label="Our Services Gallery">
+          <ServicesGallery />
+        </section>
 
         {/* Service Hero - Quick service overview */}
-        <ServiceHero />
+        <section
+          id="home-services-overview"
+          aria-label="Home Services Overview"
+        >
+          <ServiceHero />
+        </section>
 
         {/* Chores Section - Service benefits */}
-        <ChoresSection />
+        <section
+          id="house-cleaning-services"
+          aria-label="Professional Cleaning Services"
+        >
+          <ChoresSection />
+        </section>
 
-        {/* NEW: Tasks Carousel - Don't waste time section */}
-        <TasksCarousel />
+        {/* Tasks Carousel - Don't waste time section */}
+        <section
+          id="household-tasks"
+          aria-label="Let Us Handle Your Household Tasks"
+        >
+          <TasksCarousel />
+        </section>
 
         {/* Service Catalog - Detailed services */}
-        <ServiceCatalog />
+        <section
+          id="lagos-services-catalog"
+          aria-label="Lagos Home Services Catalog"
+        >
+          <ServiceCatalog />
+        </section>
 
         {/* Mobile App Promo - App benefits */}
-        <MobileAppPromoSection />
+        <section id="mobile-app-booking" aria-label="Book Services On The Go">
+          <MobileAppPromoSection />
+        </section>
 
         {/* To-Do to Ta-Da - Process explanation */}
-        <ToDoToTaDaSection />
+        <section id="how-it-works" aria-label="How Metro Mellow Works">
+          <ToDoToTaDaSection />
+        </section>
 
         {/* Testimonials - Social proof */}
-        <TestimonialCarouselSection />
+        <section id="customer-reviews" aria-label="Customer Reviews">
+          <TestimonialCarouselSection />
+        </section>
 
-        <FAQSection faqs={faqItems} />
+        {/* FAQ Section with structured data */}
+        <section id="home-services-faq" aria-label="Frequently Asked Questions">
+          <FAQSection faqs={faqItems} />
+        </section>
       </main>
       <Footer />
     </>
