@@ -14,6 +14,15 @@ export default function Footer() {
 
   return (
     <footer className={styles.footerSection}>
+      <div className={styles.signaturePattern} aria-hidden="true">
+        <Image
+          src="/images/brand/signature-pattern/Pattern.png"
+          alt=""
+          fill
+          className={styles.patternImage}
+          priority={false}
+        />
+      </div>
       <div className={styles.footerContent}>
         <div className={styles.leftCol}>
           <Link href="/" className={styles.footer__brand}>
