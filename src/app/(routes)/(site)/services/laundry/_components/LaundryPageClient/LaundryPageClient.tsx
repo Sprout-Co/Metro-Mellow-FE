@@ -18,7 +18,8 @@ const laundryFaqs: FAQItem[] = [
   {
     id: "l1",
     question: "Do you offer same-day laundry service?",
-    answer: "Yes, we offer same-day service for most orders placed before noon.",
+    answer:
+      "Yes, we offer same-day service for most orders placed before noon.",
   },
   {
     id: "l2",
@@ -69,8 +70,8 @@ const LaundryPageClient: React.FC = () => {
       />
       <LaundryFeatures />
       <LaundrySuds />
-      <LaundryPlan />
       <LaundryStepsSection />
+      <LaundryPlan />
       <FAQSection faqs={laundryFaqs} />
     </>
   );

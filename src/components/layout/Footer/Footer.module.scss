@@ -7,6 +7,8 @@
   background: map-get(map-get($colors, "primary"), "base");
   color: map-get(map-get($colors, "neutral"), "white");
   padding: map-get($spacing, "4xl") 0;
+  position: relative;
+  overflow: hidden;
 }
 
 .footerContent {
@@ -153,4 +155,27 @@
       color: map-get(map-get($colors, "accent"), "base");
     }
   }
+}
+
+.signaturePattern {
+  height: 100%;
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 1;
+
+  @media (max-width: 768px) {
+    height: 150px;
+    top: -30px;
+  }
+}
+
+.patternImage {
+  object-fit: cover;
+  object-position: center bottom;
+  filter: brightness(1.5) contrast(0.8);
+}
+
+.footerContent {
+  position: relative;
+  z-index: 2;
 }

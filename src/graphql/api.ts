@@ -2080,6 +2080,13 @@ export type GetNotificationStatsQueryVariables = Exact<{
 
 export type GetNotificationStatsQuery = { __typename?: 'Query', notificationStats: { __typename?: 'NotificationStats', total: number, unread: number, byType: Array<{ __typename?: 'NotificationTypeCount', type: NotificationType, count: number }>, byPriority: Array<{ __typename?: 'NotificationPriorityCount', priority: NotificationPriority, count: number }> } };
 
+export type IsUserOnlineQueryVariables = Exact<{
+  userId: Scalars['ID']['input'];
+}>;
+
+
+export type IsUserOnlineQuery = { __typename?: 'Query', isUserOnline: boolean };
+
 export type GetPaymentByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -5817,6 +5824,44 @@ export type GetNotificationStatsQueryHookResult = ReturnType<typeof useGetNotifi
 export type GetNotificationStatsLazyQueryHookResult = ReturnType<typeof useGetNotificationStatsLazyQuery>;
 export type GetNotificationStatsSuspenseQueryHookResult = ReturnType<typeof useGetNotificationStatsSuspenseQuery>;
 export type GetNotificationStatsQueryResult = Apollo.QueryResult<GetNotificationStatsQuery, GetNotificationStatsQueryVariables>;
+export const IsUserOnlineDocument = gql`
+    query IsUserOnline($userId: ID!) {
+  isUserOnline(userId: $userId)
+}
+    `;
+
+/**
+ * __useIsUserOnlineQuery__
+ *
+ * To run a query within a React component, call `useIsUserOnlineQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIsUserOnlineQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIsUserOnlineQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useIsUserOnlineQuery(baseOptions: ApolloReactHooks.QueryHookOptions<IsUserOnlineQuery, IsUserOnlineQueryVariables> & ({ variables: IsUserOnlineQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<IsUserOnlineQuery, IsUserOnlineQueryVariables>(IsUserOnlineDocument, options);
+      }
+export function useIsUserOnlineLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<IsUserOnlineQuery, IsUserOnlineQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<IsUserOnlineQuery, IsUserOnlineQueryVariables>(IsUserOnlineDocument, options);
+        }
+export function useIsUserOnlineSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<IsUserOnlineQuery, IsUserOnlineQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<IsUserOnlineQuery, IsUserOnlineQueryVariables>(IsUserOnlineDocument, options);
+        }
+export type IsUserOnlineQueryHookResult = ReturnType<typeof useIsUserOnlineQuery>;
+export type IsUserOnlineLazyQueryHookResult = ReturnType<typeof useIsUserOnlineLazyQuery>;
+export type IsUserOnlineSuspenseQueryHookResult = ReturnType<typeof useIsUserOnlineSuspenseQuery>;
+export type IsUserOnlineQueryResult = Apollo.QueryResult<IsUserOnlineQuery, IsUserOnlineQueryVariables>;
 export const GetPaymentByIdDocument = gql`
     query GetPaymentById($id: ID!) {
   payment(id: $id) {

@@ -1,146 +1,146 @@
-@import '../../../../../../styles/abstracts/variables';
-@import '../../../../../../styles/abstracts/functions';
-@import '../../../../../../styles/abstracts/mixins';
+@import "../../../../../../styles/abstracts/variables";
+@import "../../../../../../styles/abstracts/functions";
+@import "../../../../../../styles/abstracts/mixins";
 
 .contactInfo {
   position: relative;
-  background-color: color('neutral', 'lightest');
-  padding: spacing('6xl') 0;
-  
-  @include breakpoint-down('md') {
-    padding: spacing('4xl') 0;
+  // background-color: color('neutral', 'lightest');
+  padding: spacing("6xl") 0;
+
+  @include breakpoint-down("md") {
+    padding: spacing("4xl") 0;
   }
-  
-  @include breakpoint-down('sm') {
-    padding: spacing('3xl') 0;
+
+  @include breakpoint-down("sm") {
+    padding: spacing("3xl") 0;
   }
-  
+
   &__container {
     @include container;
   }
-  
+
   &__content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: spacing('4xl');
+    gap: spacing("4xl");
     align-items: flex-start;
-    
-    @include breakpoint-down('md') {
+
+    @include breakpoint-down("md") {
       grid-template-columns: 1fr;
-      gap: spacing('3xl');
+      gap: spacing("3xl");
     }
   }
-  
+
   &__heading {
-    @include breakpoint-down('md') {
+    @include breakpoint-down("md") {
       text-align: center;
     }
   }
-  
+
   &__title {
     @include heading-2;
-    color: color('neutral', 'black');
-    margin-bottom: spacing('lg');
-    font-size: font-size('h2');
+    color: color("neutral", "black");
+    margin-bottom: spacing("lg");
+    font-size: font-size("h2");
     line-height: 1.1;
-    font-weight: map-get($font-weights, 'bold');
-    
-    @include breakpoint-down('md') {
-      font-size: font-size('h3');
+    font-weight: map-get($font-weights, "bold");
+
+    @include breakpoint-down("md") {
+      font-size: font-size("h3");
     }
-    
-    @include breakpoint-down('sm') {
-      font-size: font-size('h4');
+
+    @include breakpoint-down("sm") {
+      font-size: font-size("h4");
     }
   }
-  
+
   &__titleLarge {
     display: block;
-    font-size: font-size('h1');
-    font-weight: map-get($font-weights, 'bold');
-    
-    @include breakpoint-down('md') {
-      font-size: font-size('h2');
+    font-size: font-size("h1");
+    font-weight: map-get($font-weights, "bold");
+
+    @include breakpoint-down("md") {
+      font-size: font-size("h2");
     }
-    
-    @include breakpoint-down('sm') {
-      font-size: font-size('h3');
+
+    @include breakpoint-down("sm") {
+      font-size: font-size("h3");
     }
   }
-  
+
   &__subtitle {
     @include body-1;
-    color: color('neutral', 'darkest');
+    color: color("neutral", "darkest");
     max-width: 25rem;
-    font-size: font-size('body-1');
-    line-height: line-height('relaxed');
-    
-    @include breakpoint-down('md') {
-      font-size: font-size('body-2');
+    font-size: font-size("body-1");
+    line-height: line-height("relaxed");
+
+    @include breakpoint-down("md") {
+      font-size: font-size("body-2");
       margin: 0 auto;
     }
   }
-  
+
   &__details {
     display: flex;
     flex-direction: column;
-    gap: spacing('3xl');
-    
-    @include breakpoint-down('md') {
-      gap: spacing('2xl');
+    gap: spacing("3xl");
+
+    @include breakpoint-down("md") {
+      gap: spacing("2xl");
     }
   }
-  
+
   &__item {
     display: flex;
     align-items: center;
-    gap: spacing('lg');
-    
-    @include breakpoint-down('md') {
+    gap: spacing("lg");
+
+    @include breakpoint-down("md") {
       justify-content: center;
     }
-    
-    @include breakpoint-down('sm') {
+
+    @include breakpoint-down("sm") {
       flex-direction: column;
       text-align: center;
-      gap: spacing('md');
+      gap: spacing("md");
     }
   }
-  
+
   &__iconWrapper {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: spacing('4xl');
-    height: spacing('4xl');
-    background-color: color('neutral', 'lighter');
-    border-radius: border-radius('md');
-    
-    @include breakpoint-down('sm') {
-      width: spacing('3xl');
-      height: spacing('3xl');
+    width: spacing("4xl");
+    height: spacing("4xl");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
+
+    @include breakpoint-down("sm") {
+      width: spacing("3xl");
+      height: spacing("3xl");
     }
   }
-  
+
   &__icon {
-    width: spacing('xl');
-    height: spacing('xl');
-    color: color('primary', 'base');
-    
-    @include breakpoint-down('sm') {
-      width: spacing('lg');
-      height: spacing('lg');
+    width: spacing("xl");
+    height: spacing("xl");
+    color: color("primary", "base");
+
+    @include breakpoint-down("sm") {
+      width: spacing("lg");
+      height: spacing("lg");
     }
   }
-  
+
   &__text {
     @include body-1;
-    color: color('neutral', 'darker');
-    font-size: font-size('body-1');
-    line-height: line-height('relaxed');
-    
-    @include breakpoint-down('md') {
-      font-size: font-size('body-2');
+    color: color("neutral", "darker");
+    font-size: font-size("body-1");
+    line-height: line-height("relaxed");
+
+    @include breakpoint-down("md") {
+      font-size: font-size("body-2");
     }
   }
-} 
+}

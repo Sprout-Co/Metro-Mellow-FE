@@ -148,6 +148,49 @@
     }
   }
 
+  &__notificationDropdown {
+    .trigger {
+      @include flex-center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: border-radius("full");
+      color: color("neutral", "dark");
+      cursor: pointer;
+      transition: $transition-base;
+      background: none;
+      border: none;
+      padding: 0;
+
+      &:hover {
+        background-color: color("neutral", "lighter");
+        color: color("primary", "base");
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px color("primary", "base");
+      }
+
+      .bellIcon {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+
+      @include breakpoint-down("sm") {
+        width: 2rem;
+        height: 2rem;
+        
+        .bellIcon {
+          width: 1rem;
+          height: 1rem;
+        }
+      }
+    }
+
+    // Ensure dropdown appears above other elements
+    z-index: z-index("dropdown");
+  }
+
   &__cartContainer {
     position: relative;
   }

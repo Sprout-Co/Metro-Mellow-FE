@@ -36,7 +36,8 @@ import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperati
 import { Booking, BookingStatus } from "@/graphql/api";
 
 // Type for GraphQL subscription data
-type Subscription = GetCustomerSubscriptionsQuery["customerSubscriptions"][0];
+type SubscriptionType =
+  GetCustomerSubscriptionsQuery["customerSubscriptions"][0];
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 import SubscriptionConfirmActionModal, {
   SubscriptionActionType,
@@ -47,13 +48,15 @@ type TabType = "overview" | "services" | "bookings" | "billing";
 interface SubscriptionDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
-  subscription: Subscription | null;
+  subscription: SubscriptionType | null;
+  refetchSubscriptions?: () => void;
 }
 
 const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   isOpen,
   onClose,
   subscription,
+  refetchSubscriptions,
 }) => {
   // Early return before any hooks to comply with Rules of Hooks
   if (!subscription) return null;
@@ -243,13 +246,20 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   }
 
   function handleConfirmActionSuccess(reason?: string) {
-    // Optionally handle the success callback
+    // Log the action for debugging
     console.log(
       "Subscription action completed:",
       confirmationActionType,
       reason
     );
-    // You might want to refetch subscription data or show a toast notification
+
+    // Close the detail modal after successful action
+    onClose();
+
+    // Refresh the subscriptions data to reflect changes
+    if (refetchSubscriptions) {
+      refetchSubscriptions();
+    }
   }
 
   const renderFooterButtons = () => {

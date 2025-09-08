@@ -5,6 +5,9 @@ interface GoogleTagManagerProps {
 }
 
 export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
+  if (process.env.NODE_ENV === "development") {
+    return null;
+  }
   return (
     <>
       {/* Google Tag Manager (noscript) */}
@@ -22,6 +25,9 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
 }
 
 export function GoogleTagManagerScript({ gtmId }: GoogleTagManagerProps) {
+  if (process.env.NODE_ENV === "development") {
+    return null;
+  }
   return (
     <Script
       id="google-tag-manager"

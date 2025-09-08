@@ -230,7 +230,10 @@ const SubscriptionsMain: React.FC = () => {
           </div>
         ) : filteredSubscriptions.length > 0 ? (
           viewType === "list" ? (
-            <SubscriptionListView subscriptions={filteredSubscriptions} />
+            <SubscriptionListView
+              subscriptions={filteredSubscriptions}
+              refetchSubscriptions={() => refetch()}
+            />
           ) : (
             <SubscriptionGridView subscriptions={filteredSubscriptions} />
           )

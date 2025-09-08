@@ -58,8 +58,6 @@ const CleaningPageClient: React.FC = () => {
     },
   });
 
-  console.log(servicesData);
-
   return (
     <>
       <CleaningHero />

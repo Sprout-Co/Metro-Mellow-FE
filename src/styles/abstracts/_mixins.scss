@@ -804,10 +804,10 @@ $semantic-breakpoints: (
 }
 
 //Hero Mixins
-@mixin hero-base {
+@mixin hero-base($height: "100vh") {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  min-height: $height;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -837,4 +837,8 @@ $semantic-breakpoints: (
     padding-top: spacing("2xl");
     padding-bottom: spacing("2xl");
   }
+}
+
+@mixin section-border {
+  border-bottom: 1px solid color("neutral", "light");
 }

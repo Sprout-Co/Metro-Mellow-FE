@@ -6,6 +6,8 @@ import Image from "next/image";
 import styles from "./Navbar.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import { Bell, ChevronDown, MapPin, Menu, User } from "lucide-react";
+import { NotificationButton } from "@/components/ui/Notifications/NotificationButton/NotificationButton";
+import { NotificationDrawer } from "@/components/ui/Notifications/NotificationDrawer/NotificationDrawer";
 import AddAddressModal from "./AddAddressModal/AddAddressModal";
 import { useDispatch, useSelector } from "react-redux";
 import { openServicesListDrawer } from "@/lib/redux/slices/uiSlice";
@@ -58,6 +60,8 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
   const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
+  const [isNotificationDrawerOpen, setIsNotificationDrawerOpen] =
+    useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
@@ -101,9 +105,14 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
             Order Now!
           </FnButton>
           {/* Notification */}
-          <motion.div className={styles.navbar__iconButton}>
-            <Bell />
-          </motion.div>
+          <NotificationButton
+            className={styles.navbar__notificationDropdown}
+            onNotificationClick={(notification) => {
+              console.log("Customer notification clicked:", notification);
+              // Handle notification click - could navigate to specific page
+            }}
+            onViewAllClick={() => setIsNotificationDrawerOpen(true)}
+          />
 
           {/* Cart */}
           {/* <motion.div className={styles.navbar__iconButton}>
@@ -173,6 +182,15 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
         items={[]}
         onUpdateQuantity={() => {}}
         onRemoveItem={() => {}}
+      />
+      <NotificationDrawer
+        isOpen={isNotificationDrawerOpen}
+        onClose={() => setIsNotificationDrawerOpen(false)}
+        onNotificationClick={(notification) => {
+          console.log("Drawer notification clicked:", notification);
+          // Handle notification click - could navigate to specific page
+        }}
+        position="right"
       />
     </nav>
   );

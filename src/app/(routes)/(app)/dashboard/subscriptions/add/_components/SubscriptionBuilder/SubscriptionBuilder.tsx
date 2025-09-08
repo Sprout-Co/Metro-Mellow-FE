@@ -1,18 +1,8 @@
-// src/app/(routes)/(site)/bookings/_components/SubscriptionBuilder/SubscriptionBuilder.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Calendar,
-  Clock,
-  ChevronRight,
-  Sparkles,
-  Shield,
-  Zap,
-  ArrowRight,
-  Check,
-} from "lucide-react";
+import { motion } from "framer-motion";
+import { Sparkles } from "lucide-react";
 import styles from "./SubscriptionBuilder.module.scss";
 import ServiceSelector from "./ServiceSelector/ServiceSelector";
 import BillingConfiguration from "./BillingConfiguration/BillingConfiguration";
@@ -21,7 +11,6 @@ import ServiceConfigDrawer from "./ServiceConfigDrawer/ServiceConfigDrawer";
 import ValidationErrors from "./ValidationErrors/ValidationErrors";
 import {
   Service,
-  ServiceCategory,
   ServiceStatus,
   BillingCycle,
   CreateSubscriptionInput,
@@ -35,13 +24,16 @@ import CheckoutSummary from "./CheckoutSummary/CheckoutSummary";
 import {
   validateSubscription,
   validateServiceConfiguration,
-  validateBillingConfiguration,
   ValidationError,
 } from "./validation";
 import { showToast } from "../../../../../../../../components/ui/Toast/Toast";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
-import { selectCurrentUser } from "@/lib/redux/slices/authSlice";
+import {
+  selectCurrentUser,
+  selectIsAuthenticated,
+} from "@/lib/redux/slices/authSlice";
+import LoginModal from "@/components/ui/booking/modals/LoginModal/LoginModal";
 
 export type DurationType = 1 | 2 | 3 | 6 | 12;
 
@@ -69,7 +61,7 @@ const SubscriptionBuilder: React.FC = () => {
   const [editingServiceId, setEditingServiceId] = useState<string | null>(null);
   const [servicesLoading, setServicesLoading] = useState(false);
   const [servicesError, setServicesError] = useState<string | null>(null);
-
+  const [showLoginModal, setShowLoginModal] = useState(false);
   // Subscription creation state
   const [startDate, setStartDate] = useState<Date>(() => {
     const tomorrow = new Date();
@@ -90,6 +82,7 @@ const SubscriptionBuilder: React.FC = () => {
   const { handleCreateSubscription } = useSubscriptionOperations();
   const router = useRouter();
   const currentUser = useSelector(selectCurrentUser);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   // Fetch services
   useEffect(() => {
@@ -218,6 +211,11 @@ const SubscriptionBuilder: React.FC = () => {
 
   // Handle checkout with validation
   const handleCheckout = () => {
+    if (!isAuthenticated) {
+      showToast("Please login to checkout", "error");
+      setShowLoginModal(true);
+      return;
+    }
     if (validateCheckout()) {
       setCurrentView("checkout");
     }
@@ -438,6 +436,14 @@ const SubscriptionBuilder: React.FC = () => {
             : undefined
         }
         onSave={handleServiceConfigSave}
+      />
+
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={() => {
+          setShowLoginModal(false);
+          handleCheckout();
+        }}
       />
     </div>
   );

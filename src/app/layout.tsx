@@ -6,6 +6,7 @@ import "@/styles/main.scss";
 import ApolloWrapper from "@/components/providers/ApolloWrapper";
 import ReduxProvider from "@/components/providers/ReduxProvider";
 import { AuthInitializer } from "@/components/providers/AuthInitializer";
+import { NotificationProvider } from "@/components/providers/NotificationProvider";
 import ModalProvider from "./_components/ModalProvider";
 import {
   GoogleTagManagerScript,
@@ -50,8 +51,10 @@ export default function RootLayout({
         <ReduxProvider>
           <ApolloWrapper>
             <AuthInitializer>
-              <CommonInitializer>{children}</CommonInitializer>
-              {/* <ModalProvider /> */}
+              <NotificationProvider>
+                <CommonInitializer>{children}</CommonInitializer>
+                {/* <ModalProvider /> */}
+              </NotificationProvider>
             </AuthInitializer>
           </ApolloWrapper>
         </ReduxProvider>

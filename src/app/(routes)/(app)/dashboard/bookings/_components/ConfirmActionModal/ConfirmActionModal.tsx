@@ -140,18 +140,28 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
     setError(null);
 
     try {
+      let result;
       switch (actionType) {
         case "cancel":
-          await handleCancelBooking(booking.id, finalReason);
+          result = await handleCancelBooking(booking.id, finalReason);
           break;
         case "pause":
-          await handleUpdateBookingStatus(booking.id, BookingStatus.Paused);
+          result = await handleUpdateBookingStatus(
+            booking.id,
+            BookingStatus.Paused
+          );
           break;
         case "resume":
-          await handleUpdateBookingStatus(booking.id, BookingStatus.Confirmed);
+          result = await handleUpdateBookingStatus(
+            booking.id,
+            BookingStatus.Confirmed
+          );
           break;
         case "complete":
-          await handleUpdateBookingStatus(booking.id, BookingStatus.Completed);
+          result = await handleUpdateBookingStatus(
+            booking.id,
+            BookingStatus.Completed
+          );
           break;
         default:
           break;
@@ -159,6 +169,7 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
 
       setShowSuccess(true);
 
+      // Immediately call onConfirm to trigger data refresh
       if (onConfirm) {
         onConfirm(finalReason);
       }

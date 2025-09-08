@@ -33,11 +33,12 @@ import BookingDetailModal from "../BookingDetailModal/BookingDetailModal";
 
 interface ListViewProps {
   bookings: Booking[];
+  refetchBookings?: () => void;
 }
 
 type TabType = "all" | "active" | "pending" | "past";
 
-const ListView: React.FC<ListViewProps> = ({ bookings }) => {
+const ListView: React.FC<ListViewProps> = ({ bookings, refetchBookings }) => {
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
@@ -440,6 +441,7 @@ const ListView: React.FC<ListViewProps> = ({ bookings }) => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           booking={selectedBooking}
+          refetchBookings={refetchBookings}
         />
       )}
     </>

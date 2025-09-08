@@ -42,12 +42,14 @@ import { calculateSubscriptionProgress } from "../../utils/subscriptionProgress"
 
 interface SubscriptionListViewProps {
   subscriptions: Subscription[];
+  refetchSubscriptions?: () => void;
 }
 
 type TabType = "active" | "paused" | "expired";
 
 const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
   subscriptions,
+  refetchSubscriptions,
 }) => {
   const [selectedSubscription, setSelectedSubscription] =
     useState<Subscription | null>(null);
@@ -502,6 +504,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         subscription={selectedSubscription}
+        refetchSubscriptions={refetchSubscriptions}
       />
     </>
   );

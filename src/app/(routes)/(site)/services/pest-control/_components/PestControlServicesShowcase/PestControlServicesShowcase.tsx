@@ -1,3 +1,4 @@
+// src/app/(routes)/(site)/services/pest-control/_components/PestControlServicesShowcase/PestControlServicesShowcase.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -5,11 +6,20 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import styles from "./PestControlServicesShowcase.module.scss";
 import { Button } from "@/components/ui/Button/Button";
-import { ServiceConfiguration } from "@/components/ui/booking/modals/ServiceModal/ServiceModal";
-import { GetServicesQuery, ServiceOption } from "@/graphql/api";
 import PestControlServiceModal, {
   PestControlServiceConfiguration,
 } from "@/components/ui/booking/modals/PestControlServiceModal";
+import { GetServicesQuery, ServiceOption } from "@/graphql/api";
+import {
+  Shield,
+  Home,
+  Building,
+  ArrowRight,
+  CheckCircle,
+  AlertCircle,
+  Leaf,
+} from "lucide-react";
+import ServiceShowcaseCard from "../../../_components/common/ServiceShowcaseCard/ServiceShowcaseCard";
 
 interface PestControlServicesShowcaseProps {
   servicesData?: GetServicesQuery["services"];
@@ -25,22 +35,47 @@ const PestControlServicesShowcase: React.FC<
     threshold: 0.1,
   });
 
-  // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedServiceOption, setSelectedServiceOption] =
     useState<ServiceOption | null>(null);
 
-  // Configuration for pest control service modal
-  const getPestControlServiceConfiguration = (): ServiceConfiguration => ({
-    options: [
-      { id: "bedrooms", name: "Bedrooms", count: 1 },
-      { id: "livingrooms", name: "Living Rooms", count: 1 },
-      { id: "kitchen", name: "Kitchen", count: 1 },
-      { id: "bathrooms", name: "Bathrooms", count: 1 },
-      { id: "outdoor", name: "Outdoor Area", count: 1 },
-    ],
-    allowCustomization: true,
-  });
+  const getServiceInfo = (serviceName: string) => {
+    const name = serviceName.toLowerCase();
+    if (name.includes("residential") || name.includes("home")) {
+      return {
+        icon: <Home />,
+        emoji: "🏠",
+        color: "#F0FDF4",
+        badge: "Most Popular",
+        showBadge: true,
+      };
+    }
+    if (name.includes("commercial") || name.includes("office")) {
+      return {
+        icon: <Building />,
+        emoji: "🏢",
+        color: "#FEF3C7",
+        badge: "Business",
+        showBadge: false,
+      };
+    }
+    if (name.includes("emergency")) {
+      return {
+        icon: <AlertCircle />,
+        emoji: "🚨",
+        color: "#FEE2E2",
+        badge: "24/7 Service",
+        showBadge: true,
+      };
+    }
+    return {
+      icon: <Shield />,
+      emoji: "🛡️",
+      color: "#E0E7FF",
+      badge: "Standard",
+      showBadge: false,
+    };
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -54,34 +89,26 @@ const PestControlServicesShowcase: React.FC<
   };
 
   const cardVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, scale: 0.95 },
     visible: {
       opacity: 1,
-      y: 0,
+      scale: 1,
       transition: {
-        duration: 0.6,
+        duration: 0.5,
         ease: "easeOut",
       },
     },
   };
 
-  // Handle opening the modal with selected service
   const handleOpenModal = (serviceOption: ServiceOption) => {
     setSelectedServiceOption(serviceOption);
     setIsModalOpen(true);
   };
 
-  // Handle closing the modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
 
-  // Handle order submission
-  const handleOrderSubmit = (configuration: any) => {
-    console.log("Pest control service configuration:", configuration);
-  };
-
-  // Features included in pest control services
   const getPestControlIncludedFeatures = () => [
     "EPA-approved pest control products",
     "Experienced and certified pest control technicians",
@@ -91,92 +118,83 @@ const PestControlServicesShowcase: React.FC<
     "Comprehensive pest assessment included",
   ];
 
+  if (loading) {
+    return (
+      <div className={styles.showcase__loading}>
+        <Shield className={styles.showcase__loadingIcon} />
+        <p>Loading pest control services...</p>
+      </div>
+    );
+  }
+
   return (
     <section className={styles.showcase} ref={sectionRef}>
       <div className={styles.showcase__container}>
+        {/* Header Section */}
         <motion.div
           className={styles.showcase__header}
           initial={{ opacity: 0, y: 20 }}
-          animate={
-            inView
-              ? {
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    duration: 0.6,
-                    ease: "easeOut",
-                  },
-                }
-              : { opacity: 0, y: 20 }
-          }
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6 }}
         >
           <h2 className={styles.showcase__title}>
-            Choose Your Pest Control Service
+            Effective Solutions for
+            <span className={styles.showcase__titleAccent}>
+              {" "}
+              Every Pest Problem
+            </span>
           </h2>
           <p className={styles.showcase__subtitle}>
-            From basic treatments to specialized solutions, we have the perfect
-            pest management options for your home or business.
+            From prevention to elimination, our certified experts protect your
+            property with safe, effective treatments
           </p>
         </motion.div>
 
+        {/* Services Grid */}
+        <motion.div className={styles.showcase__grid}>
+          {servicesData?.[0]?.options?.map((service, index) => {
+            const info = getServiceInfo(service.label);
+            return (
+              <ServiceShowcaseCard
+                key={service.id}
+                service={service}
+                onBookNowClick={handleOpenModal}
+              />
+            );
+          })}
+        </motion.div>
+
+        {/* Call to Action Section */}
         <motion.div
-          className={styles.showcase__grid}
-          variants={containerVariants}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
+          className={styles.showcase__cta}
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ delay: 0.5 }}
         >
-          {servicesData?.[0]?.options?.map((service) => (
-            <motion.div
-              key={service.id}
-              className={styles.showcase__card}
-              variants={cardVariants}
-              whileHover={{
-                y: -8,
-                transition: { duration: 0.3 },
-              }}
-            >
-              <div className={styles.showcase__icon}>
-                <span className={styles.showcase__emoji}>🐜</span>
-              </div>
-
-              <div className={styles.showcase__content}>
-                <h3 className={styles.showcase__name}>{service.label}</h3>
-                <p className={styles.showcase__description}>{service.label}</p>
-
-                <ul className={styles.showcase__features}>
-                  {service.inclusions?.map((feature, index) => (
-                    <li key={index} className={styles.showcase__feature}>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-
-                <div className={styles.showcase__priceTag}>
-                  <span className={styles.showcase__priceValue}>
-                    NGN {service.price?.toLocaleString()}
-                  </span>
-                  <span className={styles.showcase__priceUnit}>/service</span>
-                </div>
-
-                <div className={styles.showcase__action}>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={() => handleOpenModal(service)}
-                  >
-                    Book Now
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+          <AlertCircle className={styles.showcase__ctaIcon} />
+          <div className={styles.showcase__ctaContent}>
+            <h3 className={styles.showcase__ctaTitle}>
+              Emergency Pest Problem?
+            </h3>
+            <p className={styles.showcase__ctaText}>
+              We offer 24/7 emergency service for urgent pest situations
+            </p>
+          </div>
+          <Button
+            variant="secondary"
+            size="lg"
+            href="tel:+234800000000"
+            className={styles.showcase__ctaButton}
+          >
+            Call Now: +234 800 000 0000
+          </Button>
         </motion.div>
       </div>
 
       {/* Pest Control Service Modal */}
       {selectedServiceOption && servicesData?.[0] && (
         <PestControlServiceModal
-          serviceImage={"/images/pest-control/p1.jpeg"}
+          serviceImage="/images/pest-control/p1.jpeg"
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           serviceOption={selectedServiceOption}

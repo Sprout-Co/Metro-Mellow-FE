@@ -78,7 +78,7 @@
     line-height: 1;
 
     &--accent {
-      color: color("primary", "light");
+      color: color("accent", "base");
       font-weight: map-get($font-weights, "bold");
       margin-bottom: spacing("sm");
       display: inline;
