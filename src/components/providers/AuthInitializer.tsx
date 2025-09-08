@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { logout, selectIsAuthenticated, selectToken } from "@/lib/redux";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
@@ -15,13 +15,11 @@ export function AuthInitializer({ children }: AuthInitializerProps) {
   const { handleGetCurrentUser } = useAuthOperations();
   const dispatch = useAppDispatch();
   const initializationAttempted = useRef(false);
-  const [isInitializing, setIsInitializing] = useState(false);
 
   useEffect(() => {
     // Prevent multiple initialization attempts and don't block rendering
     if (token && !initializationAttempted.current && !isAuthenticated) {
       initializationAttempted.current = true;
-      setIsInitializing(true);
       
       // Use setTimeout to prevent blocking the render cycle
       setTimeout(() => {
@@ -30,9 +28,6 @@ export function AuthInitializer({ children }: AuthInitializerProps) {
             // Silently handle authentication errors - this is expected when token is invalid/expired
             console.log("Auth initialization failed:", error.message);
             dispatch(logout());
-          })
-          .finally(() => {
-            setIsInitializing(false);
           });
       }, 0);
     }

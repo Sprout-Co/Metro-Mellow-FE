@@ -3,8 +3,6 @@ import type { NextRequest } from "next/server";
 import { Routes } from "@/constants/routes";
 import {
   decodeAndValidateToken,
-  getUserRoleFromToken,
-  isTokenValid,
 } from "./utils/jwt";
 
 // Define protected routes that require authentication

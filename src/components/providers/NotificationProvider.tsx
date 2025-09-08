@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, ReactNode } from "react";
+import React, { createContext, useContext, ReactNode, useMemo } from "react";
 import { useNotificationOperations } from "@/graphql/hooks/notifications/useNotificationOperations";
 
 interface NotificationContextType {
@@ -87,7 +87,8 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     console.log("Socket connection not needed in simplified mode");
   };
 
-  const contextValue: NotificationContextType = {
+  // Memoize context value to prevent unnecessary re-renders
+  const contextValue: NotificationContextType = useMemo(() => ({
     notifications: notifications || [],
     unreadCount: unreadCount || 0,
     isLoading: false,
@@ -99,9 +100,18 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     getUnreadNotifications,
     // integrate with socket-notification.ts
     isConnected: true, // Always show as connected since we use GraphQL
-    connectionStatus: "connected",
+    connectionStatus: "connected" as const,
     connectSocket,
-  };
+  }), [
+    notifications, 
+    unreadCount, 
+    markAsRead, 
+    markAllAsRead, 
+    deleteNotification, 
+    refetch, 
+    getUnreadNotifications, 
+    connectSocket
+  ]);
 
   return (
     <NotificationContext.Provider value={contextValue}>
