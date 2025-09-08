@@ -6,26 +6,11 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import styles from "./Footer.module.scss";
 import { Button } from "@/components/ui/Button";
+import { Routes } from "@/constants/routes";
+import { Instagram } from "lucide-react";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you would typically send the email to your API
-    if (email) {
-      setSubscribed(true);
-      setEmail("");
-
-      // Reset the subscribed state after 5 seconds
-      setTimeout(() => {
-        setSubscribed(false);
-      }, 5000);
-    }
-  };
-
-  const currentYear = new Date().getFullYear();
 
   return (
     <footer className={styles.footerSection}>
@@ -52,13 +37,13 @@ export default function Footer() {
             <h3 className={styles.colTitle}>Company</h3>
             <ul>
               <li>
-                <a href="#">About</a>
+                <Link href={Routes.ABOUT}>About</Link>
               </li>
               <li>
-                <a href="#">Booking</a>
+                <Link href="/subscriptions">Subscriptions</Link>
               </li>
               <li>
-                <a href="#">Contact</a>
+                <Link href={Routes.CONTACT}>Contact</Link>
               </li>
             </ul>
           </div>
@@ -66,10 +51,10 @@ export default function Footer() {
             <h3 className={styles.colTitle}>Legal</h3>
             <ul>
               <li>
-                <a href="#">Privacy Policy</a>
+                <Link href={Routes.PRIVACY}>Privacy Policy</Link>
               </li>
               <li>
-                <a href="#">Terms & Conditions</a>
+                <Link href={Routes.TERMS}>Terms & Conditions</Link>
               </li>
             </ul>
           </div>
@@ -77,16 +62,16 @@ export default function Footer() {
             <h3 className={styles.colTitle}>Services</h3>
             <ul>
               <li>
-                <a href="#">Cooking</a>
+                <Link href="/services/food">Cooking</Link>
               </li>
               <li>
-                <a href="#">Laundry</a>
+                <Link href="/services/laundry">Laundry</Link>
               </li>
               <li>
-                <a href="#">Cleaning</a>
+                <Link href="/services/cleaning">Cleaning</Link>
               </li>
               <li>
-                <a href="#">Pests</a>
+                <Link href="/services/pest-control">Pests</Link>
               </li>
             </ul>
           </div>
@@ -94,7 +79,7 @@ export default function Footer() {
             <h3 className={styles.colTitle}>Community</h3>
             <ul className={styles.socialList}>
               <li>
-                <a href="#" aria-label="Twitter">
+                <a href="https://x.com/metromellowhq" aria-label="Twitter">
                   <svg
                     width="20"
                     height="20"
@@ -114,7 +99,10 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#" aria-label="Facebook">
+                <a
+                  href="https://www.facebook.com/metromellowhq"
+                  aria-label="Facebook"
+                >
                   <svg
                     width="20"
                     height="20"
@@ -134,7 +122,10 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#" aria-label="Youtube">
+                <a
+                  href="https://www.youtube.com/@metromellowhq"
+                  aria-label="Youtube"
+                >
                   <svg
                     width="20"
                     height="20"
@@ -157,7 +148,18 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#" aria-label="Linkedin">
+                <a
+                  href="https://www.instagram.com/metromellowhq/"
+                  aria-label="Instagram"
+                >
+                  <Instagram /> Instagram
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/company/metromellow-ltd/"
+                  aria-label="Linkedin"
+                >
                   <svg
                     width="20"
                     height="20"
