@@ -7,7 +7,8 @@ interface StructuredDataProps {
     | "Article"
     | "Service"
     | "FAQPage"
-    | "BreadcrumbList";
+    | "BreadcrumbList"
+    | "Offer";
   data: Record<string, any>;
 }
 
