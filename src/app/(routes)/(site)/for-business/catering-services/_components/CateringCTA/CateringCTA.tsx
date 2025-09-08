@@ -3,26 +3,32 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import { ArrowRight, Phone, Calendar, Utensils, CheckCircle } from "lucide-react";
+import {
+  ArrowRight,
+  Phone,
+  Calendar,
+  Utensils,
+  CheckCircle,
+} from "lucide-react";
 import styles from "./CateringCTA.module.scss";
 
 const benefits = [
   {
     icon: <CheckCircle />,
-    text: "Free tasting sessions for groups of 10+"
+    text: "Free tasting sessions for groups of 10+",
   },
   {
     icon: <CheckCircle />,
-    text: "Custom menu development at no extra cost"
+    text: "Custom menu development at no extra cost",
   },
   {
     icon: <CheckCircle />,
-    text: "Dedicated account manager"
+    text: "Dedicated account manager",
   },
   {
     icon: <CheckCircle />,
-    text: "24/7 event support"
-  }
+    text: "24/7 event support",
+  },
 ];
 
 const contactOptions = [
@@ -30,20 +36,20 @@ const contactOptions = [
     icon: <Phone />,
     title: "Call Now",
     subtitle: "(555) 123-FOOD",
-    description: "Speak with our catering specialists"
+    description: "Speak with our catering specialists",
   },
   {
     icon: <Calendar />,
     title: "Schedule Tasting",
     subtitle: "Free for 10+ people",
-    description: "Experience our menu firsthand"
+    description: "Experience our menu firsthand",
   },
   {
     icon: <Utensils />,
     title: "Custom Quote",
     subtitle: "Tailored pricing",
-    description: "Get pricing for your specific needs"
-  }
+    description: "Get pricing for your specific needs",
+  },
 ];
 
 const CateringCTA: React.FC = () => {
@@ -52,14 +58,14 @@ const CateringCTA: React.FC = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+    visible: { opacity: 1, y: 0 },
   };
 
   return (
@@ -72,7 +78,10 @@ const CateringCTA: React.FC = () => {
           viewport={{ once: true }}
         >
           <h2>Ready to Elevate Your Corporate Dining?</h2>
-          <p>Join hundreds of satisfied businesses who trust Metro Mellow for their catering needs. Let's create something delicious together.</p>
+          <p>
+            Join hundreds of satisfied businesses who trust Metromellow for
+            their catering needs. Let's create something delicious together.
+          </p>
         </motion.div>
 
         <motion.div
@@ -82,7 +91,7 @@ const CateringCTA: React.FC = () => {
           whileInView="visible"
           viewport={{ once: true }}
         >
-          <h3>What You Get With Metro Mellow:</h3>
+          <h3>What You Get With Metromellow:</h3>
           <div className={styles.benefits__grid}>
             {benefits.map((benefit, index) => (
               <motion.div
@@ -90,39 +99,8 @@ const CateringCTA: React.FC = () => {
                 className={styles.benefit__item}
                 variants={itemVariants}
               >
-                <div className={styles.benefit__icon}>
-                  {benefit.icon}
-                </div>
+                <div className={styles.benefit__icon}>{benefit.icon}</div>
                 <span>{benefit.text}</span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        <motion.div
-          className={styles.contact__section}
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <h3>Get Started Today</h3>
-          <div className={styles.contact__options}>
-            {contactOptions.map((option, index) => (
-              <motion.div
-                key={index}
-                className={styles.contact__option}
-                variants={itemVariants}
-                whileHover={{ y: -4 }}
-              >
-                <div className={styles.option__icon}>
-                  {option.icon}
-                </div>
-                <div className={styles.option__content}>
-                  <h4>{option.title}</h4>
-                  <div className={styles.option__subtitle}>{option.subtitle}</div>
-                  <p>{option.description}</p>
-                </div>
               </motion.div>
             ))}
           </div>
@@ -135,32 +113,16 @@ const CateringCTA: React.FC = () => {
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
         >
-          <Button 
-            variant="primary" 
-            size="xl" 
+          <Button
+            variant="primary"
+            size="lg"
             rightIcon={<ArrowRight size={20} />}
           >
             Schedule Free Tasting
           </Button>
-          <Button 
-            variant="outline" 
-            size="xl"
-          >
+          <Button variant="white" size="lg">
             Get Custom Quote
           </Button>
-        </motion.div>
-
-        <motion.div
-          className={styles.urgency__message}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
-        >
-          <p>
-            <strong>Planning an event soon?</strong> Our calendar fills up quickly during peak seasons. 
-            Contact us today to secure your preferred dates.
-          </p>
         </motion.div>
       </div>
     </section>

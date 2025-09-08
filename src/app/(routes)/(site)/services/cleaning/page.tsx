@@ -11,20 +11,20 @@ import {
 
 export const metadata: Metadata = {
   title:
-    "Professional Cleaning Services in Lagos | Home & Office | Metro Mellow",
+    "Professional Cleaning Services in Lagos | Home & Office | Metromellow",
   description:
     "Expert house cleaning services in Lagos. Our professional cleaners deliver spotless results using eco-friendly products. Book same-day service for homes and offices.",
   keywords:
-    "cleaning services Lagos, house cleaning, office cleaning, deep cleaning Lagos, eco-friendly cleaning, Metro Mellow cleaning, same day cleaning service",
+    "cleaning services Lagos, house cleaning, office cleaning, deep cleaning Lagos, eco-friendly cleaning, Metromellow cleaning, same day cleaning service",
   alternates: {
     canonical: "https://metromellow.com/services/cleaning",
   },
   openGraph: {
-    title: "Professional Cleaning Services in Lagos | Metro Mellow",
+    title: "Professional Cleaning Services in Lagos | Metromellow",
     description:
       "Expert house cleaning services across Lagos. Our professional cleaners deliver spotless results with eco-friendly products.",
     url: "https://metromellow.com/services/cleaning",
-    siteName: "Metro Mellow",
+    siteName: "Metromellow",
     locale: "en_NG",
     type: "website",
     images: [
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
         url: "/images/cleaning/c3.jpeg",
         width: 1200,
         height: 630,
-        alt: "Professional cleaning services by Metro Mellow",
+        alt: "Professional cleaning services by Metromellow",
       },
     ],
   },
@@ -49,7 +49,7 @@ export default function CleaningPage() {
     serviceOutput: "Clean, sanitized living and working spaces",
     provider: {
       "@type": "LocalBusiness",
-      name: "Metro Mellow",
+      name: "Metromellow",
       areaServed: {
         "@type": "State",
         name: "Lagos State",
@@ -109,7 +109,7 @@ export default function CleaningPage() {
         type="LocalBusiness"
         data={createLocalBusinessSchema({
           description:
-            "Metro Mellow provides professional cleaning services throughout Lagos, with trained and vetted cleaning professionals using eco-friendly products.",
+            "Metromellow provides professional cleaning services throughout Lagos, with trained and vetted cleaning professionals using eco-friendly products.",
         })}
       />
 

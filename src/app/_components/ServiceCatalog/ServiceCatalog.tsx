@@ -12,6 +12,7 @@ import {
   Service,
   ServiceStatus,
   ServiceOption,
+  ServiceId,
 } from "@/graphql/api";
 import ServiceModal, {
   ServiceConfiguration,
@@ -78,13 +79,45 @@ const ServiceCatalog: FC = () => {
   };
 
   // Function to validate and get safe image URL
-  const getSafeImageUrl = (imageUrl: string | null | undefined): string => {
+  const getSafeImageUrl = (
+    imageUrl: string | null | undefined,
+    serviceId: ServiceId
+  ): string => {
+    console.log("serviceId", serviceId);
+    console.log("imageUrl", imageUrl);
+    // switch (serviceId) {
+    //   case ServiceId.StandardCooking:
+    //     return "/images/food/jollof-rice.png";
+    //   case ServiceId.BasicCooking:
+    //     return "/images/food/jollof-rice.png";
+    //   case ServiceId.StandardCleaning:
+    //     return "/images/cleaning/cleaning-1.png";
+    //   case ServiceId.DeepCleaning:
+    //     return "/images/cleaning/cleaning-1.png";
+    //   case ServiceId.MoveInMoveOutCleaning:
+    //     return "/images/cleaning/cleaning-1.png";
+    //   case ServiceId.PostConstructionCleaning:
+    //     return "/images/cleaning/cleaning-1.png";
+    //   case ServiceId.Laundry:
+    //     return "/images/laundry/laundry-1.png";
+    //   case ServiceId.PremiumLaundry:
+    //     return "/images/laundry/laundry-1.png";
+    //   case ServiceId.DryCleaning:
+    //     return "/images/laundry/laundry-1.png";
+    //   case ServiceId.PestControlResidential:
+    //     return "/images/pest-control/pest-control-1.png";
+    //   case ServiceId.PestControlCommercial:
+    //     return "/images/pest-control/pest-control-1.png";
+    //   default:
+    //     return "/images/food/jollof-rice.png";
+    // }
+
     if (!imageUrl) {
       return "/images/food/jollof-rice.png"; // fallback image
     }
 
     // Check if it's a relative URL (starts with /)
-    if (imageUrl.startsWith("/")) {
+    if (imageUrl.startsWith("/") || imageUrl.startsWith("http")) {
       return imageUrl;
     }
 
@@ -608,7 +641,10 @@ const ServiceCatalog: FC = () => {
                         >
                           <div className={styles.catalog__cardImageWrapper}>
                             <Image
-                              src={getSafeImageUrl(service.imageUrl)}
+                              src={getSafeImageUrl(
+                                option.imageUrl,
+                                option.service_id
+                              )}
                               alt={option.label}
                               width={400}
                               height={300}

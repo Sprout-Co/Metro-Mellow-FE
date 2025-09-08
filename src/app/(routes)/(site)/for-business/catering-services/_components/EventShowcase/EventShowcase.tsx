@@ -2,7 +2,14 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Users, Calendar, MapPin, Star } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Users,
+  Calendar,
+  MapPin,
+  Star,
+} from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import styles from "./EventShowcase.module.scss";
 
@@ -32,25 +39,26 @@ const eventCases: EventCase[] = [
     eventType: "Corporate Conference",
     attendees: 500,
     location: "Downtown Convention Center",
-    description: "A three-day technology conference featuring keynote speakers, breakout sessions, and networking events requiring comprehensive meal service.",
+    description:
+      "A three-day technology conference featuring keynote speakers, breakout sessions, and networking events requiring comprehensive meal service.",
     challenges: [
       "Accommodating 15+ dietary restrictions",
       "Serving 500 people simultaneously",
       "Maintaining food quality over 3 days",
-      "Coordinating with multiple venue areas"
+      "Coordinating with multiple venue areas",
     ],
     solutions: [
       "Custom buffet stations with clear labeling",
       "Professional service staff coordination",
       "On-site kitchen setup for fresh preparation",
-      "Real-time communication system"
+      "Real-time communication system",
     ],
     testimonial: {
-      text: "Metro Mellow exceeded our expectations. The food was exceptional and the service was flawless. Our attendees couldn't stop talking about the meals!",
+      text: "Metromellow exceeded our expectations. The food was exceptional and the service was flawless. Our attendees couldn't stop talking about the meals!",
       author: "Sarah Chen",
-      position: "Event Director, TechCorp Solutions"
+      position: "Event Director, TechCorp Solutions",
     },
-    image: "/images/catering/tech-conference.jpg"
+    image: "/images/catering/tech-conference.jpg",
   },
   {
     id: "product-launch",
@@ -59,25 +67,26 @@ const eventCases: EventCase[] = [
     eventType: "Product Launch Event",
     attendees: 200,
     location: "Corporate Headquarters",
-    description: "An elegant evening event celebrating the launch of a revolutionary product, requiring upscale catering and impeccable presentation.",
+    description:
+      "An elegant evening event celebrating the launch of a revolutionary product, requiring upscale catering and impeccable presentation.",
     challenges: [
       "High-end presentation requirements",
       "Coordinating with media and VIP guests",
       "Limited prep space at venue",
-      "Dietary needs of international guests"
+      "Dietary needs of international guests",
     ],
     solutions: [
       "Premium plated dinner service",
       "Dedicated VIP service team",
       "Mobile kitchen and prep stations",
-      "International cuisine options"
+      "International cuisine options",
     ],
     testimonial: {
       text: "The catering was absolutely perfect. Every detail was handled professionally, allowing us to focus on our guests and product announcement.",
       author: "Michael Rodriguez",
-      position: "CMO, Innovation Inc."
+      position: "CMO, Innovation Inc.",
     },
-    image: "/images/catering/product-launch.jpg"
+    image: "/images/catering/product-launch.jpg",
   },
   {
     id: "team-retreat",
@@ -86,26 +95,27 @@ const eventCases: EventCase[] = [
     eventType: "Corporate Retreat",
     attendees: 50,
     location: "Mountain Resort",
-    description: "A multi-day leadership retreat focusing on strategy and team building, requiring varied meal options in a remote location.",
+    description:
+      "A multi-day leadership retreat focusing on strategy and team building, requiring varied meal options in a remote location.",
     challenges: [
       "Remote location logistics",
       "Outdoor dining requirements",
       "Weather contingency planning",
-      "Varied meal preferences"
+      "Varied meal preferences",
     ],
     solutions: [
       "Mobile catering equipment transport",
       "Weatherproof service setup",
       "Flexible indoor/outdoor options",
-      "Family-style and buffet combinations"
+      "Family-style and buffet combinations",
     ],
     testimonial: {
-      text: "Despite the challenging location, Metro Mellow delivered outstanding service. The meals brought our team together and enhanced the entire retreat experience.",
+      text: "Despite the challenging location, Metromellow delivered outstanding service. The meals brought our team together and enhanced the entire retreat experience.",
       author: "Jennifer Park",
-      position: "VP Operations, Global Finance Corp"
+      position: "VP Operations, Global Finance Corp",
     },
-    image: "/images/catering/team-retreat.jpg"
-  }
+    image: "/images/catering/team-retreat.jpg",
+  },
 ];
 
 const EventShowcase: React.FC = () => {
@@ -116,7 +126,9 @@ const EventShowcase: React.FC = () => {
   };
 
   const prevEvent = () => {
-    setCurrentEvent((prev) => (prev - 1 + eventCases.length) % eventCases.length);
+    setCurrentEvent(
+      (prev) => (prev - 1 + eventCases.length) % eventCases.length
+    );
   };
 
   const currentCase = eventCases[currentEvent];
@@ -131,7 +143,10 @@ const EventShowcase: React.FC = () => {
           viewport={{ once: true }}
         >
           <h2>Corporate Event Success Stories</h2>
-          <p>See how we've helped companies create memorable and successful events through exceptional catering</p>
+          <p>
+            See how we've helped companies create memorable and successful
+            events through exceptional catering
+          </p>
         </motion.div>
 
         <div className={styles.showcase__wrapper}>
@@ -141,14 +156,14 @@ const EventShowcase: React.FC = () => {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
           >
-            <button 
+            <button
               className={styles.nav__button}
               onClick={prevEvent}
               aria-label="Previous event"
             >
               <ChevronLeft />
             </button>
-            <button 
+            <button
               className={styles.nav__button}
               onClick={nextEvent}
               aria-label="Next event"
@@ -171,8 +186,12 @@ const EventShowcase: React.FC = () => {
                   <div className={styles.event__header}>
                     <h3>{currentCase.title}</h3>
                     <div className={styles.event__meta}>
-                      <span className={styles.client}>{currentCase.client}</span>
-                      <span className={styles.event__type}>{currentCase.eventType}</span>
+                      <span className={styles.client}>
+                        {currentCase.client}
+                      </span>
+                      <span className={styles.event__type}>
+                        {currentCase.eventType}
+                      </span>
                     </div>
                   </div>
 
@@ -217,9 +236,7 @@ const EventShowcase: React.FC = () => {
                         <Star key={i} size={16} fill="currentColor" />
                       ))}
                     </div>
-                    <blockquote>
-                      "{currentCase.testimonial.text}"
-                    </blockquote>
+                    <blockquote>"{currentCase.testimonial.text}"</blockquote>
                     <cite>
                       <strong>{currentCase.testimonial.author}</strong>
                       <span>{currentCase.testimonial.position}</span>
@@ -239,7 +256,7 @@ const EventShowcase: React.FC = () => {
             {eventCases.map((_, index) => (
               <button
                 key={index}
-                className={`${styles.indicator} ${index === currentEvent ? styles.indicator_active : ''}`}
+                className={`${styles.indicator} ${index === currentEvent ? styles.indicator_active : ""}`}
                 onClick={() => setCurrentEvent(index)}
                 aria-label={`Go to event ${index + 1}`}
               />
@@ -254,7 +271,10 @@ const EventShowcase: React.FC = () => {
           viewport={{ once: true }}
         >
           <h3>Ready to Create Your Success Story?</h3>
-          <p>Let us help you plan and execute a memorable corporate event that exceeds your expectations</p>
+          <p>
+            Let us help you plan and execute a memorable corporate event that
+            exceeds your expectations
+          </p>
           <Button variant="primary" size="lg">
             Plan Your Event
           </Button>

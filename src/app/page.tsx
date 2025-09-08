@@ -16,20 +16,20 @@ import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
 
 export const metadata = {
   title:
-    "Professional Home Services in Lagos | Cleaning, Laundry & Meal Delivery | Metro Mellow",
+    "Professional Home Services in Lagos | Cleaning, Laundry & Meal Delivery | Metromellow",
   description:
-    "Top-rated cleaning, laundry, cooking & pest control services in Lagos. Save time with Metro Mellow's trusted home services. Book online today & enjoy same-day service!",
+    "Top-rated cleaning, laundry, cooking & pest control services in Lagos. Save time with Metromellow's trusted home services. Book online today & enjoy same-day service!",
   keywords:
-    "home services Lagos, cleaning services, laundry service, meal prep, pest control, house cleaning Lagos, food delivery Lagos, Metro Mellow",
+    "home services Lagos, cleaning services, laundry service, meal prep, pest control, house cleaning Lagos, food delivery Lagos, Metromellow",
   alternates: {
     canonical: "https://metromellow.com",
   },
   openGraph: {
-    title: "Professional Home Services in Lagos | Metro Mellow",
+    title: "Professional Home Services in Lagos | Metromellow",
     description:
       "Top-rated cleaning, laundry & meal delivery services in Lagos. Book trusted professionals today!",
     url: "https://metromellow.com",
-    siteName: "Metro Mellow",
+    siteName: "Metromellow",
     locale: "en_NG",
     type: "website",
     images: [
@@ -37,13 +37,13 @@ export const metadata = {
         url: "/images/brand/brand-logo/solid-bg/green-bg.png",
         width: 1200,
         height: 630,
-        alt: "Metro Mellow - Professional Home Services",
+        alt: "Metromellow - Professional Home Services",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Professional Home Services in Lagos | Metro Mellow",
+    title: "Professional Home Services in Lagos | Metromellow",
     description:
       "Top-rated cleaning, laundry & meal delivery services in Lagos. Book trusted professionals today!",
     images: ["/images/brand/brand-logo/solid-bg/green-bg.png"],
@@ -65,7 +65,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "@id": "https://metromellow.com",
-  name: "Metro Mellow",
+  name: "Metromellow",
   description:
     "Top-rated home services in Lagos including cleaning, laundry, cooking, and pest control.",
   url: "https://metromellow.com",
@@ -233,7 +233,7 @@ export default function Home() {
         </section>
 
         {/* Experience Section - Value proposition */}
-        <section id="why-choose-us" aria-label="Why Choose Metro Mellow">
+        <section id="why-choose-us" aria-label="Why Choose Metromellow">
           <ExperienceSection />
         </section>
 
@@ -280,7 +280,7 @@ export default function Home() {
         </section>
 
         {/* To-Do to Ta-Da - Process explanation */}
-        <section id="how-it-works" aria-label="How Metro Mellow Works">
+        <section id="how-it-works" aria-label="How Metromellow Works">
           <ToDoToTaDaSection />
         </section>
 

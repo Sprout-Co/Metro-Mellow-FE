@@ -47,6 +47,7 @@ const navItems = [
     hasDropdown: true,
     dropdownItems: serviceItems,
   },
+  { label: "Blog", href: "/blog" },
   { label: "For Business", href: "/for-business" },
   { label: "Subscriptions", href: "/subscriptions" },
   { label: "Contact", href: "/contact" },
@@ -252,7 +253,7 @@ export default function Navbar() {
                   <div className={styles.navbar__mobileLogo}>
                     <Image
                       src="/images/brand/brand-logo/transparent-bg/green.png"
-                      alt="Metro Mellow"
+                      alt="Metromellow"
                       width={100}
                       height={30}
                       className={styles.navbar__logo}

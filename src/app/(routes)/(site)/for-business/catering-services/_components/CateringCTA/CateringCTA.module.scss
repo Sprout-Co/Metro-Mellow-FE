@@ -36,7 +36,7 @@
     margin-bottom: spacing("4xl");
 
     h2 {
-      @include heading-2();
+      @include heading-1();
       color: color("neutral", "white");
       margin-bottom: spacing("lg");
     }

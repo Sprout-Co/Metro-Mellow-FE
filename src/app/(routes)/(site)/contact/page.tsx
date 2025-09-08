@@ -13,21 +13,20 @@ import {
 } from "@/utils/seoHelpers";
 
 export const metadata: Metadata = {
-  title:
-    "Contact Us | Customer Support & Service Requests | Metro Mellow Lagos",
+  title: "Contact Us | Customer Support & Service Requests | Metromellow Lagos",
   description:
-    "Need help with home services in Lagos? Contact Metro Mellow for cleaning, laundry, cooking, errands or pest control. Our team responds within hours. Call or message us today!",
+    "Need help with home services in Lagos? Contact Metromellow for cleaning, laundry, cooking, errands or pest control. Our team responds within hours. Call or message us today!",
   keywords:
-    "contact Metro Mellow, home services support Lagos, cleaning service contact, customer service Lagos, book home services",
+    "contact Metromellow, home services support Lagos, cleaning service contact, customer service Lagos, book home services",
   alternates: {
     canonical: "https://metromellow.com/contact",
   },
   openGraph: {
-    title: "Contact Metro Mellow | Customer Support for Home Services",
+    title: "Contact Metromellow | Customer Support for Home Services",
     description:
       "Contact our team for home services throughout Lagos. Quick response guaranteed!",
     url: "https://metromellow.com/contact",
-    siteName: "Metro Mellow",
+    siteName: "Metromellow",
     locale: "en_NG",
     type: "website",
     images: [
@@ -35,7 +34,7 @@ export const metadata: Metadata = {
         url: "/images/brand/brand-logo/solid-bg/green-bg.png",
         width: 1200,
         height: 630,
-        alt: "Metro Mellow - Professional Home Services Contact",
+        alt: "Metromellow - Professional Home Services Contact",
       },
     ],
   },
@@ -84,13 +83,13 @@ export default function ContactPage() {
   // Prepare structured data objects
   const contactPageSchema = {
     "@type": "ContactPage",
-    name: "Contact Metro Mellow",
+    name: "Contact Metromellow",
     description:
       "Contact us for home services throughout Lagos including cleaning, laundry, and food delivery.",
     url: "https://metromellow.com/contact",
     isPartOf: {
       "@type": "WebSite",
-      name: "Metro Mellow",
+      name: "Metromellow",
       url: "https://metromellow.com",
     },
     contactPoint: {
@@ -151,7 +150,7 @@ export default function ContactPage() {
       <main>
         <section
           id="contact-hero-lagos"
-          aria-label="Contact Metro Mellow in Lagos"
+          aria-label="Contact Metromellow in Lagos"
         >
           <ContactHero />
         </section>

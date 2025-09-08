@@ -1,13 +1,15 @@
 # Non-Authenticated Pages Unit Testing Plan
 
 ## Overview
-This document outlines the comprehensive unit testing strategy for all non-authenticated (public) pages in the Metro Mellow frontend application. These pages are accessible without user authentication and represent the primary user-facing functionality.
+
+This document outlines the comprehensive unit testing strategy for all non-authenticated (public) pages in the Metromellow frontend application. These pages are accessible without user authentication and represent the primary user-facing functionality.
 
 ## Priority 1: Core Public Pages
 
-### 1. Home Page (`/`)   DONE
+### 1. Home Page (`/`) DONE
+
 - **File**: `src/app/page.tsx`
-- **Components**: 
+- **Components**:
   - Hero
   - ServicesGallery
   - ServiceHero
@@ -26,8 +28,9 @@ This document outlines the comprehensive unit testing strategy for all non-authe
 - **Testing Focus**: Component rendering, navigation, service display, testimonials
 
 ### 2. Welcome Page (`/welcome`) - Maintenance Mode Page
+
 - **File**: `src/app/(routes)/(site)/welcome/page.tsx`
-- **Components**: 
+- **Components**:
   - HeroSection
   - ProblemStatement
   - SolutionOverview
@@ -37,8 +40,9 @@ This document outlines the comprehensive unit testing strategy for all non-authe
 - **Testing Focus**: Waitlist functionality, FAQ interactions, maintenance mode behavior
 
 ### 3. About Page (`/about`) DONE
+
 - **File**: `src/app/(routes)/(site)/about/page.tsx`
-- **Components**: 
+- **Components**:
   - AboutHero
   - OurStory
   - StorySection
@@ -53,13 +57,15 @@ This document outlines the comprehensive unit testing strategy for all non-authe
 - **Testing Focus**: Content rendering, team information, company story, values display, statistics, video content
 
 ### 4. Contact Page (`/contact`)
+
 - **File**: `src/app/(routes)/(site)/contact/page.tsx`
 - **Components**: Contact form, contact information
 - **Testing Focus**: Form validation, form submission, contact details display
 
 ### 5. For Business Page (`/for-business`)
+
 - **File**: `src/app/(routes)/(site)/for-business/page.tsx`
-- **Components**: 
+- **Components**:
   - BusinessHero
   - BusinessBenefits
   - EnterpriseServices
@@ -73,20 +79,22 @@ This document outlines the comprehensive unit testing strategy for all non-authe
 ## Priority 2: Service Pages
 
 ### 6. Food Services Page (`/services/food`)
+
 - **File**: `src/app/(routes)/(site)/services/food/page.tsx`
-- **Components**: 
+- **Components**:
   - FoodHero
   - MealPromoSection
   - FruitBowlSection
   - FoodIllustrationSection
   - OrderStepsSection
-  - FoodMenuSection     
+  - FoodMenuSection
   - FAQSection
 - **Testing Focus**: Menu display, food categories, ordering process
 
 ### 7. Cleaning Services Page (`/services/cleaning`)
+
 - **File**: `src/app/(routes)/(site)/services/cleaning/page.tsx`
-- **Components**: 
+- **Components**:
   - CleaningHero
   - CleaningPromoSection
   - CleaningServicesShowcase
@@ -96,11 +104,13 @@ This document outlines the comprehensive unit testing strategy for all non-authe
 - **Testing Focus**: Service packages, pricing, cleaning options, service showcase, video content, process steps
 
 ### 8. Laundry Services Page (`/services/laundry`)
+
 - **File**: `src/app/(routes)/(site)/services/laundry/page.tsx`
 - **Components**: Laundry-specific components
 - **Testing Focus**: Laundry services, pricing tiers, service options
 
 ### 9. Pest Control Services Page (`/services/pest-control`)
+
 - **File**: `src/app/(routes)/(site)/services/pest-control/page.tsx`
 - **Components**: Pest control-specific components
 - **Testing Focus**: Pest control services, treatment options, safety information
@@ -108,8 +118,9 @@ This document outlines the comprehensive unit testing strategy for all non-authe
 ## Priority 3: Public Booking Page
 
 ### 10. Public Bookings Page (`/bookings`)
+
 - **File**: `src/app/(routes)/(site)/bookings/page.tsx`
-- **Components**: 
+- **Components**:
   - BookingHero
   - SubscriptionModule
 - **Testing Focus**: Booking flow initiation, subscription information
@@ -117,8 +128,9 @@ This document outlines the comprehensive unit testing strategy for all non-authe
 ## Priority 4: Authentication Pages (Non-authenticated state)
 
 ### 11. Get Started Page (`/get-started`)
+
 - **File**: `src/app/(routes)/(app)/get-started/page.tsx`
-- **Components**: 
+- **Components**:
   - AuthManagement
   - LoginForm
   - RegisterForm
@@ -127,11 +139,13 @@ This document outlines the comprehensive unit testing strategy for all non-authe
 ## Priority 5: Layout & Navigation
 
 ### 12. Site Layout
+
 - **File**: `src/app/(routes)/(site)/layout.tsx`
 - **Components**: Navbar, Footer (conditionally rendered based on maintenance mode)
 - **Testing Focus**: Layout rendering, maintenance mode behavior, navigation structure
 
 ### 13. Navigation Components
+
 - **Navbar**: `src/components/layout/Navbar/Navbar.tsx`
 - **Footer**: `src/components/layout/Footer/Footer.tsx`
 - **Testing Focus**: Navigation links, responsive behavior, logo display
@@ -139,9 +153,11 @@ This document outlines the comprehensive unit testing strategy for all non-authe
 ## Priority 6: Utility & Error Pages
 
 ### 14. 404 Page (if exists)
+
 - **Testing Focus**: Error page rendering, navigation back to home
 
 ### 15. Terms & Privacy Pages (if implemented)
+
 - **Routes**: `/terms`, `/privacy`
 - **Testing Focus**: Legal content display, link functionality
 
@@ -173,26 +189,30 @@ This document outlines the comprehensive unit testing strategy for all non-authe
 ### Core Testing Framework
 
 #### **Jest** - Test Runner
+
 - **Version**: 30.0.3
 - **Configuration**: `jest.config.js` with Next.js integration
 - **Environment**: `jest-environment-jsdom` for DOM testing
 - **Coverage**: Built-in coverage reporting with `--coverage` flag
 
 #### **React Testing Library** - Component Testing
+
 - **Version**: 16.3.0
 - **Purpose**: Testing React components from a user's perspective
-- **Key Features**: 
+- **Key Features**:
   - `render()` for component rendering
   - `screen` for querying elements
   - `fireEvent` for user interactions
   - `waitFor` for async operations
 
 #### **@testing-library/jest-dom** - Custom Matchers
+
 - **Version**: 6.6.3
 - **Purpose**: Additional Jest matchers for DOM testing
 - **Key Matchers**: `toBeInTheDocument()`, `toHaveClass()`, `toBeVisible()`, etc.
 
 #### **@testing-library/user-event** - User Interaction Simulation
+
 - **Version**: 14.6.1
 - **Purpose**: More realistic user interaction simulation
 - **Key Features**: `userEvent.type()`, `userEvent.click()`, `userEvent.hover()`
@@ -200,17 +220,18 @@ This document outlines the comprehensive unit testing strategy for all non-authe
 ### Testing Configuration
 
 #### **Jest Setup** (`jest.setup.js`)
+
 ```javascript
-import '@testing-library/jest-dom'
+import "@testing-library/jest-dom";
 
 // Mock framer-motion for animations
-jest.mock('framer-motion', () => ({
-  motion: { div: 'div', span: 'span', button: 'button' },
+jest.mock("framer-motion", () => ({
+  motion: { div: "div", span: "span", button: "button" },
   AnimatePresence: ({ children }) => children,
-}))
+}));
 
 // Mock Next.js router
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   useRouter: () => ({
     push: jest.fn(),
     back: jest.fn(),
@@ -219,51 +240,54 @@ jest.mock('next/navigation', () => ({
     replace: jest.fn(),
   }),
   useSearchParams: () => ({ get: jest.fn() }),
-  usePathname: () => '/',
-}))
+  usePathname: () => "/",
+}));
 
 // Mock Apollo Client
-jest.mock('@apollo/client', () => ({
-  ...jest.requireActual('@apollo/client'),
+jest.mock("@apollo/client", () => ({
+  ...jest.requireActual("@apollo/client"),
   useQuery: jest.fn(),
   useMutation: jest.fn(),
   useLazyQuery: jest.fn(),
-}))
+}));
 ```
 
 #### **Jest Configuration** (`jest.config.js`)
+
 ```javascript
-const nextJest = require('next/jest')
+const nextJest = require("next/jest");
 
 const createJestConfig = nextJest({
-  dir: './',
-})
+  dir: "./",
+});
 
 const customJestConfig = {
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  testEnvironment: 'jest-environment-jsdom',
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  testEnvironment: "jest-environment-jsdom",
   collectCoverageFrom: [
-    'src/**/*.{js,jsx,ts,tsx}',
-    '!src/**/*.d.ts',
-    '!src/graphql/api.ts', // Generated GraphQL types
+    "src/**/*.{js,jsx,ts,tsx}",
+    "!src/**/*.d.ts",
+    "!src/graphql/api.ts", // Generated GraphQL types
   ],
   testMatch: [
-    '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
-    '<rootDir>/src/**/*.(test|spec).{js,jsx,ts,tsx}',
+    "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
+    "<rootDir>/src/**/*.(test|spec).{js,jsx,ts,tsx}",
   ],
-  moduleDirectories: ['node_modules', '<rootDir>/'],
-  testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
-}
+  moduleDirectories: ["node_modules", "<rootDir>/"],
+  testPathIgnorePatterns: ["<rootDir>/.next/", "<rootDir>/node_modules/"],
+};
 ```
 
 ### Additional Testing Tools
 
 #### **TypeScript Support**
+
 - **@types/jest**: 30.0.0 - TypeScript definitions for Jest
 - **@types/react**: 19 - TypeScript definitions for React
 - **@types/react-dom**: 19 - TypeScript definitions for React DOM
 
 #### **Mocking Strategy**
+
 - **Jest Mocks**: Built-in mocking for modules and functions
 - **Manual Mocks**: Custom mock implementations for external dependencies
 - **Mock Service Worker**: For API mocking (recommended for future use)
@@ -271,6 +295,7 @@ const customJestConfig = {
 ### Recommended Testing Patterns
 
 #### **Component Testing Pattern**
+
 ```typescript
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -285,16 +310,17 @@ describe('Component', () => {
   it('handles user interactions', async () => {
     const user = userEvent.setup()
     render(<Component />)
-    
+
     const button = screen.getByRole('button')
     await user.click(button)
-    
+
     expect(screen.getByText('Clicked!')).toBeInTheDocument()
   })
 })
 ```
 
 #### **Page Testing Pattern**
+
 ```typescript
 import { render, screen } from '@testing-library/react'
 import Page from './page'
@@ -309,7 +335,7 @@ jest.mock('./_components/ChildComponent', () => {
 describe('Page', () => {
   it('renders all sections', () => {
     render(<Page />)
-    
+
     expect(screen.getByTestId('child-component')).toBeInTheDocument()
     expect(screen.getByRole('main')).toBeInTheDocument()
   })
@@ -331,30 +357,35 @@ describe('Page', () => {
 ## Testing Implementation Strategy
 
 ### Phase 1: Core Pages (Priority 1)
+
 - Start with Home page and Welcome page
 - Focus on component rendering and basic functionality
 - Implement navigation testing
 - **Tools**: Jest + React Testing Library + user-event
 
 ### Phase 2: Service Pages (Priority 2)
+
 - Test all service-specific pages
 - Verify service information display
 - Test service filtering and categorization
 - **Tools**: Component mocking + GraphQL mocking
 
 ### Phase 3: Authentication & Forms (Priority 3-4)
+
 - Test authentication forms and validation
 - Implement form submission testing
 - Test error handling and user feedback
 - **Tools**: Form testing + validation testing + error boundary testing
 
 ### Phase 4: Layout & Navigation (Priority 5)
+
 - Test responsive design
 - Verify navigation structure
 - Test maintenance mode behavior
 - **Tools**: Responsive testing + router mocking
 
 ### Phase 5: Edge Cases & Utilities (Priority 6)
+
 - Test error pages
 - Implement accessibility testing
 - Test performance and loading states
@@ -392,16 +423,19 @@ src/
 ## Mock Strategy
 
 ### GraphQL Operations
+
 - Mock all GraphQL queries and mutations
 - Provide realistic test data
 - Test error scenarios
 
 ### External Services
+
 - Mock Firebase waitlist operations
 - Mock image loading and optimization
 - Mock external API calls
 
 ### Browser APIs
+
 - Mock localStorage and sessionStorage
 - Mock window.location and navigation
 - Mock responsive breakpoints
@@ -417,4 +451,4 @@ src/
 
 ## Conclusion
 
-This comprehensive testing plan ensures that all public-facing functionality is thoroughly tested, providing confidence in the user experience and application reliability. The phased approach allows for systematic implementation while maintaining focus on the most critical user-facing features. 
+This comprehensive testing plan ensures that all public-facing functionality is thoroughly tested, providing confidence in the user experience and application reliability. The phased approach allows for systematic implementation while maintaining focus on the most critical user-facing features.

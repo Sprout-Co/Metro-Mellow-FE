@@ -4,7 +4,8 @@
 
 .cleaningCTA {
   @include section-spacing("3xl");
-  background: linear-gradient(135deg, color("primary", "base"), color("primary", "dark"));
+  position: relative;
+  background: color("primary", "base");
   color: color("neutral", "white");
 
   &__container {
@@ -13,12 +14,11 @@
 
   &__content {
     text-align: center;
-    max-width: 600px;
     margin: 0 auto;
   }
 
   &__title {
-    @include heading-2;
+    @include heading-1;
     margin-bottom: spacing("lg");
     color: color("neutral", "white");
   }

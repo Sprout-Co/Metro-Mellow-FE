@@ -299,7 +299,7 @@ const SettingsMain: React.FC = () => {
             </div>
             <div className={styles.settings__sessionInfo}>
               <h4 className={styles.settings__sessionDevice}>
-                Metro Mellow iOS App
+                Metromellow iOS App
               </h4>
               <p className={styles.settings__sessionLocation}>
                 Lagos, Nigeria • 2 hours ago

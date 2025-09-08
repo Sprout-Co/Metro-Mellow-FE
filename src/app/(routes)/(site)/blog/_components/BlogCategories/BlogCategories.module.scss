@@ -1,0 +1,293 @@
+@import "abstracts/variables";
+@import "abstracts/mixins";
+
+.blog-categories {
+  width: 100%;
+
+  &__container {
+    /* Container is now handled by parent component */
+    width: 100%;
+  }
+
+  &__header {
+    /* Removed as section title is now in parent */
+    display: none;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: spacing("xl");
+  }
+
+  &__category-card {
+    @include card("sm");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    padding: spacing("xl");
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    @include slide-up(10px);
+    animation-delay: calc(var(--order) * 100ms);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: border-radius("xl");
+
+    &:nth-child(1) {
+      --order: 0;
+    }
+    &:nth-child(2) {
+      --order: 1;
+    }
+    &:nth-child(3) {
+      --order: 2;
+    }
+    &:nth-child(4) {
+      --order: 3;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--category-color);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        135deg,
+        transparent 0%,
+        rgba(var(--category-color-rgb), 0.02) 100%
+      );
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: shadow("xl");
+      border-color: var(--category-color);
+
+      &::before {
+        transform: scaleX(1);
+      }
+
+      &::after {
+        opacity: 1;
+      }
+
+      .blog-categories__icon-wrapper {
+        background: var(--category-color);
+        transform: scale(1.1);
+
+        .blog-categories__icon {
+          color: color("neutral", "white");
+          transform: scale(1.1);
+        }
+      }
+
+      .blog-categories__name {
+        color: var(--category-color);
+      }
+
+      .blog-categories__arrow {
+        transform: translateX(6px);
+        opacity: 1;
+        color: var(--category-color);
+      }
+    }
+  }
+
+  &__icon-wrapper {
+    background: linear-gradient(
+      135deg,
+      color("neutral", "lightest") 0%,
+      rgba(color("neutral", "lighter"), 0.5) 100%
+    );
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+    @include flex-center;
+    margin-bottom: spacing("lg");
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(
+        circle at center,
+        rgba(var(--category-color-rgb), 0.1) 0%,
+        transparent 70%
+      );
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+  }
+
+  &__icon {
+    font-size: 2.2rem;
+    display: block;
+    transition: all 0.3s ease;
+    color: var(--category-color);
+    position: relative;
+    z-index: 1;
+  }
+
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__name {
+    @include heading-5;
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
+    transition: color 0.3s ease;
+    position: relative;
+    line-height: line-height("tight");
+  }
+
+  &__category-description {
+    @include body-2;
+    color: color("neutral", "dark");
+    margin-bottom: spacing("lg");
+    line-height: line-height("relaxed");
+    @include truncate-lines(3);
+    flex: 1;
+  }
+
+  &__footer {
+    @include flex-between;
+    margin-top: spacing("md");
+    padding-top: spacing("md");
+    border-top: 1px solid color("neutral", "lighter");
+    align-items: center;
+  }
+
+  &__post-count {
+    @include caption;
+    color: var(--category-color);
+    @include font-weight("bold");
+    background: rgba(var(--category-color-rgb), 0.08);
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("full");
+    font-size: fontSize("xs");
+    letter-spacing: letterSpacing("wide");
+  }
+
+  &__arrow-wrapper {
+    @include flex-center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: color("neutral", "lightest");
+    transition: all 0.3s ease;
+  }
+
+  &__arrow {
+    color: color("neutral", "medium");
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+    font-weight: bold;
+  }
+
+  // Add a subtle pattern to specific categories
+  &__category-card:nth-child(odd) {
+    .blog-categories__icon-wrapper::before {
+      background: radial-gradient(
+        ellipse at top left,
+        rgba(var(--category-color-rgb), 0.05) 0%,
+        transparent 70%
+      );
+    }
+  }
+
+  &__category-card:nth-child(even) {
+    .blog-categories__icon-wrapper::before {
+      background: radial-gradient(
+        ellipse at bottom right,
+        rgba(var(--category-color-rgb), 0.05) 0%,
+        transparent 70%
+      );
+    }
+  }
+
+  // Responsive design
+  @include breakpoint-down("xl") {
+    &__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: spacing("lg");
+    }
+  }
+
+  @include breakpoint-down("lg") {
+    &__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    &__category-card {
+      padding: spacing("lg");
+    }
+
+    &__icon-wrapper {
+      width: 60px;
+      height: 60px;
+      margin-bottom: spacing("md");
+    }
+
+    &__icon {
+      font-size: 1.8rem;
+    }
+  }
+
+  @include breakpoint-down("md") {
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: spacing("md");
+    }
+
+    &__category-card {
+      padding: spacing("lg");
+      max-width: 400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    &__icon-wrapper {
+      width: 50px;
+      height: 50px;
+    }
+
+    &__icon {
+      font-size: 1.5rem;
+    }
+
+    &__name {
+      @include heading-6;
+    }
+  }
+}

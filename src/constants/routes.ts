@@ -39,6 +39,11 @@ export enum Routes {
   TERMS = "/terms",
   PRIVACY = "/privacy",
 
+  // Blog routes
+  BLOG = "/blog",
+  BLOG_POST = "/blog/[slug]",
+  BLOG_CATEGORY = "/blog/category/[category]",
+
   // For Business routes
   FOR_BUSINESS = "/for-business",
   FOR_BUSINESS_CATERING = "/for-business/catering-services",

@@ -15,7 +15,7 @@
     margin-bottom: spacing("4xl");
 
     h2 {
-      @include heading-2();
+      @include heading-1;
       color: color("primary", "base");
       margin: spacing("lg") 0 spacing("lg");
     }
@@ -48,23 +48,19 @@
   &__cta {
     text-align: center;
     padding: spacing("3xl") spacing("xl");
-    background: linear-gradient(
-      135deg,
-      color("accent", "lighter") 0%,
-      color("primary", "lighter") 100%
-    );
+    background: color("primary", "base");
     border-radius: 20px;
     border: 1px solid color("accent", "light");
 
     h3 {
       @include heading-4();
-      color: color("primary", "base");
+      color: color("neutral", "white");
       margin-bottom: spacing("md");
     }
 
     p {
       @include font-size("base");
-      color: color("neutral", "dark");
+      color: color("neutral", "white");
       max-width: 600px;
       margin: 0 auto;
       line-height: map-get($line-heights, "relaxed");
@@ -120,12 +116,8 @@
   }
 
   &_active {
-    background: linear-gradient(
-      135deg,
-      color("accent", "base") 0%,
-      color("primary", "base") 100%
-    );
-    border-color: color("accent", "base");
+    background: color("primary", "base");
+    border-color: color("primary", "base");
     color: color("neutral", "white");
 
     .tab__icon {

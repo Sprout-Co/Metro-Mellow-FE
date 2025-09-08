@@ -69,7 +69,7 @@ const PestCTA: React.FC = () => {
                   rightIcon={<Phone size={18} />}
                   className={styles.pestCTA__callButton}
                 >
-                  Call (555) 123-PEST
+                  Call +234-1234567890
                 </Button>
                 <Button
                   variant="white"

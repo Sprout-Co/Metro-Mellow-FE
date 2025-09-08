@@ -241,7 +241,7 @@ const SolutionOverview: FC = () => {
           variants={titleVariants}
         >
           <h3 className={styles.solutionOverview__launchTitle}>
-            Launching Q3 2025
+            Launching Q4 2025
           </h3>
           <p className={styles.solutionOverview__launchText}>
             We're putting the finishing touches on Metromellow to ensure you get
@@ -250,7 +250,7 @@ const SolutionOverview: FC = () => {
           </p>
           <div className={styles.solutionOverview__launchBadge}>
             <span>Lagos</span>
-            <span>Abuja</span>
+            {/* <span>Abuja</span> */}
             <span>More cities soon</span>
           </div>
         </motion.div>

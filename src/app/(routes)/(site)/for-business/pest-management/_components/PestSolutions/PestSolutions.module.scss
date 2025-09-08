@@ -19,7 +19,7 @@
     margin-bottom: spacing("4xl");
 
     h2 {
-      @include heading-2();
+      @include heading-1();
       color: color("primary", "base");
       margin-bottom: spacing("md");
     }

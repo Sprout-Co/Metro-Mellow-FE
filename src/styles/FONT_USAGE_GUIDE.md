@@ -1,4 +1,4 @@
-# Metro Mellow Font Usage Guide
+# Metromellow Font Usage Guide
 
 ## 🎨 Font Strategy
 
@@ -26,7 +26,7 @@ Use Baloo 2 for all headings, titles, and brand elements to maintain the friendl
 
 ```jsx
 // Tailwind CSS
-<h1 className="font-heading text-4xl font-bold">Welcome to Metro Mellow</h1>
+<h1 className="font-heading text-4xl font-bold">Welcome to Metromellow</h1>
 <h2 className="font-baloo2 text-2xl font-semibold">Our Services</h2>
 ```
 
@@ -114,7 +114,7 @@ Buttons automatically use Montserrat for better readability and professional app
 
 ```jsx
 <nav className="navbar">
-  <div className="font-heading text-xl font-bold">Metro Mellow</div>
+  <div className="font-heading text-xl font-bold">Metromellow</div>
   <ul className="nav-links">
     <li>
       <a className="font-body">Services</a>

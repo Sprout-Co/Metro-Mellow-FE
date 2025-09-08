@@ -17,7 +17,7 @@ export default function PestManagementPage() {
       <PestThreatAssessment />
       <PestSolutions />
       <ComplianceSafety />
-      <PestPricing />
+      {/* <PestPricing /> */}
       <EmergencyResponse />
       <PestCTA />
     </main>
