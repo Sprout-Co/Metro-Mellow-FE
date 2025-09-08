@@ -35,7 +35,7 @@ const ExperienceSection: React.FC = () => {
       <div className={styles["experience-section__container"]}>
         <div className={styles["experience-section__media"]}>
           <div className={styles["experience-section__video-box"]}>
-            {!isPlaying ? (
+            {/* {!isPlaying ? (
               // Show thumbnail with play button overlay
               <div className={styles["experience-section__thumbnail-wrapper"]}>
                 <Image
@@ -62,16 +62,16 @@ const ExperienceSection: React.FC = () => {
                   />
                 </motion.button>
               </div>
-            ) : (
-              // Show video when playing
-              <video
-                ref={videoRef}
-                className={styles["experience-section__video"]}
-                src={VIDEO_URL}
-                controls
-                onEnded={handleVideoEnd}
-              />
-            )}
+            ) : ( */}
+            {/* // Show video when playing */}
+            <video
+              ref={videoRef}
+              className={styles["experience-section__video"]}
+              src={VIDEO_URL}
+              controls
+              onEnded={handleVideoEnd}
+            />
+            {/* )} */}
           </div>
         </div>
         <div className={styles["experience-section__content"]}>
