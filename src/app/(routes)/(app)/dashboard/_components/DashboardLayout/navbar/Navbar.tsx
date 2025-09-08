@@ -77,7 +77,7 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
             <div>
               <Image
                 src="/images/brand/brand-logo/transparent-bg/green.png"
-                alt="Metro Mellow Logo"
+                alt="Metromellow Logo"
                 width={150}
                 height={150}
               />

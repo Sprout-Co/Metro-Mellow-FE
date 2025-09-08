@@ -253,7 +253,7 @@ export default function Navbar() {
                   <div className={styles.navbar__mobileLogo}>
                     <Image
                       src="/images/brand/brand-logo/transparent-bg/green.png"
-                      alt="Metro Mellow"
+                      alt="Metromellow"
                       width={100}
                       height={30}
                       className={styles.navbar__logo}

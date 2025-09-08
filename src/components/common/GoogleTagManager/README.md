@@ -1,6 +1,6 @@
 # Google Tag Manager Integration
 
-This component provides Google Tag Manager (GTM) integration for the Metro Mellow application.
+This component provides Google Tag Manager (GTM) integration for the Metromellow application.
 
 ## Setup
 

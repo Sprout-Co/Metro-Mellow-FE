@@ -11,20 +11,20 @@ import {
 
 export const metadata: Metadata = {
   title:
-    "Home Service Subscriptions in Lagos | Save with Monthly Plans | Metro Mellow",
+    "Home Service Subscriptions in Lagos | Save with Monthly Plans | Metromellow",
   description:
     "Subscribe to regular home services in Lagos and save. Flexible monthly plans for cleaning, laundry, cooking, and pest control with discounted rates and priority scheduling.",
   keywords:
-    "home service subscriptions Lagos, monthly cleaning plan, recurring services, discount home services, Metro Mellow subscription, service package Lagos",
+    "home service subscriptions Lagos, monthly cleaning plan, recurring services, discount home services, Metromellow subscription, service package Lagos",
   alternates: {
     canonical: "https://metromellow.com/subscriptions",
   },
   openGraph: {
-    title: "Home Service Subscriptions in Lagos | Metro Mellow",
+    title: "Home Service Subscriptions in Lagos | Metromellow",
     description:
       "Subscribe to regular home services and save. Flexible monthly plans with discounted rates and priority scheduling.",
     url: "https://metromellow.com/subscriptions",
-    siteName: "Metro Mellow",
+    siteName: "Metromellow",
     locale: "en_NG",
     type: "website",
     images: [
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
         url: "/images/brand/brand-logo/solid-bg/green-bg.png",
         width: 1200,
         height: 630,
-        alt: "Metro Mellow Home Service Subscriptions",
+        alt: "Metromellow Home Service Subscriptions",
       },
     ],
   },
@@ -59,7 +59,7 @@ export default function BookingPage() {
     },
     seller: {
       "@type": "LocalBusiness",
-      name: "Metro Mellow",
+      name: "Metromellow",
       url: "https://metromellow.com",
     },
   };
@@ -82,7 +82,7 @@ export default function BookingPage() {
         type="LocalBusiness"
         data={createLocalBusinessSchema({
           description:
-            "Metro Mellow offers flexible home service subscription plans throughout Lagos, providing regular cleaning, laundry, cooking, and pest control at discounted rates.",
+            "Metromellow offers flexible home service subscription plans throughout Lagos, providing regular cleaning, laundry, cooking, and pest control at discounted rates.",
         })}
       />
 

@@ -22,7 +22,7 @@ export default function Footer() {
             <div className={styles.footer__logo}>
               <Image
                 src="/images/brand/brand-logo/transparent-bg/yellow.png"
-                alt="Metro Mellow"
+                alt="Metromellow"
                 width={140}
                 height={40}
                 className={styles.footer__logo}

@@ -16,7 +16,7 @@ export async function GET() {
       <pubDate>${new Date(post.publishedAt).toUTCString()}</pubDate>
       <author>${businessInfo.email} (${post.author.name})</author>
       <category>${post.category.name}</category>
-      ${post.tags.map(tag => `<category>${tag}</category>`).join('')}
+      ${post.tags.map((tag) => `<category>${tag}</category>`).join("")}
       <enclosure url="${post.featuredImage}" type="image/jpeg" length="0" />
     </item>`;
     })
@@ -31,18 +31,18 @@ export async function GET() {
      xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
      xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
   <channel>
-    <title>Metro Mellow Home Services Blog</title>
+    <title>Metromellow Home Services Blog</title>
     <atom:link href="${baseUrl}/blog/rss.xml" rel="self" type="application/rss+xml" />
     <link>${baseUrl}/blog</link>
-    <description>Expert home services advice and tips for Lagos residents. Professional insights on cleaning, laundry, cooking, pest control, and home maintenance from Metro Mellow's experts.</description>
+    <description>Expert home services advice and tips for Lagos residents. Professional insights on cleaning, laundry, cooking, pest control, and home maintenance from Metromellow's experts.</description>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <language>en-NG</language>
     <sy:updatePeriod>hourly</sy:updatePeriod>
     <sy:updateFrequency>1</sy:updateFrequency>
-    <generator>Metro Mellow Blog System</generator>
-    <managingEditor>${businessInfo.email} (Metro Mellow Team)</managingEditor>
-    <webMaster>${businessInfo.email} (Metro Mellow Team)</webMaster>
-    <copyright>Copyright ${new Date().getFullYear()} Metro Mellow. All rights reserved.</copyright>
+    <generator>Metromellow Blog System</generator>
+    <managingEditor>${businessInfo.email} (Metromellow Team)</managingEditor>
+    <webMaster>${businessInfo.email} (Metromellow Team)</webMaster>
+    <copyright>Copyright ${new Date().getFullYear()} Metromellow. All rights reserved.</copyright>
     <category>Home Services</category>
     <category>Lagos</category>
     <category>Nigeria</category>
@@ -52,11 +52,11 @@ export async function GET() {
     <category>Pest Control</category>
     <image>
       <url>${businessInfo.logo}</url>
-      <title>Metro Mellow Home Services Blog</title>
+      <title>Metromellow Home Services Blog</title>
       <link>${baseUrl}/blog</link>
       <width>144</width>
       <height>144</height>
-      <description>Metro Mellow - Professional Home Services in Lagos</description>
+      <description>Metromellow - Professional Home Services in Lagos</description>
     </image>
     ${rssItems}
   </channel>

@@ -111,7 +111,7 @@ const ModalDrawer: React.FC<ModalDrawerProps> = ({
               >
                 <Image
                   src="/images/brand/brand-logo/transparent-bg/green.png"
-                  alt="Metro Mellow"
+                  alt="Metromellow"
                   width={120}
                   height={40}
                   className={styles.modalDrawer__footerLogo}

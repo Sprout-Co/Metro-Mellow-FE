@@ -25,24 +25,27 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Metro Mellow | Professional Home Services in Lagos, Nigeria",
-  description: "Professional home services in Lagos including cleaning, laundry, cooking, and pest control. Tech-enabled solutions for modern Nigerian homes. Launching Q3 2025.",
-  keywords: "home services Lagos, cleaning services Nigeria, laundry Lagos, meal preparation, pest control, domestic help Lagos, Metro Mellow",
-  authors: [{ name: "Metro Mellow Team" }],
-  creator: "Metro Mellow",
-  publisher: "Metro Mellow",
+  title: "Metromellow | Professional Home Services in Lagos, Nigeria",
+  description:
+    "Professional home services in Lagos including cleaning, laundry, cooking, and pest control. Tech-enabled solutions for modern Nigerian homes. Launching Q3 2025.",
+  keywords:
+    "home services Lagos, cleaning services Nigeria, laundry Lagos, meal preparation, pest control, domestic help Lagos, Metromellow",
+  authors: [{ name: "Metromellow Team" }],
+  creator: "Metromellow",
+  publisher: "Metromellow",
   robots: {
     index: true,
     follow: true,
     googleBot: {
       index: true,
       follow: true,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
   other: {
-    'google-site-verification': process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+    "google-site-verification":
+      process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "",
   },
 };
 
@@ -60,7 +63,7 @@ export default function RootLayout({
         <link
           rel="alternate"
           type="application/rss+xml"
-          title="Metro Mellow Blog RSS Feed"
+          title="Metromellow Blog RSS Feed"
           href="/blog/rss.xml"
         />
       </head>

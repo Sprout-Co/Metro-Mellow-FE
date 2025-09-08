@@ -52,20 +52,20 @@ const aboutFaqs: FAQItem[] = [
 ];
 
 export const metadata: Metadata = {
-  title: "About Us | Our Story & Mission | Metro Mellow Lagos",
+  title: "About Us | Our Story & Mission | Metromellow Lagos",
   description:
-    "Discover Metro Mellow's journey to transform home services in Lagos through quality, reliability, and exceptional customer care. Learn about our mission and values.",
+    "Discover Metromellow's journey to transform home services in Lagos through quality, reliability, and exceptional customer care. Learn about our mission and values.",
   keywords:
-    "Metro Mellow, about us, home services Lagos, company mission, company values, Lagos service provider",
+    "Metromellow, about us, home services Lagos, company mission, company values, Lagos service provider",
   alternates: {
     canonical: "https://metromellow.com/about",
   },
   openGraph: {
-    title: "About Metro Mellow | Quality Home Services in Lagos",
+    title: "About Metromellow | Quality Home Services in Lagos",
     description:
       "Learn about our mission to transform home services in Lagos through quality, reliability & exceptional customer care.",
     url: "https://metromellow.com/about",
-    siteName: "Metro Mellow",
+    siteName: "Metromellow",
     locale: "en_NG",
     type: "website",
     images: [
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
         url: "/images/brand/brand-logo/solid-bg/green-bg.png",
         width: 1200,
         height: 630,
-        alt: "Metro Mellow - Professional Home Services",
+        alt: "Metromellow - Professional Home Services",
       },
     ],
   },
@@ -83,13 +83,13 @@ export default function AboutPage() {
   // Prepare structured data objects
   const aboutPageSchema = {
     "@type": "WebPage",
-    name: "About Metro Mellow",
+    name: "About Metromellow",
     description:
-      "Learn about Metro Mellow's mission to transform home services in Lagos.",
+      "Learn about Metromellow's mission to transform home services in Lagos.",
     url: "https://metromellow.com/about",
     isPartOf: {
       "@type": "WebSite",
-      name: "Metro Mellow",
+      name: "Metromellow",
       url: "https://metromellow.com",
     },
   };
@@ -119,7 +119,7 @@ export default function AboutPage() {
         type="LocalBusiness"
         data={createLocalBusinessSchema({
           description:
-            "Metro Mellow is transforming home services in Lagos through quality, reliability, and exceptional customer care.",
+            "Metromellow is transforming home services in Lagos through quality, reliability, and exceptional customer care.",
         })}
       />
 

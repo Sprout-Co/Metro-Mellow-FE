@@ -1,12 +1,12 @@
 /**
- * Common SEO utility functions and data for Metro Mellow
+ * Common SEO utility functions and data for Metromellow
  */
 
 /**
  * Base business information for JSON-LD schema
  */
 export const businessInfo = {
-  name: "Metro Mellow",
+  name: "Metromellow",
   url: "https://metromellow.com",
   logo: "https://metromellow.com/images/brand/brand-logo/solid-bg/green-bg.png",
   image:

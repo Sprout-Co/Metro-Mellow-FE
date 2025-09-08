@@ -11,20 +11,20 @@ import {
 
 export const metadata: Metadata = {
   title:
-    "Laundry & Dry Cleaning Services in Lagos | Same-Day Pickup | Metro Mellow",
+    "Laundry & Dry Cleaning Services in Lagos | Same-Day Pickup | Metromellow",
   description:
     "Professional laundry and dry cleaning services in Lagos with free pickup and delivery. Expert garment care, eco-friendly options and affordable pricing. Schedule today!",
   keywords:
-    "laundry services Lagos, dry cleaning, wash and fold, ironing service, garment care Lagos, Metro Mellow laundry, pickup laundry service",
+    "laundry services Lagos, dry cleaning, wash and fold, ironing service, garment care Lagos, Metromellow laundry, pickup laundry service",
   alternates: {
     canonical: "https://metromellow.com/services/laundry",
   },
   openGraph: {
-    title: "Laundry & Dry Cleaning Services in Lagos | Metro Mellow",
+    title: "Laundry & Dry Cleaning Services in Lagos | Metromellow",
     description:
       "Professional laundry services with free pickup and delivery throughout Lagos. Expert garment care and eco-friendly options available.",
     url: "https://metromellow.com/services/laundry",
-    siteName: "Metro Mellow",
+    siteName: "Metromellow",
     locale: "en_NG",
     type: "website",
     images: [
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
         url: "/images/laundry/dry-cleaning.jpg",
         width: 1200,
         height: 630,
-        alt: "Professional laundry services by Metro Mellow",
+        alt: "Professional laundry services by Metromellow",
       },
     ],
   },
@@ -49,7 +49,7 @@ export default function LaundryPage() {
     serviceOutput: "Clean, professionally laundered and pressed garments",
     provider: {
       "@type": "LocalBusiness",
-      name: "Metro Mellow",
+      name: "Metromellow",
       areaServed: {
         "@type": "State",
         name: "Lagos State",
@@ -109,7 +109,7 @@ export default function LaundryPage() {
         type="LocalBusiness"
         data={createLocalBusinessSchema({
           description:
-            "Metro Mellow provides professional laundry and dry cleaning services throughout Lagos, with free pickup and delivery and eco-friendly cleaning options.",
+            "Metromellow provides professional laundry and dry cleaning services throughout Lagos, with free pickup and delivery and eco-friendly cleaning options.",
         })}
       />
 

@@ -292,7 +292,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       <motion.div className={styles.sidebar__footer} variants={itemVariants}>
         <Image
           src="/images/brand/brand-logo/transparent-bg/green.png"
-          alt="Metro Mellow"
+          alt="Metromellow"
           width={120}
           height={40}
           className={styles.sidebar__footerLogo}

@@ -117,7 +117,7 @@ export default function ReferFriendPage() {
       <div className={styles.refer}>
         <DashboardHeader
           title="Refer a Friend"
-          subtitle="Share Metro Mellow with friends and earn rewards together"
+          subtitle="Share Metromellow with friends and earn rewards together"
           actionBtnText="Share"
           actionBtnIcon={<Share2 size={18} />}
           onActionButtonClick={() => {

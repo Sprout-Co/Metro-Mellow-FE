@@ -12,20 +12,20 @@ import { getBlogPosts, getBlogCategories } from "@/lib/services/blog";
 import styles from "./Blog.module.scss";
 
 export const metadata: Metadata = {
-  title: "Home Services Blog | Tips & Guides for Lagos Homes | Metro Mellow",
+  title: "Home Services Blog | Tips & Guides for Lagos Homes | Metromellow",
   description:
-    "Expert home services advice for Lagos residents. Get tips on cleaning, laundry, cooking, pest control, and home maintenance. Latest trends and professional insights from Metro Mellow.",
+    "Expert home services advice for Lagos residents. Get tips on cleaning, laundry, cooking, pest control, and home maintenance. Latest trends and professional insights from Metromellow.",
   keywords:
     "home services blog Lagos, cleaning tips Nigeria, laundry guides, cooking tips Lagos, pest control advice, home maintenance Nigeria, domestic help tips, household management",
   alternates: {
     canonical: "https://metromellow.com/blog",
   },
   openGraph: {
-    title: "Home Services Blog | Expert Tips for Lagos Homes | Metro Mellow",
+    title: "Home Services Blog | Expert Tips for Lagos Homes | Metromellow",
     description:
-      "Expert advice on cleaning, laundry, cooking & pest control for Lagos homes. Professional tips, guides, and insights from Metro Mellow's home services experts.",
+      "Expert advice on cleaning, laundry, cooking & pest control for Lagos homes. Professional tips, guides, and insights from Metromellow's home services experts.",
     url: "https://metromellow.com/blog",
-    siteName: "Metro Mellow",
+    siteName: "Metromellow",
     locale: "en_NG",
     type: "website",
     images: [
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
         url: "/images/blog/blog-hero-og.jpg",
         width: 1200,
         height: 630,
-        alt: "Metro Mellow Home Services Blog - Expert Tips for Lagos Homes",
+        alt: "Metromellow Home Services Blog - Expert Tips for Lagos Homes",
       },
     ],
   },
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   },
   other: {
     "article:publisher": "https://www.facebook.com/metromellowhq",
-    "article:author": "Metro Mellow Team",
+    "article:author": "Metromellow Team",
   },
 };
 
@@ -58,18 +58,18 @@ export default async function BlogPage() {
   // Structured data for blog
   const blogPageSchema = {
     "@type": "Blog",
-    name: "Metro Mellow Home Services Blog",
+    name: "Metromellow Home Services Blog",
     description:
       "Expert home services advice and tips for Lagos residents covering cleaning, laundry, cooking, and pest control.",
     url: "https://metromellow.com/blog",
     author: {
       "@type": "Organization",
-      name: "Metro Mellow",
+      name: "Metromellow",
       url: "https://metromellow.com",
     },
     publisher: {
       "@type": "Organization",
-      name: "Metro Mellow",
+      name: "Metromellow",
       url: "https://metromellow.com",
       logo: {
         "@type": "ImageObject",
@@ -105,7 +105,7 @@ export default async function BlogPage() {
         type="LocalBusiness"
         data={createLocalBusinessSchema({
           description:
-            "Metro Mellow blog provides expert home services advice and tips for Lagos residents.",
+            "Metromellow blog provides expert home services advice and tips for Lagos residents.",
         })}
       />
 
@@ -202,7 +202,7 @@ export default async function BlogPage() {
             residents, including professional cleaning techniques, efficient
             laundry management, delicious meal preparation, effective pest
             control strategies, and general home maintenance tips. Learn from
-            Metro Mellow's experienced professionals serving Victoria Island,
+            Metromellow's experienced professionals serving Victoria Island,
             Lekki, Ikeja, and all Lagos neighborhoods.
           </p>
           <h3>Popular Home Services Topics</h3>

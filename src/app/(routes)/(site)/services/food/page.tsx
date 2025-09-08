@@ -24,7 +24,7 @@ export default function FoodPage() {
     serviceOutput: "Freshly prepared meals delivered to your location",
     provider: {
       "@type": "LocalBusiness",
-      name: "Metro Mellow",
+      name: "Metromellow",
       areaServed: {
         "@type": "State",
         name: "Lagos State",
@@ -79,7 +79,7 @@ export default function FoodPage() {
         type="LocalBusiness"
         data={createLocalBusinessSchema({
           description:
-            "Metro Mellow provides professional meal delivery services throughout Lagos, with fresh, chef-prepared meals delivered to your door.",
+            "Metromellow provides professional meal delivery services throughout Lagos, with fresh, chef-prepared meals delivered to your door.",
         })}
       />
 

@@ -29,7 +29,7 @@ const caseStudies = [
       satisfaction: "94% tenant satisfaction rating",
     },
     testimonial:
-      "Metro Mellow transformed our property management workflow. Their reliable service and attention to detail have made a significant impact on our operational efficiency.",
+      "Metromellow transformed our property management workflow. Their reliable service and attention to detail have made a significant impact on our operational efficiency.",
     author: "Sarah Johnson",
     position: "Facilities Director",
   },
@@ -46,7 +46,7 @@ const caseStudies = [
       health: "45% decrease in sick days among staff",
     },
     testimonial:
-      "Finding a service that could meet our strict healthcare standards while maintaining our commitment to sustainability seemed impossible until we partnered with Metro Mellow.",
+      "Finding a service that could meet our strict healthcare standards while maintaining our commitment to sustainability seemed impossible until we partnered with Metromellow.",
     author: "Dr. Michael Chen",
     position: "Chief Medical Officer",
   },
@@ -63,7 +63,7 @@ const caseStudies = [
       retention: "24% increase in lease renewals",
     },
     testimonial:
-      "Our residents love the convenience and quality of Metro Mellow's services. It's become one of our most valued amenities and a key differentiator in our market.",
+      "Our residents love the convenience and quality of Metromellow's services. It's become one of our most valued amenities and a key differentiator in our market.",
     author: "James Rodriguez",
     position: "Property Manager",
   },
@@ -80,7 +80,7 @@ const caseStudies = [
       savings: "35% reduction in service costs",
     },
     testimonial:
-      "As our workplace evolved, Metro Mellow evolved with us. Their adaptive approach to our changing needs has been invaluable during our transition to hybrid work.",
+      "As our workplace evolved, Metromellow evolved with us. Their adaptive approach to our changing needs has been invaluable during our transition to hybrid work.",
     author: "Lisa Park",
     position: "Head of Workplace Experience",
   },

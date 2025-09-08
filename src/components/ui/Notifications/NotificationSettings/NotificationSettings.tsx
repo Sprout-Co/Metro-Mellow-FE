@@ -180,7 +180,7 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({
     <div className={`${styles.container} ${className}`}>
       <div className={styles.header}>
         <h3>Notification Settings</h3>
-        <p>Configure how you receive notifications from Metro Mellow</p>
+        <p>Configure how you receive notifications from Metromellow</p>
       </div>
 
       {/* Real-time Connection Settings */}

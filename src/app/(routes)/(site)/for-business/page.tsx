@@ -15,36 +15,36 @@ import FAQSection from "@/components/ui/FAQSection/FAQSection";
 const faqs = [
   {
     id: "1",
-    question: "What is Metro Mellow for Business?",
+    question: "What is Metromellow for Business?",
     answer:
-      "Metro Mellow is a platform that allows you to book services for your home and office.",
+      "Metromellow is a platform that allows you to book services for your home and office.",
   },
   {
     id: "2",
-    question: "How does Metro Mellow for Business work?",
+    question: "How does Metromellow for Business work?",
     answer:
-      "Metro Mellow for Business allows you to book services for your home and office.",
+      "Metromellow for Business allows you to book services for your home and office.",
   },
 
   {
     id: "3",
-    question: "How does Metro Mellow for Business work?",
+    question: "How does Metromellow for Business work?",
     answer:
-      "Metro Mellow for Business allows you to book services for your home and office.",
+      "Metromellow for Business allows you to book services for your home and office.",
   },
 
   {
     id: "4",
-    question: "How does Metro Mellow for Business work?",
+    question: "How does Metromellow for Business work?",
     answer:
-      "Metro Mellow for Business allows you to book services for your home and office.",
+      "Metromellow for Business allows you to book services for your home and office.",
   },
 
   {
     id: "5",
-    question: "How does Metro Mellow for Business work?",
+    question: "How does Metromellow for Business work?",
     answer:
-      "Metro Mellow for Business allows you to book services for your home and office.",
+      "Metromellow for Business allows you to book services for your home and office.",
   },
 ];
 

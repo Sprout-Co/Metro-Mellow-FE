@@ -1,5 +1,5 @@
 export function GET() {
-  const robotsTxt = `# Metro Mellow Robots.txt
+  const robotsTxt = `# Metromellow Robots.txt
 
 User-agent: *
 Allow: /
@@ -54,8 +54,8 @@ Allow: /images/blog/`;
 
   return new Response(robotsTxt, {
     headers: {
-      'Content-Type': 'text/plain',
-      'Cache-Control': 'public, max-age=86400',
+      "Content-Type": "text/plain",
+      "Cache-Control": "public, max-age=86400",
     },
   });
 }

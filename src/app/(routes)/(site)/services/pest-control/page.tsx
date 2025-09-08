@@ -11,20 +11,20 @@ import {
 
 export const metadata: Metadata = {
   title:
-    "Pest Control Services in Lagos | Safe & Effective Solutions | Metro Mellow",
+    "Pest Control Services in Lagos | Safe & Effective Solutions | Metromellow",
   description:
     "Professional pest control services in Lagos. Our expert technicians use eco-friendly, family-safe treatments to eliminate pests. Same-day service available throughout Lagos.",
   keywords:
-    "pest control Lagos, extermination services, bed bug treatment, mosquito control, rodent control Lagos, safe pest control, Metro Mellow pest services",
+    "pest control Lagos, extermination services, bed bug treatment, mosquito control, rodent control Lagos, safe pest control, Metromellow pest services",
   alternates: {
     canonical: "https://metromellow.com/services/pest-control",
   },
   openGraph: {
-    title: "Professional Pest Control Services in Lagos | Metro Mellow",
+    title: "Professional Pest Control Services in Lagos | Metromellow",
     description:
       "Safe and effective pest elimination services throughout Lagos. Family-safe and eco-friendly solutions for all pest problems.",
     url: "https://metromellow.com/services/pest-control",
-    siteName: "Metro Mellow",
+    siteName: "Metromellow",
     locale: "en_NG",
     type: "website",
     images: [
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
         url: "/images/pest-control/p1.jpeg",
         width: 1200,
         height: 630,
-        alt: "Professional pest control services by Metro Mellow",
+        alt: "Professional pest control services by Metromellow",
       },
     ],
   },
@@ -49,7 +49,7 @@ export default function PestControlPage() {
     serviceOutput: "Pest-free homes and businesses",
     provider: {
       "@type": "LocalBusiness",
-      name: "Metro Mellow",
+      name: "Metromellow",
       areaServed: {
         "@type": "State",
         name: "Lagos State",
@@ -112,7 +112,7 @@ export default function PestControlPage() {
         type="LocalBusiness"
         data={createLocalBusinessSchema({
           description:
-            "Metro Mellow provides safe and effective pest control services throughout Lagos, with eco-friendly treatments and same-day service for pest emergencies.",
+            "Metromellow provides safe and effective pest control services throughout Lagos, with eco-friendly treatments and same-day service for pest emergencies.",
         })}
       />
 

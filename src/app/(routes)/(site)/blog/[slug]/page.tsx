@@ -2,7 +2,11 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { getBlogPost, getRelatedPosts, sampleBlogPosts } from "@/lib/services/blog";
+import {
+  getBlogPost,
+  getRelatedPosts,
+  sampleBlogPosts,
+} from "@/lib/services/blog";
 import BlogCard from "../_components/BlogCard/BlogCard";
 import StructuredData from "@/components/common/SEO/StructuredData";
 import { createBreadcrumbSchema, businessInfo } from "@/utils/seoHelpers";
@@ -21,17 +25,19 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: BlogPostPageProps): Promise<Metadata> {
   const post = await getBlogPost(params.slug);
-  
+
   if (!post) {
     return {
-      title: "Post Not Found | Metro Mellow Blog",
+      title: "Post Not Found | Metromellow Blog",
     };
   }
 
   return {
-    title: post.metaTitle || `${post.title} | Metro Mellow Blog`,
+    title: post.metaTitle || `${post.title} | Metromellow Blog`,
     description: post.metaDescription || post.excerpt,
     keywords: post.seoKeywords.join(", "),
     alternates: {
@@ -41,7 +47,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       title: post.title,
       description: post.excerpt,
       url: `https://metromellow.com/blog/${post.slug}`,
-      siteName: "Metro Mellow",
+      siteName: "Metromellow",
       locale: "en_NG",
       type: "article",
       publishedTime: post.publishedAt,
@@ -75,16 +81,16 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const post = await getBlogPost(params.slug);
-  
+
   if (!post) {
     notFound();
   }
 
   const relatedPosts = await getRelatedPosts(post.slug);
-  const publishedDate = new Date(post.publishedAt).toLocaleDateString('en-NG', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+  const publishedDate = new Date(post.publishedAt).toLocaleDateString("en-NG", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 
   // Structured data for article
@@ -150,15 +156,18 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 ← Back to Blog
               </Link>
             </nav>
-            
-            <div className={styles.category} style={{ backgroundColor: post.category.color }}>
+
+            <div
+              className={styles.category}
+              style={{ backgroundColor: post.category.color }}
+            >
               <span className={styles.categoryIcon}>{post.category.icon}</span>
               <span className={styles.categoryName}>{post.category.name}</span>
             </div>
-            
+
             <h1 className={styles.title}>{post.title}</h1>
             <p className={styles.excerpt}>{post.excerpt}</p>
-            
+
             <div className={styles.meta}>
               <div className={styles.author}>
                 <Image
@@ -173,12 +182,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   <span className={styles.authorBio}>{post.author.bio}</span>
                 </div>
               </div>
-              
+
               <div className={styles.details}>
                 <time className={styles.date} dateTime={post.publishedAt}>
                   {publishedDate}
                 </time>
-                <span className={styles.readTime}>{post.readTime} min read</span>
+                <span className={styles.readTime}>
+                  {post.readTime} min read
+                </span>
               </div>
             </div>
           </div>
@@ -202,27 +213,44 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <div className={styles.articleContent}>
               {/* Placeholder content - in production this would be rich text from CMS */}
               <div className={styles.sampleContent}>
-                <p>This is where the full blog post content would appear. In a production environment, this content would be fetched from your CMS or markdown files and rendered as rich HTML.</p>
-                
+                <p>
+                  This is where the full blog post content would appear. In a
+                  production environment, this content would be fetched from
+                  your CMS or markdown files and rendered as rich HTML.
+                </p>
+
                 <h2>Key Points Covered in This Article</h2>
                 <ul>
                   {post.tags.map((tag) => (
                     <li key={tag}>{tag}</li>
                   ))}
                 </ul>
-                
+
                 <blockquote>
                   <p>{post.excerpt}</p>
                 </blockquote>
-                
-                <p>Metro Mellow's expert team brings years of experience in providing professional home services throughout Lagos. Our insights help Lagos residents maintain beautiful, comfortable homes while saving time and effort.</p>
-                
+
+                <p>
+                  Metromellow's expert team brings years of experience in
+                  providing professional home services throughout Lagos. Our
+                  insights help Lagos residents maintain beautiful, comfortable
+                  homes while saving time and effort.
+                </p>
+
                 <h3>Why Choose Professional Home Services?</h3>
-                <p>Professional home services offer several advantages over DIY approaches, especially in Lagos' unique climate and urban environment.</p>
-                
+                <p>
+                  Professional home services offer several advantages over DIY
+                  approaches, especially in Lagos' unique climate and urban
+                  environment.
+                </p>
+
                 <div className={styles.callToAction}>
                   <h4>Ready to Experience Professional Home Services?</h4>
-                  <p>Join our waitlist to be among the first to experience Metro Mellow's professional home services when we launch in Q3 2025.</p>
+                  <p>
+                    Join our waitlist to be among the first to experience
+                    Metromellow's professional home services when we launch in
+                    Q3 2025.
+                  </p>
                   <Link href="/welcome" className={styles.ctaButton}>
                     Join Our Waitlist
                   </Link>

@@ -12,7 +12,7 @@ const ClientTestimonials: React.FC = () => {
       title: "Facilities Manager",
       company: "TechCorp Solutions",
       rating: 5,
-      text: "Metro Mellow transformed our office environment. Their attention to detail and consistent quality has impressed both our staff and clients.",
+      text: "Metromellow transformed our office environment. Their attention to detail and consistent quality has impressed both our staff and clients.",
     },
     {
       name: "Michael Chen",
@@ -41,7 +41,11 @@ const ClientTestimonials: React.FC = () => {
           viewport={{ once: true }}
         >
           <h2 className={styles.clientTestimonials__title}>
-            What Our <span className={styles.clientTestimonials__highlight}>Clients</span> Say
+            What Our{" "}
+            <span className={styles.clientTestimonials__highlight}>
+              Clients
+            </span>{" "}
+            Say
           </h2>
         </motion.div>
 
@@ -63,10 +67,14 @@ const ClientTestimonials: React.FC = () => {
                   <Star key={i} size={16} fill="currentColor" />
                 ))}
               </div>
-              <p className={styles.clientTestimonials__text}>{testimonial.text}</p>
+              <p className={styles.clientTestimonials__text}>
+                {testimonial.text}
+              </p>
               <div className={styles.clientTestimonials__author}>
                 <strong>{testimonial.name}</strong>
-                <span>{testimonial.title}, {testimonial.company}</span>
+                <span>
+                  {testimonial.title}, {testimonial.company}
+                </span>
               </div>
             </motion.div>
           ))}

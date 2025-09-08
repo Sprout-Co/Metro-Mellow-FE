@@ -1,4 +1,4 @@
-# Firebase Setup Guide for Metro Mellow Waitlist
+# Firebase Setup Guide for Metromellow Waitlist
 
 ## 1. Create Firebase Project
 
@@ -20,12 +20,13 @@
 1. Go to **Project Settings** (gear icon)
 2. Scroll down to "Your apps" section
 3. Click **"Web"** icon to add a web app
-4. Register your app with name: `Metro Mellow Web`
+4. Register your app with name: `Metromellow Web`
 5. Copy the Firebase config object
 
 ## 4. Configure Environment Variables
 
 1. Copy `.env.example` to `.env.local`:
+
    ```bash
    cp .env.example .env.local
    ```
@@ -62,11 +63,13 @@ Or manually copy the rules from `firestore.rules` to Firebase Console > Firestor
 ## 7. Test Your Setup
 
 1. Install Firebase package:
+
    ```bash
    npm install firebase
    ```
 
 2. Start your development server:
+
    ```bash
    npm run dev
    ```
@@ -76,14 +79,16 @@ Or manually copy the rules from `firestore.rules` to Firebase Console > Firestor
 ## 8. Monitor Your Waitlist
 
 ### View Signups in Firebase Console
+
 1. Go to Firestore Database
 2. Navigate to the `waitlist` collection
 3. View all signups with timestamps and details
 
 ### Export Waitlist Data
+
 ```javascript
 // Use the waitlistService.exportWaitlist() method
-import { waitlistService } from '@/lib/services/waitlist';
+import { waitlistService } from "@/lib/services/waitlist";
 
 const exportData = async () => {
   const data = await waitlistService.exportWaitlist();
@@ -95,43 +100,52 @@ const exportData = async () => {
 ## 9. Production Considerations
 
 ### Security Rules
+
 - Update admin emails in `firestore.rules`
 - Consider implementing proper authentication for admin access
 - Review and tighten security rules before going live
 
 ### Analytics
+
 - Set up Firebase Analytics goals for waitlist conversions
 - Consider integrating with Google Analytics 4
 
 ### Monitoring
+
 - Set up Firebase Performance Monitoring
 - Enable Firestore usage alerts
 - Monitor costs and set billing alerts
 
 ### Backup
+
 - Consider setting up automated Firestore exports
 - Implement data retention policies
 
 ## 10. Advanced Features (Optional)
 
 ### Email Notifications
+
 Set up Cloud Functions to send welcome emails:
+
 ```bash
 firebase init functions
 ```
 
 ### Real-time Updates
+
 Add real-time listeners for live waitlist count updates:
+
 ```javascript
-import { onSnapshot, collection } from 'firebase/firestore';
+import { onSnapshot, collection } from "firebase/firestore";
 
 // Real-time waitlist count
-const unsubscribe = onSnapshot(collection(db, 'waitlist'), (snapshot) => {
-  console.log('Current waitlist size:', snapshot.size);
+const unsubscribe = onSnapshot(collection(db, "waitlist"), (snapshot) => {
+  console.log("Current waitlist size:", snapshot.size);
 });
 ```
 
 ### Data Analytics
+
 - Export data to BigQuery for advanced analytics
 - Set up conversion funnels and user behavior analysis
 
@@ -145,6 +159,7 @@ const unsubscribe = onSnapshot(collection(db, 'waitlist'), (snapshot) => {
 4. **Build Errors**: Make sure Firebase is properly imported and initialized
 
 ### Support
+
 - [Firebase Documentation](https://firebase.google.com/docs)
 - [Firestore Security Rules](https://firebase.google.com/docs/firestore/security/get-started)
 - [Next.js Firebase Integration](https://firebase.google.com/docs/web/setup)

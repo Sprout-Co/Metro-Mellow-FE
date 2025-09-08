@@ -1,5 +1,5 @@
 /**
- * Blog service functions for Metro Mellow
+ * Blog service functions for Metromellow
  * In production, these would connect to a CMS like Strapi, Contentful, or a database
  */
 
@@ -44,7 +44,7 @@ export const sampleBlogPosts: BlogPost[] = [
     title:
       "The Ultimate Deep Cleaning Guide for Lagos Homes During Rainy Season",
     excerpt:
-      "Essential deep cleaning tips to keep your Lagos home fresh and healthy during the rainy season. Learn professional techniques used by Metro Mellow's cleaning experts.",
+      "Essential deep cleaning tips to keep your Lagos home fresh and healthy during the rainy season. Learn professional techniques used by Metromellow's cleaning experts.",
     content: "", // Would be full content in production
     featuredImage: "/images/blog/blog-1.jpg",
     author: {
@@ -72,7 +72,7 @@ export const sampleBlogPosts: BlogPost[] = [
     updatedAt: "2024-03-15T09:00:00Z",
     readTime: 8,
     metaTitle:
-      "Deep Cleaning Guide for Lagos Homes | Rainy Season Tips | Metro Mellow",
+      "Deep Cleaning Guide for Lagos Homes | Rainy Season Tips | Metromellow",
     metaDescription:
       "Expert deep cleaning tips for Lagos homes during rainy season. Prevent mold, control humidity, and maintain a fresh home with professional techniques.",
     featured: true,
@@ -118,7 +118,7 @@ export const sampleBlogPosts: BlogPost[] = [
     updatedAt: "2024-03-10T10:30:00Z",
     readTime: 6,
     metaTitle:
-      "Laundry Care in Nigeria's Climate | Tropical Fabric Care Tips | Metro Mellow",
+      "Laundry Care in Nigeria's Climate | Tropical Fabric Care Tips | Metromellow",
     metaDescription:
       "Expert laundry care tips for Nigeria's tropical climate. Keep clothes fresh, prevent mold, and extend fabric life with professional techniques.",
     featured: true,
@@ -163,7 +163,7 @@ export const sampleBlogPosts: BlogPost[] = [
     updatedAt: "2024-03-08T14:15:00Z",
     readTime: 7,
     metaTitle:
-      "Nigerian Meal Prep for Busy Lagos Professionals | Healthy Recipes | Metro Mellow",
+      "Nigerian Meal Prep for Busy Lagos Professionals | Healthy Recipes | Metromellow",
     metaDescription:
       "Time-saving Nigerian meal prep ideas for busy Lagos professionals. Healthy, delicious recipes that fit your hectic schedule.",
     featured: true,
@@ -208,7 +208,7 @@ export const sampleBlogPosts: BlogPost[] = [
     updatedAt: "2024-03-05T11:20:00Z",
     readTime: 9,
     metaTitle:
-      "Pest Control Lagos Rainy Season | Natural Prevention Tips | Metro Mellow",
+      "Pest Control Lagos Rainy Season | Natural Prevention Tips | Metromellow",
     metaDescription:
       "Expert pest control tips for Lagos rainy season. Natural prevention methods and safe solutions for common household pests.",
     featured: false,
@@ -254,7 +254,7 @@ export const sampleBlogPosts: BlogPost[] = [
     updatedAt: "2024-03-01T16:45:00Z",
     readTime: 5,
     metaTitle:
-      "Home Organization Tips for Small Lagos Apartments | Space Solutions | Metro Mellow",
+      "Home Organization Tips for Small Lagos Apartments | Space Solutions | Metromellow",
     metaDescription:
       "Maximize space in small Lagos apartments with expert organization tips. Professional strategies for better storage and functionality.",
     featured: false,
