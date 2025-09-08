@@ -9,21 +9,6 @@
   min-height: 50rem;
   overflow: hidden;
   @include hero-base(40rem);
-  // Dark overlay for better text contrast
-  &__overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      to right,
-      color-alpha("primary", "base", 0.9) 0%,
-      color-alpha("primary", "base", 0.7) 60%,
-      color-alpha("primary", "base", 0.8) 100%
-    );
-    z-index: 1;
-  }
 
   &__container {
     @include container;

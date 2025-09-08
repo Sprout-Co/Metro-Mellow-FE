@@ -16,11 +16,48 @@ import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
 
 export const metadata = {
   title:
-    "Metro Mellow - Professional Home Services | Cleaning, Laundry, Cooking & More",
+    "Professional Home Services in Lagos | Cleaning, Laundry & Meal Delivery | Metro Mellow",
   description:
-    "Transform your daily routine with Metro Mellow's professional home services. From cleaning and laundry to meal delivery and pest control - we handle the chores while you enjoy life. Book trusted professionals in Lagos today!",
+    "Top-rated cleaning, laundry, cooking & pest control services in Lagos. Save time with Metro Mellow's trusted home services. Book online today & enjoy same-day service!",
   keywords:
-    "home services, cleaning services Lagos, laundry service, meal delivery, pest control, professional cleaners, Metro Mellow",
+    "home services Lagos, cleaning services, laundry service, meal prep, pest control, house cleaning Lagos, food delivery Lagos, Metro Mellow",
+  alternates: {
+    canonical: "https://metromellow.com",
+  },
+  openGraph: {
+    title: "Professional Home Services in Lagos | Metro Mellow",
+    description:
+      "Top-rated cleaning, laundry & meal delivery services in Lagos. Book trusted professionals today!",
+    url: "https://metromellow.com",
+    siteName: "Metro Mellow",
+    locale: "en_NG",
+    type: "website",
+    images: [
+      {
+        url: "/images/brand/brand-logo/solid-bg/green-bg.png",
+        width: 1200,
+        height: 630,
+        alt: "Metro Mellow - Professional Home Services",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Professional Home Services in Lagos | Metro Mellow",
+    description:
+      "Top-rated cleaning, laundry & meal delivery services in Lagos. Book trusted professionals today!",
+    images: ["/images/brand/brand-logo/solid-bg/green-bg.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function Home() {
