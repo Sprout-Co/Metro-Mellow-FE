@@ -5,11 +5,40 @@ import ContactInfo from "./_components/ContactInfo/ContactInfo";
 import ContactForm from "./_components/ContactForm/ContactForm";
 import FAQSection from "@/components/ui/FAQSection/FAQSection";
 import { FAQItem } from "@/components/ui/FAQSection/FAQSection";
+import StructuredData from "@/components/common/SEO/StructuredData";
+import {
+  createLocalBusinessSchema,
+  createBreadcrumbSchema,
+  createFAQSchema,
+} from "@/utils/seoHelpers";
 
 export const metadata: Metadata = {
-  title: "Contact Metromellow | Get in Touch",
+  title:
+    "Contact Us | Customer Support & Service Requests | Metro Mellow Lagos",
   description:
-    "Contact Metromellow for all your home service needs. Our friendly team is ready to help with cleaning, laundry, cooking, errands, and pest control.",
+    "Need help with home services in Lagos? Contact Metro Mellow for cleaning, laundry, cooking, errands or pest control. Our team responds within hours. Call or message us today!",
+  keywords:
+    "contact Metro Mellow, home services support Lagos, cleaning service contact, customer service Lagos, book home services",
+  alternates: {
+    canonical: "https://metromellow.com/contact",
+  },
+  openGraph: {
+    title: "Contact Metro Mellow | Customer Support for Home Services",
+    description:
+      "Contact our team for home services throughout Lagos. Quick response guaranteed!",
+    url: "https://metromellow.com/contact",
+    siteName: "Metro Mellow",
+    locale: "en_NG",
+    type: "website",
+    images: [
+      {
+        url: "/images/brand/brand-logo/solid-bg/green-bg.png",
+        width: 1200,
+        height: 630,
+        alt: "Metro Mellow - Professional Home Services Contact",
+      },
+    ],
+  },
 };
 
 export default function ContactPage() {
@@ -52,12 +81,99 @@ export default function ContactPage() {
     },
   ];
 
+  // Prepare structured data objects
+  const contactPageSchema = {
+    "@type": "ContactPage",
+    name: "Contact Metro Mellow",
+    description:
+      "Contact us for home services throughout Lagos including cleaning, laundry, and food delivery.",
+    url: "https://metromellow.com/contact",
+    isPartOf: {
+      "@type": "WebSite",
+      name: "Metro Mellow",
+      url: "https://metromellow.com",
+    },
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: "+2347096249201",
+      contactType: "customer service",
+      areaServed: "Lagos",
+      availableLanguage: ["en"],
+    },
+  };
+
+  // Convert FAQs to the format needed for schema
+  const faqSchemaData = contactFAQs.map((faq) => ({
+    question: faq.question,
+    answer: faq.answer,
+  }));
+
+  // Define breadcrumbs for this page
+  const breadcrumbs = [
+    { name: "Home", url: "https://metromellow.com" },
+    { name: "Contact Us", url: "https://metromellow.com/contact" },
+  ];
+
+  // Enhance business schema with contact-specific information
+  const enhancedBusinessInfo = {
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        telephone: "+2347096249201",
+        contactType: "customer service",
+        areaServed: "Lagos",
+        availableLanguage: ["en"],
+      },
+      {
+        "@type": "ContactPoint",
+        telephone: "+2349068249871",
+        contactType: "sales",
+        areaServed: "Lagos",
+        availableLanguage: ["en"],
+      },
+    ],
+  };
+
   return (
-    <main>
-      <ContactHero />
-      <ContactInfo />
-      <ContactForm />
-      <FAQSection faqs={contactFAQs} />
-    </main>
+    <>
+      {/* Add structured data */}
+      <StructuredData type="WebPage" data={contactPageSchema} />
+      <StructuredData
+        type="BreadcrumbList"
+        data={createBreadcrumbSchema(breadcrumbs)}
+      />
+      <StructuredData type="FAQPage" data={createFAQSchema(faqSchemaData)} />
+      <StructuredData
+        type="LocalBusiness"
+        data={createLocalBusinessSchema(enhancedBusinessInfo)}
+      />
+
+      <main>
+        <section
+          id="contact-hero-lagos"
+          aria-label="Contact Metro Mellow in Lagos"
+        >
+          <ContactHero />
+        </section>
+
+        <section
+          id="contact-information-details"
+          aria-label="Contact Information"
+        >
+          <ContactInfo />
+        </section>
+
+        <section id="contact-form-request" aria-label="Send Service Request">
+          <ContactForm />
+        </section>
+
+        <section
+          id="contact-faq-support"
+          aria-label="Frequently Asked Questions About Our Services"
+        >
+          <FAQSection faqs={contactFAQs} />
+        </section>
+      </main>
+    </>
   );
 }

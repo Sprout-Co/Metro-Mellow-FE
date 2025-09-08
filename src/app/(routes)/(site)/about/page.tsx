@@ -5,6 +5,12 @@ import ImpactSection from "./_components/ImpactSection/ImpactSection";
 import MagicHandsSection from "./_components/MagicHandsSection/MagicHandsSection";
 import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
 import styles from "./About.module.scss";
+import StructuredData from "@/components/common/SEO/StructuredData";
+import {
+  createLocalBusinessSchema,
+  createBreadcrumbSchema,
+  createFAQSchema,
+} from "@/utils/seoHelpers";
 
 const aboutFaqs: FAQItem[] = [
   {
@@ -46,19 +52,98 @@ const aboutFaqs: FAQItem[] = [
 ];
 
 export const metadata: Metadata = {
-  title: "About Metromellow | Our Story and Values",
+  title: "About Us | Our Story & Mission | Metro Mellow Lagos",
   description:
-    "Learn about Metromellow's mission to transform home services with quality, reliability, and exceptional customer care.",
+    "Discover Metro Mellow's journey to transform home services in Lagos through quality, reliability, and exceptional customer care. Learn about our mission and values.",
+  keywords:
+    "Metro Mellow, about us, home services Lagos, company mission, company values, Lagos service provider",
+  alternates: {
+    canonical: "https://metromellow.com/about",
+  },
+  openGraph: {
+    title: "About Metro Mellow | Quality Home Services in Lagos",
+    description:
+      "Learn about our mission to transform home services in Lagos through quality, reliability & exceptional customer care.",
+    url: "https://metromellow.com/about",
+    siteName: "Metro Mellow",
+    locale: "en_NG",
+    type: "website",
+    images: [
+      {
+        url: "/images/brand/brand-logo/solid-bg/green-bg.png",
+        width: 1200,
+        height: 630,
+        alt: "Metro Mellow - Professional Home Services",
+      },
+    ],
+  },
 };
 
 export default function AboutPage() {
+  // Prepare structured data objects
+  const aboutPageSchema = {
+    "@type": "WebPage",
+    name: "About Metro Mellow",
+    description:
+      "Learn about Metro Mellow's mission to transform home services in Lagos.",
+    url: "https://metromellow.com/about",
+    isPartOf: {
+      "@type": "WebSite",
+      name: "Metro Mellow",
+      url: "https://metromellow.com",
+    },
+  };
+
+  // Convert FAQs to the format needed for schema
+  const faqSchemaData = aboutFaqs.map((faq) => ({
+    question: faq.question,
+    answer: faq.answer,
+  }));
+
+  // Define breadcrumbs for this page
+  const breadcrumbs = [
+    { name: "Home", url: "https://metromellow.com" },
+    { name: "About Us", url: "https://metromellow.com/about" },
+  ];
+
   return (
-    <main className={styles.aboutPage}>
-      <StorySection />
-      <VideoSection />
-      <ImpactSection />
-      <MagicHandsSection />
-      <FAQSection faqs={aboutFaqs} />
-    </main>
+    <>
+      {/* Add structured data */}
+      <StructuredData type="WebPage" data={aboutPageSchema} />
+      <StructuredData
+        type="BreadcrumbList"
+        data={createBreadcrumbSchema(breadcrumbs)}
+      />
+      <StructuredData type="FAQPage" data={createFAQSchema(faqSchemaData)} />
+      <StructuredData
+        type="LocalBusiness"
+        data={createLocalBusinessSchema({
+          description:
+            "Metro Mellow is transforming home services in Lagos through quality, reliability, and exceptional customer care.",
+        })}
+      />
+
+      <main className={styles.aboutPage}>
+        <section id="about-our-story" aria-label="Our Story">
+          <StorySection />
+        </section>
+
+        <section id="our-service-video" aria-label="See Our Services">
+          <VideoSection />
+        </section>
+
+        <section id="our-impact-lagos" aria-label="Our Impact in Lagos">
+          <ImpactSection />
+        </section>
+
+        <section id="our-team" aria-label="Our Professional Team">
+          <MagicHandsSection />
+        </section>
+
+        <section id="about-faqs" aria-label="Frequently Asked Questions">
+          <FAQSection faqs={aboutFaqs} />
+        </section>
+      </main>
+    </>
   );
 }

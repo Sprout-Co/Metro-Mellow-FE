@@ -21,20 +21,20 @@
   }
 
   &__title {
-    @include heading-2;
+    @include heading-1;
     margin-bottom: spacing("lg");
 
     &--accent {
       display: block;
       color: color("primary", "base");
-      @include font-weight("medium");
+      // @include font-weight("medium");
       margin-bottom: spacing("xs");
     }
 
     &--main {
       display: block;
       color: color("neutral", "darkest");
-      @include font-weight("bold");
+      // @include font-weight("bold");
     }
 
     @include breakpoint-down("md") {

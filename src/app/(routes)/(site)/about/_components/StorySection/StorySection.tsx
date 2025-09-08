@@ -1,13 +1,10 @@
 "use client";
 import React from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import styles from "./StorySection.module.scss";
-import { Button } from "@/components/ui/Button/Button";
-import VideoSection from "../VideoSection/VideoSection";
-import CTAButtonExample from "@/components/ui/Button/CTAButton/CTAButtonExample";
 import { CTAButton } from "@/components/ui/Button/CTAButton";
 import { Routes } from "@/constants/routes";
+import SignaturePattern from "@/components/ui/SignaturePattern/SignaturePattern";
 
 const StorySection: React.FC = () => {
   // Animation variants
@@ -47,6 +44,7 @@ const StorySection: React.FC = () => {
   return (
     <>
       <section className={styles.storySection}>
+        <SignaturePattern />
         <div className={styles.storySection__container}>
           <div className={styles.storySection__content}>
             <motion.h2
