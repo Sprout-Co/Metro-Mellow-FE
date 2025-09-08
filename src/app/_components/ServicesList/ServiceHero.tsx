@@ -4,6 +4,7 @@ import styles from "./ServiceHero.module.scss";
 import { Button } from "@/components/ui/Button/Button";
 import { CTAButton } from "@/components/ui/Button/CTAButton";
 import { Routes } from "@/constants/routes";
+import SignaturePattern from "@/components/ui/SignaturePattern/SignaturePattern";
 
 interface ServiceHeroProps {
   onBookServices?: () => void;
@@ -20,6 +21,7 @@ const services = [
 const ServiceHero: React.FC<ServiceHeroProps> = ({ onBookServices }) => {
   return (
     <section className={styles["service-hero"]}>
+      <SignaturePattern />
       <div className={styles["service-hero__wrapper"]}>
         {/* Left: Call to Action */}
         <div className={styles["service-hero__left"]}>
