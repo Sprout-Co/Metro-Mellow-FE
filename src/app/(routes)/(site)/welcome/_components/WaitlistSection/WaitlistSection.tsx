@@ -3,9 +3,17 @@
 import { FC, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import { ArrowRight, CheckCircle, Users, Gift, Bell, AlertCircle } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle,
+  Users,
+  Gift,
+  Bell,
+  AlertCircle,
+} from "lucide-react";
 import { useWaitlist } from "@/hooks/useWaitlist";
 import styles from "./WaitlistSection.module.scss";
+import SignaturePattern from "@/components/ui/SignaturePattern/SignaturePattern";
 
 const WaitlistSection: FC = () => {
   const [email, setEmail] = useState("");
@@ -16,7 +24,7 @@ const WaitlistSection: FC = () => {
     successMessage,
     stats,
     addToWaitlist,
-    getStats
+    getStats,
   } = useWaitlist();
 
   // Load waitlist stats on component mount
@@ -47,8 +55,8 @@ const WaitlistSection: FC = () => {
     if (!email.trim()) return;
 
     await addToWaitlist(email.trim(), {
-      source: 'welcome_page',
-      interests: ['cleaning', 'cooking', 'laundry', 'pest-control'] // All services for now
+      source: "welcome_page",
+      interests: ["cleaning", "cooking", "laundry", "pest-control"], // All services for now
     });
 
     if (isSubmitted) {
@@ -96,6 +104,7 @@ const WaitlistSection: FC = () => {
   if (isSubmitted) {
     return (
       <section className={styles.waitlistSection} id="waitlist">
+        <SignaturePattern />
         <div className={styles.waitlistSection__container}>
           <motion.div
             className={styles.waitlistSection__success}
@@ -110,12 +119,13 @@ const WaitlistSection: FC = () => {
               Welcome to the Metromellow Family!
             </h2>
             <p className={styles.waitlistSection__successText}>
-              {successMessage || "You're now on our exclusive waitlist. We'll keep you updated on our launch progress and send you early access when we're ready to serve you."}
+              {successMessage ||
+                "You're now on our exclusive waitlist. We'll keep you updated on our launch progress and send you early access when we're ready to serve you."}
             </p>
             <div className={styles.waitlistSection__successStats}>
               <div className={styles.waitlistSection__stat}>
                 <span className={styles.waitlistSection__statNumber}>
-                  {'200+'}
+                  {"200+"}
                 </span>
                 <span className={styles.waitlistSection__statLabel}>
                   People on waitlist
@@ -138,6 +148,7 @@ const WaitlistSection: FC = () => {
 
   return (
     <section className={styles.waitlistSection} id="waitlist">
+      <SignaturePattern bgType="orange" />
       <div className={styles.waitlistSection__container}>
         <motion.div
           className={styles.waitlistSection__content}
@@ -230,7 +241,7 @@ const WaitlistSection: FC = () => {
 
             <p className={styles.waitlistSection__formText}>
               <span className={styles.waitlistSection__formNumber}>
-                {'200+'}
+                {"200+"}
               </span>{" "}
               people already joined • No spam, unsubscribe anytime
             </p>
