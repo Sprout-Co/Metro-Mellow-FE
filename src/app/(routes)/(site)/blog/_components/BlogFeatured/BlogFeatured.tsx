@@ -9,6 +9,9 @@ interface BlogFeaturedProps {
 export default function BlogFeatured({ posts }: BlogFeaturedProps) {
   if (posts.length === 0) return null;
 
+  const primaryPost = posts[0];
+  const secondaryPosts = posts.slice(1, 3);
+
   return (
     <div className={styles["blog-featured"]}>
       <div className={styles["blog-featured__container"]}>
@@ -20,14 +23,26 @@ export default function BlogFeatured({ posts }: BlogFeaturedProps) {
         </div>
 
         <div className={styles["blog-featured__grid"]}>
-          {posts.map((post, index) => (
-            <div 
-              key={post.id} 
-              className={`${styles["blog-featured__featured-item"]} ${index === 0 ? styles["blog-featured__featured-item--primary"] : ''}`}
+          {/* Primary Featured Article */}
+          <div className={styles["blog-featured__primary-featured"]}>
+            <div
+              className={`${styles["blog-featured__featured-item"]} ${styles["blog-featured__featured-item--primary"]}`}
             >
-              <BlogCard post={post} featured={index === 0} />
+              <BlogCard post={primaryPost} featured={true} />
             </div>
-          ))}
+          </div>
+
+          {/* Secondary Featured Articles */}
+          <div className={styles["blog-featured__secondary-grid"]}>
+            {secondaryPosts.map((post, index) => (
+              <div
+                key={post.id}
+                className={`${styles["blog-featured__featured-item"]} ${styles["blog-featured__featured-item--secondary"]}`}
+              >
+                <BlogCard post={post} featured={false} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

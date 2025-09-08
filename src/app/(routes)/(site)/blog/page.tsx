@@ -116,6 +116,7 @@ export default async function BlogPage() {
           Mellow
         </h1>
 
+        {/* Hero Section - Full Width */}
         <section
           id="blog-hero"
           aria-label="Blog Introduction"
@@ -124,44 +125,74 @@ export default async function BlogPage() {
           <BlogHero />
         </section>
 
-        <section
-          id="featured-posts"
-          aria-label="Featured Blog Posts"
-          className={styles["blog-page__featured-section"]}
-        >
-          <div className={styles["blog-page__container"]}>
-            <h2 className={styles["blog-page__section-title"]}>
-              Featured Articles
-            </h2>
-            <BlogFeatured posts={blogPosts.slice(0, 3)} />
-          </div>
-        </section>
+        {/* Main Content Container */}
+        <div className={styles["blog-page__container"]}>
+          {/* Featured Articles */}
+          <div className={styles["blog-page__content-wrapper"]}>
+            <section
+              id="featured-posts"
+              aria-label="Featured Blog Posts"
+              className={`${
+                styles["blog-page__featured-section"]
+              } ${styles["blog-page__section--featured"]}`}
+            >
+              <div className={styles["blog-page__section-header"]}>
+                <h2
+                  className={`${
+                    styles["blog-page__section-title"]
+                  } ${styles["blog-page__section-title--large"]}`}
+                >
+                  Featured Articles
+                </h2>
+                <p className={styles["blog-page__section-subtitle"]}>
+                  Hand-picked expert content to help you maintain your Lagos
+                  home with professional tips and insights
+                </p>
+              </div>
+              <BlogFeatured posts={blogPosts.slice(0, 3)} />
+            </section>
 
-        <section
-          id="blog-categories"
-          aria-label="Blog Categories"
-          className={styles["blog-page__categories-section"]}
-        >
-          <div className={styles["blog-page__container"]}>
-            <h2 className={styles["blog-page__section-title"]}>
-              Browse By Category
-            </h2>
-            <BlogCategories categories={categories} />
+            {/* Categories */}
+            <section
+              id="blog-categories"
+              aria-label="Blog Categories"
+              className={`${
+                styles["blog-page__categories-section"]
+              } ${styles["blog-page__section--categories"]}`}
+            >
+              <div className={styles["blog-page__section-header"]}>
+                <h2 className={styles["blog-page__section-title"]}>
+                  Browse By Category
+                </h2>
+                <p className={styles["blog-page__section-subtitle"]}>
+                  Find expert advice organized by service type to get exactly
+                  what you need
+                </p>
+              </div>
+              <BlogCategories categories={categories} />
+            </section>
           </div>
-        </section>
 
-        <section
-          id="all-posts"
-          aria-label="All Blog Posts"
-          className={styles["blog-page__grid-section"]}
-        >
-          <div className={styles["blog-page__container"]}>
-            <h2 className={styles["blog-page__section-title"]}>
-              Latest Articles
-            </h2>
+          {/* All Articles */}
+          <section
+            id="all-posts"
+            aria-label="All Blog Posts"
+            className={`${
+              styles["blog-page__grid-section"]
+            } ${styles["blog-page__section--grid"]}`}
+          >
+            <div className={styles["blog-page__section-header"]}>
+              <h2 className={styles["blog-page__section-title"]}>
+                Latest Articles
+              </h2>
+              <p className={styles["blog-page__section-subtitle"]}>
+                Discover the latest tips, guides, and insights from our home
+                services experts
+              </p>
+            </div>
             <BlogGrid posts={blogPosts} />
-          </div>
-        </section>
+          </section>
+        </div>
 
         {/* Hidden SEO content */}
         <div className={styles["blog-page__visually-hidden"]}>

@@ -3,52 +3,61 @@
 
 .blog-hero {
   position: relative;
-  min-height: 80vh;
+  min-height: 85vh;
   display: flex;
   align-items: center;
-  padding: spacing("3xl") 0;
+  padding: spacing("4xl") 0;
   overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(color("primary", "lighter"), 0.08) 0%,
+    rgba(color("secondary", "lighter"), 0.04) 50%,
+    rgba(color("neutral", "white"), 1) 100%
+  );
 
+  // Floating background elements
   &::before {
     content: "";
     position: absolute;
-    top: -10%;
-    right: -5%;
-    width: 40%;
-    height: 70%;
+    top: -20%;
+    right: -10%;
+    width: 50%;
+    height: 80%;
     background: radial-gradient(
-      circle,
-      rgba(color("primary", "lighter"), 0.3) 0%,
-      rgba(color("primary", "lighter"), 0) 70%
+      ellipse at center,
+      rgba(color("primary", "lighter"), 0.15) 0%,
+      rgba(color("primary", "lighter"), 0.05) 40%,
+      transparent 70%
     );
-    z-index: 0;
     border-radius: 50%;
-    filter: blur(60px);
-    animation: float 15s infinite alternate ease-in-out;
+    filter: blur(80px);
+    animation: float 20s infinite alternate ease-in-out;
+    z-index: 0;
   }
 
   &::after {
     content: "";
     position: absolute;
-    bottom: -10%;
-    left: -5%;
-    width: 30%;
-    height: 50%;
+    bottom: -15%;
+    left: -10%;
+    width: 40%;
+    height: 60%;
     background: radial-gradient(
-      circle,
-      rgba(color("secondary", "lighter"), 0.2) 0%,
-      rgba(color("secondary", "lighter"), 0) 70%
+      ellipse at center,
+      rgba(color("secondary", "lighter"), 0.1) 0%,
+      rgba(color("secondary", "lighter"), 0.03) 40%,
+      transparent 70%
     );
-    z-index: 0;
     border-radius: 50%;
     filter: blur(60px);
-    animation: float 20s infinite alternate-reverse ease-in-out;
+    animation: float 25s infinite alternate-reverse ease-in-out;
+    z-index: 0;
   }
 
   &__container {
     @include container;
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
+    grid-template-columns: 1.3fr 0.7fr;
     gap: spacing("4xl");
     align-items: center;
     position: relative;
@@ -56,29 +65,32 @@
   }
 
   &__content {
-    @include slide-up;
+    @include slide-up(20px);
+    animation-duration: 0.8s;
+    position: relative;
   }
 
   &__title {
     @include heading-1;
     color: color("neutral", "black");
-    margin-bottom: spacing("lg");
+    margin-bottom: spacing("xl");
     line-height: 1.1;
     position: relative;
-    display: inline-block;
 
+    // Add a subtle decorative element
     &::after {
       content: "";
       position: absolute;
-      width: 80px;
-      height: 80px;
+      width: 120px;
+      height: 120px;
       background: url("/images/brand/signature-pattern/signature-transparent.png");
       background-size: contain;
-      opacity: 0.08;
-      top: -20px;
-      right: -40px;
+      background-repeat: no-repeat;
+      opacity: 0.06;
+      top: -30px;
+      right: -60px;
       z-index: -1;
-      animation: rotate 40s linear infinite;
+      animation: rotate 50s linear infinite;
     }
   }
 
@@ -90,56 +102,96 @@
     &::after {
       content: "";
       position: absolute;
-      bottom: -4px;
+      bottom: -spacing("xs");
       left: 0;
       right: 0;
-      height: 4px;
+      height: 5px;
       background: linear-gradient(
         90deg,
         color("primary", "base") 0%,
-        color("secondary", "base") 100%
+        color("secondary", "base") 50%,
+        color("accent", "base") 100%
       );
       border-radius: border-radius("full");
-      opacity: 0.7;
+      opacity: 0.8;
+      animation: glow 3s infinite alternate ease-in-out;
     }
   }
 
   &__description {
     @include body-1;
     color: color("neutral", "dark");
-    margin-bottom: spacing("xl");
+    margin-bottom: spacing("2xl");
     line-height: line-height("relaxed");
     max-width: 90%;
-    position: relative;
-    @include slide-up(10px);
-    animation-delay: 150ms;
+    @include slide-up(15px);
+    animation-delay: 200ms;
+    animation-duration: 0.8s;
   }
 
   &__stats {
     @include flex;
     gap: spacing("xl");
     @include slide-up(10px);
-    animation-delay: 300ms;
+    animation-delay: 400ms;
+    animation-duration: 0.8s;
   }
 
   &__stat {
-    padding: spacing("md");
-    background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.9),
-      rgba(255, 255, 255, 0.5)
-    );
-    backdrop-filter: blur(5px);
-    border-radius: border-radius("lg");
-    box-shadow: shadow("sm");
+    padding: spacing("lg");
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    border-radius: border-radius("xl");
+    box-shadow: shadow("md");
     text-align: center;
-    min-width: 120px;
+    min-width: 140px;
     border: 1px solid rgba(255, 255, 255, 0.8);
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(
+        90deg,
+        color("primary", "base") 0%,
+        color("secondary", "base") 50%,
+        color("accent", "base") 100%
+      );
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
 
     &:hover {
-      transform: translateY(-5px);
-      box-shadow: shadow("md");
+      transform: translateY(-8px);
+      box-shadow: shadow("lg");
+      background: rgba(255, 255, 255, 0.95);
+
+      &::before {
+        transform: scaleX(1);
+      }
+
+      .blog-hero__stat-number {
+        color: color("primary", "base");
+        transform: scale(1.1);
+      }
+    }
+
+    // Stagger the hover animations
+    &:nth-child(1) {
+      animation-delay: 0ms;
+    }
+    &:nth-child(2) {
+      animation-delay: 100ms;
+    }
+    &:nth-child(3) {
+      animation-delay: 200ms;
     }
   }
 
@@ -148,34 +200,52 @@
     color: color("primary", "base");
     display: block;
     margin-bottom: spacing("xs");
+    transition: all 0.3s ease;
+    font-weight: 800;
   }
 
   &__stat-label {
     @include caption;
     color: color("neutral", "medium");
-    @include font-weight("semibold");
+    @include font-weight("bold");
+    letter-spacing: letterSpacing("wide");
+    text-transform: uppercase;
+    font-size: fontSize("xs");
   }
 
   &__visual {
     @include scale-in;
-    animation-delay: 450ms;
+    animation-delay: 600ms;
+    animation-duration: 1s;
     position: relative;
+    @include flex-center;
 
+    // Add floating decoration around the image
     &::before {
+      content: "";
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(
+        circle,
+        rgba(color("primary", "lighter"), 0.1) 0%,
+        rgba(color("primary", "lighter"), 0.05) 50%,
+        transparent 70%
+      );
+      border-radius: 50%;
+      z-index: -1;
+      animation: pulse 4s infinite ease-in-out;
+    }
+
+    &::after {
       content: "";
       position: absolute;
       width: 300px;
       height: 300px;
-      background: radial-gradient(
-        circle,
-        rgba(color("primary", "lighter"), 0.15) 0%,
-        rgba(color("primary", "lighter"), 0) 70%
-      );
-      z-index: -1;
+      border: 2px solid rgba(color("primary", "base"), 0.1);
       border-radius: 50%;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      z-index: -1;
+      animation: rotate 30s linear infinite reverse;
     }
   }
 
@@ -190,57 +260,103 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.1));
-    animation: float 6s infinite alternate ease-in-out;
+    filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.15));
+    animation: float 8s infinite alternate ease-in-out;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.02);
+    }
   }
 
+  // Animation keyframes
   @keyframes float {
     0% {
       transform: translateY(0) rotate(0deg);
     }
     100% {
-      transform: translateY(-10px) rotate(2deg);
+      transform: translateY(-15px) rotate(2deg);
     }
   }
 
   @keyframes rotate {
-    0% {
+    from {
       transform: rotate(0deg);
     }
-    100% {
+    to {
       transform: rotate(360deg);
     }
   }
 
+  @keyframes glow {
+    0% {
+      opacity: 0.6;
+      transform: scaleX(1);
+    }
+    100% {
+      opacity: 1;
+      transform: scaleX(1.05);
+    }
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.1;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.05;
+    }
+  }
+
   // Responsive design
+  @include breakpoint-down("xl") {
+    min-height: 75vh;
+    padding: spacing("3xl") 0;
+
+    &__container {
+      gap: spacing("3xl");
+    }
+
+    &__stats {
+      gap: spacing("lg");
+    }
+
+    &__stat {
+      min-width: 120px;
+      padding: spacing("md");
+    }
+  }
+
   @include breakpoint-down("lg") {
     min-height: auto;
-    padding: spacing("2xl") 0;
+    padding: spacing("3xl") 0;
 
     &__container {
       grid-template-columns: 1fr;
-      gap: spacing("xl");
+      gap: spacing("2xl");
+      text-align: center;
     }
 
     &__content {
-      text-align: center;
       order: 1;
     }
 
     &__description {
       margin-left: auto;
       margin-right: auto;
-      max-width: 80%;
+      max-width: 85%;
     }
 
     &__stats {
       justify-content: center;
+      flex-wrap: wrap;
     }
 
     &__visual {
       order: 0;
-      display: flex;
-      justify-content: center;
     }
 
     &__image-container {
@@ -249,31 +365,58 @@
   }
 
   @include breakpoint-down("md") {
-    padding: spacing("xl") 0;
+    padding: spacing("2xl") 0;
+
+    &__title {
+      @include heading-2;
+      margin-bottom: spacing("lg");
+
+      &::after {
+        width: 80px;
+        height: 80px;
+        top: -20px;
+        right: -40px;
+      }
+    }
 
     &__description {
       @include body-2;
-      margin-bottom: spacing("lg");
+      margin-bottom: spacing("xl");
       max-width: 100%;
     }
 
     &__stats {
-      flex-wrap: wrap;
-      justify-content: center;
       gap: spacing("md");
     }
 
     &__stat {
       min-width: 100px;
-      padding: spacing("sm");
+      padding: spacing("md") spacing("sm");
     }
 
     &__stat-number {
       @include heading-4;
     }
 
+    &__stat-label {
+      font-size: fontSize("2xs");
+    }
+
     &__image-container {
       max-width: 300px;
+    }
+  }
+
+  @include breakpoint-down("sm") {
+    &__stats {
+      flex-direction: column;
+      align-items: center;
+      gap: spacing("sm");
+    }
+
+    &__stat {
+      width: 100%;
+      max-width: 200px;
     }
   }
 }
