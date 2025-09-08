@@ -30,20 +30,20 @@
   }
 
   &__title {
-    @include heading-2;
+    @include heading-1;
     margin-bottom: spacing("lg");
 
     &--accent {
       display: block;
       color: color("accent", "base");
-      @include font-weight("medium");
+      // @include font-weight("medium");
       margin-bottom: spacing("xs");
     }
 
     &--main {
       display: block;
       color: color("neutral", "white");
-      @include font-weight("bold");
+      // @include font-weight("bold");
     }
 
     @include breakpoint-down("md") {
