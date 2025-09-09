@@ -4,10 +4,12 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
   getBlogPost,
   getRelatedPosts,
-  sampleBlogPosts,
+  getBlogPosts,
 } from "@/lib/services/blog";
 import BlogCard from "../_components/BlogCard/BlogCard";
 import styles from "./BlogPost.module.scss";
@@ -19,7 +21,8 @@ interface BlogPostPageProps {
 }
 
 export async function generateStaticParams() {
-  return sampleBlogPosts.map((post) => ({
+  const posts = await getBlogPosts();
+  return posts.map((post) => ({
     slug: post.slug,
   }));
 }
@@ -37,8 +40,8 @@ export async function generateMetadata({
 
   return {
     title: `${post.title} | Metro Mellow Blog`,
-    description: post.excerpt,
-    keywords: post.seoKeywords.join(", "),
+    description: post.metaDescription,
+    keywords: post.tags.join(", "),
   };
 }
 
@@ -125,7 +128,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           src={post.featuredImage}
           alt={post.title}
           width={1200}
-          height={630}
+          height={350}
           className={styles["post__image"]}
           priority
         />
@@ -135,29 +138,46 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <div className={styles["post__content"]}>
         <div className={styles["post__container"]}>
           <div className={styles["post__article"]}>
-            {/* Article content would go here */}
+            {/* Article content */}
             <div className={styles["post__body"]}>
-              <p>
-                This is where the full blog post content would appear. In a
-                production environment, this content would be fetched from your
-                CMS or markdown files and rendered as rich HTML.
-              </p>
-
-              <h2>Key Takeaways</h2>
-              <ul>
-                {post.tags.map((tag) => (
-                  <li key={tag}>{tag}</li>
-                ))}
-              </ul>
-
-              <blockquote>
-                <p>{post.excerpt}</p>
-              </blockquote>
-
-              <p>
-                Metro Mellow's expert team brings years of experience in
-                providing professional home services throughout Lagos.
-              </p>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  h2: ({ children }) => (
+                    <h2 className={styles["post__heading-2"]}>{children}</h2>
+                  ),
+                  h3: ({ children }) => (
+                    <h3 className={styles["post__heading-3"]}>{children}</h3>
+                  ),
+                  p: ({ children }) => (
+                    <p className={styles["post__paragraph"]}>{children}</p>
+                  ),
+                  ul: ({ children }) => (
+                    <ul className={styles["post__list"]}>{children}</ul>
+                  ),
+                  ol: ({ children }) => (
+                    <ol className={styles["post__ordered-list"]}>{children}</ol>
+                  ),
+                  li: ({ children }) => (
+                    <li className={styles["post__list-item"]}>{children}</li>
+                  ),
+                  blockquote: ({ children }) => (
+                    <blockquote className={styles["post__blockquote"]}>
+                      {children}
+                    </blockquote>
+                  ),
+                  strong: ({ children }) => (
+                    <strong className={styles["post__strong"]}>
+                      {children}
+                    </strong>
+                  ),
+                  em: ({ children }) => (
+                    <em className={styles["post__emphasis"]}>{children}</em>
+                  ),
+                }}
+              >
+                {post.content}
+              </ReactMarkdown>
             </div>
 
             {/* Tags */}
