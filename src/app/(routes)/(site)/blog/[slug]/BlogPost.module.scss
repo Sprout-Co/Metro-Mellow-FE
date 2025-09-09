@@ -179,6 +179,7 @@
     margin-top: -spacing("3xl");
     position: relative;
     z-index: 3;
+    height: 350px;
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
@@ -191,7 +192,7 @@
 
   &__image {
     width: 100%;
-    height: auto;
+    height: 350px;
     border-radius: border-radius("xl");
     box-shadow: 0 20px 40px color-alpha("neutral", "black", 0.15);
   }
