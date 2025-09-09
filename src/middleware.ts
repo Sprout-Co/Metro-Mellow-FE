@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { Routes } from "@/constants/routes";
-import {
-  decodeAndValidateToken,
-} from "./utils/jwt";
+import { decodeAndValidateToken } from "./utils/jwt";
 
 // Define protected routes that require authentication
 const protectedRoutes = [Routes.DASHBOARD, Routes.PROFILE, Routes.PAYMENTS];
@@ -30,6 +28,10 @@ export function middleware(request: NextRequest) {
   if (process.env.MAINTENANCE_MODE === "true") {
     const isWelcomePage = pathname === Routes.WELCOME;
     const isApiRoute = pathname.startsWith("/api");
+    const isSeoRoute =
+      pathname === "/sitemap.xml" ||
+      pathname === "/robots.txt" ||
+      pathname === "/blog/rss.xml";
     const isStaticAsset =
       pathname.startsWith("/_next") ||
       pathname.startsWith("/images") ||
@@ -37,15 +39,16 @@ export function middleware(request: NextRequest) {
       pathname.startsWith("/public") ||
       pathname === "/favicon.ico";
 
-    if (!isWelcomePage && !isApiRoute && !isStaticAsset) {
+    if (!isWelcomePage && !isApiRoute && !isSeoRoute && !isStaticAsset) {
       return NextResponse.redirect(new URL(Routes.WELCOME, request.url));
     }
   }
 
   // Skip JWT processing for public routes and static assets
-  const isPublicRoute = !protectedRoutes.some((route) => pathname.startsWith(route)) && 
-                       !adminRoutes.some((route) => pathname.startsWith(route));
-  
+  const isPublicRoute =
+    !protectedRoutes.some((route) => pathname.startsWith(route)) &&
+    !adminRoutes.some((route) => pathname.startsWith(route));
+
   if (isPublicRoute) {
     return NextResponse.next();
   }

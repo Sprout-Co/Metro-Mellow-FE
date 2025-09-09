@@ -2,30 +2,115 @@ import { getBlogPosts, getBlogCategories } from "@/lib/services/blog";
 
 export async function GET() {
   const baseUrl = "https://metromellow.com";
-  
+
   // Get blog data
   const blogPosts = await getBlogPosts();
   const categories = await getBlogCategories();
 
   // Static pages
   const staticPages = [
-    { url: "", priority: "1.0", changefreq: "daily" }, // Homepage
-    { url: "welcome", priority: "0.9", changefreq: "weekly" },
-    { url: "about", priority: "0.8", changefreq: "monthly" },
-    { url: "contact", priority: "0.8", changefreq: "monthly" },
-    { url: "services", priority: "0.9", changefreq: "weekly" },
-    { url: "services/cleaning", priority: "0.9", changefreq: "weekly" },
-    { url: "services/laundry", priority: "0.9", changefreq: "weekly" },
-    { url: "services/food", priority: "0.9", changefreq: "weekly" },
-    { url: "services/pest-control", priority: "0.9", changefreq: "weekly" },
-    { url: "subscriptions", priority: "0.8", changefreq: "weekly" },
-    { url: "for-business", priority: "0.7", changefreq: "monthly" },
-    { url: "for-business/corporate-cleaning", priority: "0.7", changefreq: "monthly" },
-    { url: "for-business/uniform-management", priority: "0.7", changefreq: "monthly" },
-    { url: "for-business/catering-services", priority: "0.7", changefreq: "monthly" },
-    { url: "for-business/pest-management", priority: "0.7", changefreq: "monthly" },
-    { url: "for-business/custom-solutions", priority: "0.7", changefreq: "monthly" },
-    { url: "blog", priority: "0.9", changefreq: "daily" },
+    {
+      url: "",
+      priority: "1.0",
+      changefreq: "daily",
+      lastmod: new Date().toISOString(),
+    }, // Homepage
+    {
+      url: "welcome",
+      priority: "0.9",
+      changefreq: "weekly",
+      lastmod: new Date().toISOString(),
+    },
+    {
+      url: "about",
+      priority: "0.8",
+      changefreq: "monthly",
+      lastmod: new Date().toISOString(),
+    },
+    {
+      url: "contact",
+      priority: "0.8",
+      changefreq: "monthly",
+      lastmod: new Date().toISOString(),
+    },
+    {
+      url: "services",
+      priority: "0.9",
+      changefreq: "weekly",
+      lastmod: new Date().toISOString(),
+    },
+    {
+      url: "services/cleaning",
+      priority: "0.9",
+      changefreq: "weekly",
+      lastmod: new Date().toISOString(),
+    },
+    {
+      url: "services/laundry",
+      priority: "0.9",
+      changefreq: "weekly",
+      lastmod: new Date().toISOString(),
+    },
+    {
+      url: "services/food",
+      priority: "0.9",
+      changefreq: "weekly",
+      lastmod: new Date().toISOString(),
+    },
+    {
+      url: "services/pest-control",
+      priority: "0.9",
+      changefreq: "weekly",
+      lastmod: new Date().toISOString(),
+    },
+    {
+      url: "subscriptions",
+      priority: "0.8",
+      changefreq: "weekly",
+      lastmod: new Date().toISOString(),
+    },
+    {
+      url: "for-business",
+      priority: "0.7",
+      changefreq: "monthly",
+      lastmod: new Date().toISOString(),
+    },
+    {
+      url: "for-business/corporate-cleaning",
+      priority: "0.7",
+      changefreq: "monthly",
+      lastmod: new Date().toISOString(),
+    },
+    {
+      url: "for-business/uniform-management",
+      priority: "0.7",
+      changefreq: "monthly",
+      lastmod: new Date().toISOString(),
+    },
+    {
+      url: "for-business/catering-services",
+      priority: "0.7",
+      changefreq: "monthly",
+      lastmod: new Date().toISOString(),
+    },
+    {
+      url: "for-business/pest-management",
+      priority: "0.7",
+      changefreq: "monthly",
+      lastmod: new Date().toISOString(),
+    },
+    {
+      url: "for-business/custom-solutions",
+      priority: "0.7",
+      changefreq: "monthly",
+      lastmod: new Date().toISOString(),
+    },
+    {
+      url: "blog",
+      priority: "0.9",
+      changefreq: "daily",
+      lastmod: new Date().toISOString(),
+    },
   ];
 
   // Blog pages
@@ -41,6 +126,7 @@ export async function GET() {
     url: `blog/category/${category.slug}`,
     priority: "0.7",
     changefreq: "weekly",
+    lastmod: new Date().toISOString(),
   }));
 
   const allPages = [...staticPages, ...blogPages, ...categoryPages];
