@@ -707,6 +707,72 @@ Ready to end dinner stress like the Johnsons?
   },
 ];
 
+export const sampleCategories: BlogCategory[] = [
+  {
+    id: "cleaning",
+    name: "Cleaning Stories",
+    slug: "cleaning",
+    description: "Real customer transformations and cleaning insights",
+    color: "#10B981",
+    icon: "✨",
+    postCount: 8,
+    serviceConnection: "Deep Cleaning Service",
+    metaTitle:
+      "Professional Cleaning Services Lagos | Customer Stories | Metro Mellow",
+    metaDescription:
+      "Read real customer stories about Metro Mellow's professional cleaning services in Lagos. Deep cleaning transformations, maintenance tips, and expert advice.",
+    keywords: [
+      "cleaning services Lagos",
+      "professional cleaners",
+      "deep cleaning",
+      "apartment cleaning",
+      "house cleaning Victoria Island",
+    ],
+  },
+  {
+    id: "laundry",
+    name: "Laundry Solutions",
+    slug: "laundry",
+    description: "Real solutions for Lagos laundry challenges",
+    color: "#3B82F6",
+    icon: "👕",
+    postCount: 6,
+    serviceConnection: "Laundry & Dry Cleaning",
+    metaTitle:
+      "Laundry Services Lagos | Tropical Climate Fabric Care | Metro Mellow",
+    metaDescription:
+      "Professional laundry services in Lagos. Expert solutions for tropical climate fabric care, humidity problems, and fresh clothes guaranteed.",
+    keywords: [
+      "laundry services Lagos",
+      "tropical climate laundry",
+      "fabric care Nigeria",
+      "dry cleaning Lagos",
+      "humid weather laundry",
+    ],
+  },
+  {
+    id: "cooking",
+    name: "Meal Solutions",
+    slug: "cooking",
+    description: "Real meal prep solutions for Lagos families",
+    color: "#F59E0B",
+    icon: "🍽️",
+    postCount: 4,
+    serviceConnection: "Meal Prep & Cooking",
+    metaTitle:
+      "Meal Prep Services Lagos | Nigerian Family Cooking | Metro Mellow",
+    metaDescription:
+      "Professional meal prep services for Lagos families. Nigerian cuisine meal planning, family cooking services, and healthy meal solutions for busy parents.",
+    keywords: [
+      "meal prep Lagos",
+      "family cooking services",
+      "Nigerian meal planning",
+      "cooking services Lagos",
+      "family meal prep",
+    ],
+  },
+];
+
 export const categories: BlogCategory[] = [
   {
     id: "cleaning",
@@ -890,6 +956,12 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
 
 export async function getFeaturedPosts(): Promise<BlogPost[]> {
   return blogPosts.filter((post) => post.featured);
+}
+
+export async function getBlogPostsByCategory(
+  categorySlug: string
+): Promise<BlogPost[]> {
+  return blogPosts.filter((post) => post.category.slug === categorySlug);
 }
 
 export async function getPostsByCategory(
