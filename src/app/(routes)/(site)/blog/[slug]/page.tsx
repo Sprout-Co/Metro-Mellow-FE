@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
   getBlogPost,
   getRelatedPosts,
@@ -137,10 +139,46 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className={styles["post__container"]}>
           <div className={styles["post__article"]}>
             {/* Article content */}
-            <div
-              className={styles["post__body"]}
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
+            <div className={styles["post__body"]}>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  h2: ({ children }) => (
+                    <h2 className={styles["post__heading-2"]}>{children}</h2>
+                  ),
+                  h3: ({ children }) => (
+                    <h3 className={styles["post__heading-3"]}>{children}</h3>
+                  ),
+                  p: ({ children }) => (
+                    <p className={styles["post__paragraph"]}>{children}</p>
+                  ),
+                  ul: ({ children }) => (
+                    <ul className={styles["post__list"]}>{children}</ul>
+                  ),
+                  ol: ({ children }) => (
+                    <ol className={styles["post__ordered-list"]}>{children}</ol>
+                  ),
+                  li: ({ children }) => (
+                    <li className={styles["post__list-item"]}>{children}</li>
+                  ),
+                  blockquote: ({ children }) => (
+                    <blockquote className={styles["post__blockquote"]}>
+                      {children}
+                    </blockquote>
+                  ),
+                  strong: ({ children }) => (
+                    <strong className={styles["post__strong"]}>
+                      {children}
+                    </strong>
+                  ),
+                  em: ({ children }) => (
+                    <em className={styles["post__emphasis"]}>{children}</em>
+                  ),
+                }}
+              >
+                {post.content}
+              </ReactMarkdown>
+            </div>
 
             {/* Tags */}
             <div className={styles["post__tags"]}>

@@ -358,3 +358,87 @@
     }
   }
 }
+
+// Markdown content styling
+.post__body {
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+    color: color("neutral", "darkest");
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    color: color("neutral", "darkest");
+  }
+
+  p {
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    color: color("neutral", "dark");
+  }
+
+  ul,
+  ol {
+    margin: 1.5rem 0;
+    padding-left: 2rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+    color: color("neutral", "dark");
+  }
+
+  blockquote {
+    border-left: 4px solid color("primary", "base");
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: color("neutral", "dark");
+    background: color("neutral", "lightest");
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+
+  strong {
+    font-weight: 600;
+    color: color("neutral", "darkest");
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  // Code blocks
+  pre {
+    background: color("neutral", "darkest");
+    padding: 1.5rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+
+  code {
+    background: color("neutral", "lightest");
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-family: "Monaco", "Menlo", monospace;
+    font-size: 0.9em;
+  }
+
+  pre code {
+    background: transparent;
+    padding: 0;
+  }
+}
