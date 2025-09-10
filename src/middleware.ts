@@ -31,7 +31,8 @@ export function middleware(request: NextRequest) {
     const isSeoRoute =
       pathname === "/sitemap.xml" ||
       pathname === "/robots.txt" ||
-      pathname === "/blog/rss.xml";
+      pathname === "/blog/rss.xml" ||
+      pathname.startsWith("/blog");
     const isStaticAsset =
       pathname.startsWith("/_next") ||
       pathname.startsWith("/images") ||

@@ -7,109 +7,109 @@ export async function GET() {
   const blogPosts = await getBlogPosts();
   const categories = await getBlogCategories();
 
-  // Static pages
+  // Static pages (commented out pages that redirect in maintenance mode)
   const staticPages = [
-    {
-      url: "",
-      priority: "1.0",
-      changefreq: "daily",
-      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
-    }, // Homepage
+    // {
+    //   url: "",
+    //   priority: "1.0",
+    //   changefreq: "daily",
+    //   lastmod: new Date(2024, 11, 1).toISOString(),
+    // }, // Homepage
     {
       url: "welcome",
-      priority: "0.9",
-      changefreq: "weekly",
-      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
+      priority: "1.0",
+      changefreq: "daily",
+      lastmod: new Date(2024, 11, 1).toISOString(),
     },
-    {
-      url: "about",
-      priority: "0.8",
-      changefreq: "monthly",
-      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
-    },
-    {
-      url: "contact",
-      priority: "0.8",
-      changefreq: "monthly",
-      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
-    },
-    {
-      url: "services",
-      priority: "0.9",
-      changefreq: "weekly",
-      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
-    },
-    {
-      url: "services/cleaning",
-      priority: "0.9",
-      changefreq: "weekly",
-      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
-    },
-    {
-      url: "services/laundry",
-      priority: "0.9",
-      changefreq: "weekly",
-      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
-    },
-    {
-      url: "services/food",
-      priority: "0.9",
-      changefreq: "weekly",
-      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
-    },
-    {
-      url: "services/pest-control",
-      priority: "0.9",
-      changefreq: "weekly",
-      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
-    },
-    {
-      url: "subscriptions",
-      priority: "0.8",
-      changefreq: "weekly",
-      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
-    },
-    {
-      url: "for-business",
-      priority: "0.7",
-      changefreq: "monthly",
-      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
-    },
-    {
-      url: "for-business/corporate-cleaning",
-      priority: "0.7",
-      changefreq: "monthly",
-      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
-    },
-    {
-      url: "for-business/uniform-management",
-      priority: "0.7",
-      changefreq: "monthly",
-      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
-    },
-    {
-      url: "for-business/catering-services",
-      priority: "0.7",
-      changefreq: "monthly",
-      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
-    },
-    {
-      url: "for-business/pest-management",
-      priority: "0.7",
-      changefreq: "monthly",
-      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
-    },
-    {
-      url: "for-business/custom-solutions",
-      priority: "0.7",
-      changefreq: "monthly",
-      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
-    },
+    // {
+    //   url: "about",
+    //   priority: "0.8",
+    //   changefreq: "monthly",
+    //   lastmod: new Date(2024, 11, 1).toISOString(),
+    // },
+    // {
+    //   url: "contact",
+    //   priority: "0.8",
+    //   changefreq: "monthly",
+    //   lastmod: new Date(2024, 11, 1).toISOString(),
+    // },
+    // {
+    //   url: "services",
+    //   priority: "0.9",
+    //   changefreq: "weekly",
+    //   lastmod: new Date(2024, 11, 1).toISOString(),
+    // },
+    // {
+    //   url: "services/cleaning",
+    //   priority: "0.9",
+    //   changefreq: "weekly",
+    //   lastmod: new Date(2024, 11, 1).toISOString(),
+    // },
+    // {
+    //   url: "services/laundry",
+    //   priority: "0.9",
+    //   changefreq: "weekly",
+    //   lastmod: new Date(2024, 11, 1).toISOString(),
+    // },
+    // {
+    //   url: "services/food",
+    //   priority: "0.9",
+    //   changefreq: "weekly",
+    //   lastmod: new Date(2024, 11, 1).toISOString(),
+    // },
+    // {
+    //   url: "services/pest-control",
+    //   priority: "0.9",
+    //   changefreq: "weekly",
+    //   lastmod: new Date(2024, 11, 1).toISOString(),
+    // },
+    // {
+    //   url: "subscriptions",
+    //   priority: "0.8",
+    //   changefreq: "weekly",
+    //   lastmod: new Date(2024, 11, 1).toISOString(),
+    // },
+    // {
+    //   url: "for-business",
+    //   priority: "0.7",
+    //   changefreq: "monthly",
+    //   lastmod: new Date(2024, 11, 1).toISOString(),
+    // },
+    // {
+    //   url: "for-business/corporate-cleaning",
+    //   priority: "0.7",
+    //   changefreq: "monthly",
+    //   lastmod: new Date(2024, 11, 1).toISOString(),
+    // },
+    // {
+    //   url: "for-business/uniform-management",
+    //   priority: "0.7",
+    //   changefreq: "monthly",
+    //   lastmod: new Date(2024, 11, 1).toISOString(),
+    // },
+    // {
+    //   url: "for-business/catering-services",
+    //   priority: "0.7",
+    //   changefreq: "monthly",
+    //   lastmod: new Date(2024, 11, 1).toISOString(),
+    // },
+    // {
+    //   url: "for-business/pest-management",
+    //   priority: "0.7",
+    //   changefreq: "monthly",
+    //   lastmod: new Date(2024, 11, 1).toISOString(),
+    // },
+    // {
+    //   url: "for-business/custom-solutions",
+    //   priority: "0.7",
+    //   changefreq: "monthly",
+    //   lastmod: new Date(2024, 11, 1).toISOString(),
+    // },
     {
       url: "blog",
       priority: "0.9",
       changefreq: "daily",
-      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
+      lastmod: new Date(2024, 11, 1).toISOString(),
     },
   ];
 
@@ -126,7 +126,7 @@ export async function GET() {
     url: `blog/category/${category.slug}`,
     priority: "0.7",
     changefreq: "weekly",
-    lastmod: new Date().toISOString(),
+    lastmod: new Date(2024, 11, 1).toISOString(),
   }));
 
   const allPages = [...staticPages, ...blogPages, ...categoryPages];
