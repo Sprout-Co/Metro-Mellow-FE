@@ -13,103 +13,103 @@ export async function GET() {
       url: "",
       priority: "1.0",
       changefreq: "daily",
-      lastmod: new Date().toISOString(),
+      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
     }, // Homepage
     {
       url: "welcome",
       priority: "0.9",
       changefreq: "weekly",
-      lastmod: new Date().toISOString(),
+      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
     },
     {
       url: "about",
       priority: "0.8",
       changefreq: "monthly",
-      lastmod: new Date().toISOString(),
+      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
     },
     {
       url: "contact",
       priority: "0.8",
       changefreq: "monthly",
-      lastmod: new Date().toISOString(),
+      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
     },
     {
       url: "services",
       priority: "0.9",
       changefreq: "weekly",
-      lastmod: new Date().toISOString(),
+      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
     },
     {
       url: "services/cleaning",
       priority: "0.9",
       changefreq: "weekly",
-      lastmod: new Date().toISOString(),
+      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
     },
     {
       url: "services/laundry",
       priority: "0.9",
       changefreq: "weekly",
-      lastmod: new Date().toISOString(),
+      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
     },
     {
       url: "services/food",
       priority: "0.9",
       changefreq: "weekly",
-      lastmod: new Date().toISOString(),
+      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
     },
     {
       url: "services/pest-control",
       priority: "0.9",
       changefreq: "weekly",
-      lastmod: new Date().toISOString(),
+      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
     },
     {
       url: "subscriptions",
       priority: "0.8",
       changefreq: "weekly",
-      lastmod: new Date().toISOString(),
+      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
     },
     {
       url: "for-business",
       priority: "0.7",
       changefreq: "monthly",
-      lastmod: new Date().toISOString(),
+      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
     },
     {
       url: "for-business/corporate-cleaning",
       priority: "0.7",
       changefreq: "monthly",
-      lastmod: new Date().toISOString(),
+      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
     },
     {
       url: "for-business/uniform-management",
       priority: "0.7",
       changefreq: "monthly",
-      lastmod: new Date().toISOString(),
+      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
     },
     {
       url: "for-business/catering-services",
       priority: "0.7",
       changefreq: "monthly",
-      lastmod: new Date().toISOString(),
+      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
     },
     {
       url: "for-business/pest-management",
       priority: "0.7",
       changefreq: "monthly",
-      lastmod: new Date().toISOString(),
+      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
     },
     {
       url: "for-business/custom-solutions",
       priority: "0.7",
       changefreq: "monthly",
-      lastmod: new Date().toISOString(),
+      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
     },
     {
       url: "blog",
       priority: "0.9",
       changefreq: "daily",
-      lastmod: new Date().toISOString(),
+      lastmod: new Date(2024, 11, 1).toISOString(), // December 1, 2024
     },
   ];
 
