@@ -1,23 +1,11 @@
-// Lightweight blog data for sitemap (avoids loading heavy blog service)
-const staticBlogData = {
-  posts: [
-    { slug: "deep-cleaning-transformation-victoria-island-apartment", updatedAt: "2024-03-15T09:00:00Z" },
-    { slug: "lagos-humidity-laundry-care-solutions", updatedAt: "2024-03-12T10:30:00Z" },
-    { slug: "family-meal-prep-lagos-working-parents", updatedAt: "2024-03-08T14:15:00Z" }
-  ],
-  categories: [
-    { slug: "cleaning" },
-    { slug: "laundry" },
-    { slug: "cooking" }
-  ]
-};
+import { getBlogPosts, getBlogCategories } from "@/lib/services/blog";
 
 export async function GET() {
   const baseUrl = "https://metromellow.com";
 
-  // Use lightweight static data instead of heavy blog service
-  const blogPosts = staticBlogData.posts;
-  const categories = staticBlogData.categories;
+  // Get blog data
+  const blogPosts = await getBlogPosts();
+  const categories = await getBlogCategories();
 
   // Static pages (commented out pages that redirect in maintenance mode)
   const staticPages = [
