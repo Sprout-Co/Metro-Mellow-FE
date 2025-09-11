@@ -24,6 +24,24 @@ const UserRole = {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Early auth check for auth pages (before maintenance mode)
+  if (pathname === Routes.GET_STARTED || pathname === Routes.LOGIN || pathname === Routes.REGISTER) {
+    const authToken = request.cookies.get("auth-token")?.value;
+    if (authToken) {
+      const decodedToken = decodeAndValidateToken(authToken);
+      if (decodedToken) {
+        // User is authenticated, redirect based on role
+        if (decodedToken.role === UserRole.Customer) {
+          return NextResponse.redirect(new URL(Routes.DASHBOARD, request.url));
+        } else if (decodedToken.role === UserRole.Admin || decodedToken.role === UserRole.SuperAdmin) {
+          return NextResponse.redirect(new URL(Routes.ADMIN_DASHBOARD, request.url));
+        } else {
+          return NextResponse.redirect(new URL(Routes.HOME, request.url));
+        }
+      }
+    }
+  }
+
   // ✅ Much safer: Explicit control
   if (process.env.MAINTENANCE_MODE === "true") {
     const isWelcomePage = pathname === Routes.WELCOME;
@@ -119,6 +137,15 @@ export function middleware(request: NextRequest) {
       pathname === Routes.LOGIN ||
       pathname === Routes.REGISTER)
   ) {
+    console.log(
+      "🔄 MIDDLEWARE: Authenticated user accessing auth page, redirecting...",
+      {
+        pathname,
+        userRole,
+        authToken: !!authToken,
+        isTokenValidFlag,
+      }
+    );
     // Redirect based on user role
     if (userRole === UserRole.Customer) {
       return NextResponse.redirect(new URL(Routes.DASHBOARD, request.url));
@@ -149,5 +176,7 @@ export const config = {
      * - public folder
      */
     "/((?!api|_next/static|_next/image|favicon.ico|public).*)",
+    // Explicitly include get-started for debugging
+    "/get-started/:path*",
   ],
 };
