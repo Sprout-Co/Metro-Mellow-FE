@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
@@ -22,8 +22,21 @@ export default function VerifyEmailPage() {
   const [error, setError] = useState<string>("");
   const [emailInput, setEmailInput] = useState<string>("");
 
+  // Use ref to track if we've already verified to prevent duplicate calls
+  const hasVerified = useRef(false);
+
   useEffect(() => {
+    // Skip if we've already verified
+    if (hasVerified.current) {
+      return;
+    }
+
+    console.log("verifyEmail called");
+
     const verifyEmail = async () => {
+      // Mark as verified immediately to prevent any possibility of duplicate calls
+      hasVerified.current = true;
+
       const token = searchParams.get("token");
 
       if (!token) {
@@ -55,9 +68,9 @@ export default function VerifyEmailPage() {
           setStatus("success");
 
           // Redirect to dashboard after showing success message
-          // setTimeout(() => {
-          //   router.push("/dashboard");
-          // }, 2000);
+          setTimeout(() => {
+            router.push("/dashboard");
+          }, 2000);
         } else {
           setStatus("error");
           setError("Failed to verify email. Please try again.");
@@ -72,8 +85,7 @@ export default function VerifyEmailPage() {
       }
     };
 
-    // verifyEmail();
-    console.log("verifyEmail called");
+    verifyEmail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
