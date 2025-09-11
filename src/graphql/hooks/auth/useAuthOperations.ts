@@ -27,6 +27,7 @@ import {
   UpdateUserInput,
   AccountStatus,
   useUpdateAccountStatusMutation,
+  CreateUserInput,
 } from "@/graphql/api";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import {
@@ -129,20 +130,7 @@ export const useAuthOperations = () => {
    * @throws Error if registration fails
    */
   const handleRegister = useCallback(
-    async (input: {
-      email: string;
-      password: string;
-      firstName: string;
-      lastName: string;
-      phone?: string;
-      address?: {
-        street: string;
-        city: string;
-        state: string;
-        zipCode: string;
-        country: string;
-      };
-    }) => {
+    async (input: CreateUserInput) => {
       try {
         const { data, errors } = await registerMutation({
           variables: {

@@ -9,12 +9,16 @@ import SocialAuth from "./SocialAuth";
 import styles from "./AuthLayout.module.scss";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import VerificationForm from "./VerificationForm";
+import { UserRole } from "@/graphql/api";
 
 interface RegisterFormState {
   name: string;
   email: string;
   password: string;
   agreeTerms: boolean;
+  phone: string;
+  street: string;
+  city: string;
 }
 
 interface FormErrors {
@@ -22,6 +26,9 @@ interface FormErrors {
   email?: string;
   password?: string;
   agreeTerms?: string;
+  phone?: string;
+  street?: string;
+  city?: string;
   general?: string;
 }
 
@@ -39,6 +46,9 @@ export default function RegisterForm({
     email: "",
     password: "",
     agreeTerms: false,
+    phone: "",
+    street: "",
+    city: "",
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -70,6 +80,20 @@ export default function RegisterForm({
     } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
       newErrors.password =
         "Password must include uppercase, lowercase and a number";
+    }
+
+    // Phone validation
+    if (formData.phone && !/^[+\d\s()-]{7,20}$/.test(formData.phone)) {
+      newErrors.phone = "Please enter a valid phone number";
+    }
+
+    // Address validation - making these optional but validating if entered
+    if (formData.street && formData.street.length > 100) {
+      newErrors.street = "Street address is too long";
+    }
+
+    if (formData.city && formData.city.length > 50) {
+      newErrors.city = "City name is too long";
     }
 
     // Terms validation
@@ -123,6 +147,12 @@ export default function RegisterForm({
         password: formData.password,
         firstName,
         lastName,
+        role: UserRole.Customer,
+        phone: formData.phone,
+        address: {
+          street: formData.street,
+          city: formData.city,
+        },
       });
 
       // Show verification form
@@ -357,6 +387,114 @@ export default function RegisterForm({
                     />
                     <path
                       d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                }
+              />
+
+              <FormInput
+                id="register-phone"
+                name="phone"
+                type="tel"
+                label="Phone Number"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="Your phone number"
+                error={errors.phone}
+                autoComplete="tel"
+                icon={
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M22 16.92V19.92C22 20.4704 21.7893 20.9996 21.4142 21.3747C21.0391 21.7498 20.5099 21.9605 19.96 21.96C17.44 21.96 15.01 21.32 12.86 20.13C10.8554 19.0452 9.08435 17.5543 7.68 15.75C6.47937 14.3371 5.60973 12.6567 5.14 10.85C4.99436 10.22 4.92669 9.57534 4.94 8.93C4.94 8.38009 5.15061 7.85093 5.52568 7.47586C5.90076 7.10078 6.42992 6.89017 6.98 6.89H9.98C10.4353 6.88916 10.8762 7.05027 11.2299 7.34676C11.5837 7.64325 11.8299 8.05786 11.93 8.51C12.07 9.23 12.31 9.93 12.62 10.58C12.7887 10.9041 12.8593 11.2681 12.8214 11.6297C12.7835 11.9913 12.6388 12.3314 12.41 12.61L11.39 13.63C12.6767 15.6791 14.4409 17.3278 16.57 18.46L17.58 17.46C17.8614 17.2288 18.2058 17.0818 18.5712 17.0422C18.9366 17.0025 19.3043 17.0728 19.63 17.24C20.28 17.55 20.98 17.79 21.7 17.93C22.1608 18.0305 22.5822 18.2803 22.8808 18.6397C23.1794 18.9991 23.3402 19.4455 23.34 19.91L22 16.92Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                }
+              />
+
+              <FormInput
+                id="register-street"
+                name="street"
+                type="text"
+                label="Street Address"
+                value={formData.street}
+                onChange={handleChange}
+                placeholder="Your street address"
+                error={errors.street}
+                autoComplete="street-address"
+                icon={
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M9 22V12H15V22"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                }
+              />
+
+              <FormInput
+                id="register-city"
+                name="city"
+                type="text"
+                label="City"
+                value={formData.city}
+                onChange={handleChange}
+                placeholder="Your city"
+                error={errors.city}
+                autoComplete="address-level2"
+                icon={
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M12 2C14.5013 4.73835 15.9228 8.29203 16 12C15.9228 15.708 14.5013 19.2616 12 22C9.49872 19.2616 8.07725 15.708 8 12C8.07725 8.29203 9.49872 4.73835 12 2Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M2 12H22"
                       stroke="currentColor"
                       strokeWidth="2"
                       strokeLinecap="round"
