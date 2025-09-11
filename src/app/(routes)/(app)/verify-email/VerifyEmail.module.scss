@@ -63,6 +63,28 @@
     }
   }
 
+  &__emailForm {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
+    width: 100%;
+  }
+
+  &__input {
+    padding: spacing("md");
+    border: 1px solid color("neutral", "light");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "base");
+    width: 100%;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+    }
+  }
+
   &__button {
     display: inline-flex;
     align-items: center;

@@ -6,15 +6,18 @@ import { motion } from "framer-motion";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import styles from "./VerifyEmail.module.scss";
 import { CheckCircle, XCircle } from "lucide-react";
+import FnButton from "@/components/ui/Button/FnButton";
 
 export default function VerifyEmailPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { handleVerifyEmail } = useAuthOperations();
+  const { handleVerifyEmail, handleSendVerificationEmail } =
+    useAuthOperations();
   const [status, setStatus] = useState<"verifying" | "success" | "error">(
     "verifying"
   );
   const [error, setError] = useState<string>("");
+  const [emailInput, setEmailInput] = useState<string>("");
 
   useEffect(() => {
     const verifyEmail = async () => {
@@ -51,7 +54,21 @@ export default function VerifyEmailPage() {
     };
 
     verifyEmail();
-  }, [searchParams, handleVerifyEmail, router]);
+  }, []);
+
+  const handleResendVerificationEmail = async () => {
+    if (!emailInput || emailInput.trim() === "") {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    try {
+      await handleSendVerificationEmail(emailInput);
+      setError("A new verification email has been sent to " + emailInput);
+    } catch (err) {
+      setError("Failed to send verification email. Please try again.");
+    }
+  };
 
   return (
     <div className={styles.verifyEmail}>
@@ -99,14 +116,40 @@ export default function VerifyEmailPage() {
             </motion.div>
             <h1>Verification Failed</h1>
             <p>{error}</p>
-            <motion.button
+            <div className={styles.verifyEmail__emailForm}>
+              <input
+                type="email"
+                placeholder="Enter your email address"
+                className={styles.verifyEmail__input}
+                value={emailInput}
+                onChange={(e) => setEmailInput(e.target.value)}
+              />
+              <FnButton
+                variant="primary"
+                size="md"
+                onClick={handleResendVerificationEmail}
+                disabled={!emailInput || emailInput.trim() === ""}
+              >
+                Resend Verification Email
+              </FnButton>
+            </div>
+            <br />
+            <FnButton
+              variant="primary"
+              size="md"
+              onClick={() => router.push("/get-started")}
+            >
+              Return to Registration
+            </FnButton>
+            {/* <motion.button
               className={styles.verifyEmail__button}
               onClick={() => router.push("/get-started")}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
               Return to Registration
-            </motion.button>
+              </FnButton>
+            </motion.button> */}
           </>
         )}
       </motion.div>

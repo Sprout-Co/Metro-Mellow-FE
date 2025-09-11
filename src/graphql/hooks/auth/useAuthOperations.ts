@@ -149,7 +149,7 @@ export const useAuthOperations = () => {
           const { user, token } = data.register;
 
           // Validate user role
-          if (user.role !== UserRole.Customer) {
+          if (user?.role !== UserRole.Customer) {
             throw new Error("Registration failed: Invalid role");
           }
 
