@@ -34,6 +34,10 @@ Disallow: /*.json$
 Disallow: /*?debug=*
 Disallow: /*?preview=*
 
+# Allow Next.js static assets
+Allow: /_next/static/
+Allow: /_next/static/*
+
 # Allow images
 Allow: /images/
 Allow: *.jpg
@@ -43,8 +47,9 @@ Allow: *.gif
 Allow: *.webp
 Allow: *.svg
 
-# Clean URLs
-Disallow: /*?*
+# Clean URLs (but allow Next.js assets)
+Disallow: /*?debug=*
+Disallow: /*?preview=*
 Disallow: /*.pdf$
 Disallow: /*#
 
