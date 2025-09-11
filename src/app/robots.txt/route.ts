@@ -3,6 +3,10 @@ export function GET() {
 # Optimized for Next.js App Router and SEO
 
 User-agent: *
+# EXPLICIT ALLOW - Override cache
+Allow: /blog
+Allow: /blog/
+Allow: /welcome
 
 # Block sensitive areas first (most specific rules first)
 Disallow: /admin/
