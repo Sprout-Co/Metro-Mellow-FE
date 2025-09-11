@@ -7,10 +7,13 @@ import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import styles from "./VerifyEmail.module.scss";
 import { CheckCircle, XCircle } from "lucide-react";
 import FnButton from "@/components/ui/Button/FnButton";
+import { useAppDispatch } from "@/lib/redux/hooks";
+import { login as loginAction } from "@/lib/redux";
 
 export default function VerifyEmailPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { handleVerifyEmail, handleSendVerificationEmail } =
     useAuthOperations();
   const [status, setStatus] = useState<"verifying" | "success" | "error">(
@@ -32,17 +35,33 @@ export default function VerifyEmailPage() {
       }
 
       try {
-        const success = await handleVerifyEmail(token);
-        console.log("success", success);
-        if (success) {
+        // The verification result contains both user data and auth token
+        const verificationResult = await handleVerifyEmail(token);
+        console.log("Verification result:", verificationResult);
+
+        if (
+          verificationResult &&
+          verificationResult.user &&
+          verificationResult.token
+        ) {
+          // Log the user in directly with the returned data
+          dispatch(
+            loginAction({
+              user: verificationResult.user as any,
+              token: verificationResult.token,
+            })
+          );
+
           setStatus("success");
+
+          // Redirect to dashboard after showing success message
+          // setTimeout(() => {
+          //   router.push("/dashboard");
+          // }, 2000);
         } else {
           setStatus("error");
           setError("Failed to verify email. Please try again.");
         }
-        setTimeout(() => {
-          router.push("/dashboard");
-        }, 3000);
       } catch (err) {
         setStatus("error");
         setError(
@@ -53,7 +72,9 @@ export default function VerifyEmailPage() {
       }
     };
 
-    verifyEmail();
+    // verifyEmail();
+    console.log("verifyEmail called");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleResendVerificationEmail = async () => {
@@ -98,8 +119,8 @@ export default function VerifyEmailPage() {
             </motion.div>
             <h1>Email Verified!</h1>
             <p>
-              Your email has been successfully verified. You will be redirected
-              to the dashboard shortly.
+              Your email has been successfully verified. You are now logged in
+              and will be redirected to the dashboard shortly.
             </p>
           </>
         )}

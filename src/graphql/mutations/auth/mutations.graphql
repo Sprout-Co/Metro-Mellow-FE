@@ -67,7 +67,19 @@ mutation SendVerificationEmail($email: String!) {
 }
 
 mutation VerifyEmail($token: String!) {
-  verifyEmail(token: $token)
+  verifyEmail(token: $token) {
+    message
+    token
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      emailVerified
+      accountStatus
+    }
+  }
 }
 
 mutation UpdateAccountStatus(

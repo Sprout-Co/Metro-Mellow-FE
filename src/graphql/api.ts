@@ -475,7 +475,7 @@ export type Mutation = {
   updateSubscriptionStatus: Scalars['Boolean']['output'];
   updateUserRole: User;
   uploadStaffDocument: StaffDocument;
-  verifyEmail: Scalars['Boolean']['output'];
+  verifyEmail: AuthPayload;
   verifyStaffDocument: StaffDocument;
 };
 
@@ -891,17 +891,22 @@ export type NotificationStats = {
 };
 
 export enum NotificationType {
+  AdminInvitationAccepted = 'ADMIN_INVITATION_ACCEPTED',
+  AdminInvitationSent = 'ADMIN_INVITATION_SENT',
   BookingCancellation = 'BOOKING_CANCELLATION',
   BookingConfirmation = 'BOOKING_CONFIRMATION',
   BookingReminder = 'BOOKING_REMINDER',
+  BookingUpdate = 'BOOKING_UPDATE',
   PaymentFailed = 'PAYMENT_FAILED',
   PaymentSuccess = 'PAYMENT_SUCCESS',
+  PaymentUpdate = 'PAYMENT_UPDATE',
   RewardEarned = 'REWARD_EARNED',
   RewardRedeemed = 'REWARD_REDEEMED',
   ServiceUpdate = 'SERVICE_UPDATE',
   StaffAssignment = 'STAFF_ASSIGNMENT',
   SubscriptionCancellation = 'SUBSCRIPTION_CANCELLATION',
   SubscriptionRenewal = 'SUBSCRIPTION_RENEWAL',
+  SubscriptionUpdate = 'SUBSCRIPTION_UPDATE',
   SystemAlert = 'SYSTEM_ALERT',
   UserMessage = 'USER_MESSAGE'
 }
@@ -1627,7 +1632,7 @@ export type VerifyEmailMutationVariables = Exact<{
 }>;
 
 
-export type VerifyEmailMutation = { __typename?: 'Mutation', verifyEmail: boolean };
+export type VerifyEmailMutation = { __typename?: 'Mutation', verifyEmail: { __typename?: 'AuthPayload', message?: string | null, token?: string | null, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, emailVerified?: boolean | null, accountStatus?: AccountStatus | null } | null } };
 
 export type UpdateAccountStatusMutationVariables = Exact<{
   userId: Scalars['ID']['input'];
@@ -2792,7 +2797,19 @@ export type SendVerificationEmailMutationResult = Apollo.MutationResult<SendVeri
 export type SendVerificationEmailMutationOptions = Apollo.BaseMutationOptions<SendVerificationEmailMutation, SendVerificationEmailMutationVariables>;
 export const VerifyEmailDocument = gql`
     mutation VerifyEmail($token: String!) {
-  verifyEmail(token: $token)
+  verifyEmail(token: $token) {
+    message
+    token
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      emailVerified
+      accountStatus
+    }
+  }
 }
     `;
 export type VerifyEmailMutationFn = Apollo.MutationFunction<VerifyEmailMutation, VerifyEmailMutationVariables>;
