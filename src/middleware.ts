@@ -129,37 +129,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(Routes.DASHBOARD, request.url));
   }
 
-  // If user is logged in and tries to access auth pages, redirect to dashboard
-  if (
-    authToken &&
-    isTokenValidFlag &&
-    (pathname === Routes.GET_STARTED ||
-      pathname === Routes.LOGIN ||
-      pathname === Routes.REGISTER)
-  ) {
-    console.log(
-      "🔄 MIDDLEWARE: Authenticated user accessing auth page, redirecting...",
-      {
-        pathname,
-        userRole,
-        authToken: !!authToken,
-        isTokenValidFlag,
-      }
-    );
-    // Redirect based on user role
-    if (userRole === UserRole.Customer) {
-      return NextResponse.redirect(new URL(Routes.DASHBOARD, request.url));
-    } else if (
-      userRole === UserRole.Admin ||
-      userRole === UserRole.SuperAdmin
-    ) {
-      return NextResponse.redirect(
-        new URL(Routes.ADMIN_DASHBOARD, request.url)
-      );
-    } else {
-      return NextResponse.redirect(new URL(Routes.HOME, request.url));
-    }
-  }
+  // Auth page redirects are now handled early in the middleware
 
   return NextResponse.next();
 }
@@ -176,7 +146,5 @@ export const config = {
      * - public folder
      */
     "/((?!api|_next/static|_next/image|favicon.ico|public).*)",
-    // Explicitly include get-started for debugging
-    "/get-started/:path*",
   ],
 };
