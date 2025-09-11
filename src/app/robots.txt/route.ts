@@ -1,22 +1,42 @@
 export function GET() {
-  const robotsTxt = `# Metromellow Robots.txt
+  const robotsTxt = `# Metro Mellow Robots.txt
+# Optimized for Next.js App Router and SEO
 
 User-agent: *
+
+# Block sensitive areas first (most specific rules first)
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /_next/image/
+Disallow: /_next/server/
+Disallow: /api/auth/
+Disallow: /api/internal/
+
+# Block development/debug URLs
+Disallow: /*?debug=*
+Disallow: /*?preview=*
+Disallow: /*?test=*
+Disallow: /#
+
+# Block unnecessary file types
+Disallow: /*.pdf$
+Disallow: /temp/
+Disallow: /tmp/
+
+# Allow everything else (general rule comes after specific blocks)
 Allow: /
 
-# Blog content
+# Explicitly allow important content for clarity
 Allow: /blog/
-Allow: /blog/category/
-Allow: /blog/rss.xml
-
-# Service pages
 Allow: /services/
-Allow: /for-business/
+Allow: /images/
+Allow: /_next/static/
 
-# Important pages
-Allow: /about
-Allow: /contact
-Allow: /welcome
+# Allow important files
+Allow: /manifest.json
+Allow: /robots.txt
+Allow: /sitemap.xml
+Allow: /rss.xml
 
 # Sitemaps
 Sitemap: https://metromellow.com/sitemap.xml
@@ -24,43 +44,29 @@ Sitemap: https://metromellow.com/sitemap.xml
 # Crawl delay for respectful crawling
 Crawl-delay: 1
 
-# Block admin areas (when implemented)
-Disallow: /admin/
-Disallow: /dashboard/
-Disallow: /api/
+# Special handling for different bots
+User-agent: Googlebot
+Crawl-delay: 0
 
-# Block temp/dev files
-Disallow: /*.json$
-Disallow: /*?debug=*
-Disallow: /*?preview=*
+User-agent: Bingbot
+Crawl-delay: 1
 
-# Allow Next.js static assets
-Allow: /_next/static/
-Allow: /_next/static/*
-
-# Allow images
-Allow: /images/
-Allow: *.jpg
-Allow: *.jpeg
-Allow: *.png
-Allow: *.gif
-Allow: *.webp
-Allow: *.svg
-
-# Clean URLs (but allow Next.js assets)
-Disallow: /*?debug=*
-Disallow: /*?preview=*
-Disallow: /*.pdf$
-Disallow: /*#
-
-# Social media optimization
+User-agent: facebookexternalhit
+Allow: /
+Allow: /images/blog/social/
 Allow: /images/brand/
-Allow: /images/blog/`;
+
+# SEO analysis bots (allow with higher crawl delay)
+User-agent: AhrefsBot
+Crawl-delay: 5
+
+User-agent: SemrushBot
+Crawl-delay: 5`;
 
   return new Response(robotsTxt, {
     headers: {
       "Content-Type": "text/plain",
-      "Cache-Control": "public, max-age=86400",
+      "Cache-Control": "public, max-age=86400, must-revalidate",
     },
   });
 }
