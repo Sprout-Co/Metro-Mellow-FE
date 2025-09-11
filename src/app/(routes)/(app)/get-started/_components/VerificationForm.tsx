@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import styles from "./AuthLayout.module.scss";
+import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 
 interface VerificationFormProps {
   email: string;
@@ -20,6 +21,7 @@ export default function VerificationForm({
   const [resendDisabled, setResendDisabled] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const { handleSendVerificationEmail } = useAuthOperations();
 
   // Handle countdown for resend link
   useEffect(() => {
@@ -41,22 +43,8 @@ export default function VerificationForm({
     setError(null);
 
     try {
-      // Send new verification email
-      const response = await fetch("/api/email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          type: "verification",
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to send verification email");
-      }
-
+      // Send new verification email using GraphQL
+      await handleSendVerificationEmail(email);
       setError("A new verification link has been sent to your email.");
     } catch (err) {
       setError("Failed to resend verification link. Please try again later.");
@@ -135,8 +123,7 @@ export default function VerificationForm({
         )}
 
         <div className={styles.registerForm__actions}>
-          Didn't receive the email?{" "}
-          <br />
+          Didn't receive the email? <br />
           <motion.button
             type="button"
             className={styles.registerForm__button}
