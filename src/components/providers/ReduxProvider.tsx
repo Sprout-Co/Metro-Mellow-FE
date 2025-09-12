@@ -11,7 +11,7 @@ interface ReduxProviderProps {
 export default function ReduxProvider({ children }: ReduxProviderProps) {
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
+      <PersistGate loading={<div>loading...</div>} persistor={persistor}>
         {children}
       </PersistGate>
     </Provider>

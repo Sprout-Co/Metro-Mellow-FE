@@ -17,21 +17,24 @@ export function AuthInitializer({ children }: AuthInitializerProps) {
   const initializationAttempted = useRef(false);
 
   useEffect(() => {
+    // console.log(token);
+    // console.log(isAuthenticated);
+    // console.log(initializationAttempted.current);
     // Prevent multiple initialization attempts and don't block rendering
-    if (token && !initializationAttempted.current && !isAuthenticated) {
+    if (token && !initializationAttempted.current /** && !isAuthenticated */) {
+      console.log("AuthInitializer useEffect called 2");
       initializationAttempted.current = true;
-      
+
       // Use setTimeout to prevent blocking the render cycle
       setTimeout(() => {
-        handleGetCurrentUser()
-          .catch((error) => {
-            // Silently handle authentication errors - this is expected when token is invalid/expired
-            console.log("Auth initialization failed:", error.message);
-            dispatch(logout());
-          });
+        handleGetCurrentUser().catch((error) => {
+          // Silently handle authentication errors - this is expected when token is invalid/expired
+          console.log("Auth initialization failed:", error.message);
+          dispatch(logout());
+        });
       }, 0);
     }
-  }, [token, handleGetCurrentUser, dispatch, isAuthenticated]);
+  }, [token, handleGetCurrentUser, dispatch /** , isAuthenticated */]);
 
   // Always render children immediately - don't block on auth
   return <>{children}</>;
