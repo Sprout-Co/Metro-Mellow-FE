@@ -14,7 +14,7 @@
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
   z-index: z-index("modal");
   overflow-y: auto;
-  padding: spacing("lg") spacing("lg") spacing("xl");
+  // padding: spacing("lg") spacing("lg") spacing("xl");
   display: flex;
   flex-direction: column;
 
@@ -42,6 +42,10 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: z-index("overlay");
+  }
+
+  &__content {
+    padding: spacing("lg") spacing("lg") spacing("xl");
   }
 
   &__header {

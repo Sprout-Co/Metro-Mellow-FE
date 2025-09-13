@@ -29,6 +29,7 @@ import ConfirmActionModal, {
   ActionType,
 } from "../ConfirmActionModal/ConfirmActionModal";
 import FeedbackModal from "../FeedbackModal/FeedbackModal";
+import ModalDrawerHeader from "@/components/ui/ModalDrawer/ModalDrawerHeader/ModalDrawerHeader";
 
 interface BookingDetailModalProps {
   isOpen: boolean;
@@ -222,8 +223,19 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
   };
 
   return (
-    <ModalDrawer isOpen={isOpen} onClose={onClose} width="lg">
-      <div className={styles.modal__header}>
+    <ModalDrawer
+      isOpen={isOpen}
+      onClose={onClose}
+      width="lg"
+      title={booking.service.name}
+      description={booking.service_category}
+    >
+      {/* <ModalDrawerHeader
+        title={booking.service.name}
+        description={booking.service_category}
+        onClose={onClose}
+      /> */}
+      {/* <div className={styles.modal__header}>
         <div className={styles.modal__headerLeft}>
           <div className={styles.modal__serviceIcon}>
             {getServiceIcon(booking.service_category)}
@@ -231,12 +243,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
           <div>
             <h2 className={styles.modal__title}>
               {booking.service.name}
-              {/* {booking.recurring && (
-                <span className={styles.modal__recurringBadge}>
-                  <Repeat size={12} />
-                  {booking.serviceDetails.frequency}
-                </span>
-              )} */}
+         
             </h2>
             <p className={styles.modal__subtitle}>{booking.service_category}</p>
           </div>
@@ -244,7 +251,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
         <button className={styles.modal__closeBtn} onClick={onClose}>
           <X size={18} />
         </button>
-      </div>
+      </div> */}
 
       <div className={styles.modal__body}>
         <div className={styles.modal__statusBar}>

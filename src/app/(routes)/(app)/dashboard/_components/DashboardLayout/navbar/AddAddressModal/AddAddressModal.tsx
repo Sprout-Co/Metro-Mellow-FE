@@ -2,14 +2,14 @@ import Modal from "@/components/ui/Modal/Modal";
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./AddAddressModal.module.scss";
-import { MapPin, Navigation, Search, X } from "lucide-react";
+import { MapPin, Navigation, Search, X, Star } from "lucide-react";
 import { FnButton } from "@/components/ui/Button/FnButton";
-import Input from "@/components/ui/Input";
 
 interface AddressOption {
   id: string;
   main: string;
   secondary?: string;
+  type?: "suggestion" | "recent" | "saved";
 }
 
 interface AddAddressModalProps {
@@ -28,30 +28,48 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
     []
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
 
-  // Mock address suggestions - in a real app this would come from an API
+  // Search effect with debounce
   useEffect(() => {
     if (searchValue.length > 2) {
-      setIsLoading(true);
-      // Simulating API call delay
+      setIsSearching(true);
       const timer = setTimeout(() => {
         const mockSuggestions: AddressOption[] = [
-          { id: "1", main: `${searchValue}, Nigeria` },
-          { id: "2", main: `${searchValue}-Umuruba Ndiogu, Nigeria` },
-          { id: "3", main: `${searchValue} Apena Street, Lagos, Nigeria` },
+          {
+            id: "1",
+            main: `${searchValue} Street`,
+            secondary: "Lekki Phase 1, Lagos",
+            type: "suggestion",
+          },
+          {
+            id: "2",
+            main: `${searchValue} Avenue`,
+            secondary: "Victoria Island, Lagos",
+            type: "suggestion",
+          },
+          {
+            id: "3",
+            main: `${searchValue} Close`,
+            secondary: "Ikoyi, Lagos",
+            type: "suggestion",
+          },
           {
             id: "4",
-            main: `${searchValue} supermarket gra Ikota, Lekki, Nigeria`,
+            main: `${searchValue} Road`,
+            secondary: "Ajah, Lagos",
+            type: "suggestion",
           },
-          { id: "5", main: `${searchValue}-Abu St, Lagos, Nigeria` },
         ];
         setAddressSuggestions(mockSuggestions);
-        setIsLoading(false);
+        setIsSearching(false);
       }, 500);
 
       return () => clearTimeout(timer);
     } else {
       setAddressSuggestions([]);
+      setIsSearching(false);
     }
   }, [searchValue]);
 
@@ -64,21 +82,45 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
     setAddressSuggestions([]);
   };
 
-  const handleSelectAddress = (address: string) => {
-    if (onAddressSelect) {
-      onAddressSelect(address);
-    }
+  const handleSelectAddress = (address: string, secondary?: string) => {
+    const fullAddress = secondary ? `${address}, ${secondary}` : address;
     setSearchValue(address);
     setAddressSuggestions([]);
+    if (onAddressSelect) {
+      onAddressSelect(fullAddress);
+    }
   };
 
   const handleUseCurrentLocation = () => {
     setIsLoading(true);
-    // Simulate getting location
-    setTimeout(() => {
-      setIsLoading(false);
-      handleSelectAddress("Current Location (Lagos, Nigeria)");
-    }, 1000);
+    navigator.geolocation?.getCurrentPosition(
+      (position) => {
+        // Simulate reverse geocoding
+        setTimeout(() => {
+          setIsLoading(false);
+          const address = "Current Location - Lekki Phase 1, Lagos";
+          if (onAddressSelect) {
+            onAddressSelect(address);
+          }
+          onClose();
+        }, 1500);
+      },
+      (error) => {
+        setIsLoading(false);
+        // Fallback to default location
+        const address = "Lagos, Nigeria";
+        if (onAddressSelect) {
+          onAddressSelect(address);
+        }
+      }
+    );
+  };
+
+  const handleConfirm = () => {
+    if (searchValue && onAddressSelect) {
+      onAddressSelect(searchValue);
+      onClose();
+    }
   };
 
   // Animation variants
@@ -88,6 +130,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
       opacity: 1,
       transition: {
         staggerChildren: 0.05,
+        delayChildren: 0.1,
       },
     },
   };
@@ -106,109 +149,212 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Delivery Address">
+    <Modal isOpen={isOpen} onClose={onClose} title="">
       <div className={styles["address-modal"]}>
-        <div className={styles["address-modal__search-container"]}>
-          {/* <Search className={styles["address-modal__search-icon"]} />
-          <input
-            type="text"
-            className={styles["address-modal__search-input"]}
-            placeholder="Search for an address"
-            value={searchValue}
-            onChange={handleInputChange}
-            autoFocus
-          />
-          {searchValue && (
-            <button
-              className={styles["address-modal__clear-button"]}
-              onClick={handleClearSearch}
+        {/* Redesigned Header */}
+        <motion.div
+          className={styles["address-modal__header"]}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+          <div className={styles["address-modal__icon-wrapper"]}>
+            <MapPin className={styles["address-modal__icon"]} />
+          </div>
+          <h3 className={styles["address-modal__title"]}>
+            Where should we deliver?
+          </h3>
+          <p className={styles["address-modal__subtitle"]}>
+            Enter your address to see available services
+          </p>
+        </motion.div>
+
+        <div className={styles["address-modal__content"]}>
+          {/* Search Field */}
+          <motion.div
+            className={styles["address-modal__search-wrapper"]}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.3 }}
+          >
+            <div
+              className={`${styles["address-modal__search-field"]} ${
+                isFocused ? styles["address-modal__search-field--focused"] : ""
+              } ${
+                searchValue
+                  ? styles["address-modal__search-field--has-value"]
+                  : ""
+              }`}
             >
-              <X />
+              <div className={styles["address-modal__search-inner"]}>
+                <Search className={styles["address-modal__search-icon"]} />
+                <input
+                  type="text"
+                  className={styles["address-modal__search-input"]}
+                  placeholder="Search for area, street or landmark..."
+                  value={searchValue}
+                  onChange={handleInputChange}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
+                  autoFocus
+                />
+                <AnimatePresence>
+                  {searchValue && (
+                    <motion.button
+                      className={styles["address-modal__clear-button"]}
+                      onClick={handleClearSearch}
+                      initial={{ scale: 0, rotate: -90 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      exit={{ scale: 0, rotate: 90 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 25,
+                      }}
+                    >
+                      <X />
+                    </motion.button>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Suggestions / Recent Addresses */}
+          <AnimatePresence mode="wait">
+            {searchValue && addressSuggestions.length > 0 ? (
+              <motion.div
+                className={styles["address-modal__suggestions"]}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                variants={containerVariants}
+              >
+                <div className={styles["address-modal__suggestions-header"]}>
+                  Search Results
+                </div>
+                <div className={styles["address-modal__suggestions-list"]}>
+                  {addressSuggestions.map((item, index) => (
+                    <motion.button
+                      key={item.id}
+                      className={styles["address-modal__suggestion"]}
+                      onClick={() =>
+                        handleSelectAddress(item.main, item.secondary)
+                      }
+                      variants={itemVariants}
+                      custom={index}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <div className={styles["address-modal__suggestion-icon"]}>
+                        <MapPin />
+                      </div>
+                      <div
+                        className={styles["address-modal__suggestion-content"]}
+                      >
+                        <div
+                          className={styles["address-modal__suggestion-main"]}
+                        >
+                          {item.main}
+                        </div>
+                        {item.secondary && (
+                          <div
+                            className={
+                              styles["address-modal__suggestion-secondary"]
+                            }
+                          >
+                            {item.secondary}
+                          </div>
+                        )}
+                      </div>
+                    </motion.button>
+                  ))}
+                </div>
+              </motion.div>
+            ) : searchValue && isSearching ? (
+              <motion.div
+                className={styles["address-modal__suggestions"]}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <div className={styles["address-modal__suggestions-header"]}>
+                  Searching...
+                </div>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+
+          {/* Divider */}
+          <div className={styles["address-modal__divider"]}>
+            <span>OR</span>
+          </div>
+
+          {/* Current Location Section */}
+          <motion.div
+            className={styles["address-modal__location-section"]}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.3 }}
+          >
+            <div className={styles["address-modal__location-icon-wrapper"]}>
+              <Navigation className={styles["address-modal__location-icon"]} />
+            </div>
+            <h4 className={styles["address-modal__location-title"]}>
+              Use Current Location
+            </h4>
+            <p className={styles["address-modal__location-description"]}>
+              Allow location access for accurate delivery
+            </p>
+            <button
+              className={styles["address-modal__location-button"]}
+              onClick={handleUseCurrentLocation}
+              disabled={isLoading}
+            >
+              <Navigation />
+              {isLoading ? "Getting location..." : "Share Location"}
             </button>
-          )} */}
-          <Input
-            placeholder="Search for an address"
-            value={searchValue}
-            onChange={handleInputChange}
-            autoFocus
-            fullWidth
-            leftIcon={<Search />}
-          />
+          </motion.div>
+
+          {/* Confirm Button */}
+          {searchValue && (
+            <motion.div
+              className={styles["address-modal__footer"]}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <FnButton
+                variant="primary"
+                size="lg"
+                fullWidth
+                onClick={handleConfirm}
+                className={styles["address-modal__confirm-button"]}
+              >
+                Confirm & Continue
+              </FnButton>
+            </motion.div>
+          )}
         </div>
 
+        {/* Loading Overlay */}
         <AnimatePresence>
-          {searchValue && addressSuggestions.length > 0 && (
+          {isLoading && (
             <motion.div
-              className={styles["address-modal__suggestions"]}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              variants={containerVariants}
+              className={styles["address-modal__loading"]}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
-              {addressSuggestions.map((suggestion) => (
-                <motion.button
-                  key={suggestion.id}
-                  className={styles["address-modal__suggestion"]}
-                  onClick={() => handleSelectAddress(suggestion.main)}
-                  variants={itemVariants}
-                >
-                  <MapPin
-                    className={styles["address-modal__suggestion-icon"]}
-                  />
-                  <div className={styles["address-modal__suggestion-text"]}>
-                    <span className={styles["address-modal__suggestion-main"]}>
-                      {suggestion.main}
-                    </span>
-                    {suggestion.secondary && (
-                      <span
-                        className={
-                          styles["address-modal__suggestion-secondary"]
-                        }
-                      >
-                        {suggestion.secondary}
-                      </span>
-                    )}
-                  </div>
-                </motion.button>
-              ))}
+              <div className={styles["address-modal__loading-content"]}>
+                <div className={styles["address-modal__loading-spinner"]} />
+                <div className={styles["address-modal__loading-text"]}>
+                  Getting your location...
+                </div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
-
-        {/* <motion.button
-          className={styles["address-modal__location-button"]}
-          onClick={handleUseCurrentLocation}
-          whileTap={{ scale: 0.98 }}
-          whileHover={{
-            backgroundColor: "var(--color-neutral-lighter)",
-            transition: { duration: 0.2 },
-          }}
-        >
-          <Navigation className={styles["address-modal__location-icon"]} />
-          <span className={styles["address-modal__location-text"]}>
-            Share your current location
-          </span>
-        </motion.button> */}
-
-        <FnButton
-          variant="primary"
-          size="sm"
-          disabled={!searchValue}
-          onClick={() => {
-            if (searchValue && onAddressSelect) {
-              onAddressSelect(searchValue);
-              onClose();
-            }
-          }}
-        >
-          <span>Confirm Address</span>
-        </FnButton>
-
-        {isLoading && (
-          <div className={styles["address-modal__loading"]}>
-            <div className={styles["address-modal__loading-spinner"]}></div>
-          </div>
-        )}
       </div>
     </Modal>
   );

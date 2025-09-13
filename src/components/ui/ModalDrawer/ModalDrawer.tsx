@@ -24,6 +24,7 @@ import {
   Wallet,
   Clock,
 } from "lucide-react";
+import ModalDrawerHeader from "./ModalDrawerHeader/ModalDrawerHeader";
 
 interface ModalDrawerProps {
   isOpen: boolean;
@@ -31,6 +32,8 @@ interface ModalDrawerProps {
   footer?: React.ReactNode;
   children: React.ReactNode;
   width?: "sm" | "md" | "lg" | "full-screen";
+  title?: string;
+  description?: string;
 }
 
 const ModalDrawer: React.FC<ModalDrawerProps> = ({
@@ -39,6 +42,8 @@ const ModalDrawer: React.FC<ModalDrawerProps> = ({
   footer,
   children,
   width = "md",
+  title,
+  description,
 }) => {
   // Disable body scroll when modal is open
   useEffect(() => {
@@ -94,6 +99,8 @@ const ModalDrawer: React.FC<ModalDrawerProps> = ({
             exit={{ opacity: 0 }}
             onClick={onClose}
           />
+          {/* {title && description && onClose && (
+          )} */}
 
           <motion.div
             className={modalDrawerClasses}
@@ -102,7 +109,14 @@ const ModalDrawer: React.FC<ModalDrawerProps> = ({
             exit="closed"
             variants={sidebarVariants}
           >
-            {children}
+            {title && description && onClose && (
+              <ModalDrawerHeader
+                title={title}
+                description={description}
+                onClose={onClose}
+              />
+            )}
+            <div className={styles.modalDrawer__content}>{children}</div>
 
             {/* {!footer ? (
               <motion.div

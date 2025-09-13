@@ -338,9 +338,19 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   };
 
   return (
-    <ModalDrawer isOpen={isOpen} onClose={onClose} width="lg">
+    <ModalDrawer
+      isOpen={isOpen}
+      onClose={onClose}
+      width="lg"
+      title={
+        subscription.subscriptionServices.length > 1
+          ? `${subscription.subscriptionServices.length} Services Package`
+          : subscription.subscriptionServices[0]?.service.name || "Subscription"
+      }
+      description={subscription.billingCycle}
+    >
       <>
-        <div className={styles.modal__header}>
+        {/* <div className={styles.modal__header}>
           <div className={styles.modal__headerLeft}>
             <div className={styles.modal__serviceIcon}>
               {subscription.subscriptionServices[0]
@@ -367,7 +377,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
           <button className={styles.modal__closeBtn} onClick={onClose}>
             <X size={24} />
           </button>
-        </div>
+        </div> */}
 
         <div className={styles.modal__body}>
           {/* Tab Navigation */}
