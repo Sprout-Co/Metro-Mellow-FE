@@ -1,8 +1,7 @@
 import Modal from "@/components/ui/Modal/Modal";
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import styles from "./AddAddressModal.module.scss";
-import { MapPin, Navigation, Search, X, Star } from "lucide-react";
+import { MapPin, Navigation, Search, X } from "lucide-react";
 import { FnButton } from "@/components/ui/Button/FnButton";
 
 interface AddressOption {
@@ -123,167 +122,90 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
     }
   };
 
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 24,
-      },
-    },
-  };
-
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="">
       <div className={styles["address-modal"]}>
-        {/* Redesigned Header */}
-        <motion.div
-          className={styles["address-modal__header"]}
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-        >
-          <div className={styles["address-modal__icon-wrapper"]}>
-            <MapPin className={styles["address-modal__icon"]} />
-          </div>
+        {/* Simple Header */}
+        <div className={styles["address-modal__header"]}>
           <h3 className={styles["address-modal__title"]}>
             Where should we deliver?
           </h3>
           <p className={styles["address-modal__subtitle"]}>
             Enter your address to see available services
           </p>
-        </motion.div>
+        </div>
 
         <div className={styles["address-modal__content"]}>
           {/* Search Field */}
-          <motion.div
-            className={styles["address-modal__search-wrapper"]}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.3 }}
-          >
-            <div
-              className={`${styles["address-modal__search-field"]} ${
-                isFocused ? styles["address-modal__search-field--focused"] : ""
-              } ${
-                searchValue
-                  ? styles["address-modal__search-field--has-value"]
-                  : ""
-              }`}
-            >
-              <div className={styles["address-modal__search-inner"]}>
-                <Search className={styles["address-modal__search-icon"]} />
-                <input
-                  type="text"
-                  className={styles["address-modal__search-input"]}
-                  placeholder="Search for area, street or landmark..."
-                  value={searchValue}
-                  onChange={handleInputChange}
-                  onFocus={() => setIsFocused(true)}
-                  onBlur={() => setIsFocused(false)}
-                  autoFocus
-                />
-                <AnimatePresence>
-                  {searchValue && (
-                    <motion.button
-                      className={styles["address-modal__clear-button"]}
-                      onClick={handleClearSearch}
-                      initial={{ scale: 0, rotate: -90 }}
-                      animate={{ scale: 1, rotate: 0 }}
-                      exit={{ scale: 0, rotate: 90 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 500,
-                        damping: 25,
-                      }}
+          <div className={styles["address-modal__search-wrapper"]}>
+            <div className={styles["address-modal__search-field"]}>
+              <Search className={styles["address-modal__search-icon"]} />
+              <input
+                type="text"
+                className={styles["address-modal__search-input"]}
+                placeholder="Search for area, street or landmark..."
+                value={searchValue}
+                onChange={handleInputChange}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                autoFocus
+              />
+              {searchValue && (
+                <button
+                  className={styles["address-modal__clear-button"]}
+                  onClick={handleClearSearch}
+                >
+                  <X />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Suggestions */}
+          {searchValue && addressSuggestions.length > 0 ? (
+            <div className={styles["address-modal__suggestions"]}>
+              <div className={styles["address-modal__suggestions-header"]}>
+                Search Results
+              </div>
+              <div className={styles["address-modal__suggestions-list"]}>
+                {addressSuggestions.map((item) => (
+                  <button
+                    key={item.id}
+                    className={styles["address-modal__suggestion"]}
+                    onClick={() =>
+                      handleSelectAddress(item.main, item.secondary)
+                    }
+                  >
+                    <div className={styles["address-modal__suggestion-icon"]}>
+                      <MapPin />
+                    </div>
+                    <div
+                      className={styles["address-modal__suggestion-content"]}
                     >
-                      <X />
-                    </motion.button>
-                  )}
-                </AnimatePresence>
+                      <div className={styles["address-modal__suggestion-main"]}>
+                        {item.main}
+                      </div>
+                      {item.secondary && (
+                        <div
+                          className={
+                            styles["address-modal__suggestion-secondary"]
+                          }
+                        >
+                          {item.secondary}
+                        </div>
+                      )}
+                    </div>
+                  </button>
+                ))}
               </div>
             </div>
-          </motion.div>
-
-          {/* Suggestions / Recent Addresses */}
-          <AnimatePresence mode="wait">
-            {searchValue && addressSuggestions.length > 0 ? (
-              <motion.div
-                className={styles["address-modal__suggestions"]}
-                initial="hidden"
-                animate="visible"
-                exit="hidden"
-                variants={containerVariants}
-              >
-                <div className={styles["address-modal__suggestions-header"]}>
-                  Search Results
-                </div>
-                <div className={styles["address-modal__suggestions-list"]}>
-                  {addressSuggestions.map((item, index) => (
-                    <motion.button
-                      key={item.id}
-                      className={styles["address-modal__suggestion"]}
-                      onClick={() =>
-                        handleSelectAddress(item.main, item.secondary)
-                      }
-                      variants={itemVariants}
-                      custom={index}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <div className={styles["address-modal__suggestion-icon"]}>
-                        <MapPin />
-                      </div>
-                      <div
-                        className={styles["address-modal__suggestion-content"]}
-                      >
-                        <div
-                          className={styles["address-modal__suggestion-main"]}
-                        >
-                          {item.main}
-                        </div>
-                        {item.secondary && (
-                          <div
-                            className={
-                              styles["address-modal__suggestion-secondary"]
-                            }
-                          >
-                            {item.secondary}
-                          </div>
-                        )}
-                      </div>
-                    </motion.button>
-                  ))}
-                </div>
-              </motion.div>
-            ) : searchValue && isSearching ? (
-              <motion.div
-                className={styles["address-modal__suggestions"]}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <div className={styles["address-modal__suggestions-header"]}>
-                  Searching...
-                </div>
-              </motion.div>
-            ) : null}
-          </AnimatePresence>
+          ) : searchValue && isSearching ? (
+            <div className={styles["address-modal__suggestions"]}>
+              <div className={styles["address-modal__suggestions-header"]}>
+                Searching...
+              </div>
+            </div>
+          ) : null}
 
           {/* Divider */}
           <div className={styles["address-modal__divider"]}>
@@ -291,39 +213,23 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
           </div>
 
           {/* Current Location Section */}
-          <motion.div
-            className={styles["address-modal__location-section"]}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.3 }}
-          >
-            <div className={styles["address-modal__location-icon-wrapper"]}>
-              <Navigation className={styles["address-modal__location-icon"]} />
-            </div>
+          <div className={styles["address-modal__location-section"]}>
             <h4 className={styles["address-modal__location-title"]}>
               Use Current Location
             </h4>
-            <p className={styles["address-modal__location-description"]}>
-              Allow location access for accurate delivery
-            </p>
             <button
               className={styles["address-modal__location-button"]}
               onClick={handleUseCurrentLocation}
               disabled={isLoading}
             >
               <Navigation />
-              {isLoading ? "Getting location..." : "Share Location"}
+              {isLoading ? "Getting location..." : "Use My Location"}
             </button>
-          </motion.div>
+          </div>
 
           {/* Confirm Button */}
           {searchValue && (
-            <motion.div
-              className={styles["address-modal__footer"]}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
+            <div className={styles["address-modal__footer"]}>
               <FnButton
                 variant="primary"
                 size="lg"
@@ -333,28 +239,16 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
               >
                 Confirm & Continue
               </FnButton>
-            </motion.div>
+            </div>
           )}
         </div>
 
         {/* Loading Overlay */}
-        <AnimatePresence>
-          {isLoading && (
-            <motion.div
-              className={styles["address-modal__loading"]}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <div className={styles["address-modal__loading-content"]}>
-                <div className={styles["address-modal__loading-spinner"]} />
-                <div className={styles["address-modal__loading-text"]}>
-                  Getting your location...
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {isLoading && (
+          <div className={styles["address-modal__loading"]}>
+            <div className={styles["address-modal__loading-spinner"]} />
+          </div>
+        )}
       </div>
     </Modal>
   );
