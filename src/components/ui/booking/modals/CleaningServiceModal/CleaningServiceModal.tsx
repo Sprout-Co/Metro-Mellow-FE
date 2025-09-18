@@ -24,6 +24,7 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { LocalStorageKeys } from "@/utils/localStorage";
 import LoginModal from "@/components/ui/booking/modals/LoginModal/LoginModal";
+import ServiceModalFooter from "../ServiceModalFooter/ServiceModalFooter";
 // import LoginModal from "@/components/ui/LoginModal/LoginModal";
 
 export interface CleaningServiceOption {
@@ -346,11 +347,10 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
           </div>
 
           {/* Order Button */}
-          <div className={styles.modal__orderButtonContainer}>
-            <Button variant="primary" size="lg" onClick={handleOrderSubmit}>
-              ORDER
-            </Button>
-          </div>
+          <ServiceModalFooter
+            price={calculateTotalPrice()}
+            handleOrderSubmit={handleOrderSubmit}
+          />
         </div>
       </div>
 

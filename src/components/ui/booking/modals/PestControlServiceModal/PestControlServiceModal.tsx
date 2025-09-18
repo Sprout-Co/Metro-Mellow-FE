@@ -23,6 +23,7 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { LocalStorageKeys } from "@/utils/localStorage";
 import LoginModal from "@/components/ui/booking/modals/LoginModal/LoginModal";
+import ServiceModalFooter from "../ServiceModalFooter/ServiceModalFooter";
 
 export interface TreatmentArea {
   id: string;
@@ -346,16 +347,10 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
           </div>
 
           {/* Order Button */}
-          <div className={styles.modal__orderButtonContainer}>
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={handleOrderSubmit}
-              className={styles.modal__orderButton}
-            >
-              ORDER PEST CONTROL SERVICE
-            </Button>
-          </div>
+          <ServiceModalFooter
+            price={calculateTotalPrice()}
+            handleOrderSubmit={handleOrderSubmit}
+          />
         </div>
       </div>
 
