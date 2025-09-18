@@ -2,7 +2,7 @@ import Modal from "@/components/ui/Modal/Modal";
 import React, { useState, useEffect } from "react";
 import styles from "./AddAddressModal.module.scss";
 import { MapPin, Navigation, Search, X } from "lucide-react";
-import { FnButton } from "@/components/ui/Button/FnButton";
+import { Button } from "@/components/ui/Button/Button";
 
 interface AddressOption {
   id: string;
@@ -123,131 +123,71 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="">
-      <div className={styles["address-modal"]}>
-        {/* Simple Header */}
-        <div className={styles["address-modal__header"]}>
-          <h3 className={styles["address-modal__title"]}>
-            Where should we deliver?
-          </h3>
-          <p className={styles["address-modal__subtitle"]}>
-            Enter your address to see available services
-          </p>
-        </div>
-
-        <div className={styles["address-modal__content"]}>
-          {/* Search Field */}
-          <div className={styles["address-modal__search-wrapper"]}>
-            <div className={styles["address-modal__search-field"]}>
-              <Search className={styles["address-modal__search-icon"]} />
-              <input
-                type="text"
-                className={styles["address-modal__search-input"]}
-                placeholder="Search for area, street or landmark..."
-                value={searchValue}
-                onChange={handleInputChange}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
-                autoFocus
-              />
-              {searchValue && (
-                <button
-                  className={styles["address-modal__clear-button"]}
-                  onClick={handleClearSearch}
-                >
-                  <X />
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Suggestions */}
-          {searchValue && addressSuggestions.length > 0 ? (
-            <div className={styles["address-modal__suggestions"]}>
-              <div className={styles["address-modal__suggestions-header"]}>
-                Search Results
-              </div>
-              <div className={styles["address-modal__suggestions-list"]}>
-                {addressSuggestions.map((item) => (
-                  <button
-                    key={item.id}
-                    className={styles["address-modal__suggestion"]}
-                    onClick={() =>
-                      handleSelectAddress(item.main, item.secondary)
-                    }
-                  >
-                    <div className={styles["address-modal__suggestion-icon"]}>
-                      <MapPin />
-                    </div>
-                    <div
-                      className={styles["address-modal__suggestion-content"]}
-                    >
-                      <div className={styles["address-modal__suggestion-main"]}>
-                        {item.main}
-                      </div>
-                      {item.secondary && (
-                        <div
-                          className={
-                            styles["address-modal__suggestion-secondary"]
-                          }
-                        >
-                          {item.secondary}
-                        </div>
-                      )}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : searchValue && isSearching ? (
-            <div className={styles["address-modal__suggestions"]}>
-              <div className={styles["address-modal__suggestions-header"]}>
-                Searching...
-              </div>
-            </div>
-          ) : null}
-
-          {/* Divider */}
-          <div className={styles["address-modal__divider"]}>
-            <span>OR</span>
-          </div>
-
-          {/* Current Location Section */}
-          <div className={styles["address-modal__location-section"]}>
-            <h4 className={styles["address-modal__location-title"]}>
-              Use Current Location
-            </h4>
-            <button
-              className={styles["address-modal__location-button"]}
-              onClick={handleUseCurrentLocation}
-              disabled={isLoading}
-            >
-              <Navigation />
-              {isLoading ? "Getting location..." : "Use My Location"}
-            </button>
-          </div>
-
-          {/* Confirm Button */}
+    <Modal 
+      isOpen={isOpen} 
+      onClose={onClose} 
+      title="Add Address"
+      maxWidth="450px"
+    >
+      <div className={styles.modal}>
+        {/* Search Input */}
+        <div className={styles.searchField}>
+          <Search size={20} />
+          <input
+            type="text"
+            className={styles.input}
+            placeholder="Enter your address"
+            value={searchValue}
+            onChange={handleInputChange}
+            autoFocus
+          />
           {searchValue && (
-            <div className={styles["address-modal__footer"]}>
-              <FnButton
-                variant="primary"
-                size="lg"
-                fullWidth
-                onClick={handleConfirm}
-                className={styles["address-modal__confirm-button"]}
-              >
-                Confirm & Continue
-              </FnButton>
-            </div>
+            <button onClick={handleClearSearch} className={styles.clearBtn}>
+              <X size={16} />
+            </button>
           )}
         </div>
 
-        {/* Loading Overlay */}
-        {isLoading && (
-          <div className={styles["address-modal__loading"]}>
-            <div className={styles["address-modal__loading-spinner"]} />
+        {/* Suggestions */}
+        {addressSuggestions.length > 0 && (
+          <div className={styles.suggestions}>
+            {addressSuggestions.map((item) => (
+              <button
+                key={item.id}
+                className={styles.suggestion}
+                onClick={() => handleSelectAddress(item.main, item.secondary)}
+              >
+                <MapPin size={16} />
+                <span>{item.main}</span>
+                {item.secondary && <small>{item.secondary}</small>}
+              </button>
+            ))}
           </div>
+        )}
+
+        {/* Loading state */}
+        {isSearching && <div className={styles.loading}>Searching...</div>}
+
+        {/* Current Location */}
+        <button
+          className={styles.locationBtn}
+          onClick={handleUseCurrentLocation}
+          disabled={isLoading}
+        >
+          <Navigation size={16} />
+          {isLoading ? "Getting location..." : "Use current location"}
+        </button>
+
+        {/* Confirm Button */}
+        {searchValue && (
+          <Button
+            variant="primary"
+            onClick={handleConfirm}
+            fullWidth
+            className={styles.confirmBtn}
+          >
+            Confirm
+          </Button>
         )}
       </div>
     </Modal>
