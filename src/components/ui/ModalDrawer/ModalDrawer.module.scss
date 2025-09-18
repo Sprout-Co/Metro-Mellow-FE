@@ -45,7 +45,9 @@
   }
 
   &__content {
+    flex: 1;
     padding: spacing("lg") spacing("lg") spacing("xl");
+    overflow-y: auto;
   }
 
   &__header {
@@ -81,11 +83,11 @@
   }
 
   &__footer {
-    margin-top: spacing("xl");
-    padding-top: spacing("lg");
+    flex-shrink: 0;
+    padding: spacing("lg") spacing("lg") spacing("xl");
+    background: color("neutral", "white");
     border-top: 1px solid color("neutral", "lighter");
-    display: flex;
-    justify-content: center;
+    margin-top: auto;
   }
 
   &__footerLogo {

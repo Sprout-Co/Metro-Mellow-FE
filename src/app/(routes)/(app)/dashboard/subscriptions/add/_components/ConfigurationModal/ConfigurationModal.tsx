@@ -58,8 +58,32 @@ const ConfigurationModal: React.FC<ConfigurationModalProps> = ({
 
   if (!service) return null;
 
+  const footerContent = (
+    <div className={styles.configurationModal__footer}>
+      <button
+        className={`${styles.configurationModal__button} ${styles["configurationModal__button--ghost"]}`}
+        onClick={onClose}
+      >
+        Cancel
+      </button>
+      <button
+        className={`${styles.configurationModal__button} ${styles["configurationModal__button--primary"]}`}
+        onClick={handleSave}
+      >
+        Save Configuration
+      </button>
+    </div>
+  );
+
   return (
-    <ModalDrawer isOpen={isOpen} onClose={onClose} width="md">
+    <ModalDrawer
+      isOpen={isOpen}
+      onClose={onClose}
+      width="md"
+      title={`Configure ${service.name}`}
+      showFooter={true}
+      footer={footerContent}
+    >
       <motion.div
         className={styles.configurationModal}
         initial={{ opacity: 0 }}
@@ -72,23 +96,6 @@ const ConfigurationModal: React.FC<ConfigurationModalProps> = ({
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 20 }}
         >
-          <div className={styles.configurationModal__header}>
-            <h2 className={styles.configurationModal__title}>
-              Configure {service.name}
-            </h2>
-            <button
-              onClick={onClose}
-              className={styles.configurationModal__closeButton}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              <X size={24} />
-            </button>
-          </div>
-
           <div className={styles.configurationModal__body}>
             {service.configOptions.map((option) => (
               <div key={option.id} className={styles.configurationModal__field}>
@@ -231,21 +238,6 @@ const ConfigurationModal: React.FC<ConfigurationModalProps> = ({
                 /month
               </span>
             </div>
-          </div>
-
-          <div className={styles.configurationModal__footer}>
-            <button
-              className={`${styles.configurationModal__button} ${styles["configurationModal__button--ghost"]}`}
-              onClick={onClose}
-            >
-              Cancel
-            </button>
-            <button
-              className={`${styles.configurationModal__button} ${styles["configurationModal__button--primary"]}`}
-              onClick={handleSave}
-            >
-              Save Configuration
-            </button>
           </div>
         </motion.div>
       </motion.div>

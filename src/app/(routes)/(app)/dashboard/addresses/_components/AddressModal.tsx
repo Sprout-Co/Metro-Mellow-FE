@@ -126,6 +126,34 @@ const AddressModal: React.FC<AddressModalProps> = ({
     },
   };
 
+  const footerContent = (
+    <div className={styles.footer__actions}>
+      <FnButton
+        variant="ghost"
+        onClick={onClose}
+        className={styles.footer__button}
+        disabled={isSubmitting}
+      >
+        Cancel
+      </FnButton>
+      <FnButton
+        variant="primary"
+        onClick={handleSubmit}
+        className={styles.footer__button}
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? (
+          "Saving..."
+        ) : (
+          <>
+            <Check size={18} />
+            {isEditing ? "Update Address" : "Save Address"}
+          </>
+        )}
+      </FnButton>
+    </div>
+  );
+
   return (
     <ModalDrawer
       isOpen={isOpen}
@@ -137,18 +165,10 @@ const AddressModal: React.FC<AddressModalProps> = ({
           ? "Update your address information"
           : "Enter your address details"
       }
+      showFooter={true}
+      footer={footerContent}
     >
       <div className={styles.modal}>
-        {/* <ModalDrawerHeader
-          title={isEditing ? "Edit Address" : "Add New Address"}
-          description={
-            isEditing
-              ? "Update your address information"
-              : "Enter your address details"
-          }
-          onClose={onClose}
-        /> */}
-
         {/* Form Content */}
         <div className={styles.content}>
           <motion.div
@@ -262,40 +282,6 @@ const AddressModal: React.FC<AddressModalProps> = ({
             </motion.div>
           </motion.div>
         </div>
-
-        {/* Footer */}
-        <motion.div
-          className={styles.footer}
-          initial="hidden"
-          animate="visible"
-          variants={fadeInUp}
-        >
-          <div className={styles.footer__actions}>
-            <FnButton
-              variant="ghost"
-              onClick={onClose}
-              className={styles.footer__button}
-              disabled={isSubmitting}
-            >
-              Cancel
-            </FnButton>
-            <FnButton
-              variant="primary"
-              onClick={handleSubmit}
-              className={styles.footer__button}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                "Saving..."
-              ) : (
-                <>
-                  <Check size={18} />
-                  {isEditing ? "Update Address" : "Save Address"}
-                </>
-              )}
-            </FnButton>
-          </div>
-        </motion.div>
 
         {/* Loading Overlay */}
         <AnimatePresence>

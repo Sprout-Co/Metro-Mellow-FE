@@ -222,6 +222,10 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
     }
   };
 
+  const footerContent = (
+    <div className={styles.modal__footer}>{renderFooterButtons()}</div>
+  );
+
   return (
     <ModalDrawer
       isOpen={isOpen}
@@ -229,30 +233,9 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
       width="lg"
       title={booking.service.name}
       description={booking.service_category}
+      showFooter={true}
+      footer={footerContent}
     >
-      {/* <ModalDrawerHeader
-        title={booking.service.name}
-        description={booking.service_category}
-        onClose={onClose}
-      /> */}
-      {/* <div className={styles.modal__header}>
-        <div className={styles.modal__headerLeft}>
-          <div className={styles.modal__serviceIcon}>
-            {getServiceIcon(booking.service_category)}
-          </div>
-          <div>
-            <h2 className={styles.modal__title}>
-              {booking.service.name}
-         
-            </h2>
-            <p className={styles.modal__subtitle}>{booking.service_category}</p>
-          </div>
-        </div>
-        <button className={styles.modal__closeBtn} onClick={onClose}>
-          <X size={18} />
-        </button>
-      </div> */}
-
       <div className={styles.modal__body}>
         <div className={styles.modal__statusBar}>
           <span
@@ -430,8 +413,6 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
           )}
         </div>
       </div>
-
-      <div className={styles.modal__footer}>{renderFooterButtons()}</div>
 
       <RescheduleModal
         isOpen={isRescheduleModalOpen}

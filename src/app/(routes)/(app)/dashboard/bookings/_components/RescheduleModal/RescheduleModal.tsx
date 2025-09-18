@@ -194,22 +194,45 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
     return icons[category] || "🏠";
   };
 
+  const footerContent = (
+    <div className={styles.modal__footer}>
+      <motion.button
+        className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
+        onClick={onClose}
+        disabled={isConfirming}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+      >
+        Cancel
+      </motion.button>
+      <motion.button
+        className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
+        onClick={handleConfirm}
+        disabled={!selectedDate || !selectedTime || isConfirming}
+        whileHover={
+          !isConfirming && selectedDate && selectedTime ? { scale: 1.02 } : {}
+        }
+        whileTap={
+          !isConfirming && selectedDate && selectedTime ? { scale: 0.98 } : {}
+        }
+      >
+        {isConfirming ? "Rescheduling..." : "Confirm Reschedule"}
+      </motion.button>
+    </div>
+  );
+
   return (
     <>
-      <ModalDrawer isOpen={isOpen} onClose={onClose} width="lg">
+      <ModalDrawer
+        isOpen={isOpen}
+        onClose={onClose}
+        width="lg"
+        title="Reschedule Booking"
+        description="Select a new date and time for your service"
+        showFooter={true}
+        footer={footerContent}
+      >
         <div className={styles.modal}>
-          <div className={styles.modal__header}>
-            <div className={styles.modal__headerContent}>
-              <h2 className={styles.modal__title}>Reschedule Booking</h2>
-              <p className={styles.modal__subtitle}>
-                Select a new date and time for your service
-              </p>
-            </div>
-            <button className={styles.modal__closeBtn} onClick={onClose}>
-              <X size={20} />
-            </button>
-          </div>
-
           <div className={styles.modal__body}>
             {/* Current Booking Info */}
             <div className={styles.modal__currentBooking}>
@@ -417,35 +440,6 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
-
-          <div className={styles.modal__footer}>
-            <motion.button
-              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
-              onClick={onClose}
-              disabled={isConfirming}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Cancel
-            </motion.button>
-            <motion.button
-              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
-              onClick={handleConfirm}
-              disabled={!selectedDate || !selectedTime || isConfirming}
-              whileHover={
-                !isConfirming && selectedDate && selectedTime
-                  ? { scale: 1.02 }
-                  : {}
-              }
-              whileTap={
-                !isConfirming && selectedDate && selectedTime
-                  ? { scale: 0.98 }
-                  : {}
-              }
-            >
-              {isConfirming ? "Rescheduling..." : "Confirm Reschedule"}
-            </motion.button>
           </div>
         </div>
       </ModalDrawer>

@@ -130,14 +130,8 @@
     }
   }
 
-  // Footer
+  // Footer (now handled by ModalDrawer)
   .footer {
-    padding: spacing("2xl");
-    background: color("neutral", "lightest");
-    border-top: 1px solid color("neutral", "lighter");
-    margin-top: auto;
-    flex-shrink: 0;
-
     &__actions {
       display: flex;
       justify-content: flex-end;
@@ -156,8 +150,6 @@
     }
 
     @include breakpoint-down("sm") {
-      padding: spacing("xl");
-
       &__actions {
         flex-direction: column-reverse;
         gap: spacing("md");

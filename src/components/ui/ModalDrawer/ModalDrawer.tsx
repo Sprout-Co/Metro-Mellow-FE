@@ -34,6 +34,7 @@ interface ModalDrawerProps {
   width?: "sm" | "md" | "lg" | "full-screen";
   title?: string;
   description?: string;
+  showFooter?: boolean;
 }
 
 const ModalDrawer: React.FC<ModalDrawerProps> = ({
@@ -44,6 +45,7 @@ const ModalDrawer: React.FC<ModalDrawerProps> = ({
   width = "md",
   title,
   description,
+  showFooter = false,
 }) => {
   // Disable body scroll when modal is open
   useEffect(() => {
@@ -118,22 +120,9 @@ const ModalDrawer: React.FC<ModalDrawerProps> = ({
             )}
             <div className={styles.modalDrawer__content}>{children}</div>
 
-            {/* {!footer ? (
-              <motion.div
-                className={styles.modalDrawer__footer}
-                variants={itemVariants}
-              >
-                <Image
-                  src="/images/brand/brand-logo/transparent-bg/green.png"
-                  alt="Metromellow"
-                  width={120}
-                  height={40}
-                  className={styles.modalDrawer__footerLogo}
-                />
-              </motion.div>
-            ) : (
-              footer
-            )} */}
+            {showFooter && footer && (
+              <div className={styles.modalDrawer__footer}>{footer}</div>
+            )}
           </motion.div>
         </>
       )}
