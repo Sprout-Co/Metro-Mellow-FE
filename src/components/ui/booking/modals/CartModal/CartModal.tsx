@@ -21,7 +21,7 @@ export interface CartServiceItem extends Service {
 interface CartModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onContinue?: (formData?: CheckoutFormData) => void;
+  onCheckout?: (formData?: CheckoutFormData) => void;
   items: CartServiceItem[];
   onUpdateQuantity: (id: string, quantity: number) => void;
   onRemoveItem: (id: string) => void;
@@ -32,7 +32,7 @@ interface CartModalProps {
 export const CartModal: React.FC<CartModalProps> = ({
   isOpen,
   onClose,
-  onContinue,
+  onCheckout,
   items,
   onUpdateQuantity,
   onRemoveItem,
@@ -62,8 +62,8 @@ export const CartModal: React.FC<CartModalProps> = ({
 
   const handleCheckoutComplete = (formData: CheckoutFormData) => {
     setShowShippingModal(false);
-    if (onContinue) {
-      onContinue(formData);
+    if (onCheckout) {
+      onCheckout(formData);
     }
   };
 
@@ -298,7 +298,7 @@ export const CartModal: React.FC<CartModalProps> = ({
       <CheckoutModal
         isOpen={showShippingModal}
         onClose={handleShippingModalClose}
-        onContinue={handleCheckoutComplete}
+        onCheckout={handleCheckoutComplete}
         service_category="Food"
         submitting={false}
       />

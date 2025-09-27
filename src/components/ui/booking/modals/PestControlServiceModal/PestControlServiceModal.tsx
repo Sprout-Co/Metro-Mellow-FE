@@ -358,7 +358,7 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
       <CheckoutModal
         isOpen={isCheckoutModalOpen}
         onClose={handleCheckoutClose}
-        onContinue={handleCheckoutComplete}
+        onCheckout={handleCheckoutComplete}
         service_category="Pest Control"
         submitting={isCreatingBooking}
       />

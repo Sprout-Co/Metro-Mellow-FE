@@ -682,7 +682,7 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
         onRemoveVariant={handleRemoveVariant}
-        onContinue={handleContinueToCheckout}
+        onCheckout={handleContinueToCheckout}
       />
     </>
   );

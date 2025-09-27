@@ -419,4 +419,26 @@
       padding: spacing("sm");
     }
   }
+
+  // Error Message
+  &__errorMessage {
+    background: rgba(
+      251,
+      34,
+      34,
+      0.08
+    ); // Light red background using the error color
+    border: 1px solid rgba(251, 34, 34, 0.2); // Light red border using the error color
+    border-radius: border-radius("lg");
+    padding: spacing("md") spacing("lg");
+    margin-bottom: spacing("lg");
+
+    p {
+      @include font-size("sm");
+      @include font-weight("medium");
+      color: color("status", "error");
+      margin: 0;
+      line-height: line-height("relaxed");
+    }
+  }
 }

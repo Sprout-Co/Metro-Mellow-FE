@@ -312,7 +312,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
       <CheckoutModal
         isOpen={isCheckoutModalOpen}
         onClose={handleCheckoutClose}
-        onContinue={handleCheckoutComplete}
+        onCheckout={handleCheckoutComplete}
         service_category={service_category}
       />
 

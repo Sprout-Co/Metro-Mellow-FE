@@ -469,7 +469,7 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
         <CheckoutModal
           isOpen={isCheckoutModalOpen}
           onClose={handleCheckoutClose}
-          onContinue={handleCheckoutComplete}
+          onCheckout={handleCheckoutComplete}
           service_category="Cooking"
           submitting={isCreatingBooking}
         />
@@ -502,7 +502,7 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
         <ReduxCartModal
           isOpen={showCartModal}
           onClose={handleCartModalClose}
-          onContinue={handleCheckoutComplete}
+          onCheckout={handleCheckoutComplete}
         />
 
         {!isAuthenticated && (

@@ -26,14 +26,14 @@ export const OrderSuccessModalExample: React.FC = () => {
       <Button onClick={handleOpenShippingModal} variant="primary">
         Open Shipping Details (will show Success Modal on Continue)
       </Button>
-      
-      <ShippingDetailsModal 
-        isOpen={isShippingModalOpen} 
-        onClose={handleCloseShippingModal} 
-        onContinue={handleContinue}
+
+      <ShippingDetailsModal
+        isOpen={isShippingModalOpen}
+        onClose={handleCloseShippingModal}
+        onCheckout={handleContinue}
       />
     </div>
   );
 };
 
-export default OrderSuccessModalExample; 
+export default OrderSuccessModalExample;

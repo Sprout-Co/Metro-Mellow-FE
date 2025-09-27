@@ -82,6 +82,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   const [isSlidePanelOpen, setIsSlidePanelOpen] = useState(false);
   const [showOrderSuccessModal, setShowOrderSuccessModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
   const { handleCreateBooking, isCreatingBooking } = useBookingOperations();
@@ -123,6 +124,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
 
   // Handle order submission
   const handleOrderSubmit = () => {
+    setError(null); // Clear any previous errors when starting new order
     const configuration: CleaningServiceConfiguration = {
       apartmentType,
       roomQuantities,
@@ -188,6 +190,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   // Handle checkout completion
   const handleCheckoutComplete = async (formData: CheckoutFormData) => {
     try {
+      setError(null); // Clear any previous errors
       console.log("starting");
       const completeOrder: CreateBookingInput = {
         serviceId: service._id,
@@ -222,6 +225,11 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
       console.log("Complete cleaning order:", completeOrder);
     } catch (error) {
       console.error("Error creating booking:", error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "An unexpected error occurred while creating your booking. Please try again.";
+      setError(errorMessage);
     }
   };
 
@@ -358,9 +366,11 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
       <CheckoutModal
         isOpen={isCheckoutModalOpen}
         onClose={handleCheckoutClose}
-        onContinue={handleCheckoutComplete}
+        onCheckout={handleCheckoutComplete}
         service_category="Cleaning"
         submitting={isCreatingBooking}
+        error={error}
+        onClearError={() => setError(null)}
       />
 
       {/* Service Details Slide Panel */}

@@ -271,7 +271,7 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
       <CheckoutModal
         isOpen={isCheckoutModalOpen}
         onClose={handleCheckoutClose}
-        onContinue={handleCheckoutComplete}
+        onCheckout={handleCheckoutComplete}
         service_category="Laundry"
         submitting={isCreatingBooking}
       />

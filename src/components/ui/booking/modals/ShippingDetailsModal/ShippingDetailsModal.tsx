@@ -9,7 +9,7 @@ import styles from "./ShippingDetailsModal.module.scss";
 interface ShippingDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onContinue: (shippingDetails: ShippingDetails) => void;
+  onCheckout: (shippingDetails: ShippingDetails) => void;
 }
 
 export interface ShippingDetails {
@@ -31,7 +31,7 @@ const savedAddressData = {
 const ShippingDetailsModal: React.FC<ShippingDetailsModalProps> = ({
   isOpen,
   onClose,
-  onContinue,
+  onCheckout,
 }) => {
   const [formData, setFormData] = useState<ShippingDetails>({
     fullname: "",
@@ -67,7 +67,7 @@ const ShippingDetailsModal: React.FC<ShippingDetailsModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onContinue(formData);
+    onCheckout(formData);
     setShowSuccessModal(true);
   };
 
