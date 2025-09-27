@@ -326,6 +326,95 @@
     }
   }
 
+  &__paymentStatus {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xxs");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    padding: spacing("xxs") spacing("sm");
+    border-radius: border-radius("sm");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    &--paid {
+      background-color: rgba(5, 150, 105, 0.1);
+      color: #059669;
+    }
+
+    &--paymentPending {
+      background-color: rgba(217, 119, 6, 0.1);
+      color: #d97706;
+    }
+
+    &--failed {
+      background-color: rgba(251, 34, 34, 0.1);
+      color: #fb2222;
+    }
+
+    &--refunded {
+      background-color: rgba(107, 114, 128, 0.1);
+      color: #6b7280;
+    }
+
+    &--partiallyRefunded {
+      background-color: rgba(168, 85, 247, 0.1);
+      color: #8b5cf6;
+    }
+  }
+
+  &__bookingStatus {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xxs");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    padding: spacing("xxs") spacing("sm");
+    border-radius: border-radius("sm");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    &--confirmed {
+      background-color: rgba(5, 150, 105, 0.1);
+      color: #059669;
+    }
+
+    &--pending {
+      background-color: rgba(217, 119, 6, 0.1);
+      color: #d97706;
+    }
+
+    &--inProgress {
+      background-color: rgba(34, 147, 251, 0.1);
+      color: #2293fb;
+    }
+
+    &--completed {
+      background-color: rgba(107, 114, 128, 0.1);
+      color: #6b7280;
+    }
+
+    &--cancelled {
+      background-color: rgba(251, 34, 34, 0.1);
+      color: #fb2222;
+    }
+
+    &--paused {
+      background-color: rgba(242, 153, 74, 0.1);
+      color: #f2994a;
+    }
+  }
+
   &__notes {
     display: flex;
     gap: spacing("sm");

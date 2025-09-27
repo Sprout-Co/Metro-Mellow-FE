@@ -188,7 +188,10 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   };
 
   // Handle checkout completion
-  const handleCheckoutComplete = async (formData: CheckoutFormData) => {
+  const handleCheckoutComplete = async (
+    formData: CheckoutFormData,
+    onContinuePayment: () => void
+  ) => {
     try {
       setError(null); // Clear any previous errors
       console.log("starting");
@@ -214,7 +217,8 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
 
       if (isAuthenticated) {
         await handleCreateBooking(completeOrder);
-        setShowOrderSuccessModal(true);
+        onContinuePayment();
+        // setShowOrderSuccessModal(true);
       } else {
         localStorage.setItem(
           LocalStorageKeys.BOOKING_DATA_TO_COMPLETE,

@@ -12,7 +12,10 @@ import axios from "axios";
 export interface CheckoutModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCheckout: (formData: CheckoutFormData) => void;
+  onCheckout: (
+    formData: CheckoutFormData,
+    onContinuePayment: () => void
+  ) => void;
   service_category?: string;
   submitting?: boolean;
   error?: string | null;
@@ -162,7 +165,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onCheckout(formData);
+    onCheckout(formData, () => initializePayment());
     // initializePayment();
   };
 
