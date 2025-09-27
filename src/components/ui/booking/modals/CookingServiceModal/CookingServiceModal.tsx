@@ -83,6 +83,7 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
   const [showOrderSuccessModal, setShowOrderSuccessModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showCartModal, setShowCartModal] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
   const { itemCount } = useCart();
@@ -198,6 +199,7 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
 
   // Handle order submission (direct checkout)
   const handleOrderSubmit = () => {
+    setError(null); // Clear any previous errors when starting new order
     const configuration: CookingServiceConfiguration = {
       mealType,
       deliveryFrequency,
@@ -216,6 +218,7 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
   const handleCheckoutComplete = async (formData?: CheckoutFormData) => {
     if (!formData) return;
     try {
+      setError(null); // Clear any previous errors
       const completeOrder: CreateBookingInput = {
         serviceId: service._id,
         service_category: service.category,
@@ -252,6 +255,11 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
       console.log("Complete cooking order:", completeOrder);
     } catch (error) {
       console.error("Error creating booking:", error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "An unexpected error occurred while creating your booking. Please try again.";
+      setError(errorMessage);
     }
   };
 
@@ -472,6 +480,8 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
           onCheckout={handleCheckoutComplete}
           service_category="Cooking"
           submitting={isCreatingBooking}
+          error={error}
+          onClearError={() => setError(null)}
         />
 
         {/* Service Details Slide Panel */}

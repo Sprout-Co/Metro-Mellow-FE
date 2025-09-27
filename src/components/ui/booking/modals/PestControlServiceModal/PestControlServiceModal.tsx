@@ -83,6 +83,7 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
   const [isSlidePanelOpen, setIsSlidePanelOpen] = useState(false);
   const [showOrderSuccessModal, setShowOrderSuccessModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
   const { handleCreateBooking, isCreatingBooking } = useBookingOperations();
@@ -147,6 +148,7 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
 
   // Handle order submission
   const handleOrderSubmit = () => {
+    setError(null); // Clear any previous errors when starting new order
     const configuration: PestControlServiceConfiguration = {
       treatmentType,
       severity,
@@ -164,6 +166,7 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
   // Handle checkout completion
   const handleCheckoutComplete = async (formData: CheckoutFormData) => {
     try {
+      setError(null); // Clear any previous errors
       const completeOrder: CreateBookingInput = {
         serviceId: service._id,
         service_category: service.category,
@@ -201,6 +204,11 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
       console.log("Complete pest control order:", completeOrder);
     } catch (error) {
       console.error("Error creating booking:", error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "An unexpected error occurred while creating your booking. Please try again.";
+      setError(errorMessage);
     }
   };
 
@@ -361,6 +369,8 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
         onCheckout={handleCheckoutComplete}
         service_category="Pest Control"
         submitting={isCreatingBooking}
+        error={error}
+        onClearError={() => setError(null)}
       />
 
       {/* Service Details Slide Panel */}

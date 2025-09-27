@@ -69,6 +69,7 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
   const [isSlidePanelOpen, setIsSlidePanelOpen] = useState(false);
   const [showOrderSuccessModal, setShowOrderSuccessModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
   const { handleCreateBooking, isCreatingBooking } = useBookingOperations();
@@ -108,6 +109,7 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
 
   // Handle order submission
   const handleOrderSubmit = () => {
+    setError(null); // Clear any previous errors when starting new order
     // const configuration: LaundryServiceConfiguration = {
     //   laundryType: LaundryType.StandardLaundry,
     //   bags,
@@ -124,6 +126,7 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
   // Handle checkout completion
   const handleCheckoutComplete = async (formData: CheckoutFormData) => {
     try {
+      setError(null); // Clear any previous errors
       if (!serviceOption?.service_id) {
         throw new Error("Service option is required");
       }
@@ -158,6 +161,11 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
       console.log("Complete laundry order:", completeOrder);
     } catch (error) {
       console.error("Error creating booking:", error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "An unexpected error occurred while creating your booking. Please try again.";
+      setError(errorMessage);
     }
   };
 
@@ -274,6 +282,8 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
         onCheckout={handleCheckoutComplete}
         service_category="Laundry"
         submitting={isCreatingBooking}
+        error={error}
+        onClearError={() => setError(null)}
       />
 
       {/* Service Details Slide Panel */}
