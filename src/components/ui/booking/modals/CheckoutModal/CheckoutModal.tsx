@@ -58,6 +58,14 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   });
 
   const [isNewAddress, setIsNewAddress] = useState(!user?.addresses?.length);
+
+  // Paystack payment hook - moved to component top level
+  const initializePaystackPayment = usePaystackPayment({
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "",
+    email: user?.email || "",
+    amount: 10000, // Amount in kobo
+  });
+
   // Set default address when component mounts or user changes
 
   React.useEffect(() => {
@@ -140,19 +148,17 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
       const { data } = response.data;
 
-      const config = {
-        publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "",
-        email: user?.email,
-        amount: amount * 100,
-        // reference: data.reference, // Use the reference from the backend
-      };
+      console.log("Payment initialization response:", data);
 
-      console.log("config", config);
-      // Use the usePaystackPayment hoo with the final config and callbacks
-      const initialize = usePaystackPayment(config);
-      initialize({
+      // Use the hook that's now at component top level
+      initializePaystackPayment({
         onSuccess,
         onClose: onClosePaystack,
+        config: {
+          email: user?.email || "",
+          amount: amount * 100,
+          // reference: data.reference, // Use the reference from the backend
+        },
       });
     } catch (err) {
       console.error("Error initializing payment:", err);
