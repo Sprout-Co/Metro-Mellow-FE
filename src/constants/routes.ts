@@ -23,6 +23,7 @@ export enum Routes {
   SERVICES = "/services",
   BOOKINGS = "/bookings",
   PAYMENTS = "/payments",
+  PAYMENT_CALLBACK = "/payment/callback",
 
   // Admin routes
   ADMIN_DASHBOARD = "/admin/dashboard",

@@ -7,19 +7,22 @@ import styles from "./CheckoutModal.module.scss";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { AddressInput, TimeSlot } from "@/graphql/api";
 import { usePaystackPayment } from "react-paystack";
+import { Routes } from "@/constants/routes";
 import axios from "axios";
+import router from "next/router";
 
 export interface CheckoutModalProps {
   isOpen: boolean;
   onClose: () => void;
   onCheckout: (
     formData: CheckoutFormData,
-    onContinuePayment: () => void
+    onContinuePayment: (bookingResponse: string) => void
   ) => void;
   service_category?: string;
   submitting?: boolean;
   error?: string | null;
   onClearError?: () => void;
+  bookingId?: string;
 }
 
 export interface CheckoutFormData {
@@ -38,6 +41,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   submitting = false,
   error = null,
   onClearError,
+  bookingId,
 }) => {
   // Form state management
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
@@ -60,11 +64,11 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [isNewAddress, setIsNewAddress] = useState(!user?.addresses?.length);
 
   // Paystack payment hook - moved to component top level
-  const initializePaystackPayment = usePaystackPayment({
-    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "",
-    email: user?.email || "",
-    amount: 10000, // Amount in kobo
-  });
+  // const initializePaystackPayment = usePaystackPayment({
+  //   publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "",
+  //   email: user?.email || "",
+  //   amount: 10000, // Amount in kobo
+  // });
 
   // Set default address when component mounts or user changes
 
@@ -119,21 +123,63 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   // Define the onSuccess and onClose callbacks for the payment hook
 
-  const onSuccess = (response: any) => {
-    // This function is called when the payment is successful
-    console.log("Payment successful. Reference:", response.reference);
-    alert(`Payment successful! Reference: ${response.reference}`);
-    // In a real app, you would handle post-payment logic here (e.g., redirecting the user)
-    // The final confirmation MUST come from your backend webhook!
+  const onSuccess = async (response: any) => {
+    try {
+      console.log("Payment successful. Reference:", response.reference);
+      router.push(`${Routes.PAYMENT_CALLBACK}?reference=${response.reference}`);
+
+      // Show loading state while verifying
+      // You might want to add a loading state here
+
+      // Verify payment on backend - NEVER trust frontend payment success alone
+      // const verifyResponse = await axios.get(
+      //   `http://localhost:4000/api/paystack/verify-payment/${response.reference}`
+      //   // {
+      //   //   reference: response.reference,
+      //   // }
+      // );
+      // console.log("verifyResponse", verifyResponse);
+
+      // if (verifyResponse.data.status === "success") {
+      //   // Payment verified successfully on backend
+      //   console.log("Payment verified successfully:", verifyResponse.data);
+
+      //   // Close the modal
+      //   onClose();
+
+      //   // Show success message (replace alert with proper notification component)
+      //   alert(`Payment successful! Reference: ${response.reference}`);
+
+      //   // TODO: Create booking record (if not already done in onCheckout)
+      //   // await createBooking(formData, response.reference);
+
+      //   // TODO: Redirect to confirmation page
+      //   // router.push(`/booking/confirmation/${response.reference}`);
+      // } else {
+      //   throw new Error("Payment verification failed");
+      // }
+    } catch (error) {
+      console.error("Error handling successful payment:", error);
+
+      // Show error message to user
+      alert(
+        "Payment verification failed. Please contact support with reference: " +
+          response.reference
+      );
+
+      // Don't close the modal on verification failure
+      // Let user try again or contact support
+    }
   };
 
   const onClosePaystack = () => {
     // This function is called when the user closes the payment popup
     console.log("Payment modal closed.");
-    alert("Payment canceled by user.");
+    // Don't show alert for user cancellation - it's expected behavior
+    // Just log it for debugging purposes
   };
 
-  const initializePayment = async () => {
+  const initializePayment = async (bookingId: string) => {
     // setLoading(true);
     // setError(null);
     let amount = 10000;
@@ -142,7 +188,9 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
         "http://localhost:4000/api/paystack/initialize-payment",
         {
           email: user?.email,
-          amount: amount * 100, // Convert to kobo (e.g., 100 Naira = 10000 kobo)
+          amount: 10000, // Convert to kobo (e.g., 100 Naira = 10000 kobo)
+          bookingId, // TODO: Replace with actual booking ID
+          currency: "NGN",
         }
       );
 
@@ -150,16 +198,24 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
       console.log("Payment initialization response:", data);
 
+      if (data && data.authorizationUrl) {
+        // 2. Redirect the user to the Paystack page to complete payment
+        console.log("Redirecting to Paystack:", data.authorizationUrl);
+        window.open(data.authorizationUrl, "_blank");
+      } else {
+        throw new Error("Could not retrieve payment URL.");
+      }
+
       // Use the hook that's now at component top level
-      initializePaystackPayment({
-        onSuccess,
-        onClose: onClosePaystack,
-        config: {
-          email: user?.email || "",
-          amount: amount * 100,
-          // reference: data.reference, // Use the reference from the backend
-        },
-      });
+      // initializePaystackPayment({
+      //   onSuccess,
+      //   onClose: onClosePaystack,
+      //   config: {
+      //     email: user?.email || "",
+      //     amount: amount * 100,
+      //     reference: data.reference, // Use the reference from the backend
+      //   },
+      // });
     } catch (err) {
       console.error("Error initializing payment:", err);
       alert("Failed to initiate payment. Please try again.");
@@ -171,7 +227,9 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onCheckout(formData, () => initializePayment());
+    onCheckout(formData, (bookingResponse: string) =>
+      initializePayment(bookingResponse)
+    );
     // initializePayment();
   };
 

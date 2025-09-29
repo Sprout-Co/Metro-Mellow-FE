@@ -427,7 +427,7 @@ export type Mutation = {
   completeBooking: Scalars['Boolean']['output'];
   createAdmin: AuthPayload;
   createAdminInvitation: AdminInvitationResponse;
-  createBooking: Scalars['Boolean']['output'];
+  createBooking: Scalars['String']['output'];
   createCustomer: AuthPayload;
   createNotification: Notification;
   createPayment: Payment;
@@ -1685,7 +1685,7 @@ export type CreateBookingMutationVariables = Exact<{
 }>;
 
 
-export type CreateBookingMutation = { __typename?: 'Mutation', createBooking: boolean };
+export type CreateBookingMutation = { __typename?: 'Mutation', createBooking: string };
 
 export type UpdateBookingMutationVariables = Exact<{
   id: Scalars['ID']['input'];
