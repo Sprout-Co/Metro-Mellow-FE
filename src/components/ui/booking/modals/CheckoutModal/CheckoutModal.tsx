@@ -121,64 +121,6 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     }));
   };
 
-  // Define the onSuccess and onClose callbacks for the payment hook
-
-  const onSuccess = async (response: any) => {
-    try {
-      console.log("Payment successful. Reference:", response.reference);
-      router.push(`${Routes.PAYMENT_CALLBACK}?reference=${response.reference}`);
-
-      // Show loading state while verifying
-      // You might want to add a loading state here
-
-      // Verify payment on backend - NEVER trust frontend payment success alone
-      // const verifyResponse = await axios.get(
-      //   `http://localhost:4000/api/paystack/verify-payment/${response.reference}`
-      //   // {
-      //   //   reference: response.reference,
-      //   // }
-      // );
-      // console.log("verifyResponse", verifyResponse);
-
-      // if (verifyResponse.data.status === "success") {
-      //   // Payment verified successfully on backend
-      //   console.log("Payment verified successfully:", verifyResponse.data);
-
-      //   // Close the modal
-      //   onClose();
-
-      //   // Show success message (replace alert with proper notification component)
-      //   alert(`Payment successful! Reference: ${response.reference}`);
-
-      //   // TODO: Create booking record (if not already done in onCheckout)
-      //   // await createBooking(formData, response.reference);
-
-      //   // TODO: Redirect to confirmation page
-      //   // router.push(`/booking/confirmation/${response.reference}`);
-      // } else {
-      //   throw new Error("Payment verification failed");
-      // }
-    } catch (error) {
-      console.error("Error handling successful payment:", error);
-
-      // Show error message to user
-      alert(
-        "Payment verification failed. Please contact support with reference: " +
-          response.reference
-      );
-
-      // Don't close the modal on verification failure
-      // Let user try again or contact support
-    }
-  };
-
-  const onClosePaystack = () => {
-    // This function is called when the user closes the payment popup
-    console.log("Payment modal closed.");
-    // Don't show alert for user cancellation - it's expected behavior
-    // Just log it for debugging purposes
-  };
-
   const initializePayment = async (bookingId: string) => {
     // setLoading(true);
     // setError(null);
@@ -205,17 +147,6 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
       } else {
         throw new Error("Could not retrieve payment URL.");
       }
-
-      // Use the hook that's now at component top level
-      // initializePaystackPayment({
-      //   onSuccess,
-      //   onClose: onClosePaystack,
-      //   config: {
-      //     email: user?.email || "",
-      //     amount: amount * 100,
-      //     reference: data.reference, // Use the reference from the backend
-      //   },
-      // });
     } catch (err) {
       console.error("Error initializing payment:", err);
       alert("Failed to initiate payment. Please try again.");
