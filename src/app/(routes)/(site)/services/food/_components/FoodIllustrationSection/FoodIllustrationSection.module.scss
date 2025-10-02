@@ -5,7 +5,7 @@
 
 .illustration {
   width: 100%;
-  // background-color: color-alpha('primary', 'lighter', 0.5);
+  background-color: color("neutral", "white");
   @include section-spacing("6xl");
   @include section-border;
   overflow: hidden;
