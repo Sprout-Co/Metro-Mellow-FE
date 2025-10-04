@@ -40,10 +40,17 @@
     @include flex-center;
     text-decoration: none;
 
+    img {
+      width: 140px;
+      height: 35px;
+      object-fit: contain;
+    }
+
     @include breakpoint-down("sm") {
       img {
-        width: 120px !important;
-        height: auto !important;
+        width: 145px !important;
+        height: 30px !important;
+        object-fit: contain;
       }
     }
   }
