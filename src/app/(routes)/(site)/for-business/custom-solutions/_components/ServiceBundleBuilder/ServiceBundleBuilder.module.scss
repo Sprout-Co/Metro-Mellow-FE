@@ -37,6 +37,13 @@
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: spacing("lg");
     margin-bottom: spacing("3xl");
+    justify-items: center;
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+      max-width: 400px;
+      margin: 0 auto spacing("3xl");
+    }
   }
 
   &__summary {
@@ -62,6 +69,8 @@
     map-get($transition-timing, "ease-out");
   position: relative;
   overflow: hidden;
+  width: 100%;
+  max-width: 320px;
 
   &::before {
     content: "";
