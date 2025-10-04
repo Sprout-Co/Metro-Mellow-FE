@@ -290,3 +290,149 @@
   @include font-weight("bold");
   color: color("neutral", "darkest");
 }
+
+// Mobile Responsive Styles
+@include breakpoint-down("md") {
+  .modal {
+    &__container {
+      flex-direction: column;
+      min-height: auto;
+      max-height: 90vh;
+    }
+
+    &__detailsSection {
+      padding: spacing("lg");
+      max-height: none;
+    }
+
+    &__title {
+      @include font-size("h5");
+      text-align: center;
+    }
+
+    &__description {
+      @include font-size("body-1");
+      text-align: center;
+    }
+
+    &__priceSection {
+      margin: spacing("lg") 0;
+      padding: spacing("md");
+    }
+
+    &__price {
+      @include font-size("h6");
+    }
+
+    &__configurationSection {
+      padding-right: 0;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+  }
+
+  .section {
+    padding: spacing("md");
+    margin-bottom: spacing("md");
+  }
+
+  .apartmentTypeOptions {
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  .apartmentTypeOption {
+    min-width: auto;
+    padding: spacing("sm") spacing("md");
+  }
+
+  .roomsGrid {
+    grid-template-columns: 1fr;
+    gap: spacing("sm");
+  }
+
+  .roomCounter {
+    padding: spacing("sm");
+  }
+
+  .counterButton {
+    width: 28px;
+    height: 28px;
+    font-size: font-size("sm");
+  }
+
+  .counterValue {
+    min-width: 25px;
+    @include font-size("sm");
+  }
+}
+
+@include breakpoint-down("sm") {
+  .modal {
+    &__container {
+      max-height: 95vh;
+    }
+
+    &__detailsSection {
+      padding: spacing("md");
+    }
+
+    &__title {
+      @include font-size("h6");
+    }
+
+    &__description {
+      @include font-size("small");
+    }
+
+    &__priceSection {
+      padding: spacing("sm");
+      margin: spacing("md") 0;
+    }
+
+    &__price {
+      @include font-size("body-1");
+    }
+
+    &__configurationSection {
+      max-height: 50vh;
+    }
+  }
+
+  .section {
+    padding: spacing("sm");
+    margin-bottom: spacing("sm");
+  }
+
+  .sectionTitle {
+    @include font-size("small");
+    margin-bottom: spacing("sm");
+  }
+
+  .apartmentTypeOption {
+    padding: spacing("xs") spacing("sm");
+    
+    span {
+      @include font-size("xs");
+    }
+  }
+
+  .roomCounter {
+    padding: spacing("xs");
+  }
+
+  .roomName {
+    @include font-size("xs");
+  }
+
+  .counterButton {
+    width: 24px;
+    height: 24px;
+    font-size: font-size("xs");
+  }
+
+  .counterValue {
+    min-width: 20px;
+    @include font-size("xs");
+  }
+}
