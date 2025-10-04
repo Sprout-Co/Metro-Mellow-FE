@@ -17,8 +17,14 @@
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: spacing("md");
 
+    @include breakpoint-down("md") {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: spacing("sm");
+    }
+
     @include breakpoint-down("sm") {
       grid-template-columns: repeat(2, 1fr);
+      gap: spacing("xs");
     }
   }
 
@@ -41,6 +47,16 @@
     transition: $transition-base;
     position: relative;
     height: 140px;
+
+    @include breakpoint-down("md") {
+      height: 120px;
+      padding: spacing("sm");
+    }
+
+    @include breakpoint-down("sm") {
+      height: 100px;
+      padding: spacing("xs");
+    }
 
     &:hover {
       box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
@@ -65,10 +81,28 @@
     align-items: center;
     justify-content: center;
     transition: $transition-base;
+
+    @include breakpoint-down("md") {
+      width: 40px;
+      height: 40px;
+    }
+
+    @include breakpoint-down("sm") {
+      width: 32px;
+      height: 32px;
+    }
   }
 
   &__icon {
     font-size: 24px;
+
+    @include breakpoint-down("md") {
+      font-size: 20px;
+    }
+
+    @include breakpoint-down("sm") {
+      font-size: 16px;
+    }
   }
 
   &__info {
@@ -80,11 +114,23 @@
     font-weight: map-get($font-weights, "semibold");
     color: color("neutral", "black");
     margin-bottom: spacing("xxs");
+
+    @include breakpoint-down("md") {
+      font-size: map-get($font-sizes, "sm");
+    }
+
+    @include breakpoint-down("sm") {
+      font-size: map-get($font-sizes, "xs");
+    }
   }
 
   &__price {
     font-size: map-get($font-sizes, "xs");
     color: color("neutral", "dark");
+
+    @include breakpoint-down("sm") {
+      font-size: 10px;
+    }
   }
 
   &__checkbox {
