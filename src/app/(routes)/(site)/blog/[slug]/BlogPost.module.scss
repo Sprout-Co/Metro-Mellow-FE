@@ -11,10 +11,11 @@
     @include container;
     padding-left: spacing("md");
     padding-right: spacing("md");
-
+    padding-top: spacing("4xl");
     @include breakpoint-down("sm") {
       padding-left: spacing("sm");
       padding-right: spacing("sm");
+      padding-top: spacing("4xl");
     }
   }
 
@@ -101,10 +102,12 @@
 
     @include breakpoint-down("md") {
       @include heading-2;
+      color: color("neutral", "white");
     }
 
     @include breakpoint-down("sm") {
       @include heading-3;
+      color: color("neutral", "white");
     }
   }
 
@@ -119,6 +122,7 @@
 
     @include breakpoint-down("md") {
       @include body-2;
+      color: color-alpha("neutral", "white", 0.9);
     }
   }
 
@@ -139,6 +143,10 @@
     display: flex;
     align-items: center;
     gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      justify-content: center;
+    }
   }
 
   &__author-avatar {
@@ -150,6 +158,10 @@
     display: flex;
     flex-direction: column;
     text-align: left;
+
+    @include breakpoint-down("sm") {
+      text-align: center;
+    }
   }
 
   &__author-name {
@@ -169,6 +181,10 @@
     gap: spacing("sm");
     color: color-alpha("neutral", "white", 0.8);
     font-size: font-size("sm");
+
+    @include breakpoint-down("sm") {
+      justify-content: center;
+    }
   }
 
   &__divider {
@@ -176,7 +192,7 @@
   }
 
   &__featured-image {
-    margin-top: -spacing("3xl");
+    margin-top: spacing("3xl");
     position: relative;
     z-index: 3;
     height: 350px;
@@ -191,6 +207,7 @@
   }
 
   &__image {
+    object-fit: cover;
     width: 100%;
     height: 350px;
     border-radius: border-radius("xl");
@@ -264,6 +281,11 @@
 
     @include breakpoint-down("md") {
       @include body-2;
+      color: color("neutral", "dark");
+    }
+
+    @include breakpoint-down("sm") {
+       text-align: center;
     }
   }
 
@@ -314,6 +336,10 @@
     @include body-2;
     color: color("neutral", "dark");
     margin-bottom: spacing("xl");
+
+    @include breakpoint-down("md") {
+      color: color("neutral", "dark");
+    }
   }
 
   &__cta-button {
