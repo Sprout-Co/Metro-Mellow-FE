@@ -13,6 +13,7 @@ interface ServiceHeroProps {
   description: string;
   ctaText: string;
   ctaHref?: string;
+  connectorText?: string;
   animationType?: "wobble" | "vibrate" | "heartbeat";
   animationIntensity?: "subtle" | "intense";
 }
@@ -24,9 +25,21 @@ const ServiceHero = ({
   description,
   ctaText,
   ctaHref = Routes.GET_STARTED,
+  connectorText = "That",
   animationType = "wobble",
   animationIntensity = "intense",
 }: ServiceHeroProps) => {
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -39,14 +52,31 @@ const ServiceHero = ({
     },
   };
 
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
+  const getButtonAnimation = () => {
+    switch (animationType) {
+      case "wobble":
+        return {
+          whileHover: { scale: 1.05 },
+          whileTap: { scale: 0.95 },
+          transition: { type: "spring", stiffness: 400, damping: 17 },
+        };
+      case "vibrate":
+        return {
+          whileHover: { 
+            x: [0, -2, 2, -2, 2, 0],
+            transition: { duration: 0.3 }
+          },
+        };
+      case "heartbeat":
+        return {
+          whileHover: { 
+            scale: [1, 1.1, 1],
+            transition: { duration: 0.3, repeat: 1 }
+          },
+        };
+      default:
+        return {};
+    }
   };
 
   return (
@@ -63,8 +93,8 @@ const ServiceHero = ({
           variants={staggerContainer}
         >
           <motion.h1 className={styles.hero__title} variants={fadeIn}>
-            <span className={styles["hero__title--accent"]}>{accentText}</span> That
-            <br />
+            <span className={styles["hero__title--accent"]}>{accentText}</span> {connectorText}
+            {connectorText && <br />}
             <span className={styles["hero__title--main"]}>{mainText}</span>
           </motion.h1>
 
@@ -78,9 +108,10 @@ const ServiceHero = ({
               size="lg"
               animationType={animationType}
               animationIntensity={animationIntensity}
+              rightIcon={<ArrowRightIcon size={18} />}
+              {...getButtonAnimation()}
             >
               {ctaText}
-              <ArrowRightIcon className={styles.icon} />
             </CTAButton>
           </motion.div>
         </motion.div>
