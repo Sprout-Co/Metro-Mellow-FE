@@ -447,9 +447,22 @@
     text-decoration: none;
     padding: spacing("md") spacing("sm");
     transition: color 0.3s ease;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 
     &:hover {
       color: color("primary", "base");
+    }
+
+    &:active {
+      opacity: 0.7;
     }
 
     &--open {
