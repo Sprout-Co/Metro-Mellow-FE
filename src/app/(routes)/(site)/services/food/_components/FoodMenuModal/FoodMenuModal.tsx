@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { X } from "lucide-react";
 import { Button } from "@/components/ui/Button/Button";
 import Modal from "@/components/ui/Modal/Modal";
 import FoodItemModal from "../FoodItemModal";
@@ -565,13 +566,24 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
   // Custom header content
   const headerContent = (
     <div className={styles.modal__headerContent}>
-      <h2 className={styles.modal__title}>Select your sumptuous platters</h2>
-      <div className={styles.modal__cart}>
-        <CartIcon
-          itemCount={cartItems.length}
-          onClick={handleCartClick}
-          size="md"
-          showBadge={true}
+      <h2 className={styles.modal__title}>Select your meal</h2>
+      <div className={styles.modal__headerActions}>
+        <div className={styles.modal__cart}>
+          <CartIcon
+            itemCount={cartItems.length}
+            onClick={handleCartClick}
+            size="md"
+            showBadge={true}
+          />
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          iconOnly
+          leftIcon={<X size={20} />}
+          onClick={onClose}
+          aria-label="Close modal"
+          className={styles.modal__cancelButton}
         />
       </div>
     </div>

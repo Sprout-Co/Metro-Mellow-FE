@@ -70,13 +70,23 @@
     }
   }
 
-  &__cart {
+  &__headerActions {
     @include flex-center;
+    gap: spacing("md");
   }
 
   &__cart {
     @include flex-center;
   }
+
+  &__cancelButton {
+    border: border-width("thin") solid color("primary", "base") !important;
+    
+    &:hover {
+      border-color: color("primary", "dark") !important;
+    }
+  }
+
 
   &__close {
     @include flex-center;
@@ -311,6 +321,11 @@
     &__content {
       padding: spacing("lg");
     }
+
+    &__headerActions {
+      gap: spacing("sm");
+    }
+
 
     &__foodGrid {
       @include grid-responsive(1, 1, 1, 1, spacing("md"));
