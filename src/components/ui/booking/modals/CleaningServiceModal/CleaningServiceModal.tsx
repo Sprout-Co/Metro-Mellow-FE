@@ -261,12 +261,12 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
       maxWidth="800px"
       showCloseButton={true}
       className={styles.cleaningServiceModal}
+      title={serviceOption?.label}
     >
       <div className={styles.modal__container}>
         {/* Details Section */}
         <div className={styles.modal__detailsSection}>
-          {/* Service Title and Description */}
-          <h2 className={styles.modal__title}>{serviceOption?.label}</h2>
+          {/* Service Description */}
           <p className={styles.modal__description}>
             {serviceOption?.description}
           </p>
