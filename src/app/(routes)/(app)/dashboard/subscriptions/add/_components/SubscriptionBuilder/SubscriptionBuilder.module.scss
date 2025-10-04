@@ -121,6 +121,12 @@
 
     @include breakpoint-down("md") {
       padding: spacing("xl");
+      border-radius: border-radius("xl");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("lg");
+      border-radius: border-radius("lg");
     }
   }
 
@@ -130,16 +136,39 @@
     gap: spacing("lg");
     margin-bottom: spacing("xl");
 
+    @include breakpoint-down("md") {
+      gap: spacing("md");
+      margin-bottom: spacing("lg");
+    }
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      gap: spacing("sm");
+      margin-bottom: spacing("md");
+    }
+
     h2 {
       @include font-size("xl");
       @include font-weight("semibold");
       color: color("neutral", "darkest");
       margin-bottom: spacing("xxs");
+
+      @include breakpoint-down("md") {
+        @include font-size("lg");
+      }
+
+      @include breakpoint-down("sm") {
+        @include font-size("base");
+      }
     }
 
     p {
       @include font-size("sm");
       color: color("neutral", "dark");
+
+      @include breakpoint-down("sm") {
+        @include font-size("xs");
+      }
     }
   }
 
@@ -158,6 +187,12 @@
     justify-content: center;
     @include font-weight("bold");
     flex-shrink: 0;
+
+    @include breakpoint-down("sm") {
+      width: 28px;
+      height: 28px;
+      @include font-size("sm");
+    }
   }
 
   &__sidebar {

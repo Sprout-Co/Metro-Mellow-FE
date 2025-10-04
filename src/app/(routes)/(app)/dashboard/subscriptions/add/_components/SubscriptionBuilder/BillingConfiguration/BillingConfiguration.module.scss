@@ -29,8 +29,9 @@
     grid-template-columns: repeat(2, 1fr);
     gap: spacing("md");
 
-    @include breakpoint-down("sm") {
+    @include breakpoint-down("md") {
       grid-template-columns: 1fr;
+      gap: spacing("sm");
     }
   }
 
@@ -47,9 +48,26 @@
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     text-align: left;
 
+    @include breakpoint-down("md") {
+      padding: spacing("md");
+      gap: spacing("sm");
+      flex-direction: column;
+      text-align: center;
+      min-height: 120px;
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("sm");
+      min-height: 100px;
+    }
+
     svg {
       color: color("neutral", "dark");
       flex-shrink: 0;
+
+      @include breakpoint-down("md") {
+        margin-bottom: spacing("xs");
+      }
     }
 
     div:not(.config__checkmark):not(.config__savingBadge) {
@@ -58,12 +76,21 @@
       flex-direction: column;
       gap: spacing("xxs");
 
+      @include breakpoint-down("md") {
+        align-items: center;
+        text-align: center;
+      }
+
       small {
         display: block;
         font-size: 12px;
         color: color("neutral", "dark");
         margin-top: 4px;
         font-weight: normal;
+
+        @include breakpoint-down("sm") {
+          font-size: 11px;
+        }
       }
     }
 
@@ -71,11 +98,19 @@
       @include font-size("base");
       @include font-weight("semibold");
       color: color("neutral", "darkest");
+
+      @include breakpoint-down("sm") {
+        @include font-size("sm");
+      }
     }
 
     span {
       @include font-size("sm");
       color: color("neutral", "dark");
+
+      @include breakpoint-down("sm") {
+        @include font-size("xs");
+      }
     }
 
     &:hover {
@@ -163,8 +198,14 @@
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: spacing("sm");
 
+    @include breakpoint-down("md") {
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: spacing("xs");
+    }
+
     @include breakpoint-down("sm") {
       grid-template-columns: repeat(3, 1fr);
+      gap: spacing("xs");
     }
   }
 
@@ -183,6 +224,16 @@
     align-items: center;
     justify-content: center;
     gap: spacing("xxs");
+
+    @include breakpoint-down("md") {
+      padding: spacing("sm");
+      min-height: 80px;
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("xs");
+      min-height: 70px;
+    }
 
     &:hover {
       border-color: color("primary", "base");
@@ -225,11 +276,23 @@
     color: color("neutral", "darkest");
     line-height: 1;
     transition: color 0.2s ease;
+
+    @include breakpoint-down("md") {
+      @include font-size("xl");
+    }
+
+    @include breakpoint-down("sm") {
+      @include font-size("lg");
+    }
   }
 
   &__durationLabel {
     @include font-size("sm");
     color: color("neutral", "dark");
+
+    @include breakpoint-down("sm") {
+      @include font-size("xs");
+    }
   }
 
   &__durationSaving {
