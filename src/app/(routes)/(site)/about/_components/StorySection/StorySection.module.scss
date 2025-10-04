@@ -84,6 +84,7 @@
     @include breakpoint-down("sm") {
       margin-top: spacing("md");
       width: 100%;
+      text-align: center;
     }
   }
 
