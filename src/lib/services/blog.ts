@@ -184,7 +184,7 @@ Ready to reclaim your weekends like Sarah?
       name: "metromellow team",
       avatar: "/images/brand/brand-logo/solid-bg/green-bg.png",
       role: "Lead Cleaning Specialist Team",
-      bio: "5+ years experience in residential cleaning. Specialized in Lagos apartment maintenance and deep cleaning services.",
+      bio: "Experience in residential cleaning. Specialized in Lagos apartment maintenance and deep cleaning services.",
     },
     category: {
       id: "cleaning",
