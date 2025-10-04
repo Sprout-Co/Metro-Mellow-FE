@@ -23,7 +23,7 @@
     z-index: 2;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
 
     @include breakpoint-down('md') {
       padding: 0 map-get($spacing, "md");
@@ -41,10 +41,10 @@
     color: map-get(map-get($colors, "neutral"), "black");
     margin-bottom: map-get($spacing, "lg");
     line-height: map-get($line-heights, "tight");
-    text-align: left;
+    text-align: center !important;
     @include breakpoint-down('sm') {
       font-size: map-get($font-sizes, "h4");
-      text-align: center;
+      text-align: center !important;
       width: 100%;
     }
   }
@@ -57,13 +57,13 @@
     max-width: 60%;
     margin-bottom: map-get($spacing, "4xl");
     line-height: map-get($line-heights, "normal");
-    text-align: left;
+    text-align: center !important;
     @include breakpoint-down('md') {
       max-width: 100%;
     }
     @include breakpoint-down('sm') {
       font-size: map-get($font-sizes, "body-2");
-      text-align: center;
+      text-align: center !important;
       margin-bottom: map-get($spacing, "2xl");
     }
   }
