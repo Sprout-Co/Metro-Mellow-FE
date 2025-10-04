@@ -14,6 +14,7 @@ import {
   LogOut,
   PlusCircle,
   HelpCircle,
+  Settings,
 } from "lucide-react";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 
@@ -94,6 +95,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           href: "/dashboard/bookings",
           label: "My Bookings",
           icon: CalendarDays,
+        },
+        {
+          href: "/dashboard/services",
+          label: "Services",
+          icon: Settings,
         },
         {
           href: "/dashboard/subscriptions",
