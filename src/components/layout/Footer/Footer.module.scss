@@ -9,6 +9,10 @@
   padding: map-get($spacing, "4xl") 0;
   position: relative;
   overflow: hidden;
+
+  @include breakpoint-down('sm') {
+    padding: 0;
+  }
 }
 
 .footerContent {
