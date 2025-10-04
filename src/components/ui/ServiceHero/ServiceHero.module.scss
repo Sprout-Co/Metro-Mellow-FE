@@ -10,10 +10,9 @@
   // display: flex;
   // align-items: center;
   // justify-content: center;
-  background-image: url("/images/laundry/l3.jpeg");
-  // background-size: cover;
-  // background-position: center;
-  // background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   // overflow: hidden;
   @include hero-base;
 
@@ -82,12 +81,6 @@
       font-weight: map-get($font-weights, "bold");
       margin-bottom: spacing("sm");
       display: inline;
-      @include breakpoint-down("sm") {
-        white-space: normal;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        hyphens: auto;
-      }
     }
     &--main {
       display: inline;
@@ -105,8 +98,6 @@
     @include breakpoint-down("sm") {
       font-size: font-size("h3") * 1.2;
       line-height: 1.1;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
     }
   }
 
