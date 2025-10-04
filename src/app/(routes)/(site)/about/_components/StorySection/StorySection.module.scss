@@ -6,13 +6,10 @@
   width: 100%;
   background-color: color("accent", "lighter");
 
-  @include breakpoint-down("md") {
-    padding: spacing("3xl") 0;
+  @include breakpoint-down("sm") {
+    padding-top: spacing("7xl");
   }
 
-  @include breakpoint-down("sm") {
-    padding: spacing("2xl") 0;
-  }
   @include hero-base;
 
   &__container {
