@@ -391,41 +391,27 @@
   &__mobileHeader {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: spacing("lg");
+    justify-content: flex-start;
+    padding: spacing("md") spacing("lg");
     border-bottom: 1px solid color("neutral", "lighter");
+    min-height: 60px; // Fixed height to prevent distortion
     
     // Better spacing for wider mobile menu
     @include breakpoint-down("sm") {
-      padding: spacing("lg") spacing("xl");
+      padding: spacing("md") spacing("xl");
     }
   }
 
   &__mobileLogo {
-    .navbar__logoMark {
-      width: 100px;
-      height: 25px;
+    // Ensure mobile logo matches main navbar logo size and maintains aspect ratio
+    .navbar__logo {
+      width: 140px !important;
+      height: 40px !important;
+      object-fit: contain !important;
+      flex-shrink: 0;
     }
   }
 
-  &__mobileClose {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: border-radius("full");
-    background-color: color("neutral", "lighter");
-    border: none;
-    cursor: pointer;
-    color: color("neutral", "darkest");
-    transition: all 0.3s ease;
-
-    &:hover {
-      background-color: color("neutral", "light");
-      color: color("primary", "base");
-    }
-  }
 
   &__mobileNav {
     flex: 1;

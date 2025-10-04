@@ -252,33 +252,13 @@ export default function Navbar() {
                 <div className={styles.navbar__mobileHeader}>
                   <div className={styles.navbar__mobileLogo}>
                     <Image
-                      src="/images/brand/brand-logo/transparent-bg/green.png"
+                      src="/images/brand/brand-logo/transparent-bg/green-on-white.png"
                       alt="Metromellow"
-                      width={100}
-                      height={30}
+                      width={140}
+                      height={40}
                       className={styles.navbar__logo}
                     />
                   </div>
-                  <button
-                    className={styles.navbar__mobileClose}
-                    onClick={toggleMobileMenu}
-                    aria-label="Close menu"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
                 </div>
 
                 <nav className={styles.navbar__mobileNav}>
