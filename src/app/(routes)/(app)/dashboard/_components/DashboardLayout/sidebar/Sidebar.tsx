@@ -64,10 +64,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   };
 
   const services = [
-    { href: "/dashboard/services/cleaning", label: "Cleaning Services" },
-    { href: "/dashboard/services/laundry", label: "Laundry Services" },
-    { href: "/dashboard/services/food", label: "Food Services" },
-    { href: "/dashboard/services/pest-control", label: "Pest Control" },
+    { href: "/services/cleaning", label: "Cleaning Services" },
+    { href: "/services/laundry", label: "Laundry Services" },
+    { href: "/services/food", label: "Food Services" },
+    { href: "/services/pest-control", label: "Pest Control" },
   ];
 
   const quickActions: QuickAction[] = [
