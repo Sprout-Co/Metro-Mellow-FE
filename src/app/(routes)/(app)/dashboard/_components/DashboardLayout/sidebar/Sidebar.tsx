@@ -55,12 +55,20 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [isQuickHelpDrawerOpen, setIsQuickHelpDrawerOpen] = useState(false);
+  const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
 
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
     dispatch(logout());
     router.push(Routes.GET_STARTED);
   };
+
+  const services = [
+    { href: "/dashboard/services/cleaning", label: "Cleaning Services" },
+    { href: "/dashboard/services/laundry", label: "Laundry Services" },
+    { href: "/dashboard/services/food", label: "Food Services" },
+    { href: "/dashboard/services/pest-control", label: "Pest Control" },
+  ];
 
   const quickActions: QuickAction[] = [
     {
@@ -97,9 +105,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           icon: CalendarDays,
         },
         {
-          href: "/dashboard/services",
           label: "Services",
           icon: Settings,
+          onClick: () => setIsServicesDropdownOpen(!isServicesDropdownOpen),
         },
         {
           href: "/dashboard/subscriptions",
@@ -286,7 +294,38 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                     >
                       <link.icon className={styles.sidebar__icon} />
                       <span>{link.label}</span>
+                      {link.label === "Services" && (
+                        <span className={styles.sidebar__dropdownArrow}>
+                          {isServicesDropdownOpen ? "▼" : "▶"}
+                        </span>
+                      )}
                     </div>
+                  )}
+                  
+                  {/* Services Dropdown */}
+                  {link.label === "Services" && isServicesDropdownOpen && (
+                    <motion.ul
+                      className={styles.sidebar__servicesDropdown}
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {services.map((service) => (
+                        <motion.li
+                          key={service.href}
+                          className={styles.sidebar__serviceItem}
+                        >
+                          <Link
+                            href={service.href}
+                            className={styles.sidebar__serviceLink}
+                            onClick={() => setIsServicesDropdownOpen(false)}
+                          >
+                            {service.label}
+                          </Link>
+                        </motion.li>
+                      ))}
+                    </motion.ul>
                   )}
                 </motion.li>
               ))}
