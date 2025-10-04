@@ -57,6 +57,13 @@
   &__title-wrapper {
     flex: 1;
     // max-width: 600px;
+    
+    @include breakpoint-down("md") {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
   }
 
   &__title {
@@ -64,6 +71,7 @@
     color: color("neutral", "white");
     margin-bottom: spacing("md");
     line-height: 1.1;
+    text-align: center;
 
     @include breakpoint-down("lg") {
       font-size: font-size("h2");
@@ -71,10 +79,12 @@
 
     @include breakpoint-down("md") {
       font-size: font-size("h3");
+      text-align: center;
     }
 
     @include breakpoint-down("sm") {
       font-size: font-size("h4");
+      text-align: center;
     }
   }
 
@@ -82,9 +92,17 @@
     @include body-1;
     color: color-alpha("neutral", "white", 0.9);
     max-width: 500px;
+    text-align: center;
+
+    @include breakpoint-down("md") {
+      text-align: center;
+      margin: 0 auto;
+    }
 
     @include breakpoint-down("sm") {
       @include body-2;
+      text-align: center;
+      margin: 0 auto;
     }
   }
 
