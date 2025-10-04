@@ -337,13 +337,15 @@
   }
 
   .apartmentTypeOptions {
-    flex-direction: column;
-    gap: spacing("sm");
+  flex-direction: column;
+  gap: spacing("sm");
+  width: 100%;
   }
 
   .apartmentTypeOption {
-    min-width: auto;
-    padding: spacing("sm") spacing("md");
+  min-width: auto;
+  padding: spacing("sm") spacing("md");
+  width: 100%;
   }
 
   .roomsGrid {
@@ -409,8 +411,13 @@
     margin-bottom: spacing("sm");
   }
 
+  .apartmentTypeOptions {
+    width: 100%;
+  }
+
   .apartmentTypeOption {
     padding: spacing("xs") spacing("sm");
+    width: 100%;
     
     span {
       @include font-size("xs");
@@ -419,6 +426,7 @@
 
   .roomCounter {
     padding: spacing("xs");
+    width: 100%;
   }
 
   .roomName {

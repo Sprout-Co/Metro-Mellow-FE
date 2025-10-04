@@ -305,7 +305,8 @@
   }
 
   &__addressListTitle {
-    @include subtitle-2;
+    @include font-size("small");
+    @include font-weight("medium");
     color: color("neutral", "darkest");
     margin: 0 0 spacing("sm") 0;
   }
@@ -345,13 +346,13 @@
   }
 
   &__addressCardLabel {
-    @include body-2;
+    @include font-size("small");
     @include font-weight("medium");
     color: color("neutral", "darkest");
   }
 
   &__addressCardDefault {
-    @include caption;
+    @include font-size("xs");
     background-color: color("primary", "base");
     color: color("neutral", "white");
     padding: spacing("xxs") spacing("xs");
@@ -361,7 +362,7 @@
 
   &__addressCardText {
     @include font-secondary;
-    @include font-size("sm");
+    @include font-size("xs");
     color: color("neutral", "dark");
     margin: spacing("xxs") 0;
     line-height: map-get($line-heights, "normal");
@@ -392,31 +393,199 @@
     }
   }
 
+  // Enhanced Mobile Responsive Styles
+  @include breakpoint-down("md") {
+    &__container {
+      width: 95%;
+      max-width: 100%;
+      max-height: 95vh;
+    }
+
+    &__content {
+      padding: spacing("lg");
+    }
+
+    &__header {
+      padding: spacing("lg");
+    }
+
+    &__title {
+      @include font-size("h5");
+    }
+
+    &__form {
+      gap: spacing("lg");
+    }
+
+    &__sectionTitle {
+      @include font-size("body-1");
+    }
+
+    &__label {
+      @include font-size("small");
+    }
+
+    &__input {
+      @include font-size("body-1");
+      padding: spacing("md");
+    }
+
+    &__select {
+      @include font-size("body-1");
+      padding: spacing("md");
+    }
+
+    &__radioGroup {
+      flex-direction: column;
+      gap: spacing("md");
+    }
+
+    &__radioLabel {
+      @include font-size("small");
+    }
+
+    &__addressCard {
+      padding: spacing("md");
+    }
+
+    &__addressCardText {
+      @include font-size("xs");
+    }
+  }
+
   @include breakpoint-down("sm") {
     &__container {
-      max-width: 100%;
-      border-radius: 0;
+      width: 95%;
+      max-width: 500px;
+      max-height: 95vh;
+      border-radius: border-radius("xl");
     }
 
     &__content {
       padding: spacing("md");
+      max-height: calc(95vh - 80px);
+      overflow-y: auto;
     }
 
     &__header {
       padding: spacing("md");
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: color("neutral", "white");
+      border-bottom: map-get($border-width, "thin") solid color("neutral", "lighter");
+    }
+
+    &__title {
+      @include font-size("h6");
+    }
+
+    &__close {
+      width: 32px;
+      height: 32px;
     }
 
     &__form {
       gap: spacing("md");
     }
 
+    &__sectionTitle {
+      @include font-size("small");
+      margin-bottom: spacing("sm");
+    }
+
+    &__field {
+      gap: spacing("xs");
+    }
+
+    &__label {
+      @include font-size("xs");
+    }
+
+    &__input {
+      @include font-size("small");
+      padding: spacing("sm");
+    }
+
+    &__select {
+      @include font-size("small");
+      padding: spacing("sm");
+    }
+
+    &__radioGroup {
+      flex-direction: column;
+      gap: spacing("sm");
+    }
+
+    &__radioLabel {
+      @include font-size("xs");
+    }
+
+    &__radio {
+      width: 18px;
+      height: 18px;
+
+      &:checked::after {
+        width: 6px;
+        height: 6px;
+      }
+    }
+
     &__buttonWrapper {
-      margin-top: spacing("lg");
+      margin-top: spacing("md");
       padding-top: spacing("md");
+      position: sticky;
+      bottom: 0;
+      background: color("neutral", "white");
+      border-top: map-get($border-width, "thin") solid color("neutral", "lighter");
+    }
+
+    &__continueButton {
+      width: 100%;
+      padding: spacing("md");
+      @include font-size("small");
     }
 
     &__addressCard {
       padding: spacing("sm");
+    }
+
+    &__addressCardHeader {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("xs");
+    }
+
+    &__addressCardText {
+      @include font-size("xs");
+      line-height: 1.3;
+    }
+
+    &__addressListTitle {
+      @include font-size("xs");
+      margin-bottom: spacing("xs");
+    }
+
+    &__addressCardLabel {
+      @include font-size("xs");
+    }
+
+    &__addressCardDefault {
+      @include font-size("xs");
+      padding: spacing("xxs") spacing("xs");
+    }
+
+    &__noAddress {
+      padding: spacing("md");
+    }
+
+    &__errorMessage {
+      padding: spacing("sm");
+      margin-bottom: spacing("md");
+
+      p {
+        @include font-size("xs");
+      }
     }
   }
 

@@ -258,6 +258,10 @@
     @include flex-center;
     padding-top: spacing("xl");
     gap: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      display: none;
+    }
   }
 
   &__separatorLine {
