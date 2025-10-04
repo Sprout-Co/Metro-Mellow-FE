@@ -25,6 +25,10 @@
     border-radius: 2px 0 0 2px;
   }
 
+  @include breakpoint-down("sm") {
+    flex-direction: column;
+  }
+
   // Header variant (used in WelcomeHeader and BookingsMain header)
   &--header {
     flex: 1;
@@ -67,6 +71,9 @@
   &__info {
     flex: 1;
     min-width: 0;
+    @include breakpoint-down("sm") {
+      text-align: center;
+    }
   }
 
   &__serviceName {
