@@ -12,7 +12,6 @@
   z-index: z-index("sticky");
 
   &__container {
-    @include container;
     @include flex-between;
     height: 4.5rem; // 72px
     padding: spacing("sm") spacing("md");
@@ -20,17 +19,33 @@
     @include breakpoint-down("md") {
       padding: spacing("xs") spacing("sm");
     }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("xs") spacing("xs");
+    }
   }
 
   // Logo styles
   &__logoContainer {
     @include flex-center;
     gap: spacing("sm");
+
+    @include breakpoint-down("sm") {
+      gap: spacing("xs");
+      margin-left: -spacing("xs");
+    }
   }
 
   &__logo {
     @include flex-center;
     text-decoration: none;
+
+    @include breakpoint-down("sm") {
+      img {
+        width: 120px !important;
+        height: auto !important;
+      }
+    }
   }
 
   &__logoText {
@@ -126,6 +141,10 @@
 
     @include breakpoint-down("lg") {
       gap: spacing("sm");
+    }
+
+    @include breakpoint-down("sm") {
+      gap: spacing("xs");
     }
   }
   &__iconButton {

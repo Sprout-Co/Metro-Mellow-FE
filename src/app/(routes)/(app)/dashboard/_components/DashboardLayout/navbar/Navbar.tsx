@@ -135,13 +135,6 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
             </div>
           </motion.div>
 
-          <motion.div
-            className={styles.navbar__menuIcon}
-            onClick={() => handleSidebarToggle(false)}
-          >
-            <Menu />
-          </motion.div>
-
           {/* Mobile Menu Button */}
           <motion.button
             className={styles.navbar__menuButton}
