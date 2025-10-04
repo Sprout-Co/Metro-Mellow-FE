@@ -9,25 +9,30 @@ import CheckoutModal, {
 } from "@/components/ui/booking/modals/CheckoutModal/CheckoutModal";
 import ServiceDetailsSlidePanel from "@/components/ui/booking/modals/ServiceDetailsSlidePanel/ServiceDetailsSlidePanel";
 import styles from "./ServiceModal.module.scss";
-
-// Configuration interfaces for different service types
-export interface ServiceOption {
-  id: string;
-  name: string;
-  count: number;
-}
-
-export interface ServiceCategory {
-  id: string;
-  name: string;
-  options: string[];
-  required?: boolean;
-}
+import {
+  CleaningType,
+  CreateBookingInput,
+  HouseType,
+  RoomQuantitiesInput,
+  Service,
+  ServiceCategory,
+  ServiceId,
+  ServiceOption,
+  LaundryType,
+  LaundryItemsInput,
+} from "@/graphql/api";
+import OrderSuccessModal from "../OrderSuccessModal/OrderSuccessModal";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
+import { LocalStorageKeys } from "@/utils/localStorage";
+import LoginModal from "@/components/ui/booking/modals/LoginModal/LoginModal";
+import ServiceModalFooter from "../ServiceModalFooter/ServiceModalFooter";
 
 export interface ServiceConfiguration {
-  categories?: ServiceCategory[];
-  options?: ServiceOption[];
-  allowCustomization?: boolean;
+  apartmentType?: HouseType;
+  roomQuantities?: RoomQuantitiesInput;
+  bags?: number;
+  items?: LaundryItemsInput;
 }
 
 export interface ServiceModalProps {
@@ -37,18 +42,11 @@ export interface ServiceModalProps {
   serviceTitle?: string;
   serviceDescription?: string;
   servicePrice?: number;
-  serviceConfiguration?: ServiceConfiguration;
-  service_category?: string;
   includedFeatures?: string[];
-  // Optional sections to show/hide
-  showImageSection?: boolean;
-  showPriceSection?: boolean;
-  showConfigurationSection?: boolean;
-  // Custom content slots
-  headerContent?: React.ReactNode;
-  footerContent?: React.ReactNode;
-  // Callback for order submission
-  onOrderSubmit?: (configuration: any) => void;
+  onOrderSubmit?: (configuration: ServiceConfiguration) => void;
+  serviceOption?: ServiceOption;
+  service: Service;
+  serviceType: "cleaning" | "laundry";
 }
 
 const ServiceModal: React.FC<ServiceModalProps> = ({
@@ -56,98 +54,212 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
   onClose,
   serviceImage = "/images/placeholder.jpg",
   serviceTitle = "Service",
-  serviceDescription = "Service description",
+  serviceDescription = "Professional service",
   servicePrice = 0,
-  serviceConfiguration,
-  service_category = "Service",
-  includedFeatures,
-  showImageSection = true,
-  showPriceSection = true,
-  showConfigurationSection = true,
-  headerContent,
-  footerContent,
+  includedFeatures = [],
   onOrderSubmit,
+  serviceOption,
+  service,
+  serviceType,
 }) => {
   // State for service configuration
-  const [selectedCategories, setSelectedCategories] = useState<
-    Record<string, string>
-  >({});
-  const [serviceOptions, setServiceOptions] = useState<ServiceOption[]>(
-    serviceConfiguration?.options || []
-  );
+  const [apartmentType, setApartmentType] = useState<HouseType>(HouseType.Flat);
+  const [roomQuantities, setRoomQuantities] = useState<RoomQuantitiesInput>({
+    balcony: 0,
+    bathroom: 1,
+    bedroom: 1,
+    kitchen: 1,
+    livingRoom: 1,
+    lobby: 1,
+    other: 0,
+    outdoor: 0,
+    studyRoom: 0,
+  });
+  const [bags, setBags] = useState(1);
 
   // State for checkout modal and slide panel
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [isSlidePanelOpen, setIsSlidePanelOpen] = useState(false);
+  const [showOrderSuccessModal, setShowOrderSuccessModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
-  // Handle category selection (radio buttons)
-  const handleCategoryChange = (categoryId: string, optionValue: string) => {
-    setSelectedCategories((prev) => ({
+  const { handleCreateBooking, isCreatingBooking } = useBookingOperations();
+
+  // Handle apartment type change (for cleaning)
+  const handleApartmentTypeChange = (type: HouseType) => {
+    setApartmentType(type);
+  };
+
+  // Handle room counter changes (for cleaning)
+  const handleRoomCounterChange = (
+    room: keyof RoomQuantitiesInput,
+    increment: boolean
+  ) => {
+    setRoomQuantities((prev) => ({
       ...prev,
-      [categoryId]: optionValue,
+      [room]: Math.max(0, (prev[room] as number) + (increment ? 1 : -1)),
     }));
   };
 
-  // Handle service option counter changes
-  const handleOptionCounterChange = (optionId: string, increment: boolean) => {
-    setServiceOptions((prev) =>
-      prev.map((option) => {
-        if (option.id === optionId) {
-          const newCount = increment
-            ? option.count + 1
-            : Math.max(0, option.count - 1);
-          return { ...option, count: newCount };
-        }
-        return option;
-      })
-    );
+  // Handle bag count change (for laundry)
+  const handleBagCountChange = (increment: boolean) => {
+    const newCount = increment ? bags + 1 : Math.max(1, bags - 1);
+    setBags(newCount);
   };
 
-  // Calculate total count for slide panel
-  const getTotalCount = () => {
-    return serviceOptions.reduce((total, option) => total + option.count, 0);
+  // Calculate total room count (for cleaning)
+  const getTotalRoomCount = () => {
+    return Object.values(roomQuantities).reduce(
+      (total, quantity) => total + quantity,
+      0
+    );
   };
 
   // Handle order submission
   const handleOrderSubmit = () => {
-    const configuration = {
-      categories: selectedCategories,
-      options: serviceOptions,
-      serviceTitle,
-      servicePrice,
+    setError(null); // Clear any previous errors when starting new order
+    const configuration: ServiceConfiguration = {
+      apartmentType,
+      roomQuantities,
+      bags,
     };
 
-    console.log("Service configured", configuration);
-
-    if (onOrderSubmit) {
-      onOrderSubmit(configuration);
-    }
+    console.log("configuration", configuration);
 
     setIsCheckoutModalOpen(true);
     setIsSlidePanelOpen(true);
   };
 
+  const calculateTotalPrice = () => {
+    if (!service) return 0;
+
+    let totalPrice = service.price;
+
+    if (serviceType === "cleaning") {
+      // Calculate total price based on room prices and number of days
+      const selectedDays = 1; // Default to 1 day for one-off bookings
+      const roomPrices = service.roomPrices || {};
+
+      // Calculate total price for each room type
+      const roomTotal = Object.entries(roomQuantities).reduce(
+        (total, [room, quantity]) => {
+          const roomPrice = roomPrices[room as keyof typeof roomPrices] || 0;
+          return total + roomPrice * (quantity as number);
+        },
+        0
+      );
+
+      let cleaningTypeMultiplier = 1;
+
+      switch (serviceOption?.service_id) {
+        case ServiceId.StandardCleaning:
+          cleaningTypeMultiplier = 1;
+          break;
+        case ServiceId.DeepCleaning:
+          cleaningTypeMultiplier = 2.5;
+          break;
+        case ServiceId.PostConstructionCleaning:
+          cleaningTypeMultiplier = 4;
+          break;
+        case ServiceId.MoveInMoveOutCleaning:
+          cleaningTypeMultiplier = 2.5;
+          break;
+        default:
+          break;
+      }
+
+      // Multiply by number of days selected
+      totalPrice = roomTotal * selectedDays * cleaningTypeMultiplier;
+      if (apartmentType === HouseType.Duplex) {
+        totalPrice *= 1.5;
+      }
+    } else if (serviceType === "laundry") {
+      // Calculate laundry pricing
+      totalPrice = serviceOption?.price || service.price;
+      const totalItems = bags * totalPrice;
+
+      // Base price multiplier based on laundry type
+      let typeMultiplier = 1;
+      switch (serviceOption?.service_id) {
+        case ServiceId.StandardLaundry:
+          typeMultiplier = 1;
+          break;
+        case ServiceId.PremiumLaundry:
+          typeMultiplier = 1.5;
+          break;
+        case ServiceId.DryCleaning:
+          typeMultiplier = 2;
+          break;
+      }
+
+      // Price per bag calculation
+      totalPrice = totalItems * typeMultiplier;
+    }
+
+    return totalPrice;
+  };
+
   // Handle checkout completion
-  const handleCheckoutComplete = (formData: CheckoutFormData) => {
-    const completeOrder = {
-      service: {
-        title: serviceTitle,
-        price: servicePrice,
-        categories: selectedCategories,
-        options: serviceOptions,
-      },
-      checkout: formData,
-    };
+  const handleCheckoutComplete = async (
+    formData: CheckoutFormData,
+    onContinuePayment: (bookingId: string) => void
+  ) => {
+    try {
+      setError(null); // Clear any previous errors
+      console.log("starting");
+      if (!serviceOption?.service_id) {
+        throw new Error("Service option is required");
+      }
 
-    console.log("Complete order:", completeOrder);
+      const completeOrder: CreateBookingInput = {
+        serviceId: service._id,
+        service_category: service.category,
+        serviceOption: serviceOption.service_id,
+        date: formData.date,
+        timeSlot: formData.timeSlot,
+        address: formData.addressId || "",
+        notes: serviceType === "cleaning" ? `Frequency` : `Laundry Type: ${LaundryType.StandardLaundry}, Bags: ${bags}`,
+        serviceDetails: {
+          serviceOption: serviceOption.service_id,
+          ...(serviceType === "cleaning" ? {
+            cleaning: {
+              cleaningType: serviceOption?.service_id as unknown as CleaningType,
+              houseType: apartmentType,
+              rooms: roomQuantities,
+            },
+          } : {
+            laundry: {
+              laundryType: serviceOption?.service_id as unknown as LaundryType,
+              bags,
+            },
+          }),
+        },
+        totalPrice: calculateTotalPrice(),
+      };
 
-    // Close modals and show success
-    setIsCheckoutModalOpen(false);
-    onClose();
-
-    alert(
-      "Order placed successfully! We'll confirm your booking details shortly."
-    );
+      if (isAuthenticated) {
+        const bookingResponse = await handleCreateBooking(completeOrder);
+        const booking = bookingResponse;
+        onContinuePayment(bookingResponse || "");
+        // setShowOrderSuccessModal(true);
+      } else {
+        localStorage.setItem(
+          LocalStorageKeys.BOOKING_DATA_TO_COMPLETE,
+          JSON.stringify(completeOrder)
+        );
+        setShowLoginModal(true);
+      }
+      console.log(`Complete ${serviceType} order:`, completeOrder);
+    } catch (error) {
+      console.error("Error creating booking:", error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "An unexpected error occurred while creating your booking. Please try again.";
+      setError(errorMessage);
+    }
   };
 
   // Handle checkout modal close
@@ -170,141 +282,177 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      maxWidth="1200px"
+      maxWidth="800px"
       showCloseButton={true}
       className={styles.serviceModal}
+      title={serviceOption?.label}
     >
       <div className={styles.modal__container}>
-        {/* Image Section */}
-        {showImageSection && (
-          <div className={styles.modal__imageSection}>
-            <Image
-              src={serviceImage}
-              alt={serviceTitle}
-              width={500}
-              height={500}
-              className={styles.modal__image}
-            />
-          </div>
-        )}
-
         {/* Details Section */}
         <div className={styles.modal__detailsSection}>
-          {/* Custom header content */}
-          {headerContent && (
-            <div className={styles.modal__headerContent}>{headerContent}</div>
-          )}
-
-          {/* Service Title and Description */}
-          <h2 className={styles.modal__title}>{serviceTitle}</h2>
-          <p className={styles.modal__description}>{serviceDescription}</p>
+          {/* Service Description */}
+          <p className={styles.modal__description}>
+            {serviceOption?.description}
+          </p>
 
           {/* Price Section */}
-          {showPriceSection && (
-            <div className={styles.modal__price}>
-              NGN {servicePrice.toLocaleString()}
-            </div>
-          )}
+          <div className={styles.modal__price}>
+            NGN {calculateTotalPrice().toLocaleString()}
+          </div>
 
           {/* Configuration Section */}
-          {showConfigurationSection && serviceConfiguration && (
-            <div className={styles.modal__configurationSection}>
-              {/* Category Selection (Radio buttons) */}
-              {serviceConfiguration.categories?.map((category) => (
-                <div
-                  key={category.id}
-                  className={styles.modal__categorySection}
-                >
-                  <h3 className={styles.modal__sectionTitle}>
-                    {category.name}
-                  </h3>
-                  <div className={styles.modal__categoryOptions}>
-                    {category.options.map((option) => (
-                      <label
-                        key={option}
-                        className={`${styles.modal__categoryOption} ${
-                          selectedCategories[category.id] === option
-                            ? styles.modal__categoryOption_selected
-                            : ""
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name={category.id}
-                          value={option}
-                          checked={selectedCategories[category.id] === option}
-                          onChange={() =>
-                            handleCategoryChange(category.id, option)
-                          }
-                          className={styles.modal__radioInput}
-                        />
-                        <span>{option}</span>
-                      </label>
+          <div className={styles.modal__configurationSection}>
+            {serviceType === "cleaning" && (
+              <>
+                {/* Apartment Type Selection */}
+                <div className={styles.section}>
+                  <h3 className={styles.sectionTitle}>Your Apartment Type</h3>
+                  <div className={styles.apartmentTypeOptions}>
+                    <label
+                      className={`${styles.apartmentTypeOption} ${
+                        apartmentType === HouseType.Flat ? styles.selected : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="apartmentType"
+                        value={HouseType.Flat}
+                        checked={apartmentType === HouseType.Flat}
+                        onChange={() => handleApartmentTypeChange(HouseType.Flat)}
+                        className={styles.radioInput}
+                      />
+                      <span>Flat/Apartment</span>
+                    </label>
+                    <label
+                      className={`${styles.apartmentTypeOption} ${
+                        apartmentType === HouseType.Duplex ? styles.selected : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="apartmentType"
+                        value={HouseType.Duplex}
+                        checked={apartmentType === HouseType.Duplex}
+                        onChange={() => handleApartmentTypeChange(HouseType.Duplex)}
+                        className={styles.radioInput}
+                      />
+                      <span>Duplex/House</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Room Selection */}
+                <div className={styles.section}>
+                  <h3 className={styles.sectionTitle}>Select Rooms to Clean</h3>
+                  <div className={styles.roomsGrid}>
+                    {Object.entries(roomQuantities).map(([room, quantity]) => (
+                      <div key={room} className={styles.roomCounter}>
+                        <span className={styles.roomName}>
+                          {room
+                            .replace(/([A-Z])/g, " $1")
+                            .replace(/^./, (str) => str.toUpperCase())}
+                        </span>
+                        <div className={styles.counterControls}>
+                          <button
+                            className={styles.counterButton}
+                            onClick={() =>
+                              handleRoomCounterChange(
+                                room as keyof RoomQuantitiesInput,
+                                false
+                              )
+                            }
+                            aria-label={`Decrement ${room}`}
+                          >
+                            -
+                          </button>
+                          <span className={styles.counterValue}>{quantity}</span>
+                          <button
+                            className={styles.counterButton}
+                            onClick={() =>
+                              handleRoomCounterChange(
+                                room as keyof RoomQuantitiesInput,
+                                true
+                              )
+                            }
+                            aria-label={`Increment ${room}`}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
                     ))}
                   </div>
                 </div>
-              ))}
+              </>
+            )}
 
-              {/* Service Options with Counters */}
-              {serviceConfiguration.options &&
-                serviceConfiguration.options.length > 0 && (
-                  <div className={styles.modal__optionsSection}>
-                    <div className={styles.modal__optionsGrid}>
-                      {serviceOptions.map((option) => (
-                        <div
-                          key={option.id}
-                          className={styles.modal__optionCounter}
-                        >
-                          <span className={styles.modal__optionName}>
-                            {option.name}
-                          </span>
-                          <div className={styles.modal__counterControls}>
-                            <button
-                              className={styles.modal__counterButton}
-                              onClick={() =>
-                                handleOptionCounterChange(option.id, true)
-                              }
-                              aria-label={`Increment ${option.name}`}
-                            >
-                              +
-                            </button>
-                            <span className={styles.modal__counterValue}>
-                              {option.count}
-                            </span>
-                            <button
-                              className={styles.modal__counterButton}
-                              onClick={() =>
-                                handleOptionCounterChange(option.id, false)
-                              }
-                              aria-label={`Decrement ${option.name}`}
-                            >
-                              -
-                            </button>
-                          </div>
-                        </div>
-                      ))}
+            {serviceType === "laundry" && (
+              <>
+                {/* Bag Count */}
+                <div className={styles.section}>
+                  <h3 className={styles.sectionTitle}>Number of Bags</h3>
+                  <div className={styles.bagCounter}>
+                    <span className={styles.bagLabel}>Laundry Bags</span>
+                    <div className={styles.counterControls}>
+                      <button
+                        className={styles.counterButton}
+                        onClick={() => handleBagCountChange(false)}
+                        aria-label="Decrement bags"
+                      >
+                        -
+                      </button>
+                      <span className={styles.counterValue}>{bags}</span>
+                      <button
+                        className={styles.counterButton}
+                        onClick={() => handleBagCountChange(true)}
+                        aria-label="Increment bags"
+                      >
+                        +
+                      </button>
                     </div>
                   </div>
-                )}
-            </div>
-          )}
+                </div>
 
-          {/* Custom footer content */}
-          {footerContent && (
-            <div className={styles.modal__footerContent}>{footerContent}</div>
-          )}
+                {/* Item Selection */}
+                <div className={styles.section}>
+                  <h3 className={styles.sectionTitle}>Extra Items (TBD)</h3>
+                  <div className={styles.itemsGrid}>
+                    {[
+                      { name: "Duvet", id: "duvet" },
+                      { name: "Bedsheet", id: "bedsheet" },
+                      { name: "Towel", id: "towel" },
+                      { name: "Other", id: "other" },
+                    ].map((item) => (
+                      <div key={item.id} className={styles.itemCounter}>
+                        <span className={styles.itemName}>{item.name}</span>
+                        <div className={styles.counterControls}>
+                          <button
+                            className={styles.counterButton}
+                            aria-label={`Decrement ${item.name}`}
+                          >
+                            -
+                          </button>
+                          <span className={styles.counterValue}>0</span>
+                          <button
+                            className={styles.counterButton}
+                            aria-label={`Increment ${item.name}`}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
 
           {/* Order Button */}
-          <div className={styles.modal__orderButtonContainer}>
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={handleOrderSubmit}
-              className={styles.modal__orderButton}
-            >
-              ORDER
-            </Button>
-          </div>
+          <ServiceModalFooter
+            price={calculateTotalPrice()}
+            handleOrderSubmit={handleOrderSubmit}
+          />
         </div>
       </div>
 
@@ -313,7 +461,10 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
         isOpen={isCheckoutModalOpen}
         onClose={handleCheckoutClose}
         onCheckout={handleCheckoutComplete}
-        service_category={service_category}
+        service_category={serviceType === "cleaning" ? "Cleaning" : "Laundry"}
+        submitting={isCreatingBooking}
+        error={error}
+        onClearError={() => setError(null)}
       />
 
       {/* Service Details Slide Panel */}
@@ -325,13 +476,29 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
         serviceDescription={serviceDescription}
         servicePrice={servicePrice}
         serviceImage={serviceImage}
-        apartmentType={
-          selectedCategories.apartmentType as "flat" | "duplex" | undefined
-        }
-        roomCount={getTotalCount()}
-        service_category={service_category}
+        apartmentType={serviceType === "cleaning" ? apartmentType : undefined}
+        roomCount={serviceType === "cleaning" ? getTotalRoomCount() : bags}
+        service_category={serviceType === "cleaning" ? "Cleaning" : "Laundry"}
         includedFeatures={includedFeatures}
       />
+
+      {/* Order Success Modal */}
+      <OrderSuccessModal
+        isOpen={showOrderSuccessModal}
+        onClose={() => {
+          setShowOrderSuccessModal(false);
+          onClose();
+        }}
+      />
+
+      {!isAuthenticated && (
+        <LoginModal
+          isOpen={showLoginModal}
+          onClose={() => {
+            setShowLoginModal(false);
+          }}
+        />
+      )}
     </Modal>
   );
 };
