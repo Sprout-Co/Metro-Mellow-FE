@@ -380,18 +380,16 @@ const PestControlServiceConfiguration: React.FC<
             <Bug size={32} />
           </div>
           <div className={styles.drawer__infoContent}>
-            <h4>Professional Pest Control</h4>
+            <h4>Pest Control</h4>
             <p>
-              Our comprehensive pest control service provides effective
-              treatment against common household pests with safe, eco-friendly
-              solutions.
+              Fast, safe, eco‑friendly treatment for common household pests.
             </p>
             <ul>
-              <li>✓ Complete property inspection</li>
-              <li>✓ Targeted treatment for specific pests</li>
-              <li>✓ Safe, eco-friendly chemicals</li>
-              <li>✓ Prevention recommendations</li>
-              <li>✓ Follow-up monitoring</li>
+              <li>✓ Full inspection</li>
+              <li>✓ Targeted treatment</li>
+              <li>✓ Eco‑friendly chemicals</li>
+              <li>✓ Prevention tips</li>
+              <li>✓ Follow‑up checks</li>
             </ul>
           </div>
         </div>
@@ -403,10 +401,9 @@ const PestControlServiceConfiguration: React.FC<
             <Bug size={20} />
           </div>
           <div className={styles.drawer__warningContent}>
-            <h5>Monthly Service Required</h5>
+            <h5>Monthly Service</h5>
             <p>
-              Pest control services are most effective when performed monthly to
-              ensure continuous protection and prevent re-infestation.
+              Monthly visits keep protection active and prevent re‑infestation.
             </p>
           </div>
         </div>
