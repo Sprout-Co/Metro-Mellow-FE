@@ -508,3 +508,139 @@
     @include font-size("xs");
   }
 }
+
+// Pest Control Specific Styles
+.severityOptions {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("sm");
+}
+
+.severityOption {
+  display: flex;
+  align-items: center;
+  gap: spacing("md");
+  padding: spacing("md") spacing("lg");
+  background: color("neutral", "lightest");
+  border: 2px solid color("neutral", "lighter");
+  border-radius: border-radius("lg");
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+
+  &:hover {
+    border-color: color("primary", "light");
+    background: color("neutral", "white");
+    transform: translateX(2px);
+  }
+
+  &.selected {
+    border-color: color("primary", "base");
+    background: color("primary", "base");
+
+    span {
+      color: color("neutral", "white");
+    }
+  }
+
+  span {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    transition: color 0.2s ease;
+  }
+}
+
+.treatmentTypeOptions {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("sm");
+}
+
+.treatmentTypeOption {
+  display: flex;
+  align-items: center;
+  gap: spacing("md");
+  padding: spacing("md") spacing("lg");
+  background: color("neutral", "lightest");
+  border: 2px solid color("neutral", "lighter");
+  border-radius: border-radius("lg");
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+
+  &:hover {
+    border-color: color("primary", "light");
+    background: color("neutral", "white");
+    transform: translateX(2px);
+  }
+
+  &.selected {
+    border-color: color("primary", "base");
+    background: color("primary", "base");
+
+    span {
+      color: color("neutral", "white");
+    }
+  }
+
+  span {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    transition: color 0.2s ease;
+  }
+}
+
+// Areas Grid
+.areasGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: spacing("md");
+}
+
+.areaOption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: spacing("md");
+  background: color("neutral", "lightest");
+  border: 2px solid color("neutral", "lighter");
+  border-radius: border-radius("lg");
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+
+  &:hover {
+    border-color: color("primary", "light");
+    background: color("neutral", "white");
+    transform: translateY(-1px);
+  }
+
+  &.selected {
+    background: color("primary", "base");
+    border-color: color("primary", "base");
+    color: color("neutral", "white");
+  }
+
+  span {
+    @include font-size("sm");
+    @include font-weight("semibold");
+  }
+}
+
+.checkboxInput {
+  display: none;
+}
+
+.selectedAreasCount {
+  margin-top: spacing("lg");
+  padding: spacing("md");
+  background: color("neutral", "lightest");
+  border-radius: border-radius("lg");
+  text-align: center;
+  @include font-size("body-2");
+  @include font-weight("semibold");
+  color: color("primary", "base");
+  border: 1px solid color("primary", "light");
+}

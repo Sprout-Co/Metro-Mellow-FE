@@ -20,6 +20,8 @@ import {
   ServiceOption,
   LaundryType,
   LaundryItemsInput,
+  Severity,
+  TreatmentType,
 } from "@/graphql/api";
 import OrderSuccessModal from "../OrderSuccessModal/OrderSuccessModal";
 import { useAppSelector } from "@/lib/redux/hooks";
@@ -28,11 +30,20 @@ import { LocalStorageKeys } from "@/utils/localStorage";
 import LoginModal from "@/components/ui/booking/modals/LoginModal/LoginModal";
 import ServiceModalFooter from "../ServiceModalFooter/ServiceModalFooter";
 
+export interface TreatmentArea {
+  id: string;
+  name: string;
+  selected: boolean;
+}
+
 export interface ServiceConfiguration {
   apartmentType?: HouseType;
   roomQuantities?: RoomQuantitiesInput;
   bags?: number;
   items?: LaundryItemsInput;
+  severity?: Severity;
+  treatmentType?: TreatmentType;
+  areas?: TreatmentArea[];
 }
 
 export interface ServiceModalProps {
@@ -46,7 +57,7 @@ export interface ServiceModalProps {
   onOrderSubmit?: (configuration: ServiceConfiguration) => void;
   serviceOption?: ServiceOption;
   service: Service;
-  serviceType: "cleaning" | "laundry";
+  serviceType: "cleaning" | "laundry" | "pest-control";
 }
 
 const ServiceModal: React.FC<ServiceModalProps> = ({
@@ -76,6 +87,22 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
     studyRoom: 0,
   });
   const [bags, setBags] = useState(1);
+  
+  // Pest control state
+  const [severity, setSeverity] = useState<Severity>(Severity.Medium);
+  const [treatmentType, setTreatmentType] = useState<TreatmentType>(
+    TreatmentType.PestControlResidential
+  );
+  const [areas, setAreas] = useState<TreatmentArea[]>([
+    { id: "kitchen", name: "Kitchen", selected: true },
+    { id: "bathroom", name: "Bathroom", selected: true },
+    { id: "bedroom", name: "Bedroom", selected: false },
+    { id: "livingRoom", name: "Living Room", selected: false },
+    { id: "basement", name: "Basement", selected: false },
+    { id: "attic", name: "Attic", selected: false },
+    { id: "garden", name: "Garden/Outdoor", selected: false },
+    { id: "garage", name: "Garage", selected: false },
+  ]);
 
   // State for checkout modal and slide panel
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
@@ -109,6 +136,25 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
     setBags(newCount);
   };
 
+  // Handle severity change (for pest control)
+  const handleSeverityChange = (level: Severity) => {
+    setSeverity(level);
+  };
+
+  // Handle area selection (for pest control)
+  const handleAreaToggle = (areaId: string) => {
+    setAreas((prev) =>
+      prev.map((area) =>
+        area.id === areaId ? { ...area, selected: !area.selected } : area
+      )
+    );
+  };
+
+  // Get selected areas count (for pest control)
+  const getSelectedAreasCount = () => {
+    return areas.filter((area) => area.selected).length;
+  };
+
   // Calculate total room count (for cleaning)
   const getTotalRoomCount = () => {
     return Object.values(roomQuantities).reduce(
@@ -124,6 +170,9 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
       apartmentType,
       roomQuantities,
       bags,
+      severity,
+      treatmentType,
+      areas,
     };
 
     console.log("configuration", configuration);
@@ -196,6 +245,38 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
 
       // Price per bag calculation
       totalPrice = totalItems * typeMultiplier;
+    } else if (serviceType === "pest-control") {
+      // Calculate pest control pricing
+      const selectedAreasCount = getSelectedAreasCount();
+
+      // Base price multiplier based on treatment type
+      let typeMultiplier = 1;
+      switch (treatmentType) {
+        case TreatmentType.PestControlResidential:
+          typeMultiplier = 1;
+          break;
+        case TreatmentType.PestControlCommercial:
+          typeMultiplier = 2;
+          break;
+      }
+
+      // Severity multiplier
+      let severityMultiplier = 1;
+      switch (severity) {
+        case Severity.Low:
+          severityMultiplier = 1;
+          break;
+        case Severity.Medium:
+          severityMultiplier = 1.5;
+          break;
+        case Severity.High:
+          severityMultiplier = 2;
+          break;
+      }
+
+      // Price calculation: base price * areas * type * severity
+      totalPrice =
+        service.price * selectedAreasCount * typeMultiplier * severityMultiplier;
     }
 
     return totalPrice;
@@ -220,7 +301,14 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
         date: formData.date,
         timeSlot: formData.timeSlot,
         address: formData.addressId || "",
-        notes: serviceType === "cleaning" ? `Frequency` : `Laundry Type: ${LaundryType.StandardLaundry}, Bags: ${bags}`,
+        notes: serviceType === "cleaning" 
+          ? `Frequency` 
+          : serviceType === "laundry" 
+          ? `Laundry Type: ${LaundryType.StandardLaundry}, Bags: ${bags}`
+          : `Treatment Type: ${treatmentType}, Severity: ${severity}, Areas: ${areas
+              .filter((a) => a.selected)
+              .map((a) => a.name)
+              .join(", ")}`,
         serviceDetails: {
           serviceOption: serviceOption.service_id,
           ...(serviceType === "cleaning" ? {
@@ -229,10 +317,16 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
               houseType: apartmentType,
               rooms: roomQuantities,
             },
-          } : {
+          } : serviceType === "laundry" ? {
             laundry: {
               laundryType: serviceOption?.service_id as unknown as LaundryType,
               bags,
+            },
+          } : {
+            pestControl: {
+              treatmentType,
+              severity,
+              areas: areas.filter((area) => area.selected).map((area) => area.id),
             },
           }),
         },
@@ -296,12 +390,12 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
           </p>
 
           {/* Price Section */}
-          <div className={styles.modal__price}>
+            <div className={styles.modal__price}>
             NGN {calculateTotalPrice().toLocaleString()}
-          </div>
+            </div>
 
           {/* Configuration Section */}
-          <div className={styles.modal__configurationSection}>
+            <div className={styles.modal__configurationSection}>
             {serviceType === "cleaning" && (
               <>
                 {/* Apartment Type Selection */}
@@ -323,13 +417,13 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
                       />
                       <span>Flat/Apartment</span>
                     </label>
-                    <label
+                      <label
                       className={`${styles.apartmentTypeOption} ${
                         apartmentType === HouseType.Duplex ? styles.selected : ""
-                      }`}
-                    >
-                      <input
-                        type="radio"
+                        }`}
+                      >
+                        <input
+                          type="radio"
                         name="apartmentType"
                         value={HouseType.Duplex}
                         checked={apartmentType === HouseType.Duplex}
@@ -337,7 +431,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
                         className={styles.radioInput}
                       />
                       <span>Duplex/House</span>
-                    </label>
+                      </label>
                   </div>
                 </div>
 
@@ -351,38 +445,38 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
                           {room
                             .replace(/([A-Z])/g, " $1")
                             .replace(/^./, (str) => str.toUpperCase())}
-                        </span>
+                          </span>
                         <div className={styles.counterControls}>
-                          <button
+                            <button
                             className={styles.counterButton}
-                            onClick={() =>
+                              onClick={() =>
                               handleRoomCounterChange(
                                 room as keyof RoomQuantitiesInput,
                                 false
                               )
-                            }
+                              }
                             aria-label={`Decrement ${room}`}
-                          >
+                            >
                             -
-                          </button>
+                            </button>
                           <span className={styles.counterValue}>{quantity}</span>
-                          <button
+                            <button
                             className={styles.counterButton}
-                            onClick={() =>
+                              onClick={() =>
                               handleRoomCounterChange(
                                 room as keyof RoomQuantitiesInput,
                                 true
                               )
-                            }
+                              }
                             aria-label={`Increment ${room}`}
-                          >
+                            >
                             +
-                          </button>
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
               </>
             )}
 
@@ -443,6 +537,138 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
                       </div>
                     ))}
                   </div>
+            </div>
+              </>
+            )}
+
+            {serviceType === "pest-control" && (
+              <>
+                {/* Severity Level */}
+                <div className={styles.section}>
+                  <h3 className={styles.sectionTitle}>Infestation Severity</h3>
+                  <div className={styles.severityOptions}>
+                    <label
+                      className={`${styles.severityOption} ${
+                        severity === Severity.Low ? styles.selected : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="severity"
+                        value={Severity.Low}
+                        checked={severity === Severity.Low}
+                        onChange={() => handleSeverityChange(Severity.Low)}
+                        className={styles.radioInput}
+                      />
+                      <span>Low - Minor infestation</span>
+                    </label>
+                    <label
+                      className={`${styles.severityOption} ${
+                        severity === Severity.Medium ? styles.selected : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="severity"
+                        value={Severity.Medium}
+                        checked={severity === Severity.Medium}
+                        onChange={() => handleSeverityChange(Severity.Medium)}
+                        className={styles.radioInput}
+                      />
+                      <span>Medium - Moderate infestation</span>
+                    </label>
+                    <label
+                      className={`${styles.severityOption} ${
+                        severity === Severity.High ? styles.selected : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="severity"
+                        value={Severity.High}
+                        checked={severity === Severity.High}
+                        onChange={() => handleSeverityChange(Severity.High)}
+                        className={styles.radioInput}
+                      />
+                      <span>High - Severe infestation</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Treatment Type */}
+                <div className={styles.section}>
+                  <h3 className={styles.sectionTitle}>Treatment Type</h3>
+                  <div className={styles.treatmentTypeOptions}>
+                    <label
+                      className={`${styles.treatmentTypeOption} ${
+                        treatmentType === TreatmentType.PestControlResidential
+                          ? styles.selected
+                          : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="treatmentType"
+                        value={TreatmentType.PestControlResidential}
+                        checked={
+                          treatmentType === TreatmentType.PestControlResidential
+                        }
+                        onChange={() =>
+                          setTreatmentType(TreatmentType.PestControlResidential)
+                        }
+                        className={styles.radioInput}
+                      />
+                      <span>Residential - Home treatment</span>
+                    </label>
+                    <label
+                      className={`${styles.treatmentTypeOption} ${
+                        treatmentType === TreatmentType.PestControlCommercial
+                          ? styles.selected
+                          : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="treatmentType"
+                        value={TreatmentType.PestControlCommercial}
+                        checked={
+                          treatmentType === TreatmentType.PestControlCommercial
+                        }
+                        onChange={() =>
+                          setTreatmentType(TreatmentType.PestControlCommercial)
+                        }
+                        className={styles.radioInput}
+                      />
+                      <span>Commercial - Business treatment</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Treatment Areas */}
+                <div className={styles.section}>
+                  <h3 className={styles.sectionTitle}>Treatment Areas</h3>
+                  <div className={styles.areasGrid}>
+                    {areas.map((area) => (
+                      <div
+                        key={area.id}
+                        className={`${styles.areaOption} ${
+                          area.selected ? styles.selected : ""
+                        }`}
+                        onClick={() => handleAreaToggle(area.id)}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={area.selected}
+                          onChange={() => handleAreaToggle(area.id)}
+                          className={styles.checkboxInput}
+                        />
+                        <span>{area.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className={styles.selectedAreasCount}>
+                    {getSelectedAreasCount()} area(s) selected
+                  </div>
                 </div>
               </>
             )}
@@ -461,7 +687,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
         isOpen={isCheckoutModalOpen}
         onClose={handleCheckoutClose}
         onCheckout={handleCheckoutComplete}
-        service_category={serviceType === "cleaning" ? "Cleaning" : "Laundry"}
+        service_category={serviceType === "cleaning" ? "Cleaning" : serviceType === "laundry" ? "Laundry" : "Pest Control"}
         submitting={isCreatingBooking}
         error={error}
         onClearError={() => setError(null)}
@@ -477,8 +703,8 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
         servicePrice={servicePrice}
         serviceImage={serviceImage}
         apartmentType={serviceType === "cleaning" ? apartmentType : undefined}
-        roomCount={serviceType === "cleaning" ? getTotalRoomCount() : bags}
-        service_category={serviceType === "cleaning" ? "Cleaning" : "Laundry"}
+        roomCount={serviceType === "cleaning" ? getTotalRoomCount() : serviceType === "laundry" ? bags : getSelectedAreasCount()}
+        service_category={serviceType === "cleaning" ? "Cleaning" : serviceType === "laundry" ? "Laundry" : "Pest Control"}
         includedFeatures={includedFeatures}
       />
 
