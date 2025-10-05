@@ -1,0 +1,61 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.parfait-testimonials {
+  @include section-spacing("6xl");
+  background: color("primary", "base");
+
+  &__container {
+    @include container;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("3xl");
+  }
+
+  &__title {
+    @include heading-2;
+    color: white;
+  }
+
+  &__grid {
+    @include grid-responsive(
+      $sm: 1,
+      $md: 2,
+      $lg: 3,
+      $xl: 3,
+      $gap: spacing("xl")
+    );
+  }
+
+  &__card {
+    @include card("lg");
+    padding: spacing("2xl");
+    text-align: center;
+    background: white;
+  }
+
+  &__emoji {
+    font-size: 3rem;
+    margin-bottom: spacing("lg");
+  }
+
+  &__text {
+    @include body-1;
+    color: color("neutral", "darker");
+    margin-bottom: spacing("lg");
+    font-style: italic;
+  }
+
+  &__rating {
+    margin-bottom: spacing("md");
+  }
+
+  &__author {
+    @include body-2;
+    color: color("primary", "base");
+    font-weight: map-get($font-weights, "semibold");
+  }
+}

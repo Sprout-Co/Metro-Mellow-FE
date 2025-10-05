@@ -6,13 +6,10 @@
   width: 100%;
   background-color: color("accent", "lighter");
 
-  @include breakpoint-down("md") {
-    padding: spacing("3xl") 0;
+  @include breakpoint-down("sm") {
+    padding-top: spacing("7xl");
   }
 
-  @include breakpoint-down("sm") {
-    padding: spacing("2xl") 0;
-  }
   @include hero-base;
 
   &__container {
@@ -40,32 +37,20 @@
   }
 
   &__title {
-    // font-size: font-size("h1");
-    // font-weight: font-weight("bold");
-    // color: color("neutral", "black");
-    // margin-bottom: spacing("2xl");
-    // line-height: line-height("tight");
-    // letter-spacing: letter-spacing("tight");
-    @include heading-1;
-
-    @include breakpoint-down("lg") {
-      font-size: font-size("h2");
-    }
-
-    @include breakpoint-down("md") {
-      font-size: font-size("h3");
-      margin-bottom: spacing("xl");
-    }
+    font-family: $font-family-heading;
+    font-size: font-size("h2");
+    font-weight: font-weight("bold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("2xl");
+    line-height: line-height("tight");
+    letter-spacing: letter-spacing("tight");
+    text-align: center !important;
 
     @include breakpoint-down("sm") {
       font-size: font-size("h4");
       margin-bottom: spacing("lg");
       line-height: 1.2;
-    }
-
-    @include breakpoint-down("xs") {
-      font-size: font-size("h5");
-      margin-bottom: spacing("md");
+      text-align: center !important;
     }
   }
 
@@ -76,10 +61,9 @@
     margin-bottom: spacing("3xl");
     max-width: 620px;
     line-height: line-height("normal");
+    text-align: center !important;
 
     @include breakpoint-down("md") {
-      font-size: font-size("body-1");
-      margin-bottom: spacing("2xl");
       max-width: 100%;
     }
 
@@ -87,11 +71,7 @@
       font-size: font-size("body-2");
       margin-bottom: spacing("xl");
       line-height: 1.5;
-    }
-
-    @include breakpoint-down("xs") {
-      font-size: font-size("small");
-      margin-bottom: spacing("lg");
+      text-align: center !important;
     }
   }
 
@@ -101,6 +81,7 @@
     @include breakpoint-down("sm") {
       margin-top: spacing("md");
       width: 100%;
+      text-align: center;
     }
   }
 

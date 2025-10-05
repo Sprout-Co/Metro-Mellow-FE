@@ -22,7 +22,12 @@ import {
   Pause,
 } from "lucide-react";
 import styles from "./BookingDetailModal.module.scss";
-import { ServiceCategory, BookingStatus, Booking } from "@/graphql/api";
+import {
+  ServiceCategory,
+  BookingStatus,
+  Booking,
+  PaymentStatus,
+} from "@/graphql/api";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 import RescheduleModal from "../RescheduleModal/RescheduleModal";
 import ConfirmActionModal, {
@@ -81,6 +86,19 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
       [BookingStatus.InProgress]: "inProgress",
       [BookingStatus.Completed]: "completed",
       [BookingStatus.Cancelled]: "cancelled",
+    };
+    return colors[status] || "default";
+  };
+
+  // Get payment status color
+  const getPaymentStatusColor = (status: PaymentStatus) => {
+    const colors = {
+      [PaymentStatus.Paid]: "paid",
+      [PaymentStatus.Completed]: "paid",
+      [PaymentStatus.Pending]: "paymentPending",
+      [PaymentStatus.Failed]: "failed",
+      [PaymentStatus.Refunded]: "refunded",
+      [PaymentStatus.PartiallyRefunded]: "partiallyRefunded",
     };
     return colors[status] || "default";
   };
@@ -333,12 +351,69 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
 
           {/* Pricing Section */}
           <div className={styles.modal__section}>
-            <h3 className={styles.modal__sectionTitle}>Pricing</h3>
+            <h3 className={styles.modal__sectionTitle}>Pricing & Payment</h3>
             <div className={styles.modal__priceCard}>
               <div className={styles.modal__priceRow}>
                 <span className={styles.modal__priceLabel}>Service Fee</span>
                 <span className={styles.modal__priceValue}>
                   {formatPrice(booking.totalPrice)}
+                </span>
+              </div>
+              <div className={styles.modal__priceRow}>
+                <span className={styles.modal__priceLabel}>Payment Status</span>
+                <span
+                  className={`${styles.modal__paymentStatus} ${
+                    styles[
+                      `modal__paymentStatus--${getPaymentStatusColor(booking.paymentStatus)}`
+                    ]
+                  }`}
+                >
+                  {(booking.paymentStatus === PaymentStatus.Paid ||
+                    booking.paymentStatus === PaymentStatus.Completed) && (
+                    <CheckCircle size={12} />
+                  )}
+                  {booking.paymentStatus === PaymentStatus.Pending && (
+                    <AlertCircle size={12} />
+                  )}
+                  {booking.paymentStatus === PaymentStatus.Failed && (
+                    <X size={12} />
+                  )}
+                  {(booking.paymentStatus === PaymentStatus.Refunded ||
+                    booking.paymentStatus ===
+                      PaymentStatus.PartiallyRefunded) && (
+                    <RefreshCw size={12} />
+                  )}
+                  {booking.paymentStatus}
+                </span>
+              </div>
+              <div className={styles.modal__priceRow}>
+                <span className={styles.modal__priceLabel}>Booking Status</span>
+                <span
+                  className={`${styles.modal__bookingStatus} ${
+                    styles[
+                      `modal__bookingStatus--${getStatusColor(booking.status)}`
+                    ]
+                  }`}
+                >
+                  {booking.status === BookingStatus.Confirmed && (
+                    <CheckCircle size={12} />
+                  )}
+                  {booking.status === BookingStatus.Pending && (
+                    <AlertCircle size={12} />
+                  )}
+                  {booking.status === BookingStatus.Paused && (
+                    <Pause size={12} />
+                  )}
+                  {booking.status === BookingStatus.Completed && (
+                    <CheckCircle size={12} />
+                  )}
+                  {booking.status === BookingStatus.Cancelled && (
+                    <X size={12} />
+                  )}
+                  {booking.status === BookingStatus.InProgress && (
+                    <RefreshCw size={12} />
+                  )}
+                  {booking.status}
                 </span>
               </div>
               {/* {booking.serviceDetails.recurring && (

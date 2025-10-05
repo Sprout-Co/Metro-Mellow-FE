@@ -124,6 +124,12 @@
     gap: spacing("md");
     margin-bottom: spacing("lg");
 
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      text-align: center;
+      gap: spacing("sm");
+    }
+
     h3 {
       @include heading-4();
       color: color("primary", "base");
@@ -143,6 +149,17 @@
     transition: all map-get($transition-duration, "base")
       map-get($transition-timing, "ease-out");
     flex-shrink: 0;
+
+    @include breakpoint-down("sm") {
+      width: 56px;
+      height: 56px;
+      margin-bottom: spacing("xs");
+
+      svg {
+        width: 28px;
+        height: 28px;
+      }
+    }
 
     svg {
       width: 24px;

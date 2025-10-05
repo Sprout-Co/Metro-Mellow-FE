@@ -86,24 +86,40 @@
     @include breakpoint-down("md") {
       align-items: center;
       padding-top: spacing("3xl");
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
     }
 
     @include breakpoint-down("sm") {
       padding-top: spacing("2xl");
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      padding-left: spacing("md");
+      padding-right: spacing("md");
     }
   }
 
   &__content {
     // max-width: 655px;
+    text-align: center;
+    width: 100%;
 
     @include breakpoint-down("md") {
-      margin-left: 0;
+      margin-left: auto;
+      margin-right: auto;
       text-align: center;
       max-width: 100%;
+      width: 100%;
     }
 
     @include breakpoint-down("sm") {
       padding: 0 spacing("sm");
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      width: 100%;
     }
   }
 
@@ -113,6 +129,8 @@
     color: color("neutral", "white");
     margin-bottom: spacing("lg");
     line-height: 1;
+    text-align: center;
+    width: 100%;
 
     &--accent {
       color: color("accent", "base");
@@ -126,11 +144,17 @@
 
     @include breakpoint-down("md") {
       font-size: font-size("h2") * 1.2;
+      text-align: center;
+      width: 100%;
     }
 
     @include breakpoint-down("sm") {
       font-size: font-size("h3") * 1.2;
       line-height: 1.1;
+      text-align: center;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 

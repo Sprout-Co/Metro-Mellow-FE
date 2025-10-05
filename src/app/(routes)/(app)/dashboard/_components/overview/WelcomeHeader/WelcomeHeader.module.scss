@@ -46,7 +46,7 @@
       align-items: flex-end;
       gap: spacing("xl");
 
-      @include breakpoint-down("md") {
+      @include breakpoint-down("lg") {
         flex-direction: column;
         align-items: flex-start;
         gap: spacing("lg");

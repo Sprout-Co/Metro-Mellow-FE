@@ -70,13 +70,23 @@
     }
   }
 
-  &__cart {
+  &__headerActions {
     @include flex-center;
+    gap: spacing("md");
   }
 
   &__cart {
     @include flex-center;
   }
+
+  &__cancelButton {
+    border: border-width("thin") solid color("primary", "base") !important;
+    
+    &:hover {
+      border-color: color("primary", "dark") !important;
+    }
+  }
+
 
   &__close {
     @include flex-center;
@@ -248,6 +258,10 @@
     @include flex-center;
     padding-top: spacing("xl");
     gap: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      display: none;
+    }
   }
 
   &__separatorLine {
@@ -311,6 +325,11 @@
     &__content {
       padding: spacing("lg");
     }
+
+    &__headerActions {
+      gap: spacing("sm");
+    }
+
 
     &__foodGrid {
       @include grid-responsive(1, 1, 1, 1, spacing("md"));

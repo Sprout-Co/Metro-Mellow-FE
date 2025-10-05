@@ -106,6 +106,7 @@
 
     @include breakpoint-down("md") {
       @include body-2;
+      color: color-alpha("neutral", "white", 0.95);
     }
   }
 

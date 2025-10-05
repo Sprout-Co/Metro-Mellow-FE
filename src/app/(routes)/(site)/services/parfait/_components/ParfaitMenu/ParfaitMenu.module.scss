@@ -1,0 +1,129 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.parfait-menu {
+  @include section-spacing("6xl");
+  background: color("neutral", "white");
+
+  &__container {
+    @include container;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("4xl");
+  }
+
+  &__title {
+    @include heading-2;
+    color: color("primary", "base");
+    margin-bottom: spacing("md");
+  }
+
+  &__subtitle {
+    @include body-1;
+    color: color("neutral", "darker");
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  &__grid {
+    @include grid-responsive(
+      $sm: 1,
+      $md: 2,
+      $lg: 3,
+      $xl: 3,
+      $gap: spacing("xl")
+    );
+  }
+}
+
+.parfait-card {
+  @include card("md");
+  position: relative;
+  overflow: visible;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &--popular {
+    border: 2px solid color("secondary", "base");
+  }
+
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: map-get($shadows, "xl");
+
+    .parfait-card__image {
+      transform: scale(1.05);
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    background: color("secondary", "base");
+    color: white;
+    padding: spacing("xs") spacing("md");
+    border-radius: border-radius("full");
+    font-size: font-size("small");
+    font-weight: map-get($font-weights, "bold");
+    z-index: 1;
+  }
+
+  &__image {
+    height: 200px;
+    background: linear-gradient(
+      135deg,
+      color("accent", "lighter") 0%,
+      color("secondary", "lighter") 100%
+    );
+    @include flex-center;
+    transition: transform 0.3s ease;
+  }
+
+  &__emoji {
+    font-size: 5rem;
+  }
+
+  &__content {
+    padding: spacing("xl");
+  }
+
+  &__name {
+    @include heading-5;
+    color: color("primary", "base");
+    margin-bottom: spacing("sm");
+  }
+
+  &__description {
+    @include body-2;
+    color: color("neutral", "darker");
+    margin-bottom: spacing("md");
+  }
+
+  &__ingredients {
+    @include flex(row, wrap, flex-start, center);
+    gap: spacing("xs");
+    margin-bottom: spacing("lg");
+  }
+
+  &__tag {
+    font-size: font-size("xs");
+    color: color("primary", "base");
+    background: color("primary", "lighter");
+    padding: spacing("xxs") spacing("sm");
+    border-radius: border-radius("full");
+  }
+
+  &__footer {
+    @include flex-between;
+  }
+
+  &__price {
+    font-size: font-size("h6");
+    font-weight: map-get($font-weights, "bold");
+    color: color("secondary", "base");
+  }
+}

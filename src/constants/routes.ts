@@ -23,6 +23,7 @@ export enum Routes {
   SERVICES = "/services",
   BOOKINGS = "/bookings",
   PAYMENTS = "/payments",
+  PAYMENT_CALLBACK = "/payment/callback",
 
   // Admin routes
   ADMIN_DASHBOARD = "/admin/dashboard",
@@ -51,4 +52,9 @@ export enum Routes {
   FOR_BUSINESS_LAUNDRY = "/for-business/uniform-management",
   FOR_BUSINESS_PEST_CONTROL = "/for-business/pest-management",
   FOR_BUSINESS_CUSTOM_SOLUTIONS = "/for-business/custom-solutions",
+
+  // Services routes
+  PARFAIT = "services/parfait",
+  PARFAIT_BUILDER = "services/parfait#builder",
+  PARFAIT_MENU = "services/parfait#menu",
 }

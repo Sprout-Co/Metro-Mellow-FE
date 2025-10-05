@@ -6,7 +6,7 @@
 .checkout {
   min-height: 100vh;
   background: color("neutral", "lightest");
-
+  margin-top: spacing("7xl");
   &__container {
     max-width: 1400px;
     margin: 0 auto;
@@ -52,6 +52,11 @@
       gap: spacing("lg");
       align-items: flex-start;
     }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("lg") spacing("md");
+      gap: spacing("md");
+    }
   }
 
   &__headerContent {
@@ -60,6 +65,14 @@
     gap: spacing("xl");
     position: relative;
     z-index: 1;
+
+    @include breakpoint-down("md") {
+      gap: spacing("md");
+    }
+
+    @include breakpoint-down("sm") {
+      gap: spacing("sm");
+    }
   }
 
   &__headerIcon {
@@ -72,6 +85,11 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+
+    @include breakpoint-down("sm") {
+      width: 40px;
+      height: 40px;
+    }
   }
 
   &__headerText {
@@ -79,12 +97,24 @@
       @include font-size("2xl");
       @include font-weight("bold");
       margin: 0 0 spacing("xxs") 0;
+
+      @include breakpoint-down("md") {
+        @include font-size("xl");
+      }
+
+      @include breakpoint-down("sm") {
+        @include font-size("lg");
+      }
     }
 
     p {
       @include font-size("sm");
       opacity: 0.9;
       margin: 0;
+
+      @include breakpoint-down("sm") {
+        @include font-size("xs");
+      }
     }
   }
 
@@ -122,6 +152,16 @@
     @include breakpoint-down("lg") {
       grid-template-columns: 1fr;
       padding: spacing("xl");
+    }
+
+    @include breakpoint-down("md") {
+      padding: spacing("lg");
+      gap: spacing("xl");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md");
+      gap: spacing("lg");
     }
   }
 
@@ -313,6 +353,11 @@
     background-color: color("neutral", "lightest");
     border-bottom: 1px solid color("neutral", "lighter");
 
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+      display: none; // Hide header on mobile, show labels inline
+    }
+
     > div {
       padding: spacing("sm") spacing("md");
       @include font-size("xs");
@@ -320,6 +365,10 @@
       color: color("neutral", "dark");
       text-transform: uppercase;
       letter-spacing: 0.5px;
+
+      @include breakpoint-down("sm") {
+        padding: spacing("xs") spacing("sm");
+      }
     }
   }
 
@@ -327,6 +376,14 @@
     display: grid;
     grid-template-columns: 2fr 1fr 1.5fr 1fr 1fr;
     border-bottom: 1px solid color("neutral", "lighter");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+      display: flex;
+      flex-direction: column;
+      padding: spacing("md");
+      gap: spacing("sm");
+    }
 
     &:last-child {
       border-bottom: none;
@@ -343,11 +400,36 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+
+      @include breakpoint-down("md") {
+        padding: 0;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid color("neutral", "lightest");
+        padding: spacing("xs") 0;
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+
+      @include breakpoint-down("sm") {
+        @include font-size("xs");
+      }
     }
   }
 
   &__serviceColName {
     @include font-weight("medium");
+
+    @include breakpoint-down("md") {
+      &::before {
+        content: "Service: ";
+        @include font-weight("medium");
+        color: color("neutral", "dark");
+      }
+    }
   }
 
   &__serviceType {
@@ -357,14 +439,52 @@
     font-weight: normal;
   }
 
-  &__serviceColFrequency,
-  &__serviceColDays,
+  &__serviceColFrequency {
+    @include font-size("sm");
+
+    @include breakpoint-down("md") {
+      &::before {
+        content: "Frequency: ";
+        @include font-weight("medium");
+        color: color("neutral", "dark");
+      }
+    }
+  }
+
+  &__serviceColDays {
+    @include font-size("sm");
+
+    @include breakpoint-down("md") {
+      &::before {
+        content: "Days: ";
+        @include font-weight("medium");
+        color: color("neutral", "dark");
+      }
+    }
+  }
+
   &__serviceColTime {
     @include font-size("sm");
+
+    @include breakpoint-down("md") {
+      &::before {
+        content: "Time: ";
+        @include font-weight("medium");
+        color: color("neutral", "dark");
+      }
+    }
   }
 
   &__serviceColPrice {
     @include font-weight("semibold");
+
+    @include breakpoint-down("md") {
+      &::before {
+        content: "Price: ";
+        @include font-weight("medium");
+        color: color("neutral", "dark");
+      }
+    }
   }
 
   &__pricePeriod {
@@ -382,6 +502,15 @@
 
     @include breakpoint-down("lg") {
       position: static;
+      margin-top: spacing("xl");
+    }
+
+    @include breakpoint-down("md") {
+      margin-top: spacing("lg");
+    }
+
+    @include breakpoint-down("sm") {
+      margin-top: spacing("md");
     }
   }
 
@@ -391,6 +520,15 @@
     border-radius: border-radius("2xl");
     overflow: hidden;
     box-shadow: 0 8px 24px rgba(color("primary", "base"), 0.1);
+
+    @include breakpoint-down("md") {
+      border-radius: border-radius("xl");
+    }
+
+    @include breakpoint-down("sm") {
+      border-radius: border-radius("lg");
+      border-width: 1px;
+    }
   }
 
   &__summaryHeader {
@@ -402,21 +540,37 @@
     padding: spacing("lg");
     color: color("neutral", "white");
 
+    @include breakpoint-down("sm") {
+      padding: spacing("md");
+    }
+
     h2 {
       @include font-size("lg");
       @include font-weight("semibold");
       margin: 0 0 spacing("xxs") 0;
+
+      @include breakpoint-down("sm") {
+        @include font-size("base");
+      }
     }
 
     p {
       @include font-size("sm");
       opacity: 0.9;
       margin: 0;
+
+      @include breakpoint-down("sm") {
+        @include font-size("xs");
+      }
     }
   }
 
   &__summaryBody {
     padding: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md");
+    }
   }
 
   &__summaryItem {
@@ -497,6 +651,14 @@
     @include font-size("3xl");
     @include font-weight("bold");
     color: color("primary", "dark");
+
+    @include breakpoint-down("md") {
+      @include font-size("2xl");
+    }
+
+    @include breakpoint-down("sm") {
+      @include font-size("xl");
+    }
   }
 
   &__checkoutBtn {
@@ -521,6 +683,11 @@
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+
+    @include breakpoint-down("sm") {
+      padding: spacing("sm");
+      @include font-size("sm");
+    }
 
     &::before {
       content: "";

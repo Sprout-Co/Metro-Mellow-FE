@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Portal from "../../../Portal/Portal";
@@ -7,13 +6,23 @@ import Button from "../../../Button/Button";
 import styles from "./CheckoutModal.module.scss";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { AddressInput, TimeSlot } from "@/graphql/api";
+import { usePaystackPayment } from "react-paystack";
+import { Routes } from "@/constants/routes";
+import axios from "axios";
+import router from "next/router";
 
 export interface CheckoutModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onContinue?: (formData: CheckoutFormData) => void;
+  onCheckout: (
+    formData: CheckoutFormData,
+    onContinuePayment: (bookingResponse: string) => void
+  ) => void;
   service_category?: string;
   submitting?: boolean;
+  error?: string | null;
+  onClearError?: () => void;
+  bookingId?: string;
 }
 
 export interface CheckoutFormData {
@@ -27,9 +36,12 @@ export interface CheckoutFormData {
 const CheckoutModal: React.FC<CheckoutModalProps> = ({
   isOpen,
   onClose,
-  onContinue,
+  onCheckout,
   service_category = "Cleaning",
   submitting = false,
+  error = null,
+  onClearError,
+  bookingId,
 }) => {
   // Form state management
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
@@ -48,9 +60,18 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     street: "",
     state: "Lagos",
   });
+
   const [isNewAddress, setIsNewAddress] = useState(!user?.addresses?.length);
 
+  // Paystack payment hook - moved to component top level
+  // const initializePaystackPayment = usePaystackPayment({
+  //   publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "",
+  //   email: user?.email || "",
+  //   amount: 10000, // Amount in kobo
+  // });
+
   // Set default address when component mounts or user changes
+
   React.useEffect(() => {
     if (user?.defaultAddress) {
       setFormData((prev) => ({
@@ -63,13 +84,13 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   }, [user]);
 
   // Handle escape key press
+
   React.useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
       }
     };
-
     if (isOpen) {
       document.addEventListener("keydown", handleEscape);
       document.body.style.overflow = "hidden";
@@ -84,6 +105,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   // Handle backdrop click
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
+      if (onClearError) onClearError();
       onClose();
     }
   };
@@ -99,10 +121,47 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     }));
   };
 
+  const initializePayment = async (bookingId: string) => {
+    // setLoading(true);
+    // setError(null);
+    let amount = 10000;
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/api/paystack/initialize-payment",
+        {
+          email: user?.email,
+          amount: 10000, // Convert to kobo (e.g., 100 Naira = 10000 kobo)
+          bookingId, // TODO: Replace with actual booking ID
+          currency: "NGN",
+        }
+      );
+
+      const { data } = response.data;
+
+      console.log("Payment initialization response:", data);
+
+      if (data && data.authorizationUrl) {
+        // 2. Redirect the user to the Paystack page to complete payment
+        console.log("Redirecting to Paystack:", data.authorizationUrl);
+        window.open(data.authorizationUrl, "_blank");
+      } else {
+        throw new Error("Could not retrieve payment URL.");
+      }
+    } catch (err) {
+      console.error("Error initializing payment:", err);
+      alert("Failed to initiate payment. Please try again.");
+    } finally {
+      // setLoading(false);
+    }
+  };
+
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onContinue?.(formData);
+    onCheckout(formData, (bookingResponse: string) =>
+      initializePayment(bookingResponse)
+    );
+    // initializePayment();
   };
 
   if (!isOpen) return null;
@@ -118,6 +177,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
           transition={{ duration: 0.3 }}
         >
           {/* Backdrop */}
+
           <motion.div
             className={styles.checkoutModal__backdrop}
             onClick={handleBackdropClick}
@@ -128,6 +188,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
           />
 
           {/* Modal Content */}
+
           <motion.div
             className={styles.checkoutModal__container}
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -135,15 +196,21 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{
               duration: 0.3,
+
               ease: "easeOut",
             }}
           >
             {/* Header */}
+
             <div className={styles.checkoutModal__header}>
               <h2 className={styles.checkoutModal__title}>Checkout</h2>
+
               <button
                 className={styles.checkoutModal__close}
-                onClick={onClose}
+                onClick={() => {
+                  if (onClearError) onClearError();
+                  onClose();
+                }}
                 aria-label="Close modal"
               >
                 <svg
@@ -165,21 +232,32 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
             </div>
 
             {/* Form Content */}
+
             <div className={styles.checkoutModal__content}>
               <form
                 onSubmit={handleSubmit}
                 className={styles.checkoutModal__form}
               >
                 {/* Section Title */}
+
                 <h3 className={styles.checkoutModal__sectionTitle}>
                   {service_category} Details
                 </h3>
 
+                {/* Error Display */}
+                {error && (
+                  <div className={styles.checkoutModal__errorMessage}>
+                    <p>{error}</p>
+                  </div>
+                )}
+
                 {/* Date Field */}
+
                 <div className={styles.checkoutModal__field}>
                   <label htmlFor="date" className={styles.checkoutModal__label}>
                     Date
                   </label>
+
                   <div className={styles.checkoutModal__inputWrapper}>
                     <input
                       type="date"
@@ -190,6 +268,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       className={styles.checkoutModal__input}
                       required
                     />
+
                     <svg
                       className={styles.checkoutModal__inputIcon}
                       width="20"
@@ -210,10 +289,12 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 </div>
 
                 {/* Time Field */}
+
                 <div className={styles.checkoutModal__field}>
                   <label htmlFor="time" className={styles.checkoutModal__label}>
                     Time
                   </label>
+
                   <select
                     id="timeSlot"
                     name="timeSlot"
@@ -223,12 +304,15 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     required
                   >
                     <option value={TimeSlot.Morning}>Morning</option>
+
                     <option value={TimeSlot.Afternoon}>Afternoon</option>
+
                     <option value={TimeSlot.Evening}>Evening</option>
                   </select>
                 </div>
 
                 {/* Address Type Radio Buttons */}
+
                 {user && isAuthenticated ? (
                   <div className={styles.checkoutModal__field}>
                     <div className={styles.checkoutModal__radioGroup}>
@@ -238,24 +322,29 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                           name="addressType"
                           value="saved"
                           // checked={formData.addressType === "saved"}
+
                           checked={!isNewAddress}
                           onChange={() => setIsNewAddress(false)}
                           className={styles.checkoutModal__radio}
                         />
+
                         <span className={styles.checkoutModal__radioText}>
                           Saved Address
                         </span>
                       </label>
+
                       <label className={styles.checkoutModal__radioLabel}>
                         <input
                           type="radio"
                           name="addressType"
                           value="new"
                           // checked={formData.addressType === "new"}
+
                           checked={isNewAddress}
                           onChange={() => setIsNewAddress(true)}
                           className={styles.checkoutModal__radio}
                         />
+
                         <span className={styles.checkoutModal__radioText}>
                           New Address
                         </span>
@@ -271,6 +360,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 {isNewAddress ? (
                   <>
                     {/* City Field */}
+
                     <div className={styles.checkoutModal__field}>
                       <label
                         htmlFor="city"
@@ -278,6 +368,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       >
                         City
                       </label>
+
                       <select
                         id="city"
                         name="city"
@@ -287,13 +378,19 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                         required
                       >
                         <option value="">Select City</option>
+
                         <option value="ikeja">Ikeja</option>
+
                         <option value="victoria-island">Victoria Island</option>
+
                         <option value="lekki">Lekki</option>
+
                         <option value="surulere">Surulere</option>
                       </select>
                     </div>
+
                     {/* Address Field */}
+
                     <div className={styles.checkoutModal__field}>
                       <label
                         htmlFor="street"
@@ -301,6 +398,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       >
                         Street
                       </label>
+
                       <input
                         type="text"
                         id="street"
@@ -319,6 +417,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                         <h4 className={styles.checkoutModal__addressListTitle}>
                           Select an address
                         </h4>
+
                         {user.addresses.map(
                           (address) =>
                             address && (
@@ -332,8 +431,11 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                                 onClick={() =>
                                   setFormData((prev) => ({
                                     ...prev,
+
                                     addressId: address.id,
+
                                     city: address.city || "",
+
                                     street: address.street || "",
                                   }))
                                 }
@@ -355,6 +457,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                                     >
                                       {address.label}
                                     </span>
+
                                     {address.isDefault && (
                                       <span
                                         className={
@@ -365,6 +468,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                                       </span>
                                     )}
                                   </div>
+
                                   <p
                                     className={
                                       styles.checkoutModal__addressCardText
@@ -372,6 +476,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                                   >
                                     {address.street}
                                   </p>
+
                                   <p
                                     className={
                                       styles.checkoutModal__addressCardText
@@ -381,6 +486,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                                     {address.zipCode}
                                   </p>
                                 </div>
+
                                 <div
                                   className={
                                     styles.checkoutModal__addressCardRadio
@@ -402,6 +508,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     ) : (
                       <div className={styles.checkoutModal__noAddress}>
                         <p>You don't have any saved addresses.</p>
+
                         <p>Please add a new address.</p>
                       </div>
                     )}
@@ -409,6 +516,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 )}
 
                 {/* Submit Button */}
+
                 <div className={styles.checkoutModal__buttonWrapper}>
                   <Button
                     type="submit"

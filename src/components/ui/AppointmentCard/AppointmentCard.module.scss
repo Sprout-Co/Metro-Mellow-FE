@@ -25,6 +25,14 @@
     border-radius: 2px 0 0 2px;
   }
 
+  @include breakpoint-down("sm") {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+    max-width: 100%;
+  }
+
   // Header variant (used in WelcomeHeader and BookingsMain header)
   &--header {
     flex: 1;
@@ -38,8 +46,13 @@
     }
 
     @include breakpoint-down("md") {
-      margin: spacing("md") 0;
+      margin: spacing("md") auto;
       padding: spacing("md");
+    }
+
+    @include breakpoint-down("sm") {
+      margin: spacing("md") auto;
+      width: 100%;
     }
   }
 
@@ -52,6 +65,11 @@
 
     @include breakpoint-down("md") {
       padding: spacing("md");
+    }
+
+    @include breakpoint-down("sm") {
+      margin: 0 auto spacing("lg");
+      width: 100%;
     }
   }
 

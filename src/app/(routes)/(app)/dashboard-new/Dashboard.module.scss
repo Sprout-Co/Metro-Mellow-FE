@@ -5,22 +5,22 @@
 .dashboard {
   min-height: 100vh;
   background-color: color("neutral", "lightest");
-  
   &__content {
     padding-top: spacing("xl");
     padding-bottom: spacing("xl");
   }
   
   &__container {
-    @include container;
-    max-width: map-get($container-max-widths, "xl");
+   // @include container;
+   // max-width: map-get($container-max-widths, "xl");
+   max-width: 100vw !important;
   }
   
   &__main {
     display: flex;
     gap: spacing("xl");
     margin-top: spacing("lg");
-    
+    width: 100vw !important;
     @include breakpoint-down("lg") {
       flex-direction: column;
     }

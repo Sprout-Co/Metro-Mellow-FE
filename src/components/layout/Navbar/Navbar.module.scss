@@ -20,6 +20,21 @@
     background-color: color("neutral", "white");
     transition: all 0.3s ease-in-out;
     // @include container;
+    
+    // Make navbar wider on mobile devices
+    @include breakpoint-down("md") {
+      width: 95%;
+      max-width: 95%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    @include breakpoint-down("sm") {
+      width: 98%;
+      max-width: 98%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
   }
 
   &--scrolled {
@@ -37,6 +52,17 @@
     padding-left: spacing("xl");
     padding-right: spacing("xl");
     box-sizing: border-box;
+    
+    // Adjust padding for mobile devices
+    @include breakpoint-down("md") {
+      padding-left: spacing("lg");
+      padding-right: spacing("lg");
+    }
+    
+    @include breakpoint-down("sm") {
+      padding-left: spacing("md");
+      padding-right: spacing("md");
+    }
   }
 
   &__brand {
@@ -343,7 +369,7 @@
     top: 0;
     right: 0;
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     height: 100vh;
     background-color: color("neutral", "white");
     z-index: 1000;
@@ -354,41 +380,38 @@
     @include breakpoint-up("lg") {
       display: none;
     }
+    
+    // Make mobile menu wider on smaller screens
+    @include breakpoint-down("sm") {
+      max-width: 100%;
+      width: 100%;
+    }
   }
 
   &__mobileHeader {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: spacing("lg");
+    justify-content: flex-start;
+    padding: spacing("md") spacing("lg");
     border-bottom: 1px solid color("neutral", "lighter");
+    min-height: 60px; // Fixed height to prevent distortion
+    
+    // Better spacing for wider mobile menu
+    @include breakpoint-down("sm") {
+      padding: spacing("md") spacing("xl");
+    }
   }
 
   &__mobileLogo {
-    .navbar__logoMark {
-      width: 100px;
-      height: 25px;
+    // Ensure mobile logo matches main navbar logo size and maintains aspect ratio
+    .navbar__logo {
+      width: 140px !important;
+      height: 40px !important;
+      object-fit: contain !important;
+      flex-shrink: 0;
     }
   }
 
-  &__mobileClose {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: border-radius("full");
-    background-color: color("neutral", "lighter");
-    border: none;
-    cursor: pointer;
-    color: color("neutral", "darkest");
-    transition: all 0.3s ease;
-
-    &:hover {
-      background-color: color("neutral", "light");
-      color: color("primary", "base");
-    }
-  }
 
   &__mobileNav {
     flex: 1;
@@ -418,15 +441,28 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: font-size("body-1");
+    font-size: font-size("body-2");
     font-weight: font-weight("medium");
     color: color("neutral", "darkest");
     text-decoration: none;
     padding: spacing("md") spacing("sm");
     transition: color 0.3s ease;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 
     &:hover {
       color: color("primary", "base");
+    }
+
+    &:active {
+      opacity: 0.7;
     }
 
     &--open {
@@ -525,6 +561,11 @@
   &__mobileFooter {
     border-top: 1px solid color("neutral", "lighter");
     padding: spacing("lg");
+    
+    // Better spacing for wider mobile menu
+    @include breakpoint-down("sm") {
+      padding: spacing("lg") spacing("xl");
+    }
   }
 
   &__mobileButton {

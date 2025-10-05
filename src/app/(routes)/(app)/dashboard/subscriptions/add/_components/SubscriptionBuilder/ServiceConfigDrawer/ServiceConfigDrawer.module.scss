@@ -895,6 +895,16 @@
     padding: spacing("xl");
     border-top: 1px solid color("neutral", "lighter");
     background: color("neutral", "lightest");
+
+    @include breakpoint-down("md") {
+      padding: spacing("lg");
+    }
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      gap: spacing("md");
+      padding: spacing("md");
+    }
   }
 
   &__footerPrice {
@@ -902,21 +912,42 @@
     flex-direction: column;
     gap: spacing("xxs");
 
+    @include breakpoint-down("sm") {
+      text-align: center;
+    }
+
     span {
       @include font-size("sm");
       color: color("neutral", "dark");
+
+      @include breakpoint-down("sm") {
+        @include font-size("sm");
+      }
     }
 
     strong {
       @include font-size("xl");
       @include font-weight("bold");
       color: color("primary", "dark");
+
+      @include breakpoint-down("md") {
+        @include font-size("lg");
+      }
+
+      @include breakpoint-down("sm") {
+        @include font-size("lg");
+      }
     }
   }
 
   &__footerActions {
     display: flex;
     gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      width: 100%;
+      justify-content: center;
+    }
   }
 
   &__backBtn {
@@ -935,6 +966,11 @@
     transition: all 0.2s ease;
     min-width: 140px;
     min-height: 40px;
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md") spacing("xl");
+      @include font-size("sm");
+    }
 
     &:hover:not(:disabled) {
       border-color: color("neutral", "medium");
@@ -965,6 +1001,11 @@
     transition: all 0.2s ease;
     min-width: 140px;
     min-height: 40px;
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md") spacing("xl");
+      @include font-size("sm");
+    }
 
     &:hover:not(:disabled) {
       background: color("primary", "dark");

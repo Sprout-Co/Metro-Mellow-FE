@@ -14,24 +14,67 @@
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
   z-index: z-index("modal");
   overflow-y: auto;
-  // padding: spacing("lg") spacing("lg") spacing("xl");
   display: flex;
   flex-direction: column;
 
   &--sm {
-    width: 25rem;
+    width: 20rem;
+
+    @include breakpoint-down("lg") {
+      width: 18rem;
+    }
+
+    @include breakpoint-down("md") {
+      width: 16rem;
+    }
+
+    @include breakpoint-down("sm") {
+      width: 100vw;
+      max-width: 100vw;
+    }
   }
 
   &--md {
     width: 30rem;
+
+    @include breakpoint-down("lg") {
+      width: 28rem;
+    }
+
+    @include breakpoint-down("md") {
+      width: 24rem;
+    }
+
+    @include breakpoint-down("sm") {
+      width: 100vw;
+      max-width: 100vw;
+    }
   }
 
   &--lg {
     width: 45rem;
+
+    @include breakpoint-down("xl") {
+      width: 40rem;
+    }
+
+    @include breakpoint-down("lg") {
+      width: 35rem;
+    }
+
+    @include breakpoint-down("md") {
+      width: 30rem;
+    }
+
+    @include breakpoint-down("sm") {
+      width: 100vw;
+      max-width: 100vw;
+    }
   }
 
   &--full-screen {
     width: 100vw;
+    max-width: 100vw;
   }
 
   &__overlay {
@@ -42,12 +85,24 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: z-index("overlay");
+
+    @include breakpoint-down("sm") {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
   }
 
   &__content {
     flex: 1;
     padding: spacing("lg") spacing("lg") spacing("xl");
     overflow-y: auto;
+
+    @include breakpoint-down("md") {
+      padding: spacing("md") spacing("md") spacing("lg");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("sm") spacing("sm") spacing("md");
+    }
   }
 
   &__header {
@@ -55,6 +110,14 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: spacing("lg");
+
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("md");
+    }
+
+    @include breakpoint-down("sm") {
+      margin-bottom: spacing("sm");
+    }
   }
 
   &__title {
@@ -62,6 +125,14 @@
     @include font-weight("semibold");
     color: color("neutral", "darkest");
     margin: 0;
+
+    @include breakpoint-down("md") {
+      @include font-size("lg");
+    }
+
+    @include breakpoint-down("sm") {
+      @include font-size("base");
+    }
   }
 
   &__closeButton {
@@ -80,6 +151,12 @@
     &:hover {
       background-color: color("neutral", "lighter");
     }
+
+    @include breakpoint-down("sm") {
+      width: 2.5rem;
+      height: 2.5rem;
+      font-size: 1.25rem;
+    }
   }
 
   &__footer {
@@ -88,6 +165,14 @@
     background: color("neutral", "white");
     border-top: 1px solid color("neutral", "lighter");
     margin-top: auto;
+
+    @include breakpoint-down("md") {
+      padding: spacing("md") spacing("md") spacing("lg");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("sm") spacing("sm") spacing("md");
+    }
   }
 
   &__footerLogo {
@@ -95,21 +180,54 @@
   }
 }
 
-// Mobile adjustments
-@include breakpoint-down("md") {
+// Mobile adjustments for all screen sizes
+@include breakpoint-down("xl") {
   .modalDrawer {
-    width: 280px;
-  }
-}
-
-@include breakpoint-down("sm") {
-  .modalDrawer {
-    width: 100%;
+    &--lg {
+      width: 40rem;
+    }
   }
 }
 
 @include breakpoint-down("lg") {
   .modalDrawer {
-    width: 35rem;
+    &--sm {
+      width: 18rem;
+    }
+    
+    &--md {
+      width: 28rem;
+    }
+    
+    &--lg {
+      width: 35rem;
+    }
+  }
+}
+
+@include breakpoint-down("md") {
+  .modalDrawer {
+    &--sm {
+      width: 16rem;
+    }
+    
+    &--md {
+      width: 24rem;
+    }
+    
+    &--lg {
+      width: 30rem;
+    }
+  }
+}
+
+@include breakpoint-down("sm") {
+  .modalDrawer {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    left: 0;
+    right: 0;
+    box-shadow: none;
+    border-radius: 0;
   }
 }

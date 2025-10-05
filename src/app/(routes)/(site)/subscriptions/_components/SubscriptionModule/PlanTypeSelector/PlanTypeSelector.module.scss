@@ -20,6 +20,16 @@
     background-color: color("neutral", "light");
     border-radius: border-radius("full");
     padding: 5px;
+
+    @include breakpoint-down("md") {
+      width: 200px;
+      height: 45px;
+    }
+
+    @include breakpoint-down("sm") {
+      width: 180px;
+      height: 40px;
+    }
   }
 
   &__option {
@@ -33,6 +43,10 @@
     position: relative;
     z-index: 2;
     transition: color 0.3s;
+
+    @include breakpoint-down("sm") {
+      font-size: map-get($font-sizes, "xs");
+    }
 
     &_active {
       color: #ffffff;
@@ -128,6 +142,16 @@
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: spacing("md");
     margin-bottom: spacing("sm");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: spacing("sm");
+    }
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr 1fr;
+      gap: spacing("xs");
+    }
   }
 
   &__pill {
@@ -146,6 +170,18 @@
     cursor: pointer;
     transition: $transition-base;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+    @include breakpoint-down("md") {
+      height: 35px;
+      min-width: 70px;
+      font-size: map-get($font-sizes, "xs");
+    }
+
+    @include breakpoint-down("sm") {
+      height: 30px;
+      min-width: 60px;
+      padding: 0 spacing("sm");
+    }
 
     &_active {
       background-color: color("primary", "dark");

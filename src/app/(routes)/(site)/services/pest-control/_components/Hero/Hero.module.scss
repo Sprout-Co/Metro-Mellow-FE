@@ -38,7 +38,7 @@
       padding: 0 spacing("md");
     }
     @include breakpoint-down("sm") {
-      padding: 0 spacing("sm");
+      padding-top: spacing("6xl");
     }
   }
 

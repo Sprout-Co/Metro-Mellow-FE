@@ -70,9 +70,10 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close dropdown when clicking outside
+  // Close desktop dropdown when clicking outside (disabled while mobile menu is open)
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      if (isMobileMenuOpen) return;
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
@@ -83,7 +84,32 @@ export default function Navbar() {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [isMobileMenuOpen]);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMobileMenuOpen) {
+        const mobileMenu = document.querySelector(`.${styles.navbar__mobileMenu}`);
+        const mobileToggle = document.querySelector(`.${styles.navbar__mobileToggle}`);
+        
+        if (
+          mobileMenu &&
+          !mobileMenu.contains(event.target as Node) &&
+          mobileToggle &&
+          !mobileToggle.contains(event.target as Node)
+        ) {
+          setIsMobileMenuOpen(false);
+          setActiveDropdown(null);
+        }
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [isMobileMenuOpen]);
 
   // Close mobile menu when route changes
   useEffect(() => {
@@ -91,13 +117,28 @@ export default function Navbar() {
     setActiveDropdown(null);
   }, [pathname]);
 
+  // Close mobile menu when escape key is pressed
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+        setActiveDropdown(null);
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener("keydown", handleEscapeKey);
+      return () => document.removeEventListener("keydown", handleEscapeKey);
+    }
+  }, [isMobileMenuOpen]);
+
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
     setActiveDropdown(null);
   };
 
   const toggleDropdown = (label: string) => {
-    setActiveDropdown(activeDropdown === label ? null : label);
+    setActiveDropdown((prev) => (prev === label ? null : label));
   };
 
   const isActive = (href: string) => {
@@ -252,33 +293,13 @@ export default function Navbar() {
                 <div className={styles.navbar__mobileHeader}>
                   <div className={styles.navbar__mobileLogo}>
                     <Image
-                      src="/images/brand/brand-logo/transparent-bg/green.png"
+                      src="/images/brand/brand-logo/transparent-bg/green-on-white.png"
                       alt="Metromellow"
-                      width={100}
-                      height={30}
+                      width={140}
+                      height={40}
                       className={styles.navbar__logo}
                     />
                   </div>
-                  <button
-                    className={styles.navbar__mobileClose}
-                    onClick={toggleMobileMenu}
-                    aria-label="Close menu"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
                 </div>
 
                 <nav className={styles.navbar__mobileNav}>
@@ -291,9 +312,15 @@ export default function Navbar() {
                         {item.hasDropdown ? (
                           <>
                             <button
+                              type="button"
                               className={`${styles.navbar__mobileLink} ${activeDropdown === item.label ? styles["navbar__mobileLink--open"] : ""}`}
-                              onClick={() => toggleDropdown(item.label)}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                toggleDropdown(item.label);
+                              }}
                               aria-expanded={activeDropdown === item.label}
+                              aria-controls={`mobile-submenu-${item.label}`}
                             >
                               {item.label}
                               <svg
@@ -315,6 +342,7 @@ export default function Navbar() {
                             <AnimatePresence>
                               {activeDropdown === item.label && (
                                 <motion.div
+                                  id={`mobile-submenu-${item.label}`}
                                   className={styles.navbar__mobileSubmenu}
                                   initial={{ height: 0, opacity: 0 }}
                                   animate={{ height: "auto", opacity: 1 }}
@@ -339,6 +367,10 @@ export default function Navbar() {
                                           className={
                                             styles.navbar__mobileSubmenuLink
                                           }
+                                          onClick={() => {
+                                            setActiveDropdown(null);
+                                            setIsMobileMenuOpen(false);
+                                          }}
                                         >
                                           <div
                                             className={
