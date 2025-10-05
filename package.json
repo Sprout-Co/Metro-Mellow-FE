@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.13.5",
+    "@paystack/inline-js": "^2.22.7",
     "@reduxjs/toolkit": "^2.8.2",
     "@types/js-cookie": "^3.0.6",
     "anthropic": "^0.0.0",
@@ -49,6 +50,7 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/jest": "^30.0.0",
     "@types/node": "^20",
+    "@types/paystack__inline-js": "^1.0.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/redux-persist": "^4.0.0",

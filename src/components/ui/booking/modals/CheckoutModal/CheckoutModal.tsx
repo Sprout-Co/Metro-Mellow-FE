@@ -11,6 +11,7 @@ import { Routes } from "@/constants/routes";
 import axios from "axios";
 import router from "next/router";
 import { usePayment } from "@/hooks/usePayment";
+import OrderSuccessModal from "../OrderSuccessModal/OrderSuccessModal";
 
 export interface CheckoutModalProps {
   isOpen: boolean;
@@ -50,6 +51,8 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     initializePayment,
     loading: paymentLoading,
     error: paymentError,
+    paymentSuccess,
+    paymentReference,
   } = usePayment();
   const [formData, setFormData] = useState<CheckoutFormData>({
     date: new Date(Date.now() + 24 * 60 * 60 * 1000)
@@ -513,6 +516,19 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
           </motion.div>
         </motion.div>
       </AnimatePresence>
+
+      {/* Order Success Modal */}
+      <OrderSuccessModal
+        isOpen={paymentSuccess}
+        onClose={() => {
+          // Reset payment success state and close modal
+          // You might want to add a reset function to usePayment hook
+          onClose();
+          window.location.reload();
+        }}
+        title="Payment Successful!"
+        message={`Your payment has been verified and your booking is confirmed. Payment reference: ${paymentReference}`}
+      />
     </Portal>
   );
 };
