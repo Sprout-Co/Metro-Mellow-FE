@@ -27,6 +27,7 @@ import {
   BookingStatus,
   Booking,
   PaymentStatus,
+  BillingStatus,
 } from "@/graphql/api";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 import RescheduleModal from "../RescheduleModal/RescheduleModal";
@@ -135,6 +136,26 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
   }
 
   const renderFooterButtons = () => {
+    // Check for payment status first
+    if (
+      booking.paymentStatus === PaymentStatus.Pending &&
+      booking.status !== BookingStatus.Cancelled
+    ) {
+      return (
+        <>
+          <motion.button
+            className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
+            onClick={onClose}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            Retry Payment
+          </motion.button>
+        </>
+      );
+    }
+
+    // Then check booking status
     switch (booking.status) {
       case BookingStatus.Paused:
         return (

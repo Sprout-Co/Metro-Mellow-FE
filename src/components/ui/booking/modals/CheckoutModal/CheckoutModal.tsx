@@ -143,7 +143,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
       if (data && data.authorizationUrl) {
         // 2. Redirect the user to the Paystack page to complete payment
         console.log("Redirecting to Paystack:", data.authorizationUrl);
-        window.open(data.authorizationUrl, "_blank");
+        window.location.href = data.authorizationUrl;
       } else {
         throw new Error("Could not retrieve payment URL.");
       }
