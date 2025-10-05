@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { PaymentStatus } from "@/graphql/api";
+import OrderSuccessModal from "@/components/ui/booking/modals/OrderSuccessModal/OrderSuccessModal";
+import { Routes } from "@/constants/routes";
 
 // type PaymentStatus = "verifying" | "success" | "failed" | "error";
 
@@ -61,12 +63,12 @@ export default function PaymentCallbackPage() {
               setStatus(PaymentStatus.Paid);
               setPaymentData(verifyResponse.data);
 
-              // Redirect to booking confirmation after 3 seconds
+              // Redirect to booking confirmation after 5 seconds
               setTimeout(() => {
                 router.push(
-                  `/dashboard/bookings?payment=success&reference=${paymentReference}`
+                  `${Routes.DASHBOARD_BOOKINGS}?payment=success&reference=${paymentReference}`
                 );
-              }, 3000);
+              }, 5000);
               break;
             case "FAILED":
             case "CANCELLED":
@@ -274,6 +276,16 @@ export default function PaymentCallbackPage() {
           </div>
         )}
       </div>
+      <OrderSuccessModal
+        isOpen={status === PaymentStatus.Paid}
+        onClose={() => {
+          router.push(
+            `${Routes.DASHBOARD_BOOKINGS}?payment=success&reference=${paymentData.reference}`
+          );
+        }}
+        title="Payment Successful"
+        message={`Your payment has been verified and your booking is confirmed`}
+      />
     </div>
   );
 }
