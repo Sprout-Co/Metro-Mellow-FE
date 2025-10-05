@@ -22,6 +22,8 @@ import {
   LaundryItemsInput,
   Severity,
   TreatmentType,
+  MealType,
+  ScheduleDays,
 } from "@/graphql/api";
 import OrderSuccessModal from "../OrderSuccessModal/OrderSuccessModal";
 import { useAppSelector } from "@/lib/redux/hooks";
@@ -36,6 +38,12 @@ export interface TreatmentArea {
   selected: boolean;
 }
 
+export interface MealOption {
+  id: string;
+  name: string;
+  count: number;
+}
+
 export interface ServiceConfiguration {
   apartmentType?: HouseType;
   roomQuantities?: RoomQuantitiesInput;
@@ -44,6 +52,9 @@ export interface ServiceConfiguration {
   severity?: Severity;
   treatmentType?: TreatmentType;
   areas?: TreatmentArea[];
+  mealType?: "basic" | "standard" | "premium";
+  deliveryFrequency?: "daily" | "weekly" | "monthly";
+  meals?: MealOption[];
 }
 
 export interface ServiceModalProps {
@@ -57,7 +68,7 @@ export interface ServiceModalProps {
   onOrderSubmit?: (configuration: ServiceConfiguration) => void;
   serviceOption?: ServiceOption;
   service: Service;
-  serviceType: "cleaning" | "laundry" | "pest-control";
+  serviceType: "cleaning" | "laundry" | "pest-control" | "cooking";
 }
 
 const ServiceModal: React.FC<ServiceModalProps> = ({
@@ -102,6 +113,15 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
     { id: "attic", name: "Attic", selected: false },
     { id: "garden", name: "Garden/Outdoor", selected: false },
     { id: "garage", name: "Garage", selected: false },
+  ]);
+  
+  // Cooking state
+  const [mealType, setMealType] = useState<"basic" | "standard" | "premium">("standard");
+  const [deliveryFrequency, setDeliveryFrequency] = useState<"daily" | "weekly" | "monthly">("daily");
+  const [meals, setMeals] = useState<MealOption[]>([
+    { id: "breakfast", name: "Breakfast", count: 1 },
+    { id: "lunch", name: "Lunch", count: 1 },
+    { id: "dinner", name: "Dinner", count: 1 },
   ]);
 
   // State for checkout modal and slide panel
@@ -155,6 +175,36 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
     return areas.filter((area) => area.selected).length;
   };
 
+  // Handle meal type change (for cooking)
+  const handleMealTypeChange = (type: "basic" | "standard" | "premium") => {
+    setMealType(type);
+  };
+
+  // Handle delivery frequency change (for cooking)
+  const handleDeliveryFrequencyChange = (frequency: "daily" | "weekly" | "monthly") => {
+    setDeliveryFrequency(frequency);
+  };
+
+  // Handle meal counter changes (for cooking)
+  const handleMealCounterChange = (mealId: string, increment: boolean) => {
+    setMeals((prev) =>
+      prev.map((meal) => {
+        if (meal.id === mealId) {
+          const newCount = increment
+            ? meal.count + 1
+            : Math.max(0, meal.count - 1);
+          return { ...meal, count: newCount };
+        }
+        return meal;
+      })
+    );
+  };
+
+  // Calculate total meal count (for cooking)
+  const getTotalMealCount = () => {
+    return meals.reduce((total, meal) => total + meal.count, 0);
+  };
+
   // Calculate total room count (for cleaning)
   const getTotalRoomCount = () => {
     return Object.values(roomQuantities).reduce(
@@ -173,6 +223,9 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
       severity,
       treatmentType,
       areas,
+      mealType,
+      deliveryFrequency,
+      meals,
     };
 
     console.log("configuration", configuration);
@@ -277,6 +330,41 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
       // Price calculation: base price * areas * type * severity
       totalPrice =
         service.price * selectedAreasCount * typeMultiplier * severityMultiplier;
+    } else if (serviceType === "cooking") {
+      // Calculate cooking pricing
+      const totalMeals = getTotalMealCount();
+
+      // Base price multiplier based on meal type
+      let typeMultiplier = 1;
+      switch (mealType) {
+        case "basic":
+          typeMultiplier = 1;
+          break;
+        case "standard":
+          typeMultiplier = 1.5;
+          break;
+        case "premium":
+          typeMultiplier = 2.5;
+          break;
+      }
+
+      // Frequency multiplier
+      let frequencyMultiplier = 1;
+      switch (deliveryFrequency) {
+        case "daily":
+          frequencyMultiplier = 1;
+          break;
+        case "weekly":
+          frequencyMultiplier = 7;
+          break;
+        case "monthly":
+          frequencyMultiplier = 30;
+          break;
+      }
+
+      // Price calculation: base price * meals * type * frequency
+      totalPrice =
+        service.price * totalMeals * typeMultiplier * frequencyMultiplier;
     }
 
     return totalPrice;
@@ -305,10 +393,12 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
           ? `Frequency` 
           : serviceType === "laundry" 
           ? `Laundry Type: ${LaundryType.StandardLaundry}, Bags: ${bags}`
-          : `Treatment Type: ${treatmentType}, Severity: ${severity}, Areas: ${areas
+          : serviceType === "pest-control"
+          ? `Treatment Type: ${treatmentType}, Severity: ${severity}, Areas: ${areas
               .filter((a) => a.selected)
               .map((a) => a.name)
-              .join(", ")}`,
+              .join(", ")}`
+          : `Meal Type: ${mealType}, Frequency: ${deliveryFrequency}, Meals: ${meals.map((m) => `${m.name}(${m.count})`).join(", ")}`,
         serviceDetails: {
           serviceOption: serviceOption.service_id,
           ...(serviceType === "cleaning" ? {
@@ -322,11 +412,21 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
               laundryType: serviceOption?.service_id as unknown as LaundryType,
               bags,
             },
-          } : {
+          } : serviceType === "pest-control" ? {
             pestControl: {
               treatmentType,
               severity,
               areas: areas.filter((area) => area.selected).map((area) => area.id),
+            },
+          } : {
+            cooking: {
+              mealType: mealType === "basic" ? MealType.Basic : MealType.Standard,
+              mealsPerDelivery: meals
+                .filter((meal) => meal.count > 0)
+                .map((meal) => ({
+                  count: meal.count,
+                  day: ScheduleDays.Monday, // Default to Monday, could be made configurable
+                })),
             },
           }),
         },
@@ -672,6 +772,146 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
                 </div>
               </>
             )}
+
+            {serviceType === "cooking" && (
+              <>
+                {/* Meal Type Selection */}
+                <div className={styles.section}>
+                  <h3 className={styles.sectionTitle}>Meal Type</h3>
+                  <div className={styles.mealTypeOptions}>
+                    <label
+                      className={`${styles.mealTypeOption} ${
+                        mealType === "basic" ? styles.selected : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="mealType"
+                        value="basic"
+                        checked={mealType === "basic"}
+                        onChange={() => handleMealTypeChange("basic")}
+                        className={styles.radioInput}
+                      />
+                      <span>Basic - Simple meals</span>
+                    </label>
+                    <label
+                      className={`${styles.mealTypeOption} ${
+                        mealType === "standard" ? styles.selected : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="mealType"
+                        value="standard"
+                        checked={mealType === "standard"}
+                        onChange={() => handleMealTypeChange("standard")}
+                        className={styles.radioInput}
+                      />
+                      <span>Standard - Balanced meals</span>
+                    </label>
+                    <label
+                      className={`${styles.mealTypeOption} ${
+                        mealType === "premium" ? styles.selected : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="mealType"
+                        value="premium"
+                        checked={mealType === "premium"}
+                        onChange={() => handleMealTypeChange("premium")}
+                        className={styles.radioInput}
+                      />
+                      <span>Premium - Gourmet meals</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Delivery Frequency */}
+                <div className={styles.section}>
+                  <h3 className={styles.sectionTitle}>Delivery Frequency</h3>
+                  <div className={styles.frequencyOptions}>
+                    <label
+                      className={`${styles.frequencyOption} ${
+                        deliveryFrequency === "daily" ? styles.selected : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="deliveryFrequency"
+                        value="daily"
+                        checked={deliveryFrequency === "daily"}
+                        onChange={() => handleDeliveryFrequencyChange("daily")}
+                        className={styles.radioInput}
+                      />
+                      <span>Daily</span>
+                    </label>
+                    <label
+                      className={`${styles.frequencyOption} ${
+                        deliveryFrequency === "weekly" ? styles.selected : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="deliveryFrequency"
+                        value="weekly"
+                        checked={deliveryFrequency === "weekly"}
+                        onChange={() => handleDeliveryFrequencyChange("weekly")}
+                        className={styles.radioInput}
+                      />
+                      <span>Weekly</span>
+                    </label>
+                    <label
+                      className={`${styles.frequencyOption} ${
+                        deliveryFrequency === "monthly" ? styles.selected : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="deliveryFrequency"
+                        value="monthly"
+                        checked={deliveryFrequency === "monthly"}
+                        onChange={() => handleDeliveryFrequencyChange("monthly")}
+                        className={styles.radioInput}
+                      />
+                      <span>Monthly</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Meal Selection */}
+                <div className={styles.section}>
+                  <h3 className={styles.sectionTitle}>Select Meals</h3>
+                  <div className={styles.mealsGrid}>
+                    {meals.map((meal) => (
+                      <div key={meal.id} className={styles.mealCounter}>
+                        <span className={styles.mealName}>{meal.name}</span>
+                        <div className={styles.counterControls}>
+                          <button
+                            className={styles.counterButton}
+                            onClick={() => handleMealCounterChange(meal.id, false)}
+                            aria-label={`Decrement ${meal.name}`}
+                          >
+                            -
+                          </button>
+                          <span className={styles.counterValue}>{meal.count}</span>
+                          <button
+                            className={styles.counterButton}
+                            onClick={() => handleMealCounterChange(meal.id, true)}
+                            aria-label={`Increment ${meal.name}`}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className={styles.totalMealsCount}>
+                    {getTotalMealCount()} meal(s) selected
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Order Button */}
@@ -687,7 +927,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
         isOpen={isCheckoutModalOpen}
         onClose={handleCheckoutClose}
         onCheckout={handleCheckoutComplete}
-        service_category={serviceType === "cleaning" ? "Cleaning" : serviceType === "laundry" ? "Laundry" : "Pest Control"}
+        service_category={serviceType === "cleaning" ? "Cleaning" : serviceType === "laundry" ? "Laundry" : serviceType === "pest-control" ? "Pest Control" : "Cooking"}
         submitting={isCreatingBooking}
         error={error}
         onClearError={() => setError(null)}
@@ -703,8 +943,8 @@ const ServiceModal: React.FC<ServiceModalProps> = ({
         servicePrice={servicePrice}
         serviceImage={serviceImage}
         apartmentType={serviceType === "cleaning" ? apartmentType : undefined}
-        roomCount={serviceType === "cleaning" ? getTotalRoomCount() : serviceType === "laundry" ? bags : getSelectedAreasCount()}
-        service_category={serviceType === "cleaning" ? "Cleaning" : serviceType === "laundry" ? "Laundry" : "Pest Control"}
+        roomCount={serviceType === "cleaning" ? getTotalRoomCount() : serviceType === "laundry" ? bags : serviceType === "pest-control" ? getSelectedAreasCount() : getTotalMealCount()}
+        service_category={serviceType === "cleaning" ? "Cleaning" : serviceType === "laundry" ? "Laundry" : serviceType === "pest-control" ? "Pest Control" : "Cooking"}
         includedFeatures={includedFeatures}
       />
 
