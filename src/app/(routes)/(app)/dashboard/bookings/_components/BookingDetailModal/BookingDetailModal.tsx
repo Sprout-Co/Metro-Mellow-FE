@@ -36,6 +36,7 @@ import ConfirmActionModal, {
 } from "../ConfirmActionModal/ConfirmActionModal";
 import FeedbackModal from "../FeedbackModal/FeedbackModal";
 import ModalDrawerHeader from "@/components/ui/ModalDrawer/ModalDrawerHeader/ModalDrawerHeader";
+import { usePayment } from "@/hooks/usePayment";
 
 interface BookingDetailModalProps {
   isOpen: boolean;
@@ -56,6 +57,8 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
   const [confirmationActionType, setConfirmationActionType] =
     useState<ActionType>(null);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const { initializePayment, loading: paymentLoading } = usePayment();
+
   if (!booking) return null;
 
   // Format date
@@ -135,6 +138,18 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
     }
   }
 
+  const handleRetryPayment = async () => {
+    try {
+      await initializePayment(
+        booking.id,
+        booking.totalPrice,
+        booking.customer?.email || ""
+      );
+    } catch (err) {
+      console.error("Payment retry failed:", err);
+    }
+  };
+
   const renderFooterButtons = () => {
     // Check for payment status first
     if (
@@ -145,11 +160,12 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
         <>
           <motion.button
             className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
-            onClick={onClose}
+            onClick={handleRetryPayment}
+            disabled={paymentLoading}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            Retry Payment
+            {paymentLoading ? "Processing..." : "Retry Payment"}
           </motion.button>
         </>
       );

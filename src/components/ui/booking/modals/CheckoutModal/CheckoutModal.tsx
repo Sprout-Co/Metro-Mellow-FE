@@ -10,6 +10,7 @@ import { usePaystackPayment } from "react-paystack";
 import { Routes } from "@/constants/routes";
 import axios from "axios";
 import router from "next/router";
+import { usePayment } from "@/hooks/usePayment";
 
 export interface CheckoutModalProps {
   isOpen: boolean;
@@ -45,6 +46,11 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
 }) => {
   // Form state management
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+  const {
+    initializePayment,
+    loading: paymentLoading,
+    error: paymentError,
+  } = usePayment();
   const [formData, setFormData] = useState<CheckoutFormData>({
     date: new Date(Date.now() + 24 * 60 * 60 * 1000)
       .toISOString()
@@ -121,37 +127,11 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     }));
   };
 
-  const initializePayment = async (bookingId: string) => {
-    // setLoading(true);
-    // setError(null);
-    let amount = 10000;
+  const handlePayment = async (bookingId: string) => {
     try {
-      const response = await axios.post(
-        "http://localhost:4000/api/paystack/initialize-payment",
-        {
-          email: user?.email,
-          amount: 10000, // Convert to kobo (e.g., 100 Naira = 10000 kobo)
-          bookingId, // TODO: Replace with actual booking ID
-          currency: "NGN",
-        }
-      );
-
-      const { data } = response.data;
-
-      console.log("Payment initialization response:", data);
-
-      if (data && data.authorizationUrl) {
-        // 2. Redirect the user to the Paystack page to complete payment
-        console.log("Redirecting to Paystack:", data.authorizationUrl);
-        window.location.href = data.authorizationUrl;
-      } else {
-        throw new Error("Could not retrieve payment URL.");
-      }
+      await initializePayment(bookingId, 10000, user?.email || "");
     } catch (err) {
-      console.error("Error initializing payment:", err);
-      alert("Failed to initiate payment. Please try again.");
-    } finally {
-      // setLoading(false);
+      console.error("Payment failed:", err);
     }
   };
 
@@ -159,7 +139,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onCheckout(formData, (bookingResponse: string) =>
-      initializePayment(bookingResponse)
+      handlePayment(bookingResponse)
     );
     // initializePayment();
   };
