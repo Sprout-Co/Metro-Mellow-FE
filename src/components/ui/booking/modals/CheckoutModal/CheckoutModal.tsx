@@ -71,16 +71,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   });
 
   const [isNewAddress, setIsNewAddress] = useState(!user?.addresses?.length);
-
-  // Paystack payment hook - moved to component top level
-  // const initializePaystackPayment = usePaystackPayment({
-  //   publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "",
-  //   email: user?.email || "",
-  //   amount: 10000, // Amount in kobo
-  // });
-
   // Set default address when component mounts or user changes
-
   React.useEffect(() => {
     if (user?.defaultAddress) {
       setFormData((prev) => ({
@@ -507,8 +498,9 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     size="lg"
                     fullWidth
                     className={styles.checkoutModal__continueButton}
+                    disabled={paymentLoading || submitting}
                   >
-                    {submitting ? "Hang on..." : "CONTINUE"}
+                    {submitting || paymentLoading ? "Hang on..." : "CONTINUE"}
                   </Button>
                 </div>
               </form>

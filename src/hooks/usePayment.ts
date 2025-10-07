@@ -1,90 +1,7 @@
 import { useState, useCallback } from "react";
 import axios from "axios";
 import PaystackPop from "@paystack/inline-js";
-
-// Utility function to verify payment on backend with polling
-const verifyPaymentWithPolling = async (
-  reference: string
-): Promise<{ success: boolean; status?: string; error?: string }> => {
-  // Polling configuration (same as verification page)
-  const maxAttempts = 30; // Maximum number of polling attempts
-  const pollInterval = 2000; // Poll every 2 seconds
-  const maxPollingTime = 60000; // Maximum polling time: 60 seconds
-
-  let attempts = 0;
-  const startTime = Date.now();
-
-  const pollPayment = async (): Promise<{
-    success: boolean;
-    status?: string;
-    error?: string;
-  }> => {
-    try {
-      attempts++;
-
-      // Check if we've exceeded maximum polling time
-      if (Date.now() - startTime > maxPollingTime) {
-        return { success: false, error: "Payment verification timeout" };
-      }
-
-      // Verify payment with your backend
-      const verifyResponse = await axios.get(
-        `http://localhost:4000/api/paystack/verify-payment/${reference}`
-      );
-
-      const paymentStatus = verifyResponse.data.data.status;
-
-      switch (paymentStatus) {
-        case "PAID":
-          return { success: true, status: paymentStatus };
-        case "FAILED":
-        case "CANCELLED":
-          return { success: false, status: paymentStatus };
-        case "PENDING":
-        case "PROCESSING":
-          // Payment is still processing, continue polling
-          if (attempts < maxAttempts) {
-            await new Promise((resolve) => setTimeout(resolve, pollInterval));
-            return pollPayment();
-          } else {
-            return {
-              success: false,
-              error: "Payment is taking longer than expected",
-            };
-          }
-        default:
-          // Unknown status, continue polling for a few more attempts
-          if (attempts < maxAttempts) {
-            await new Promise((resolve) => setTimeout(resolve, pollInterval));
-            return pollPayment();
-          } else {
-            return {
-              success: false,
-              error: "Payment verification failed with unknown status",
-            };
-          }
-      }
-    } catch (error) {
-      console.error("Payment verification error:", error);
-
-      // If it's a network error and we haven't exceeded max attempts, retry
-      if (attempts < maxAttempts && (error as any)?.code === "NETWORK_ERROR") {
-        await new Promise((resolve) => setTimeout(resolve, pollInterval));
-        return pollPayment();
-      } else {
-        return {
-          success: false,
-          error:
-            error instanceof Error
-              ? error.message
-              : "An unexpected error occurred during payment verification",
-        };
-      }
-    }
-  };
-
-  return pollPayment();
-};
+import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 
 interface BackendResponseData {
   authorizationUrl: string;
@@ -109,8 +26,96 @@ export const usePayment = (): UsePaymentReturn => {
   const [error, setError] = useState<string | null>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentReference, setPaymentReference] = useState<string | null>(null);
+  const { handleDeleteBooking } = useBookingOperations();
 
   const PAYSTACK_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
+
+  // Utility function to verify payment on backend with polling
+  const verifyPaymentWithPolling = async (
+    reference: string
+  ): Promise<{ success: boolean; status?: string; error?: string }> => {
+    // Polling configuration (same as verification page)
+    const maxAttempts = 30; // Maximum number of polling attempts
+    const pollInterval = 2000; // Poll every 2 seconds
+    const maxPollingTime = 60000; // Maximum polling time: 60 seconds
+
+    let attempts = 0;
+    const startTime = Date.now();
+
+    const pollPayment = async (): Promise<{
+      success: boolean;
+      status?: string;
+      error?: string;
+    }> => {
+      try {
+        attempts++;
+
+        // Check if we've exceeded maximum polling time
+        if (Date.now() - startTime > maxPollingTime) {
+          return { success: false, error: "Payment verification timeout" };
+        }
+
+        // Verify payment with your backend
+        const verifyResponse = await axios.get(
+          `http://localhost:4000/api/paystack/verify-payment/${reference}`
+        );
+
+        const paymentStatus = verifyResponse.data.data.status;
+
+        switch (paymentStatus) {
+          case "PAID":
+            return { success: true, status: paymentStatus };
+          case "FAILED":
+          case "CANCELLED":
+            return { success: false, status: paymentStatus };
+          case "PENDING":
+          case "PROCESSING":
+            // Payment is still processing, continue polling
+            if (attempts < maxAttempts) {
+              await new Promise((resolve) => setTimeout(resolve, pollInterval));
+              return pollPayment();
+            } else {
+              return {
+                success: false,
+                error: "Payment is taking longer than expected",
+              };
+            }
+          default:
+            // Unknown status, continue polling for a few more attempts
+            if (attempts < maxAttempts) {
+              await new Promise((resolve) => setTimeout(resolve, pollInterval));
+              return pollPayment();
+            } else {
+              return {
+                success: false,
+                error: "Payment verification failed with unknown status",
+              };
+            }
+        }
+      } catch (error) {
+        console.error("Payment verification error:", error);
+
+        // If it's a network error and we haven't exceeded max attempts, retry
+        if (
+          attempts < maxAttempts &&
+          (error as any)?.code === "NETWORK_ERROR"
+        ) {
+          await new Promise((resolve) => setTimeout(resolve, pollInterval));
+          return pollPayment();
+        } else {
+          return {
+            success: false,
+            error:
+              error instanceof Error
+                ? error.message
+                : "An unexpected error occurred during payment verification",
+          };
+        }
+      }
+    };
+
+    return pollPayment();
+  };
 
   const initializePayment = useCallback(
     async (bookingId: string, amountInNaira: number, email: string) => {
@@ -209,8 +214,19 @@ export const usePayment = (): UsePaymentReturn => {
 
           onCancel: async () => {
             console.log("Payment popup canceled by user");
-            setLoading(false);
-            // No need to verify if user explicitly canceled
+            try {
+              setLoading(true);
+              await handleDeleteBooking(bookingId);
+            } catch (err) {
+              console.error("Failed to delete booking after cancel:", err);
+              setError(
+                err instanceof Error
+                  ? err.message
+                  : "Failed to delete booking after cancellation"
+              );
+            } finally {
+              setLoading(false);
+            }
           },
         };
 
