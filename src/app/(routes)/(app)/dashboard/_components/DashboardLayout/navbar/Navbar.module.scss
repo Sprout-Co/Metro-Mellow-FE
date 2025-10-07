@@ -12,6 +12,7 @@
   z-index: z-index("sticky");
 
   &__container {
+    @include container;
     @include flex-between;
     height: 4.5rem; // 72px
     padding: spacing("sm") spacing("md");
@@ -19,40 +20,17 @@
     @include breakpoint-down("md") {
       padding: spacing("xs") spacing("sm");
     }
-
-    @include breakpoint-down("sm") {
-      padding: spacing("xs") spacing("xs");
-    }
   }
 
   // Logo styles
   &__logoContainer {
     @include flex-center;
     gap: spacing("sm");
-
-    @include breakpoint-down("sm") {
-      gap: spacing("xs");
-      margin-left: -spacing("xs");
-    }
   }
 
   &__logo {
     @include flex-center;
     text-decoration: none;
-
-    img {
-      width: 140px;
-      height: 35px;
-      object-fit: contain;
-    }
-
-    @include breakpoint-down("sm") {
-      img {
-        width: 145px !important;
-        height: 30px !important;
-        object-fit: contain;
-      }
-    }
   }
 
   &__logoText {
@@ -149,10 +127,6 @@
     @include breakpoint-down("lg") {
       gap: spacing("sm");
     }
-
-    @include breakpoint-down("sm") {
-      gap: spacing("xs");
-    }
   }
   &__iconButton {
     @include flex-center;
@@ -205,7 +179,7 @@
       @include breakpoint-down("sm") {
         width: 2rem;
         height: 2rem;
-        
+
         .bellIcon {
           width: 1rem;
           height: 1rem;
@@ -283,4 +257,51 @@
     transition: $transition-base;
   }
 
+  // Mobile menu button
+  &__menuButton {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: color("neutral", "darkest");
+    padding: spacing("xs");
+
+    @include breakpoint-down("md") {
+      display: block;
+    }
+  }
+
+  // Mobile menu
+  &__mobileMenu {
+    width: 100%;
+    background-color: color("neutral", "white");
+    border-top: 1px solid color("neutral", "light");
+    overflow: hidden;
+
+    @include breakpoint-up("md") {
+      display: none;
+    }
+  }
+
+  &__mobileMenuItem {
+    padding: spacing("md");
+    border-bottom: 1px solid color("neutral", "light");
+
+    a {
+      @include font-size("body-2");
+      text-decoration: none;
+      color: color("neutral", "darkest");
+      display: block;
+      width: 100%;
+    }
+
+    &--active {
+      background-color: color("neutral", "light");
+
+      a {
+        color: color("primary", "base");
+        @include font-weight("semibold");
+      }
+    }
+  }
 }

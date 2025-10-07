@@ -72,10 +72,6 @@
     @include font-weight("medium");
     @include font-size("sm");
 
-    @include breakpoint-down("sm") {
-      display: none;
-    }
-
     &:hover {
       background-color: color("primary", "dark");
       transform: translateY(-50%) translateX(-2px);

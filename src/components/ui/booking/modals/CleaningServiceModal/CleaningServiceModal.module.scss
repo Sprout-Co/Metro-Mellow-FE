@@ -148,16 +148,13 @@
 .apartmentTypeOption {
   flex: 1;
   min-width: 140px;
-  padding: spacing("lg") spacing("xl");
+  padding: spacing("md") spacing("lg");
   background: color("neutral", "lightest");
   border: 2px solid color("neutral", "lighter");
   border-radius: border-radius("lg");
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
-  display: flex;
-  align-items: center;
-  gap: spacing("sm");
 
   &:hover {
     border-color: color("primary", "light");
@@ -191,6 +188,7 @@
 }
 
 .radioInput {
+  margin-right: spacing("sm");
   width: 18px;
   height: 18px;
   border: 2px solid color("neutral", "medium");
@@ -291,158 +289,4 @@
   @include font-size("body-2");
   @include font-weight("bold");
   color: color("neutral", "darkest");
-}
-
-// Mobile Responsive Styles
-@include breakpoint-down("md") {
-  .modal {
-    &__container {
-      flex-direction: column;
-      min-height: auto;
-      max-height: 90vh;
-    }
-
-    &__detailsSection {
-      padding: spacing("lg");
-      max-height: none;
-    }
-
-    &__title {
-      @include font-size("h5");
-      text-align: center;
-    }
-
-    &__description {
-      @include font-size("body-1");
-      text-align: center;
-    }
-
-    &__priceSection {
-      margin: spacing("lg") 0;
-      padding: spacing("md");
-    }
-
-    &__price {
-      @include font-size("h6");
-    }
-
-    &__configurationSection {
-      padding-right: 0;
-      max-height: 60vh;
-      overflow-y: auto;
-    }
-  }
-
-  .section {
-    padding: spacing("md");
-    margin-bottom: spacing("md");
-  }
-
-  .apartmentTypeOptions {
-  flex-direction: column;
-  gap: spacing("sm");
-  width: 100%;
-  }
-
-  .apartmentTypeOption {
-  min-width: auto;
-  padding: spacing("lg") spacing("xl");
-  width: 100%;
-  }
-
-  .roomsGrid {
-    grid-template-columns: 1fr;
-    gap: spacing("sm");
-  }
-
-  .roomCounter {
-    padding: spacing("lg");
-  }
-
-  .counterButton {
-    width: 28px;
-    height: 28px;
-    font-size: font-size("sm");
-  }
-
-  .counterValue {
-    min-width: 25px;
-    @include font-size("sm");
-  }
-}
-
-@include breakpoint-down("sm") {
-  .modal {
-    &__container {
-      max-height: 95vh;
-    }
-
-    &__detailsSection {
-      padding: spacing("md");
-    }
-
-    &__title {
-      @include font-size("h6");
-    }
-
-    &__description {
-      @include font-size("small");
-    }
-
-    &__priceSection {
-      padding: spacing("sm");
-      margin: spacing("md") 0;
-    }
-
-    &__price {
-      @include font-size("body-1");
-    }
-
-    &__configurationSection {
-      max-height: 50vh;
-    }
-  }
-
-  .section {
-    padding: spacing("sm");
-    margin-bottom: spacing("sm");
-  }
-
-  .sectionTitle {
-    @include font-size("small");
-    margin-bottom: spacing("sm");
-  }
-
-  .apartmentTypeOptions {
-    width: 100%;
-  }
-
-  .apartmentTypeOption {
-    padding: spacing("md") spacing("lg");
-    width: 100%;
-    
-    span {
-      @include font-size("xs");
-    }
-  }
-
-  .roomCounter {
-    padding: spacing("md");
-    width: 100%;
-  }
-
-  .roomName {
-    @include font-size("xs");
-  }
-
-  .counterButton {
-    width: 24px;
-    height: 24px;
-    font-size: font-size("xs");
-  }
-
-  .counterValue {
-    min-width: 20px;
-    @include font-size("xs");
-  }
 }
