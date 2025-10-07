@@ -14,6 +14,10 @@ mutation CompleteBooking($id: ID!) {
   completeBooking(id: $id)
 }
 
+mutation DeleteBooking($id: ID!) {
+  deleteBooking(id: $id)
+}
+
 mutation AssignStaff($bookingId: ID!, $staffId: ID!) {
   assignStaff(bookingId: $bookingId, staffId: $staffId)
 }

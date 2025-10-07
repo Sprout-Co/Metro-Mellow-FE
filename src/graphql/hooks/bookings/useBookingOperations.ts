@@ -34,6 +34,7 @@ import {
   GetStaffBookingsDocument,
   useAddBookingFeedbackMutation,
   FeedbackInput,
+  useDeleteBookingMutation,
 } from "@/graphql/api";
 
 export const useBookingOperations = () => {
@@ -49,6 +50,7 @@ export const useBookingOperations = () => {
   const [updateBookingStatusMutation] = useUpdateBookingStatusMutation();
   const [rescheduleBookingMutation] = useRescheduleBookingMutation();
   const [addBookingFeedbackMutation] = useAddBookingFeedbackMutation();
+  const [deleteBookingMutation] = useDeleteBookingMutation();
   // Use lazy query hooks with data destructuring
   const [getBookingById, { data: bookingData }] = useGetBookingByIdLazyQuery();
   const [getBookings, { data: bookingsData }] = useGetBookingsLazyQuery();
@@ -166,6 +168,38 @@ export const useBookingOperations = () => {
       }
     },
     [cancelBookingMutation]
+  );
+
+  /**
+   * Deletes a booking
+   * @param id - Booking ID
+   * @returns Deletion result
+   * @throws Error if deletion fails
+   */
+  const handleDeleteBooking = useCallback(
+    async (id: string) => {
+      try {
+        const { data, errors } = await deleteBookingMutation({
+          variables: { id },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        // Refetch customer bookings to update the UI
+        await handleGetCustomerBookings();
+
+        return data?.deleteBooking;
+      } catch (error) {
+        console.error("Booking delete error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [deleteBookingMutation, handleGetCustomerBookings]
   );
 
   /**
@@ -399,6 +433,7 @@ export const useBookingOperations = () => {
     handleCreateBooking,
     handleUpdateBooking,
     handleCancelBooking,
+    handleDeleteBooking,
     handleCompleteBooking,
     handleRescheduleBooking,
     handleAddBookingFeedback,
