@@ -1,6 +1,7 @@
-@import "../../../../../../styles/abstracts/_variables.scss";
-@import "../../../../../../styles/abstracts/_mixins.scss";
-@import "../../../../../../styles/abstracts/_functions.scss";
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/animations";
 
 .teamCards {
   padding: spacing("6xl") 0;
@@ -21,7 +22,7 @@
   &__title {
     font-size: font-size("h2");
     font-weight: font-weight("bold");
-    color: color("primary", "base");
+    color: color("neutral", "black");
     margin-bottom: spacing("md");
     line-height: line-height("tight");
 
