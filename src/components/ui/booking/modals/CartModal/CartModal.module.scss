@@ -30,8 +30,9 @@
     @include breakpoint-down("md") {
       width: 100% !important;
       max-width: 100% !important;
-      margin-top: spacing("lg") !important;
-      margin-bottom: spacing("lg") !important;
+      margin-top: spacing("sm") !important;
+      margin-bottom: spacing("sm") !important;
+      border-radius: border-radius("lg");
     }
   }
 
@@ -39,12 +40,19 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
+    width: 100vw;
     padding: spacing("lg");
     background: color("primary", "base");
     margin: -(spacing("lg"));
     margin-bottom: spacing("lg");
     border-radius: border-radius("xl") border-radius("xl") 0 0;
+
+    @include breakpoint-down("md") {
+      margin: -(spacing("sm"));
+      margin-bottom: spacing("lg");
+      padding: spacing("md") spacing("sm");
+      border-radius: border-radius("lg") border-radius("lg") 0 0;
+    }
   }
 
   &__headerLeft {
@@ -86,6 +94,10 @@
     flex-direction: column;
     gap: spacing("md");
     padding: 0 spacing("lg") spacing("lg");
+
+    @include breakpoint-down("md") {
+      padding: 0 spacing("sm") spacing("lg");
+    }
   }
 
   &__empty {
@@ -117,8 +129,8 @@
     padding-right: spacing("xs");
 
     @include breakpoint-down("md") {
-      max-height: 50vh;
-      padding-right: 0;
+      // max-height: 50vh;
+     // padding-right: 0;
     }
 
     &::-webkit-scrollbar {
@@ -158,6 +170,9 @@
       flex-direction: column;
       align-items: flex-start;
       gap: spacing("md");
+      padding: spacing("lg");
+      margin: 0 -(spacing("xs"));
+      width: calc(100% + #{spacing("xs") * 2});
     }
   }
 
@@ -351,6 +366,11 @@
     background: color("neutral", "lightest");
     border-top: 2px solid color("neutral", "lighter");
     border-bottom: 2px solid color("neutral", "lighter");
+
+    @include breakpoint-down("md") {
+      padding: spacing("md");
+      margin: spacing("md") -(spacing("sm"));
+    }
   }
 
   &__subtotalLabel {
@@ -359,17 +379,29 @@
     color: color("neutral", "dark");
     text-transform: uppercase;
     letter-spacing: 0.5px;
+
+    @include breakpoint-down("md") {
+      @include font-size("body-3");
+    }
   }
 
   &__subtotalAmount {
     @include font-size("h5");
     @include font-weight("bold");
     color: color("primary", "base");
+
+    @include breakpoint-down("md") {
+      @include font-size("body-2");
+    }
   }
 
   &__footer {
     margin-top: spacing("lg");
     padding: 0 spacing("lg") spacing("lg");
+
+    @include breakpoint-down("md") {
+      padding: 0 spacing("sm") spacing("lg");
+    }
 
     button {
       width: 100%;
