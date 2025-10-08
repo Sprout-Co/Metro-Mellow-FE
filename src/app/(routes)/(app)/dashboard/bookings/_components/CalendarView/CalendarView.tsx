@@ -167,8 +167,9 @@ const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
   };
 
   // Format time
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString("en-US", {
+  const formatTime = (date: Date | string) => {
+    const dateObj = typeof date === "string" ? new Date(date) : date;
+    return dateObj.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "2-digit",
       hour12: true,
