@@ -34,35 +34,16 @@ const CartIcon = () => (
   </svg>
 );
 
-const MenuIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <line x1="3" y1="12" x2="21" y2="12"></line>
-    <line x1="3" y1="6" x2="21" y2="6"></line>
-    <line x1="3" y1="18" x2="21" y2="18"></line>
-  </svg>
-);
 
 interface NavbarProps {
   handleSidebarToggle: (collapsed: boolean) => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
   const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
   const [isNotificationDrawerOpen, setIsNotificationDrawerOpen] =
     useState(false);
-  const [activeTab, setActiveTab] = useState("overview");
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const openCartModal = () => {
@@ -149,36 +130,9 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
           >
             <Menu />
           </motion.div>
-
-          {/* Mobile Menu Button */}
-          <motion.button
-            className={styles.navbar__menuButton}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <MenuIcon />
-          </motion.button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className={styles.navbar__mobileMenu}>
-          {["overview", "services", "bookings", "history"].map((tab) => (
-            <div
-              key={tab}
-              className={`${styles.navbar__mobileMenuItem} ${activeTab === tab ? styles["navbar__mobileMenuItem--active"] : ""}`}
-              onClick={() => {
-                setActiveTab(tab);
-                setIsMenuOpen(false);
-              }}
-            >
-              <Link href={`/dashboard/${tab === "overview" ? "" : tab}`}>
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </Link>
-            </div>
-          ))}
-        </div>
-      )}
 
       <AddAddressModal
         isOpen={isAddAddressModalOpen}
