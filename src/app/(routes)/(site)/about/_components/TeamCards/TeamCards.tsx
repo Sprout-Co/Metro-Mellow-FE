@@ -18,57 +18,19 @@ interface TeamMember {
 const teamMembers: TeamMember[] = [
   {
     id: "1",
-    name: "Adebayo Ogunlesi",
+    name: "Jubril",
     role: "CEO & Co-Founder",
-    bio: "Former McKinsey consultant with 8 years in operations. Passionate about solving Lagos' service challenges through technology and human connection.",
-    image: "/images/team/ceo.jpg",
-    linkedin: "https://linkedin.com/in/adebayo-ogunlesi",
+    bio: "Passionate about solving Lagos' service challenges through technology and human connection.",
+    image: "/images/leadership/jubril.jpg",
     category: "leadership"
   },
   {
     id: "2",
-    name: "Fatima Ibrahim",
+    name: "Faruq",
     role: "COO & Co-Founder",
-    bio: "Ex-Amazon logistics expert who understands the complexity of Lagos operations. Leads our service delivery and quality assurance teams.",
-    image: "/images/team/coo.jpg",
-    linkedin: "https://linkedin.com/in/fatima-ibrahim",
+    bio: "Expert in operations and logistics. Leads our service delivery and quality assurance teams.",
+    image: "/images/leadership/faruq.jpg",
     category: "leadership"
-  },
-  {
-    id: "3",
-    name: "Chinedu Okonkwo",
-    role: "Head of Quality Assurance",
-    bio: "15 years in hospitality management across Lagos hotels. Ensures every professional meets our rigorous standards through comprehensive training programs.",
-    image: "/images/team/quality.jpg",
-    linkedin: "https://linkedin.com/in/chinedu-okonkwo",
-    category: "quality"
-  },
-  {
-    id: "4",
-    name: "Aisha Mohammed",
-    role: "Customer Experience Lead",
-    bio: "Former customer success manager at Jumia. Specializes in understanding Lagos families' unique needs and ensuring exceptional service delivery.",
-    image: "/images/team/customer.jpg",
-    linkedin: "https://linkedin.com/in/aisha-mohammed",
-    category: "customer"
-  },
-  {
-    id: "5",
-    name: "Emeka Nwosu",
-    role: "Operations Manager",
-    bio: "Logistics expert with deep knowledge of Lagos neighborhoods. Coordinates service delivery across Victoria Island, Ikoyi, Lekki, and mainland areas.",
-    image: "/images/team/operations.jpg",
-    linkedin: "https://linkedin.com/in/emeka-nwosu",
-    category: "operations"
-  },
-  {
-    id: "6",
-    name: "Tolu Adebayo",
-    role: "Technology Lead",
-    bio: "Full-stack developer and former Andela engineer. Builds the platform that connects Lagos families with trusted professionals seamlessly.",
-    image: "/images/team/tech.jpg",
-    linkedin: "https://linkedin.com/in/tolu-adebayo",
-    category: "operations"
   }
 ];
 
