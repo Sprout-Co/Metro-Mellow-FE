@@ -18,8 +18,16 @@
   flex-direction: column;
   backdrop-filter: blur(1px);
 
+  @include breakpoint-down("md") {
+    width: 100%;
+    right: 0;
+    left: 0;
+  }
+
   @include breakpoint-down("sm") {
     width: 100%;
+    right: 0;
+    left: 0;
   }
 
   &__overlay {
