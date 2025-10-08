@@ -260,6 +260,11 @@
   &__cta {
     margin-top: spacing("2xl");
 
+    @include breakpoint-down("lg") {
+      display: flex;
+      justify-content: center;
+    }
+
     @include breakpoint-down("sm") {
       margin-top: spacing("xl");
     }
