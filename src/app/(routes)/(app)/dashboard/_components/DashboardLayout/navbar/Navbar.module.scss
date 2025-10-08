@@ -26,11 +26,31 @@
   &__logoContainer {
     @include flex-center;
     gap: spacing("sm");
+
+    @include breakpoint-down("md") {
+      gap: spacing("xs");
+    }
   }
 
   &__logo {
     @include flex-center;
     text-decoration: none;
+  }
+
+  &__logoDesktop {
+    display: block;
+
+    @include breakpoint-down("md") {
+      display: none;
+    }
+  }
+
+  &__logoMobile {
+    display: none;
+
+    @include breakpoint-down("md") {
+      display: block;
+    }
   }
 
   &__logoText {
