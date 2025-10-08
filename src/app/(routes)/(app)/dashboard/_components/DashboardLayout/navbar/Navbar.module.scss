@@ -12,10 +12,10 @@
   z-index: z-index("sticky");
 
   &__container {
-    @include container;
     @include flex-between;
     height: 4.5rem; // 72px
     padding: spacing("sm") spacing("md");
+    width: 100%;
 
     @include breakpoint-down("md") {
       padding: spacing("xs") spacing("sm");
