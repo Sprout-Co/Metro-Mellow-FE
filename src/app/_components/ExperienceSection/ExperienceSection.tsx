@@ -26,7 +26,7 @@ const ExperienceSection: React.FC = () => {
             Home Services
           </h1>
           <p className={styles["experience-section__subtext"]}>
-            Join over 1,000+ satisfied Lagos families and professionals who trust us with their most important tasks. Vetted professionals, guaranteed satisfaction, and same-day service when you need it most.
+            Our vetted professionals is ready to serve families everywhere. With guaranteed satisfaction and same-day service when you need it most.
           </p>
           <CTAButton
             href={Routes.GET_STARTED}

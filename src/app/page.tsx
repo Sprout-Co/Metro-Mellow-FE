@@ -16,18 +16,18 @@ import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
 
 export const metadata = {
   title:
-    "Best Home Services in Lagos | Professional Cleaning, Laundry & Meal Delivery | Metromellow",
+    "Best Home Services | Professional Cleaning, Laundry & Meal Delivery | Metromellow",
   description:
-    "Trusted home services in Lagos: professional cleaning, laundry, fresh meal delivery & pest control. 1000+ satisfied customers. Same-day service available. Book online today!",
+    "Professional home services: cleaning, laundry, meal delivery & pest control. Trusted professionals ready to serve. Book your service today!",
   keywords:
-    "home services Lagos, professional cleaning Lagos, laundry service Lagos, meal delivery Lagos, pest control Lagos, house cleaning, food delivery, Metromellow, trusted home services",
+    "home services, professional cleaning, laundry service, meal delivery, pest control, house cleaning, food delivery, Metromellow, trusted home services",
   alternates: {
     canonical: "https://metromellow.com",
   },
   openGraph: {
-    title: "Best Home Services in Lagos | Professional Cleaning & More | Metromellow",
+    title: "Best Home Services | Professional Cleaning & More | Metromellow",
     description:
-      "Trusted home services in Lagos: professional cleaning, laundry, meal delivery & pest control. 1000+ satisfied customers. Book today!",
+      "Professional home services: cleaning, laundry, meal delivery & pest control. Trusted professionals ready to serve. Book your service today!",
     url: "https://metromellow.com",
     siteName: "Metromellow",
     locale: "en_NG",
@@ -43,9 +43,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Best Home Services in Lagos | Professional Cleaning & More | Metromellow",
+    title: "Best Home Services | Professional Cleaning & More | Metromellow",
     description:
-      "Trusted home services in Lagos: professional cleaning, laundry, meal delivery & pest control. 1000+ satisfied customers. Book today!",
+      "Professional home services: cleaning, laundry, meal delivery & pest control. Trusted professionals ready to serve. Book your service today!",
     images: ["/images/brand/brand-logo/solid-bg/green-bg.png"],
   },
   robots: {

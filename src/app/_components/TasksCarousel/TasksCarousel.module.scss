@@ -93,6 +93,7 @@
     color: color-alpha("neutral", "white", 0.9);
     max-width: 500px;
     text-align: center;
+    margin: 0 auto;
 
     @include breakpoint-down("md") {
       text-align: center;

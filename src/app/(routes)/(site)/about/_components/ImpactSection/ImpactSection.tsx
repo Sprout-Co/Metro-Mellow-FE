@@ -11,29 +11,28 @@ const ImpactSection: React.FC = () => {
   return (
     <section className={styles["impact-section"]}>
       <div className={styles["impact-section__container"]}>
-        <h2 className={styles["impact-section__heading"]}>Our impacts</h2>
+        <h2 className={styles["impact-section__heading"]}>Transforming Home Services</h2>
         <p className={styles["impact-section__description"]}>
-          We're the spark that turns your chaos into calm, the groove that gets
-          your life back in tune.
+          We're transforming how families manage their homes with trusted professionals. Our network is ready to serve with quality, reliability, and exceptional care.
         </p>
 
         <div className={styles["impact-section__stats"]}>
           <div className={styles["impact-section__stat-item"]}>
-            <div className={styles["impact-section__stat-number"]}>900+</div>
+            <div className={styles["impact-section__stat-number"]}>Now Live</div>
             <div className={styles["impact-section__stat-label"]}>
-              Project completed
+              Service Available
             </div>
           </div>
           <div className={styles["impact-section__stat-item"]}>
-            <div className={styles["impact-section__stat-number"]}>120+</div>
+            <div className={styles["impact-section__stat-number"]}>100+</div>
             <div className={styles["impact-section__stat-label"]}>
-              Hire hands
+              Vetted Professionals
             </div>
           </div>
           <div className={styles["impact-section__stat-item"]}>
-            <div className={styles["impact-section__stat-number"]}>20+</div>
+            <div className={styles["impact-section__stat-number"]}>24/7</div>
             <div className={styles["impact-section__stat-label"]}>
-              states availability
+              Customer Support
             </div>
           </div>
         </div>
@@ -50,7 +49,7 @@ const ImpactSection: React.FC = () => {
 
         <div className={styles["impact-section__cta"]}>
           <CTAButton href={Routes.GET_STARTED} size="lg" variant="primary">
-            JOIN OUR MISSION
+            Book Your Service
           </CTAButton>
         </div>
       </div>

@@ -3,6 +3,7 @@ import StorySection from "./_components/StorySection/StorySection";
 import VideoSection from "./_components/VideoSection/VideoSection";
 import ImpactSection from "./_components/ImpactSection/ImpactSection";
 import MagicHandsSection from "./_components/MagicHandsSection/MagicHandsSection";
+import TeamCards from "./_components/TeamCards/TeamCards";
 import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
 import styles from "./About.module.scss";
 import StructuredData from "@/components/common/SEO/StructuredData";
@@ -15,55 +16,55 @@ import {
 const aboutFaqs: FAQItem[] = [
   {
     id: "q1",
-    question: "Is my data safe?",
+    question: "How do you ensure the safety of my family and home in Lagos?",
     answer:
-      "Yes, your data security is our priority. We use industry-standard encryption and secure protocols to protect all your personal information. Our systems are regularly audited and we never share your data with third parties without your explicit consent.",
+      "Every professional undergoes comprehensive background checks, reference verification, and identity verification. We also provide insurance coverage and maintain detailed records of all service providers. Our professionals are trained in safety protocols and we conduct regular quality assessments to ensure your family's security.",
   },
   {
     id: "q2",
-    question: "Is there a free trial available?",
+    question: "Do you serve all areas of Lagos including mainland and island?",
     answer:
-      "Absolutely! We offer a risk-free 7-day trial for new customers to experience our services. This gives you the opportunity to see the Metromellow difference before committing to a regular service schedule.",
+      "Yes! We currently serve 25+ neighborhoods across Lagos including Victoria Island, Ikoyi, Lekki, Surulere, Yaba, Gbagada, and mainland areas. Our coverage is expanding monthly. Check our service area map or contact us to confirm availability in your specific location.",
   },
   {
     id: "q3",
-    question: "Is moneyback guaranteed?",
+    question: "Can I book services for my elderly parents who live in Lagos?",
     answer:
-      "Yes, we offer a 100% satisfaction guarantee. If you're not completely satisfied with our service, we'll make it right or refund your money. Simply notify us within 24 hours of service completion and we'll address your concerns immediately.",
+      "Absolutely! Many of our customers book services for their parents. We understand the cultural importance of caring for elderly family members. Our professionals are trained to work respectfully with elderly clients, and we can coordinate directly with your parents while keeping you updated on service delivery.",
   },
   {
     id: "q4",
-    question: "Can I order on behalf of someone?",
+    question: "How do you handle traditional Nigerian meals and cooking preferences?",
     answer:
-      "Yes, you can order our services as a gift or on behalf of someone else. Just provide their contact information during booking, and we'll coordinate directly with them for scheduling while keeping you updated throughout the process.",
+      "Our chefs are trained in both traditional Nigerian cuisine and international dishes. We can prepare jollof rice, egusi soup, pounded yam, and other local favorites just like your grandmother would make. We also accommodate dietary restrictions and cultural preferences for halal, vegetarian, or other specific requirements.",
   },
   {
     id: "q5",
-    question: "Is there a cancellation policy?",
+    question: "What happens during Lagos traffic or power outages?",
     answer:
-      "We understand plans change. You can cancel or reschedule your service up to 24 hours before the scheduled time with no penalty. Cancellations within 24 hours may incur a small fee to cover our scheduling and preparation costs.",
+      "We factor Lagos traffic into our scheduling and provide real-time updates if there are delays. For power outages, our professionals come equipped with backup solutions and can work around electricity challenges. We also offer flexible rescheduling if weather or infrastructure issues affect service delivery.",
   },
   {
     id: "q6",
-    question: "Is there a service guarantee?",
+    question: "How do you ensure quality service that meets Lagos standards?",
     answer:
-      "Absolutely. We guarantee the quality of all our services. If any service doesn't meet your expectations, we'll return to fix any issues at no additional cost. Our professional staff are trained to deliver consistent, high-quality results every time.",
+      "We understand Lagos residents have high standards for home services. Our professionals undergo rigorous training, quality assessments, and customer feedback reviews. We maintain a 4.8+ star rating and offer satisfaction guarantees. If any service doesn't meet your expectations, we'll return to fix it at no additional cost.",
   },
 ];
 
 export const metadata: Metadata = {
-  title: "About Us | Our Story & Mission | Metromellow Lagos",
+  title: "About Metromellow | Trusted Home Services Company in Lagos | Our Story",
   description:
-    "Discover Metromellow's journey to transform home services in Lagos through quality, reliability, and exceptional customer care. Learn about our mission and values.",
+    "Learn about Metromellow's mission to transform home services in Lagos. Meet our professional team, discover our story, and see how we're helping 1,000+ Lagos families reclaim their time.",
   keywords:
-    "Metromellow, about us, home services Lagos, company mission, company values, Lagos service provider",
+    "about Metromellow, home services company Lagos, professional cleaning team Lagos, trusted domestic help Lagos, Lagos service professionals, Metromellow team, company story Lagos",
   alternates: {
     canonical: "https://metromellow.com/about",
   },
   openGraph: {
-    title: "About Metromellow | Quality Home Services in Lagos",
+    title: "About Metromellow | Trusted Home Services Company in Lagos",
     description:
-      "Learn about our mission to transform home services in Lagos through quality, reliability & exceptional customer care.",
+      "Discover our story, meet our professional team, and learn how we're transforming home services for 1,000+ Lagos families with quality, reliability & exceptional care.",
     url: "https://metromellow.com/about",
     siteName: "Metromellow",
     locale: "en_NG",
@@ -136,8 +137,12 @@ export default function AboutPage() {
           <ImpactSection />
         </section>
 
-        <section id="our-team" aria-label="Our Professional Team">
+        {/* <section id="our-team" aria-label="Our Professional Team">
           <MagicHandsSection />
+        </section> */}
+
+        <section id="leadership-team" aria-label="Meet Our Leadership Team">
+          <TeamCards />
         </section>
 
         <section id="about-faqs" aria-label="Frequently Asked Questions">

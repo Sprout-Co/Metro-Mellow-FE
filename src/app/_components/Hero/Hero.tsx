@@ -123,7 +123,7 @@ const Hero: FC = () => {
             variants={textVariants}
           >
             <span className={styles["hero__title--accent"]}>Professional </span>
-            Home Services in Lagos
+            Home Services
           </motion.h1>
 
           <motion.p
@@ -161,7 +161,7 @@ const Hero: FC = () => {
             >
               pest control
             </Link>{" "}
-            across Lagos. Same-day service available.
+            Same-day service available.
           </motion.p>
 
           <motion.div

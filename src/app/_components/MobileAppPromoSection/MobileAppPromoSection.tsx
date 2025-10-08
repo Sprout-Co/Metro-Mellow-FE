@@ -14,7 +14,7 @@ const MobileAppPromoSection = () => {
             Book Services <br /> On-The-Go with <br /> Our Mobile App
           </h2>
           <p className={styles["app-promo__description"]}>
-            Get instant access to all our services with real-time tracking, push notifications, and exclusive app-only deals. Join 1,000+ Lagos residents who manage their home services effortlessly.
+            Get instant access to all our services with real-time tracking, push notifications, and exclusive app-only deals. Be among the first to experience effortless home service management.
           </p>
           <div className={styles["app-promo__buttons"]}>
             <Button variant="primary" size="lg" fullWidth={false}>
