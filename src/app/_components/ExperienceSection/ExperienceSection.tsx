@@ -21,13 +21,8 @@ const ExperienceSection: React.FC = () => {
         </div>
         <div className={styles["experience-section__content"]}>
           <h1 className={styles["experience-section__heading"]}>
-            Reclaim Your Time <br />
-            with Trusted <br />
-            Home Services
+            Professional home services that give you back your time. From cleaning to cooking, we make your life easier with trusted, reliable service.
           </h1>
-          <p className={styles["experience-section__subtext"]}>
-            Our network of vetted professionals is ready to serve families everywhere. With guaranteed satisfaction and same-day service when you need it most.
-          </p>
           <CTAButton
             href={Routes.GET_STARTED}
             size="lg"
