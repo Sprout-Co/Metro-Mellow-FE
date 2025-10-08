@@ -74,12 +74,20 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
         {/* Logo */}
         <div className={styles.navbar__logoContainer}>
           <Link href="/dashboard" className={styles.navbar__logo}>
-            <div>
+            <div className={styles.navbar__logoDesktop}>
               <Image
                 src="/images/brand/brand-logo/transparent-bg/green.png"
                 alt="Metromellow Logo"
                 width={150}
                 height={150}
+              />
+            </div>
+            <div className={styles.navbar__logoMobile}>
+              <Image
+                src="/images/brand/brand-logo/single-logo/primary.png"
+                alt="Metromellow Logo"
+                width={40}
+                height={40}
               />
             </div>
           </Link>
