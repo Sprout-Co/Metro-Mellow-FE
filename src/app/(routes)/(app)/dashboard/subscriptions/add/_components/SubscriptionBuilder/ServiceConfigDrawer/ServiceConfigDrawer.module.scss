@@ -1182,6 +1182,16 @@
     position: relative;
     overflow: hidden;
 
+    @include breakpoint-down("md") {
+      padding: spacing("lg");
+      margin-bottom: spacing("xl");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md");
+      margin-bottom: spacing("lg");
+    }
+
     &::before {
       content: "";
       position: absolute;
@@ -1209,6 +1219,10 @@
       gap: spacing("lg");
       text-align: center;
     }
+
+    @include breakpoint-down("sm") {
+      gap: spacing("md");
+    }
   }
 
   &__serviceIconLarge {
@@ -1221,6 +1235,17 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 
+    @include breakpoint-down("md") {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto;
+    }
+
+    @include breakpoint-down("sm") {
+      width: 48px;
+      height: 48px;
+    }
+
     &:hover {
       transform: scale(1.05) rotate(-2deg);
     }
@@ -1232,6 +1257,15 @@
       @include font-weight("bold");
       color: color("neutral", "darkest");
       margin: 0 0 spacing("xs") 0;
+
+      @include breakpoint-down("md") {
+        @include font-size("xl");
+        text-align: center;
+      }
+
+      @include breakpoint-down("sm") {
+        @include font-size("lg");
+      }
     }
 
     p {
@@ -1239,6 +1273,16 @@
       color: color("neutral", "dark");
       margin: 0 0 spacing("md") 0;
       line-height: line-height("relaxed");
+
+      @include breakpoint-down("md") {
+        text-align: center;
+        @include font-size("sm");
+      }
+
+      @include breakpoint-down("sm") {
+        @include font-size("xs");
+        margin: 0 0 spacing("sm") 0;
+      }
     }
   }
 
@@ -1275,6 +1319,12 @@
     @include breakpoint-down("md") {
       align-items: center;
       width: 100%;
+      padding: spacing("md");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("sm");
+      min-width: auto;
     }
 
     span {
@@ -1283,17 +1333,33 @@
       color: color("neutral", "dark");
       text-transform: uppercase;
       letter-spacing: 0.05em;
+
+      @include breakpoint-down("sm") {
+        @include font-size("xxs");
+      }
     }
 
     strong {
       @include font-size("2xl");
       @include font-weight("bold");
+
+      @include breakpoint-down("md") {
+        @include font-size("xl");
+      }
+
+      @include breakpoint-down("sm") {
+        @include font-size("lg");
+      }
     }
 
     small {
       @include font-size("xs");
       color: color("neutral", "dark");
       opacity: 0.8;
+
+      @include breakpoint-down("sm") {
+        @include font-size("xxs");
+      }
     }
   }
 
@@ -1302,6 +1368,17 @@
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: spacing("lg");
     margin-bottom: spacing("2xl");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+      gap: spacing("md");
+      margin-bottom: spacing("xl");
+    }
+
+    @include breakpoint-down("sm") {
+      gap: spacing("sm");
+      margin-bottom: spacing("lg");
+    }
   }
 
   &__configCard {
@@ -1312,6 +1389,14 @@
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+
+    @include breakpoint-down("md") {
+      padding: spacing("lg");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md");
+    }
 
     &::before {
       content: "";
@@ -1348,7 +1433,7 @@
     margin-bottom: spacing("lg");
 
     h5 {
-      @include font-size("lg");
+      @include font-size("base");
       @include font-weight("semibold");
       color: color("neutral", "darkest");
       margin: 0;
@@ -1377,18 +1462,20 @@
 
   &__packageDetails {
     h6 {
-      @include font-size("base");
+      @include font-size("sm");
       @include font-weight("semibold");
       color: color("neutral", "darkest");
       margin: 0 0 spacing("xs") 0;
     }
 
     p {
-      @include font-size("sm");
+      @include font-size("xs");
       color: color("neutral", "dark");
       margin: 0 0 spacing("md") 0;
       line-height: line-height("relaxed");
     }
+
+  
   }
 
   &__packagePrice {
@@ -1408,6 +1495,15 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: spacing("md");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+      gap: spacing("sm");
+    }
+
+    @include breakpoint-down("sm") {
+      gap: spacing("xs");
+    }
   }
 
   &__propertyItem {
@@ -1418,15 +1514,34 @@
     background: color("neutral", "lightest");
     border-radius: border-radius("lg");
 
+    @include breakpoint-down("md") {
+      padding: spacing("sm");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("xs");
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("xxs");
+    }
+
     span {
       @include font-size("sm");
       color: color("neutral", "dark");
+
+      @include breakpoint-down("sm") {
+        @include font-size("xs");
+      }
     }
 
     strong {
       @include font-size("sm");
       @include font-weight("semibold");
       color: color("neutral", "darkest");
+
+      @include breakpoint-down("sm") {
+        @include font-size("xs");
+      }
     }
   }
 
