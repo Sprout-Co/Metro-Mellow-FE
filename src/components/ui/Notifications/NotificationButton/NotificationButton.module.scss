@@ -233,20 +233,20 @@
   .dropdown {
     width: 320px;
     right: -5rem;
-
+      
     &::before {
       right: 5.5rem;
     }
   }
 }
 
-@media (max-width: 480px) {
-  .dropdown {
-    width: calc(100vw - 2rem);
-    right: -3.5rem;
+// @media (max-width: 480px) {
+//   .dropdown {
+//     width: calc(100vw - 2rem);
+//     right: -3.5rem;
 
-    &::before {
-      right: 4rem;
-    }
-  }
-}
+//     &::before {
+//       right: 4rem;
+//     }
+//   }
+// }
