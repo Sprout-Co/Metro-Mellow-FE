@@ -6,7 +6,6 @@ import Button from "../../../Button/Button";
 import styles from "./CheckoutModal.module.scss";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { AddressInput, TimeSlot } from "@/graphql/api";
-import { usePaystackPayment } from "react-paystack";
 import { Routes } from "@/constants/routes";
 import axios from "axios";
 import router from "next/router";
