@@ -16,18 +16,18 @@ import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
 
 export const metadata = {
   title:
-    "Professional Home Services in Lagos | Cleaning, Laundry & Meal Delivery | Metromellow",
+    "Best Home Services in Lagos | Professional Cleaning, Laundry & Meal Delivery | Metromellow",
   description:
-    "Top-rated cleaning, laundry, cooking & pest control services in Lagos. Save time with Metromellow's trusted home services. Book online today & enjoy same-day service!",
+    "Trusted home services in Lagos: professional cleaning, laundry, fresh meal delivery & pest control. 1000+ satisfied customers. Same-day service available. Book online today!",
   keywords:
-    "home services Lagos, cleaning services, laundry service, meal prep, pest control, house cleaning Lagos, food delivery Lagos, Metromellow",
+    "home services Lagos, professional cleaning Lagos, laundry service Lagos, meal delivery Lagos, pest control Lagos, house cleaning, food delivery, Metromellow, trusted home services",
   alternates: {
     canonical: "https://metromellow.com",
   },
   openGraph: {
-    title: "Professional Home Services in Lagos | Metromellow",
+    title: "Best Home Services in Lagos | Professional Cleaning & More | Metromellow",
     description:
-      "Top-rated cleaning, laundry & meal delivery services in Lagos. Book trusted professionals today!",
+      "Trusted home services in Lagos: professional cleaning, laundry, meal delivery & pest control. 1000+ satisfied customers. Book today!",
     url: "https://metromellow.com",
     siteName: "Metromellow",
     locale: "en_NG",
@@ -43,9 +43,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Professional Home Services in Lagos | Metromellow",
+    title: "Best Home Services in Lagos | Professional Cleaning & More | Metromellow",
     description:
-      "Top-rated cleaning, laundry & meal delivery services in Lagos. Book trusted professionals today!",
+      "Trusted home services in Lagos: professional cleaning, laundry, meal delivery & pest control. 1000+ satisfied customers. Book today!",
     images: ["/images/brand/brand-logo/solid-bg/green-bg.png"],
   },
   robots: {
@@ -185,33 +185,33 @@ export default function Home() {
   const faqItems: FAQItem[] = [
     {
       id: "1",
-      question: "How do I book home cleaning services in Lagos?",
+      question: "How do I book professional home cleaning services in Lagos?",
       answer:
-        "You can book our professional home cleaning services in Lagos by clicking the 'Book a Service' button on our website or by calling us directly. We offer same-day service for many neighborhoods across Lagos.",
+        "Booking is simple! Click 'Get Started Today' on our website, select your cleaning service, choose your preferred time, and our vetted professionals will arrive with all necessary supplies. We offer same-day service across Lagos with satisfaction guarantee.",
     },
     {
       id: "2",
-      question: "What laundry and dry cleaning services do you offer?",
+      question: "What laundry and dry cleaning services do you provide in Lagos?",
       answer:
-        "Our comprehensive laundry services include wash & fold, dry cleaning, ironing, stain removal, and garment repairs. We pick up and deliver throughout Lagos, with eco-friendly options available.",
+        "Our complete laundry service includes wash & fold, dry cleaning, ironing, stain removal, and garment repairs. We provide free pickup and delivery throughout Lagos using eco-friendly detergents. Professional care for all your clothing needs.",
     },
     {
       id: "3",
-      question: "Do you offer meal preparation and food delivery in Lagos?",
+      question: "Do you offer fresh meal delivery and cooking services in Lagos?",
       answer:
-        "Yes, our professional chefs prepare delicious meals with local and international cuisine options. We offer meal plans, one-time cooking services, and food delivery throughout Lagos with customizable dietary options.",
+        "Yes! Our professional chefs prepare nutritious meals from traditional Nigerian dishes to international cuisine. We offer daily meal plans, one-time cooking services, and fresh food delivery throughout Lagos with customizable dietary options and on-time delivery.",
     },
     {
       id: "4",
-      question: "How quickly can you respond to pest control emergencies?",
+      question: "How quickly can you respond to pest control emergencies in Lagos?",
       answer:
-        "Our pest control experts can respond to emergencies within 24 hours in most Lagos neighborhoods. We use safe, effective treatments for all types of pest issues and offer prevention plans to keep your home pest-free.",
+        "Our licensed pest control professionals can respond to emergencies within 24 hours across Lagos. We use safe, eco-friendly treatments for all pest issues and provide follow-up visits with warranty coverage to keep your home completely pest-free.",
     },
     {
       id: "5",
-      question: "Do you offer home service subscriptions or packages?",
+      question: "Do you offer home service packages and subscriptions in Lagos?",
       answer:
-        "Yes, we offer flexible subscription plans that combine our cleaning, laundry, cooking, and pest control services at discounted rates. Our packages can be customized to your specific needs and schedule in Lagos.",
+        "Yes! We offer flexible subscription plans that combine cleaning, laundry, cooking, and pest control services at discounted rates. Our packages are customizable to your specific needs and schedule, providing comprehensive home management solutions for Lagos residents.",
     },
   ];
   return (

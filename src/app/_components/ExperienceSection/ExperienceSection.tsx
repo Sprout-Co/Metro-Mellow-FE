@@ -21,13 +21,12 @@ const ExperienceSection: React.FC = () => {
         </div>
         <div className={styles["experience-section__content"]}>
           <h1 className={styles["experience-section__heading"]}>
-            Experience a <br />
-            life without <br />
-            hassle
+            Reclaim Your Time <br />
+            with Trusted <br />
+            Home Services
           </h1>
           <p className={styles["experience-section__subtext"]}>
-            We're the spark that turns your chaos into calm, the groove that
-            gets your life back in tune.
+            Join over 1,000+ satisfied Lagos families and professionals who trust us with their most important tasks. Vetted professionals, guaranteed satisfaction, and same-day service when you need it most.
           </p>
           <CTAButton
             href={Routes.GET_STARTED}
@@ -35,7 +34,7 @@ const ExperienceSection: React.FC = () => {
             variant="primary"
             animationType="vibrate"
           >
-            Book a service
+            Start Your Free Trial
           </CTAButton>
         </div>
       </div>

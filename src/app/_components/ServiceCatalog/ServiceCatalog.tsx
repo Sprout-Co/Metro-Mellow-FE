@@ -152,28 +152,28 @@ const ServiceCatalog: FC = () => {
   const getCategoryConfig = (category: ServiceCategory) => {
     const categoryConfig = {
       [ServiceCategory.Cooking]: {
-        title: "Our Delicacies",
+        title: "Fresh Meal Delivery",
         subtitle:
-          "Explore our menu of delicious meals prepared with fresh ingredients",
+          "Nutritious meals prepared by professional chefs. Traditional Nigerian dishes to international cuisine, delivered fresh to your door.",
       },
       [ServiceCategory.Cleaning]: {
-        title: "Cleaning Services",
+        title: "Professional House Cleaning",
         subtitle:
-          "Professional cleaning services to keep your space spotless and fresh",
+          "Deep cleaning, regular maintenance, and move-in services. Vetted professionals with quality supplies and satisfaction guarantee.",
       },
       [ServiceCategory.PestControl]: {
-        title: "Pest Control Solutions",
+        title: "Safe Pest Control Services",
         subtitle:
-          "Effective pest control treatments for a pest-free environment",
+          "Licensed professionals using eco-friendly treatments. Effective pest elimination for homes and offices with warranty coverage.",
       },
       [ServiceCategory.Laundry]: {
-        title: "Laundry Services",
+        title: "Complete Laundry Service",
         subtitle:
-          "Quality laundry services to keep your clothes looking their best",
+          "Wash, fold, iron, and dry cleaning services. Professional care with free pickup and delivery across Lagos.",
       },
       [ServiceCategory.Errands]: {
-        title: "Errand Services",
-        subtitle: "Convenient errand services to save you time and effort",
+        title: "Convenient Errand Services",
+        subtitle: "Professional errand services to save you time and effort across Lagos",
       },
     };
 
@@ -566,9 +566,9 @@ const ServiceCatalog: FC = () => {
     <section className={styles.catalog}>
       <div className={styles.catalog__container}>
         <div className={styles.catalog__header}>
-          <h2 className={styles.catalog__title}>Our catalog</h2>
+          <h2 className={styles.catalog__title}>Professional Home Services in Lagos</h2>
           <p className={styles.catalog__subtitle}>
-            Select your need and wait for the magic.
+            Choose from our comprehensive range of trusted services. Professional quality, guaranteed satisfaction, and same-day availability across Lagos.
           </p>
         </div>
 

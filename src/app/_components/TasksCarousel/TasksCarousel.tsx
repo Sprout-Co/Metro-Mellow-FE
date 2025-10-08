@@ -22,59 +22,60 @@ const taskCards: TaskCard[] = [
     id: "cleaning",
     title: (
       <>
-        No need to sweat –<br />
-        we've got your cleaning too
+        Professional House Cleaning
+        <br />
+        That Actually Works
       </>
     ),
-    description: "Get professionals to cater for your home.",
+    description: "Deep cleaning, regular maintenance, and move-in services. Vetted professionals with quality supplies and satisfaction guarantee.",
     colorClass: "cleaning",
     icon: "/images/icons/cleaning-supplies.svg",
-    ctaText: "Book Now",
+    ctaText: "Book Cleaning",
     route: Routes.SERVICES,
   },
   {
     id: "food",
     title: (
       <>
-        Keep a good eating routine
+        Fresh, Nutritious Meals
         <br />
-        with quality meals
+        Delivered Daily
       </>
     ),
-    description: "Set reminders, confirm and we deliver home.",
+    description: "Professional chefs prepare delicious meals from traditional Nigerian dishes to international cuisine. Fresh ingredients, delivered on time.",
     colorClass: "food",
     icon: "/images/icons/food-bowl.svg",
-    ctaText: "Order Now",
+    ctaText: "Order Meals",
     route: Routes.SERVICES,
   },
   {
     id: "laundry",
     title: (
       <>
-        Go about your business,
+        Complete Laundry Service
         <br />
-        we'll handle your laundry
+        Pickup to Delivery
       </>
     ),
-    description: "Your time is precious. Let us take care of the washing.",
+    description: "Wash, fold, iron, and dry cleaning services. Professional care for your clothes with free pickup and delivery across Lagos.",
     colorClass: "laundry",
     icon: "/images/icons/laundry-basket.svg",
-    ctaText: "Book Now",
+    ctaText: "Book Laundry",
     route: Routes.SERVICES,
   },
   {
     id: "pest",
     title: (
       <>
-        Keep pests away with
+        Safe, Effective Pest Control
         <br />
-        professional treatment
+        Licensed Professionals
       </>
     ),
-    description: "Safe and effective pest control for your peace of mind.",
+    description: "Eco-friendly pest elimination for homes and offices. Licensed professionals with follow-up visits and warranty on all treatments.",
     colorClass: "pest",
     icon: "/images/icons/pest-spray.svg",
-    ctaText: "Book Now",
+    ctaText: "Book Service",
     route: Routes.SERVICES,
   },
 ];
@@ -174,8 +175,8 @@ const TasksCarousel: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              Don't waste time {/* <br /> */}
-              on tasks we can handle
+              Focus on What Matters <br />
+              We Handle the Rest
             </motion.h2>
             <motion.p
               className={styles["tasks-carousel__subtitle"]}
@@ -184,7 +185,7 @@ const TasksCarousel: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              Focus on what matters most while we take care of your daily chores
+              Professional home services that give you back your time. From cleaning to cooking, we make your life easier with trusted, reliable service.
             </motion.p>
           </div>
           <motion.div
