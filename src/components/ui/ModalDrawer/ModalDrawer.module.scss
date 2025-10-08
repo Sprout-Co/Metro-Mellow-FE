@@ -17,6 +17,9 @@
   // padding: spacing("lg") spacing("lg") spacing("xl");
   display: flex;
   flex-direction: column;
+  // Ensure proper mobile behavior
+  max-width: 100vw;
+  max-height: 100vh;
 
   &--sm {
     width: 25rem;
@@ -95,21 +98,40 @@
   }
 }
 
-// Mobile adjustments
+// Mobile adjustments - ordered from largest to smallest
+@include breakpoint-down("lg") {
+  .modalDrawer {
+    width: 35rem;
+  }
+}
+
 @include breakpoint-down("md") {
   .modalDrawer {
-    width: 280px;
+    width: 100%;
+    right: 0;
+    left: 0;
+    // Ensure proper mobile positioning
+    transform: none;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
   }
 }
 
 @include breakpoint-down("sm") {
   .modalDrawer {
     width: 100%;
-  }
-}
-
-@include breakpoint-down("lg") {
-  .modalDrawer {
-    width: 35rem;
+    right: 0;
+    left: 0;
+    // Ensure proper mobile positioning
+    transform: none;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    
+    // Improve mobile content spacing
+    &__content {
+      padding: spacing("md");
+    }
+    
+    &__footer {
+      padding: spacing("md");
+    }
   }
 }
