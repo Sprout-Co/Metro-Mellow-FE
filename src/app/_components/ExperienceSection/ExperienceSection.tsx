@@ -26,7 +26,7 @@ const ExperienceSection: React.FC = () => {
             Home Services
           </h1>
           <p className={styles["experience-section__subtext"]}>
-            Our vetted professionals is ready to serve families everywhere. With guaranteed satisfaction and same-day service when you need it most.
+            Our network of vetted professionals is ready to serve families everywhere. With guaranteed satisfaction and same-day service when you need it most.
           </p>
           <CTAButton
             href={Routes.GET_STARTED}
