@@ -142,35 +142,12 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
             <Menu />
           </motion.div>
 
-          {/* Mobile Menu Button */}
-          <motion.button
-            className={styles.navbar__menuButton}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <MenuIcon />
-          </motion.button>
+
+ 
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className={styles.navbar__mobileMenu}>
-          {["overview", "services", "bookings", "history"].map((tab) => (
-            <div
-              key={tab}
-              className={`${styles.navbar__mobileMenuItem} ${activeTab === tab ? styles["navbar__mobileMenuItem--active"] : ""}`}
-              onClick={() => {
-                setActiveTab(tab);
-                setIsMenuOpen(false);
-              }}
-            >
-              <Link href={`/dashboard/${tab === "overview" ? "" : tab}`}>
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </Link>
-            </div>
-          ))}
-        </div>
-      )}
+  
 
       <AddAddressModal
         isOpen={isAddAddressModalOpen}
