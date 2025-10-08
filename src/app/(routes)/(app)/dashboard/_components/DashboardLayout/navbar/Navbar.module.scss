@@ -12,10 +12,10 @@
   z-index: z-index("sticky");
 
   &__container {
+    @include container;
     @include flex-between;
     height: 4.5rem; // 72px
     padding: spacing("sm") spacing("md");
-    width: 100%;
 
     @include breakpoint-down("md") {
       padding: spacing("xs") spacing("sm");
@@ -26,31 +26,11 @@
   &__logoContainer {
     @include flex-center;
     gap: spacing("sm");
-
-    @include breakpoint-down("md") {
-      gap: spacing("xs");
-    }
   }
 
   &__logo {
     @include flex-center;
     text-decoration: none;
-  }
-
-  &__logoDesktop {
-    display: block;
-
-    @include breakpoint-down("md") {
-      display: none;
-    }
-  }
-
-  &__logoMobile {
-    display: none;
-
-    @include breakpoint-down("md") {
-      display: block;
-    }
   }
 
   &__logoText {
@@ -277,4 +257,51 @@
     transition: $transition-base;
   }
 
+  // Mobile menu button
+  &__menuButton {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: color("neutral", "darkest");
+    padding: spacing("xs");
+
+    @include breakpoint-down("md") {
+      display: block;
+    }
+  }
+
+  // Mobile menu
+  &__mobileMenu {
+    width: 100%;
+    background-color: color("neutral", "white");
+    border-top: 1px solid color("neutral", "light");
+    overflow: hidden;
+
+    @include breakpoint-up("md") {
+      display: none;
+    }
+  }
+
+  &__mobileMenuItem {
+    padding: spacing("md");
+    border-bottom: 1px solid color("neutral", "light");
+
+    a {
+      @include font-size("body-2");
+      text-decoration: none;
+      color: color("neutral", "darkest");
+      display: block;
+      width: 100%;
+    }
+
+    &--active {
+      background-color: color("neutral", "light");
+
+      a {
+        color: color("primary", "base");
+        @include font-weight("semibold");
+      }
+    }
+  }
 }
