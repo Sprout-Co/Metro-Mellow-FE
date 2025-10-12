@@ -111,16 +111,32 @@ export type Billing = {
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  payment?: Maybe<Payment>;
   paymentDate?: Maybe<Scalars['DateTime']['output']>;
+  paystackReference?: Maybe<Scalars['String']['output']>;
+  periodEndDate: Scalars['DateTime']['output'];
+  periodStartDate: Scalars['DateTime']['output'];
   status: BillingStatus;
   subscription: Subscription;
   updatedAt: Scalars['DateTime']['output'];
+  user: User;
 };
 
 export enum BillingCycle {
   Monthly = 'MONTHLY',
   Quarterly = 'QUARTERLY'
 }
+
+export type BillingStats = {
+  __typename?: 'BillingStats';
+  cancelled: Scalars['Int']['output'];
+  failed: Scalars['Int']['output'];
+  paid: Scalars['Int']['output'];
+  paidAmount: Scalars['Float']['output'];
+  pending: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
+  totalAmount: Scalars['Float']['output'];
+};
 
 export enum BillingStatus {
   Cancelled = 'CANCELLED',
@@ -1010,6 +1026,10 @@ export type Query = {
   _?: Maybe<Scalars['Boolean']['output']>;
   adminInvitation?: Maybe<AdminInvitation>;
   availableStaff: Array<StaffProfile>;
+  billing?: Maybe<Billing>;
+  billingStats: BillingStats;
+  billingsByStatus: Array<Billing>;
+  billingsDueToday: Array<Billing>;
   booking?: Maybe<Booking>;
   bookings: Array<Booking>;
   customerBookings: Array<Booking>;
@@ -1022,10 +1042,13 @@ export type Query = {
   notification?: Maybe<Notification>;
   notificationStats: NotificationStats;
   notifications: NotificationConnection;
+  overdueBillings: Array<Billing>;
+  paidBillings: Array<Billing>;
   payment: Payment;
   paymentMethods: Array<PaymentMethod>;
   payments: Array<Payment>;
   pendingAdminInvitations: Array<AdminInvitation>;
+  pendingBillings: Array<Billing>;
   service?: Maybe<Service>;
   services: Array<Service>;
   staffBookings: Array<Booking>;
@@ -1033,10 +1056,13 @@ export type Query = {
   staffProfile?: Maybe<StaffProfile>;
   staffProfiles: Array<StaffProfile>;
   subscription?: Maybe<Subscription>;
+  subscriptionBillings: Array<Billing>;
+  subscriptionBillingsByStatus: Array<Billing>;
   subscriptionService?: Maybe<SubscriptionService>;
   subscriptions: Array<Subscription>;
   unreadNotificationCount: Scalars['Int']['output'];
   user?: Maybe<User>;
+  userBillings: Array<Billing>;
   users: Array<User>;
 };
 
@@ -1049,6 +1075,21 @@ export type QueryAdminInvitationArgs = {
 export type QueryAvailableStaffArgs = {
   date: Scalars['DateTime']['input'];
   serviceCategory: ServiceCategory;
+};
+
+
+export type QueryBillingArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryBillingStatsArgs = {
+  subscriptionId: Scalars['ID']['input'];
+};
+
+
+export type QueryBillingsByStatusArgs = {
+  status: BillingStatus;
 };
 
 
@@ -1088,6 +1129,11 @@ export type QueryNotificationsArgs = {
 };
 
 
+export type QueryPaidBillingsArgs = {
+  subscriptionId: Scalars['ID']['input'];
+};
+
+
 export type QueryPaymentArgs = {
   id: Scalars['ID']['input'];
 };
@@ -1095,6 +1141,11 @@ export type QueryPaymentArgs = {
 
 export type QueryPaymentsArgs = {
   status?: InputMaybe<PaymentStatus>;
+};
+
+
+export type QueryPendingBillingsArgs = {
+  subscriptionId: Scalars['ID']['input'];
 };
 
 
@@ -1126,6 +1177,17 @@ export type QueryStaffProfilesArgs = {
 
 export type QuerySubscriptionArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QuerySubscriptionBillingsArgs = {
+  subscriptionId: Scalars['ID']['input'];
+};
+
+
+export type QuerySubscriptionBillingsByStatusArgs = {
+  status: BillingStatus;
+  subscriptionId: Scalars['ID']['input'];
 };
 
 
@@ -2055,6 +2117,25 @@ export type GetUsersQueryVariables = Exact<{
 
 
 export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label?: string | null } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null } | null> | null }> };
+
+export type GetSubscriptionBillingsQueryVariables = Exact<{
+  subscriptionId: Scalars['ID']['input'];
+}>;
+
+
+export type GetSubscriptionBillingsQuery = { __typename?: 'Query', subscriptionBillings: Array<{ __typename?: 'Billing', id: string, amount: number, status: BillingStatus, billingDate: any, paymentDate?: any | null, description?: string | null, cancellationDate?: any | null, cancellationReason?: string | null, createdAt: any, updatedAt: any, periodStartDate: any, periodEndDate: any, paystackReference?: string | null, payment?: { __typename?: 'Payment', id: string, amount: number, currency: string, status: PaymentStatus, refundAmount?: number | null, refundReason?: string | null, metadata?: any | null, createdAt: any, updatedAt: any } | null }> };
+
+export type GetBillingStatsQueryVariables = Exact<{
+  subscriptionId: Scalars['ID']['input'];
+}>;
+
+
+export type GetBillingStatsQuery = { __typename?: 'Query', billingStats: { __typename?: 'BillingStats', total: number, paid: number, pending: number, failed: number, totalAmount: number, paidAmount: number } };
+
+export type GetUserBillingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserBillingsQuery = { __typename?: 'Query', userBillings: Array<{ __typename?: 'Billing', id: string, amount: number, status: BillingStatus, billingDate: any, paymentDate?: any | null, description?: string | null, cancellationDate?: any | null, cancellationReason?: string | null, createdAt: any, updatedAt: any, periodStartDate: any, periodEndDate: any, paystackReference?: string | null, payment?: { __typename?: 'Payment', id: string, amount: number, currency: string, status: PaymentStatus, refundAmount?: number | null, refundReason?: string | null, metadata?: any | null, createdAt: any, updatedAt: any } | null }> };
 
 export type GetBookingsQueryVariables = Exact<{
   status?: InputMaybe<BookingStatus>;
@@ -5060,6 +5141,176 @@ export type GetUsersQueryHookResult = ReturnType<typeof useGetUsersQuery>;
 export type GetUsersLazyQueryHookResult = ReturnType<typeof useGetUsersLazyQuery>;
 export type GetUsersSuspenseQueryHookResult = ReturnType<typeof useGetUsersSuspenseQuery>;
 export type GetUsersQueryResult = Apollo.QueryResult<GetUsersQuery, GetUsersQueryVariables>;
+export const GetSubscriptionBillingsDocument = gql`
+    query GetSubscriptionBillings($subscriptionId: ID!) {
+  subscriptionBillings(subscriptionId: $subscriptionId) {
+    id
+    amount
+    status
+    billingDate
+    paymentDate
+    description
+    cancellationDate
+    cancellationReason
+    createdAt
+    updatedAt
+    periodStartDate
+    periodEndDate
+    paystackReference
+    payment {
+      id
+      amount
+      currency
+      status
+      refundAmount
+      refundReason
+      metadata
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetSubscriptionBillingsQuery__
+ *
+ * To run a query within a React component, call `useGetSubscriptionBillingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSubscriptionBillingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSubscriptionBillingsQuery({
+ *   variables: {
+ *      subscriptionId: // value for 'subscriptionId'
+ *   },
+ * });
+ */
+export function useGetSubscriptionBillingsQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetSubscriptionBillingsQuery, GetSubscriptionBillingsQueryVariables> & ({ variables: GetSubscriptionBillingsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetSubscriptionBillingsQuery, GetSubscriptionBillingsQueryVariables>(GetSubscriptionBillingsDocument, options);
+      }
+export function useGetSubscriptionBillingsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetSubscriptionBillingsQuery, GetSubscriptionBillingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetSubscriptionBillingsQuery, GetSubscriptionBillingsQueryVariables>(GetSubscriptionBillingsDocument, options);
+        }
+export function useGetSubscriptionBillingsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetSubscriptionBillingsQuery, GetSubscriptionBillingsQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetSubscriptionBillingsQuery, GetSubscriptionBillingsQueryVariables>(GetSubscriptionBillingsDocument, options);
+        }
+export type GetSubscriptionBillingsQueryHookResult = ReturnType<typeof useGetSubscriptionBillingsQuery>;
+export type GetSubscriptionBillingsLazyQueryHookResult = ReturnType<typeof useGetSubscriptionBillingsLazyQuery>;
+export type GetSubscriptionBillingsSuspenseQueryHookResult = ReturnType<typeof useGetSubscriptionBillingsSuspenseQuery>;
+export type GetSubscriptionBillingsQueryResult = Apollo.QueryResult<GetSubscriptionBillingsQuery, GetSubscriptionBillingsQueryVariables>;
+export const GetBillingStatsDocument = gql`
+    query GetBillingStats($subscriptionId: ID!) {
+  billingStats(subscriptionId: $subscriptionId) {
+    total
+    paid
+    pending
+    failed
+    totalAmount
+    paidAmount
+  }
+}
+    `;
+
+/**
+ * __useGetBillingStatsQuery__
+ *
+ * To run a query within a React component, call `useGetBillingStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBillingStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBillingStatsQuery({
+ *   variables: {
+ *      subscriptionId: // value for 'subscriptionId'
+ *   },
+ * });
+ */
+export function useGetBillingStatsQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetBillingStatsQuery, GetBillingStatsQueryVariables> & ({ variables: GetBillingStatsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetBillingStatsQuery, GetBillingStatsQueryVariables>(GetBillingStatsDocument, options);
+      }
+export function useGetBillingStatsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetBillingStatsQuery, GetBillingStatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetBillingStatsQuery, GetBillingStatsQueryVariables>(GetBillingStatsDocument, options);
+        }
+export function useGetBillingStatsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetBillingStatsQuery, GetBillingStatsQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetBillingStatsQuery, GetBillingStatsQueryVariables>(GetBillingStatsDocument, options);
+        }
+export type GetBillingStatsQueryHookResult = ReturnType<typeof useGetBillingStatsQuery>;
+export type GetBillingStatsLazyQueryHookResult = ReturnType<typeof useGetBillingStatsLazyQuery>;
+export type GetBillingStatsSuspenseQueryHookResult = ReturnType<typeof useGetBillingStatsSuspenseQuery>;
+export type GetBillingStatsQueryResult = Apollo.QueryResult<GetBillingStatsQuery, GetBillingStatsQueryVariables>;
+export const GetUserBillingsDocument = gql`
+    query GetUserBillings {
+  userBillings {
+    id
+    amount
+    status
+    billingDate
+    paymentDate
+    description
+    cancellationDate
+    cancellationReason
+    createdAt
+    updatedAt
+    periodStartDate
+    periodEndDate
+    paystackReference
+    payment {
+      id
+      amount
+      currency
+      status
+      refundAmount
+      refundReason
+      metadata
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserBillingsQuery__
+ *
+ * To run a query within a React component, call `useGetUserBillingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserBillingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserBillingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserBillingsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetUserBillingsQuery, GetUserBillingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetUserBillingsQuery, GetUserBillingsQueryVariables>(GetUserBillingsDocument, options);
+      }
+export function useGetUserBillingsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetUserBillingsQuery, GetUserBillingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetUserBillingsQuery, GetUserBillingsQueryVariables>(GetUserBillingsDocument, options);
+        }
+export function useGetUserBillingsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetUserBillingsQuery, GetUserBillingsQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetUserBillingsQuery, GetUserBillingsQueryVariables>(GetUserBillingsDocument, options);
+        }
+export type GetUserBillingsQueryHookResult = ReturnType<typeof useGetUserBillingsQuery>;
+export type GetUserBillingsLazyQueryHookResult = ReturnType<typeof useGetUserBillingsLazyQuery>;
+export type GetUserBillingsSuspenseQueryHookResult = ReturnType<typeof useGetUserBillingsSuspenseQuery>;
+export type GetUserBillingsQueryResult = Apollo.QueryResult<GetUserBillingsQuery, GetUserBillingsQueryVariables>;
 export const GetBookingsDocument = gql`
     query GetBookings($status: BookingStatus) {
   bookings(status: $status) {

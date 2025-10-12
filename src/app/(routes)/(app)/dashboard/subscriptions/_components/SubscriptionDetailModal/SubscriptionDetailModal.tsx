@@ -33,7 +33,8 @@ import {
 } from "@/graphql/api";
 import { calculateSubscriptionProgress } from "../../utils/subscriptionProgress";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
-import { Booking, BookingStatus } from "@/graphql/api";
+import { useBillingOperations } from "@/graphql/hooks/billing/useBillingOperations";
+import { Booking, BookingStatus, BillingStatus } from "@/graphql/api";
 
 // Type for GraphQL subscription data
 type SubscriptionType =
@@ -77,13 +78,30 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   const [selectedBookingStatus, setSelectedBookingStatus] = useState<
     BookingStatus | "all"
   >("all");
+  const [subscriptionBillings, setSubscriptionBillings] = useState<any[]>([]);
+  const [billingStats, setBillingStats] = useState<any>(null);
+  const [loadingBillings, setLoadingBillings] = useState(false);
+  const [billingsError, setBillingsError] = useState<string | null>(null);
 
   const { handleGetCustomerBookings } = useBookingOperations();
+  const {
+    handleGetSubscriptionBillings,
+    handleGetBillingStats,
+    filterBillingsByStatus,
+    calculateTotalAmount,
+  } = useBillingOperations();
 
   // Fetch bookings for this subscription when modal opens and bookings tab is active
   useEffect(() => {
     if (isOpen && activeTab === "bookings" && subscription) {
       fetchSubscriptionBookings();
+    }
+  }, [isOpen, activeTab, subscription?.id]);
+
+  // Fetch billing data when modal opens and billing tab is active
+  useEffect(() => {
+    if (isOpen && activeTab === "billing" && subscription) {
+      fetchSubscriptionBillings();
     }
   }, [isOpen, activeTab, subscription?.id]);
 
@@ -127,6 +145,38 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
     }
   };
 
+  // Helper function to format billing status names
+  const formatBillingStatusName = (status: BillingStatus): string => {
+    switch (status) {
+      case BillingStatus.Paid:
+        return "Paid";
+      case BillingStatus.Pending:
+        return "Pending";
+      case BillingStatus.Failed:
+        return "Failed";
+      case BillingStatus.Cancelled:
+        return "Cancelled";
+      default:
+        return status;
+    }
+  };
+
+  // Helper function to get billing status color
+  const getBillingStatusColor = (status: BillingStatus): string => {
+    switch (status) {
+      case BillingStatus.Paid:
+        return "#10b981";
+      case BillingStatus.Pending:
+        return "#f59e0b";
+      case BillingStatus.Failed:
+        return "#ef4444";
+      case BillingStatus.Cancelled:
+        return "#6b7280";
+      default:
+        return "#6b7280";
+    }
+  };
+
   const fetchSubscriptionBookings = async () => {
     setLoadingBookings(true);
     setBookingsError(null);
@@ -165,6 +215,29 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
       setBookingsError("Failed to load bookings for this subscription");
     } finally {
       setLoadingBookings(false);
+    }
+  };
+
+  const fetchSubscriptionBillings = async () => {
+    if (!subscription?.id) return;
+
+    setLoadingBillings(true);
+    setBillingsError(null);
+
+    try {
+      // Fetch both billings and stats in parallel
+      const [billingsResult, statsResult] = await Promise.all([
+        handleGetSubscriptionBillings(subscription.id),
+        handleGetBillingStats(subscription.id),
+      ]);
+
+      setSubscriptionBillings(billingsResult || []);
+      setBillingStats(statsResult || null);
+    } catch (error) {
+      console.error("Error fetching subscription billings:", error);
+      setBillingsError("Failed to load billing information");
+    } finally {
+      setLoadingBillings(false);
     }
   };
 
@@ -725,178 +798,300 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                 transition={{ duration: 0.2, ease: "easeInOut" }}
               >
                 <div className={styles.modal__sections}>
-                  {/* Billing Summary Card - Greeting Card Style */}
-                  <div className={styles.modal__section}>
-                    <div className={styles.modal__billingCard}>
-                      <div className={styles.modal__billingCardHeader}>
-                        <div>
-                          <h3 className={styles.modal__billingCardTitle}>
-                            Subscription Billing Summary
-                          </h3>
-                          <p className={styles.modal__billingCardSubtitle}>
-                            {subscription.billingCycle} billing • Auto-renewal{" "}
-                            {subscription.autoRenew ? "enabled" : "disabled"}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className={styles.modal__billingCardContent}>
-                        <div className={styles.modal__billingAmount}>
-                          <span className={styles.modal__billingAmountLabel}>
-                            Total Amount
-                          </span>
-                          <span className={styles.modal__billingAmountValue}>
-                            {formatPrice(subscription.totalPrice)}
-                            <small>/{subscription.billingCycle}</small>
-                          </span>
-                        </div>
-
-                        {/* Discount information removed as it's not available in GraphQL data */}
-
-                        <div className={styles.modal__billingDetails}>
-                          <div className={styles.modal__billingDetail}>
-                            <CreditCard size={14} />
-                            <div>
-                              <span
-                                className={styles.modal__billingDetailLabel}
-                              >
-                                Payment Method
-                              </span>
-                              <span
-                                className={styles.modal__billingDetailValue}
-                              >
-                                {subscription.paymentMethod?.brand ||
-                                  "No payment method"}{" "}
-                                ••••{" "}
-                                {subscription.paymentMethod?.last4 || "****"}
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className={styles.modal__billingDetail}>
-                            <Calendar size={14} />
-                            <div>
-                              <span
-                                className={styles.modal__billingDetailLabel}
-                              >
-                                Next Billing Date
-                              </span>
-                              <span
-                                className={styles.modal__billingDetailValue}
-                              >
-                                {formatDate(subscription.nextBillingDate)}
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className={styles.modal__billingDetail}>
-                            <Clock size={14} />
-                            <div>
-                              <span
-                                className={styles.modal__billingDetailLabel}
-                              >
-                                Last Payment
-                              </span>
-                              <span
-                                className={styles.modal__billingDetailValue}
-                              >
-                                {subscription.lastBillingDate
-                                  ? formatDate(subscription.lastBillingDate)
-                                  : "No previous billing"}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                  {loadingBillings ? (
+                    <div className={styles.modal__loadingState}>
+                      <RefreshCw className="animate-spin" size={24} />
+                      <p>Loading billing information...</p>
                     </div>
-                  </div>
+                  ) : billingsError ? (
+                    <div className={styles.modal__errorState}>
+                      <AlertTriangle size={24} />
+                      <h4>Error Loading Billing Information</h4>
+                      <p>{billingsError}</p>
+                      <motion.button
+                        className={styles.modal__retryButton}
+                        onClick={fetchSubscriptionBillings}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        Try Again
+                      </motion.button>
+                    </div>
+                  ) : (
+                    <>
+                      {/* Billing Summary Card - Greeting Card Style */}
+                      <div className={styles.modal__section}>
+                        <div className={styles.modal__billingCard}>
+                          <div className={styles.modal__billingCardHeader}>
+                            <div>
+                              <h3 className={styles.modal__billingCardTitle}>
+                                Subscription Billing Summary
+                              </h3>
+                              <p className={styles.modal__billingCardSubtitle}>
+                                {subscription.billingCycle} billing •
+                                Auto-renewal{" "}
+                                {subscription.autoRenew
+                                  ? "enabled"
+                                  : "disabled"}
+                              </p>
+                            </div>
+                          </div>
 
-                  {/* Service Breakdown */}
-                  <div className={styles.modal__section}>
-                    <h3 className={styles.modal__sectionTitle}>
-                      Service Breakdown
-                    </h3>
-                    <div className={styles.modal__serviceBreakdown}>
-                      {subscription.subscriptionServices.map((service) => (
-                        <div
-                          key={service.id}
-                          className={styles.modal__serviceBreakdownItem}
-                        >
-                          <div className={styles.modal__serviceBreakdownIcon}>
-                            {getServiceIcon(
-                              service.service_category as ServiceCategory
+                          <div className={styles.modal__billingCardContent}>
+                            <div className={styles.modal__billingAmount}>
+                              <span
+                                className={styles.modal__billingAmountLabel}
+                              >
+                                Total Amount
+                              </span>
+                              <span
+                                className={styles.modal__billingAmountValue}
+                              >
+                                {formatPrice(subscription.totalPrice)}
+                                <small>/{subscription.billingCycle}</small>
+                              </span>
+                            </div>
+
+                            {/* Billing Statistics */}
+                            {billingStats && (
+                              <div className={styles.modal__billingStats}>
+                                <div className={styles.modal__billingStatItem}>
+                                  <span
+                                    className={styles.modal__billingStatLabel}
+                                  >
+                                    Total Billings
+                                  </span>
+                                  <span
+                                    className={styles.modal__billingStatValue}
+                                  >
+                                    {billingStats.total}
+                                  </span>
+                                </div>
+                                <div className={styles.modal__billingStatItem}>
+                                  <span
+                                    className={styles.modal__billingStatLabel}
+                                  >
+                                    Paid
+                                  </span>
+                                  <span
+                                    className={styles.modal__billingStatValue}
+                                  >
+                                    {billingStats.paid}
+                                  </span>
+                                </div>
+                                <div className={styles.modal__billingStatItem}>
+                                  <span
+                                    className={styles.modal__billingStatLabel}
+                                  >
+                                    Pending
+                                  </span>
+                                  <span
+                                    className={styles.modal__billingStatValue}
+                                  >
+                                    {billingStats.pending}
+                                  </span>
+                                </div>
+                                <div className={styles.modal__billingStatItem}>
+                                  <span
+                                    className={styles.modal__billingStatLabel}
+                                  >
+                                    Failed
+                                  </span>
+                                  <span
+                                    className={styles.modal__billingStatValue}
+                                  >
+                                    {billingStats.failed}
+                                  </span>
+                                </div>
+                              </div>
                             )}
+
+                            <div className={styles.modal__billingDetails}>
+                              <div className={styles.modal__billingDetail}>
+                                <CreditCard size={14} />
+                                <div>
+                                  <span
+                                    className={styles.modal__billingDetailLabel}
+                                  >
+                                    Payment Method
+                                  </span>
+                                  <span
+                                    className={styles.modal__billingDetailValue}
+                                  >
+                                    {subscription.paymentMethod?.brand ||
+                                      "No payment method"}{" "}
+                                    ••••{" "}
+                                    {subscription.paymentMethod?.last4 ||
+                                      "****"}
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className={styles.modal__billingDetail}>
+                                <Calendar size={14} />
+                                <div>
+                                  <span
+                                    className={styles.modal__billingDetailLabel}
+                                  >
+                                    Next Billing Date
+                                  </span>
+                                  <span
+                                    className={styles.modal__billingDetailValue}
+                                  >
+                                    {formatDate(subscription.nextBillingDate)}
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className={styles.modal__billingDetail}>
+                                <Clock size={14} />
+                                <div>
+                                  <span
+                                    className={styles.modal__billingDetailLabel}
+                                  >
+                                    Last Payment
+                                  </span>
+                                  <span
+                                    className={styles.modal__billingDetailValue}
+                                  >
+                                    {subscription.lastBillingDate
+                                      ? formatDate(subscription.lastBillingDate)
+                                      : "No previous billing"}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                          <div className={styles.modal__serviceBreakdownInfo}>
-                            <span
-                              className={styles.modal__serviceBreakdownName}
+                        </div>
+                      </div>
+
+                      {/* Service Breakdown */}
+                      <div className={styles.modal__section}>
+                        <h3 className={styles.modal__sectionTitle}>
+                          Service Breakdown
+                        </h3>
+                        <div className={styles.modal__serviceBreakdown}>
+                          {subscription.subscriptionServices.map((service) => (
+                            <div
+                              key={service.id}
+                              className={styles.modal__serviceBreakdownItem}
                             >
-                              {service.service.name}
-                            </span>
-                            <span
-                              className={styles.modal__serviceBreakdownFreq}
-                            >
-                              {service.frequency
-                                .toLowerCase()
-                                .replace("_", " ")}
-                            </span>
+                              <div
+                                className={styles.modal__serviceBreakdownIcon}
+                              >
+                                {getServiceIcon(
+                                  service.service_category as ServiceCategory
+                                )}
+                              </div>
+                              <div
+                                className={styles.modal__serviceBreakdownInfo}
+                              >
+                                <span
+                                  className={styles.modal__serviceBreakdownName}
+                                >
+                                  {service.service.name}
+                                </span>
+                                <span
+                                  className={styles.modal__serviceBreakdownFreq}
+                                >
+                                  {service.frequency
+                                    .toLowerCase()
+                                    .replace("_", " ")}
+                                </span>
+                              </div>
+                              <span
+                                className={styles.modal__serviceBreakdownPrice}
+                              >
+                                {formatPrice(service.price)}
+                              </span>
+                            </div>
+                          ))}
+
+                          <div className={styles.modal__serviceBreakdownTotal}>
+                            <span>Total</span>
+                            <span>{formatPrice(subscription.totalPrice)}</span>
                           </div>
-                          <span className={styles.modal__serviceBreakdownPrice}>
-                            {formatPrice(service.price)}
-                          </span>
                         </div>
-                      ))}
-
-                      <div className={styles.modal__serviceBreakdownTotal}>
-                        <span>Total</span>
-                        <span>{formatPrice(subscription.totalPrice)}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Billing History Preview */}
-                  <div className={styles.modal__section}>
-                    <h3 className={styles.modal__sectionTitle}>
-                      Recent Billing
-                    </h3>
-                    <div className={styles.modal__billingHistory}>
-                      <div className={styles.modal__billingHistoryItem}>
-                        <div className={styles.modal__billingHistoryIcon}>
-                          <CheckCircle size={16} />
-                        </div>
-                        <div className={styles.modal__billingHistoryInfo}>
-                          <span className={styles.modal__billingHistoryDate}>
-                            {subscription.lastBillingDate
-                              ? formatDate(subscription.lastBillingDate)
-                              : "No payment yet"}
-                          </span>
-                          <span className={styles.modal__billingHistoryAmount}>
-                            {formatPrice(subscription.totalPrice)}
-                          </span>
-                        </div>
-                        <span className={styles.modal__billingHistoryStatus}>
-                          Paid
-                        </span>
                       </div>
 
-                      <div className={styles.modal__billingHistoryItem}>
-                        <div className={styles.modal__billingHistoryIcon}>
-                          <Calendar size={16} />
-                        </div>
-                        <div className={styles.modal__billingHistoryInfo}>
-                          <span className={styles.modal__billingHistoryDate}>
-                            {formatDate(subscription.nextBillingDate)}
-                          </span>
-                          <span className={styles.modal__billingHistoryAmount}>
-                            {formatPrice(subscription.totalPrice)}
-                          </span>
-                        </div>
-                        <span className={styles.modal__billingHistoryStatus}>
-                          Upcoming
-                        </span>
+                      {/* Billing History */}
+                      <div className={styles.modal__section}>
+                        <h3 className={styles.modal__sectionTitle}>
+                          Billing History
+                        </h3>
+                        {subscriptionBillings.length > 0 ? (
+                          <div className={styles.modal__billingHistory}>
+                            {subscriptionBillings.slice(0, 5).map((billing) => (
+                              <div
+                                key={billing.id}
+                                className={styles.modal__billingHistoryItem}
+                              >
+                                <div
+                                  className={styles.modal__billingHistoryIcon}
+                                >
+                                  {billing.status === BillingStatus.Paid ? (
+                                    <CheckCircle size={16} />
+                                  ) : billing.status ===
+                                    BillingStatus.Pending ? (
+                                    <Clock size={16} />
+                                  ) : billing.status ===
+                                    BillingStatus.Failed ? (
+                                    <AlertTriangle size={16} />
+                                  ) : (
+                                    <X size={16} />
+                                  )}
+                                </div>
+                                <div
+                                  className={styles.modal__billingHistoryInfo}
+                                >
+                                  <span
+                                    className={styles.modal__billingHistoryDate}
+                                  >
+                                    {formatDate(billing.billingDate)}
+                                  </span>
+                                  <span
+                                    className={
+                                      styles.modal__billingHistoryAmount
+                                    }
+                                  >
+                                    {formatPrice(billing.amount)}
+                                  </span>
+                                  {billing.description && (
+                                    <span
+                                      className={
+                                        styles.modal__billingHistoryDescription
+                                      }
+                                    >
+                                      {billing.description}
+                                    </span>
+                                  )}
+                                </div>
+                                <span
+                                  className={styles.modal__billingHistoryStatus}
+                                  style={{
+                                    color: getBillingStatusColor(
+                                      billing.status
+                                    ),
+                                  }}
+                                >
+                                  {formatBillingStatusName(billing.status)}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className={styles.modal__emptyState}>
+                            <CreditCard size={48} />
+                            <h4>No billing history</h4>
+                            <p>
+                              No billing records found for this subscription
+                              yet.
+                            </p>
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  </div>
+                    </>
+                  )}
                 </div>
               </motion.div>
             )}
