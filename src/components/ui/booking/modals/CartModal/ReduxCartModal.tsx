@@ -14,7 +14,10 @@ import { useCart, useCartActions } from "@/lib/redux/hooks";
 interface ReduxCartModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCheckout?: (formData?: CheckoutFormData) => void;
+  onCheckout?: (
+    formData: CheckoutFormData,
+    onContinuePayment: (bookingId: string) => void
+  ) => void;
 }
 
 export const ReduxCartModal: React.FC<ReduxCartModalProps> = ({
@@ -45,10 +48,13 @@ export const ReduxCartModal: React.FC<ReduxCartModalProps> = ({
     setShowShippingModal(true);
   };
 
-  const handleCheckoutComplete = (formData: CheckoutFormData) => {
+  const handleCheckoutComplete = (
+    formData: CheckoutFormData,
+    onContinuePayment: (bookingId: string) => void
+  ) => {
     setShowShippingModal(false);
     if (onCheckout) {
-      onCheckout(formData);
+      onCheckout(formData, onContinuePayment);
     }
   };
 

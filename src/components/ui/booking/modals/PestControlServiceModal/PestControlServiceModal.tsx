@@ -164,7 +164,10 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
   };
 
   // Handle checkout completion
-  const handleCheckoutComplete = async (formData: CheckoutFormData) => {
+  const handleCheckoutComplete = async (
+    formData: CheckoutFormData,
+    onContinuePayment: (bookingId: string) => void
+  ) => {
     try {
       setError(null); // Clear any previous errors
       const completeOrder: CreateBookingInput = {
@@ -192,8 +195,10 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
       };
 
       if (isAuthenticated) {
-        await handleCreateBooking(completeOrder);
-        setShowOrderSuccessModal(true);
+        const bookingResponse = await handleCreateBooking(completeOrder);
+        const booking = bookingResponse;
+        onContinuePayment(bookingResponse || "");
+        // setShowOrderSuccessModal(true);
       } else {
         localStorage.setItem(
           LocalStorageKeys.BOOKING_DATA_TO_COMPLETE,

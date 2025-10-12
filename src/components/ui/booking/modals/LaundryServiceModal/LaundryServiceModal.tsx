@@ -124,7 +124,10 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
   };
 
   // Handle checkout completion
-  const handleCheckoutComplete = async (formData: CheckoutFormData) => {
+  const handleCheckoutComplete = async (
+    formData: CheckoutFormData,
+    onContinuePayment: (bookingId: string) => void
+  ) => {
     try {
       setError(null); // Clear any previous errors
       if (!serviceOption?.service_id) {
@@ -149,8 +152,10 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
       };
 
       if (isAuthenticated) {
-        await handleCreateBooking(completeOrder);
-        setShowOrderSuccessModal(true);
+        const bookingResponse = await handleCreateBooking(completeOrder);
+        const booking = bookingResponse;
+        onContinuePayment(bookingResponse || "");
+        // setShowOrderSuccessModal(true);
       } else {
         localStorage.setItem(
           LocalStorageKeys.BOOKING_DATA_TO_COMPLETE,

@@ -215,7 +215,10 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
   };
 
   // Handle checkout completion
-  const handleCheckoutComplete = async (formData?: CheckoutFormData) => {
+  const handleCheckoutComplete = async (
+    formData: CheckoutFormData,
+    onContinuePayment: (bookingId: string) => void
+  ) => {
     if (!formData) return;
     try {
       setError(null); // Clear any previous errors
@@ -243,8 +246,10 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
       };
 
       if (isAuthenticated) {
-        await handleCreateBooking(completeOrder);
-        setShowOrderSuccessModal(true);
+        const bookingResponse = await handleCreateBooking(completeOrder);
+        const booking = bookingResponse;
+        onContinuePayment(bookingResponse || "");
+        //setShowOrderSuccessModal(true);
       } else {
         localStorage.setItem(
           LocalStorageKeys.BOOKING_DATA_TO_COMPLETE,
