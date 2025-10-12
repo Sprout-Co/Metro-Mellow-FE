@@ -12,18 +12,21 @@ import {
   RefreshCw,
   Package,
   Info,
+  AlertTriangle,
 } from "lucide-react";
 import styles from "./SubscriptionDetailModal.module.scss";
 import {
   ServiceCategory,
   GetCustomerSubscriptionsQuery,
   SubscriptionStatus,
+  Billing,
 } from "@/graphql/api";
 import { calculateSubscriptionProgress } from "../../utils/subscriptionProgress";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { useBillingOperations } from "@/graphql/hooks/billing/useBillingOperations";
 import { Booking, BookingStatus, BillingStatus } from "@/graphql/api";
 import { OverviewTab, ServicesTab, BookingsTab, BillingTab } from "./tabs";
+import PaymentAlertBanner from "./PaymentAlertBanner";
 
 // Type for GraphQL subscription data
 type SubscriptionType =
@@ -87,12 +90,13 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
     }
   }, [isOpen, activeTab, subscription?.id]);
 
-  // Fetch billing data when modal opens and billing tab is active
+  // Fetch billing data when modal opens (not just on billing tab)
+  // We need billing data to check payment status for actions
   useEffect(() => {
-    if (isOpen && activeTab === "billing" && subscription) {
+    if (isOpen && subscription) {
       fetchSubscriptionBillings();
     }
-  }, [isOpen, activeTab, subscription?.id]);
+  }, [isOpen, subscription?.id]);
 
   // Filter bookings when status filter changes
   useEffect(() => {
@@ -210,25 +214,79 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
     }
   }
 
+  // Check if the current billing period has been paid
+  const isCurrentPeriodPaid = () => {
+    if (!subscriptionBillings || subscriptionBillings.length === 0) {
+      return false;
+    }
+
+    // Find the most recent billing record
+    const sortedBillings = [...subscriptionBillings].sort(
+      (a, b) =>
+        new Date(b.billingDate).getTime() - new Date(a.billingDate).getTime()
+    );
+
+    const latestBilling = sortedBillings[0];
+
+    // Check if the latest billing is paid
+    return latestBilling?.status === BillingStatus.Paid;
+  };
+
   const renderFooterButtons = () => {
+    const isPaid = isCurrentPeriodPaid();
+    if (!isPaid) {
+      return (
+        <>
+          <motion.button
+            className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
+            // onClick={handleRetryPayment}
+            // disabled={paymentLoading}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            Retry Payment
+          </motion.button>
+        </>
+      );
+    }
     switch (subscription.status) {
       case SubscriptionStatus.Active:
         return (
           <>
             <motion.button
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => handleConfirmAction("pause")}
+              whileHover={{ scale: isPaid ? 1.02 : 1 }}
+              whileTap={{ scale: isPaid ? 0.98 : 1 }}
+              onClick={() => isPaid && handleConfirmAction("pause")}
+              disabled={!isPaid}
+              style={{
+                opacity: !isPaid ? 0.5 : 1,
+                cursor: !isPaid ? "not-allowed" : "pointer",
+              }}
+              title={
+                !isPaid
+                  ? "Complete payment before pausing subscription"
+                  : "Pause subscription"
+              }
             >
               <Pause size={14} />
               Pause
             </motion.button>
             <motion.button
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--danger"]}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => handleConfirmAction("cancel")}
+              whileHover={{ scale: isPaid ? 1.02 : 1 }}
+              whileTap={{ scale: isPaid ? 0.98 : 1 }}
+              onClick={() => isPaid && handleConfirmAction("cancel")}
+              disabled={!isPaid}
+              style={{
+                opacity: !isPaid ? 0.5 : 1,
+                cursor: !isPaid ? "not-allowed" : "pointer",
+              }}
+              title={
+                !isPaid
+                  ? "Complete payment before canceling subscription"
+                  : "Cancel subscription"
+              }
             >
               <X size={14} />
               Cancel Subscription
@@ -304,6 +362,11 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
       footer={footerContent}
     >
       <div className={styles.modal__body}>
+        {/* Payment Alert Banner */}
+        {!isCurrentPeriodPaid() && (
+          <PaymentAlertBanner onViewBilling={() => setActiveTab("billing")} />
+        )}
+
         {/* Tab Navigation */}
         <div className={styles.modal__tabs}>
           {tabs.map((tab) => {

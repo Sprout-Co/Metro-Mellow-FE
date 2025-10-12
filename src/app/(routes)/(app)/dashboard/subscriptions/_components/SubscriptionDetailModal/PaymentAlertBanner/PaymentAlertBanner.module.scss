@@ -1,0 +1,93 @@
+// PaymentAlertBanner component styles
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.paymentAlert {
+  display: flex;
+  align-items: flex-start;
+  gap: spacing("md");
+  padding: spacing("md") spacing("lg");
+  background: linear-gradient(
+    135deg,
+    color-alpha("status", "warning", 0.1),
+    color-alpha("status", "warning", 0.05)
+  );
+  border: 1px solid color("status", "warning");
+  border-radius: border-radius("lg");
+  box-shadow: 0 2px 8px color-alpha("status", "warning", 0.1);
+
+  @include breakpoint-down("sm") {
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: color-alpha("status", "warning", 0.15);
+    border-radius: border-radius("full");
+    color: color("status", "warning");
+    flex-shrink: 0;
+
+    svg {
+      stroke-width: 2.5;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__title {
+    @include font-size("md");
+    @include font-weight("bold");
+    color: color("status", "warning");
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  &__message {
+    @include font-size("sm");
+    color: color("status", "warning");
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  &__button {
+    padding: spacing("sm") spacing("lg");
+    background: linear-gradient(
+      135deg,
+      color("status", "warning"),
+      color("status", "warning")
+    );
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("md");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px color-alpha("status", "warning", 0.2);
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px color-alpha("status", "warning", 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    @include breakpoint-down("sm") {
+      width: 100%;
+    }
+  }
+}
