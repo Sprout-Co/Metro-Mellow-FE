@@ -1,5 +1,10 @@
 mutation CreateSubscription($input: CreateSubscriptionInput!) {
-  createSubscription(input: $input)
+  createSubscription(input: $input) {
+    success
+    subscriptionId
+    billingId
+    requiresPayment
+  }
 }
 
 mutation UpdateSubscription($id: ID!, $input: UpdateSubscriptionInput!) {

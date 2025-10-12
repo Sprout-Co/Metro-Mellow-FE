@@ -34,6 +34,7 @@ import {
   selectIsAuthenticated,
 } from "@/lib/redux/slices/authSlice";
 import LoginModal from "@/components/ui/booking/modals/LoginModal/LoginModal";
+import { useSubscriptionPayment } from "@/hooks/useSubscriptionPayment";
 
 export type DurationType = 1 | 2 | 3 | 6 | 12;
 
@@ -80,6 +81,13 @@ const SubscriptionBuilder: React.FC = () => {
   // Hooks
   const { handleGetServices } = useServiceOperations();
   const { handleCreateSubscription } = useSubscriptionOperations();
+  const {
+    initializeSubscriptionPayment,
+    loading: paymentLoading,
+    error: paymentError,
+    paymentSuccess,
+    paymentReference,
+  } = useSubscriptionPayment();
   const router = useRouter();
   const currentUser = useSelector(selectCurrentUser);
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -115,6 +123,26 @@ const SubscriptionBuilder: React.FC = () => {
       setSelectedAddress(currentUser.defaultAddress);
     }
   }, [currentUser, selectedAddress]);
+
+  // Handle payment success - redirect to subscriptions dashboard
+  useEffect(() => {
+    if (paymentSuccess && paymentReference) {
+      showToast(
+        "Payment successful! Your subscription is now active. 🎉",
+        "success"
+      );
+      setTimeout(() => {
+        router.push("/dashboard/subscriptions");
+      }, 2000);
+    }
+  }, [paymentSuccess, paymentReference, router]);
+
+  // Handle payment error
+  useEffect(() => {
+    if (paymentError) {
+      showToast(paymentError, "error");
+    }
+  }, [paymentError]);
 
   // Handle service selection
   const handleServiceSelect = (service: Service) => {
@@ -235,6 +263,14 @@ const SubscriptionBuilder: React.FC = () => {
         setIsCreatingSubscription(false);
         return;
       }
+
+      // Validate user email
+      if (!currentUser?.email) {
+        showToast("User email is required for payment", "error");
+        setIsCreatingSubscription(false);
+        return;
+      }
+
       // Prepare subscription input
       const subscriptionInput: CreateSubscriptionInput = {
         address: addressToUse,
@@ -252,14 +288,41 @@ const SubscriptionBuilder: React.FC = () => {
           serviceDetails: cs.configuration.serviceDetails,
         })),
       };
-      console.log(subscriptionInput, "subscriptionInput zzzz");
+
+      console.log("Creating subscription with input:", subscriptionInput);
+
+      // Create subscription
       const createdSubscription =
         await handleCreateSubscription(subscriptionInput);
 
-      if (createdSubscription) {
-        showToast("Subscription created successfully! 🎉", "success");
+      if (!createdSubscription) {
+        throw new Error("Failed to create subscription");
+      }
 
-        // Redirect to subscriptions dashboard after a brief delay
+      console.log("Subscription created:", createdSubscription);
+
+      // Check if payment is required
+      if (
+        createdSubscription.requiresPayment &&
+        createdSubscription.billingId
+      ) {
+        showToast("Subscription created! Proceeding to payment...", "success");
+
+        // Calculate total amount
+        const totalAmount = calculateTotal();
+
+        // Initialize payment with billing ID
+        await initializeSubscriptionPayment(
+          createdSubscription.billingId,
+          totalAmount,
+          currentUser.email
+        );
+
+        // Payment modal will open automatically
+        // Success/failure will be handled by useEffect hooks
+      } else {
+        // No payment required (shouldn't happen for new subscriptions)
+        showToast("Subscription created successfully! 🎉", "success");
         setTimeout(() => {
           router.push("/dashboard/subscriptions");
         }, 2000);
@@ -272,8 +335,13 @@ const SubscriptionBuilder: React.FC = () => {
           : "Failed to create subscription",
         "error"
       );
-    } finally {
       setIsCreatingSubscription(false);
+    } finally {
+      // Don't set loading to false here if payment is being processed
+      // The payment hook will manage its own loading state
+      if (!paymentLoading) {
+        setIsCreatingSubscription(false);
+      }
     }
   };
 

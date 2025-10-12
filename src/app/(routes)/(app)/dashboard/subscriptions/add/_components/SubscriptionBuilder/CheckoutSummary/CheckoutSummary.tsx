@@ -435,7 +435,8 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
                     </>
                   ) : (
                     <>
-                      <span>Complete Subscription</span>
+                      <CreditCard size={18} />
+                      <span>Proceed to Payment</span>
                       <ArrowLeft
                         size={18}
                         style={{ transform: "rotate(180deg)" }}

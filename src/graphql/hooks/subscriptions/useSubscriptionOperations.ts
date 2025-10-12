@@ -56,11 +56,21 @@ export const useSubscriptionOperations = () => {
   /**
    * Creates a new subscription
    * @param input - Subscription creation input object
-   * @returns Created subscription
+   * @returns Created subscription response with payment information
    * @throws Error if creation fails
    */
   const handleCreateSubscription = useCallback(
-    async (input: CreateSubscriptionInput) => {
+    async (
+      input: CreateSubscriptionInput
+    ): Promise<
+      | {
+          success: boolean;
+          subscriptionId?: string | null;
+          billingId?: string | null;
+          requiresPayment: boolean;
+        }
+      | undefined
+    > => {
       try {
         const { data, errors } = await createSubscriptionMutation({
           variables: { input },
@@ -70,7 +80,11 @@ export const useSubscriptionOperations = () => {
           throw new Error(errors[0].message);
         }
 
-        return data?.createSubscription;
+        if (!data?.createSubscription) {
+          throw new Error("No data returned from subscription creation");
+        }
+
+        return data.createSubscription;
       } catch (error) {
         console.error("Subscription creation error:", error);
         if (error instanceof Error) {

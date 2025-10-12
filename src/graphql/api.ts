@@ -282,6 +282,15 @@ export type CreateSubscriptionInput = {
   startDate: Scalars['DateTime']['input'];
 };
 
+export type CreateSubscriptionResponse = {
+  __typename?: 'CreateSubscriptionResponse';
+  billingId?: Maybe<Scalars['ID']['output']>;
+  message?: Maybe<Scalars['String']['output']>;
+  requiresPayment: Scalars['Boolean']['output'];
+  subscriptionId?: Maybe<Scalars['ID']['output']>;
+  success: Scalars['Boolean']['output'];
+};
+
 export type CreateUserInput = {
   address?: InputMaybe<CreateCustomerAddressInput>;
   email: Scalars['String']['input'];
@@ -434,7 +443,7 @@ export type Mutation = {
   createService: Service;
   createStaff: AuthPayload;
   createStaffProfile: StaffProfile;
-  createSubscription: Scalars['Boolean']['output'];
+  createSubscription: CreateSubscriptionResponse;
   deleteBooking: Scalars['Boolean']['output'];
   deleteNotification: Scalars['Boolean']['output'];
   deleteService: Scalars['Boolean']['output'];
@@ -1945,7 +1954,7 @@ export type CreateSubscriptionMutationVariables = Exact<{
 }>;
 
 
-export type CreateSubscriptionMutation = { __typename?: 'Mutation', createSubscription: boolean };
+export type CreateSubscriptionMutation = { __typename?: 'Mutation', createSubscription: { __typename?: 'CreateSubscriptionResponse', success: boolean, subscriptionId?: string | null, billingId?: string | null, requiresPayment: boolean } };
 
 export type UpdateSubscriptionMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -4389,7 +4398,12 @@ export type DeleteStaffDocumentMutationResult = Apollo.MutationResult<DeleteStaf
 export type DeleteStaffDocumentMutationOptions = Apollo.BaseMutationOptions<DeleteStaffDocumentMutation, DeleteStaffDocumentMutationVariables>;
 export const CreateSubscriptionDocument = gql`
     mutation CreateSubscription($input: CreateSubscriptionInput!) {
-  createSubscription(input: $input)
+  createSubscription(input: $input) {
+    success
+    subscriptionId
+    billingId
+    requiresPayment
+  }
 }
     `;
 export type CreateSubscriptionMutationFn = Apollo.MutationFunction<CreateSubscriptionMutation, CreateSubscriptionMutationVariables>;
