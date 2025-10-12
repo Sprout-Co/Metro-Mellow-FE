@@ -1,0 +1,135 @@
+// OverviewTab specific styles
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.modal {
+  &__sections {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xl");
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__sectionTitle {
+    @include font-size("sm");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 spacing("xs") 0;
+    position: relative;
+    padding-bottom: spacing("xs");
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 24px;
+      height: 2px;
+      background: color("primary", "base");
+      border-radius: border-radius("pill");
+    }
+  }
+
+  // Overview Grid Styles
+  &__overviewGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__overviewCard {
+    background: linear-gradient(
+      135deg,
+      color("neutral", "lightest"),
+      rgba(255, 255, 255, 0.8)
+    );
+    border-radius: border-radius("xl");
+    padding: spacing("lg");
+    border: 1px solid color("neutral", "lighter");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      border-color: color("primary", "lighter");
+    }
+  }
+
+  &__overviewCardHeader {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "medium");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+      color: color("neutral", "medium");
+    }
+  }
+
+  &__overviewCardValue {
+    @include font-size("xl");
+    @include font-weight("bold");
+    color: color("primary", "base");
+    line-height: 1.2;
+  }
+
+  // Info Styles
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__infoItem {
+    display: flex;
+    gap: spacing("sm");
+
+    svg {
+      width: 14px;
+      height: 14px;
+      color: color("neutral", "medium");
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: spacing("xxs");
+    }
+  }
+
+  &__infoLabel {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+  }
+
+  &__infoValue {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    line-height: 1.3;
+  }
+}
