@@ -27,6 +27,7 @@ import { useBillingOperations } from "@/graphql/hooks/billing/useBillingOperatio
 import { Booking, BookingStatus, BillingStatus } from "@/graphql/api";
 import { OverviewTab, ServicesTab, BookingsTab, BillingTab } from "./tabs";
 import PaymentAlertBanner from "./PaymentAlertBanner";
+import { useSubscriptionPayment } from "@/hooks/useSubscriptionPayment";
 
 // Type for GraphQL subscription data
 type SubscriptionType =
@@ -82,6 +83,8 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
     filterBillingsByStatus,
     calculateTotalAmount,
   } = useBillingOperations();
+  const { initializeSubscriptionPayment, loading: paymentLoading } =
+    useSubscriptionPayment();
 
   // Fetch bookings for this subscription when modal opens and bookings tab is active
   useEffect(() => {
@@ -213,7 +216,30 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
       refetchSubscriptions();
     }
   }
+  const handleRetryPayment = async () => {
+    if (!subscription) return;
 
+    try {
+      // Get the most recent unpaid billing
+      const unpaidBilling = subscriptionBillings.find(
+        (billing) =>
+          billing.status === BillingStatus.Pending ||
+          billing.status === BillingStatus.Failed
+      );
+
+      if (unpaidBilling) {
+        await initializeSubscriptionPayment(
+          unpaidBilling.id,
+          unpaidBilling.amount,
+          subscription.customer?.email || ""
+        );
+      } else {
+        console.error("No unpaid billing found");
+      }
+    } catch (err) {
+      console.error("Payment retry failed:", err);
+    }
+  };
   // Check if the current billing period has been paid
   const isCurrentPeriodPaid = () => {
     if (!subscriptionBillings || subscriptionBillings.length === 0) {
@@ -239,12 +265,12 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
         <>
           <motion.button
             className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
-            // onClick={handleRetryPayment}
-            // disabled={paymentLoading}
+            onClick={handleRetryPayment}
+            disabled={paymentLoading}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            Retry Payment
+            {paymentLoading ? "Processing..." : "Retry Payment"}
           </motion.button>
         </>
       );
