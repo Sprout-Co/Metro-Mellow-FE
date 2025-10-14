@@ -12,9 +12,9 @@ const MagicHandsSection: React.FC = () => {
     <section className={styles["magic-hands"]}>
       <div className={styles["magic-hands__container"]}>
         <div className={styles["magic-hands__content"]}>
-          <h2 className={styles["magic-hands__title"]}>The magic hands</h2>
+          <h2 className={styles["magic-hands__title"]}>Our Professional Team</h2>
           <h3 className={styles["magic-hands__subtitle"]}>
-            Meet the exceptional people behind Metromellow
+            Vetted professionals who understand Lagos families and deliver exceptional service every time
           </h3>
 
           <div className={styles["magic-hands__images"]}>

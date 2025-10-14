@@ -33,6 +33,22 @@
     text-decoration: none;
   }
 
+  &__logoDesktop {
+    display: block;
+
+    @include breakpoint-down("md") {
+      display: none;
+    }
+  }
+
+  &__logoMobile {
+    display: none;
+
+    @include breakpoint-down("md") {
+      display: block;
+    }
+  }
+
   &__logoText {
     @include font-size("lg");
     @include font-weight("bold");

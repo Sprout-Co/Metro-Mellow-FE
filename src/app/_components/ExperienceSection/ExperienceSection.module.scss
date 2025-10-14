@@ -167,7 +167,7 @@
     flex: 1 1 50%;
     @include flex-column;
     justify-content: center;
-
+    margin: 0 auto;
     @include breakpoint-down("md") {
       @include flex-column-center;
       width: 100%;

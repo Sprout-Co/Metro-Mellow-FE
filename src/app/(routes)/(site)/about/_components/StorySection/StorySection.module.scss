@@ -5,12 +5,13 @@
 .storySection {
   width: 100%;
   background-color: color("accent", "lighter");
+  padding: spacing("9xl") 0;
 
   @include breakpoint-down("sm") {
-    padding-top: spacing("7xl");
+    padding: spacing("xs") 0;
   }
 
-  @include hero-base;
+  // Removed hero-base mixin to prevent text cutting
 
   &__container {
     // @include container;

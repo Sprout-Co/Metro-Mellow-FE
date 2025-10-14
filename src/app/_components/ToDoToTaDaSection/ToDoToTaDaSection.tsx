@@ -11,14 +11,14 @@ const ToDoToTaDaSection = () => {
           <span>to <span className={styles.taDa}>Ta-Da!</span></span>
         </h1>
         <ol className={styles.steps}>
-          <li>Click what's stressing you out</li>
-          <li>Choose your rescue time</li>
-          <li>Boom. It's done. You're the hero.</li>
+          <li>Select your service and schedule your preferred time</li>
+          <li>Our vetted professionals arrive with everything needed</li>
+          <li>Relax while we handle it - satisfaction guaranteed!</li>
         </ol>
         {/* <button className={styles.ctaButton} type="button">
           BOOK A SERVICE
         </button> */}
-        <Button variant="white" size='lg' fullWidth={false}>Book a service</Button>
+        <Button variant="white" size='lg' fullWidth={false}>Get Started Now</Button>
       </div>
     </section>
   );

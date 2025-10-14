@@ -89,25 +89,28 @@
   &__title {
     margin-bottom: spacing("md");
     @include heading-1;
+    font-size: font-size("h1") * 1.2;
+    line-height: 1;
+    font-weight: map-get($font-weights, "bold");
 
     @include breakpoint-down("md") {
-      font-size: font-size("h3");
+      font-size: font-size("h2") * 1.2;
     }
 
     @include breakpoint-down("sm") {
-      font-size: font-size("h4");
+      font-size: font-size("h3");
+      line-height: 1.1;
     }
   }
 
   &__subtitle {
-    font-size: font-size("subtitle-1");
-    font-weight: map-get($font-weights, "medium");
-    line-height: line-height("normal");
-    color: color("neutral", "darkest");
+    @include paragraph;
+    color: color("neutral", "dark");
+    font-size: font-size("body-1");
     margin-bottom: spacing("lg");
 
     @include breakpoint-down("md") {
-      font-size: font-size("body-1");
+      font-size: font-size("body-2");
     }
     @include breakpoint-down("sm") {
       font-size: font-size("body-2");

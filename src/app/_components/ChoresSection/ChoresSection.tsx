@@ -71,29 +71,29 @@ const LaundryIcon = () => (
 import { Button } from '@/components/ui/Button/Button';
 const services = [
   {
-    name: 'Food',
-    desc: 'Enjoy your work without the pressure of wondering what would happen to you if you lose.',
+    name: 'Fresh Meal Delivery',
+    desc: 'Nutritious, delicious meals prepared by professional chefs. From traditional Nigerian dishes to international cuisine, delivered fresh to your door.',
     icon: <FoodIcon />,
     bg: 'chores-card--food',
     btn: 'chores-card__btn--primary',
   },
   {
     name: 'Pest Control',
-    desc: 'Enjoy your work without the pressure of wondering what would happen to you if you lose.',
+    desc: 'Safe, effective pest elimination for homes and offices. Licensed professionals using eco-friendly treatments to keep your space pest-free.',
     icon: <PestIcon />,
     bg: 'chores-card--pest',
     btn: 'chores-card__btn--primary',
   },
   {
-    name: 'Cleaning',
-    desc: 'Enjoy work without the pressure of wondering what would happen to you if you lose your job.',
+    name: 'House Cleaning',
+    desc: 'Deep cleaning, regular maintenance, and move-in/out services. Professional cleaners with quality supplies and satisfaction guarantee.',
     icon: <CleaningIcon />,
     bg: 'chores-card--cleaning',
     btn: 'chores-card__btn--primary',
   },
   {
-    name: 'Laundry',
-    desc: 'Enjoy work without the pressure of wondering what would happen to you if you lose your job.',
+    name: 'Laundry Service',
+    desc: 'Wash, fold, iron, and dry cleaning services. Pickup and delivery included. Your clothes handled with care by laundry professionals.',
     icon: <LaundryIcon />,
     bg: 'chores-card--laundry',
     btn: 'chores-card__btn--secondary',
@@ -105,10 +105,10 @@ const ChoresSection: React.FC = () => {
     <section className={styles['chores-section']}>
       <div className={styles['chores-section__container']}>
         <h2 className={styles['chores-section__heading']}>
-          We Handle the Chores, You Chase the Cheers.
+          Professional Home Services That Actually Work
         </h2>
         <p className={styles['chores-section__subheading']}>
-          whatever's hijacking your peace, Metromellow sends it packing with a smile.
+          From deep cleaning to fresh meals, our vetted professionals deliver results you can trust. No stress, no hassle, just quality service when you need it.
         </p>
         <div className={styles['chores-section__grid']}>
           {services.map((service) => (
@@ -122,7 +122,7 @@ const ChoresSection: React.FC = () => {
                 {/* <button className={`${styles['chores-card__btn']} ${styles[service.btn]}`}>
                   START HIRING
                 </button> */}
-                <Button variant="white" size='md' fullWidth={false}>Start Hiring</Button>
+                <Button variant="white" size='md' fullWidth={false}>Learn More</Button>
               </div>
             </div>
           ))}

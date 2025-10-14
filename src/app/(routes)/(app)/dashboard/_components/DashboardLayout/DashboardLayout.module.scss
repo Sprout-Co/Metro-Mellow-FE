@@ -19,12 +19,7 @@
     flex: 1;
     padding: spacing("xl");
     @include container;
-    // margin-left: 16rem; // Match sidebar width
     transition: margin-left 0.3s ease;
-
-    // &--expanded {
-    //   margin-left: 5rem; // Match collapsed sidebar width
-    // }
 
     @include breakpoint-down("md") {
       margin-left: 0;
@@ -33,6 +28,7 @@
 
     @include breakpoint-down("sm") {
       padding: spacing("md");
+      max-width: 100vw !important;
     }
   }
 }

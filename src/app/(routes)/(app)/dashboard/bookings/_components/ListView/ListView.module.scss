@@ -19,10 +19,18 @@
     margin-bottom: spacing("xl");
     padding-bottom: spacing("md");
     border-bottom: 2px solid color("neutral", "lighter");
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     @include breakpoint-down("sm") {
       gap: spacing("xxs");
       margin-bottom: spacing("lg");
+      padding-bottom: spacing("sm");
     }
   }
 
@@ -42,11 +50,13 @@
     position: relative;
     min-width: 120px;
     justify-content: center;
+    flex-shrink: 0;
 
     @include breakpoint-down("sm") {
       padding: spacing("sm") spacing("md");
-      min-width: 100px;
+      min-width: 80px;
       gap: spacing("xs");
+      @include font-size("xxs");
     }
 
     &:hover {
@@ -101,6 +111,12 @@
     min-width: 20px;
     text-align: center;
     line-height: 1;
+
+    @include breakpoint-down("sm") {
+      @include font-size("xxs");
+      padding: 1px spacing("xxs");
+      min-width: 16px;
+    }
   }
 
   &__content {
@@ -175,6 +191,7 @@
     @include breakpoint-down("sm") {
       grid-template-columns: 1fr;
       padding-left: calc(spacing("md") + 4px);
+      gap: spacing("sm");
     }
   }
 
@@ -189,6 +206,10 @@
     display: flex;
     align-items: center;
     gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      gap: spacing("sm");
+    }
   }
 
   &__serviceIcon {
@@ -228,6 +249,10 @@
     align-items: center;
     gap: spacing("xs");
     flex-wrap: wrap;
+
+    @include breakpoint-down("sm") {
+      @include font-size("sm");
+    }
   }
 
   &__recurringBadge {
@@ -255,6 +280,10 @@
     @include font-size("sm");
     color: color("neutral", "medium");
     margin: 0;
+
+    @include breakpoint-down("sm") {
+      @include font-size("xs");
+    }
   }
 
   &__info {
@@ -264,6 +293,7 @@
 
     @include breakpoint-down("sm") {
       grid-template-columns: 1fr;
+      gap: spacing("xs");
     }
   }
 
@@ -274,11 +304,20 @@
     @include font-size("sm");
     color: color("neutral", "dark");
 
+    @include breakpoint-down("sm") {
+      @include font-size("xs");
+    }
+
     svg {
       width: 14px;
       height: 14px;
       color: color("neutral", "medium");
       flex-shrink: 0;
+
+      @include breakpoint-down("sm") {
+        width: 12px;
+        height: 12px;
+      }
     }
 
     span {
@@ -301,6 +340,7 @@
       margin-top: spacing("md");
       padding-top: spacing("md");
       border-top: 1px solid color("neutral", "lighter");
+      gap: spacing("sm");
     }
   }
 
@@ -315,6 +355,7 @@
       align-items: center;
       flex: 1;
       justify-content: space-between;
+      gap: spacing("xs");
     }
   }
 
@@ -326,6 +367,11 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     white-space: nowrap;
+
+    @include breakpoint-down("sm") {
+      @include font-size("xxs");
+      padding: 2px spacing("xs");
+    }
 
     &--upcoming {
       background: linear-gradient(
@@ -382,6 +428,10 @@
     @include font-size("lg");
     @include font-weight("bold");
     color: color("primary", "base");
+
+    @include breakpoint-down("sm") {
+      @include font-size("md");
+    }
   }
 
   &__quickActions {
@@ -432,6 +482,11 @@
     cursor: pointer;
     transition: all 0.2s ease;
 
+    @include breakpoint-down("sm") {
+      width: 32px;
+      height: 32px;
+    }
+
     &:hover {
       background: color("neutral", "lightest");
       border-color: color("neutral", "light");
@@ -451,6 +506,11 @@
     z-index: 2;
     overflow: hidden;
     padding: spacing("xs");
+
+    @include breakpoint-down("sm") {
+      min-width: 160px;
+      right: -10px;
+    }
   }
 
   &__menuItem {
@@ -469,6 +529,12 @@
     border-radius: border-radius("md");
     transition: all 0.15s ease;
 
+    @include breakpoint-down("sm") {
+      padding: spacing("xs") spacing("sm");
+      @include font-size("xs");
+      gap: spacing("xs");
+    }
+
     &:hover {
       background: color("neutral", "lightest");
       transform: translateX(2px);
@@ -486,6 +552,11 @@
       width: 14px;
       height: 14px;
       flex-shrink: 0;
+
+      @include breakpoint-down("sm") {
+        width: 12px;
+        height: 12px;
+      }
     }
   }
 

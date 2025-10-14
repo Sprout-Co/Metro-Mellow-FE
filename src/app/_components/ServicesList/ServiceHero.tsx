@@ -38,7 +38,7 @@ const ServiceHero: React.FC<ServiceHeroProps> = ({ onBookServices }) => {
               href={Routes.GET_STARTED}
               animationType="wobble"
             >
-              Book a service
+              Browse All Services
             </CTAButton>
           </div>
         </div>

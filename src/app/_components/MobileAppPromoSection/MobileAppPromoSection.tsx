@@ -11,18 +11,17 @@ const MobileAppPromoSection = () => {
       <div className={styles["app-promo__container"]}>
         <div className={styles["app-promo__content"]}>
           <h2 className={styles["app-promo__heading"]}>
-            It gets even <br /> better with our <br /> mobile App
+            Book Services <br /> On-The-Go with <br /> Our Mobile App
           </h2>
           <p className={styles["app-promo__description"]}>
-            We're the spark that turns your chaos into calm, the groove that
-            gets your life back in tune.
+            Get instant access to all our services with real-time tracking, push notifications, and exclusive app-only deals. Be among the first to experience effortless home service management.
           </p>
           <div className={styles["app-promo__buttons"]}>
             <Button variant="primary" size="lg" fullWidth={false}>
-              Download the app
+              Download for Android
             </Button>
             <Button variant="white" size="lg" fullWidth={false}>
-              IOS DOWNLOAD
+              Download for iOS
             </Button>
           </div>
         </div>

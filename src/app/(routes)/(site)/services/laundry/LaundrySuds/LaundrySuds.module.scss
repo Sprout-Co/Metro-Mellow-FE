@@ -31,6 +31,8 @@
 
     @include breakpoint-down("lg") {
       order: 1;
+      align-items: center;
+      text-align: center;
     }
   }
 
@@ -58,7 +60,7 @@
     }
 
     @include breakpoint-down("sm") {
-      font-size: font-size("h3") * 1.2;
+      font-size: font-size("h3");
       line-height: 1.1;
     }
   }
@@ -83,6 +85,7 @@
     @include breakpoint-down("sm") {
       font-size: font-size("body-2");
       margin-bottom: spacing("lg");
+      text-align: center;
     }
   }
 

@@ -74,12 +74,20 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
         {/* Logo */}
         <div className={styles.navbar__logoContainer}>
           <Link href="/dashboard" className={styles.navbar__logo}>
-            <div>
+            <div className={styles.navbar__logoDesktop}>
               <Image
                 src="/images/brand/brand-logo/transparent-bg/green.png"
                 alt="Metromellow Logo"
                 width={150}
                 height={150}
+              />
+            </div>
+            <div className={styles.navbar__logoMobile}>
+              <Image
+                src="/images/brand/brand-logo/single-logo/primary.png"
+                alt="Metromellow Logo"
+                width={40}
+                height={40}
               />
             </div>
           </Link>
@@ -142,35 +150,12 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
             <Menu />
           </motion.div>
 
-          {/* Mobile Menu Button */}
-          <motion.button
-            className={styles.navbar__menuButton}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <MenuIcon />
-          </motion.button>
+
+ 
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className={styles.navbar__mobileMenu}>
-          {["overview", "services", "bookings", "history"].map((tab) => (
-            <div
-              key={tab}
-              className={`${styles.navbar__mobileMenuItem} ${activeTab === tab ? styles["navbar__mobileMenuItem--active"] : ""}`}
-              onClick={() => {
-                setActiveTab(tab);
-                setIsMenuOpen(false);
-              }}
-            >
-              <Link href={`/dashboard/${tab === "overview" ? "" : tab}`}>
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </Link>
-            </div>
-          ))}
-        </div>
-      )}
+  
 
       <AddAddressModal
         isOpen={isAddAddressModalOpen}

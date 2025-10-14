@@ -122,10 +122,8 @@ const Hero: FC = () => {
             custom={1}
             variants={textVariants}
           >
-            <span className={styles["hero__title--accent"]}>Comfort </span>
-            {/* <span className={styles["hero__title--main"]}> */}
-            Delivered To Your Doorstep
-            {/* </span> */}
+            <span className={styles["hero__title--accent"]}>Professional </span>
+            Home Services
           </motion.h1>
 
           <motion.p
@@ -135,35 +133,35 @@ const Hero: FC = () => {
             custom={2}
             variants={textVariants}
           >
-            Subscribe to hassle-free home services -{" "}
-            <Link
-              href="/services/food"
-              className={styles.hero__subtitleHighlight}
-            >
-              meals
-            </Link>
-            ,{" "}
+            Trusted professionals for{" "}
             <Link
               href="/services/cleaning"
               className={styles.hero__subtitleHighlight}
             >
-              cleaning
+              house cleaning
             </Link>
             ,{" "}
             <Link
               href="/services/laundry"
               className={styles.hero__subtitleHighlight}
             >
-              laundry
-            </Link>{" "}
-            and{" "}
+              laundry service
+            </Link>
+            ,{" "}
+            <Link
+              href="/services/food"
+              className={styles.hero__subtitleHighlight}
+            >
+              fresh meal delivery
+            </Link>
+            , and{" "}
             <Link
               href="/services/pest-control"
               className={styles.hero__subtitleHighlight}
             >
               pest control
             </Link>{" "}
-            delivered when you need them
+            Same-day service available.
           </motion.p>
 
           <motion.div
@@ -185,7 +183,7 @@ const Hero: FC = () => {
               animationIntensity="intense"
               animationInterval={1500}
             >
-              Book a service
+              Get Started Today
             </CTAButton>
           </motion.div>
         </div>

@@ -19,6 +19,11 @@
       flex-direction: column;
       align-items: stretch;
     }
+
+    @include breakpoint-down("sm") {
+      margin-bottom: spacing("lg");
+      gap: spacing("md");
+    }
   }
 
   &__controlsLeft {
@@ -32,6 +37,10 @@
       align-items: stretch;
       width: 100%;
     }
+
+    @include breakpoint-down("sm") {
+      gap: spacing("sm");
+    }
   }
 
   &__searchContainer {
@@ -41,6 +50,10 @@
 
     @include breakpoint-down("md") {
       max-width: none;
+    }
+
+    @include breakpoint-down("sm") {
+      order: 2;
     }
   }
 
@@ -83,6 +96,12 @@
     border-radius: border-radius("pill");
     padding: 4px;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+
+    @include breakpoint-down("sm") {
+      order: 1;
+      width: 100%;
+      justify-content: center;
+    }
   }
 
   &__viewBtn {
@@ -133,6 +152,8 @@
 
     @include breakpoint-down("sm") {
       flex-wrap: wrap;
+      gap: spacing("sm");
+      order: 3;
     }
   }
 
@@ -144,6 +165,8 @@
     @include breakpoint-down("sm") {
       flex: 1;
       justify-content: space-between;
+      flex-wrap: wrap;
+      gap: spacing("xs");
     }
   }
 
@@ -166,9 +189,19 @@
       border-color: color("neutral", "light");
     }
 
+    @include breakpoint-down("sm") {
+      padding: spacing("xs") spacing("sm");
+      @include font-size("xs");
+    }
+
     svg {
       width: 16px;
       height: 16px;
+
+      @include breakpoint-down("sm") {
+        width: 14px;
+        height: 14px;
+      }
     }
   }
 
