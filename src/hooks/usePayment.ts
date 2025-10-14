@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react";
 import axios from "axios";
-import PaystackPop from "@paystack/inline-js";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 
 interface BackendResponseData {
@@ -230,11 +229,18 @@ export const usePayment = (): UsePaymentReturn => {
           },
         };
 
-        // 3. Open the Paystack Popup using the @paystack/inline-js package
-        const paystack = new PaystackPop();
+        // 3. Open the Paystack Popup using dynamic import (client-side only)
+        if (typeof window !== "undefined") {
+          const { default: PaystackPop } = await import("@paystack/inline-js");
+          const paystack = new PaystackPop();
 
-        // Use resumeTransaction with the access_code
-        paystack.resumeTransaction(accessCode, paystackOptions);
+          // Use resumeTransaction with the access_code
+          paystack.resumeTransaction(accessCode, paystackOptions);
+        } else {
+          throw new Error(
+            "Paystack can only be initialized on the client side"
+          );
+        }
       } catch (err) {
         console.error("Error initializing payment:", err);
         const axiosErrorMsg =

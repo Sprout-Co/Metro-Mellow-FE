@@ -1,0 +1,42 @@
+# Netlify configuration for Next.js App Router
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+# Next.js runtime configuration
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--legacy-peer-deps"
+
+# Headers for static assets
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Redirect rules
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+
+# Function configuration for better error handling
+[functions]
+  node_bundler = "esbuild"
+  # Increase timeout for complex operations
+  included_files = ["**/*.graphql", "**/*.json"]
+
+# Next.js specific settings for Netlify
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
