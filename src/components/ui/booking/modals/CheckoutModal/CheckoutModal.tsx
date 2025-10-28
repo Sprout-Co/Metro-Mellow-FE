@@ -23,7 +23,6 @@ export interface CheckoutModalProps {
   submitting?: boolean;
   error?: string | null;
   onClearError?: () => void;
-  bookingId?: string;
 }
 
 export interface CheckoutFormData {
@@ -42,7 +41,6 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   submitting = false,
   error = null,
   onClearError,
-  bookingId,
 }) => {
   // Form state management
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);

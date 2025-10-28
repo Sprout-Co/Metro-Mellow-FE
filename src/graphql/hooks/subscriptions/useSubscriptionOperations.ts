@@ -23,6 +23,7 @@ import {
   UpdateSubscriptionServiceInput,
   SubscriptionServiceInput,
   useReactivateSubscriptionMutation,
+  useRenewSubscriptionMutation,
 } from "@/graphql/api";
 import { SubscriptionStatus, BillingCycle } from "@/graphql/api";
 
@@ -41,6 +42,7 @@ export const useSubscriptionOperations = () => {
   const [updateSubscriptionServiceMutation] =
     useUpdateSubscriptionServiceMutation();
   const [reactivateSubscriptionMutation] = useReactivateSubscriptionMutation();
+  const [renewSubscriptionMutation] = useRenewSubscriptionMutation();
 
   const { refetch: getSubscriptionById } = useGetSubscriptionByIdQuery({
     skip: true,
@@ -242,6 +244,38 @@ export const useSubscriptionOperations = () => {
       }
     },
     [reactivateSubscriptionMutation]
+  );
+  /**
+   * Renews a subscription
+   * @param id - Subscription ID
+   * @returns Renewed subscription response with payment information
+   * @throws Error if renewal fails
+   */
+  const handleRenewSubscription = useCallback(
+    async (id: string) => {
+      try {
+        const { data, errors } = await renewSubscriptionMutation({
+          variables: { renewSubscriptionId: id },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        if (!data?.renewSubscription) {
+          throw new Error("No data returned from subscription renewal");
+        }
+
+        return data.renewSubscription;
+      } catch (error) {
+        console.error("Subscription renewal error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [renewSubscriptionMutation]
   );
 
   /**
@@ -453,6 +487,7 @@ export const useSubscriptionOperations = () => {
     handlePauseSubscription,
     handleResumeSubscription,
     handleReactivateSubscription,
+    handleRenewSubscription,
     handleUpdateSubscriptionStatus,
     handleAddServiceToSubscription,
     handleRemoveServiceFromSubscription,

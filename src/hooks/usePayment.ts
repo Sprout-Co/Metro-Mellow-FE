@@ -145,6 +145,7 @@ export const usePayment = (): UsePaymentReturn => {
         // CRITICAL: Destructure the accessCode and reference from the backend response
         const { data } = response.data;
         const { reference, accessCode } = data as BackendResponseData;
+        console.log(data);
 
         if (!reference || !accessCode) {
           throw new Error(

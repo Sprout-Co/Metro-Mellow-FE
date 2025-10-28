@@ -2,7 +2,33 @@ mutation CreateSubscription($input: CreateSubscriptionInput!) {
   createSubscription(input: $input) {
     success
     subscriptionId
-    billingId
+    billing {
+      id
+      amount
+      status
+      billingDate
+      paymentDate
+      description
+      cancellationDate
+      cancellationReason
+      createdAt
+      updatedAt
+      periodStartDate
+      periodEndDate
+      payment {
+        id
+        amount
+        currency
+        status
+        paymentIntentId
+        refundAmount
+        refundReason
+        metadata
+        createdAt
+        updatedAt
+      }
+      paystackReference
+    }
     requiresPayment
   }
 }
@@ -61,4 +87,40 @@ mutation UpdateSubscriptionService(
 
 mutation ReactivateSubscription($reactivateSubscriptionId: ID!) {
   reactivateSubscription(id: $reactivateSubscriptionId)
+}
+
+mutation RenewSubscription($renewSubscriptionId: ID!) {
+  renewSubscription(id: $renewSubscriptionId) {
+    success
+    subscriptionId
+    billing {
+      id
+      amount
+      status
+      billingDate
+      paymentDate
+      description
+      cancellationDate
+      cancellationReason
+      createdAt
+      updatedAt
+      periodStartDate
+      periodEndDate
+      payment {
+        id
+        amount
+        currency
+        status
+        paymentIntentId
+        refundAmount
+        refundReason
+        metadata
+        createdAt
+        updatedAt
+      }
+      paystackReference
+    }
+    requiresPayment
+    message
+  }
 }

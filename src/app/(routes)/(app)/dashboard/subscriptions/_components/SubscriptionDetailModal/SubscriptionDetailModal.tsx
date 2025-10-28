@@ -36,6 +36,8 @@ import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 import SubscriptionConfirmActionModal, {
   SubscriptionActionType,
 } from "../SubscriptionConfirmActionModal/SubscriptionConfirmActionModal";
+import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
+import FnButton from "@/components/ui/Button/FnButton";
 
 type TabType = "overview" | "services" | "bookings" | "billing";
 
@@ -75,6 +77,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   const [billingStats, setBillingStats] = useState<any>(null);
   const [loadingBillings, setLoadingBillings] = useState(false);
   const [billingsError, setBillingsError] = useState<string | null>(null);
+  const [renewingSubscription, setRenewingSubscription] = useState(false);
 
   const { handleGetCustomerBookings } = useBookingOperations();
   const {
@@ -85,7 +88,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   } = useBillingOperations();
   const { initializeSubscriptionPayment, loading: paymentLoading } =
     useSubscriptionPayment();
-
+  const { handleRenewSubscription } = useSubscriptionOperations();
   // Fetch bookings for this subscription when modal opens and bookings tab is active
   useEffect(() => {
     if (isOpen && activeTab === "bookings" && subscription) {
@@ -216,7 +219,33 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
       refetchSubscriptions();
     }
   }
+
+  async function onRenewSubscriptionClick(subscriptionId: string) {
+    try {
+      setRenewingSubscription(true);
+      console.log(subscriptionBillings.length, " before renewal");
+      const result = await handleRenewSubscription(subscriptionId);
+
+      if (result.billing) {
+        setSubscriptionBillings((prev) => [...prev, result.billing]);
+        await initializeSubscriptionPayment(
+          result.billing.id,
+          result.billing.amount,
+          subscription?.customer?.email || ""
+        );
+        // console.log(subscriptionBillings.length, " after renewal");
+      }
+      await handleRetryPayment();
+      console.log(subscriptionBillings.length, " after retry");
+    } catch (error) {
+      console.error("Error renewing subscription:", error);
+    } finally {
+      setRenewingSubscription(false);
+    }
+  }
+
   const handleRetryPayment = async () => {
+    console.log(subscriptionBillings.length, " before retry");
     if (!subscription) return;
 
     try {
@@ -263,15 +292,18 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
     if (!isPaid) {
       return (
         <>
-          <motion.button
+          <FnButton
             className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
             onClick={handleRetryPayment}
             disabled={paymentLoading}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            size="lg"
+            loading={paymentLoading}
+            // whileHover={{ scale: 1.02 }}
+            // whileTap={{ scale: 0.98 }}
+            leftIcon={<RefreshCw size={14} />}
           >
             {paymentLoading ? "Processing..." : "Retry Payment"}
-          </motion.button>
+          </FnButton>
         </>
       );
     }
@@ -279,10 +311,11 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
       case SubscriptionStatus.Active:
         return (
           <>
-            <motion.button
+            <FnButton
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
-              whileHover={{ scale: isPaid ? 1.02 : 1 }}
-              whileTap={{ scale: isPaid ? 0.98 : 1 }}
+              size="lg"
+              loading={paymentLoading}
+              leftIcon={<Pause size={14} />}
               onClick={() => isPaid && handleConfirmAction("pause")}
               disabled={!isPaid}
               style={{
@@ -295,13 +328,13 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                   : "Pause subscription"
               }
             >
-              <Pause size={14} />
               Pause
-            </motion.button>
-            <motion.button
+            </FnButton>
+            <FnButton
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--danger"]}`}
-              whileHover={{ scale: isPaid ? 1.02 : 1 }}
-              whileTap={{ scale: isPaid ? 0.98 : 1 }}
+              size="lg"
+              loading={paymentLoading}
+              leftIcon={<X size={14} />}
               onClick={() => isPaid && handleConfirmAction("cancel")}
               disabled={!isPaid}
               style={{
@@ -314,57 +347,69 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
                   : "Cancel subscription"
               }
             >
-              <X size={14} />
               Cancel Subscription
-            </motion.button>
+            </FnButton>
           </>
         );
       case SubscriptionStatus.Paused:
         return (
           <>
-            <motion.button
+            <FnButton
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              size="lg"
+              loading={paymentLoading}
+              leftIcon={<Play size={14} />}
               onClick={() => handleConfirmAction("resume")}
             >
-              <Play size={14} />
               Resume
-            </motion.button>
-            <motion.button
+            </FnButton>
+            <FnButton
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--danger"]}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              size="lg"
+              loading={paymentLoading}
+              leftIcon={<X size={14} />}
               onClick={() => handleConfirmAction("cancel")}
             >
-              <X size={14} />
               Cancel Subscription
-            </motion.button>
+            </FnButton>
           </>
         );
       case SubscriptionStatus.Expired:
+        return (
+          <FnButton
+            className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
+            size="lg"
+            loading={renewingSubscription}
+            leftIcon={<RefreshCw size={14} />}
+            onClick={() => onRenewSubscriptionClick(subscription.id)}
+            disabled={renewingSubscription}
+          >
+            {renewingSubscription ? "Renewing..." : "Renew"}
+          </FnButton>
+        );
       case SubscriptionStatus.Cancelled:
         return (
-          <motion.button
+          <FnButton
             className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            size="lg"
+            loading={renewingSubscription}
+            leftIcon={<RefreshCw size={14} />}
             onClick={() => handleConfirmAction("reactivate")}
           >
-            <RefreshCw size={14} />
             Reactivate
-          </motion.button>
+          </FnButton>
         );
       default:
         return (
-          <motion.button
+          <FnButton
             className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
             onClick={onClose}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            size="lg"
+            loading={paymentLoading}
+            leftIcon={<X size={14} />}
           >
             Close
-          </motion.button>
+          </FnButton>
         );
     }
   };

@@ -177,6 +177,7 @@ export enum BookingStatus {
   Completed = 'COMPLETED',
   Confirmed = 'CONFIRMED',
   InProgress = 'IN_PROGRESS',
+  NoShow = 'NO_SHOW',
   Paused = 'PAUSED',
   Pending = 'PENDING'
 }
@@ -300,7 +301,7 @@ export type CreateSubscriptionInput = {
 
 export type CreateSubscriptionResponse = {
   __typename?: 'CreateSubscriptionResponse';
-  billingId?: Maybe<Scalars['ID']['output']>;
+  billing?: Maybe<Billing>;
   message?: Maybe<Scalars['String']['output']>;
   requiresPayment: Scalars['Boolean']['output'];
   subscriptionId?: Maybe<Scalars['ID']['output']>;
@@ -477,6 +478,7 @@ export type Mutation = {
   removeAddress: Scalars['Boolean']['output'];
   removePaymentMethod: Scalars['Boolean']['output'];
   removeServiceFromSubscription: Scalars['Boolean']['output'];
+  renewSubscription: CreateSubscriptionResponse;
   rescheduleBooking: Scalars['Boolean']['output'];
   resendAdminInvitation: Scalars['Boolean']['output'];
   resetPassword: Scalars['Boolean']['output'];
@@ -711,6 +713,12 @@ export type MutationRemovePaymentMethodArgs = {
 export type MutationRemoveServiceFromSubscriptionArgs = {
   subscriptionId: Scalars['ID']['input'];
   subscriptionServiceId: Scalars['ID']['input'];
+};
+
+
+export type MutationRenewSubscriptionArgs = {
+  duration?: InputMaybe<Scalars['Int']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -2016,7 +2024,7 @@ export type CreateSubscriptionMutationVariables = Exact<{
 }>;
 
 
-export type CreateSubscriptionMutation = { __typename?: 'Mutation', createSubscription: { __typename?: 'CreateSubscriptionResponse', success: boolean, subscriptionId?: string | null, billingId?: string | null, requiresPayment: boolean } };
+export type CreateSubscriptionMutation = { __typename?: 'Mutation', createSubscription: { __typename?: 'CreateSubscriptionResponse', success: boolean, subscriptionId?: string | null, requiresPayment: boolean, billing?: { __typename?: 'Billing', id: string, amount: number, status: BillingStatus, billingDate: any, paymentDate?: any | null, description?: string | null, cancellationDate?: any | null, cancellationReason?: string | null, createdAt: any, updatedAt: any, periodStartDate: any, periodEndDate: any, paystackReference?: string | null, payment?: { __typename?: 'Payment', id: string, amount: number, currency: string, status: PaymentStatus, paymentIntentId: string, refundAmount?: number | null, refundReason?: string | null, metadata?: any | null, createdAt: any, updatedAt: any } | null } | null } };
 
 export type UpdateSubscriptionMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2086,6 +2094,13 @@ export type ReactivateSubscriptionMutationVariables = Exact<{
 
 
 export type ReactivateSubscriptionMutation = { __typename?: 'Mutation', reactivateSubscription: boolean };
+
+export type RenewSubscriptionMutationVariables = Exact<{
+  renewSubscriptionId: Scalars['ID']['input'];
+}>;
+
+
+export type RenewSubscriptionMutation = { __typename?: 'Mutation', renewSubscription: { __typename?: 'CreateSubscriptionResponse', success: boolean, subscriptionId?: string | null, requiresPayment: boolean, message?: string | null, billing?: { __typename?: 'Billing', id: string, amount: number, status: BillingStatus, billingDate: any, paymentDate?: any | null, description?: string | null, cancellationDate?: any | null, cancellationReason?: string | null, createdAt: any, updatedAt: any, periodStartDate: any, periodEndDate: any, paystackReference?: string | null, payment?: { __typename?: 'Payment', id: string, amount: number, currency: string, status: PaymentStatus, paymentIntentId: string, refundAmount?: number | null, refundReason?: string | null, metadata?: any | null, createdAt: any, updatedAt: any } | null } | null } };
 
 export type PendingAdminInvitationsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -4482,7 +4497,33 @@ export const CreateSubscriptionDocument = gql`
   createSubscription(input: $input) {
     success
     subscriptionId
-    billingId
+    billing {
+      id
+      amount
+      status
+      billingDate
+      paymentDate
+      description
+      cancellationDate
+      cancellationReason
+      createdAt
+      updatedAt
+      periodStartDate
+      periodEndDate
+      payment {
+        id
+        amount
+        currency
+        status
+        paymentIntentId
+        refundAmount
+        refundReason
+        metadata
+        createdAt
+        updatedAt
+      }
+      paystackReference
+    }
     requiresPayment
   }
 }
@@ -4805,6 +4846,69 @@ export function useReactivateSubscriptionMutation(baseOptions?: ApolloReactHooks
 export type ReactivateSubscriptionMutationHookResult = ReturnType<typeof useReactivateSubscriptionMutation>;
 export type ReactivateSubscriptionMutationResult = Apollo.MutationResult<ReactivateSubscriptionMutation>;
 export type ReactivateSubscriptionMutationOptions = Apollo.BaseMutationOptions<ReactivateSubscriptionMutation, ReactivateSubscriptionMutationVariables>;
+export const RenewSubscriptionDocument = gql`
+    mutation RenewSubscription($renewSubscriptionId: ID!) {
+  renewSubscription(id: $renewSubscriptionId) {
+    success
+    subscriptionId
+    billing {
+      id
+      amount
+      status
+      billingDate
+      paymentDate
+      description
+      cancellationDate
+      cancellationReason
+      createdAt
+      updatedAt
+      periodStartDate
+      periodEndDate
+      payment {
+        id
+        amount
+        currency
+        status
+        paymentIntentId
+        refundAmount
+        refundReason
+        metadata
+        createdAt
+        updatedAt
+      }
+      paystackReference
+    }
+    requiresPayment
+    message
+  }
+}
+    `;
+export type RenewSubscriptionMutationFn = Apollo.MutationFunction<RenewSubscriptionMutation, RenewSubscriptionMutationVariables>;
+
+/**
+ * __useRenewSubscriptionMutation__
+ *
+ * To run a mutation, you first call `useRenewSubscriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRenewSubscriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [renewSubscriptionMutation, { data, loading, error }] = useRenewSubscriptionMutation({
+ *   variables: {
+ *      renewSubscriptionId: // value for 'renewSubscriptionId'
+ *   },
+ * });
+ */
+export function useRenewSubscriptionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RenewSubscriptionMutation, RenewSubscriptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<RenewSubscriptionMutation, RenewSubscriptionMutationVariables>(RenewSubscriptionDocument, options);
+      }
+export type RenewSubscriptionMutationHookResult = ReturnType<typeof useRenewSubscriptionMutation>;
+export type RenewSubscriptionMutationResult = Apollo.MutationResult<RenewSubscriptionMutation>;
+export type RenewSubscriptionMutationOptions = Apollo.BaseMutationOptions<RenewSubscriptionMutation, RenewSubscriptionMutationVariables>;
 export const PendingAdminInvitationsDocument = gql`
     query PendingAdminInvitations {
   pendingAdminInvitations {

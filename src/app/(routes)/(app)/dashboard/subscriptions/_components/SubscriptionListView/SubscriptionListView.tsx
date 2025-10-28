@@ -27,6 +27,7 @@ import {
   CreditCard,
   AlertTriangle,
   TrendingUp,
+  List,
 } from "lucide-react";
 import styles from "./SubscriptionListView.module.scss";
 import {
@@ -45,7 +46,7 @@ interface SubscriptionListViewProps {
   refetchSubscriptions?: () => void;
 }
 
-type TabType = "active" | "paused" | "expired";
+type TabType = "all" | "active" | "paused" | "expired";
 
 const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
   subscriptions,
@@ -56,7 +57,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<TabType>("active");
+  const [activeTab, setActiveTab] = useState<TabType>("all");
 
   // Sort subscriptions by next billing date
   const sortedSubscriptions = [...subscriptions].sort(
@@ -67,6 +68,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
 
   // Group subscriptions by status
   const groupedSubscriptions = {
+    all: sortedSubscriptions,
     active: sortedSubscriptions.filter(
       (s) =>
         s.status === SubscriptionStatus.Active ||
@@ -84,6 +86,12 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
 
   // Tab configuration
   const tabs = [
+    {
+      id: "all" as TabType,
+      label: "All",
+      count: subscriptions.length,
+      icon: List,
+    },
     {
       id: "active" as TabType,
       label: "Active",
@@ -436,11 +444,12 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
   // Get empty message for current tab
   const getEmptyMessage = (tabId: TabType) => {
     const messages = {
+      all: "No subscriptions found",
       active: "No active subscriptions",
       paused: "No paused subscriptions",
       expired: "No expired subscriptions",
     };
-    return messages[tabId];
+    return messages[tabId] || "No subscriptions found";
   };
 
   return (
