@@ -191,6 +191,12 @@ export type BroadcastNotificationInput = {
   type: NotificationType;
 };
 
+export type CheckAvailabilityInput = {
+  date: Scalars['DateTime']['input'];
+  serviceCategory: ServiceCategory;
+  timeSlot: TimeSlot;
+};
+
 export type CleaningDetails = {
   __typename?: 'CleaningDetails';
   cleaningType: CleaningType;
@@ -316,6 +322,13 @@ export type CreateUserInput = {
   password: Scalars['String']['input'];
   phone?: InputMaybe<Scalars['String']['input']>;
   role: UserRole;
+};
+
+export type DateAvailability = {
+  __typename?: 'DateAvailability';
+  date: Scalars['DateTime']['output'];
+  hasAvailableSlots: Scalars['Boolean']['output'];
+  slots: Array<SlotAvailability>;
 };
 
 export type ExtraItem = {
@@ -1040,10 +1053,12 @@ export type Query = {
   billingsDueToday: Array<Billing>;
   booking?: Maybe<Booking>;
   bookings: Array<Booking>;
+  checkSlotAvailability: SlotAvailability;
   customerBookings: Array<Booking>;
   customerInvoices: Array<Invoice>;
   customerPayments: Array<Payment>;
   customerSubscriptions: Array<Subscription>;
+  getAvailableSlots: Array<DateAvailability>;
   invoice: Invoice;
   isUserOnline: Scalars['Boolean']['output'];
   me?: Maybe<User>;
@@ -1108,6 +1123,18 @@ export type QueryBookingArgs = {
 
 export type QueryBookingsArgs = {
   status?: InputMaybe<BookingStatus>;
+};
+
+
+export type QueryCheckSlotAvailabilityArgs = {
+  input: CheckAvailabilityInput;
+};
+
+
+export type QueryGetAvailableSlotsArgs = {
+  endDate: Scalars['DateTime']['input'];
+  serviceCategory: ServiceCategory;
+  startDate: Scalars['DateTime']['input'];
 };
 
 
@@ -1377,6 +1404,15 @@ export enum Severity {
   Low = 'LOW',
   Medium = 'MEDIUM'
 }
+
+export type SlotAvailability = {
+  __typename?: 'SlotAvailability';
+  availableCapacity: Scalars['Int']['output'];
+  date: Scalars['DateTime']['output'];
+  isAvailable: Scalars['Boolean']['output'];
+  maxCapacity: Scalars['Int']['output'];
+  timeSlot: TimeSlot;
+};
 
 export type StaffAvailability = {
   __typename?: 'StaffAvailability';
@@ -2175,6 +2211,22 @@ export type GetStaffBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetStaffBookingsQuery = { __typename?: 'Query', staffBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, service_category: ServiceCategory, serviceOption: ServiceId, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, imageUrl?: string | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, label?: string | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> };
+
+export type GetAvailableSlotsQueryVariables = Exact<{
+  startDate: Scalars['DateTime']['input'];
+  endDate: Scalars['DateTime']['input'];
+  serviceCategory: ServiceCategory;
+}>;
+
+
+export type GetAvailableSlotsQuery = { __typename?: 'Query', getAvailableSlots: Array<{ __typename?: 'DateAvailability', date: any, hasAvailableSlots: boolean, slots: Array<{ __typename?: 'SlotAvailability', date: any, timeSlot: TimeSlot, isAvailable: boolean, availableCapacity: number, maxCapacity: number }> }> };
+
+export type CheckSlotAvailabilityQueryVariables = Exact<{
+  input: CheckAvailabilityInput;
+}>;
+
+
+export type CheckSlotAvailabilityQuery = { __typename?: 'Query', checkSlotAvailability: { __typename?: 'SlotAvailability', date: any, timeSlot: TimeSlot, isAvailable: boolean, availableCapacity: number, maxCapacity: number } };
 
 export type GetNotificationsQueryVariables = Exact<{
   filters?: InputMaybe<NotificationFilters>;
@@ -6038,6 +6090,104 @@ export type GetStaffBookingsQueryHookResult = ReturnType<typeof useGetStaffBooki
 export type GetStaffBookingsLazyQueryHookResult = ReturnType<typeof useGetStaffBookingsLazyQuery>;
 export type GetStaffBookingsSuspenseQueryHookResult = ReturnType<typeof useGetStaffBookingsSuspenseQuery>;
 export type GetStaffBookingsQueryResult = Apollo.QueryResult<GetStaffBookingsQuery, GetStaffBookingsQueryVariables>;
+export const GetAvailableSlotsDocument = gql`
+    query GetAvailableSlots($startDate: DateTime!, $endDate: DateTime!, $serviceCategory: ServiceCategory!) {
+  getAvailableSlots(
+    startDate: $startDate
+    endDate: $endDate
+    serviceCategory: $serviceCategory
+  ) {
+    date
+    slots {
+      date
+      timeSlot
+      isAvailable
+      availableCapacity
+      maxCapacity
+    }
+    hasAvailableSlots
+  }
+}
+    `;
+
+/**
+ * __useGetAvailableSlotsQuery__
+ *
+ * To run a query within a React component, call `useGetAvailableSlotsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAvailableSlotsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAvailableSlotsQuery({
+ *   variables: {
+ *      startDate: // value for 'startDate'
+ *      endDate: // value for 'endDate'
+ *      serviceCategory: // value for 'serviceCategory'
+ *   },
+ * });
+ */
+export function useGetAvailableSlotsQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetAvailableSlotsQuery, GetAvailableSlotsQueryVariables> & ({ variables: GetAvailableSlotsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetAvailableSlotsQuery, GetAvailableSlotsQueryVariables>(GetAvailableSlotsDocument, options);
+      }
+export function useGetAvailableSlotsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetAvailableSlotsQuery, GetAvailableSlotsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetAvailableSlotsQuery, GetAvailableSlotsQueryVariables>(GetAvailableSlotsDocument, options);
+        }
+export function useGetAvailableSlotsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetAvailableSlotsQuery, GetAvailableSlotsQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetAvailableSlotsQuery, GetAvailableSlotsQueryVariables>(GetAvailableSlotsDocument, options);
+        }
+export type GetAvailableSlotsQueryHookResult = ReturnType<typeof useGetAvailableSlotsQuery>;
+export type GetAvailableSlotsLazyQueryHookResult = ReturnType<typeof useGetAvailableSlotsLazyQuery>;
+export type GetAvailableSlotsSuspenseQueryHookResult = ReturnType<typeof useGetAvailableSlotsSuspenseQuery>;
+export type GetAvailableSlotsQueryResult = Apollo.QueryResult<GetAvailableSlotsQuery, GetAvailableSlotsQueryVariables>;
+export const CheckSlotAvailabilityDocument = gql`
+    query CheckSlotAvailability($input: CheckAvailabilityInput!) {
+  checkSlotAvailability(input: $input) {
+    date
+    timeSlot
+    isAvailable
+    availableCapacity
+    maxCapacity
+  }
+}
+    `;
+
+/**
+ * __useCheckSlotAvailabilityQuery__
+ *
+ * To run a query within a React component, call `useCheckSlotAvailabilityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckSlotAvailabilityQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckSlotAvailabilityQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCheckSlotAvailabilityQuery(baseOptions: ApolloReactHooks.QueryHookOptions<CheckSlotAvailabilityQuery, CheckSlotAvailabilityQueryVariables> & ({ variables: CheckSlotAvailabilityQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<CheckSlotAvailabilityQuery, CheckSlotAvailabilityQueryVariables>(CheckSlotAvailabilityDocument, options);
+      }
+export function useCheckSlotAvailabilityLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CheckSlotAvailabilityQuery, CheckSlotAvailabilityQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<CheckSlotAvailabilityQuery, CheckSlotAvailabilityQueryVariables>(CheckSlotAvailabilityDocument, options);
+        }
+export function useCheckSlotAvailabilitySuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<CheckSlotAvailabilityQuery, CheckSlotAvailabilityQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<CheckSlotAvailabilityQuery, CheckSlotAvailabilityQueryVariables>(CheckSlotAvailabilityDocument, options);
+        }
+export type CheckSlotAvailabilityQueryHookResult = ReturnType<typeof useCheckSlotAvailabilityQuery>;
+export type CheckSlotAvailabilityLazyQueryHookResult = ReturnType<typeof useCheckSlotAvailabilityLazyQuery>;
+export type CheckSlotAvailabilitySuspenseQueryHookResult = ReturnType<typeof useCheckSlotAvailabilitySuspenseQuery>;
+export type CheckSlotAvailabilityQueryResult = Apollo.QueryResult<CheckSlotAvailabilityQuery, CheckSlotAvailabilityQueryVariables>;
 export const GetNotificationsDocument = gql`
     query GetNotifications($filters: NotificationFilters, $pagination: PaginationInput) {
   notifications(filters: $filters, pagination: $pagination) {

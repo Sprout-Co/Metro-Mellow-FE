@@ -486,3 +486,35 @@ query GetStaffBookings {
     }
   }
 }
+
+query GetAvailableSlots(
+  $startDate: DateTime!
+  $endDate: DateTime!
+  $serviceCategory: ServiceCategory!
+) {
+  getAvailableSlots(
+    startDate: $startDate
+    endDate: $endDate
+    serviceCategory: $serviceCategory
+  ) {
+    date
+    slots {
+      date
+      timeSlot
+      isAvailable
+      availableCapacity
+      maxCapacity
+    }
+    hasAvailableSlots
+  }
+}
+
+query CheckSlotAvailability($input: CheckAvailabilityInput!) {
+  checkSlotAvailability(input: $input) {
+    date
+    timeSlot
+    isAvailable
+    availableCapacity
+    maxCapacity
+  }
+}

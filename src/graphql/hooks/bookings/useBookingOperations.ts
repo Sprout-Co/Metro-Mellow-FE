@@ -35,6 +35,10 @@ import {
   useAddBookingFeedbackMutation,
   FeedbackInput,
   useDeleteBookingMutation,
+  useGetAvailableSlotsLazyQuery,
+  useCheckSlotAvailabilityLazyQuery,
+  ServiceCategory,
+  CheckAvailabilityInput,
 } from "@/graphql/api";
 
 export const useBookingOperations = () => {
@@ -58,6 +62,10 @@ export const useBookingOperations = () => {
     useGetCustomerBookingsLazyQuery();
   const [getStaffBookings, { data: staffBookingsData }] =
     useGetStaffBookingsLazyQuery();
+  const [getAvailableSlots, { data: availableSlotsData }] =
+    useGetAvailableSlotsLazyQuery();
+  const [checkSlotAvailability, { data: slotAvailabilityData }] =
+    useCheckSlotAvailabilityLazyQuery();
 
   const handleGetCustomerBookings = useCallback(async () => {
     try {
@@ -429,6 +437,74 @@ export const useBookingOperations = () => {
     }
   }, [getStaffBookings]);
 
+  /**
+   * Fetches available slots for a given date range and service category
+   * @param startDate - Start date for slot availability
+   * @param endDate - End date for slot availability
+   * @param serviceCategory - Service category to check availability for
+   * @returns Available slots data
+   * @throws Error if fetch fails
+   */
+  const handleGetAvailableSlots = useCallback(
+    async (
+      startDate: string,
+      endDate: string,
+      serviceCategory: ServiceCategory
+    ) => {
+      try {
+        const { data, errors } = await getAvailableSlots({
+          variables: {
+            startDate,
+            endDate,
+            serviceCategory,
+          },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.getAvailableSlots;
+      } catch (error) {
+        console.error("Available slots fetch error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [getAvailableSlots]
+  );
+
+  /**
+   * Checks availability for a specific slot
+   * @param input - Check availability input object
+   * @returns Slot availability data
+   * @throws Error if check fails
+   */
+  const handleCheckSlotAvailability = useCallback(
+    async (input: CheckAvailabilityInput) => {
+      try {
+        const { data, errors } = await checkSlotAvailability({
+          variables: { input },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.checkSlotAvailability;
+      } catch (error) {
+        console.error("Slot availability check error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [checkSlotAvailability]
+  );
+
   return {
     handleCreateBooking,
     handleUpdateBooking,
@@ -443,11 +519,15 @@ export const useBookingOperations = () => {
     handleGetBookings,
     handleGetCustomerBookings,
     handleGetStaffBookings,
+    handleGetAvailableSlots,
+    handleCheckSlotAvailability,
     // Return the current data
     currentBookings: bookingsData?.bookings,
     currentCustomerBookings: customerBookingsData?.customerBookings,
     currentStaffBookings: staffBookingsData?.staffBookings,
     currentBooking: bookingData?.booking,
+    currentAvailableSlots: availableSlotsData?.getAvailableSlots,
+    currentSlotAvailability: slotAvailabilityData?.checkSlotAvailability,
     isCreatingBooking,
   };
 };
