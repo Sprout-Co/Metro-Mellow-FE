@@ -1,24 +1,29 @@
 // src/app/(routes)/(app)/dashboard/bookings/_components/RescheduleModal/RescheduleModal.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Calendar,
-  Clock,
-  ChevronRight,
-  ChevronLeft,
-  AlertCircle,
-  CheckCircle,
-  Info,
-  X,
-  User,
-  MapPin,
-} from "lucide-react";
+import { Calendar, Clock, AlertCircle, CheckCircle, User } from "lucide-react";
 import styles from "./RescheduleModal.module.scss";
-import { Booking, TimeSlot } from "@/graphql/api";
+import {
+  Booking,
+  TimeSlot,
+  DateAvailability,
+  SlotAvailability,
+  ServiceCategory,
+} from "@/graphql/api";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
+import DateSlotPicker from "@/components/ui/booking/DateSlotPicker/DateSlotPicker";
+import TimeSlotSelector from "@/components/ui/booking/TimeSlotSelector/TimeSlotSelector";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
+import {
+  mapServiceCategoryToEnum,
+  formatDateForAPI,
+  getSlotAvailabilityForDate,
+  getTomorrowDate,
+  getMaxDate,
+  formatDateToLocalString,
+} from "@/utils/slotHelpers";
 
 interface RescheduleModalProps {
   isOpen: boolean;
@@ -35,62 +40,81 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
 }) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<TimeSlot | null>(null);
-  const [currentMonth, setCurrentMonth] = useState(new Date());
   const [isConfirming, setIsConfirming] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { handleRescheduleBooking } = useBookingOperations();
+  // Slot availability state
+  const [availableSlots, setAvailableSlots] = useState<DateAvailability[]>([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const [slotError, setSlotError] = useState<string | null>(null);
+  const [validatingSlot, setValidatingSlot] = useState(false);
+
+  const {
+    handleRescheduleBooking,
+    handleGetAvailableSlots,
+    handleCheckSlotAvailability,
+  } = useBookingOperations();
+
+  // Determine if availability-based date/time is required
+  const serviceCategoryEnum = useMemo(
+    () => booking?.service_category || ServiceCategory.Cleaning,
+    [booking?.service_category]
+  );
+  const requiresAvailability = useMemo(
+    () =>
+      ![ServiceCategory.Cooking, ServiceCategory.Laundry].includes(
+        serviceCategoryEnum
+      ),
+    [serviceCategoryEnum]
+  );
+
+  // Fetch available slots when modal opens
+  const fetchAvailableSlots = useCallback(async () => {
+    if (!isOpen || !booking || !requiresAvailability) return;
+
+    setLoadingSlots(true);
+    setSlotError(null);
+
+    try {
+      const startDate = getTomorrowDate();
+      const endDate = getMaxDate();
+      const serviceCategory = serviceCategoryEnum;
+
+      const slots = await handleGetAvailableSlots(
+        formatDateForAPI(startDate),
+        formatDateForAPI(endDate),
+        serviceCategory
+      );
+
+      setAvailableSlots(slots || []);
+    } catch (err) {
+      console.error("Failed to fetch available slots:", err);
+      setSlotError("Unable to load available time slots. Please try again.");
+    } finally {
+      setLoadingSlots(false);
+    }
+  }, [
+    isOpen,
+    booking,
+    requiresAvailability,
+    serviceCategoryEnum,
+    handleGetAvailableSlots,
+  ]);
+
+  // Fetch slots when modal opens
+  useEffect(() => {
+    if (isOpen && requiresAvailability) {
+      fetchAvailableSlots();
+    }
+    if (isOpen && !requiresAvailability) {
+      // Clear any previous slot-related errors/data when not required
+      setAvailableSlots([]);
+      setSlotError(null);
+    }
+  }, [isOpen, requiresAvailability, fetchAvailableSlots]);
 
   if (!isOpen || !booking) return null;
-
-  // Calendar navigation
-  const navigateMonth = (direction: "prev" | "next") => {
-    const newMonth = new Date(currentMonth);
-    newMonth.setMonth(newMonth.getMonth() + (direction === "next" ? 1 : -1));
-    setCurrentMonth(newMonth);
-  };
-
-  const goToToday = () => {
-    const today = new Date();
-    setCurrentMonth(today);
-  };
-
-  // Get calendar days for current month
-  const getCalendarDays = () => {
-    const year = currentMonth.getFullYear();
-    const month = currentMonth.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const daysInMonth = lastDay.getDate();
-    const startingDayOfWeek = firstDay.getDay();
-
-    const days: (Date | null)[] = [];
-
-    // Add empty days for the start of the month
-    for (let i = 0; i < startingDayOfWeek; i++) {
-      days.push(null);
-    }
-
-    // Add all days of the month
-    for (let i = 1; i <= daysInMonth; i++) {
-      days.push(new Date(year, month, i));
-    }
-
-    // Add empty days to complete the last week
-    const remainingDays = 42 - days.length; // 6 weeks * 7 days
-    for (let i = 0; i < remainingDays; i++) {
-      days.push(null);
-    }
-
-    return days;
-  };
-
-  const calendarDays = getCalendarDays();
-  const timeSlots = Object.values(TimeSlot);
-
-  // Get weekday names
-  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   // Format date
   const formatDate = (date: Date) => {
@@ -101,36 +125,58 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
     });
   };
 
-  // Check if date is weekend
-  const isWeekend = (date: Date) => {
-    const day = date.getDay();
-    return day === 0 || day === 6;
-  };
-
-  // Check if date is today
-  const isToday = (date: Date) => {
-    const today = new Date();
-    return date.toDateString() === today.toDateString();
-  };
-
-  // Check if date is in the past
-  const isPastDate = (date: Date) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return date < today;
-  };
-
-  // Handle date selection
+  // Handle date selection from calendar
   const handleDateSelect = (date: Date) => {
-    if (!isPastDate(date)) {
-      setSelectedDate(date);
-      setSelectedTime(null); // Reset time when date changes
-    }
+    setSelectedDate(date);
+    setSelectedTime(null); // Reset time when date changes
   };
 
-  // Handle time selection
-  const handleTimeSelect = (slot: TimeSlot) => {
-    setSelectedTime(slot);
+  // Handle time slot selection
+  const handleTimeSlotSelect = (timeSlot: TimeSlot) => {
+    setSelectedTime(timeSlot);
+  };
+
+  // Get slot availability for selected date
+  const getSelectedDateSlots = (): SlotAvailability[] => {
+    if (!selectedDate) return [];
+    return getSlotAvailabilityForDate(selectedDate, availableSlots);
+  };
+
+  // Validate selected slot availability
+  const validateSlotAvailability = async (): Promise<boolean> => {
+    if (!selectedDate || !selectedTime || !requiresAvailability) return true;
+
+    setValidatingSlot(true);
+    setError(null);
+
+    try {
+      const serviceCategory = serviceCategoryEnum;
+
+      const slotCheck = await handleCheckSlotAvailability({
+        date: formatDateForAPI(selectedDate),
+        timeSlot: selectedTime,
+        serviceCategory,
+      });
+
+      if (!slotCheck?.isAvailable) {
+        setError(
+          `The ${selectedTime.toLowerCase()} slot is no longer available. Please select a different time slot.`
+        );
+
+        // Refresh availability data
+        await fetchAvailableSlots();
+
+        return false;
+      }
+
+      return true;
+    } catch (err) {
+      console.error("Slot validation error:", err);
+      setError("Unable to verify slot availability. Please try again.");
+      return false;
+    } finally {
+      setValidatingSlot(false);
+    }
   };
 
   // Format time slot for display
@@ -155,16 +201,26 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
     setError(null);
 
     try {
+      // Validate slot availability before proceeding (only if required)
+      if (requiresAvailability) {
+        const isSlotAvailable = await validateSlotAvailability();
+        if (!isSlotAvailable) {
+          // Slot validation failed, error message is already set
+          setIsConfirming(false);
+          return;
+        }
+      }
+
       await handleRescheduleBooking(
         booking.id,
-        selectedDate.toISOString(),
+        formatDateForAPI(selectedDate),
         selectedTime
       );
 
       setShowSuccess(true);
 
       if (onConfirm) {
-        onConfirm(selectedDate.toISOString(), selectedTime);
+        onConfirm(formatDateForAPI(selectedDate), selectedTime);
       }
 
       setTimeout(() => {
@@ -208,15 +264,25 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
       <motion.button
         className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
         onClick={handleConfirm}
-        disabled={!selectedDate || !selectedTime || isConfirming}
+        disabled={
+          !selectedDate || !selectedTime || isConfirming || validatingSlot
+        }
         whileHover={
-          !isConfirming && selectedDate && selectedTime ? { scale: 1.02 } : {}
+          !isConfirming && !validatingSlot && selectedDate && selectedTime
+            ? { scale: 1.02 }
+            : {}
         }
         whileTap={
-          !isConfirming && selectedDate && selectedTime ? { scale: 0.98 } : {}
+          !isConfirming && !validatingSlot && selectedDate && selectedTime
+            ? { scale: 0.98 }
+            : {}
         }
       >
-        {isConfirming ? "Rescheduling..." : "Confirm Reschedule"}
+        {validatingSlot
+          ? "Checking availability..."
+          : isConfirming
+            ? "Rescheduling..."
+            : "Confirm Reschedule"}
       </motion.button>
     </div>
   );
@@ -269,90 +335,44 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
             <div className={styles.modal__section}>
               <div className={styles.modal__sectionTitle}>Select New Date</div>
 
-              {/* Calendar Header */}
-              <div className={styles.modal__calendarHeader}>
-                <button
-                  className={styles.modal__calendarNavBtn}
-                  onClick={() => navigateMonth("prev")}
-                >
-                  <ChevronLeft size={20} />
-                </button>
-                <div className={styles.modal__calendarTitle}>
-                  {currentMonth.toLocaleDateString("en-US", {
-                    month: "long",
-                    year: "numeric",
-                  })}
-                </div>
-                <button
-                  className={styles.modal__calendarNavBtn}
-                  onClick={() => navigateMonth("next")}
-                >
-                  <ChevronRight size={20} />
-                </button>
-              </div>
-
-              {/* Today Button */}
-              <div className={styles.modal__todayContainer}>
-                <button className={styles.modal__todayBtn} onClick={goToToday}>
-                  Today
-                </button>
-              </div>
-
-              {/* Calendar Grid */}
-              <div className={styles.modal__calendar}>
-                {/* Week Days Header */}
-                <div className={styles.modal__weekDays}>
-                  {weekDays.map((day) => (
-                    <div key={day} className={styles.modal__weekDay}>
-                      {day}
-                    </div>
-                  ))}
-                </div>
-
-                {/* Calendar Days */}
-                <div className={styles.modal__calendarDays}>
-                  {calendarDays.map((date, index) => {
-                    if (!date) {
-                      return (
-                        <div
-                          key={`empty-${index}`}
-                          className={styles.modal__calendarDayEmpty}
-                        />
-                      );
+              {requiresAvailability ? (
+                loadingSlots ? (
+                  <div className={styles.modal__loading}>
+                    <p>Loading available dates...</p>
+                  </div>
+                ) : (
+                  <DateSlotPicker
+                    selectedDate={selectedDate || getTomorrowDate()}
+                    onDateSelect={handleDateSelect}
+                    availableSlots={availableSlots}
+                    disabled={loadingSlots}
+                  />
+                )
+              ) : (
+                <div className={styles.modal__dateInput}>
+                  <input
+                    type="date"
+                    value={
+                      selectedDate ? formatDateToLocalString(selectedDate) : ""
                     }
-
-                    const isSelected =
-                      selectedDate?.toDateString() === date.toDateString();
-                    const isPast = isPastDate(date);
-                    const weekend = isWeekend(date);
-                    const today = isToday(date);
-
-                    return (
-                      <motion.button
-                        key={date.toISOString()}
-                        className={`${styles.modal__calendarDay} ${
-                          isSelected
-                            ? styles["modal__calendarDay--selected"]
-                            : ""
-                        } ${
-                          isPast ? styles["modal__calendarDay--disabled"] : ""
-                        } ${
-                          weekend ? styles["modal__calendarDay--weekend"] : ""
-                        } ${today ? styles["modal__calendarDay--today"] : ""}`}
-                        onClick={() => handleDateSelect(date)}
-                        disabled={isPast}
-                        whileHover={!isPast ? { scale: 1.05 } : {}}
-                        whileTap={!isPast ? { scale: 0.95 } : {}}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: index * 0.01 }}
-                      >
-                        {date.getDate()}
-                      </motion.button>
-                    );
-                  })}
+                    onChange={(e) => {
+                      const newDate = new Date(e.target.value);
+                      if (!isNaN(newDate.getTime())) {
+                        handleDateSelect(newDate);
+                      }
+                    }}
+                    min={getTomorrowDate().toISOString().split("T")[0]}
+                    className={styles.modal__dateInputField}
+                  />
                 </div>
-              </div>
+              )}
+
+              {slotError && (
+                <div className={styles.modal__error}>
+                  <AlertCircle size={16} />
+                  <p>{slotError}</p>
+                </div>
+              )}
             </div>
 
             {/* Time Selection */}
@@ -364,31 +384,46 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
                 transition={{ duration: 0.3 }}
               >
                 <div className={styles.modal__sectionTitle}>
-                  Available Time Slots for {formatDate(selectedDate)}
+                  {requiresAvailability
+                    ? `Available Time Slots for ${formatDate(selectedDate)}`
+                    : `Select Time for ${formatDate(selectedDate)}`}
                 </div>
-                <div className={styles.modal__timeGrid}>
-                  {Object.values(TimeSlot).map((slot, index) => {
-                    const isSelected = selectedTime === slot;
 
-                    return (
-                      <motion.button
-                        key={index}
-                        className={`${styles.modal__timeSlot} ${
-                          isSelected ? styles["modal__timeSlot--selected"] : ""
-                        } ${!slot ? styles["modal__timeSlot--unavailable"] : ""}`}
-                        onClick={() => handleTimeSelect(slot)}
-                        disabled={!slot}
-                        whileHover={slot ? { scale: 1.05 } : {}}
-                        whileTap={slot ? { scale: 0.95 } : {}}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: index * 0.03 }}
-                      >
-                        <span>{formatTimeSlot(slot)}</span>
-                      </motion.button>
-                    );
-                  })}
-                </div>
+                {requiresAvailability ? (
+                  loadingSlots ? (
+                    <div className={styles.modal__loading}>
+                      <p>Loading time slots...</p>
+                    </div>
+                  ) : (
+                    <TimeSlotSelector
+                      selectedTimeSlot={selectedTime || TimeSlot.Morning}
+                      onTimeSlotSelect={handleTimeSlotSelect}
+                      slotAvailability={getSelectedDateSlots()}
+                      disabled={loadingSlots}
+                    />
+                  )
+                ) : (
+                  <div className={styles.modal__timeSelect}>
+                    <select
+                      value={selectedTime || ""}
+                      onChange={(e) =>
+                        handleTimeSlotSelect(e.target.value as TimeSlot)
+                      }
+                      className={styles.modal__timeSelectField}
+                    >
+                      <option value="">Select Time</option>
+                      <option value={TimeSlot.Morning}>
+                        Morning (9:00 AM - 12:00 PM)
+                      </option>
+                      <option value={TimeSlot.Afternoon}>
+                        Afternoon (12:00 PM - 4:00 PM)
+                      </option>
+                      <option value={TimeSlot.Evening}>
+                        Evening (4:00 PM - 8:00 PM)
+                      </option>
+                    </select>
+                  </div>
+                )}
               </motion.div>
             )}
 
