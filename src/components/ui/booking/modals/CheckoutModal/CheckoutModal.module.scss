@@ -2,6 +2,16 @@
 @import "@/styles/abstracts/mixins";
 @import "@/styles/abstracts/functions";
 
+// Loading animation keyframes
+@keyframes loading-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 .checkoutModal {
   position: fixed;
   top: 0;
@@ -439,6 +449,54 @@
       color: color("status", "error");
       margin: 0;
       line-height: line-height("relaxed");
+    }
+  }
+
+  // Loading states for slot booking
+  &__loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("xl");
+    background-color: color("neutral", "lightest");
+    border: map-get($border-width, "thin") dashed color("neutral", "light");
+    border-radius: border-radius("lg");
+    min-height: 200px;
+  }
+
+  &__loadingSkeleton {
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(
+      90deg,
+      color("neutral", "light") 25%,
+      color("neutral", "lighter") 50%,
+      color("neutral", "light") 75%
+    );
+    background-size: 200% 100%;
+    animation: loading-shimmer 1.5s infinite;
+    border-radius: border-radius("lg");
+    margin-bottom: spacing("md");
+  }
+
+  &__loadingText {
+    @include body-2;
+    color: color("neutral", "medium");
+    margin: 0;
+    text-align: center;
+  }
+
+  // Calendar and time slot container adjustments
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+
+    // Override for calendar and time slot components
+    .dateSlotPicker,
+    .timeSlotSelector {
+      margin-top: spacing("xs");
     }
   }
 }

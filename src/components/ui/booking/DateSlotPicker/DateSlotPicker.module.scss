@@ -93,6 +93,48 @@
     align-items: center;
     justify-content: center;
     position: relative;
+    // Tooltip base
+    &[data-tooltip]::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      background-color: color("neutral", "darkest");
+      color: color("neutral", "white");
+      @include font-size("xs");
+      padding: spacing("xxs") spacing("xs");
+      border-radius: border-radius("sm");
+      box-shadow: map-get($shadows, "sm");
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        opacity 0.15s ease,
+        transform 0.15s ease;
+      z-index: 2;
+    }
+
+    // Tooltip arrow
+    &[data-tooltip]::before {
+      content: "";
+      position: absolute;
+      bottom: 102%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 6px;
+      border-style: solid;
+      border-color: color("neutral", "darkest") transparent transparent
+        transparent;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      z-index: 2;
+    }
+
+    &:hover::after,
+    &:hover::before {
+      opacity: 1;
+    }
 
     &:hover:not(:disabled) {
       background-color: color("neutral", "lightest");

@@ -1,15 +1,32 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Portal from "../../../Portal/Portal";
 import Button from "../../../Button/Button";
+import DateSlotPicker from "../../DateSlotPicker/DateSlotPicker";
+import TimeSlotSelector from "../../TimeSlotSelector/TimeSlotSelector";
 import styles from "./CheckoutModal.module.scss";
 import { useAppSelector } from "@/lib/redux/hooks";
-import { AddressInput, TimeSlot } from "@/graphql/api";
+import {
+  AddressInput,
+  TimeSlot,
+  DateAvailability,
+  SlotAvailability,
+  ServiceCategory,
+} from "@/graphql/api";
 import { Routes } from "@/constants/routes";
 import axios from "axios";
 import router from "next/router";
 import { usePayment } from "@/hooks/usePayment";
+import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
+import {
+  mapServiceCategoryToEnum,
+  formatDateForAPI,
+  getSlotAvailabilityForDate,
+  getTomorrowDate,
+  getMaxDate,
+  formatDateToLocalString,
+} from "@/utils/slotHelpers";
 import OrderSuccessModal from "../OrderSuccessModal/OrderSuccessModal";
 
 export interface CheckoutModalProps {
@@ -51,10 +68,35 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     paymentSuccess,
     paymentReference,
   } = usePayment();
+
+  // Booking operations hook
+  const { handleGetAvailableSlots, handleCheckSlotAvailability } =
+    useBookingOperations();
+
+  // Determine if availability-based date/time is required
+  const serviceCategoryEnum = useMemo(
+    () => mapServiceCategoryToEnum(service_category),
+    [service_category]
+  );
+  const requiresAvailability = useMemo(
+    () =>
+      ![ServiceCategory.Cooking, ServiceCategory.Laundry].includes(
+        serviceCategoryEnum
+      ),
+    [serviceCategoryEnum]
+  );
+
+  // Slot availability state
+  const [availableSlots, setAvailableSlots] = useState<DateAvailability[]>([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const [slotError, setSlotError] = useState<string | null>(null);
+  const [validatingSlot, setValidatingSlot] = useState(false);
+  const [slotValidationError, setSlotValidationError] = useState<string | null>(
+    null
+  );
+
   const [formData, setFormData] = useState<CheckoutFormData>({
-    date: new Date(Date.now() + 24 * 60 * 60 * 1000)
-      .toISOString()
-      .split("T")[0],
+    date: getTomorrowDate().toISOString().split("T")[0],
     timeSlot: TimeSlot.Morning,
     city: user?.defaultAddress?.city || "",
     street: user?.defaultAddress?.street || "",
@@ -68,6 +110,46 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   });
 
   const [isNewAddress, setIsNewAddress] = useState(!user?.addresses?.length);
+
+  // Fetch available slots when modal opens
+  const fetchAvailableSlots = useCallback(async () => {
+    if (!isOpen || !requiresAvailability) return;
+
+    setLoadingSlots(true);
+    setSlotError(null);
+
+    try {
+      const startDate = getTomorrowDate();
+      const endDate = getMaxDate();
+      const serviceCategory = mapServiceCategoryToEnum(service_category);
+
+      const slots = await handleGetAvailableSlots(
+        formatDateForAPI(startDate),
+        formatDateForAPI(endDate),
+        serviceCategory
+      );
+
+      setAvailableSlots(slots || []);
+    } catch (err) {
+      console.error("Failed to fetch available slots:", err);
+      setSlotError("Unable to load available time slots. Please try again.");
+    } finally {
+      setLoadingSlots(false);
+    }
+  }, [isOpen, requiresAvailability, service_category, handleGetAvailableSlots]);
+
+  // Fetch slots when modal opens
+  useEffect(() => {
+    if (isOpen && requiresAvailability) {
+      fetchAvailableSlots();
+    }
+    if (isOpen && !requiresAvailability) {
+      // Clear any previous slot-related errors/data when not required
+      setAvailableSlots([]);
+      setSlotError(null);
+    }
+  }, [isOpen, requiresAvailability, fetchAvailableSlots]);
+
   // Set default address when component mounts or user changes
   React.useEffect(() => {
     if (user?.defaultAddress) {
@@ -118,6 +200,69 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     }));
   };
 
+  // Handle date selection from calendar
+  const handleDateSelect = (date: Date) => {
+    // Use local date formatting to avoid timezone issues
+    const dateString = formatDateToLocalString(date);
+
+    setFormData((prev) => ({
+      ...prev,
+      date: dateString,
+    }));
+  };
+
+  // Handle time slot selection
+  const handleTimeSlotSelect = (timeSlot: TimeSlot) => {
+    setFormData((prev) => ({
+      ...prev,
+      timeSlot,
+    }));
+  };
+
+  // Get slot availability for selected date
+  const getSelectedDateSlots = (): SlotAvailability[] => {
+    const selectedDate = new Date(formData.date);
+    return getSlotAvailabilityForDate(selectedDate, availableSlots);
+  };
+
+  // Validate selected slot availability
+  const validateSlotAvailability = async (): Promise<boolean> => {
+    setValidatingSlot(true);
+    setSlotValidationError(null);
+
+    try {
+      const selectedDate = new Date(formData.date);
+      const serviceCategory = mapServiceCategoryToEnum(service_category);
+
+      const slotCheck = await handleCheckSlotAvailability({
+        date: formatDateForAPI(selectedDate),
+        timeSlot: formData.timeSlot,
+        serviceCategory,
+      });
+
+      if (!slotCheck?.isAvailable) {
+        setSlotValidationError(
+          `The ${formData.timeSlot.toLowerCase()} slot is no longer available. Please select a different time slot.`
+        );
+
+        // Refresh availability data
+        await fetchAvailableSlots();
+
+        return false;
+      }
+
+      return true;
+    } catch (err) {
+      console.error("Slot validation error:", err);
+      setSlotValidationError(
+        "Unable to verify slot availability. Please try again."
+      );
+      return false;
+    } finally {
+      setValidatingSlot(false);
+    }
+  };
+
   const handlePayment = async (bookingId: string) => {
     try {
       await initializePayment(bookingId, 10000, user?.email || "");
@@ -127,12 +272,25 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   };
 
   // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Clear any previous validation errors
+    setSlotValidationError(null);
+
+    // Validate slot availability before proceeding (only if required)
+    if (requiresAvailability) {
+      const isSlotAvailable = await validateSlotAvailability();
+      if (!isSlotAvailable) {
+        // Slot validation failed, error message is already set
+        return;
+      }
+    }
+
+    // Proceed with booking if slot is available
     onCheckout(formData, (bookingResponse: string) =>
       handlePayment(bookingResponse)
     );
-    // initializePayment();
   };
 
   if (!isOpen) return null;
@@ -222,65 +380,109 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   </div>
                 )}
 
-                {/* Date Field */}
-
-                <div className={styles.checkoutModal__field}>
-                  <label htmlFor="date" className={styles.checkoutModal__label}>
-                    Date
-                  </label>
-
-                  <div className={styles.checkoutModal__inputWrapper}>
-                    <input
-                      type="date"
-                      id="date"
-                      name="date"
-                      value={formData.date}
-                      onChange={handleInputChange}
-                      className={styles.checkoutModal__input}
-                      required
-                    />
-
-                    <svg
-                      className={styles.checkoutModal__inputIcon}
-                      width="20"
-                      height="20"
-                      viewBox="0 0 20 20"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M6.667 1.667v1.666M13.333 1.667v1.666M2.5 8.333h15M4.167 3.333h11.666c.917 0 1.667.75 1.667 1.667v11.667c0 .916-.75 1.666-1.667 1.666H4.167c-.917 0-1.667-.75-1.667-1.666V5c0-.917.75-1.667 1.667-1.667z"
-                        stroke="currentColor"
-                        strokeWidth="1.25"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                {/* Slot Error Display */}
+                {slotError && (
+                  <div className={styles.checkoutModal__errorMessage}>
+                    <p>{slotError}</p>
                   </div>
-                </div>
+                )}
 
-                {/* Time Field */}
+                {/* Slot Validation Error Display */}
+                {slotValidationError && (
+                  <div className={styles.checkoutModal__errorMessage}>
+                    <p>{slotValidationError}</p>
+                  </div>
+                )}
 
+                {/* Date Selection */}
                 <div className={styles.checkoutModal__field}>
-                  <label htmlFor="time" className={styles.checkoutModal__label}>
-                    Time
+                  <label className={styles.checkoutModal__label}>
+                    Select Date
                   </label>
 
-                  <select
-                    id="timeSlot"
-                    name="timeSlot"
-                    value={formData.timeSlot}
-                    onChange={handleInputChange}
-                    className={styles.checkoutModal__select}
-                    required
-                  >
-                    <option value={TimeSlot.Morning}>Morning</option>
-
-                    <option value={TimeSlot.Afternoon}>Afternoon</option>
-
-                    <option value={TimeSlot.Evening}>Evening</option>
-                  </select>
+                  {requiresAvailability ? (
+                    loadingSlots ? (
+                      <div className={styles.checkoutModal__loadingContainer}>
+                        <div
+                          className={styles.checkoutModal__loadingSkeleton}
+                        />
+                        <p className={styles.checkoutModal__loadingText}>
+                          Loading available dates...
+                        </p>
+                      </div>
+                    ) : (
+                      <DateSlotPicker
+                        selectedDate={new Date(formData.date)}
+                        onDateSelect={handleDateSelect}
+                        availableSlots={availableSlots}
+                        disabled={loadingSlots}
+                      />
+                    )
+                  ) : (
+                    <div className={styles.checkoutModal__inputWrapper}>
+                      <input
+                        type="date"
+                        id="date"
+                        name="date"
+                        value={formData.date}
+                        onChange={handleInputChange}
+                        className={styles.checkoutModal__input}
+                        required
+                      />
+                    </div>
+                  )}
                 </div>
+
+                {/* Time Slot Selection */}
+                {requiresAvailability ? (
+                  <div className={styles.checkoutModal__field}>
+                    <label className={styles.checkoutModal__label}>
+                      Select Time Slot
+                    </label>
+
+                    {loadingSlots ? (
+                      <div className={styles.checkoutModal__loadingContainer}>
+                        <div
+                          className={styles.checkoutModal__loadingSkeleton}
+                        />
+                        <p className={styles.checkoutModal__loadingText}>
+                          Loading time slots...
+                        </p>
+                      </div>
+                    ) : (
+                      <TimeSlotSelector
+                        selectedTimeSlot={formData.timeSlot}
+                        onTimeSlotSelect={handleTimeSlotSelect}
+                        slotAvailability={getSelectedDateSlots()}
+                        disabled={loadingSlots}
+                      />
+                    )}
+                  </div>
+                ) : (
+                  <div className={styles.checkoutModal__field}>
+                    <label className={styles.checkoutModal__label}>
+                      Select Time
+                    </label>
+                    <select
+                      id="timeSlot"
+                      name="timeSlot"
+                      value={formData.timeSlot}
+                      onChange={handleInputChange}
+                      className={styles.checkoutModal__select}
+                      required
+                    >
+                      <option value={TimeSlot.Morning}>
+                        Morning (9:00 AM - 12:00 PM)
+                      </option>
+                      <option value={TimeSlot.Afternoon}>
+                        Afternoon (12:00 PM - 4:00 PM)
+                      </option>
+                      <option value={TimeSlot.Evening}>
+                        Evening (4:00 PM - 8:00 PM)
+                      </option>
+                    </select>
+                  </div>
+                )}
 
                 {/* Address Type Radio Buttons */}
 
@@ -495,9 +697,13 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     size="lg"
                     fullWidth
                     className={styles.checkoutModal__continueButton}
-                    disabled={paymentLoading || submitting}
+                    disabled={paymentLoading || submitting || validatingSlot}
                   >
-                    {submitting || paymentLoading ? "Hang on..." : "CONTINUE"}
+                    {validatingSlot
+                      ? "Checking availability..."
+                      : submitting || paymentLoading
+                        ? "Hang on..."
+                        : "CONTINUE"}
                   </Button>
                 </div>
               </form>

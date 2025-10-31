@@ -198,6 +198,14 @@ const DateSlotPicker: React.FC<DateSlotPickerProps> = ({
       <div className={styles.dateSlotPicker__grid}>
         {calendarDates.map((date, index) => {
           const availabilityIndicator = getAvailabilityIndicator(date);
+          const daySlots = getSlotAvailabilityForDate(date, availableSlots);
+          const availableCount = daySlots.filter((s) => s.isAvailable).length;
+          const tooltipText = isDateSelectable(date)
+            ? availableCount === 0
+              ? "No slots available"
+              : `${availableCount} slot${availableCount > 1 ? "s" : ""} available`
+            : "Unavailable";
+          const selectable = isDateSelectable(date);
 
           return (
             <button
@@ -205,8 +213,9 @@ const DateSlotPicker: React.FC<DateSlotPickerProps> = ({
               type="button"
               className={getDateCellClassName(date)}
               onClick={() => handleDateClick(date)}
-              disabled={!isDateSelectable(date)}
-              aria-label={`${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`}
+              aria-disabled={!selectable}
+              data-tooltip={tooltipText}
+              aria-label={`${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()} — ${tooltipText}`}
             >
               <span className={styles.dateSlotPicker__dateNumber}>
                 {date.getDate()}
