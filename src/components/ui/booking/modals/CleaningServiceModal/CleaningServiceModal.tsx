@@ -272,11 +272,6 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
             {serviceOption?.description}
           </p>
 
-          {/* Price Section */}
-          <div className={styles.modal__price}>
-            NGN {calculateTotalPrice().toLocaleString()}
-          </div>
-
           {/* Configuration Section */}
           <div className={styles.modal__configurationSection}>
             {/* Apartment Type Selection */}

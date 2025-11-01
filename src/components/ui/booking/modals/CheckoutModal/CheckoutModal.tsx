@@ -692,15 +692,6 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                                       >
                                         {address.street}
                                       </p>
-
-                                      <p
-                                        className={
-                                          styles.checkoutModal__addressCardText
-                                        }
-                                      >
-                                        {address.city}, {address.state}{" "}
-                                        {address.zipCode}
-                                      </p>
                                     </div>
 
                                     <div

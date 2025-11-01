@@ -208,11 +208,6 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
             {serviceOption?.description}
           </p>
 
-          {/* Price Section */}
-          <div className={styles.modal__price}>
-            NGN {calculateTotalPrice().toLocaleString()}
-          </div>
-
           {/* Configuration Section */}
           <div className={styles.modal__configurationSection}>
             {/* Bag Count */}

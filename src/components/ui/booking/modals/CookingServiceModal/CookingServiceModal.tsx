@@ -309,11 +309,6 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
               {serviceOption?.description}
             </p>
 
-            {/* Price Section */}
-            <div className={styles.modal__price}>
-              NGN {calculateTotalPrice().toLocaleString()}
-            </div>
-
             {/* Configuration Section */}
             <div className={styles.modal__configurationSection}>
               {/* Meal Type Selection */}
