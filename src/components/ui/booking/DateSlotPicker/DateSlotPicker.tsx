@@ -22,6 +22,7 @@ export interface DateSlotPickerProps {
   maxDate?: Date;
   serviceCategory?: string;
   disabled?: boolean;
+  requiresAvailability?: boolean;
 }
 
 const DateSlotPicker: React.FC<DateSlotPickerProps> = ({
@@ -31,6 +32,7 @@ const DateSlotPicker: React.FC<DateSlotPickerProps> = ({
   minDate = getTomorrowDate(),
   maxDate = getMaxDate(),
   disabled = false,
+  requiresAvailability = true,
 }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
@@ -200,11 +202,13 @@ const DateSlotPicker: React.FC<DateSlotPickerProps> = ({
           const availabilityIndicator = getAvailabilityIndicator(date);
           const daySlots = getSlotAvailabilityForDate(date, availableSlots);
           const availableCount = daySlots.filter((s) => s.isAvailable).length;
-          const tooltipText = isDateSelectable(date)
-            ? availableCount === 0
-              ? "No slots available"
-              : `${availableCount} slot${availableCount > 1 ? "s" : ""} available`
-            : "Unavailable";
+          const tooltipText = requiresAvailability
+            ? isDateSelectable(date)
+              ? availableCount === 0
+                ? "No slots available"
+                : `${availableCount} slot${availableCount > 1 ? "s" : ""} available`
+              : "Unavailable"
+            : "Available";
           const selectable = isDateSelectable(date);
 
           return (
@@ -231,26 +235,28 @@ const DateSlotPicker: React.FC<DateSlotPickerProps> = ({
       </div>
 
       {/* Legend */}
-      <div className={styles.dateSlotPicker__legend}>
-        <div className={styles.dateSlotPicker__legendItem}>
-          <div
-            className={`${styles.dateSlotPicker__legendDot} ${styles.dateSlotPicker__legendDot__available}`}
-          />
-          <span>Available</span>
+      {requiresAvailability && (
+        <div className={styles.dateSlotPicker__legend}>
+          <div className={styles.dateSlotPicker__legendItem}>
+            <div
+              className={`${styles.dateSlotPicker__legendDot} ${styles.dateSlotPicker__legendDot__available}`}
+            />
+            <span>Available</span>
+          </div>
+          <div className={styles.dateSlotPicker__legendItem}>
+            <div
+              className={`${styles.dateSlotPicker__legendDot} ${styles.dateSlotPicker__legendDot__limited}`}
+            />
+            <span>Limited</span>
+          </div>
+          <div className={styles.dateSlotPicker__legendItem}>
+            <div
+              className={`${styles.dateSlotPicker__legendDot} ${styles.dateSlotPicker__legendDot__unavailable}`}
+            />
+            <span>Unavailable</span>
+          </div>
         </div>
-        <div className={styles.dateSlotPicker__legendItem}>
-          <div
-            className={`${styles.dateSlotPicker__legendDot} ${styles.dateSlotPicker__legendDot__limited}`}
-          />
-          <span>Limited</span>
-        </div>
-        <div className={styles.dateSlotPicker__legendItem}>
-          <div
-            className={`${styles.dateSlotPicker__legendDot} ${styles.dateSlotPicker__legendDot__unavailable}`}
-          />
-          <span>Unavailable</span>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

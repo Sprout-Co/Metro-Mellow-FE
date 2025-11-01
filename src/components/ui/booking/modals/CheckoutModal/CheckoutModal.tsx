@@ -225,6 +225,31 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     return getSlotAvailabilityForDate(selectedDate, availableSlots);
   };
 
+  // Generate fake availability data for all dates when not required
+  const getAvailableSlotsForPicker = (): DateAvailability[] => {
+    if (requiresAvailability) {
+      return availableSlots;
+    }
+
+    // For services that don't require availability, generate fake data
+    // so all dates appear available in the picker
+    const fakeSlots: DateAvailability[] = [];
+    const startDate = getTomorrowDate();
+    const endDate = getMaxDate();
+
+    const currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+      fakeSlots.push({
+        date: currentDate.toISOString().split("T")[0],
+        hasAvailableSlots: true,
+        slots: [],
+      });
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return fakeSlots;
+  };
+
   // Validate selected slot availability
   const validateSlotAvailability = async (): Promise<boolean> => {
     setValidatingSlot(true);
@@ -368,7 +393,6 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 className={styles.checkoutModal__form}
               >
                 {/* Section Title */}
-
                 <h3 className={styles.checkoutModal__sectionTitle}>
                   {service_category} Details
                 </h3>
@@ -393,300 +417,315 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     <p>{slotValidationError}</p>
                   </div>
                 )}
-
-                {/* Date Selection */}
-                <div className={styles.checkoutModal__field}>
-                  <label className={styles.checkoutModal__label}>
-                    Select Date
-                  </label>
-
-                  {requiresAvailability ? (
-                    loadingSlots ? (
-                      <div className={styles.checkoutModal__loadingContainer}>
-                        <div
-                          className={styles.checkoutModal__loadingSkeleton}
-                        />
-                        <p className={styles.checkoutModal__loadingText}>
-                          Loading available dates...
-                        </p>
-                      </div>
-                    ) : (
-                      <DateSlotPicker
-                        selectedDate={new Date(formData.date)}
-                        onDateSelect={handleDateSelect}
-                        availableSlots={availableSlots}
-                        disabled={loadingSlots}
-                      />
-                    )
-                  ) : (
-                    <div className={styles.checkoutModal__inputWrapper}>
-                      <input
-                        type="date"
-                        id="date"
-                        name="date"
-                        value={formData.date}
-                        onChange={handleInputChange}
-                        className={styles.checkoutModal__input}
-                        required
-                      />
-                    </div>
-                  )}
-                </div>
-
-                {/* Time Slot Selection */}
-                {requiresAvailability ? (
-                  <div className={styles.checkoutModal__field}>
-                    <label className={styles.checkoutModal__label}>
-                      Select Time Slot
-                    </label>
-
-                    {loadingSlots ? (
-                      <div className={styles.checkoutModal__loadingContainer}>
-                        <div
-                          className={styles.checkoutModal__loadingSkeleton}
-                        />
-                        <p className={styles.checkoutModal__loadingText}>
-                          Loading time slots...
-                        </p>
-                      </div>
-                    ) : (
-                      <TimeSlotSelector
-                        selectedTimeSlot={formData.timeSlot}
-                        onTimeSlotSelect={handleTimeSlotSelect}
-                        slotAvailability={getSelectedDateSlots()}
-                        disabled={loadingSlots}
-                      />
-                    )}
-                  </div>
-                ) : (
-                  <div className={styles.checkoutModal__field}>
-                    <label className={styles.checkoutModal__label}>
-                      Select Time
-                    </label>
-                    <select
-                      id="timeSlot"
-                      name="timeSlot"
-                      value={formData.timeSlot}
-                      onChange={handleInputChange}
-                      className={styles.checkoutModal__select}
-                      required
-                    >
-                      <option value={TimeSlot.Morning}>
-                        Morning (9:00 AM - 12:00 PM)
-                      </option>
-                      <option value={TimeSlot.Afternoon}>
-                        Afternoon (12:00 PM - 4:00 PM)
-                      </option>
-                      <option value={TimeSlot.Evening}>
-                        Evening (4:00 PM - 8:00 PM)
-                      </option>
-                    </select>
-                  </div>
-                )}
-
-                {/* Address Type Radio Buttons */}
-
-                {user && isAuthenticated ? (
-                  <div className={styles.checkoutModal__field}>
-                    <div className={styles.checkoutModal__radioGroup}>
-                      <label className={styles.checkoutModal__radioLabel}>
-                        <input
-                          type="radio"
-                          name="addressType"
-                          value="saved"
-                          // checked={formData.addressType === "saved"}
-
-                          checked={!isNewAddress}
-                          onChange={() => setIsNewAddress(false)}
-                          className={styles.checkoutModal__radio}
-                        />
-
-                        <span className={styles.checkoutModal__radioText}>
-                          Saved Address
-                        </span>
-                      </label>
-
-                      <label className={styles.checkoutModal__radioLabel}>
-                        <input
-                          type="radio"
-                          name="addressType"
-                          value="new"
-                          // checked={formData.addressType === "new"}
-
-                          checked={isNewAddress}
-                          onChange={() => setIsNewAddress(true)}
-                          className={styles.checkoutModal__radio}
-                        />
-
-                        <span className={styles.checkoutModal__radioText}>
-                          New Address
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-                ) : (
-                  <div className={styles.checkoutModal__field}>
-                    <p>Please login to continue</p>
-                  </div>
-                )}
-
-                {isNewAddress ? (
-                  <>
-                    {/* City Field */}
-
+                <div className={styles.checkoutModal__mainContent}>
+                  <div className={styles.checkoutModal__leftColumn}>
+                    {/* Date Selection */}
                     <div className={styles.checkoutModal__field}>
-                      <label
-                        htmlFor="city"
-                        className={styles.checkoutModal__label}
-                      >
-                        City
+                      <label className={styles.checkoutModal__label}>
+                        Select Date
                       </label>
 
-                      <select
-                        id="city"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleInputChange}
-                        className={styles.checkoutModal__select}
-                        required
-                      >
-                        <option value="">Select City</option>
-
-                        <option value="ikeja">Ikeja</option>
-
-                        <option value="victoria-island">Victoria Island</option>
-
-                        <option value="lekki">Lekki</option>
-
-                        <option value="surulere">Surulere</option>
-                      </select>
+                      {requiresAvailability && loadingSlots ? (
+                        <div className={styles.checkoutModal__loadingContainer}>
+                          <div
+                            className={styles.checkoutModal__loadingSkeleton}
+                          />
+                          <p className={styles.checkoutModal__loadingText}>
+                            Loading available dates...
+                          </p>
+                        </div>
+                      ) : (
+                        <DateSlotPicker
+                          selectedDate={new Date(formData.date)}
+                          onDateSelect={handleDateSelect}
+                          availableSlots={getAvailableSlotsForPicker()}
+                          disabled={loadingSlots}
+                          requiresAvailability={requiresAvailability}
+                        />
+                      )}
                     </div>
 
-                    {/* Address Field */}
+                    {/* Time Slot Selection */}
+                    {/* MOVED TO RIGHT COLUMN */}
+                  </div>
+                  <div className={styles.checkoutModal__rightColumn}>
+                    {/* Time Slot Selection */}
+                    {requiresAvailability ? (
+                      <div className={styles.checkoutModal__field}>
+                        <label className={styles.checkoutModal__label}>
+                          Select Time Slot
+                        </label>
 
-                    <div className={styles.checkoutModal__field}>
-                      <label
-                        htmlFor="street"
-                        className={styles.checkoutModal__label}
-                      >
-                        Street
-                      </label>
-
-                      <input
-                        type="text"
-                        id="street"
-                        name="street"
-                        value={formData.street}
-                        onChange={handleInputChange}
-                        className={styles.checkoutModal__input}
-                        required
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    {user?.addresses && user.addresses.length > 0 ? (
-                      <div className={styles.checkoutModal__addressList}>
-                        <h4 className={styles.checkoutModal__addressListTitle}>
-                          Select an address
-                        </h4>
-
-                        {user.addresses.map(
-                          (address) =>
-                            address && (
-                              <div
-                                key={address.id}
-                                className={`${styles.checkoutModal__addressCard} ${
-                                  formData.addressId === address.id
-                                    ? styles.checkoutModal__addressCard__selected
-                                    : ""
-                                }`}
-                                onClick={() =>
-                                  setFormData((prev) => ({
-                                    ...prev,
-
-                                    addressId: address.id,
-
-                                    city: address.city || "",
-
-                                    street: address.street || "",
-                                  }))
-                                }
-                              >
-                                <div
-                                  className={
-                                    styles.checkoutModal__addressCardContent
-                                  }
-                                >
-                                  <div
-                                    className={
-                                      styles.checkoutModal__addressCardHeader
-                                    }
-                                  >
-                                    <span
-                                      className={
-                                        styles.checkoutModal__addressCardLabel
-                                      }
-                                    >
-                                      {address.label}
-                                    </span>
-
-                                    {address.isDefault && (
-                                      <span
-                                        className={
-                                          styles.checkoutModal__addressCardDefault
-                                        }
-                                      >
-                                        Default
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <p
-                                    className={
-                                      styles.checkoutModal__addressCardText
-                                    }
-                                  >
-                                    {address.street}
-                                  </p>
-
-                                  <p
-                                    className={
-                                      styles.checkoutModal__addressCardText
-                                    }
-                                  >
-                                    {address.city}, {address.state}{" "}
-                                    {address.zipCode}
-                                  </p>
-                                </div>
-
-                                <div
-                                  className={
-                                    styles.checkoutModal__addressCardRadio
-                                  }
-                                >
-                                  <input
-                                    type="radio"
-                                    name="addressId"
-                                    value={address.id}
-                                    checked={formData.addressId === address.id}
-                                    onChange={() => {}}
-                                    className={styles.checkoutModal__radio}
-                                  />
-                                </div>
-                              </div>
-                            )
+                        {loadingSlots ? (
+                          <div
+                            className={styles.checkoutModal__loadingContainer}
+                          >
+                            <div
+                              className={styles.checkoutModal__loadingSkeleton}
+                            />
+                            <p className={styles.checkoutModal__loadingText}>
+                              Loading time slots...
+                            </p>
+                          </div>
+                        ) : (
+                          <TimeSlotSelector
+                            selectedTimeSlot={formData.timeSlot}
+                            onTimeSlotSelect={handleTimeSlotSelect}
+                            slotAvailability={getSelectedDateSlots()}
+                            disabled={loadingSlots}
+                          />
                         )}
                       </div>
                     ) : (
-                      <div className={styles.checkoutModal__noAddress}>
-                        <p>You don't have any saved addresses.</p>
-
-                        <p>Please add a new address.</p>
+                      <div className={styles.checkoutModal__field}>
+                        <label className={styles.checkoutModal__label}>
+                          Select Time
+                        </label>
+                        <select
+                          id="timeSlot"
+                          name="timeSlot"
+                          value={formData.timeSlot}
+                          onChange={handleInputChange}
+                          className={styles.checkoutModal__select}
+                          required
+                        >
+                          <option value={TimeSlot.Morning}>
+                            Morning (9:00 AM - 12:00 PM)
+                          </option>
+                          <option value={TimeSlot.Afternoon}>
+                            Afternoon (12:00 PM - 4:00 PM)
+                          </option>
+                          <option value={TimeSlot.Evening}>
+                            Evening (4:00 PM - 8:00 PM)
+                          </option>
+                        </select>
                       </div>
                     )}
-                  </>
-                )}
+                    {/* Address Type Radio Buttons */}
+
+                    {user && isAuthenticated ? (
+                      <div className={styles.checkoutModal__field}>
+                        <div className={styles.checkoutModal__radioGroup}>
+                          <label className={styles.checkoutModal__radioLabel}>
+                            <input
+                              type="radio"
+                              name="addressType"
+                              value="saved"
+                              // checked={formData.addressType === "saved"}
+                              checked={!isNewAddress}
+                              onChange={() => setIsNewAddress(false)}
+                              className={styles.checkoutModal__radio}
+                            />
+
+                            <span className={styles.checkoutModal__radioText}>
+                              Saved Address
+                            </span>
+                          </label>
+
+                          <label className={styles.checkoutModal__radioLabel}>
+                            <input
+                              type="radio"
+                              name="addressType"
+                              value="new"
+                              // checked={formData.addressType === "new"}
+                              checked={isNewAddress}
+                              onChange={() => setIsNewAddress(true)}
+                              className={styles.checkoutModal__radio}
+                            />
+
+                            <span className={styles.checkoutModal__radioText}>
+                              New Address
+                            </span>
+                          </label>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className={styles.checkoutModal__field}>
+                        <p>Please login to continue</p>
+                      </div>
+                    )}
+
+                    {isNewAddress ? (
+                      <>
+                        {/* City Field */}
+
+                        <div className={styles.checkoutModal__field}>
+                          <label
+                            htmlFor="city"
+                            className={styles.checkoutModal__label}
+                          >
+                            City
+                          </label>
+
+                          <select
+                            id="city"
+                            name="city"
+                            value={formData.city}
+                            onChange={handleInputChange}
+                            className={styles.checkoutModal__select}
+                            required
+                          >
+                            <option value="">Select City</option>
+
+                            <option value="ikeja">Ikeja</option>
+
+                            <option value="victoria-island">
+                              Victoria Island
+                            </option>
+
+                            <option value="lekki">Lekki</option>
+
+                            <option value="surulere">Surulere</option>
+                          </select>
+                        </div>
+
+                        {/* Address Field */}
+
+                        <div className={styles.checkoutModal__field}>
+                          <label
+                            htmlFor="street"
+                            className={styles.checkoutModal__label}
+                          >
+                            Street
+                          </label>
+
+                          <input
+                            type="text"
+                            id="street"
+                            name="street"
+                            value={formData.street}
+                            onChange={handleInputChange}
+                            className={styles.checkoutModal__input}
+                            required
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {user?.addresses && user.addresses.length > 0 ? (
+                          <div className={styles.checkoutModal__addressList}>
+                            <h4 className={styles.checkoutModal__label}>
+                              Select an address
+                            </h4>
+
+                            {user.addresses.map(
+                              (address) =>
+                                address && (
+                                  <div
+                                    key={address.id}
+                                    className={`${
+                                      styles.checkoutModal__addressCard
+                                    } ${
+                                      formData.addressId === address.id
+                                        ? styles.checkoutModal__addressCard__selected
+                                        : ""
+                                    }`}
+                                    onClick={() =>
+                                      setFormData((prev) => ({
+                                        ...prev,
+
+                                        addressId: address.id,
+
+                                        city: address.city || "",
+
+                                        street: address.street || "",
+                                      }))
+                                    }
+                                  >
+                                    <div
+                                      className={
+                                        styles.checkoutModal__addressCardContent
+                                      }
+                                    >
+                                      <div
+                                        className={
+                                          styles.checkoutModal__addressCardHeader
+                                        }
+                                      >
+                                        <span
+                                          className={
+                                            styles.checkoutModal__addressCardLabel
+                                          }
+                                        >
+                                          {address.label}
+                                        </span>
+
+                                        {address.isDefault && (
+                                          <span
+                                            className={
+                                              styles.checkoutModal__addressCardDefault
+                                            }
+                                          >
+                                            Default
+                                          </span>
+                                        )}
+                                      </div>
+
+                                      <p
+                                        className={
+                                          styles.checkoutModal__addressCardText
+                                        }
+                                      >
+                                        {address.street}
+                                      </p>
+
+                                      <p
+                                        className={
+                                          styles.checkoutModal__addressCardText
+                                        }
+                                      >
+                                        {address.city}, {address.state}{" "}
+                                        {address.zipCode}
+                                      </p>
+                                    </div>
+
+                                    <div
+                                      className={
+                                        styles.checkoutModal__addressCardRadio
+                                      }
+                                    >
+                                      <input
+                                        type="radio"
+                                        name="addressId"
+                                        value={address.id}
+                                        checked={
+                                          formData.addressId === address.id
+                                        }
+                                        onChange={() => {}}
+                                        className={styles.checkoutModal__radio}
+                                      />
+                                    </div>
+                                  </div>
+                                )
+                            )}
+                          </div>
+                        ) : (
+                          <div className={styles.checkoutModal__noAddress}>
+                            <p>You don't have any saved addresses.</p>
+
+                            <p>Please add a new address.</p>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {/* Booking Summary */}
+                <div className={styles.checkoutModal__summary}>
+                  <div className={styles.checkoutModal__summaryItem}>
+                    <span>Subtotal</span>
+                    <span>₦10,000</span>
+                  </div>
+                  <div className={styles.checkoutModal__summaryItem}>
+                    <span>Discount</span>
+                    <span>₦0</span>
+                  </div>
+                  <div className={styles.checkoutModal__summaryItem}>
+                    <span>Total</span>
+                    <span>₦10,000</span>
+                  </div>
+                </div>
 
                 {/* Submit Button */}
 
