@@ -203,6 +203,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
         timeSlot: formData.timeSlot,
         address: formData.addressId || "",
         notes: `Frequency`,
+        serviceArea: formData.serviceArea,
         serviceDetails: {
           serviceOption:
             serviceOption?.service_id || ServiceId.StandardCleaning,

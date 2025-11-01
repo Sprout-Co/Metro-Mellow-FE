@@ -178,6 +178,7 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
         date: formData.date,
         timeSlot: formData.timeSlot,
         address: formData.addressId || "",
+        serviceArea: formData.serviceArea,
         notes: `Treatment Type: ${treatmentType}, Severity: ${severity}, Areas: ${areas
           .filter((a) => a.selected)
           .map((a) => a.name)

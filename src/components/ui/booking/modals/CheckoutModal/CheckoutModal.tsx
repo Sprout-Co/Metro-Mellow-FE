@@ -5,6 +5,7 @@ import Portal from "../../../Portal/Portal";
 import Button from "../../../Button/Button";
 import DateSlotPicker from "../../DateSlotPicker/DateSlotPicker";
 import TimeSlotSelector from "../../TimeSlotSelector/TimeSlotSelector";
+import ServiceAreaDropdown from "../../ServiceAreaDropdown/ServiceAreaDropdown";
 import styles from "./CheckoutModal.module.scss";
 import { useAppSelector } from "@/lib/redux/hooks";
 import {
@@ -48,6 +49,7 @@ export interface CheckoutFormData {
   city: string;
   street: string;
   addressId?: string;
+  serviceArea: string;
 }
 
 const CheckoutModal: React.FC<CheckoutModalProps> = ({
@@ -101,6 +103,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     city: user?.defaultAddress?.city || "",
     street: user?.defaultAddress?.street || "",
     addressId: user?.defaultAddress?.id,
+    serviceArea: "Ikeja",
   });
 
   const [address, setAddress] = useState<AddressInput>({
@@ -110,6 +113,14 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   });
 
   const [isNewAddress, setIsNewAddress] = useState(!user?.addresses?.length);
+
+  // Handle service area change
+  const handleServiceAreaChange = (area: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      serviceArea: area,
+    }));
+  };
 
   // Fetch available slots when modal opens
   const fetchAvailableSlots = useCallback(async () => {
@@ -163,13 +174,13 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   }, [user]);
 
   // Handle escape key press
-
   React.useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
       }
     };
+
     if (isOpen) {
       document.addEventListener("keydown", handleEscape);
       document.body.style.overflow = "hidden";
@@ -313,9 +324,11 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     }
 
     // Proceed with booking if slot is available
-    onCheckout(formData, (bookingResponse: string) =>
-      handlePayment(bookingResponse)
-    );
+    console.log("formData", formData);
+    onCheckout(formData, (bookingResponse: string) => {
+      console.log("bookingResponse", bookingResponse);
+      handlePayment(bookingResponse);
+    });
   };
 
   if (!isOpen) return null;
@@ -449,6 +462,17 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     {/* MOVED TO RIGHT COLUMN */}
                   </div>
                   <div className={styles.checkoutModal__rightColumn}>
+                    {/* Service Area Selection */}
+                    <div className={styles.checkoutModal__field}>
+                      <label className={styles.checkoutModal__label}>
+                        Service Area
+                      </label>
+                      <ServiceAreaDropdown
+                        value={formData.serviceArea}
+                        onChange={handleServiceAreaChange}
+                      />
+                    </div>
+
                     {/* Time Slot Selection */}
                     {requiresAvailability ? (
                       <div className={styles.checkoutModal__field}>

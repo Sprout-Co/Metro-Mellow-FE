@@ -141,6 +141,7 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
         timeSlot: formData.timeSlot,
         address: formData.addressId || "",
         notes: `Laundry Type: ${LaundryType.StandardLaundry}, Bags: ${bags}`,
+        serviceArea: formData.serviceArea,
         serviceDetails: {
           serviceOption: serviceOption?.service_id || "",
           laundry: {
