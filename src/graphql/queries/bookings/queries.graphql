@@ -17,7 +17,6 @@ query GetBookings($status: BookingStatus) {
     resumeDate
     pauseDate
     recurringDiscount
-    serviceArea
     feedback {
       rating
       comment
@@ -143,7 +142,6 @@ query GetBookingById($id: ID!) {
     resumeDate
     pauseDate
     recurringDiscount
-    serviceArea
     feedback {
       rating
       comment
@@ -269,7 +267,6 @@ query GetCustomerBookings {
     resumeDate
     pauseDate
     recurringDiscount
-    serviceArea
     feedback {
       rating
       comment

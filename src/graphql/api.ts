@@ -55,6 +55,7 @@ export type Address = {
   id: Scalars['ID']['output'];
   isDefault?: Maybe<Scalars['Boolean']['output']>;
   label?: Maybe<Scalars['String']['output']>;
+  serviceArea: Scalars['String']['output'];
   state?: Maybe<Scalars['String']['output']>;
   street?: Maybe<Scalars['String']['output']>;
   zipCode?: Maybe<Scalars['String']['output']>;
@@ -64,6 +65,7 @@ export type AddressInput = {
   city: Scalars['String']['input'];
   isDefault?: InputMaybe<Scalars['Boolean']['input']>;
   label?: InputMaybe<Scalars['String']['input']>;
+  serviceArea: Scalars['String']['input'];
   state?: InputMaybe<Scalars['String']['input']>;
   street: Scalars['String']['input'];
   userId?: InputMaybe<Scalars['ID']['input']>;
@@ -162,7 +164,6 @@ export type Booking = {
   recurringDiscount?: Maybe<Scalars['Float']['output']>;
   resumeDate?: Maybe<Scalars['DateTime']['output']>;
   service: Service;
-  serviceArea?: Maybe<Scalars['String']['output']>;
   serviceDetails: ServiceDetails;
   serviceOption: ServiceId;
   service_category: ServiceCategory;
@@ -243,7 +244,6 @@ export type CreateBookingInput = {
   customerId?: InputMaybe<Scalars['ID']['input']>;
   date: Scalars['DateTime']['input'];
   notes?: InputMaybe<Scalars['String']['input']>;
-  serviceArea?: InputMaybe<Scalars['String']['input']>;
   serviceDetails: ServiceDetailsInput;
   serviceId: Scalars['ID']['input'];
   serviceOption: ServiceId;
@@ -254,6 +254,7 @@ export type CreateBookingInput = {
 
 export type CreateCustomerAddressInput = {
   city: Scalars['String']['input'];
+  serviceArea: Scalars['String']['input'];
   street: Scalars['String']['input'];
 };
 
@@ -1563,7 +1564,6 @@ export type UpdateBookingInput = {
   address: Scalars['ID']['input'];
   date: Scalars['DateTime']['input'];
   notes?: InputMaybe<Scalars['String']['input']>;
-  serviceArea?: InputMaybe<Scalars['String']['input']>;
   serviceDetails: ServiceDetailsInput;
   serviceOption: ServiceId;
   service_category: ServiceCategory;
@@ -2156,21 +2156,21 @@ export type AdminInvitationQuery = { __typename?: 'Query', adminInvitation?: { _
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label?: string | null } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null } | null> | null } | null };
+export type GetCurrentUserQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label?: string | null, serviceArea: string } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea: string } | null> | null } | null };
 
 export type GetUserByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label?: string | null } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null } | null> | null } | null };
+export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label?: string | null, serviceArea: string } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea: string } | null> | null } | null };
 
 export type GetUsersQueryVariables = Exact<{
   role?: InputMaybe<UserRole>;
 }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label?: string | null } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null } | null> | null }> };
+export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label?: string | null, serviceArea: string } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea: string } | null> | null }> };
 
 export type GetSubscriptionBillingsQueryVariables = Exact<{
   subscriptionId: Scalars['ID']['input'];
@@ -2196,19 +2196,19 @@ export type GetBookingsQueryVariables = Exact<{
 }>;
 
 
-export type GetBookingsQuery = { __typename?: 'Query', bookings: Array<{ __typename?: 'Booking', id: string, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, service_category: ServiceCategory, serviceOption: ServiceId, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, recurring?: boolean | null, cancellationDate?: any | null, cancellationReason?: string | null, resumeDate?: any | null, pauseDate?: any | null, recurringDiscount?: number | null, serviceArea?: string | null, feedback?: { __typename?: 'Feedback', rating?: number | null, comment?: string | null } | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, imageUrl?: string | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, label?: string | null }, serviceDetails: { __typename?: 'ServiceDetails', serviceOption?: ServiceId | null, cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> };
+export type GetBookingsQuery = { __typename?: 'Query', bookings: Array<{ __typename?: 'Booking', id: string, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, service_category: ServiceCategory, serviceOption: ServiceId, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, recurring?: boolean | null, cancellationDate?: any | null, cancellationReason?: string | null, resumeDate?: any | null, pauseDate?: any | null, recurringDiscount?: number | null, feedback?: { __typename?: 'Feedback', rating?: number | null, comment?: string | null } | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, imageUrl?: string | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, label?: string | null }, serviceDetails: { __typename?: 'ServiceDetails', serviceOption?: ServiceId | null, cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> };
 
 export type GetBookingByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetBookingByIdQuery = { __typename?: 'Query', booking?: { __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, service_category: ServiceCategory, serviceOption: ServiceId, recurring?: boolean | null, cancellationDate?: any | null, cancellationReason?: string | null, resumeDate?: any | null, pauseDate?: any | null, recurringDiscount?: number | null, serviceArea?: string | null, feedback?: { __typename?: 'Feedback', rating?: number | null, comment?: string | null } | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, imageUrl?: string | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, label?: string | null }, serviceDetails: { __typename?: 'ServiceDetails', serviceOption?: ServiceId | null, cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } } | null };
+export type GetBookingByIdQuery = { __typename?: 'Query', booking?: { __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, service_category: ServiceCategory, serviceOption: ServiceId, recurring?: boolean | null, cancellationDate?: any | null, cancellationReason?: string | null, resumeDate?: any | null, pauseDate?: any | null, recurringDiscount?: number | null, feedback?: { __typename?: 'Feedback', rating?: number | null, comment?: string | null } | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, imageUrl?: string | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, label?: string | null }, serviceDetails: { __typename?: 'ServiceDetails', serviceOption?: ServiceId | null, cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } } | null };
 
 export type GetCustomerBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCustomerBookingsQuery = { __typename?: 'Query', customerBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, service_category: ServiceCategory, serviceOption: ServiceId, recurring?: boolean | null, cancellationDate?: any | null, cancellationReason?: string | null, resumeDate?: any | null, pauseDate?: any | null, recurringDiscount?: number | null, serviceArea?: string | null, feedback?: { __typename?: 'Feedback', rating?: number | null, comment?: string | null } | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, imageUrl?: string | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, label?: string | null }, serviceDetails: { __typename?: 'ServiceDetails', serviceOption?: ServiceId | null, cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> };
+export type GetCustomerBookingsQuery = { __typename?: 'Query', customerBookings: Array<{ __typename?: 'Booking', id: string, date: any, timeSlot: TimeSlot, status: BookingStatus, notes?: string | null, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, service_category: ServiceCategory, serviceOption: ServiceId, recurring?: boolean | null, cancellationDate?: any | null, cancellationReason?: string | null, resumeDate?: any | null, pauseDate?: any | null, recurringDiscount?: number | null, feedback?: { __typename?: 'Feedback', rating?: number | null, comment?: string | null } | null, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, imageUrl?: string | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, staff?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } | null, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, label?: string | null }, serviceDetails: { __typename?: 'ServiceDetails', serviceOption?: ServiceId | null, cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number, lobby: number, outdoor: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> };
 
 export type GetStaffBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2362,7 +2362,7 @@ export type GetSubscriptionsQuery = { __typename?: 'Query', subscriptions: Array
 export type GetCustomerSubscriptionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCustomerSubscriptionsQuery = { __typename?: 'Query', customerSubscriptions: Array<{ __typename?: 'Subscription', id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', service_category: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, imageUrl?: string | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> }> };
+export type GetCustomerSubscriptionsQuery = { __typename?: 'Query', customerSubscriptions: Array<{ __typename?: 'Subscription', id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea: string }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', service_category: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, imageUrl?: string | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> }> };
 
 
 export const CreateAdminInvitationDocument = gql`
@@ -5109,6 +5109,7 @@ export const GetCurrentUserDocument = gql`
       id
       isDefault
       label
+      serviceArea
     }
     addresses {
       id
@@ -5119,6 +5120,7 @@ export const GetCurrentUserDocument = gql`
       country
       isDefault
       label
+      serviceArea
     }
     emailVerified
     emailVerifiedAt
@@ -5178,6 +5180,7 @@ export const GetUserByIdDocument = gql`
       id
       isDefault
       label
+      serviceArea
     }
     addresses {
       id
@@ -5188,6 +5191,7 @@ export const GetUserByIdDocument = gql`
       country
       isDefault
       label
+      serviceArea
     }
     emailVerified
     emailVerifiedAt
@@ -5248,6 +5252,7 @@ export const GetUsersDocument = gql`
       id
       isDefault
       label
+      serviceArea
     }
     addresses {
       id
@@ -5258,6 +5263,7 @@ export const GetUsersDocument = gql`
       country
       isDefault
       label
+      serviceArea
     }
     emailVerified
     emailVerifiedAt
@@ -5490,7 +5496,6 @@ export const GetBookingsDocument = gql`
     resumeDate
     pauseDate
     recurringDiscount
-    serviceArea
     feedback {
       rating
       comment
@@ -5650,7 +5655,6 @@ export const GetBookingByIdDocument = gql`
     resumeDate
     pauseDate
     recurringDiscount
-    serviceArea
     feedback {
       rating
       comment
@@ -5810,7 +5814,6 @@ export const GetCustomerBookingsDocument = gql`
     resumeDate
     pauseDate
     recurringDiscount
-    serviceArea
     feedback {
       rating
       comment
@@ -7558,6 +7561,7 @@ export const GetCustomerSubscriptionsDocument = gql`
       country
       isDefault
       label
+      serviceArea
     }
     paymentMethod {
       id

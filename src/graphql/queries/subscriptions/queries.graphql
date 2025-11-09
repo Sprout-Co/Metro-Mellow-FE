@@ -299,6 +299,7 @@ query GetCustomerSubscriptions {
       country
       isDefault
       label
+      serviceArea
     }
     paymentMethod {
       id

@@ -49,7 +49,6 @@ export interface CheckoutFormData {
   city: string;
   street: string;
   addressId?: string;
-  serviceArea: string;
 }
 
 const CheckoutModal: React.FC<CheckoutModalProps> = ({
@@ -103,13 +102,13 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     city: user?.defaultAddress?.city || "",
     street: user?.defaultAddress?.street || "",
     addressId: user?.defaultAddress?.id,
-    serviceArea: "Ikeja",
   });
 
   const [address, setAddress] = useState<AddressInput>({
     city: "",
     street: "",
     state: "Lagos",
+    serviceArea: "Ikeja",
   });
 
   const [isNewAddress, setIsNewAddress] = useState(!user?.addresses?.length);
@@ -462,7 +461,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     {/* MOVED TO RIGHT COLUMN */}
                   </div>
                   <div className={styles.checkoutModal__rightColumn}>
-                    {/* Service Area Selection */}
+                    {/* Service Area Selection
                     <div className={styles.checkoutModal__field}>
                       <label className={styles.checkoutModal__label}>
                         Service Area
@@ -471,7 +470,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                         value={formData.serviceArea}
                         onChange={handleServiceAreaChange}
                       />
-                    </div>
+                    </div> */}
 
                     {/* Time Slot Selection */}
                     {requiresAvailability ? (
