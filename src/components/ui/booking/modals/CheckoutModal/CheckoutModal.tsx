@@ -104,6 +104,9 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   const [isNewAddress, setIsNewAddress] = useState(!user?.addresses?.length);
 
+  // Ref for error container to scroll to
+  const errorContainerRef = React.useRef<HTMLDivElement>(null);
+
   // Fetch available slots when modal opens
   const fetchAvailableSlots = useCallback(async () => {
     if (!isOpen || !requiresAvailability) return;
@@ -164,6 +167,21 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
       }));
     }
   }, [isOpen]);
+
+  // Scroll to error when any error appears
+  React.useEffect(() => {
+    if (
+      (error || slotError || slotValidationError) &&
+      errorContainerRef.current
+    ) {
+      setTimeout(() => {
+        errorContainerRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 100);
+    }
+  }, [error, slotError, slotValidationError]);
 
   // Handle escape key press
   React.useEffect(() => {
@@ -424,25 +442,27 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 </h3>
 
                 {/* Error Display */}
-                {error && (
-                  <div className={styles.checkoutModal__errorMessage}>
-                    <p>{error}</p>
-                  </div>
-                )}
+                <div ref={errorContainerRef}>
+                  {error && (
+                    <div className={styles.checkoutModal__errorMessage}>
+                      <p>{error}</p>
+                    </div>
+                  )}
 
-                {/* Slot Error Display */}
-                {slotError && (
-                  <div className={styles.checkoutModal__errorMessage}>
-                    <p>{slotError}</p>
-                  </div>
-                )}
+                  {/* Slot Error Display */}
+                  {slotError && (
+                    <div className={styles.checkoutModal__errorMessage}>
+                      <p>{slotError}</p>
+                    </div>
+                  )}
 
-                {/* Slot Validation Error Display */}
-                {slotValidationError && (
-                  <div className={styles.checkoutModal__errorMessage}>
-                    <p>{slotValidationError}</p>
-                  </div>
-                )}
+                  {/* Slot Validation Error Display */}
+                  {slotValidationError && (
+                    <div className={styles.checkoutModal__errorMessage}>
+                      <p>{slotValidationError}</p>
+                    </div>
+                  )}
+                </div>
                 <div className={styles.checkoutModal__mainContent}>
                   <div className={styles.checkoutModal__leftColumn}>
                     {/* Date Selection */}
