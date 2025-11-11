@@ -25,7 +25,7 @@ export const usePayment = (): UsePaymentReturn => {
   const [error, setError] = useState<string | null>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentReference, setPaymentReference] = useState<string | null>(null);
-  const { handleDeleteBooking } = useBookingOperations();
+  const { handleCancelBooking } = useBookingOperations();
 
   const PAYSTACK_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
 
@@ -123,6 +123,8 @@ export const usePayment = (): UsePaymentReturn => {
 
       // CRITICAL: Convert Naira to Kobo
       const amountInKobo = Math.round(amountInNaira);
+      console.log(amountInKobo, "amountInKobo");
+      console.log(amountInNaira, "amountInNaira");
 
       try {
         // 1. Call Backend to Initialize Transaction
@@ -187,12 +189,11 @@ export const usePayment = (): UsePaymentReturn => {
               const verification = await verifyPaymentWithPolling(
                 transaction.reference
               );
-
+              console.log(verification);
               if (verification.success) {
                 // Set success state for the component to handle
                 setPaymentSuccess(true);
                 setPaymentReference(transaction.reference);
-
                 // Here you would typically:
                 // 1. Update order status in your database
                 // 2. Send confirmation email
@@ -214,18 +215,38 @@ export const usePayment = (): UsePaymentReturn => {
 
           onCancel: async () => {
             console.log("Payment popup canceled by user");
-            try {
-              setLoading(true);
-              await handleDeleteBooking(bookingId);
-            } catch (err) {
-              console.error("Failed to delete booking after cancel:", err);
-              setError(
-                err instanceof Error
-                  ? err.message
-                  : "Failed to delete booking after cancellation"
-              );
-            } finally {
+
+            // Show confirmation dialog
+            const confirmed = window.confirm(
+              "Payment was cancelled. Would you like to cancel this booking?\n\n" +
+                "Click OK to cancel the booking, or Cancel to keep it and retry payment later."
+            );
+
+            if (confirmed) {
+              try {
+                setLoading(true);
+                // Cancel booking (preserves record) instead of deleting
+                await handleCancelBooking(
+                  bookingId,
+                  "Payment cancelled by user"
+                );
+                console.log("Booking cancelled successfully");
+              } catch (err) {
+                console.error("Failed to cancel booking:", err);
+                setError(
+                  err instanceof Error
+                    ? err.message
+                    : "Failed to cancel booking"
+                );
+              } finally {
+                setLoading(false);
+              }
+            } else {
+              // User chose to keep the booking - just close the payment flow
               setLoading(false);
+              console.log(
+                "Booking kept in pending state, user can retry payment later"
+              );
             }
           },
         };

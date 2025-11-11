@@ -179,6 +179,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   // Handle checkout completion
   const handleCheckoutComplete = async (
     formData: CheckoutFormData,
+    finalTotalPrice: number,
     onContinuePayment: (bookingId: string) => void
   ) => {
     try {
@@ -201,7 +202,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
             rooms: roomQuantities,
           },
         },
-        totalPrice: calculateTotalPrice(),
+        totalPrice: finalTotalPrice,
       };
 
       if (isAuthenticated) {

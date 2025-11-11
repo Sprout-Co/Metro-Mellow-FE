@@ -166,6 +166,7 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
   // Handle checkout completion
   const handleCheckoutComplete = async (
     formData: CheckoutFormData,
+    finalTotalPrice: number,
     onContinuePayment: (bookingId: string) => void
   ) => {
     try {
@@ -191,7 +192,7 @@ const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
             areas: areas.filter((area) => area.selected).map((area) => area.id),
           },
         },
-        totalPrice: calculateTotalPrice(),
+        totalPrice: finalTotalPrice,
       };
 
       if (isAuthenticated) {

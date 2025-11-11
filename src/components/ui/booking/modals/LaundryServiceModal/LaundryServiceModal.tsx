@@ -126,6 +126,7 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
   // Handle checkout completion
   const handleCheckoutComplete = async (
     formData: CheckoutFormData,
+    finalTotalPrice: number,
     onContinuePayment: (bookingId: string) => void
   ) => {
     try {
@@ -148,7 +149,7 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
             bags,
           },
         },
-        totalPrice: calculateTotalPrice(),
+        totalPrice: finalTotalPrice,
       };
 
       if (isAuthenticated) {

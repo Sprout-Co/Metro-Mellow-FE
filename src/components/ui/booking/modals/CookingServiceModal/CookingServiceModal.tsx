@@ -217,6 +217,7 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
   // Handle checkout completion
   const handleCheckoutComplete = async (
     formData: CheckoutFormData,
+    finalTotalPrice: number,
     onContinuePayment: (bookingId: string) => void
   ) => {
     if (!formData) return;
@@ -242,7 +243,7 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
               })),
           },
         },
-        totalPrice: calculateTotalPrice(),
+        totalPrice: finalTotalPrice,
       };
 
       if (isAuthenticated) {

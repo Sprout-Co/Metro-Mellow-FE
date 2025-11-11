@@ -25,6 +25,7 @@ export interface CheckoutModalProps {
   onClose: () => void;
   onCheckout: (
     formData: CheckoutFormData,
+    finalTotalPrice: number,
     onContinuePayment: (bookingResponse: string) => void
   ) => void;
   service_category?: string;
@@ -149,8 +150,11 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
       }
     }
 
+    // Calculate final total price (service price + delivery cost - discount)
+    const finalTotalPrice = totalPrice + deliveryCost;
+
     // Proceed with booking
-    onCheckout(formData, (bookingResponse: string) => {
+    onCheckout(formData, finalTotalPrice, (bookingResponse: string) => {
       handlePayment(bookingResponse);
     });
   };
