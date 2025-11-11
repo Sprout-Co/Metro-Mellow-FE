@@ -141,7 +141,6 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
         timeSlot: formData.timeSlot,
         address: formData.addressId || "",
         notes: `Laundry Type: ${LaundryType.StandardLaundry}, Bags: ${bags}`,
-        serviceArea: formData.serviceArea,
         serviceDetails: {
           serviceOption: serviceOption?.service_id || "",
           laundry: {
@@ -285,6 +284,7 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
         submitting={isCreatingBooking}
         error={error}
         onClearError={() => setError(null)}
+        totalPrice={calculateTotalPrice()}
       />
 
       {/* Service Details Slide Panel */}

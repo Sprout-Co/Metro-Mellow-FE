@@ -5,7 +5,6 @@ import Portal from "../../../Portal/Portal";
 import Button from "../../../Button/Button";
 import DateSlotPicker from "../../DateSlotPicker/DateSlotPicker";
 import TimeSlotSelector from "../../TimeSlotSelector/TimeSlotSelector";
-import ServiceAreaDropdown from "../../ServiceAreaDropdown/ServiceAreaDropdown";
 import styles from "./CheckoutModal.module.scss";
 import { useAppSelector } from "@/lib/redux/hooks";
 import {
@@ -15,9 +14,6 @@ import {
   SlotAvailability,
   ServiceCategory,
 } from "@/graphql/api";
-import { Routes } from "@/constants/routes";
-import axios from "axios";
-import router from "next/router";
 import { usePayment } from "@/hooks/usePayment";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import {
@@ -41,6 +37,7 @@ export interface CheckoutModalProps {
   submitting?: boolean;
   error?: string | null;
   onClearError?: () => void;
+  totalPrice: number;
 }
 
 export interface CheckoutFormData {
@@ -59,6 +56,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   submitting = false,
   error = null,
   onClearError,
+  totalPrice = 0,
 }) => {
   // Form state management
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
@@ -97,29 +95,14 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   );
 
   const [formData, setFormData] = useState<CheckoutFormData>({
-    date: getTomorrowDate().toISOString().split("T")[0],
+    date: formatDateToLocalString(getTomorrowDate()),
     timeSlot: TimeSlot.Morning,
     city: user?.defaultAddress?.city || "",
     street: user?.defaultAddress?.street || "",
     addressId: user?.defaultAddress?.id,
   });
 
-  const [address, setAddress] = useState<AddressInput>({
-    city: "",
-    street: "",
-    state: "Lagos",
-    serviceArea: "Ikeja",
-  });
-
   const [isNewAddress, setIsNewAddress] = useState(!user?.addresses?.length);
-
-  // Handle service area change
-  const handleServiceAreaChange = (area: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      serviceArea: area,
-    }));
-  };
 
   // Fetch available slots when modal opens
   const fetchAvailableSlots = useCallback(async () => {
@@ -171,6 +154,16 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
       }));
     }
   }, [user]);
+
+  // Reset date to tomorrow when modal opens
+  React.useEffect(() => {
+    if (isOpen) {
+      setFormData((prev) => ({
+        ...prev,
+        date: formatDateToLocalString(getTomorrowDate()),
+      }));
+    }
+  }, [isOpen]);
 
   // Handle escape key press
   React.useEffect(() => {
@@ -300,7 +293,11 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   const handlePayment = async (bookingId: string) => {
     try {
-      await initializePayment(bookingId, 10000, user?.email || "");
+      await initializePayment(
+        bookingId,
+        totalPrice + deliveryCost,
+        user?.email || ""
+      );
     } catch (err) {
       console.error("Payment failed:", err);
     }
@@ -329,6 +326,23 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
       handlePayment(bookingResponse);
     });
   };
+
+  const deliveryCost = useMemo(() => {
+    // If an address is selected, get delivery cost from that address's service area
+    if (formData.addressId && user?.addresses) {
+      const selectedAddress = user.addresses.find(
+        (addr) => addr?.id === formData.addressId
+      );
+      return selectedAddress?.serviceArea?.deliveryCost || 0;
+    }
+
+    // Fallback to default address if no specific address is selected
+    return user?.defaultAddress?.serviceArea?.deliveryCost || 0;
+  }, [
+    formData.addressId,
+    user?.addresses,
+    user?.defaultAddress?.serviceArea?.deliveryCost,
+  ]);
 
   if (!isOpen) return null;
 
@@ -448,7 +462,12 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                         </div>
                       ) : (
                         <DateSlotPicker
-                          selectedDate={new Date(formData.date)}
+                          selectedDate={(() => {
+                            const [year, month, day] = formData.date
+                              .split("-")
+                              .map(Number);
+                            return new Date(year, month - 1, day);
+                          })()}
                           onDateSelect={handleDateSelect}
                           availableSlots={getAvailableSlotsForPicker()}
                           disabled={loadingSlots}
@@ -461,17 +480,6 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     {/* MOVED TO RIGHT COLUMN */}
                   </div>
                   <div className={styles.checkoutModal__rightColumn}>
-                    {/* Service Area Selection
-                    <div className={styles.checkoutModal__field}>
-                      <label className={styles.checkoutModal__label}>
-                        Service Area
-                      </label>
-                      <ServiceAreaDropdown
-                        value={formData.serviceArea}
-                        onChange={handleServiceAreaChange}
-                      />
-                    </div> */}
-
                     {/* Time Slot Selection */}
                     {requiresAvailability ? (
                       <div className={styles.checkoutModal__field}>
@@ -729,7 +737,11 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 <div className={styles.checkoutModal__summary}>
                   <div className={styles.checkoutModal__summaryItem}>
                     <span>Subtotal</span>
-                    <span>₦10,000</span>
+                    <span>₦{totalPrice}</span>
+                  </div>
+                  <div className={styles.checkoutModal__summaryItem}>
+                    <span>Delivery Fee</span>
+                    <span>₦{deliveryCost}</span>
                   </div>
                   <div className={styles.checkoutModal__summaryItem}>
                     <span>Discount</span>
@@ -737,7 +749,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   </div>
                   <div className={styles.checkoutModal__summaryItem}>
                     <span>Total</span>
-                    <span>₦10,000</span>
+                    <span>₦{totalPrice + deliveryCost}</span>
                   </div>
                 </div>
 

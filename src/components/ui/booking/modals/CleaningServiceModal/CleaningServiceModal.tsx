@@ -46,7 +46,7 @@ export interface CleaningServiceModalProps {
   serviceDescription?: string;
   servicePrice?: number;
   includedFeatures?: string[];
-  onOrderSubmit?: (configuration: CleaningServiceConfiguration) => void;
+  // onOrderSubmit?: (configuration: CleaningServiceConfiguration) => void;
   serviceOption?: ServiceOption;
   service: Service;
 }
@@ -59,7 +59,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   serviceDescription = "Professional cleaning service",
   servicePrice = 0,
   includedFeatures = [],
-  onOrderSubmit,
+  // onOrderSubmit,
   serviceOption,
   service,
 }) => {
@@ -97,17 +97,6 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
     room: keyof RoomQuantitiesInput,
     increment: boolean
   ) => {
-    // setRooms((prev) =>
-    //   prev.map((room) => {
-    //     if (room.id === roomId) {
-    //       const newCount = increment
-    //         ? room.count + 1
-    //         : Math.max(0, room.count - 1);
-    //       return { ...room, count: newCount };
-    //     }
-    //     return room;
-    //   })
-    // );
     setRoomQuantities((prev) => ({
       ...prev,
       [room]: Math.max(0, (prev[room] as number) + (increment ? 1 : -1)),
@@ -125,12 +114,12 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   // Handle order submission
   const handleOrderSubmit = () => {
     setError(null); // Clear any previous errors when starting new order
-    const configuration: CleaningServiceConfiguration = {
-      apartmentType,
-      roomQuantities,
-    };
+    // const configuration: CleaningServiceConfiguration = {
+    //   apartmentType,
+    //   roomQuantities,
+    // };
 
-    console.log("configuration", configuration);
+    // console.log("configuration", configuration);
 
     // if (onOrderSubmit) {
     //   onOrderSubmit(configuration);
@@ -203,7 +192,6 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
         timeSlot: formData.timeSlot,
         address: formData.addressId || "",
         notes: `Frequency`,
-        serviceArea: formData.serviceArea,
         serviceDetails: {
           serviceOption:
             serviceOption?.service_id || ServiceId.StandardCleaning,
@@ -372,6 +360,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
         submitting={isCreatingBooking}
         error={error}
         onClearError={() => setError(null)}
+        totalPrice={calculateTotalPrice()}
       />
 
       {/* Service Details Slide Panel */}

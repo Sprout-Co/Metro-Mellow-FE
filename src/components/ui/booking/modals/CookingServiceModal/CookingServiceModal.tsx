@@ -230,7 +230,6 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
         timeSlot: formData.timeSlot,
         address: formData.addressId || "",
         notes: `Meal Type: ${mealType}, Frequency: ${deliveryFrequency}, Meals: ${meals.map((m) => `${m.name}(${m.count})`).join(", ")}`,
-        serviceArea: formData.serviceArea,
         serviceDetails: {
           serviceOption: serviceOption?.service_id || ServiceId.StandardCooking,
           cooking: {
@@ -483,6 +482,7 @@ const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
           submitting={isCreatingBooking}
           error={error}
           onClearError={() => setError(null)}
+          totalPrice={calculateTotalPrice()}
         />
 
         {/* Service Details Slide Panel */}

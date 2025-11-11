@@ -29,7 +29,7 @@ export function AuthInitializer({ children }: AuthInitializerProps) {
       setTimeout(() => {
         handleGetCurrentUser().catch((error) => {
           // Silently handle authentication errors - this is expected when token is invalid/expired
-          console.log("Auth initialization failed:", error.message);
+          console.log("Auth initialization failed:", error);
           dispatch(logout());
         });
       }, 0);

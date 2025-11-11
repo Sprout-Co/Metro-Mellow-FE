@@ -1,15 +1,15 @@
 // Store and types
-export { store, persistor } from './store';
-export type { RootState, AppDispatch } from './store';
+export { store, persistor } from "./store";
+export type { RootState, AppDispatch } from "./store";
 
 // Hooks
-export { useAppDispatch, useAppSelector } from './hooks';
+export { useAppDispatch, useAppSelector } from "./hooks";
 
 // Auth slice
-export { 
-  setUser, 
-  setToken, 
-  login, 
+export {
+  setUser,
+  setToken,
+  login,
   logout,
   selectUser,
   selectToken,
@@ -17,8 +17,8 @@ export {
   selectIsAdmin,
   selectIsStaff,
   selectIsCustomer,
-  selectCurrentUser
-} from './slices/authSlice';
+  selectCurrentUser,
+} from "./slices/authSlice";
 
 // UI slice
 export {
@@ -31,5 +31,5 @@ export {
   selectIsSidebarOpen,
   selectIsModalOpen,
   selectModalType,
-  selectModalData
-} from './slices/uiSlice';
+  selectModalData,
+} from "./slices/uiSlice";

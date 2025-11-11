@@ -15,7 +15,13 @@ query GetCurrentUser {
       id
       isDefault
       label
-      serviceArea
+      serviceArea {
+        id
+        name
+        city
+        deliveryCost
+        isActive
+      }
     }
     addresses {
       id
@@ -26,7 +32,13 @@ query GetCurrentUser {
       country
       isDefault
       label
-      serviceArea
+      serviceArea {
+        id
+        name
+        city
+        deliveryCost
+        isActive
+      }
     }
     emailVerified
     emailVerifiedAt
@@ -53,7 +65,13 @@ query GetUserById($id: ID!) {
       id
       isDefault
       label
-      serviceArea
+      serviceArea {
+        id
+        name
+        city
+        deliveryCost
+        isActive
+      }
     }
     addresses {
       id
@@ -64,7 +82,13 @@ query GetUserById($id: ID!) {
       country
       isDefault
       label
-      serviceArea
+      serviceArea {
+        id
+        name
+        city
+        deliveryCost
+        isActive
+      }
     }
     emailVerified
     emailVerifiedAt
@@ -91,7 +115,13 @@ query GetUsers($role: UserRole) {
       id
       isDefault
       label
-      serviceArea
+      serviceArea {
+        id
+        name
+        city
+        deliveryCost
+        isActive
+      }
     }
     addresses {
       id
@@ -102,7 +132,13 @@ query GetUsers($role: UserRole) {
       country
       isDefault
       label
-      serviceArea
+      serviceArea {
+        id
+        name
+        city
+        deliveryCost
+        isActive
+      }
     }
     emailVerified
     emailVerifiedAt

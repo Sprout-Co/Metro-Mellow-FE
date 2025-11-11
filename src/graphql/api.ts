@@ -55,7 +55,7 @@ export type Address = {
   id: Scalars['ID']['output'];
   isDefault?: Maybe<Scalars['Boolean']['output']>;
   label?: Maybe<Scalars['String']['output']>;
-  serviceArea: Scalars['String']['output'];
+  serviceArea: ServiceArea;
   state?: Maybe<Scalars['String']['output']>;
   street?: Maybe<Scalars['String']['output']>;
   zipCode?: Maybe<Scalars['String']['output']>;
@@ -65,7 +65,7 @@ export type AddressInput = {
   city: Scalars['String']['input'];
   isDefault?: InputMaybe<Scalars['Boolean']['input']>;
   label?: InputMaybe<Scalars['String']['input']>;
-  serviceArea: Scalars['String']['input'];
+  serviceArea: Scalars['ID']['input'];
   state?: InputMaybe<Scalars['String']['input']>;
   street: Scalars['String']['input'];
   userId?: InputMaybe<Scalars['ID']['input']>;
@@ -254,7 +254,7 @@ export type CreateBookingInput = {
 
 export type CreateCustomerAddressInput = {
   city: Scalars['String']['input'];
-  serviceArea: Scalars['String']['input'];
+  serviceArea: Scalars['ID']['input'];
   street: Scalars['String']['input'];
 };
 
@@ -274,6 +274,13 @@ export type CreatePaymentInput = {
   currency: Scalars['String']['input'];
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   paymentMethodId: Scalars['ID']['input'];
+};
+
+export type CreateServiceAreaInput = {
+  city: Scalars['String']['input'];
+  deliveryCost: Scalars['Float']['input'];
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  name: Scalars['String']['input'];
 };
 
 export type CreateServiceInput = {
@@ -474,12 +481,14 @@ export type Mutation = {
   createNotification: Notification;
   createPayment: Payment;
   createService: Service;
+  createServiceArea: ServiceArea;
   createStaff: AuthPayload;
   createStaffProfile: StaffProfile;
   createSubscription: CreateSubscriptionResponse;
   deleteBooking: Scalars['Boolean']['output'];
   deleteNotification: Scalars['Boolean']['output'];
   deleteService: Scalars['Boolean']['output'];
+  deleteServiceArea: Scalars['Boolean']['output'];
   deleteStaffDocument: Scalars['Boolean']['output'];
   forgotPassword: Scalars['Boolean']['output'];
   generateInvoice: Invoice;
@@ -510,6 +519,7 @@ export type Mutation = {
   updateBookingStatus: Scalars['Boolean']['output'];
   updateProfile?: Maybe<User>;
   updateService: Service;
+  updateServiceArea: ServiceArea;
   updateServiceStatus: Service;
   updateStaffAvailability: StaffProfile;
   updateStaffProfile: StaffProfile;
@@ -629,6 +639,11 @@ export type MutationCreateServiceArgs = {
 };
 
 
+export type MutationCreateServiceAreaArgs = {
+  input: CreateServiceAreaInput;
+};
+
+
 export type MutationCreateStaffArgs = {
   input: CreateUserInput;
 };
@@ -655,6 +670,11 @@ export type MutationDeleteNotificationArgs = {
 
 
 export type MutationDeleteServiceArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteServiceAreaArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -821,6 +841,12 @@ export type MutationUpdateProfileArgs = {
 export type MutationUpdateServiceArgs = {
   id: Scalars['ID']['input'];
   input: UpdateServiceInput;
+};
+
+
+export type MutationUpdateServiceAreaArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateServiceAreaInput;
 };
 
 
@@ -1048,6 +1074,7 @@ export enum PropertyType {
 export type Query = {
   __typename?: 'Query';
   _?: Maybe<Scalars['Boolean']['output']>;
+  activeServiceAreas: Array<ServiceArea>;
   adminInvitation?: Maybe<AdminInvitation>;
   availableStaff: Array<StaffProfile>;
   billing?: Maybe<Billing>;
@@ -1076,6 +1103,8 @@ export type Query = {
   pendingAdminInvitations: Array<AdminInvitation>;
   pendingBillings: Array<Billing>;
   service?: Maybe<Service>;
+  serviceArea?: Maybe<ServiceArea>;
+  serviceAreas: Array<ServiceArea>;
   services: Array<Service>;
   staffBookings: Array<Booking>;
   staffPerformance: StaffPerformance;
@@ -1189,6 +1218,17 @@ export type QueryPendingBillingsArgs = {
 
 export type QueryServiceArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryServiceAreaArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryServiceAreasArgs = {
+  city?: InputMaybe<Scalars['String']['input']>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
@@ -1329,6 +1369,17 @@ export type Service = {
   roomPrices?: Maybe<RoomPrices>;
   service_id: ServiceId;
   status: ServiceStatus;
+};
+
+export type ServiceArea = {
+  __typename?: 'ServiceArea';
+  city: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  deliveryCost: Scalars['Float']['output'];
+  id: Scalars['ID']['output'];
+  isActive: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export enum ServiceCategory {
@@ -1571,6 +1622,13 @@ export type UpdateBookingInput = {
   subscriptionServiceId?: InputMaybe<Scalars['ID']['input']>;
   timeSlot: TimeSlot;
   totalPrice: Scalars['Float']['input'];
+};
+
+export type UpdateServiceAreaInput = {
+  city?: InputMaybe<Scalars['String']['input']>;
+  deliveryCost?: InputMaybe<Scalars['Float']['input']>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateServiceInput = {
@@ -1973,6 +2031,28 @@ export type CancelInvoiceMutationVariables = Exact<{
 
 export type CancelInvoiceMutation = { __typename?: 'Mutation', cancelInvoice: { __typename?: 'Invoice', id: string, status: InvoiceStatus, updatedAt: any } };
 
+export type CreateServiceAreaMutationVariables = Exact<{
+  input: CreateServiceAreaInput;
+}>;
+
+
+export type CreateServiceAreaMutation = { __typename?: 'Mutation', createServiceArea: { __typename?: 'ServiceArea', id: string, name: string, city: string, deliveryCost: number, isActive: boolean, createdAt: any, updatedAt: any } };
+
+export type UpdateServiceAreaMutationVariables = Exact<{
+  updateServiceAreaId: Scalars['ID']['input'];
+  input: UpdateServiceAreaInput;
+}>;
+
+
+export type UpdateServiceAreaMutation = { __typename?: 'Mutation', updateServiceArea: { __typename?: 'ServiceArea', id: string, name: string, city: string, deliveryCost: number, isActive: boolean, createdAt: any, updatedAt: any } };
+
+export type DeleteServiceAreaMutationVariables = Exact<{
+  deleteServiceAreaId: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteServiceAreaMutation = { __typename?: 'Mutation', deleteServiceArea: boolean };
+
 export type CreateServiceMutationVariables = Exact<{
   input: CreateServiceInput;
 }>;
@@ -2156,21 +2236,21 @@ export type AdminInvitationQuery = { __typename?: 'Query', adminInvitation?: { _
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label?: string | null, serviceArea: string } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea: string } | null> | null } | null };
+export type GetCurrentUserQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label?: string | null, serviceArea: { __typename?: 'ServiceArea', id: string, name: string, city: string, deliveryCost: number, isActive: boolean } } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea: { __typename?: 'ServiceArea', id: string, name: string, city: string, deliveryCost: number, isActive: boolean } } | null> | null } | null };
 
 export type GetUserByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label?: string | null, serviceArea: string } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea: string } | null> | null } | null };
+export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label?: string | null, serviceArea: { __typename?: 'ServiceArea', id: string, name: string, city: string, deliveryCost: number, isActive: boolean } } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea: { __typename?: 'ServiceArea', id: string, name: string, city: string, deliveryCost: number, isActive: boolean } } | null> | null } | null };
 
 export type GetUsersQueryVariables = Exact<{
   role?: InputMaybe<UserRole>;
 }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label?: string | null, serviceArea: string } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea: string } | null> | null }> };
+export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, emailVerified?: boolean | null, emailVerifiedAt?: any | null, accountStatus?: AccountStatus | null, createdAt: any, updatedAt: any, defaultAddress?: { __typename?: 'Address', street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, id: string, isDefault?: boolean | null, label?: string | null, serviceArea: { __typename?: 'ServiceArea', id: string, name: string, city: string, deliveryCost: number, isActive: boolean } } | null, addresses?: Array<{ __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea: { __typename?: 'ServiceArea', id: string, name: string, city: string, deliveryCost: number, isActive: boolean } } | null> | null }> };
 
 export type GetSubscriptionBillingsQueryVariables = Exact<{
   subscriptionId: Scalars['ID']['input'];
@@ -2301,6 +2381,23 @@ export type GetCustomerInvoicesQueryVariables = Exact<{ [key: string]: never; }>
 
 export type GetCustomerInvoicesQuery = { __typename?: 'Query', customerInvoices: Array<{ __typename?: 'Invoice', id: string, invoiceNumber: string, subtotal: number, tax: number, total: number, dueDate: any, status: InvoiceStatus, paidAt?: any | null, createdAt: any, updatedAt: any, items: Array<{ __typename?: 'InvoiceItem', description: string, quantity: number, unitPrice: number, amount: number }> }> };
 
+export type ServiceAreaQueryVariables = Exact<{
+  serviceAreaId: Scalars['ID']['input'];
+}>;
+
+
+export type ServiceAreaQuery = { __typename?: 'Query', serviceArea?: { __typename?: 'ServiceArea', id: string, name: string, city: string, deliveryCost: number, isActive: boolean, createdAt: any, updatedAt: any } | null };
+
+export type ServiceAreasQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ServiceAreasQuery = { __typename?: 'Query', serviceAreas: Array<{ __typename?: 'ServiceArea', id: string, name: string, city: string, deliveryCost: number, isActive: boolean, createdAt: any, updatedAt: any }> };
+
+export type ActiveServiceAreasQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ActiveServiceAreasQuery = { __typename?: 'Query', activeServiceAreas: Array<{ __typename?: 'ServiceArea', id: string, name: string, city: string, deliveryCost: number, isActive: boolean, createdAt: any, updatedAt: any }> };
+
 export type GetServicesQueryVariables = Exact<{
   category?: InputMaybe<ServiceCategory>;
   status?: InputMaybe<ServiceStatus>;
@@ -2362,7 +2459,7 @@ export type GetSubscriptionsQuery = { __typename?: 'Query', subscriptions: Array
 export type GetCustomerSubscriptionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCustomerSubscriptionsQuery = { __typename?: 'Query', customerSubscriptions: Array<{ __typename?: 'Subscription', id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea: string }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', service_category: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, imageUrl?: string | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> }> };
+export type GetCustomerSubscriptionsQuery = { __typename?: 'Query', customerSubscriptions: Array<{ __typename?: 'Subscription', id: string, startDate: any, endDate?: any | null, status: SubscriptionStatus, billingCycle: BillingCycle, duration: number, totalPrice: number, nextBillingDate: any, lastBillingDate?: any | null, autoRenew: boolean, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any }, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea: { __typename?: 'ServiceArea', id: string, name: string, city: string, deliveryCost: number, isActive: boolean } }, paymentMethod?: { __typename?: 'PaymentMethod', id: string, type: PaymentMethodType, last4: string, expiryMonth: number, expiryYear: number, brand: string, isDefault: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, phone?: string | null, createdAt: any, updatedAt: any } } | null, subscriptionServices: Array<{ __typename?: 'SubscriptionService', service_category: ServiceCategory, frequency: SubscriptionFrequency, price: number, scheduledDays: Array<ScheduleDays>, preferredTimeSlot: TimeSlot, createdAt: any, updatedAt: any, id: string, service: { __typename?: 'Service', _id: string, service_id: ServiceId, name: string, label: string, description: string, category: ServiceCategory, icon: string, price: number, displayPrice: string, status: ServiceStatus, imageUrl?: string | null, features?: Array<string> | null, inclusions?: Array<string> | null, options?: Array<{ __typename?: 'ServiceOption', id: string, service_id: ServiceId, label: string, description: string, price: number, inclusions?: Array<string> | null, imageUrl?: string | null, extraItems?: Array<{ __typename?: 'ExtraItem', name: string, items: number, cost: number }> | null }> | null }, serviceDetails: { __typename?: 'ServiceDetails', cleaning?: { __typename?: 'CleaningDetails', cleaningType: CleaningType, houseType: HouseType, rooms: { __typename?: 'RoomQuantities', bedroom: number, livingRoom: number, bathroom: number, kitchen: number, balcony: number, studyRoom: number, other: number } } | null, laundry?: { __typename?: 'LaundryDetails', laundryType: LaundryType, bags: number, items?: { __typename?: 'LaundryItems', shirts: number, pants: number, dresses: number, suits: number, others: number } | null } | null, pestControl?: { __typename?: 'PestControlDetails', treatmentType: TreatmentType, areas: Array<string>, severity: Severity } | null, cooking?: { __typename?: 'CookingDetails', mealType: MealType, mealsPerDelivery: Array<{ __typename?: 'MealDelivery', day: ScheduleDays, count: number }> } | null } }> }> };
 
 
 export const CreateAdminInvitationDocument = gql`
@@ -4034,6 +4131,116 @@ export function useCancelInvoiceMutation(baseOptions?: ApolloReactHooks.Mutation
 export type CancelInvoiceMutationHookResult = ReturnType<typeof useCancelInvoiceMutation>;
 export type CancelInvoiceMutationResult = Apollo.MutationResult<CancelInvoiceMutation>;
 export type CancelInvoiceMutationOptions = Apollo.BaseMutationOptions<CancelInvoiceMutation, CancelInvoiceMutationVariables>;
+export const CreateServiceAreaDocument = gql`
+    mutation CreateServiceArea($input: CreateServiceAreaInput!) {
+  createServiceArea(input: $input) {
+    id
+    name
+    city
+    deliveryCost
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export type CreateServiceAreaMutationFn = Apollo.MutationFunction<CreateServiceAreaMutation, CreateServiceAreaMutationVariables>;
+
+/**
+ * __useCreateServiceAreaMutation__
+ *
+ * To run a mutation, you first call `useCreateServiceAreaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateServiceAreaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createServiceAreaMutation, { data, loading, error }] = useCreateServiceAreaMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateServiceAreaMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateServiceAreaMutation, CreateServiceAreaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<CreateServiceAreaMutation, CreateServiceAreaMutationVariables>(CreateServiceAreaDocument, options);
+      }
+export type CreateServiceAreaMutationHookResult = ReturnType<typeof useCreateServiceAreaMutation>;
+export type CreateServiceAreaMutationResult = Apollo.MutationResult<CreateServiceAreaMutation>;
+export type CreateServiceAreaMutationOptions = Apollo.BaseMutationOptions<CreateServiceAreaMutation, CreateServiceAreaMutationVariables>;
+export const UpdateServiceAreaDocument = gql`
+    mutation UpdateServiceArea($updateServiceAreaId: ID!, $input: UpdateServiceAreaInput!) {
+  updateServiceArea(id: $updateServiceAreaId, input: $input) {
+    id
+    name
+    city
+    deliveryCost
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export type UpdateServiceAreaMutationFn = Apollo.MutationFunction<UpdateServiceAreaMutation, UpdateServiceAreaMutationVariables>;
+
+/**
+ * __useUpdateServiceAreaMutation__
+ *
+ * To run a mutation, you first call `useUpdateServiceAreaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateServiceAreaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateServiceAreaMutation, { data, loading, error }] = useUpdateServiceAreaMutation({
+ *   variables: {
+ *      updateServiceAreaId: // value for 'updateServiceAreaId'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateServiceAreaMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateServiceAreaMutation, UpdateServiceAreaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<UpdateServiceAreaMutation, UpdateServiceAreaMutationVariables>(UpdateServiceAreaDocument, options);
+      }
+export type UpdateServiceAreaMutationHookResult = ReturnType<typeof useUpdateServiceAreaMutation>;
+export type UpdateServiceAreaMutationResult = Apollo.MutationResult<UpdateServiceAreaMutation>;
+export type UpdateServiceAreaMutationOptions = Apollo.BaseMutationOptions<UpdateServiceAreaMutation, UpdateServiceAreaMutationVariables>;
+export const DeleteServiceAreaDocument = gql`
+    mutation DeleteServiceArea($deleteServiceAreaId: ID!) {
+  deleteServiceArea(id: $deleteServiceAreaId)
+}
+    `;
+export type DeleteServiceAreaMutationFn = Apollo.MutationFunction<DeleteServiceAreaMutation, DeleteServiceAreaMutationVariables>;
+
+/**
+ * __useDeleteServiceAreaMutation__
+ *
+ * To run a mutation, you first call `useDeleteServiceAreaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteServiceAreaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteServiceAreaMutation, { data, loading, error }] = useDeleteServiceAreaMutation({
+ *   variables: {
+ *      deleteServiceAreaId: // value for 'deleteServiceAreaId'
+ *   },
+ * });
+ */
+export function useDeleteServiceAreaMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteServiceAreaMutation, DeleteServiceAreaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<DeleteServiceAreaMutation, DeleteServiceAreaMutationVariables>(DeleteServiceAreaDocument, options);
+      }
+export type DeleteServiceAreaMutationHookResult = ReturnType<typeof useDeleteServiceAreaMutation>;
+export type DeleteServiceAreaMutationResult = Apollo.MutationResult<DeleteServiceAreaMutation>;
+export type DeleteServiceAreaMutationOptions = Apollo.BaseMutationOptions<DeleteServiceAreaMutation, DeleteServiceAreaMutationVariables>;
 export const CreateServiceDocument = gql`
     mutation CreateService($input: CreateServiceInput!) {
   createService(input: $input) {
@@ -5109,7 +5316,13 @@ export const GetCurrentUserDocument = gql`
       id
       isDefault
       label
-      serviceArea
+      serviceArea {
+        id
+        name
+        city
+        deliveryCost
+        isActive
+      }
     }
     addresses {
       id
@@ -5120,7 +5333,13 @@ export const GetCurrentUserDocument = gql`
       country
       isDefault
       label
-      serviceArea
+      serviceArea {
+        id
+        name
+        city
+        deliveryCost
+        isActive
+      }
     }
     emailVerified
     emailVerifiedAt
@@ -5180,7 +5399,13 @@ export const GetUserByIdDocument = gql`
       id
       isDefault
       label
-      serviceArea
+      serviceArea {
+        id
+        name
+        city
+        deliveryCost
+        isActive
+      }
     }
     addresses {
       id
@@ -5191,7 +5416,13 @@ export const GetUserByIdDocument = gql`
       country
       isDefault
       label
-      serviceArea
+      serviceArea {
+        id
+        name
+        city
+        deliveryCost
+        isActive
+      }
     }
     emailVerified
     emailVerifiedAt
@@ -5252,7 +5483,13 @@ export const GetUsersDocument = gql`
       id
       isDefault
       label
-      serviceArea
+      serviceArea {
+        id
+        name
+        city
+        deliveryCost
+        isActive
+      }
     }
     addresses {
       id
@@ -5263,7 +5500,13 @@ export const GetUsersDocument = gql`
       country
       isDefault
       label
-      serviceArea
+      serviceArea {
+        id
+        name
+        city
+        deliveryCost
+        isActive
+      }
     }
     emailVerified
     emailVerifiedAt
@@ -6807,6 +7050,142 @@ export type GetCustomerInvoicesQueryHookResult = ReturnType<typeof useGetCustome
 export type GetCustomerInvoicesLazyQueryHookResult = ReturnType<typeof useGetCustomerInvoicesLazyQuery>;
 export type GetCustomerInvoicesSuspenseQueryHookResult = ReturnType<typeof useGetCustomerInvoicesSuspenseQuery>;
 export type GetCustomerInvoicesQueryResult = Apollo.QueryResult<GetCustomerInvoicesQuery, GetCustomerInvoicesQueryVariables>;
+export const ServiceAreaDocument = gql`
+    query ServiceArea($serviceAreaId: ID!) {
+  serviceArea(id: $serviceAreaId) {
+    id
+    name
+    city
+    deliveryCost
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useServiceAreaQuery__
+ *
+ * To run a query within a React component, call `useServiceAreaQuery` and pass it any options that fit your needs.
+ * When your component renders, `useServiceAreaQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useServiceAreaQuery({
+ *   variables: {
+ *      serviceAreaId: // value for 'serviceAreaId'
+ *   },
+ * });
+ */
+export function useServiceAreaQuery(baseOptions: ApolloReactHooks.QueryHookOptions<ServiceAreaQuery, ServiceAreaQueryVariables> & ({ variables: ServiceAreaQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<ServiceAreaQuery, ServiceAreaQueryVariables>(ServiceAreaDocument, options);
+      }
+export function useServiceAreaLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ServiceAreaQuery, ServiceAreaQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<ServiceAreaQuery, ServiceAreaQueryVariables>(ServiceAreaDocument, options);
+        }
+export function useServiceAreaSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<ServiceAreaQuery, ServiceAreaQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<ServiceAreaQuery, ServiceAreaQueryVariables>(ServiceAreaDocument, options);
+        }
+export type ServiceAreaQueryHookResult = ReturnType<typeof useServiceAreaQuery>;
+export type ServiceAreaLazyQueryHookResult = ReturnType<typeof useServiceAreaLazyQuery>;
+export type ServiceAreaSuspenseQueryHookResult = ReturnType<typeof useServiceAreaSuspenseQuery>;
+export type ServiceAreaQueryResult = Apollo.QueryResult<ServiceAreaQuery, ServiceAreaQueryVariables>;
+export const ServiceAreasDocument = gql`
+    query ServiceAreas {
+  serviceAreas {
+    id
+    name
+    city
+    deliveryCost
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useServiceAreasQuery__
+ *
+ * To run a query within a React component, call `useServiceAreasQuery` and pass it any options that fit your needs.
+ * When your component renders, `useServiceAreasQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useServiceAreasQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useServiceAreasQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ServiceAreasQuery, ServiceAreasQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<ServiceAreasQuery, ServiceAreasQueryVariables>(ServiceAreasDocument, options);
+      }
+export function useServiceAreasLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ServiceAreasQuery, ServiceAreasQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<ServiceAreasQuery, ServiceAreasQueryVariables>(ServiceAreasDocument, options);
+        }
+export function useServiceAreasSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<ServiceAreasQuery, ServiceAreasQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<ServiceAreasQuery, ServiceAreasQueryVariables>(ServiceAreasDocument, options);
+        }
+export type ServiceAreasQueryHookResult = ReturnType<typeof useServiceAreasQuery>;
+export type ServiceAreasLazyQueryHookResult = ReturnType<typeof useServiceAreasLazyQuery>;
+export type ServiceAreasSuspenseQueryHookResult = ReturnType<typeof useServiceAreasSuspenseQuery>;
+export type ServiceAreasQueryResult = Apollo.QueryResult<ServiceAreasQuery, ServiceAreasQueryVariables>;
+export const ActiveServiceAreasDocument = gql`
+    query ActiveServiceAreas {
+  activeServiceAreas {
+    id
+    name
+    city
+    deliveryCost
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useActiveServiceAreasQuery__
+ *
+ * To run a query within a React component, call `useActiveServiceAreasQuery` and pass it any options that fit your needs.
+ * When your component renders, `useActiveServiceAreasQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useActiveServiceAreasQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useActiveServiceAreasQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ActiveServiceAreasQuery, ActiveServiceAreasQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<ActiveServiceAreasQuery, ActiveServiceAreasQueryVariables>(ActiveServiceAreasDocument, options);
+      }
+export function useActiveServiceAreasLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ActiveServiceAreasQuery, ActiveServiceAreasQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<ActiveServiceAreasQuery, ActiveServiceAreasQueryVariables>(ActiveServiceAreasDocument, options);
+        }
+export function useActiveServiceAreasSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<ActiveServiceAreasQuery, ActiveServiceAreasQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<ActiveServiceAreasQuery, ActiveServiceAreasQueryVariables>(ActiveServiceAreasDocument, options);
+        }
+export type ActiveServiceAreasQueryHookResult = ReturnType<typeof useActiveServiceAreasQuery>;
+export type ActiveServiceAreasLazyQueryHookResult = ReturnType<typeof useActiveServiceAreasLazyQuery>;
+export type ActiveServiceAreasSuspenseQueryHookResult = ReturnType<typeof useActiveServiceAreasSuspenseQuery>;
+export type ActiveServiceAreasQueryResult = Apollo.QueryResult<ActiveServiceAreasQuery, ActiveServiceAreasQueryVariables>;
 export const GetServicesDocument = gql`
     query GetServices($category: ServiceCategory, $status: ServiceStatus) {
   services(category: $category, status: $status) {
@@ -7561,7 +7940,13 @@ export const GetCustomerSubscriptionsDocument = gql`
       country
       isDefault
       label
-      serviceArea
+      serviceArea {
+        id
+        name
+        city
+        deliveryCost
+        isActive
+      }
     }
     paymentMethod {
       id

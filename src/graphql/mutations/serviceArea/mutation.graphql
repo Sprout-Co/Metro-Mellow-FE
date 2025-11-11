@@ -1,0 +1,28 @@
+mutation CreateServiceArea($input: CreateServiceAreaInput!) {
+  createServiceArea(input: $input) {
+    id
+    name
+    city
+    deliveryCost
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+
+mutation UpdateServiceArea($updateServiceAreaId: ID!, $input: UpdateServiceAreaInput!) {
+  updateServiceArea(id: $updateServiceAreaId, input: $input) {
+    id
+    name
+    city
+    deliveryCost
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+
+mutation DeleteServiceArea($deleteServiceAreaId: ID!) {
+  deleteServiceArea(id: $deleteServiceAreaId)
+}
+
