@@ -326,7 +326,7 @@
   &__addressList {
     display: flex;
     flex-direction: column;
-    gap: spacing("md");
+    gap: 0.4rem;
     margin-top: spacing("sm");
   }
 
@@ -340,7 +340,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: spacing("md");
+    padding: spacing("sm") spacing("md");
     border: map-get($border-width, "thin") solid color("neutral", "light");
     border-radius: border-radius("lg");
     transition: $transition-base;
