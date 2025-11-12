@@ -35,6 +35,7 @@ import {
 } from "@/lib/redux/slices/authSlice";
 import LoginModal from "@/components/ui/booking/modals/LoginModal/LoginModal";
 import { useSubscriptionPayment } from "@/hooks/useSubscriptionPayment";
+import SignaturePattern from "@/components/ui/SignaturePattern/SignaturePattern";
 
 export type DurationType = 1 | 2 | 3 | 6 | 12;
 
@@ -408,6 +409,7 @@ const SubscriptionBuilder: React.FC = () => {
             Combine multiple services into one convenient subscription
           </p>
         </motion.div>
+        <SignaturePattern />
       </div>
 
       {/* Validation Errors */}

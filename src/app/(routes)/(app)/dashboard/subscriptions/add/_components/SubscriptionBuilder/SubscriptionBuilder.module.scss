@@ -38,6 +38,7 @@
     text-align: center;
     background: color("primary", "base");
     border-radius: border-radius("2xl");
+    position: relative;
     // border-bottom: 1px solid color("neutral", "lighter");
 
     @include breakpoint-down("md") {
