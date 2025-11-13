@@ -87,9 +87,13 @@ const CleaningServiceConfiguration: React.FC<
   });
 
   const steps = [
-    { id: "details", label: "Details", icon: <Home size={18} /> },
-    { id: "frequency", label: "Frequency", icon: <Calendar size={18} /> },
-    { id: "schedule", label: "Schedule", icon: <Clock size={18} /> },
+    { id: "service", label: "Service Package", icon: <Package size={18} /> },
+    { id: "property", label: "Property & Rooms", icon: <Home size={18} /> },
+    {
+      id: "schedule",
+      label: "Frequency & Schedule",
+      icon: <Calendar size={18} />,
+    },
     { id: "summary", label: "Summary", icon: <Sparkles size={18} /> },
   ];
 
@@ -298,11 +302,13 @@ const CleaningServiceConfiguration: React.FC<
   const canProceed = () => {
     switch (activeStep) {
       case 0:
+        // Service Package step
         if (service.options && service.options.length > 0) {
-          const hasServiceOption = !!configuration.serviceDetails.serviceOption;
-          if (!hasServiceOption) return false;
+          return !!configuration.serviceDetails.serviceOption;
         }
-
+        return true; // If no service options, can proceed
+      case 1:
+        // Property & Rooms step
         const hasHouseType = !!configuration.serviceDetails.cleaning?.houseType;
         const hasRooms =
           configuration.serviceDetails.cleaning?.rooms &&
@@ -311,13 +317,15 @@ const CleaningServiceConfiguration: React.FC<
             0
           ) > 0;
         return hasHouseType && hasRooms;
-      case 1:
-        return configuration.frequency;
       case 2:
+        // Frequency & Schedule step
         return (
-          configuration.scheduledDays && configuration.scheduledDays.length > 0
+          configuration.frequency &&
+          configuration.scheduledDays &&
+          configuration.scheduledDays.length > 0
         );
       case 3:
+        // Summary step
         return true;
       default:
         return false;
@@ -335,15 +343,15 @@ const CleaningServiceConfiguration: React.FC<
     }
   };
 
-  const renderDetailsStep = () => (
+  const renderServicePackageStep = () => (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       className={styles.drawer__stepContent}
     >
       <div className={styles.drawer__stepHeader}>
-        <h3>Cleaning Service Details</h3>
-        <p>Configure your cleaning service preferences</p>
+        <h3>Select Service Package</h3>
+        <p>Choose the cleaning package that suits your needs</p>
       </div>
 
       {/* Service Options */}
@@ -397,10 +405,25 @@ const CleaningServiceConfiguration: React.FC<
           </div>
         </div>
       )}
+    </motion.div>
+  );
+
+  const renderPropertyAndRoomsStep = () => (
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      className={styles.drawer__stepContent}
+    >
+      <div className={styles.drawer__stepHeader}>
+        <h3>Property & Room Configuration</h3>
+        <p>Select your property type and configure rooms</p>
+      </div>
 
       {/* Property Type */}
       <div className={styles.drawer__section}>
-        <label className={styles.drawer__label}>Property Type</label>
+        <label className={styles.drawer__label}>
+          Property Type <span className={styles.drawer__required}>*</span>
+        </label>
         <div className={styles.drawer__propertyGrid}>
           {propertyTypes.map((type) => (
             <motion.button
@@ -434,7 +457,9 @@ const CleaningServiceConfiguration: React.FC<
 
       {/* Room Configuration */}
       <div className={styles.drawer__section}>
-        <label className={styles.drawer__label}>Room Configuration</label>
+        <label className={styles.drawer__label}>
+          Room Configuration <span className={styles.drawer__required}>*</span>
+        </label>
         <div className={styles.drawer__roomsGrid}>
           {roomTypes.map((room) => (
             <div key={room.key} className={styles.drawer__roomCard}>
@@ -469,64 +494,15 @@ const CleaningServiceConfiguration: React.FC<
     </motion.div>
   );
 
-  const renderFrequencyStep = () => (
+  const renderFrequencyAndScheduleStep = () => (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       className={styles.drawer__stepContent}
     >
       <div className={styles.drawer__stepHeader}>
-        <h3>How often do you need cleaning?</h3>
-        <p>Choose the frequency that works best for you</p>
-      </div>
-
-      <div className={styles.drawer__frequencyGrid}>
-        {frequencies.map((freq) => (
-          <motion.button
-            key={freq.value}
-            className={`${styles.drawer__frequencyCard} ${
-              configuration.frequency === freq.value
-                ? styles["drawer__frequencyCard--active"]
-                : ""
-            }`}
-            onClick={() =>
-              setConfiguration((prev) => ({ ...prev, frequency: freq.value }))
-            }
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            {freq.popular && (
-              <span className={styles.drawer__popularTag}>Most Popular</span>
-            )}
-            <div className={styles.drawer__frequencyContent}>
-              <h4>{freq.label}</h4>
-              <p>{freq.description}</p>
-            </div>
-            {configuration.frequency === freq.value && (
-              <motion.div
-                className={styles.drawer__checkmark}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 400 }}
-              >
-                <Check size={16} />
-              </motion.div>
-            )}
-          </motion.button>
-        ))}
-      </div>
-    </motion.div>
-  );
-
-  const renderScheduleStep = () => (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      className={styles.drawer__stepContent}
-    >
-      <div className={styles.drawer__stepHeader}>
-        <h3>Set your cleaning schedule</h3>
-        <p>Select days and preferred time for the service</p>
+        <h3>Frequency & Schedule</h3>
+        <p>Choose how often and when you need cleaning</p>
         {configuration.frequency === SubscriptionFrequency.Monthly && (
           <div className={styles.drawer__scheduleNote}>
             <p>📅 Monthly frequency allows only one service day per month</p>
@@ -534,6 +510,49 @@ const CleaningServiceConfiguration: React.FC<
         )}
       </div>
 
+      {/* Frequency Selection */}
+      <div className={styles.drawer__section}>
+        <label className={styles.drawer__label}>
+          How often? <span className={styles.drawer__required}>*</span>
+        </label>
+        <div className={styles.drawer__frequencyGrid}>
+          {frequencies.map((freq) => (
+            <motion.button
+              key={freq.value}
+              className={`${styles.drawer__frequencyCard} ${
+                configuration.frequency === freq.value
+                  ? styles["drawer__frequencyCard--active"]
+                  : ""
+              }`}
+              onClick={() =>
+                setConfiguration((prev) => ({ ...prev, frequency: freq.value }))
+              }
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              {freq.popular && (
+                <span className={styles.drawer__popularTag}>Most Popular</span>
+              )}
+              <div className={styles.drawer__frequencyContent}>
+                <h4>{freq.label}</h4>
+                <p>{freq.description}</p>
+              </div>
+              {configuration.frequency === freq.value && (
+                <motion.div
+                  className={styles.drawer__checkmark}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
+                  <Check size={16} />
+                </motion.div>
+              )}
+            </motion.button>
+          ))}
+        </div>
+      </div>
+
+      {/* Schedule Selection */}
       <div className={styles.drawer__section}>
         <label className={styles.drawer__label}>
           Select Days <span className={styles.drawer__required}>*</span>
@@ -710,11 +729,11 @@ const CleaningServiceConfiguration: React.FC<
   const renderStepContent = () => {
     switch (activeStep) {
       case 0:
-        return renderDetailsStep();
+        return renderServicePackageStep();
       case 1:
-        return renderFrequencyStep();
+        return renderPropertyAndRoomsStep();
       case 2:
-        return renderScheduleStep();
+        return renderFrequencyAndScheduleStep();
       case 3:
         return renderSummaryStep();
       default:

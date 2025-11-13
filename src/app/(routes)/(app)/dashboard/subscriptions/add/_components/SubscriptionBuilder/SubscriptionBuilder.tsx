@@ -52,7 +52,7 @@ const SubscriptionBuilder: React.FC = () => {
   const [billingCycle, setBillingCycle] = useState<BillingCycle>(
     BillingCycle.Monthly
   );
-  const [duration, setDuration] = useState<DurationType>(3);
+  const [duration, setDuration] = useState<DurationType>(1);
   const [services, setServices] = useState<Service[]>([]);
   const [configuredServices, setConfiguredServices] = useState<
     ConfiguredService[]
