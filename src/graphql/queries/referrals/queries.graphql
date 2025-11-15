@@ -1,0 +1,104 @@
+query MyCommissions {
+  myCommissions {
+    id
+    amount
+    status
+    paidAt
+    paidBy {
+      id
+      email
+      firstName
+      lastName
+    }
+    referredUser {
+      id
+      email
+      firstName
+      lastName
+    }
+    referrer {
+      id
+      email
+      firstName
+      lastName
+    }
+    booking {
+      id
+    }
+    createdAt
+  }
+}
+
+query MyReferralInfo {
+  myReferralInfo {
+    referralCode
+    referralLink
+    totalEarnings
+    pendingEarnings
+    paidEarnings
+    referredUsersCount
+  }
+}
+
+# Admin queries
+query AllCommissions {
+  allCommissions {
+    id
+    amount
+    status
+    paidAt
+    paidBy {
+      id
+      email
+      firstName
+      lastName
+    }
+    referredUser {
+      id
+      email
+      firstName
+      lastName
+    }
+    referrer {
+      id
+      email
+      firstName
+      lastName
+    }
+    booking {
+      id
+    }
+    createdAt
+  }
+}
+
+query UserCommissions($userId: ID!) {
+  userCommissions(userId: $userId) {
+    id
+    amount
+    status
+    paidAt
+    paidBy {
+      id
+      email
+      firstName
+      lastName
+    }
+    referredUser {
+      id
+      email
+      firstName
+      lastName
+    }
+    referrer {
+      id
+      email
+      firstName
+      lastName
+    }
+    booking {
+      id
+    }
+    createdAt
+  }
+}

@@ -219,6 +219,24 @@ export enum CleaningType {
   StandardCleaning = 'STANDARD_CLEANING'
 }
 
+export type Commission = {
+  __typename?: 'Commission';
+  amount: Scalars['Float']['output'];
+  booking: Booking;
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  paidAt?: Maybe<Scalars['DateTime']['output']>;
+  paidBy?: Maybe<User>;
+  referredUser: User;
+  referrer: User;
+  status: CommissionStatus;
+};
+
+export enum CommissionStatus {
+  Paid = 'PAID',
+  Pending = 'PENDING'
+}
+
 export type CookingDetails = {
   __typename?: 'CookingDetails';
   mealType: MealType;
@@ -330,6 +348,7 @@ export type CreateUserInput = {
   lastName: Scalars['String']['input'];
   password: Scalars['String']['input'];
   phone?: InputMaybe<Scalars['String']['input']>;
+  referralCode?: InputMaybe<Scalars['String']['input']>;
   role: UserRole;
 };
 
@@ -464,6 +483,7 @@ export type Mutation = {
   addBookingFeedback: Scalars['Boolean']['output'];
   addPaymentMethod: PaymentMethod;
   addServiceToSubscription: Scalars['Boolean']['output'];
+  applyReferralCode: Scalars['Boolean']['output'];
   assignStaff: Scalars['Boolean']['output'];
   broadcastNotification: Scalars['Boolean']['output'];
   cancelAdminInvitation: Scalars['Boolean']['output'];
@@ -491,11 +511,14 @@ export type Mutation = {
   deleteStaffDocument: Scalars['Boolean']['output'];
   forgotPassword: Scalars['Boolean']['output'];
   generateInvoice: Invoice;
+  generateReferralCode: Scalars['String']['output'];
   login: AuthPayload;
   markInvoiceAsPaid: Invoice;
   markNotificationAsRead?: Maybe<Notification>;
   markNotificationsAsRead: Scalars['Int']['output'];
   pauseSubscription: Scalars['Boolean']['output'];
+  payoutCommission: Scalars['Boolean']['output'];
+  payoutUserCommissions: Scalars['Boolean']['output'];
   reactivateSubscription: Scalars['Boolean']['output'];
   refundPayment: Payment;
   register: AuthPayload;
@@ -557,6 +580,11 @@ export type MutationAddPaymentMethodArgs = {
 export type MutationAddServiceToSubscriptionArgs = {
   service: SubscriptionServiceInput;
   subscriptionId: Scalars['ID']['input'];
+};
+
+
+export type MutationApplyReferralCodeArgs = {
+  code: Scalars['String']['input'];
 };
 
 
@@ -717,6 +745,16 @@ export type MutationMarkNotificationsAsReadArgs = {
 
 export type MutationPauseSubscriptionArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationPayoutCommissionArgs = {
+  commissionId: Scalars['ID']['input'];
+};
+
+
+export type MutationPayoutUserCommissionsArgs = {
+  userId: Scalars['ID']['input'];
 };
 
 
@@ -1075,6 +1113,7 @@ export type Query = {
   _?: Maybe<Scalars['Boolean']['output']>;
   activeServiceAreas: Array<ServiceArea>;
   adminInvitation?: Maybe<AdminInvitation>;
+  allCommissions: Array<Commission>;
   availableStaff: Array<StaffProfile>;
   billing?: Maybe<Billing>;
   billingStats: BillingStats;
@@ -1091,6 +1130,8 @@ export type Query = {
   invoice: Invoice;
   isUserOnline: Scalars['Boolean']['output'];
   me?: Maybe<User>;
+  myCommissions: Array<Commission>;
+  myReferralInfo: ReferralInfo;
   notification?: Maybe<Notification>;
   notificationStats: NotificationStats;
   notifications: NotificationConnection;
@@ -1117,12 +1158,18 @@ export type Query = {
   unreadNotificationCount: Scalars['Int']['output'];
   user?: Maybe<User>;
   userBillings: Array<Billing>;
+  userCommissions: Array<Commission>;
   users: Array<User>;
 };
 
 
 export type QueryAdminInvitationArgs = {
   token: Scalars['String']['input'];
+};
+
+
+export type QueryAllCommissionsArgs = {
+  status?: InputMaybe<CommissionStatus>;
 };
 
 
@@ -1283,8 +1330,23 @@ export type QueryUserArgs = {
 };
 
 
+export type QueryUserCommissionsArgs = {
+  userId: Scalars['ID']['input'];
+};
+
+
 export type QueryUsersArgs = {
   role?: InputMaybe<UserRole>;
+};
+
+export type ReferralInfo = {
+  __typename?: 'ReferralInfo';
+  paidEarnings: Scalars['Float']['output'];
+  pendingEarnings: Scalars['Float']['output'];
+  referralCode: Scalars['String']['output'];
+  referralLink: Scalars['String']['output'];
+  referredUsersCount: Scalars['Int']['output'];
+  totalEarnings: Scalars['Float']['output'];
 };
 
 export type RefundPaymentInput = {
@@ -1314,6 +1376,7 @@ export type RoomPricesInput = {
   livingRoom: Scalars['Float']['input'];
   lobby: Scalars['Float']['input'];
   outdoor: Scalars['Float']['input'];
+  staircase: Scalars['Float']['input'];
   study: Scalars['Float']['input'];
 };
 
@@ -1690,8 +1753,12 @@ export type User = {
   firstName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   lastName: Scalars['String']['output'];
+  paidEarnings?: Maybe<Scalars['Float']['output']>;
   phone?: Maybe<Scalars['String']['output']>;
+  referralCode?: Maybe<Scalars['String']['output']>;
+  referredBy?: Maybe<User>;
   role: UserRole;
+  totalEarnings?: Maybe<Scalars['Float']['output']>;
   updatedAt: Scalars['DateTime']['output'];
 };
 
@@ -2030,6 +2097,32 @@ export type CancelInvoiceMutationVariables = Exact<{
 
 
 export type CancelInvoiceMutation = { __typename?: 'Mutation', cancelInvoice: { __typename?: 'Invoice', id: string, status: InvoiceStatus, updatedAt: any } };
+
+export type GenerateReferralCodeMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GenerateReferralCodeMutation = { __typename?: 'Mutation', generateReferralCode: string };
+
+export type ApplyReferralCodeMutationVariables = Exact<{
+  code: Scalars['String']['input'];
+}>;
+
+
+export type ApplyReferralCodeMutation = { __typename?: 'Mutation', applyReferralCode: boolean };
+
+export type PayoutCommissionMutationVariables = Exact<{
+  commissionId: Scalars['ID']['input'];
+}>;
+
+
+export type PayoutCommissionMutation = { __typename?: 'Mutation', payoutCommission: boolean };
+
+export type PayoutUserCommissionsMutationVariables = Exact<{
+  userId: Scalars['ID']['input'];
+}>;
+
+
+export type PayoutUserCommissionsMutation = { __typename?: 'Mutation', payoutUserCommissions: boolean };
 
 export type CreateServiceAreaMutationVariables = Exact<{
   input: CreateServiceAreaInput;
@@ -2380,6 +2473,28 @@ export type GetCustomerInvoicesQueryVariables = Exact<{ [key: string]: never; }>
 
 
 export type GetCustomerInvoicesQuery = { __typename?: 'Query', customerInvoices: Array<{ __typename?: 'Invoice', id: string, invoiceNumber: string, subtotal: number, tax: number, total: number, dueDate: any, status: InvoiceStatus, paidAt?: any | null, createdAt: any, updatedAt: any, items: Array<{ __typename?: 'InvoiceItem', description: string, quantity: number, unitPrice: number, amount: number }> }> };
+
+export type MyCommissionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyCommissionsQuery = { __typename?: 'Query', myCommissions: Array<{ __typename?: 'Commission', id: string, amount: number, status: CommissionStatus, paidAt?: any | null, createdAt: any, paidBy?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string } | null, referredUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string }, referrer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string }, booking: { __typename?: 'Booking', id: string } }> };
+
+export type MyReferralInfoQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyReferralInfoQuery = { __typename?: 'Query', myReferralInfo: { __typename?: 'ReferralInfo', referralCode: string, referralLink: string, totalEarnings: number, pendingEarnings: number, paidEarnings: number, referredUsersCount: number } };
+
+export type AllCommissionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllCommissionsQuery = { __typename?: 'Query', allCommissions: Array<{ __typename?: 'Commission', id: string, amount: number, status: CommissionStatus, paidAt?: any | null, createdAt: any, paidBy?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string } | null, referredUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string }, referrer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string }, booking: { __typename?: 'Booking', id: string } }> };
+
+export type UserCommissionsQueryVariables = Exact<{
+  userId: Scalars['ID']['input'];
+}>;
+
+
+export type UserCommissionsQuery = { __typename?: 'Query', userCommissions: Array<{ __typename?: 'Commission', id: string, amount: number, status: CommissionStatus, paidAt?: any | null, createdAt: any, paidBy?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string } | null, referredUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string }, referrer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string }, booking: { __typename?: 'Booking', id: string } }> };
 
 export type ServiceAreaQueryVariables = Exact<{
   serviceAreaId: Scalars['ID']['input'];
@@ -4131,6 +4246,129 @@ export function useCancelInvoiceMutation(baseOptions?: ApolloReactHooks.Mutation
 export type CancelInvoiceMutationHookResult = ReturnType<typeof useCancelInvoiceMutation>;
 export type CancelInvoiceMutationResult = Apollo.MutationResult<CancelInvoiceMutation>;
 export type CancelInvoiceMutationOptions = Apollo.BaseMutationOptions<CancelInvoiceMutation, CancelInvoiceMutationVariables>;
+export const GenerateReferralCodeDocument = gql`
+    mutation GenerateReferralCode {
+  generateReferralCode
+}
+    `;
+export type GenerateReferralCodeMutationFn = Apollo.MutationFunction<GenerateReferralCodeMutation, GenerateReferralCodeMutationVariables>;
+
+/**
+ * __useGenerateReferralCodeMutation__
+ *
+ * To run a mutation, you first call `useGenerateReferralCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGenerateReferralCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [generateReferralCodeMutation, { data, loading, error }] = useGenerateReferralCodeMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGenerateReferralCodeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<GenerateReferralCodeMutation, GenerateReferralCodeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<GenerateReferralCodeMutation, GenerateReferralCodeMutationVariables>(GenerateReferralCodeDocument, options);
+      }
+export type GenerateReferralCodeMutationHookResult = ReturnType<typeof useGenerateReferralCodeMutation>;
+export type GenerateReferralCodeMutationResult = Apollo.MutationResult<GenerateReferralCodeMutation>;
+export type GenerateReferralCodeMutationOptions = Apollo.BaseMutationOptions<GenerateReferralCodeMutation, GenerateReferralCodeMutationVariables>;
+export const ApplyReferralCodeDocument = gql`
+    mutation ApplyReferralCode($code: String!) {
+  applyReferralCode(code: $code)
+}
+    `;
+export type ApplyReferralCodeMutationFn = Apollo.MutationFunction<ApplyReferralCodeMutation, ApplyReferralCodeMutationVariables>;
+
+/**
+ * __useApplyReferralCodeMutation__
+ *
+ * To run a mutation, you first call `useApplyReferralCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useApplyReferralCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [applyReferralCodeMutation, { data, loading, error }] = useApplyReferralCodeMutation({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useApplyReferralCodeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ApplyReferralCodeMutation, ApplyReferralCodeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<ApplyReferralCodeMutation, ApplyReferralCodeMutationVariables>(ApplyReferralCodeDocument, options);
+      }
+export type ApplyReferralCodeMutationHookResult = ReturnType<typeof useApplyReferralCodeMutation>;
+export type ApplyReferralCodeMutationResult = Apollo.MutationResult<ApplyReferralCodeMutation>;
+export type ApplyReferralCodeMutationOptions = Apollo.BaseMutationOptions<ApplyReferralCodeMutation, ApplyReferralCodeMutationVariables>;
+export const PayoutCommissionDocument = gql`
+    mutation PayoutCommission($commissionId: ID!) {
+  payoutCommission(commissionId: $commissionId)
+}
+    `;
+export type PayoutCommissionMutationFn = Apollo.MutationFunction<PayoutCommissionMutation, PayoutCommissionMutationVariables>;
+
+/**
+ * __usePayoutCommissionMutation__
+ *
+ * To run a mutation, you first call `usePayoutCommissionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePayoutCommissionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [payoutCommissionMutation, { data, loading, error }] = usePayoutCommissionMutation({
+ *   variables: {
+ *      commissionId: // value for 'commissionId'
+ *   },
+ * });
+ */
+export function usePayoutCommissionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<PayoutCommissionMutation, PayoutCommissionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<PayoutCommissionMutation, PayoutCommissionMutationVariables>(PayoutCommissionDocument, options);
+      }
+export type PayoutCommissionMutationHookResult = ReturnType<typeof usePayoutCommissionMutation>;
+export type PayoutCommissionMutationResult = Apollo.MutationResult<PayoutCommissionMutation>;
+export type PayoutCommissionMutationOptions = Apollo.BaseMutationOptions<PayoutCommissionMutation, PayoutCommissionMutationVariables>;
+export const PayoutUserCommissionsDocument = gql`
+    mutation PayoutUserCommissions($userId: ID!) {
+  payoutUserCommissions(userId: $userId)
+}
+    `;
+export type PayoutUserCommissionsMutationFn = Apollo.MutationFunction<PayoutUserCommissionsMutation, PayoutUserCommissionsMutationVariables>;
+
+/**
+ * __usePayoutUserCommissionsMutation__
+ *
+ * To run a mutation, you first call `usePayoutUserCommissionsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePayoutUserCommissionsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [payoutUserCommissionsMutation, { data, loading, error }] = usePayoutUserCommissionsMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function usePayoutUserCommissionsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<PayoutUserCommissionsMutation, PayoutUserCommissionsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<PayoutUserCommissionsMutation, PayoutUserCommissionsMutationVariables>(PayoutUserCommissionsDocument, options);
+      }
+export type PayoutUserCommissionsMutationHookResult = ReturnType<typeof usePayoutUserCommissionsMutation>;
+export type PayoutUserCommissionsMutationResult = Apollo.MutationResult<PayoutUserCommissionsMutation>;
+export type PayoutUserCommissionsMutationOptions = Apollo.BaseMutationOptions<PayoutUserCommissionsMutation, PayoutUserCommissionsMutationVariables>;
 export const CreateServiceAreaDocument = gql`
     mutation CreateServiceArea($input: CreateServiceAreaInput!) {
   createServiceArea(input: $input) {
@@ -7050,6 +7288,243 @@ export type GetCustomerInvoicesQueryHookResult = ReturnType<typeof useGetCustome
 export type GetCustomerInvoicesLazyQueryHookResult = ReturnType<typeof useGetCustomerInvoicesLazyQuery>;
 export type GetCustomerInvoicesSuspenseQueryHookResult = ReturnType<typeof useGetCustomerInvoicesSuspenseQuery>;
 export type GetCustomerInvoicesQueryResult = Apollo.QueryResult<GetCustomerInvoicesQuery, GetCustomerInvoicesQueryVariables>;
+export const MyCommissionsDocument = gql`
+    query MyCommissions {
+  myCommissions {
+    id
+    amount
+    status
+    paidAt
+    paidBy {
+      id
+      email
+      firstName
+      lastName
+    }
+    referredUser {
+      id
+      email
+      firstName
+      lastName
+    }
+    referrer {
+      id
+      email
+      firstName
+      lastName
+    }
+    booking {
+      id
+    }
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useMyCommissionsQuery__
+ *
+ * To run a query within a React component, call `useMyCommissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyCommissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyCommissionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyCommissionsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MyCommissionsQuery, MyCommissionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<MyCommissionsQuery, MyCommissionsQueryVariables>(MyCommissionsDocument, options);
+      }
+export function useMyCommissionsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MyCommissionsQuery, MyCommissionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<MyCommissionsQuery, MyCommissionsQueryVariables>(MyCommissionsDocument, options);
+        }
+export function useMyCommissionsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<MyCommissionsQuery, MyCommissionsQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<MyCommissionsQuery, MyCommissionsQueryVariables>(MyCommissionsDocument, options);
+        }
+export type MyCommissionsQueryHookResult = ReturnType<typeof useMyCommissionsQuery>;
+export type MyCommissionsLazyQueryHookResult = ReturnType<typeof useMyCommissionsLazyQuery>;
+export type MyCommissionsSuspenseQueryHookResult = ReturnType<typeof useMyCommissionsSuspenseQuery>;
+export type MyCommissionsQueryResult = Apollo.QueryResult<MyCommissionsQuery, MyCommissionsQueryVariables>;
+export const MyReferralInfoDocument = gql`
+    query MyReferralInfo {
+  myReferralInfo {
+    referralCode
+    referralLink
+    totalEarnings
+    pendingEarnings
+    paidEarnings
+    referredUsersCount
+  }
+}
+    `;
+
+/**
+ * __useMyReferralInfoQuery__
+ *
+ * To run a query within a React component, call `useMyReferralInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyReferralInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyReferralInfoQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyReferralInfoQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MyReferralInfoQuery, MyReferralInfoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<MyReferralInfoQuery, MyReferralInfoQueryVariables>(MyReferralInfoDocument, options);
+      }
+export function useMyReferralInfoLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MyReferralInfoQuery, MyReferralInfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<MyReferralInfoQuery, MyReferralInfoQueryVariables>(MyReferralInfoDocument, options);
+        }
+export function useMyReferralInfoSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<MyReferralInfoQuery, MyReferralInfoQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<MyReferralInfoQuery, MyReferralInfoQueryVariables>(MyReferralInfoDocument, options);
+        }
+export type MyReferralInfoQueryHookResult = ReturnType<typeof useMyReferralInfoQuery>;
+export type MyReferralInfoLazyQueryHookResult = ReturnType<typeof useMyReferralInfoLazyQuery>;
+export type MyReferralInfoSuspenseQueryHookResult = ReturnType<typeof useMyReferralInfoSuspenseQuery>;
+export type MyReferralInfoQueryResult = Apollo.QueryResult<MyReferralInfoQuery, MyReferralInfoQueryVariables>;
+export const AllCommissionsDocument = gql`
+    query AllCommissions {
+  allCommissions {
+    id
+    amount
+    status
+    paidAt
+    paidBy {
+      id
+      email
+      firstName
+      lastName
+    }
+    referredUser {
+      id
+      email
+      firstName
+      lastName
+    }
+    referrer {
+      id
+      email
+      firstName
+      lastName
+    }
+    booking {
+      id
+    }
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useAllCommissionsQuery__
+ *
+ * To run a query within a React component, call `useAllCommissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllCommissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllCommissionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllCommissionsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AllCommissionsQuery, AllCommissionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<AllCommissionsQuery, AllCommissionsQueryVariables>(AllCommissionsDocument, options);
+      }
+export function useAllCommissionsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AllCommissionsQuery, AllCommissionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<AllCommissionsQuery, AllCommissionsQueryVariables>(AllCommissionsDocument, options);
+        }
+export function useAllCommissionsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<AllCommissionsQuery, AllCommissionsQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<AllCommissionsQuery, AllCommissionsQueryVariables>(AllCommissionsDocument, options);
+        }
+export type AllCommissionsQueryHookResult = ReturnType<typeof useAllCommissionsQuery>;
+export type AllCommissionsLazyQueryHookResult = ReturnType<typeof useAllCommissionsLazyQuery>;
+export type AllCommissionsSuspenseQueryHookResult = ReturnType<typeof useAllCommissionsSuspenseQuery>;
+export type AllCommissionsQueryResult = Apollo.QueryResult<AllCommissionsQuery, AllCommissionsQueryVariables>;
+export const UserCommissionsDocument = gql`
+    query UserCommissions($userId: ID!) {
+  userCommissions(userId: $userId) {
+    id
+    amount
+    status
+    paidAt
+    paidBy {
+      id
+      email
+      firstName
+      lastName
+    }
+    referredUser {
+      id
+      email
+      firstName
+      lastName
+    }
+    referrer {
+      id
+      email
+      firstName
+      lastName
+    }
+    booking {
+      id
+    }
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useUserCommissionsQuery__
+ *
+ * To run a query within a React component, call `useUserCommissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserCommissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserCommissionsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useUserCommissionsQuery(baseOptions: ApolloReactHooks.QueryHookOptions<UserCommissionsQuery, UserCommissionsQueryVariables> & ({ variables: UserCommissionsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<UserCommissionsQuery, UserCommissionsQueryVariables>(UserCommissionsDocument, options);
+      }
+export function useUserCommissionsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UserCommissionsQuery, UserCommissionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<UserCommissionsQuery, UserCommissionsQueryVariables>(UserCommissionsDocument, options);
+        }
+export function useUserCommissionsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<UserCommissionsQuery, UserCommissionsQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<UserCommissionsQuery, UserCommissionsQueryVariables>(UserCommissionsDocument, options);
+        }
+export type UserCommissionsQueryHookResult = ReturnType<typeof useUserCommissionsQuery>;
+export type UserCommissionsLazyQueryHookResult = ReturnType<typeof useUserCommissionsLazyQuery>;
+export type UserCommissionsSuspenseQueryHookResult = ReturnType<typeof useUserCommissionsSuspenseQuery>;
+export type UserCommissionsQueryResult = Apollo.QueryResult<UserCommissionsQuery, UserCommissionsQueryVariables>;
 export const ServiceAreaDocument = gql`
     query ServiceArea($serviceAreaId: ID!) {
   serviceArea(id: $serviceAreaId) {
