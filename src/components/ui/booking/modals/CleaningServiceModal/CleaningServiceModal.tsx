@@ -137,7 +137,12 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
     {
       // Calculate total price based on room prices and number of days
       const selectedDays = 1; // Default to 1 day for one-off bookings
-      const roomPrices = service.roomPrices || {};
+      const roomPrices =
+        service.options?.find(
+          (opt) => opt.service_id === serviceOption?.service_id
+        )?.roomPrices || {};
+      console.log("serviceOption", serviceOption);
+      console.log("roomPrices", roomPrices);
 
       // Calculate total price for each room type
       const roomTotal = Object.entries(roomQuantities).reduce(

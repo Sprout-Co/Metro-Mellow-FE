@@ -21,21 +21,22 @@ query GetServices($category: ServiceCategory, $status: ServiceStatus) {
       price
       inclusions
       imageUrl
+      roomPrices {
+        bedroom
+        livingRoom
+        bathroom
+        kitchen
+        study
+        outdoor
+        lobby
+        balcony
+        staircase
+      }
       extraItems {
         name
         items
         cost
       }
-    }
-    roomPrices {
-      bedroom
-      livingRoom
-      bathroom
-      kitchen
-      study
-      outdoor
-      lobby
-      balcony
     }
   }
 }
@@ -63,21 +64,22 @@ query GetServiceById($id: ID!) {
       price
       inclusions
       imageUrl
+      roomPrices {
+        bedroom
+        livingRoom
+        bathroom
+        kitchen
+        study
+        outdoor
+        lobby
+        balcony
+        staircase
+      }
       extraItems {
         name
         items
         cost
       }
-    }
-    roomPrices {
-      bedroom
-      livingRoom
-      bathroom
-      kitchen
-      study
-      outdoor
-      lobby
-      balcony
     }
   }
 }

@@ -230,7 +230,9 @@ const CleaningServiceConfiguration: React.FC<
     const roomQuantities = configuration.serviceDetails.cleaning?.rooms;
     const propertyType = configuration.serviceDetails.cleaning?.houseType;
     // Calculate total price based on room prices and number of days
-    const roomPrices = service.roomPrices || {};
+    const roomPrices =
+      service.options?.find((opt) => opt.service_id === selectedOption)
+        ?.roomPrices || {};
 
     // Calculate total price for each room type
     const roomTotal = Object.entries(roomQuantities || {}).reduce(
