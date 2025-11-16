@@ -5,11 +5,6 @@
 
 .refer {
   min-height: 100vh;
-  // background: color("neutral", "lightest");
-  // padding: spacing("xl");
-  // display: flex;
-  // align-items: flex-start;
-  // justify-content: center;
 
   @include breakpoint-down("md") {
     padding: spacing("lg");
@@ -34,8 +29,9 @@
   padding: spacing("xl");
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
   margin-bottom: spacing("xl");
+  gap: spacing("lg");
 
   @include breakpoint-down("md") {
     flex-direction: column;
@@ -63,9 +59,28 @@
     margin: 0;
   }
 
+  &__subtitle {
+    @include font-size("sm");
+    @include font-weight("normal");
+    color: rgba(255, 255, 255, 0.7);
+    margin: spacing("xs") 0 0 0;
+    line-height: 1.5;
+  }
+
+  &__rightWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+
+    @include breakpoint-down("md") {
+      width: 100%;
+    }
+  }
+
   &__right {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: spacing("md");
     background: rgba(255, 255, 255, 0.1);
     padding: spacing("md") spacing("lg");
@@ -81,6 +96,7 @@
     color: rgba(255, 255, 255, 0.7);
     @include font-size("sm");
     @include font-weight("medium");
+    white-space: nowrap;
   }
 
   &__link {
@@ -97,6 +113,16 @@
     }
   }
 
+  &__code {
+    color: color("neutral", "white");
+    @include font-size("sm");
+    @include font-weight("bold");
+    font-family: monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
   &__copyBtn {
     background: $color-orange-base;
     color: color("neutral", "white");
@@ -110,6 +136,7 @@
     align-items: center;
     gap: spacing("xs");
     transition: all 0.2s ease;
+    white-space: nowrap;
 
     &:hover {
       background: $color-orange-80;
@@ -117,6 +144,39 @@
 
     @include breakpoint-down("md") {
       padding: spacing("sm");
+    }
+  }
+
+  &__payoutBtn {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: color("neutral", "white");
+    border: none;
+    padding: spacing("md") spacing("lg");
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("sm");
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    width: 100%;
+
+    &:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    @include breakpoint-down("md") {
+      padding: spacing("sm") spacing("md");
     }
   }
 }
@@ -418,409 +478,6 @@
     }
   }
 }
-
-// Referral Code Section
-// .codeSection {
-//   margin-bottom: spacing("xl");
-
-//   &__inputGroup {
-//     display: flex;
-//     align-items: stretch;
-//     background: color("neutral", "white");
-//     border: 2px solid color("neutral", "lighter");
-//     border-radius: border-radius("lg");
-//     overflow: hidden;
-//     transition: border-color 0.2s ease;
-
-//     &:focus-within {
-//       border-color: color("primary", "base");
-//     }
-//   }
-
-//   &__input {
-//     flex: 1;
-//     padding: spacing("md");
-//     background: transparent;
-//     border: none;
-//     @include font-size("small");
-//     @include font-weight("semibold");
-//     color: color("primary", "base");
-//     font-family: monospace;
-//     letter-spacing: 2px;
-//     text-transform: uppercase;
-
-//     &:focus {
-//       outline: none;
-//     }
-
-//     &::selection {
-//       background: color("primary", "lighter");
-//       color: color("primary", "base");
-//     }
-//   }
-
-//   &__copyBtn {
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     padding: 0 spacing("lg");
-//     background: transparent;
-//     border: none;
-//     color: color("neutral", "dark");
-//     cursor: pointer;
-//     transition: all 0.2s ease;
-
-//     &:hover {
-//       background: color("primary", "lighter");
-//       color: color("primary", "base");
-//     }
-
-//     &:active {
-//       background: color("primary", "light");
-//     }
-//   }
-// }
-
-// .refer {
-//   padding: spacing("xl");
-//   max-width: 1200px;
-//   margin: 0 auto;
-
-//   @include breakpoint-down("md") {
-//     padding: spacing("lg");
-//   }
-
-//   @include breakpoint-down("sm") {
-//     padding: spacing("md");
-//   }
-
-//   &__header {
-//     margin-bottom: spacing("xl");
-//     padding: spacing("xl");
-//     background: linear-gradient(
-//       135deg,
-//       color("primary", "base"),
-//       color("primary", "dark")
-//     );
-//     border-radius: border-radius("2xl");
-//     color: color("neutral", "white");
-//     position: relative;
-//     overflow: hidden;
-
-//     &::before {
-//       content: "";
-//       position: absolute;
-//       top: -50%;
-//       right: -10%;
-//       width: 40%;
-//       height: 200%;
-//       background: radial-gradient(
-//         circle,
-//         rgba(255, 255, 255, 0.1) 0%,
-//         transparent 60%
-//       );
-//       pointer-events: none;
-//     }
-
-//     @include breakpoint-down("md") {
-//       padding: spacing("lg");
-//     }
-
-//     @include breakpoint-down("sm") {
-//       padding: spacing("md");
-//     }
-//   }
-
-//   &__headerContent {
-//     display: flex;
-//     align-items: center;
-//     gap: spacing("lg");
-//     position: relative;
-//     z-index: 1;
-
-//     @include breakpoint-down("sm") {
-//       flex-direction: column;
-//       text-align: center;
-//     }
-//   }
-
-//   &__headerIcon {
-//     width: 60px;
-//     height: 60px;
-//     padding: spacing("md");
-//     background: rgba(255, 255, 255, 0.2);
-//     backdrop-filter: blur(10px);
-//     border-radius: border-radius("xl");
-//     color: color("neutral", "white");
-//     flex-shrink: 0;
-//   }
-
-//   &__title {
-//     @include font-size("h4");
-//     @include font-weight("bold");
-//     color: color("neutral", "white");
-//     margin: 0 0 spacing("xs") 0;
-//     font-family: $font-family-heading;
-//   }
-
-//   &__subtitle {
-//     @include font-size("body-2");
-//     color: color("neutral", "white");
-//     margin: 0;
-//     opacity: 0.9;
-//   }
-// }
-
-// // Stats Overview
-// .statsOverview {
-//   margin-bottom: spacing("xl");
-
-//   &__grid {
-//     display: grid;
-//     grid-template-columns: repeat(4, 1fr);
-//     gap: spacing("lg");
-
-//     @include breakpoint-down("lg") {
-//       grid-template-columns: repeat(2, 1fr);
-//     }
-
-//     @include breakpoint-down("sm") {
-//       grid-template-columns: 1fr;
-//       gap: spacing("md");
-//     }
-//   }
-// }
-
-// .statCard {
-//   background: color("neutral", "white");
-//   border-radius: border-radius("xl");
-//   padding: spacing("lg");
-//   display: flex;
-//   align-items: center;
-//   gap: spacing("md");
-//   border: 2px solid color("neutral", "lighter");
-//   transition: all 0.3s ease;
-//   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-
-//   &:hover {
-//     border-color: color("primary", "lighter");
-//     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-//     transform: translateY(-2px);
-//   }
-
-//   &__icon {
-//     width: 50px;
-//     height: 50px;
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     background: color("primary", "lighter");
-//     color: color("primary", "base");
-//     border-radius: border-radius("lg");
-//     flex-shrink: 0;
-//   }
-
-//   &__content {
-//     flex: 1;
-//     display: flex;
-//     flex-direction: column;
-//     gap: spacing("xxs");
-//   }
-
-//   &__value {
-//     @include font-size("h4");
-//     @include font-weight("bold");
-//     color: color("neutral", "darkest");
-//     line-height: 1;
-//   }
-
-//   &__label {
-//     @include font-size("sm");
-//     color: color("neutral", "medium");
-//     font-weight: 500;
-//   }
-// }
-
-// // How It Works
-// .howItWorks {
-//   margin-bottom: spacing("xl");
-//   background: color("neutral", "white");
-//   border-radius: border-radius("xl");
-//   padding: spacing("xl");
-//   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-
-//   @include breakpoint-down("md") {
-//     padding: spacing("lg");
-//   }
-
-//   &__title {
-//     @include heading-2;
-//     color: color("primary", "base");
-//     margin: 0 0 spacing("lg") 0;
-//     text-align: center;
-//   }
-
-//   &__steps {
-//     display: grid;
-//     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-//     gap: spacing("lg");
-
-//     @include breakpoint-down("sm") {
-//       grid-template-columns: 1fr;
-//     }
-//   }
-// }
-
-// .step {
-//   display: flex;
-//   align-items: flex-start;
-//   gap: spacing("md");
-//   text-align: left;
-
-//   @include breakpoint-down("sm") {
-//     text-align: center;
-//     flex-direction: column;
-//     align-items: center;
-//   }
-
-//   &__number {
-//     width: 40px;
-//     height: 40px;
-//     background: color("primary", "base");
-//     color: color("neutral", "white");
-//     border-radius: border-radius("full");
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     @include font-size("body-1");
-//     @include font-weight("bold");
-//     flex-shrink: 0;
-//   }
-
-//   &__content {
-//     flex: 1;
-
-//     h3 {
-//       @include font-size("body-1");
-//       @include font-weight("semibold");
-//       color: color("neutral", "darkest");
-//       margin: 0 0 spacing("xs") 0;
-//     }
-
-//     p {
-//       @include font-size("sm");
-//       color: color("neutral", "medium");
-//       margin: 0;
-//       line-height: 1.5;
-//     }
-//   }
-// }
-
-// // Referral Methods
-// .referralMethods {
-//   margin-bottom: spacing("xl");
-
-//   @include breakpoint-down("lg") {
-//     grid-template-columns: 1fr;
-//     gap: spacing("lg");
-//   }
-// }
-
-// // Code Section
-// .codeSection {
-//   background: color("neutral", "white");
-//   border-radius: border-radius("xl");
-//   padding: spacing("xl");
-//   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-
-//   &__title {
-//     @include font-size("subtitle-2");
-//     @include font-weight("semibold");
-//     color: color("neutral", "darkest");
-//     margin: 0 0 spacing("lg") 0;
-//   }
-// }
-
-// .codeBox {
-//   display: flex;
-//   align-items: center;
-//   gap: spacing("md");
-//   padding: spacing("lg");
-//   background: color("primary", "lighter");
-//   border-radius: border-radius("lg");
-//   border: 2px solid color("primary", "lighter");
-//   margin-bottom: spacing("md");
-
-//   &__code {
-//     @include font-size("h5");
-//     @include font-weight("bold");
-//     color: color("primary", "base");
-//     letter-spacing: 2px;
-//     font-family: "Courier New", monospace;
-//     flex: 1;
-//   }
-
-//   &__copyBtn {
-//     display: flex;
-//     align-items: center;
-//     gap: spacing("xs");
-//     padding: spacing("sm") spacing("md");
-//     background: color("primary", "base");
-//     color: color("neutral", "white");
-//     border: none;
-//     border-radius: border-radius("lg");
-//     @include font-size("sm");
-//     @include font-weight("semibold");
-//     cursor: pointer;
-//     transition: all 0.2s ease;
-
-//     &:hover {
-//       background: color("primary", "dark");
-//       transform: scale(1.05);
-//     }
-//   }
-// }
-
-// .linkBox {
-//   display: flex;
-//   align-items: center;
-//   gap: spacing("sm");
-//   padding: spacing("sm");
-//   background: color("neutral", "lightest");
-//   border-radius: border-radius("lg");
-//   border: 1px solid color("neutral", "lighter");
-
-//   &__input {
-//     flex: 1;
-//     border: none;
-//     background: transparent;
-//     @include font-size("sm");
-//     color: color("neutral", "dark");
-//     padding: spacing("xs");
-
-//     &:focus {
-//       outline: none;
-//     }
-//   }
-
-//   &__copyBtn {
-//     padding: spacing("xs");
-//     background: color("neutral", "white");
-//     border: 1px solid color("neutral", "lighter");
-//     border-radius: border-radius("md");
-//     color: color("neutral", "medium");
-//     cursor: pointer;
-//     transition: all 0.2s ease;
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-
-//     &:hover {
-//       border-color: color("primary", "base");
-//       color: color("primary", "base");
-//     }
-//   }
-// }
 
 // // Commissions Section
 .commissionsSection {

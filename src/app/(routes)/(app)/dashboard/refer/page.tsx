@@ -130,7 +130,9 @@ export default function ReferFriendPage() {
     return (
       commission.id.toLowerCase().includes(searchLower) ||
       commission.referredUser.email.toLowerCase().includes(searchLower) ||
-      getUserName(commission.referredUser).toLowerCase().includes(searchLower) ||
+      getUserName(commission.referredUser)
+        .toLowerCase()
+        .includes(searchLower) ||
       commission.status.toLowerCase().includes(searchLower)
     );
   });
@@ -171,6 +173,11 @@ export default function ReferFriendPage() {
 
   const handleRemoveEmail = (index: number) => {
     setEmails(emails.filter((_, i) => i !== index));
+  };
+
+  const handleRequestPayout = () => {
+    // TODO: Implement payout request logic
+    alert(`Requesting payout for ${formatCurrency(pendingEarnings)}`);
   };
 
   const getStatusBadge = (status: string) => {
@@ -221,21 +228,43 @@ export default function ReferFriendPage() {
           transition={{ duration: 0.5 }}
         >
           <div className={styles.header__left}>
-            <Gift className={styles.header__icon} />
-            <h1 className={styles.header__title}>Referral program</h1>
+            <div>
+              {/* <Gift className={styles.header__icon} /> */}
+              <h1 className={styles.header__title}>Referral program</h1>
+              <p className={styles.header__subtitle}>
+                Share your unique referral link or code with friends and earn
+                10% commission on their first booking
+              </p>
+            </div>
           </div>
-          <div className={styles.header__right}>
-            <span className={styles.header__label}>Referral link:</span>
-            <span className={styles.header__link}>{referralLink}</span>
-            <motion.button
-              className={styles.header__copyBtn}
-              onClick={handleCopyLink}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {copied ? <Check size={16} /> : <Copy size={16} />}
-              Copy link
-            </motion.button>
+          <div className={styles.header__rightWrapper}>
+            <div className={styles.header__right}>
+              <span className={styles.header__label}>Referral link:</span>
+              <span className={styles.header__link}>{referralLink}</span>
+              <FnButton variant="secondary" size="sm" onClick={handleCopyLink}>
+                {copied ? <Check size={16} /> : <Copy size={16} />}
+                Copy link
+              </FnButton>
+            </div>
+            <div className={styles.header__right}>
+              <span className={styles.header__label}>Referral code:</span>
+              <span className={styles.header__code}>{referralCode}</span>
+              <FnButton variant="secondary" size="sm" onClick={handleCopyCode}>
+                {copied ? <Check size={16} /> : <Copy size={16} />}
+                Copy code
+              </FnButton>
+            </div>
+            {pendingEarnings > 0 && (
+              <FnButton
+                variant="primary"
+                size="md"
+                fullWidth
+                // className={styles.header__payoutBtn}
+                onClick={handleRequestPayout}
+              >
+                Request Payout ({formatCurrency(pendingEarnings)})
+              </FnButton>
+            )}
           </div>
         </motion.div>
 
