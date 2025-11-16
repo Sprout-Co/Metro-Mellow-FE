@@ -99,8 +99,12 @@
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: spacing("lg");
+
+    @include breakpoint-down("lg") {
+      grid-template-columns: repeat(2, 1fr);
+    }
 
     @include breakpoint-down("sm") {
       grid-template-columns: 1fr;
@@ -205,11 +209,7 @@
   &__number {
     width: 40px;
     height: 40px;
-    background: linear-gradient(
-      135deg,
-      color("primary", "base"),
-      color("primary", "dark")
-    );
+    background: color("primary", "base");
     color: color("neutral", "white");
     border-radius: border-radius("full");
     display: flex;
@@ -272,11 +272,7 @@
   align-items: center;
   gap: spacing("md");
   padding: spacing("lg");
-  background: linear-gradient(
-    135deg,
-    color("primary", "lighter"),
-    rgba(7, 80, 86, 0.05)
-  );
+  background: color("primary", "lighter");
   border-radius: border-radius("lg");
   border: 2px solid color("primary", "lighter");
   margin-bottom: spacing("md");
@@ -503,8 +499,175 @@
   }
 }
 
-// Referral History
-.referralHistory {
+// Commissions Section
+.commissionsSection {
+  background: color("neutral", "white");
+  border-radius: border-radius("xl");
+  padding: spacing("xl");
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  margin-bottom: spacing("xl");
+
+  &__title {
+    @include font-size("subtitle-2");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("lg") 0;
+  }
+}
+
+.emptyState {
+  text-align: center;
+  padding: spacing("xl");
+  color: color("neutral", "medium");
+  
+  p {
+    @include font-size("body-1");
+    margin: 0;
+  }
+}
+
+.commissionsList {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("lg");
+}
+
+.commissionGroup {
+  border: 2px solid color("neutral", "lighter");
+  border-radius: border-radius("lg");
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: color("primary", "lighter");
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("lg");
+    background: color("neutral", "lightest");
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+    }
+  }
+
+  &__userInfo {
+    h4 {
+      @include font-size("body-1");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xxs") 0;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "medium");
+      margin: 0;
+    }
+  }
+
+  &__summary {
+    display: flex;
+    align-items: center;
+    gap: spacing("lg");
+  }
+
+  &__count {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    padding: spacing("xs") spacing("sm");
+    background: color("neutral", "white");
+    border-radius: border-radius("md");
+  }
+
+  &__total {
+    @include font-size("h6");
+    @include font-weight("bold");
+    color: color("primary", "base");
+  }
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.commissionItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: spacing("md") spacing("lg");
+  border-bottom: 1px solid color("neutral", "lighter");
+  transition: background 0.2s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: color("neutral", "lightest");
+  }
+
+  @include breakpoint-down("sm") {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: spacing("sm");
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+  }
+
+  &__booking {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+  }
+
+  &__date {
+    @include font-size("xs");
+    color: color("neutral", "light");
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  &__amount {
+    @include font-size("body-1");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  &__badge {
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("pill");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+// Payout History
+.payoutHistory {
   background: color("neutral", "white");
   border-radius: border-radius("xl");
   padding: spacing("xl");
@@ -518,49 +681,43 @@
   }
 }
 
-.referralList {
+.payoutList {
   display: flex;
   flex-direction: column;
-  gap: spacing("md");
+  gap: spacing("sm");
 }
 
-.referralItem {
+.payoutItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: spacing("lg");
+  padding: spacing("md") spacing("lg");
   background: color("neutral", "lightest");
   border-radius: border-radius("lg");
   border: 1px solid color("neutral", "lighter");
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 
   &:hover {
     background: color("neutral", "lighter");
     transform: translateX(4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   }
 
   @include breakpoint-down("sm") {
     flex-direction: column;
     align-items: flex-start;
-    gap: spacing("md");
+    gap: spacing("sm");
   }
 
   &__info {
-    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+  }
 
-    h4 {
-      @include font-size("body-1");
-      @include font-weight("semibold");
-      color: color("neutral", "darkest");
-      margin: 0 0 spacing("xxs") 0;
-    }
-
-    p {
-      @include font-size("sm");
-      color: color("neutral", "medium");
-      margin: 0 0 spacing("xs") 0;
-    }
+  &__user {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
   }
 
   &__date {
@@ -568,32 +725,9 @@
     color: color("neutral", "light");
   }
 
-  &__status {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: spacing("xs");
-
-    @include breakpoint-down("sm") {
-      align-items: flex-start;
-      width: 100%;
-      flex-direction: row;
-      justify-content: space-between;
-    }
-  }
-
-  &__badge {
-    padding: spacing("xs") spacing("sm");
-    border-radius: border-radius("pill");
-    @include font-size("xs");
-    @include font-weight("semibold");
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  &__reward {
-    @include font-size("sm");
-    @include font-weight("semibold");
+  &__amount {
+    @include font-size("body-1");
+    @include font-weight("bold");
     color: color("status", "success");
   }
 }

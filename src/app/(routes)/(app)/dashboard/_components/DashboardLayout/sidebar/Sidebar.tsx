@@ -301,7 +301,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                       )}
                     </div>
                   )}
-                  
+
                   {/* Services Dropdown */}
                   {link.label === "Services" && isServicesDropdownOpen && (
                     <motion.ul

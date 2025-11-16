@@ -1,0 +1,192 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.commissionsPage {
+  padding: spacing("xl");
+
+  @include breakpoint-down("md") {
+    padding: spacing("lg");
+  }
+
+  @include breakpoint-down("sm") {
+    padding: spacing("md");
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: spacing("xl");
+
+  @include breakpoint-down("sm") {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: spacing("md");
+  }
+}
+
+.title {
+  @include font-size("h3");
+  @include font-weight("bold");
+  color: color("neutral", "darkest");
+  margin: 0 0 spacing("xs") 0;
+}
+
+.subtitle {
+  @include font-size("body-2");
+  color: color("neutral", "medium");
+  margin: 0;
+}
+
+// Stats Grid
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: spacing("lg");
+  margin-bottom: spacing("xl");
+
+  @include breakpoint-down("md") {
+    grid-template-columns: 1fr;
+  }
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: spacing("md");
+  padding: spacing("md");
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color("primary", "lighter");
+    color: color("primary", "base");
+    border-radius: border-radius("lg");
+    flex-shrink: 0;
+  }
+
+  &__content {
+    flex: 1;
+  }
+
+  &__label {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    margin: 0 0 spacing("xs") 0;
+    font-weight: 500;
+  }
+
+  &__value {
+    @include font-size("h5");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    margin: 0;
+  }
+}
+
+// Table Section
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: spacing("lg");
+  border-bottom: 1px solid color("neutral", "lighter");
+  gap: spacing("lg");
+
+  @include breakpoint-down("md") {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.filters {
+  display: flex;
+  gap: spacing("sm");
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: spacing("xs") spacing("md");
+  border: 2px solid color("neutral", "lighter");
+  background: color("neutral", "white");
+  color: color("neutral", "dark");
+  border-radius: border-radius("md");
+  @include font-size("sm");
+  @include font-weight("medium");
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: color("primary", "lighter");
+    color: color("primary", "base");
+  }
+
+  &__active {
+    background: color("primary", "base");
+    border-color: color("primary", "base");
+    color: color("neutral", "white");
+
+    &:hover {
+      background: color("primary", "dark");
+      border-color: color("primary", "dark");
+      color: color("neutral", "white");
+    }
+  }
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: spacing("sm");
+  padding: spacing("sm") spacing("md");
+  background: color("neutral", "lightest");
+  border: 1px solid color("neutral", "lighter");
+  border-radius: border-radius("md");
+  min-width: 300px;
+
+  @include breakpoint-down("md") {
+    width: 100%;
+    min-width: auto;
+  }
+
+  svg {
+    color: color("neutral", "medium");
+  }
+}
+
+.searchInput {
+  flex: 1;
+  border: none;
+  background: transparent;
+  @include font-size("sm");
+  color: color("neutral", "darkest");
+  outline: none;
+
+  &::placeholder {
+    color: color("neutral", "light");
+  }
+}
+
+// States
+.loading,
+.error,
+.empty {
+  text-align: center;
+  padding: spacing("xl");
+  @include font-size("body-1");
+  color: color("neutral", "medium");
+}
+
+.error {
+  color: color("status", "error");
+}
+
+.empty {
+  color: color("neutral", "light");
+}
+

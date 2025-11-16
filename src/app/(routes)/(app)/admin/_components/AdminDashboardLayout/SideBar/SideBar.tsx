@@ -23,6 +23,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     { label: "Bookings", path: "/admin/bookings", icon: "calendar" },
     { label: "Subscriptions", path: "/admin/subscriptions", icon: "credit-card" },
     { label: "Customers", path: "/admin/customers", icon: "users" },
+    { label: "Commissions", path: "/admin/commissions", icon: "dollar-sign" },
     { label: "Scheduling", path: "/admin/scheduling", icon: "calendar-plus" },
     // { label: "Services", path: "/admin/services", icon: "package" },
     // { label: "Reports", path: "/admin/reports", icon: "file-text" },
