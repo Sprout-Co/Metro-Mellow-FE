@@ -19,6 +19,7 @@ import {
   useGetUsersQuery,
   useSendVerificationEmailMutation,
   useVerifyEmailMutation,
+  useVerifyEmailWithCodeMutation,
   useAddAddressMutation,
   AddressInput,
   useUpdateAddressMutation,
@@ -58,6 +59,7 @@ export const useAuthOperations = () => {
   const { refetch: getUsers } = useGetUsersQuery({ skip: true });
   const [sendVerificationEmailMutation] = useSendVerificationEmailMutation();
   const [verifyEmailMutation] = useVerifyEmailMutation();
+  const [verifyEmailWithCodeMutation] = useVerifyEmailWithCodeMutation();
   const [addAddressMutation] = useAddAddressMutation();
   const [updateAddressMutation] = useUpdateAddressMutation();
   const [setDefaultAddressMutation] = useSetDefaultAddressMutation();
@@ -506,6 +508,47 @@ export const useAuthOperations = () => {
   );
 
   /**
+   * Verifies user's email using a verification code
+   * @param email - User's email address
+   * @param code - Verification code received via email
+   * @returns Auth payload with token and user data
+   * @throws Error if verification fails
+   */
+  const handleVerifyEmailWithCode = useCallback(
+    async (email: string, code: string) => {
+      try {
+        const { data, errors } = await verifyEmailWithCodeMutation({
+          variables: { email, code },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        if (!data?.verifyEmailWithCode) {
+          throw new Error("Verification failed: No response from server");
+        }
+
+        const { user, token, success } = data.verifyEmailWithCode;
+
+        if (user && token) {
+          // Store auth data
+          dispatch(loginAction({ user: user as any, token }));
+        }
+
+        return data.verifyEmailWithCode;
+      } catch (error) {
+        console.error("Verify email with code error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [verifyEmailWithCodeMutation, dispatch]
+  );
+
+  /**
    * Adds a new address for the current user
    * @param input - Address input object
    * @returns Created address
@@ -696,6 +739,7 @@ export const useAuthOperations = () => {
     handleGetUsers,
     handleSendVerificationEmail,
     handleVerifyEmail,
+    handleVerifyEmailWithCode,
     handleAddAddress,
     handleUpdateAddress,
     handleSetDefaultAddress,

@@ -554,6 +554,7 @@ export type Mutation = {
   updateUserRole: User;
   uploadStaffDocument: StaffDocument;
   verifyEmail: AuthPayload;
+  verifyEmailWithCode: AuthPayload;
   verifyStaffDocument: StaffDocument;
 };
 
@@ -951,6 +952,12 @@ export type MutationUploadStaffDocumentArgs = {
 
 export type MutationVerifyEmailArgs = {
   token: Scalars['String']['input'];
+};
+
+
+export type MutationVerifyEmailWithCodeArgs = {
+  code: Scalars['String']['input'];
+  email: Scalars['String']['input'];
 };
 
 
@@ -1890,6 +1897,14 @@ export type VerifyEmailMutationVariables = Exact<{
 
 
 export type VerifyEmailMutation = { __typename?: 'Mutation', verifyEmail: { __typename?: 'AuthPayload', message?: string | null, token?: string | null, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, emailVerified?: boolean | null, accountStatus?: AccountStatus | null } | null } };
+
+export type VerifyEmailWithCodeMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+  code: Scalars['String']['input'];
+}>;
+
+
+export type VerifyEmailWithCodeMutation = { __typename?: 'Mutation', verifyEmailWithCode: { __typename?: 'AuthPayload', token?: string | null, message?: string | null, success?: boolean | null, user?: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: UserRole, emailVerified?: boolean | null, accountStatus?: AccountStatus | null } | null } };
 
 export type UpdateAccountStatusMutationVariables = Exact<{
   userId: Scalars['ID']['input'];
@@ -3238,6 +3253,51 @@ export function useVerifyEmailMutation(baseOptions?: ApolloReactHooks.MutationHo
 export type VerifyEmailMutationHookResult = ReturnType<typeof useVerifyEmailMutation>;
 export type VerifyEmailMutationResult = Apollo.MutationResult<VerifyEmailMutation>;
 export type VerifyEmailMutationOptions = Apollo.BaseMutationOptions<VerifyEmailMutation, VerifyEmailMutationVariables>;
+export const VerifyEmailWithCodeDocument = gql`
+    mutation VerifyEmailWithCode($email: String!, $code: String!) {
+  verifyEmailWithCode(email: $email, code: $code) {
+    token
+    message
+    success
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      emailVerified
+      accountStatus
+    }
+  }
+}
+    `;
+export type VerifyEmailWithCodeMutationFn = Apollo.MutationFunction<VerifyEmailWithCodeMutation, VerifyEmailWithCodeMutationVariables>;
+
+/**
+ * __useVerifyEmailWithCodeMutation__
+ *
+ * To run a mutation, you first call `useVerifyEmailWithCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVerifyEmailWithCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [verifyEmailWithCodeMutation, { data, loading, error }] = useVerifyEmailWithCodeMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useVerifyEmailWithCodeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<VerifyEmailWithCodeMutation, VerifyEmailWithCodeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<VerifyEmailWithCodeMutation, VerifyEmailWithCodeMutationVariables>(VerifyEmailWithCodeDocument, options);
+      }
+export type VerifyEmailWithCodeMutationHookResult = ReturnType<typeof useVerifyEmailWithCodeMutation>;
+export type VerifyEmailWithCodeMutationResult = Apollo.MutationResult<VerifyEmailWithCodeMutation>;
+export type VerifyEmailWithCodeMutationOptions = Apollo.BaseMutationOptions<VerifyEmailWithCodeMutation, VerifyEmailWithCodeMutationVariables>;
 export const UpdateAccountStatusDocument = gql`
     mutation UpdateAccountStatus($userId: ID!, $status: AccountStatus!, $reason: String) {
   updateAccountStatus(userId: $userId, status: $status, reason: $reason)
