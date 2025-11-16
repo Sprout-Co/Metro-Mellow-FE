@@ -4,12 +4,23 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import {
+  User,
+  Mail,
+  Lock,
+  Phone,
+  Home,
+  Globe,
+  AlertCircle,
+  MapPin,
+  Gift,
+} from "lucide-react";
 import FormInput from "./FormInput";
 import SocialAuth from "./SocialAuth";
 import styles from "./AuthLayout.module.scss";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import VerificationForm from "./VerificationForm";
-import { UserRole } from "@/graphql/api";
+import { UserRole, useActiveServiceAreasQuery } from "@/graphql/api";
 
 interface RegisterFormState {
   name: string;
@@ -19,6 +30,8 @@ interface RegisterFormState {
   phone: string;
   street: string;
   city: string;
+  serviceArea: string;
+  referralCode: string;
 }
 
 interface FormErrors {
@@ -29,6 +42,8 @@ interface FormErrors {
   phone?: string;
   street?: string;
   city?: string;
+  serviceArea?: string;
+  referralCode?: string;
   general?: string;
 }
 
@@ -49,6 +64,8 @@ export default function RegisterForm({
     phone: "",
     street: "",
     city: "",
+    serviceArea: "",
+    referralCode: "",
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -56,6 +73,8 @@ export default function RegisterForm({
   const [showVerification, setShowVerification] = useState(false);
 
   const { handleRegister } = useAuthOperations();
+  const { data: serviceAreasData, loading: loadingServiceAreas } =
+    useActiveServiceAreasQuery();
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -77,10 +96,11 @@ export default function RegisterForm({
       newErrors.password = "Password is required";
     } else if (formData.password.length < 8) {
       newErrors.password = "Password must be at least 8 characters";
-    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      newErrors.password =
-        "Password must include uppercase, lowercase and a number";
     }
+    // else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
+    //   newErrors.password =
+    //     "Password must include uppercase, lowercase and a number";
+    // }
 
     // Phone validation
     if (formData.phone && !/^[+\d\s()-]{7,20}$/.test(formData.phone)) {
@@ -94,6 +114,11 @@ export default function RegisterForm({
 
     if (formData.city && formData.city.length > 50) {
       newErrors.city = "City name is too long";
+    }
+
+    // Service area validation
+    if (!formData.serviceArea) {
+      newErrors.serviceArea = "Service area is required";
     }
 
     // Terms validation
@@ -111,6 +136,26 @@ export default function RegisterForm({
     setFormData({
       ...formData,
       [name]: type === "checkbox" ? checked : value,
+    });
+
+    // Clear the error for this field when user changes it
+    if (errors[name as keyof FormErrors]) {
+      setErrors({
+        ...errors,
+        [name]: undefined,
+      });
+    }
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    const selectedOption = e.target.options[e.target.selectedIndex];
+
+    setFormData({
+      ...formData,
+      [name]: value,
+      // If service area is selected, set city to the area name
+      ...(name === "serviceArea" && value ? { city: selectedOption.text } : {}),
     });
 
     // Clear the error for this field when user changes it
@@ -149,9 +194,11 @@ export default function RegisterForm({
         lastName,
         role: UserRole.Customer,
         phone: formData.phone,
+        referralCode: formData.referralCode || undefined,
         address: {
           street: formData.street,
           city: formData.city,
+          serviceArea: formData.serviceArea,
         },
       });
 
@@ -189,22 +236,6 @@ export default function RegisterForm({
       }
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleSocialAuth = async (provider: string) => {
-    try {
-      // In a real app, you would implement social auth logic here
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Simulate a successful registration
-      onSuccess();
-    } catch (error) {
-      console.error(`${provider} registration error:`, error);
-      setErrors({
-        ...errors,
-        general: `${provider} registration failed. Please try again.`,
-      });
     }
   };
 
@@ -262,25 +293,12 @@ export default function RegisterForm({
               Join Metromellow to get started
             </p>
 
-            <SocialAuth onSocialAuth={handleSocialAuth} />
+            {/* <SocialAuth onSocialAuth={handleSocialAuth} /> */}
 
             <form onSubmit={handleSubmit} noValidate>
               {errors.general && (
                 <div className={styles.registerForm__error}>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12 8V12M12 16H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
+                  <AlertCircle size={20} />
                   {errors.general}
                 </div>
               )}
@@ -296,30 +314,7 @@ export default function RegisterForm({
                 required
                 error={errors.name}
                 autoComplete="name"
-                icon={
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                }
+                icon={<User size={20} />}
               />
 
               <FormInput
@@ -333,30 +328,7 @@ export default function RegisterForm({
                 required
                 error={errors.email}
                 autoComplete="email"
-                icon={
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M22 6L12 13L2 6"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                }
+                icon={<Mail size={20} />}
               />
 
               <FormInput
@@ -370,30 +342,7 @@ export default function RegisterForm({
                 required
                 error={errors.password}
                 autoComplete="new-password"
-                icon={
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M19 11H5C3.89543 11 3 11.8954 3 13V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V13C21 11.8954 20.1046 11 19 11Z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                }
+                icon={<Lock size={20} />}
               />
 
               <FormInput
@@ -406,23 +355,7 @@ export default function RegisterForm({
                 placeholder="Your phone number"
                 error={errors.phone}
                 autoComplete="tel"
-                icon={
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M22 16.92V19.92C22 20.4704 21.7893 20.9996 21.4142 21.3747C21.0391 21.7498 20.5099 21.9605 19.96 21.96C17.44 21.96 15.01 21.32 12.86 20.13C10.8554 19.0452 9.08435 17.5543 7.68 15.75C6.47937 14.3371 5.60973 12.6567 5.14 10.85C4.99436 10.22 4.92669 9.57534 4.94 8.93C4.94 8.38009 5.15061 7.85093 5.52568 7.47586C5.90076 7.10078 6.42992 6.89017 6.98 6.89H9.98C10.4353 6.88916 10.8762 7.05027 11.2299 7.34676C11.5837 7.64325 11.8299 8.05786 11.93 8.51C12.07 9.23 12.31 9.93 12.62 10.58C12.7887 10.9041 12.8593 11.2681 12.8214 11.6297C12.7835 11.9913 12.6388 12.3314 12.41 12.61L11.39 13.63C12.6767 15.6791 14.4409 17.3278 16.57 18.46L17.58 17.46C17.8614 17.2288 18.2058 17.0818 18.5712 17.0422C18.9366 17.0025 19.3043 17.0728 19.63 17.24C20.28 17.55 20.98 17.79 21.7 17.93C22.1608 18.0305 22.5822 18.2803 22.8808 18.6397C23.1794 18.9991 23.3402 19.4455 23.34 19.91L22 16.92Z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                }
+                icon={<Phone size={20} />}
               />
 
               <FormInput
@@ -435,33 +368,10 @@ export default function RegisterForm({
                 placeholder="Your street address"
                 error={errors.street}
                 autoComplete="street-address"
-                icon={
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M9 22V12H15V22"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                }
+                icon={<Home size={20} />}
               />
 
-              <FormInput
+              {/* <FormInput
                 id="register-city"
                 name="city"
                 type="text"
@@ -471,38 +381,91 @@ export default function RegisterForm({
                 placeholder="Your city"
                 error={errors.city}
                 autoComplete="address-level2"
-                icon={
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+                icon={<Globe size={20} />}
+              /> */}
+
+              <div className={styles.formInput}>
+                <label
+                  htmlFor="register-serviceArea"
+                  className={styles.formInput__label}
+                >
+                  Service Area
+                  <span className={styles.formInput__required}>*</span>
+                </label>
+                <div
+                  className={`
+                    ${styles.formInput__wrapper} 
+                    ${errors.serviceArea ? styles["formInput__wrapper--error"] : ""}
+                  `}
+                >
+                  <div className={styles.formInput__icon}>
+                    <MapPin size={20} />
+                  </div>
+                  <select
+                    id="register-serviceArea"
+                    name="serviceArea"
+                    value={formData.serviceArea}
+                    onChange={handleSelectChange}
+                    className={styles.formInput__select}
+                    required
+                    disabled={loadingServiceAreas}
                   >
-                    <path
-                      d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M12 2C14.5013 4.73835 15.9228 8.29203 16 12C15.9228 15.708 14.5013 19.2616 12 22C9.49872 19.2616 8.07725 15.708 8 12C8.07725 8.29203 9.49872 4.73835 12 2Z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M2 12H22"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                }
-              />
+                    <option value="">Select service area...</option>
+                    {serviceAreasData?.activeServiceAreas.map((area) => (
+                      <option
+                        key={area.id}
+                        value={area.id}
+                        data-city={area.city}
+                      >
+                        {area.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {errors.serviceArea && (
+                  <p className={styles.formInput__error}>
+                    {errors.serviceArea}
+                  </p>
+                )}
+              </div>
+
+              <div className={styles.formInput}>
+                <label
+                  htmlFor="register-referralCode"
+                  className={styles.formInput__label}
+                >
+                  Referral Code (Optional)
+                </label>
+                <p className={styles.registerForm__referralHelper}>
+                  Add your referral code to enjoy up to a 10% discount on your
+                  next three orders!
+                </p>
+                <div
+                  className={`
+                    ${styles.formInput__wrapper} 
+                    ${errors.referralCode ? styles["formInput__wrapper--error"] : ""}
+                  `}
+                >
+                  <div className={styles.formInput__icon}>
+                    <Gift size={20} />
+                  </div>
+                  <input
+                    id="register-referralCode"
+                    name="referralCode"
+                    type="text"
+                    value={formData.referralCode}
+                    onChange={handleChange}
+                    placeholder="Enter referral code"
+                    className={styles.formInput__input}
+                    autoComplete="off"
+                  />
+                </div>
+                {errors.referralCode && (
+                  <p className={styles.formInput__error}>
+                    {errors.referralCode}
+                  </p>
+                )}
+              </div>
 
               {formData.password && (
                 <div className={styles.registerForm__passwordStrength}>

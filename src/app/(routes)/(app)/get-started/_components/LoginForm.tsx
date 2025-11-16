@@ -150,7 +150,7 @@ export default function LoginForm({
             Sign in to continue to Metromellow
           </p>
 
-          <SocialAuth onSocialAuth={handleSocialAuth} />
+          {/* <SocialAuth onSocialAuth={handleSocialAuth} /> */}
 
           <form onSubmit={handleSubmit} noValidate>
             {errors.general && (
