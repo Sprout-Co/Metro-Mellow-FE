@@ -15,6 +15,7 @@ import {
   PlusCircle,
   HelpCircle,
   Settings,
+  Gift,
 } from "lucide-react";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 
@@ -91,6 +92,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       onClick: () => setIsQuickHelpDrawerOpen(true),
       color: styles.quickActionAccent,
     },
+    {
+      icon: Gift,
+      label: "Refer a Friend",
+      href: Routes.DASHBOARD_REFER_FRIEND,
+      color: styles.quickActionAccent,
+    },
     // Removed reschedule quick action - using modal instead
   ];
 
@@ -136,7 +143,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         //   label: "Payment Methods",
         //   icon: CreditCard,
         // },
-        // { href: "/dashboard/rewards", label: "Loyalty Program", icon: Gift },
+        { href: "/dashboard/refer", label: "Loyalty Program", icon: Gift },
         // {
         //   href: "/dashboard/rewards/refer",
         //   label: "Refer a Friend",
