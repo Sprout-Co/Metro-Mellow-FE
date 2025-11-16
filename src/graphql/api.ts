@@ -344,6 +344,7 @@ export type CreateSubscriptionResponse = {
 export type CreateUserInput = {
   address?: InputMaybe<CreateCustomerAddressInput>;
   email: Scalars['String']['input'];
+  emailMarketingOptIn?: InputMaybe<Scalars['Boolean']['input']>;
   firstName: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -539,6 +540,7 @@ export type Mutation = {
   updateBooking: Scalars['Boolean']['output'];
   updateBookingPaymentStatus: Scalars['Boolean']['output'];
   updateBookingStatus: Scalars['Boolean']['output'];
+  updateEmailMarketingPreference: Scalars['Boolean']['output'];
   updateProfile?: Maybe<User>;
   updateService: Service;
   updateServiceArea: ServiceArea;
@@ -867,6 +869,11 @@ export type MutationUpdateBookingPaymentStatusArgs = {
 export type MutationUpdateBookingStatusArgs = {
   id: Scalars['ID']['input'];
   status: BookingStatus;
+};
+
+
+export type MutationUpdateEmailMarketingPreferenceArgs = {
+  optIn: Scalars['Boolean']['input'];
 };
 
 
@@ -1748,6 +1755,7 @@ export type User = {
   createdAt: Scalars['DateTime']['output'];
   defaultAddress?: Maybe<Address>;
   email: Scalars['String']['output'];
+  emailMarketingOptIn?: Maybe<Scalars['Boolean']['output']>;
   emailVerified?: Maybe<Scalars['Boolean']['output']>;
   emailVerifiedAt?: Maybe<Scalars['DateTime']['output']>;
   firstName: Scalars['String']['output'];
@@ -1928,6 +1936,13 @@ export type UpdateBookingPaymentStatusMutationVariables = Exact<{
 
 
 export type UpdateBookingPaymentStatusMutation = { __typename?: 'Mutation', updateBookingPaymentStatus: boolean };
+
+export type UpdateEmailMarketingPreferenceMutationVariables = Exact<{
+  optIn: Scalars['Boolean']['input'];
+}>;
+
+
+export type UpdateEmailMarketingPreferenceMutation = { __typename?: 'Mutation', updateEmailMarketingPreference: boolean };
 
 export type CreateBookingMutationVariables = Exact<{
   input: CreateBookingInput;
@@ -3416,6 +3431,37 @@ export function useUpdateBookingPaymentStatusMutation(baseOptions?: ApolloReactH
 export type UpdateBookingPaymentStatusMutationHookResult = ReturnType<typeof useUpdateBookingPaymentStatusMutation>;
 export type UpdateBookingPaymentStatusMutationResult = Apollo.MutationResult<UpdateBookingPaymentStatusMutation>;
 export type UpdateBookingPaymentStatusMutationOptions = Apollo.BaseMutationOptions<UpdateBookingPaymentStatusMutation, UpdateBookingPaymentStatusMutationVariables>;
+export const UpdateEmailMarketingPreferenceDocument = gql`
+    mutation UpdateEmailMarketingPreference($optIn: Boolean!) {
+  updateEmailMarketingPreference(optIn: $optIn)
+}
+    `;
+export type UpdateEmailMarketingPreferenceMutationFn = Apollo.MutationFunction<UpdateEmailMarketingPreferenceMutation, UpdateEmailMarketingPreferenceMutationVariables>;
+
+/**
+ * __useUpdateEmailMarketingPreferenceMutation__
+ *
+ * To run a mutation, you first call `useUpdateEmailMarketingPreferenceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateEmailMarketingPreferenceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateEmailMarketingPreferenceMutation, { data, loading, error }] = useUpdateEmailMarketingPreferenceMutation({
+ *   variables: {
+ *      optIn: // value for 'optIn'
+ *   },
+ * });
+ */
+export function useUpdateEmailMarketingPreferenceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateEmailMarketingPreferenceMutation, UpdateEmailMarketingPreferenceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<UpdateEmailMarketingPreferenceMutation, UpdateEmailMarketingPreferenceMutationVariables>(UpdateEmailMarketingPreferenceDocument, options);
+      }
+export type UpdateEmailMarketingPreferenceMutationHookResult = ReturnType<typeof useUpdateEmailMarketingPreferenceMutation>;
+export type UpdateEmailMarketingPreferenceMutationResult = Apollo.MutationResult<UpdateEmailMarketingPreferenceMutation>;
+export type UpdateEmailMarketingPreferenceMutationOptions = Apollo.BaseMutationOptions<UpdateEmailMarketingPreferenceMutation, UpdateEmailMarketingPreferenceMutationVariables>;
 export const CreateBookingDocument = gql`
     mutation CreateBooking($input: CreateBookingInput!) {
   createBooking(input: $input)

@@ -28,6 +28,7 @@ import {
   AccountStatus,
   useUpdateAccountStatusMutation,
   CreateUserInput,
+  useUpdateEmailMarketingPreferenceMutation,
 } from "@/graphql/api";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import {
@@ -62,6 +63,8 @@ export const useAuthOperations = () => {
   const [setDefaultAddressMutation] = useSetDefaultAddressMutation();
   const [removeAddressMutation] = useRemoveAddressMutation();
   const [updateAccountStatusMutation] = useUpdateAccountStatusMutation();
+  const [updateEmailMarketingPreferenceMutation] =
+    useUpdateEmailMarketingPreferenceMutation();
   /**
    * Handles user login with email and password
    * @param email - User's email address
@@ -360,7 +363,7 @@ export const useAuthOperations = () => {
       if (data?.me) {
         // Update the auth store with the latest user data
         console.log("Setting user in auth store:", data.me);
-        dispatch(setUser(data.me));
+        dispatch(setUser(data.me as any));
       }
 
       return data?.me;
@@ -650,6 +653,35 @@ export const useAuthOperations = () => {
     [updateAccountStatusMutation]
   );
 
+  /**
+   * Updates user's email marketing preference
+   * @param optIn - Whether to opt in to email marketing
+   * @returns Boolean indicating success
+   * @throws Error if update fails
+   */
+  const handleUpdateEmailMarketingPreference = useCallback(
+    async (optIn: boolean) => {
+      try {
+        const { data, errors } = await updateEmailMarketingPreferenceMutation({
+          variables: { optIn },
+        });
+
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        return data?.updateEmailMarketingPreference;
+      } catch (error) {
+        console.error("Email marketing preference update error:", error);
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    },
+    [updateEmailMarketingPreferenceMutation]
+  );
+
   return {
     handleLogin,
     handleRegister,
@@ -669,5 +701,6 @@ export const useAuthOperations = () => {
     handleSetDefaultAddress,
     handleRemoveAddress,
     handleUpdateAccountStatus,
+    handleUpdateEmailMarketingPreference,
   };
 };

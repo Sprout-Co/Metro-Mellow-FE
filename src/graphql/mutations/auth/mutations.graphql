@@ -115,3 +115,7 @@ mutation UpdateBookingPaymentStatus(
     paymentStatus: $paymentStatus
   )
 }
+
+mutation UpdateEmailMarketingPreference($optIn: Boolean!) {
+  updateEmailMarketingPreference(optIn: $optIn)
+}
