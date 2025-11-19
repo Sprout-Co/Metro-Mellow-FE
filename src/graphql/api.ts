@@ -162,6 +162,7 @@ export type Booking = {
   paymentStatus: PaymentStatus;
   recurring?: Maybe<Scalars['Boolean']['output']>;
   recurringDiscount?: Maybe<Scalars['Float']['output']>;
+  referralDiscount?: Maybe<Scalars['Float']['output']>;
   resumeDate?: Maybe<Scalars['DateTime']['output']>;
   service: Service;
   serviceDetails: ServiceDetails;
@@ -1145,6 +1146,7 @@ export type Query = {
   isUserOnline: Scalars['Boolean']['output'];
   me?: Maybe<User>;
   myCommissions: Array<Commission>;
+  myReferralDiscountInfo: ReferralDiscountInfo;
   myReferralInfo: ReferralInfo;
   notification?: Maybe<Notification>;
   notificationStats: NotificationStats;
@@ -1351,6 +1353,14 @@ export type QueryUserCommissionsArgs = {
 
 export type QueryUsersArgs = {
   role?: InputMaybe<UserRole>;
+};
+
+export type ReferralDiscountInfo = {
+  __typename?: 'ReferralDiscountInfo';
+  discountPercentage: Scalars['Float']['output'];
+  isEligible: Scalars['Boolean']['output'];
+  maxDiscountedBookings: Scalars['Int']['output'];
+  remainingDiscountedBookings: Scalars['Int']['output'];
 };
 
 export type ReferralInfo = {
@@ -2513,6 +2523,11 @@ export type MyReferralInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MyReferralInfoQuery = { __typename?: 'Query', myReferralInfo: { __typename?: 'ReferralInfo', referralCode: string, referralLink: string, totalEarnings: number, pendingEarnings: number, paidEarnings: number, referredUsersCount: number } };
+
+export type MyReferralDiscountInfoQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyReferralDiscountInfoQuery = { __typename?: 'Query', myReferralDiscountInfo: { __typename?: 'ReferralDiscountInfo', isEligible: boolean, discountPercentage: number, remainingDiscountedBookings: number, maxDiscountedBookings: number } };
 
 export type AllCommissionsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -7502,6 +7517,48 @@ export type MyReferralInfoQueryHookResult = ReturnType<typeof useMyReferralInfoQ
 export type MyReferralInfoLazyQueryHookResult = ReturnType<typeof useMyReferralInfoLazyQuery>;
 export type MyReferralInfoSuspenseQueryHookResult = ReturnType<typeof useMyReferralInfoSuspenseQuery>;
 export type MyReferralInfoQueryResult = Apollo.QueryResult<MyReferralInfoQuery, MyReferralInfoQueryVariables>;
+export const MyReferralDiscountInfoDocument = gql`
+    query MyReferralDiscountInfo {
+  myReferralDiscountInfo {
+    isEligible
+    discountPercentage
+    remainingDiscountedBookings
+    maxDiscountedBookings
+  }
+}
+    `;
+
+/**
+ * __useMyReferralDiscountInfoQuery__
+ *
+ * To run a query within a React component, call `useMyReferralDiscountInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyReferralDiscountInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyReferralDiscountInfoQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyReferralDiscountInfoQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MyReferralDiscountInfoQuery, MyReferralDiscountInfoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<MyReferralDiscountInfoQuery, MyReferralDiscountInfoQueryVariables>(MyReferralDiscountInfoDocument, options);
+      }
+export function useMyReferralDiscountInfoLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MyReferralDiscountInfoQuery, MyReferralDiscountInfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<MyReferralDiscountInfoQuery, MyReferralDiscountInfoQueryVariables>(MyReferralDiscountInfoDocument, options);
+        }
+export function useMyReferralDiscountInfoSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<MyReferralDiscountInfoQuery, MyReferralDiscountInfoQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<MyReferralDiscountInfoQuery, MyReferralDiscountInfoQueryVariables>(MyReferralDiscountInfoDocument, options);
+        }
+export type MyReferralDiscountInfoQueryHookResult = ReturnType<typeof useMyReferralDiscountInfoQuery>;
+export type MyReferralDiscountInfoLazyQueryHookResult = ReturnType<typeof useMyReferralDiscountInfoLazyQuery>;
+export type MyReferralDiscountInfoSuspenseQueryHookResult = ReturnType<typeof useMyReferralDiscountInfoSuspenseQuery>;
+export type MyReferralDiscountInfoQueryResult = Apollo.QueryResult<MyReferralDiscountInfoQuery, MyReferralDiscountInfoQueryVariables>;
 export const AllCommissionsDocument = gql`
     query AllCommissions {
   allCommissions {

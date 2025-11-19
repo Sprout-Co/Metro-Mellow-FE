@@ -4,7 +4,8 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Mail, AlertCircle, ArrowLeft } from "lucide-react";
-import styles from "./AuthLayout.module.scss";
+import styles from "./VerificationForm.module.scss";
+import layoutStyles from "../AuthLayout.module.scss";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import { Button } from "@/components/ui/Button";
 
@@ -105,19 +106,19 @@ export default function VerificationForm({
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
     >
-      <h1 className={styles.registerForm__title}>Verify Your Email</h1>
-      <p className={styles.registerForm__subtitle}>
+      <h1 className={styles.verificationForm__title}>Verify Your Email</h1>
+      <p className={styles.verificationForm__subtitle}>
         We've sent a verification email to{" "}
-        <span className={styles.registerForm__emailHighlight}>{email}</span>
+        <span className={styles.verificationForm__emailHighlight}>{email}</span>
       </p>
 
-      <div className={styles.registerForm__verificationGroup}>
+      <div className={styles.verificationForm__inputGroup}>
         {error && (
           <div
-            className={`${styles.registerForm__error} ${
+            className={`${styles.verificationForm__message} ${
               error.includes("has been sent") || error.includes("successfully")
-                ? styles["registerForm__error--success"]
-                : ""
+                ? styles["verificationForm__message--success"]
+                : styles["verificationForm__message--error"]
             }`}
           >
             <AlertCircle size={20} />
@@ -127,33 +128,33 @@ export default function VerificationForm({
 
         {success && (
           <div
-            className={`${styles.registerForm__error} ${styles["registerForm__error--success"]}`}
+            className={`${styles.verificationForm__message} ${styles["verificationForm__message--success"]}`}
           >
             {success}
           </div>
         )}
 
         <form onSubmit={handleSubmit} noValidate>
-          <div className={styles.formInput}>
+          <div className={layoutStyles.formInput}>
             <label
               htmlFor="verification-code"
-              className={styles.formInput__label}
+              className={layoutStyles.formInput__label}
             >
               Or Enter Verification Code (Optional)
             </label>
             <div
               className={`
-                ${styles.formInput__wrapper} 
+                ${layoutStyles.formInput__wrapper} 
                 ${
                   error &&
                   !error.includes("has been sent") &&
                   !error.includes("successfully")
-                    ? styles["formInput__wrapper--error"]
+                    ? layoutStyles["formInput__wrapper--error"]
                     : ""
                 }
               `}
             >
-              <div className={styles.formInput__icon}>
+              <div className={layoutStyles.formInput__icon}>
                 <Mail size={20} />
               </div>
               <input
@@ -165,7 +166,7 @@ export default function VerificationForm({
                   setError(null);
                 }}
                 placeholder="Enter verification code"
-                className={styles.formInput__input}
+                className={layoutStyles.formInput__input}
                 autoComplete="off"
                 maxLength={10}
                 disabled={loading}
@@ -176,14 +177,14 @@ export default function VerificationForm({
           {code.trim() && (
             <motion.button
               type="submit"
-              className={styles.registerForm__button}
+              className={styles.verificationForm__button}
               disabled={loading || !code.trim()}
               whileHover={!loading && code.trim() ? { scale: 1.02 } : {}}
               whileTap={!loading && code.trim() ? { scale: 0.98 } : {}}
             >
               {loading ? (
                 <>
-                  <div className={styles.registerForm__buttonSpinner}></div>
+                  <div className={styles.verificationForm__buttonSpinner}></div>
                   Verifying...
                 </>
               ) : (
@@ -192,7 +193,7 @@ export default function VerificationForm({
             </motion.button>
           )}
 
-          <div className={styles.registerForm__actions}>
+          <div className={styles.verificationForm__actions}>
             <p style={{ marginBottom: "1rem", textAlign: "center" }}>
               Didn't receive the email?
             </p>
@@ -209,10 +210,10 @@ export default function VerificationForm({
                   : "Resend Verification Link"}
               </Button>
             </div>
-            <div className={styles.registerForm__back}>
+            <div className={styles.verificationForm__back}>
               <button
                 type="button"
-                className={styles.registerForm__backLink}
+                className={styles.verificationForm__backLink}
                 onClick={onBack}
                 disabled={loading}
               >

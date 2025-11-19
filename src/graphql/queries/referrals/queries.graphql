@@ -40,6 +40,15 @@ query MyReferralInfo {
   }
 }
 
+query MyReferralDiscountInfo {
+  myReferralDiscountInfo {
+    isEligible # Whether user can get discount
+    discountPercentage # The discount % (e.g., 10)
+    remainingDiscountedBookings # How many discounted bookings left
+    maxDiscountedBookings # Max allowed (e.g., 3)
+  }
+}
+
 # Admin queries
 query AllCommissions {
   allCommissions {

@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import AuthLayout from "./AuthLayout";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
@@ -13,25 +12,27 @@ export default function AuthManagement({
 }: {
   showImage?: boolean;
 }) {
-  const [authMode, setAuthMode] = useState<AuthMode>("login");
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const router = useRouter();
+  const authMode = (
+    searchParams.get("view") === "register" ? "register" : "login"
+  ) as AuthMode;
 
   const handleLoginSuccess = () => {
-    // Redirect to dashboard or return URL
     router.push("/dashboard");
   };
 
   const handleRegisterSuccess = () => {
-    // Redirect to dashboard with welcome message
     router.push("/dashboard?welcome=true");
   };
 
   const handleSwitchToLogin = () => {
-    setAuthMode("login");
+    router.replace(`${pathname}?view=login`, { scroll: false });
   };
 
   const handleSwitchToRegister = () => {
-    setAuthMode("register");
+    router.replace(`${pathname}?view=register`, { scroll: false });
   };
 
   return (

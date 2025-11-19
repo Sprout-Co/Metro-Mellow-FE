@@ -4,9 +4,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import FormInput from "./FormInput";
-import SocialAuth from "./SocialAuth";
-import styles from "./AuthLayout.module.scss";
+import FormInput from "../FormInput";
+import SocialAuth from "../SocialAuth";
+import styles from "./LoginForm.module.scss";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 
 interface LoginFormState {

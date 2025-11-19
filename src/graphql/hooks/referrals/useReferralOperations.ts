@@ -12,6 +12,7 @@ import {
   usePayoutUserCommissionsMutation,
   useMyCommissionsQuery,
   useMyReferralInfoQuery,
+  useMyReferralDiscountInfoQuery,
   useAllCommissionsQuery,
   useUserCommissionsQuery,
 } from "@/graphql/api";
@@ -32,6 +33,8 @@ export const useReferralOperations = () => {
     useMyCommissionsQuery({ skip: true });
   const { refetch: getMyReferralInfo, data: myReferralInfoData } =
     useMyReferralInfoQuery({ skip: true });
+  const { refetch: getMyReferralDiscountInfo, data: myReferralDiscountInfoData } =
+    useMyReferralDiscountInfoQuery({ skip: true });
   const { refetch: getAllCommissions, data: allCommissionsData } =
     useAllCommissionsQuery({ skip: true });
   const { refetch: getUserCommissions } = useUserCommissionsQuery({ skip: true });
@@ -197,6 +200,29 @@ export const useReferralOperations = () => {
   }, [getMyReferralInfo]);
 
   /**
+   * Fetches referral discount information for the current user
+   * @returns Discount eligibility, percentage, and remaining bookings
+   * @throws Error if fetch fails
+   */
+  const handleGetMyReferralDiscountInfo = useCallback(async () => {
+    try {
+      const { data, errors } = await getMyReferralDiscountInfo();
+
+      if (errors) {
+        throw new Error(errors[0].message);
+      }
+
+      return data?.myReferralDiscountInfo;
+    } catch (error) {
+      console.error("Get my referral discount info error:", error);
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+      throw new Error("An unexpected error occurred");
+    }
+  }, [getMyReferralDiscountInfo]);
+
+  /**
    * Fetches all commissions in the system (admin only)
    * @returns Array of all commissions
    * @throws Error if fetch fails
@@ -255,6 +281,7 @@ export const useReferralOperations = () => {
     // Queries
     handleGetMyCommissions,
     handleGetMyReferralInfo,
+    handleGetMyReferralDiscountInfo,
     handleGetAllCommissions,
     handleGetUserCommissions,
     // Loading states
@@ -265,6 +292,7 @@ export const useReferralOperations = () => {
     // Query data
     myCommissionsData,
     myReferralInfoData,
+    myReferralDiscountInfoData,
     allCommissionsData,
   };
 };

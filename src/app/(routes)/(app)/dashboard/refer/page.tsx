@@ -276,9 +276,7 @@ export default function ReferFriendPage() {
           transition={{ delay: 0.1 }}
         >
           <div className={styles.statCard}>
-            <div className={styles.statCard__icon}>
-              <DollarSign size={24} />
-            </div>
+            <div className={styles.statCard__icon}>₦</div>
             <div className={styles.statCard__content}>
               <h3 className={styles.statCard__label}>Total earnings</h3>
               <p className={styles.statCard__value}>

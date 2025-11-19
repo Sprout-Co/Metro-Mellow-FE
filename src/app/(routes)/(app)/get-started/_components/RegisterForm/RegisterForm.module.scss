@@ -1,0 +1,345 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.registerForm {
+  position: relative;
+  z-index: 1;
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "3xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("xs");
+
+    @include breakpoint-down("sm") {
+      font-size: map-get($font-sizes, "2xl");
+    }
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("lg");
+  }
+
+  &__progress {
+    margin-bottom: spacing("xl");
+  }
+
+  &__progressBar {
+    height: 4px;
+    background-color: color("neutral", "lighter");
+    border-radius: 2px;
+    margin-bottom: spacing("md");
+    overflow: hidden;
+  }
+
+  &__progressFill {
+    height: 100%;
+    background: color("primary", "base");
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  &__progressSteps {
+    display: flex;
+    justify-content: space-between;
+    gap: spacing("sm");
+  }
+
+  &__progressStep {
+    flex: 1;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "medium");
+    transition: all 0.3s ease;
+    cursor: not-allowed;
+
+    svg {
+      color: color("neutral", "white");
+    }
+
+    &--active {
+      background: color("primary", "base");
+      color: color("neutral", "white");
+      box-shadow: 0 2px 8px rgba(color("primary", "base"), 0.2);
+      cursor: pointer;
+    }
+  }
+
+  &__buttonGroup {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("md");
+    margin-top: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__buttonSecondary {
+    width: 100%;
+    padding: spacing("md");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    background-color: color("neutral", "white");
+    color: color("neutral", "darker");
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "semibold");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("sm");
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+      border-color: color("neutral", "dark");
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &__passwordStrength {
+    margin-bottom: spacing("md");
+  }
+
+  &__passwordStrengthBar {
+    height: 4px;
+    background-color: color("neutral", "lighter");
+    border-radius: 2px;
+    margin-bottom: spacing("xs");
+    overflow: hidden;
+  }
+
+  &__passwordStrengthIndicator {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+
+    &--weak {
+      background-color: color("status", "error");
+    }
+
+    &--medium {
+      background-color: color("status", "warning");
+    }
+
+    &--strong {
+      background-color: color("status", "success");
+    }
+  }
+
+  &__passwordStrengthText {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__passwordStrengthLabel {
+    font-weight: map-get($font-weights, "medium");
+
+    &--weak {
+      color: color("status", "error");
+    }
+
+    &--medium {
+      color: color("status", "warning");
+    }
+
+    &--strong {
+      color: color("status", "success");
+    }
+  }
+
+  &__referralHelper {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xs");
+    line-height: 1.4;
+  }
+
+  &__checkGroup {
+    margin-bottom: spacing("lg");
+  }
+
+  &__checkbox {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    line-height: 1.5;
+
+    input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+
+      &:checked ~ .registerForm__checkmark {
+        background-color: color("primary", "base");
+        border-color: color("primary", "base");
+
+        &::after {
+          display: block;
+        }
+      }
+    }
+  }
+
+  &__checkmark {
+    height: 18px;
+    width: 18px;
+    background-color: color("neutral", "white");
+    border: 1px solid color("neutral", "medium");
+    border-radius: 3px;
+    margin-right: spacing("xs");
+    margin-top: 3px;
+    position: relative;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+
+    &::after {
+      content: "";
+      position: absolute;
+      display: none;
+      left: 6px;
+      top: 2px;
+      width: 4px;
+      height: 9px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+  }
+
+  &__link {
+    color: color("primary", "base");
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: color("primary", "dark");
+      text-decoration: underline;
+    }
+  }
+
+  &__checkError {
+    font-size: map-get($font-sizes, "xs");
+    color: color("status", "error");
+    margin-top: spacing("xs");
+    margin-left: spacing("lg");
+  }
+
+  &__error {
+    margin: spacing("sm") 0;
+    padding: spacing("sm") spacing("md");
+    background-color: rgba(color("status", "error"), 0.1);
+    border-radius: border-radius("md");
+    color: color("status", "error");
+    font-size: map-get($font-sizes, "sm");
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+
+    &--success {
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
+    }
+  }
+
+  &__verificationGroup {
+    margin-bottom: spacing("xl");
+    text-align: center;
+  }
+
+  &__emailHighlight {
+    display: inline-block;
+    background-color: color("neutral", "white");
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("sm");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("primary", "base");
+    margin: spacing("xs") 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+    margin-top: spacing("xl");
+  }
+
+  &__button {
+    width: 100%;
+    padding: spacing("md");
+    border: none;
+    border-radius: border-radius("md");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "semibold");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("sm");
+    box-shadow: 0 4px 6px rgba(color("primary", "base"), 0.2);
+
+    &:hover:not(:disabled) {
+      background: color("primary", "dark");
+      transform: translateY(-1px);
+      box-shadow: 0 6px 8px rgba(color("primary", "base"), 0.25);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(color("primary", "base"), 0.2);
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+
+  &__switch {
+    text-align: center;
+    margin-top: spacing("lg");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+  }
+
+  &__switchLink {
+    color: color("primary", "base");
+    font-weight: map-get($font-weights, "semibold");
+    margin-left: spacing("xs");
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: color("primary", "dark");
+      text-decoration: underline;
+    }
+  }
+}

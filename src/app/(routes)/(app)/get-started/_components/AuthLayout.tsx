@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
 import styles from "./AuthLayout.module.scss";
+import SignaturePattern from "@/components/ui/SignaturePattern/SignaturePattern";
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -46,7 +47,7 @@ export default function AuthLayout({
                   services
                 </p>
 
-                <div className={styles.authLayout__stats}>
+                {/* <div className={styles.authLayout__stats}>
                   <div className={styles.authLayout__statItem}>
                     <div className={styles.authLayout__statNumber}>15k+</div>
                     <div className={styles.authLayout__statLabel}>
@@ -65,9 +66,9 @@ export default function AuthLayout({
                       Star Rating
                     </div>
                   </div>
-                </div>
+                </div> */}
 
-                <div className={styles.authLayout__testimonials}>
+                {/* <div className={styles.authLayout__testimonials}>
                   <div className={styles.authLayout__testimonial}>
                     <p className={styles.authLayout__testimonialText}>
                       "Metromellow transformed our home care experience with
@@ -82,7 +83,8 @@ export default function AuthLayout({
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
+                <SignaturePattern />
               </div>
             </div>
           )}
