@@ -17,6 +17,7 @@ query GetBookings($status: BookingStatus) {
     resumeDate
     pauseDate
     recurringDiscount
+    referralDiscount
     feedback {
       rating
       comment
@@ -142,6 +143,7 @@ query GetBookingById($id: ID!) {
     resumeDate
     pauseDate
     recurringDiscount
+    referralDiscount
     feedback {
       rating
       comment
@@ -267,6 +269,7 @@ query GetCustomerBookings {
     resumeDate
     pauseDate
     recurringDiscount
+    referralDiscount
     feedback {
       rating
       comment
@@ -444,6 +447,7 @@ query GetStaffBookings {
     updatedAt
     service_category
     serviceOption
+    referralDiscount
     serviceDetails {
       cleaning {
         cleaningType

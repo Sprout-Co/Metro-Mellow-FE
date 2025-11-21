@@ -25,19 +25,25 @@ export const useReferralOperations = () => {
     useApplyReferralCodeMutation();
   const [payoutCommissionMutation, { loading: isPayingOutCommission }] =
     usePayoutCommissionMutation();
-  const [payoutUserCommissionsMutation, { loading: isPayingOutUserCommissions }] =
-    usePayoutUserCommissionsMutation();
+  const [
+    payoutUserCommissionsMutation,
+    { loading: isPayingOutUserCommissions },
+  ] = usePayoutUserCommissionsMutation();
 
   // Queries
   const { refetch: getMyCommissions, data: myCommissionsData } =
     useMyCommissionsQuery({ skip: true });
   const { refetch: getMyReferralInfo, data: myReferralInfoData } =
     useMyReferralInfoQuery({ skip: true });
-  const { refetch: getMyReferralDiscountInfo, data: myReferralDiscountInfoData } =
-    useMyReferralDiscountInfoQuery({ skip: true });
+  const {
+    refetch: getMyReferralDiscountInfo,
+    data: myReferralDiscountInfoData,
+  } = useMyReferralDiscountInfoQuery({ skip: true });
   const { refetch: getAllCommissions, data: allCommissionsData } =
     useAllCommissionsQuery({ skip: true });
-  const { refetch: getUserCommissions } = useUserCommissionsQuery({ skip: true });
+  const { refetch: getUserCommissions } = useUserCommissionsQuery({
+    skip: true,
+  });
 
   /**
    * Generates a referral code for the current user
@@ -296,4 +302,3 @@ export const useReferralOperations = () => {
     allCommissionsData,
   };
 };
-

@@ -140,7 +140,7 @@
   &__form {
     display: flex;
     flex-direction: column;
-    gap: spacing("lg");
+    gap: spacing("sm");
   }
 
   &__sectionTitle {
@@ -515,6 +515,51 @@
     .timeSlotSelector {
       margin-top: spacing("xs");
     }
+  }
+}
+
+.checkoutModal__discountBanner {
+  display: flex;
+  align-items: center;
+  gap: spacing("md");
+  padding: spacing("md");
+  margin-top: spacing("lg");
+  background: linear-gradient(135deg, rgba(color("status", "success"), 0.1));
+  border: 1px solid rgba(color("status", "success"), 0.2);
+  border-radius: border-radius("md");
+  animation: slideIn 0.3s ease-out;
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.checkoutModal__discountIcon {
+  font-size: map-get($font-sizes, "2xl");
+  line-height: 1;
+}
+
+.checkoutModal__discountText {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("xs");
+
+  strong {
+    color: color("status", "success");
+    @include font-size("base");
+    @include font-weight("semibold");
+  }
+
+  span {
+    color: color("neutral", "dark");
+    @include font-size("xs");
   }
 }
 

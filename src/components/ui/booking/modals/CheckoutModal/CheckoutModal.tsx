@@ -5,7 +5,11 @@ import Portal from "../../../Portal/Portal";
 import Button from "../../../Button/Button";
 import styles from "./CheckoutModal.module.scss";
 import { useAppSelector } from "@/lib/redux/hooks";
-import { TimeSlot, ServiceCategory } from "@/graphql/api";
+import {
+  TimeSlot,
+  ServiceCategory,
+  useMyReferralDiscountInfoQuery,
+} from "@/graphql/api";
 import { usePayment } from "@/hooks/usePayment";
 import { useCheckoutForm } from "@/hooks/useCheckoutForm";
 import { useSlotAvailability } from "@/hooks/useSlotAvailability";
@@ -64,6 +68,11 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     paymentReference,
   } = usePayment();
 
+  // Referral discount query
+  const { data: discountData } = useMyReferralDiscountInfoQuery({
+    skip: !isOpen || !isAuthenticated,
+  });
+
   // Determine if availability-based date/time is required
   const serviceCategoryEnum = useMemo(
     () => mapServiceCategoryToEnum(service_category),
@@ -119,14 +128,31 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     slotValidationError
   );
 
+  // Calculate referral discount
+  const discountAmount = useMemo(() => {
+    const discountInfo = discountData?.myReferralDiscountInfo;
+    if (
+      !discountInfo?.isEligible ||
+      !discountInfo.discountPercentage ||
+      discountInfo.remainingDiscountedBookings <= 0
+    ) {
+      return 0;
+    }
+    return Math.round((totalPrice * discountInfo.discountPercentage) / 100);
+  }, [discountData, totalPrice]);
+
+  // Get discount info for display
+  const discountInfo = useMemo(
+    () => discountData?.myReferralDiscountInfo,
+    [discountData]
+  );
+
   // Handle payment initialization
   const handlePayment = async (bookingId: string) => {
     try {
-      await initializePayment(
-        bookingId,
-        totalPrice + deliveryCost,
-        user?.email || ""
-      );
+      // Calculate final amount with discount applied
+      const finalAmount = totalPrice + deliveryCost - discountAmount;
+      await initializePayment(bookingId, finalAmount, user?.email || "");
     } catch (err) {
       console.error("Payment failed:", err);
     }
@@ -151,7 +177,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     }
 
     // Calculate final total price (service price + delivery cost - discount)
-    const finalTotalPrice = totalPrice + deliveryCost;
+    const finalTotalPrice = totalPrice + deliveryCost - discountAmount;
 
     // Proceed with booking
     onCheckout(formData, finalTotalPrice, (bookingResponse: string) => {
@@ -262,10 +288,34 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   </div>
                 </div>
 
+                {/* Referral Discount Banner */}
+                {discountInfo?.isEligible &&
+                  discountInfo.remainingDiscountedBookings > 0 && (
+                    <div className={styles.checkoutModal__discountBanner}>
+                      <div className={styles.checkoutModal__discountIcon}>
+                        🎉
+                      </div>
+                      <div className={styles.checkoutModal__discountText}>
+                        <strong>
+                          {discountInfo.discountPercentage}% Referral Discount
+                          Applied!
+                        </strong>
+                        <span>
+                          {discountInfo.remainingDiscountedBookings} discount
+                          {discountInfo.remainingDiscountedBookings > 1
+                            ? "s"
+                            : ""}{" "}
+                          remaining
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
                 {/* Booking Summary */}
                 <CheckoutSummary
                   totalPrice={totalPrice}
                   deliveryCost={deliveryCost}
+                  discount={discountAmount}
                 />
 
                 {/* Submit Button */}
@@ -299,7 +349,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
           window.location.reload();
         }}
         title="Payment Successful!"
-        message={`Your payment has been verified and your booking is confirmed. Payment reference: ${paymentReference}`}
+        message={`All set! Your payment was successful and your booking is locked in.`}
       />
     </Portal>
   );
