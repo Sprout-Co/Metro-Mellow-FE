@@ -8,6 +8,7 @@ import FormInput from "../FormInput";
 import SocialAuth from "../SocialAuth";
 import styles from "./LoginForm.module.scss";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
+import { Button } from "@/components/ui/Button";
 
 interface LoginFormState {
   email: string;
@@ -274,12 +275,12 @@ export default function LoginForm({
               </label>
             </div>
 
-            <motion.button
+            <Button
               type="submit"
-              className={styles.loginForm__button}
+              variant="primary"
+              size="lg"
+              fullWidth
               disabled={loading}
-              whileHover={!loading ? { scale: 1.02 } : {}}
-              whileTap={!loading ? { scale: 0.98 } : {}}
             >
               {loading ? (
                 <>
@@ -289,7 +290,7 @@ export default function LoginForm({
               ) : (
                 "Sign In"
               )}
-            </motion.button>
+            </Button>
           </form>
 
           <div className={styles.loginForm__switch}>
