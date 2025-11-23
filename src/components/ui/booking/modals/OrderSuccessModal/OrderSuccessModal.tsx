@@ -16,8 +16,8 @@ interface OrderSuccessModalProps {
 const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({
   isOpen,
   onClose,
-  title = "Your order has been sent. Thank you!",
-  message = "We'll notify you once your order is ready.",
+  title = "Order Confirmed! 🚀",
+  message = "We've received your order. Sit back, relax, and we'll update you shortly!",
 }) => {
   return (
     <Modal

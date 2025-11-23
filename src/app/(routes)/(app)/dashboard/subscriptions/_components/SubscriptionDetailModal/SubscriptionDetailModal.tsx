@@ -346,7 +346,6 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
               Pause
             </FnButton> */}
             <FnButton
-              // className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--danger"]}`}
               size="lg"
               loading={paymentLoading}
               leftIcon={<X size={14} />}
@@ -406,8 +405,10 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
       case SubscriptionStatus.Cancelled:
         return (
           <FnButton
-            className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
+            // className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--primary"]}`}
+            variant="primary"
             size="lg"
+            fullWidth
             loading={renewingSubscription}
             leftIcon={<RefreshCw size={14} />}
             onClick={() => handleConfirmAction("reactivate")}
