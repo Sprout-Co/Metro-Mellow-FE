@@ -24,6 +24,7 @@ import {
   SubscriptionServiceInput,
   useReactivateSubscriptionMutation,
   useRenewSubscriptionMutation,
+  CreateSubscriptionResponse,
 } from "@/graphql/api";
 import { SubscriptionStatus, BillingCycle } from "@/graphql/api";
 
@@ -64,15 +65,7 @@ export const useSubscriptionOperations = () => {
   const handleCreateSubscription = useCallback(
     async (
       input: CreateSubscriptionInput
-    ): Promise<
-      | {
-          success: boolean;
-          subscriptionId?: string | null;
-          billingId?: string | null;
-          requiresPayment: boolean;
-        }
-      | undefined
-    > => {
+    ): Promise<CreateSubscriptionResponse | undefined> => {
       try {
         const { data, errors } = await createSubscriptionMutation({
           variables: { input },
@@ -86,7 +79,7 @@ export const useSubscriptionOperations = () => {
           throw new Error("No data returned from subscription creation");
         }
 
-        return data.createSubscription;
+        return data.createSubscription as CreateSubscriptionResponse;
       } catch (error) {
         console.error("Subscription creation error:", error);
         if (error instanceof Error) {

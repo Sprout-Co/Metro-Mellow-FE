@@ -331,6 +331,7 @@ export type CreateSubscriptionInput = {
   duration: Scalars['Int']['input'];
   services: Array<SubscriptionServiceInput>;
   startDate: Scalars['DateTime']['input'];
+  totalPrice: Scalars['Float']['input'];
 };
 
 export type CreateSubscriptionResponse = {
@@ -1639,6 +1640,7 @@ export type Subscription = {
   nextBillingDate: Scalars['DateTime']['output'];
   pauseDate?: Maybe<Scalars['DateTime']['output']>;
   paymentMethod?: Maybe<PaymentMethod>;
+  referralDiscount?: Maybe<Scalars['Float']['output']>;
   resumeDate?: Maybe<Scalars['DateTime']['output']>;
   startDate: Scalars['DateTime']['output'];
   status: SubscriptionStatus;
@@ -5118,6 +5120,7 @@ export const CreateSubscriptionDocument = gql`
   createSubscription(input: $input) {
     success
     subscriptionId
+    requiresPayment
     billing {
       id
       amount
@@ -5145,7 +5148,6 @@ export const CreateSubscriptionDocument = gql`
       }
       paystackReference
     }
-    requiresPayment
   }
 }
     `;
@@ -5472,6 +5474,7 @@ export const RenewSubscriptionDocument = gql`
   renewSubscription(id: $renewSubscriptionId) {
     success
     subscriptionId
+    requiresPayment
     billing {
       id
       amount
@@ -5499,7 +5502,6 @@ export const RenewSubscriptionDocument = gql`
       }
       paystackReference
     }
-    requiresPayment
     message
   }
 }

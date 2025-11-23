@@ -32,6 +32,7 @@ interface SubscriptionSummaryProps {
   billingCycle: BillingCycle;
   duration: DurationType;
   total: number;
+  discount: { amount: number; savingsPercentage: number };
   onServiceEdit: (serviceId: string) => void;
   onServiceRemove: (serviceId: string) => void;
   onCheckout: () => void;
@@ -42,6 +43,7 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
   billingCycle,
   duration,
   total,
+  discount,
   onServiceEdit,
   onServiceRemove,
   onCheckout,
@@ -51,12 +53,12 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
     0
   );
 
-  const savingsPercentage =
-    duration >= 12 ? 30 : duration >= 6 ? 20 : duration >= 3 ? 10 : 0;
-  const savingsAmount = Math.round(
-    monthlyTotal * (savingsPercentage / 100) * duration
-  );
-  const finalTotal = total - savingsAmount;
+  // const savingsPercentage =
+  //   duration >= 12 ? 30 : duration >= 6 ? 20 : duration >= 3 ? 10 : 0;
+  // const savingsAmount = Math.round(
+  //   monthlyTotal * (savingsPercentage / 100) * duration
+  // );
+  // const finalTotal = total; // - savingsAmount;
 
   const getServiceIcon = (category: string) => {
     const iconProps = { size: 20, strokeWidth: 1.5 };
@@ -232,7 +234,7 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
               </span>
             </div>
 
-            {savingsAmount > 0 && (
+            {discount.amount > 0 && (
               <motion.div
                 className={styles.summary__discountRow}
                 initial={{ opacity: 0, y: -10 }}
@@ -242,11 +244,11 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
                   🎁
                   <span>Subscription Discount</span>
                   <span className={styles.summary__discountBadge}>
-                    {savingsPercentage}% OFF
+                    {discount.savingsPercentage}% OFF
                   </span>
                 </span>
                 <span className={styles.summary__discountValue}>
-                  -₦{savingsAmount.toLocaleString()}
+                  -₦{discount.amount.toLocaleString()}
                 </span>
               </motion.div>
             )}
@@ -260,7 +262,7 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
                   Total Amount
                 </span>
                 <span className={styles.summary__totalSubLabel}>
-                  ₦{Math.round(finalTotal / duration).toLocaleString()}/month
+                  ₦{Math.round(total / duration).toLocaleString()}/month
                 </span>
               </div>
               <motion.span
@@ -269,7 +271,7 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                ₦{finalTotal.toLocaleString()}
+                ₦{total.toLocaleString()}
               </motion.span>
             </div>
 

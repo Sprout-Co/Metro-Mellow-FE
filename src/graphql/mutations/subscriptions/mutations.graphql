@@ -2,6 +2,7 @@ mutation CreateSubscription($input: CreateSubscriptionInput!) {
   createSubscription(input: $input) {
     success
     subscriptionId
+    requiresPayment
     billing {
       id
       amount
@@ -29,7 +30,6 @@ mutation CreateSubscription($input: CreateSubscriptionInput!) {
       }
       paystackReference
     }
-    requiresPayment
   }
 }
 
@@ -93,6 +93,7 @@ mutation RenewSubscription($renewSubscriptionId: ID!) {
   renewSubscription(id: $renewSubscriptionId) {
     success
     subscriptionId
+    requiresPayment
     billing {
       id
       amount
@@ -120,7 +121,6 @@ mutation RenewSubscription($renewSubscriptionId: ID!) {
       }
       paystackReference
     }
-    requiresPayment
     message
   }
 }

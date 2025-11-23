@@ -27,6 +27,7 @@ import { useBillingOperations } from "@/graphql/hooks/billing/useBillingOperatio
 import { Booking, BookingStatus, BillingStatus } from "@/graphql/api";
 import { OverviewTab, ServicesTab, BookingsTab, BillingTab } from "./tabs";
 import PaymentAlertBanner from "./PaymentAlertBanner";
+import ErrorBanner from "./ErrorBanner/ErrorBanner";
 import { useSubscriptionPayment } from "@/hooks/useSubscriptionPayment";
 
 // Type for GraphQL subscription data
@@ -38,6 +39,7 @@ import SubscriptionConfirmActionModal, {
 } from "../SubscriptionConfirmActionModal/SubscriptionConfirmActionModal";
 import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
 import FnButton from "@/components/ui/Button/FnButton";
+import OrderSuccessModal from "@/components/ui/booking/modals/OrderSuccessModal/OrderSuccessModal";
 
 type TabType = "overview" | "services" | "bookings" | "billing";
 
@@ -78,6 +80,15 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   const [loadingBillings, setLoadingBillings] = useState(false);
   const [billingsError, setBillingsError] = useState<string | null>(null);
   const [renewingSubscription, setRenewingSubscription] = useState(false);
+  const [errors, setErrors] = useState<{
+    renewal?: string | null;
+    bookings?: string | null;
+    billings?: string | null;
+  }>({
+    renewal: null,
+    bookings: null,
+    billings: null,
+  });
 
   const { handleGetCustomerBookings } = useBookingOperations();
   const {
@@ -86,8 +97,12 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
     filterBillingsByStatus,
     calculateTotalAmount,
   } = useBillingOperations();
-  const { initializeSubscriptionPayment, loading: paymentLoading } =
-    useSubscriptionPayment();
+  const {
+    initializeSubscriptionPayment,
+    loading: paymentLoading,
+    paymentSuccess,
+    setPaymentSuccess,
+  } = useSubscriptionPayment();
   const { handleRenewSubscription } = useSubscriptionOperations();
   // Fetch bookings for this subscription when modal opens and bookings tab is active
   useEffect(() => {
@@ -187,12 +202,6 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
     { id: "billing" as const, label: "Billing", icon: CreditCard },
   ];
 
-  // Calculate subscription progress using utility function
-  const calculateProgress = () => {
-    if (!subscription) return 0;
-    return calculateSubscriptionProgress(subscription);
-  };
-
   function handleConfirmAction(actionType: SubscriptionActionType) {
     setConfirmationActionType(actionType);
     setIsConfirmActionModalOpen(true);
@@ -239,6 +248,11 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
       console.log(subscriptionBillings.length, " after retry");
     } catch (error) {
       console.error("Error renewing subscription:", error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "An unexpected error occurred while renewing your subscription. Please try again.";
+      setErrors((prev) => ({ ...prev, renewal: errorMessage }));
     } finally {
       setRenewingSubscription(false);
     }
@@ -311,7 +325,8 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
       case SubscriptionStatus.Active:
         return (
           <>
-            <FnButton
+            {/* TBD: Work out how to pause a subscription from the backend */}
+            {/* <FnButton
               className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--secondary"]}`}
               size="lg"
               loading={paymentLoading}
@@ -329,14 +344,15 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
               }
             >
               Pause
-            </FnButton>
+            </FnButton> */}
             <FnButton
-              className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--danger"]}`}
+              // className={`${styles.modal__footerBtn} ${styles["modal__footerBtn--danger"]}`}
               size="lg"
               loading={paymentLoading}
               leftIcon={<X size={14} />}
               onClick={() => isPaid && handleConfirmAction("cancel")}
               disabled={!isPaid}
+              fullWidth
               style={{
                 opacity: !isPaid ? 0.5 : 1,
                 cursor: !isPaid ? "not-allowed" : "pointer",
@@ -421,7 +437,14 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   return (
     <ModalDrawer
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => {
+        setErrors((prev) => ({
+          renewal: null,
+          bookings: null,
+          billings: null,
+        }));
+        onClose();
+      }}
       width="lg"
       title={
         subscription.subscriptionServices.length > 1
@@ -436,6 +459,15 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
         {/* Payment Alert Banner */}
         {!isCurrentPeriodPaid() && (
           <PaymentAlertBanner onViewBilling={() => setActiveTab("billing")} />
+        )}
+
+        {/* Error Banner */}
+        {errors.renewal && (
+          <ErrorBanner
+            error={errors.renewal}
+            onDismiss={() => setErrors((prev) => ({ ...prev, renewal: null }))}
+            title="Renewal Failed"
+          />
         )}
 
         {/* Tab Navigation */}
@@ -538,6 +570,15 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
         subscription={subscription}
         actionType={confirmationActionType}
         onConfirm={handleConfirmActionSuccess}
+      />
+      <OrderSuccessModal
+        title="Oya, You Are Good to Go! 🚀"
+        message="Payment confirmed! Your subscription is active now. Enjoy the flex!"
+        isOpen={paymentSuccess}
+        onClose={() => {
+          refetchSubscriptions?.();
+          setPaymentSuccess(false);
+        }}
       />
     </ModalDrawer>
   );

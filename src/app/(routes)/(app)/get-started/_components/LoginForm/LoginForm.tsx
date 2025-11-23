@@ -53,8 +53,6 @@ export default function LoginForm({
     // Password validation
     if (!formData.password) {
       newErrors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
     }
 
     setErrors(newErrors);
@@ -112,7 +110,6 @@ export default function LoginForm({
             ? error.message
             : "Login failed. Please check your credentials and try again.",
       });
-    } finally {
       setLoading(false);
     }
   };

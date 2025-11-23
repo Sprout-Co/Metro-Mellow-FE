@@ -17,6 +17,7 @@ interface UseSubscriptionPaymentReturn {
   error: string | null;
   paymentSuccess: boolean;
   paymentReference: string | null;
+  setPaymentSuccess: (success: boolean) => void;
 }
 
 export const useSubscriptionPayment = (): UseSubscriptionPaymentReturn => {
@@ -252,6 +253,7 @@ export const useSubscriptionPayment = (): UseSubscriptionPaymentReturn => {
     loading,
     error,
     paymentSuccess,
+    setPaymentSuccess,
     paymentReference,
   };
 };

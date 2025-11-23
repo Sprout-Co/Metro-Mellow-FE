@@ -212,14 +212,40 @@ const SubscriptionBuilder: React.FC = () => {
     setEditingServiceId(null);
   };
 
-  // Calculate subscription total
-  const calculateTotal = () => {
-    const monthlyTotal = configuredServices.reduce(
+  const calculateSubtotal = () => {
+    return configuredServices.reduce(
       (sum, cs) => sum + (cs.configuration.price || 0),
       0
     );
-    return monthlyTotal * duration;
   };
+
+  const calculateDiscount = (): {
+    amount: number;
+    savingsPercentage: number;
+  } => {
+    const monthlyTotal = calculateSubtotal();
+    const savingsPercentage =
+      duration >= 12 ? 10 : duration >= 6 ? 7 : duration >= 3 ? 5 : 0;
+    return {
+      amount: Math.round(monthlyTotal * (savingsPercentage / 100) * duration),
+      savingsPercentage: savingsPercentage,
+    };
+  };
+
+  const calculateTotal = () => {
+    const subtotal = calculateSubtotal() * duration;
+    const { amount, savingsPercentage } = calculateDiscount();
+    return subtotal - amount;
+  };
+
+  // Calculate subscription total
+  // const calculateTotal = () => {
+  //   const monthlyTotal = configuredServices.reduce(
+  //     (sum, cs) => sum + (cs.configuration.price || 0),
+  //     0
+  //   );
+  //   return monthlyTotal * duration;
+  // };
 
   // Validate checkout requirements
   const validateCheckout = (): boolean => {
@@ -279,6 +305,7 @@ const SubscriptionBuilder: React.FC = () => {
         billingCycle: billingCycle,
         duration: duration,
         startDate: startDate.toISOString(),
+        totalPrice: calculateTotal(),
         services: configuredServices.map((cs) => ({
           serviceId: cs.service._id,
           category: cs.configuration.category,
@@ -293,41 +320,35 @@ const SubscriptionBuilder: React.FC = () => {
       console.log("Creating subscription with input:", subscriptionInput);
 
       // Create subscription
-      const createdSubscription =
-        await handleCreateSubscription(subscriptionInput);
+      // const createdSubscription =
+      //   await handleCreateSubscription(subscriptionInput);
 
-      if (!createdSubscription) {
-        throw new Error("Failed to create subscription");
-      }
+      // if (!createdSubscription) {
+      //   throw new Error("Failed to create subscription");
+      // }
 
-      console.log("Subscription created:", createdSubscription);
+      // console.log("Subscription created:", createdSubscription);
 
-      // Check if payment is required
-      if (
-        createdSubscription.requiresPayment &&
-        createdSubscription.billingId
-      ) {
-        showToast("Subscription created! Proceeding to payment...", "success");
+      // // Check if payment is required
+      // if (
+      //   createdSubscription.requiresPayment &&
+      //   createdSubscription.billing?.id
+      // ) {
+      //   showToast("Subscription created! Proceeding to payment...", "success");
 
-        // Calculate total amount
-        const totalAmount = calculateTotal();
+      //   // Calculate total amount
+      //   const totalAmount = calculateTotal();
 
-        // Initialize payment with billing ID
-        await initializeSubscriptionPayment(
-          createdSubscription.billingId,
-          totalAmount,
-          currentUser.email
-        );
+      //   // Initialize payment with billing ID
+      //   await initializeSubscriptionPayment(
+      //     createdSubscription.billing.id,
+      //     totalAmount,
+      //     currentUser.email
+      //   );
 
-        // Payment modal will open automatically
-        // Success/failure will be handled by useEffect hooks
-      } else {
-        // No payment required (shouldn't happen for new subscriptions)
-        showToast("Subscription created successfully! 🎉", "success");
-        setTimeout(() => {
-          router.push("/dashboard/subscriptions");
-        }, 2000);
-      }
+      //   // Payment modal will open automatically
+      //   // Success/failure will be handled by useEffect hooks
+      // }
     } catch (error) {
       console.error("Error creating subscription:", error);
       showToast(
@@ -383,6 +404,8 @@ const SubscriptionBuilder: React.FC = () => {
         isCreatingSubscription={isCreatingSubscription}
         onBack={() => setCurrentView("builder")}
         onConfirmCheckout={handleCreateNewSubscription}
+        discount={calculateDiscount()}
+        total={calculateTotal()}
       />
     );
   }
@@ -399,11 +422,11 @@ const SubscriptionBuilder: React.FC = () => {
         >
           <div className={styles.builder__badge}>
             <Sparkles size={16} />
-            <span>Save up to 30% with subscriptions</span>
+            <span>Save up to 10% with subscriptions</span>
           </div>
           <h1 className={styles.builder__title}>
             <span>Build </span>
-            Your Perfect Service Plan
+            Your Perfect Service Plan and save up to 10%
           </h1>
           <p className={styles.builder__subtitle}>
             Combine multiple services into one convenient subscription
@@ -485,6 +508,7 @@ const SubscriptionBuilder: React.FC = () => {
             onServiceEdit={handleServiceEdit}
             onServiceRemove={handleServiceRemove}
             onCheckout={handleCheckout}
+            discount={calculateDiscount()}
           />
         </div>
       </div>

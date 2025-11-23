@@ -119,10 +119,10 @@ const SubscriptionConfirmActionModal: React.FC<
           warningTitle: "Important Information",
           warnings: [
             "This action cannot be undone",
+            "No refunds will be issued",
+            "Your service providers will be notified immediately",
             "All future scheduled services will be cancelled",
             "You'll lose any remaining service credits",
-            "Your service providers will be notified immediately",
-            "Final billing will be processed within 24 hours",
           ],
           buttonText: "Cancel Subscription",
           successTitle: "Subscription Cancelled",

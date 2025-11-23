@@ -45,6 +45,8 @@ interface CheckoutSummaryProps {
   isCreatingSubscription?: boolean;
   onBack: () => void;
   onConfirmCheckout: () => void;
+  discount: { amount: number; savingsPercentage: number };
+  total: number;
 }
 
 const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
@@ -58,6 +60,8 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
   isCreatingSubscription = false,
   onBack,
   onConfirmCheckout,
+  discount,
+  total,
 }) => {
   const [expandedSections, setExpandedSections] = useState<string[]>([
     "date",
@@ -66,56 +70,25 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
   ]);
   const currentUser = useSelector(selectCurrentUser);
 
-  const getServiceIcon = (category: string) => {
-    const iconProps = { size: 24, strokeWidth: 1.5 };
-    switch (category) {
-      case "CLEANING":
-        return <Home {...iconProps} />;
-      case "LAUNDRY":
-        return <Droplets {...iconProps} />;
-      case "COOKING":
-        return <Utensils {...iconProps} />;
-      case "PEST_CONTROL":
-        return <Bug {...iconProps} />;
-      default:
-        return <Package {...iconProps} />;
-    }
-  };
+  // const calculateSubtotal = () => {
+  //   return configuredServices.reduce(
+  //     (sum, cs) => sum + (cs.configuration.price || 0),
+  //     0
+  //   );
+  // };
 
-  const getServiceCategoryClass = (category: string) => {
-    switch (category) {
-      case "CLEANING":
-        return styles["checkout__serviceCard--cleaning"];
-      case "LAUNDRY":
-        return styles["checkout__serviceCard--laundry"];
-      case "COOKING":
-        return styles["checkout__serviceCard--cooking"];
-      case "PEST_CONTROL":
-        return styles["checkout__serviceCard--pest"];
-      default:
-        return "";
-    }
-  };
+  // const calculateDiscount = () => {
+  //   const monthlyTotal = calculateSubtotal();
+  //   const savingsPercentage =
+  //     duration >= 12 ? 30 : duration >= 6 ? 20 : duration >= 3 ? 10 : 0;
+  //   return Math.round(monthlyTotal * (savingsPercentage / 100) * duration);
+  // };
 
-  const calculateSubtotal = () => {
-    return configuredServices.reduce(
-      (sum, cs) => sum + (cs.configuration.price || 0),
-      0
-    );
-  };
-
-  const calculateDiscount = () => {
-    const monthlyTotal = calculateSubtotal();
-    const savingsPercentage =
-      duration >= 12 ? 30 : duration >= 6 ? 20 : duration >= 3 ? 10 : 0;
-    return Math.round(monthlyTotal * (savingsPercentage / 100) * duration);
-  };
-
-  const calculateTotal = () => {
-    const subtotal = calculateSubtotal() * duration;
-    const discount = calculateDiscount();
-    return subtotal - discount;
-  };
+  // const calculateTotal = () => {
+  //   const subtotal = calculateSubtotal() * duration;
+  //   const discount = calculateDiscount();
+  //   return subtotal - discount;
+  // };
 
   const formatDate = (date: Date) => {
     return date.toLocaleDateString("en-US", {
@@ -379,15 +352,14 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
                   </span>
                 </div>
 
-                {calculateDiscount() > 0 && (
+                {discount.amount > 0 && (
                   <div className={styles.checkout__discountRow}>
                     <span className={styles.checkout__discountLabel}>
                       <Gift size={16} />
-                      Subscription Discount (
-                      {duration >= 12 ? 30 : duration >= 6 ? 20 : 10}%)
+                      Subscription Discount ({discount.savingsPercentage}%)
                     </span>
                     <span className={styles.checkout__discountValue}>
-                      -₦{calculateDiscount().toLocaleString()}
+                      -₦{discount.amount.toLocaleString()}
                     </span>
                   </div>
                 )}
@@ -399,25 +371,23 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
                         Total Amount
                       </span>
                       <span className={styles.checkout__totalSublabel}>
-                        ₦
-                        {Math.round(
-                          calculateTotal() / duration
-                        ).toLocaleString()}
+                        ₦{Math.round(total / duration).toLocaleString()}
                         /month
                       </span>
                     </div>
                     <span className={styles.checkout__totalAmount}>
-                      ₦{calculateTotal().toLocaleString()}
+                      ₦{total.toLocaleString()}
                     </span>
                   </div>
                 </div>
 
-                <motion.button
+                <FnButton
+                  variant="primary"
+                  size="lg"
                   className={styles.checkout__checkoutBtn}
                   onClick={onConfirmCheckout}
                   disabled={isCreatingSubscription}
-                  whileHover={!isCreatingSubscription ? { scale: 1.02 } : {}}
-                  whileTap={!isCreatingSubscription ? { scale: 0.98 } : {}}
+                  fullWidth
                 >
                   {isCreatingSubscription ? (
                     <>
@@ -443,7 +413,7 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
                       />
                     </>
                   )}
-                </motion.button>
+                </FnButton>
               </div>
             </div>
           </div>

@@ -46,7 +46,7 @@ const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({
             className={styles.success__button}
             onClick={onClose}
           >
-            RETURN HOME
+            CLOSE
           </Button>
         </div>
       </div>

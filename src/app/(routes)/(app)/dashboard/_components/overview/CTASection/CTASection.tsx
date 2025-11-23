@@ -42,7 +42,7 @@ const CTASection: React.FC = () => {
                 </div>
                 <div className={styles.subscriptionContent__benefit}>
                   <Check size={14} />
-                  <span>30% discount</span>
+                  <span>10% discount</span>
                 </div>
                 <div className={styles.subscriptionContent__benefit}>
                   <Check size={14} />
