@@ -20,6 +20,7 @@ import {
   GetCustomerSubscriptionsQuery,
   SubscriptionStatus,
   Billing,
+  ServiceId,
 } from "@/graphql/api";
 import { calculateSubscriptionProgress } from "../../utils/subscriptionProgress";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
@@ -428,6 +429,55 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
     <div className={styles.modal__footer}>{renderFooterButtons()}</div>
   );
 
+  const getServiceOptionLabel = (
+    subscriptionService: SubscriptionType["subscriptionServices"][0]
+  ): string => {
+    if (!subscriptionService?.service) return "Subscription";
+
+    const { service, serviceDetails } = subscriptionService;
+
+    // Extract serviceOptionId from serviceDetails (any category)
+    const serviceOptionId =
+      serviceDetails?.cleaning?.cleaningType ||
+      serviceDetails?.laundry?.laundryType ||
+      serviceDetails?.pestControl?.treatmentType ||
+      serviceDetails?.cooking?.mealType;
+
+    const labelMap: Record<ServiceId, string> = {
+      [ServiceId.StandardLaundry]: "Your Standard Laundry Package",
+      [ServiceId.PremiumLaundry]: "Your Premium Laundry Package",
+      [ServiceId.DryCleaning]: "Your Dry Cleaning Package",
+      [ServiceId.StandardCleaning]: "Your Standard Cleaning Package",
+      [ServiceId.DeepCleaning]: "Your Deep Cleaning Package",
+      [ServiceId.MoveInMoveOutCleaning]:
+        "Your Move In Move Out Cleaning Package",
+      [ServiceId.PostConstructionCleaning]:
+        "Your Post Construction Cleaning Package",
+      [ServiceId.BasicCooking]: "Your Basic Cooking Package",
+      [ServiceId.StandardCooking]: "Your Standard Cooking Package",
+      [ServiceId.Cleaning]: "Your Cleaning Package",
+      [ServiceId.Cooking]: "Your Cooking Package",
+      [ServiceId.Laundry]: "Your Laundry Package",
+      [ServiceId.PestControl]: "Your Pest Control Package",
+      [ServiceId.PestControlCommercial]: "Your Pest Control Commercial Package",
+      [ServiceId.PestControlResidential]:
+        "Your Pest Control Residential Package",
+    };
+
+    // Find matching option label
+    const option = service.options?.find(
+      (opt) => opt.service_id === (serviceOptionId as unknown as ServiceId)
+    );
+
+    return (
+      labelMap[serviceOptionId as unknown as ServiceId] ||
+      option?.label ||
+      service.label ||
+      service.name ||
+      "Subscription"
+    );
+  };
+
   return (
     <ModalDrawer
       isOpen={isOpen}
@@ -443,7 +493,8 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
       title={
         subscription.subscriptionServices.length > 1
           ? `${subscription.subscriptionServices.length} Services Package`
-          : subscription.subscriptionServices[0]?.service.name || "Subscription"
+          : getServiceOptionLabel(subscription.subscriptionServices[0]) ||
+            "Subscription"
       }
       description={subscription.billingCycle}
       showFooter={true}

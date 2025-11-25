@@ -242,15 +242,6 @@ const SubscriptionBuilder: React.FC = () => {
     return subtotal - amount;
   };
 
-  // Calculate subscription total
-  // const calculateTotal = () => {
-  //   const monthlyTotal = configuredServices.reduce(
-  //     (sum, cs) => sum + (cs.configuration.price || 0),
-  //     0
-  //   );
-  //   return monthlyTotal * duration;
-  // };
-
   // Validate checkout requirements
   const validateCheckout = (): boolean => {
     const validation = validateSubscription(
