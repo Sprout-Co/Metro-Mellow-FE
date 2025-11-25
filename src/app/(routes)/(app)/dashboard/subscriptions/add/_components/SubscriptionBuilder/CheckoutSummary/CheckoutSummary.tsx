@@ -63,32 +63,7 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
   discount,
   total,
 }) => {
-  const [expandedSections, setExpandedSections] = useState<string[]>([
-    "date",
-    "address",
-    "services",
-  ]);
   const currentUser = useSelector(selectCurrentUser);
-
-  // const calculateSubtotal = () => {
-  //   return configuredServices.reduce(
-  //     (sum, cs) => sum + (cs.configuration.price || 0),
-  //     0
-  //   );
-  // };
-
-  // const calculateDiscount = () => {
-  //   const monthlyTotal = calculateSubtotal();
-  //   const savingsPercentage =
-  //     duration >= 12 ? 30 : duration >= 6 ? 20 : duration >= 3 ? 10 : 0;
-  //   return Math.round(monthlyTotal * (savingsPercentage / 100) * duration);
-  // };
-
-  // const calculateTotal = () => {
-  //   const subtotal = calculateSubtotal() * duration;
-  //   const discount = calculateDiscount();
-  //   return subtotal - discount;
-  // };
 
   const formatDate = (date: Date) => {
     return date.toLocaleDateString("en-US", {
@@ -384,7 +359,7 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
                 <FnButton
                   variant="primary"
                   size="lg"
-                  className={styles.checkout__checkoutBtn}
+                  // className={styles.checkout__checkoutBtn}
                   onClick={onConfirmCheckout}
                   disabled={isCreatingSubscription}
                   fullWidth

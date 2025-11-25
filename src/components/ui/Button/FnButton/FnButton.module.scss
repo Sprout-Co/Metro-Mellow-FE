@@ -59,6 +59,10 @@
     @include button-accent-outline;
   }
 
+  &--danger {
+    @include button-danger;
+  }
+
   border-radius: border-radius("lg") !important;
   font-weight: font-weight("regular") !important;
 

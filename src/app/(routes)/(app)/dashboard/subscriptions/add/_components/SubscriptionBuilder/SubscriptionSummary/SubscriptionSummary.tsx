@@ -21,6 +21,7 @@ import {
 import styles from "./SubscriptionSummary.module.scss";
 import { BillingCycle } from "@/graphql/api";
 import { DurationType } from "../SubscriptionBuilder";
+import FnButton from "@/components/ui/Button/FnButton";
 
 interface ConfiguredService {
   service: any;
@@ -52,29 +53,6 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
     (sum, cs) => sum + (cs.configuration.price || 0),
     0
   );
-
-  // const savingsPercentage =
-  //   duration >= 12 ? 30 : duration >= 6 ? 20 : duration >= 3 ? 10 : 0;
-  // const savingsAmount = Math.round(
-  //   monthlyTotal * (savingsPercentage / 100) * duration
-  // );
-  // const finalTotal = total; // - savingsAmount;
-
-  const getServiceIcon = (category: string) => {
-    const iconProps = { size: 20, strokeWidth: 1.5 };
-    switch (category) {
-      case "CLEANING":
-        return <Home {...iconProps} />;
-      case "LAUNDRY":
-        return <Droplets {...iconProps} />;
-      case "COOKING":
-        return <Utensils {...iconProps} />;
-      case "PEST_CONTROL":
-        return <Bug {...iconProps} />;
-      default:
-        return <Package {...iconProps} />;
-    }
-  };
 
   const getServiceEmoji = (category: string) => {
     switch (category) {
@@ -203,28 +181,6 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
             </AnimatePresence>
           </div>
 
-          {/* Billing Info */}
-          <div className={styles.summary__billingInfo}>
-            <div className={styles.summary__billingItem}>
-              <span className={styles.summary__billingLabel}>Billing</span>
-              <span className={styles.summary__billingValue}>
-                {billingCycle}
-              </span>
-            </div>
-            <div className={styles.summary__billingItem}>
-              <span className={styles.summary__billingLabel}>Duration</span>
-              <span className={styles.summary__billingValue}>
-                {duration} month{duration !== 1 ? "s" : ""}
-              </span>
-            </div>
-            <div className={styles.summary__billingItem}>
-              <span className={styles.summary__billingLabel}>Start</span>
-              <span className={styles.summary__billingValue}>
-                {formatStartDate()}
-              </span>
-            </div>
-          </div>
-
           {/* Price Breakdown */}
           <div className={styles.summary__priceSection}>
             <div className={styles.summary__priceRow}>
@@ -275,15 +231,14 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
               </motion.span>
             </div>
 
-            <motion.button
-              className={styles.summary__ctaButton}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            <FnButton
+              variant="primary"
+              size="lg"
               onClick={onCheckout}
+              fullWidth
             >
-              <span>Proceed to Checkout</span>
-              <span>→</span>
-            </motion.button>
+              Proceed to Checkout
+            </FnButton>
           </div>
         </>
       )}

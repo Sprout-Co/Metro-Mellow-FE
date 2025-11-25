@@ -16,7 +16,7 @@
   border: 1px solid color("status", "error");
   border-radius: border-radius("lg");
   box-shadow: 0 2px 8px color-alpha("status", "error", 0.1);
-  margin-bottom: spacing("md");
+  margin: spacing("md") 0;
 
   @include breakpoint-down("sm") {
     flex-direction: column;

@@ -18,6 +18,8 @@ interface UseSubscriptionPaymentReturn {
   paymentSuccess: boolean;
   paymentReference: string | null;
   setPaymentSuccess: (success: boolean) => void;
+  setPaymentLoading: (loading: boolean) => void;
+  setPaymentError: (error: string | null) => void;
 }
 
 export const useSubscriptionPayment = (): UseSubscriptionPaymentReturn => {
@@ -207,8 +209,6 @@ export const useSubscriptionPayment = (): UseSubscriptionPaymentReturn => {
                 "Payment verification failed. Please contact support if payment was deducted.";
               setError(errorMessage);
               alert(errorMessage);
-            } finally {
-              setLoading(false);
             }
           },
 
@@ -255,5 +255,7 @@ export const useSubscriptionPayment = (): UseSubscriptionPaymentReturn => {
     paymentSuccess,
     setPaymentSuccess,
     paymentReference,
+    setPaymentLoading: setLoading,
+    setPaymentError: setError,
   };
 };

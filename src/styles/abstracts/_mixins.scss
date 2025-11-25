@@ -580,6 +580,19 @@ $semantic-breakpoints: (
   }
 }
 
+@mixin button-danger($size: "md") {
+  @include button-base($size);
+  background-color: color("status", "error");
+  color: color("neutral", "white");
+  border-color: color("status", "error");
+
+  &:hover:not(:disabled) {
+    background-color: color("status", "error");
+    color: color("neutral", "white");
+    border-color: color("status", "error");
+  }
+}
+
 // ===================================
 // FORM MIXINS
 // ===================================

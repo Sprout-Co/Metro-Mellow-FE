@@ -102,6 +102,9 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
     loading: paymentLoading,
     paymentSuccess,
     setPaymentSuccess,
+    setPaymentLoading,
+    error: paymentError,
+    setPaymentError,
   } = useSubscriptionPayment();
   const { handleRenewSubscription } = useSubscriptionOperations();
   // Fetch bookings for this subscription when modal opens and bookings tab is active
@@ -312,8 +315,6 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
             disabled={paymentLoading}
             size="lg"
             loading={paymentLoading}
-            // whileHover={{ scale: 1.02 }}
-            // whileTap={{ scale: 0.98 }}
             leftIcon={<RefreshCw size={14} />}
           >
             {paymentLoading ? "Processing..." : "Retry Payment"}
@@ -347,20 +348,12 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
             </FnButton> */}
             <FnButton
               size="lg"
+              variant="primary"
               loading={paymentLoading}
               leftIcon={<X size={14} />}
-              onClick={() => isPaid && handleConfirmAction("cancel")}
+              onClick={() => handleConfirmAction("cancel")}
               disabled={!isPaid}
               fullWidth
-              style={{
-                opacity: !isPaid ? 0.5 : 1,
-                cursor: !isPaid ? "not-allowed" : "pointer",
-              }}
-              title={
-                !isPaid
-                  ? "Complete payment before canceling subscription"
-                  : "Cancel subscription"
-              }
             >
               Cancel Subscription
             </FnButton>
@@ -470,6 +463,14 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
             title="Renewal Failed"
           />
         )}
+        {/* Payment Error Banner */}
+        {paymentError && (
+          <ErrorBanner
+            error={paymentError}
+            onDismiss={() => setPaymentError("")}
+            title="Payment Failed"
+          />
+        )}
 
         {/* Tab Navigation */}
         <div className={styles.modal__tabs}>
@@ -577,8 +578,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
         message="Payment confirmed! Your subscription is active now. Enjoy the flex!"
         isOpen={paymentSuccess}
         onClose={() => {
-          refetchSubscriptions?.();
-          setPaymentSuccess(false);
+          window.location.reload();
         }}
       />
     </ModalDrawer>

@@ -36,6 +36,9 @@ import {
 import LoginModal from "@/components/ui/booking/modals/LoginModal/LoginModal";
 import { useSubscriptionPayment } from "@/hooks/useSubscriptionPayment";
 import SignaturePattern from "@/components/ui/SignaturePattern/SignaturePattern";
+import OrderSuccessModal from "@/components/ui/booking/modals/OrderSuccessModal/OrderSuccessModal";
+import { Routes } from "@/constants/routes";
+import FullPageLoader from "@/components/ui/FullPageLoader";
 
 export type DurationType = 1 | 2 | 3 | 6 | 12;
 
@@ -88,6 +91,7 @@ const SubscriptionBuilder: React.FC = () => {
     error: paymentError,
     paymentSuccess,
     paymentReference,
+    setPaymentSuccess,
   } = useSubscriptionPayment();
   const router = useRouter();
   const currentUser = useSelector(selectCurrentUser);
@@ -225,7 +229,7 @@ const SubscriptionBuilder: React.FC = () => {
   } => {
     const monthlyTotal = calculateSubtotal();
     const savingsPercentage =
-      duration >= 12 ? 10 : duration >= 6 ? 7 : duration >= 3 ? 5 : 0;
+      duration >= 12 ? 10 : duration >= 6 ? 7 : duration >= 3 ? 5 : 3;
     return {
       amount: Math.round(monthlyTotal * (savingsPercentage / 100) * duration),
       savingsPercentage: savingsPercentage,
@@ -320,35 +324,34 @@ const SubscriptionBuilder: React.FC = () => {
       console.log("Creating subscription with input:", subscriptionInput);
 
       // Create subscription
-      // const createdSubscription =
-      //   await handleCreateSubscription(subscriptionInput);
+      const createdSubscription =
+        await handleCreateSubscription(subscriptionInput);
 
-      // if (!createdSubscription) {
-      //   throw new Error("Failed to create subscription");
-      // }
+      if (!createdSubscription) {
+        throw new Error("Failed to create subscription");
+      }
 
       // console.log("Subscription created:", createdSubscription);
 
       // // Check if payment is required
-      // if (
-      //   createdSubscription.requiresPayment &&
-      //   createdSubscription.billing?.id
-      // ) {
-      //   showToast("Subscription created! Proceeding to payment...", "success");
+      if (
+        createdSubscription.requiresPayment &&
+        createdSubscription.billing?.id
+      ) {
+        showToast("Subscription created! Proceeding to payment...", "success");
 
-      //   // Calculate total amount
-      //   const totalAmount = calculateTotal();
+        // Calculate total amount
+        const totalAmount = calculateTotal();
 
-      //   // Initialize payment with billing ID
-      //   await initializeSubscriptionPayment(
-      //     createdSubscription.billing.id,
-      //     totalAmount,
-      //     currentUser.email
-      //   );
+        // Initialize payment with billing ID
+        await initializeSubscriptionPayment(
+          createdSubscription.billing.id,
+          totalAmount,
+          currentUser.email
+        );
 
-      //   // Payment modal will open automatically
-      //   // Success/failure will be handled by useEffect hooks
-      // }
+        // Payment modal will open automatically
+      }
     } catch (error) {
       console.error("Error creating subscription:", error);
       showToast(
@@ -361,9 +364,9 @@ const SubscriptionBuilder: React.FC = () => {
     } finally {
       // Don't set loading to false here if payment is being processed
       // The payment hook will manage its own loading state
-      if (!paymentLoading) {
-        setIsCreatingSubscription(false);
-      }
+      // if (!paymentLoading) {
+      //   setIsCreatingSubscription(false);
+      // }
     }
   };
 
@@ -538,6 +541,22 @@ const SubscriptionBuilder: React.FC = () => {
           setShowLoginModal(false);
           handleCheckout();
         }}
+      />
+
+      <OrderSuccessModal
+        isOpen={paymentSuccess}
+        title="Oya, You Are Good to Go! 🚀"
+        message="Payment confirmed! Your subscription is active now. Enjoy the flex!"
+        onClose={() => {
+          setPaymentSuccess(false);
+          router.push(Routes.DASHBOARD_SUBSCRIPTIONS);
+        }}
+      />
+
+      <FullPageLoader
+        isLoading={paymentLoading}
+        message="Processing your payment. This may take a few minutes.
+Please do not refresh or close this window."
       />
     </div>
   );

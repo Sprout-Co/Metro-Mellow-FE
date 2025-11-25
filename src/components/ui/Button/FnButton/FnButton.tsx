@@ -15,7 +15,8 @@ export interface FnButtonProps
     | "white"
     | "primary-outline"
     | "secondary-outline"
-    | "accent-outline";
+    | "accent-outline"
+    | "danger";
   /** Button size */
   size?: "xs" | "sm" | "md" | "lg";
   /** Loading state */

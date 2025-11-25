@@ -272,46 +272,6 @@
     }
   }
 
-  // Billing Info
-  &__billingInfo {
-    margin: 0 spacing("lg");
-    padding: spacing("md");
-    background: linear-gradient(
-      135deg,
-      color("neutral", "lightest"),
-      color("neutral", "lighter")
-    );
-    border-radius: border-radius("lg");
-    display: flex;
-    justify-content: space-between;
-    gap: spacing("md");
-
-    @include breakpoint-down("sm") {
-      flex-direction: column;
-      gap: spacing("sm");
-    }
-  }
-
-  &__billingItem {
-    display: flex;
-    flex-direction: column;
-    gap: spacing("xxs");
-    flex: 1;
-  }
-
-  &__billingLabel {
-    @include font-size("xs");
-    color: color("neutral", "dark");
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  &__billingValue {
-    @include font-size("sm");
-    @include font-weight("semibold");
-    color: color("neutral", "darkest");
-  }
-
   // Price Section
   &__priceSection {
     padding: spacing("lg");
@@ -418,59 +378,5 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-  }
-
-  // CTA Button
-  &__ctaButton {
-    width: 100%;
-    padding: spacing("md");
-    background: linear-gradient(
-      135deg,
-      color("primary", "base"),
-      color("primary", "dark")
-    );
-    color: color("neutral", "white");
-    border: none;
-    border-radius: border-radius("lg");
-    @include font-size("base");
-    @include font-weight("semibold");
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: spacing("xs");
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-
-    &::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      transform: translate(-50%, -50%);
-      transition:
-        width 0.6s ease,
-        height 0.6s ease;
-    }
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(color("primary", "base"), 0.3);
-
-      &::before {
-        width: 400px;
-        height: 400px;
-      }
-    }
-
-    span {
-      position: relative;
-      z-index: 1;
-    }
   }
 }
