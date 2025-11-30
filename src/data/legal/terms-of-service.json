@@ -1,0 +1,333 @@
+{
+  "effectiveDate": "October, 2025",
+  "version": "1",
+  "title": "Metromellow Terms and Conditions of Service",
+  "sections": [
+    {
+      "id": "introduction",
+      "title": "Introduction and Background",
+      "content": [
+        "Metromellow Ltd is a company that operates a digital, technology-driven service platform ('the Platform').",
+        "The Platform provides individuals and businesses ('Users' or 'Clients') with a range of domestic and lifestyle services.",
+        "Through the Platform, Users can conveniently access multiple categories of domestic and lifestyle services described in this Terms and Conditions of Service."
+      ]
+    },
+    {
+      "id": "references",
+      "title": "References to Parties",
+      "content": [
+        "All references to 'Metromellow', the 'Company', 'us' and 'we' in this Terms of Service (this 'Agreement') shall be deemed to mean Metromellow.",
+        "All references to the 'Platform' in this Agreement shall be deemed to mean the technology-driven service platform hosted by Metromellow on its website, mobile application and software platforms through which Metromellow offers a range of domestic and lifestyle services to Users.",
+        "All references to the 'User', 'Users', 'Clients', or 'You' in this Agreement shall be deemed to mean any individual, corporate entity, or organisation that accesses, registers on, or uses the Platform to request or receive services provided by Metromellow.",
+        "All references to 'Services' in this Agreement shall mean any of the on-demand domestic and lifestyle services offered by Metromellow, including professional cooking services, deep cleaning, laundry & care, and pest control services amongst others.",
+        "All references to 'Personnels' shall mean any individual engaged by Metromellow on a full-time, part-time, or contractual basis to deliver or support the Services to Users under the supervision and management of Metromellow.",
+        "All references to the 'Parties' in this Agreement shall be deemed to be a collective reference to 'Metromellow' and the 'Users'.",
+        "All references to 'Terms' and 'Agreement' shall mean this Terms and Conditions of Service, together with all Policies, Schedules and additional terms referenced or incorporated, as may be amended from time to time."
+      ]
+    },
+    {
+      "id": "agreement",
+      "title": "Agreement to Terms",
+      "content": [
+        "By clicking on the 'I agree' button on the Terms and Conditions segment of the Platform's registration or onboarding interface, it is deemed that you have read, understood and agree to be bound by the Terms set out in this Agreement.",
+        "By accepting this Agreement (on behalf of yourself or the entity that you represent), you represent and warrant that you have the right, authority, and capacity to enter into these terms (on behalf of yourself or the entity that you represent). You further represent that you are at least 18 years of age and that you are not a person barred from accessing the services rendered by Metromellow through its Platform under the laws of the Federal Republic of Nigeria or any other applicable jurisdictions.",
+        "By accepting this Agreement, you agree to the fact that Metromellow reserves the right to modify this Agreement at any time, at which point, you will be given a notice of the amendment or modification, and you shall be required to read and consent to the modified Agreement where you find the Agreement agreeable.",
+        "If you do not agree to the terms and conditions set out in this Agreement, it is agreed that you shall immediately stop using the services offered by Metromellow through the Platform and shall immediately indicate the withdrawal of your acceptance to this Agreement on the Interface provided on the Platform to deactivate or delete your user account.",
+        "We reserve the right at any time to modify or discontinue, temporarily or permanently, our Services or any part thereof with or without notice to you, or other users or clients."
+      ]
+    },
+    {
+      "id": "governing-law",
+      "title": "Governing Law",
+      "content": [
+        "This Agreement shall be governed by the laws of the Federal Republic of Nigeria and shall be interpreted in accordance with the laws of the Federal Republic of Nigeria."
+      ]
+    },
+    {
+      "id": "entire-agreement",
+      "title": "Entire Agreement",
+      "content": [
+        "The Terms and Conditions contained in this Agreement supersede any earlier verbal or written communications between the Parties or between you and our agents and affiliates regarding the services and marketplace offered by Metromellow through the Platform.",
+        "The Terms and Conditions contained in this Agreement constitute the entire agreement between the Parties at the time the User accesses and uses the services and marketplace offered by Metromellow through the Platform, unless otherwise provided in another agreement entered into with Metromellow."
+      ]
+    },
+    {
+      "id": "representations",
+      "title": "Representations and Warranties",
+      "content": [
+        "Metromellow is a digital, technology-driven service Platform that provides individuals and businesses ('Users' or 'Clients') with a range of domestic and lifestyle services. Metromellow represents that it has full corporate power and authority to own, manage, and operate the Platform and provide the Services thereon. Metromellow warrants that it will use reasonable commercial efforts to ensure the continuous availability and functionality of the Platform, subject to scheduled maintenance, system upgrades, and Force Majeure events.",
+        "It is agreed that an off-platform transaction or off-platform arrangement is an offline transaction or agreement made outside the Platform where a User, whilst benefiting from the Platform, circumvents the Platform. Metromellow represents that it bears no liability for any loss, liability, injury or death arising from an off-platform arrangement between Personnels and Users.",
+        "To the fullest extent permitted by applicable law, Metromellow disclaims all warranties of any kind, whether express or implied warranties, including but not limited to, implied warranties of merchantability, fitness for a particular purpose, title, quiet enjoyment, accuracy, and non-infringement, related to its services.",
+        "Metromellow makes no representations or warranties of any kind, express or implied: that its services will meet your requirements; that the quality of any content obtained by you through its services will meet your expectations; that the operation of the services will be uninterrupted, timely, secure, or error-free, or that any defects will be corrected; or that its website, mobile application and software platforms, servers, or communications will be free of viruses or other harmful components.",
+        "Users will be solely responsible for any damage to their computer system and/or mobile device(s) and/or for loss of data that results from their use of our platform and/or services. Metromellow shall not be responsible for any downtime, data loss, or payment failure resulting from interruptions or malfunctions in third-party systems, internet service providers, mobile networks, or payment processors.",
+        "Metromellow's services are provided 'as is' and 'as available'. Where the Platform contains links or references to third-party websites, resources, or promotional content, such links are provided for convenience only and do not imply endorsement, control, or responsibility by Metromellow. If the applicable law requires any warranties with respect to the site, all such warranties are limited in duration to sixty (60) days from the date of first use."
+      ]
+    },
+    {
+      "id": "eligibility",
+      "title": "Eligibility for Users",
+      "content": [
+        "Access to and use of the Platform is limited to individuals who are at least eighteen (18) years of age and possess the legal capacity to enter into binding contracts under the laws of the Federal Republic of Nigeria. By registering on Metromellow or using any of the Services, the User represents and warrants that they meet this age requirement.",
+        "Users representing a company or business entities further represent that they have the authorisation to do so. Users who are restricted by law, court order, or regulatory sanction from contracting or using online platforms are not eligible to use the Platform."
+      ]
+    },
+    {
+      "id": "user-account",
+      "title": "User Account",
+      "content": [
+        "To access and use the Platform or book Services, Users are required to create a personal account ('Account') by providing complete, accurate, and up-to-date information as requested by Metromellow. Users are solely responsible for maintaining the confidentiality of their login credentials, including usernames, passwords, payment information, banking details and verification codes. Metromellow shall not be liable for any unauthorised access or transactions carried out through a User's Account resulting from the User's failure to maintain adequate personal cybersecurity and confidentiality of login details.",
+        "Each User shall only maintain one Account on the Platform. Creation of multiple accounts by the same individual or entity, misrepresentation of identity, or impersonation of any person or organisation is strictly prohibited. Upon detection of multiple accounts, Metromellow reserves the right to merge, suspend, or permanently delete duplicate or fraudulent accounts without notice.",
+        "Metromellow reserves the right, in its sole discretion, to suspend or terminate any User Account without prior notice if: any information provided by the User is false, misleading, or unverifiable; the User engages in any fraudulent, abusive, or unlawful conduct; the User violates these Terms, the Privacy Policy, or other applicable policies; or such suspension or termination is required by law or regulatory directive."
+      ]
+    },
+    {
+      "id": "kyc",
+      "title": "Know Your Customer (KYC) and Onboarding",
+      "content": [
+        "To maintain the integrity and security of its operations, Metromellow conducts Know Your Customer (KYC) and onboarding verification for all Users registering on the Platform. All personal information collected under this Clause shall be processed and stored in compliance with the Nigeria Data Protection Act (NDPA) 2023, all applicable Nigerian data protection laws and Metromellow's Privacy Policy.",
+        "Metromellow reserves the right to restrict, suspend, or terminate any User Account where the Platform's KYC requirements are not satisfied or where the information provided is found to be false, misleading, or unverifiable. Users acknowledge that non-completion of the Platform's KYC process may limit their ability to access or use certain Services on the Platform.",
+        "It should be noted that the final prerogative to onboard a person or entity on the Platform lies solely with Metromellow and it may decide for any reason or no reason at any time to refuse to onboard a person on the Platform. Metromellow shall bear no liability for its refusal to onboard any person who applies to be onboard."
+      ]
+    },
+    {
+      "id": "metromellow-obligations",
+      "title": "Metromellow's Obligations",
+      "content": [
+        "Metromellow shall, subject to these Terms, make the Platform available to Users to request, schedule, pay for and receive Services during Metromellow's published hours of operation and in Metromellow's stated service areas.",
+        "Metromellow shall comply with all applicable laws, regulations, and mandatory industry standards relevant to its operations and the provision of its Services."
+      ]
+    },
+    {
+      "id": "user-obligations",
+      "title": "User Obligations",
+      "content": [
+        "As a User of the Platform, you agree to: Use the Platform and Services only for lawful, legitimate purposes and in compliance with these Terms, the Privacy Policy, and all applicable laws and regulations. Pay all Fees, charges and taxes associated with Services ordered through the Platform. Be responsible for any chargebacks, bank fees or other payment-related costs resulting from insufficient funds or disputed transactions.",
+        "You agree not to use the Platform to: Collect, upload, transmit, display, or distribute any User Content that violates any third-party right or is unlawful, harassing, abusive, tortious, threatening, harmful, invasive of another's privacy, vulgar, defamatory, false, or intentionally misleading. Upload, transmit, or distribute any computer viruses, worms, or any software intended to damage or alter a computer system or data. Send unsolicited or unauthorised advertising, promotional materials, junk mail, spam, or chain letters. Harvest, collect, gather or assemble information or data regarding other users without their consent. Interfere with, disrupt, or create an undue burden on servers or networks connected to the Platform. Attempt to gain unauthorised access to the Platform. Use software or automated agents or scripts to produce multiple accounts on the Platform. Take any action to circumvent the services offered by Metromellow, including completing, initiating, arranging or executing any transactions between a Personnel and User outside of the Platform (off-platform/offline transactions). Re-sell, re-distribute or commercially exploit any Service made available through the Platform without Metromellow's prior written consent."
+      ]
+    },
+    {
+      "id": "booking-payment",
+      "title": "Booking and Payment",
+      "content": [
+        "All Services must be requested and confirmed exclusively through the Metromellow Platform via website, mobile application or software platforms. All bookings are subject to service availability in the User's location and confirmation by Metromellow.",
+        "Pricing: Prices for Services shall be displayed on the Platform and are quoted in Nigerian Naira (₦) unless otherwise stated. Each booking may consist of one or more of the following fee components: Base Service Fee (Standard charge for the category of service), Add-On Charges (Additional fees for special requests, extended time, or consumables), Delivery or Transportation Charges (Applicable for services requiring logistics), Taxes and Statutory Levies (VAT or other mandatory charges).",
+        "Payments: Except where expressly stated otherwise, all bookings must be prepaid in full at the time of confirmation. Payments can be made via debit/credit cards, bank transfers, verified mobile money platforms, or in-app wallets.",
+        "Failed Payments & Chargebacks: Unjustified chargebacks initiated through the User's bank or card issuer may result in immediate suspension of the User's Account, denial of future Services, and recovery of all associated costs. If a User's payment fails after Service performance has commenced, the outstanding amount shall become immediately due and payable."
+      ]
+    },
+    {
+      "id": "refund-cancellation",
+      "title": "Refund, Cancellation and Compensation",
+      "content": [
+        "Users may cancel a scheduled service subject to the following timelines and applicable fees:",
+        "Professional Cooking Service: Between 24-48 hours before delivery - Refund of Service Fee. After processing has commenced - No Refund.",
+        "Deep Cleaning: 48 hours or more before appointment - Full Refund of Service Fee. Between 24-48 hours before appointment - 50% Refund. Less than 24 hours before appointment - No Refund.",
+        "Laundry & Care: Before pickup time - Refund of Service Fee. After pickup but before processing - 50% Refund (less logistics cost). After processing has commenced - No Refund.",
+        "Pest Control Services: 48 hours or more before appointment - Refund of Service Fee. Less than 48 hours before appointment - 50% Refund. Same-day cancellations - No Refund.",
+        "Metromellow Cancellations: Metromellow may cancel a booking due to unforeseen circumstances (e.g., staff unavailability, Force Majeure). In such cases, Users shall be entitled to a refund, a rebooking at no additional cost, or Platform credit.",
+        "Service Complaints: Where a service is not performed to reasonable professional standards, Users may raise a complaint within 24 hours of service completion. Complaints must be supported by evidence such as photos or written details.",
+        "Processing: Approved refunds are typically processed within 7 to 14 business days."
+      ]
+    },
+    {
+      "id": "safety-compliance",
+      "title": "Safety, Health and Compliance",
+      "content": [
+        "Metromellow reserves the right to refuse, discontinue, or postpone any service where: The premises or circumstances pose a health, safety, or security risk to its personnel; The User fails to disclose hazards or comply with safety requirements; Weather, environmental, or operational conditions render service performance unsafe."
+      ]
+    },
+    {
+      "id": "client-protection",
+      "title": "Client Protection Plan",
+      "content": [
+        "This Plan provides a structured framework for resolving incidents of accidental damage or theft directly caused by Metromellow personnel during a scheduled service.",
+        "Client Protection Fee: Each booking attracts a mandatory, non-refundable Client Protection Fee of ₦1,000 (One thousand naira).",
+        "Damage Coverage: Coverage for accidental physical damage is limited to ₦50,000 (Fifty thousand naira) per incident. Metromellow reserves the right to first attempt professional repair.",
+        "Theft Coverage: Coverage for theft is limited to ₦50,000 (Fifty thousand naira) per incident. A valid police report is required.",
+        "Exclusions: The plan does not cover cash, jewellery, antiques, heirlooms, items of high sentimental value, normal wear and tear, or damage to delicate surfaces where handling instructions were not provided.",
+        "Reporting: Accidental Property Damage must be reported within 24 hours. Theft must be reported to the Police and Metromellow within 48 hours."
+      ]
+    },
+    {
+      "id": "limitation-liability",
+      "title": "Limitation of Liability",
+      "content": [
+        "Metromellow will not be liable for any direct, indirect, incidental, special, punitive, consequential or exemplary damages which would include, but is not limited to, lost profits or data, goodwill, damage to reputation, injury or interruptions of service.",
+        "Metromellow's total cumulative liability for any accidental physical damage to property caused directly by Metromellow's Personnel during Service performance shall not exceed the total amount paid by the User for the specific booking giving rise to the claim or ₦50,000 (Fifty thousand naira) whichever is lower as prescribed under the Client Protection Plan."
+      ]
+    },
+    {
+      "id": "indemnification",
+      "title": "Indemnification",
+      "content": [
+        "Users agree to indemnify and hold Metromellow and its representatives harmless from any third-party claims, demands, losses, liabilities, and expenses arising out of User negligence, breach of terms, misuse of the Platform, or violation of applicable laws."
+      ]
+    },
+    {
+      "id": "intellectual-property",
+      "title": "Intellectual Property",
+      "content": [
+        "The name Metromellow, the Platform, and all other Metromellow marks, logos, designs, and phrasing used in connection with our Services are trademarks, service marks, or trade dress of Metromellow.",
+        "Users are granted a limited, revocable, non-sublicensable, non-exclusive, and non-transferable license to access our Platform solely for a use authorised by this Agreement."
+      ]
+    },
+    {
+      "id": "customer-service",
+      "title": "Escalation and Customer Service",
+      "content": [
+        "Users may contact Metromellow's Customer Service team through: In-App Chat Support, Email Support: [Insert support email], Telephone Hotline: +234 [Insert number], Emergency Hotline: +234 [Insert number], Hours of Operation: Monday to Saturday, 8:00 a.m. – 6:00 p.m."
+      ]
+    },
+    {
+      "id": "dispute-resolution",
+      "title": "Dispute Resolution",
+      "content": [
+        "Arbitration Agreement: By signing up to this Agreement, you and Metromellow mutually agree to waive your respective rights to resolution of disputes via litigation and agree to resolve any dispute conclusively by arbitration.",
+        "Notice: Before seeking arbitration, a party must send a written Notice of Dispute.",
+        "Mediation: If unresolved after 30 days, the dispute shall be referred to mediation under the Lagos State Multi-Door Courthouse.",
+        "Arbitration: If unresolved 30 days after mediation, the dispute refers to binding online ad-hoc arbitration in Lagos, Nigeria.",
+        "Court Jurisdiction: In circumstances where litigation is permitted, parties submit to the jurisdiction of the courts located within Lagos State."
+      ]
+    }
+  ],
+  "schedules": [
+    {
+      "id": "schedule-a",
+      "title": "Schedule A: Professional Cooking Services",
+      "sections": [
+        {
+          "id": "cooking-allergies",
+          "title": "Allergies and Dietary Restrictions",
+          "content": [
+            "Customers are required to disclose any known food allergies or dietary restrictions at the time of placing their Meal Order.",
+            "Metromellow cannot guarantee that any meal will be completely free from allergens."
+          ]
+        },
+        {
+          "id": "cooking-refunds",
+          "title": "Refunds",
+          "content": [
+            "No refunds will be issued once food preparation has commenced, except for delivery of wrong meals or food safety/contamination issues supported by evidence.",
+            "Refund requests must be submitted within 12 hours of delivery."
+          ]
+        },
+        {
+          "id": "cooking-delivery",
+          "title": "Delivery",
+          "content": [
+            "Delivery timelines are estimates. Customers must ensure address accuracy.",
+            "If delivery fails due to User error, the order may be marked completed without refund."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "schedule-b",
+      "title": "Schedule B: Deep Cleaning Services",
+      "sections": [
+        {
+          "id": "cleaning-scope",
+          "title": "Scope of Service",
+          "content": [
+            "Includes residential, corporate, and post-construction cleaning."
+          ]
+        },
+        {
+          "id": "cleaning-obligations",
+          "title": "Client Obligations",
+          "content": [
+            "Provide safe access, running water, and electricity.",
+            "Secure valuables and disclose fragile items (e.g., marble, antiques) before service begins."
+          ]
+        },
+        {
+          "id": "cleaning-equipment",
+          "title": "Equipment",
+          "content": [
+            "The Client shall supply cleaning equipment/tools unless they request Metromellow to supply them."
+          ]
+        },
+        {
+          "id": "cleaning-pricing",
+          "title": "Pricing",
+          "content": [
+            "Estimates are based on factors like square footage.",
+            "Additional charges may apply for heavy soiling or post-construction debris."
+          ]
+        },
+        {
+          "id": "cleaning-disclaimer",
+          "title": "Disclaimer",
+          "content": [
+            "Metromellow is not liable for normal wear and tear, damage to fragile items not disclosed, or pre-existing defects."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "schedule-c",
+      "title": "Schedule C: Laundry and Care Services",
+      "sections": [
+        {
+          "id": "laundry-standard",
+          "title": "Service Standard",
+          "content": [
+            "Metromellow exercises reasonable care but does not guarantee the removal of all stains or odours."
+          ]
+        },
+        {
+          "id": "laundry-obligations",
+          "title": "Client Obligations",
+          "content": [
+            "Empty all pockets and remove detachable accessories before collection.",
+            "Inspect garments for pre-existing damage."
+          ]
+        },
+        {
+          "id": "laundry-turnaround",
+          "title": "Turnaround Time",
+          "content": [
+            "Standard turnaround is 48 to 72 hours."
+          ]
+        },
+        {
+          "id": "laundry-exclusions",
+          "title": "Exclusions",
+          "content": [
+            "Items like fur, leather, suede, wedding dresses, and carpets are excluded from standard service unless explicitly approved with additional fees."
+          ]
+        },
+        {
+          "id": "laundry-uncollected",
+          "title": "Uncollected Items",
+          "content": [
+            "Metromellow is not liable for items uncollected after 30 days."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "schedule-d",
+      "title": "Schedule D: Pest Control Services",
+      "sections": [
+        {
+          "id": "pest-safety",
+          "title": "Safety Precautions",
+          "content": [
+            "Customers must disclose medical conditions, allergies, pets, or exposed food items before treatment.",
+            "Users must vacate the premises during fumigation if instructed."
+          ]
+        },
+        {
+          "id": "pest-disclaimer",
+          "title": "Service Disclaimer",
+          "content": [
+            "Metromellow does not guarantee permanent eradication from a single treatment, as re-infestation may occur due to environmental factors.",
+            "Metromellow is not liable for health effects where safety instructions were followed."
+          ]
+        }
+      ]
+    }
+  ]
+}
+

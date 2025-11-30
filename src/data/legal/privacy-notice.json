@@ -1,0 +1,164 @@
+{
+  "title": "Privacy Notice",
+  "subtitle": "For General Website Visitors",
+  "effectiveDate": "October, 2025",
+  "version": "1",
+  "sections": [
+    {
+      "id": "introduction",
+      "title": "Introduction",
+      "content": [
+        "This Privacy Notice explains how Metromellow Ltd ('we', 'us', 'our') handles the personal information of visitors to our website who browse our content without creating an account or using our services.",
+        "This notice applies to casual visitors, prospective customers, and anyone who accesses our website for informational purposes.",
+        "We are committed to protecting your privacy and handling your data in an open and transparent manner."
+      ]
+    },
+    {
+      "id": "information-collected",
+      "title": "Information We Collect from Website Visitors",
+      "content": [
+        "Automatically Collected Information: When you visit our website, we automatically collect certain technical information including IP address, browser type and version, operating system, referring website URLs, pages viewed, time spent on pages, and access times.",
+        "Cookies and Tracking Technologies: We use cookies, web beacons, and similar tracking technologies to collect information about your browsing behavior and preferences. See our Cookie section below for more details.",
+        "Information You Provide Voluntarily: If you contact us through forms on our website, subscribe to our newsletter, or request information, we collect the information you choose to provide (such as name, email address, and message content).",
+        "Location Information: We may collect approximate location data based on your IP address to provide location-relevant content and services."
+      ]
+    },
+    {
+      "id": "how-we-use",
+      "title": "How We Use Your Information",
+      "content": [
+        "Website Operation: To provide, maintain, and secure our website, ensure technical functionality, and troubleshoot issues.",
+        "Analytics and Improvement: To understand how visitors use our website, analyze traffic patterns, and improve our content, features, and user experience.",
+        "Communication: To respond to your inquiries, send newsletters (if you've subscribed), and provide information you've requested.",
+        "Marketing: To show relevant advertisements and promotional content on our website and third-party platforms.",
+        "Legal Compliance: To comply with legal obligations and protect our rights and interests.",
+        "Security: To detect, prevent, and address fraud, security issues, and technical problems."
+      ]
+    },
+    {
+      "id": "cookies",
+      "title": "Cookies and Tracking Technologies",
+      "content": [
+        "What Are Cookies: Cookies are small text files placed on your device when you visit our website. They help us recognize your browser, remember your preferences, and understand how you use our site.",
+        "Essential Cookies: These cookies are necessary for basic website functionality, including page navigation and access to secure areas. The website cannot function properly without these cookies.",
+        "Performance and Analytics Cookies: These cookies help us understand how visitors interact with our website by collecting anonymous information about pages visited, time spent, and any errors encountered. We use services like Google Analytics for this purpose.",
+        "Functional Cookies: These cookies remember your preferences and choices (such as language or region) to provide enhanced, personalized features.",
+        "Advertising and Targeting Cookies: These cookies track your browsing habits and are used to deliver advertisements relevant to you and your interests. They also limit the number of times you see an ad and measure advertising campaign effectiveness.",
+        "Third-Party Cookies: We allow carefully selected third-party service providers (such as analytics and advertising partners) to place cookies on your device. These third parties have their own privacy policies.",
+        "Managing Cookies: You can control and delete cookies through your browser settings. Most browsers allow you to refuse cookies, delete existing cookies, or receive warnings before cookies are stored. However, some website features may not function properly if you disable cookies.",
+        "Browser Settings: For information on managing cookies in specific browsers, visit: Google Chrome Help, Mozilla Firefox Help, Microsoft Edge Help, Safari Help.",
+        "Mobile Devices: For mobile devices, refer to your device manufacturer's instructions for managing cookies and tracking in mobile browsers."
+      ]
+    },
+    {
+      "id": "data-sharing",
+      "title": "Data Sharing",
+      "content": [
+        "Service Providers: We share information with trusted third-party service providers who assist us with website hosting, analytics (such as Google Analytics), email services, and advertising.",
+        "Analytics Partners: We use analytics services to understand website usage. These services may collect information about your use of this and other websites.",
+        "Advertising Partners: We may share information with advertising networks to display targeted advertisements on our website and other sites you visit.",
+        "Legal Requirements: We may disclose information when required by law, court order, legal process, or to protect our rights, property, or safety.",
+        "Business Transfers: In the event of a business sale, merger, or acquisition, visitor information may be transferred as part of that transaction.",
+        "These third parties are obligated to protect your information and only use it for the purposes we specify."
+      ]
+    },
+    {
+      "id": "data-security",
+      "title": "Data Security",
+      "content": [
+        "We implement reasonable security measures to protect the information collected from website visitors against unauthorized access, alteration, disclosure, or destruction.",
+        "Security measures include secure server infrastructure, encryption of data transmission (SSL/TLS), regular security monitoring, and limited access to information.",
+        "While we take reasonable precautions, no internet transmission is completely secure. We cannot guarantee the absolute security of information transmitted through our website.",
+        "You transmit information to our website at your own risk."
+      ]
+    },
+    {
+      "id": "data-retention",
+      "title": "Data Retention",
+      "content": [
+        "We retain visitor information collected through cookies and analytics for as long as necessary to fulfill the purposes outlined in this notice.",
+        "Analytics and cookie data are typically retained for 26 months, after which they are automatically deleted or anonymized.",
+        "Information you provide through contact forms or newsletter subscriptions is retained until you request deletion or unsubscribe.",
+        "We may retain certain information for longer periods where required by law or for legitimate business purposes."
+      ]
+    },
+    {
+      "id": "your-rights",
+      "title": "Your Rights",
+      "content": [
+        "Access: You have the right to request information about what personal data we hold about you.",
+        "Correction: You can request correction of inaccurate information.",
+        "Deletion: You can request deletion of your information, subject to legal retention requirements.",
+        "Objection: You can object to certain types of data processing, including marketing and profiling.",
+        "Restriction: You can request restriction of processing in certain circumstances.",
+        "Data Portability: You can request a copy of your data in a portable format.",
+        "To exercise these rights, please contact us using the details provided in the Contact section below.",
+        "You also have the right to lodge a complaint with the Nigeria Data Protection Commission if you believe we have not handled your data appropriately."
+      ]
+    },
+    {
+      "id": "third-party-links",
+      "title": "Third-Party Links",
+      "content": [
+        "Our website may contain links to third-party websites, plugins, and applications.",
+        "We are not responsible for the privacy practices or content of these third-party sites.",
+        "When you click on third-party links, you will be redirected to those sites. We encourage you to review the privacy policies of any third-party sites you visit.",
+        "This Privacy Notice applies only to information collected through our website."
+      ]
+    },
+    {
+      "id": "children-privacy",
+      "title": "Children's Privacy",
+      "content": [
+        "Our website is not intended for children under the age of 18.",
+        "We do not knowingly collect personal information from children through our website.",
+        "If we become aware that we have inadvertently collected information from a child, we will take steps to delete it promptly.",
+        "Parents or guardians who believe we may have collected information from a child should contact us immediately."
+      ]
+    },
+    {
+      "id": "do-not-track",
+      "title": "Do Not Track Signals",
+      "content": [
+        "Some web browsers have a 'Do Not Track' (DNT) feature that signals to websites that you do not want your online activities tracked.",
+        "Currently, there is no universally accepted standard for how to respond to DNT signals.",
+        "Our website does not currently respond to DNT browser signals or similar mechanisms.",
+        "You can still control cookies and tracking through your browser settings as described in the Cookies section."
+      ]
+    },
+    {
+      "id": "international-visitors",
+      "title": "International Visitors",
+      "content": [
+        "Our website is operated from Nigeria and primarily serves Nigerian customers.",
+        "If you are visiting from outside Nigeria, please be aware that your information may be transferred to, stored, and processed in Nigeria.",
+        "By using our website, you consent to the transfer of your information to Nigeria and other countries where we operate.",
+        "We take steps to ensure your information is protected in accordance with applicable data protection laws."
+      ]
+    },
+    {
+      "id": "changes",
+      "title": "Changes to This Notice",
+      "content": [
+        "We may update this Privacy Notice from time to time to reflect changes in our practices, technologies, legal requirements, or other factors.",
+        "When we make changes, we will update the 'Effective Date' at the top of this notice.",
+        "Material changes will be prominently posted on our website or communicated through other appropriate channels.",
+        "We encourage you to review this notice periodically to stay informed about how we handle visitor information.",
+        "Your continued use of our website after changes are posted constitutes acceptance of the updated notice."
+      ]
+    },
+    {
+      "id": "contact",
+      "title": "Contact Us",
+      "content": [
+        "If you have questions, concerns, or requests regarding this Privacy Notice or how we handle visitor information, please contact us:",
+        "Email: privacy@metromellow.com",
+        "Phone: +234 [Insert number]",
+        "Mailing Address: [Insert physical address]",
+        "Data Protection Officer: [Insert DPO name and contact]",
+        "We will respond to your inquiries within a reasonable timeframe in accordance with applicable data protection laws."
+      ]
+    }
+  ]
+}
+

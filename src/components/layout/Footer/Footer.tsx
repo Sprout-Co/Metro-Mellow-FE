@@ -53,10 +53,13 @@ export default function Footer() {
             <h3 className={styles.colTitle}>Legal</h3>
             <ul>
               <li>
-                <Link href={Routes.PRIVACY}>Privacy Policy</Link>
+                <Link href={Routes.TERMS}>Terms of Service</Link>
               </li>
               <li>
-                <Link href={Routes.TERMS}>Terms & Conditions</Link>
+                <Link href={Routes.PRIVACY}>Privacy & Cookie Policy</Link>
+              </li>
+              <li>
+                <Link href={Routes.PRIVACY_NOTICE}>Privacy Notice</Link>
               </li>
             </ul>
           </div>
