@@ -7,16 +7,14 @@ import styles from "./FloatingButtons.module.scss";
 
 const FloatingButtons: React.FC = () => {
   const handleWhatsAppClick = () => {
-    // Replace with your actual WhatsApp number
-    const phoneNumber = "+2348123456789"; // Replace with your WhatsApp number
+    const phoneNumber = "+2347049452585";
     const message = "Hello! I'm interested in your services.";
     const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
   const handleCallClick = () => {
-    // Replace with your actual phone number
-    const phoneNumber = "+2348123456789"; // Replace with your phone number
+    const phoneNumber = "+2347049452585";
     window.open(`tel:${phoneNumber}`, '_self');
   };
 

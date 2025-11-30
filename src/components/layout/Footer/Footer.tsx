@@ -30,7 +30,16 @@ export default function Footer() {
             </div>
           </Link>
           <p className={styles.contactPrompt}>Questions? Comments? Concerns?</p>
-          <Button variant="white" size="md">
+          <Button
+            variant="white"
+            size="md"
+            onClick={() => {
+              const phoneNumber = "+2347049452585";
+              const message = "Hello! I'm interested in your services.";
+              const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
+              window.open(whatsappUrl, '_blank');
+            }}
+          >
             Chat with us on WhatsApp
           </Button>
         </div>

@@ -72,7 +72,7 @@ const jsonLd = {
   logo: "https://metromellow.com/images/brand/brand-logo/solid-bg/green-bg.png",
   image:
     "https://metromellow.com/images/brand/brand-logo/solid-bg/green-bg.png",
-  telephone: "+2349068249871", // Replace with actual phone
+  telephone: "+2347049452585",
   email: "team@metromellow.com", // Replace with actual email
   address: {
     "@type": "PostalAddress",

@@ -295,7 +295,8 @@ export default function PrivacyNoticePage() {
                   <strong>Privacy Email:</strong> privacy@metromellow.com
                 </p>
                 <p>
-                  <strong>Phone:</strong> +234 [Insert number]
+                  <strong>Phone:</strong>{" "}
+                  <a href="tel:+2347049452585">+2347049452585</a>
                 </p>
                 <p>
                   <strong>General Inquiries:</strong>{" "}
