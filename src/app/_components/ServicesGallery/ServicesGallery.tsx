@@ -55,9 +55,9 @@ const serviceProfessionals = [
     position: 'bottom-center'
   },
   {
-    id: 'pest-control-cover',
-    image: '/images/pest-control/p1.jpeg',
-    role: 'Pest Control',
+    id: 'home-hero',
+    image: '/images/home/hero.jpg',
+    role: 'Home Hero',
     bgColor: 'primary',
     position: 'bottom-right'
   }
