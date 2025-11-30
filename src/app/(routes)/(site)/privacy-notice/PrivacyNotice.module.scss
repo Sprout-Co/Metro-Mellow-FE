@@ -320,6 +320,43 @@
       line-height: 1.4;
     }
   }
+
+  &__list {
+    list-style-type: disc;
+    margin: spacing("md") 0 spacing("md") spacing("xl");
+    padding-left: spacing("md");
+
+    @include breakpoint-down("md") {
+      margin: spacing("sm") 0 spacing("sm") spacing("lg");
+      padding-left: spacing("sm");
+    }
+
+    @include breakpoint-down("sm") {
+      margin: spacing("xs") 0 spacing("xs") spacing("md");
+      padding-left: spacing("xs");
+    }
+  }
+
+  &__listItem {
+    @include font-size("small");
+    color: color("neutral", "darkest");
+    line-height: 1.6;
+    margin-bottom: spacing("xs");
+
+    @include breakpoint-down("md") {
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+
+    @include breakpoint-down("sm") {
+      font-size: 0.7rem;
+      line-height: 1.4;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 
 // Info Banner

@@ -16,36 +16,39 @@
     {
       "id": "information-collected",
       "title": "Information We Collect",
-      "content": [
-        "Personal Information: When you register for an account, we collect information including but not limited to: full name, email address, phone number, residential address, date of birth, and government-issued identification documents for verification purposes.",
-        "Payment Information: We collect payment card details, bank account information, and transaction history necessary to process payments for our services.",
-        "Service Usage Data: We collect information about the services you book, service preferences, scheduling information, and communication with our personnel.",
-        "Technical Data: We automatically collect device information, IP addresses, browser type, operating system, and app usage analytics.",
-        "Location Data: With your permission, we collect precise location data to facilitate service delivery and improve user experience."
+      "content": [],
+      "listItems": [
+        "**Personal Information:** When you register for an account, we collect information including but not limited to: full name, email address, phone number, residential address, date of birth, and government-issued identification documents for verification purposes.",
+        "**Payment Information:** We collect payment card details, bank account information, and transaction history necessary to process payments for our services.",
+        "**Service Usage Data:** We collect information about the services you book, service preferences, scheduling information, and communication with our personnel.",
+        "**Technical Data:** We automatically collect device information, IP addresses, browser type, operating system, and app usage analytics.",
+        "**Location Data:** With your permission, we collect precise location data to facilitate service delivery and improve user experience."
       ]
     },
     {
       "id": "how-we-use",
       "title": "How We Use Your Information",
-      "content": [
-        "Service Delivery: To provide, maintain, and improve our services, process bookings, and facilitate communication between you and our service personnel.",
-        "Account Management: To create and manage your account, verify your identity, and maintain account security.",
-        "Payment Processing: To process payments, prevent fraud, and maintain financial records.",
-        "Communication: To send service updates, booking confirmations, promotional offers (with your consent), and important notices about our services.",
-        "Platform Improvement: To analyze usage patterns, conduct research, develop new features, and enhance user experience.",
-        "Legal Compliance: To comply with legal obligations, enforce our terms and conditions, and protect our rights and the rights of our users."
+      "content": [],
+      "listItems": [
+        "**Service Delivery:** To provide, maintain, and improve our services, process bookings, and facilitate communication between you and our service personnel.",
+        "**Account Management:** To create and manage your account, verify your identity, and maintain account security.",
+        "**Payment Processing:** To process payments, prevent fraud, and maintain financial records.",
+        "**Communication:** To send service updates, booking confirmations, promotional offers (with your consent), and important notices about our services.",
+        "**Platform Improvement:** To analyze usage patterns, conduct research, develop new features, and enhance user experience.",
+        "**Legal Compliance:** To comply with legal obligations, enforce our terms and conditions, and protect our rights and the rights of our users."
       ]
     },
     {
       "id": "data-sharing",
       "title": "Data Sharing and Disclosure",
-      "content": [
-        "Service Personnel: We share necessary information with our personnel assigned to fulfill your service requests.",
-        "Payment Processors: We share payment information with third-party payment service providers to process transactions securely.",
-        "Service Providers: We may share data with trusted third-party service providers who assist us in operating our platform, conducting business, or servicing you.",
-        "Legal Requirements: We may disclose your information when required by law, court order, or government request, or to protect our rights, property, or safety.",
-        "Business Transfers: In the event of a merger, acquisition, or sale of assets, your information may be transferred to the acquiring entity.",
-        "With Your Consent: We may share your information with third parties when you have given us explicit consent to do so."
+      "content": [],
+      "listItems": [
+        "**Service Personnel:** We share necessary information with our personnel assigned to fulfill your service requests.",
+        "**Payment Processors:** We share payment information with third-party payment service providers to process transactions securely.",
+        "**Service Providers:** We may share data with trusted third-party service providers who assist us in operating our platform, conducting business, or servicing you.",
+        "**Legal Requirements:** We may disclose your information when required by law, court order, or government request, or to protect our rights, property, or safety.",
+        "**Business Transfers:** In the event of a merger, acquisition, or sale of assets, your information may be transferred to the acquiring entity.",
+        "**With Your Consent:** We may share your information with third parties when you have given us explicit consent to do so."
       ]
     },
     {
@@ -71,24 +74,32 @@
     {
       "id": "your-rights",
       "title": "Your Rights and Choices",
-      "content": [
-        "Access and Update: You have the right to access, review, and update your personal information through your account settings.",
-        "Data Portability: You can request a copy of your personal data in a structured, commonly used format.",
-        "Deletion: You can request deletion of your account and personal information, subject to legal retention requirements.",
-        "Consent Withdrawal: You can withdraw consent for marketing communications, location tracking, and other optional data processing activities.",
-        "Objection: You have the right to object to certain types of data processing, including automated decision-making.",
-        "Complaint: You have the right to lodge a complaint with the Nigeria Data Protection Commission if you believe your privacy rights have been violated."
+      "content": [],
+      "listItems": [
+        "**Access and Update:** You have the right to access, review, and update your personal information through your account settings.",
+        "**Data Portability:** You can request a copy of your personal data in a structured, commonly used format.",
+        "**Deletion:** You can request deletion of your account and personal information, subject to legal retention requirements.",
+        "**Consent Withdrawal:** You can withdraw consent for marketing communications, location tracking, and other optional data processing activities.",
+        "**Objection:** You have the right to object to certain types of data processing, including automated decision-making.",
+        "**Complaint:** You have the right to lodge a complaint with the Nigeria Data Protection Commission if you believe your privacy rights have been violated."
       ]
     },
     {
       "id": "cookies",
       "title": "Cookie Policy",
       "content": [
-        "What Are Cookies: Cookies are small text files stored on your device when you visit our website or use our app. They help us recognize your device, remember your preferences, and improve your experience.",
-        "Types of Cookies We Use: Essential Cookies (necessary for platform functionality), Performance Cookies (help us understand how users interact with our platform), Functional Cookies (remember your preferences and settings), Targeting/Advertising Cookies (used to deliver relevant advertisements).",
-        "Third-Party Cookies: We may allow trusted third parties to place cookies on your device for analytics, advertising, and other purposes.",
-        "Managing Cookies: You can control and manage cookies through your browser settings. However, disabling certain cookies may affect platform functionality and your user experience.",
-        "Mobile App Tracking: Our mobile app may use similar tracking technologies. You can manage these through your device settings."
+        "**What Are Cookies:** Cookies are small text files stored on your device when you visit our website or use our app. They help us recognize your device, remember your preferences, and improve your experience."
+      ],
+      "listItems": [
+        "**Essential Cookies:** Necessary for platform functionality.",
+        "**Performance Cookies:** Help us understand how users interact with our platform.",
+        "**Functional Cookies:** Remember your preferences and settings.",
+        "**Targeting/Advertising Cookies:** Used to deliver relevant advertisements."
+      ],
+      "contentAfterList": [
+        "**Third-Party Cookies:** We may allow trusted third parties to place cookies on your device for analytics, advertising, and other purposes.",
+        "**Managing Cookies:** You can control and manage cookies through your browser settings. However, disabling certain cookies may affect platform functionality and your user experience.",
+        "**Mobile App Tracking:** Our mobile app may use similar tracking technologies. You can manage these through your device settings."
       ]
     },
     {
@@ -123,13 +134,14 @@
       "id": "contact",
       "title": "Contact Us",
       "content": [
-        "If you have questions, concerns, or requests regarding this Privacy & Cookie Policy or our data practices, please contact us:",
-        "Email: privacy@metromellow.com",
-        "Phone: +234 [Insert number]",
-        "Address: [Insert physical address]",
-        "Data Protection Officer: [Insert DPO contact details]"
+        "If you have questions, concerns, or requests regarding this Privacy & Cookie Policy or our data practices, please contact us:"
+      ],
+      "listItems": [
+        "**Email:** privacy@metromellow.com",
+        "**Phone:** +234 [Insert number]",
+        "**Address:** [Insert physical address]",
+        "**Data Protection Officer:** [Insert DPO contact details]"
       ]
     }
   ]
 }
-

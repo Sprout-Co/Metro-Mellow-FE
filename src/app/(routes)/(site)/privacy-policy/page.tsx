@@ -5,6 +5,18 @@ import StructuredData from "@/components/common/SEO/StructuredData";
 import { createBreadcrumbSchema } from "@/utils/seoHelpers";
 import Link from "next/link";
 
+// Helper function to render text with bold formatting
+const renderText = (text: string) => {
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      const boldText = part.slice(2, -2);
+      return <strong key={index}>{boldText}</strong>;
+    }
+    return <span key={index}>{part}</span>;
+  });
+};
+
 export const metadata: Metadata = {
   title: "Privacy & Cookie Policy | Metromellow Data Protection",
   description:
@@ -124,11 +136,26 @@ export default function PrivacyPolicyPage() {
                 <div key={section.id} className={styles.section}>
                   <h3 className={styles.section__title}>{section.title}</h3>
                   <div className={styles.section__content}>
-                    {section.content.map((paragraph, index) => (
+                    {section.content && section.content.map((paragraph, index) => (
                       <p key={index} className={styles.section__paragraph}>
-                        {paragraph}
+                        {renderText(paragraph)}
                       </p>
                     ))}
+                    {section.listItems && (
+                      <ul className={styles.section__list}>
+                        {section.listItems.map((item, index) => (
+                          <li key={index} className={styles.section__listItem}>
+                            {renderText(item)}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {section.contentAfterList &&
+                      section.contentAfterList.map((paragraph, index) => (
+                        <p key={index} className={styles.section__paragraph}>
+                          {renderText(paragraph)}
+                        </p>
+                      ))}
                   </div>
                 </div>
               ))}
