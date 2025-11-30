@@ -64,6 +64,7 @@
   &__title {
     @include heading-3;
     color: color("neutral", "white");
+    margin-top: spacing("xl");
     margin-bottom: spacing("md");
     line-height: 1.2;
     text-align: center;
@@ -72,12 +73,14 @@
 
     @include breakpoint-down("lg") {
       @include heading-4;
+      margin-top: spacing("lg");
     }
 
     @include breakpoint-down("md") {
       @include heading-5;
       text-align: center;
       width: 100%;
+      margin-top: spacing("md");
     }
 
     @include breakpoint-down("sm") {
@@ -87,6 +90,7 @@
       width: 100%;
       margin-left: auto;
       margin-right: auto;
+      margin-top: spacing("sm");
     }
   }
 
@@ -309,17 +313,17 @@
   }
 
   &__subtitle {
-    @include heading-6;
+    @include font-size("small");
+    @include font-weight("semibold");
     color: color("primary", "dark");
     margin-bottom: spacing("sm");
 
     @include breakpoint-down("md") {
-      font-size: 0.9rem;
-      @include font-weight("semibold");
+      font-size: 0.8rem;
     }
 
     @include breakpoint-down("sm") {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
     }
   }
 
@@ -672,6 +676,43 @@
           text-decoration: underline;
         }
       }
+    }
+  }
+}
+
+// Last Updated Section
+.lastUpdated {
+  margin-top: spacing("3xl");
+  padding-top: spacing("xl");
+  border-top: 1px solid color("neutral", "lighter");
+  text-align: center;
+
+  @include breakpoint-down("md") {
+    margin-top: spacing("2xl");
+    padding-top: spacing("lg");
+  }
+
+  @include breakpoint-down("sm") {
+    margin-top: spacing("xl");
+    padding-top: spacing("md");
+  }
+
+  &__text {
+    @include font-size("small");
+    color: color("neutral", "darker");
+    opacity: 0.8;
+
+    @include breakpoint-down("md") {
+      font-size: 0.75rem;
+    }
+
+    @include breakpoint-down("sm") {
+      font-size: 0.7rem;
+    }
+
+    strong {
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
     }
   }
 }

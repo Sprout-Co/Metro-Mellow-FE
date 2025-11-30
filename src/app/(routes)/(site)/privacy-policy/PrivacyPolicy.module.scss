@@ -68,11 +68,16 @@
     backdrop-filter: blur(10px);
     padding: spacing("xs") spacing("md");
     border-radius: border-radius("full");
-    margin: 0 auto spacing("md") auto;
+    margin: spacing("lg") auto spacing("md") auto;
     width: fit-content;
 
     @include breakpoint-down("md") {
       padding: spacing("xs") spacing("sm");
+      margin-top: spacing("md");
+    }
+
+    @include breakpoint-down("sm") {
+      margin-top: spacing("sm");
     }
   }
 
@@ -92,6 +97,7 @@
   &__title {
     @include heading-3;
     color: color("neutral", "white");
+    margin-top: spacing("xl");
     margin-bottom: spacing("md");
     line-height: 1.2;
     text-align: center;
@@ -100,12 +106,14 @@
 
     @include breakpoint-down("lg") {
       @include heading-4;
+      margin-top: spacing("lg");
     }
 
     @include breakpoint-down("md") {
       @include heading-5;
       text-align: center;
       width: 100%;
+      margin-top: spacing("md");
     }
 
     @include breakpoint-down("sm") {
@@ -115,6 +123,7 @@
       width: 100%;
       margin-left: auto;
       margin-right: auto;
+      margin-top: spacing("sm");
     }
   }
 

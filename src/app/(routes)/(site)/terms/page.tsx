@@ -67,14 +67,6 @@ export default function TermsOfServicePage() {
                 <span className={styles.hero__titleAccent}>Metromellow</span>{" "}
                 Terms and Conditions of Service
               </h1>
-              <p className={styles.hero__meta}>
-                <span className={styles.hero__label}>Effective from:</span>{" "}
-                {termsData.effectiveDate}
-              </p>
-              <p className={styles.hero__meta}>
-                <span className={styles.hero__label}>Version:</span>{" "}
-                {termsData.version}
-              </p>
             </div>
           </div>
         </section>
@@ -267,6 +259,13 @@ export default function TermsOfServicePage() {
                   <Link href="/contact">Visit our Contact Page</Link>
                 </p>
               </div>
+            </div>
+
+            {/* Last Updated */}
+            <div className={styles.lastUpdated}>
+              <p className={styles.lastUpdated__text}>
+                <strong>Last updated:</strong> 31st October 2025
+              </p>
             </div>
           </div>
         </section>

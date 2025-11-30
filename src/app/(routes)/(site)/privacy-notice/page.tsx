@@ -78,14 +78,6 @@ export default function PrivacyNoticePage() {
                 visit our website. We value your privacy and are transparent
                 about our data practices.
               </p>
-              <p className={styles.hero__meta}>
-                <span className={styles.hero__label}>Effective from:</span>{" "}
-                {privacyNoticeData.effectiveDate}
-              </p>
-              <p className={styles.hero__meta}>
-                <span className={styles.hero__label}>Version:</span>{" "}
-                {privacyNoticeData.version}
-              </p>
             </div>
           </div>
         </section>

@@ -78,14 +78,6 @@ export default function PrivacyPolicyPage() {
                 security of your personal information. This policy explains how
                 we collect, use, and safeguard your data.
               </p>
-              <p className={styles.hero__meta}>
-                <span className={styles.hero__label}>Effective from:</span>{" "}
-                {privacyData.effectiveDate}
-              </p>
-              <p className={styles.hero__meta}>
-                <span className={styles.hero__label}>Version:</span>{" "}
-                {privacyData.version}
-              </p>
             </div>
           </div>
         </section>
