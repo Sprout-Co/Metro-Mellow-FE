@@ -54,7 +54,7 @@ describe('ServicesGallery Component', () => {
       const expectedImages = [
         '/images/food/f1.png',
         '/images/food/f10.jpeg',
-        '/images/cleaning/c1.jpeg',
+        '/images/cleaning/c1.jpg',
         '/images/food/f3.jpeg',
         '/images/errand/e1.jpeg',
         '/images/cleaning/c3.jpeg',

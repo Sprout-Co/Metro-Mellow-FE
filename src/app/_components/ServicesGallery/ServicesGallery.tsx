@@ -21,7 +21,7 @@ const serviceProfessionals = [
   },
   {
     id: 'cleaner1',
-    image: '/images/cleaning/c1.jpeg',
+    image: '/images/cleaning/c1.jpg',
     role: 'Cleaner',
     bgColor: 'secondary',
     position: 'middle-left'

@@ -151,7 +151,7 @@ describe('MagicHandsSection Component', () => {
       
       // Check that images have the expected sources
       const images = screen.getAllByRole('img')
-      expect(images[0]).toHaveAttribute('src', '/images/cleaning/c1.jpeg') // Main image
+      expect(images[0]).toHaveAttribute('src', '/images/cleaning/c1.jpg') // Main image
       expect(images[1]).toHaveAttribute('src', '/images/cleaning/c2.jpeg') // Grid image 1
       expect(images[2]).toHaveAttribute('src', '/images/cleaning/c3.jpeg') // Grid image 2
       expect(images[3]).toHaveAttribute('src', '/images/cleaning/c4.jpeg') // Grid image 3

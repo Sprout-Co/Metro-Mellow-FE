@@ -20,7 +20,7 @@ const MagicHandsSection: React.FC = () => {
           <div className={styles["magic-hands__images"]}>
             <div className={styles["magic-hands__main-image"]}>
               <Image
-                src="/images/cleaning/c1.jpeg"
+                src="/images/cleaning/c1.jpg"
                 alt="Metromellow team member"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
