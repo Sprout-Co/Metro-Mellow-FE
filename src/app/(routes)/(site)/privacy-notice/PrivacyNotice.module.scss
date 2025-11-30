@@ -91,8 +91,12 @@
 
   &__title {
     @include heading-3;
+    color: color("neutral", "white");
     margin-bottom: spacing("md");
-    letter-spacing: letter-spacing("tight");
+    line-height: 1.2;
+    text-align: center;
+    width: 100%;
+    font-weight: map-get($font-weights, "bold");
 
     @include breakpoint-down("lg") {
       @include heading-4;
@@ -100,11 +104,22 @@
 
     @include breakpoint-down("md") {
       @include heading-5;
+      text-align: center;
+      width: 100%;
     }
 
     @include breakpoint-down("sm") {
       @include heading-6;
+      line-height: 1.3;
+      text-align: center;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
     }
+  }
+
+  &__titleAccent {
+    color: color("accent", "base");
   }
 
   &__description {
@@ -121,11 +136,19 @@
 
   &__meta {
     @include font-size("small");
+    color: color("neutral", "light");
     opacity: 0.9;
     margin-bottom: spacing("xs");
+    line-height: line-height("normal");
 
     @include breakpoint-down("md") {
+      font-size: 0.75rem;
+      text-align: center;
+    }
+
+    @include breakpoint-down("sm") {
       font-size: 0.7rem;
+      line-height: 1.4;
     }
 
     &:last-child {

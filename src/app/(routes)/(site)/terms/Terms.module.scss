@@ -63,8 +63,12 @@
 
   &__title {
     @include heading-3;
+    color: color("neutral", "white");
     margin-bottom: spacing("md");
-    letter-spacing: letter-spacing("tight");
+    line-height: 1.2;
+    text-align: center;
+    width: 100%;
+    font-weight: map-get($font-weights, "bold");
 
     @include breakpoint-down("lg") {
       @include heading-4;
@@ -72,20 +76,39 @@
 
     @include breakpoint-down("md") {
       @include heading-5;
+      text-align: center;
+      width: 100%;
     }
 
     @include breakpoint-down("sm") {
       @include heading-6;
+      line-height: 1.3;
+      text-align: center;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
     }
+  }
+
+  &__titleAccent {
+    color: color("accent", "base");
   }
 
   &__meta {
     @include font-size("small");
+    color: color("neutral", "light");
     opacity: 0.9;
     margin-bottom: spacing("xs");
+    line-height: line-height("normal");
 
     @include breakpoint-down("md") {
+      font-size: 0.75rem;
+      text-align: center;
+    }
+
+    @include breakpoint-down("sm") {
       font-size: 0.7rem;
+      line-height: 1.4;
     }
 
     &:last-child {
@@ -114,12 +137,12 @@
 
   &__links {
     @include flex(row, wrap, center, center);
-    gap: spacing("md");
-    padding: spacing("md") 0;
+    gap: spacing("sm");
+    padding: spacing("sm") 0;
 
     @include breakpoint-down("md") {
-      gap: spacing("sm");
-      padding: spacing("sm") 0;
+      gap: spacing("xs");
+      padding: spacing("xs") 0;
     }
 
     @include breakpoint-down("sm") {
@@ -130,23 +153,23 @@
   }
 
   &__link {
-    @include body-1;
+    @include font-size("small");
     @include font-weight("medium");
     color: color("neutral", "darkest");
-    padding: spacing("sm") spacing("lg");
+    padding: spacing("xs") spacing("md");
     border-radius: border-radius("md");
     text-decoration: none;
     transition: all 0.3s ease;
     border: 2px solid transparent;
 
     @include breakpoint-down("lg") {
-      @include body-2;
-      padding: spacing("sm") spacing("md");
+      font-size: 0.75rem;
+      padding: spacing("xs") spacing("sm");
     }
 
     @include breakpoint-down("sm") {
       text-align: center;
-      padding: spacing("xs") spacing("md");
+      padding: spacing("xs") spacing("sm");
     }
 
     &:hover {
@@ -318,6 +341,110 @@
     @include breakpoint-down("sm") {
       font-size: 0.7rem;
       line-height: 1.4;
+    }
+  }
+
+  &__list {
+    list-style-type: disc;
+    margin: spacing("md") 0 spacing("md") spacing("xl");
+    padding-left: spacing("md");
+
+    @include breakpoint-down("md") {
+      margin: spacing("sm") 0 spacing("sm") spacing("lg");
+      padding-left: spacing("sm");
+    }
+
+    @include breakpoint-down("sm") {
+      margin: spacing("xs") 0 spacing("xs") spacing("md");
+      padding-left: spacing("xs");
+    }
+  }
+
+  &__listItem {
+    @include font-size("small");
+    color: color("neutral", "darkest");
+    line-height: 1.6;
+    margin-bottom: spacing("xs");
+
+    @include breakpoint-down("md") {
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+
+    @include breakpoint-down("sm") {
+      font-size: 0.7rem;
+      line-height: 1.4;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__tableWrapper {
+    margin: spacing("lg") 0;
+    overflow-x: auto;
+
+    @include breakpoint-down("md") {
+      margin: spacing("md") 0;
+    }
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: color("neutral", "white");
+    border-radius: border-radius("sm");
+    overflow: hidden;
+    box-shadow: box-shadow("sm");
+  }
+
+  &__tableHeader {
+    @include font-size("small");
+    @include font-weight("bold");
+    color: color("neutral", "white");
+    background-color: color("primary", "base");
+    padding: spacing("sm") spacing("md");
+    text-align: left;
+    border-bottom: 2px solid color("primary", "dark");
+
+    @include breakpoint-down("md") {
+      font-size: 0.75rem;
+      padding: spacing("xs") spacing("sm");
+    }
+
+    @include breakpoint-down("sm") {
+      font-size: 0.7rem;
+      padding: spacing("xs");
+    }
+  }
+
+  &__tableRow {
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    &:nth-child(even) {
+      background-color: color("neutral", "lightest");
+    }
+
+    &:hover {
+      background-color: color("primary", "lighter");
+    }
+  }
+
+  &__tableCell {
+    @include font-size("small");
+    color: color("neutral", "darkest");
+    padding: spacing("sm") spacing("md");
+    line-height: 1.5;
+
+    @include breakpoint-down("md") {
+      font-size: 0.75rem;
+      padding: spacing("xs") spacing("sm");
+    }
+
+    @include breakpoint-down("sm") {
+      font-size: 0.7rem;
+      padding: spacing("xs");
     }
   }
 }

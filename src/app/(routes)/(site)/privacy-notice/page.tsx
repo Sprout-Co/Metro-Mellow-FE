@@ -57,7 +57,10 @@ export default function PrivacyNoticePage() {
                   {privacyNoticeData.subtitle}
                 </span>
               </div>
-              <h1 className={styles.hero__title}>{privacyNoticeData.title}</h1>
+              <h1 className={styles.hero__title}>
+                <span className={styles.hero__titleAccent}>Metromellow</span>{" "}
+                Privacy Notice
+              </h1>
               <p className={styles.hero__description}>
                 This notice explains how we collect and use information when you
                 visit our website. We value your privacy and are transparent

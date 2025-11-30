@@ -5,6 +5,18 @@ import StructuredData from "@/components/common/SEO/StructuredData";
 import { createBreadcrumbSchema } from "@/utils/seoHelpers";
 import Link from "next/link";
 
+// Helper function to render text with bold formatting
+const renderText = (text: string) => {
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      const boldText = part.slice(2, -2);
+      return <strong key={index}>{boldText}</strong>;
+    }
+    return <span key={index}>{part}</span>;
+  });
+};
+
 export const metadata: Metadata = {
   title: "Terms of Service | Metromellow Legal Terms & Conditions",
   description:
@@ -51,7 +63,10 @@ export default function TermsOfServicePage() {
         <section className={styles.hero}>
           <div className={styles.hero__container}>
             <div className={styles.hero__content}>
-              <h1 className={styles.hero__title}>{termsData.title}</h1>
+              <h1 className={styles.hero__title}>
+                <span className={styles.hero__titleAccent}>Metromellow</span>{" "}
+                Terms and Conditions of Service
+              </h1>
               <p className={styles.hero__meta}>
                 <span className={styles.hero__label}>Effective from:</span>{" "}
                 {termsData.effectiveDate}
@@ -99,11 +114,67 @@ export default function TermsOfServicePage() {
                 <div key={section.id} className={styles.section}>
                   <h3 className={styles.section__title}>{section.title}</h3>
                   <div className={styles.section__content}>
-                    {section.content.map((paragraph, index) => (
+                    {section.content && section.content.map((paragraph, index) => (
                       <p key={index} className={styles.section__paragraph}>
-                        {paragraph}
+                        {renderText(paragraph)}
                       </p>
                     ))}
+                    {section.listItems && (
+                      <ul className={styles.section__list}>
+                        {section.listItems.map((item, index) => (
+                          <li key={index} className={styles.section__listItem}>
+                            {renderText(item)}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {section.contentAfterList &&
+                      section.contentAfterList.map((paragraph, index) => (
+                        <p key={index} className={styles.section__paragraph}>
+                          {renderText(paragraph)}
+                        </p>
+                      ))}
+                    {section.listItems2 && (
+                      <ul className={styles.section__list}>
+                        {section.listItems2.map((item, index) => (
+                          <li key={index} className={styles.section__listItem}>
+                            {renderText(item)}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {section.table && (
+                      <div className={styles.section__tableWrapper}>
+                        <table className={styles.section__table}>
+                          <thead>
+                            <tr>
+                              {section.table.headers.map((header, index) => (
+                                <th key={index} className={styles.section__tableHeader}>
+                                  {renderText(header)}
+                                </th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {section.table.rows.map((row, rowIndex) => (
+                              <tr key={rowIndex} className={styles.section__tableRow}>
+                                {row.map((cell, cellIndex) => (
+                                  <td key={cellIndex} className={styles.section__tableCell}>
+                                    {cell ? renderText(cell) : "\u00A0"}
+                                  </td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                    {section.contentAfterTable &&
+                      section.contentAfterTable.map((paragraph, index) => (
+                        <p key={index} className={styles.section__paragraph}>
+                          {renderText(paragraph)}
+                        </p>
+                      ))}
                   </div>
                 </div>
               ))}

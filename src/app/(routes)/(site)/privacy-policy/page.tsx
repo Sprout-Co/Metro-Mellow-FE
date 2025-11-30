@@ -57,7 +57,10 @@ export default function PrivacyPolicyPage() {
                   {privacyData.subtitle}
                 </span>
               </div>
-              <h1 className={styles.hero__title}>{privacyData.title}</h1>
+              <h1 className={styles.hero__title}>
+                <span className={styles.hero__titleAccent}>Metromellow</span>{" "}
+                Privacy & Cookie Policy
+              </h1>
               <p className={styles.hero__description}>
                 We are committed to protecting your privacy and ensuring the
                 security of your personal information. This policy explains how
