@@ -84,7 +84,12 @@ export default function Footer() {
             <h3 className={styles.colTitle}>Community</h3>
             <ul className={styles.socialList}>
               <li>
-                <a href="https://x.com/metromellowhq" aria-label="Twitter">
+                <a
+                  href="https://x.com/metromellowhq"
+                  aria-label="Twitter"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <svg
                     width="20"
                     height="20"
@@ -107,6 +112,8 @@ export default function Footer() {
                 <a
                   href="https://www.facebook.com/metromellowhq"
                   aria-label="Facebook"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <svg
                     width="20"
@@ -130,6 +137,8 @@ export default function Footer() {
                 <a
                   href="https://www.youtube.com/@metromellowhq"
                   aria-label="Youtube"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <svg
                     width="20"
@@ -156,6 +165,8 @@ export default function Footer() {
                 <a
                   href="https://www.instagram.com/metromellowhq/"
                   aria-label="Instagram"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <Instagram /> Instagram
                 </a>
@@ -164,6 +175,8 @@ export default function Footer() {
                 <a
                   href="https://www.linkedin.com/company/metromellow-ltd/"
                   aria-label="Linkedin"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <svg
                     width="20"
