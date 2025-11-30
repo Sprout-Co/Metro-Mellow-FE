@@ -245,7 +245,7 @@ export default function PrivacyPolicyPage() {
               </p>
               <div className={styles.contact__info}>
                 <p>
-                  <strong>Email:</strong> privacy@metromellow.com
+                  <strong>Email:</strong> team@metromellow.com
                 </p>
                 <p>
                   <strong>Phone:</strong>{" "}

@@ -256,7 +256,7 @@ export default function TermsOfServicePage() {
               </p>
               <div className={styles.contact__info}>
                 <p>
-                  <strong>Email:</strong> legal@metromellow.com
+                  <strong>Email:</strong> team@metromellow.com
                 </p>
                 <p>
                   <strong>Phone:</strong>{" "}

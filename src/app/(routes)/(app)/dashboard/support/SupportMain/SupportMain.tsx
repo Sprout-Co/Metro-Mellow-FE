@@ -415,10 +415,10 @@ const SupportMain: React.FC = () => {
             <h4>Email Support</h4>
             <p>We'll respond within 24 hours</p>
             <a
-              href="mailto:support@metromellow.com"
+              href="mailto:team@metromellow.com"
               className={styles.support__contactCardLink}
             >
-              support@metromellow.com
+              team@metromellow.com
             </a>
           </div>
 

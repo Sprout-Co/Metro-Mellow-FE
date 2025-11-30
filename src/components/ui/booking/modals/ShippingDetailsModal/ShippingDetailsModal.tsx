@@ -25,7 +25,7 @@ export interface ShippingDetails {
 const savedAddressData = {
   address: "234, Alvan Ikoku Street, Lagos Island, Lagos.",
   phone: "+2349087653423",
-  email: "info@metromellow.com",
+  email: "team@metromellow.com",
 };
 
 const ShippingDetailsModal: React.FC<ShippingDetailsModalProps> = ({

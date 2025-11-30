@@ -46,7 +46,7 @@ const ContactInfo: FC = () => {
                 <Mail className={styles.contactInfo__icon} />
               </div>
               <p className={styles.contactInfo__text}>
-                info@metromellow.ng
+                team@metromellow.com
               </p>
             </div>
           </div>

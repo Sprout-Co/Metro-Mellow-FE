@@ -292,7 +292,7 @@ export default function PrivacyNoticePage() {
               </p>
               <div className={styles.contact__info}>
                 <p>
-                  <strong>Privacy Email:</strong> privacy@metromellow.com
+                  <strong>Privacy Email:</strong> team@metromellow.com
                 </p>
                 <p>
                   <strong>Phone:</strong>{" "}
