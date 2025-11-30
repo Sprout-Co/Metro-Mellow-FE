@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import axios from "axios";
+import { REST_API_BASE_URL } from "@/constants/config";
 
 interface BackendResponseData {
   authorizationUrl: string;
@@ -57,7 +58,7 @@ export const useSubscriptionPayment = (): UseSubscriptionPaymentReturn => {
 
         // Verify payment with your backend
         const verifyResponse = await axios.get(
-          `http://localhost:4000/api/paystack/verify-payment/${reference}`
+          `${REST_API_BASE_URL}/api/paystack/verify-payment/${reference}`
         );
 
         const paymentStatus = verifyResponse.data.data.status;
@@ -130,7 +131,7 @@ export const useSubscriptionPayment = (): UseSubscriptionPaymentReturn => {
         const clientSessionId = crypto.randomUUID();
 
         const response = await axios.post(
-          "http://localhost:4000/api/paystack/initialize-subscription-payment",
+          `${REST_API_BASE_URL}/api/paystack/initialize-subscription-payment`,
           {
             email,
             billingId,

@@ -1,5 +1,8 @@
 export const API_URL = "http://localhost:4000/graphql";
 
+export const REST_API_BASE_URL =
+  process.env.NEXT_PUBLIC_REST_API_URL || "http://localhost:4000";
+
 export const ROUTES = {
   HOME: "/",
   LOGIN: "/login",

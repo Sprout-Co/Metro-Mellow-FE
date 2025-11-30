@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import axios from "axios";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
+import { REST_API_BASE_URL } from "@/constants/config";
 
 interface BackendResponseData {
   authorizationUrl: string;
@@ -56,7 +57,7 @@ export const usePayment = (): UsePaymentReturn => {
 
         // Verify payment with your backend
         const verifyResponse = await axios.get(
-          `http://localhost:4000/api/paystack/verify-payment/${reference}`
+          `${REST_API_BASE_URL}/api/paystack/verify-payment/${reference}`
         );
 
         const paymentStatus = verifyResponse.data.data.status;
@@ -131,7 +132,7 @@ export const usePayment = (): UsePaymentReturn => {
         const clientSessionId = crypto.randomUUID();
 
         const response = await axios.post(
-          "http://localhost:4000/api/paystack/initialize-payment",
+          `${REST_API_BASE_URL}/api/paystack/initialize-payment`,
           {
             email,
             amount: amountInKobo,

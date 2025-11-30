@@ -6,6 +6,7 @@ import axios from "axios";
 import { PaymentStatus } from "@/graphql/api";
 import OrderSuccessModal from "@/components/ui/booking/modals/OrderSuccessModal/OrderSuccessModal";
 import { Routes } from "@/constants/routes";
+import { REST_API_BASE_URL } from "@/constants/config";
 
 // type PaymentStatus = "verifying" | "success" | "failed" | "error";
 
@@ -53,7 +54,7 @@ export default function PaymentCallbackPage() {
 
           // Verify payment with your backend
           const verifyResponse = await axios.get(
-            `http://localhost:4000/api/paystack/verify-payment/${paymentReference}`
+            `${REST_API_BASE_URL}/api/paystack/verify-payment/${paymentReference}`
           );
           console.log("verifyResponse", verifyResponse);
           const paymentStatus = verifyResponse.data.data.status;
