@@ -14,19 +14,19 @@ const serviceItems = [
     title: "Food",
     href: "/services/food",
     description: "Delicious home-cooked meals",
-    image: "/images/food/jollof-rice.png",
+    image: "/images/food/food-hero.jpg",
   },
   {
     title: "Cleaning",
     href: "/services/cleaning",
     description: "Professional home cleaning services",
-    image: "/images/cleaning/c2.jpeg",
+    image: "/images/cleaning/cleaning1.jpg",
   },
   {
     title: "Laundry",
     href: "/services/laundry",
     description: "Professional laundry and dry cleaning",
-    image: "/images/laundry/l3.jpeg",
+    image: "/images/home/home1.jpg",
   },
 
   {
