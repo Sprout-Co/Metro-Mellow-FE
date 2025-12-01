@@ -20,7 +20,7 @@
         "All references to 'Metromellow', the 'Company', 'us' and 'we' in this Terms of Service (this 'Agreement') shall be deemed to mean Metromellow.",
         "All references to the 'Platform' in this Agreement shall be deemed to mean the technology-driven service platform hosted by Metromellow on its website, mobile application and software platforms through which Metromellow offers a range of domestic and lifestyle services to Users.",
         "All references to the 'User', 'Users', 'Clients', or 'You' in this Agreement shall be deemed to mean any individual, corporate entity, or organisation that accesses, registers on, or uses the Platform to request or receive services provided by Metromellow.",
-        "All references to 'Services' in this Agreement shall mean any of the on-demand domestic and lifestyle services offered by Metromellow, including professional cooking services, deep cleaning, laundry & care, and pest control services amongst others.",
+        "All references to 'Services' in this Agreement shall mean any of the on-demand domestic and lifestyle services offered by Metromellow, including professional cooking services, cleaning, laundry & care, and pest control services amongst others.",
         "All references to 'Personnels' shall mean any individual engaged by Metromellow on a full-time, part-time, or contractual basis to deliver or support the Services to Users under the supervision and management of Metromellow.",
         "All references to the 'Parties' in this Agreement shall be deemed to be a collective reference to 'Metromellow' and the 'Users'.",
         "All references to 'Terms' and 'Agreement' shall mean this Terms and Conditions of Service, together with all Policies, Schedules and additional terms referenced or incorporated, as may be amended from time to time."
@@ -168,7 +168,7 @@
         "rows": [
           ["**Professional Cooking Service**", "Between 24-48 hours before delivery", "Refund of Service Fee"],
           ["", "After processing has commenced", "No Refund"],
-          ["**Deep Cleaning**", "48 hours or more before appointment", "Full Refund of Service Fee"],
+          ["**Cleaning**", "48 hours or more before appointment", "Full Refund of Service Fee"],
           ["", "Between 24-48 hours before appointment", "50% Refund"],
           ["", "Less than 24 hours before appointment", "No Refund"],
           ["**Laundry & Care**", "Before pickup time", "Refund of Service Fee"],
@@ -295,7 +295,7 @@
     },
     {
       "id": "schedule-b",
-      "title": "Schedule B: Deep Cleaning Services",
+      "title": "Schedule B: Cleaning Services",
       "sections": [
         {
           "id": "cleaning-scope",

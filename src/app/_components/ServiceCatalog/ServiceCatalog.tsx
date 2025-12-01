@@ -85,51 +85,52 @@ const ServiceCatalog: FC = () => {
   ): string => {
     console.log("serviceId", serviceId);
     console.log("imageUrl", imageUrl);
-    // switch (serviceId) {
-    //   case ServiceId.StandardCooking:
-    //     return "/images/food/jollof-rice.png";
-    //   case ServiceId.BasicCooking:
-    //     return "/images/food/jollof-rice.png";
-    //   case ServiceId.StandardCleaning:
-    //     return "/images/cleaning/cleaning-1.png";
-    //   case ServiceId.DeepCleaning:
-    //     return "/images/cleaning/cleaning-1.png";
-    //   case ServiceId.MoveInMoveOutCleaning:
-    //     return "/images/cleaning/cleaning-1.png";
-    //   case ServiceId.PostConstructionCleaning:
-    //     return "/images/cleaning/cleaning-1.png";
-    //   case ServiceId.Laundry:
-    //     return "/images/laundry/laundry-1.png";
-    //   case ServiceId.PremiumLaundry:
-    //     return "/images/laundry/laundry-1.png";
-    //   case ServiceId.DryCleaning:
-    //     return "/images/laundry/laundry-1.png";
-    //   case ServiceId.PestControlResidential:
-    //     return "/images/pest-control/pest-control-1.png";
-    //   case ServiceId.PestControlCommercial:
-    //     return "/images/pest-control/pest-control-1.png";
-    //   default:
-    //     return "/images/food/jollof-rice.png";
-    // }
+    
+    // Override specific service images with local images
+    switch (serviceId) {
+      case ServiceId.StandardCooking:
+        return "/images/home/home6.jpg";
+      case ServiceId.BasicCooking:
+        return "/images/home/home5.jpg";
+      case ServiceId.StandardCleaning:
+        return "/images/home/home2.jpg";
+      case ServiceId.DeepCleaning:
+        return "/images/home/hero.jpg";
+      case ServiceId.MoveInMoveOutCleaning:
+        return "/images/cleaning/cleaning-1.png";
+      case ServiceId.PostConstructionCleaning:
+        return "/images/cleaning/cleaning-1.png";
+      case ServiceId.Laundry:
+        return "/images/laundry/laundry-1.png";
+      case ServiceId.PremiumLaundry:
+        return "/images/laundry/laundry-1.png";
+      case ServiceId.DryCleaning:
+        return "/images/laundry/laundry-1.png";
+      case ServiceId.PestControlResidential:
+        return "/images/pest-control/pest-control-1.png";
+      case ServiceId.PestControlCommercial:
+        return "/images/pest-control/pest-control-1.png";
+      default:
+        // If no override, use the provided imageUrl or fallback
+        if (!imageUrl) {
+          return "/images/food/jollof-rice.png"; // fallback image
+        }
 
-    if (!imageUrl) {
-      return "/images/food/jollof-rice.png"; // fallback image
+        // Check if it's a relative URL (starts with /)
+        if (imageUrl.startsWith("/") || imageUrl.startsWith("http")) {
+          return imageUrl;
+        }
+
+        // Check if it's a local image in public folder
+        if (imageUrl.startsWith("/images/")) {
+          return imageUrl;
+        }
+
+        // For external URLs, we'll use a fallback for now
+        // You can add specific domains to next.config.ts if needed
+        console.warn(`External image URL not configured: ${imageUrl}`);
+        return "/images/food/jollof-rice.png"; // fallback image
     }
-
-    // Check if it's a relative URL (starts with /)
-    if (imageUrl.startsWith("/") || imageUrl.startsWith("http")) {
-      return imageUrl;
-    }
-
-    // Check if it's a local image in public folder
-    if (imageUrl.startsWith("/images/")) {
-      return imageUrl;
-    }
-
-    // For external URLs, we'll use a fallback for now
-    // You can add specific domains to next.config.ts if needed
-    console.warn(`External image URL not configured: ${imageUrl}`);
-    return "/images/food/jollof-rice.png"; // fallback image
   };
 
   // Function to get appropriate button text based on category
