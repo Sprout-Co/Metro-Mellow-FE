@@ -97,7 +97,10 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
           >
             <MapPin />
             <span className={styles.navbar__locationText}>
-              Anike Ologuntoye Avenue, Lagos, Nigeria
+              {user?.defaultAddress?.street &&
+              user.defaultAddress.street.length > 35
+                ? user.defaultAddress.street.slice(0, 35) + "..."
+                : user?.defaultAddress?.street || "N/A"}
             </span>
             <ChevronDown />
           </motion.div>
@@ -149,13 +152,8 @@ const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
           >
             <Menu />
           </motion.div>
-
-
- 
         </div>
       </div>
-
-  
 
       <AddAddressModal
         isOpen={isAddAddressModalOpen}
