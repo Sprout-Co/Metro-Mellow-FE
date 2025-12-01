@@ -3,7 +3,7 @@ import ServiceHero from "@/components/ui/ServiceHero/ServiceHero";
 const LaundryHero = () => {
   return (
     <ServiceHero
-      backgroundImage="/images/laundry/l3.jpeg"
+      backgroundImage="/images/home/home1.jpg"
       accentText="Laundry"
       mainText="Washes & Wows"
       description="Turn your dirty laundry blues into crisp, clean tunes. We pickup and deliver."

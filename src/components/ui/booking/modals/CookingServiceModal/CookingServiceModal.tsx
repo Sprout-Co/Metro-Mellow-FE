@@ -55,7 +55,7 @@ export interface CookingServiceModalProps {
 const CookingServiceModal: React.FC<CookingServiceModalProps> = ({
   isOpen,
   onClose,
-  serviceImage = "/images/placeholder.jpg",
+  serviceImage = "/images/home/hero.jpg",
   serviceTitle = "Cooking Service",
   serviceDescription = "Professional cooking service",
   servicePrice = 0,

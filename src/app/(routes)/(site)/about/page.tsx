@@ -3,7 +3,7 @@ import StorySection from "./_components/StorySection/StorySection";
 import VideoSection from "./_components/VideoSection/VideoSection";
 import ImpactSection from "./_components/ImpactSection/ImpactSection";
 import MagicHandsSection from "./_components/MagicHandsSection/MagicHandsSection";
-import TeamCards from "./_components/TeamCards/TeamCards";
+// import TeamCards from "./_components/TeamCards/TeamCards";
 import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
 import styles from "./About.module.scss";
 import StructuredData from "@/components/common/SEO/StructuredData";
@@ -141,9 +141,9 @@ export default function AboutPage() {
           <MagicHandsSection />
         </section> */}
 
-        <section id="leadership-team" aria-label="Meet Our Leadership Team">
+        {/* <section id="leadership-team" aria-label="Meet Our Leadership Team">
           <TeamCards />
-        </section>
+        </section> */}
 
         <section id="about-faqs" aria-label="Frequently Asked Questions">
           <FAQSection faqs={aboutFaqs} />

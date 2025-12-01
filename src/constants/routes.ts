@@ -38,7 +38,8 @@ export enum Routes {
   ABOUT = "/about",
   CONTACT = "/contact",
   TERMS = "/terms",
-  PRIVACY = "/privacy",
+  PRIVACY = "/privacy-policy",
+  PRIVACY_NOTICE = "/privacy-notice",
 
   // Blog routes
   BLOG = "/blog",

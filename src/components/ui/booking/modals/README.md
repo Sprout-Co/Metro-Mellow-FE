@@ -47,7 +47,7 @@ import CleaningServiceModal, {
   serviceTitle="Standard Cleaning"
   serviceDescription="Regular maintenance cleaning for your home"
   servicePrice={2950}
-  serviceImage="/images/cleaning/c1.jpeg"
+  serviceImage="/images/cleaning/c1.jpg"
   includedFeatures={[
     "Professional cleaning supplies included",
     "Experienced and vetted cleaning professionals",

@@ -16,7 +16,7 @@ const mockAddresses = [
     lga: 'Ikeja',
     address: '234, Alvan Ikoku Street, Lagos Island, Lagos.',
     phone: '+2349087653423',
-    email: 'info@metromellow.com'
+    email: 'team@metromellow.com'
   },
   {
     id: '2',
@@ -25,7 +25,7 @@ const mockAddresses = [
     lga: 'Ikeja',
     address: '234, Alvan Ikoku Street, Lagos Island, Lagos.',
     phone: '+2349087653423',
-    email: 'info@metromellow.com'
+    email: 'team@metromellow.com'
   }
 ];
 
@@ -80,7 +80,7 @@ const AddressSection = () => {
         id: `${Date.now()}`, // Generate a simple ID
         ...formData,
         phone: '+2349087653423', // Dummy data for demo
-        email: 'info@metromellow.com' // Dummy data for demo
+        email: 'team@metromellow.com' // Dummy data for demo
       };
       
       setAddresses(prevAddresses => [...prevAddresses, newAddress]);

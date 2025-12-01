@@ -11,7 +11,7 @@ export const businessInfo = {
   logo: "https://metromellow.com/images/brand/brand-logo/solid-bg/green-bg.png",
   image:
     "https://metromellow.com/images/brand/brand-logo/solid-bg/green-bg.png",
-  telephone: "+2349068249871",
+  telephone: "+2347049452585",
   email: "team@metromellow.com",
   address: {
     "@type": "PostalAddress",

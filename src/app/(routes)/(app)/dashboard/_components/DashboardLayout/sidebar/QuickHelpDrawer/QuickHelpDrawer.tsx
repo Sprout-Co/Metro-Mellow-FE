@@ -331,7 +331,7 @@ const QuickHelpDrawer: React.FC<QuickHelpDrawerProps> = ({
                       Email
                     </span>
                     <span className={styles.drawer__supportOptionDesc}>
-                      support@metromellow.com
+                      team@metromellow.com
                     </span>
                   </div>
                   <ExternalLink size={16} />

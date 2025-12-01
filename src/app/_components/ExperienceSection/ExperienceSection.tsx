@@ -29,7 +29,7 @@ const ExperienceSection: React.FC = () => {
             variant="primary"
             animationType="vibrate"
           >
-            Start Your Free Trial
+            Book Now!
           </CTAButton>
         </div>
       </div>

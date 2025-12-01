@@ -54,7 +54,7 @@ export interface CleaningServiceModalProps {
 const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   isOpen,
   onClose,
-  serviceImage = "/images/placeholder.jpg",
+  serviceImage = "/images/home/hero.jpg",
   serviceTitle = "Cleaning Service",
   serviceDescription = "Professional cleaning service",
   servicePrice = 0,

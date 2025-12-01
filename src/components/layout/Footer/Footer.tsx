@@ -30,7 +30,16 @@ export default function Footer() {
             </div>
           </Link>
           <p className={styles.contactPrompt}>Questions? Comments? Concerns?</p>
-          <Button variant="white" size="md">
+          <Button
+            variant="white"
+            size="md"
+            onClick={() => {
+              const phoneNumber = "+2347049452585";
+              const message = "Hello! I'm interested in your services.";
+              const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
+              window.open(whatsappUrl, '_blank');
+            }}
+          >
             Chat with us on WhatsApp
           </Button>
         </div>
@@ -53,10 +62,13 @@ export default function Footer() {
             <h3 className={styles.colTitle}>Legal</h3>
             <ul>
               <li>
-                <Link href={Routes.PRIVACY}>Privacy Policy</Link>
+                <Link href={Routes.TERMS}>Terms of Service</Link>
               </li>
               <li>
-                <Link href={Routes.TERMS}>Terms & Conditions</Link>
+                <Link href={Routes.PRIVACY}>Privacy & Cookie Policy</Link>
+              </li>
+              <li>
+                <Link href={Routes.PRIVACY_NOTICE}>Privacy Notice</Link>
               </li>
             </ul>
           </div>
@@ -81,7 +93,12 @@ export default function Footer() {
             <h3 className={styles.colTitle}>Community</h3>
             <ul className={styles.socialList}>
               <li>
-                <a href="https://x.com/metromellowhq" aria-label="Twitter">
+                <a
+                  href="https://x.com/metromellowhq"
+                  aria-label="Twitter"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <svg
                     width="20"
                     height="20"
@@ -104,6 +121,8 @@ export default function Footer() {
                 <a
                   href="https://www.facebook.com/metromellowhq"
                   aria-label="Facebook"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <svg
                     width="20"
@@ -127,6 +146,8 @@ export default function Footer() {
                 <a
                   href="https://www.youtube.com/@metromellowhq"
                   aria-label="Youtube"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <svg
                     width="20"
@@ -153,6 +174,8 @@ export default function Footer() {
                 <a
                   href="https://www.instagram.com/metromellowhq/"
                   aria-label="Instagram"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <Instagram /> Instagram
                 </a>
@@ -161,6 +184,8 @@ export default function Footer() {
                 <a
                   href="https://www.linkedin.com/company/metromellow-ltd/"
                   aria-label="Linkedin"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <svg
                     width="20"

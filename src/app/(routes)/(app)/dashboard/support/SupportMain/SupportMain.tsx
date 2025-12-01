@@ -401,10 +401,10 @@ const SupportMain: React.FC = () => {
             <h4>Phone Support</h4>
             <p>Available Mon-Fri, 8am-6pm</p>
             <a
-              href="tel:+2348012345678"
+              href="tel:+2347049452585"
               className={styles.support__contactCardLink}
             >
-              +234 801 234 5678
+              +234 704 945 2585
             </a>
           </div>
 
@@ -415,10 +415,10 @@ const SupportMain: React.FC = () => {
             <h4>Email Support</h4>
             <p>We'll respond within 24 hours</p>
             <a
-              href="mailto:support@metromellow.com"
+              href="mailto:team@metromellow.com"
               className={styles.support__contactCardLink}
             >
-              support@metromellow.com
+              team@metromellow.com
             </a>
           </div>
 

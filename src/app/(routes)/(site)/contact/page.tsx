@@ -46,7 +46,7 @@ export default function ContactPage() {
       id: "1",
       question: "How quickly can I expect a response to my inquiry?",
       answer:
-        "We typically respond to all inquiries within 2-4 hours during business hours (8 AM - 8 PM). For urgent matters, you can call us directly at +2347096249201 for immediate assistance.",
+        "We typically respond to all inquiries within 2-4 hours during business hours (8 AM - 8 PM). For urgent matters, you can call us directly at +2347049452585 for immediate assistance.",
     },
     {
       id: "2",
@@ -94,7 +94,7 @@ export default function ContactPage() {
     },
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: "+2347096249201",
+      telephone: "+2347049452585",
       contactType: "customer service",
       areaServed: "Lagos",
       availableLanguage: ["en"],
@@ -118,14 +118,14 @@ export default function ContactPage() {
     contactPoint: [
       {
         "@type": "ContactPoint",
-        telephone: "+2347096249201",
+        telephone: "+2347049452585",
         contactType: "customer service",
         areaServed: "Lagos",
         availableLanguage: ["en"],
       },
       {
         "@type": "ContactPoint",
-        telephone: "+2349068249871",
+        telephone: "+2347049452585",
         contactType: "sales",
         areaServed: "Lagos",
         availableLanguage: ["en"],

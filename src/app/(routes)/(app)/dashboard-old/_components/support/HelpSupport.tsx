@@ -61,7 +61,7 @@ const faqData = [
     id: "faq7",
     question: "How do I contact customer support?",
     answer:
-      "You can contact our customer support team through multiple channels: use the chat feature in your dashboard, submit a support request through the Help & Support section, email us at support@metromellow.com, or call us at (555) 123-4567 during business hours (Monday to Friday, 9 AM to 6 PM).",
+      "You can contact our customer support team through multiple channels: use the chat feature in your dashboard, submit a support request through the Help & Support section, email us at team@metromellow.com, or call us at (555) 123-4567 during business hours (Monday to Friday, 9 AM to 6 PM).",
     category: "general",
   },
   {
@@ -87,7 +87,7 @@ const contactOptions = [
     id: "co2",
     icon: "mail",
     title: "Email Support",
-    description: "Send us an email at support@metromellow.com",
+    description: "Send us an email at team@metromellow.com",
     action: "Send Email",
     availability: "24/7 response within 24 hours",
   },

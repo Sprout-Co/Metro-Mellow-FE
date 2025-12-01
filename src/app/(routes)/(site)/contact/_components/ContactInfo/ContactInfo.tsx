@@ -37,8 +37,7 @@ const ContactInfo: FC = () => {
                 <Phone className={styles.contactInfo__icon} />
               </div>
               <p className={styles.contactInfo__text}>
-                +2347096249201,<br />
-                +2347096249201
+                <a href="tel:+2347049452585">+2347049452585</a>
               </p>
             </div>
 
@@ -47,7 +46,7 @@ const ContactInfo: FC = () => {
                 <Mail className={styles.contactInfo__icon} />
               </div>
               <p className={styles.contactInfo__text}>
-                info@metromellow.ng
+                team@metromellow.com
               </p>
             </div>
           </div>

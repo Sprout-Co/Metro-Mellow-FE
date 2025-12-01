@@ -6,58 +6,58 @@ import styles from './ServicesGallery.module.scss';
 // Define the service professionals data with exact positioning
 const serviceProfessionals = [
   {
-    id: 'chef1',
-    image: '/images/food/f1.png',
-    role: 'Chef',
+    id: 'home1',
+    image: '/images/home/home1.jpg',
+    role: 'Home',
     bgColor: 'primary',
     position: 'top-left'
   },
   {
-    id: 'chef2',
-    image: '/images/food/f10.jpeg',
-    role: 'Chef',
+    id: 'home2',
+    image: '/images/home/home2.jpg',
+    role: 'Home',
     bgColor: 'primary',
     position: 'top-right'
   },
   {
-    id: 'cleaner1',
-    image: '/images/cleaning/c1.jpeg',
-    role: 'Cleaner',
+    id: 'home3',
+    image: '/images/home/home3.jpg',
+    role: 'Home',
     bgColor: 'secondary',
     position: 'middle-left'
   },
   {
-    id: 'cook1',
-    image: '/images/food/f3.jpeg',
-    role: 'Cook',
+    id: 'home4',
+    image: '/images/home/home4.jpg',
+    role: 'Home',
     bgColor: 'primary',
     position: 'middle-center-left'
   },
   {
-    id: 'assistant1',
-    image: '/images/errand/e1.jpeg',
-    role: 'Assistant',
+    id: 'home5',
+    image: '/images/home/home5.jpg',
+    role: 'Home',
     bgColor: 'secondary',
     position: 'middle-center-right'
   },
   {
-    id: 'support1',
-    image: '/images/cleaning/c3.jpeg',
-    role: 'Support',
+    id: 'home6',
+    image: '/images/home/home6.jpg',
+    role: 'Home',
     bgColor: 'primary',
     position: 'bottom-left'
   },
   {
-    id: 'delivery1',
-    image: '/images/food/f4.jpeg',
-    role: 'Delivery',
+    id: 'home7',
+    image: '/images/home/home7.jpg',
+    role: 'Home',
     bgColor: 'secondary',
     position: 'bottom-center'
   },
   {
-    id: 'delivery2',
-    image: '/images/food/f3.jpeg',
-    role: 'Courier',
+    id: 'home-hero',
+    image: '/images/home/hero.jpg',
+    role: 'Home Hero',
     bgColor: 'primary',
     position: 'bottom-right'
   }

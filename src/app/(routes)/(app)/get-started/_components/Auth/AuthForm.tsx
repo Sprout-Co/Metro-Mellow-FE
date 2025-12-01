@@ -592,7 +592,7 @@ export default function AuthForm() {
                             Terms of Service
                           </Link>{" "}
                           and{" "}
-                          <Link href="/privacy" className={styles.auth__link}>
+                          <Link href="/privacy-policy" className={styles.auth__link}>
                             Privacy Policy
                           </Link>
                         </span>

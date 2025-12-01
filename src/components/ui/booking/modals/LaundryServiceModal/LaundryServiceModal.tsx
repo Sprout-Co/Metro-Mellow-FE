@@ -53,7 +53,7 @@ export interface LaundryServiceModalProps {
 const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
   isOpen,
   onClose,
-  serviceImage = "/images/placeholder.jpg",
+  serviceImage = "/images/home/hero.jpg",
   serviceTitle = "Laundry Service",
   serviceDescription = "Professional laundry service",
   servicePrice = 0,
