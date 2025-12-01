@@ -55,8 +55,9 @@ const Hero: FC = () => {
             custom={1}
             variants={textVariants}
           >
-            <span className={styles["hero__title--accent"]}>Professional </span>
-            Home Services
+            <span className={styles["hero__title--accent"]}>Professional</span>
+            <span className={styles["hero__title--word"]}>Home</span>
+            <span className={styles["hero__title--word"]}>Services</span>
           </motion.h1>
 
           <motion.p
