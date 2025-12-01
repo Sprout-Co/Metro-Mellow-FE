@@ -69,16 +69,6 @@ const StorySection: React.FC = () => {
           Modern life is demanding. Between work, commutes, personal responsibilities, and the daily grind of managing a home, there's never enough time. We saw too many people burning out, missing precious moments, and struggling to maintain the quality of life they work so hard to achieve.
         </motion.p>
 
-        <motion.p
-          className={styles.storySection__description}
-          initial="hidden"
-          animate="visible"
-          custom={3}
-          variants={textVariants}
-        >
-          In our parents' generation, extended families provided support. Today's busy people juggle everything alone. We're building Metromellow to bring back that community support system - but with professional standards, reliability, and the quality that modern families deserve. Because your time is valuable, and you shouldn't have to choose between success and a well-managed home.
-        </motion.p>
-
             <motion.div
               className={styles.storySection__cta}
               initial="hidden"

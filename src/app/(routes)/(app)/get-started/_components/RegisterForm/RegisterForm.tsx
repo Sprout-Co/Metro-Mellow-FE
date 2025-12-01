@@ -429,7 +429,7 @@ export default function RegisterForm({
                         </Link>{" "}
                         and{" "}
                         <Link
-                          href="/privacy"
+                          href="/privacy-policy"
                           className={styles.registerForm__link}
                         >
                           Privacy Policy

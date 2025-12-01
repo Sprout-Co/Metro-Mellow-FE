@@ -54,7 +54,7 @@ export interface ServiceModalProps {
 const ServiceModal: React.FC<ServiceModalProps> = ({
   isOpen,
   onClose,
-  serviceImage = "/images/placeholder.jpg",
+  serviceImage = "/images/home/hero.jpg",
   serviceTitle = "Service",
   serviceDescription = "Service description",
   servicePrice = 0,

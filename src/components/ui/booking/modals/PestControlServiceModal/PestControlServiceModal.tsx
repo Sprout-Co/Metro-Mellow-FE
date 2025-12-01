@@ -53,7 +53,7 @@ export interface PestControlServiceModalProps {
 const PestControlServiceModal: React.FC<PestControlServiceModalProps> = ({
   isOpen,
   onClose,
-  serviceImage = "/images/placeholder.jpg",
+  serviceImage = "/images/home/hero.jpg",
   serviceTitle = "Pest Control Service",
   serviceDescription = "Professional pest control service",
   servicePrice = 0,

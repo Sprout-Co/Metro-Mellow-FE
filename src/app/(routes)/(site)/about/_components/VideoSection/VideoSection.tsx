@@ -27,7 +27,7 @@ const VideoSection: React.FC = () => {
 
   // Place your video file (e.g., about-video.mp4) in public/videos/ and use the path below
   const VIDEO_URL = "/videos/metromellow_animation.mp4"; // Example: /videos/about-video.mp4
-  const THUMBNAIL_URL = "/images/cleaning/cleaning-page-about-us.jpg";
+  const THUMBNAIL_URL = "/images/home/home3.jpg";
 
   const handlePlayVideo = () => {
     setIsPlaying(true);
