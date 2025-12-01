@@ -3,7 +3,7 @@
 import { FC, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
-import { Clock, Star, ArrowRight, Search } from "lucide-react";
+import { Clock, ArrowRight, Search } from "lucide-react";
 import styles from "./ServiceCatalog.module.scss";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -416,7 +416,6 @@ const ServiceCatalog: FC = () => {
                           <span>...</span>
                         </div>
                         <div className={styles.catalog__cardMetaItem}>
-                          <Star size={16} />
                           <span>...</span>
                         </div>
                       </div>
@@ -642,7 +641,7 @@ const ServiceCatalog: FC = () => {
                           className={styles.catalog__card}
                           variants={itemVariants}
                         >
-                          <div className={styles.catalog__cardImageWrapper}>
+                            <div className={styles.catalog__cardImageWrapper}>
                             <Image
                               src={getSafeImageUrl(
                                 option.imageUrl,
@@ -653,13 +652,6 @@ const ServiceCatalog: FC = () => {
                               height={300}
                               className={styles.catalog__cardImage}
                             />
-                            <div className={styles.catalog__cardBadge}>
-                              4.8{" "}
-                              <Star
-                                size={12}
-                                style={{ display: "inline", marginLeft: "2px" }}
-                              />
-                            </div>
                           </div>
                           <div className={styles.catalog__cardContent}>
                             <div className={styles.catalog__cardHeader}>
@@ -681,7 +673,6 @@ const ServiceCatalog: FC = () => {
                                 <span>30-45 mins</span>
                               </div>
                               <div className={styles.catalog__cardMetaItem}>
-                                <Star size={16} />
                                 <span>
                                   {option.inclusions?.join(", ") ||
                                     service.inclusions?.join(", ") ||
