@@ -97,19 +97,21 @@ const ServiceCatalog: FC = () => {
       case ServiceId.DeepCleaning:
         return "/images/home/hero.jpg";
       case ServiceId.MoveInMoveOutCleaning:
-        return "/images/cleaning/cleaning-1.png";
+        return "/images/home/home3.jpg";
       case ServiceId.PostConstructionCleaning:
-        return "/images/cleaning/cleaning-1.png";
+        return "/images/home/home4.jpg";
       case ServiceId.Laundry:
-        return "/images/laundry/laundry-1.png";
+        return "/images/home/home1.jpg";
+      case ServiceId.StandardLaundry:
+        return "/images/home/home1.jpg";
       case ServiceId.PremiumLaundry:
-        return "/images/laundry/laundry-1.png";
+        return "/images/home/home1.jpg";
       case ServiceId.DryCleaning:
-        return "/images/laundry/laundry-1.png";
+        return "/images/home/home1.jpg";
       case ServiceId.PestControlResidential:
-        return "/images/pest-control/pest-control-1.png";
+        return "/images/pest-control/p1.jpeg";
       case ServiceId.PestControlCommercial:
-        return "/images/pest-control/pest-control-1.png";
+        return "/images/pest-control/p1.jpeg";
       default:
         // If no override, use the provided imageUrl or fallback
         if (!imageUrl) {
