@@ -1,15 +1,8 @@
 import Modal from "@/components/ui/Modal/Modal";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./AddAddressModal.module.scss";
-import { MapPin, Navigation, Search, X } from "lucide-react";
+import { Navigation, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/Button/Button";
-
-interface AddressOption {
-  id: string;
-  main: string;
-  secondary?: string;
-  type?: "suggestion" | "recent" | "saved";
-}
 
 interface AddAddressModalProps {
   isOpen: boolean;
@@ -23,54 +16,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
   onAddressSelect,
 }) => {
   const [searchValue, setSearchValue] = useState("");
-  const [addressSuggestions, setAddressSuggestions] = useState<AddressOption[]>(
-    []
-  );
   const [isLoading, setIsLoading] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
-  const [isSearching, setIsSearching] = useState(false);
-
-  // Search effect with debounce
-  useEffect(() => {
-    if (searchValue.length > 2) {
-      setIsSearching(true);
-      const timer = setTimeout(() => {
-        const mockSuggestions: AddressOption[] = [
-          {
-            id: "1",
-            main: `${searchValue} Street`,
-            secondary: "Lekki Phase 1, Lagos",
-            type: "suggestion",
-          },
-          {
-            id: "2",
-            main: `${searchValue} Avenue`,
-            secondary: "Victoria Island, Lagos",
-            type: "suggestion",
-          },
-          {
-            id: "3",
-            main: `${searchValue} Close`,
-            secondary: "Ikoyi, Lagos",
-            type: "suggestion",
-          },
-          {
-            id: "4",
-            main: `${searchValue} Road`,
-            secondary: "Ajah, Lagos",
-            type: "suggestion",
-          },
-        ];
-        setAddressSuggestions(mockSuggestions);
-        setIsSearching(false);
-      }, 500);
-
-      return () => clearTimeout(timer);
-    } else {
-      setAddressSuggestions([]);
-      setIsSearching(false);
-    }
-  }, [searchValue]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -78,41 +24,109 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
 
   const handleClearSearch = () => {
     setSearchValue("");
-    setAddressSuggestions([]);
   };
 
-  const handleSelectAddress = (address: string, secondary?: string) => {
-    const fullAddress = secondary ? `${address}, ${secondary}` : address;
-    setSearchValue(address);
-    setAddressSuggestions([]);
-    if (onAddressSelect) {
-      onAddressSelect(fullAddress);
+  const handleUseCurrentLocation = async () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
     }
-  };
 
-  const handleUseCurrentLocation = () => {
     setIsLoading(true);
-    navigator.geolocation?.getCurrentPosition(
-      (position) => {
-        // Simulate reverse geocoding
-        setTimeout(() => {
-          setIsLoading(false);
-          const address = "Current Location - Lekki Phase 1, Lagos";
-          if (onAddressSelect) {
-            onAddressSelect(address);
-          }
-          onClose();
-        }, 1500);
-      },
-      (error) => {
-        setIsLoading(false);
-        // Fallback to default location
-        const address = "Lagos, Nigeria";
-        if (onAddressSelect) {
-          onAddressSelect(address);
+
+    try {
+      // Get current position
+      const position = await new Promise<GeolocationPosition>(
+        (resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0,
+          });
         }
+      );
+
+      const { latitude, longitude } = position.coords;
+
+      // Reverse geocode using OpenStreetMap Nominatim API
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`,
+        {
+          headers: {
+            "User-Agent": "Metromellow App", // Required by Nominatim
+          },
+        }
+      );
+
+      console.log("response", response);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch address");
       }
-    );
+
+      const data = await response.json();
+
+      // Extract address components
+      const address = data.address || {};
+      const addressParts: string[] = [];
+
+      // Build address string from components
+      if (address.road || address.house_number) {
+        const street = [address.house_number, address.road]
+          .filter(Boolean)
+          .join(" ");
+        addressParts.push(street);
+      } else if (address.pedestrian) {
+        addressParts.push(address.pedestrian);
+      }
+
+      if (address.suburb || address.neighbourhood) {
+        addressParts.push(address.suburb || address.neighbourhood);
+      }
+
+      if (address.city || address.town || address.village) {
+        addressParts.push(address.city || address.town || address.village);
+      }
+
+      if (address.state) {
+        addressParts.push(address.state);
+      }
+
+      if (address.country) {
+        addressParts.push(address.country);
+      }
+
+      // Fallback to display_name if no structured address
+      const fullAddress =
+        addressParts.length > 0
+          ? addressParts.join(", ")
+          : data.display_name || `${latitude}, ${longitude}`;
+
+      // Update the search input
+      setSearchValue(fullAddress);
+
+      // Call the callback
+      if (onAddressSelect) {
+        onAddressSelect(fullAddress);
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error getting location:", error);
+      setIsLoading(false);
+
+      // Show user-friendly error message
+      const errorMessage =
+        error instanceof GeolocationPositionError
+          ? error.code === error.PERMISSION_DENIED
+            ? "Location access denied. Please enable location permissions."
+            : error.code === error.POSITION_UNAVAILABLE
+              ? "Location unavailable. Please try again."
+              : "Location request timed out. Please try again."
+          : "Failed to get your location. Please enter your address manually.";
+
+      alert(errorMessage);
+    }
   };
 
   const handleConfirm = () => {
@@ -123,9 +137,9 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
   };
 
   return (
-    <Modal 
-      isOpen={isOpen} 
-      onClose={onClose} 
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
       title="Add Address"
       maxWidth="450px"
     >
@@ -147,26 +161,6 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
             </button>
           )}
         </div>
-
-        {/* Suggestions */}
-        {addressSuggestions.length > 0 && (
-          <div className={styles.suggestions}>
-            {addressSuggestions.map((item) => (
-              <button
-                key={item.id}
-                className={styles.suggestion}
-                onClick={() => handleSelectAddress(item.main, item.secondary)}
-              >
-                <MapPin size={16} />
-                <span>{item.main}</span>
-                {item.secondary && <small>{item.secondary}</small>}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {/* Loading state */}
-        {isSearching && <div className={styles.loading}>Searching...</div>}
 
         {/* Current Location */}
         <button
