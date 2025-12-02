@@ -209,26 +209,11 @@ export default function LoginForm({
             />
 
             <div className={styles.loginForm__passwordGroup}>
-              <div className={styles.loginForm__passwordHeader}>
-                <label
-                  htmlFor="login-password"
-                  className={styles.loginForm__label}
-                >
-                  Password<span className={styles.loginForm__required}>*</span>
-                </label>
-                <Link
-                  href="/get-started/forgot-password"
-                  className={styles.loginForm__forgotPassword}
-                >
-                  Forgot Password?
-                </Link>
-              </div>
-
               <FormInput
                 id="login-password"
                 name="password"
                 type="password"
-                label=""
+                label="Password"
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Your password"
@@ -260,6 +245,13 @@ export default function LoginForm({
                   </svg>
                 }
               />
+
+              <Link
+                href="/get-started/forgot-password"
+                className={styles.loginForm__forgotPassword}
+              >
+                Forgot Password?
+              </Link>
             </div>
 
             <div className={styles.loginForm__checkGroup}>

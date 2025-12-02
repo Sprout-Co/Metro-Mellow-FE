@@ -74,6 +74,8 @@
     text-decoration: none;
     @include font-weight("medium");
     transition: color transition-duration("fast") transition-timing("ease");
+    text-align: right;
+    display: block;
 
     &:hover {
       color: color("primary", "dark");
