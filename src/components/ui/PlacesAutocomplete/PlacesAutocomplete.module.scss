@@ -1,3 +1,7 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
 // PlacesAutocomplete - BEM Structure
 // Block: places-autocomplete
 
@@ -9,25 +13,23 @@
   &__input-wrapper {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 14px;
-    background-color: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    transition:
-      border-color 0.2s ease,
-      box-shadow 0.2s ease;
+    gap: spacing("sm");
+    padding: spacing("sm") spacing("md");
+    background-color: color("neutral", "lightest");
+    border: border-width("thin") solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    transition: $transition-fast;
 
     &:focus-within {
-      border-color: #22c55e;
-      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+      border-color: color("status", "success");
+      box-shadow: 0 0 0 3px color-alpha("status", "success", 0.1);
     }
   }
 
   // Element: Search Icon
   &__search-icon {
     flex-shrink: 0;
-    color: #9ca3af;
+    color: color("neutral", "medium");
   }
 
   // Element: Input
@@ -35,57 +37,53 @@
     flex: 1;
     border: none;
     background: transparent;
-    font-size: 15px;
-    color: #1f2937;
+    @include font-size("sm");
+    color: color("neutral", "darkest");
     outline: none;
 
     &::placeholder {
-      color: #9ca3af;
+      color: color("neutral", "medium");
     }
   }
 
   // Element: Loader
   &__loader {
     flex-shrink: 0;
-    color: #22c55e;
+    color: color("status", "success");
     animation: spin 1s linear infinite;
   }
 
   // Element: Clear Button
   &__clear-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px;
+    @include flex-center;
+    padding: spacing("xxs");
     border: none;
     background: transparent;
-    color: #6b7280;
+    color: color("neutral", "dark");
     cursor: pointer;
-    border-radius: 4px;
-    transition:
-      background-color 0.15s ease,
-      color 0.15s ease;
+    border-radius: border-radius("sm");
+    transition: $transition-fast;
 
     &:hover {
-      background-color: #f3f4f6;
-      color: #374151;
+      background-color: color("neutral", "lighter");
+      color: color("neutral", "darkest");
     }
   }
 
   // Element: Suggestions List
   &__suggestions {
     position: absolute;
-    top: calc(100% + 6px);
+    top: calc(100% + spacing("xs"));
     left: 0;
     right: 0;
     margin: 0;
-    padding: 6px;
+    padding: spacing("xs");
     list-style: none;
-    background-color: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    z-index: 50;
+    background-color: color("neutral", "white");
+    border: border-width("thin") solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    box-shadow: shadow("lg");
+    z-index: z-index("dropdown");
     max-height: 280px;
     overflow-y: auto;
   }
@@ -94,56 +92,50 @@
   &__suggestion-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 10px 12px;
+    gap: spacing("sm");
+    padding: spacing("sm") spacing("md");
     cursor: pointer;
-    border-radius: 6px;
-    transition: background-color 0.15s ease;
+    border-radius: border-radius("md");
+    transition: background-color transition-duration("fast") transition-timing("ease");
 
     &:hover {
-      background-color: #f9fafb;
+      background-color: color("neutral", "lightest");
     }
   }
 
   // Element: Icon Wrapper
   &__icon-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include flex-center;
     width: 32px;
     height: 32px;
     flex-shrink: 0;
-    background-color: #f3f4f6;
-    border-radius: 50%;
-    color: #6b7280;
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("full");
+    color: color("neutral", "dark");
   }
 
   // Element: Text Wrapper
   &__text-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: spacing("xxs");
     text-align: left;
     min-width: 0;
   }
 
   // Element: Main Text
   &__main-text {
-    font-size: 14px;
-    font-weight: 500;
-    color: #1f2937;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    @include truncate;
   }
 
   // Element: Secondary Text
   &__secondary-text {
-    font-size: 13px;
-    color: #6b7280;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    @include truncate;
   }
 }
 

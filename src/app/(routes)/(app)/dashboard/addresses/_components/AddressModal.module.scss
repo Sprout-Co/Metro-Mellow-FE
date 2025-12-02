@@ -1,9 +1,11 @@
-// AddressModal - Clean Minimal Design
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
 
 .container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: spacing("lg");
   overflow: visible;
 }
 
@@ -12,49 +14,47 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding-bottom: 4px;
+  gap: spacing("sm");
+  padding-bottom: spacing("xs");
 }
 
 .step {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: spacing("xs");
 
   &__number {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include flex-center;
     width: 22px;
     height: 22px;
-    border-radius: 50%;
-    background-color: #e5e7eb;
-    color: #9ca3af;
-    font-size: 11px;
-    font-weight: 600;
-    transition: all 0.2s ease;
+    border-radius: border-radius("full");
+    background-color: color("neutral", "lighter");
+    color: color("neutral", "medium");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    transition: $transition-fast;
   }
 
   &__text {
-    font-size: 12px;
-    color: #9ca3af;
-    font-weight: 500;
+    @include font-size("xs");
+    color: color("neutral", "medium");
+    @include font-weight("medium");
   }
 
   &__divider {
-    width: 24px;
+    width: spacing("lg");
     height: 1px;
-    background-color: #e5e7eb;
+    background-color: color("neutral", "lighter");
   }
 
   &--active {
     .step__number {
-      background-color: #22c55e;
-      color: #fff;
+      background-color: color("status", "success");
+      color: color("neutral", "white");
     }
 
     .step__text {
-      color: #374151;
+      color: color("neutral", "darkest");
     }
   }
 }
@@ -63,34 +63,34 @@
 .field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: spacing("xs");
 
   &__label {
-    font-size: 13px;
-    font-weight: 500;
-    color: #6b7280;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
   }
 
   &__preview {
     display: flex;
     align-items: flex-start;
-    gap: 8px;
-    padding: 10px 12px;
-    background-color: #f0fdf4;
-    border: 1px solid #bbf7d0;
-    border-radius: 8px;
-    margin-top: 6px;
+    gap: spacing("sm");
+    padding: spacing("sm") spacing("md");
+    background-color: color-alpha("status", "success", 0.05);
+    border: border-width("thin") solid color-alpha("status", "success", 0.3);
+    border-radius: border-radius("lg");
+    margin-top: spacing("xs");
 
     svg {
       flex-shrink: 0;
-      color: #22c55e;
+      color: color("status", "success");
       margin-top: 2px;
     }
 
     span {
-      font-size: 13px;
-      color: #166534;
-      line-height: 1.4;
+      @include font-size("sm");
+      color: color-darken("status", "success", 15%);
+      line-height: line-height("normal");
     }
   }
 }
@@ -102,23 +102,23 @@
   &__btn {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: spacing("sm");
     width: 100%;
-    padding: 12px 14px;
-    background-color: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    font-size: 14px;
-    color: #9ca3af;
+    padding: spacing("sm") spacing("md");
+    background-color: color("neutral", "lightest");
+    border: border-width("thin") solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    color: color("neutral", "medium");
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: $transition-fast;
 
     &:hover {
-      border-color: #d1d5db;
+      border-color: color("neutral", "light");
     }
 
     svg:first-child {
-      color: #9ca3af;
+      color: color("neutral", "medium");
     }
 
     span {
@@ -127,17 +127,17 @@
     }
 
     svg:last-child {
-      color: #9ca3af;
-      transition: transform 0.2s ease;
+      color: color("neutral", "medium");
+      transition: transform transition-duration("fast") transition-timing("ease");
     }
 
     &--selected {
-      color: #1f2937;
-      border-color: #22c55e;
-      background-color: #f0fdf4;
+      color: color("neutral", "darkest");
+      border-color: color("status", "success");
+      background-color: color-alpha("status", "success", 0.05);
 
       svg:first-child {
-        color: #22c55e;
+        color: color("status", "success");
       }
     }
   }
@@ -148,36 +148,36 @@
 
   &__menu {
     position: absolute;
-    top: calc(100% + 4px);
+    top: calc(100% + spacing("xs"));
     left: 0;
     right: 0;
     margin: 0;
-    padding: 4px;
+    padding: spacing("xs");
     list-style: none;
-    background-color: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    z-index: 100;
+    background-color: color("neutral", "white");
+    border: border-width("thin") solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    box-shadow: shadow("lg");
+    z-index: z-index("dropdown");
   }
 
   &__item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    border-radius: 6px;
-    font-size: 14px;
-    color: #374151;
+    gap: spacing("sm");
+    padding: spacing("sm") spacing("md");
+    border-radius: border-radius("md");
+    @include font-size("sm");
+    color: color("neutral", "darkest");
     cursor: pointer;
-    transition: background-color 0.15s ease;
+    transition: background-color transition-duration("fast") transition-timing("ease");
 
     &:hover {
-      background-color: #f9fafb;
+      background-color: color("neutral", "lightest");
     }
 
     svg:first-child {
-      color: #9ca3af;
+      color: color("neutral", "medium");
     }
 
     span {
@@ -185,14 +185,14 @@
     }
 
     svg:last-child {
-      color: #22c55e;
+      color: color("status", "success");
     }
 
     &--selected {
-      background-color: #f0fdf4;
+      background-color: color-alpha("status", "success", 0.05);
 
       svg:first-child {
-        color: #22c55e;
+        color: color("status", "success");
       }
     }
   }
@@ -201,22 +201,22 @@
 // Input
 .input {
   width: 100%;
-  padding: 12px 14px;
-  background-color: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #1f2937;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  padding: spacing("sm") spacing("md");
+  background-color: color("neutral", "lightest");
+  border: border-width("thin") solid color("neutral", "lighter");
+  border-radius: border-radius("lg");
+  @include font-size("sm");
+  color: color("neutral", "darkest");
+  transition: $transition-fast;
 
   &::placeholder {
-    color: #9ca3af;
+    color: color("neutral", "medium");
   }
 
   &:focus {
     outline: none;
-    border-color: #22c55e;
-    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+    border-color: color("status", "success");
+    box-shadow: 0 0 0 3px color-alpha("status", "success", 0.1);
   }
 }
 
@@ -224,23 +224,23 @@
 .toggle {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: spacing("sm");
   cursor: pointer;
-  padding: 12px 14px;
-  background-color: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  transition: border-color 0.15s ease;
+  padding: spacing("sm") spacing("md");
+  background-color: color("neutral", "lightest");
+  border: border-width("thin") solid color("neutral", "lighter");
+  border-radius: border-radius("lg");
+  transition: border-color transition-duration("fast") transition-timing("ease");
 
   &:hover {
-    border-color: #d1d5db;
+    border-color: color("neutral", "light");
   }
 
   input {
     display: none;
 
     &:checked + .toggle__track {
-      background-color: #22c55e;
+      background-color: color("status", "success");
 
       .toggle__thumb {
         transform: translateX(16px);
@@ -252,9 +252,9 @@
     position: relative;
     width: 36px;
     height: 20px;
-    background-color: #d1d5db;
-    border-radius: 10px;
-    transition: background-color 0.2s ease;
+    background-color: color("neutral", "light");
+    border-radius: border-radius("full");
+    transition: background-color transition-duration("fast") transition-timing("ease");
     flex-shrink: 0;
   }
 
@@ -264,65 +264,63 @@
     left: 2px;
     width: 16px;
     height: 16px;
-    background-color: #fff;
-    border-radius: 50%;
-    transition: transform 0.2s ease;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: color("neutral", "white");
+    border-radius: border-radius("full");
+    transition: transform transition-duration("fast") transition-timing("ease");
+    box-shadow: shadow("sm");
   }
 
   &__label {
-    font-size: 14px;
-    color: #374151;
-    font-weight: 500;
+    @include font-size("sm");
+    color: color("neutral", "darkest");
+    @include font-weight("medium");
   }
 }
 
 // Actions
 .actions {
   display: flex;
-  gap: 10px;
-  margin-top: 4px;
+  gap: spacing("sm");
+  margin-top: spacing("xs");
 }
 
 .cancelBtn {
   flex: 1;
-  padding: 12px 16px;
-  background-color: #f3f4f6;
-  color: #6b7280;
+  padding: spacing("sm") spacing("md");
+  background-color: color("neutral", "lighter");
+  color: color("neutral", "dark");
   border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
+  border-radius: border-radius("lg");
+  @include font-size("sm");
+  @include font-weight("medium");
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background-color transition-duration("fast") transition-timing("ease");
 
   &:hover {
-    background-color: #e5e7eb;
+    background-color: color("neutral", "light");
   }
 }
 
 .submitBtn {
   flex: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 12px 16px;
-  background-color: #22c55e;
-  color: #fff;
+  @include flex-center;
+  gap: spacing("xs");
+  padding: spacing("sm") spacing("md");
+  background-color: color("status", "success");
+  color: color("neutral", "white");
   border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
+  border-radius: border-radius("lg");
+  @include font-size("sm");
+  @include font-weight("medium");
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background-color transition-duration("fast") transition-timing("ease");
 
   &:hover:not(:disabled) {
-    background-color: #16a34a;
+    background-color: color-darken("status", "success", 10%);
   }
 
   &:disabled {
-    background-color: #d1d5db;
+    background-color: color("neutral", "light");
     cursor: not-allowed;
   }
 }
