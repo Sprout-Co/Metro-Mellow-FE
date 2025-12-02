@@ -26,6 +26,7 @@ import {
 import styles from "./QuickHelpDrawer.module.scss";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 import FnButton from "@/components/ui/Button/FnButton";
+import { ContactDetails } from "@/constants/config";
 
 interface FAQ {
   id: string;
@@ -47,6 +48,7 @@ const QuickHelpDrawer: React.FC<QuickHelpDrawerProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedFAQ, setExpandedFAQ] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   // Help categories
   const helpCategories = [
@@ -106,7 +108,7 @@ const QuickHelpDrawer: React.FC<QuickHelpDrawerProps> = ({
       id: "1",
       question: "How far in advance can I book a service?",
       answer:
-        "You can book services up to 30 days in advance. For same-day bookings, please book at least 4 hours before your preferred time slot.",
+        "You can book services up to 60 days in advance. For same-day bookings, please book at least 4 hours before your preferred time slot.",
       category: "bookings",
     },
     {
@@ -130,15 +132,15 @@ const QuickHelpDrawer: React.FC<QuickHelpDrawerProps> = ({
         "Subscriptions allow you to schedule recurring services at discounted rates. Choose your services, set your frequency, and enjoy automatic scheduling with up to 30% savings.",
       category: "subscriptions",
     },
+    // {
+    //   id: "5",
+    //   question: "What if I'm not satisfied with the service?",
+    //   answer:
+    //     "Your satisfaction is our priority. If you're not happy with a service, contact us within 24 hours and we'll either re-do the service at no cost or provide a full refund.",
+    //   category: "quality",
+    // },
     {
       id: "5",
-      question: "What if I'm not satisfied with the service?",
-      answer:
-        "Your satisfaction is our priority. If you're not happy with a service, contact us within 24 hours and we'll either re-do the service at no cost or provide a full refund.",
-      category: "quality",
-    },
-    {
-      id: "6",
       question: "Are your service providers background checked?",
       answer:
         "Yes, all our service providers undergo thorough background checks, skill assessments, and regular training to ensure quality and safety.",
@@ -157,18 +159,40 @@ const QuickHelpDrawer: React.FC<QuickHelpDrawerProps> = ({
     setExpandedFAQ(expandedFAQ === faqId ? null : faqId);
   };
 
+  const handleCategoryClick = (categoryId: string) => {
+    setSelectedCategory(categoryId);
+  };
+
+  const handleBackToCategories = () => {
+    setSelectedCategory(null);
+  };
+
+  const currentCategory = helpCategories.find(
+    (cat) => cat.id === selectedCategory
+  );
+
   return (
-    <ModalDrawer isOpen={isOpen} onClose={onClose} width="lg">
+    <ModalDrawer
+      isOpen={isOpen}
+      onClose={onClose}
+      width="lg"
+      addContentPadding={false}
+    >
       <div className={styles.drawer}>
         {/* Header */}
-        <div className={styles.drawer__header}>
-          <button className={styles.drawer__backBtn} onClick={onClose}>
-            <ArrowLeft size={20} />
-          </button>
-          <div className={styles.drawer__headerText}>
-            <h2 className={styles.drawer__title}>Help & Support</h2>
-            <p className={styles.drawer__subtitle}>
-              How can we help you today?
+        <div className={styles.header}>
+          <div className={styles.header__top}>
+            <button className={styles.header__closeBtn} onClick={onClose}>
+              <ArrowLeft size={18} />
+            </button>
+          </div>
+          <div className={styles.header__content}>
+            <div className={styles.header__iconWrapper}>
+              <HelpCircle size={28} />
+            </div>
+            <h2 className={styles.header__title}>How can we help?</h2>
+            <p className={styles.header__subtitle}>
+              Search our guides or browse topics below
             </p>
           </div>
         </div>
@@ -187,17 +211,58 @@ const QuickHelpDrawer: React.FC<QuickHelpDrawerProps> = ({
 
         {/* Content */}
         <div className={styles.drawer__content}>
+          {/* Category Articles View */}
+          {selectedCategory && currentCategory && !searchQuery && (
+            <div className={styles.drawer__section}>
+              <button
+                className={styles.drawer__backToCategories}
+                onClick={handleBackToCategories}
+              >
+                <ArrowLeft size={16} />
+                Back to topics
+              </button>
+              <div className={styles.drawer__categoryHeader}>
+                <div
+                  className={styles.drawer__categoryIconLarge}
+                  style={{ backgroundColor: `${currentCategory.color}15` }}
+                >
+                  <span style={{ color: currentCategory.color }}>
+                    {currentCategory.icon}
+                  </span>
+                </div>
+                <h3 className={styles.drawer__categoryTitleLarge}>
+                  {currentCategory.title}
+                </h3>
+              </div>
+              <div className={styles.drawer__articles}>
+                {currentCategory.articles.map((article, index) => (
+                  <motion.button
+                    key={index}
+                    className={styles.drawer__articleItem}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <FileText size={16} />
+                    <span>{article}</span>
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Quick Links */}
-          {!searchQuery && (
+          {!searchQuery && !selectedCategory && (
             <div className={styles.drawer__section}>
               <h3 className={styles.drawer__sectionTitle}>Browse Topics</h3>
               <div className={styles.drawer__categories}>
                 {helpCategories.map((category) => (
-                  <motion.div
+                  <motion.button
                     key={category.id}
                     className={styles.drawer__categoryCard}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
+                    onClick={() => handleCategoryClick(category.id)}
                   >
                     <div
                       className={styles.drawer__categoryIcon}
@@ -215,57 +280,62 @@ const QuickHelpDrawer: React.FC<QuickHelpDrawerProps> = ({
                         {category.articles.length} articles
                       </span>
                     </div>
-                  </motion.div>
+                  </motion.button>
                 ))}
               </div>
             </div>
           )}
 
           {/* FAQs */}
-          <div className={styles.drawer__section}>
-            <h3 className={styles.drawer__sectionTitle}>
-              Frequently Asked Questions
-            </h3>
-            <div className={styles.drawer__faqs}>
-              {filteredFAQs.map((faq, index) => (
-                <motion.div
-                  key={faq.id}
-                  className={styles.drawer__faqItem}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <button
-                    className={styles.drawer__faqQuestion}
-                    onClick={() => toggleFAQ(faq.id)}
+          {!selectedCategory && (
+            <div className={styles.drawer__section}>
+              <h3 className={styles.drawer__sectionTitle}>
+                Frequently Asked Questions
+              </h3>
+              <div className={styles.drawer__faqs}>
+                {filteredFAQs.map((faq, index) => (
+                  <motion.div
+                    key={faq.id}
+                    className={styles.drawer__faqItem}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
                   >
-                    <HelpCircle size={18} className={styles.drawer__faqIcon} />
-                    <span>{faq.question}</span>
-                    <motion.div
-                      className={styles.drawer__faqArrow}
-                      animate={{ rotate: expandedFAQ === faq.id ? 180 : 0 }}
-                      transition={{ duration: 0.2 }}
+                    <button
+                      className={styles.drawer__faqQuestion}
+                      onClick={() => toggleFAQ(faq.id)}
                     >
-                      <ChevronDown size={18} />
-                    </motion.div>
-                  </button>
-                  <AnimatePresence>
-                    {expandedFAQ === faq.id && (
+                      <HelpCircle
+                        size={18}
+                        className={styles.drawer__faqIcon}
+                      />
+                      <span>{faq.question}</span>
                       <motion.div
-                        className={styles.drawer__faqAnswer}
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
+                        className={styles.drawer__faqArrow}
+                        animate={{ rotate: expandedFAQ === faq.id ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
                       >
-                        <p>{faq.answer}</p>
+                        <ChevronDown size={18} />
                       </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              ))}
+                    </button>
+                    <AnimatePresence>
+                      {expandedFAQ === faq.id && (
+                        <motion.div
+                          className={styles.drawer__faqAnswer}
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <p>{faq.answer}</p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Contact Support */}
           <div className={styles.drawer__support}>
@@ -292,7 +362,7 @@ const QuickHelpDrawer: React.FC<QuickHelpDrawerProps> = ({
                   </div>
                   <div className={styles.drawer__supportOptionInfo}>
                     <span className={styles.drawer__supportOptionTitle}>
-                      Live Chat
+                      Live Chat (coming soon)
                     </span>
                     <span className={styles.drawer__supportOptionDesc}>
                       Chat with our team
@@ -313,7 +383,7 @@ const QuickHelpDrawer: React.FC<QuickHelpDrawerProps> = ({
                       Call Us
                     </span>
                     <span className={styles.drawer__supportOptionDesc}>
-                      +234 801 234 5678
+                      {ContactDetails.PHONE}
                     </span>
                   </div>
                   <ExternalLink size={16} />
@@ -331,7 +401,7 @@ const QuickHelpDrawer: React.FC<QuickHelpDrawerProps> = ({
                       Email
                     </span>
                     <span className={styles.drawer__supportOptionDesc}>
-                      team@metromellow.com
+                      {ContactDetails.EMAIL}
                     </span>
                   </div>
                   <ExternalLink size={16} />

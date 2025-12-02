@@ -49,8 +49,12 @@
 
   &__content {
     flex: 1;
-    padding: spacing("lg") spacing("lg") spacing("xl");
+    // padding: spacing("lg") spacing("lg") spacing("xl");
     overflow-y: auto;
+  }
+
+  &__contentPadding {
+    padding: spacing("lg") spacing("lg") spacing("xl");
   }
 
   &__header {
@@ -124,12 +128,12 @@
     // Ensure proper mobile positioning
     transform: none;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
-    
+
     // Improve mobile content spacing
     &__content {
       padding: spacing("md");
     }
-    
+
     &__footer {
       padding: spacing("md");
     }

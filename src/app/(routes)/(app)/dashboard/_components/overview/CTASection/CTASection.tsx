@@ -33,7 +33,8 @@ const CTASection: React.FC = () => {
                 Save with Subscription
               </h3>
               <p className={styles.subscriptionContent__description}>
-                Monthly plans from ₦25,000 and enjoy 30% savings on all services
+                Monthly plans from ₦25,000 and enjoy up to 10% savings on all
+                services
               </p>
               <div className={styles.subscriptionContent__benefits}>
                 <div className={styles.subscriptionContent__benefit}>
@@ -42,7 +43,7 @@ const CTASection: React.FC = () => {
                 </div>
                 <div className={styles.subscriptionContent__benefit}>
                   <Check size={14} />
-                  <span>10% discount</span>
+                  <span>Up to10% discount</span>
                 </div>
                 <div className={styles.subscriptionContent__benefit}>
                   <Check size={14} />

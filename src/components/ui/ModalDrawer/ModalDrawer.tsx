@@ -35,6 +35,7 @@ interface ModalDrawerProps {
   title?: string;
   description?: string;
   showFooter?: boolean;
+  addContentPadding?: boolean;
 }
 
 const ModalDrawer: React.FC<ModalDrawerProps> = ({
@@ -46,6 +47,7 @@ const ModalDrawer: React.FC<ModalDrawerProps> = ({
   title,
   description,
   showFooter = false,
+  addContentPadding = true,
 }) => {
   // Disable body scroll when modal is open
   useEffect(() => {
@@ -118,7 +120,13 @@ const ModalDrawer: React.FC<ModalDrawerProps> = ({
                 onClose={onClose}
               />
             )}
-            <div className={styles.modalDrawer__content}>{children}</div>
+            <div
+              className={`${styles.modalDrawer__content} ${
+                addContentPadding ? styles.modalDrawer__contentPadding : ""
+              }`}
+            >
+              {children}
+            </div>
 
             {showFooter && footer && (
               <div className={styles.modalDrawer__footer}>{footer}</div>
