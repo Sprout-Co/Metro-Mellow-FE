@@ -1,12 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Check, MapPin, ChevronDown, X } from "lucide-react";
+import { Check, MapPin, ChevronDown, Loader2 } from "lucide-react";
 import styles from "./AddressModal.module.scss";
-import FnButton from "@/components/ui/Button/FnButton";
-import Input from "@/components/ui/Input";
-import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
+import Modal from "@/components/ui/Modal/Modal";
 import { Address, ServiceArea } from "@/graphql/api";
 import { PlacesAutocomplete } from "@/components/ui/PlacesAutocomplete/PlacesAutocomplete";
 import { useServiceAreaOperations } from "@/graphql/hooks/serviceArea/useServiceAreaOperations";
@@ -30,7 +27,6 @@ const AddressModal: React.FC<AddressModalProps> = ({
   const [label, setLabel] = useState("");
   const [isDefault, setIsDefault] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const isEditing = !!address;
@@ -38,12 +34,10 @@ const AddressModal: React.FC<AddressModalProps> = ({
   const { handleGetActiveServiceAreas, currentActiveServiceAreas } =
     useServiceAreaOperations();
 
-  // Fetch service areas on mount
   useEffect(() => {
     handleGetActiveServiceAreas();
   }, [handleGetActiveServiceAreas]);
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -57,50 +51,43 @@ const AddressModal: React.FC<AddressModalProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Reset form when modal opens or address changes
   useEffect(() => {
     if (isOpen) {
       if (address) {
         setLabel(address.label || "");
         setStreetAddress(address.street || "");
         setIsDefault(address.isDefault || false);
-        // Set the service area from the existing address
         if (address.serviceArea) {
           setSelectedArea(address.serviceArea as ServiceArea);
         }
       } else {
-        setLabel("");
-        setStreetAddress("");
-        setIsDefault(false);
-        setSelectedArea(null);
+        resetForm();
       }
-      setError(null);
     }
   }, [address, isOpen]);
+
+  const resetForm = () => {
+    setLabel("");
+    setStreetAddress("");
+    setIsDefault(false);
+    setSelectedArea(null);
+    setIsDropdownOpen(false);
+  };
 
   const handleAreaSelect = (area: ServiceArea) => {
     setSelectedArea(area);
     setIsDropdownOpen(false);
-    setStreetAddress(""); // Reset address when area changes
+    if (!isEditing) setStreetAddress("");
   };
 
-  const handleAddressSelect = (selectedAddress: string) => {
-    setStreetAddress(selectedAddress);
+  const handleAddressSelect = (selected: string) => {
+    setStreetAddress(selected);
   };
 
   const handleSubmit = async () => {
-    if (!selectedArea) {
-      setError("Please select a service area");
-      return;
-    }
-    if (!streetAddress.trim()) {
-      setError("Please enter an address");
-      return;
-    }
+    if (!selectedArea || !streetAddress.trim()) return;
 
     setIsSubmitting(true);
-    setError(null);
-
     try {
       await onSave(
         {
@@ -111,197 +98,157 @@ const AddressModal: React.FC<AddressModalProps> = ({
         },
         selectedArea.id
       );
+      resetForm();
       onClose();
     } catch (err) {
       console.error("Error saving address:", err);
-      setError("Failed to save address. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleClose = () => {
-    setSelectedArea(null);
-    setStreetAddress("");
-    setLabel("");
-    setIsDefault(false);
-    setError(null);
-    setIsDropdownOpen(false);
+    resetForm();
     onClose();
   };
 
-  const footerContent = (
-    <div className={styles.footer__actions}>
-      <FnButton
-        variant="ghost"
-        onClick={handleClose}
-        className={styles.footer__button}
-        disabled={isSubmitting}
-      >
-        Cancel
-      </FnButton>
-      <FnButton
-        variant="primary"
-        onClick={handleSubmit}
-        className={styles.footer__button}
-        disabled={isSubmitting || !selectedArea || !streetAddress}
-      >
-        {isSubmitting ? (
-          "Saving..."
-        ) : (
-          <>
-            <Check size={18} />
-            {isEditing ? "Update Address" : "Save Address"}
-          </>
-        )}
-      </FnButton>
-    </div>
-  );
+  const canSubmit = selectedArea && streetAddress.trim();
 
   return (
-    <ModalDrawer
+    <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      width="md"
-      title={isEditing ? "Edit Address" : "Add New Address"}
-      description={
-        isEditing
-          ? "Update your address information"
-          : "Select your service area and enter address"
-      }
-      showFooter={true}
-      footer={footerContent}
+      title={isEditing ? "Edit Address" : "Add Address"}
+      maxWidth="440px"
     >
-      <div className={styles.modal}>
-        <div className={styles.content}>
-          {/* Error Message */}
-          {error && <div className={styles.error}>{error}</div>}
-
-          {/* Service Area Dropdown */}
-          <div className={styles.field}>
-            <label className={styles.field__label}>
-              Service Area
-              <span className={styles.field__required}>*</span>
-            </label>
-            <div className={styles.dropdown} ref={dropdownRef}>
-              <button
-                type="button"
-                className={styles.dropdown__trigger}
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              >
-                <MapPin size={18} className={styles.dropdown__icon} />
-                <span
-                  className={
-                    selectedArea
-                      ? styles.dropdown__value
-                      : styles.dropdown__placeholder
-                  }
-                >
-                  {selectedArea?.name || "Select service area"}
-                </span>
-                {selectedArea ? (
-                  <X
-                    size={16}
-                    className={styles.dropdown__clear}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedArea(null);
-                      setStreetAddress("");
-                    }}
-                  />
-                ) : (
-                  <ChevronDown size={18} className={styles.dropdown__chevron} />
-                )}
-              </button>
-
-              {isDropdownOpen && (
-                <ul className={styles.dropdown__list}>
-                  {currentActiveServiceAreas?.map((area) => (
-                    <li
-                      key={area.id}
-                      className={styles.dropdown__item}
-                      onClick={() => handleAreaSelect(area)}
-                    >
-                      <MapPin size={16} />
-                      <span>{area.name}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+      <div className={styles.container}>
+        {/* Step indicator */}
+        <div className={styles.steps}>
+          <div className={`${styles.step} ${styles["step--active"]}`}>
+            <span className={styles.step__number}>1</span>
+            <span className={styles.step__text}>Area</span>
           </div>
-
-          {/* Address Input - only show after area is selected */}
-          {selectedArea && (
-            <div className={styles.field}>
-              <label className={styles.field__label}>
-                Address
-                <span className={styles.field__required}>*</span>
-              </label>
-              <PlacesAutocomplete
-                onSelect={handleAddressSelect}
-                placeholder={`Enter address in ${selectedArea.name}`}
-              />
-              {streetAddress && (
-                <div className={styles.field__selected}>
-                  <MapPin size={14} />
-                  <span>{streetAddress}</span>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Label Input - only show after address is selected */}
-          {streetAddress && (
-            <>
-              <div className={styles.field}>
-                <label className={styles.field__label}>Address Label</label>
-                <Input
-                  placeholder="e.g., Home, Office, Mom's House"
-                  value={label}
-                  onChange={(e) => setLabel(e.target.value)}
-                  className={styles.field__input}
-                />
-              </div>
-
-              {/* Default Address Checkbox */}
-              <div className={styles.checkbox}>
-                <label className={styles.checkbox__label}>
-                  <input
-                    type="checkbox"
-                    className={styles.checkbox__input}
-                    checked={isDefault}
-                    onChange={(e) => setIsDefault(e.target.checked)}
-                  />
-                  <div className={styles.checkbox__content}>
-                    <div className={styles.checkbox__title}>
-                      Set as default address
-                    </div>
-                    <div className={styles.checkbox__description}>
-                      This address will be automatically selected for new orders
-                    </div>
-                  </div>
-                </label>
-              </div>
-            </>
-          )}
+          <div className={styles.step__divider} />
+          <div
+            className={`${styles.step} ${selectedArea ? styles["step--active"] : ""}`}
+          >
+            <span className={styles.step__number}>2</span>
+            <span className={styles.step__text}>Address</span>
+          </div>
+          <div className={styles.step__divider} />
+          <div
+            className={`${styles.step} ${streetAddress ? styles["step--active"] : ""}`}
+          >
+            <span className={styles.step__number}>3</span>
+            <span className={styles.step__text}>Details</span>
+          </div>
         </div>
 
-        {/* Loading Overlay */}
-        <AnimatePresence>
-          {isSubmitting && (
-            <motion.div
-              className={styles.loading}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+        {/* Service Area */}
+        <div className={styles.field}>
+          <label className={styles.field__label}>Service Area</label>
+          <div className={styles.dropdown} ref={dropdownRef}>
+            <button
+              type="button"
+              className={`${styles.dropdown__btn} ${selectedArea ? styles["dropdown__btn--selected"] : ""}`}
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
-              <div className={styles.loading__spinner} />
-            </motion.div>
-          )}
-        </AnimatePresence>
+              <MapPin size={18} />
+              <span>{selectedArea?.name || "Select area"}</span>
+              <ChevronDown
+                size={16}
+                className={isDropdownOpen ? styles["dropdown__icon--open"] : ""}
+              />
+            </button>
+
+            {isDropdownOpen && (
+              <ul className={styles.dropdown__menu}>
+                {currentActiveServiceAreas?.map((area) => (
+                  <li
+                    key={area.id}
+                    className={`${styles.dropdown__item} ${selectedArea?.id === area.id ? styles["dropdown__item--selected"] : ""}`}
+                    onClick={() => handleAreaSelect(area)}
+                  >
+                    <MapPin size={16} />
+                    <span>{area.name}</span>
+                    {selectedArea?.id === area.id && <Check size={16} />}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+
+        {/* Address */}
+        {selectedArea && (
+          <div className={styles.field}>
+            <label className={styles.field__label}>Street Address</label>
+            <PlacesAutocomplete
+              onSelect={handleAddressSelect}
+              placeholder={`Search in ${selectedArea.name}...`}
+            />
+            {streetAddress && (
+              <div className={styles.field__preview}>
+                <Check size={14} />
+                <span>{streetAddress}</span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Label & Default */}
+        {streetAddress && (
+          <>
+            <div className={styles.field}>
+              <label className={styles.field__label}>Label (optional)</label>
+              <input
+                type="text"
+                className={styles.input}
+                placeholder="e.g., Home, Office"
+                value={label}
+                onChange={(e) => setLabel(e.target.value)}
+              />
+            </div>
+
+            <label className={styles.toggle}>
+              <input
+                type="checkbox"
+                checked={isDefault}
+                onChange={(e) => setIsDefault(e.target.checked)}
+              />
+              <div className={styles.toggle__track}>
+                <div className={styles.toggle__thumb} />
+              </div>
+              <span className={styles.toggle__label}>Set as default</span>
+            </label>
+          </>
+        )}
+
+        {/* Actions */}
+        <div className={styles.actions}>
+          <button className={styles.cancelBtn} onClick={handleClose}>
+            Cancel
+          </button>
+          <button
+            className={styles.submitBtn}
+            onClick={handleSubmit}
+            disabled={!canSubmit || isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 size={16} className={styles.spinner} />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Check size={16} />
+                {isEditing ? "Update" : "Save"} Address
+              </>
+            )}
+          </button>
+        </div>
       </div>
-    </ModalDrawer>
+    </Modal>
   );
 };
 

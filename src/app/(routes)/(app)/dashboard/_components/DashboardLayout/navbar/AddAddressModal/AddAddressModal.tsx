@@ -1,12 +1,11 @@
 import Modal from "@/components/ui/Modal/Modal";
 import React, { useState, useRef, useEffect } from "react";
 import styles from "./AddAddressModal.module.scss";
-import { Button } from "@/components/ui/Button/Button";
 import { PlacesAutocomplete } from "@/components/ui/PlacesAutocomplete/PlacesAutocomplete";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import { useServiceAreaOperations } from "@/graphql/hooks/serviceArea/useServiceAreaOperations";
 import { ServiceArea } from "@/graphql/api";
-import { MapPin, ChevronDown, X } from "lucide-react";
+import { MapPin, ChevronDown, Check, Loader2 } from "lucide-react";
 
 interface AddAddressModalProps {
   isOpen: boolean;
@@ -29,12 +28,10 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
   const { handleGetActiveServiceAreas, currentActiveServiceAreas } =
     useServiceAreaOperations();
 
-  // Fetch service areas on mount
   useEffect(() => {
     handleGetActiveServiceAreas();
   }, [handleGetActiveServiceAreas]);
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -51,6 +48,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
   const handleAreaSelect = (area: ServiceArea) => {
     setSelectedArea(area);
     setIsDropdownOpen(false);
+    setAddress("");
   };
 
   const handleAddressSelect = (selectedAddress: string) => {
@@ -71,11 +69,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
 
       await handleGetCurrentUser();
       onAddressSelect?.(address);
-
-      // Reset & close
-      setSelectedArea(null);
-      setAddress("");
-      onClose();
+      resetAndClose();
     } catch (error) {
       console.error("Failed to add address:", error);
     } finally {
@@ -83,7 +77,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
     }
   };
 
-  const handleClose = () => {
+  const resetAndClose = () => {
     setSelectedArea(null);
     setAddress("");
     setIsDropdownOpen(false);
@@ -93,55 +87,56 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
   return (
     <Modal
       isOpen={isOpen}
-      onClose={handleClose}
+      onClose={resetAndClose}
       title="Add Address"
-      maxWidth="450px"
+      maxWidth="420px"
     >
-      <div className={styles.modal}>
-        {/* Service Area Dropdown */}
-        <div className={styles.field}>
-          <label className={styles.label}>Service Area</label>
+      <div className={styles.container}>
+        {/* Step indicator */}
+        <div className={styles.steps}>
+          <div className={`${styles.step} ${styles["step--active"]}`}>
+            <span className={styles.step__number}>1</span>
+            <span className={styles.step__label}>Area</span>
+          </div>
+          <div className={styles.step__line} />
+          <div
+            className={`${styles.step} ${selectedArea ? styles["step--active"] : ""}`}
+          >
+            <span className={styles.step__number}>2</span>
+            <span className={styles.step__label}>Address</span>
+          </div>
+        </div>
+
+        {/* Service Area Selection */}
+        <div className={styles.section}>
+          <label className={styles.label}>Select your service area</label>
           <div className={styles.dropdown} ref={dropdownRef}>
             <button
               type="button"
-              className={styles.dropdown__trigger}
+              className={`${styles.dropdown__btn} ${selectedArea ? styles["dropdown__btn--selected"] : ""}`}
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
-              <MapPin size={18} className={styles.dropdown__icon} />
-              <span
+              <MapPin size={18} />
+              <span>{selectedArea?.name || "Choose area"}</span>
+              <ChevronDown
+                size={16}
                 className={
-                  selectedArea
-                    ? styles.dropdown__value
-                    : styles.dropdown__placeholder
+                  isDropdownOpen ? styles["dropdown__chevron--open"] : ""
                 }
-              >
-                {selectedArea?.name || "Select service area"}
-              </span>
-              {selectedArea ? (
-                <X
-                  size={16}
-                  className={styles.dropdown__clear}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedArea(null);
-                    setAddress("");
-                  }}
-                />
-              ) : (
-                <ChevronDown size={18} className={styles.dropdown__chevron} />
-              )}
+              />
             </button>
 
             {isDropdownOpen && (
-              <ul className={styles.dropdown__list}>
+              <ul className={styles.dropdown__menu}>
                 {currentActiveServiceAreas?.map((area) => (
                   <li
                     key={area.id}
-                    className={styles.dropdown__item}
+                    className={`${styles.dropdown__option} ${selectedArea?.id === area.id ? styles["dropdown__option--selected"] : ""}`}
                     onClick={() => handleAreaSelect(area)}
                   >
                     <MapPin size={16} />
                     <span>{area.name}</span>
+                    {selectedArea?.id === area.id && <Check size={16} />}
                   </li>
                 ))}
               </ul>
@@ -149,29 +144,41 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
           </div>
         </div>
 
-        {/* Address Input - only show after area is selected */}
+        {/* Address Input */}
         {selectedArea && (
-          <div className={styles.field}>
-            <label className={styles.label}>Address</label>
+          <div className={styles.section}>
+            <label className={styles.label}>Enter your address</label>
             <PlacesAutocomplete
               onSelect={handleAddressSelect}
-              placeholder={`Enter address in ${selectedArea.name}`}
+              placeholder={`Search in ${selectedArea.name}...`}
             />
+            {address && (
+              <div className={styles.selected}>
+                <Check size={14} />
+                <span>{address}</span>
+              </div>
+            )}
           </div>
         )}
 
         {/* Confirm Button */}
-        {address && selectedArea && (
-          <Button
-            variant="primary"
-            onClick={handleConfirm}
-            fullWidth
-            className={styles.confirmBtn}
-            disabled={isLoading}
-          >
-            {isLoading ? "Adding..." : "Confirm Address"}
-          </Button>
-        )}
+        <button
+          className={styles.confirmBtn}
+          onClick={handleConfirm}
+          disabled={!address || !selectedArea || isLoading}
+        >
+          {isLoading ? (
+            <>
+              <Loader2 size={18} className={styles.spinner} />
+              Adding...
+            </>
+          ) : (
+            <>
+              <Check size={18} />
+              Confirm Address
+            </>
+          )}
+        </button>
       </div>
     </Modal>
   );
