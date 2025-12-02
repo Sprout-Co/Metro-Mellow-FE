@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "./Navbar.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
-import { Bell, ChevronDown, MapPin, Menu, User } from "lucide-react";
+import { ChevronDown, MapPin, Menu, User } from "lucide-react";
 import { NotificationButton } from "@/components/ui/Notifications/NotificationButton/NotificationButton";
 import { NotificationDrawer } from "@/components/ui/Notifications/NotificationDrawer/NotificationDrawer";
 import AddAddressModal from "./AddAddressModal/AddAddressModal";
@@ -14,60 +14,18 @@ import { openServicesListDrawer } from "@/lib/redux/slices/uiSlice";
 import { RootState } from "@/lib/redux/store";
 import CartModal from "@/components/ui/booking/modals/CartModal/CartModal";
 
-// Icons (you can replace these with your preferred icon library)
-
-const CartIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <circle cx="9" cy="21" r="1"></circle>
-    <circle cx="20" cy="21" r="1"></circle>
-    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-  </svg>
-);
-
-const MenuIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <line x1="3" y1="12" x2="21" y2="12"></line>
-    <line x1="3" y1="6" x2="21" y2="6"></line>
-    <line x1="3" y1="18" x2="21" y2="18"></line>
-  </svg>
-);
-
 interface NavbarProps {
   handleSidebarToggle: (collapsed: boolean) => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ handleSidebarToggle }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
   const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
   const [isNotificationDrawerOpen, setIsNotificationDrawerOpen] =
     useState(false);
-  const [activeTab, setActiveTab] = useState("overview");
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
-  const openCartModal = () => {
-    setIsCartModalOpen(true);
-  };
+
   return (
     <nav className={styles.navbar}>
       <div className={styles.navbar__container}>

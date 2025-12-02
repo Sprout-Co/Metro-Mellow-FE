@@ -1,0 +1,157 @@
+// PlacesAutocomplete - BEM Structure
+// Block: places-autocomplete
+
+.places-autocomplete {
+  position: relative;
+  width: 100%;
+
+  // Element: Input Wrapper
+  &__input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+
+    &:focus-within {
+      border-color: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+    }
+  }
+
+  // Element: Search Icon
+  &__search-icon {
+    flex-shrink: 0;
+    color: #9ca3af;
+  }
+
+  // Element: Input
+  &__input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 15px;
+    color: #1f2937;
+    outline: none;
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+
+  // Element: Loader
+  &__loader {
+    flex-shrink: 0;
+    color: #22c55e;
+    animation: spin 1s linear infinite;
+  }
+
+  // Element: Clear Button
+  &__clear-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    cursor: pointer;
+    border-radius: 4px;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+
+    &:hover {
+      background-color: #f3f4f6;
+      color: #374151;
+    }
+  }
+
+  // Element: Suggestions List
+  &__suggestions {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    z-index: 50;
+    max-height: 280px;
+    overflow-y: auto;
+  }
+
+  // Element: Suggestion Item
+  &__suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: #f9fafb;
+    }
+  }
+
+  // Element: Icon Wrapper
+  &__icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    background-color: #f3f4f6;
+    border-radius: 50%;
+    color: #6b7280;
+  }
+
+  // Element: Text Wrapper
+  &__text-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: left;
+    min-width: 0;
+  }
+
+  // Element: Main Text
+  &__main-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1f2937;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // Element: Secondary Text
+  &__secondary-text {
+    font-size: 13px;
+    color: #6b7280;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,8 +1,15 @@
 import Modal from "@/components/ui/Modal/Modal";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styles from "./AddAddressModal.module.scss";
-import { Navigation, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/Button/Button";
+import { PlacesAutocomplete } from "@/components/ui/PlacesAutocomplete/PlacesAutocomplete";
+import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
+import {
+  useActiveServiceAreasQuery,
+  useGetCurrentUserQuery,
+  ServiceArea,
+} from "@/graphql/api";
+import { MapPin, ChevronDown, X } from "lucide-react";
 
 interface AddAddressModalProps {
   isOpen: boolean;
@@ -15,172 +22,152 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
   onClose,
   onAddressSelect,
 }) => {
-  const [searchValue, setSearchValue] = useState("");
+  const [selectedArea, setSelectedArea] = useState<ServiceArea | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [address, setAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
+  const { handleAddAddress } = useAuthOperations();
+  const { data: serviceAreasData } = useActiveServiceAreasQuery();
+  const { refetch: refetchUser } = useGetCurrentUserQuery({ skip: true });
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleAreaSelect = (area: ServiceArea) => {
+    setSelectedArea(area);
+    setIsDropdownOpen(false);
   };
 
-  const handleClearSearch = () => {
-    setSearchValue("");
+  const handleAddressSelect = (selectedAddress: string) => {
+    setAddress(selectedAddress);
   };
 
-  const handleUseCurrentLocation = async () => {
-    if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser");
-      return;
-    }
+  const handleConfirm = async () => {
+    if (!address || !selectedArea) return;
 
     setIsLoading(true);
-
     try {
-      // Get current position
-      const position = await new Promise<GeolocationPosition>(
-        (resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject, {
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 0,
-          });
-        }
-      );
+      await handleAddAddress({
+        street: address,
+        city: selectedArea.city,
+        serviceArea: selectedArea.id,
+        isDefault: true,
+      });
 
-      const { latitude, longitude } = position.coords;
+      await refetchUser();
+      onAddressSelect?.(address);
 
-      // Reverse geocode using OpenStreetMap Nominatim API
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`,
-        {
-          headers: {
-            "User-Agent": "Metromellow App", // Required by Nominatim
-          },
-        }
-      );
-
-      console.log("response", response);
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch address");
-      }
-
-      const data = await response.json();
-
-      // Extract address components
-      const address = data.address || {};
-      const addressParts: string[] = [];
-
-      // Build address string from components
-      if (address.road || address.house_number) {
-        const street = [address.house_number, address.road]
-          .filter(Boolean)
-          .join(" ");
-        addressParts.push(street);
-      } else if (address.pedestrian) {
-        addressParts.push(address.pedestrian);
-      }
-
-      if (address.suburb || address.neighbourhood) {
-        addressParts.push(address.suburb || address.neighbourhood);
-      }
-
-      if (address.city || address.town || address.village) {
-        addressParts.push(address.city || address.town || address.village);
-      }
-
-      if (address.state) {
-        addressParts.push(address.state);
-      }
-
-      if (address.country) {
-        addressParts.push(address.country);
-      }
-
-      // Fallback to display_name if no structured address
-      const fullAddress =
-        addressParts.length > 0
-          ? addressParts.join(", ")
-          : data.display_name || `${latitude}, ${longitude}`;
-
-      // Update the search input
-      setSearchValue(fullAddress);
-
-      // Call the callback
-      if (onAddressSelect) {
-        onAddressSelect(fullAddress);
-      }
-
-      setIsLoading(false);
+      // Reset & close
+      setSelectedArea(null);
+      setAddress("");
+      onClose();
     } catch (error) {
-      console.error("Error getting location:", error);
+      console.error("Failed to add address:", error);
+    } finally {
       setIsLoading(false);
-
-      // Show user-friendly error message
-      const errorMessage =
-        error instanceof GeolocationPositionError
-          ? error.code === error.PERMISSION_DENIED
-            ? "Location access denied. Please enable location permissions."
-            : error.code === error.POSITION_UNAVAILABLE
-              ? "Location unavailable. Please try again."
-              : "Location request timed out. Please try again."
-          : "Failed to get your location. Please enter your address manually.";
-
-      alert(errorMessage);
     }
   };
 
-  const handleConfirm = () => {
-    if (searchValue && onAddressSelect) {
-      onAddressSelect(searchValue);
-      onClose();
-    }
+  const handleClose = () => {
+    setSelectedArea(null);
+    setAddress("");
+    setIsDropdownOpen(false);
+    onClose();
   };
 
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       title="Add Address"
       maxWidth="450px"
     >
       <div className={styles.modal}>
-        {/* Search Input */}
-        <div className={styles.searchField}>
-          <Search size={20} />
-          <input
-            type="text"
-            className={styles.input}
-            placeholder="Enter your address"
-            value={searchValue}
-            onChange={handleInputChange}
-            autoFocus
-          />
-          {searchValue && (
-            <button onClick={handleClearSearch} className={styles.clearBtn}>
-              <X size={16} />
+        {/* Service Area Dropdown */}
+        <div className={styles.field}>
+          <label className={styles.label}>Service Area</label>
+          <div className={styles.dropdown} ref={dropdownRef}>
+            <button
+              type="button"
+              className={styles.dropdown__trigger}
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
+              <MapPin size={18} className={styles.dropdown__icon} />
+              <span
+                className={
+                  selectedArea
+                    ? styles.dropdown__value
+                    : styles.dropdown__placeholder
+                }
+              >
+                {selectedArea?.name || "Select service area"}
+              </span>
+              {selectedArea ? (
+                <X
+                  size={16}
+                  className={styles.dropdown__clear}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedArea(null);
+                    setAddress("");
+                  }}
+                />
+              ) : (
+                <ChevronDown size={18} className={styles.dropdown__chevron} />
+              )}
             </button>
-          )}
+
+            {isDropdownOpen && (
+              <ul className={styles.dropdown__list}>
+                {serviceAreasData?.activeServiceAreas.map((area) => (
+                  <li
+                    key={area.id}
+                    className={styles.dropdown__item}
+                    onClick={() => handleAreaSelect(area)}
+                  >
+                    <MapPin size={16} />
+                    <span>{area.name}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
 
-        {/* Current Location */}
-        <button
-          className={styles.locationBtn}
-          onClick={handleUseCurrentLocation}
-          disabled={isLoading}
-        >
-          <Navigation size={16} />
-          {isLoading ? "Getting location..." : "Use current location"}
-        </button>
+        {/* Address Input - only show after area is selected */}
+        {selectedArea && (
+          <div className={styles.field}>
+            <label className={styles.label}>Address</label>
+            <PlacesAutocomplete
+              onSelect={handleAddressSelect}
+              placeholder={`Enter address in ${selectedArea.name}`}
+            />
+          </div>
+        )}
 
         {/* Confirm Button */}
-        {searchValue && (
+        {address && selectedArea && (
           <Button
             variant="primary"
             onClick={handleConfirm}
             fullWidth
             className={styles.confirmBtn}
+            disabled={isLoading}
           >
-            Confirm
+            {isLoading ? "Adding..." : "Confirm Address"}
           </Button>
         )}
       </div>
