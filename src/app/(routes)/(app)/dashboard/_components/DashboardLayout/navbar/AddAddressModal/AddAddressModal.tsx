@@ -4,11 +4,8 @@ import styles from "./AddAddressModal.module.scss";
 import { Button } from "@/components/ui/Button/Button";
 import { PlacesAutocomplete } from "@/components/ui/PlacesAutocomplete/PlacesAutocomplete";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
-import {
-  useActiveServiceAreasQuery,
-  useGetCurrentUserQuery,
-  ServiceArea,
-} from "@/graphql/api";
+import { useServiceAreaOperations } from "@/graphql/hooks/serviceArea/useServiceAreaOperations";
+import { ServiceArea } from "@/graphql/api";
 import { MapPin, ChevronDown, X } from "lucide-react";
 
 interface AddAddressModalProps {
@@ -28,9 +25,14 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const { handleAddAddress } = useAuthOperations();
-  const { data: serviceAreasData } = useActiveServiceAreasQuery();
-  const { refetch: refetchUser } = useGetCurrentUserQuery({ skip: true });
+  const { handleAddAddress, handleGetCurrentUser } = useAuthOperations();
+  const { handleGetActiveServiceAreas, currentActiveServiceAreas } =
+    useServiceAreaOperations();
+
+  // Fetch service areas on mount
+  useEffect(() => {
+    handleGetActiveServiceAreas();
+  }, [handleGetActiveServiceAreas]);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -67,7 +69,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
         isDefault: true,
       });
 
-      await refetchUser();
+      await handleGetCurrentUser();
       onAddressSelect?.(address);
 
       // Reset & close
@@ -132,7 +134,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
 
             {isDropdownOpen && (
               <ul className={styles.dropdown__list}>
-                {serviceAreasData?.activeServiceAreas.map((area) => (
+                {currentActiveServiceAreas?.map((area) => (
                   <li
                     key={area.id}
                     className={styles.dropdown__item}

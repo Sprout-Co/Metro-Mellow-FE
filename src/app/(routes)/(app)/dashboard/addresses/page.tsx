@@ -29,52 +29,13 @@ import AddressModal from "./_components/AddressModal";
 import AddressListView from "./_components/AddressListView";
 import DashboardHeader from "../_components/DashboardHeader/DashboardHeader";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { selectUser } from "@/lib/redux";
 import {
-  useGetCurrentUserQuery,
   Address as GraphQLAddress,
   AddressInput,
   Address,
 } from "@/graphql/api";
-
-// Types - extended from GraphQL Address type to include additional UI fields
-// export interface Address extends Omit<GraphQLAddress, "zipCode"> {
-//   id: string;
-//   label?: string | null;
-//   type: "home" | "work" | "other";
-//   street?: string | null;
-//   area?: string; // derived from address parts
-//   city?: string | null;
-//   state?: string | null;
-//   postalCode?: string; // renamed from zipCode
-//   country?: string | null;
-//   isDefault?: boolean | null;
-//   landmark?: string;
-//   phoneNumber?: string;
-//   instructions?: string;
-//   coordinates?: {
-//     lat: number;
-//     lng: number;
-//   };
-// }
-
-// Helper function to transform GraphQL address to UI address
-// const transformGraphQLAddress = (address: GraphQLAddress): Address
-//   => {
-//   return {
-//     ...address,
-//     // type: (address.label?.toLowerCase() === "home"
-//     //   ? "home"
-//     //   : address.label?.toLowerCase() === "office" ||
-//     //       address.label?.toLowerCase() === "work"
-//     //     ? "work"
-//     //     : "other") as "home" | "work" | "other",
-//     // area: "", // Can be derived from street or set separately
-//     postalCode: address.zipCode || "",
-//     landmark: "",
-//     phoneNumber: "",
-//     instructions: "",
-//   };
-// };
 
 const AddressManagementPage: React.FC = () => {
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -86,25 +47,25 @@ const AddressManagementPage: React.FC = () => {
   const [viewType, setViewType] = useState<"list" | "grid">("grid");
   const [isLoading, setIsLoading] = useState(false);
 
-  // GraphQL hooks
-  const { data: userData, refetch: refetchUser } = useGetCurrentUserQuery();
+  // Get user from Redux & auth operations
+  const currentUser = useAppSelector(selectUser);
   const {
     handleAddAddress,
     handleUpdateAddress,
     handleSetDefaultAddress,
     handleRemoveAddress,
+    handleGetCurrentUser,
   } = useAuthOperations();
 
-  // Load addresses from GraphQL data
+  // Load addresses from user data
   useEffect(() => {
-    if (userData?.me?.addresses) {
-      const transformedAddresses = userData.me.addresses.filter(
+    if (currentUser?.addresses) {
+      const transformedAddresses = currentUser.addresses.filter(
         (addr): addr is GraphQLAddress => addr !== null
       );
-      // .map(transformGraphQLAddress);
       setAddresses(transformedAddresses);
     }
-  }, [userData]);
+  }, [currentUser]);
 
   // Handle view change
   const handleViewChange = (type: "list" | "grid") => {
@@ -149,6 +110,16 @@ const AddressManagementPage: React.FC = () => {
     console.log("handleSaveAddress called with:", addressData);
     setIsLoading(true);
     try {
+      // For editing, use existing serviceArea; for new, this modal shouldn't be used
+      // New addresses should use the AddAddressModal with service area selection
+      const serviceAreaId = editingAddress?.serviceArea?.id;
+      if (!serviceAreaId) {
+        console.error(
+          "Service area is required. Use AddAddressModal for new addresses."
+        );
+        return;
+      }
+
       const addressInput: AddressInput = {
         label: addressData.label || "",
         street: addressData.street || "",
@@ -156,20 +127,17 @@ const AddressManagementPage: React.FC = () => {
         state: addressData.state || "",
         zipCode: addressData.zipCode || "",
         isDefault: addressData.isDefault || false,
+        serviceArea: serviceAreaId,
       };
 
       if (editingAddress) {
         // Update existing address
         await handleUpdateAddress(editingAddress.id, addressInput);
         console.log("Address updated successfully");
-      } else {
-        // Add new address
-        await handleAddAddress(addressInput);
-        console.log("Address added successfully");
       }
 
       // Refetch user data to get updated addresses
-      await refetchUser();
+      await handleGetCurrentUser();
       setIsModalOpen(false);
       setEditingAddress(null);
     } catch (error) {
@@ -190,7 +158,7 @@ const AddressManagementPage: React.FC = () => {
       await handleRemoveAddress(id);
       console.log("Address deleted successfully");
       // Refetch user data to get updated addresses
-      await refetchUser();
+      await handleGetCurrentUser();
       setActiveMenuId(null);
     } catch (error) {
       console.error("Address delete error:", error);
@@ -210,7 +178,7 @@ const AddressManagementPage: React.FC = () => {
       await handleSetDefaultAddress(id);
       console.log("Default address updated successfully");
       // Refetch user data to get updated addresses
-      await refetchUser();
+      await handleGetCurrentUser();
       setActiveMenuId(null);
     } catch (error) {
       console.error("Set default address error:", error);
