@@ -13,6 +13,7 @@ import {
   AddressInput,
   Address,
 } from "@/graphql/api";
+import FnButton from "@/components/ui/Button/FnButton";
 
 const AddressManagementPage: React.FC = () => {
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -110,8 +111,10 @@ const AddressManagementPage: React.FC = () => {
               Manage your delivery addresses
             </p>
           </div>
-          <button
-            className={styles.header__addBtn}
+          <FnButton
+            variant="primary"
+            size="sm"
+            // className={styles.header__addBtn}
             onClick={() => {
               setEditingAddress(null);
               setIsModalOpen(true);
@@ -120,7 +123,7 @@ const AddressManagementPage: React.FC = () => {
           >
             <Plus size={18} />
             Add Address
-          </button>
+          </FnButton>
         </div>
 
         {/* Address List */}
