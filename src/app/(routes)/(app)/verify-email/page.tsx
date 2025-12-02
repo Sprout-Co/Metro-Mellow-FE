@@ -5,8 +5,15 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import styles from "./VerifyEmail.module.scss";
-import { CheckCircle, XCircle } from "lucide-react";
-import FnButton from "@/components/ui/Button/FnButton";
+import {
+  CheckCircle,
+  XCircle,
+  Mail,
+  ArrowRight,
+  Loader2,
+  RefreshCw,
+} from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { login as loginAction } from "@/lib/redux";
 
@@ -21,20 +28,17 @@ export default function VerifyEmailPage() {
   );
   const [error, setError] = useState<string>("");
   const [emailInput, setEmailInput] = useState<string>("");
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendSuccess, setResendSuccess] = useState(false);
 
-  // Use ref to track if we've already verified to prevent duplicate calls
   const hasVerified = useRef(false);
 
   useEffect(() => {
-    // Skip if we've already verified
     if (hasVerified.current) {
       return;
     }
 
-    console.log("verifyEmail called");
-
     const verifyEmail = async () => {
-      // Mark as verified immediately to prevent any possibility of duplicate calls
       hasVerified.current = true;
 
       const token = searchParams.get("token");
@@ -48,16 +52,13 @@ export default function VerifyEmailPage() {
       }
 
       try {
-        // The verification result contains both user data and auth token
         const verificationResult = await handleVerifyEmail(token);
-        console.log("Verification result:", verificationResult);
 
         if (
           verificationResult &&
           verificationResult.user &&
           verificationResult.token
         ) {
-          // Log the user in directly with the returned data
           dispatch(
             loginAction({
               user: verificationResult.user as any,
@@ -67,10 +68,9 @@ export default function VerifyEmailPage() {
 
           setStatus("success");
 
-          // Redirect to dashboard after showing success message
           setTimeout(() => {
-            router.push("/dashboard");
-          }, 2000);
+            router.push("/dashboard?welcome=true");
+          }, 2500);
         } else {
           setStatus("error");
           setError("Failed to verify email. Please try again.");
@@ -95,11 +95,17 @@ export default function VerifyEmailPage() {
       return;
     }
 
+    setResendLoading(true);
+    setResendSuccess(false);
+
     try {
       await handleSendVerificationEmail(emailInput);
-      setError("A new verification email has been sent to " + emailInput);
+      setResendSuccess(true);
+      setError("");
     } catch (err) {
       setError("Failed to send verification email. Please try again.");
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -107,83 +113,131 @@ export default function VerifyEmailPage() {
     <div className={styles.verifyEmail}>
       <motion.div
         className={styles.verifyEmail__card}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
       >
+        {/* Verifying State */}
         {status === "verifying" && (
-          <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
             <div className={styles.verifyEmail__spinner} />
             <h1>Verifying Your Email</h1>
             <p>Please wait while we verify your email address...</p>
-          </>
+          </motion.div>
         )}
 
+        {/* Success State */}
         {status === "success" && (
-          <>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <motion.div
               className={styles.verifyEmail__success}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 200, damping: 10 }}
+              transition={{ type: "spring", stiffness: 200, damping: 15 }}
             >
-              <CheckCircle size={64} />
+              <CheckCircle />
             </motion.div>
-            <h1>Email Verified!</h1>
+            <h1>Email Verified! 🎉</h1>
             <p>
-              Your email has been successfully verified. You are now logged in
-              and will be redirected to the dashboard shortly.
+              Your email has been successfully verified. Redirecting you to your
+              dashboard...
             </p>
-          </>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <Button
+                variant="primary"
+                size="lg"
+                fullWidth
+                onClick={() => router.push("/dashboard?welcome=true")}
+              >
+                Go to Dashboard
+                <ArrowRight size={18} />
+              </Button>
+            </motion.div>
+          </motion.div>
         )}
 
+        {/* Error State */}
         {status === "error" && (
-          <>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <motion.div
               className={styles.verifyEmail__error}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 200, damping: 10 }}
+              transition={{ type: "spring", stiffness: 200, damping: 15 }}
             >
-              <XCircle size={64} />
+              <XCircle />
             </motion.div>
             <h1>Verification Failed</h1>
-            <p>{error}</p>
+            <p>{error || "Something went wrong. Please try again."}</p>
+
+            {resendSuccess && (
+              <div
+                className={`${styles.verifyEmail__message} ${styles["verifyEmail__message--success"]}`}
+              >
+                <CheckCircle size={16} />
+                Verification email sent to {emailInput}
+              </div>
+            )}
+
             <div className={styles.verifyEmail__emailForm}>
+              <label className={styles.verifyEmail__label}>
+                <Mail size={16} style={{ marginRight: 6, opacity: 0.6 }} />
+                Enter your email to resend verification
+              </label>
               <input
                 type="email"
-                placeholder="Enter your email address"
+                placeholder="your@email.com"
                 className={styles.verifyEmail__input}
                 value={emailInput}
-                onChange={(e) => setEmailInput(e.target.value)}
+                onChange={(e) => {
+                  setEmailInput(e.target.value);
+                  setResendSuccess(false);
+                }}
               />
-              <FnButton
+              <Button
                 variant="primary"
-                size="md"
+                size="lg"
+                fullWidth
                 onClick={handleResendVerificationEmail}
-                disabled={!emailInput || emailInput.trim() === ""}
+                disabled={
+                  !emailInput || emailInput.trim() === "" || resendLoading
+                }
               >
-                Resend Verification Email
-              </FnButton>
+                {resendLoading ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw size={18} />
+                    Resend Verification Email
+                  </>
+                )}
+              </Button>
             </div>
-            <br />
-            <FnButton
-              variant="primary"
-              size="md"
+
+            <div className={styles.verifyEmail__divider}>
+              <span>or</span>
+            </div>
+
+            <Button
+              variant="ghost"
+              size="lg"
+              fullWidth
               onClick={() => router.push("/get-started")}
             >
-              Return to Registration
-            </FnButton>
-            {/* <motion.button
-              className={styles.verifyEmail__button}
-              onClick={() => router.push("/get-started")}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Return to Registration
-              </FnButton>
-            </motion.button> */}
-          </>
+              Return to Sign Up
+            </Button>
+          </motion.div>
         )}
       </motion.div>
     </div>

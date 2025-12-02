@@ -5,8 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
+import { Sparkles, Shield, Clock } from "lucide-react";
 import styles from "./AuthLayout.module.scss";
-import SignaturePattern from "@/components/ui/SignaturePattern/SignaturePattern";
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -23,68 +23,82 @@ export default function AuthLayout({
     >
       <div className={styles.authLayout__container}>
         <div className={styles.authLayout__wrapper}>
-          <div className={styles.authLayout__card}>
-            {/* <Link href="/" className={styles.authLayout__logo}>
-              <Image 
-                src="/images/logo.svg" 
-                alt="Metromellow" 
-                width={180} 
-                height={50}
-              />
-            </Link> */}
-
-            {children}
-          </div>
+          <div className={styles.authLayout__card}>{children}</div>
 
           {showImage && (
             <div className={styles.authLayout__imageWrapper}>
               <div className={styles.authLayout__image}>
-                <h2 className={styles.authLayout__imageTitle}>
-                  Experience the Metromellow Difference
-                </h2>
-                <p className={styles.authLayout__imageText}>
-                  Join thousands of satisfied customers enjoying premium home
-                  services
-                </p>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                >
+                  <h2 className={styles.authLayout__imageTitle}>
+                    Your Home, Our Priority
+                  </h2>
+                  <p className={styles.authLayout__imageText}>
+                    Experience premium home cleaning services designed around
+                    your busy lifestyle.
+                  </p>
+                </motion.div>
 
-                {/* <div className={styles.authLayout__stats}>
-                  <div className={styles.authLayout__statItem}>
-                    <div className={styles.authLayout__statNumber}>15k+</div>
-                    <div className={styles.authLayout__statLabel}>
-                      Happy Customers
+                <motion.div
+                  className={styles.authLayout__features}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.5 }}
+                >
+                  <div className={styles.authLayout__feature}>
+                    <div className={styles.authLayout__featureIcon}>
+                      <Clock size={20} />
+                    </div>
+                    <div>
+                      <h4>Flexible Scheduling</h4>
+                      <p>Book cleanings that fit your schedule</p>
                     </div>
                   </div>
-                  <div className={styles.authLayout__statItem}>
-                    <div className={styles.authLayout__statNumber}>50k+</div>
-                    <div className={styles.authLayout__statLabel}>
-                      Services Completed
+                  <div className={styles.authLayout__feature}>
+                    <div className={styles.authLayout__featureIcon}>
+                      <Shield size={20} />
+                    </div>
+                    <div>
+                      <h4>Vetted Professionals</h4>
+                      <p>Background-checked & trained cleaners</p>
                     </div>
                   </div>
-                  <div className={styles.authLayout__statItem}>
-                    <div className={styles.authLayout__statNumber}>4.9</div>
-                    <div className={styles.authLayout__statLabel}>
-                      Star Rating
+                  <div className={styles.authLayout__feature}>
+                    <div className={styles.authLayout__featureIcon}>
+                      <Sparkles size={20} />
+                    </div>
+                    <div>
+                      <h4>Spotless Results</h4>
+                      <p>Satisfaction guaranteed every time</p>
                     </div>
                   </div>
-                </div> */}
+                </motion.div>
 
-                {/* <div className={styles.authLayout__testimonials}>
-                  <div className={styles.authLayout__testimonial}>
-                    <p className={styles.authLayout__testimonialText}>
-                      "Metromellow transformed our home care experience with
-                      their reliable and professional service!"
-                    </p>
-                    <div className={styles.authLayout__testimonialAuthor}>
-                      <div className={styles.authLayout__testimonialName}>
-                        Sarah J.
+                <motion.div
+                  className={styles.authLayout__testimonial}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6, duration: 0.5 }}
+                >
+                  <p className={styles.authLayout__quote}>
+                    "Coming home to a spotless apartment after a long day is
+                    everything. Metromellow made it so easy!"
+                  </p>
+                  <div className={styles.authLayout__author}>
+                    <div className={styles.authLayout__authorAvatar}>T</div>
+                    <div>
+                      <div className={styles.authLayout__authorName}>
+                        Tolu A.
                       </div>
-                      <div className={styles.authLayout__testimonialStars}>
-                        ★★★★★
+                      <div className={styles.authLayout__authorTitle}>
+                        Lagos Customer
                       </div>
                     </div>
                   </div>
-                </div> */}
-                <SignaturePattern />
+                </motion.div>
               </div>
             </div>
           )}

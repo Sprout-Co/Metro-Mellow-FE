@@ -1,11 +1,17 @@
-// components/auth/VerificationForm.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Mail, AlertCircle, ArrowLeft } from "lucide-react";
+import {
+  Mail,
+  CheckCircle,
+  AlertCircle,
+  ArrowLeft,
+  Loader2,
+  RefreshCw,
+  KeyRound,
+} from "lucide-react";
 import styles from "./VerificationForm.module.scss";
-import layoutStyles from "../AuthLayout.module.scss";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import { Button } from "@/components/ui/Button";
 
@@ -22,67 +28,51 @@ export default function VerificationForm({
 }: VerificationFormProps) {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const [resendLinkDisabled, setResendLinkDisabled] = useState(false);
-  const [resendCodeDisabled, setResendCodeDisabled] = useState(false);
-  const [linkCountdown, setLinkCountdown] = useState(0);
-  const [codeCountdown, setCodeCountdown] = useState(0);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [countdown, setCountdown] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
   const { handleSendVerificationEmail, handleVerifyEmailWithCode } =
     useAuthOperations();
 
-  // Handle countdown for resend link
+  // Countdown timer
   useEffect(() => {
-    if (linkCountdown > 0) {
-      const timer = setTimeout(() => {
-        setLinkCountdown(linkCountdown - 1);
-      }, 1000);
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
       return () => clearTimeout(timer);
-    } else if (linkCountdown === 0 && resendLinkDisabled) {
-      setResendLinkDisabled(false);
     }
-  }, [linkCountdown, resendLinkDisabled]);
-
-  // Handle countdown for resend code
-  useEffect(() => {
-    if (codeCountdown > 0) {
-      const timer = setTimeout(() => {
-        setCodeCountdown(codeCountdown - 1);
-      }, 1000);
-      return () => clearTimeout(timer);
-    } else if (codeCountdown === 0 && resendCodeDisabled) {
-      setResendCodeDisabled(false);
-    }
-  }, [codeCountdown, resendCodeDisabled]);
+  }, [countdown]);
 
   const handleResendLink = async () => {
-    if (resendLinkDisabled) return;
+    if (countdown > 0) return;
 
-    setResendLinkDisabled(true);
-    setLinkCountdown(60); // 60 second cooldown
+    setResendLoading(true);
     setError(null);
     setSuccess(null);
 
     try {
-      // Send new verification email with link
       await handleSendVerificationEmail(email);
-      setSuccess("A new verification link has been sent to your email.");
+      setSuccess("Verification email sent!");
+      setCountdown(60);
     } catch (err) {
-      setError("Failed to resend verification link. Please try again later.");
+      setError("Failed to send email. Please try again.");
+    } finally {
+      setResendLoading(false);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setSuccess(null);
 
     if (!code.trim()) {
       setError("Please enter the verification code");
-      setLoading(false);
       return;
     }
+
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
 
     try {
       await handleVerifyEmailWithCode(email, code);
@@ -100,130 +90,132 @@ export default function VerificationForm({
 
   return (
     <motion.div
-      key="verification"
+      className={styles.verification}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
     >
-      <h1 className={styles.verificationForm__title}>Verify Your Email</h1>
-      <p className={styles.verificationForm__subtitle}>
-        We've sent a verification email to{" "}
-        <span className={styles.verificationForm__emailHighlight}>{email}</span>
-      </p>
-
-      <div className={styles.verificationForm__inputGroup}>
-        {error && (
-          <div
-            className={`${styles.verificationForm__message} ${
-              error.includes("has been sent") || error.includes("successfully")
-                ? styles["verificationForm__message--success"]
-                : styles["verificationForm__message--error"]
-            }`}
-          >
-            <AlertCircle size={20} />
-            {error}
-          </div>
-        )}
-
-        {success && (
-          <div
-            className={`${styles.verificationForm__message} ${styles["verificationForm__message--success"]}`}
-          >
-            {success}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} noValidate>
-          <div className={layoutStyles.formInput}>
-            <label
-              htmlFor="verification-code"
-              className={layoutStyles.formInput__label}
-            >
-              Or Enter Verification Code (Optional)
-            </label>
-            <div
-              className={`
-                ${layoutStyles.formInput__wrapper} 
-                ${
-                  error &&
-                  !error.includes("has been sent") &&
-                  !error.includes("successfully")
-                    ? layoutStyles["formInput__wrapper--error"]
-                    : ""
-                }
-              `}
-            >
-              <div className={layoutStyles.formInput__icon}>
-                <Mail size={20} />
-              </div>
-              <input
-                id="verification-code"
-                type="text"
-                value={code}
-                onChange={(e) => {
-                  setCode(e.target.value);
-                  setError(null);
-                }}
-                placeholder="Enter verification code"
-                className={layoutStyles.formInput__input}
-                autoComplete="off"
-                maxLength={10}
-                disabled={loading}
-              />
-            </div>
-          </div>
-
-          {code.trim() && (
-            <motion.button
-              type="submit"
-              className={styles.verificationForm__button}
-              disabled={loading || !code.trim()}
-              whileHover={!loading && code.trim() ? { scale: 1.02 } : {}}
-              whileTap={!loading && code.trim() ? { scale: 0.98 } : {}}
-            >
-              {loading ? (
-                <>
-                  <div className={styles.verificationForm__buttonSpinner}></div>
-                  Verifying...
-                </>
-              ) : (
-                "Verify with Code"
-              )}
-            </motion.button>
-          )}
-
-          <div className={styles.verificationForm__actions}>
-            <p style={{ marginBottom: "1rem", textAlign: "center" }}>
-              Didn't receive the email?
-            </p>
-            <div>
-              <Button
-                variant="primary"
-                size="lg"
-                fullWidth
-                onClick={handleResendLink}
-                disabled={resendLinkDisabled || loading}
-              >
-                {resendLinkDisabled
-                  ? `Resend Link in ${linkCountdown}s`
-                  : "Resend Verification Link"}
-              </Button>
-            </div>
-            <div className={styles.verificationForm__back}>
-              <button
-                type="button"
-                className={styles.verificationForm__backLink}
-                onClick={onBack}
-                disabled={loading}
-              >
-                <ArrowLeft size={16} />
-                Back to Registration
-              </button>
-            </div>
-          </div>
-        </form>
+      {/* Header */}
+      <div className={styles.verification__header}>
+        <div className={styles.verification__icon}>
+          <Mail size={28} />
+        </div>
+        <h1 className={styles.verification__title}>Check Your Email</h1>
+        <p className={styles.verification__subtitle}>
+          We sent a verification link to
+        </p>
+        <span className={styles.verification__email}>{email}</span>
       </div>
+
+      {/* Messages */}
+      {error && (
+        <motion.div
+          className={`${styles.verification__message} ${styles["verification__message--error"]}`}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <AlertCircle size={18} />
+          {error}
+        </motion.div>
+      )}
+
+      {success && (
+        <motion.div
+          className={`${styles.verification__message} ${styles["verification__message--success"]}`}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <CheckCircle size={18} />
+          {success}
+        </motion.div>
+      )}
+
+      {/* Main Action */}
+      <div className={styles.verification__primary}>
+        <p className={styles.verification__instructions}>
+          Click the link in your email to verify your account
+        </p>
+        <Button
+          variant="primary"
+          size="lg"
+          fullWidth
+          onClick={handleResendLink}
+          disabled={countdown > 0 || resendLoading}
+        >
+          {resendLoading ? (
+            <>
+              <Loader2 size={18} className={styles.spinner} />
+              Sending...
+            </>
+          ) : countdown > 0 ? (
+            `Resend in ${countdown}s`
+          ) : (
+            <>
+              <RefreshCw size={18} />
+              Resend Verification Email
+            </>
+          )}
+        </Button>
+      </div>
+
+      {/* Divider */}
+      <div className={styles.verification__divider}>
+        <span>or verify with code</span>
+      </div>
+
+      {/* Code Form */}
+      <form onSubmit={handleSubmit} className={styles.verification__form}>
+        <div className={styles.verification__inputGroup}>
+          <label className={styles.verification__label}>
+            Enter the 6-digit code from your email
+          </label>
+          <div className={styles.verification__inputWrapper}>
+            <KeyRound size={20} className={styles.verification__inputIcon} />
+            <input
+              type="text"
+              value={code}
+              onChange={(e) => {
+                setCode(e.target.value.toUpperCase());
+                setError(null);
+              }}
+              placeholder="Enter code"
+              className={styles.verification__input}
+              autoComplete="off"
+              maxLength={10}
+              disabled={loading}
+            />
+          </div>
+        </div>
+
+        <Button
+          type="submit"
+          variant="ghost"
+          size="lg"
+          fullWidth
+          disabled={!code.trim() || loading}
+        >
+          {loading ? (
+            <>
+              <Loader2 size={18} className={styles.spinner} />
+              Verifying...
+            </>
+          ) : (
+            "Verify Code"
+          )}
+        </Button>
+      </form>
+
+      {/* Back Link */}
+      <button
+        type="button"
+        className={styles.verification__back}
+        onClick={onBack}
+        disabled={loading}
+      >
+        <ArrowLeft size={16} />
+        Back to Registration
+      </button>
     </motion.div>
   );
 }
