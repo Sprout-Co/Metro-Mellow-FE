@@ -1,12 +1,13 @@
 "use client";
 
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useState, Suspense } from "react";
 import { motion } from "framer-motion";
 import Navbar from "./navbar/Navbar";
 import Sidebar from "./sidebar/Sidebar";
 import styles from "./DashboardLayout.module.scss";
 import Breadcrumb from "./breadcrumb/Breadcrumb";
 import ServicesListDrawer from "./sidebar/ServicesListDrawer/ServicesListDrawer";
+import WelcomeModal from "../WelcomeModal/WelcomeModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/redux/store";
 import { closeServicesListDrawer } from "@/lib/redux/slices/uiSlice";
@@ -57,6 +58,11 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           dispatch(closeServicesListDrawer());
         }}
       />
+
+      {/* Welcome Modal for new signups */}
+      <Suspense fallback={null}>
+        <WelcomeModal />
+      </Suspense>
     </div>
   );
 };
