@@ -1,19 +1,20 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Check } from "lucide-react";
+import { Check, MapPin, ChevronDown, X } from "lucide-react";
 import styles from "./AddressModal.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
 import Input from "@/components/ui/Input";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
-import { Address } from "@/graphql/api";
-import ModalDrawerHeader from "@/components/ui/ModalDrawer/ModalDrawerHeader/ModalDrawerHeader";
+import { Address, ServiceArea } from "@/graphql/api";
+import { PlacesAutocomplete } from "@/components/ui/PlacesAutocomplete/PlacesAutocomplete";
+import { useServiceAreaOperations } from "@/graphql/hooks/serviceArea/useServiceAreaOperations";
 
 interface AddressModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (address: Partial<Address>) => Promise<void>;
+  onSave: (address: Partial<Address>, serviceAreaId?: string) => Promise<void>;
   address?: Address | null;
 }
 
@@ -23,114 +24,117 @@ const AddressModal: React.FC<AddressModalProps> = ({
   onSave,
   address,
 }) => {
-  const [formData, setFormData] = useState<Partial<Address>>({
-    label: "",
-    street: "",
-    city: "",
-    state: "Lagos",
-    zipCode: "",
-    country: "Nigeria",
-    isDefault: false,
-  });
-
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [selectedArea, setSelectedArea] = useState<ServiceArea | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [streetAddress, setStreetAddress] = useState("");
+  const [label, setLabel] = useState("");
+  const [isDefault, setIsDefault] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const isEditing = !!address;
 
-  // Reset form when modal opens
+  const { handleGetActiveServiceAreas, currentActiveServiceAreas } =
+    useServiceAreaOperations();
+
+  // Fetch service areas on mount
   useEffect(() => {
-    if (address) {
-      console.log("Editing address:", address); // Debug log
-      setFormData({
-        label: address.label || "",
-        street: address.street || "",
-        city: address.city || "",
-        state: address.state || "Lagos",
-        zipCode: address.zipCode || "",
-        country: address.country || "Nigeria",
-        isDefault: address.isDefault || false,
-      });
-    } else {
-      console.log("Adding new address"); // Debug log
-      setFormData({
-        label: "",
-        street: "",
-        city: "",
-        state: "Lagos",
-        zipCode: "",
-        country: "Nigeria",
-        isDefault: false,
-      });
+    handleGetActiveServiceAreas();
+  }, [handleGetActiveServiceAreas]);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Reset form when modal opens or address changes
+  useEffect(() => {
+    if (isOpen) {
+      if (address) {
+        setLabel(address.label || "");
+        setStreetAddress(address.street || "");
+        setIsDefault(address.isDefault || false);
+        // Set the service area from the existing address
+        if (address.serviceArea) {
+          setSelectedArea(address.serviceArea as ServiceArea);
+        }
+      } else {
+        setLabel("");
+        setStreetAddress("");
+        setIsDefault(false);
+        setSelectedArea(null);
+      }
+      setError(null);
     }
-    setErrors({});
   }, [address, isOpen]);
 
-  // Validate form
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.street?.trim()) {
-      newErrors.street = "Street address is required";
-    }
-    if (!formData.city?.trim()) {
-      newErrors.city = "City is required";
-    }
-    if (!formData.state?.trim()) {
-      newErrors.state = "State is required";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const handleAreaSelect = (area: ServiceArea) => {
+    setSelectedArea(area);
+    setIsDropdownOpen(false);
+    setStreetAddress(""); // Reset address when area changes
   };
 
-  // Handle form submission
+  const handleAddressSelect = (selectedAddress: string) => {
+    setStreetAddress(selectedAddress);
+  };
+
   const handleSubmit = async () => {
-    if (validateForm()) {
-      setIsSubmitting(true);
-      try {
-        await onSave(formData);
-      } catch (error) {
-        console.error("Error saving address:", error);
-      } finally {
-        setIsSubmitting(false);
-      }
+    if (!selectedArea) {
+      setError("Please select a service area");
+      return;
+    }
+    if (!streetAddress.trim()) {
+      setError("Please enter an address");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      await onSave(
+        {
+          label: label || "Home",
+          street: streetAddress,
+          city: selectedArea.city,
+          isDefault,
+        },
+        selectedArea.id
+      );
+      onClose();
+    } catch (err) {
+      console.error("Error saving address:", err);
+      setError("Failed to save address. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  // Handle input change
-  const handleChange = (field: keyof Address, value: any) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: "" }));
-    }
-  };
-
-  // Animation variants
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.3, ease: "easeOut" },
-    },
-  };
-
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
+  const handleClose = () => {
+    setSelectedArea(null);
+    setStreetAddress("");
+    setLabel("");
+    setIsDefault(false);
+    setError(null);
+    setIsDropdownOpen(false);
+    onClose();
   };
 
   const footerContent = (
     <div className={styles.footer__actions}>
       <FnButton
         variant="ghost"
-        onClick={onClose}
+        onClick={handleClose}
         className={styles.footer__button}
         disabled={isSubmitting}
       >
@@ -140,7 +144,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
         variant="primary"
         onClick={handleSubmit}
         className={styles.footer__button}
-        disabled={isSubmitting}
+        disabled={isSubmitting || !selectedArea || !streetAddress}
       >
         {isSubmitting ? (
           "Saving..."
@@ -157,130 +161,130 @@ const AddressModal: React.FC<AddressModalProps> = ({
   return (
     <ModalDrawer
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       width="md"
       title={isEditing ? "Edit Address" : "Add New Address"}
       description={
         isEditing
           ? "Update your address information"
-          : "Enter your address details"
+          : "Select your service area and enter address"
       }
       showFooter={true}
       footer={footerContent}
     >
       <div className={styles.modal}>
-        {/* Form Content */}
         <div className={styles.content}>
-          <motion.div
-            key={address?.id || "new"}
-            className={styles.form}
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer}
-          >
-            {/* Address Label */}
-            <motion.div className={styles.field} variants={fadeInUp}>
-              <label className={styles.field__label}>Address Label</label>
-              <Input
-                placeholder="e.g., Home, Office, Mom's House"
-                value={formData.label || ""}
-                onChange={(e) => handleChange("label", e.target.value)}
-                error={errors.label}
-                className={styles.field__input}
-                key={`label-${address?.id || "new"}`}
-              />
-            </motion.div>
+          {/* Error Message */}
+          {error && <div className={styles.error}>{error}</div>}
 
-            {/* Street Address */}
-            <motion.div className={styles.field} variants={fadeInUp}>
+          {/* Service Area Dropdown */}
+          <div className={styles.field}>
+            <label className={styles.field__label}>
+              Service Area
+              <span className={styles.field__required}>*</span>
+            </label>
+            <div className={styles.dropdown} ref={dropdownRef}>
+              <button
+                type="button"
+                className={styles.dropdown__trigger}
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              >
+                <MapPin size={18} className={styles.dropdown__icon} />
+                <span
+                  className={
+                    selectedArea
+                      ? styles.dropdown__value
+                      : styles.dropdown__placeholder
+                  }
+                >
+                  {selectedArea?.name || "Select service area"}
+                </span>
+                {selectedArea ? (
+                  <X
+                    size={16}
+                    className={styles.dropdown__clear}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedArea(null);
+                      setStreetAddress("");
+                    }}
+                  />
+                ) : (
+                  <ChevronDown size={18} className={styles.dropdown__chevron} />
+                )}
+              </button>
+
+              {isDropdownOpen && (
+                <ul className={styles.dropdown__list}>
+                  {currentActiveServiceAreas?.map((area) => (
+                    <li
+                      key={area.id}
+                      className={styles.dropdown__item}
+                      onClick={() => handleAreaSelect(area)}
+                    >
+                      <MapPin size={16} />
+                      <span>{area.name}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+
+          {/* Address Input - only show after area is selected */}
+          {selectedArea && (
+            <div className={styles.field}>
               <label className={styles.field__label}>
-                Street Address
+                Address
                 <span className={styles.field__required}>*</span>
               </label>
-              <Input
-                placeholder="House number and street name"
-                value={formData.street || ""}
-                onChange={(e) => handleChange("street", e.target.value)}
-                error={errors.street}
-                className={styles.field__input}
-                key={`street-${address?.id || "new"}`}
+              <PlacesAutocomplete
+                onSelect={handleAddressSelect}
+                placeholder={`Enter address in ${selectedArea.name}`}
               />
-            </motion.div>
-
-            {/* City and State Row */}
-            <motion.div className={styles.field__row} variants={fadeInUp}>
-              <div className={styles.field}>
-                <label className={styles.field__label}>
-                  City
-                  <span className={styles.field__required}>*</span>
-                </label>
-                <Input
-                  placeholder="e.g., Lekki"
-                  value={formData.city || ""}
-                  onChange={(e) => handleChange("city", e.target.value)}
-                  error={errors.city}
-                  className={styles.field__input}
-                  key={`city-${address?.id || "new"}`}
-                />
-              </div>
-              <div className={styles.field}>
-                <label className={styles.field__label}>State</label>
-                <Input
-                  placeholder="Lagos"
-                  value={formData.state || "Lagos"}
-                  disabled
-                  className={styles.field__input}
-                  key={`state-${address?.id || "new"}`}
-                />
-              </div>
-            </motion.div>
-
-            {/* Postal Code and Country Row */}
-            <motion.div className={styles.field__row} variants={fadeInUp}>
-              <div className={styles.field}>
-                <label className={styles.field__label}>Postal Code</label>
-                <Input
-                  placeholder="e.g., 101233"
-                  value={formData.zipCode || ""}
-                  onChange={(e) => handleChange("zipCode", e.target.value)}
-                  className={styles.field__input}
-                  key={`zipCode-${address?.id || "new"}`}
-                />
-              </div>
-              <div className={styles.field}>
-                <label className={styles.field__label}>Country</label>
-                <Input
-                  placeholder="Nigeria"
-                  value={formData.country || "Nigeria"}
-                  disabled
-                  className={styles.field__input}
-                  key={`country-${address?.id || "new"}`}
-                />
-              </div>
-            </motion.div>
-
-            {/* Default Address Checkbox */}
-            <motion.div className={styles.checkbox} variants={fadeInUp}>
-              <label className={styles.checkbox__label}>
-                <input
-                  type="checkbox"
-                  className={styles.checkbox__input}
-                  checked={formData.isDefault || false}
-                  onChange={(e) => handleChange("isDefault", e.target.checked)}
-                  key={`isDefault-${address?.id || "new"}`}
-                />
-                <div className={styles.checkbox__content}>
-                  <div className={styles.checkbox__title}>
-                    Set as default address
-                  </div>
-                  <div className={styles.checkbox__description}>
-                    This address will be automatically selected for all new
-                    orders
-                  </div>
+              {streetAddress && (
+                <div className={styles.field__selected}>
+                  <MapPin size={14} />
+                  <span>{streetAddress}</span>
                 </div>
-              </label>
-            </motion.div>
-          </motion.div>
+              )}
+            </div>
+          )}
+
+          {/* Label Input - only show after address is selected */}
+          {streetAddress && (
+            <>
+              <div className={styles.field}>
+                <label className={styles.field__label}>Address Label</label>
+                <Input
+                  placeholder="e.g., Home, Office, Mom's House"
+                  value={label}
+                  onChange={(e) => setLabel(e.target.value)}
+                  className={styles.field__input}
+                />
+              </div>
+
+              {/* Default Address Checkbox */}
+              <div className={styles.checkbox}>
+                <label className={styles.checkbox__label}>
+                  <input
+                    type="checkbox"
+                    className={styles.checkbox__input}
+                    checked={isDefault}
+                    onChange={(e) => setIsDefault(e.target.checked)}
+                  />
+                  <div className={styles.checkbox__content}>
+                    <div className={styles.checkbox__title}>
+                      Set as default address
+                    </div>
+                    <div className={styles.checkbox__description}>
+                      This address will be automatically selected for new orders
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Loading Overlay */}
