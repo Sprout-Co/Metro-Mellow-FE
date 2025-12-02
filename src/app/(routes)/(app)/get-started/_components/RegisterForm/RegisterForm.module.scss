@@ -172,6 +172,25 @@
     line-height: 1.4;
   }
 
+  &__selectedAddress {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("xs");
+    margin-top: spacing("sm");
+    padding: spacing("sm") spacing("md");
+    background-color: color-alpha("status", "success", 0.08);
+    border: border-width("thin") solid color-alpha("status", "success", 0.3);
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    color: color("status", "success");
+    line-height: 1.4;
+
+    svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+  }
+
   &__checkGroup {
     margin-bottom: spacing("lg");
   }

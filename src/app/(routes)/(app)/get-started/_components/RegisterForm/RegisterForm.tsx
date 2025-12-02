@@ -9,8 +9,6 @@ import {
   Mail,
   Lock,
   Phone,
-  Home,
-  Globe,
   AlertCircle,
   MapPin,
   Gift,
@@ -26,6 +24,7 @@ import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import VerificationForm from "../VerificationForm";
 import { UserRole, useActiveServiceAreasQuery } from "@/graphql/api";
 import { Button } from "@/components/ui/Button";
+import { PlacesAutocomplete } from "@/components/ui/PlacesAutocomplete/PlacesAutocomplete";
 
 interface RegisterFormState {
   name: string;
@@ -526,18 +525,34 @@ export default function RegisterForm({
                     )}
                   </div>
 
-                  <FormInput
-                    id="register-street"
-                    name="street"
-                    type="text"
-                    label="Street Address"
-                    value={formData.street}
-                    onChange={handleChange}
-                    placeholder="Your street address"
-                    error={errors.street}
-                    autoComplete="street-address"
-                    icon={<Home size={20} />}
-                  />
+                  <div className={layoutStyles.formInput}>
+                    <label
+                      htmlFor="register-street"
+                      className={layoutStyles.formInput__label}
+                    >
+                      Street Address
+                    </label>
+                    <PlacesAutocomplete
+                      onSelect={(address) => {
+                        setFormData((prev) => ({ ...prev, street: address }));
+                        if (errors.street) {
+                          setErrors((prev) => ({ ...prev, street: undefined }));
+                        }
+                      }}
+                      placeholder="Search for your address..."
+                    />
+                    {formData.street && (
+                      <p className={styles.registerForm__selectedAddress}>
+                        <CheckCircle size={14} />
+                        {formData.street}
+                      </p>
+                    )}
+                    {errors.street && (
+                      <p className={layoutStyles.formInput__error}>
+                        {errors.street}
+                      </p>
+                    )}
+                  </div>
 
                   <FormInput
                     id="register-phone"
