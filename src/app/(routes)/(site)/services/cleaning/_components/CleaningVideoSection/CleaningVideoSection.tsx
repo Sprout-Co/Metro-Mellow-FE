@@ -17,7 +17,7 @@ const CleaningVideoSection = () => {
   });
 
   const VIDEO_URL = "/videos/metromellow_animation.mp4";
-  const THUMBNAIL_URL = "/images/cleaning/c1.jpg";
+  const THUMBNAIL_URL = "/images/cleaning/cleaning1.jpg";
 
   const playVideo = () => {
     setVideoPlaying(true);

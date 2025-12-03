@@ -115,7 +115,7 @@
     }
 
     @include breakpoint-down("sm") {
-      padding: 0 spacing("sm");
+      padding: 0;
       margin-left: auto;
       margin-right: auto;
       text-align: center;
@@ -131,11 +131,36 @@
     line-height: 1;
     text-align: center;
     width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
 
     &--accent {
       color: color("accent", "base");
       font-weight: map-get($font-weights, "bold");
-      margin-bottom: spacing("sm");
+      display: inline-block;
+      white-space: nowrap;
+      margin-right: 0.25em;
+
+      @include breakpoint-down("sm") {
+        display: block;
+        margin-bottom: 0;
+        margin-right: 0;
+        white-space: nowrap;
+      }
+    }
+
+    &--word {
+      display: inline-block;
+      color: color("neutral", "white");
+      font-weight: map-get($font-weights, "bold");
+      margin-right: 0.25em;
+
+      @include breakpoint-down("sm") {
+        display: block;
+        margin-right: 0;
+      }
     }
 
     &--main {
@@ -143,18 +168,28 @@
     }
 
     @include breakpoint-down("md") {
-      font-size: font-size("h2") * 1.2;
+      font-size: font-size("h2") * 1.1;
       text-align: center;
       width: 100%;
+      padding: 0 spacing("md");
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      word-break: break-word;
     }
 
     @include breakpoint-down("sm") {
-      font-size: font-size("h3") * 1.2;
-      line-height: 1.1;
+      font-size: font-size("h3");
+      line-height: 1.2;
       text-align: center;
       width: 100%;
       margin-left: auto;
       margin-right: auto;
+      padding: 0 spacing("sm");
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      word-break: break-word;
+      max-width: 100%;
+      box-sizing: border-box;
     }
   }
 

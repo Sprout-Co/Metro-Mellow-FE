@@ -3,7 +3,7 @@
 import { FC, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
-import { Clock, Star, ArrowRight, Search } from "lucide-react";
+import { Clock, ArrowRight, Search } from "lucide-react";
 import styles from "./ServiceCatalog.module.scss";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -85,51 +85,54 @@ const ServiceCatalog: FC = () => {
   ): string => {
     console.log("serviceId", serviceId);
     console.log("imageUrl", imageUrl);
-    // switch (serviceId) {
-    //   case ServiceId.StandardCooking:
-    //     return "/images/food/jollof-rice.png";
-    //   case ServiceId.BasicCooking:
-    //     return "/images/food/jollof-rice.png";
-    //   case ServiceId.StandardCleaning:
-    //     return "/images/cleaning/cleaning-1.png";
-    //   case ServiceId.DeepCleaning:
-    //     return "/images/cleaning/cleaning-1.png";
-    //   case ServiceId.MoveInMoveOutCleaning:
-    //     return "/images/cleaning/cleaning-1.png";
-    //   case ServiceId.PostConstructionCleaning:
-    //     return "/images/cleaning/cleaning-1.png";
-    //   case ServiceId.Laundry:
-    //     return "/images/laundry/laundry-1.png";
-    //   case ServiceId.PremiumLaundry:
-    //     return "/images/laundry/laundry-1.png";
-    //   case ServiceId.DryCleaning:
-    //     return "/images/laundry/laundry-1.png";
-    //   case ServiceId.PestControlResidential:
-    //     return "/images/pest-control/pest-control-1.png";
-    //   case ServiceId.PestControlCommercial:
-    //     return "/images/pest-control/pest-control-1.png";
-    //   default:
-    //     return "/images/food/jollof-rice.png";
-    // }
+    
+    // Override specific service images with local images
+    switch (serviceId) {
+      case ServiceId.StandardCooking:
+        return "/images/home/home6.jpg";
+      case ServiceId.BasicCooking:
+        return "/images/home/home5.jpg";
+      case ServiceId.StandardCleaning:
+        return "/images/home/home2.jpg";
+      case ServiceId.DeepCleaning:
+        return "/images/home/hero.jpg";
+      case ServiceId.MoveInMoveOutCleaning:
+        return "/images/home/home3.jpg";
+      case ServiceId.PostConstructionCleaning:
+        return "/images/home/home4.jpg";
+      case ServiceId.Laundry:
+        return "/images/home/home1.jpg";
+      case ServiceId.StandardLaundry:
+        return "/images/home/home1.jpg";
+      case ServiceId.PremiumLaundry:
+        return "/images/home/home1.jpg";
+      case ServiceId.DryCleaning:
+        return "/images/home/home1.jpg";
+      case ServiceId.PestControlResidential:
+        return "/images/pest-control/p1.jpeg";
+      case ServiceId.PestControlCommercial:
+        return "/images/pest-control/p1.jpeg";
+      default:
+        // If no override, use the provided imageUrl or fallback
+        if (!imageUrl) {
+          return "/images/food/jollof-rice.png"; // fallback image
+        }
 
-    if (!imageUrl) {
-      return "/images/food/jollof-rice.png"; // fallback image
+        // Check if it's a relative URL (starts with /)
+        if (imageUrl.startsWith("/") || imageUrl.startsWith("http")) {
+          return imageUrl;
+        }
+
+        // Check if it's a local image in public folder
+        if (imageUrl.startsWith("/images/")) {
+          return imageUrl;
+        }
+
+        // For external URLs, we'll use a fallback for now
+        // You can add specific domains to next.config.ts if needed
+        console.warn(`External image URL not configured: ${imageUrl}`);
+        return "/images/food/jollof-rice.png"; // fallback image
     }
-
-    // Check if it's a relative URL (starts with /)
-    if (imageUrl.startsWith("/") || imageUrl.startsWith("http")) {
-      return imageUrl;
-    }
-
-    // Check if it's a local image in public folder
-    if (imageUrl.startsWith("/images/")) {
-      return imageUrl;
-    }
-
-    // For external URLs, we'll use a fallback for now
-    // You can add specific domains to next.config.ts if needed
-    console.warn(`External image URL not configured: ${imageUrl}`);
-    return "/images/food/jollof-rice.png"; // fallback image
   };
 
   // Function to get appropriate button text based on category
@@ -413,7 +416,6 @@ const ServiceCatalog: FC = () => {
                           <span>...</span>
                         </div>
                         <div className={styles.catalog__cardMetaItem}>
-                          <Star size={16} />
                           <span>...</span>
                         </div>
                       </div>
@@ -639,7 +641,7 @@ const ServiceCatalog: FC = () => {
                           className={styles.catalog__card}
                           variants={itemVariants}
                         >
-                          <div className={styles.catalog__cardImageWrapper}>
+                            <div className={styles.catalog__cardImageWrapper}>
                             <Image
                               src={getSafeImageUrl(
                                 option.imageUrl,
@@ -650,13 +652,6 @@ const ServiceCatalog: FC = () => {
                               height={300}
                               className={styles.catalog__cardImage}
                             />
-                            <div className={styles.catalog__cardBadge}>
-                              4.8{" "}
-                              <Star
-                                size={12}
-                                style={{ display: "inline", marginLeft: "2px" }}
-                              />
-                            </div>
                           </div>
                           <div className={styles.catalog__cardContent}>
                             <div className={styles.catalog__cardHeader}>
@@ -678,7 +673,6 @@ const ServiceCatalog: FC = () => {
                                 <span>30-45 mins</span>
                               </div>
                               <div className={styles.catalog__cardMetaItem}>
-                                <Star size={16} />
                                 <span>
                                   {option.inclusions?.join(", ") ||
                                     service.inclusions?.join(", ") ||
