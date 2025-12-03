@@ -14,6 +14,7 @@ import {
   Utensils,
   Bug,
   Sparkles,
+  ArrowRight,
 } from "lucide-react";
 import styles from "./ServiceSelector.module.scss";
 import { Service, ServiceCategory } from "@/graphql/api";
@@ -40,24 +41,21 @@ const ServiceSelector: React.FC<ServiceSelectorProps> = ({
   onServiceRemove,
   currentBillingCycle,
 }) => {
-  // Determine if a service should be disabled based on current billing cycle
   const isServiceDisabled = (
     service: Service
   ): { disabled: boolean; reason?: string } => {
-    // If quarterly billing is selected, only allow pest control services
     if (
       currentBillingCycle === "QUARTERLY" &&
       service.category !== ServiceCategory.PestControl
     ) {
       return {
         disabled: true,
-        reason:
-          "Quarterly billing is only available for pest control services. Switch to monthly billing to add other services.",
+        reason: "Only available with monthly billing",
       };
     }
-
     return { disabled: false };
   };
+
   const getServiceIcon = (category: string) => {
     const iconProps = { size: 24, strokeWidth: 1.5 };
     switch (category) {
@@ -124,12 +122,15 @@ const ServiceSelector: React.FC<ServiceSelectorProps> = ({
           return (
             <motion.div
               key={service._id}
-              className={`${styles.selector__card} ${configured ? styles["selector__card--configured"] : ""} ${
-                disabled ? styles["selector__card--disabled"] : ""
-              }`}
-              initial={{ opacity: 0, y: 20 }}
+              className={`${styles.selector__card} ${
+                configured ? styles["selector__card--configured"] : ""
+              } ${disabled ? styles["selector__card--disabled"] : ""}`}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.3 }}
+              transition={{
+                delay: index * 0.05,
+                duration: 0.3,
+              }}
               title={disabled ? reason : undefined}
             >
               {/* Configured Badge */}
@@ -140,42 +141,39 @@ const ServiceSelector: React.FC<ServiceSelectorProps> = ({
                     initial={{ scale: 0, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0, opacity: 0 }}
-                    transition={{ type: "spring", stiffness: 400 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
                   >
-                    <Check size={14} />
+                    <Check size={12} strokeWidth={3} />
                     <span>Added</span>
                   </motion.div>
                 )}
               </AnimatePresence>
 
-              {/* Card Header */}
-              <div className={styles.selector__header}>
-                <div
-                  className={`${styles.selector__icon} ${
-                    styles[`selector__icon--${colorClass}`]
-                  }`}
-                >
-                  {getServiceIcon(service.category)}
+              {/* Card Content */}
+              <div className={styles.selector__content}>
+                {/* Header */}
+                <div className={styles.selector__header}>
+                  <div
+                    className={`${styles.selector__icon} ${styles[`selector__icon--${colorClass}`]}`}
+                  >
+                    {getServiceIcon(service.category)}
+                  </div>
+                  <div className={styles.selector__titleGroup}>
+                    <h3 className={styles.selector__name}>{service.name}</h3>
+                    <span className={styles.selector__category}>
+                      {service.category.replace(/_/g, " ")}
+                    </span>
+                  </div>
                 </div>
-                <div className={styles.selector__info}>
-                  <h3 className={styles.selector__name}>{service.name}</h3>
-                  <p className={styles.selector__category}>
-                    {service.category.replace(/_/g, " ")}
-                  </p>
-                </div>
-              </div>
 
-              {/* Card Body */}
-              <div className={styles.selector__body}>
+                {/* Description */}
                 <p className={styles.selector__description}>
                   {service.description}
                 </p>
 
-                {/* Price Display */}
-                <div className={styles.selector__pricing}>
-                  <span className={styles.selector__priceLabel}>
-                    Starting from
-                  </span>
+                {/* Price */}
+                <div className={styles.selector__priceRow}>
+                  <span className={styles.selector__priceLabel}>From</span>
                   <span className={styles.selector__price}>
                     ₦{service.price.toLocaleString()}
                     <span className={styles.selector__priceUnit}>/service</span>
@@ -183,57 +181,55 @@ const ServiceSelector: React.FC<ServiceSelectorProps> = ({
                 </div>
 
                 {/* Configuration Summary */}
-                {configured && configuredData && (
-                  <motion.div
-                    className={styles.selector__config}
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className={styles.selector__configItem}>
-                      <Calendar size={14} />
-                      <span>
-                        {getFrequencyLabel(
-                          configuredData.configuration.frequency
-                        )}
-                      </span>
-                    </div>
-                    <div className={styles.selector__configItem}>
-                      <Clock size={14} />
-                      <span>
-                        {configuredData.configuration.scheduledDays?.length ||
-                          0}{" "}
-                        days/week
-                      </span>
-                    </div>
-                    <div className={styles.selector__configDivider} />
-                    <div className={styles.selector__configPrice}>
-                      <span>Monthly</span>
-                      <strong>
-                        ₦
-                        {(
-                          configuredData.configuration.price || 0
-                        ).toLocaleString()}
-                      </strong>
-                    </div>
-                  </motion.div>
-                )}
+                <AnimatePresence>
+                  {configured && configuredData && (
+                    <motion.div
+                      className={styles.selector__configSummary}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <div className={styles.selector__configRow}>
+                        <Calendar size={14} />
+                        <span>
+                          {getFrequencyLabel(
+                            configuredData.configuration.frequency
+                          )}{" "}
+                          •{" "}
+                          {configuredData.configuration.scheduledDays?.length ||
+                            0}{" "}
+                          days
+                        </span>
+                      </div>
+                      <div className={styles.selector__configTotal}>
+                        <span>Monthly</span>
+                        <strong>
+                          ₦
+                          {(
+                            configuredData.configuration.price || 0
+                          ).toLocaleString()}
+                        </strong>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
-              {/* Card Footer */}
+              {/* Footer */}
               <div className={styles.selector__footer}>
                 {!configured ? (
                   disabled ? (
-                    <div className={styles.selector__disabledBtn}>
-                      <span>Cannot Add</span>
+                    <div className={styles.selector__disabledState}>
+                      <span>Unavailable</span>
                       {reason && <small>{reason}</small>}
                     </div>
                   ) : (
                     <motion.button
                       className={styles.selector__addBtn}
                       onClick={() => onServiceSelect(service)}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
                     >
                       <Plus size={18} />
                       <span>Add Service</span>
@@ -244,10 +240,10 @@ const ServiceSelector: React.FC<ServiceSelectorProps> = ({
                     <motion.button
                       className={styles.selector__editBtn}
                       onClick={() => onServiceEdit(service._id)}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                     >
-                      <Edit2 size={16} />
+                      <Edit2 size={15} />
                       <span>Edit</span>
                     </motion.button>
                     <motion.button
@@ -269,13 +265,13 @@ const ServiceSelector: React.FC<ServiceSelectorProps> = ({
       {/* Empty State */}
       {configuredServices.length === 0 && (
         <motion.div
-          className={styles.selector__empty}
-          initial={{ opacity: 0, y: 20 }}
+          className={styles.selector__emptyState}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
           <Sparkles size={24} />
-          <p>Select services above to build your perfect subscription plan</p>
+          <p>Select services above to build your subscription plan</p>
         </motion.div>
       )}
     </div>
