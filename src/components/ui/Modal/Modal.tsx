@@ -18,7 +18,7 @@ interface ModalProps {
   showHeader?: boolean;
   closeOnBackdropClick?: boolean;
   closeOnEscape?: boolean;
-  contentOverflow?: "auto" | "visible";
+  contentOverflow?: "auto" | "visible" | "hidden";
 }
 
 const Modal: React.FC<ModalProps> = ({

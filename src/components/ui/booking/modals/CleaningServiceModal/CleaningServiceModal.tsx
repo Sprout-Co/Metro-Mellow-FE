@@ -256,6 +256,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
       maxWidth="800px"
       showCloseButton={true}
       className={styles.cleaningServiceModal}
+      contentOverflow="hidden"
     >
       <div className={styles.modal__container}>
         {/* Details Section */}

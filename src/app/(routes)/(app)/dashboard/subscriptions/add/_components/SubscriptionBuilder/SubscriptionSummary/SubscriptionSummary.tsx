@@ -64,11 +64,11 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
     <div className={styles.summary}>
       {/* Header */}
       <div className={styles.summary__header}>
-        <div className={styles.summary__headerIcon}>
+          <div className={styles.summary__headerIcon}>
           <ShoppingBag size={20} />
-        </div>
-        <div className={styles.summary__headerText}>
-          <h3>Order Summary</h3>
+          </div>
+          <div className={styles.summary__headerText}>
+            <h3>Order Summary</h3>
           {configuredServices.length > 0 && (
             <span className={styles.summary__count}>
               {configuredServices.length} service
@@ -102,32 +102,32 @@ const SubscriptionSummary: React.FC<SubscriptionSummaryProps> = ({
                 >
                   <div className={styles.summary__serviceInfo}>
                     <span className={styles.summary__serviceName}>
-                      {cs.service.name}
-                    </span>
+                        {cs.service.name}
+                        </span>
                     <span className={styles.summary__serviceMeta}>
                       {getFrequencyLabel(cs.configuration.frequency)} •{" "}
                       {cs.configuration.scheduledDays?.length || 0} days
-                    </span>
-                  </div>
-                  <div className={styles.summary__serviceRight}>
+                        </span>
+                    </div>
+                    <div className={styles.summary__serviceRight}>
                     <span className={styles.summary__servicePrice}>
-                      ₦{(cs.configuration.price || 0).toLocaleString()}
+                        ₦{(cs.configuration.price || 0).toLocaleString()}
                     </span>
-                    <div className={styles.summary__serviceActions}>
-                      <button
+                      <div className={styles.summary__serviceActions}>
+                        <button
                         className={styles.summary__editBtn}
-                        onClick={() => onServiceEdit(cs.service._id)}
+                          onClick={() => onServiceEdit(cs.service._id)}
                         aria-label="Edit"
-                      >
+                        >
                         <Edit2 size={14} />
-                      </button>
-                      <button
+                        </button>
+                        <button
                         className={styles.summary__removeBtn}
-                        onClick={() => onServiceRemove(cs.service._id)}
+                          onClick={() => onServiceRemove(cs.service._id)}
                         aria-label="Remove"
-                      >
+                        >
                         <X size={14} />
-                      </button>
+                        </button>
                     </div>
                   </div>
                 </motion.div>
