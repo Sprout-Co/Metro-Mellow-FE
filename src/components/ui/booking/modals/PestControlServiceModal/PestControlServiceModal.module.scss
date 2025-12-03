@@ -6,6 +6,9 @@
   :global(.modal__content) {
     padding: 0;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(90vh - 80px);
   }
 }
 
@@ -14,11 +17,8 @@
     display: flex;
     flex-direction: column;
     background: color("neutral", "white");
-
-    @include breakpoint-up("md") {
-      flex-direction: row;
-      min-height: 80vh;
-    }
+    height: 100%;
+    max-height: calc(90vh - 80px);
   }
 
   &__detailsSection {
@@ -26,7 +26,8 @@
     padding: spacing("2xl");
     display: flex;
     flex-direction: column;
-    position: relative;
+    overflow: hidden;
+    min-height: 0;
 
     @include breakpoint-down("md") {
       padding: spacing("xl");
@@ -36,6 +37,7 @@
   &__header {
     margin-bottom: spacing("xl");
     text-align: center;
+    flex-shrink: 0;
 
     @include breakpoint-up("lg") {
       text-align: left;
@@ -49,6 +51,7 @@
     color: color("neutral", "darkest");
     margin: 0 0 spacing("sm") 0;
     line-height: 1.2;
+    flex-shrink: 0;
   }
 
   &__description {
@@ -56,42 +59,16 @@
     @include font-weight("medium");
     color: color("neutral", "dark");
     line-height: line-height("relaxed");
-    margin: 0;
-  }
-
-  &__priceSection {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: spacing("lg");
-    background: color("primary", "base");
-    border-radius: border-radius("xl");
-    margin: spacing("xl") 0;
-    position: relative;
-    overflow: hidden;
-  }
-
-  &__priceLabel {
-    @include font-size("sm");
-    @include font-weight("semibold");
-    color: rgba(255, 255, 255, 0.9);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  &__price {
-    @include font-size("h5");
-    @include font-weight("bold");
-    color: color("neutral", "white");
-    margin: 0;
-    position: relative;
-    z-index: 1;
+    margin: 0 0 spacing("lg") 0;
+    flex-shrink: 0;
   }
 
   &__configurationSection {
     flex: 1;
     overflow-y: auto;
     padding-right: spacing("sm");
+    margin-right: spacing("sm") * -1;
+    min-height: 0;
 
     &::-webkit-scrollbar {
       width: 6px;
@@ -122,6 +99,10 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   border: 1px solid color("neutral", "lighter");
   transition: all 0.2s ease;
+
+  &:last-child {
+    margin-bottom: spacing("md");
+  }
 
   &:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
