@@ -113,10 +113,31 @@ export const useAuthOperations = () => {
         console.log("Storing auth data...");
         dispatch(loginAction({ user: user as any, token }));
 
-        // Use a direct browser redirect for client-side navigation
-        console.log("Redirecting to dashboard...");
+        // Verify cookie is set before redirecting (important for mobile devices)
+        // This prevents redirect loops where middleware doesn't see the cookie yet
         if (typeof window !== "undefined") {
-          window.location.href = Routes.DASHBOARD;
+          // Wait a bit and verify cookie is set
+          let cookieSet = false;
+          const maxAttempts = 10;
+          for (let i = 0; i < maxAttempts; i++) {
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            const cookieValue = document.cookie
+              .split("; ")
+              .find((row) => row.startsWith("auth-token="));
+            if (cookieValue) {
+              cookieSet = true;
+              break;
+            }
+          }
+
+          if (!cookieSet) {
+            console.warn("Cookie not set after dispatch, proceeding anyway");
+          }
+
+          // Use window.location.replace to avoid adding to history and prevent back button issues
+          // This ensures a clean redirect that works reliably on mobile devices
+          console.log("Redirecting to dashboard...");
+          window.location.replace(Routes.DASHBOARD);
         }
       } catch (error) {
         console.error("Login error:", error);
