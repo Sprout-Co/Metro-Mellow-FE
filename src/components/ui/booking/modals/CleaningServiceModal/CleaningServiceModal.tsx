@@ -71,10 +71,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
     bedroom: 1,
     kitchen: 1,
     livingRoom: 1,
-    lobby: 1,
-    other: 0,
-    outdoor: 0,
-    studyRoom: 0,
+    staircase: 0,
   });
 
   // State for checkout modal and slide panel

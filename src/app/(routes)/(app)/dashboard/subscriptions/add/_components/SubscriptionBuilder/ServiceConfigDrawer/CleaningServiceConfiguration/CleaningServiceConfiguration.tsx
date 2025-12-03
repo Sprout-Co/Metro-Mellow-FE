@@ -68,15 +68,12 @@ const CleaningServiceConfiguration: React.FC<
         cleaningType: CleaningType.StandardCleaning,
         houseType: HouseType.Flat,
         rooms: {
-          bedroom: 1,
-          livingRoom: 1,
-          bathroom: 1,
-          kitchen: 1,
           balcony: 0,
-          studyRoom: 0,
-          lobby: 0,
-          other: 0,
-          outdoor: 0,
+          bathroom: 1,
+          bedroom: 1,
+          kitchen: 1,
+          livingRoom: 1,
+          staircase: 0,
         },
       },
       serviceOption:
@@ -102,7 +99,7 @@ const CleaningServiceConfiguration: React.FC<
     { key: "bathroom", label: "Bathroom", icon: "🚿" },
     { key: "kitchen", label: "Kitchen", icon: "🍳" },
     { key: "balcony", label: "Balcony", icon: "🌿" },
-    { key: "studyRoom", label: "Study Room", icon: "📚" },
+    { key: "staircase", label: "Staircase", icon: "📚" },
   ];
 
   const frequencies = [

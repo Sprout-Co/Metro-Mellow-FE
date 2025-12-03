@@ -91,10 +91,7 @@ query GetBookings($status: BookingStatus) {
           bathroom
           kitchen
           balcony
-          studyRoom
-          other
-          lobby
-          outdoor
+          staircase
         }
       }
       laundry {
@@ -217,10 +214,7 @@ query GetBookingById($id: ID!) {
           bathroom
           kitchen
           balcony
-          studyRoom
-          other
-          lobby
-          outdoor
+          staircase
         }
       }
       laundry {
@@ -343,10 +337,7 @@ query GetCustomerBookings {
           bathroom
           kitchen
           balcony
-          studyRoom
-          other
-          lobby
-          outdoor
+          staircase
         }
       }
       laundry {
@@ -458,10 +449,7 @@ query GetStaffBookings {
           bathroom
           kitchen
           balcony
-          studyRoom
-          other
-          lobby
-          outdoor
+          staircase
         }
       }
       laundry {
