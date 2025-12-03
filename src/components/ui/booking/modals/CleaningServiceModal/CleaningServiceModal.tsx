@@ -132,52 +132,48 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   const calculateTotalPrice = () => {
     if (!service) return 0;
 
-    let totalPrice = service.price;
+    // Start with base price
+    const basePrice = serviceOption?.price || service.price;
 
-    {
-      // Calculate total price based on room prices and number of days
-      const selectedDays = 1; // Default to 1 day for one-off bookings
-      const roomPrices =
-        service.options?.find(
-          (opt) => opt.service_id === serviceOption?.service_id
-        )?.roomPrices || {};
-      console.log("serviceOption", serviceOption);
-      console.log("roomPrices", roomPrices);
+    // Get room prices from service options
+    const roomPrices =
+      service.options?.find(
+        (opt) => opt.service_id === serviceOption?.service_id
+      )?.roomPrices || {};
 
-      // Calculate total price for each room type
-      const roomTotal = Object.entries(roomQuantities).reduce(
-        (total, [room, quantity]) => {
-          const roomPrice = roomPrices[room as keyof typeof roomPrices] || 0;
-          return total + roomPrice * (quantity as number);
-        },
-        0
-      );
+    // Calculate total price for each room type
+    // Bedrooms: charge for quantity > 1 (first bedroom included in base)
+    // Other rooms: charge for quantity > bedroom count (threshold based on bedroom selection)
+    const bedroomCount = roomQuantities.bedroom || 0;
+    const roomTotal = Object.entries(roomQuantities).reduce(
+      (total, [room, quantity]) => {
+        const roomPrice = roomPrices[room as keyof typeof roomPrices] || 0;
+        const qty = quantity as number;
 
-      let cleaningTypeMultiplier = 1;
+        if (room === "bedroom") {
+          // For bedrooms: charge for quantity > 1
+          if (qty > 1) {
+            return total + roomPrice * (qty - 1);
+          }
+        } else {
+          // For other rooms: charge for quantity > bedroom count
+          if (qty > bedroomCount) {
+            return total + roomPrice * (qty - bedroomCount);
+          }
+        }
+        return total;
+      },
+      0
+    );
 
-      switch (serviceOption?.service_id) {
-        case ServiceId.StandardCleaning:
-          cleaningTypeMultiplier = 1;
-          break;
-        case ServiceId.DeepCleaning:
-          cleaningTypeMultiplier = 2.5;
-          break;
-        case ServiceId.PostConstructionCleaning:
-          cleaningTypeMultiplier = 4;
-          break;
-        case ServiceId.MoveInMoveOutCleaning:
-          cleaningTypeMultiplier = 2.5;
-          break;
-        default:
-          break;
-      }
+    // Add room prices to base price
+    let totalPrice = basePrice + roomTotal;
 
-      // Multiply by number of days selected
-      totalPrice = roomTotal * selectedDays * cleaningTypeMultiplier;
-      if (apartmentType === HouseType.Duplex) {
-        totalPrice *= 1.5;
-      }
+    // Apply duplex multiplier if applicable
+    if (apartmentType === HouseType.Duplex) {
+      totalPrice *= 1.5;
     }
+
     return totalPrice;
   };
 
