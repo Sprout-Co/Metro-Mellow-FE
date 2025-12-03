@@ -45,6 +45,7 @@ export interface CheckoutFormData {
   city: string;
   street: string;
   addressId?: string;
+  notes?: string;
 }
 
 const CheckoutModal: React.FC<CheckoutModalProps> = ({
@@ -285,6 +286,25 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       onInputChange={handleInputChange}
                       onAddressSelect={handleAddressSelect}
                     />
+
+                    {/* Notes Section */}
+                    <div className={styles.checkoutModal__field}>
+                      <label className={styles.checkoutModal__label}>
+                        Special Instructions (Optional)
+                      </label>
+                      <textarea
+                        name="notes"
+                        className={styles.checkoutModal__textarea}
+                        placeholder="Add any special instructions or notes for your booking..."
+                        value={formData.notes || ""}
+                        onChange={handleInputChange}
+                        rows={3}
+                        maxLength={500}
+                      />
+                      <span className={styles.checkoutModal__charCount}>
+                        {formData.notes?.length || 0}/500
+                      </span>
+                    </div>
                   </div>
                 </div>
 

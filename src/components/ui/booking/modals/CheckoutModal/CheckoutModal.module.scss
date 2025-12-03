@@ -211,6 +211,44 @@
     }
   }
 
+  &__textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: spacing("md");
+    background-color: color("neutral", "white");
+    border: map-get($border-width, "thin") solid color("neutral", "light");
+    border-radius: border-radius("lg");
+    @include font-size("body-2");
+    font-family: inherit;
+    color: color("neutral", "darkest");
+    transition: $transition-base;
+    resize: vertical;
+    line-height: line-height("relaxed");
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+
+    &:focus {
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.1);
+      outline: none;
+    }
+
+    &:disabled {
+      background-color: color("neutral", "lighter");
+      color: color("neutral", "medium");
+      cursor: not-allowed;
+    }
+  }
+
+  &__charCount {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+    text-align: right;
+    margin-top: spacing("xs");
+  }
+
   &__inputIcon {
     position: absolute;
     right: spacing("md");

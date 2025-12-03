@@ -1,9 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { TimeSlot, User } from "@/graphql/api";
-import {
-  formatDateToLocalString,
-  getTomorrowDate,
-} from "@/utils/slotHelpers";
+import { formatDateToLocalString, getTomorrowDate } from "@/utils/slotHelpers";
 
 export interface CheckoutFormData {
   date: string;
@@ -11,6 +8,7 @@ export interface CheckoutFormData {
   city: string;
   street: string;
   addressId?: string;
+  notes?: string;
 }
 
 interface UseCheckoutFormOptions {
@@ -25,11 +23,17 @@ interface UseCheckoutFormReturn {
   setFormData: React.Dispatch<React.SetStateAction<CheckoutFormData>>;
   setIsNewAddress: (value: boolean) => void;
   handleInputChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => void;
   handleDateSelect: (date: Date) => void;
   handleTimeSlotSelect: (timeSlot: TimeSlot) => void;
-  handleAddressSelect: (addressId: string, city: string, street: string) => void;
+  handleAddressSelect: (
+    addressId: string,
+    city: string,
+    street: string
+  ) => void;
   resetForm: () => void;
 }
 
@@ -45,10 +49,12 @@ export const useCheckoutForm = ({
       city: user?.defaultAddress?.city ?? "",
       street: user?.defaultAddress?.street ?? "",
       addressId: user?.defaultAddress?.id,
+      notes: "",
     };
   }, [user]);
 
-  const [formData, setFormData] = useState<CheckoutFormData>(getInitialFormData());
+  const [formData, setFormData] =
+    useState<CheckoutFormData>(getInitialFormData());
   const [isNewAddress, setIsNewAddress] = useState(!user?.addresses?.length);
 
   // Update form data when user changes
@@ -75,7 +81,11 @@ export const useCheckoutForm = ({
 
   // Handle input changes
   const handleInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    (
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      >
+    ) => {
       const { name, value } = e.target;
       setFormData((prev) => ({
         ...prev,
@@ -145,4 +155,3 @@ export const useCheckoutForm = ({
     resetForm,
   };
 };
-
