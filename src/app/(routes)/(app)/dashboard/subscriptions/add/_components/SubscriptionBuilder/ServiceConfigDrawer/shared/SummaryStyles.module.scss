@@ -1,0 +1,178 @@
+// ServiceConfigDrawer - Summary Styles with Subtle Enhancements
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+// ===================================
+// SUMMARY - Clean with Polish
+// ===================================
+
+.summary {
+  // Section wrapper
+  &__section {
+    margin-bottom: spacing("lg");
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__sectionTitle {
+    @include font-size("xs");
+    @include font-weight("bold");
+    color: color("neutral", "dark");
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 spacing("sm") 0;
+    padding-bottom: spacing("sm");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+
+  // Configuration rows
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("xs") 0;
+
+    & + & {
+      border-top: 1px dashed color("neutral", "lighter");
+      margin-top: spacing("xs");
+      padding-top: spacing("sm");
+    }
+  }
+
+  &__label {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+  }
+
+  &__value {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    text-align: right;
+  }
+
+  // Price highlight
+  &__priceRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("lg");
+    background: color("primary", "base");
+    border-radius: border-radius("xl");
+    margin-top: spacing("lg");
+    box-shadow: 0 4px 12px rgba(color("primary", "base"), 0.2);
+  }
+
+  &__priceLabel {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  &__priceValue {
+    @include font-size("2xl");
+    @include font-weight("bold");
+    color: color("neutral", "white");
+  }
+
+  // Days pills
+  &__days {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing("xxs");
+    justify-content: flex-end;
+  }
+
+  &__dayPill {
+    padding: spacing("xxs") spacing("sm");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    border-radius: border-radius("md");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    box-shadow: 0 1px 3px rgba(color("primary", "base"), 0.25);
+  }
+
+  // Rooms list
+  &__roomsList {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+  }
+
+  &__roomItem {
+    display: flex;
+    justify-content: space-between;
+    padding: spacing("xs") 0;
+    @include font-size("sm");
+    color: color("neutral", "dark");
+
+    & + & {
+      border-top: 1px dashed color("neutral", "lighter");
+    }
+
+    span:last-child {
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+    }
+  }
+
+  // Meals summary
+  &__mealsList {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+  }
+
+  &__mealItem {
+    display: flex;
+    justify-content: space-between;
+    padding: spacing("xs") 0;
+    @include font-size("sm");
+    color: color("neutral", "dark");
+
+    & + & {
+      border-top: 1px dashed color("neutral", "lighter");
+    }
+
+    span:last-child {
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+    }
+  }
+
+  // Severity display
+  &__severity {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+  }
+
+  &__severityIcon {
+    @include font-size("base");
+  }
+
+  &__severityText {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  // Note/info
+  &__note {
+    padding: spacing("sm") spacing("md");
+    background: color("accent", "lighter");
+    border-radius: border-radius("md");
+    border-left: 3px solid color("accent", "base");
+    @include font-size("xs");
+    color: color("neutral", "darker");
+    margin-top: spacing("md");
+  }
+}

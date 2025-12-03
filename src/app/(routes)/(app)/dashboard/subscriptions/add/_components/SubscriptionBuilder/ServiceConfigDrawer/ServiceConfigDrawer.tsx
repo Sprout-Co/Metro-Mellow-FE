@@ -2,10 +2,10 @@
 
 import React from "react";
 import { Service, ServiceCategory, SubscriptionServiceInput } from "@/graphql/api";
-import CleaningServiceConfiguration from "./components/CleaningServiceConfiguration";
-import CookingServiceConfiguration from "./components/CookingServiceConfiguration";
-import LaundryServiceConfiguration from "./components/LaundryServiceConfiguration";
-import PestControlServiceConfiguration from "./components/PestControlServiceConfiguration";
+import CleaningServiceConfiguration from "./CleaningServiceConfiguration";
+import CookingServiceConfiguration from "./CookingServiceConfiguration";
+import LaundryServiceConfiguration from "./LaundryServiceConfiguration";
+import PestControlServiceConfiguration from "./PestControlServiceConfiguration";
 
 interface ServiceConfigDrawerProps {
   isOpen: boolean;
