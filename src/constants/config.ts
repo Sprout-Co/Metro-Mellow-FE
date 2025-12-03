@@ -32,3 +32,5 @@ export const ContactDetails = {
   EMAIL: "team@metromellow.com",
   ADDRESS: "Opeyemi Street, Yaba, Lagos",
 } as const;
+
+export const REFERRAL_CODE_STORAGE_KEY = "referral_code";

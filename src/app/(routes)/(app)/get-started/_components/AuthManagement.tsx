@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import AuthLayout from "./AuthLayout";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
+import { REFERRAL_CODE_STORAGE_KEY } from "@/constants/config";
 
 type AuthMode = "login" | "register";
 
@@ -19,6 +21,19 @@ export default function AuthManagement({
     searchParams.get("view") === "register" ? "register" : "login"
   ) as AuthMode;
 
+  // Capture referral code from URL and store in sessionStorage
+  useEffect(() => {
+    const refCode = searchParams.get("ref");
+    if (refCode) {
+      // Store referral code in sessionStorage
+      // This persists across page refreshes but clears when browser closes
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem(REFERRAL_CODE_STORAGE_KEY, refCode);
+        console.log("Referral code captured and stored:", refCode);
+      }
+    }
+  }, [searchParams]);
+
   const handleLoginSuccess = () => {
     router.push("/dashboard");
   };
@@ -28,11 +43,17 @@ export default function AuthManagement({
   };
 
   const handleSwitchToLogin = () => {
-    router.replace(`${pathname}?view=login`, { scroll: false });
+    // Preserve existing query params (like ref) when switching views
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("view", "login");
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   const handleSwitchToRegister = () => {
-    router.replace(`${pathname}?view=register`, { scroll: false });
+    // Preserve existing query params (like ref) when switching views
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("view", "register");
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   return (

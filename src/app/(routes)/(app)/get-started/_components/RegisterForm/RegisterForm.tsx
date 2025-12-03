@@ -1,7 +1,7 @@
 // components/auth/RegisterForm.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
@@ -25,6 +25,7 @@ import VerificationForm from "../VerificationForm";
 import { UserRole, useActiveServiceAreasQuery } from "@/graphql/api";
 import { Button } from "@/components/ui/Button";
 import { PlacesAutocomplete } from "@/components/ui/PlacesAutocomplete/PlacesAutocomplete";
+import { REFERRAL_CODE_STORAGE_KEY } from "@/constants/config";
 
 interface RegisterFormState {
   name: string;
@@ -82,6 +83,26 @@ export default function RegisterForm({
   const { handleRegister } = useAuthOperations();
   const { data: serviceAreasData, loading: loadingServiceAreas } =
     useActiveServiceAreasQuery();
+
+  // Auto-fill referral code from sessionStorage on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedReferralCode = sessionStorage.getItem(
+        REFERRAL_CODE_STORAGE_KEY
+      );
+      if (storedReferralCode && !formData.referralCode) {
+        setFormData((prev) => ({
+          ...prev,
+          referralCode: storedReferralCode,
+        }));
+        console.log(
+          "Referral code auto-filled from sessionStorage:",
+          storedReferralCode
+        );
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const validateStep = (step: FormStep): boolean => {
     const newErrors: FormErrors = {};
