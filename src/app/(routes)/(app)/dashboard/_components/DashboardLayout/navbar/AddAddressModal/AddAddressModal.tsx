@@ -90,6 +90,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
       onClose={resetAndClose}
       title="Add Address"
       maxWidth="420px"
+      contentOverflow="visible"
     >
       <div className={styles.container}>
         {/* Step indicator */}

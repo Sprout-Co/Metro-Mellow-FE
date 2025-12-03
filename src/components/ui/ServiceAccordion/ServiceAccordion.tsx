@@ -9,6 +9,7 @@ import {
   Utensils,
   Bug,
   Loader2,
+  Clock,
 } from "lucide-react";
 import styles from "./ServiceAccordion.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
@@ -20,7 +21,6 @@ import PestControlServiceModal from "../booking/modals/PestControlServiceModal";
 import { RootState } from "@/lib/redux/store";
 import { useSelector } from "react-redux";
 
-// Helper function to get icon for service category
 const getServiceIcon = (category: ServiceCategory) => {
   switch (category) {
     case ServiceCategory.Cleaning:
@@ -36,15 +36,14 @@ const getServiceIcon = (category: ServiceCategory) => {
   }
 };
 
-// Helper function to get color for service category
 const getServiceColor = (category: ServiceCategory) => {
   switch (category) {
     case ServiceCategory.Cleaning:
       return "#075056";
     case ServiceCategory.Laundry:
-      return "#6366f1";
+      return "#8b5cf6";
     case ServiceCategory.Cooking:
-      return "#fe5b04";
+      return "#f59e0b";
     case ServiceCategory.PestControl:
       return "#10b981";
     default:
@@ -52,16 +51,20 @@ const getServiceColor = (category: ServiceCategory) => {
   }
 };
 
-// Helper function to get service options with icons
 const getServiceOptions = (options: Service["options"] = []) => {
   if (!options) return [];
   return options.map((option) => ({
     id: option.id,
     title: option.label,
     description: option.description,
-    icon: <Package />, // Default icon for service options
+    icon: <Package />,
     price: option.price,
   }));
+};
+
+// Check if service is available (currently only Cleaning)
+const isServiceAvailable = (category: ServiceCategory) => {
+  return category === ServiceCategory.Cleaning;
 };
 
 interface ServiceAccordionProps {
@@ -90,16 +93,13 @@ const ServiceAccordion: React.FC<ServiceAccordionProps> = ({
         .includes(searchQuery?.toLowerCase() || "")
   );
 
-  const toggleService = (serviceId: string) => {
+  const toggleService = (serviceId: string, category: ServiceCategory) => {
+    // Only allow expanding available services
+    if (!isServiceAvailable(category)) return;
     setExpandedService(expandedService === serviceId ? null : serviceId);
   };
 
   const handleBookService = (serviceId: string, serviceOptionId: string) => {
-    // if (onBookService) {
-    //   onBookService(serviceId, serviceOptionId);
-    // }
-    console.log("Booking service:", serviceId);
-    console.log("Booking service:", services);
     const service = services.find((service) => service._id === serviceId);
     if (service) {
       setSelectedService(service);
@@ -206,75 +206,77 @@ const ServiceAccordion: React.FC<ServiceAccordionProps> = ({
         const serviceIcon = getServiceIcon(service.category);
         const serviceColor = getServiceColor(service.category);
         const serviceOptions = getServiceOptions(service.options);
+        const isAvailable = isServiceAvailable(service.category);
+        const isExpanded = expandedService === service._id;
 
         return (
           <motion.div
             key={service._id}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.3,
-              delay: index * 0.05,
-            }}
-            className={styles.accordionItem}
+            transition={{ duration: 0.3, delay: index * 0.05 }}
+            className={`${styles.accordionItem} ${
+              !isAvailable ? styles["accordionItem--disabled"] : ""
+            }`}
           >
             <motion.button
               className={`${styles.accordionHeader} ${
-                expandedService === service._id
-                  ? styles["accordionHeader--active"]
-                  : ""
+                isExpanded ? styles["accordionHeader--active"] : ""
               }`}
-              onClick={() => toggleService(service._id)}
-              whileHover={{ x: 2 }}
-              whileTap={{ scale: 0.99 }}
+              onClick={() => toggleService(service._id, service.category)}
+              whileTap={isAvailable ? { scale: 0.995 } : undefined}
               style={{
-                borderLeftColor:
-                  expandedService === service._id
-                    ? serviceColor
-                    : "transparent",
+                borderLeftColor: isExpanded ? serviceColor : "transparent",
               }}
             >
               <div
                 className={styles.accordionHeader__icon}
                 style={{
-                  backgroundColor:
-                    expandedService === service._id ? serviceColor : undefined,
-                  color:
-                    expandedService === service._id ? "#ffffff" : serviceColor,
+                  backgroundColor: isExpanded
+                    ? serviceColor
+                    : `${serviceColor}15`,
+                  color: isExpanded ? "#ffffff" : serviceColor,
                 }}
               >
                 {serviceIcon}
               </div>
+
               <div className={styles.accordionHeader__content}>
-                <h3 className={styles.accordionHeader__title}>
-                  {service.name}
-                </h3>
+                <div className={styles.accordionHeader__titleRow}>
+                  <h3 className={styles.accordionHeader__title}>
+                    {service.name}
+                  </h3>
+                  {!isAvailable && (
+                    <span className={styles.accordionHeader__comingSoon}>
+                      <Clock size={12} />
+                      Coming Soon
+                    </span>
+                  )}
+                </div>
                 <p className={styles.accordionHeader__description}>
                   {service.description}
                 </p>
               </div>
-              <motion.div
-                className={styles.accordionHeader__arrow}
-                animate={{
-                  rotate: expandedService === service._id ? 180 : 0,
-                }}
-                transition={{ duration: 0.2 }}
-              >
-                <ChevronDown />
-              </motion.div>
+
+              {isAvailable && (
+                <motion.div
+                  className={styles.accordionHeader__arrow}
+                  animate={{ rotate: isExpanded ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ChevronDown />
+                </motion.div>
+              )}
             </motion.button>
 
             <AnimatePresence>
-              {expandedService === service._id && (
+              {isExpanded && isAvailable && (
                 <motion.div
                   className={styles.accordionContent}
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  transition={{
-                    duration: 0.3,
-                    ease: "easeInOut",
-                  }}
+                  transition={{ duration: 0.25, ease: "easeInOut" }}
                 >
                   <div className={styles.subServicesList}>
                     {serviceOptions.length > 0 ? (
@@ -289,9 +291,6 @@ const ServiceAccordion: React.FC<ServiceAccordionProps> = ({
                             delay: optionIndex * 0.05,
                           }}
                         >
-                          <div className={styles.subServiceItem__icon}>
-                            {option.icon}
-                          </div>
                           <div className={styles.subServiceItem__content}>
                             <h4 className={styles.subServiceItem__title}>
                               {option.title}
@@ -299,21 +298,20 @@ const ServiceAccordion: React.FC<ServiceAccordionProps> = ({
                             <p className={styles.subServiceItem__description}>
                               {option.description}
                             </p>
-                            <span className={styles.subServiceItem__duration}>
-                              <Timer size={12} />
+                          </div>
+                          <div className={styles.subServiceItem__right}>
+                            <span className={styles.subServiceItem__price}>
                               From ₦{option.price.toLocaleString()}
                             </span>
-                            <div>
-                              <FnButton
-                                size="xs"
-                                variant="primary"
-                                onClick={() =>
-                                  handleBookService(service._id, option.id)
-                                }
-                              >
-                                Book Now
-                              </FnButton>
-                            </div>
+                            <FnButton
+                              size="xs"
+                              variant="primary"
+                              onClick={() =>
+                                handleBookService(service._id, option.id)
+                              }
+                            >
+                              Book Now
+                            </FnButton>
                           </div>
                         </motion.div>
                       ))
@@ -323,9 +321,6 @@ const ServiceAccordion: React.FC<ServiceAccordionProps> = ({
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                       >
-                        <div className={styles.subServiceItem__icon}>
-                          <Package />
-                        </div>
                         <div className={styles.subServiceItem__content}>
                           <h4 className={styles.subServiceItem__title}>
                             {service.name}
@@ -333,15 +328,14 @@ const ServiceAccordion: React.FC<ServiceAccordionProps> = ({
                           <p className={styles.subServiceItem__description}>
                             {service.description}
                           </p>
-                          <span className={styles.subServiceItem__duration}>
-                            <Timer size={12} />
+                        </div>
+                        <div className={styles.subServiceItem__right}>
+                          <span className={styles.subServiceItem__price}>
                             From ₦{service.price.toLocaleString()}
                           </span>
-                          <div>
-                            <FnButton size="xs" variant="primary">
-                              Book Now
-                            </FnButton>
-                          </div>
+                          <FnButton size="xs" variant="primary">
+                            Book Now
+                          </FnButton>
                         </div>
                       </motion.div>
                     )}

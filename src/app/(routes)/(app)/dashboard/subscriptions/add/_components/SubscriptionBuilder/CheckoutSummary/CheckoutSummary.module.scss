@@ -31,21 +31,6 @@
     position: relative;
     overflow: hidden;
 
-    // &::before {
-    //   content: "";
-    //   position: absolute;
-    //   top: -50%;
-    //   right: -30%;
-    //   width: 60%;
-    //   height: 200%;
-    //   background: radial-gradient(
-    //     circle,
-    //     rgba(255, 255, 255, 0.1) 0%,
-    //     transparent 60%
-    //   );
-    //   pointer-events: none;
-    // }
-
     @include breakpoint-down("md") {
       padding: spacing("xl") spacing("lg");
       flex-direction: column;
