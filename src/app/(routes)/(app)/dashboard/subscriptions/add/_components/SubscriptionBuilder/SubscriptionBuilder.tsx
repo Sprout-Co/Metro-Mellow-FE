@@ -40,7 +40,7 @@ import OrderSuccessModal from "@/components/ui/booking/modals/OrderSuccessModal/
 import { Routes } from "@/constants/routes";
 import FullPageLoader from "@/components/ui/FullPageLoader";
 
-export type DurationType = 1 | 2 | 3 | 6 | 12;
+export type DurationType = 1 | 2 | 3 | 4;
 
 interface ConfiguredService {
   service: Service;

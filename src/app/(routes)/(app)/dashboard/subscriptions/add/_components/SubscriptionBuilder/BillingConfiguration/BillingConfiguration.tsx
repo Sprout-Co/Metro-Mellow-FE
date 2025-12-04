@@ -29,8 +29,8 @@ const BillingConfiguration: React.FC<BillingConfigurationProps> = ({
   setDuration,
   configuredServices = [],
 }) => {
-  const monthlyDurations: DurationType[] = [1, 2, 3, 6, 12];
-  const quarterlyDurations: DurationType[] = [3, 6, 12];
+  const monthlyDurations: DurationType[] = [1, 2, 3, 4];
+  const quarterlyDurations: DurationType[] = [3, 4];
 
   // Determine allowed billing cycles based on configured services
   const hasPestControl = configuredServices.some(
@@ -50,13 +50,6 @@ const BillingConfiguration: React.FC<BillingConfigurationProps> = ({
     billingCycle === BillingCycle.Monthly
       ? monthlyDurations
       : quarterlyDurations;
-
-  const getSavingsPercentage = (dur: DurationType) => {
-    if (dur >= 12) return 30;
-    if (dur >= 6) return 20;
-    if (dur >= 3) return 10;
-    return 0;
-  };
 
   // Auto-adjust billing cycle based on services
   React.useEffect(() => {
@@ -170,9 +163,6 @@ const BillingConfiguration: React.FC<BillingConfigurationProps> = ({
         <h3 className={styles.config__label}>Commitment Period</h3>
         <div className={styles.config__durationGrid}>
           {durations.map((dur) => {
-            const savings = getSavingsPercentage(dur);
-            const isPopular = dur === 6;
-
             return (
               <motion.button
                 key={dur}
@@ -183,38 +173,15 @@ const BillingConfiguration: React.FC<BillingConfigurationProps> = ({
                 whileHover={{ y: -4 }}
                 whileTap={{ scale: 0.98 }}
               >
-                {/* {isPopular && (
-                  <div className={styles.config__popularBadge}>
-                    <Award size={14} />
-                    Most Popular
-                  </div>
-                )} */}
                 <div className={styles.config__durationValue}>{dur}</div>
                 <div className={styles.config__durationLabel}>
                   {dur === 1 ? "Month" : "Months"}
                 </div>
-                {/* {savings > 0 && (
-                  <div className={styles.config__durationSaving}>
-                    Save {savings}%
-                  </div>
-                )} */}
               </motion.button>
             );
           })}
         </div>
       </div>
-
-      {/* Benefits */}
-      {/* <div className={styles.config__benefits}>
-        <div className={styles.config__benefit}>
-          <Clock size={16} />
-          <span>Cancel anytime after commitment period</span>
-        </div>
-        <div className={styles.config__benefit}>
-          <TrendingUp size={16} />
-          <span>Lock in current prices for entire duration</span>
-        </div>
-      </div> */}
     </div>
   );
 };
