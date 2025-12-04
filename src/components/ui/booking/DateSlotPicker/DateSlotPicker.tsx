@@ -82,6 +82,7 @@ const DateSlotPicker: React.FC<DateSlotPickerProps> = ({
     if (disabled) return false;
     if (isPastDate(date)) return false;
     if (date < minDate || date > maxDate) return false;
+    if (date.getDay() === 0) return false; // Disable Sundays
     return isDateAvailable(date, availableSlots);
   };
 
