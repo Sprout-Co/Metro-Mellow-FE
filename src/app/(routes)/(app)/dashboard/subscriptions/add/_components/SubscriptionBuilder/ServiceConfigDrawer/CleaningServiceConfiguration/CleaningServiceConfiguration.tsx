@@ -164,24 +164,30 @@ const CleaningServiceConfiguration: React.FC<
   }, [isOpen, existingConfiguration]);
 
   const updateRoomCount = (room: string, increment: boolean) => {
-    setConfiguration((prev) => ({
-      ...prev,
-      serviceDetails: {
-        ...prev.serviceDetails,
-        cleaning: {
-          ...prev.serviceDetails.cleaning!,
-          rooms: {
-            ...prev.serviceDetails.cleaning!.rooms,
-            [room]: Math.max(
-              0,
-              (prev.serviceDetails.cleaning?.rooms?.[
-                room as keyof typeof prev.serviceDetails.cleaning.rooms
-              ] ?? 0) + (increment ? 1 : -1)
-            ),
+    setConfiguration((prev) => {
+      const currentCount =
+        prev.serviceDetails.cleaning?.rooms?.[
+          room as keyof typeof prev.serviceDetails.cleaning.rooms
+        ] ?? 0;
+      const newCount = currentCount + (increment ? 1 : -1);
+
+      // Staircase and balcony can go to 0, others must be at least 1
+      const minValue = room === "staircase" || room === "balcony" ? 0 : 1;
+
+      return {
+        ...prev,
+        serviceDetails: {
+          ...prev.serviceDetails,
+          cleaning: {
+            ...prev.serviceDetails.cleaning!,
+            rooms: {
+              ...prev.serviceDetails.cleaning!.rooms,
+              [room]: Math.max(minValue, newCount),
+            },
           },
         },
-      },
-    }));
+      };
+    });
   };
 
   const toggleDay = (day: ScheduleDays) => {
@@ -411,11 +417,21 @@ const CleaningServiceConfiguration: React.FC<
               <div className={styles.drawer__roomCounter}>
                 <button
                   onClick={() => updateRoomCount(room.key, false)}
-                  disabled={
-                    !configuration.serviceDetails.cleaning?.rooms?.[
-                      room.key as keyof typeof configuration.serviceDetails.cleaning.rooms
-                    ]
-                  }
+                  disabled={(() => {
+                    const currentCount =
+                      configuration.serviceDetails.cleaning?.rooms?.[
+                        room.key as keyof typeof configuration.serviceDetails.cleaning.rooms
+                      ] ?? 0;
+                    // Disable if count is 0, or if count is 1 and room is not staircase/balcony
+                    if (currentCount === 0) return true;
+                    if (
+                      currentCount === 1 &&
+                      room.key !== "staircase" &&
+                      room.key !== "balcony"
+                    )
+                      return true;
+                    return false;
+                  })()}
                 >
                   −
                 </button>

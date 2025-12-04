@@ -224,7 +224,7 @@ const ServiceSelector: React.FC<ServiceSelectorProps> = ({
                       <span>Unavailable</span>
                       {reason && <small>{reason}</small>}
                     </div>
-                  ) : (
+                  ) : service.category === ServiceCategory.Cleaning ? (
                     <motion.button
                       className={styles.selector__addBtn}
                       onClick={() => onServiceSelect(service)}
@@ -234,6 +234,10 @@ const ServiceSelector: React.FC<ServiceSelectorProps> = ({
                       <Plus size={18} />
                       <span>Add Service</span>
                     </motion.button>
+                  ) : (
+                    <div className={styles.selector__disabledState}>
+                      <span>Coming Soon</span>
+                    </div>
                   )
                 ) : (
                   <div className={styles.selector__actions}>
