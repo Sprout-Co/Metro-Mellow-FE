@@ -189,6 +189,12 @@
     gap: spacing("sm");
   }
 
+  &__labelWrapper {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+  }
+
   &__label {
     @include font-size("xs");
     @include font-weight("semibold");
@@ -196,6 +202,101 @@
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.06em;
+  }
+
+  &__infoIconWrapper {
+    position: relative;
+    display: inline-flex;
+  }
+
+  &__infoIcon {
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: color("neutral", "medium");
+    cursor: pointer;
+    padding: 0;
+    border-radius: border-radius("full");
+    transition: all 0.15s ease;
+
+    &:hover {
+      color: color("primary", "base");
+      background-color: color("primary", "lighter");
+    }
+
+    &:focus-visible {
+      outline: 2px solid color("primary", "base");
+      outline-offset: 2px;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__infoPopup {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    min-width: 280px;
+    max-width: 320px;
+    background-color: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: fadeIn 0.15s ease;
+
+    // Arrow pointing up
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 6px;
+      border-style: solid;
+      border-color: transparent transparent color("neutral", "white")
+        transparent;
+    }
+
+    // Arrow border
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 7px;
+      border-style: solid;
+      border-color: transparent transparent color("neutral", "lighter")
+        transparent;
+      margin-bottom: -1px;
+    }
+  }
+
+  &__infoPopupContent {
+    padding: spacing("md");
+  }
+
+  &__infoPopupTitle {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xs") 0;
+  }
+
+  &__infoPopupText {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+    margin: 0;
+    line-height: 1.5;
   }
 
   &__inputWrapper {

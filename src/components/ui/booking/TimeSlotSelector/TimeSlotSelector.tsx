@@ -28,11 +28,11 @@ const TimeSlotSelector: React.FC<TimeSlotSelectorProps> = ({
       label: "Afternoon",
       timeRange: "12:00 PM - 5:00 PM",
     },
-    {
-      value: TimeSlot.Evening,
-      label: "Evening",
-      timeRange: "5:00 PM - 8:00 PM",
-    },
+    // {
+    //   value: TimeSlot.Evening,
+    //   label: "Evening",
+    //   timeRange: "5:00 PM - 8:00 PM",
+    // },
   ];
 
   // Get availability for a specific time slot

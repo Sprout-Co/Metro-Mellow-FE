@@ -71,7 +71,12 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
   if (!user || !isAuthenticated) {
     return (
       <div className={styles.checkoutModal__field}>
-        <p>Please login to continue</p>
+        <p>
+          Please login to continue.&nbsp;
+          <a href="/get-started" className={styles.checkoutModal__loginLink}>
+            Go to Login / Register
+          </a>
+        </p>
       </div>
     );
   }
