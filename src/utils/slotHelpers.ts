@@ -65,6 +65,30 @@ export const formatDateToLocalString = (date: Date): string => {
 };
 
 /**
+ * Parses a date string from the API (ISO format) as a local date
+ * This prevents timezone issues where UTC dates shift to previous/next day
+ * @param dateString - Date string from API (ISO format or YYYY-MM-DD)
+ * @returns Date object representing the date in local timezone
+ */
+export const parseAPIDateAsLocal = (dateString: string | Date): Date => {
+  // If it's already a Date object, extract the date parts
+  if (dateString instanceof Date) {
+    return new Date(
+      dateString.getFullYear(),
+      dateString.getMonth(),
+      dateString.getDate()
+    );
+  }
+
+  // Extract date part (YYYY-MM-DD) from ISO string or use as-is
+  const dateOnly = dateString.split("T")[0];
+  const [year, month, day] = dateOnly.split("-").map(Number);
+  
+  // Create date in local timezone (month is 0-indexed)
+  return new Date(year, month - 1, day);
+};
+
+/**
  * Formats a Date object for GraphQL DateTime input
  * @param date - Date object to format
  * @returns ISO string format for API
@@ -86,7 +110,7 @@ export const isDateAvailable = (
   const dateString = formatDateToLocalString(date);
 
   return availableSlots.some((slot) => {
-    const slotDateString = formatDateToLocalString(new Date(slot.date));
+    const slotDateString = formatDateToLocalString(parseAPIDateAsLocal(slot.date));
     return slotDateString === dateString && slot.hasAvailableSlots;
   });
 };
@@ -104,7 +128,7 @@ export const getSlotAvailabilityForDate = (
   const dateString = formatDateToLocalString(date);
 
   const dateSlot = availableSlots.find((slot) => {
-    const slotDateString = formatDateToLocalString(new Date(slot.date));
+    const slotDateString = formatDateToLocalString(parseAPIDateAsLocal(slot.date));
     return slotDateString === dateString;
   });
 
