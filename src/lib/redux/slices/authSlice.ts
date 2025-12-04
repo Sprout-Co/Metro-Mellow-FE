@@ -67,10 +67,12 @@ const authSlice = createSlice({
 
       // Save token to cookie
       cookieStorage.setItem("auth-token", token);
-      const redirectUrl = welcome
-        ? `${Routes.DASHBOARD}?welcome=true`
-        : Routes.DASHBOARD;
-      window.location.replace(redirectUrl);
+      setTimeout(() => {
+        const redirectUrl = welcome
+          ? `${Routes.DASHBOARD}?welcome=true`
+          : Routes.DASHBOARD;
+        window.location.replace(redirectUrl);
+      }, 5000);
     },
     logout: (state) => {
       console.log("Auth store: Logging out");
