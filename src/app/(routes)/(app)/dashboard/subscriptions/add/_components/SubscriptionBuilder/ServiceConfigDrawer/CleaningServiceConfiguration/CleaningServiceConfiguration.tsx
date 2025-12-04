@@ -128,7 +128,7 @@ const CleaningServiceConfiguration: React.FC<
     { value: ScheduleDays.Thursday, label: "Thu" },
     { value: ScheduleDays.Friday, label: "Fri" },
     { value: ScheduleDays.Saturday, label: "Sat" },
-    { value: ScheduleDays.Sunday, label: "Sun" },
+    // { value: ScheduleDays.Sunday, label: "Sun" },
   ];
 
   const timeSlots = [
@@ -144,12 +144,12 @@ const CleaningServiceConfiguration: React.FC<
       time: "12PM - 4PM",
       icon: "☀️",
     },
-    {
-      value: TimeSlot.Evening,
-      label: "Evening",
-      time: "4PM - 8PM",
-      icon: "🌆",
-    },
+    // {
+    //   value: TimeSlot.Evening,
+    //   label: "Evening",
+    //   time: "4PM - 8PM",
+    //   icon: "🌆",
+    // },
   ];
 
   useEffect(() => {
@@ -214,36 +214,51 @@ const CleaningServiceConfiguration: React.FC<
     const propertyType = configuration.serviceDetails.cleaning?.houseType;
     const daysCount = configuration.scheduledDays?.length || 0;
 
-    const roomPrices =
-      service.options?.find((opt) => opt.service_id === selectedOption)
-        ?.roomPrices || {};
+    // Get the selected service option
+    const serviceOption = service.options?.find(
+      (opt) => opt.service_id === selectedOption
+    );
 
+    // Start with base price
+    const basePrice = serviceOption?.price || service.price;
+
+    // Get room prices from service options
+    const roomPrices = serviceOption?.roomPrices || {};
+
+    // Calculate total price for each room type
+    // Bedrooms: charge for quantity > 1 (first bedroom included in base)
+    // Other rooms: charge for quantity > bedroom count (threshold based on bedroom selection)
+    const bedroomCount = roomQuantities?.bedroom || 0;
     const roomTotal = Object.entries(roomQuantities || {}).reduce(
       (total, [room, quantity]) => {
         const roomPrice = roomPrices[room as keyof typeof roomPrices] || 0;
-        return total + roomPrice * (quantity as number);
+        const qty = quantity as number;
+
+        if (room === "bedroom") {
+          // For bedrooms: charge for quantity > 1
+          if (qty > 1) {
+            return total + roomPrice * (qty - 1);
+          }
+        } else {
+          // For other rooms: charge for quantity > bedroom count
+          if (qty > bedroomCount) {
+            return total + roomPrice * (qty - bedroomCount);
+          }
+        }
+        return total;
       },
       0
     );
 
-    let multiplier = 1;
-    switch (selectedOption) {
-      case ServiceId.DeepCleaning:
-        multiplier = 2.5;
-        break;
-      case ServiceId.PostConstructionCleaning:
-        multiplier = 4;
-        break;
-      case ServiceId.MoveInMoveOutCleaning:
-        multiplier = 2.5;
-        break;
-    }
+    // Add room prices to base price
+    let totalPrice = basePrice + roomTotal;
 
-    let totalPrice = roomTotal * multiplier;
+    // Apply duplex multiplier if applicable
     if (propertyType === HouseType.Duplex) {
       totalPrice *= 1.5;
     }
 
+    // Apply frequency and days multipliers
     let frequencyMultiplier = 4;
     if (configuration.frequency === SubscriptionFrequency.BiWeekly) {
       frequencyMultiplier = 2;

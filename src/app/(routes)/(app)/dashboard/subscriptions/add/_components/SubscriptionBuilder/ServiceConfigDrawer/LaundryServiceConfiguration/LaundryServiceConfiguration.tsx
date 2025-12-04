@@ -95,7 +95,7 @@ const LaundryServiceConfiguration: React.FC<
     { value: ScheduleDays.Thursday, label: "Thu" },
     { value: ScheduleDays.Friday, label: "Fri" },
     { value: ScheduleDays.Saturday, label: "Sat" },
-    { value: ScheduleDays.Sunday, label: "Sun" },
+    // { value: ScheduleDays.Sunday, label: "Sun" },
   ];
 
   const timeSlots = [
@@ -111,12 +111,12 @@ const LaundryServiceConfiguration: React.FC<
       time: "12PM - 4PM",
       icon: "☀️",
     },
-    {
-      value: TimeSlot.Evening,
-      label: "Evening",
-      time: "4PM - 8PM",
-      icon: "🌆",
-    },
+    // {
+    //   value: TimeSlot.Evening,
+    //   label: "Evening",
+    //   time: "4PM - 8PM",
+    //   icon: "🌆",
+    // },
   ];
 
   useEffect(() => {

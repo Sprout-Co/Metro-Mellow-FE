@@ -106,7 +106,7 @@ const CookingServiceConfiguration: React.FC<
     { value: ScheduleDays.Thursday, label: "Thu" },
     { value: ScheduleDays.Friday, label: "Fri" },
     { value: ScheduleDays.Saturday, label: "Sat" },
-    { value: ScheduleDays.Sunday, label: "Sun" },
+    // { value: ScheduleDays.Sunday, label: "Sun" },
   ];
 
   const timeSlots = [
