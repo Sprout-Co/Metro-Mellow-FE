@@ -98,7 +98,6 @@ const SubscriptionsMain: React.FC = () => {
   }, [subscriptions, selectedStatus, selectedFrequency, searchQuery]);
 
   const handleAddSubscription = () => {
-    console.log("Add new subscription");
     router.push(Routes.DASHBOARD_SUBSCRIPTIONS_ADD);
   };
 

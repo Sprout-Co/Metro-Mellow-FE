@@ -345,7 +345,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
           </div>
 
           {/* Menu Button */}
-          <div className={styles.subscriptionCard__menuContainer}>
+          {/* <div className={styles.subscriptionCard__menuContainer}>
             <motion.button
               className={styles.subscriptionCard__menuBtn}
               onClick={(e) => toggleMenu(subscription.id, e)}
@@ -421,7 +421,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
+          </div> */}
         </div>
 
         {/* Hover Arrow */}

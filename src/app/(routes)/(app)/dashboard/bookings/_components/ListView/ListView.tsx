@@ -152,7 +152,7 @@ const ListView: React.FC<ListViewProps> = ({ bookings, refetchBookings }) => {
       [BookingStatus.Completed]: "completed",
       [BookingStatus.Cancelled]: "cancelled",
     };
-    return styles[status] || "default";
+    return styles[status as keyof typeof styles] || "default";
   };
 
   // Format date
@@ -276,83 +276,6 @@ const ListView: React.FC<ListViewProps> = ({ bookings, refetchBookings }) => {
                 {formatPrice(booking.totalPrice)}
               </span>
             </div>
-          </div>
-
-          {/* Menu Button */}
-          <div className={styles.bookingCard__menuContainer}>
-            <motion.button
-              className={styles.bookingCard__menuBtn}
-              onClick={(e) => toggleMenu(booking.id, e)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <MoreVertical size={18} />
-            </motion.button>
-
-            <AnimatePresence>
-              {isMenuOpen && (
-                <motion.div
-                  className={styles.bookingCard__menu}
-                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                  transition={{ duration: 0.1 }}
-                >
-                  <button
-                    className={styles.bookingCard__menuItem}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCardClick(booking);
-                    }}
-                  >
-                    <Eye size={14} />
-                    View Details
-                  </button>
-                  {booking.status !== BookingStatus.Completed &&
-                    booking.status !== BookingStatus.Cancelled && (
-                      <>
-                        <button className={styles.bookingCard__menuItem}>
-                          <RefreshCw size={14} />
-                          Reschedule
-                        </button>
-                        <button className={styles.bookingCard__menuItem}>
-                          <Edit size={14} />
-                          Edit Booking
-                        </button>
-                      </>
-                    )}
-                  {booking.status === BookingStatus.Completed && (
-                    <>
-                      <button className={styles.bookingCard__menuItem}>
-                        <Copy size={14} />
-                        Book Again
-                      </button>
-                      <button className={styles.bookingCard__menuItem}>
-                        <FileText size={14} />
-                        Download Invoice
-                      </button>
-                      {!booking.feedback && (
-                        <button className={styles.bookingCard__menuItem}>
-                          <Star size={14} />
-                          Leave Review
-                        </button>
-                      )}
-                    </>
-                  )}
-                  {booking.status !== BookingStatus.Completed &&
-                    booking.status !== BookingStatus.Cancelled && (
-                      <button
-                        className={`${styles.bookingCard__menuItem} ${
-                          styles["bookingCard__menuItem--danger"]
-                        }`}
-                      >
-                        <X size={14} />
-                        Cancel Booking
-                      </button>
-                    )}
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
         </div>
 
