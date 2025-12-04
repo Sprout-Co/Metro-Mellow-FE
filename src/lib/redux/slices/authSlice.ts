@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User, UserRole } from "@/graphql/api";
 import Cookies from "js-cookie";
+import { Routes } from "@/constants/routes";
 
 interface AuthState {
   user: User | null;
@@ -53,8 +54,11 @@ const authSlice = createSlice({
         cookieStorage.removeItem("auth-token");
       }
     },
-    login: (state, action: PayloadAction<{ user: User; token: string }>) => {
-      const { user, token } = action.payload;
+    login: (
+      state,
+      action: PayloadAction<{ user: User; token: string; welcome?: boolean }>
+    ) => {
+      const { user, token, welcome } = action.payload;
       console.log("Auth store: Logging in", { user, token });
 
       state.user = user;
@@ -63,6 +67,10 @@ const authSlice = createSlice({
 
       // Save token to cookie
       cookieStorage.setItem("auth-token", token);
+      const redirectUrl = welcome
+        ? `${Routes.DASHBOARD}?welcome=true`
+        : Routes.DASHBOARD;
+      window.location.replace(redirectUrl);
     },
     logout: (state) => {
       console.log("Auth store: Logging out");

@@ -116,44 +116,44 @@ export const useAuthOperations = () => {
 
         // Ensure cookie is set synchronously before redirecting (critical for mobile devices)
         // Mobile browsers can have delays in cookie propagation, so we need to wait and verify
-        if (typeof window !== "undefined") {
-          // Explicitly set cookie again to ensure it's set (redundant but ensures mobile compatibility)
-          Cookies.set("auth-token", token, {
-            path: "/",
-            expires: 30,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-          });
+        // if (typeof window !== "undefined") {
+        //   // Explicitly set cookie again to ensure it's set (redundant but ensures mobile compatibility)
+        //   Cookies.set("auth-token", token, {
+        //     path: "/",
+        //     expires: 30,
+        //     secure: process.env.NODE_ENV === "production",
+        //     sameSite: "lax",
+        //   });
 
-          // Wait and verify cookie is set with more attempts and longer delays for mobile
-          let cookieSet = false;
-          const maxAttempts = 30; // Increased from 10 to 30 for mobile reliability
-          const delayMs = 100; // Increased from 50ms to 100ms
+        //   // Wait and verify cookie is set with more attempts and longer delays for mobile
+        //   let cookieSet = false;
+        //   const maxAttempts = 30; // Increased from 10 to 30 for mobile reliability
+        //   const delayMs = 100; // Increased from 50ms to 100ms
 
-          for (let i = 0; i < maxAttempts; i++) {
-            await new Promise((resolve) => setTimeout(resolve, delayMs));
-            const cookieValue = document.cookie
-              .split("; ")
-              .find((row) => row.startsWith("auth-token="));
-            if (cookieValue) {
-              cookieSet = true;
-              console.log(`Cookie verified after ${i + 1} attempts`);
-              break;
-            }
-          }
+        //   for (let i = 0; i < maxAttempts; i++) {
+        //     await new Promise((resolve) => setTimeout(resolve, delayMs));
+        //     const cookieValue = document.cookie
+        //       .split("; ")
+        //       .find((row) => row.startsWith("auth-token="));
+        //     if (cookieValue) {
+        //       cookieSet = true;
+        //       console.log(`Cookie verified after ${i + 1} attempts`);
+        //       break;
+        //     }
+        //   }
 
-          if (!cookieSet) {
-            console.error(
-              "Cookie verification failed - attempting redirect anyway"
-            );
-          }
+        //   if (!cookieSet) {
+        //     console.error(
+        //       "Cookie verification failed - attempting redirect anyway"
+        //     );
+        //   }
 
-          // Use window.location.replace to avoid adding to history
-          // Add a small delay before redirect to ensure cookie propagation on mobile
-          await new Promise((resolve) => setTimeout(resolve, 150));
-          console.log("Redirecting to dashboard...");
-          window.location.replace(Routes.DASHBOARD);
-        }
+        //   // Use window.location.replace to avoid adding to history
+        //   // Add a small delay before redirect to ensure cookie propagation on mobile
+        //   await new Promise((resolve) => setTimeout(resolve, 150));
+        //   console.log("Redirecting to dashboard...");
+        //   window.location.replace(Routes.DASHBOARD);
+        // }
       } catch (error) {
         console.error("Login error:", error);
         if (error instanceof Error) {
@@ -194,7 +194,13 @@ export const useAuthOperations = () => {
             throw new Error("Registration failed: Invalid role");
           }
 
-          dispatch(loginAction({ user: user as any, token: token || "" }));
+          dispatch(
+            loginAction({
+              user: user as any,
+              token: token || "",
+              welcome: true,
+            })
+          );
 
           // Use a direct browser redirect
           // if (typeof window !== "undefined") {
@@ -569,7 +575,7 @@ export const useAuthOperations = () => {
 
         if (user && token) {
           // Store auth data
-          dispatch(loginAction({ user: user as any, token }));
+          dispatch(loginAction({ user: user as any, token, welcome: true }));
         }
 
         return data.verifyEmailWithCode;

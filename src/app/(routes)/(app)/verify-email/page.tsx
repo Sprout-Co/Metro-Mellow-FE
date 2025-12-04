@@ -63,14 +63,15 @@ export default function VerifyEmailPage() {
             loginAction({
               user: verificationResult.user as any,
               token: verificationResult.token,
+              welcome: true,
             })
           );
 
           setStatus("success");
 
-          setTimeout(() => {
-            router.push("/dashboard?welcome=true");
-          }, 2500);
+          // setTimeout(() => {
+          //   router.push("/dashboard?welcome=true");
+          // }, 2500);
         } else {
           setStatus("error");
           setError("Failed to verify email. Please try again.");

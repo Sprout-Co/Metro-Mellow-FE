@@ -35,11 +35,11 @@ export default function AuthManagement({
   }, [searchParams]);
 
   const handleLoginSuccess = () => {
-    router.push("/dashboard");
+    // router.push("/dashboard");
   };
 
   const handleRegisterSuccess = () => {
-    router.push("/dashboard?welcome=true");
+    // router.push("/dashboard?welcome=true");
   };
 
   const handleSwitchToLogin = () => {
