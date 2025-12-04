@@ -55,6 +55,33 @@ const DateSlotPicker: React.FC<DateSlotPickerProps> = ({
     "December",
   ];
 
+  // TODO: Remove this entire useMemo block after December 8th, 2024 passes
+  // Calculate next week Monday (December 8th or dynamically calculated)
+  const nextWeekMonday = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
+
+    // Calculate days until next Monday
+    // If today is Monday (1), we want next week's Monday (7 days away)
+    // Otherwise, calculate days until the Monday of next week
+    let daysUntilMonday;
+    if (dayOfWeek === 1) {
+      // Today is Monday, get next week's Monday
+      daysUntilMonday = 7;
+    } else if (dayOfWeek === 0) {
+      // Today is Sunday, next Monday is tomorrow (1 day)
+      daysUntilMonday = 1;
+    } else {
+      // Calculate days until Monday of next week
+      daysUntilMonday = 8 - dayOfWeek;
+    }
+
+    const nextMonday = new Date(today);
+    nextMonday.setDate(today.getDate() + daysUntilMonday);
+    return nextMonday;
+  }, []);
+
   // Get calendar dates for current month view
   const calendarDates = useMemo(() => {
     return getCalendarDates(currentMonth);
@@ -83,6 +110,11 @@ const DateSlotPicker: React.FC<DateSlotPickerProps> = ({
     if (isPastDate(date)) return false;
     if (date < minDate || date > maxDate) return false;
     if (date.getDay() === 0) return false; // Disable Sundays
+    // TODO: Remove the next 4 lines after December 8th, 2024 passes
+    // Disable all dates before next week Monday
+    const dateOnly = new Date(date);
+    dateOnly.setHours(0, 0, 0, 0);
+    if (dateOnly < nextWeekMonday) return false;
     return isDateAvailable(date, availableSlots);
   };
 
