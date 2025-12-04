@@ -20,13 +20,13 @@ export const DateSelection: React.FC<DateSelectionProps> = ({
 }) => {
   return (
     <div className={styles.checkoutModal__field}>
-      <label className={styles.checkoutModal__label}>Select Date</label>
+      <label className={styles.checkoutModal__label}>Choose Date</label>
 
       {requiresAvailability && loadingSlots ? (
         <div className={styles.checkoutModal__loadingContainer}>
           <div className={styles.checkoutModal__loadingSkeleton} />
           <p className={styles.checkoutModal__loadingText}>
-            Loading available dates...
+            Checking availability...
           </p>
         </div>
       ) : (
@@ -41,4 +41,3 @@ export const DateSelection: React.FC<DateSelectionProps> = ({
     </div>
   );
 };
-

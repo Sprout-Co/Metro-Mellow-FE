@@ -137,9 +137,11 @@ export const useCheckoutForm = ({
       const selectedAddress = user.addresses.find(
         (addr) => addr?.id === formData.addressId
       );
-      return selectedAddress?.serviceArea?.deliveryCost ?? 0;
+      return 0; //TODO: Decide later if we want to charge for delivery or not
+      // return selectedAddress?.serviceArea?.deliveryCost ?? 0;
     }
-    return user?.defaultAddress?.serviceArea?.deliveryCost ?? 0;
+    // return user?.defaultAddress?.serviceArea?.deliveryCost ?? 0;
+    return 0; //TODO: Decide later if we want to charge for delivery or not
   }, [formData.addressId, user?.addresses, user?.defaultAddress]);
 
   return {

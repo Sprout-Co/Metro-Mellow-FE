@@ -14,27 +14,44 @@ export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
 }) => {
   const finalTotal = totalPrice + deliveryCost - discount;
 
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("en-NG", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
   return (
     <div className={styles.checkoutModal__summary}>
+      <h4 className={styles.checkoutModal__summaryTitle}>Order Summary</h4>
+
       <div className={styles.checkoutModal__summaryItem}>
         <span>Subtotal</span>
-        <span>₦{totalPrice}</span>
+        <span>₦{formatCurrency(totalPrice)}</span>
       </div>
+
       <div className={styles.checkoutModal__summaryItem}>
-        <span>Delivery Fee</span>
-        <span>₦{deliveryCost}</span>
+        <span>Logistics Fee</span>
+        <span>
+          {deliveryCost > 0 ? `₦${formatCurrency(deliveryCost)}` : "Free"}
+        </span>
       </div>
+
       {discount > 0 && (
-        <div className={styles.checkoutModal__summaryItem}>
-          <span>Discount</span>
-          <span>-₦{discount}</span>
+        <div
+          className={`${styles.checkoutModal__summaryItem} ${styles["checkoutModal__summaryItem--discount"]}`}
+        >
+          <span>Referral Discount</span>
+          <span>-₦{formatCurrency(discount)}</span>
         </div>
       )}
-      <div className={styles.checkoutModal__summaryItem}>
+
+      <div
+        className={`${styles.checkoutModal__summaryItem} ${styles["checkoutModal__summaryItem--total"]}`}
+      >
         <span>Total</span>
-        <span>₦{finalTotal}</span>
+        <span>₦{formatCurrency(finalTotal)}</span>
       </div>
     </div>
   );
 };
-

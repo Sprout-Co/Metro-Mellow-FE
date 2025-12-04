@@ -10,7 +10,7 @@ export const CheckoutModalHeader: React.FC<CheckoutModalHeaderProps> = ({
 }) => {
   return (
     <div className={styles.checkoutModal__header}>
-      <h2 className={styles.checkoutModal__title}>Checkout</h2>
+      <h2 className={styles.checkoutModal__title}>Complete Your Booking</h2>
 
       <button
         className={styles.checkoutModal__close}
@@ -18,8 +18,8 @@ export const CheckoutModalHeader: React.FC<CheckoutModalHeaderProps> = ({
         aria-label="Close modal"
       >
         <svg
-          width="24"
-          height="24"
+          width="20"
+          height="20"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -27,7 +27,7 @@ export const CheckoutModalHeader: React.FC<CheckoutModalHeaderProps> = ({
           <path
             d="M18 6L6 18M6 6L18 18"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
@@ -36,4 +36,3 @@ export const CheckoutModalHeader: React.FC<CheckoutModalHeaderProps> = ({
     </div>
   );
 };
-

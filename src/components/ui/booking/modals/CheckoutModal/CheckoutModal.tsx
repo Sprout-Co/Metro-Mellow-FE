@@ -266,44 +266,52 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     />
                   </div>
 
-                  {/* Right Column - Time and Address */}
+                  {/* Right Column - Time, Address, and Notes */}
                   <div className={styles.checkoutModal__rightColumn}>
-                    <TimeSlotSelection
-                      selectedTimeSlot={formData.timeSlot}
-                      onTimeSlotSelect={handleTimeSlotSelect}
-                      slotAvailability={getSelectedDateSlots(formData.date)}
-                      requiresAvailability={requiresAvailability}
-                      loadingSlots={loadingSlots}
-                      onInputChange={handleInputChange}
-                    />
-
-                    <AddressSection
-                      user={user as any}
-                      isAuthenticated={isAuthenticated}
-                      isNewAddress={isNewAddress}
-                      setIsNewAddress={setIsNewAddress}
-                      formData={formData}
-                      onInputChange={handleInputChange}
-                      onAddressSelect={handleAddressSelect}
-                    />
-
-                    {/* Notes Section */}
-                    <div className={styles.checkoutModal__field}>
-                      <label className={styles.checkoutModal__label}>
-                        Special Instructions (Optional)
-                      </label>
-                      <textarea
-                        name="notes"
-                        className={styles.checkoutModal__textarea}
-                        placeholder="Add any special instructions or notes for your booking..."
-                        value={formData.notes || ""}
-                        onChange={handleInputChange}
-                        rows={3}
-                        maxLength={500}
+                    {/* Time Slot Card */}
+                    <div className={styles.checkoutModal__fieldCard}>
+                      <TimeSlotSelection
+                        selectedTimeSlot={formData.timeSlot}
+                        onTimeSlotSelect={handleTimeSlotSelect}
+                        slotAvailability={getSelectedDateSlots(formData.date)}
+                        requiresAvailability={requiresAvailability}
+                        loadingSlots={loadingSlots}
+                        onInputChange={handleInputChange}
                       />
-                      <span className={styles.checkoutModal__charCount}>
-                        {formData.notes?.length || 0}/500
-                      </span>
+                    </div>
+
+                    {/* Address Card */}
+                    <div className={styles.checkoutModal__fieldCard}>
+                      <AddressSection
+                        user={user as any}
+                        isAuthenticated={isAuthenticated}
+                        isNewAddress={isNewAddress}
+                        setIsNewAddress={setIsNewAddress}
+                        formData={formData}
+                        onInputChange={handleInputChange}
+                        onAddressSelect={handleAddressSelect}
+                      />
+                    </div>
+
+                    {/* Notes Card */}
+                    <div className={styles.checkoutModal__fieldCard}>
+                      <div className={styles.checkoutModal__field}>
+                        <label className={styles.checkoutModal__label}>
+                          Special Instructions (Optional)
+                        </label>
+                        <textarea
+                          name="notes"
+                          className={styles.checkoutModal__textarea}
+                          placeholder="E.g., Ring the doorbell twice, leave packages at the back door..."
+                          value={formData.notes || ""}
+                          onChange={handleInputChange}
+                          rows={3}
+                          maxLength={500}
+                        />
+                        <span className={styles.checkoutModal__charCount}>
+                          {formData.notes?.length || 0}/500
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>

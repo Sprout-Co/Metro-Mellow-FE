@@ -12,6 +12,15 @@
   }
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .checkoutModal {
   position: fixed;
   top: 0;
@@ -30,45 +39,33 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: color-alpha("neutral", "black", 0.6);
-    backdrop-filter: blur(spacing("xs"));
+    // background-color: rgba(0, 0, 0, 0.5);
+    // backdrop-filter: blur(4px);
+    // background-color: color-alpha("neutral", "black", 0.4);
+    // backdrop-filter: blur(spacing("xs"));
+
     pointer-events: auto;
   }
 
   &__container {
     position: relative;
     width: 92%;
-    max-width: 900px;
+    max-width: 880px;
     max-height: 90vh;
-    background-color: color("neutral", "white");
+    // background-color: color("neutral", "white");
     border-radius: border-radius("xl");
-    box-shadow: map-get($shadows, "xl");
+    box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.18);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     pointer-events: auto;
 
     @include breakpoint-down("sm") {
-      width: 95%;
+      width: 100%;
       max-width: 100%;
-      max-height: 95vh;
+      max-height: 100vh;
+      border-radius: border-radius("lg") border-radius("lg") 0 0;
     }
-  }
-
-  &__mainContent {
-    display: flex;
-    gap: spacing("xl");
-    @include breakpoint-down("sm") {
-      flex-direction: column;
-    }
-  }
-
-  &__leftColumn,
-  &__rightColumn {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: spacing("lg");
   }
 
   &__header {
@@ -76,40 +73,42 @@
     align-items: center;
     justify-content: space-between;
     padding: spacing("lg") spacing("xl");
-    border-bottom: map-get($border-width, "thin") solid
-      color("neutral", "lighter");
-    background: color("neutral", "white");
+    background-color: color("primary", "base");
     flex-shrink: 0;
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md") spacing("lg");
+    }
   }
 
   &__title {
-    @include heading-4;
-    color: color("neutral", "black");
+    color: color("neutral", "white");
     margin: 0;
+    font-size: map-get($font-sizes, "lg");
+    @include font-weight("semibold");
+    letter-spacing: 0.02em;
   }
 
   &__close {
     width: 36px;
     height: 36px;
-    border-radius: 50%;
+    border-radius: border-radius("md");
     display: flex;
     align-items: center;
     justify-content: center;
-    color: color("neutral", "dark");
-    background-color: color("neutral", "lightest");
+    color: color("neutral", "white");
+    background-color: rgba(255, 255, 255, 0.15);
     border: none;
     cursor: pointer;
-    transition: $transition-fast;
+    transition: background-color 0.15s ease;
 
     &:hover {
-      background-color: color("neutral", "lighter");
-      color: color("neutral", "black");
-      transform: rotate(90deg);
+      background-color: rgba(255, 255, 255, 0.25);
     }
 
     &:focus-visible {
-      outline: map-get($border-width, "medium") solid color("primary", "base");
-      outline-offset: spacing("xxs");
+      outline: 2px solid color("neutral", "white");
+      outline-offset: 2px;
     }
   }
 
@@ -117,14 +116,14 @@
     flex: 1;
     padding: spacing("xl");
     overflow-y: auto;
+    background-color: color("neutral", "lightest");
 
     &::-webkit-scrollbar {
-      width: spacing("xs");
+      width: 6px;
     }
 
     &::-webkit-scrollbar-track {
-      background: color("neutral", "lightest");
-      border-radius: border-radius("full");
+      background: transparent;
     }
 
     &::-webkit-scrollbar-thumb {
@@ -135,21 +134,53 @@
         background: color("neutral", "medium");
       }
     }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md");
+    }
   }
 
   &__form {
     display: flex;
     flex-direction: column;
-    gap: spacing("sm");
+    gap: spacing("lg");
   }
 
   &__sectionTitle {
-    @include subtitle-1;
-    color: color("neutral", "black");
-    margin: 0 0 spacing("md") 0;
-    padding-bottom: spacing("sm");
-    border-bottom: map-get($border-width, "thin") solid
-      color("neutral", "lighter");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xs") 0;
+    font-size: map-get($font-sizes, "base");
+  }
+
+  &__mainContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("lg");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__leftColumn {
+    background: color("neutral", "white");
+    border-radius: border-radius("lg");
+    padding: spacing("lg");
+    border: 1px solid color("neutral", "lighter");
+  }
+
+  &__rightColumn {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__fieldCard {
+    background: color("neutral", "white");
+    border-radius: border-radius("lg");
+    padding: spacing("lg");
+    border: 1px solid color("neutral", "lighter");
   }
 
   &__field {
@@ -159,10 +190,12 @@
   }
 
   &__label {
-    @include body-2;
-    @include font-weight("medium");
-    color: color("neutral", "darkest");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    color: color("neutral", "dark");
     margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
   }
 
   &__inputWrapper {
@@ -172,20 +205,27 @@
   }
 
   &__input {
-    @include input("md");
     width: 100%;
-    background-color: color("neutral", "white");
-    border: map-get($border-width, "thin") solid color("neutral", "light");
-    border-radius: border-radius("lg");
-    @include font-size("body-2");
+    padding: 12px 14px;
+    background-color: color("neutral", "lightest");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    @include font-size("sm");
     color: color("neutral", "darkest");
-    transition: $transition-base;
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
 
     &::placeholder {
       color: color("neutral", "medium");
     }
 
+    &:hover {
+      border-color: color("neutral", "light");
+    }
+
     &:focus {
+      background-color: color("neutral", "white");
       border-color: color("primary", "base");
       box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.1);
       outline: none;
@@ -196,40 +236,34 @@
       color: color("neutral", "medium");
       cursor: not-allowed;
     }
-
-    &[type="date"] {
-      padding-right: spacing("2xl");
-
-      &::-webkit-calendar-picker-indicator {
-        opacity: 0;
-        position: absolute;
-        right: spacing("sm");
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-      }
-    }
   }
 
   &__textarea {
     width: 100%;
     min-height: 80px;
-    padding: spacing("md");
-    background-color: color("neutral", "white");
-    border: map-get($border-width, "thin") solid color("neutral", "light");
-    border-radius: border-radius("lg");
-    @include font-size("body-2");
+    padding: 12px 14px;
+    background-color: color("neutral", "lightest");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    @include font-size("sm");
     font-family: inherit;
     color: color("neutral", "darkest");
-    transition: $transition-base;
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
     resize: vertical;
-    line-height: line-height("relaxed");
+    line-height: 1.5;
 
     &::placeholder {
       color: color("neutral", "medium");
     }
 
+    &:hover {
+      border-color: color("neutral", "light");
+    }
+
     &:focus {
+      background-color: color("neutral", "white");
       border-color: color("primary", "base");
       box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.1);
       outline: none;
@@ -246,7 +280,6 @@
     @include font-size("xs");
     color: color("neutral", "medium");
     text-align: right;
-    margin-top: spacing("xs");
   }
 
   &__inputIcon {
@@ -258,25 +291,31 @@
   }
 
   &__select {
-    @include select("md");
     width: 100%;
-    background-color: color("neutral", "white");
-    border: map-get($border-width, "thin") solid color("neutral", "light");
-    border-radius: border-radius("lg");
-    @include font-size("body-2");
+    padding: 12px 14px;
+    padding-right: 40px;
+    background-color: color("neutral", "lightest");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    @include font-size("sm");
     color: color("neutral", "darkest");
-    transition: $transition-base;
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
     appearance: none;
     cursor: pointer;
-    height: auto;
 
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right spacing("md") center;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239f9f9f' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
     background-repeat: no-repeat;
-    background-size: 1.5em 1.5em;
-    padding-right: spacing("2xl");
+    background-size: 18px 18px;
+
+    &:hover {
+      border-color: color("neutral", "light");
+    }
 
     &:focus {
+      background-color: color("neutral", "white");
       border-color: color("primary", "base");
       box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.1);
       outline: none;
@@ -291,56 +330,38 @@
 
   &__radioGroup {
     display: flex;
-    gap: spacing("lg");
-    margin: spacing("sm") 0;
-
-    @include breakpoint-down("sm") {
-      flex-direction: column;
-      gap: spacing("md");
-    }
+    gap: 4px;
+    padding: 4px;
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
   }
 
   &__radioLabel {
+    flex: 1;
     display: flex;
     align-items: center;
-    gap: spacing("sm");
+    justify-content: center;
+    padding: 10px 16px;
     cursor: pointer;
-    @include body-2;
-    color: color("neutral", "darkest");
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    border-radius: 6px;
+    transition: all 0.15s ease;
+
+    &:hover {
+      color: color("neutral", "darkest");
+    }
   }
 
   &__radio {
-    width: 20px;
-    height: 20px;
-    border: map-get($border-width, "medium") solid color("neutral", "light");
-    border-radius: 50%;
+    display: none;
+  }
+
+  &__radioLabel:has(.checkoutModal__radio:checked) {
     background-color: color("neutral", "white");
-    appearance: none;
-    cursor: pointer;
-    transition: $transition-base;
-    position: relative;
-
-    &:checked {
-      border-color: color("primary", "base");
-      background-color: color("neutral", "white");
-
-      &::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background-color: color("primary", "base");
-      }
-    }
-
-    &:focus-visible {
-      outline: map-get($border-width, "medium") solid color("primary", "base");
-      outline-offset: spacing("xxs");
-    }
+    color: color("primary", "base");
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
   }
 
   &__radioText {
@@ -349,51 +370,60 @@
   }
 
   &__buttonWrapper {
-    margin-top: spacing("xl");
-    padding-top: spacing("lg");
-    border-top: map-get($border-width, "thin") solid color("neutral", "lighter");
+    margin-top: spacing("sm");
   }
 
   &__continueButton {
     text-transform: uppercase;
-    letter-spacing: map-get($letter-spacing, "wider");
+    letter-spacing: 0.08em;
     @include font-weight("bold");
+    font-size: map-get($font-sizes, "sm") !important;
+    padding: 14px spacing("xl") !important;
+    border-radius: border-radius("lg") !important;
+    background-color: color("primary", "base") !important;
+    box-shadow: 0 2px 8px rgba(7, 80, 86, 0.2) !important;
+    transition: all 0.15s ease !important;
+
+    &:hover:not(:disabled) {
+      background-color: darken($color-midnight-green-base, 5%) !important;
+      box-shadow: 0 4px 12px rgba(7, 80, 86, 0.25) !important;
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   }
 
-  // Address list styles
+  // Address styles
   &__addressList {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
-    margin-top: spacing("sm");
-  }
-
-  &__addressListTitle {
-    @include subtitle-2;
-    color: color("neutral", "darkest");
-    margin: 0 0 spacing("sm") 0;
+    gap: spacing("sm");
   }
 
   &__addressCard {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: spacing("sm") spacing("md");
-    border: map-get($border-width, "thin") solid color("neutral", "light");
-    border-radius: border-radius("lg");
-    transition: $transition-base;
+    padding: spacing("md");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    transition: all 0.15s ease;
     cursor: pointer;
     background-color: color("neutral", "white");
 
     &:hover {
       border-color: color("primary", "light");
-      background-color: color("neutral", "lightest");
     }
 
     &__selected {
       border-color: color("primary", "base");
-      background-color: color("primary", "lighter");
-      box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.1);
+      background-color: rgba(7, 80, 86, 0.03);
     }
   }
 
@@ -401,54 +431,41 @@
     flex: 1;
   }
 
-  &__addressCardHeader {
-    display: flex;
-    align-items: center;
-    gap: spacing("sm");
-    margin-bottom: spacing("xs");
-  }
-
   &__addressCardLabel {
-    @include body-2;
+    @include font-size("sm");
     @include font-weight("medium");
     color: color("neutral", "darkest");
   }
 
   &__addressCardDefault {
-    @include caption;
+    @include font-size("xs");
     background-color: color("primary", "base");
     color: color("neutral", "white");
-    padding: spacing("xxs") spacing("xs");
-    font-size: 0.7rem;
-    border-radius: 6px;
-    @include font-weight("medium");
+    padding: 2px 8px;
+    border-radius: border-radius("full");
+    @include font-weight("semibold");
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
 
   &__addressCardText {
-    @include font-secondary;
     @include font-size("sm");
     color: color("neutral", "dark");
-    margin: spacing("xxs") 0;
-    line-height: map-get($line-heights, "normal");
-  }
-
-  &__addressCardRadio {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    margin: 0;
+    line-height: 1.4;
   }
 
   &__noAddress {
     background-color: color("neutral", "lightest");
-    border: map-get($border-width, "thin") dashed color("neutral", "light");
-    border-radius: border-radius("lg");
+    border: 1px dashed color("neutral", "light");
+    border-radius: border-radius("md");
     padding: spacing("lg");
     text-align: center;
 
     p {
-      @include body-2;
+      @include font-size("sm");
       color: color("neutral", "dark");
-      margin: spacing("xs") 0;
+      margin: 4px 0;
 
       &:first-child {
         @include font-weight("medium");
@@ -457,57 +474,40 @@
     }
   }
 
-  @include breakpoint-down("sm") {
-    &__container {
-      max-width: 100%;
-      border-radius: 0;
-    }
+  &__selectedAddress {
+    margin-top: spacing("sm");
+    padding: spacing("sm") spacing("md");
+    background-color: color("neutral", "lightest");
+    border: 1px solid color("primary", "lighter");
+    border-radius: border-radius("md");
+    @include font-size("sm");
+    color: color("primary", "darker");
 
-    &__content {
-      padding: spacing("md");
-    }
-
-    &__header {
-      padding: spacing("md");
-    }
-
-    &__form {
-      gap: spacing("md");
-    }
-
-    &__buttonWrapper {
-      margin-top: spacing("lg");
-      padding-top: spacing("md");
-    }
-
-    &__addressCard {
-      padding: spacing("sm");
+    p {
+      margin: 0;
+      @include font-weight("medium");
     }
   }
 
   // Error Message
   &__errorMessage {
-    background: rgba(
-      251,
-      34,
-      34,
-      0.08
-    ); // Light red background using the error color
-    border: 1px solid rgba(251, 34, 34, 0.2); // Light red border using the error color
-    border-radius: border-radius("lg");
-    padding: spacing("md") spacing("lg");
-    margin-bottom: spacing("lg");
+    background-color: rgba(251, 34, 34, 0.06);
+    border: 1px solid rgba(251, 34, 34, 0.12);
+    border-left: 3px solid color("status", "error");
+    border-radius: border-radius("md");
+    padding: spacing("md");
+    animation: fadeIn 0.2s ease;
 
     p {
       @include font-size("sm");
       @include font-weight("medium");
       color: color("status", "error");
       margin: 0;
-      line-height: line-height("relaxed");
+      line-height: 1.5;
     }
   }
 
-  // Loading states for slot booking
+  // Loading states
   &__loadingContainer {
     display: flex;
     flex-direction: column;
@@ -515,83 +515,69 @@
     justify-content: center;
     padding: spacing("xl");
     background-color: color("neutral", "lightest");
-    border: map-get($border-width, "thin") dashed color("neutral", "light");
-    border-radius: border-radius("lg");
-    min-height: 200px;
+    border-radius: border-radius("md");
+    min-height: 160px;
   }
 
   &__loadingSkeleton {
     width: 100%;
-    height: 120px;
+    height: 80px;
     background: linear-gradient(
       90deg,
-      color("neutral", "light") 25%,
-      color("neutral", "lighter") 50%,
-      color("neutral", "light") 75%
+      color("neutral", "lighter") 25%,
+      color("neutral", "lightest") 50%,
+      color("neutral", "lighter") 75%
     );
     background-size: 200% 100%;
     animation: loading-shimmer 1.5s infinite;
-    border-radius: border-radius("lg");
+    border-radius: border-radius("md");
     margin-bottom: spacing("md");
   }
 
   &__loadingText {
-    @include body-2;
+    @include font-size("sm");
     color: color("neutral", "medium");
     margin: 0;
-    text-align: center;
   }
 
-  // Calendar and time slot container adjustments
-  &__field {
-    display: flex;
-    flex-direction: column;
-    gap: spacing("sm");
+  // Responsive
+  @include breakpoint-down("sm") {
+    &__leftColumn {
+      padding: spacing("md");
+    }
 
-    // Override for calendar and time slot components
-    .dateSlotPicker,
-    .timeSlotSelector {
-      margin-top: spacing("xs");
+    &__fieldCard {
+      padding: spacing("md");
     }
   }
 }
 
+// Discount Banner
 .checkoutModal__discountBanner {
   display: flex;
   align-items: center;
   gap: spacing("md");
   padding: spacing("md");
-  margin-top: spacing("lg");
-  background: linear-gradient(135deg, rgba(color("status", "success"), 0.1));
-  border: 1px solid rgba(color("status", "success"), 0.2);
+  background-color: rgba(5, 150, 105, 0.06);
+  border: 1px solid rgba(5, 150, 105, 0.15);
+  border-left: 3px solid color("status", "success");
   border-radius: border-radius("md");
-  animation: slideIn 0.3s ease-out;
-
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+  animation: fadeIn 0.2s ease;
 }
 
 .checkoutModal__discountIcon {
-  font-size: map-get($font-sizes, "2xl");
+  font-size: map-get($font-sizes, "xl");
   line-height: 1;
 }
 
 .checkoutModal__discountText {
   display: flex;
   flex-direction: column;
-  gap: spacing("xs");
+  gap: 2px;
 
   strong {
     color: color("status", "success");
-    @include font-size("base");
+    @include font-size("sm");
     @include font-weight("semibold");
   }
 
@@ -601,17 +587,30 @@
   }
 }
 
+// Summary Section
 .checkoutModal__summary {
-  margin-top: spacing("lg");
-  padding: spacing("md");
+  background: color("neutral", "white");
+  border-radius: border-radius("lg");
+  padding: spacing("lg");
   border: 1px solid color("neutral", "lighter");
-  border-radius: border-radius("md");
+}
+
+.checkoutModal__summaryTitle {
+  @include font-size("xs");
+  @include font-weight("semibold");
+  color: color("neutral", "dark");
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 spacing("md") 0;
+  padding-bottom: spacing("sm");
+  border-bottom: 1px solid color("neutral", "lighter");
 }
 
 .checkoutModal__summaryItem {
   display: flex;
   justify-content: space-between;
-  padding: spacing("sm") 0;
+  align-items: center;
+  padding: 8px 0;
   @include font-size("sm");
 
   span:first-child {
@@ -621,11 +620,35 @@
   span:last-child {
     color: color("neutral", "darkest");
     @include font-weight("medium");
+    font-variant-numeric: tabular-nums;
+  }
+
+  &--discount {
+    span:last-child {
+      color: color("status", "success");
+    }
+  }
+
+  &--total {
+    padding-top: spacing("md");
+    margin-top: spacing("xs");
+    border-top: 1px solid color("neutral", "lighter");
+
+    span:first-child {
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+    }
+
+    span:last-child {
+      @include font-size("base");
+      @include font-weight("bold");
+      color: color("primary", "base");
+    }
   }
 }
 
 .checkoutModal__summaryDivider {
   height: 1px;
   background-color: color("neutral", "lighter");
-  margin: spacing("sm") 0;
+  margin: spacing("xs") 0;
 }

@@ -26,15 +26,13 @@ export const TimeSlotSelection: React.FC<TimeSlotSelectionProps> = ({
     <>
       {requiresAvailability ? (
         <div className={styles.checkoutModal__field}>
-          <label className={styles.checkoutModal__label}>
-            Select Time Slot
-          </label>
+          <label className={styles.checkoutModal__label}>Preferred Time</label>
 
           {loadingSlots ? (
             <div className={styles.checkoutModal__loadingContainer}>
               <div className={styles.checkoutModal__loadingSkeleton} />
               <p className={styles.checkoutModal__loadingText}>
-                Loading time slots...
+                Checking availability...
               </p>
             </div>
           ) : (
@@ -48,7 +46,7 @@ export const TimeSlotSelection: React.FC<TimeSlotSelectionProps> = ({
         </div>
       ) : (
         <div className={styles.checkoutModal__field}>
-          <label className={styles.checkoutModal__label}>Select Time</label>
+          <label className={styles.checkoutModal__label}>Preferred Time</label>
           <select
             id="timeSlot"
             name="timeSlot"
@@ -72,4 +70,3 @@ export const TimeSlotSelection: React.FC<TimeSlotSelectionProps> = ({
     </>
   );
 };
-

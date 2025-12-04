@@ -123,7 +123,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
     // }
 
     setIsCheckoutModalOpen(true);
-    setIsSlidePanelOpen(true);
+    // setIsSlidePanelOpen(true);
   };
 
   const calculateTotalPrice = () => {

@@ -4,6 +4,7 @@ import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import { useGetCurrentUserQuery } from "@/graphql/api";
 import styles from "../CheckoutModal.module.scss";
 import FnButton from "@/components/ui/Button/FnButton";
+import { PlacesAutocomplete } from "@/components/ui/PlacesAutocomplete/PlacesAutocomplete";
 
 interface AddressSectionProps {
   user: User | null;
@@ -77,8 +78,9 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
 
   return (
     <>
-      {/* Address Type Radio Buttons */}
+      {/* Address Section Header */}
       <div className={styles.checkoutModal__field}>
+        <label className={styles.checkoutModal__label}>Delivery Address</label>
         <div className={styles.checkoutModal__radioGroup}>
           <label className={styles.checkoutModal__radioLabel}>
             <input
@@ -89,9 +91,7 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
               onChange={() => setIsNewAddress(false)}
               className={styles.checkoutModal__radio}
             />
-            <span className={styles.checkoutModal__radioText}>
-              Saved Address
-            </span>
+            <span className={styles.checkoutModal__radioText}>Saved</span>
           </label>
 
           <label className={styles.checkoutModal__radioLabel}>
@@ -103,7 +103,7 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
               onChange={() => setIsNewAddress(true)}
               className={styles.checkoutModal__radio}
             />
-            <span className={styles.checkoutModal__radioText}>New Address</span>
+            <span className={styles.checkoutModal__radioText}>New</span>
           </label>
         </div>
       </div>
@@ -126,7 +126,7 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
               disabled={loadingServiceAreas}
             >
               <option value="">
-                {loadingServiceAreas ? "Loading cities..." : "Select City"}
+                {loadingServiceAreas ? "Loading..." : "Select your city"}
               </option>
               {availableCities.map((city) => (
                 <option key={city} value={city.toLowerCase()}>
@@ -139,17 +139,29 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
           {/* Street Field */}
           <div className={styles.checkoutModal__field}>
             <label htmlFor="street" className={styles.checkoutModal__label}>
-              Street
+              Street Address
             </label>
-            <input
-              type="text"
-              id="street"
-              name="street"
-              value={formData.street}
-              onChange={onInputChange}
-              className={styles.checkoutModal__input}
-              required
+            <PlacesAutocomplete
+              onSelect={(address) => {
+                // Update the street field when an address is selected
+                onInputChange({
+                  target: {
+                    name: "street",
+                    value: address,
+                  },
+                } as React.ChangeEvent<HTMLInputElement>);
+              }}
+              placeholder={
+                formData.city
+                  ? `Search address in ${formData.city}...`
+                  : "Enter your full street address"
+              }
             />
+            {formData.street && (
+              <div className={styles.checkoutModal__selectedAddress}>
+                <p>{formData.street}</p>
+              </div>
+            )}
           </div>
 
           <FnButton
@@ -157,77 +169,48 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
             type="button"
             onClick={handleAddAddressClick}
           >
-            add and select address
+            Save & Select Address
           </FnButton>
         </>
       ) : (
         <>
           {user?.addresses && user.addresses.length > 0 ? (
-            <div className={styles.checkoutModal__addressList}>
-              <h4 className={styles.checkoutModal__label}>Select an address</h4>
-
-              {user.addresses.map(
-                (address) =>
-                  address && (
-                    <div
-                      key={address.id}
-                      className={`${styles.checkoutModal__addressCard} ${
-                        formData.addressId === address.id
-                          ? styles.checkoutModal__addressCard__selected
-                          : ""
-                      }`}
-                      onClick={() =>
-                        onAddressSelect(
-                          address.id ?? "",
-                          address.city ?? "",
-                          address.street ?? ""
-                        )
-                      }
-                    >
-                      <div className={styles.checkoutModal__addressCardContent}>
-                        {/* <div
-                          className={styles.checkoutModal__addressCardHeader}
-                        >
-                          <span
-                            className={styles.checkoutModal__addressCardLabel}
-                          >
-                            {address.label ?? "Address"}
-                          </span>
-
-                          {address.isDefault && (
-                            <span
-                              className={
-                                styles.checkoutModal__addressCardDefault
-                              }
-                            >
-                              Default
-                            </span>
-                          )}
-                        </div> */}
-
-                        <p className={styles.checkoutModal__addressCardText}>
-                          {address.street ?? ""}
-                        </p>
-                      </div>
-
-                      <div className={styles.checkoutModal__addressCardRadio}>
-                        <input
-                          type="radio"
-                          name="addressId"
-                          value={address.id}
-                          checked={formData.addressId === address.id}
-                          onChange={() => {}}
-                          className={styles.checkoutModal__radio}
-                        />
-                      </div>
-                    </div>
-                  )
-              )}
+            <div className={styles.checkoutModal__field}>
+              <select
+                id="savedAddress"
+                name="addressId"
+                value={formData.addressId || ""}
+                onChange={(e) => {
+                  const selectedAddress = user.addresses?.find(
+                    (addr) => addr?.id === e.target.value
+                  );
+                  if (selectedAddress) {
+                    onAddressSelect(
+                      selectedAddress.id ?? "",
+                      selectedAddress.city ?? "",
+                      selectedAddress.street ?? ""
+                    );
+                  }
+                }}
+                className={styles.checkoutModal__select}
+                required
+              >
+                <option value="">Choose a saved address</option>
+                {user.addresses.map(
+                  (address) =>
+                    address && (
+                      <option key={address.id} value={address.id}>
+                        {address.street}
+                        {address.isDefault ? " ★" : ""}
+                      </option>
+                    )
+                )}
+              </select>
             </div>
           ) : (
             <div className={styles.checkoutModal__noAddress}>
-              <p>You don't have any saved addresses.</p>
-              <p>Please add a new address.</p>
+              <p>No saved addresses yet</p>
+              <p>Switch to &quot;New&quot; to add your first address</p>
             </div>
           )}
         </>
