@@ -25,6 +25,10 @@ import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperati
 import { LocalStorageKeys } from "@/utils/localStorage";
 import LoginModal from "@/components/ui/booking/modals/LoginModal/LoginModal";
 import ServiceModalFooter from "../ServiceModalFooter/ServiceModalFooter";
+import ServiceInformation, {
+  ServiceInformationDisplayMode,
+  ServiceInformationSection,
+} from "./components/ServiceInformation";
 // import LoginModal from "@/components/ui/LoginModal/LoginModal";
 
 export interface CleaningServiceOption {
@@ -49,6 +53,10 @@ export interface CleaningServiceModalProps {
   // onOrderSubmit?: (configuration: CleaningServiceConfiguration) => void;
   serviceOption?: ServiceOption;
   service: Service;
+  // Service information display options
+  serviceInformationDisplayMode?: ServiceInformationDisplayMode;
+  serviceInformationSections?: ServiceInformationSection[];
+  serviceInformationTitle?: string;
 }
 
 const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
@@ -62,7 +70,48 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   // onOrderSubmit,
   serviceOption,
   service,
+  serviceInformationDisplayMode = "info-popup",
+  serviceInformationSections,
+  serviceInformationTitle = "What's Included in Standard Cleaning?",
 }) => {
+  // Default service information sections if not provided
+  const defaultServiceInformationSections: ServiceInformationSection[] = [
+    {
+      title: "What's Included",
+      items: [
+        "Sweeping and mopping of all floors",
+        "Washing and disinfection of toilet and urinals",
+        "Dusting and wiping of all surfaces",
+        "Washing of dirty dishes",
+        "Emptying and cleaning of trash can",
+        "Cleaning of cupboards and cabinets",
+        "Removal of cobweb from all surfaces",
+      ],
+    },
+    {
+      title: "What's On You",
+      items: [
+        "Mop bucket",
+        "Mop stick",
+        "Broom/sweeper",
+        "Cobweb remover",
+        "Dustpan",
+      ],
+    },
+    {
+      title: "What's On Us",
+      items: [
+        "Detergent",
+        "Liquid soap",
+        "Bleach",
+        "Toilet cleaner",
+        "Fragrance",
+      ],
+    },
+  ];
+
+  const informationSections =
+    serviceInformationSections || defaultServiceInformationSections;
   // State for cleaning configuration
   const [apartmentType, setApartmentType] = useState<HouseType>(HouseType.Flat);
   const [roomQuantities, setRoomQuantities] = useState<RoomQuantitiesInput>({
@@ -256,9 +305,20 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
         <div className={styles.modal__detailsSection}>
           {/* Service Title and Description */}
           <h2 className={styles.modal__title}>{serviceOption?.label}</h2>
-          <p className={styles.modal__description}>
-            {serviceOption?.description}
-          </p>
+          <div className={styles.modal__descriptionWrapper}>
+            <p className={styles.modal__description}>
+              {serviceOption?.description}
+            </p>
+          </div>
+
+          {/* Service Information Section */}
+          {informationSections.length > 0 && (
+            <ServiceInformation
+              displayMode={serviceInformationDisplayMode}
+              mainTitle={serviceInformationTitle}
+              sections={informationSections}
+            />
+          )}
 
           {/* Configuration Section */}
           <div className={styles.modal__configurationSection}>
