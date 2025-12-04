@@ -19,6 +19,190 @@ import {
   ServiceId,
   ServiceOption,
 } from "@/graphql/api";
+
+// Helper function to map ServiceId to CleaningType
+const getCleaningTypeFromServiceId = (
+  serviceId: ServiceId | undefined
+): CleaningType => {
+  if (!serviceId) return CleaningType.StandardCleaning;
+
+  switch (serviceId) {
+    case ServiceId.DeepCleaning:
+      return CleaningType.DeepCleaning;
+    case ServiceId.MoveInMoveOutCleaning:
+      return CleaningType.MoveInMoveOutCleaning;
+    case ServiceId.PostConstructionCleaning:
+      return CleaningType.PostConstructionCleaning;
+    case ServiceId.StandardCleaning:
+    default:
+      return CleaningType.StandardCleaning;
+  }
+};
+
+// Function to get service information sections based on cleaning type
+const getServiceInformationSections = (
+  cleaningType: CleaningType
+): ServiceInformationSection[] => {
+  switch (cleaningType) {
+    case CleaningType.DeepCleaning:
+      return [
+        {
+          title: "What's Included",
+          items: [
+            "Deep scrubbing of all floors and baseboards",
+            "Intensive bathroom cleaning including grout and tiles",
+            "Detailed kitchen cleaning including inside appliances",
+            "Dusting and wiping of all surfaces including high areas",
+            "Window cleaning (interior)",
+            "Cabinet and cupboard deep cleaning",
+            "Cobweb removal from all surfaces",
+            "Sanitization of high-touch areas",
+          ],
+        },
+        {
+          title: "What's On You",
+          items: [
+            "Mop bucket",
+            "Mop stick",
+            "Broom/sweeper",
+            "Cobweb remover",
+            "Dustpan",
+            "Vacuum cleaner (if available)",
+          ],
+        },
+        {
+          title: "What's On Us",
+          items: [
+            "Heavy-duty detergent",
+            "Disinfectant",
+            "Bleach",
+            "Toilet cleaner",
+            "Glass cleaner",
+            "Degreaser",
+            "Fragrance",
+          ],
+        },
+      ];
+
+    case CleaningType.MoveInMoveOutCleaning:
+      return [
+        {
+          title: "What's Included",
+          items: [
+            "Complete deep cleaning of entire property",
+            "Inside and outside of all cabinets and drawers",
+            "Cleaning of all appliances (oven, refrigerator, etc.)",
+            "Bathroom deep cleaning and sanitization",
+            "Window cleaning (interior and accessible exterior)",
+            "Baseboard and corner cleaning",
+            "Cobweb removal",
+            "Floor scrubbing and polishing",
+          ],
+        },
+        {
+          title: "What's On You",
+          items: [
+            "Mop bucket",
+            "Mop stick",
+            "Broom/sweeper",
+            "Cobweb remover",
+            "Dustpan",
+            "Ladder (for high areas)",
+          ],
+        },
+        {
+          title: "What's On Us",
+          items: [
+            "Professional-grade cleaning supplies",
+            "Disinfectant",
+            "Bleach",
+            "Degreaser",
+            "Glass cleaner",
+            "Polish",
+            "Fragrance",
+          ],
+        },
+      ];
+
+    case CleaningType.PostConstructionCleaning:
+      return [
+        {
+          title: "What's Included",
+          items: [
+            "Removal of construction debris and dust",
+            "Deep cleaning of all surfaces",
+            "Window cleaning (interior and exterior)",
+            "Cleaning of all fixtures and fittings",
+            "Removal of paint splatters and adhesive residues",
+            "Vacuuming and mopping of all floors",
+            "Sanitization of bathrooms and kitchen",
+            "Final touch-up cleaning",
+          ],
+        },
+        {
+          title: "What's On You",
+          items: [
+            "Mop bucket",
+            "Mop stick",
+            "Broom/sweeper",
+            "Cobweb remover",
+            "Dustpan",
+            "Ladder",
+            "Protective coverings removed",
+          ],
+        },
+        {
+          title: "What's On Us",
+          items: [
+            "Industrial-grade cleaning supplies",
+            "Solvents for paint removal",
+            "Heavy-duty degreaser",
+            "Disinfectant",
+            "Glass cleaner",
+            "Protective equipment",
+            "Fragrance",
+          ],
+        },
+      ];
+
+    case CleaningType.StandardCleaning:
+    default:
+      return [
+        {
+          title: "What's Included",
+          items: [
+            "Sweeping and mopping of all floors",
+            "Washing and disinfection of toilet and urinals",
+            "Dusting and wiping of all surfaces",
+            "Washing of dirty dishes",
+            "Emptying and cleaning of trash can",
+            "Cleaning of cupboards and cabinets",
+            "Removal of cobweb from all surfaces",
+          ],
+        },
+        {
+          title: "What's On You",
+          items: [
+            "Mop bucket",
+            "Mop stick",
+            "Broom/sweeper",
+            "Cobweb remover",
+            "Dustpan",
+          ],
+        },
+        {
+          title: "What's On Us",
+          items: [
+            "Detergent",
+            "Liquid soap",
+            "Bleach",
+            "Toilet cleaner",
+            "Fragrance",
+          ],
+        },
+      ];
+  }
+};
 import OrderSuccessModal from "../OrderSuccessModal/OrderSuccessModal";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
@@ -26,7 +210,6 @@ import { LocalStorageKeys } from "@/utils/localStorage";
 import LoginModal from "@/components/ui/booking/modals/LoginModal/LoginModal";
 import ServiceModalFooter from "../ServiceModalFooter/ServiceModalFooter";
 import ServiceInformation, {
-  ServiceInformationDisplayMode,
   ServiceInformationSection,
 } from "./components/ServiceInformation";
 // import LoginModal from "@/components/ui/LoginModal/LoginModal";
@@ -70,46 +253,33 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   serviceOption,
   service,
   serviceInformationSections,
-  serviceInformationTitle = "What's Included in Standard Cleaning?",
+  serviceInformationTitle,
 }) => {
-  // Default service information sections if not provided
-  const defaultServiceInformationSections: ServiceInformationSection[] = [
-    {
-      title: "What's Included",
-      items: [
-        "Sweeping and mopping of all floors",
-        "Washing and disinfection of toilet and urinals",
-        "Dusting and wiping of all surfaces",
-        "Washing of dirty dishes",
-        "Emptying and cleaning of trash can",
-        "Cleaning of cupboards and cabinets",
-        "Removal of cobweb from all surfaces",
-      ],
-    },
-    {
-      title: "What's On You",
-      items: [
-        "Mop bucket",
-        "Mop stick",
-        "Broom/sweeper",
-        "Cobweb remover",
-        "Dustpan",
-      ],
-    },
-    {
-      title: "What's On Us",
-      items: [
-        "Detergent",
-        "Liquid soap",
-        "Bleach",
-        "Toilet cleaner",
-        "Fragrance",
-      ],
-    },
-  ];
+  // Get cleaning type from service option
+  const cleaningType = getCleaningTypeFromServiceId(serviceOption?.service_id);
 
+  // Get default title based on cleaning type
+  const getDefaultTitle = (type: CleaningType): string => {
+    switch (type) {
+      case CleaningType.DeepCleaning:
+        return "What's Included in Deep Cleaning?";
+      case CleaningType.MoveInMoveOutCleaning:
+        return "What's Included in Move-In/Move-Out Cleaning?";
+      case CleaningType.PostConstructionCleaning:
+        return "What's Included in Post-Construction Cleaning?";
+      case CleaningType.StandardCleaning:
+      default:
+        return "What's Included in Standard Cleaning?";
+    }
+  };
+
+  // Get service information sections - use provided or get from cleaning type
   const informationSections =
-    serviceInformationSections || defaultServiceInformationSections;
+    serviceInformationSections || getServiceInformationSections(cleaningType);
+
+  // Get title - use provided or default based on cleaning type
+  const informationTitle =
+    serviceInformationTitle || getDefaultTitle(cleaningType);
   // State for cleaning configuration
   const [apartmentType, setApartmentType] = useState<HouseType>(HouseType.Flat);
   const [roomQuantities, setRoomQuantities] = useState<RoomQuantitiesInput>({
@@ -312,7 +482,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
           {/* Service Information Section */}
           {informationSections.length > 0 && (
             <ServiceInformation
-              mainTitle={serviceInformationTitle}
+              mainTitle={informationTitle}
               sections={informationSections}
             />
           )}
