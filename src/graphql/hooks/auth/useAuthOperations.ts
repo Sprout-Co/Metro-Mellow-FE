@@ -41,6 +41,7 @@ import {
 } from "@/lib/redux";
 import { UserRole } from "@/graphql/api";
 import { Routes } from "@/constants/routes";
+import Cookies from "js-cookie";
 
 export const useAuthOperations = () => {
   const dispatch = useAppDispatch();
@@ -113,29 +114,43 @@ export const useAuthOperations = () => {
         console.log("Storing auth data...");
         dispatch(loginAction({ user: user as any, token }));
 
-        // Verify cookie is set before redirecting (important for mobile devices)
-        // This prevents redirect loops where middleware doesn't see the cookie yet
+        // Ensure cookie is set synchronously before redirecting (critical for mobile devices)
+        // Mobile browsers can have delays in cookie propagation, so we need to wait and verify
         if (typeof window !== "undefined") {
-          // Wait a bit and verify cookie is set
+          // Explicitly set cookie again to ensure it's set (redundant but ensures mobile compatibility)
+          Cookies.set("auth-token", token, {
+            path: "/",
+            expires: 30,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+          });
+
+          // Wait and verify cookie is set with more attempts and longer delays for mobile
           let cookieSet = false;
-          const maxAttempts = 10;
+          const maxAttempts = 30; // Increased from 10 to 30 for mobile reliability
+          const delayMs = 100; // Increased from 50ms to 100ms
+
           for (let i = 0; i < maxAttempts; i++) {
-            await new Promise((resolve) => setTimeout(resolve, 50));
+            await new Promise((resolve) => setTimeout(resolve, delayMs));
             const cookieValue = document.cookie
               .split("; ")
               .find((row) => row.startsWith("auth-token="));
             if (cookieValue) {
               cookieSet = true;
+              console.log(`Cookie verified after ${i + 1} attempts`);
               break;
             }
           }
 
           if (!cookieSet) {
-            console.warn("Cookie not set after dispatch, proceeding anyway");
+            console.error(
+              "Cookie verification failed - attempting redirect anyway"
+            );
           }
 
-          // Use window.location.replace to avoid adding to history and prevent back button issues
-          // This ensures a clean redirect that works reliably on mobile devices
+          // Use window.location.replace to avoid adding to history
+          // Add a small delay before redirect to ensure cookie propagation on mobile
+          await new Promise((resolve) => setTimeout(resolve, 150));
           console.log("Redirecting to dashboard...");
           window.location.replace(Routes.DASHBOARD);
         }
