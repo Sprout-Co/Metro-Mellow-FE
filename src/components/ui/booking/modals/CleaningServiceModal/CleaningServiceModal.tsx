@@ -54,7 +54,6 @@ export interface CleaningServiceModalProps {
   serviceOption?: ServiceOption;
   service: Service;
   // Service information display options
-  serviceInformationDisplayMode?: ServiceInformationDisplayMode;
   serviceInformationSections?: ServiceInformationSection[];
   serviceInformationTitle?: string;
 }
@@ -70,7 +69,6 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   // onOrderSubmit,
   serviceOption,
   service,
-  serviceInformationDisplayMode = "info-popup",
   serviceInformationSections,
   serviceInformationTitle = "What's Included in Standard Cleaning?",
 }) => {
@@ -314,7 +312,6 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
           {/* Service Information Section */}
           {informationSections.length > 0 && (
             <ServiceInformation
-              displayMode={serviceInformationDisplayMode}
               mainTitle={serviceInformationTitle}
               sections={informationSections}
             />

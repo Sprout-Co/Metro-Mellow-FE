@@ -13,7 +13,7 @@
   }
 }
 
-// Main Trigger Button (for accordion, card-grid, and info-popup modes)
+// Main Trigger Button
 .mainTrigger {
   width: 100%;
   display: flex;
@@ -57,180 +57,6 @@
   }
 }
 
-// Accordion Styles
-.accordion {
-  display: flex;
-  flex-direction: column;
-  gap: spacing("xs");
-  margin-top: spacing("sm");
-  animation: fadeIn 0.2s ease;
-}
-
-.accordion__item {
-  background-color: color("neutral", "lightest");
-  border-radius: border-radius("md");
-  border: 1px solid color("neutral", "lighter");
-  transition: all 0.2s ease;
-  overflow: hidden;
-
-  &:hover {
-    border-color: color("primary", "light");
-  }
-
-  &_expanded {
-    border-color: color("primary", "base");
-    background-color: color("neutral", "white");
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-
-    .accordion__header {
-      background-color: color("primary", "lighter");
-    }
-
-    .accordion__icon {
-      color: color("primary", "base");
-    }
-
-    .accordion__title {
-      color: color("neutral", "darkest");
-    }
-  }
-}
-
-.accordion__header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: spacing("sm") spacing("md");
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: left;
-
-  &:hover {
-    background-color: color("primary", "lighter");
-  }
-
-  &:focus-visible {
-    outline: 2px solid color("primary", "base");
-    outline-offset: -2px;
-  }
-}
-
-.accordion__title {
-  @include font-size("xs");
-  @include font-weight("semibold");
-  color: color("neutral", "dark");
-  flex: 1;
-  padding-right: spacing("sm");
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.accordion__icon {
-  @include font-size("sm");
-  @include font-weight("bold");
-  color: color("neutral", "medium");
-  flex-shrink: 0;
-  transition: color 0.2s ease;
-}
-
-.accordion__content {
-  padding: spacing("sm") spacing("md");
-  padding-top: spacing("xs");
-  animation: fadeIn 0.2s ease;
-}
-
-.accordion__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: spacing("xxs");
-}
-
-.accordion__listItem {
-  @include font-size("xs");
-  color: color("neutral", "dark");
-  padding-left: spacing("sm");
-  position: relative;
-  line-height: 1.4;
-
-  &::before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    color: color("primary", "base");
-    font-weight: bold;
-    font-size: 0.75rem;
-  }
-}
-
-// Card Grid Styles
-.cardGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: spacing("sm");
-  margin-top: spacing("sm");
-  animation: fadeIn 0.2s ease;
-
-  @include breakpoint-down("sm") {
-    grid-template-columns: 1fr;
-  }
-}
-
-.card {
-  background-color: color("neutral", "lightest");
-  border-radius: border-radius("md");
-  padding: spacing("sm") spacing("md");
-  border: 1px solid color("neutral", "lighter");
-  transition: all 0.2s ease;
-
-  &:hover {
-    border-color: color("primary", "light");
-    background-color: color("neutral", "white");
-  }
-}
-
-.card__title {
-  @include font-size("xs");
-  @include font-weight("semibold");
-  color: color("neutral", "dark");
-  margin: 0 0 spacing("xs") 0;
-  padding-bottom: spacing("xxs");
-  border-bottom: 1px solid color("primary", "lighter");
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.card__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: spacing("xxs");
-}
-
-.card__listItem {
-  @include font-size("xs");
-  color: color("neutral", "dark");
-  padding-left: spacing("sm");
-  position: relative;
-  line-height: 1.4;
-
-  &::before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    color: color("primary", "base");
-    font-weight: bold;
-    font-size: 0.75rem;
-  }
-}
-
 // Info Popup Styles
 .infoPopup {
   &__wrapper {
@@ -239,45 +65,15 @@
     width: 100%;
   }
 
-  &__icon {
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background: transparent;
-    color: color("neutral", "medium");
-    cursor: pointer;
-    padding: 0;
-    border-radius: border-radius("full");
-    transition: all 0.15s ease;
-
-    &:hover {
-      color: color("primary", "base");
-      background-color: color("primary", "lighter");
-    }
-
-    &:focus-visible {
-      outline: 2px solid color("primary", "base");
-      outline-offset: 2px;
-    }
-
-    svg {
-      width: 100%;
-      height: 100%;
-    }
-  }
-
   &__popup {
     position: absolute;
     top: calc(100% + 12px);
-    left: 0; // Align to left
-    transform: none; // Remove centering transform
+    left: 0;
+    transform: none;
     z-index: 1000;
     min-width: 320px;
-    max-width: 100%; // Allow full width
-    width: 100%; // Match parent width
+    max-width: 100%;
+    width: 100%;
     max-height: 400px;
     overflow-y: auto;
     background-color: color("neutral", "white");
@@ -286,12 +82,12 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     animation: fadeIn 0.15s ease;
 
-    // Arrow pointing up - adjust position
+    // Arrow pointing up
     &::before {
       content: "";
       position: absolute;
       bottom: 100%;
-      right: 20px; // Position near icon on right
+      right: 20px;
       left: auto;
       transform: none;
       border-width: 8px;
@@ -305,7 +101,7 @@
       content: "";
       position: absolute;
       bottom: 100%;
-      right: 20px; // Position near icon on right
+      right: 20px;
       left: auto;
       transform: none;
       border-width: 9px;
@@ -401,4 +197,3 @@
     transform: translateY(0);
   }
 }
-
