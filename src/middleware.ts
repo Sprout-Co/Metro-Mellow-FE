@@ -25,7 +25,11 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Early auth check for auth pages (before maintenance mode)
-  if (pathname === Routes.GET_STARTED || pathname === Routes.LOGIN || pathname === Routes.REGISTER) {
+  if (
+    pathname === Routes.GET_STARTED ||
+    pathname === Routes.LOGIN ||
+    pathname === Routes.REGISTER
+  ) {
     const authToken = request.cookies.get("auth-token")?.value;
     if (authToken) {
       const decodedToken = decodeAndValidateToken(authToken);
@@ -33,8 +37,13 @@ export function middleware(request: NextRequest) {
         // User is authenticated, redirect based on role
         if (decodedToken.role === UserRole.Customer) {
           return NextResponse.redirect(new URL(Routes.DASHBOARD, request.url));
-        } else if (decodedToken.role === UserRole.Admin || decodedToken.role === UserRole.SuperAdmin) {
-          return NextResponse.redirect(new URL(Routes.ADMIN_DASHBOARD, request.url));
+        } else if (
+          decodedToken.role === UserRole.Admin ||
+          decodedToken.role === UserRole.SuperAdmin
+        ) {
+          return NextResponse.redirect(
+            new URL(Routes.ADMIN_DASHBOARD, request.url)
+          );
         } else {
           return NextResponse.redirect(new URL(Routes.HOME, request.url));
         }
@@ -43,25 +52,25 @@ export function middleware(request: NextRequest) {
   }
 
   // ✅ Much safer: Explicit control
-  if (process.env.MAINTENANCE_MODE === "true") {
-    const isWelcomePage = pathname === Routes.WELCOME;
-    const isApiRoute = pathname.startsWith("/api");
-    const isSeoRoute =
-      pathname === "/sitemap.xml" ||
-      pathname === "/robots.txt" ||
-      pathname === "/blog/rss.xml" ||
-      pathname.startsWith("/blog");
-    const isStaticAsset =
-      pathname.startsWith("/_next") ||
-      pathname.startsWith("/images") ||
-      pathname.startsWith("/videos") ||
-      pathname.startsWith("/public") ||
-      pathname === "/favicon.ico";
+  // if (process.env.MAINTENANCE_MODE === "true") {
+  //   const isWelcomePage = pathname === Routes.WELCOME;
+  //   const isApiRoute = pathname.startsWith("/api");
+  //   const isSeoRoute =
+  //     pathname === "/sitemap.xml" ||
+  //     pathname === "/robots.txt" ||
+  //     pathname === "/blog/rss.xml" ||
+  //     pathname.startsWith("/blog");
+  //   const isStaticAsset =
+  //     pathname.startsWith("/_next") ||
+  //     pathname.startsWith("/images") ||
+  //     pathname.startsWith("/videos") ||
+  //     pathname.startsWith("/public") ||
+  //     pathname === "/favicon.ico";
 
-    if (!isWelcomePage && !isApiRoute && !isSeoRoute && !isStaticAsset) {
-      return NextResponse.redirect(new URL(Routes.WELCOME, request.url));
-    }
-  }
+  //   if (!isWelcomePage && !isApiRoute && !isSeoRoute && !isStaticAsset) {
+  //     return NextResponse.redirect(new URL(Routes.WELCOME, request.url));
+  //   }
+  // }
 
   // Skip JWT processing for public routes and static assets
   const isPublicRoute =

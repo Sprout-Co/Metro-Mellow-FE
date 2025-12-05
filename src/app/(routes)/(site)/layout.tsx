@@ -14,10 +14,10 @@ export default function SiteLayout({
 }>) {
   return (
     <>
-      {process.env.MAINTENANCE_MODE === "true" ? null : <Navbar />}
+      {/* {process.env.MAINTENANCE_MODE === "true" ? null : <Navbar />} */}
 
       {children}
-      {process.env.MAINTENANCE_MODE === "true" ? null : <Footer />}
+      {/* {process.env.MAINTENANCE_MODE === "true" ? null : <Footer />} */}
     </>
   );
 }
