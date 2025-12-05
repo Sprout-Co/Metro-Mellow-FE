@@ -138,7 +138,8 @@ export const TimeSlotSelection: React.FC<TimeSlotSelectionProps> = ({
             <div className={styles.checkoutModal__loadingContainer}>
               <div className={styles.checkoutModal__loadingSkeleton} />
               <p className={styles.checkoutModal__loadingText}>
-                Checking availability...
+                Checking availability... Please hold on this might take a
+                minute...
               </p>
             </div>
           ) : (

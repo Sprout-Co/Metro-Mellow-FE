@@ -48,7 +48,7 @@ const navItems = [
     dropdownItems: serviceItems,
   },
   { label: "Blog", href: "/blog" },
-  { label: "For Business", href: "/for-business" },
+  // { label: "For Business", href: "/for-business" },
   { label: "Subscriptions", href: "/subscriptions" },
   { label: "Contact", href: "/contact" },
 ];
@@ -90,9 +90,13 @@ export default function Navbar() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (isMobileMenuOpen) {
-        const mobileMenu = document.querySelector(`.${styles.navbar__mobileMenu}`);
-        const mobileToggle = document.querySelector(`.${styles.navbar__mobileToggle}`);
-        
+        const mobileMenu = document.querySelector(
+          `.${styles.navbar__mobileMenu}`
+        );
+        const mobileToggle = document.querySelector(
+          `.${styles.navbar__mobileToggle}`
+        );
+
         if (
           mobileMenu &&
           !mobileMenu.contains(event.target as Node) &&
@@ -107,7 +111,8 @@ export default function Navbar() {
 
     if (isMobileMenuOpen) {
       document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [isMobileMenuOpen]);
 

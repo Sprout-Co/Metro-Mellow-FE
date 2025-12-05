@@ -8,7 +8,11 @@ import styles from "./CleaningServicesShowcase.module.scss";
 import CleaningServiceModal, {
   CleaningServiceConfiguration,
 } from "@/components/ui/booking/modals/CleaningServiceModal/CleaningServiceModal";
-import { GetServicesQuery, ServiceOption } from "@/graphql/api";
+import {
+  GetServicesQuery,
+  ServiceCategory,
+  ServiceOption,
+} from "@/graphql/api";
 import { Home, Sparkles, Building, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import ServiceShowcaseCard from "../../../_components/common/ServiceShowcaseCard/ServiceShowcaseCard";
@@ -139,6 +143,7 @@ const CleaningServicesShowcase: React.FC<CleaningServicesShowcaseProps> = ({
               key={service.id}
               service={service}
               onBookNowClick={handleOpenModal}
+              category={ServiceCategory.Cleaning}
             />
           ))}
         </motion.div>

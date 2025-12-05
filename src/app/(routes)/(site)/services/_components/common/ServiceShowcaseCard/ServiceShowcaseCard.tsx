@@ -21,6 +21,7 @@ export default function ServiceShowcaseCard({
   category,
 }: ServiceShowcaseCardProps) {
   const isAvailable = isServiceAvailable(category);
+  console.log(category);
   const cardVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
