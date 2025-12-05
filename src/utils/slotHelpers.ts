@@ -83,18 +83,29 @@ export const parseAPIDateAsLocal = (dateString: string | Date): Date => {
   // Extract date part (YYYY-MM-DD) from ISO string or use as-is
   const dateOnly = dateString.split("T")[0];
   const [year, month, day] = dateOnly.split("-").map(Number);
-  
+
   // Create date in local timezone (month is 0-indexed)
   return new Date(year, month - 1, day);
 };
 
 /**
  * Formats a Date object for GraphQL DateTime input
+ * Preserves the date part regardless of timezone by using noon UTC
+ * This prevents timezone shifts that could change the date
  * @param date - Date object to format
- * @returns ISO string format for API
+ * @returns ISO string format for API (at noon UTC to avoid day shifts)
  */
 export const formatDateForAPI = (date: Date): string => {
-  return date.toISOString();
+  // Extract the date parts from the local date
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDate();
+
+  // Create a date at noon UTC to avoid timezone-related day shifts
+  // Using noon (12:00) ensures the date won't shift to previous/next day
+  // regardless of the server's timezone
+  const utcDate = new Date(Date.UTC(year, month, day, 12, 0, 0, 0));
+  return utcDate.toISOString();
 };
 
 /**
@@ -110,7 +121,9 @@ export const isDateAvailable = (
   const dateString = formatDateToLocalString(date);
 
   return availableSlots.some((slot) => {
-    const slotDateString = formatDateToLocalString(parseAPIDateAsLocal(slot.date));
+    const slotDateString = formatDateToLocalString(
+      parseAPIDateAsLocal(slot.date)
+    );
     return slotDateString === dateString && slot.hasAvailableSlots;
   });
 };
@@ -128,7 +141,9 @@ export const getSlotAvailabilityForDate = (
   const dateString = formatDateToLocalString(date);
 
   const dateSlot = availableSlots.find((slot) => {
-    const slotDateString = formatDateToLocalString(parseAPIDateAsLocal(slot.date));
+    const slotDateString = formatDateToLocalString(
+      parseAPIDateAsLocal(slot.date)
+    );
     return slotDateString === dateString;
   });
 
