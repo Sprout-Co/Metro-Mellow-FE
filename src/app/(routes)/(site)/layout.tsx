@@ -14,10 +14,9 @@ export default function SiteLayout({
 }>) {
   return (
     <>
-      {/* {process.env.MAINTENANCE_MODE === "true" ? null : <Navbar />} */}
-
+      <Navbar />
       {children}
-      {/* {process.env.MAINTENANCE_MODE === "true" ? null : <Footer />} */}
+      <Footer />
     </>
   );
 }
