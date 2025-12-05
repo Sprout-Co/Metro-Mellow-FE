@@ -10,6 +10,7 @@ const FoodHero = () => {
       ctaText="ORDER A MEAL"
       animationType="wobble"
       animationIntensity="intense"
+      isAvailable={false}
     />
   );
 };

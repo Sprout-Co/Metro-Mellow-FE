@@ -695,6 +695,7 @@ const FoodMenuModal: React.FC<FoodMenuModalProps> = ({ isOpen, onClose }) => {
         onRemoveItem={handleRemoveItem}
         onRemoveVariant={handleRemoveVariant}
         onCheckout={handleContinueToCheckout}
+        disableCheckout={true}
       />
     </>
   );

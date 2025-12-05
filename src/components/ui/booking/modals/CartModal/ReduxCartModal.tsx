@@ -10,6 +10,7 @@ import CheckoutModal, {
   CheckoutFormData,
 } from "../CheckoutModal/CheckoutModal";
 import { useCart, useCartActions } from "@/lib/redux/hooks";
+import { Clock } from "lucide-react";
 
 interface ReduxCartModalProps {
   isOpen: boolean;
@@ -18,12 +19,14 @@ interface ReduxCartModalProps {
     formData: CheckoutFormData,
     onContinuePayment: (bookingId: string) => void
   ) => void;
+  disableCheckout?: boolean;
 }
 
 export const ReduxCartModal: React.FC<ReduxCartModalProps> = ({
   isOpen,
   onClose,
   onCheckout,
+  disableCheckout = false,
 }) => {
   const [showShippingModal, setShowShippingModal] = useState(false);
 
@@ -277,14 +280,21 @@ export const ReduxCartModal: React.FC<ReduxCartModalProps> = ({
               </div>
 
               <div className={styles.cartModal__footer}>
-                <Button
-                  variant="primary"
-                  size="lg"
-                  fullWidth
-                  onClick={handleContinue}
-                >
-                  CONTINUE
-                </Button>
+                {disableCheckout ? (
+                  <Button variant="secondary" size="lg" fullWidth disabled>
+                    <Clock size={16} style={{ marginRight: "8px" }} />
+                    Coming Soon
+                  </Button>
+                ) : (
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    fullWidth
+                    onClick={handleContinue}
+                  >
+                    CONTINUE
+                  </Button>
+                )}
               </div>
             </>
           )}

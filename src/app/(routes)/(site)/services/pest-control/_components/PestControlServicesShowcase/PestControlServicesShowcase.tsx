@@ -20,6 +20,7 @@ import {
   Leaf,
 } from "lucide-react";
 import ServiceShowcaseCard from "../../../_components/common/ServiceShowcaseCard/ServiceShowcaseCard";
+import { ServiceCategory } from "@/graphql/api";
 
 interface PestControlServicesShowcaseProps {
   servicesData?: GetServicesQuery["services"];
@@ -159,6 +160,7 @@ const PestControlServicesShowcase: React.FC<
                 key={service.id}
                 service={service}
                 onBookNowClick={handleOpenModal}
+                category={ServiceCategory.PestControl}
               />
             );
           })}

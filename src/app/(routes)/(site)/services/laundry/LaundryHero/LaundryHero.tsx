@@ -10,6 +10,7 @@ const LaundryHero = () => {
       ctaText="BOOK LAUNDRY"
       animationType="vibrate"
       animationIntensity="intense"
+      isAvailable={false}
     />
   );
 };

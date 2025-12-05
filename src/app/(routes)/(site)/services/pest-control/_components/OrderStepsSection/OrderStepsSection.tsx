@@ -6,7 +6,7 @@ import styles from "./OrderStepsSection.module.scss";
 import { Button } from "@/components/ui/Button/Button";
 import { Routes } from "@/constants/routes";
 import { CTAButton } from "@/components/ui/Button/CTAButton";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, Clock } from "lucide-react";
 
 const OrderStepsSection = () => {
   const fadeIn = {
@@ -88,15 +88,10 @@ const OrderStepsSection = () => {
         viewport={{ once: true }}
         transition={{ delay: 0.6 }}
       >
-        <CTAButton
-          href={Routes.GET_STARTED}
-          size="lg"
-          animationType="vibrate"
-          animationIntensity="intense"
-        >
-          BOOK PEST CONTROL
-          <ArrowRightIcon className={styles.icon} />
-        </CTAButton>
+        <Button variant="secondary" size="lg" disabled>
+          <Clock size={16} style={{ marginRight: "8px" }} />
+          Coming Soon
+        </Button>
       </motion.div>
     </section>
   );

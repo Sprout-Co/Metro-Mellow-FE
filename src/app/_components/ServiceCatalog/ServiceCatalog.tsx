@@ -25,10 +25,10 @@ import FoodMenuModal from "@/app/(routes)/(site)/services/food/_components/FoodM
 
 // Define service categories for sidebar
 const serviceCategories = [
-  { id: "COOKING", name: "Food" },
   { id: "CLEANING", name: "Cleaning" },
   { id: "PEST_CONTROL", name: "Pest Control" },
   { id: "LAUNDRY", name: "Laundry" },
+  { id: "COOKING", name: "Food" },
 ];
 
 const ServiceCatalog: FC = () => {
@@ -85,7 +85,7 @@ const ServiceCatalog: FC = () => {
   ): string => {
     console.log("serviceId", serviceId);
     console.log("imageUrl", imageUrl);
-    
+
     // Override specific service images with local images
     switch (serviceId) {
       case ServiceId.StandardCooking:
@@ -135,6 +135,11 @@ const ServiceCatalog: FC = () => {
     }
   };
 
+  // Check if service is available (currently only Cleaning)
+  const isServiceAvailable = (category: ServiceCategory) => {
+    return category === ServiceCategory.Cleaning;
+  };
+
   // Function to get appropriate button text based on category
   const getButtonText = (category: ServiceCategory): string => {
     switch (category) {
@@ -176,7 +181,8 @@ const ServiceCatalog: FC = () => {
       },
       [ServiceCategory.Errands]: {
         title: "Convenient Errand Services",
-        subtitle: "Professional errand services to save you time and effort across Lagos",
+        subtitle:
+          "Professional errand services to save you time and effort across Lagos",
       },
     };
 
@@ -568,9 +574,12 @@ const ServiceCatalog: FC = () => {
     <section className={styles.catalog}>
       <div className={styles.catalog__container}>
         <div className={styles.catalog__header}>
-          <h2 className={styles.catalog__title}>Professional Home Services in Lagos</h2>
+          <h2 className={styles.catalog__title}>
+            Professional Home Services in Lagos
+          </h2>
           <p className={styles.catalog__subtitle}>
-            Choose from our comprehensive range of trusted services. Professional quality, guaranteed satisfaction, and same-day availability across Lagos.
+            Choose from our comprehensive range of trusted services.
+            Professional quality, guaranteed satisfaction
           </p>
         </div>
 
@@ -641,7 +650,7 @@ const ServiceCatalog: FC = () => {
                           className={styles.catalog__card}
                           variants={itemVariants}
                         >
-                            <div className={styles.catalog__cardImageWrapper}>
+                          <div className={styles.catalog__cardImageWrapper}>
                             <Image
                               src={getSafeImageUrl(
                                 option.imageUrl,
@@ -704,16 +713,31 @@ const ServiceCatalog: FC = () => {
                               )}
 
                             <div className={styles.catalog__cardActions}>
-                              <Button
-                                variant="primary"
-                                size="lg"
-                                fullWidth={true}
-                                onClick={() =>
-                                  handleOrderClick(service, option)
-                                }
-                              >
-                                {getButtonText(selectedCategory)}
-                              </Button>
+                              {isServiceAvailable(service.category) ? (
+                                <Button
+                                  variant="primary"
+                                  size="lg"
+                                  fullWidth={true}
+                                  onClick={() =>
+                                    handleOrderClick(service, option)
+                                  }
+                                >
+                                  {getButtonText(selectedCategory)}
+                                </Button>
+                              ) : (
+                                <Button
+                                  variant="secondary"
+                                  size="lg"
+                                  fullWidth={true}
+                                  disabled
+                                >
+                                  <Clock
+                                    size={16}
+                                    style={{ marginRight: "8px" }}
+                                  />
+                                  Coming Soon
+                                </Button>
+                              )}
                             </div>
                           </div>
                         </motion.div>

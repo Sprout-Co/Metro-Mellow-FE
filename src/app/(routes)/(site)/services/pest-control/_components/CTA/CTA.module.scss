@@ -94,6 +94,19 @@
       }
     }
 
+    &_disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: color("neutral", "white");
+        transform: none;
+      }
+    }
+
     &_secondary {
       display: inline-block;
       padding: spacing("md") spacing("xl");

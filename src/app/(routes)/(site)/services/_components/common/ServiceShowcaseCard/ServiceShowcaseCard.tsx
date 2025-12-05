@@ -1,18 +1,26 @@
-import { ServiceOption } from "@/graphql/api";
+import { ServiceOption, ServiceCategory } from "@/graphql/api";
 import styles from "./ServiceShowcaseCard.module.scss";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Clock } from "lucide-react";
 
 interface ServiceShowcaseCardProps {
   service: ServiceOption;
   onBookNowClick: (service: ServiceOption) => void;
+  category?: ServiceCategory;
 }
+
+// Check if service is available (currently only Cleaning)
+const isServiceAvailable = (category?: ServiceCategory) => {
+  return category === ServiceCategory.Cleaning;
+};
 
 export default function ServiceShowcaseCard({
   service,
   onBookNowClick,
+  category,
 }: ServiceShowcaseCardProps) {
+  const isAvailable = isServiceAvailable(category);
   const cardVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
@@ -69,15 +77,22 @@ export default function ServiceShowcaseCard({
             <span className={styles.showcase__priceUnit}>/service</span>
           </div>
         </div>
-        <Button
-          variant="primary"
-          size="md"
-          fullWidth
-          onClick={() => onBookNowClick(service)}
-        >
-          Book Now
-          <ArrowRight className={styles.showcase__buttonIcon} />
-        </Button>
+        {isAvailable ? (
+          <Button
+            variant="primary"
+            size="md"
+            fullWidth
+            onClick={() => onBookNowClick(service)}
+          >
+            Book Now
+            <ArrowRight className={styles.showcase__buttonIcon} />
+          </Button>
+        ) : (
+          <Button variant="secondary" size="md" fullWidth disabled>
+            <Clock size={16} style={{ marginRight: "8px" }} />
+            Coming Soon
+          </Button>
+        )}
       </div>
 
       {/* Card Footer */}

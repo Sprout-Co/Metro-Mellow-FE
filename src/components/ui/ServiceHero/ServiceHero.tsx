@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import styles from "./ServiceHero.module.scss";
 import { Routes } from "@/constants/routes";
 import { CTAButton } from "@/components/ui/Button/CTAButton";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, Clock } from "lucide-react";
+import { Button } from "@/components/ui/Button/Button";
 
 interface ServiceHeroProps {
   backgroundImage: string;
@@ -16,6 +17,7 @@ interface ServiceHeroProps {
   connectorText?: string;
   animationType?: "wobble" | "vibrate" | "heartbeat";
   animationIntensity?: "subtle" | "intense";
+  isAvailable?: boolean;
 }
 
 const ServiceHero = ({
@@ -28,6 +30,7 @@ const ServiceHero = ({
   connectorText = "That",
   animationType = "wobble",
   animationIntensity = "intense",
+  isAvailable = true,
 }: ServiceHeroProps) => {
   const staggerContainer = {
     hidden: { opacity: 0 },
@@ -62,16 +65,16 @@ const ServiceHero = ({
         };
       case "vibrate":
         return {
-          whileHover: { 
+          whileHover: {
             x: [0, -2, 2, -2, 2, 0],
-            transition: { duration: 0.3 }
+            transition: { duration: 0.3 },
           },
         };
       case "heartbeat":
         return {
-          whileHover: { 
+          whileHover: {
             scale: [1, 1.1, 1],
-            transition: { duration: 0.3, repeat: 1 }
+            transition: { duration: 0.3, repeat: 1 },
           },
         };
       default:
@@ -80,7 +83,7 @@ const ServiceHero = ({
   };
 
   return (
-    <section 
+    <section
       className={styles.hero}
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
@@ -93,7 +96,8 @@ const ServiceHero = ({
           variants={staggerContainer}
         >
           <motion.h1 className={styles.hero__title} variants={fadeIn}>
-            <span className={styles["hero__title--accent"]}>{accentText}</span> {connectorText}
+            <span className={styles["hero__title--accent"]}>{accentText}</span>{" "}
+            {connectorText}
             {connectorText && <br />}
             <span className={styles["hero__title--main"]}>{mainText}</span>
           </motion.h1>
@@ -103,16 +107,23 @@ const ServiceHero = ({
           </motion.p>
 
           <motion.div className={styles.hero__cta} variants={fadeIn}>
-            <CTAButton
-              href={ctaHref}
-              size="lg"
-              animationType={animationType}
-              animationIntensity={animationIntensity}
-              rightIcon={<ArrowRightIcon size={18} />}
-              {...getButtonAnimation()}
-            >
-              {ctaText}
-            </CTAButton>
+            {isAvailable ? (
+              <CTAButton
+                href={ctaHref}
+                size="lg"
+                animationType={animationType}
+                animationIntensity={animationIntensity}
+                rightIcon={<ArrowRightIcon size={18} />}
+                {...getButtonAnimation()}
+              >
+                {ctaText}
+              </CTAButton>
+            ) : (
+              <Button variant="secondary" size="lg" disabled>
+                <Clock size={16} style={{ marginRight: "8px" }} />
+                Coming Soon
+              </Button>
+            )}
           </motion.div>
         </motion.div>
       </div>

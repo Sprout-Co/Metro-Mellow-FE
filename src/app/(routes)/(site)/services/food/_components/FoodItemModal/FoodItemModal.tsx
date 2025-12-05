@@ -6,6 +6,12 @@ import Modal from "@/components/ui/Modal/Modal";
 import { Button } from "@/components/ui/Button/Button";
 import styles from "./FoodItemModal.module.scss";
 import { ServiceCategory, ServiceId } from "@/graphql/api";
+import { Clock } from "lucide-react";
+
+// Check if service is available (currently only Cleaning)
+const isServiceAvailable = (category: ServiceCategory) => {
+  return category === ServiceCategory.Cleaning;
+};
 
 // Food item interface (should match with FoodMenuModal)
 interface FoodItem {
@@ -163,14 +169,26 @@ const FoodItemModal: React.FC<FoodItemModalProps> = ({
               </button>
             </div>
 
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={handleOrder}
-              className={styles.modal__orderButton}
-            >
-              ORDER
-            </Button>
+            {isServiceAvailable(foodItem.category) ? (
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={handleOrder}
+                className={styles.modal__orderButton}
+              >
+                ORDER
+              </Button>
+            ) : (
+              <Button
+                variant="secondary"
+                size="lg"
+                disabled
+                className={styles.modal__orderButton}
+              >
+                <Clock size={16} style={{ marginRight: "8px" }} />
+                Coming Soon
+              </Button>
+            )}
           </div>
 
           <div className={styles.modal__proteinOptions}>

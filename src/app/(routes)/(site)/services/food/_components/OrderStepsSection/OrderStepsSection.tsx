@@ -6,7 +6,8 @@ import { motion } from "framer-motion";
 import styles from "./OrderStepsSection.module.scss";
 import { CTAButton } from "@/components/ui/Button/CTAButton";
 import { Routes } from "@/constants/routes";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, Clock } from "lucide-react";
+import { Button } from "@/components/ui/Button/Button";
 
 const OrderStepsSection = () => {
   // Animation variants
@@ -130,16 +131,15 @@ const OrderStepsSection = () => {
               },
             }}
           >
-            <CTAButton
-              href={Routes.GET_STARTED}
+            <Button
+              variant="secondary"
               size="lg"
+              disabled
               className={styles.orderSteps__button}
-              animationType="bounce"
-              animationIntensity="intense"
             >
-              ORDER NOW
-              <ArrowRightIcon className={styles.icon} />
-            </CTAButton>
+              <Clock size={16} style={{ marginRight: "8px" }} />
+              Coming Soon
+            </Button>
           </motion.div>
         </div>
       </motion.div>

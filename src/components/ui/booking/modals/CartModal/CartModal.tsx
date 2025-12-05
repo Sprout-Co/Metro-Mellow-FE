@@ -10,6 +10,7 @@ import CheckoutModal, {
   CheckoutFormData,
 } from "../CheckoutModal/CheckoutModal";
 import { Service, ServiceOption } from "@/graphql/api";
+import { Clock } from "lucide-react";
 
 // Cart item that extends the Service type with cart-specific properties
 export interface CartServiceItem extends Service {
@@ -27,6 +28,7 @@ interface CartModalProps {
   onRemoveItem: (id: string) => void;
   onRemoveVariant?: (itemId: string, variant: string) => void;
   onRemoveOption?: (itemId: string, optionId: string) => void;
+  disableCheckout?: boolean;
 }
 
 export const CartModal: React.FC<CartModalProps> = ({
@@ -38,6 +40,7 @@ export const CartModal: React.FC<CartModalProps> = ({
   onRemoveItem,
   onRemoveVariant,
   onRemoveOption,
+  disableCheckout = false,
 }) => {
   const [showShippingModal, setShowShippingModal] = useState(false);
 
@@ -281,14 +284,21 @@ export const CartModal: React.FC<CartModalProps> = ({
               </div>
 
               <div className={styles.cartModal__footer}>
-                <Button
-                  variant="primary"
-                  size="lg"
-                  fullWidth
-                  onClick={handleContinue}
-                >
-                  CONTINUE
-                </Button>
+                {disableCheckout ? (
+                  <Button variant="secondary" size="lg" fullWidth disabled>
+                    <Clock size={16} style={{ marginRight: "8px" }} />
+                    Coming Soon
+                  </Button>
+                ) : (
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    fullWidth
+                    onClick={handleContinue}
+                  >
+                    CONTINUE
+                  </Button>
+                )}
               </div>
             </>
           )}

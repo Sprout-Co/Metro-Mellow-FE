@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 import styles from "./CTA.module.scss";
+import { Clock } from "lucide-react";
 
 const CTA = () => {
   const ref = useRef(null);
@@ -35,9 +36,13 @@ const CTA = () => {
             peace of mind with our comprehensive solutions.
           </p>
           <div className={styles.cta__buttons}>
-            <Link href="/bookings" className={styles.cta__button_primary}>
-              Schedule Service
-            </Link>
+            <button
+              className={`${styles.cta__button_primary} ${styles.cta__button_disabled}`}
+              disabled
+            >
+              <Clock size={16} style={{ marginRight: "8px" }} />
+              Coming Soon
+            </button>
             <Link href="/contact" className={styles.cta__button_secondary}>
               Get a Quote
             </Link>

@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import styles from "./ParfaitCTA.module.scss";
 import { CTAButton } from "@/components/ui/Button/CTAButton";
 import { Routes } from "@/constants/routes";
+import { Button } from "@/components/ui/Button/Button";
+import { Clock } from "lucide-react";
 
 const ParfaitCTA: React.FC = () => {
   return (
@@ -25,15 +27,10 @@ const ParfaitCTA: React.FC = () => {
             parfaits delivered daily
           </p>
           <div className={styles["parfait-cta__buttons"]}>
-            <CTAButton
-              variant="white"
-              size="lg"
-              href={Routes.GET_STARTED}
-              animationType="vibrate"
-              animationIntensity="intense"
-            >
-              Order Now
-            </CTAButton>
+            <Button variant="secondary" size="lg" disabled>
+              <Clock size={16} style={{ marginRight: "8px" }} />
+              Coming Soon
+            </Button>
             <CTAButton variant="secondary" size="lg" href="#menu">
               View Menu
             </CTAButton>
