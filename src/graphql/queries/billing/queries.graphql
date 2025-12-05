@@ -1,0 +1,68 @@
+query GetSubscriptionBillings($subscriptionId: ID!) {
+  subscriptionBillings(subscriptionId: $subscriptionId) {
+    id
+    amount
+    status
+    billingDate
+    paymentDate
+    description
+    cancellationDate
+    cancellationReason
+    createdAt
+    updatedAt
+    periodStartDate
+    periodEndDate
+    paystackReference
+    payment {
+      id
+      amount
+      currency
+      status
+      refundAmount
+      refundReason
+      metadata
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+query GetBillingStats($subscriptionId: ID!) {
+  billingStats(subscriptionId: $subscriptionId) {
+    total
+    paid
+    pending
+    failed
+    totalAmount
+    paidAmount
+  }
+}
+
+query GetUserBillings {
+  userBillings {
+    id
+    amount
+    status
+    billingDate
+    paymentDate
+    description
+    cancellationDate
+    cancellationReason
+    createdAt
+    updatedAt
+    periodStartDate
+    periodEndDate
+    paystackReference
+    payment {
+      id
+      amount
+      currency
+      status
+      refundAmount
+      refundReason
+      metadata
+      createdAt
+      updatedAt
+    }
+  }
+}

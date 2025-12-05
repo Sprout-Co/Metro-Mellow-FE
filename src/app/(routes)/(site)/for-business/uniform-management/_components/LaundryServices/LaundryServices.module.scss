@@ -1,0 +1,90 @@
+@import "abstracts/variables";
+@import "abstracts/mixins";
+@import "abstracts/functions";
+
+.laundryServices {
+  @include section-spacing("3xl");
+  background: color("neutral", "lightest");
+
+  &__container {
+    @include container;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("4xl");
+  }
+
+  &__title {
+    @include heading-1;
+    margin-bottom: spacing("lg");
+    color: color("neutral", "black");
+  }
+
+  &__highlight {
+    color: color("primary", "base");
+  }
+
+  &__subtitle {
+    @include body-1;
+    color: color("neutral", "dark");
+  }
+
+  &__grid {
+    @include grid-responsive(1, 2, 2, 4, spacing("xl"));
+  }
+
+  &__card {
+    background: color("neutral", "white");
+    padding: spacing("2xl");
+    border-radius: border-radius("2xl");
+    box-shadow: shadow("md");
+    text-align: center;
+    transition: $transition-base;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: shadow("xl");
+    }
+  }
+
+  &__cardIcon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto spacing("lg");
+    @include flex-center;
+    background: color("primary", "lighter");
+    color: color("primary", "base");
+    border-radius: border-radius("xl");
+  }
+
+  &__cardTitle {
+    @include heading-4;
+    margin-bottom: spacing("md");
+    color: color("neutral", "black");
+  }
+
+  &__cardDescription {
+    @include body-2;
+    color: color("neutral", "dark");
+    margin-bottom: spacing("lg");
+  }
+
+  &__features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      @include font-secondary;
+      @include font-size("sm");
+      color: color("neutral", "darker");
+      padding: spacing("xs") 0;
+      border-bottom: 1px solid color("neutral", "lighter");
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+}

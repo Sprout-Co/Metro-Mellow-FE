@@ -1,0 +1,443 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.plan_summary {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("primary", "dark");
+    margin-bottom: spacing("lg");
+  }
+
+  &__social_proof {
+    background-color: color("neutral", "light");
+    border-radius: border-radius("full");
+    padding: spacing("sm") spacing("lg");
+    margin-bottom: spacing("xl");
+    display: inline-flex;
+    align-items: center;
+
+    &_text {
+      font-size: map-get($font-sizes, "sm");
+      color: color("neutral", "dark");
+    }
+  }
+
+  &__empty {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    p {
+      font-size: map-get($font-sizes, "base");
+      color: color("neutral", "dark");
+      text-align: center;
+      max-width: 80%;
+    }
+  }
+
+  &__services {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+    margin-bottom: spacing("xl");
+    flex: 1;
+  }
+
+  &__service {
+    background-color: #ffffff;
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    &_active {
+      border-color: color("primary", "base");
+    }
+  }
+
+  &__service_header {
+    display: flex;
+    padding: spacing("md");
+    align-items: center;
+    gap: spacing("md");
+    background-color: #f9f7f5;
+    border-bottom: 1px solid color("neutral", "lighter");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      background-color: darken(#f9f7f5, 3%);
+    }
+
+    &_active {
+      background-color: rgba(color("primary", "light"), 0.1);
+      border-bottom: 1px solid color("neutral", "lighter");
+
+      &:hover {
+        background-color: rgba(color("primary", "light"), 0.15);
+      }
+    }
+  }
+
+  &__service_icon {
+    width: 40px;
+    height: 40px;
+    border-radius: border-radius("full");
+    background-color: rgba(color("primary", "light"), 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+    color: color("neutral", "dark");
+
+    span {
+      font-size: 18px;
+    }
+  }
+
+  &__service_info {
+    flex: 1;
+  }
+
+  &__service_name {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0;
+    margin-bottom: spacing("xxs");
+  }
+
+  &__service_type {
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
+
+  &__service_price_container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: spacing("xs");
+  }
+
+  &__service_price {
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("primary", "base");
+    margin: 0;
+  }
+
+  &__service_detail {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    margin: 4px 0 0;
+  }
+
+  &__service_details {
+    padding: spacing("md");
+    background-color: color("neutral", "light");
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: spacing("sm");
+  }
+
+  &__detail_item {
+    display: flex;
+    flex-direction: column;
+    font-size: map-get($font-sizes, "sm");
+    padding: spacing("sm");
+    background-color: color("neutral", "white");
+    border-radius: border-radius("sm");
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  &__detail_label {
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xxs");
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    font-size: map-get($font-sizes, "xs");
+  }
+
+  &__detail_value {
+    color: color("neutral", "black");
+    font-weight: map-get($font-weights, "medium");
+  }
+
+  &__service_edit {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+    padding: spacing("xs") spacing("sm");
+    background-color: color("neutral", "light");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("sm");
+    font-size: map-get($font-sizes, "xs");
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    cursor: pointer;
+    color: color("neutral", "dark");
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+      color: color("neutral", "darker");
+    }
+  }
+
+  &__service_edit {
+    padding: spacing("xs") spacing("sm");
+    background-color: transparent;
+    border: 1px solid color("primary", "base");
+    border-radius: border-radius("sm");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    color: color("primary", "base");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      background-color: rgba(color("primary", "base"), 0.05);
+    }
+  }
+
+  &__edit_btn {
+    width: 100%;
+    padding: spacing("sm");
+    background-color: transparent;
+    border: 1px solid color("primary", "base");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "xs");
+    font-weight: map-get($font-weights, "medium");
+    color: color("primary", "base");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      background-color: rgba(color("primary", "base"), 0.05);
+    }
+  }
+
+  &__total {
+    margin-top: auto;
+    background-color: color("primary", "dark");
+    padding: spacing("lg");
+    border-radius: border-radius("lg");
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__total_label {
+    font-size: map-get($font-sizes, "base");
+    font-weight: map-get($font-weights, "medium");
+    color: #ffffff;
+  }
+
+  &__total_value {
+    text-align: right;
+  }
+
+  &__total_price {
+    display: block;
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "bold");
+    color: #ffffff;
+  }
+
+  &__total_period {
+    font-size: map-get($font-sizes, "sm");
+    color: color("status", "success");
+  }
+
+  &__modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: z-index("modal");
+  }
+
+  &__modal_backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+  }
+
+  &__modal_content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 spacing("lg");
+  }
+
+  &__pricing {
+    margin-top: spacing("lg");
+    background-color: #ffffff;
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    padding: spacing("lg");
+  }
+
+  &__price_row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: spacing("md");
+    font-size: map-get($font-sizes, "base");
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &_total {
+      margin-top: spacing("lg");
+      padding-top: spacing("md");
+      border-top: 1px solid color("neutral", "lighter");
+      font-weight: map-get($font-weights, "bold");
+      font-size: map-get($font-sizes, "lg");
+      color: color("primary", "dark");
+    }
+  }
+
+  &__per_period {
+    margin-top: spacing("xs");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    text-align: right;
+  }
+
+  &__accordion_icon {
+    font-size: map-get($font-sizes, "xs");
+    color: color("primary", "base");
+    margin-left: spacing("sm");
+    transition: $transition-base;
+  }
+
+  &__service_editor {
+    overflow: hidden;
+    background-color: #ffffff;
+    padding: 0;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("lg");
+  }
+
+  &__edit_button {
+    padding: spacing("sm") spacing("md");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("sm");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color("primary", "dark");
+      transform: translateY(-1px);
+    }
+  }
+}
+
+.summary__actions {
+  display: flex;
+  gap: spacing("md");
+  margin-top: spacing("xl");
+  padding: spacing("md");
+  background-color: color("neutral", "white");
+  border-radius: border-radius("lg");
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.summary__editButton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: spacing("sm");
+  padding: spacing("md");
+  background-color: transparent;
+  border: 1px solid color("primary", "base");
+  border-radius: border-radius("md");
+  font-size: map-get($font-sizes, "base");
+  font-weight: map-get($font-weights, "medium");
+  color: color("primary", "base");
+  cursor: pointer;
+  transition: $transition-base;
+
+  &:hover {
+    background-color: rgba(color("primary", "base"), 0.05);
+  }
+}
+
+.summary__createButton {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: spacing("sm");
+  padding: spacing("md");
+  background-color: color("primary", "base");
+  border: none;
+  border-radius: border-radius("md");
+  font-size: map-get($font-sizes, "base");
+  font-weight: map-get($font-weights, "medium");
+  color: #ffffff;
+  cursor: pointer;
+  transition: $transition-base;
+
+  &:hover {
+    background-color: darken(color("primary", "base"), 5%);
+  }
+
+  &:disabled {
+    background-color: color("neutral", "lighter");
+    cursor: not-allowed;
+  }
+}
+
+.summary__error {
+  margin-top: spacing("md");
+  padding: spacing("md");
+  background-color: rgba(color("status", "error"), 0.1);
+  border-radius: border-radius("md");
+  display: flex;
+  align-items: center;
+  gap: spacing("sm");
+  color: color("status", "error");
+  font-size: map-get($font-sizes, "sm");
+}

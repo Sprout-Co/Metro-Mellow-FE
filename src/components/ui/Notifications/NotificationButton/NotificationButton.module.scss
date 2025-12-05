@@ -1,0 +1,252 @@
+@import "abstracts/variables";
+@import "abstracts/mixins";
+
+.container {
+  position: relative;
+  display: inline-flex;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  position: relative;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px color("primary", "lighter");
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.iconContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: color("neutral", "dark");
+  transition: color 0.2s;
+
+  &.active {
+    color: color("primary", "base");
+  }
+}
+
+.badge {
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  z-index: 1;
+}
+
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.5rem);
+  width: 360px;
+  max-height: 480px;
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border: 1px solid color("neutral", "lighter");
+  overflow: hidden;
+  z-index: 50;
+  transform-origin: top right;
+  animation: dropdownEnter 0.15s ease-out forwards;
+
+  @keyframes dropdownEnter {
+    from {
+      opacity: 0;
+      transform: scale(0.95) translateY(-0.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid color("neutral", "lighter");
+}
+
+.title {
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.markAllButton {
+  color: color("primary", "base");
+  background: none;
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: color("primary", "lighter");
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px color("primary", "lighter");
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.list {
+  max-height: 360px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: color("neutral", "light");
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: color("neutral", "medium");
+  }
+}
+
+.footer {
+  padding: 0.75rem;
+  border-top: 1px solid color("neutral", "lighter");
+  background: color("neutral", "lightest");
+  text-align: center;
+}
+
+.viewAllButton {
+  color: color("primary", "base");
+  background: none;
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: color("primary", "lighter");
+    color: color("primary", "dark");
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px color("primary", "lighter");
+  }
+}
+
+.emptyState {
+  padding: 2rem;
+  text-align: center;
+  color: color("neutral", "medium");
+}
+
+.emptyIcon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.emptyText {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+// Loading state
+.loading {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: color("neutral", "medium");
+}
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid color("neutral", "lighter");
+  border-top-color: color("primary", "base");
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingText {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+// Responsive
+@media (max-width: 640px) {
+  .dropdown {
+    width: 320px;
+    right: -5rem;
+      
+    &::before {
+      right: 5.5rem;
+    }
+  }
+}
+
+// @media (max-width: 480px) {
+//   .dropdown {
+//     width: calc(100vw - 2rem);
+//     right: -3.5rem;
+
+//     &::before {
+//       right: 4rem;
+//     }
+//   }
+// }

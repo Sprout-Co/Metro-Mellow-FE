@@ -1,0 +1,512 @@
+query GetBookings($status: BookingStatus) {
+  bookings(status: $status) {
+    id
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+    service_category
+    serviceOption
+    date
+    timeSlot
+    status
+    notes
+    recurring
+    cancellationDate
+    cancellationReason
+    resumeDate
+    pauseDate
+    recurringDiscount
+    referralDiscount
+    feedback {
+      rating
+      comment
+    }
+    customer {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      createdAt
+      updatedAt
+    }
+    service {
+      _id
+      service_id
+      name
+      label
+      description
+      category
+      icon
+      price
+      displayPrice
+      status
+      imageUrl
+      features
+      inclusions
+      options {
+        id
+        service_id
+        label
+        description
+        price
+        inclusions
+        imageUrl
+        extraItems {
+          name
+          items
+          cost
+        }
+      }
+    }
+    staff {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      createdAt
+      updatedAt
+    }
+    address {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      label
+    }
+    serviceDetails {
+      serviceOption
+      cleaning {
+        cleaningType
+        houseType
+        rooms {
+          bedroom
+          livingRoom
+          bathroom
+          kitchen
+          balcony
+          staircase
+        }
+      }
+      laundry {
+        laundryType
+        bags
+        items {
+          shirts
+          pants
+          dresses
+          suits
+          others
+        }
+      }
+      pestControl {
+        treatmentType
+        areas
+        severity
+      }
+      cooking {
+        mealType
+        mealsPerDelivery {
+          day
+          count
+        }
+      }
+    }
+  }
+}
+
+query GetBookingById($id: ID!) {
+  booking(id: $id) {
+    id
+    date
+    timeSlot
+    status
+    notes
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+    service_category
+    serviceOption
+    recurring
+    cancellationDate
+    cancellationReason
+    resumeDate
+    pauseDate
+    recurringDiscount
+    referralDiscount
+    feedback {
+      rating
+      comment
+    }
+    customer {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      createdAt
+      updatedAt
+    }
+    service {
+      _id
+      service_id
+      name
+      label
+      description
+      category
+      icon
+      price
+      displayPrice
+      status
+      imageUrl
+      features
+      inclusions
+      options {
+        id
+        service_id
+        label
+        description
+        price
+        inclusions
+        imageUrl
+        extraItems {
+          name
+          items
+          cost
+        }
+      }
+    }
+    staff {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      createdAt
+      updatedAt
+    }
+    address {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      label
+    }
+    serviceDetails {
+      serviceOption
+      cleaning {
+        cleaningType
+        houseType
+        rooms {
+          bedroom
+          livingRoom
+          bathroom
+          kitchen
+          balcony
+          staircase
+        }
+      }
+      laundry {
+        laundryType
+        bags
+        items {
+          shirts
+          pants
+          dresses
+          suits
+          others
+        }
+      }
+      pestControl {
+        treatmentType
+        areas
+        severity
+      }
+      cooking {
+        mealType
+        mealsPerDelivery {
+          day
+          count
+        }
+      }
+    }
+  }
+}
+
+query GetCustomerBookings {
+  customerBookings {
+    id
+    date
+    timeSlot
+    status
+    notes
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+    service_category
+    serviceOption
+    recurring
+    cancellationDate
+    cancellationReason
+    resumeDate
+    pauseDate
+    recurringDiscount
+    referralDiscount
+    feedback {
+      rating
+      comment
+    }
+    customer {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      createdAt
+      updatedAt
+    }
+    service {
+      _id
+      service_id
+      name
+      label
+      description
+      category
+      icon
+      price
+      displayPrice
+      status
+      imageUrl
+      features
+      inclusions
+      options {
+        id
+        service_id
+        label
+        description
+        price
+        inclusions
+        imageUrl
+        extraItems {
+          name
+          items
+          cost
+        }
+      }
+    }
+    staff {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      createdAt
+      updatedAt
+    }
+    address {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      label
+    }
+    serviceDetails {
+      serviceOption
+      cleaning {
+        cleaningType
+        houseType
+        rooms {
+          bedroom
+          livingRoom
+          bathroom
+          kitchen
+          balcony
+          staircase
+        }
+      }
+      laundry {
+        laundryType
+        bags
+        items {
+          shirts
+          pants
+          dresses
+          suits
+          others
+        }
+      }
+      pestControl {
+        treatmentType
+        areas
+        severity
+      }
+      cooking {
+        mealType
+        mealsPerDelivery {
+          day
+          count
+        }
+      }
+    }
+  }
+}
+
+query GetStaffBookings {
+  staffBookings {
+    id
+    customer {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      createdAt
+      updatedAt
+    }
+    service {
+      _id
+      service_id
+      name
+      label
+      description
+      category
+      icon
+      price
+      displayPrice
+      status
+      imageUrl
+      features
+      inclusions
+      options {
+        id
+        service_id
+        label
+        description
+        price
+        inclusions
+        imageUrl
+        extraItems {
+          name
+          items
+          cost
+        }
+      }
+    }
+    staff {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      createdAt
+      updatedAt
+    }
+    date
+    timeSlot
+    status
+    notes
+    address {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      label
+    }
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+    service_category
+    serviceOption
+    referralDiscount
+    serviceDetails {
+      cleaning {
+        cleaningType
+        houseType
+        rooms {
+          bedroom
+          livingRoom
+          bathroom
+          kitchen
+          balcony
+          staircase
+        }
+      }
+      laundry {
+        laundryType
+        bags
+        items {
+          shirts
+          pants
+          dresses
+          suits
+          others
+        }
+      }
+      pestControl {
+        treatmentType
+        areas
+        severity
+      }
+      cooking {
+        mealType
+        mealsPerDelivery {
+          day
+          count
+        }
+      }
+    }
+  }
+}
+
+query GetAvailableSlots(
+  $startDate: DateTime!
+  $endDate: DateTime!
+  $serviceCategory: ServiceCategory!
+) {
+  getAvailableSlots(
+    startDate: $startDate
+    endDate: $endDate
+    serviceCategory: $serviceCategory
+  ) {
+    date
+    slots {
+      date
+      timeSlot
+      isAvailable
+      availableCapacity
+      maxCapacity
+    }
+    hasAvailableSlots
+  }
+}
+
+query CheckSlotAvailability($input: CheckAvailabilityInput!) {
+  checkSlotAvailability(input: $input) {
+    date
+    timeSlot
+    isAvailable
+    availableCapacity
+    maxCapacity
+  }
+}

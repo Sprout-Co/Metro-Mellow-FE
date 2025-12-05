@@ -1,0 +1,248 @@
+// ===================================
+// CLEANING PROTOCOLS COMPONENT
+// ===================================
+
+@import "abstracts/variables";
+@import "abstracts/mixins";
+@import "abstracts/functions";
+
+.cleaningProtocols {
+  @include section-spacing("3xl");
+  background: linear-gradient(
+    180deg,
+    color("neutral", "white") 0%,
+    color("neutral", "lightest") 50%,
+    color("neutral", "white") 100%
+  );
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("/images/patterns/grid-pattern.svg") repeat;
+    opacity: 0.02;
+    z-index: 1;
+  }
+
+  &__container {
+    @include container;
+    position: relative;
+    z-index: 2;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("4xl");
+    // max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &__badge {
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("semibold");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    padding: spacing("xs") spacing("lg");
+    border-radius: border-radius("pill");
+    text-transform: uppercase;
+    letter-spacing: letter-spacing("wide");
+    display: inline-block;
+    margin-bottom: spacing("lg");
+  }
+
+  &__title {
+    @include heading-1;
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("md") {
+      @include heading-3;
+    }
+  }
+
+  &__highlight {
+    color: color("primary", "base");
+  }
+
+  &__subtitle {
+    @include body-1;
+    color: color("neutral", "dark");
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: line-height("relaxed");
+  }
+
+  &__grid {
+    @include grid-responsive(1, 2, 2, spacing("xl"));
+    margin-bottom: spacing("5xl");
+  }
+}
+
+// Protocol Card Component
+.protocolCard {
+  background: color("neutral", "white");
+  padding: spacing("2xl");
+  border-radius: border-radius("2xl");
+  box-shadow: shadow("md");
+  transition: $transition-base;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--card-accent-color);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: $transition-base;
+  }
+
+  &--primary {
+    --card-accent-color: #{color("primary", "base")};
+  }
+
+  &--secondary {
+    --card-accent-color: #{color("secondary", "base")};
+  }
+
+  &--accent {
+    --card-accent-color: #{color("accent", "base")};
+  }
+
+  &--success {
+    --card-accent-color: #{color("status", "success")};
+  }
+
+  &__iconContainer {
+    width: 64px;
+    height: 64px;
+    border-radius: border-radius("xl");
+    @include flex-center;
+    margin-bottom: spacing("lg");
+    color: color("neutral", "white");
+
+    &--primary {
+      background: linear-gradient(
+        135deg,
+        color("primary", "base"),
+        color("primary", "dark")
+      );
+    }
+
+    &--secondary {
+      background: linear-gradient(
+        135deg,
+        color("secondary", "base"),
+        color("secondary", "dark")
+      );
+    }
+
+    &--accent {
+      background: linear-gradient(
+        135deg,
+        color("accent", "base"),
+        color("accent", "dark")
+      );
+    }
+
+    &--success {
+      background: linear-gradient(
+        135deg,
+        color("status", "success"),
+        darken(color("status", "success"), 10%)
+      );
+    }
+  }
+
+  &__title {
+    @include heading-4;
+    margin-bottom: spacing("md");
+    color: color("neutral", "black");
+  }
+
+  &__description {
+    @include body-2;
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xl");
+    line-height: line-height("relaxed");
+  }
+
+  &__steps {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__step {
+    @include flex($align: center);
+    gap: spacing("sm");
+    @include font-secondary;
+    @include font-size("sm");
+    color: color("neutral", "darker");
+    padding: spacing("xs") 0;
+
+    svg {
+      color: var(--card-accent-color);
+      flex-shrink: 0;
+    }
+  }
+}
+
+// Responsive adjustments
+@include breakpoint-down("xl") {
+  .cleaningProtocols {
+    &__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+@include breakpoint-down("lg") {
+  .cleaningProtocols {
+    &__grid {
+      grid-template-columns: 1fr;
+    }
+
+    &__certificationsGrid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+@include breakpoint-down("md") {
+  .protocolCard {
+    padding: spacing("xl");
+    text-align: center;
+
+    &__iconContainer {
+      margin: 0 auto spacing("lg");
+    }
+  }
+
+  .cleaningProtocols {
+    &__certificationsGrid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@include breakpoint-down("sm") {
+  .protocolCard {
+    padding: spacing("lg");
+
+    &__iconContainer {
+      width: 56px;
+      height: 56px;
+    }
+  }
+}

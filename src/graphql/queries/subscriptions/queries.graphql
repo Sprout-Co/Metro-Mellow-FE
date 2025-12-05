@@ -1,0 +1,408 @@
+query GetSubscriptionById($id: ID!) {
+  subscription(id: $id) {
+    id
+    customer {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      createdAt
+      updatedAt
+    }
+    startDate
+    endDate
+    status
+    billingCycle
+    duration
+    totalPrice
+    nextBillingDate
+    lastBillingDate
+    autoRenew
+    address {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+    }
+    paymentMethod {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        createdAt
+        updatedAt
+      }
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+      createdAt
+      updatedAt
+    }
+    subscriptionServices {
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          imageUrl
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+      service_category
+      frequency
+      price
+      serviceDetails {
+        cleaning {
+          cleaningType
+          houseType
+          rooms {
+            bedroom
+            livingRoom
+            bathroom
+            kitchen
+            balcony
+            staircase
+          }
+        }
+        laundry {
+          laundryType
+          bags
+          items {
+            shirts
+            pants
+            dresses
+            suits
+            others
+          }
+        }
+        pestControl {
+          treatmentType
+          areas
+          severity
+        }
+        cooking {
+          mealType
+          mealsPerDelivery {
+            day
+            count
+          }
+        }
+      }
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      id
+    }
+    createdAt
+    updatedAt
+  }
+}
+
+query GetSubscriptions($status: SubscriptionStatus) {
+  subscriptions(status: $status) {
+    id
+    customer {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      createdAt
+      updatedAt
+    }
+    startDate
+    endDate
+    status
+    billingCycle
+    duration
+    totalPrice
+    nextBillingDate
+    lastBillingDate
+    autoRenew
+    address {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+    }
+    paymentMethod {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        createdAt
+        updatedAt
+      }
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+      createdAt
+      updatedAt
+    }
+    subscriptionServices {
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          imageUrl
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+      service_category
+      frequency
+      price
+      serviceDetails {
+        cleaning {
+          cleaningType
+          houseType
+          rooms {
+            bedroom
+            livingRoom
+            bathroom
+            kitchen
+            balcony
+            staircase
+          }
+        }
+        laundry {
+          laundryType
+          bags
+          items {
+            shirts
+            pants
+            dresses
+            suits
+            others
+          }
+        }
+        pestControl {
+          treatmentType
+          areas
+          severity
+        }
+        cooking {
+          mealType
+          mealsPerDelivery {
+            day
+            count
+          }
+        }
+      }
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      id
+    }
+    createdAt
+    updatedAt
+  }
+}
+
+query GetCustomerSubscriptions {
+  customerSubscriptions {
+    id
+    customer {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      createdAt
+      updatedAt
+    }
+    startDate
+    endDate
+    status
+    billingCycle
+    duration
+    totalPrice
+    nextBillingDate
+    lastBillingDate
+    autoRenew
+    address {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+      serviceArea {
+        id
+        name
+        city
+        deliveryCost
+        isActive
+      }
+    }
+    paymentMethod {
+      id
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+        phone
+        createdAt
+        updatedAt
+      }
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+      createdAt
+      updatedAt
+    }
+    subscriptionServices {
+      service {
+        _id
+        service_id
+        name
+        label
+        description
+        category
+        icon
+        price
+        displayPrice
+        status
+        imageUrl
+        features
+        inclusions
+        options {
+          id
+          service_id
+          label
+          description
+          price
+          inclusions
+          imageUrl
+          extraItems {
+            name
+            items
+            cost
+          }
+        }
+      }
+      service_category
+      frequency
+      price
+      serviceDetails {
+        cleaning {
+          cleaningType
+          houseType
+          rooms {
+            bedroom
+            livingRoom
+            bathroom
+            kitchen
+            balcony
+            staircase
+          }
+        }
+        laundry {
+          laundryType
+          bags
+          items {
+            shirts
+            pants
+            dresses
+            suits
+            others
+          }
+        }
+        pestControl {
+          treatmentType
+          areas
+          severity
+        }
+        cooking {
+          mealType
+          mealsPerDelivery {
+            day
+            count
+          }
+        }
+      }
+      scheduledDays
+      preferredTimeSlot
+      createdAt
+      updatedAt
+      id
+    }
+    createdAt
+    updatedAt
+  }
+}

@@ -1,0 +1,188 @@
+// CustomerSelectionSection.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.customer_selection {
+  padding: map-get($spacing, "lg");
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: map-get($spacing, "sm");
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: map-get($colors, "neutral", "black");
+    margin: 0 0 map-get($spacing, "lg") 0;
+  }
+
+  &__field {
+    margin-bottom: map-get($spacing, "lg");
+  }
+
+  &__label {
+    display: block;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: map-get($colors, "neutral", "dark");
+    margin-bottom: map-get($spacing, "xs");
+  }
+
+  &__search_wrapper {
+    position: relative;
+  }
+
+  &__search_icon {
+    position: absolute;
+    left: map-get($spacing, "sm");
+    top: 50%;
+    transform: translateY(-50%);
+    color: map-get($colors, "neutral", "dark");
+    z-index: 1;
+  }
+
+  &__search_input {
+    width: 100%;
+    padding: map-get($spacing, "sm") map-get($spacing, "sm")
+      map-get($spacing, "sm") 40px;
+    border: 1px solid map-get($colors, "neutral", "light");
+    border-radius: map-get($border-radius, "md");
+    font-size: map-get($font-sizes, "md");
+    background-color: map-get($colors, "neutral", "white");
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: map-get($colors, "primary", "base");
+      box-shadow: 0 0 0 3px map-get($colors, "primary", "lighter");
+    }
+  }
+
+  &__select {
+    width: 100%;
+    padding: map-get($spacing, "sm");
+    border: 1px solid map-get($colors, "neutral", "light");
+    border-radius: map-get($border-radius, "md");
+    font-size: map-get($font-sizes, "md");
+    background-color: map-get($colors, "neutral", "white");
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: map-get($colors, "primary", "base");
+      box-shadow: 0 0 0 3px map-get($colors, "primary", "lighter");
+    }
+  }
+
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: map-get($spacing, "sm");
+    padding: map-get($spacing, "lg");
+    text-align: center;
+    color: map-get($colors, "neutral", "dark");
+  }
+
+  &__selected {
+    margin-top: map-get($spacing, "lg");
+    padding: map-get($spacing, "md");
+    background-color: map-get($colors, "neutral", "lightest");
+    border-radius: map-get($border-radius, "md");
+    border: 1px solid map-get($colors, "neutral", "light");
+
+    h4 {
+      margin: 0 0 map-get($spacing, "sm") 0;
+      font-size: map-get($font-sizes, "md");
+      font-weight: map-get($font-weights, "semibold");
+      color: map-get($colors, "neutral", "black");
+    }
+  }
+
+  &__customer_info {
+    display: flex;
+    align-items: center;
+    gap: map-get($spacing, "md");
+  }
+
+  &__customer_details {
+    p {
+      margin: map-get($spacing, "xs") 0;
+      font-size: map-get($font-sizes, "sm");
+      color: map-get($colors, "neutral", "dark");
+    }
+  }
+
+  &__address_section {
+    margin-top: map-get($spacing, "lg");
+    padding-top: map-get($spacing, "lg");
+    border-top: 1px solid map-get($colors, "neutral", "light");
+  }
+
+  &__address_list {
+    display: flex;
+    flex-direction: column;
+    gap: map-get($spacing, "sm");
+  }
+
+  &__address_item {
+    display: flex;
+    align-items: center;
+    gap: map-get($spacing, "sm");
+    padding: map-get($spacing, "sm");
+    border: 1px solid map-get($colors, "neutral", "light");
+    border-radius: map-get($border-radius, "sm");
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: map-get($colors, "primary", "base");
+      background-color: map-get($colors, "primary", "lighter");
+    }
+
+    &--selected {
+      border-color: map-get($colors, "primary", "base");
+      background-color: map-get($colors, "primary", "lighter");
+    }
+  }
+
+  &__address_radio {
+    accent-color: map-get($colors, "primary", "base");
+  }
+
+  &__address_text {
+    flex: 1;
+    font-size: map-get($font-sizes, "sm");
+    color: map-get($colors, "neutral", "dark");
+  }
+
+  &__no_addresses {
+    text-align: center;
+    padding: map-get($spacing, "lg");
+    color: map-get($colors, "neutral", "dark");
+    font-style: italic;
+  }
+}
+
+// Responsive design
+@include respond-to("tablet") {
+  .customer_selection {
+    padding: map-get($spacing, "md");
+
+    &__customer_info {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: map-get($spacing, "sm");
+    }
+  }
+}
+
+@include respond-to("mobile") {
+  .customer_selection {
+    padding: map-get($spacing, "sm");
+
+    &__title {
+      font-size: map-get($font-sizes, "lg");
+    }
+  }
+}

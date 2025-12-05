@@ -1,0 +1,596 @@
+// src/app/(routes)/(app)/dashboard/bookings/_components/BookingDetailModal/BookingDetailModal.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.modal {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    // padding: spacing("lg");
+    padding-bottom: spacing("sm");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+
+  &__headerLeft {
+    display: flex;
+    gap: spacing("sm");
+    flex: 1;
+  }
+
+  &__serviceIcon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("md");
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  &__title {
+    @include font-size("body-1");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xxs") 0;
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+  }
+
+  &__recurringBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    @include font-size("xs");
+    @include font-weight("medium");
+    padding: 2px spacing("xs");
+    background-color: rgba(254, 91, 4, 0.08);
+    color: color("secondary", "base");
+    border-radius: border-radius("sm");
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  &__subtitle {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+    margin: 0;
+  }
+
+  &__closeBtn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    border-radius: border-radius("sm");
+    color: color("neutral", "medium");
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+      color: color("neutral", "dark");
+    }
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: spacing("lg");
+    // padding: spacing("lg");
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: color("neutral", "light");
+      border-radius: 4px;
+    }
+  }
+
+  &__statusBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("sm");
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("md");
+    margin-bottom: spacing("lg");
+  }
+
+  &__status {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xxs");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    padding: spacing("xxs") spacing("sm");
+    border-radius: border-radius("sm");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    &--upcoming {
+      background-color: rgba(242, 153, 74, 0.1);
+      color: #f2994a;
+    }
+
+    &--confirmed {
+      background-color: rgba(5, 150, 105, 0.1);
+      color: #059669;
+    }
+
+    &--pending {
+      background-color: rgba(217, 119, 6, 0.1);
+      color: #d97706;
+    }
+
+    &--inProgress {
+      background-color: rgba(34, 147, 251, 0.1);
+      color: #2293fb;
+    }
+
+    &--completed {
+      background-color: rgba(107, 114, 128, 0.1);
+      color: #6b7280;
+    }
+
+    &--cancelled {
+      background-color: rgba(251, 34, 34, 0.1);
+      color: #fb2222;
+    }
+  }
+
+  &__bookingId {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+  }
+
+  &__sections {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__sectionTitle {
+    @include font-size("xs");
+    @include font-weight("semibold");
+    color: color("neutral", "dark");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__infoItem {
+    display: flex;
+    gap: spacing("sm");
+
+    svg {
+      width: 14px;
+      height: 14px;
+      color: color("neutral", "medium");
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: spacing("xxs");
+    }
+  }
+
+  &__infoLabel {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+  }
+
+  &__infoValue {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    line-height: 1.3;
+  }
+
+  &__providerCard {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("sm");
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("md");
+  }
+
+  &__providerAvatar {
+    width: 36px;
+    height: 36px;
+    border-radius: border-radius("full");
+    background-color: color("primary", "lighter");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("primary", "base");
+    flex-shrink: 0;
+  }
+
+  &__providerInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+  }
+
+  &__providerName {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  &__providerContact {
+    display: flex;
+    align-items: center;
+    gap: spacing("xxs");
+    @include font-size("xs");
+    color: color("neutral", "dark");
+
+    svg {
+      width: 12px;
+      height: 12px;
+      color: color("neutral", "medium");
+    }
+  }
+
+  &__contactBtn {
+    padding: spacing("xs") spacing("sm");
+    background-color: color("neutral", "white");
+    border: 1px solid color("neutral", "light");
+    border-radius: border-radius("md");
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover {
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
+      border-color: color("primary", "base");
+    }
+  }
+
+  &__priceCard {
+    padding: spacing("sm");
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("md");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__priceRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__priceLabel {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+  }
+
+  &__priceValue {
+    @include font-size("body-2");
+    @include font-weight("bold");
+    color: color("primary", "base");
+  }
+
+  &__priceNote {
+    display: flex;
+    align-items: center;
+    gap: spacing("xxs");
+    @include font-size("xs");
+    color: color("neutral", "medium");
+    padding-top: spacing("xs");
+    border-top: 1px solid color("neutral", "lighter");
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  &__paymentStatus {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xxs");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    padding: spacing("xxs") spacing("sm");
+    border-radius: border-radius("sm");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    &--paid {
+      background-color: rgba(5, 150, 105, 0.1);
+      color: #059669;
+    }
+
+    &--paymentPending {
+      background-color: rgba(217, 119, 6, 0.1);
+      color: #d97706;
+    }
+
+    &--failed {
+      background-color: rgba(251, 34, 34, 0.1);
+      color: #fb2222;
+    }
+
+    &--refunded {
+      background-color: rgba(107, 114, 128, 0.1);
+      color: #6b7280;
+    }
+
+    &--partiallyRefunded {
+      background-color: rgba(168, 85, 247, 0.1);
+      color: #8b5cf6;
+    }
+  }
+
+  &__bookingStatus {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xxs");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    padding: spacing("xxs") spacing("sm");
+    border-radius: border-radius("sm");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    &--confirmed {
+      background-color: rgba(5, 150, 105, 0.1);
+      color: #059669;
+    }
+
+    &--pending {
+      background-color: rgba(217, 119, 6, 0.1);
+      color: #d97706;
+    }
+
+    &--inProgress {
+      background-color: rgba(34, 147, 251, 0.1);
+      color: #2293fb;
+    }
+
+    &--completed {
+      background-color: rgba(107, 114, 128, 0.1);
+      color: #6b7280;
+    }
+
+    &--cancelled {
+      background-color: rgba(251, 34, 34, 0.1);
+      color: #fb2222;
+    }
+
+    &--paused {
+      background-color: rgba(242, 153, 74, 0.1);
+      color: #f2994a;
+    }
+  }
+
+  &__notes {
+    display: flex;
+    gap: spacing("sm");
+    padding: spacing("sm");
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("md");
+
+    svg {
+      width: 14px;
+      height: 14px;
+      color: color("neutral", "medium");
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      margin: 0;
+      line-height: 1.4;
+    }
+  }
+
+  &__rating {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+    padding: spacing("sm");
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("md");
+  }
+
+  &__stars {
+    display: flex;
+    gap: 2px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+      color: color("neutral", "lighter");
+      fill: color("neutral", "lighter");
+    }
+  }
+
+  &__star--filled {
+    color: color("accent", "base") !important;
+    fill: color("accent", "base") !important;
+  }
+
+  &__ratingText {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+  }
+
+  &__rateBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+    padding: spacing("sm");
+    background-color: color("neutral", "lightest");
+    border: 1px dashed color("neutral", "light");
+    border-radius: border-radius("md");
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover {
+      background-color: color("accent", "lighter");
+      border-color: color("accent", "base");
+      color: color("accent", "darker");
+    }
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    gap: spacing("sm");
+    // padding: spacing("xl");
+    border-top: 1px solid color("neutral", "lighter");
+    background: linear-gradient(
+      135deg,
+      color("neutral", "white"),
+      color("neutral", "lightest")
+    );
+  }
+
+  &__footerBtn {
+    flex: 1;
+    padding: spacing("md");
+    border: none;
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+    position: relative;
+    overflow: hidden;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    &--primary {
+      background: linear-gradient(
+        135deg,
+        color("primary", "base"),
+        color("primary", "dark")
+      );
+      color: color("neutral", "white");
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    &--secondary {
+      background: linear-gradient(
+        135deg,
+        color("neutral", "white"),
+        color("neutral", "lightest")
+      );
+      color: color("neutral", "darkest");
+      border: 1px solid color("neutral", "light");
+
+      &:hover {
+        background: linear-gradient(
+          135deg,
+          color("neutral", "lightest"),
+          color("neutral", "lighter")
+        );
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    &--danger {
+      background: linear-gradient(
+        135deg,
+        rgba(239, 68, 68, 0.1),
+        rgba(239, 68, 68, 0.2)
+      );
+      color: color("status", "error");
+      border: 1px solid color("status", "error");
+
+      &:hover {
+        background: linear-gradient(135deg, color("status", "error"), #dc2626);
+        color: color("neutral", "white");
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+}

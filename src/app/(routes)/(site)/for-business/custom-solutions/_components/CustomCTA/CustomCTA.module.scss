@@ -1,0 +1,65 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.customCTA {
+  padding: spacing("5xl") 0;
+  background: linear-gradient(
+    135deg,
+    color("primary", "base") 0%,
+    color("primary", "dark") 100%
+  );
+  color: color("neutral", "white");
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: rgba(color("neutral", "white"), 0.1);
+    z-index: z-index("negative");
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -70px;
+    left: -70px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background-color: rgba(color("neutral", "white"), 0.05);
+    z-index: z-index("negative");
+  }
+
+  &__container {
+    @include container;
+    position: relative;
+    z-index: z-index("base");
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+
+    h2 {
+      @include heading-2;
+      color: color("neutral", "white");
+      margin-bottom: spacing("md");
+    }
+
+    p {
+      @include paragraph;
+      color: color("neutral", "white");
+      opacity: 0.9;
+      font-size: map-get($font-sizes, "lg");
+      margin-bottom: spacing("xl");
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}

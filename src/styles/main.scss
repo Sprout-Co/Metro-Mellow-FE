@@ -1,0 +1,859 @@
+// ===================================
+// METRO MELLOW DESIGN SYSTEM
+// Main Styles
+// ===================================
+
+// Import abstracts
+@import "abstracts/variables";
+@import "abstracts/functions";
+@import "abstracts/mixins";
+
+// ===================================
+// RESET & BASE STYLES
+// ===================================
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px; // Base font size for rem calculations
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  @include font-secondary; // Use Montserrat as the default body font
+  @include body-2;
+  background-color: color("neutral", "white");
+  color: color("neutral", "darkest");
+  line-height: line-height("relaxed");
+  overflow-x: hidden;
+  background-color: color("accent", "lighter");
+}
+
+// ===================================
+// TYPOGRAPHY CLASSES
+// ===================================
+
+.heading {
+  &--1 {
+    @include heading-1;
+  }
+
+  &--2 {
+    @include heading-2;
+  }
+
+  &--3 {
+    @include heading-3;
+  }
+
+  &--4 {
+    @include heading-4;
+  }
+
+  &--5 {
+    @include heading-5;
+  }
+
+  &--6 {
+    @include heading-6;
+  }
+}
+
+// Font Family Utility Classes
+.font-heading {
+  font-family: $font-family-heading; // Baloo 2 for headings
+}
+
+.font-body {
+  @include font-secondary; // Montserrat for body text
+}
+
+// Legacy classes for backward compatibility
+.font-primary {
+  font-family: $font-family-primary;
+}
+
+.font-secondary {
+  @include font-secondary;
+}
+
+.title {
+  @include title;
+}
+
+.subtitle {
+  &--1 {
+    @include subtitle-1;
+  }
+
+  &--2 {
+    @include subtitle-2;
+  }
+}
+
+.body {
+  &--1 {
+    @include body-1;
+  }
+
+  &--2 {
+    @include body-2;
+  }
+}
+
+.caption {
+  @include caption;
+}
+
+// ===================================
+// BUTTON CLASSES (BEM)
+// ===================================
+
+.btn {
+  @include button-primary;
+
+  // Button variants
+  &--primary {
+    @include button-primary;
+  }
+
+  &--secondary {
+    @include button-secondary;
+  }
+
+  &--ghost {
+    @include button-ghost;
+  }
+
+  &--white {
+    @include button-white;
+  }
+
+  // Button sizes
+  &--sm {
+    @include button-primary("sm");
+
+    &.btn--secondary {
+      @include button-secondary("sm");
+    }
+
+    &.btn--ghost {
+      @include button-ghost("sm");
+    }
+
+    &.btn--white {
+      @include button-white("sm");
+    }
+  }
+
+  &--lg {
+    @include button-primary("lg");
+
+    &.btn--secondary {
+      @include button-secondary("lg");
+    }
+
+    &.btn--ghost {
+      @include button-ghost("lg");
+    }
+
+    &.btn--white {
+      @include button-white("lg");
+    }
+  }
+
+  &--xl {
+    @include button-primary("xl");
+
+    &.btn--secondary {
+      @include button-secondary("xl");
+    }
+
+    &.btn--ghost {
+      @include button-ghost("xl");
+    }
+
+    &.btn--white {
+      @include button-white("xl");
+    }
+  }
+
+  // Button states
+  &--loading {
+    position: relative;
+    pointer-events: none;
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid transparent;
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: btn-loading 1s linear infinite;
+    }
+  }
+
+  &__icon {
+    &--left {
+      margin-right: spacing("xs");
+    }
+
+    &--right {
+      margin-left: spacing("xs");
+    }
+  }
+}
+
+@keyframes btn-loading {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ===================================
+// FORM CLASSES (BEM)
+// ===================================
+
+.form {
+  &__group {
+    margin-bottom: spacing("lg");
+  }
+
+  &__label {
+    display: block;
+    @include caption;
+    font-weight: font-weight("medium");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xs");
+
+    &--required::after {
+      content: " *";
+      color: color("status", "error");
+    }
+  }
+
+  &__input {
+    @include input;
+
+    &--sm {
+      @include input("sm");
+    }
+
+    &--lg {
+      @include input("lg");
+    }
+
+    &--error {
+      @extend .form__input;
+      border-color: color("status", "error");
+
+      &:focus {
+        border-color: color("status", "error");
+        box-shadow: shadow("focus-error");
+      }
+    }
+
+    &--success {
+      @extend .form__input;
+      border-color: color("status", "success");
+    }
+  }
+
+  &__textarea {
+    @include textarea;
+
+    &--sm {
+      @include textarea("sm");
+    }
+
+    &--lg {
+      @include textarea("lg");
+    }
+  }
+
+  &__select {
+    @include select;
+
+    &--sm {
+      @include select("sm");
+    }
+
+    &--lg {
+      @include select("lg");
+    }
+  }
+
+  &__help-text {
+    @include caption;
+    color: color("neutral", "medium");
+    margin-top: spacing("xs");
+  }
+
+  &__error-text {
+    @include caption;
+    color: color("status", "error");
+    margin-top: spacing("xs");
+  }
+
+  &__success-text {
+    @include caption;
+    color: color("status", "success");
+    margin-top: spacing("xs");
+  }
+}
+
+// ===================================
+// CARD CLASSES (BEM)
+// ===================================
+
+.card {
+  @include card;
+
+  &--elevated {
+    @include card("lg");
+  }
+
+  &--flat {
+    @include card("none");
+    border: border-width("thin") solid color("neutral", "light");
+  }
+
+  &--hover {
+    @include card-hover;
+  }
+
+  &__header {
+    @include card-body;
+    border-bottom: border-width("thin") solid color("neutral", "lighter");
+  }
+
+  &__body {
+    @include card-body;
+  }
+
+  &__footer {
+    @include card-body;
+    border-top: border-width("thin") solid color("neutral", "lighter");
+    background-color: color("neutral", "lightest");
+  }
+
+  &__title {
+    @include subtitle-1;
+    margin-bottom: spacing("xs");
+  }
+
+  &__subtitle {
+    @include caption;
+    color: color("neutral", "medium");
+  }
+}
+
+// ===================================
+// LAYOUT CLASSES (BEM)
+// ===================================
+
+.container {
+  @include container;
+
+  &--sm {
+    @include container(container-width("sm"));
+  }
+
+  &--md {
+    @include container(container-width("md"));
+  }
+
+  &--lg {
+    @include container(container-width("lg"));
+  }
+
+  &--xl {
+    @include container(container-width("xl"));
+  }
+
+  &--2xl {
+    @include container(container-width("2xl"));
+  }
+
+  &--fluid {
+    width: 100%;
+    max-width: none;
+    padding-left: spacing("md");
+    padding-right: spacing("md");
+  }
+}
+
+.section {
+  @include section-spacing;
+
+  &--sm {
+    @include section-spacing("lg");
+  }
+
+  &--lg {
+    @include section-spacing("4xl");
+  }
+}
+
+.grid {
+  @include grid;
+
+  &--2 {
+    @include grid-cols(2);
+  }
+
+  &--3 {
+    @include grid-cols(3);
+  }
+
+  &--4 {
+    @include grid-cols(4);
+  }
+
+  &--responsive {
+    @include grid-responsive;
+  }
+
+  &--gap-sm {
+    gap: spacing("sm");
+  }
+
+  &--gap-lg {
+    gap: spacing("lg");
+  }
+
+  &--gap-xl {
+    gap: spacing("xl");
+  }
+}
+
+.flex {
+  @include flex;
+
+  &--center {
+    @include flex-center;
+  }
+
+  &--between {
+    @include flex-between;
+  }
+
+  &--around {
+    @include flex-around;
+  }
+
+  &--column {
+    @include flex-column;
+  }
+
+  &--column-center {
+    @include flex-column-center;
+  }
+
+  &--wrap {
+    flex-wrap: wrap;
+  }
+
+  &--nowrap {
+    flex-wrap: nowrap;
+  }
+}
+
+// ===================================
+// UTILITY CLASSES
+// ===================================
+
+// Display utilities
+.d-none {
+  display: none !important;
+}
+
+.d-block {
+  display: block !important;
+}
+
+.d-inline {
+  display: inline !important;
+}
+
+.d-inline-block {
+  display: inline-block !important;
+}
+
+.d-flex {
+  display: flex !important;
+}
+
+.d-grid {
+  display: grid !important;
+}
+
+// Responsive display utilities
+@each $breakpoint in map-keys($breakpoints) {
+  @include breakpoint-up($breakpoint) {
+    .d-#{$breakpoint}-none {
+      display: none !important;
+    }
+
+    .d-#{$breakpoint}-block {
+      display: block !important;
+    }
+
+    .d-#{$breakpoint}-flex {
+      display: flex !important;
+    }
+
+    .d-#{$breakpoint}-grid {
+      display: grid !important;
+    }
+  }
+}
+
+// Text utilities
+.text {
+  &--left {
+    text-align: left !important;
+  }
+
+  &--center {
+    text-align: center !important;
+  }
+
+  &--right {
+    text-align: right !important;
+  }
+
+  &--uppercase {
+    text-transform: uppercase !important;
+  }
+
+  &--lowercase {
+    text-transform: lowercase !important;
+  }
+
+  &--capitalize {
+    text-transform: capitalize !important;
+  }
+
+  &--truncate {
+    @include truncate;
+  }
+
+  &--break {
+    word-break: break-word !important;
+  }
+}
+
+// Color utilities
+@each $color-name, $color-map in $colors {
+  @if type-of($color-map) == "map" {
+    @each $shade, $value in $color-map {
+      .text--#{$color-name}-#{$shade} {
+        color: $value !important;
+      }
+
+      .bg--#{$color-name}-#{$shade} {
+        background-color: $value !important;
+      }
+
+      .border--#{$color-name}-#{$shade} {
+        border-color: $value !important;
+      }
+    }
+  } @else {
+    .text--#{$color-name} {
+      color: $color-map !important;
+    }
+
+    .bg--#{$color-name} {
+      background-color: $color-map !important;
+    }
+
+    .border--#{$color-name} {
+      border-color: $color-map !important;
+    }
+  }
+}
+
+// Spacing utilities
+@each $prop, $abbrev in (margin: m, padding: p) {
+  @each $size, $length in $spacing {
+    .#{$abbrev}-#{$size} {
+      #{$prop}: $length !important;
+    }
+
+    .#{$abbrev}t-#{$size} {
+      #{$prop}-top: $length !important;
+    }
+
+    .#{$abbrev}r-#{$size} {
+      #{$prop}-right: $length !important;
+    }
+
+    .#{$abbrev}b-#{$size} {
+      #{$prop}-bottom: $length !important;
+    }
+
+    .#{$abbrev}l-#{$size} {
+      #{$prop}-left: $length !important;
+    }
+
+    .#{$abbrev}x-#{$size} {
+      #{$prop}-left: $length !important;
+      #{$prop}-right: $length !important;
+    }
+
+    .#{$abbrev}y-#{$size} {
+      #{$prop}-top: $length !important;
+      #{$prop}-bottom: $length !important;
+    }
+  }
+}
+
+// Width utilities
+.w-auto {
+  width: auto !important;
+}
+
+.w-full {
+  width: 100% !important;
+}
+
+.w-screen {
+  width: 100vw !important;
+}
+
+@for $i from 1 through 12 {
+  .w-#{$i}\/12 {
+    width: percentage($i / 12) !important;
+  }
+}
+
+// Height utilities
+.h-auto {
+  height: auto !important;
+}
+
+.h-full {
+  height: 100% !important;
+}
+
+.h-screen {
+  height: 100vh !important;
+}
+
+// Position utilities
+.position {
+  &--static {
+    position: static !important;
+  }
+
+  &--relative {
+    position: relative !important;
+  }
+
+  &--absolute {
+    position: absolute !important;
+  }
+
+  &--fixed {
+    position: fixed !important;
+  }
+
+  &--sticky {
+    position: sticky !important;
+  }
+}
+
+// Z-index utilities
+@each $name, $value in $z-index {
+  .z-#{$name} {
+    z-index: $value !important;
+  }
+}
+
+// Border radius utilities
+@each $name, $value in $border-radius {
+  .rounded {
+    &--#{$name} {
+      border-radius: $value !important;
+    }
+  }
+}
+
+// Shadow utilities
+@each $name, $value in $shadows {
+  .shadow--#{$name} {
+    box-shadow: $value !important;
+  }
+}
+
+// Visibility utilities
+.visible {
+  visibility: visible !important;
+}
+
+.invisible {
+  visibility: hidden !important;
+}
+
+.sr-only {
+  @include visually-hidden;
+}
+
+// Overflow utilities
+.overflow {
+  &--auto {
+    overflow: auto !important;
+  }
+
+  &--hidden {
+    overflow: hidden !important;
+  }
+
+  &--visible {
+    overflow: visible !important;
+  }
+
+  &--scroll {
+    overflow: scroll !important;
+  }
+}
+
+// ===================================
+// ANIMATION CLASSES
+// ===================================
+
+.animate {
+  &--fade-in {
+    @include fade-in;
+  }
+
+  &--slide-up {
+    @include slide-up;
+  }
+
+  &--scale-in {
+    @include scale-in;
+  }
+}
+
+// ===================================
+// RESPONSIVE UTILITIES
+// ===================================
+
+@each $breakpoint in map-keys($breakpoints) {
+  @include breakpoint-up($breakpoint) {
+    .bp-#{$breakpoint}-text--left {
+      text-align: left !important;
+    }
+
+    .bp-#{$breakpoint}-text--center {
+      text-align: center !important;
+    }
+
+    .bp-#{$breakpoint}-text--right {
+      text-align: right !important;
+    }
+
+    .bp-#{$breakpoint}-flex--column {
+      flex-direction: column !important;
+    }
+
+    .bp-#{$breakpoint}-flex--row {
+      flex-direction: row !important;
+    }
+  }
+}
+
+// ===================================
+// PRINT STYLES
+// ===================================
+
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  abbr[title]::after {
+    content: " (" attr(title) ")";
+  }
+
+  pre {
+    white-space: pre-wrap !important;
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}
+
+// ===================================
+// REDUCED MOTION SUPPORT
+// ===================================
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate,
+  .stagger,
+  .hover,
+  .loading,
+  .scroll-animate {
+    animation: none !important;
+    transition: none !important;
+  }
+}

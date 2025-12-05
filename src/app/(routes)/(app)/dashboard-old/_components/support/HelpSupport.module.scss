@@ -1,0 +1,339 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.support {
+  &__header {
+    margin-bottom: spacing("xl");
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "3xl");
+    font-weight: map-get($font-weights, "bold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+
+    @include breakpoint-down("md") {
+      font-size: map-get($font-sizes, "2xl");
+    }
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "lg");
+    color: color("neutral", "dark");
+
+    @include breakpoint-down("md") {
+      font-size: map-get($font-sizes, "base");
+    }
+  }
+
+  &__section {
+    background-color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    box-shadow: map-get($shadows, "sm");
+    padding: spacing("xl");
+    margin-bottom: spacing("xl");
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__sectionTitle {
+    display: flex;
+    align-items: center;
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("lg");
+
+    svg {
+      margin-right: spacing("sm");
+      color: color("primary", "base");
+    }
+  }
+
+  &__categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing("xs");
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  &__categoryBtn {
+    padding: spacing("xs") spacing("md");
+    background: none;
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    color: color("neutral", "darker");
+    font-size: map-get($font-sizes, "sm");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+    }
+
+    &--active {
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
+      border-color: color("primary", "base");
+
+      &:hover {
+        background-color: color("primary", "dark");
+      }
+    }
+  }
+
+  &__faqList {
+  }
+
+  &__faqItem {
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__faqQuestion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: spacing("md") 0;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "black");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      color: color("primary", "base");
+    }
+
+    svg {
+      flex-shrink: 0;
+      color: color("neutral", "dark");
+      transition: $transition-base;
+    }
+  }
+
+  &__faqAnswer {
+    padding: 0 0 spacing("md") 0;
+    overflow: hidden;
+
+    p {
+      font-size: map-get($font-sizes, "base");
+      color: color("neutral", "darker");
+      line-height: map-get($line-heights, "relaxed");
+    }
+  }
+
+  &__columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("xl");
+
+    @include breakpoint-down("lg") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__contactOptions {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__contactOption {
+    display: flex;
+    align-items: center;
+    padding: spacing("md");
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("md");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+    }
+  }
+
+  &__contactIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("full");
+    background-color: rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+    color: color("primary", "base");
+    margin-right: spacing("md");
+    flex-shrink: 0;
+
+    @include breakpoint-down("sm") {
+      margin-right: 0;
+    }
+  }
+
+  &__contactInfo {
+    flex: 1;
+
+    @include breakpoint-down("sm") {
+      width: 100%;
+    }
+  }
+
+  &__contactTitle {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__contactDescription {
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("xs");
+  }
+
+  &__contactAvailability {
+    display: flex;
+    align-items: center;
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+
+    svg {
+      margin-right: spacing("xxs");
+      font-size: map-get($font-sizes, "sm");
+    }
+  }
+
+  &__contactBtn {
+    padding: spacing("xs") spacing("md");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("md");
+    font-weight: map-get($font-weights, "medium");
+    cursor: pointer;
+    transition: $transition-base;
+    margin-left: spacing("md");
+
+    &:hover {
+      background-color: color("primary", "dark");
+    }
+
+    @include breakpoint-down("sm") {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+
+  &__form {
+  }
+
+  &__formGroup {
+    margin-bottom: spacing("md");
+  }
+
+  &__formLabel {
+    display: block;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("xs");
+  }
+
+  &__formInput,
+  &__formSelect,
+  &__formTextarea {
+    width: 100%;
+    padding: spacing("sm") spacing("md");
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "base");
+    color: color("neutral", "black");
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 2px
+        rgba(map-get(map-get($colors, "primary"), "base"), 0.1);
+    }
+  }
+
+  &__formTextarea {
+    resize: vertical;
+  }
+
+  &__formAttachment {
+    display: flex;
+    align-items: center;
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("xs");
+    }
+  }
+
+  &__attachBtn {
+    display: flex;
+    align-items: center;
+    padding: spacing("xs") spacing("md");
+    background: none;
+    border: 1px solid color("neutral", "medium");
+    border-radius: border-radius("md");
+    color: color("neutral", "darker");
+    font-size: map-get($font-sizes, "sm");
+    cursor: pointer;
+    transition: $transition-base;
+    margin-right: spacing("md");
+
+    svg {
+      margin-right: spacing("xs");
+    }
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+    }
+
+    @include breakpoint-down("sm") {
+      margin-right: 0;
+    }
+  }
+
+  &__attachNote {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+  }
+
+  &__submitBtn {
+    padding: spacing("md") spacing("lg");
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("md");
+    font-weight: map-get($font-weights, "medium");
+    font-size: map-get($font-sizes, "base");
+    cursor: pointer;
+    transition: $transition-base;
+    width: 100%;
+
+    &:hover {
+      background-color: color("primary", "dark");
+    }
+  }
+}

@@ -1,0 +1,42 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(color("neutral", "white"), 0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: z-index("overlay");
+}
+
+.spinner {
+  width: 3rem;
+  height: 3rem;
+  border: 3px solid color("neutral", "lighter");
+  border-top-color: color("primary", "base");
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.message {
+  margin-top: spacing("md");
+  color: color("neutral", "dark");
+  font-family: font-family("base");
+  font-size: font-size("body-2");
+  font-weight: font-weight("medium");
+  text-align: center;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

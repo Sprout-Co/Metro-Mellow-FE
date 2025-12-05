@@ -1,0 +1,99 @@
+mutation CreateService($input: CreateServiceInput!) {
+  createService(input: $input) {
+    _id
+    service_id
+    name
+    label
+    description
+    category
+    icon
+    price
+    displayPrice
+    status
+    imageUrl
+    features
+    inclusions
+    options {
+      id
+      service_id
+      label
+      description
+      price
+      inclusions
+      extraItems {
+        name
+        items
+        cost
+      }
+    }
+  }
+}
+
+mutation UpdateService($updateServiceId: ID!, $input: UpdateServiceInput!) {
+  updateService(id: $updateServiceId, input: $input) {
+    _id
+    service_id
+    name
+    label
+    description
+    category
+    icon
+    price
+    displayPrice
+    status
+    imageUrl
+    features
+    inclusions
+    options {
+      id
+      service_id
+      label
+      description
+      price
+      inclusions
+      extraItems {
+        name
+        items
+        cost
+      }
+    }
+  }
+}
+
+mutation DeleteService($id: ID!) {
+  deleteService(id: $id)
+}
+
+mutation UpdateServiceStatus(
+  $updateServiceStatusId: ID!
+  $status: ServiceStatus!
+) {
+  updateServiceStatus(id: $updateServiceStatusId, status: $status) {
+    _id
+    service_id
+    name
+    label
+    description
+    category
+    icon
+    price
+    displayPrice
+    status
+    imageUrl
+    features
+    inclusions
+    options {
+      id
+      service_id
+      label
+      description
+      price
+      inclusions
+      extraItems {
+        name
+        items
+        cost
+      }
+    }
+  }
+}

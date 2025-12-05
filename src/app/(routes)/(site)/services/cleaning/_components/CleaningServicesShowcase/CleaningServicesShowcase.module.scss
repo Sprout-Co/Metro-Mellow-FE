@@ -1,0 +1,172 @@
+// src/app/(routes)/(site)/services/cleaning/_components/CleaningServicesShowcase/CleaningServicesShowcase.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.showcase {
+  width: 100%;
+  padding: spacing("5xl") 0;
+  position: relative;
+  overflow: hidden;
+  @include section-border;
+
+  @include breakpoint-down("md") {
+    padding: spacing("4xl") 0;
+  }
+
+  @include breakpoint-down("sm") {
+    padding: spacing("3xl") 0;
+  }
+
+  &__container {
+    @include container;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+  }
+
+  &__loader {
+    width: 50px;
+    height: 50px;
+    border: 3px solid color("neutral", "lighter");
+    border-top-color: color("primary", "base");
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  &__header {
+    text-align: center;
+    max-width: 700px;
+    margin-bottom: spacing("3xl");
+
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("2xl");
+    }
+  }
+
+  &__label {
+    display: inline-block;
+    background: color("primary", "lighter");
+    color: color("primary", "base");
+    padding: spacing("xs") spacing("md");
+    border-radius: border-radius("pill");
+    font-size: font-size("small");
+    font-weight: map-get($font-weights, "semibold");
+    margin-bottom: spacing("md");
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  &__title {
+    @include heading-1;
+    // font-size: 3.5rem;
+    margin-bottom: spacing("md");
+    color: color("neutral", "black");
+
+    @include breakpoint-down("lg") {
+      font-size: 3rem;
+    }
+
+    @include breakpoint-down("md") {
+      font-size: 2.5rem;
+    }
+
+    @include breakpoint-down("sm") {
+      font-size: 2rem;
+    }
+  }
+
+  &__titleAccent {
+    color: color("primary", "base");
+    position: relative;
+  }
+
+  &__subtitle {
+    @include paragraph;
+    font-size: font-size("body-1");
+    color: color("neutral", "dark");
+    line-height: 1.6;
+
+    @include breakpoint-down("md") {
+      font-size: font-size("body-2");
+    }
+  }
+
+  &__badges {
+    display: flex;
+    justify-content: center;
+    gap: spacing("xl");
+    margin-bottom: spacing("3xl");
+    flex-wrap: wrap;
+
+    @include breakpoint-down("md") {
+      gap: spacing("lg");
+      margin-bottom: spacing("2xl");
+    }
+
+    @include breakpoint-down("sm") {
+      gap: spacing("md");
+    }
+  }
+
+  &__badge {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    padding: spacing("sm") spacing("lg");
+    background: color("accent", "lighter");
+    border-radius: border-radius("pill");
+    font-size: font-size("small");
+    color: color("neutral", "darkest");
+    font-weight: map-get($font-weights, "medium");
+
+    @include breakpoint-down("sm") {
+      padding: spacing("xs") spacing("md");
+      font-size: font-size("xs");
+    }
+  }
+
+  &__badgeIcon {
+    width: 18px;
+    height: 18px;
+    color: color("primary", "base");
+
+    @include breakpoint-down("sm") {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: spacing("xl");
+    width: 100%;
+    margin-bottom: spacing("3xl");
+
+    @include breakpoint-down("lg") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+      gap: spacing("lg");
+    }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

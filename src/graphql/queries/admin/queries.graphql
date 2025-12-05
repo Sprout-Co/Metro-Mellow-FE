@@ -1,0 +1,59 @@
+query PendingAdminInvitations {
+  pendingAdminInvitations {
+    id
+    email
+    firstName
+    lastName
+    role
+    invitedBy {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+      createdAt
+      updatedAt
+    }
+    invitedByName
+    invitationToken
+    expiresAt
+    isUsed
+    usedAt
+    createdAt
+    permissions
+  }
+}
+
+query AdminInvitation($token: String!) {
+  adminInvitation(token: $token) {
+    id
+    email
+    firstName
+    lastName
+    role
+    invitedBy {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+      emailVerified
+      emailVerifiedAt
+      accountStatus
+      createdAt
+      updatedAt
+    }
+    invitedByName
+    invitationToken
+    expiresAt
+    isUsed
+    usedAt
+    createdAt
+    permissions
+  }
+}

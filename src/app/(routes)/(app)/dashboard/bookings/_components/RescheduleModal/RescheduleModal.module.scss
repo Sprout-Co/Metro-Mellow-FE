@@ -1,0 +1,591 @@
+// src/app/(routes)/(app)/dashboard/bookings/_components/RescheduleModal/RescheduleModal.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: spacing("lg");
+    border-bottom: 1px solid color("neutral", "lighter");
+    background: linear-gradient(
+      135deg,
+      color("neutral", "white"),
+      color("neutral", "lightest")
+    );
+  }
+
+  &__headerContent {
+    flex: 1;
+  }
+
+  &__title {
+    @include font-size("lg");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xs") 0;
+  }
+
+  &__subtitle {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
+
+  &__closeBtn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    border-radius: border-radius("md");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+      color: color("neutral", "darkest");
+    }
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: spacing("lg");
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: color("neutral", "light");
+      border-radius: 3px;
+    }
+  }
+
+  &__currentBooking {
+    margin-bottom: spacing("xl");
+  }
+
+  &__sectionTitle {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "dark");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: spacing("md");
+  }
+
+  &__bookingCard {
+    display: flex;
+    gap: spacing("md");
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+  }
+
+  &__bookingIcon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color("neutral", "white");
+    border-radius: border-radius("md");
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  &__bookingInfo {
+    flex: 1;
+
+    h4 {
+      @include font-size("body-2");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xs") 0;
+    }
+  }
+
+  &__bookingDetails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing("md");
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: spacing("xs");
+      @include font-size("sm");
+      color: color("neutral", "dark");
+
+      svg {
+        width: 14px;
+        height: 14px;
+        color: color("neutral", "medium");
+      }
+    }
+  }
+
+  &__section {
+    margin-bottom: spacing("xl");
+  }
+
+  // Calendar Styles
+  &__calendarHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: spacing("md");
+    padding: spacing("sm") spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+  }
+
+  &__calendarNavBtn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "light");
+    border-radius: border-radius("md");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("primary", "lighter");
+      border-color: color("primary", "base");
+      color: color("primary", "base");
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__calendarTitle {
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    text-align: center;
+    flex: 1;
+  }
+
+  &__todayContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: spacing("md");
+  }
+
+  &__todayBtn {
+    padding: spacing("xs") spacing("md");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("medium");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("primary", "dark");
+      transform: translateY(-1px);
+    }
+  }
+
+  &__calendar {
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    overflow: hidden;
+  }
+
+  &__weekDays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: color("neutral", "lightest");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+
+  &__weekDay {
+    padding: spacing("sm");
+    text-align: center;
+    @include font-size("xs");
+    @include font-weight("semibold");
+    color: color("neutral", "dark");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__calendarDays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  &__calendarDay {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color("neutral", "white");
+    border: none;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:hover:not(&--disabled) {
+      background: color("primary", "lighter");
+      color: color("primary", "base");
+    }
+
+    &--selected {
+      background: color("primary", "base");
+      color: color("neutral", "white");
+      font-weight: map-get($font-weights, "semibold");
+
+      &:hover {
+        background: color("primary", "dark");
+      }
+    }
+
+    &--disabled {
+      background: color("neutral", "lighter");
+      color: color("neutral", "medium");
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    &--weekend {
+      color: color("accent", "base");
+    }
+
+    &--today {
+      background: color("secondary", "lighter");
+      color: color("secondary", "base");
+      font-weight: map-get($font-weights, "semibold");
+      border: 2px solid color("secondary", "base");
+
+      &:hover:not(&--disabled) {
+        background: color("secondary", "base");
+        color: color("neutral", "white");
+      }
+    }
+  }
+
+  &__calendarDayEmpty {
+    aspect-ratio: 1;
+    background: color("neutral", "lightest");
+  }
+
+  // Legacy date grid styles (keeping for backward compatibility)
+  &__dateGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: spacing("sm");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  &__dateCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: spacing("sm");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:hover {
+      border-color: color("primary", "base");
+      background: color("primary", "lighter");
+    }
+
+    &--selected {
+      background: color("primary", "base");
+      border-color: color("primary", "base");
+      color: color("neutral", "white");
+
+      .modal__dateDay,
+      .modal__dateNumber {
+        color: color("neutral", "white");
+      }
+    }
+
+    &--weekend {
+      background: color("neutral", "lightest");
+    }
+  }
+
+  &__dateDay {
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "medium");
+    text-transform: uppercase;
+    margin-bottom: spacing("xxs");
+  }
+
+  &__dateNumber {
+    @include font-size("lg");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  &__weekendBadge {
+    position: absolute;
+    top: spacing("xxs");
+    right: spacing("xxs");
+    @include font-size("xs");
+    padding: 1px spacing("xxs");
+    background: color("accent", "base");
+    color: color("neutral", "darkest");
+    border-radius: border-radius("sm");
+  }
+
+  &__timeGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: spacing("sm");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__timeSlot {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("md") spacing("sm");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(&--unavailable) {
+      border-color: color("primary", "base");
+      background: color("primary", "lighter");
+    }
+
+    &--selected {
+      background: color("primary", "base");
+      border-color: color("primary", "base");
+      color: color("neutral", "white");
+    }
+
+    &--unavailable {
+      background: color("neutral", "lighter");
+      color: color("neutral", "medium");
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+
+  &__popularBadge {
+    position: absolute;
+    top: spacing("xxs");
+    right: spacing("xxs");
+    @include font-size("xs");
+    padding: 1px spacing("xs");
+    background: color("secondary", "base");
+    color: color("neutral", "white");
+    border-radius: border-radius("sm");
+  }
+
+  &__unavailableBadge {
+    position: absolute;
+    bottom: spacing("xxs");
+    @include font-size("xs");
+    color: color("neutral", "medium");
+  }
+
+  &__notes {
+    display: flex;
+    gap: spacing("sm");
+    padding: spacing("md");
+    background: rgba(254, 91, 4, 0.05);
+    border: 1px solid rgba(254, 91, 4, 0.2);
+    border-radius: border-radius("md");
+    margin-bottom: spacing("lg");
+
+    svg {
+      flex-shrink: 0;
+      color: color("secondary", "base");
+      margin-top: 2px;
+    }
+
+    div {
+      flex: 1;
+
+      strong {
+        @include font-size("sm");
+        @include font-weight("semibold");
+        color: color("neutral", "darkest");
+        display: block;
+        margin-bottom: spacing("xs");
+      }
+
+      ul {
+        margin: 0;
+        padding-left: spacing("lg");
+
+        li {
+          @include font-size("sm");
+          color: color("neutral", "dark");
+          margin-bottom: spacing("xs");
+        }
+      }
+    }
+  }
+
+  &__success {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("lg");
+    background: linear-gradient(
+      135deg,
+      rgba(5, 150, 105, 0.1),
+      rgba(5, 150, 105, 0.05)
+    );
+    border: 1px solid color("status", "success");
+    border-radius: border-radius("lg");
+
+    svg {
+      color: color("status", "success");
+      flex-shrink: 0;
+    }
+
+    h4 {
+      @include font-size("body-2");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xxs") 0;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      margin: 0;
+    }
+  }
+
+  &__error {
+    display: flex;
+    gap: spacing("sm");
+    padding: spacing("md");
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: border-radius("md");
+    margin-bottom: spacing("lg");
+
+    svg {
+      flex-shrink: 0;
+      color: #ef4444;
+      margin-top: 2px;
+    }
+
+    div {
+      flex: 1;
+
+      strong {
+        @include font-size("sm");
+        @include font-weight("semibold");
+        color: color("neutral", "darkest");
+        display: block;
+        margin-bottom: spacing("xs");
+      }
+
+      p {
+        @include font-size("sm");
+        color: color("neutral", "dark");
+        margin: 0;
+      }
+    }
+  }
+
+  &__footer {
+    display: flex;
+    gap: spacing("md");
+    padding: spacing("lg");
+    border-top: 1px solid color("neutral", "lighter");
+    background: color("neutral", "lightest");
+  }
+
+  &__footerBtn {
+    flex: 1;
+    padding: spacing("md");
+    border: none;
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &--primary {
+      background: linear-gradient(
+        135deg,
+        color("primary", "base"),
+        color("primary", "dark")
+      );
+      color: color("neutral", "white");
+
+      &:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    &--secondary {
+      background: color("neutral", "white");
+      color: color("neutral", "darkest");
+      border: 1px solid color("neutral", "light");
+
+      &:hover:not(:disabled) {
+        background: color("neutral", "lighter");
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+}

@@ -1,0 +1,106 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.service_performance {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("lg");
+  }
+
+  &__title {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin: 0;
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+  }
+
+  &__button {
+    background-color: color("neutral", "lighter");
+    border: none;
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("md");
+    font-size: map-get($font-sizes, "sm");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    .icon {
+      margin-left: spacing("xs");
+      font-size: map-get($font-sizes, "xs");
+    }
+
+    &:hover {
+      background-color: darken(color("neutral", "lighter"), 5%);
+    }
+  }
+
+  &__chart {
+    height: 300px;
+    margin-bottom: spacing("lg");
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: spacing("md");
+    padding-top: spacing("md");
+    border-top: 1px solid color("neutral", "lighter");
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__stat_indicator {
+    width: 15px;
+    height: 15px;
+    border-radius: border-radius("xs");
+    margin-bottom: spacing("xs");
+
+    &--primary {
+      background-color: color("primary", "base");
+    }
+
+    &--secondary {
+      background-color: color("secondary", "base");
+    }
+
+    &--success {
+      background-color: color("status", "success");
+    }
+
+    &--info {
+      background-color: color("status", "info");
+    }
+
+    &--warning {
+      background-color: color("status", "warning");
+    }
+
+    &--error {
+      background-color: color("status", "error");
+    }
+  }
+
+  &__stat_name {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__stat_value {
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+  }
+}

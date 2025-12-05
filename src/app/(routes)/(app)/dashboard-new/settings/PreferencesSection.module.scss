@@ -1,0 +1,99 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.preferencesSection {
+  background-color: color("neutral", "white");
+  border-radius: border-radius("lg");
+  box-shadow: map-get($shadows, "sm");
+  overflow: hidden;
+  margin-top: spacing("lg");
+
+  &__section {
+    padding: spacing("xl");
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  &__title {
+    @include heading-5;
+    color: color("neutral", "black");
+    margin-bottom: spacing("lg");
+  }
+
+  &__options {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    cursor: pointer;
+    padding: spacing("sm") 0;
+    transition: $transition-base;
+
+    &:hover {
+      .preferencesSection__checkboxText {
+        color: color("primary", "base");
+      }
+    }
+  }
+
+  &__checkbox {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid color("neutral", "medium");
+    border-radius: border-radius("sm");
+    background-color: color("neutral", "white");
+    cursor: pointer;
+    position: relative;
+    transition: $transition-base;
+    flex-shrink: 0;
+
+    &:checked {
+      background-color: color("primary", "base");
+      border-color: color("primary", "base");
+
+      &::after {
+        content: "✓";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: color("neutral", "white");
+        font-size: map-get($font-sizes, "xs");
+        font-weight: map-get($font-weights, "bold");
+      }
+    }
+
+    &:hover {
+      border-color: color("primary", "light");
+    }
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: map-get($shadows, "focus");
+    }
+  }
+
+  &__checkboxText {
+    @include body-2;
+    color: color("neutral", "darkest");
+    font-weight: map-get($font-weights, "medium");
+    transition: $transition-base;
+  }
+
+  &__actions {
+    margin-top: spacing("2xl");
+    padding: spacing("xl");
+    border-top: 1px solid color("neutral", "lighter");
+  }
+}

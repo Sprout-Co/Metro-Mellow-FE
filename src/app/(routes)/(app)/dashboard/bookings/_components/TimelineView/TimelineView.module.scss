@@ -1,0 +1,420 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.timelineView {
+  padding: spacing("lg");
+
+  @include breakpoint-down("md") {
+    padding: spacing("md");
+  }
+
+  &__group {
+    margin-bottom: spacing("lg");
+  }
+
+  &__groupHeader {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("md") spacing("lg");
+    background: color("neutral", "lightest");
+    border: none;
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    @include breakpoint-down("sm") {
+      padding: spacing("sm") spacing("md");
+    }
+
+    &:hover {
+      background: rgba(7, 80, 86, 0.02);
+    }
+  }
+
+  &__groupTitle {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+
+    @include breakpoint-down("sm") {
+      gap: spacing("sm");
+    }
+
+    h3 {
+      @include font-size("body-1");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0;
+
+      @include breakpoint-down("sm") {
+        @include font-size("sm");
+      }
+    }
+  }
+
+  &__groupCount {
+    @include font-size("sm");
+    @include font-weight("medium");
+    padding: 2px spacing("sm");
+    background: color("neutral", "white");
+    color: color("neutral", "dark");
+    border-radius: border-radius("pill");
+
+    @include breakpoint-down("sm") {
+      @include font-size("xs");
+      padding: 1px spacing("xs");
+    }
+  }
+
+  &__timeline {
+    padding: spacing("lg") 0;
+    overflow: hidden;
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md") 0;
+    }
+  }
+
+  &__item {
+    display: grid;
+    grid-template-columns: 80px 40px 1fr;
+    gap: spacing("lg");
+    position: relative;
+    padding-bottom: spacing("lg");
+    cursor: pointer;
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 60px 30px 1fr;
+      gap: spacing("md");
+    }
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 40px 20px 1fr;
+      gap: spacing("sm");
+      padding-bottom: spacing("md");
+    }
+
+    &:last-child {
+      padding-bottom: 0;
+
+      .timelineView__line {
+        display: none;
+      }
+    }
+  }
+
+  &__date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: spacing("sm");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    text-align: center;
+
+    @include breakpoint-down("sm") {
+      padding: spacing("xs");
+    }
+  }
+
+  &__dateDay {
+    @include font-size("lg");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    line-height: 1;
+
+    @include breakpoint-down("sm") {
+      @include font-size("md");
+    }
+  }
+
+  &__dateMonth {
+    @include font-size("xs");
+    @include font-weight("medium");
+    color: color("neutral", "medium");
+    text-transform: uppercase;
+    margin-top: 2px;
+
+    @include breakpoint-down("sm") {
+      @include font-size("xxs");
+    }
+  }
+
+  &__indicator {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &--upcoming {
+      color: #f2994a;
+    }
+
+    &--confirmed {
+      color: #059669;
+    }
+
+    &--pending {
+      color: #d97706;
+    }
+
+    &--inProgress {
+      color: #2293fb;
+    }
+
+    &--completed {
+      color: #059669;
+    }
+
+    &--cancelled {
+      color: #fb2222;
+    }
+  }
+
+  &__statusIcon {
+    width: 24px;
+    height: 24px;
+    background: color("neutral", "white");
+    border: 2px solid currentColor;
+    border-radius: border-radius("full");
+    z-index: 1;
+
+    @include breakpoint-down("sm") {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &__line {
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: calc(100% + #{spacing("lg")});
+    background: color("neutral", "lighter");
+
+    @include breakpoint-down("sm") {
+      top: 24px;
+      width: 1px;
+    }
+  }
+
+  &__card {
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    padding: spacing("md");
+    transition: all 0.2s ease;
+
+    @include breakpoint-down("sm") {
+      padding: spacing("sm");
+    }
+
+    &:hover {
+      border-color: color("primary", "lighter");
+    }
+  }
+
+  &__cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: spacing("md");
+
+    @include breakpoint-down("sm") {
+      margin-bottom: spacing("sm");
+    }
+  }
+
+  &__serviceInfo {
+    display: flex;
+    gap: spacing("sm");
+    align-items: center;
+
+    @include breakpoint-down("sm") {
+      gap: spacing("xs");
+    }
+  }
+
+  &__serviceIcon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color("neutral", "lightest");
+    border-radius: border-radius("md");
+    font-size: 16px;
+
+    @include breakpoint-down("sm") {
+      width: 28px;
+      height: 28px;
+      font-size: 14px;
+    }
+  }
+
+  &__serviceName {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 2px 0;
+
+    @include breakpoint-down("sm") {
+      @include font-size("xs");
+    }
+  }
+
+  &__service_category {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+    margin: 0;
+
+    @include breakpoint-down("sm") {
+      @include font-size("xxs");
+    }
+  }
+
+  &__status {
+    @include font-size("xs");
+    @include font-weight("medium");
+    padding: 2px spacing("xs");
+    border-radius: border-radius("sm");
+    text-transform: uppercase;
+
+    @include breakpoint-down("sm") {
+      @include font-size("xxs");
+      padding: 1px spacing("xxs");
+    }
+
+    &--upcoming {
+      background: rgba(242, 153, 74, 0.1);
+      color: #f2994a;
+    }
+
+    &--confirmed {
+      background: rgba(5, 150, 105, 0.1);
+      color: #059669;
+    }
+
+    &--pending {
+      background: rgba(217, 119, 6, 0.1);
+      color: #d97706;
+    }
+
+    &--inProgress {
+      background: rgba(34, 147, 251, 0.1);
+      color: #2293fb;
+    }
+
+    &--completed {
+      background: rgba(5, 150, 105, 0.1);
+      color: #059669;
+    }
+
+    &--cancelled {
+      background: rgba(251, 34, 34, 0.1);
+      color: #fb2222;
+    }
+  }
+
+  &__cardDetails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing("md");
+    margin-bottom: spacing("md");
+    padding-bottom: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      gap: spacing("sm");
+      margin-bottom: spacing("sm");
+      padding-bottom: spacing("sm");
+    }
+  }
+
+  &__detail {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    @include font-size("xs");
+    color: color("neutral", "dark");
+
+    @include breakpoint-down("sm") {
+      @include font-size("xxs");
+    }
+
+    svg {
+      color: color("neutral", "medium");
+      flex-shrink: 0;
+
+      @include breakpoint-down("sm") {
+        width: 12px;
+        height: 12px;
+      }
+    }
+  }
+
+  &__cardFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__price {
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    color: color("primary", "base");
+
+    @include breakpoint-down("sm") {
+      @include font-size("sm");
+    }
+  }
+
+  &__moreBtn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("md");
+    color: color("neutral", "medium");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    @include breakpoint-down("sm") {
+      width: 24px;
+      height: 24px;
+    }
+
+    &:hover {
+      background: color("neutral", "lightest");
+      color: color("neutral", "dark");
+    }
+  }
+
+  &__empty {
+    padding: spacing("3xl");
+    text-align: center;
+    color: color("neutral", "dark");
+
+    @include breakpoint-down("sm") {
+      padding: spacing("2xl");
+    }
+
+    p {
+      @include font-size("body-2");
+
+      @include breakpoint-down("sm") {
+        @include font-size("sm");
+      }
+    }
+  }
+}

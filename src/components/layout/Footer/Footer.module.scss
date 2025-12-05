@@ -1,0 +1,167 @@
+// components/layout/Footer.module.scss
+@import "@/styles/abstracts/_variables.scss";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.footerSection {
+  background: map-get(map-get($colors, "primary"), "base");
+  color: map-get(map-get($colors, "neutral"), "white");
+  padding: map-get($spacing, "4xl") 0;
+  position: relative;
+  overflow: hidden;
+
+  @include breakpoint-down('sm') {
+    padding: 0;
+  }
+}
+
+.footerContent {
+  @include container;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: map-get($spacing, "3xl");
+  flex-wrap: wrap;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+    align-items: center;
+    gap: map-get($spacing, "2xl");
+  }
+}
+
+.leftCol {
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: map-get($spacing, "lg");
+  min-width: 220px;
+  @media (max-width: 900px) {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.footer__brand {
+  display: block;
+  text-decoration: none;
+  margin-bottom: map-get($spacing, "md");
+}
+
+.footer__logo {
+  width: 180px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.contactPrompt {
+  color: map-get(map-get($colors, "neutral"), "white");
+  font-size: map-get($font-sizes, "body-2");
+  margin-bottom: map-get($spacing, "md");
+}
+
+.discordBtn {
+  background: map-get(map-get($colors, "neutral"), "lighter");
+  color: map-get(map-get($colors, "primary"), "base");
+  border: none;
+  border-radius: map-get($spacing, "xs");
+  padding: map-get($spacing, "sm") map-get($spacing, "xl");
+  font-size: map-get($font-sizes, "body-2");
+  font-weight: map-get($font-weights, "medium");
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+  margin-top: map-get($spacing, "sm");
+  &:hover,
+  &:focus {
+    background: map-get(map-get($colors, "neutral"), "white");
+    color: map-get(map-get($colors, "primary"), "base");
+  }
+}
+
+.linksCol {
+  display: flex;
+  flex: 3 1 70px;
+  justify-content: space-between;
+  gap: map-get($spacing, "3xl");
+  width: 100%;
+  @media (max-width: 1100px) {
+    gap: map-get($spacing, "xl");
+  }
+  @media (max-width: 900px) {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: map-get($spacing, "lg");
+  }
+}
+
+.colGroup {
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "sm");
+}
+
+.colTitle {
+  color: map-get(map-get($colors, "neutral"), "white");
+  font-size: map-get($font-sizes, "body-1");
+  font-weight: map-get($font-weights, "semibold");
+  margin-bottom: map-get($spacing, "sm");
+}
+
+.colGroup ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.colGroup li {
+  margin-bottom: map-get($spacing, "xs");
+}
+
+.colGroup a {
+  color: map-get(map-get($colors, "neutral"), "white");
+  text-decoration: none;
+  font-size: map-get($font-sizes, "body-2");
+  transition: color 0.2s;
+  &:hover,
+  &:focus {
+    color: map-get(map-get($colors, "accent"), "base");
+  }
+}
+
+.socialList {
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "xs");
+}
+
+.socialList a {
+  display: flex;
+  align-items: center;
+  gap: map-get($spacing, "xs");
+  color: map-get(map-get($colors, "neutral"), "white");
+  font-size: map-get($font-sizes, "body-2");
+  transition: color 0.2s;
+  svg {
+    color: map-get(map-get($colors, "neutral"), "white");
+    margin-right: map-get($spacing, "xs");
+    flex-shrink: 0;
+  }
+  &:hover,
+  &:focus {
+    color: map-get(map-get($colors, "accent"), "base");
+    svg {
+      color: map-get(map-get($colors, "accent"), "base");
+    }
+  }
+}
+
+.footerContent {
+  position: relative;
+  z-index: 2;
+}

@@ -1,0 +1,310 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.dateSlotPicker {
+  background-color: color("neutral", "white");
+  border-radius: border-radius("lg");
+  padding: spacing("lg");
+  box-shadow: map-get($shadows, "sm");
+  border: map-get($border-width, "thin") solid color("neutral", "light");
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: spacing("lg");
+  }
+
+  &__navButton {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: color("neutral", "lightest");
+    border: map-get($border-width, "thin") solid color("neutral", "light");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover:not(:disabled) {
+      background-color: color("primary", "lighter");
+      border-color: color("primary", "light");
+      color: color("primary", "base");
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &:focus-visible {
+      outline: map-get($border-width, "medium") solid color("primary", "base");
+      outline-offset: spacing("xxs");
+    }
+  }
+
+  &__monthYear {
+    @include subtitle-1;
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0;
+    text-align: center;
+    flex: 1;
+  }
+
+  &__weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: spacing("xs");
+    margin-bottom: spacing("sm");
+  }
+
+  &__weekday {
+    @include caption;
+    @include font-weight("medium");
+    color: color("neutral", "medium");
+    text-align: center;
+    padding: spacing("xs") 0;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: spacing("xs");
+    margin-bottom: spacing("lg");
+  }
+
+  &__dateCell {
+    width: 100%;
+    height: 36px;
+    border-radius: border-radius("md");
+    border: map-get($border-width, "thin") solid transparent;
+    background-color: color("neutral", "white");
+    color: color("neutral", "darkest");
+    @include font-size("sm");
+    @include font-weight("medium");
+    cursor: pointer;
+    transition: $transition-base;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    // Tooltip base
+    &[data-tooltip]::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      background-color: color("neutral", "darkest");
+      color: color("neutral", "white");
+      @include font-size("xs");
+      padding: spacing("xxs") spacing("xs");
+      border-radius: border-radius("sm");
+      box-shadow: map-get($shadows, "sm");
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        opacity 0.15s ease,
+        transform 0.15s ease;
+      z-index: 2;
+    }
+
+    // Tooltip arrow
+    &[data-tooltip]::before {
+      content: "";
+      position: absolute;
+      bottom: 102%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 6px;
+      border-style: solid;
+      border-color: color("neutral", "darkest") transparent transparent
+        transparent;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      z-index: 2;
+    }
+
+    &:hover::after,
+    &:hover::before {
+      opacity: 1;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: color("neutral", "lightest");
+      border-color: color("primary", "light");
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &:focus-visible {
+      outline: map-get($border-width, "medium") solid color("primary", "base");
+      outline-offset: spacing("xxs");
+    }
+
+    &__today {
+      background-color: color("primary", "lighter");
+      border-color: color("primary", "light");
+      color: color("primary", "base");
+      @include font-weight("semibold");
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: 2px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: color("primary", "base");
+      }
+    }
+
+    &__selected {
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
+      @include font-weight("semibold");
+      border-color: color("primary", "base");
+
+      &:hover:not(:disabled) {
+        background-color: color("primary", "dark");
+        border-color: color("primary", "dark");
+      }
+    }
+
+    &__available {
+      &:hover:not(:disabled) {
+        background-color: rgba(5, 150, 105, 0.1);
+        border-color: color("status", "success");
+        color: color("status", "success");
+      }
+    }
+
+    &__disabled {
+      color: color("neutral", "medium");
+      background-color: color("neutral", "lightest");
+      cursor: not-allowed;
+
+      &:hover {
+        background-color: color("neutral", "lightest");
+        border-color: transparent;
+      }
+    }
+
+    &__otherMonth {
+      color: color("neutral", "light");
+      background-color: transparent;
+
+      &:hover:not(:disabled) {
+        background-color: color("neutral", "lightest");
+        color: color("neutral", "medium");
+      }
+    }
+  }
+
+  &__dateNumber {
+    display: block;
+    line-height: 1;
+  }
+
+  &__availabilityDot {
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 6px;
+    border-radius: 4px;
+    margin-top: 2px;
+
+    &__available {
+      background-color: color("status", "success");
+    }
+
+    &__limited {
+      background-color: color("status", "warning");
+    }
+  }
+
+  &__legend {
+    display: flex;
+    justify-content: center;
+    gap: spacing("lg");
+    padding-top: spacing("md");
+    border-top: map-get($border-width, "thin") solid color("neutral", "lighter");
+  }
+
+  &__legendItem {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    @include caption;
+    font-size: font-size("small");
+    color: color("neutral", "dark");
+  }
+
+  &__legendDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+
+    &__available {
+      background-color: color("status", "success");
+    }
+
+    &__limited {
+      background-color: color("status", "warning");
+    }
+
+    &__unavailable {
+      background-color: color("neutral", "light");
+    }
+  }
+
+  // Responsive adjustments
+  @include breakpoint-down("sm") {
+    padding: spacing("md");
+    margin: spacing("sm") 0;
+
+    &__header {
+      margin-bottom: spacing("md");
+    }
+
+    &__navButton {
+      width: 28px;
+      height: 28px;
+    }
+
+    &__monthYear {
+      @include subtitle-2;
+    }
+
+    &__dateCell {
+      height: 32px;
+      @include font-size("xs");
+    }
+
+    &__grid {
+      gap: spacing("xxs");
+    }
+
+    &__weekdays {
+      gap: spacing("xxs");
+    }
+
+    &__legend {
+      gap: spacing("md");
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}

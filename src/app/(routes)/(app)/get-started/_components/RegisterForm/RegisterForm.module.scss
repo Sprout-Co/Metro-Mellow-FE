@@ -1,0 +1,267 @@
+// RegisterForm - Modern Minimal Design
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.registerForm {
+  position: relative;
+  z-index: 1;
+
+  &__title {
+    font-family: $font-family-heading;
+    @include font-size("3xl");
+    @include font-weight("bold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+    line-height: line-height("tight");
+
+    @include breakpoint-down("sm") {
+      @include font-size("2xl");
+    }
+  }
+
+  &__subtitle {
+    @include font-size("base");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("lg");
+    line-height: line-height("relaxed");
+  }
+
+  // Progress Indicator
+  &__progress {
+    margin-bottom: spacing("xl");
+  }
+
+  &__progressBar {
+    height: 4px;
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("full");
+    margin-bottom: spacing("md");
+    overflow: hidden;
+  }
+
+  &__progressFill {
+    height: 100%;
+    background: color("primary", "base");
+    border-radius: border-radius("full");
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &__progressSteps {
+    display: flex;
+    justify-content: space-between;
+    gap: spacing("sm");
+  }
+
+  &__progressStep {
+    flex: 1;
+    height: 44px;
+    @include flex-center;
+    background-color: color("neutral", "lightest");
+    border: border-width("thin") solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "medium");
+    transition: $transition-fast;
+
+    svg {
+      color: color("neutral", "white");
+    }
+
+    &--active {
+      background: color("primary", "base");
+      border-color: color("primary", "base");
+      color: color("neutral", "white");
+      box-shadow: 0 4px 12px color-alpha("primary", "base", 0.25);
+    }
+  }
+
+  // Button Group
+  &__buttonGroup {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("md");
+    margin-top: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__buttonSpinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: color("neutral", "white");
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  // Selected Address Preview
+  &__selectedAddress {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("sm");
+    margin-top: spacing("sm");
+    padding: spacing("sm") spacing("md");
+    background-color: color-alpha("status", "success", 0.08);
+    border: border-width("thin") solid color-alpha("status", "success", 0.2);
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    color: color("status", "success");
+    line-height: line-height("normal");
+
+    svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+  }
+
+  // Referral Helper Text
+  &__referralHelper {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("sm");
+    line-height: line-height("relaxed");
+    padding: spacing("sm") spacing("md");
+    background: color-alpha("accent", "base", 0.1);
+    border-radius: border-radius("md");
+    border-left: 3px solid color("accent", "base");
+  }
+
+  // Checkbox Styles
+  &__checkGroup {
+    margin-bottom: spacing("xl");
+  }
+
+  &__checkbox {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    line-height: line-height("relaxed");
+    gap: spacing("sm");
+
+    input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+
+      &:checked ~ .registerForm__checkmark {
+        background-color: color("primary", "base");
+        border-color: color("primary", "base");
+
+        &::after {
+          display: block;
+        }
+      }
+    }
+  }
+
+  &__checkmark {
+    height: 20px;
+    width: 20px;
+    background-color: color("neutral", "white");
+    border: 2px solid color("neutral", "light");
+    border-radius: border-radius("sm");
+    margin-top: 2px;
+    position: relative;
+    transition: $transition-fast;
+    flex-shrink: 0;
+
+    &::after {
+      content: "";
+      position: absolute;
+      display: none;
+      left: 6px;
+      top: 2px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+  }
+
+  &__link {
+    color: color("primary", "base");
+    text-decoration: none;
+    @include font-weight("medium");
+    transition: color transition-duration("fast") transition-timing("ease");
+
+    &:hover {
+      color: color("primary", "dark");
+      text-decoration: underline;
+    }
+  }
+
+  &__checkError {
+    @include font-size("xs");
+    color: color("status", "error");
+    margin-top: spacing("xs");
+    margin-left: spacing("lg");
+  }
+
+  // Error Message
+  &__error {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("sm");
+    margin-bottom: spacing("lg");
+    padding: spacing("md");
+    background-color: color-alpha("status", "error", 0.08);
+    border: border-width("thin") solid color-alpha("status", "error", 0.2);
+    border-radius: border-radius("lg");
+    color: color("status", "error");
+    @include font-size("sm");
+    line-height: line-height("normal");
+
+    svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    &--success {
+      background-color: color-alpha("status", "success", 0.08);
+      border-color: color-alpha("status", "success", 0.2);
+      color: color("status", "success");
+    }
+  }
+
+  // Switch to Login
+  &__switch {
+    text-align: center;
+    margin-top: spacing("xl");
+    @include font-size("sm");
+    color: color("neutral", "dark");
+  }
+
+  &__switchLink {
+    color: color("primary", "base");
+    @include font-weight("semibold");
+    margin-left: spacing("xs");
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color transition-duration("fast") transition-timing("ease");
+
+    &:hover {
+      color: color("primary", "dark");
+      text-decoration: underline;
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

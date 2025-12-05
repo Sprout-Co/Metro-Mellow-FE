@@ -1,0 +1,154 @@
+query GetPaymentById($id: ID!) {
+  payment(id: $id) {
+    id
+    booking {
+      id
+      service {
+        _id
+        service_id
+        name
+      }
+    }
+    customer {
+      id
+      firstName
+      lastName
+      email
+    }
+    amount
+    currency
+    status
+    paymentMethod {
+      id
+      type
+      last4
+      expiryMonth
+      expiryYear
+      brand
+      isDefault
+    }
+    paymentIntentId
+    refundAmount
+    refundReason
+    metadata
+    createdAt
+    updatedAt
+  }
+}
+
+query GetPayments($status: PaymentStatus) {
+  payments(status: $status) {
+    id
+    booking {
+      id
+      service {
+        _id
+        service_id
+        name
+      }
+    }
+    customer {
+      id
+      firstName
+      lastName
+      email
+    }
+    amount
+    currency
+    status
+    paymentMethod {
+      id
+      type
+      last4
+      brand
+    }
+    createdAt
+    updatedAt
+  }
+}
+
+query GetCustomerPayments {
+  customerPayments {
+    id
+    booking {
+      id
+      service {
+        _id
+        service_id
+        name
+      }
+    }
+    amount
+    currency
+    status
+    paymentMethod {
+      id
+      type
+      last4
+      brand
+    }
+    createdAt
+    updatedAt
+  }
+}
+
+query GetPaymentMethods {
+  paymentMethods {
+    id
+    type
+    last4
+    expiryMonth
+    expiryYear
+    brand
+    isDefault
+    createdAt
+    updatedAt
+  }
+}
+
+query GetInvoiceById($id: ID!) {
+  invoice(id: $id) {
+    id
+    payment {
+      id
+      amount
+      currency
+    }
+    invoiceNumber
+    subtotal
+    tax
+    total
+    dueDate
+    status
+    items {
+      description
+      quantity
+      unitPrice
+      amount
+    }
+    paidAt
+    createdAt
+    updatedAt
+  }
+}
+
+query GetCustomerInvoices {
+  customerInvoices {
+    id
+    invoiceNumber
+    subtotal
+    tax
+    total
+    dueDate
+    status
+    items {
+      description
+      quantity
+      unitPrice
+      amount
+    }
+    paidAt
+    createdAt
+    updatedAt
+  }
+}

@@ -1,0 +1,167 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.quickActions {
+  margin-bottom: spacing("xl");
+
+  &__header {
+    margin-bottom: spacing("lg");
+  }
+
+  &__title {
+    @include font-size("lg");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xxs") 0;
+  }
+
+  &__subtitle {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: spacing("md");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: spacing("sm");
+    }
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__card {
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    padding: spacing("md");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+    }
+
+    &:hover {
+      // border-color: currentColor;
+
+      &::before {
+        transform: scaleX(1);
+      }
+
+      // .quickActions__iconWrapper {
+      //   transform: scale(1.1);
+      //   background: currentColor;
+      //   color: color("neutral", "white");
+      // }
+    }
+
+    &--primary {
+      color: color("primary", "base");
+
+      .quickActions__iconWrapper {
+        background: rgba(7, 80, 86, 0.1);
+        color: color("primary", "base");
+      }
+    }
+
+    &--secondary {
+      color: color("secondary", "base");
+
+      .quickActions__iconWrapper {
+        background: rgba(254, 91, 4, 0.1);
+        color: color("secondary", "base");
+      }
+    }
+
+    &--accent {
+      color: color("accent", "darker");
+
+      .quickActions__iconWrapper {
+        background: rgba(244, 212, 125, 0.15);
+        color: color("accent", "darker");
+      }
+    }
+
+    &--success {
+      color: color("status", "success");
+
+      .quickActions__iconWrapper {
+        background: rgba(5, 150, 105, 0.1);
+        color: color("status", "success");
+      }
+    }
+
+    &--info {
+      color: color("status", "info");
+
+      .quickActions__iconWrapper {
+        background: rgba(34, 147, 251, 0.1);
+        color: color("status", "info");
+      }
+    }
+
+    &--warning {
+      color: color("status", "warning");
+
+      .quickActions__iconWrapper {
+        background: rgba(217, 119, 6, 0.1);
+        color: color("status", "warning");
+      }
+    }
+
+    &--neutral {
+      color: color("neutral", "dark");
+
+      .quickActions__iconWrapper {
+        background: color("neutral", "lightest");
+        color: color("neutral", "dark");
+      }
+    }
+  }
+
+  &__iconWrapper {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto spacing("sm");
+    border-radius: border-radius("md");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+  }
+
+  &__cardTitle {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0;
+  }
+
+  &__cardDescription {
+    @include font-size("xs");
+    color: color("neutral", "medium");
+    margin: 0;
+    line-height: 1.3;
+  }
+}

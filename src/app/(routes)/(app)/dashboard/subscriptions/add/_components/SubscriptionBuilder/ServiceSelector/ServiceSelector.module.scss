@@ -1,0 +1,361 @@
+// ServiceSelector - Clean & Refined
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.selector {
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: spacing("lg");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+      gap: spacing("md");
+    }
+  }
+
+  // ===================================
+  // CARD
+  // ===================================
+  &__card {
+    position: relative;
+    background: color("neutral", "white");
+    border-radius: border-radius("xl");
+    border: 1.5px solid color("neutral", "lighter");
+    overflow: hidden;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+    &:hover:not(&--disabled) {
+      border-color: color("primary", "light");
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
+    }
+
+    &--configured {
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.08);
+
+      &:hover {
+        box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.08),
+          0 8px 24px rgba(0, 0, 0, 0.08);
+      }
+    }
+
+    &--disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+
+      &:hover {
+        transform: none;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        border-color: color("neutral", "lighter");
+      }
+    }
+  }
+
+  // ===================================
+  // BADGE
+  // ===================================
+  &__badge {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    border-radius: border-radius("pill");
+    @include font-size("xs");
+    @include font-weight("bold");
+    z-index: 1;
+    box-shadow: 0 2px 8px rgba(color("primary", "base"), 0.3);
+  }
+
+  // ===================================
+  // CONTENT
+  // ===================================
+  &__content {
+    padding: spacing("lg");
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("md");
+    margin-bottom: spacing("md");
+  }
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("lg");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    // Subtle category colors - just the icon bg
+    &--cleaning {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3b82f6;
+    }
+
+    &--laundry {
+      background: rgba(139, 92, 246, 0.1);
+      color: #8b5cf6;
+    }
+
+    &--cooking {
+      background: rgba(245, 158, 11, 0.1);
+      color: #f59e0b;
+    }
+
+    &--pest {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+    }
+  }
+
+  &__titleGroup {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    @include font-size("lg");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xxs") 0;
+  }
+
+  &__category {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  &__description {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    line-height: 1.5;
+    margin-bottom: spacing("md");
+    flex: 1;
+  }
+
+  // ===================================
+  // PRICE
+  // ===================================
+  &__priceRow {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: spacing("sm") spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    margin-bottom: spacing("sm");
+  }
+
+  &__priceLabel {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  &__price {
+    @include font-size("lg");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+  }
+
+  &__priceUnit {
+    @include font-size("sm");
+    @include font-weight("normal");
+    color: color("neutral", "dark");
+    margin-left: spacing("xxs");
+  }
+
+  // ===================================
+  // CONFIG SUMMARY
+  // ===================================
+  &__configSummary {
+    overflow: hidden;
+    padding: spacing("sm") spacing("md");
+    background: rgba(color("primary", "base"), 0.04);
+    border-radius: border-radius("lg");
+    border: 1px solid rgba(color("primary", "base"), 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__configRow {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    @include font-size("sm");
+    color: color("neutral", "darker");
+
+    svg {
+      color: color("primary", "base");
+      flex-shrink: 0;
+    }
+  }
+
+  &__configTotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: spacing("sm");
+    border-top: 1px dashed rgba(color("primary", "base"), 0.15);
+
+    span {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+    }
+
+    strong {
+      @include font-size("base");
+      @include font-weight("bold");
+      color: color("primary", "base");
+    }
+  }
+
+  // ===================================
+  // FOOTER & ACTIONS
+  // ===================================
+  &__footer {
+    padding: 0 spacing("lg") spacing("lg");
+  }
+
+  &__addBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("sm");
+    padding: spacing("sm") spacing("lg");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 0 2px 8px rgba(color("primary", "base"), 0.25);
+
+    &:hover {
+      background: color("primary", "dark");
+      box-shadow: 0 4px 12px rgba(color("primary", "base"), 0.3);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: spacing("sm");
+  }
+
+  &__editBtn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+    padding: spacing("sm");
+    background: color("neutral", "white");
+    border: 1.5px solid color("primary", "base");
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("primary", "base");
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+      background: color("primary", "base");
+      color: color("neutral", "white");
+    }
+  }
+
+  &__removeBtn {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color("neutral", "white");
+    border: 1.5px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+      border-color: color("status", "error");
+      background: color("status", "error");
+      color: color("neutral", "white");
+    }
+  }
+
+  &__disabledState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: spacing("sm") spacing("md");
+    background: color("neutral", "lightest");
+    border: 1.5px dashed color("neutral", "light");
+    border-radius: border-radius("lg");
+    text-align: center;
+
+    span {
+      @include font-size("sm");
+      @include font-weight("medium");
+      color: color("neutral", "dark");
+    }
+
+    small {
+      @include font-size("xs");
+      color: color("neutral", "dark");
+      margin-top: spacing("xxs");
+    }
+  }
+
+  // ===================================
+  // EMPTY STATE
+  // ===================================
+  &__emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("xl");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("xl");
+    border: 1.5px dashed color("neutral", "light");
+    text-align: center;
+    margin-top: spacing("lg");
+
+    svg {
+      color: color("primary", "base");
+      opacity: 0.6;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      max-width: 300px;
+      margin: 0;
+    }
+  }
+}

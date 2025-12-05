@@ -1,0 +1,81 @@
+@import "../../../../../../styles/abstracts/variables";
+@import "../../../../../../styles/abstracts/functions";
+@import "../../../../../../styles/abstracts/mixins";
+
+.contactHero {
+  position: relative;
+  width: 100%;
+  background-color: color("primary", "base");
+  min-height: 50rem;
+  overflow: hidden;
+  @include hero-base(40rem);
+
+  &__container {
+    @include container;
+    position: relative;
+    height: 100%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 30rem;
+    padding: spacing("6xl") 0;
+
+    @include breakpoint-down("md") {
+      padding: spacing("4xl") spacing("lg");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("3xl") spacing("md");
+    }
+  }
+
+  &__content {
+    text-align: center;
+    max-width: 800px;
+  }
+
+  &__title {
+    @include heading-1;
+    color: color("neutral", "white");
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("md") {
+      font-size: font-size("h2");
+    }
+
+    @include breakpoint-down("sm") {
+      font-size: font-size("h3");
+    }
+  }
+
+  &__subtitle {
+    @include body-1;
+    color: color("neutral", "lightest");
+    margin-bottom: spacing("sm");
+    font-size: font-size("subtitle-1");
+
+    @include breakpoint-down("md") {
+      font-size: font-size("body-1");
+    }
+
+    @include breakpoint-down("sm") {
+      font-size: font-size("body-2");
+    }
+  }
+
+  &__text {
+    @include body-1;
+    color: color("neutral", "lightest");
+    margin-bottom: spacing("xl");
+    font-size: font-size("body-1");
+
+    @include breakpoint-down("md") {
+      font-size: font-size("body-2");
+    }
+
+    @include breakpoint-down("sm") {
+      font-size: font-size("caption");
+    }
+  }
+}

@@ -1,0 +1,55 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.timeSlotSelector {
+  &__select {
+    @include select("md");
+    width: 100%;
+    background-color: color("neutral", "white");
+    border: map-get($border-width, "thin") solid color("neutral", "light");
+    border-radius: border-radius("lg");
+    @include font-size("body-2");
+    color: color("neutral", "darkest");
+    transition: $transition-base;
+    appearance: none;
+    cursor: pointer;
+    height: auto;
+
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right spacing("md") center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: spacing("2xl");
+
+    &:focus {
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 3px rgba(7, 80, 86, 0.1);
+      outline: none;
+    }
+
+    &:disabled {
+      background-color: color("neutral", "lighter");
+      color: color("neutral", "medium");
+      cursor: not-allowed;
+    }
+  }
+
+  &__option {
+    padding: spacing("sm") spacing("md");
+    @include font-size("body-2");
+    color: color("neutral", "darkest");
+
+    &__disabled {
+      color: color("neutral", "medium");
+      background-color: color("neutral", "lightest");
+      font-style: italic;
+    }
+
+    &:disabled {
+      color: color("neutral", "medium");
+      background-color: color("neutral", "lightest");
+      cursor: not-allowed;
+    }
+  }
+}

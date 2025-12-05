@@ -1,0 +1,34 @@
+// src/app/(routes)/(app)/dashboard/_components/DashboardLayout/DashboardLayout.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.dashboardLayout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: color("neutral", "lightest");
+
+  &__content {
+    display: flex;
+    flex: 1;
+    position: relative;
+  }
+
+  &__main {
+    flex: 1;
+    padding: spacing("xl");
+    @include container;
+    transition: margin-left 0.3s ease;
+
+    @include breakpoint-down("md") {
+      margin-left: 0;
+      padding: spacing("lg") spacing("md");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md");
+      max-width: 100vw !important;
+    }
+  }
+}

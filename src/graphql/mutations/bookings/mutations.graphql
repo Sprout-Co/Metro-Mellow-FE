@@ -1,0 +1,42 @@
+mutation CreateBooking($input: CreateBookingInput!) {
+  createBooking(input: $input)
+}
+
+mutation UpdateBooking($id: ID!, $input: UpdateBookingInput!) {
+  updateBooking(id: $id, input: $input)
+}
+
+mutation CancelBooking($cancelBookingId: ID!, $cancellationReason: String) {
+  cancelBooking(id: $cancelBookingId, cancellationReason: $cancellationReason)
+}
+
+mutation CompleteBooking($id: ID!) {
+  completeBooking(id: $id)
+}
+
+mutation DeleteBooking($id: ID!) {
+  deleteBooking(id: $id)
+}
+
+mutation AssignStaff($bookingId: ID!, $staffId: ID!) {
+  assignStaff(bookingId: $bookingId, staffId: $staffId)
+}
+
+mutation UpdateBookingStatus($id: ID!, $status: BookingStatus!) {
+  updateBookingStatus(id: $id, status: $status)
+}
+
+mutation RescheduleBooking(
+  $id: ID!
+  $newDate: DateTime!
+  $newTimeSlot: TimeSlot!
+) {
+  rescheduleBooking(id: $id, newDate: $newDate, newTimeSlot: $newTimeSlot)
+}
+
+mutation AddBookingFeedback(
+  $addBookingFeedbackId: ID!
+  $feedback: FeedbackInput!
+) {
+  addBookingFeedback(id: $addBookingFeedbackId, feedback: $feedback)
+}

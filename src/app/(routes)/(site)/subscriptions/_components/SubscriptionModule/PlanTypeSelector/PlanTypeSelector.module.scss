@@ -1,0 +1,203 @@
+// PlanTypeSelector.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.plan_selector {
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "medium");
+    color: color("primary", "dark");
+    margin-bottom: spacing("md");
+  }
+
+  &__toggle {
+    position: relative;
+    display: flex;
+    width: 220px;
+    height: 50px;
+    background-color: color("neutral", "light");
+    border-radius: border-radius("full");
+    padding: 5px;
+
+    @include breakpoint-down("md") {
+      width: 200px;
+      height: 45px;
+    }
+
+    @include breakpoint-down("sm") {
+      width: 180px;
+      height: 40px;
+    }
+  }
+
+  &__option {
+    flex: 1;
+    border: none;
+    background-color: transparent;
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: color 0.3s;
+
+    @include breakpoint-down("sm") {
+      font-size: map-get($font-sizes, "xs");
+    }
+
+    &_active {
+      color: #ffffff;
+    }
+  }
+
+  &__slider {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: calc(50% - 5px);
+    height: calc(100% - 10px);
+    background-color: color("primary", "base");
+    border-radius: border-radius("full");
+    z-index: 1;
+    pointer-events: none;
+    box-shadow: 0 2px 6px color-alpha("primary", "base", 0.3);
+  }
+
+  &__duration {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  &__duration_title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  &__duration_message {
+    font-size: 0.9rem;
+    color: color("neutral", "dark");
+    margin-bottom: 1rem;
+    text-align: center;
+    font-style: italic;
+  }
+
+  &__duration_controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  &__duration_btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: var(--background-primary);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background: var(--background-hover);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__duration_value {
+    font-size: 1.2rem;
+    font-weight: 500;
+    min-width: 8rem;
+    text-align: center;
+    color: var(--text-primary);
+  }
+}
+
+.duration_selector {
+  margin-top: spacing("lg");
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "medium");
+    color: color("primary", "dark");
+    margin-bottom: spacing("md");
+  }
+
+  &__container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: spacing("md");
+    margin-bottom: spacing("sm");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: spacing("sm");
+    }
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr 1fr;
+      gap: spacing("xs");
+    }
+  }
+
+  &__pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    min-width: 80px;
+    padding: 0 spacing("md");
+    border-radius: border-radius("full");
+    font-size: map-get($font-sizes, "sm");
+    font-weight: map-get($font-weights, "medium");
+    background-color: #ffffff;
+    border: 1px solid color("neutral", "lighter");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: $transition-base;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+    @include breakpoint-down("md") {
+      height: 35px;
+      min-width: 70px;
+      font-size: map-get($font-sizes, "xs");
+    }
+
+    @include breakpoint-down("sm") {
+      height: 30px;
+      min-width: 60px;
+      padding: 0 spacing("sm");
+    }
+
+    &_active {
+      background-color: color("primary", "dark");
+      color: #ffffff;
+      border-color: color("primary", "dark");
+      box-shadow: 0 4px 8px color-alpha("primary", "dark", 0.2);
+    }
+
+    &:hover:not(.duration_selector__pill_active) {
+      border-color: color("primary", "light");
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &__helper {
+    font-size: map-get($font-sizes, "xs");
+    color: color("neutral", "dark");
+  }
+}

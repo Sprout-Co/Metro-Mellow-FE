@@ -1,0 +1,12 @@
+mutation GenerateReferralCode {
+  generateReferralCode
+}
+mutation ApplyReferralCode($code: String!) {
+  applyReferralCode(code: $code)
+}
+mutation PayoutCommission($commissionId: ID!) {
+  payoutCommission(commissionId: $commissionId)
+}
+mutation PayoutUserCommissions($userId: ID!) {
+  payoutUserCommissions(userId: $userId)
+}

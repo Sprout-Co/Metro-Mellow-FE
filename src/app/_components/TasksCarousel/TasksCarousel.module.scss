@@ -1,0 +1,410 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/animations";
+
+.tasks-carousel {
+  width: 100%;
+  background: linear-gradient(
+    135deg,
+    darken(color("primary", "base"), 5%) 0%,
+    color("primary", "base") 100%
+  );
+  background: color("primary", "base");
+  @include section-spacing("6xl");
+  position: relative;
+  overflow: hidden;
+
+  // Decorative background pattern
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    // background-image:
+    //   radial-gradient(
+    //     circle at 20% 80%,
+    //     color-alpha("primary", "light", 0.1) 0%,
+    //     transparent 50%
+    //   ),
+    //   radial-gradient(
+    //     circle at 80% 20%,
+    //     color-alpha("primary", "dark", 0.1) 0%,
+    //     transparent 50%
+    //   );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  &__container {
+    @include container;
+    position: relative;
+    z-index: 2;
+  }
+
+  &__header {
+    @include flex(row, nowrap, space-between, flex-start);
+    margin-bottom: spacing("4xl");
+
+    @include breakpoint-down("md") {
+      @include flex-column;
+      gap: spacing("xl");
+    }
+  }
+
+  &__title-wrapper {
+    flex: 1;
+    // max-width: 600px;
+    
+    @include breakpoint-down("md") {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  &__title {
+    @include heading-1;
+    color: color("neutral", "white");
+    margin-bottom: spacing("md");
+    line-height: 1.1;
+    text-align: center;
+
+    @include breakpoint-down("lg") {
+      font-size: font-size("h2");
+    }
+
+    @include breakpoint-down("md") {
+      font-size: font-size("h3");
+      text-align: center;
+    }
+
+    @include breakpoint-down("sm") {
+      font-size: font-size("h4");
+      text-align: center;
+    }
+  }
+
+  &__subtitle {
+    @include body-1;
+    color: color-alpha("neutral", "white", 0.9);
+    max-width: 500px;
+    text-align: center;
+    margin: 0 auto;
+    @include breakpoint-down("md") {
+      text-align: center;
+      margin: 0 auto;
+    }
+
+    @include breakpoint-down("sm") {
+      @include body-2;
+      text-align: center;
+      margin: 0 auto;
+      color: color("neutral", "white");
+    }
+  }
+
+  &__nav {
+    @include flex(row, nowrap, center, center);
+    gap: spacing("md");
+
+    @include breakpoint-down("md") {
+      align-self: center;
+    }
+  }
+
+  &__nav-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("full");
+    background: color-alpha("neutral", "white", 0.15);
+    border: 2px solid color-alpha("neutral", "white", 0.3);
+    color: color("neutral", "white");
+    @include flex-center;
+    cursor: pointer;
+    transition: $transition-base;
+    backdrop-filter: blur(10px);
+
+    &:hover:not(:disabled) {
+      background: color-alpha("neutral", "white", 0.25);
+      border-color: color("neutral", "white");
+      transform: scale(1.1);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    @include breakpoint-down("sm") {
+      width: 40px;
+      height: 40px;
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+
+  &__carousel-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    margin: 0 calc(spacing("md") * -1);
+    padding: 0 spacing("md");
+  }
+
+  &__carousel-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    gap: spacing("xl");
+
+    @include breakpoint-down("md") {
+      gap: spacing("md");
+    }
+  }
+
+  &__indicators {
+    @include flex(row, nowrap, center, center);
+    gap: spacing("sm");
+    margin-top: spacing("3xl");
+
+    @include breakpoint-down("md") {
+      margin-top: spacing("2xl");
+    }
+  }
+
+  &__indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: border-radius("full");
+    background: color-alpha("neutral", "white", 0.3);
+    border: none;
+    cursor: pointer;
+    transition: $transition-base;
+    padding: 0;
+
+    &--active {
+      width: 32px;
+      background: color("neutral", "white");
+    }
+
+    &:hover:not(&--active) {
+      background: color-alpha("neutral", "white", 0.5);
+    }
+  }
+}
+
+.task-card {
+  flex: 0 0 380px;
+  min-height: 460px;
+  border-radius: border-radius("2xl");
+  padding: spacing("2xl");
+  @include flex-column;
+  position: relative;
+  overflow: hidden;
+  transition: $transition-base;
+  cursor: pointer;
+
+  @include breakpoint-down("lg") {
+    flex: 0 0 340px;
+    min-height: 420px;
+  }
+
+  @include breakpoint-down("md") {
+    flex: 0 0 300px;
+    min-height: 400px;
+    padding: spacing("xl");
+  }
+
+  @include breakpoint-down("sm") {
+    flex: 0 0 280px;
+    min-height: 380px;
+    padding: spacing("lg");
+  }
+
+  &:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+
+    .task-card__icon-wrapper {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .task-card__cta {
+      transform: translateX(4px);
+    }
+  }
+
+  // Color variants
+  &--cleaning {
+    background: linear-gradient(135deg, #fdb94e 0%, #f2994a 100%);
+    color: color("neutral", "darkest");
+  }
+
+  &--food {
+    background: linear-gradient(
+      135deg,
+      color("secondary", "base") 0%,
+      color("secondary", "dark") 100%
+    );
+    color: color("neutral", "white");
+
+    .task-card__cta {
+      background: color("neutral", "white");
+      color: color("secondary", "base");
+
+      &:hover {
+        background: color("neutral", "lightest");
+      }
+    }
+  }
+
+  &--laundry {
+    background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+    color: color("neutral", "white");
+
+    .task-card__cta {
+      background: color("neutral", "white");
+      color: #44a08d;
+
+      &:hover {
+        background: color("neutral", "lightest");
+      }
+    }
+  }
+
+  &--pest {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: color("neutral", "white");
+
+    .task-card__cta {
+      background: color("neutral", "white");
+      color: #764ba2;
+
+      &:hover {
+        background: color("neutral", "lightest");
+      }
+    }
+  }
+
+  &__content {
+    flex: 1;
+    @include flex-column;
+    z-index: 2;
+    position: relative;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: font-size("h5");
+    font-weight: map-get($font-weights, "bold");
+    margin-bottom: spacing("md");
+    line-height: 1.2;
+
+    @include breakpoint-down("md") {
+      font-size: font-size("h6");
+    }
+
+    @include breakpoint-down("sm") {
+      font-size: font-size("title");
+    }
+  }
+
+  &__description {
+    @include body-2;
+    margin-bottom: spacing("2xl");
+    opacity: 0.95;
+    line-height: 1.6;
+
+    @include breakpoint-down("sm") {
+      font-size: font-size("small");
+    }
+  }
+
+  &__icon-wrapper {
+    position: absolute;
+    transition: $transition-base;
+    right: 15px;
+    bottom: 0;
+    width: 180px;
+    height: 180px;
+    opacity: 0.9;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: flex-end;
+
+    @include breakpoint-down("md") {
+      width: 150px;
+      height: 150px;
+      // right: spacing("lg");
+      // bottom: spacing("lg");
+    }
+
+    @include breakpoint-down("sm") {
+      width: 120px;
+      height: 120px;
+      // right: spacing("md");
+      // bottom: spacing("md");
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+    }
+  }
+
+  &__cta {
+    @include button-base("sm");
+    background: color("neutral", "darkest");
+    color: color("neutral", "white");
+    border: none;
+    margin-top: auto;
+    align-self: flex-start;
+    padding: spacing("sm") spacing("xl");
+    font-size: font-size("small");
+    font-weight: map-get($font-weights, "semibold");
+    letter-spacing: 0.5px;
+    transition: $transition-fast;
+    z-index: 2;
+
+    &:hover {
+      background: color("neutral", "black");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("sm") spacing("lg");
+      font-size: font-size("xs");
+    }
+  }
+
+  // Decorative elements
+  &::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 300px;
+    height: 300px;
+    border-radius: border-radius("full");
+    background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+}

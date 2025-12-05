@@ -1,0 +1,386 @@
+"use client";
+import React, { useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Portal from "../../../Portal/Portal";
+import Button from "../../../Button/Button";
+import styles from "./CheckoutModal.module.scss";
+import { useAppSelector } from "@/lib/redux/hooks";
+import {
+  TimeSlot,
+  ServiceCategory,
+  useMyReferralDiscountInfoQuery,
+} from "@/graphql/api";
+import { usePayment } from "@/hooks/usePayment";
+import { useCheckoutForm } from "@/hooks/useCheckoutForm";
+import { useSlotAvailability } from "@/hooks/useSlotAvailability";
+import { useModalBehavior } from "@/hooks/useModalBehavior";
+import { useErrorScroll } from "@/hooks/useErrorScroll";
+import { mapServiceCategoryToEnum } from "@/utils/slotHelpers";
+import OrderSuccessModal from "../OrderSuccessModal/OrderSuccessModal";
+import { CheckoutModalHeader } from "./components/CheckoutModalHeader";
+import { CheckoutModalErrors } from "./components/CheckoutModalErrors";
+import { DateSelection } from "./components/DateSelection";
+import { TimeSlotSelection } from "./components/TimeSlotSelection";
+import { AddressSection } from "./components/AddressSection";
+import { CheckoutSummary } from "./components/CheckoutSummary";
+
+export interface CheckoutModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onCheckout: (
+    formData: CheckoutFormData,
+    finalTotalPrice: number,
+    onContinuePayment: (bookingResponse: string) => void
+  ) => void;
+  service_category?: string;
+  submitting?: boolean;
+  error?: string | null;
+  onClearError?: () => void;
+  totalPrice: number;
+}
+
+export interface CheckoutFormData {
+  date: string;
+  timeSlot: TimeSlot;
+  city: string;
+  street: string;
+  addressId?: string;
+  notes?: string;
+}
+
+const CheckoutModal: React.FC<CheckoutModalProps> = ({
+  isOpen,
+  onClose,
+  onCheckout,
+  service_category = "Cleaning",
+  submitting = false,
+  error = null,
+  onClearError,
+  totalPrice = 0,
+}) => {
+  // Redux state
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+
+  // Payment hook
+  const {
+    initializePayment,
+    loading: paymentLoading,
+    paymentSuccess,
+    paymentReference,
+  } = usePayment();
+
+  // Referral discount query
+  const { data: discountData } = useMyReferralDiscountInfoQuery({
+    skip: !isOpen || !isAuthenticated,
+  });
+
+  // Determine if availability-based date/time is required
+  const serviceCategoryEnum = useMemo(
+    () => mapServiceCategoryToEnum(service_category),
+    [service_category]
+  );
+  const requiresAvailability = useMemo(
+    () =>
+      ![ServiceCategory.Cooking, ServiceCategory.Laundry].includes(
+        serviceCategoryEnum
+      ),
+    [serviceCategoryEnum]
+  );
+
+  // Custom hooks for form management
+  const {
+    formData,
+    isNewAddress,
+    deliveryCost,
+    setIsNewAddress,
+    handleInputChange,
+    handleDateSelect,
+    handleTimeSlotSelect,
+    handleAddressSelect,
+  } = useCheckoutForm({ user: user as any, isOpen });
+
+  // Custom hook for slot availability
+  const {
+    loadingSlots,
+    slotError,
+    validatingSlot,
+    slotValidationError,
+    validateSlotAvailability,
+    getSelectedDateSlots,
+    getAvailableSlotsForPicker,
+    clearSlotValidationError,
+  } = useSlotAvailability({
+    isOpen,
+    requiresAvailability,
+    serviceCategory: service_category,
+  });
+
+  // Custom hook for modal behavior
+  const { handleBackdropClick } = useModalBehavior({
+    isOpen,
+    onClose,
+    onClearError,
+  });
+
+  // Custom hook for error scrolling
+  const { errorContainerRef } = useErrorScroll(
+    error,
+    slotError,
+    slotValidationError
+  );
+
+  // Calculate referral discount
+  const discountAmount = useMemo(() => {
+    const discountInfo = discountData?.myReferralDiscountInfo;
+    if (
+      !discountInfo?.isEligible ||
+      !discountInfo.discountPercentage ||
+      discountInfo.remainingDiscountedBookings <= 0
+    ) {
+      return 0;
+    }
+    return Math.round((totalPrice * discountInfo.discountPercentage) / 100);
+  }, [discountData, totalPrice]);
+
+  // Get discount info for display
+  const discountInfo = useMemo(
+    () => discountData?.myReferralDiscountInfo,
+    [discountData]
+  );
+
+  // Handle payment initialization
+  const handlePayment = async (bookingId: string) => {
+    try {
+      // Calculate final amount with discount applied
+      const finalAmount = totalPrice + deliveryCost - discountAmount;
+      await initializePayment(bookingId, finalAmount, user?.email || "");
+    } catch (err) {
+      console.error("Payment failed:", err);
+    }
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Clear any previous validation errors
+    clearSlotValidationError();
+
+    // Validate slot availability before proceeding (only if required)
+    if (requiresAvailability) {
+      const isSlotAvailable = await validateSlotAvailability(
+        formData.date,
+        formData.timeSlot
+      );
+      if (!isSlotAvailable) {
+        return;
+      }
+    }
+
+    // Calculate final total price (service price + delivery cost - discount)
+    const finalTotalPrice = totalPrice + deliveryCost - discountAmount;
+
+    // Proceed with booking
+    onCheckout(formData, finalTotalPrice, (bookingResponse: string) => {
+      handlePayment(bookingResponse);
+    });
+  };
+
+  // Handle modal close
+  const handleClose = () => {
+    if (onClearError) onClearError();
+    onClose();
+  };
+
+  // Parse selected date for DateSlotPicker
+  const selectedDate = useMemo(() => {
+    const [year, month, day] = formData.date.split("-").map(Number);
+    return new Date(year, month - 1, day);
+  }, [formData.date]);
+
+  if (!isOpen) return null;
+
+  return (
+    <Portal>
+      <AnimatePresence mode="wait">
+        <motion.div
+          className={styles.checkoutModal}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {/* Backdrop */}
+          <motion.div
+            className={styles.checkoutModal__backdrop}
+            onClick={handleBackdropClick}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          />
+
+          {/* Modal Content */}
+          <motion.div
+            className={styles.checkoutModal__container}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{
+              duration: 0.3,
+              ease: "easeOut",
+            }}
+          >
+            {/* Header */}
+            <CheckoutModalHeader onClose={handleClose} />
+
+            {/* Form Content */}
+            <div className={styles.checkoutModal__content}>
+              <form
+                onSubmit={handleSubmit}
+                className={styles.checkoutModal__form}
+              >
+                {/* Section Title */}
+                <h3 className={styles.checkoutModal__sectionTitle}>
+                  {service_category} Details
+                </h3>
+
+                {/* Error Display */}
+                <CheckoutModalErrors
+                  error={error}
+                  slotError={slotError}
+                  slotValidationError={slotValidationError}
+                  errorRef={errorContainerRef}
+                />
+
+                {/* Main Content - Date, Time, and Address */}
+                <div className={styles.checkoutModal__mainContent}>
+                  {/* Left Column - Date Selection */}
+                  <div className={styles.checkoutModal__leftColumn}>
+                    <DateSelection
+                      selectedDate={selectedDate}
+                      onDateSelect={handleDateSelect}
+                      availableSlots={getAvailableSlotsForPicker()}
+                      requiresAvailability={requiresAvailability}
+                      loadingSlots={loadingSlots}
+                    />
+                  </div>
+
+                  {/* Right Column - Time, Address, and Notes */}
+                  <div className={styles.checkoutModal__rightColumn}>
+                    {/* Time Slot Card */}
+                    <div className={styles.checkoutModal__fieldCard}>
+                      <TimeSlotSelection
+                        selectedTimeSlot={formData.timeSlot}
+                        onTimeSlotSelect={handleTimeSlotSelect}
+                        slotAvailability={getSelectedDateSlots(formData.date)}
+                        requiresAvailability={requiresAvailability}
+                        loadingSlots={loadingSlots}
+                        onInputChange={handleInputChange}
+                      />
+                    </div>
+
+                    {/* Address Card */}
+                    <div className={styles.checkoutModal__fieldCard}>
+                      <AddressSection
+                        user={user as any}
+                        isAuthenticated={isAuthenticated}
+                        isNewAddress={isNewAddress}
+                        setIsNewAddress={setIsNewAddress}
+                        formData={formData}
+                        onInputChange={handleInputChange}
+                        onAddressSelect={handleAddressSelect}
+                      />
+                    </div>
+
+                    {/* Notes Card */}
+                    <div className={styles.checkoutModal__fieldCard}>
+                      <div className={styles.checkoutModal__field}>
+                        <label className={styles.checkoutModal__label}>
+                          Special Instructions (Optional)
+                        </label>
+                        <textarea
+                          name="notes"
+                          className={styles.checkoutModal__textarea}
+                          placeholder="E.g., Ring the doorbell twice, leave packages at the back door..."
+                          value={formData.notes || ""}
+                          onChange={handleInputChange}
+                          rows={3}
+                          maxLength={500}
+                        />
+                        <span className={styles.checkoutModal__charCount}>
+                          {formData.notes?.length || 0}/500
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Referral Discount Banner */}
+                {discountInfo?.isEligible &&
+                  discountInfo.remainingDiscountedBookings > 0 && (
+                    <div className={styles.checkoutModal__discountBanner}>
+                      <div className={styles.checkoutModal__discountIcon}>
+                        🎉
+                      </div>
+                      <div className={styles.checkoutModal__discountText}>
+                        <strong>
+                          {discountInfo.discountPercentage}% Referral Discount
+                          Applied!
+                        </strong>
+                        <span>
+                          {discountInfo.remainingDiscountedBookings} discount
+                          {discountInfo.remainingDiscountedBookings > 1
+                            ? "s"
+                            : ""}{" "}
+                          remaining
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                {/* Booking Summary */}
+                <CheckoutSummary
+                  totalPrice={totalPrice}
+                  deliveryCost={deliveryCost}
+                  discount={discountAmount}
+                />
+
+                {/* Submit Button */}
+                <div className={styles.checkoutModal__buttonWrapper}>
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="lg"
+                    fullWidth
+                    className={styles.checkoutModal__continueButton}
+                    disabled={paymentLoading || submitting || validatingSlot}
+                  >
+                    {validatingSlot
+                      ? "Checking availability..."
+                      : submitting || paymentLoading
+                        ? "Hang on..."
+                        : "CONTINUE"}
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </motion.div>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Order Success Modal */}
+      <OrderSuccessModal
+        isOpen={paymentSuccess}
+        onClose={() => {
+          onClose();
+          window.location.reload();
+        }}
+        title="Payment Successful!"
+        message={`All set! Your payment was successful and your booking is locked in.`}
+      />
+    </Portal>
+  );
+};
+
+export default CheckoutModal;

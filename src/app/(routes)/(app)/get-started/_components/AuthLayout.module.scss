@@ -1,0 +1,733 @@
+// AuthLayout - Modern Minimal Design
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.authLayout {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    color("neutral", "lightest") 0%,
+    color("accent", "lighter") 50%,
+    color("neutral", "lighter") 100%
+  );
+  position: relative;
+  overflow: hidden;
+  padding: spacing("xl");
+
+  // Subtle animated background pattern
+  &::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle at 30% 20%,
+      color-alpha("primary", "base", 0.03) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 70% 80%,
+      color-alpha("secondary", "base", 0.03) 0%,
+      transparent 50%
+    );
+    animation: floatBg 20s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @include breakpoint-down("sm") {
+    padding: spacing("md");
+  }
+
+  &__noImage {
+    background: color("neutral", "white");
+  }
+
+  &__container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    background: color("neutral", "white");
+    border-radius: border-radius("2xl");
+    box-shadow: 
+      0 25px 50px -12px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(0, 0, 0, 0.02);
+    overflow: hidden;
+    min-height: 600px;
+
+    @include breakpoint-down("lg") {
+      grid-template-columns: 1fr;
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: auto;
+    }
+  }
+
+  &__card {
+    padding: spacing("3xl");
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+
+    @include breakpoint-down("md") {
+      padding: spacing("2xl");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("xl") spacing("lg");
+    }
+  }
+
+  &__logo {
+    display: block;
+    margin-bottom: spacing("2xl");
+    position: relative;
+    z-index: 1;
+  }
+
+  &__imageWrapper {
+    position: relative;
+    overflow: hidden;
+
+    @include breakpoint-down("lg") {
+      display: none;
+    }
+  }
+
+  &__image {
+    position: relative;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      color("primary", "base") 0%,
+      color-darken("primary", "base", 15%) 100%
+    );
+    padding: spacing("3xl");
+    color: color("neutral", "white");
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    // Decorative circles
+    &::before {
+      content: "";
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -50px;
+      left: -50px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.03);
+    }
+  }
+
+  &__imageTitle {
+    font-family: $font-family-heading;
+    @include font-size("3xl");
+    @include font-weight("bold");
+    margin-bottom: spacing("md");
+    position: relative;
+    z-index: 1;
+    line-height: line-height("tight");
+
+    @include breakpoint-down("xl") {
+      @include font-size("2xl");
+    }
+  }
+
+  &__imageText {
+    @include font-size("lg");
+    margin-bottom: spacing("2xl");
+    opacity: 0.9;
+    position: relative;
+    z-index: 1;
+    line-height: line-height("relaxed");
+
+    @include breakpoint-down("xl") {
+      @include font-size("base");
+    }
+  }
+
+  // Features Section
+  &__features {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+    margin-bottom: spacing("2xl");
+    position: relative;
+    z-index: 1;
+  }
+
+  &__feature {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("md");
+
+    h4 {
+      @include font-size("base");
+      @include font-weight("semibold");
+      margin: 0 0 spacing("xxs");
+    }
+
+    p {
+      @include font-size("sm");
+      opacity: 0.8;
+      margin: 0;
+    }
+  }
+
+  &__featureIcon {
+    width: 40px;
+    height: 40px;
+    @include flex-center;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: border-radius("lg");
+    flex-shrink: 0;
+  }
+
+  // Testimonial Section
+  &__testimonial {
+    margin-top: auto;
+    padding: spacing("lg");
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: border-radius("xl");
+    position: relative;
+    z-index: 1;
+  }
+
+  &__quote {
+    @include font-size("base");
+    font-style: italic;
+    line-height: line-height("relaxed");
+    margin: 0 0 spacing("md");
+    opacity: 0.95;
+  }
+
+  &__author {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+  }
+
+  &__authorAvatar {
+    width: 40px;
+    height: 40px;
+    @include flex-center;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: border-radius("full");
+    @include font-size("base");
+    @include font-weight("semibold");
+  }
+
+  &__authorName {
+    @include font-size("sm");
+    @include font-weight("semibold");
+  }
+
+  &__authorTitle {
+    @include font-size("xs");
+    opacity: 0.7;
+  }
+}
+
+// Form Input Styles (shared across all auth forms)
+.formInput {
+  margin-bottom: spacing("lg");
+  position: relative;
+
+  &__label {
+    display: block;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("sm");
+  }
+
+  &__required {
+    color: color("secondary", "base");
+    margin-left: 2px;
+  }
+
+  &__wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: color("neutral", "lightest");
+    border: border-width("thin") solid color("neutral", "lighter");
+    border-radius: border-radius("xl");
+    transition: $transition-fast;
+
+    &:focus-within {
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 4px color-alpha("primary", "base", 0.1);
+      background: color("neutral", "white");
+    }
+
+    &--error {
+      border-color: color("status", "error");
+      background: color-alpha("status", "error", 0.02);
+
+      &:focus-within {
+        box-shadow: 0 0 0 4px color-alpha("status", "error", 0.1);
+      }
+    }
+  }
+
+  &__icon {
+    @include flex-center;
+    color: color("neutral", "medium");
+    padding-left: spacing("md");
+    flex-shrink: 0;
+
+    .formInput__wrapper:focus-within & {
+      color: color("primary", "base");
+    }
+
+    .formInput__wrapper--error & {
+      color: color("status", "error");
+    }
+  }
+
+  &__input {
+    flex: 1;
+    height: 52px;
+    padding: spacing("md");
+    @include font-size("base");
+    color: color("neutral", "darkest");
+    background: transparent;
+    border: none;
+    outline: none;
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+  }
+
+  &__select {
+    flex: 1;
+    height: 52px;
+    padding: spacing("md");
+    @include font-size("base");
+    color: color("neutral", "darkest");
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M6 8L10 12L14 8' stroke='%23666' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right spacing("md") center;
+    padding-right: spacing("2xl");
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    option {
+      color: color("neutral", "darkest");
+      background-color: color("neutral", "white");
+    }
+  }
+
+  &__passwordToggle {
+    background: none;
+    border: none;
+    color: color("neutral", "medium");
+    padding: 0 spacing("md");
+    cursor: pointer;
+    @include flex-center;
+    transition: color transition-duration("fast") transition-timing("ease");
+
+    &:hover {
+      color: color("neutral", "darkest");
+    }
+  }
+
+  &__error {
+    @include font-size("xs");
+    color: color("status", "error");
+    margin-top: spacing("xs");
+    display: flex;
+    align-items: center;
+    gap: spacing("xxs");
+
+    svg {
+      flex-shrink: 0;
+    }
+  }
+}
+
+// Social Auth Styles
+.socialAuth {
+  margin-bottom: spacing("xl");
+
+  &__button {
+    width: 100%;
+    padding: spacing("md");
+    border: border-width("thin") solid color("neutral", "lighter");
+    border-radius: border-radius("xl");
+    background-color: color("neutral", "white");
+    color: color("neutral", "darkest");
+    @include font-size("sm");
+    @include font-weight("medium");
+    @include flex-center;
+    gap: spacing("sm");
+    cursor: pointer;
+    transition: $transition-fast;
+    margin-bottom: spacing("sm");
+
+    &:hover:not(:disabled) {
+      background-color: color("neutral", "lightest");
+      border-color: color("neutral", "light");
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    svg {
+      flex-shrink: 0;
+    }
+
+    &--loading {
+      position: relative;
+      color: transparent;
+
+      svg {
+        opacity: 0;
+      }
+    }
+  }
+
+  &__spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid color("neutral", "lighter");
+    border-top-color: color("primary", "base");
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  &__divider {
+    position: relative;
+    text-align: center;
+    margin: spacing("xl") 0;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background-color: color("neutral", "lighter");
+    }
+  }
+
+  &__dividerText {
+    position: relative;
+    background-color: color("neutral", "white");
+    padding: 0 spacing("md");
+    color: color("neutral", "medium");
+    @include font-size("sm");
+  }
+}
+
+// Login Form Styles (used by login, forgot password, reset password)
+.loginForm {
+  position: relative;
+  z-index: 1;
+
+  &__title {
+    font-family: $font-family-heading;
+    @include font-size("3xl");
+    @include font-weight("bold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+    line-height: line-height("tight");
+
+    @include breakpoint-down("sm") {
+      @include font-size("2xl");
+    }
+  }
+
+  &__subtitle {
+    @include font-size("base");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xl");
+    line-height: line-height("relaxed");
+  }
+
+  &__error {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("sm");
+    margin-bottom: spacing("lg");
+    padding: spacing("md");
+    background-color: color-alpha("status", "error", 0.08);
+    border: border-width("thin") solid color-alpha("status", "error", 0.2);
+    border-radius: border-radius("lg");
+    color: color("status", "error");
+    @include font-size("sm");
+
+    svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+  }
+
+  &__success {
+    text-align: center;
+    padding: spacing("xl") 0;
+
+    svg {
+      color: color("status", "success");
+      margin-bottom: spacing("md");
+    }
+  }
+
+  &__successIcon {
+    width: 80px;
+    height: 80px;
+    @include flex-center;
+    margin: 0 auto spacing("lg");
+    background: color-alpha("status", "success", 0.1);
+    border-radius: border-radius("full");
+    color: color("status", "success");
+  }
+
+  &__successTitle {
+    @include font-size("xl");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("sm");
+  }
+
+  &__successMessage {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    margin-bottom: spacing("xl");
+    line-height: line-height("relaxed");
+  }
+
+  &__email {
+    @include font-weight("semibold");
+    color: color("primary", "base");
+  }
+
+  &__passwordGroup {
+    margin-bottom: spacing("lg");
+  }
+
+  &__passwordHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("sm");
+  }
+
+  &__label {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+  }
+
+  &__required {
+    color: color("secondary", "base");
+    margin-left: 2px;
+  }
+
+  &__forgotPassword {
+    @include font-size("sm");
+    color: color("primary", "base");
+    text-decoration: none;
+    @include font-weight("medium");
+    transition: color transition-duration("fast") transition-timing("ease");
+
+    &:hover {
+      color: color("primary", "dark");
+      text-decoration: underline;
+    }
+  }
+
+  &__checkGroup {
+    margin-bottom: spacing("xl");
+  }
+
+  &__checkbox {
+    display: flex;
+    align-items: center;
+    position: relative;
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    gap: spacing("sm");
+
+    input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+
+      &:checked ~ .loginForm__checkmark {
+        background-color: color("primary", "base");
+        border-color: color("primary", "base");
+
+        &::after {
+          display: block;
+        }
+      }
+    }
+  }
+
+  &__checkmark {
+    height: 20px;
+    width: 20px;
+    background-color: color("neutral", "white");
+    border: 2px solid color("neutral", "light");
+    border-radius: border-radius("sm");
+    position: relative;
+    transition: $transition-fast;
+    flex-shrink: 0;
+
+    &::after {
+      content: "";
+      position: absolute;
+      display: none;
+      left: 6px;
+      top: 2px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+  }
+
+  &__button {
+    width: 100%;
+    padding: spacing("md") spacing("lg");
+    border: none;
+    border-radius: border-radius("xl");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    @include font-size("base");
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: $transition-fast;
+    @include flex-center;
+    gap: spacing("sm");
+    box-shadow: 0 4px 14px color-alpha("primary", "base", 0.25);
+
+    &:hover:not(:disabled) {
+      background: color-darken("primary", "base", 8%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px color-alpha("primary", "base", 0.35);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
+
+  &__buttonSpinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: color("neutral", "white");
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  &__switch {
+    text-align: center;
+    margin-top: spacing("xl");
+    @include font-size("sm");
+    color: color("neutral", "dark");
+  }
+
+  &__switchLink {
+    color: color("primary", "base");
+    @include font-weight("semibold");
+    margin-left: spacing("xs");
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color transition-duration("fast") transition-timing("ease");
+
+    &:hover {
+      color: color("primary", "dark");
+      text-decoration: underline;
+    }
+  }
+
+  &__link {
+    display: block;
+    text-align: center;
+    margin-top: spacing("md");
+    color: color("primary", "base");
+    background: none;
+    border: none;
+    cursor: pointer;
+    @include font-size("sm");
+    @include font-weight("medium");
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes floatBg {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(-2%, 2%) rotate(1deg);
+  }
+}

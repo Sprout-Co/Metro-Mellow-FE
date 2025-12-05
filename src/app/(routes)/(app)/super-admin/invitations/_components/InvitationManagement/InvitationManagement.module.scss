@@ -1,0 +1,97 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.invitation_management {
+  padding: map-get($spacing, "lg");
+
+  &__header {
+    @include flex-between;
+    margin-bottom: map-get($spacing, "2xl");
+    padding-bottom: map-get($spacing, "lg");
+    border-bottom: 1px solid map-get(map-get($colors, "neutral"), "lighter");
+  }
+
+  &__title_section {
+    @include flex-column;
+    gap: map-get($spacing, "xs");
+  }
+
+  &__title {
+    @include heading-2;
+    color: map-get(map-get($colors, "neutral"), "black");
+    margin: 0;
+  }
+
+  &__subtitle {
+    @include paragraph;
+    margin: 0;
+    color: map-get(map-get($colors, "neutral"), "dark");
+  }
+
+  &__actions {
+    display: flex;
+    gap: map-get($spacing, "md");
+    align-items: center;
+  }
+
+  &__cleanup_btn {
+    @include button-base;
+    background-color: map-get(map-get($colors, "neutral"), "light");
+    color: map-get(map-get($colors, "neutral"), "darker");
+    border: 1px solid map-get(map-get($colors, "neutral"), "medium");
+
+    &:hover {
+      background-color: map-get(map-get($colors, "neutral"), "lighter");
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__create_btn {
+    @include button-primary;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__error {
+    background-color: rgba(color("status", "error"), 0.1);
+    color: color("status", "error");
+    padding: map-get($spacing, "md");
+    border-radius: map-get($border-radius, "md");
+    margin-bottom: map-get($spacing, "lg");
+    border: 1px solid rgba(color("status", "error"), 0.2);
+  }
+
+  &__content {
+    background-color: map-get(map-get($colors, "neutral"), "white");
+    border-radius: map-get($border-radius, "lg");
+    box-shadow: map-get($shadows, "sm");
+    overflow: hidden;
+  }
+}
+
+.access_denied {
+  text-align: center;
+  padding: map-get($spacing, "4xl");
+  background-color: map-get(map-get($colors, "neutral"), "white");
+  border-radius: map-get($border-radius, "lg");
+  box-shadow: map-get($shadows, "sm");
+
+  h2 {
+    @include heading-2;
+    color: color("status", "error");
+    margin-bottom: map-get($spacing, "md");
+  }
+
+  p {
+    @include paragraph;
+    color: map-get(map-get($colors, "neutral"), "dark");
+  }
+}

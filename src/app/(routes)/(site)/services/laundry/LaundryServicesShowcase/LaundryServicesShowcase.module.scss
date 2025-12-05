@@ -1,0 +1,140 @@
+// src/app/(routes)/(site)/services/laundry/LaundryServicesShowcase/LaundryServicesShowcase.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.showcase {
+  width: 100%;
+  padding: spacing("5xl") 0;
+  @include section-border;
+  position: relative;
+  overflow: hidden;
+
+  @include breakpoint-down("md") {
+    padding: spacing("4xl") 0;
+  }
+
+  @include breakpoint-down("sm") {
+    padding: spacing("3xl") 0;
+  }
+
+  &__container {
+    @include container;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: spacing("md");
+
+    p {
+      color: color("neutral", "dark");
+      font-size: font-size("body-2");
+    }
+  }
+
+  &__spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid color("primary", "lighter");
+    border-top-color: color("primary", "base");
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  &__header {
+    text-align: center;
+    max-width: 700px;
+    margin-bottom: spacing("2xl");
+
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("xl");
+    }
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xs");
+    background: linear-gradient(135deg, #e6f7ff 0%, #cfeeff 100%);
+    color: color("primary", "dark");
+    padding: spacing("xs") spacing("lg");
+    border-radius: border-radius("pill");
+    font-size: font-size("small");
+    font-weight: map-get($font-weights, "semibold");
+    margin-bottom: spacing("md");
+    border: 1px solid rgba(color("primary", "base"), 0.2);
+  }
+
+  &__badgeIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  &__title {
+    @include heading-1;
+    margin-bottom: spacing("md");
+    color: color("neutral", "black");
+
+    @include breakpoint-down("lg") {
+      font-size: 3rem;
+    }
+
+    @include breakpoint-down("md") {
+      font-size: 2.5rem;
+    }
+
+    @include breakpoint-down("sm") {
+      font-size: 2rem;
+    }
+  }
+
+  &__titleAccent {
+    color: color("primary", "base");
+    position: relative;
+    display: inline-block;
+  }
+
+  &__subtitle {
+    @include paragraph;
+    font-size: font-size("body-1");
+    color: color("neutral", "dark");
+    line-height: 1.6;
+
+    @include breakpoint-down("md") {
+      font-size: font-size("body-2");
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: spacing("xl");
+    width: 100%;
+    margin-bottom: spacing("3xl");
+
+    @include breakpoint-down("lg") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+      gap: spacing("lg");
+    }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,37 @@
+@import "abstracts/variables";
+@import "abstracts/mixins";
+@import "abstracts/functions";
+
+.cleaningCTA {
+  @include section-spacing("3xl");
+  position: relative;
+  background: color("primary", "base");
+  color: color("neutral", "white");
+
+  &__container {
+    @include container;
+  }
+
+  &__content {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  &__title {
+    @include heading-1;
+    margin-bottom: spacing("lg");
+    color: color("neutral", "white");
+  }
+
+  &__subtitle {
+    @include body-1;
+    margin-bottom: spacing("2xl");
+    color: color-alpha("neutral", "white", 0.9);
+  }
+
+  &__buttons {
+    @include flex($justify: center, $align: center);
+    gap: spacing("lg");
+    flex-wrap: wrap;
+  }
+}

@@ -1,0 +1,35 @@
+query ServiceArea($serviceAreaId: ID!) {
+  serviceArea(id: $serviceAreaId) {
+    id
+    name
+    city
+    deliveryCost
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+
+query ServiceAreas {
+  serviceAreas {
+    id
+    name
+    city
+    deliveryCost
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+
+query ActiveServiceAreas {
+  activeServiceAreas {
+    id
+    name
+    city
+    deliveryCost
+    isActive
+    createdAt
+    updatedAt
+  }
+}

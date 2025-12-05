@@ -1,0 +1,134 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.header {
+  width: 100%;
+  background-color: color("neutral", "white");
+  box-shadow: map-get($shadows, "sm");
+  position: sticky;
+  top: 0;
+  z-index: map-get($z-index, "sticky");
+  
+  &__container {
+    @include container;
+    @include flex-between;
+    max-width: map-get($container-max-widths, "xl");
+    height: 70px;
+  }
+  
+  &__logo {
+    display: flex;
+    align-items: center;
+  }
+  
+  &__logoImage {
+    height: auto;
+    object-fit: contain;
+  }
+  
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+  }
+  
+  &__notification {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  &__notificationIcon {
+    font-size: font-size("xl");
+  }
+  
+  &__user {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  &__userInfo {
+    @include flex-center;
+    gap: spacing("xs");
+  }
+  
+  &__greeting {
+    @include font-secondary;
+    @include font-size("body-2");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+  }
+  
+  &__chevron {
+    font-size: font-size("xxs");
+    color: color("neutral", "dark");
+  }
+  
+  &__dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: spacing("xs");
+    background-color: color("neutral", "white");
+    border-radius: border-radius("md");
+    box-shadow: map-get($shadows, "lg");
+    min-width: 200px;
+    overflow: hidden;
+  }
+  
+  &__menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  &__menuItem {
+    @include flex;
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("medium");
+    padding: spacing("sm") spacing("md");
+    color: color("neutral", "darkest");
+    cursor: pointer;
+    gap: spacing("sm");
+    
+    &:hover {
+      background-color: color("neutral", "lightest");
+    }
+    
+    &--logout {
+      color: color("status", "error");
+      border-top: 1px solid color("neutral", "lighter");
+    }
+  }
+  
+  &__menuIcon {
+    font-size: font-size("base");
+  }
+
+  &__menuLink {
+    @include flex;
+    @include font-secondary;
+    @include font-size("sm");
+    @include font-weight("medium");
+    width: 100%;
+    padding: spacing("sm") spacing("md");
+    color: color("neutral", "darkest");
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    gap: spacing("sm");
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color("neutral", "lightest");
+      text-decoration: none;
+    }
+
+    &:focus {
+      outline: none;
+      background-color: color("neutral", "lightest");
+    }
+  }
+}

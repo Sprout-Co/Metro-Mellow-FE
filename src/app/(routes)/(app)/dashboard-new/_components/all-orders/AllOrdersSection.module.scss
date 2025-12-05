@@ -1,0 +1,13 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.allOrders {
+  &__filterTabs {
+    margin-bottom: spacing("md");
+  }
+  
+  &__content {
+    margin-top: spacing("md");
+  }
+}

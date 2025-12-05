@@ -1,0 +1,100 @@
+// src/app/(routes)/(site)/blog/Blog.module.scss
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.blog {
+  min-height: 100vh;
+  background: color("neutral", "lightest");
+
+  &__container {
+    @include container;
+    padding-left: spacing("md");
+    padding-right: spacing("md");
+
+    @include breakpoint-down("sm") {
+      padding-left: spacing("sm");
+      padding-right: spacing("sm");
+    }
+  }
+
+  // Section spacing
+  &__categories-section,
+  &__featured-section,
+  &__grid-section {
+    padding: spacing("4xl") 0;
+
+    @include breakpoint-down("md") {
+      padding: spacing("3xl") 0;
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("2xl") 0;
+    }
+  }
+
+  &__categories-section {
+    background: color("neutral", "white");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+
+  &__featured-section {
+    background: linear-gradient(
+      to bottom,
+      color("neutral", "white") 0%,
+      color("neutral", "lightest") 100%
+    );
+  }
+
+  &__grid-section {
+    background: color("neutral", "lightest");
+  }
+
+  // Section headers
+  &__section-header {
+    text-align: center;
+    margin-bottom: spacing("3xl");
+
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("2xl");
+    }
+  }
+
+  &__section-label {
+    display: inline-block;
+    background: color("primary", "lighter");
+    color: color("primary", "base");
+    padding: spacing("xs") spacing("md");
+    border-radius: border-radius("pill");
+    font-size: font-size("xs");
+    font-weight: map-get($font-weights, "bold");
+    letter-spacing: letterSpacing("wider");
+    margin-bottom: spacing("md");
+  }
+
+  &__section-title {
+    @include heading-2;
+    color: color("neutral", "black");
+    margin-bottom: spacing("md");
+
+    @include breakpoint-down("md") {
+      @include heading-3;
+    }
+
+    @include breakpoint-down("sm") {
+      @include heading-4;
+    }
+  }
+
+  &__section-description {
+    @include body-1;
+    color: color("neutral", "dark");
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: line-height("relaxed");
+
+    @include breakpoint-down("md") {
+      @include body-2;
+    }
+  }
+}

@@ -1,0 +1,21 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.sectionHeader {
+  margin-bottom: spacing("md");
+  
+  &__title {
+    @include font-size("title");
+    @include font-weight("bold");
+    font-family: $font-family-heading;
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
+  }
+  
+  &__subtitle {
+    @include body-1;
+    color: color("neutral", "dark");
+    margin-bottom: spacing("md");
+  }
+}

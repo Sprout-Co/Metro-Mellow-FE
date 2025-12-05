@@ -1,0 +1,40 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.dashboard_page {
+  &__metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: spacing("lg");
+    margin-bottom: spacing("xl");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__main_content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: spacing("lg");
+
+    @include breakpoint-down("lg") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__side_content {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("lg");
+  }
+
+  &__revenue {
+    height: 180px;
+  }
+
+  &__bookings {
+    flex: 1;
+  }
+}

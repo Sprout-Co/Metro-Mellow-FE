@@ -1,0 +1,648 @@
+// CheckoutSummary.module.scss - Complete Redesign
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.checkout {
+  min-height: 100vh;
+  background: color("neutral", "lightest");
+  margin-top: spacing("7xl");
+  &__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: color("neutral", "white");
+    border-radius: border-radius("3xl");
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+
+    @include breakpoint-down("lg") {
+      border-radius: 0;
+    }
+  }
+
+  // Clean Header Section
+  &__header {
+    background: color("primary", "base");
+    padding: spacing("2xl") spacing("3xl");
+    color: color("neutral", "white");
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+
+    @include breakpoint-down("md") {
+      padding: spacing("xl") spacing("lg");
+      flex-direction: column;
+      gap: spacing("lg");
+      align-items: flex-start;
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("lg") spacing("md");
+      gap: spacing("md");
+    }
+  }
+
+  &__headerContent {
+    display: flex;
+    align-items: center;
+    gap: spacing("xl");
+    position: relative;
+    z-index: 1;
+
+    @include breakpoint-down("md") {
+      gap: spacing("md");
+    }
+
+    @include breakpoint-down("sm") {
+      gap: spacing("sm");
+    }
+  }
+
+  &__headerIcon {
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: border-radius("2xl");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    @include breakpoint-down("sm") {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  &__headerText {
+    h1 {
+      @include font-size("2xl");
+      @include font-weight("bold");
+      margin: 0 0 spacing("xxs") 0;
+
+      @include breakpoint-down("md") {
+        @include font-size("xl");
+      }
+
+      @include breakpoint-down("sm") {
+        @include font-size("lg");
+      }
+    }
+
+    p {
+      @include font-size("sm");
+      opacity: 0.9;
+      margin: 0;
+
+      @include breakpoint-down("sm") {
+        @include font-size("xs");
+      }
+    }
+  }
+
+  &__backBtn {
+    padding: spacing("sm") spacing("lg");
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: border-radius("lg");
+    color: color("neutral", "white");
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    transition: all 0.3s ease;
+    @include font-size("sm");
+    @include font-weight("medium");
+    position: relative;
+    z-index: 1;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateX(-2px);
+    }
+  }
+
+  // Main Layout Grid
+  &__body {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: spacing("2xl");
+    padding: spacing("2xl");
+    background: color("neutral", "white");
+
+    @include breakpoint-down("lg") {
+      grid-template-columns: 1fr;
+      padding: spacing("xl");
+    }
+
+    @include breakpoint-down("md") {
+      padding: spacing("lg");
+      gap: spacing("xl");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md");
+      gap: spacing("lg");
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // Clean & Professional Design
+  &__simpleSection {
+    margin-bottom: spacing("xl");
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  &__simpleSectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: spacing("md");
+
+    h3 {
+      @include font-size("base");
+      @include font-weight("medium");
+      color: color("neutral", "darkest");
+      margin: 0;
+    }
+  }
+
+  &__simpleLabel {
+    display: block;
+    @include font-size("base");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("md");
+  }
+
+  &__simpleCount {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+    min-width: 24px;
+    padding: 0 spacing("xs");
+    border-radius: 12px;
+    background-color: color("primary", "lighter");
+    color: color("primary", "base");
+    @include font-size("xs");
+    @include font-weight("medium");
+  }
+
+  &__simpleFormGroup {
+    margin-bottom: spacing("md");
+  }
+
+  &__simpleInput {
+    width: 100%;
+    max-width: 300px;
+    padding: spacing("md");
+    border: 1px solid color("neutral", "light");
+    border-radius: spacing("xs");
+    @include font-size("base");
+    color: color("neutral", "darkest");
+    background-color: color("neutral", "white");
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 2px rgba(color("primary", "base"), 0.1);
+    }
+  }
+
+  &__simpleDateDisplay {
+    margin-top: spacing("md");
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    font-style: italic;
+  }
+
+  // Address Table
+  &__addressTable {
+    border: 1px solid color("neutral", "lighter");
+    border-radius: spacing("xs");
+    overflow: hidden;
+  }
+
+  &__addressRow {
+    display: flex;
+    padding: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: color("neutral", "lightest");
+    }
+  }
+
+  &__addressRowSelected {
+    background-color: rgba(color("primary", "light"), 0.5);
+
+    &:hover {
+      background-color: rgba(color("primary", "lighter"), 0.7);
+    }
+  }
+
+  &__addressRowCheck {
+    margin-right: spacing("md");
+    display: flex;
+    align-items: center;
+  }
+
+  &__radioOuter {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid color("neutral", "light");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  &__radioOuterSelected {
+    border-color: color("primary", "base");
+  }
+
+  &__radioInner {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: color("primary", "base");
+  }
+
+  &__addressRowContent {
+    flex: 1;
+  }
+
+  &__addressRowTitle {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xs");
+    display: flex;
+    align-items: center;
+  }
+
+  &__addressRowTag {
+    margin-left: spacing("xs");
+    padding: 2px spacing("xs");
+    @include font-size("xs");
+    color: color("primary", "dark");
+    background-color: color("primary", "lighter");
+    border-radius: spacing("xs");
+  }
+
+  &__addressRowText {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+  }
+
+  &__noAddressMessage {
+    padding: spacing("lg");
+    text-align: center;
+    border: 1px solid color("neutral", "lighter");
+    border-radius: spacing("xs");
+    color: color("neutral", "dark");
+  }
+
+  // Service Table
+  &__serviceTable {
+    border: 1px solid color("neutral", "lighter");
+    border-radius: spacing("xs");
+    overflow: hidden;
+  }
+
+  &__serviceTableHeader {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr 1fr 1fr;
+    background-color: color("neutral", "lightest");
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+      display: none; // Hide header on mobile, show labels inline
+    }
+
+    > div {
+      padding: spacing("sm") spacing("md");
+      @include font-size("xs");
+      @include font-weight("medium");
+      color: color("neutral", "dark");
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      @include breakpoint-down("sm") {
+        padding: spacing("xs") spacing("sm");
+      }
+    }
+  }
+
+  &__serviceRow {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr 1fr 1fr;
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+      display: flex;
+      flex-direction: column;
+      padding: spacing("md");
+      gap: spacing("sm");
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: rgba(color("neutral", "lightest"), 0.5);
+    }
+
+    > div {
+      padding: spacing("md");
+      @include font-size("sm");
+      color: color("neutral", "darkest");
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      @include breakpoint-down("md") {
+        padding: 0;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid color("neutral", "lightest");
+        padding: spacing("xs") 0;
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+
+      @include breakpoint-down("sm") {
+        @include font-size("xs");
+      }
+    }
+  }
+
+  &__serviceColName {
+    @include font-weight("medium");
+
+    @include breakpoint-down("md") {
+      &::before {
+        content: "Service: ";
+        @include font-weight("medium");
+        color: color("neutral", "dark");
+      }
+    }
+  }
+
+  &__serviceType {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+    margin-top: 2px;
+    font-weight: normal;
+  }
+
+  &__serviceColFrequency {
+    @include font-size("sm");
+
+    @include breakpoint-down("md") {
+      &::before {
+        content: "Frequency: ";
+        @include font-weight("medium");
+        color: color("neutral", "dark");
+      }
+    }
+  }
+
+  &__serviceColDays {
+    @include font-size("sm");
+
+    @include breakpoint-down("md") {
+      &::before {
+        content: "Days: ";
+        @include font-weight("medium");
+        color: color("neutral", "dark");
+      }
+    }
+  }
+
+  &__serviceColTime {
+    @include font-size("sm");
+
+    @include breakpoint-down("md") {
+      &::before {
+        content: "Time: ";
+        @include font-weight("medium");
+        color: color("neutral", "dark");
+      }
+    }
+  }
+
+  &__serviceColPrice {
+    @include font-weight("semibold");
+
+    @include breakpoint-down("md") {
+      &::before {
+        content: "Price: ";
+        @include font-weight("medium");
+        color: color("neutral", "dark");
+      }
+    }
+  }
+
+  &__pricePeriod {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+    font-weight: normal;
+    margin-left: 2px;
+  }
+
+  // Order Summary Sidebar
+  &__sidebar {
+    position: sticky;
+    top: spacing("xl");
+    height: fit-content;
+
+    @include breakpoint-down("lg") {
+      position: static;
+      margin-top: spacing("xl");
+    }
+
+    @include breakpoint-down("md") {
+      margin-top: spacing("lg");
+    }
+
+    @include breakpoint-down("sm") {
+      margin-top: spacing("md");
+    }
+  }
+
+  &__summary {
+    background: color("neutral", "white");
+    border: 2px solid color("primary", "base");
+    border-radius: border-radius("2xl");
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(color("primary", "base"), 0.1);
+
+    @include breakpoint-down("md") {
+      border-radius: border-radius("xl");
+    }
+
+    @include breakpoint-down("sm") {
+      border-radius: border-radius("lg");
+      border-width: 1px;
+    }
+  }
+
+  &__summaryHeader {
+    background: linear-gradient(
+      135deg,
+      color("primary", "base"),
+      color("primary", "dark")
+    );
+    padding: spacing("lg");
+    color: color("neutral", "white");
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md");
+    }
+
+    h2 {
+      @include font-size("lg");
+      @include font-weight("semibold");
+      margin: 0 0 spacing("xxs") 0;
+
+      @include breakpoint-down("sm") {
+        @include font-size("base");
+      }
+    }
+
+    p {
+      @include font-size("sm");
+      opacity: 0.9;
+      margin: 0;
+
+      @include breakpoint-down("sm") {
+        @include font-size("xs");
+      }
+    }
+  }
+
+  &__summaryBody {
+    padding: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md");
+    }
+  }
+
+  &__summaryItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("sm") 0;
+    @include font-size("sm");
+
+    &:not(:last-child) {
+      border-bottom: 1px solid color("neutral", "lightest");
+    }
+  }
+
+  &__summaryLabel {
+    color: color("neutral", "dark");
+  }
+
+  &__summaryValue {
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  &__discountRow {
+    background: rgba(color("status", "success"), 0.05);
+    padding: spacing("sm");
+    border-radius: border-radius("lg");
+    margin: spacing("md") 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__discountLabel {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    color: darken(color("status", "success"), 20%);
+    @include font-size("sm");
+    @include font-weight("medium");
+  }
+
+  &__discountValue {
+    color: color("status", "success");
+    @include font-weight("semibold");
+  }
+
+  &__totalSection {
+    margin: spacing("lg") 0;
+    padding-top: spacing("lg");
+    border-top: 2px solid color("neutral", "lighter");
+  }
+
+  &__totalRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  &__totalLabelGroup {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+  }
+
+  &__totalLabel {
+    @include font-size("base");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  &__totalSublabel {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+  }
+
+  &__totalAmount {
+    @include font-size("3xl");
+    @include font-weight("bold");
+    color: color("primary", "dark");
+
+    @include breakpoint-down("md") {
+      @include font-size("2xl");
+    }
+
+    @include breakpoint-down("sm") {
+      @include font-size("xl");
+    }
+  }
+}

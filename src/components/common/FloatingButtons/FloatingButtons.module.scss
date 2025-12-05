@@ -1,0 +1,134 @@
+@import "../../../styles/abstracts/variables";
+@import "../../../styles/abstracts/mixins";
+@import "../../../styles/abstracts/functions";
+
+.floatingButtons {
+  position: fixed;
+  bottom: spacing("lg");
+  right: spacing("lg");
+  display: flex;
+  flex-direction: column;
+  gap: spacing("sm");
+  z-index: 1000;
+  
+  @include breakpoint-down("md") {
+    bottom: spacing("md");
+    right: spacing("md");
+  }
+  
+  @include breakpoint-down("sm") {
+    bottom: spacing("sm");
+    right: spacing("sm");
+  }
+}
+
+.floatingButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: border-radius("full");
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: map-get($shadows, "lg");
+  position: relative;
+  
+  @include breakpoint-down("sm") {
+    width: 50px;
+    height: 50px;
+  }
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: map-get($shadows, "xl");
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.whatsappButton {
+  background-color: #25D366; // WhatsApp green
+  color: color("neutral", "white");
+  
+  &:hover {
+    background-color: #128C7E; // Darker WhatsApp green
+    color: color("neutral", "white");
+  }
+  
+  &::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #25D366, #128C7E);
+    border-radius: border-radius("full");
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  &:hover::before {
+    opacity: 1;
+  }
+}
+
+.callButton {
+  background-color: color("primary", "base");
+  color: color("neutral", "white");
+  
+  &:hover {
+    background-color: color("primary", "dark");
+    color: color("neutral", "white");
+  }
+  
+  &::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, color("primary", "base"), color("primary", "dark"));
+    border-radius: border-radius("full");
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  &:hover::before {
+    opacity: 1;
+  }
+}
+
+// Pulse animation for attention
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(37, 211, 102, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}
+
+.whatsappButton {
+  animation: pulse 2s infinite;
+}
+
+// Responsive adjustments
+@include breakpoint-down("sm") {
+  .floatingButton {
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}

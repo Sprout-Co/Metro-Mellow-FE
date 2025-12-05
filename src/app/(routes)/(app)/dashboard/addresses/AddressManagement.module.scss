@@ -1,0 +1,279 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.page {
+  max-width: container-width("md");
+  margin: 0 auto;
+  padding: spacing("2xl") spacing("lg");
+
+  @include breakpoint-down("sm") {
+    padding: spacing("xl") spacing("md");
+  }
+}
+
+// Header
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: spacing("xl");
+
+  @include breakpoint-down("sm") {
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xxs");
+  }
+
+  &__title {
+    @include font-size("xl");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0;
+  }
+
+  &__subtitle {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
+
+  &__addBtn {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("sm") spacing("md");
+    background-color: color("status", "success");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("medium");
+    cursor: pointer;
+    transition: $transition-fast;
+
+    @include breakpoint-down("sm") {
+      width: 100%;
+      justify-content: center;
+    }
+
+    &:hover {
+      background-color: color-darken("status", "success", 10%);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Address List
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("sm");
+}
+
+// Address Card
+.card {
+  display: flex;
+  align-items: flex-start;
+  gap: spacing("md");
+  padding: spacing("md") spacing("lg");
+  background-color: color("neutral", "white");
+  border: border-width("thin") solid color("neutral", "lighter");
+  border-radius: border-radius("xl");
+  transition: $transition-fast;
+
+  @include breakpoint-down("sm") {
+    padding: spacing("md");
+  }
+
+  &:hover {
+    border-color: color("neutral", "light");
+  }
+
+  &--default {
+    border-color: color("status", "success");
+    background-color: color-alpha("status", "success", 0.02);
+
+    &:hover {
+      border-color: color("status", "success");
+    }
+  }
+
+  &__icon {
+    @include flex-center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    color: color("neutral", "dark");
+
+    .card--default & {
+      background-color: color-alpha("status", "success", 0.1);
+      color: color("status", "success");
+    }
+  }
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    margin-bottom: spacing("xxs");
+  }
+
+  &__label {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xxs");
+    padding: spacing("xxs") spacing("sm");
+    background-color: color("status", "success");
+    color: color("neutral", "white");
+    border-radius: border-radius("pill");
+    @include font-size("xs");
+    @include font-weight("semibold");
+    text-transform: uppercase;
+    letter-spacing: letter-spacing("wide");
+  }
+
+  &__street {
+    @include font-size("sm");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xxs");
+    @include truncate;
+  }
+
+  &__city {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    margin: 0;
+  }
+
+  &__actions {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  &__menuBtn {
+    @include flex-center;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    border-radius: border-radius("md");
+    color: color("neutral", "medium");
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover {
+      background-color: color("neutral", "lighter");
+      color: color("neutral", "darkest");
+    }
+  }
+
+  &__menu {
+    position: absolute;
+    top: calc(100% + spacing("xs"));
+    right: 0;
+    min-width: 140px;
+    padding: spacing("xs");
+    background-color: color("neutral", "white");
+    border: border-width("thin") solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    box-shadow: shadow("lg");
+    z-index: z-index("dropdown");
+  }
+
+  &__menuItem {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    width: 100%;
+    padding: spacing("sm") spacing("md");
+    background: transparent;
+    border: none;
+    border-radius: border-radius("md");
+    @include font-size("sm");
+    color: color("neutral", "darkest");
+    cursor: pointer;
+    transition: background-color transition-duration("fast")
+      transition-timing("ease");
+    text-align: left;
+
+    &:hover {
+      background-color: color("neutral", "lightest");
+    }
+
+    svg {
+      color: color("neutral", "dark");
+    }
+  }
+}
+
+// Empty State
+.empty {
+  @include flex-column-center;
+  padding: spacing("4xl") spacing("lg");
+  text-align: center;
+
+  &__icon {
+    @include flex-center;
+    width: 64px;
+    height: 64px;
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("2xl");
+    color: color("neutral", "medium");
+    margin-bottom: spacing("md");
+  }
+
+  &__title {
+    @include font-size("lg");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("xxs");
+  }
+
+  &__text {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("lg");
+  }
+
+  &__btn {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("sm") spacing("lg");
+    background-color: color("status", "success");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("medium");
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover {
+      background-color: color-darken("status", "success", 10%);
+    }
+  }
+}

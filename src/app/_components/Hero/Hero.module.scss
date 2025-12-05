@@ -1,0 +1,319 @@
+// src/app/_components/Hero/Hero.module.scss
+@import "../../../styles/abstracts/variables";
+@import "../../../styles/abstracts/functions";
+@import "../../../styles/abstracts/mixins";
+@import "../../../styles/abstracts/animations";
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: spacing("9xl");
+  overflow: hidden;
+  @include hero-base;
+
+  // Sliding background images
+  &__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 0;
+
+    // Mobile optimizations
+    @include breakpoint-down("md") {
+      background-size: cover;
+      background-position: center 20%;
+    }
+
+    @include breakpoint-down("sm") {
+      background-size: cover;
+      background-position: center 30%;
+    }
+  }
+
+  // Dark overlay for better text contrast
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to right,
+      color-alpha("neutral", "black", 0.8) 0%,
+      color-alpha("neutral", "black", 0.6) 60%,
+      color-alpha("neutral", "black", 0.4) 100%
+    );
+    z-index: 1;
+
+    // Enhanced overlay for mobile
+    @include breakpoint-down("md") {
+      background: linear-gradient(
+        to bottom,
+        color-alpha("neutral", "black", 0.7) 0%,
+        color-alpha("neutral", "black", 0.5) 50%,
+        color-alpha("neutral", "black", 0.8) 100%
+      );
+    }
+
+    @include breakpoint-down("sm") {
+      background: linear-gradient(
+        to bottom,
+        color-alpha("neutral", "black", 0.6) 0%,
+        color-alpha("neutral", "black", 0.4) 40%,
+        color-alpha("neutral", "black", 0.7) 100%
+      );
+    }
+  }
+
+  &__container {
+    @include container;
+    position: relative;
+    height: 100%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+
+    @include breakpoint-down("md") {
+      align-items: center;
+      padding-top: spacing("3xl");
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    @include breakpoint-down("sm") {
+      padding-top: spacing("2xl");
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      padding-left: spacing("md");
+      padding-right: spacing("md");
+    }
+  }
+
+  &__content {
+    // max-width: 655px;
+    text-align: center;
+    width: 100%;
+
+    @include breakpoint-down("md") {
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      max-width: 100%;
+      width: 100%;
+    }
+
+    @include breakpoint-down("sm") {
+      padding: 0;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      width: 100%;
+    }
+  }
+
+  &__title {
+    @include heading-1;
+    font-size: font-size("h1") * 1.2;
+    color: color("neutral", "white");
+    margin-bottom: spacing("lg");
+    line-height: 1;
+    text-align: center;
+    width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+
+    &--accent {
+      color: color("accent", "base");
+      font-weight: map-get($font-weights, "bold");
+      display: inline-block;
+      white-space: nowrap;
+      margin-right: 0.25em;
+
+      @include breakpoint-down("sm") {
+        display: block;
+        margin-bottom: 0;
+        margin-right: 0;
+        white-space: nowrap;
+      }
+    }
+
+    &--word {
+      display: inline-block;
+      color: color("neutral", "white");
+      font-weight: map-get($font-weights, "bold");
+      margin-right: 0.25em;
+
+      @include breakpoint-down("sm") {
+        display: block;
+        margin-right: 0;
+      }
+    }
+
+    &--main {
+      font-weight: map-get($font-weights, "bold");
+    }
+
+    @include breakpoint-down("md") {
+      font-size: font-size("h2") * 1.1;
+      text-align: center;
+      width: 100%;
+      padding: 0 spacing("md");
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      word-break: break-word;
+    }
+
+    @include breakpoint-down("sm") {
+      font-size: font-size("h3");
+      line-height: 1.2;
+      text-align: center;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 spacing("sm");
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      word-break: break-word;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+  }
+
+  &__subtitle {
+    @include body-1;
+    font-size: font-size("body-1");
+    color: color("neutral", "light");
+    margin-bottom: spacing("xl");
+    line-height: line-height("relaxed");
+    max-width: 500px;
+    margin: auto;
+    @include breakpoint-down("md") {
+      font-size: font-size("body-2");
+      text-align: center;
+      max-width: 100%;
+    }
+
+    @include breakpoint-down("sm") {
+      font-size: font-size("body-2");
+      line-height: line-height("normal");
+    }
+
+    &Highlight {
+      color: color("accent", "base");
+      font-weight: map-get($font-weights, "semibold");
+      text-decoration: underline;
+      text-decoration-color: color("accent", "base");
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      &:hover {
+        color: color("accent", "dark");
+        text-decoration-color: color("accent", "dark");
+        transform: translateY(-1px);
+      }
+    }
+  }
+
+  &__cta {
+    margin-top: spacing("2xl");
+
+    @include breakpoint-down("md") {
+      margin-top: spacing("xl");
+    }
+
+    @include breakpoint-down("sm") {
+      margin-top: spacing("lg");
+    }
+  }
+
+  &__button {
+    @include button-base;
+    background-color: color("neutral", "white");
+    color: color("neutral", "darkest");
+    border-radius: border-radius("full");
+    padding: spacing("lg") spacing("2xl");
+    font-weight: map-get($font-weights, "medium");
+    letter-spacing: letter-spacing("wider");
+    transition: $transition-base;
+
+    &:hover {
+      background-color: color("primary", "base");
+      color: color("neutral", "white");
+      transform: translateY(-2px);
+      box-shadow: map-get($shadows, "md");
+    }
+
+    @include breakpoint-down("md") {
+      padding: spacing("md") spacing("xl");
+    }
+
+    @include breakpoint-down("sm") {
+      min-width: 100%;
+      width: 100%;
+      padding: spacing("xl") 0;
+      font-size: font-size("body-2");
+    }
+  }
+
+  &__indicators {
+    position: absolute;
+    bottom: spacing("2xl");
+    right: spacing("2xl");
+    display: flex;
+    gap: spacing("xs");
+    z-index: 2;
+
+    @include breakpoint-down("md") {
+      right: spacing("xl");
+      bottom: spacing("xl");
+    }
+
+    @include breakpoint-down("sm") {
+      right: spacing("md");
+      bottom: spacing("lg");
+    }
+  }
+
+  &__indicator {
+    width: spacing("md");
+    height: spacing("xs");
+    background-color: color("neutral", "medium");
+    border-radius: border-radius("full");
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: color("neutral", "light");
+      transform: scale(1.1);
+    }
+
+    &--active {
+      background-color: color("accent", "base");
+      width: spacing("xl");
+    }
+
+    @include breakpoint-down("sm") {
+      width: spacing("sm");
+      height: spacing("xxs");
+
+      &--active {
+        width: spacing("lg");
+      }
+    }
+  }
+}

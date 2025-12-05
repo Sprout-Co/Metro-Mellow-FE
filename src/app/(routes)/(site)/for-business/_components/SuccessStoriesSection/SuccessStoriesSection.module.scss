@@ -1,0 +1,442 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/animations";
+
+.section {
+  @include section-spacing("6xl");
+  background: linear-gradient(
+    to bottom,
+    map-get(map-get($colors, "neutral"), "lightest") 0%,
+    map-get(map-get($colors, "neutral"), "lighter") 100%
+  );
+  overflow: hidden;
+}
+
+.container {
+  @include container;
+}
+
+// Section Header
+.header {
+  text-align: center;
+  margin-bottom: spacing("4xl");
+}
+
+.badge {
+  display: inline-block;
+  background-color: map-get(map-get($colors, "primary"), "base");
+  color: map-get(map-get($colors, "neutral"), "white");
+  font-size: map-get($font-sizes, "small");
+  font-weight: map-get($font-weights, "bold");
+  padding: spacing("xs") spacing("md");
+  border-radius: map-get($border-radius, "pill");
+  margin-bottom: spacing("md");
+  letter-spacing: map-get($letter-spacing, "wider");
+}
+
+.title {
+  @include heading-2;
+  color: map-get(map-get($colors, "neutral"), "black");
+  margin-bottom: spacing("lg");
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.subtitle {
+  font-size: map-get($font-sizes, "body-1");
+  color: map-get(map-get($colors, "neutral"), "dark");
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: map-get($line-heights, "relaxed");
+}
+
+// Metrics Bar
+.metricsBar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: spacing("5xl");
+  flex-wrap: wrap;
+  gap: spacing("xl");
+}
+
+.metricCard {
+  flex: 1;
+  min-width: 200px;
+  background-color: map-get(map-get($colors, "neutral"), "white");
+  border-radius: map-get($border-radius, "lg");
+  padding: spacing("xl");
+  text-align: center;
+  box-shadow: map-get($shadows, "md");
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: map-get($shadows, "lg");
+  }
+}
+
+.metricIcon {
+  color: map-get(map-get($colors, "primary"), "base");
+  margin-bottom: spacing("md");
+}
+
+.metricValue {
+  font-size: map-get($font-sizes, "h4");
+  font-weight: map-get($font-weights, "bold");
+  color: map-get(map-get($colors, "secondary"), "base");
+  margin-bottom: spacing("xs");
+}
+
+.metricLabel {
+  font-size: map-get($font-sizes, "body-2");
+  color: map-get(map-get($colors, "neutral"), "dark");
+}
+
+// Case Study Carousel
+.carouselContainer {
+  margin-bottom: spacing("5xl");
+}
+
+.carouselTitle {
+  font-size: map-get($font-sizes, "h5");
+  font-weight: map-get($font-weights, "medium");
+  text-align: center;
+  margin-bottom: spacing("2xl");
+  color: map-get(map-get($colors, "neutral"), "black");
+}
+
+.carousel {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: spacing("xl");
+}
+
+.carouselTrack {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.caseStudyCard {
+  flex: 0 0 100%;
+  background-color: map-get(map-get($colors, "neutral"), "white");
+  border-radius: map-get($border-radius, "xl");
+  padding: spacing("2xl");
+  box-shadow: map-get($shadows, "md");
+  display: flex;
+  flex-direction: column;
+  gap: spacing("xl");
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: spacing("lg");
+  padding-bottom: spacing("lg");
+  border-bottom: 1px solid map-get(map-get($colors, "neutral"), "lighter");
+}
+
+.logoContainer {
+  width: 60px;
+  height: 60px;
+  border-radius: map-get($border-radius, "md");
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.companyLogo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.companyName {
+  font-size: map-get($font-sizes, "subtitle-2");
+  font-weight: map-get($font-weights, "bold");
+  color: map-get(map-get($colors, "neutral"), "black");
+  margin: 0;
+}
+
+.industry {
+  font-size: map-get($font-sizes, "body-2");
+  color: map-get(map-get($colors, "neutral"), "dark");
+  margin: 0;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("xl");
+}
+
+.challengeSolution {
+  display: flex;
+  gap: spacing("xl");
+
+  @include breakpoint-down("md") {
+    flex-direction: column;
+    gap: spacing("lg");
+  }
+}
+
+.challenge,
+.solution {
+  flex: 1;
+}
+
+.sectionLabel {
+  font-size: map-get($font-sizes, "body-2");
+  font-weight: map-get($font-weights, "bold");
+  color: map-get(map-get($colors, "primary"), "base");
+  margin-bottom: spacing("sm");
+  text-transform: uppercase;
+  letter-spacing: map-get($letter-spacing, "wide");
+}
+
+.results {
+  background-color: map-get(map-get($colors, "primary"), "lighter");
+  border-radius: map-get($border-radius, "md");
+  padding: spacing("lg");
+}
+
+.resultsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.resultItem {
+  margin-bottom: spacing("sm");
+  font-size: map-get($font-sizes, "body-2");
+  display: flex;
+  align-items: flex-start;
+  gap: spacing("xs");
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.checkIcon {
+  color: map-get(map-get($colors, "secondary"), "base");
+  font-weight: map-get($font-weights, "bold");
+}
+
+.testimonial {
+  background-color: map-get(map-get($colors, "neutral"), "lightest");
+  border-radius: map-get($border-radius, "md");
+  padding: spacing("xl");
+  position: relative;
+}
+
+.quoteIcon {
+  position: absolute;
+  top: spacing("md");
+  right: spacing("md");
+  color: map-get(map-get($colors, "neutral"), "light");
+}
+
+.quote {
+  font-size: map-get($font-sizes, "body-1");
+  font-style: italic;
+  color: map-get(map-get($colors, "neutral"), "darkest");
+  margin: 0 0 spacing("md") 0;
+  line-height: map-get($line-heights, "relaxed");
+}
+
+.author {
+  font-size: map-get($font-sizes, "body-2");
+  color: map-get(map-get($colors, "neutral"), "dark");
+}
+
+.authorName {
+  font-weight: map-get($font-weights, "bold");
+  color: map-get(map-get($colors, "neutral"), "black");
+}
+
+.authorPosition {
+  font-style: italic;
+}
+
+// Carousel Navigation
+.carouselNav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: spacing("xl");
+}
+
+.navBtn {
+  background-color: map-get(map-get($colors, "neutral"), "white");
+  border: 1px solid map-get(map-get($colors, "neutral"), "light");
+  color: map-get(map-get($colors, "neutral"), "darkest");
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: map-get(map-get($colors, "primary"), "base");
+    color: map-get(map-get($colors, "neutral"), "white");
+    border-color: map-get(map-get($colors, "primary"), "base");
+  }
+}
+
+.indicators {
+  display: flex;
+  gap: spacing("sm");
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: map-get(map-get($colors, "neutral"), "light");
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &.active {
+    background-color: map-get(map-get($colors, "secondary"), "base");
+    transform: scale(1.2);
+  }
+}
+
+// Industry Spotlights
+.spotlightsContainer {
+  margin-top: spacing("6xl");
+}
+
+.spotlightsTitle {
+  font-size: map-get($font-sizes, "h5");
+  font-weight: map-get($font-weights, "medium");
+  text-align: center;
+  margin-bottom: spacing("3xl");
+  color: map-get(map-get($colors, "neutral"), "black");
+}
+
+.spotlightsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: spacing("xl");
+
+  @include breakpoint-down("lg") {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include breakpoint-down("sm") {
+    grid-template-columns: 1fr;
+  }
+}
+
+.spotlightCard {
+  background-color: map-get(map-get($colors, "neutral"), "white");
+  border-radius: map-get($border-radius, "lg");
+  padding: spacing("xl");
+  text-align: center;
+  box-shadow: map-get($shadows, "md");
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: map-get($shadows, "lg");
+  }
+}
+
+.spotlightIcon {
+  background-color: map-get(map-get($colors, "primary"), "lighter");
+  color: map-get(map-get($colors, "primary"), "base");
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto spacing("lg");
+}
+
+.spotlightIndustry {
+  font-size: map-get($font-sizes, "subtitle-2");
+  font-weight: map-get($font-weights, "bold");
+  color: map-get(map-get($colors, "neutral"), "black");
+  margin-bottom: spacing("md");
+}
+
+.spotlightHighlight {
+  font-size: map-get($font-sizes, "body-2");
+  color: map-get(map-get($colors, "neutral"), "darkest");
+  margin-bottom: spacing("lg");
+  line-height: map-get($line-heights, "relaxed");
+}
+
+.spotlightMetric {
+  font-size: map-get($font-sizes, "body-1");
+  font-weight: map-get($font-weights, "bold");
+  color: map-get(map-get($colors, "secondary"), "base");
+  padding: spacing("sm") spacing("md");
+  background-color: map-get(map-get($colors, "secondary"), "lighter");
+  border-radius: map-get($border-radius, "pill");
+  display: inline-block;
+}
+
+// Responsive adjustments
+@include breakpoint-down("md") {
+  .metricsBar {
+    justify-content: center;
+  }
+
+  .metricCard {
+    min-width: 160px;
+    flex-basis: calc(50% - #{spacing("lg")});
+  }
+
+  .challengeSolution {
+    flex-direction: column;
+  }
+
+  .carouselNav {
+    gap: spacing("md");
+  }
+}
+
+@include breakpoint-down("sm") {
+  .section {
+    @include section-spacing("3xl");
+  }
+
+  .header {
+    margin-bottom: spacing("2xl");
+  }
+
+  .title {
+    font-size: map-get($font-sizes, "h4");
+  }
+
+  .subtitle {
+    font-size: map-get($font-sizes, "body-2");
+  }
+
+  .metricCard {
+    flex-basis: 100%;
+  }
+
+  .caseStudyCard {
+    padding: spacing("lg");
+  }
+
+  .carouselTitle,
+  .spotlightsTitle {
+    font-size: map-get($font-sizes, "h6");
+  }
+}

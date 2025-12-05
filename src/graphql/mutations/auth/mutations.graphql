@@ -1,0 +1,138 @@
+mutation Register($input: CreateUserInput!) {
+  register(input: $input) {
+    message
+    token
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      emailVerified
+      accountStatus
+    }
+  }
+}
+
+mutation Login($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    token
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      phone
+    }
+  }
+}
+
+mutation UpdateProfile($input: UpdateUserInput!) {
+  updateProfile(input: $input) {
+    id
+    email
+    firstName
+    lastName
+    role
+    phone
+  }
+}
+
+mutation ChangePassword($currentPassword: String!, $newPassword: String!) {
+  changePassword(currentPassword: $currentPassword, newPassword: $newPassword)
+}
+
+mutation ForgotPassword($email: String!) {
+  forgotPassword(email: $email)
+}
+
+mutation ResetPassword($token: String!, $newPassword: String!) {
+  resetPassword(token: $token, newPassword: $newPassword)
+}
+
+mutation UpdateUserRole($userId: ID!, $role: UserRole!) {
+  updateUserRole(userId: $userId, role: $role) {
+    id
+    email
+    firstName
+    lastName
+    role
+    phone
+  }
+}
+
+mutation SendVerificationEmail($email: String!) {
+  sendVerificationEmail(email: $email)
+}
+
+mutation VerifyEmail($token: String!) {
+  verifyEmail(token: $token) {
+    message
+    token
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      emailVerified
+      accountStatus
+    }
+  }
+}
+
+mutation VerifyEmailWithCode($email: String!, $code: String!) {
+  verifyEmailWithCode(email: $email, code: $code) {
+    token
+    message
+    success
+    user {
+      id
+      email
+      firstName
+      lastName
+      role
+      emailVerified
+      accountStatus
+    }
+  }
+}
+
+mutation UpdateAccountStatus(
+  $userId: ID!
+  $status: AccountStatus!
+  $reason: String
+) {
+  updateAccountStatus(userId: $userId, status: $status, reason: $reason)
+}
+
+mutation AddAddress($input: AddressInput!) {
+  addAddress(input: $input)
+}
+
+mutation SetDefaultAddress($addressId: ID!) {
+  setDefaultAddress(addressId: $addressId)
+}
+
+mutation UpdateAddress($addressId: ID!, $input: AddressInput!) {
+  updateAddress(addressId: $addressId, input: $input)
+}
+
+mutation RemoveAddress($addressId: ID!) {
+  removeAddress(addressId: $addressId)
+}
+
+mutation UpdateBookingPaymentStatus(
+  $updateBookingPaymentStatusId: ID!
+  $paymentStatus: PaymentStatus!
+) {
+  updateBookingPaymentStatus(
+    id: $updateBookingPaymentStatusId
+    paymentStatus: $paymentStatus
+  )
+}
+
+mutation UpdateEmailMarketingPreference($optIn: Boolean!) {
+  updateEmailMarketingPreference(optIn: $optIn)
+}

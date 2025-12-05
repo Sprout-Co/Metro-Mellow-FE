@@ -1,0 +1,290 @@
+// SubscriptionSummary - Clean & Polished
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.summary {
+  background: color("neutral", "white");
+  border-radius: border-radius("xl");
+  border: 1.5px solid color("neutral", "lighter");
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+
+  // ===================================
+  // HEADER
+  // ===================================
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("lg");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+
+  &__headerIcon {
+    width: 44px;
+    height: 44px;
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    border-radius: border-radius("lg");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(color("primary", "base"), 0.25);
+  }
+
+  &__headerText {
+    flex: 1;
+
+    h3 {
+      @include font-size("base");
+      @include font-weight("bold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xxs") 0;
+    }
+  }
+
+  &__count {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+  }
+
+  // ===================================
+  // EMPTY STATE
+  // ===================================
+  &__empty {
+    padding: spacing("3xl") spacing("lg");
+    text-align: center;
+  }
+
+  &__emptyIcon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto spacing("md");
+    background: color("neutral", "lightest");
+    border: 2px dashed color("neutral", "lighter");
+    border-radius: border-radius("xl");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("neutral", "light");
+  }
+
+  &__empty p {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    margin: 0;
+  }
+
+  // ===================================
+  // SERVICES LIST
+  // ===================================
+  &__services {
+    padding: spacing("md") spacing("lg");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+    max-height: 280px;
+    overflow-y: auto;
+
+    // Subtle scrollbar
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: color("neutral", "lighter");
+      border-radius: 2px;
+    }
+  }
+
+  &__serviceItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    border: 1px solid transparent;
+    transition: all 0.15s ease;
+
+    &:hover {
+      background: color("neutral", "white");
+      border-color: color("neutral", "lighter");
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+      .summary__serviceActions {
+        opacity: 1;
+      }
+    }
+  }
+
+  &__serviceInfo {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__serviceName {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__serviceMeta {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+  }
+
+  &__serviceRight {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    flex-shrink: 0;
+  }
+
+  &__servicePrice {
+    @include font-size("sm");
+    @include font-weight("bold");
+    color: color("primary", "base");
+    min-width: 80px;
+    text-align: right;
+  }
+
+  &__serviceActions {
+    display: flex;
+    gap: spacing("xxs");
+    opacity: 0.6;
+    transition: opacity 0.15s ease;
+  }
+
+  &__editBtn,
+  &__removeBtn {
+    width: 28px;
+    height: 28px;
+    border-radius: border-radius("md");
+    border: none;
+    background: color("neutral", "white");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    color: color("neutral", "dark");
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+
+    &:hover {
+      color: color("primary", "base");
+      transform: scale(1.1);
+    }
+    }
+
+  &__removeBtn:hover {
+        color: color("status", "error");
+  }
+
+  // ===================================
+  // PRICING
+  // ===================================
+  &__pricing {
+    padding: spacing("md") spacing("lg");
+    border-top: 1px solid color("neutral", "lighter");
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @include font-size("sm");
+    color: color("neutral", "dark");
+
+    span:last-child {
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    }
+  }
+
+  &__discountRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("sm") spacing("md");
+    background: rgba(color("status", "success"), 0.06);
+    border: 1px solid rgba(color("status", "success"), 0.15);
+    border-radius: border-radius("lg");
+  }
+
+  &__discountLabel {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("status", "success");
+
+    svg {
+      opacity: 0.8;
+    }
+  }
+
+  &__discountValue {
+    @include font-size("sm");
+    @include font-weight("bold");
+    color: color("status", "success");
+  }
+
+  // ===================================
+  // TOTAL
+  // ===================================
+  &__total {
+    padding: spacing("lg");
+    border-top: 2px solid color("neutral", "lighter");
+    background: color("neutral", "lightest");
+  }
+
+  &__totalRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("lg");
+  }
+
+  &__totalLabel {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    span:first-child {
+      @include font-size("sm");
+      @include font-weight("bold");
+    color: color("neutral", "darkest");
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+  }
+
+  &__perMonth {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+  }
+
+  &__totalAmount {
+    @include font-size("2xl");
+    @include font-weight("bold");
+    color: color("primary", "base");
+  }
+}

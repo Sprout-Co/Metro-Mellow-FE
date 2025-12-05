@@ -1,0 +1,46 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.quantity {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: spacing("lg");
+  margin-bottom: spacing("xl");
+
+  &__button {
+    width: 40px;
+    height: 40px;
+    border-radius: border-radius("full");
+    background-color: color("neutral", "black");
+    color: color("neutral", "white");
+    border: none;
+    font-size: font-size("lg");
+    font-weight: font-weight("bold");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover:not(:disabled) {
+      background-color: color("primary", "base");
+      transform: translateY(-2px);
+    }
+
+    &:disabled {
+      background-color: color("neutral", "light");
+      cursor: not-allowed;
+    }
+  }
+
+  &__counter {
+    font-family: $font-family-secondary;
+    font-size: font-size("xl");
+    font-weight: font-weight("bold");
+    color: color("neutral", "black");
+    min-width: spacing("xl");
+    text-align: center;
+  }
+}

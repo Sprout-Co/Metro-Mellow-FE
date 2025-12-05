@@ -1,0 +1,231 @@
+@import "abstracts/variables";
+@import "abstracts/functions";
+@import "abstracts/mixins";
+
+.problemStatement {
+  @include section-spacing("3xl");
+  background: linear-gradient(
+    135deg,
+    color("neutral", "lightest") 0%,
+    color("neutral", "white") 100%
+  );
+
+  &__container {
+    @include container;
+    max-width: map-get($container-max-widths, "2xl");
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("4xl");
+
+    @include breakpoint-down("md") {
+      margin-bottom: spacing("3xl");
+    }
+  }
+
+  &__title {
+    @include heading-1;
+    margin-bottom: spacing("lg");
+
+    &--accent {
+      display: block;
+      color: color("secondary", "base");
+      // @include font-weight("medium");
+      margin-bottom: spacing("xs");
+    }
+
+    &--main {
+      display: block;
+      color: color("neutral", "darkest");
+      // @include font-weight("bold");
+    }
+
+    @include breakpoint-down("md") {
+      @include font-size("h3");
+    }
+
+    @include breakpoint-down("sm") {
+      @include font-size("h4");
+    }
+  }
+
+  &__subtitle {
+    @include body-1;
+    color: color("neutral", "dark");
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: line-height("relaxed");
+
+    @include breakpoint-down("md") {
+      @include font-size("body-2");
+    }
+  }
+
+  &__grid {
+    @include grid-responsive(1, 2, 2, 4, spacing("xl"));
+    margin-bottom: spacing("4xl");
+
+    @include breakpoint-down("lg") {
+      @include grid-responsive(1, 2, 2, 3, spacing("lg"));
+    }
+
+    @include breakpoint-down("md") {
+      @include grid-responsive(1, 1, 2, 2, spacing("lg"));
+      margin-bottom: spacing("3xl");
+    }
+
+    @include breakpoint-down("sm") {
+      @include grid-responsive(1, 1, 1, 1, spacing("md"));
+      margin-bottom: spacing("2xl");
+    }
+  }
+
+  &__card {
+    @include card("sm");
+    @include card-body("xl");
+    text-align: center;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+    border: 1px solid color("neutral", "lighter");
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: map-get($shadows, "lg");
+      border-color: color("accent", "lighter");
+    }
+
+    @include breakpoint-down("sm") {
+      @include card-body("lg");
+    }
+  }
+
+  &__cardHeader {
+    @include flex($justify: space-between, $align: center);
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      gap: spacing("sm");
+      margin-bottom: spacing("md");
+    }
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      gap: spacing("sm");
+    }
+  }
+
+  &__iconWrapper {
+    @include flex-center;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(
+      135deg,
+      color("primary", "base") 0%,
+      color("primary", "dark") 100%
+    );
+    border-radius: border-radius("2xl");
+
+    @include breakpoint-down("sm") {
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+  &__icon {
+    width: 28px;
+    height: 28px;
+    color: color("neutral", "white");
+
+    @include breakpoint-down("sm") {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__stat {
+    @include font-size("small");
+    @include font-weight("bold");
+    color: color("secondary", "base");
+    background-color: color("secondary", "lighter");
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("pill");
+    text-transform: uppercase;
+    letter-spacing: letter-spacing("wide");
+
+    @include breakpoint-down("md") {
+      order: -1;
+      @include font-size("xs");
+    }
+
+    @include breakpoint-down("sm") {
+      order: -1;
+    }
+  }
+
+  &__cardTitle {
+    @include subtitle-1;
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("md");
+
+    @include breakpoint-down("sm") {
+      @include font-size("subtitle-2");
+    }
+  }
+
+  &__cardDescription {
+    @include body-2;
+    color: color("neutral", "dark");
+    line-height: line-height("relaxed");
+    margin: 0;
+
+    @include breakpoint-down("sm") {
+      @include font-size("caption");
+    }
+  }
+
+  &__cta {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: spacing("3xl") spacing("xl");
+    background: linear-gradient(
+      135deg,
+      color("accent", "lighter") 0%,
+      color("accent", "base") 100%
+    );
+    border-radius: border-radius("2xl");
+
+    @include breakpoint-down("md") {
+      padding: spacing("2xl") spacing("lg");
+    }
+
+    @include breakpoint-down("sm") {
+      padding: spacing("xl") spacing("md");
+      border-radius: border-radius("lg");
+    }
+  }
+
+  &__ctaTitle {
+    @include subtitle-1;
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("md");
+
+    @include breakpoint-down("sm") {
+      @include font-size("subtitle-2");
+    }
+  }
+
+  &__ctaText {
+    @include body-2;
+    color: color("neutral", "darker");
+    line-height: line-height("relaxed");
+    margin: 0;
+
+    @include breakpoint-down("sm") {
+      @include font-size("caption");
+    }
+  }
+}

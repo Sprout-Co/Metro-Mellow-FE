@@ -1,0 +1,220 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.verifyEmail {
+  min-height: 100vh;
+  @include flex-center;
+  background: linear-gradient(
+    135deg,
+    color("neutral", "lightest") 0%,
+    color("accent", "lighter") 50%,
+    color("neutral", "lighter") 100%
+  );
+  padding: spacing("xl");
+  position: relative;
+  overflow: hidden;
+
+  // Subtle animated background
+  &::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle at 30% 20%,
+      color-alpha("primary", "base", 0.03) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 70% 80%,
+      color-alpha("secondary", "base", 0.03) 0%,
+      transparent 50%
+    );
+    animation: floatBg 20s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  &__card {
+    position: relative;
+    z-index: 1;
+    background-color: color("neutral", "white");
+    border-radius: border-radius("2xl");
+    box-shadow: 
+      0 25px 50px -12px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(0, 0, 0, 0.02);
+    padding: spacing("3xl");
+    text-align: center;
+    max-width: 440px;
+    width: 100%;
+
+    @include breakpoint-down("sm") {
+      padding: spacing("2xl");
+    }
+
+    h1 {
+      font-family: $font-family-heading;
+      @include font-size("2xl");
+      @include font-weight("bold");
+      color: color("neutral", "black");
+      margin: spacing("lg") 0 spacing("sm");
+      line-height: line-height("tight");
+    }
+
+    p {
+      @include font-size("base");
+      color: color("neutral", "dark");
+      line-height: line-height("relaxed");
+      margin-bottom: spacing("xl");
+    }
+  }
+
+  // Loading State
+  &__spinner {
+    width: 56px;
+    height: 56px;
+    border: 3px solid color("neutral", "lighter");
+    border-top-color: color("primary", "base");
+    border-radius: 50%;
+    margin: 0 auto;
+    animation: spin 1s linear infinite;
+  }
+
+  // Success State
+  &__success {
+    width: 80px;
+    height: 80px;
+    @include flex-center;
+    margin: 0 auto;
+    background: color-alpha("status", "success", 0.1);
+    border-radius: border-radius("full");
+    color: color("status", "success");
+
+    svg {
+      width: 48px;
+      height: 48px;
+    }
+  }
+
+  // Error State
+  &__error {
+    width: 80px;
+    height: 80px;
+    @include flex-center;
+    margin: 0 auto;
+    background: color-alpha("status", "error", 0.1);
+    border-radius: border-radius("full");
+    color: color("status", "error");
+
+    svg {
+      width: 48px;
+      height: 48px;
+    }
+  }
+
+  // Email Form
+  &__emailForm {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
+    width: 100%;
+    text-align: left;
+  }
+
+  &__label {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xs");
+  }
+
+  &__input {
+    width: 100%;
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border: border-width("thin") solid color("neutral", "lighter");
+    border-radius: border-radius("xl");
+    @include font-size("base");
+    color: color("neutral", "darkest");
+    transition: $transition-fast;
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+
+    &:focus {
+      outline: none;
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 4px color-alpha("primary", "base", 0.1);
+      background: color("neutral", "white");
+    }
+  }
+
+  // Divider
+  &__divider {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    margin: spacing("lg") 0;
+
+    &::before,
+    &::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color("neutral", "lighter");
+    }
+
+    span {
+      @include font-size("sm");
+      color: color("neutral", "medium");
+    }
+  }
+
+  // Actions
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  // Message
+  &__message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("sm");
+    padding: spacing("md");
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    margin-bottom: spacing("lg");
+
+    &--success {
+      background: color-alpha("status", "success", 0.08);
+      color: color("status", "success");
+    }
+
+    &--error {
+      background: color-alpha("status", "error", 0.08);
+      color: color("status", "error");
+    }
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes floatBg {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(-2%, 2%) rotate(1deg);
+  }
+}

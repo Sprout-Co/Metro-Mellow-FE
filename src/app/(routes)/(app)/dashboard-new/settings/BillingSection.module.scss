@@ -1,0 +1,480 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.billingSection {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: spacing("xl");
+  margin-top: spacing("lg");
+
+  @include breakpoint-down("lg") {
+    grid-template-columns: 1fr;
+  }
+
+  &__card {
+    background: linear-gradient(135deg, color("neutral", "white") 0%, color("neutral", "lightest") 100%);
+    border-radius: border-radius("xl");
+    box-shadow: map-get($shadows, "md");
+    padding: spacing("xl");
+    border: 1px solid color("neutral", "lighter");
+    transition: $transition-base;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, color("primary", "base") 0%, color("secondary", "base") 100%);
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: map-get($shadows, "lg");
+    }
+
+    &--full-width {
+      grid-column: 1 / -1;
+    }
+  }
+
+  &__cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: spacing("lg");
+  }
+
+  &__cardTitle {
+    @include heading-5;
+    color: color("neutral", "black");
+    margin: 0;
+  }
+
+  &__status {
+    @include caption;
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("pill");
+    font-weight: map-get($font-weights, "semibold");
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &--active {
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
+    }
+
+    &--cancelled {
+      background-color: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
+    }
+
+    &--expired {
+      background-color: rgba(color("status", "warning"), 0.1);
+      color: color("status", "warning");
+    }
+
+    &--paid {
+      background-color: rgba(color("status", "success"), 0.1);
+      color: color("status", "success");
+    }
+
+    &--pending {
+      background-color: rgba(color("status", "warning"), 0.1);
+      color: color("status", "warning");
+    }
+
+    &--failed {
+      background-color: rgba(color("status", "error"), 0.1);
+      color: color("status", "error");
+    }
+  }
+
+  // Plan Section
+  &__planInfo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("xl");
+    margin-bottom: spacing("lg");
+
+    @include breakpoint-down("md") {
+      grid-template-columns: 1fr;
+      gap: spacing("lg");
+    }
+  }
+
+  &__planDetails {
+    h4 {
+      @include heading-4;
+      color: color("primary", "base");
+      margin-bottom: spacing("xs");
+    }
+  }
+
+  &__planPrice {
+    @include title;
+    color: color("neutral", "black");
+    margin-bottom: spacing("sm");
+  }
+
+  &__nextBilling {
+    @include body-2;
+    color: color("neutral", "dark");
+  }
+
+  &__planFeatures {
+    h5 {
+      @include subtitle-2;
+      color: color("neutral", "black");
+      margin-bottom: spacing("md");
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  &__feature {
+    @include body-2;
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    margin-bottom: spacing("sm");
+    color: color("neutral", "darkest");
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__featureIcon {
+    color: color("status", "success");
+    font-weight: map-get($font-weights, "bold");
+    font-size: map-get($font-sizes, "lg");
+  }
+
+  &__planActions {
+    display: flex;
+    gap: spacing("md");
+    flex-wrap: wrap;
+  }
+
+  // Usage Section
+  &__usageInfo {
+    text-align: center;
+  }
+
+  &__usageStats {
+    margin-bottom: spacing("md");
+  }
+
+  &__usageCurrent {
+    @include heading-3;
+    color: color("primary", "base");
+    font-weight: map-get($font-weights, "bold");
+  }
+
+  &__usageLimit {
+    @include body-1;
+    color: color("neutral", "dark");
+  }
+
+  &__usageBar {
+    width: 100%;
+    height: 8px;
+    background-color: color("neutral", "lighter");
+    border-radius: border-radius("pill");
+    overflow: hidden;
+    margin-bottom: spacing("md");
+  }
+
+  &__usageProgress {
+    height: 100%;
+    border-radius: border-radius("pill");
+    transition: all 0.3s ease;
+
+    &--normal {
+      background: linear-gradient(90deg, color("status", "success") 0%, color("primary", "base") 100%);
+    }
+
+    &--warning {
+      background: linear-gradient(90deg, color("status", "warning") 0%, color("secondary", "base") 100%);
+    }
+
+    &--critical {
+      background: linear-gradient(90deg, color("status", "error") 0%, color("secondary", "base") 100%);
+    }
+  }
+
+  &__usageText {
+    @include body-2;
+    color: color("neutral", "dark");
+  }
+
+  // Payment Methods Section
+  &__paymentMethods {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+    margin-bottom: spacing("lg");
+  }
+
+  &__paymentCard {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("lg");
+    background: linear-gradient(135deg, color("neutral", "white") 0%, color("neutral", "lightest") 100%);
+    border: 2px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    transition: $transition-base;
+
+    &:hover {
+      border-color: color("primary", "light");
+      box-shadow: map-get($shadows, "sm");
+    }
+  }
+
+  &__cardIcon {
+    font-size: map-get($font-sizes, "2xl");
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, color("primary", "base") 0%, color("primary", "dark") 100%);
+    border-radius: border-radius("lg");
+    color: color("neutral", "white");
+  }
+
+  &__cardInfo {
+    flex: 1;
+  }
+
+  &__cardBrand {
+    @include body-1;
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+  }
+
+  &__cardExpiry {
+    @include body-2;
+    color: color("neutral", "dark");
+  }
+
+  &__defaultBadge {
+    @include caption;
+    background-color: color("primary", "base");
+    color: color("neutral", "white");
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("pill");
+    font-weight: map-get($font-weights, "semibold");
+  }
+
+  &__addPayment {
+    padding: spacing("lg");
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    border: 2px dashed color("neutral", "medium");
+    text-align: center;
+    color: color("neutral", "dark");
+  }
+
+  // Billing History Section
+  &__history {
+    margin-bottom: spacing("lg");
+  }
+
+  &__historyItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("md") 0;
+    border-bottom: 1px solid color("neutral", "lighter");
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__historyInfo {
+    flex: 1;
+  }
+
+  &__historyDescription {
+    @include body-1;
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+  }
+
+  &__historyDate {
+    @include body-2;
+    color: color("neutral", "dark");
+  }
+
+  &__historyInvoice {
+    @include body-2;
+    color: color("primary", "base");
+    font-weight: map-get($font-weights, "medium");
+    margin-bottom: spacing("xs");
+  }
+
+  &__historyAmount {
+    text-align: right;
+  }
+
+  &__amount {
+    @include body-1;
+    font-weight: map-get($font-weights, "semibold");
+    color: color("neutral", "black");
+    display: block;
+    margin-bottom: spacing("xs");
+  }
+
+  &__historyActions {
+    text-align: center;
+  }
+
+  // Billing Address Section
+  &__address {
+    margin-bottom: spacing("lg");
+  }
+
+  &__addressLine {
+    @include body-1;
+    color: color("neutral", "darkest");
+    margin-bottom: spacing("xs");
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__addressActions {
+    text-align: center;
+  }
+
+  // Billing Preferences Section
+  &__preferences {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xl");
+  }
+
+  &__preferenceItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: spacing("lg");
+    padding: spacing("lg");
+    background-color: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+
+    @include breakpoint-down("md") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+    }
+  }
+
+  &__preferenceInfo {
+    flex: 1;
+  }
+
+  &__preferenceTitle {
+    @include subtitle-2;
+    color: color("neutral", "black");
+    margin-bottom: spacing("xs");
+  }
+
+  &__preferenceDescription {
+    @include body-2;
+    color: color("neutral", "dark");
+  }
+
+  &__toggle {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  &__toggleInput {
+    opacity: 0;
+    width: 0;
+    height: 0;
+
+    &:checked + .billingSection__toggleSlider {
+      background-color: color("primary", "base");
+
+      &:before {
+        transform: translateX(26px);
+      }
+    }
+
+    &:focus + .billingSection__toggleSlider {
+      box-shadow: map-get($shadows, "focus");
+    }
+  }
+
+  &__toggleSlider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: color("neutral", "medium");
+    transition: $transition-base;
+    border-radius: border-radius("pill");
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: color("neutral", "white");
+      transition: $transition-base;
+      border-radius: border-radius("full");
+    }
+  }
+
+  &__emailList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing("sm");
+    align-items: center;
+  }
+
+  &__emailTag {
+    @include caption;
+    background-color: color("primary", "lighter");
+    color: color("primary", "base");
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("pill");
+    font-weight: map-get($font-weights, "medium");
+  }
+
+  // Actions
+  &__actions {
+    display: flex;
+    justify-content: center;
+    margin-top: spacing("xl");
+
+    &--full-width {
+      grid-column: 1 / -1;
+    }
+  }
+}
