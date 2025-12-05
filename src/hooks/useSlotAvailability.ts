@@ -42,7 +42,7 @@ export const useSlotAvailability = ({
   serviceCategory,
 }: UseSlotAvailabilityOptions): UseSlotAvailabilityReturn => {
   const [availableSlots, setAvailableSlots] = useState<DateAvailability[]>([]);
-  const [loadingSlots, setLoadingSlots] = useState(true);
+  const [loadingSlots, setLoadingSlots] = useState(false);
   const [slotError, setSlotError] = useState<string | null>(null);
   const [validatingSlot, setValidatingSlot] = useState(false);
   const [slotValidationError, setSlotValidationError] = useState<string | null>(
@@ -75,7 +75,7 @@ export const useSlotAvailability = ({
       console.error("Failed to fetch available slots:", err);
       setSlotError("Unable to load available time slots. Please try again.");
     } finally {
-      // setLoadingSlots(false);
+      setLoadingSlots(false);
     }
   }, [requiresAvailability, serviceCategory, handleGetAvailableSlots]);
 
