@@ -23,6 +23,7 @@ import { DateSelection } from "./components/DateSelection";
 import { TimeSlotSelection } from "./components/TimeSlotSelection";
 import { AddressSection } from "./components/AddressSection";
 import { CheckoutSummary } from "./components/CheckoutSummary";
+import FullPageSpinner from "@/components/ui/FullPageSpinner/FullPageSpinner";
 
 export interface CheckoutModalProps {
   isOpen: boolean;
@@ -68,6 +69,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     paymentSuccess,
     error: paymentError,
     paymentReference,
+    verifyPaymentLoading,
   } = usePayment();
 
   // Referral discount query
@@ -370,6 +372,14 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
           </motion.div>
         </motion.div>
       </AnimatePresence>
+
+      {verifyPaymentLoading && (
+        <FullPageSpinner
+          message="Please wait while we verify your payment. This may take a few seconds...✨🙂"
+          isLoading={verifyPaymentLoading}
+          size={48}
+        />
+      )}
 
       {/* Order Success Modal */}
       <OrderSuccessModal
