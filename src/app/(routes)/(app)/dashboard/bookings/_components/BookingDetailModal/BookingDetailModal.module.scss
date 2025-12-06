@@ -219,54 +219,6 @@
     line-height: 1.3;
   }
 
-  &__providerCard {
-    display: flex;
-    align-items: center;
-    gap: spacing("sm");
-    padding: spacing("sm");
-    background-color: color("neutral", "lightest");
-    border-radius: border-radius("md");
-  }
-
-  &__providerAvatar {
-    width: 36px;
-    height: 36px;
-    border-radius: border-radius("full");
-    background-color: color("primary", "lighter");
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: color("primary", "base");
-    flex-shrink: 0;
-  }
-
-  &__providerInfo {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: spacing("xxs");
-  }
-
-  &__providerName {
-    @include font-size("sm");
-    @include font-weight("semibold");
-    color: color("neutral", "darkest");
-  }
-
-  &__providerContact {
-    display: flex;
-    align-items: center;
-    gap: spacing("xxs");
-    @include font-size("xs");
-    color: color("neutral", "dark");
-
-    svg {
-      width: 12px;
-      height: 12px;
-      color: color("neutral", "medium");
-    }
-  }
-
   &__contactBtn {
     padding: spacing("xs") spacing("sm");
     background-color: color("neutral", "white");

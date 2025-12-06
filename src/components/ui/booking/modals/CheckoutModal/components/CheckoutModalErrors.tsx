@@ -4,6 +4,7 @@ import styles from "../CheckoutModal.module.scss";
 interface CheckoutModalErrorsProps {
   error?: string | null;
   slotError?: string | null;
+  paymentError?: string | null;
   slotValidationError?: string | null;
   errorRef?: React.RefObject<HTMLDivElement>;
 }
@@ -11,10 +12,11 @@ interface CheckoutModalErrorsProps {
 export const CheckoutModalErrors: React.FC<CheckoutModalErrorsProps> = ({
   error,
   slotError,
+  paymentError,
   slotValidationError,
   errorRef,
 }) => {
-  const hasAnyError = error || slotError || slotValidationError;
+  const hasAnyError = error || slotError || slotValidationError || paymentError;
 
   if (!hasAnyError) return null;
 
@@ -37,7 +39,12 @@ export const CheckoutModalErrors: React.FC<CheckoutModalErrorsProps> = ({
           <p>{slotValidationError}</p>
         </div>
       )}
+
+      {paymentError && (
+        <div className={styles.checkoutModal__errorMessage}>
+          <p>{paymentError}</p>
+        </div>
+      )}
     </div>
   );
 };
-

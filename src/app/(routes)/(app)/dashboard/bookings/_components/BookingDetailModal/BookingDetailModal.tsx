@@ -37,6 +37,8 @@ import ConfirmActionModal, {
 import FeedbackModal from "../FeedbackModal/FeedbackModal";
 import ModalDrawerHeader from "@/components/ui/ModalDrawer/ModalDrawerHeader/ModalDrawerHeader";
 import { usePayment } from "@/hooks/usePayment";
+import ErrorBanner from "../../../subscriptions/_components/SubscriptionDetailModal/ErrorBanner/ErrorBanner";
+import FullPageSpinner from "@/components/ui/FullPageSpinner/FullPageSpinner";
 
 interface BookingDetailModalProps {
   isOpen: boolean;
@@ -57,7 +59,12 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
   const [confirmationActionType, setConfirmationActionType] =
     useState<ActionType>(null);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
-  const { initializePayment, loading: paymentLoading } = usePayment();
+  const {
+    initializePayment,
+    loading: paymentLoading,
+    error: paymentError,
+    verifyPaymentLoading,
+  } = usePayment();
 
   if (!booking) return null;
 
@@ -90,7 +97,8 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
       [BookingStatus.InProgress]: "inProgress",
       [BookingStatus.Completed]: "completed",
       [BookingStatus.Cancelled]: "cancelled",
-    };
+      [BookingStatus.NoShow]: "noShow",
+    } as const;
     return colors[status] || "default";
   };
 
@@ -292,6 +300,13 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
       footer={footerContent}
     >
       <div className={styles.modal__body}>
+        {paymentError && (
+          <ErrorBanner
+            error={paymentError}
+            onDismiss={() => {}}
+            title="Payment Failed"
+          />
+        )}
         <div className={styles.modal__statusBar}>
           <span
             className={`${styles.modal__status} ${
@@ -350,39 +365,6 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                   </span>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Service Provider Section */}
-          <div className={styles.modal__section}>
-            <h3 className={styles.modal__sectionTitle}>Service Provider</h3>
-            <div className={styles.modal__providerCard}>
-              <div className={styles.modal__providerAvatar}>
-                <User size={16} />
-              </div>
-              <div className={styles.modal__providerInfo}>
-                <span className={styles.modal__providerName}>
-                  {booking.staff?.firstName} {booking.staff?.lastName}
-                </span>
-                {booking.staff?.phone && (
-                  <div className={styles.modal__providerContact}>
-                    <Phone size={12} />
-                    <span>{booking.staff?.phone || "+234 801 234 5678"}</span>
-                  </div>
-                )}
-                {booking.staff?.email && (
-                  <div className={styles.modal__providerContact}>
-                    <Mail size={12} />
-                    <span>
-                      {booking.staff?.email || "provider@metromellow.com"}
-                    </span>
-                  </div>
-                )}
-              </div>
-              {booking.status === BookingStatus.Paused ||
-              booking.status === BookingStatus.Confirmed ? (
-                <button className={styles.modal__contactBtn}>Contact</button>
-              ) : null}
             </div>
           </div>
 
@@ -543,6 +525,13 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
         onClose={() => setIsFeedbackModalOpen(false)}
         booking={booking}
       />
+      {verifyPaymentLoading && (
+        <FullPageSpinner
+          message="Please wait while we verify your payment. This may take a few seconds...✨🙂"
+          isLoading={verifyPaymentLoading}
+          size={48}
+        />
+      )}
     </ModalDrawer>
   );
 };

@@ -16,6 +16,7 @@ interface UsePaymentReturn {
     email: string
   ) => Promise<void>;
   loading: boolean;
+  verifyPaymentLoading: boolean;
   error: string | null;
   paymentSuccess: boolean;
   paymentReference: string | null;
@@ -23,6 +24,7 @@ interface UsePaymentReturn {
 
 export const usePayment = (): UsePaymentReturn => {
   const [loading, setLoading] = useState(false);
+  const [verifyPaymentLoading, setVerifyPaymentLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentReference, setPaymentReference] = useState<string | null>(null);
@@ -184,7 +186,8 @@ export const usePayment = (): UsePaymentReturn => {
           onSuccess: async (transaction: { reference: string }) => {
             // CRITICAL: Always verify payment on backend before trusting success
             console.log("Payment popup closed, verifying payment...");
-            setLoading(true); // Show loading during verification
+            // setLoading(true); // Show loading during verification
+            setVerifyPaymentLoading(true); // Show loading during verification
 
             try {
               const verification = await verifyPaymentWithPolling(
@@ -195,6 +198,7 @@ export const usePayment = (): UsePaymentReturn => {
                 // Set success state for the component to handle
                 setPaymentSuccess(true);
                 setPaymentReference(transaction.reference);
+                setVerifyPaymentLoading(false); // Hide loading after successful verification
                 // Here you would typically:
                 // 1. Update order status in your database
                 // 2. Send confirmation email
@@ -209,8 +213,10 @@ export const usePayment = (): UsePaymentReturn => {
               alert(
                 "Payment verification failed. Please contact support if payment was deducted."
               );
+              setVerifyPaymentLoading(false); // Hide loading after failed verification
             } finally {
               setLoading(false);
+              setVerifyPaymentLoading(false); // Hide loading after failed verification
             }
           },
 
@@ -224,30 +230,13 @@ export const usePayment = (): UsePaymentReturn => {
             );
 
             if (confirmed) {
-              try {
-                setLoading(true);
-                // Cancel booking (preserves record) instead of deleting
-                await handleCancelBooking(
-                  bookingId,
-                  "Payment cancelled by user"
-                );
-                console.log("Booking cancelled successfully");
-              } catch (err) {
-                console.error("Failed to cancel booking:", err);
-                setError(
-                  err instanceof Error
-                    ? err.message
-                    : "Failed to cancel booking"
-                );
-              } finally {
-                setLoading(false);
-              }
+              setLoading(true);
+              // Cancel booking (preserves record) instead of deleting
+              await handleCancelBooking(bookingId, "Payment cancelled by user");
+              window.location.reload();
             } else {
               // User chose to keep the booking - just close the payment flow
-              setLoading(false);
-              console.log(
-                "Booking kept in pending state, user can retry payment later"
-              );
+              window.location.reload();
             }
           },
         };
@@ -281,6 +270,7 @@ export const usePayment = (): UsePaymentReturn => {
   return {
     initializePayment,
     loading,
+    verifyPaymentLoading,
     error,
     paymentSuccess,
     paymentReference,

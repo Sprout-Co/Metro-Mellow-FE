@@ -66,6 +66,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     initializePayment,
     loading: paymentLoading,
     paymentSuccess,
+    error: paymentError,
     paymentReference,
   } = usePayment();
 
@@ -248,6 +249,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 {/* Error Display */}
                 <CheckoutModalErrors
                   error={error}
+                  paymentError={paymentError}
                   slotError={slotError}
                   slotValidationError={slotValidationError}
                   errorRef={errorContainerRef}
