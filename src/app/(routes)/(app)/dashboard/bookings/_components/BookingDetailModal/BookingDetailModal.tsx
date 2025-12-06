@@ -39,6 +39,7 @@ import ModalDrawerHeader from "@/components/ui/ModalDrawer/ModalDrawerHeader/Mod
 import { usePayment } from "@/hooks/usePayment";
 import ErrorBanner from "../../../subscriptions/_components/SubscriptionDetailModal/ErrorBanner/ErrorBanner";
 import FullPageSpinner from "@/components/ui/FullPageSpinner/FullPageSpinner";
+import OrderSuccessModal from "@/components/ui/booking/modals/OrderSuccessModal/OrderSuccessModal";
 
 interface BookingDetailModalProps {
   isOpen: boolean;
@@ -64,6 +65,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
     loading: paymentLoading,
     error: paymentError,
     verifyPaymentLoading,
+    paymentSuccess,
   } = usePayment();
 
   if (!booking) return null;
@@ -524,6 +526,15 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
         isOpen={isFeedbackModalOpen}
         onClose={() => setIsFeedbackModalOpen(false)}
         booking={booking}
+      />
+      <OrderSuccessModal
+        isOpen={paymentSuccess}
+        onClose={() => {
+          onClose();
+          window.location.reload();
+        }}
+        title="Payment Successful!"
+        message={`All set! Your payment was successful and your booking is locked in.`}
       />
       {verifyPaymentLoading && (
         <FullPageSpinner
