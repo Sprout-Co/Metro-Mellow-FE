@@ -240,8 +240,8 @@ const SubscriptionConfirmActionModal: React.FC<
             </h3>
             <div className={styles.modal__subscriptionMeta}>
               <span className={styles.modal__subscriptionPrice}>
-                ₦{subscription.totalPrice.toLocaleString()} per{" "}
-                {subscription.billingCycle.toLowerCase()}
+                ₦{subscription.totalPrice.toLocaleString()} every{" "}
+                {subscription.duration} months(s)
               </span>
               <span className={styles.modal__subscriptionServices}>
                 {subscription.subscriptionServices.length} service

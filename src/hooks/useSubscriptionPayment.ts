@@ -15,6 +15,7 @@ interface UseSubscriptionPaymentReturn {
     email: string
   ) => Promise<void>;
   loading: boolean;
+  verifySubscriptionPaymentLoading: boolean;
   error: string | null;
   paymentSuccess: boolean;
   paymentReference: string | null;
@@ -25,6 +26,10 @@ interface UseSubscriptionPaymentReturn {
 
 export const useSubscriptionPayment = (): UseSubscriptionPaymentReturn => {
   const [loading, setLoading] = useState(false);
+  const [
+    verifySubscriptionPaymentLoading,
+    setVerifySubscriptionPaymentLoading,
+  ] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentReference, setPaymentReference] = useState<string | null>(null);
@@ -182,7 +187,8 @@ export const useSubscriptionPayment = (): UseSubscriptionPaymentReturn => {
             console.log(
               "Subscription payment popup closed, verifying payment..."
             );
-            setLoading(true); // Show loading during verification
+            // setLoading(true); // Show loading during verification
+            setVerifySubscriptionPaymentLoading(true); // Show loading during verification
 
             try {
               const verification = await verifyPaymentWithPolling(
@@ -193,7 +199,7 @@ export const useSubscriptionPayment = (): UseSubscriptionPaymentReturn => {
                 // Set success state for the component to handle
                 setPaymentSuccess(true);
                 setPaymentReference(transaction.reference);
-
+                setVerifySubscriptionPaymentLoading(false); // Hide loading after successful verification
                 console.log("Subscription payment verified successfully!");
                 // The component will handle redirect to /dashboard/subscriptions
               } else {
@@ -210,6 +216,8 @@ export const useSubscriptionPayment = (): UseSubscriptionPaymentReturn => {
                 "Payment verification failed. Please contact support if payment was deducted.";
               setError(errorMessage);
               alert(errorMessage);
+            } finally {
+              setVerifySubscriptionPaymentLoading(false); // Hide loading after verification
             }
           },
 
@@ -252,6 +260,7 @@ export const useSubscriptionPayment = (): UseSubscriptionPaymentReturn => {
   return {
     initializeSubscriptionPayment,
     loading,
+    verifySubscriptionPaymentLoading,
     error,
     paymentSuccess,
     setPaymentSuccess,

@@ -39,6 +39,7 @@ import SignaturePattern from "@/components/ui/SignaturePattern/SignaturePattern"
 import OrderSuccessModal from "@/components/ui/booking/modals/OrderSuccessModal/OrderSuccessModal";
 import { Routes } from "@/constants/routes";
 import FullPageLoader from "@/components/ui/FullPageLoader";
+import FullPageSpinner from "@/components/ui/FullPageSpinner/FullPageSpinner";
 
 export type DurationType = 1 | 2 | 3 | 4;
 
@@ -92,6 +93,7 @@ const SubscriptionBuilder: React.FC = () => {
     paymentSuccess,
     paymentReference,
     setPaymentSuccess,
+    verifySubscriptionPaymentLoading,
   } = useSubscriptionPayment();
   const router = useRouter();
   const currentUser = useSelector(selectCurrentUser);
@@ -129,16 +131,12 @@ const SubscriptionBuilder: React.FC = () => {
     }
   }, [currentUser, selectedAddress]);
 
-  // Handle payment success - redirect to subscriptions dashboard
   useEffect(() => {
     if (paymentSuccess && paymentReference) {
       showToast(
         "Payment successful! Your subscription is now active. 🎉",
         "success"
       );
-      setTimeout(() => {
-        router.push("/dashboard/subscriptions");
-      }, 2000);
     }
   }, [paymentSuccess, paymentReference, router]);
 
@@ -387,20 +385,48 @@ const SubscriptionBuilder: React.FC = () => {
 
   if (currentView === "checkout") {
     return (
-      <CheckoutSummary
-        configuredServices={configuredServices}
-        billingCycle={billingCycle}
-        duration={duration}
-        startDate={startDate}
-        selectedAddress={selectedAddress}
-        onStartDateChange={setStartDate}
-        onAddressChange={setSelectedAddress}
-        isCreatingSubscription={isCreatingSubscription}
-        onBack={() => setCurrentView("builder")}
-        onConfirmCheckout={handleCreateNewSubscription}
-        discount={calculateDiscount()}
-        total={calculateTotal()}
-      />
+      <>
+        <CheckoutSummary
+          configuredServices={configuredServices}
+          billingCycle={billingCycle}
+          duration={duration}
+          startDate={startDate}
+          selectedAddress={selectedAddress}
+          onStartDateChange={setStartDate}
+          onAddressChange={setSelectedAddress}
+          isCreatingSubscription={isCreatingSubscription}
+          onBack={() => setCurrentView("builder")}
+          onConfirmCheckout={handleCreateNewSubscription}
+          discount={calculateDiscount()}
+          total={calculateTotal()}
+        />
+        <OrderSuccessModal
+          isOpen={paymentSuccess}
+          title="Oya, You Are Good to Go! 🚀"
+          message="Payment confirmed! Your subscription is active now. Enjoy the flex!"
+          onClose={() => {
+            setPaymentSuccess(false);
+            if (typeof window !== "undefined") {
+              window.location.href = Routes.DASHBOARD_SUBSCRIPTIONS;
+            } else {
+              router.push(Routes.DASHBOARD_SUBSCRIPTIONS);
+            }
+          }}
+        />
+
+        <FullPageLoader
+          isLoading={paymentLoading}
+          message="Processing your payment. This may take a few minutes.
+Please do not refresh or close this window."
+        />
+        {verifySubscriptionPaymentLoading && (
+          <FullPageSpinner
+            isLoading={verifySubscriptionPaymentLoading}
+            message="Please wait while we verify your payment. This may take a few seconds...✨🙂"
+            size={48}
+          />
+        )}
+      </>
     );
   }
 
@@ -532,22 +558,6 @@ const SubscriptionBuilder: React.FC = () => {
           setShowLoginModal(false);
           handleCheckout();
         }}
-      />
-
-      <OrderSuccessModal
-        isOpen={paymentSuccess}
-        title="Oya, You Are Good to Go! 🚀"
-        message="Payment confirmed! Your subscription is active now. Enjoy the flex!"
-        onClose={() => {
-          setPaymentSuccess(false);
-          router.push(Routes.DASHBOARD_SUBSCRIPTIONS);
-        }}
-      />
-
-      <FullPageLoader
-        isLoading={paymentLoading}
-        message="Processing your payment. This may take a few minutes.
-Please do not refresh or close this window."
       />
     </div>
   );
