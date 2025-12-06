@@ -228,6 +228,7 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
         setShowSuccess(false);
         setSelectedDate(null);
         setSelectedTime(null);
+        window.location.reload();
       }, 2000);
     } catch (err) {
       setError(
