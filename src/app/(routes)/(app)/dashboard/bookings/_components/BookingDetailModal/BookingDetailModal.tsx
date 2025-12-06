@@ -141,11 +141,12 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
 
     // Close the detail modal
     onClose();
+    window.location.reload();
 
-    // Refresh the bookings data
-    if (refetchBookings) {
-      refetchBookings();
-    }
+    // // Refresh the bookings data
+    // if (refetchBookings) {
+    //   refetchBookings();
+    // }
   }
 
   const handleRetryPayment = async () => {
