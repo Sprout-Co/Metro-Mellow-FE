@@ -6,8 +6,19 @@ declare global {
   }
 }
 
+const isProduction = () => {
+  // Only track in actual production, not staging/preview/development
+  // Check custom env var or NEXT_PUBLIC_ENV for client-side checks
+  const env =
+    process.env.NEXT_PUBLIC_APP_ENV || process.env.NEXT_PUBLIC_ENV || "";
+  return env === "production" && process.env.NODE_ENV !== "development";
+};
+
 export const useGoogleTagManager = () => {
   const pushEvent = useCallback((event: string, data?: Record<string, any>) => {
+    if (!isProduction()) {
+      return;
+    }
     if (typeof window !== "undefined" && window.dataLayer) {
       window.dataLayer.push({
         event,

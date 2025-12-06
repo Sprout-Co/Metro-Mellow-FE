@@ -4,8 +4,24 @@ interface GoogleTagManagerProps {
   gtmId: string;
 }
 
+const isProduction = () => {
+  // Only track in actual production, not staging/preview/development
+  // Check in order: custom env var, VERCEL_ENV (server-side), NEXT_PUBLIC_ENV (client-side)
+  const env =
+    process.env.NEXT_PUBLIC_APP_ENV ||
+    process.env.VERCEL_ENV ||
+    process.env.NEXT_PUBLIC_ENV ||
+    "";
+  console.log("env", env);
+  console.log(
+    "isProduction",
+    env === "production" && process.env.NODE_ENV !== "development"
+  );
+  return env === "production" && process.env.NODE_ENV !== "development";
+};
+
 export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
-  if (process.env.NODE_ENV === "development") {
+  if (!isProduction()) {
     return null;
   }
   return (
@@ -25,7 +41,7 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
 }
 
 export function GoogleTagManagerScript({ gtmId }: GoogleTagManagerProps) {
-  if (process.env.NODE_ENV === "development") {
+  if (!isProduction()) {
     return null;
   }
   return (
