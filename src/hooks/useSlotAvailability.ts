@@ -73,7 +73,9 @@ export const useSlotAvailability = ({
       setAvailableSlots(slots || []);
     } catch (err) {
       console.error("Failed to fetch available slots:", err);
-      setSlotError("Unable to load available time slots. Please try again.");
+      setSlotError(
+        "Unable to load available time slots. Please refresh the page and try again."
+      );
     } finally {
       setLoadingSlots(false);
     }

@@ -191,25 +191,29 @@ export default function Home() {
     },
     {
       id: "2",
-      question: "What laundry and dry cleaning services do you provide in Lagos?",
+      question:
+        "What laundry and dry cleaning services do you provide in Lagos?",
       answer:
         "Our complete laundry service includes wash & fold, dry cleaning, ironing, stain removal, and garment repairs. We provide free pickup and delivery throughout Lagos using eco-friendly detergents. Professional care for all your clothing needs.",
     },
     {
       id: "3",
-      question: "Do you offer fresh meal delivery and cooking services in Lagos?",
+      question:
+        "Do you offer fresh meal delivery and cooking services in Lagos?",
       answer:
         "Yes! Our professional chefs prepare nutritious meals from traditional Nigerian dishes to international cuisine. We offer daily meal plans, one-time cooking services, and fresh food delivery throughout Lagos with customizable dietary options and on-time delivery.",
     },
     {
       id: "4",
-      question: "How quickly can you respond to pest control emergencies in Lagos?",
+      question:
+        "How quickly can you respond to pest control emergencies in Lagos?",
       answer:
         "Our licensed pest control professionals can respond to emergencies within 24 hours across Lagos. We use safe, eco-friendly treatments for all pest issues and provide follow-up visits with warranty coverage to keep your home completely pest-free.",
     },
     {
       id: "5",
-      question: "Do you offer home service packages and subscriptions in Lagos?",
+      question:
+        "Do you offer home service packages and subscriptions in Lagos?",
       answer:
         "Yes! We offer flexible subscription plans that combine cleaning, laundry, cooking, and pest control services at discounted rates. Our packages are customizable to your specific needs and schedule, providing comprehensive home management solutions for Lagos residents.",
     },
@@ -285,9 +289,9 @@ export default function Home() {
         </section>
 
         {/* Testimonials - Social proof */}
-        <section id="customer-reviews" aria-label="Customer Reviews">
+        {/* <section id="customer-reviews" aria-label="Customer Reviews">
           <TestimonialCarouselSection />
-        </section>
+        </section> */}
 
         {/* FAQ Section with structured data */}
         <section id="home-services-faq" aria-label="Frequently Asked Questions">

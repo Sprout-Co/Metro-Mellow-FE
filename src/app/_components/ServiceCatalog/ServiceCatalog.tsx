@@ -33,7 +33,7 @@ const serviceCategories = [
 
 const ServiceCatalog: FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<ServiceCategory>(
-    ServiceCategory.Cooking
+    ServiceCategory.Cleaning
   );
 
   // State for modal
