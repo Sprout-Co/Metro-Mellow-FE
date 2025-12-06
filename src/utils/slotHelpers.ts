@@ -163,11 +163,11 @@ export const getTomorrowDate = (): Date => {
 
 /**
  * Gets date 60 days from today (maximum selectable date)
- * @returns Date object for 30 days from today
+ * @returns Date object for 60 days from today
  */
 export const getMaxDate = (): Date => {
   const maxDate = new Date();
-  maxDate.setDate(maxDate.getDate() + 30);
+  maxDate.setDate(maxDate.getDate() + 60);
   maxDate.setHours(23, 59, 59, 999);
   return maxDate;
 };
