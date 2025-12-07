@@ -34,6 +34,7 @@ import {
   TimeSlot,
   GetCustomerSubscriptionsQuery,
 } from "@/graphql/api";
+import { normalizeSubscriptions } from "@/utils/dateNormalization";
 import SubscriptionListView from "../SubscriptionListView/SubscriptionListView";
 import AppointmentCard from "@/components/ui/AppointmentCard";
 import SubscriptionGridView from "../SubscriptionGridView/SubscriptionGridView";
@@ -59,9 +60,10 @@ const SubscriptionsMain: React.FC = () => {
     fetchPolicy: "cache-and-network",
   });
 
-  // Use GraphQL data directly
+  // Normalize dates to prevent timezone issues
   const subscriptions = useMemo(() => {
-    return data?.customerSubscriptions || [];
+    if (!data?.customerSubscriptions) return [];
+    return normalizeSubscriptions(data.customerSubscriptions as any);
   }, [data]);
   const [viewType, setViewType] = useState<"list" | "grid">("list");
 
@@ -76,7 +78,7 @@ const SubscriptionsMain: React.FC = () => {
     // Filter by search query
     if (searchQuery) {
       filtered = filtered.filter((s) =>
-        s.subscriptionServices.some((service) =>
+        s.subscriptionServices.some((service: any) =>
           service.service.name.toLowerCase().includes(searchQuery.toLowerCase())
         )
       );

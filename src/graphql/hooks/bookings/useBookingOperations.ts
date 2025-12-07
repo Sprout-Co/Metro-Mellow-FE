@@ -40,6 +40,7 @@ import {
   ServiceCategory,
   CheckAvailabilityInput,
 } from "@/graphql/api";
+import { normalizeBooking, normalizeBookings } from "@/utils/dateNormalization";
 
 export const useBookingOperations = () => {
   const [createBookingMutation, { loading: isCreatingBooking }] =
@@ -75,7 +76,12 @@ export const useBookingOperations = () => {
         throw new Error(errors[0].message);
       }
 
-      return { data: data?.customerBookings, loading };
+      // Normalize dates to prevent timezone issues
+      const normalizedBookings = data?.customerBookings
+        ? normalizeBookings(data.customerBookings)
+        : undefined;
+
+      return { data: normalizedBookings, loading };
     } catch (error) {
       console.error("Customer bookings fetch error:", error);
       if (error instanceof Error) {
@@ -137,6 +143,7 @@ export const useBookingOperations = () => {
           throw new Error(errors[0].message);
         }
 
+        // updateBooking returns boolean, not a booking object
         return data?.updateBooking;
       } catch (error) {
         console.error("Booking update error:", error);
@@ -227,6 +234,7 @@ export const useBookingOperations = () => {
           throw new Error(errors[0].message);
         }
 
+        // completeBooking returns boolean, not a booking object
         return data?.completeBooking;
       } catch (error) {
         console.error("Booking completion error:", error);
@@ -265,6 +273,7 @@ export const useBookingOperations = () => {
         // Force a refetch of customer bookings to update the UI
         await handleGetCustomerBookings();
 
+        // rescheduleBooking returns boolean, not a booking object
         return data?.rescheduleBooking;
       } catch (error) {
         console.error("Booking reschedule error:", error);
@@ -318,6 +327,7 @@ export const useBookingOperations = () => {
           throw new Error(errors[0].message);
         }
 
+        // assignStaff returns boolean, not a booking object
         return data?.assignStaff;
       } catch (error) {
         console.error("Staff assignment error:", error);
@@ -348,6 +358,7 @@ export const useBookingOperations = () => {
           throw new Error(errors[0].message);
         }
 
+        // updateBookingStatus returns boolean, not a booking object
         return data?.updateBookingStatus;
       } catch (error) {
         console.error("Booking status update error:", error);
@@ -375,7 +386,8 @@ export const useBookingOperations = () => {
           throw new Error(errors[0].message);
         }
 
-        return data?.booking;
+        // Normalize dates for the returned booking
+        return data?.booking ? normalizeBooking(data.booking) : undefined;
       } catch (error) {
         console.error("Booking fetch error:", error);
         if (error instanceof Error) {
@@ -402,7 +414,8 @@ export const useBookingOperations = () => {
           throw new Error(errors[0].message);
         }
 
-        return data?.bookings;
+        // Normalize dates to prevent timezone issues
+        return data?.bookings ? normalizeBookings(data.bookings) : undefined;
       } catch (error) {
         console.error("Bookings fetch error:", error);
         if (error instanceof Error) {
@@ -427,7 +440,10 @@ export const useBookingOperations = () => {
         throw new Error(errors[0].message);
       }
 
-      return data?.staffBookings;
+      // Normalize dates to prevent timezone issues
+      return data?.staffBookings
+        ? normalizeBookings(data.staffBookings)
+        : undefined;
     } catch (error) {
       console.error("Staff bookings fetch error:", error);
       if (error instanceof Error) {
@@ -521,11 +537,19 @@ export const useBookingOperations = () => {
     handleGetStaffBookings,
     handleGetAvailableSlots,
     handleCheckSlotAvailability,
-    // Return the current data
-    currentBookings: bookingsData?.bookings,
-    currentCustomerBookings: customerBookingsData?.customerBookings,
-    currentStaffBookings: staffBookingsData?.staffBookings,
-    currentBooking: bookingData?.booking,
+    // Return the current data (normalized)
+    currentBookings: bookingsData?.bookings
+      ? normalizeBookings(bookingsData.bookings)
+      : undefined,
+    currentCustomerBookings: customerBookingsData?.customerBookings
+      ? normalizeBookings(customerBookingsData.customerBookings)
+      : undefined,
+    currentStaffBookings: staffBookingsData?.staffBookings
+      ? normalizeBookings(staffBookingsData.staffBookings)
+      : undefined,
+    currentBooking: bookingData?.booking
+      ? normalizeBooking(bookingData.booking)
+      : undefined,
     currentAvailableSlots: availableSlotsData?.getAvailableSlots,
     currentSlotAvailability: slotAvailabilityData?.checkSlotAvailability,
     isCreatingBooking,

@@ -27,6 +27,10 @@ import {
   CreateSubscriptionResponse,
 } from "@/graphql/api";
 import { SubscriptionStatus, BillingCycle } from "@/graphql/api";
+import {
+  normalizeSubscription,
+  normalizeSubscriptions,
+} from "@/utils/dateNormalization";
 
 export const useSubscriptionOperations = () => {
   const [createSubscriptionMutation] = useCreateSubscriptionMutation();
@@ -109,6 +113,7 @@ export const useSubscriptionOperations = () => {
           throw new Error(errors[0].message);
         }
 
+        // updateSubscription returns boolean, not a subscription object
         return data?.updateSubscription;
       } catch (error) {
         console.error("Subscription update error:", error);
@@ -167,6 +172,7 @@ export const useSubscriptionOperations = () => {
           throw new Error(errors[0].message);
         }
 
+        // pauseSubscription returns boolean, not a subscription object
         return data?.pauseSubscription;
       } catch (error) {
         console.error("Subscription pause error:", error);
@@ -196,6 +202,7 @@ export const useSubscriptionOperations = () => {
           throw new Error(errors[0].message);
         }
 
+        // resumeSubscription returns boolean, not a subscription object
         return data?.resumeSubscription;
       } catch (error) {
         console.error("Subscription resume error:", error);
@@ -227,6 +234,7 @@ export const useSubscriptionOperations = () => {
           throw new Error(errors[0].message);
         }
 
+        // reactivateSubscription returns boolean, not a subscription object
         return data?.reactivateSubscription;
       } catch (error) {
         console.error("Subscription reactivation error:", error);
@@ -289,6 +297,7 @@ export const useSubscriptionOperations = () => {
           throw new Error(errors[0].message);
         }
 
+        // updateSubscriptionStatus returns boolean, not a subscription object
         return data?.updateSubscriptionStatus;
       } catch (error) {
         console.error("Subscription status update error:", error);
@@ -319,6 +328,7 @@ export const useSubscriptionOperations = () => {
           throw new Error(errors[0].message);
         }
 
+        // addServiceToSubscription returns boolean, not a subscription object
         return data?.addServiceToSubscription;
       } catch (error) {
         console.error("Add service to subscription error:", error);
@@ -349,6 +359,7 @@ export const useSubscriptionOperations = () => {
           throw new Error(errors[0].message);
         }
 
+        // removeServiceFromSubscription returns boolean, not a subscription object
         return data?.removeServiceFromSubscription;
       } catch (error) {
         console.error("Remove service from subscription error:", error);
@@ -411,7 +422,10 @@ export const useSubscriptionOperations = () => {
           throw new Error(errors[0].message);
         }
 
-        return data?.subscription;
+        // Normalize dates for the returned subscription
+        return data?.subscription
+          ? normalizeSubscription(data.subscription as any)
+          : undefined;
       } catch (error) {
         console.error("Subscription fetch error:", error);
         if (error instanceof Error) {
@@ -438,7 +452,10 @@ export const useSubscriptionOperations = () => {
           throw new Error(errors[0].message);
         }
 
-        return data?.subscriptions;
+        // Normalize dates to prevent timezone issues
+        return data?.subscriptions
+          ? normalizeSubscriptions(data.subscriptions as any)
+          : undefined;
       } catch (error) {
         console.error("Subscriptions fetch error:", error);
         if (error instanceof Error) {
@@ -463,7 +480,10 @@ export const useSubscriptionOperations = () => {
         throw new Error(errors[0].message);
       }
 
-      return data?.customerSubscriptions;
+      // Normalize dates to prevent timezone issues
+      return data?.customerSubscriptions
+        ? normalizeSubscriptions(data.customerSubscriptions as any)
+        : undefined;
     } catch (error) {
       console.error("Customer subscriptions fetch error:", error);
       if (error instanceof Error) {
