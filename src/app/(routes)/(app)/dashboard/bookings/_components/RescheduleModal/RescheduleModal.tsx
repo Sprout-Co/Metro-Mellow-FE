@@ -186,8 +186,8 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({
         return "9:00 AM - 12:00 PM";
       case TimeSlot.Afternoon:
         return "12:00 PM - 5:00 PM";
-      case TimeSlot.Evening:
-        return "5:00 PM - 8:00 PM";
+      // case TimeSlot.Evening:
+      //   return "5:00 PM - 8:00 PM";
       default:
         return timeSlot;
     }

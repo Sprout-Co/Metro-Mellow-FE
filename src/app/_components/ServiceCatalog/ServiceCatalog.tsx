@@ -677,10 +677,10 @@ const ServiceCatalog: FC = () => {
                             </p>
 
                             <div className={styles.catalog__cardMeta}>
-                              <div className={styles.catalog__cardMetaItem}>
+                              {/* <div className={styles.catalog__cardMetaItem}>
                                 <Clock size={16} />
                                 <span>30-45 mins</span>
-                              </div>
+                              </div> */}
                               <div className={styles.catalog__cardMetaItem}>
                                 <span>
                                   {option.inclusions?.join(", ") ||
@@ -691,7 +691,7 @@ const ServiceCatalog: FC = () => {
                             </div>
 
                             {/* Show extra items if available */}
-                            {option.extraItems &&
+                            {/* {option.extraItems &&
                               option.extraItems.length > 0 && (
                                 <div className={styles.catalog__cardExtra}>
                                   <h5>Extra Items Available:</h5>
@@ -710,7 +710,7 @@ const ServiceCatalog: FC = () => {
                                     ))}
                                   </div>
                                 </div>
-                              )}
+                              )} */}
 
                             <div className={styles.catalog__cardActions}>
                               {isServiceAvailable(service.category) ? (

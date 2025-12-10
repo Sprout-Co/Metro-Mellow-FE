@@ -53,6 +53,7 @@
     background-color: color("primary", "base");
     border-radius: border-radius("md");
     overflow: hidden;
+    height: fit-content;
 
     @include breakpoint-down("md") {
       flex: 0 0 auto;
