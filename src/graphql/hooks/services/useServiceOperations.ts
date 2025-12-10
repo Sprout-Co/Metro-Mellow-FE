@@ -15,7 +15,7 @@ import {
   useGetServicesQuery,
   CreateServiceMutationVariables,
 } from "@/graphql/api";
-import { ServiceCategory, ServiceStatus } from "@/graphql/api";
+import { ServiceCategory, ServiceStatus, ServiceId } from "@/graphql/api";
 
 export const useServiceOperations = () => {
   const [createServiceMutation] = useCreateServiceMutation();
@@ -33,7 +33,7 @@ export const useServiceOperations = () => {
     async (input: CreateServiceMutationVariables) => {
       try {
         const { data, errors } = await createServiceMutation({
-          variables:  input,
+          variables: input,
         });
 
         if (errors) {
@@ -200,7 +200,12 @@ export const useServiceOperations = () => {
           throw new Error(errors[0].message);
         }
 
-        return data?.services;
+        return data?.services?.map((service) => ({
+          ...service,
+          options: service.options?.filter(
+            (option) => option.service_id !== ServiceId.PostConstructionCleaning
+          ),
+        }));
       } catch (error) {
         console.error("Services fetch error:", error);
         if (error instanceof Error) {
@@ -219,5 +224,39 @@ export const useServiceOperations = () => {
     handleUpdateServiceStatus,
     handleGetService,
     handleGetServices,
+  };
+};
+
+/**
+ * Hook wrapper for useGetServicesQuery that applies the same filtering
+ * logic as handleGetServices (filters out postconstruction cleaning).
+ */
+export const useGetServices = (variables?: {
+  category?: ServiceCategory;
+  status?: ServiceStatus;
+}) => {
+  const queryResult = useGetServicesQuery({
+    variables: {
+      category: variables?.category,
+      status: variables?.status,
+    },
+  });
+
+  // Apply the same filtering logic as handleGetServices
+  const filteredData = queryResult.data?.services
+    ? {
+        ...queryResult.data,
+        services: queryResult.data.services.map((service) => ({
+          ...service,
+          options: service.options?.filter(
+            (option) => option.service_id !== ServiceId.PostConstructionCleaning
+          ),
+        })),
+      }
+    : queryResult.data;
+
+  return {
+    ...queryResult,
+    data: filteredData,
   };
 };

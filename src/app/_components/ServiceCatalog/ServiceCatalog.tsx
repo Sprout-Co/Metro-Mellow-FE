@@ -7,13 +7,13 @@ import { Clock, ArrowRight, Search } from "lucide-react";
 import styles from "./ServiceCatalog.module.scss";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  useGetServicesQuery,
   ServiceCategory,
   Service,
   ServiceStatus,
   ServiceOption,
   ServiceId,
 } from "@/graphql/api";
+import { useGetServices } from "@/graphql/hooks/services/useServiceOperations";
 import ServiceModal, {
   ServiceConfiguration,
 } from "@/components/ui/booking/modals/ServiceModal/ServiceModal";
@@ -48,11 +48,9 @@ const ServiceCatalog: FC = () => {
     data: servicesData,
     loading,
     error,
-  } = useGetServicesQuery({
-    variables: {
-      category: selectedCategory,
-      status: ServiceStatus.Active,
-    },
+  } = useGetServices({
+    category: selectedCategory,
+    status: ServiceStatus.Active,
   });
 
   const containerVariants = {

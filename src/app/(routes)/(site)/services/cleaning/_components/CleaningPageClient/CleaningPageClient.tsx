@@ -7,11 +7,8 @@ import CleaningPromoSection from "../CleaningPromoSection/CleaningPromoSection";
 import CleaningVideoSection from "../CleaningVideoSection/CleaningVideoSection";
 import CleaningStepsSection from "../CleaningStepsSection/CleaningStepsSection";
 import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
-import {
-  ServiceCategory,
-  useGetServicesQuery,
-  ServiceStatus,
-} from "@/graphql/api";
+import { ServiceCategory, ServiceStatus } from "@/graphql/api";
+import { useGetServices } from "@/graphql/hooks/services/useServiceOperations";
 
 const cleaningFaqs: FAQItem[] = [
   {
@@ -51,11 +48,9 @@ const CleaningPageClient: React.FC = () => {
     data: servicesData,
     loading,
     error,
-  } = useGetServicesQuery({
-    variables: {
-      category: ServiceCategory.Cleaning,
-      status: ServiceStatus.Active,
-    },
+  } = useGetServices({
+    category: ServiceCategory.Cleaning,
+    status: ServiceStatus.Active,
   });
 
   return (

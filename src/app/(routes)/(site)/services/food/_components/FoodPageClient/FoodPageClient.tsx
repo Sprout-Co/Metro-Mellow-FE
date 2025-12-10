@@ -7,11 +7,8 @@ import FoodIllustrationSection from "../FoodIllustrationSection/FoodIllustration
 import OrderStepsSection from "../OrderStepsSection/OrderStepsSection";
 import FoodMenuSection from "../FoodMenuSection/FoodMenuSection";
 import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
-import {
-  ServiceCategory,
-  useGetServicesQuery,
-  ServiceStatus,
-} from "@/graphql/api";
+import { ServiceCategory, ServiceStatus } from "@/graphql/api";
+import { useGetServices } from "@/graphql/hooks/services/useServiceOperations";
 
 const foodFaqs: FAQItem[] = [
   {
@@ -50,11 +47,9 @@ const FoodPageClient: React.FC = () => {
     data: servicesData,
     loading,
     error,
-  } = useGetServicesQuery({
-    variables: {
-      category: ServiceCategory.Cooking,
-      status: ServiceStatus.Active,
-    },
+  } = useGetServices({
+    category: ServiceCategory.Cooking,
+    status: ServiceStatus.Active,
   });
 
   console.log(servicesData);

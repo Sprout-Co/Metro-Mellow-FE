@@ -6,11 +6,8 @@ import SafetyPromise from "../SafetyPromise/SafetyPromise";
 import ServiceCoverage from "../ServiceCoverage/ServiceCoverage";
 import OrderStepsSection from "../OrderStepsSection/OrderStepsSection";
 import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
-import {
-  ServiceCategory,
-  useGetServicesQuery,
-  ServiceStatus,
-} from "@/graphql/api";
+import { ServiceCategory, ServiceStatus } from "@/graphql/api";
+import { useGetServices } from "@/graphql/hooks/services/useServiceOperations";
 import PestControlServicesShowcase from "../PestControlServicesShowcase/PestControlServicesShowcase";
 
 const pestFaqs: FAQItem[] = [
@@ -51,11 +48,9 @@ const PestControlPageClient: React.FC = () => {
     data: servicesData,
     loading,
     error,
-  } = useGetServicesQuery({
-    variables: {
-      category: ServiceCategory.PestControl,
-      status: ServiceStatus.Active,
-    },
+  } = useGetServices({
+    category: ServiceCategory.PestControl,
+    status: ServiceStatus.Active,
   });
 
   console.log(servicesData);

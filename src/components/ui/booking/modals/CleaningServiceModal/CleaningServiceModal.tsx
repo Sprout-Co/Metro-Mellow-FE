@@ -268,9 +268,9 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   // State for cleaning configuration
   const [apartmentType, setApartmentType] = useState<HouseType>(HouseType.Flat);
   const [roomQuantities, setRoomQuantities] = useState<RoomQuantitiesInput>({
-    balcony: 0,
-    bathroom: 1,
     bedroom: 1,
+    bathroom: 1,
+    balcony: 0,
     kitchen: 1,
     livingRoom: 1,
     staircase: 0,
