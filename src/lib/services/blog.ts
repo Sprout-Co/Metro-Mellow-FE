@@ -1,8 +1,24 @@
 /**
- * Hybrid Blog Service for Metro Mellow
+ * Hybrid Blog Service for Metromellow
  * Balance: Authentic content + Essential SEO optimization
  * Focus: Customer conversion with search visibility
  */
+
+export interface BlogCategory {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  color: string;
+  icon: string;
+  postCount: number;
+  serviceConnection: string;
+
+  // SEO for category pages
+  metaTitle: string;
+  metaDescription: string;
+  keywords: string[];
+}
 
 export interface BlogPost {
   id: string;
@@ -11,7 +27,6 @@ export interface BlogPost {
   excerpt: string;
   content: string;
   featuredImage: string;
-
   // Author (real team member or customer story)
   author: {
     name: string;
@@ -19,17 +34,14 @@ export interface BlogPost {
     role: string;
     bio: string;
   };
-
   // Simple categorization
   category: BlogCategory;
   tags: string[];
-
   // Publishing info
   publishedAt: string;
   updatedAt: string;
   readTime: number;
   wordCount: number;
-
   // Essential SEO
   metaTitle: string;
   metaDescription: string;
@@ -37,7 +49,6 @@ export interface BlogPost {
   focusKeyword: string;
   keywords: string[];
   featured: boolean;
-
   // Customer journey focus
   customerStage: "Awareness" | "Consideration" | "Decision" | "Retention";
   callToAction: {
@@ -45,7 +56,6 @@ export interface BlogPost {
     text: string;
     link: string;
   };
-
   // Real social proof
   customerStory?: {
     name: string;
@@ -88,185 +98,193 @@ export interface BlogPost {
   };
 }
 
-export interface BlogCategory {
-  id: string;
-  name: string;
-  slug: string;
-  description: string;
-  color: string;
-  icon: string;
-  postCount: number;
-  serviceConnection: string;
+export const categories: BlogCategory[] = [
+  {
+    id: "cleaning",
+    name: "Cleaning Stories",
+    slug: "cleaning",
+    description: "Real customer transformations and cleaning insights",
+    color: "#10B981",
+    icon: "✨",
+    postCount: 8,
+    serviceConnection: "Deep Cleaning Service",
+    metaTitle:
+      "Professional Cleaning Services Lagos | Customer Stories | Metromellow",
+    metaDescription:
+      "Read real customer stories about Metromellow's professional cleaning services in Lagos. Deep cleaning transformations, maintenance tips, and expert advice.",
+    keywords: [
+      "cleaning services Lagos",
+      "professional cleaners",
+      "deep cleaning",
+      "apartment cleaning",
+      "house cleaning Victoria Island",
+    ],
+  },
+  {
+    id: "laundry",
+    name: "Laundry Solutions",
+    slug: "laundry",
+    description: "Real solutions for Lagos laundry challenges",
+    color: "#3B82F6",
+    icon: "👕",
+    postCount: 6,
+    serviceConnection: "Laundry & Dry Cleaning",
+    metaTitle:
+      "Laundry Services Lagos | Tropical Climate Fabric Care | Metromellow",
+    metaDescription:
+      "Professional laundry services in Lagos. Expert solutions for tropical climate fabric care, humidity problems, and fresh clothes guaranteed.",
+    keywords: [
+      "laundry services Lagos",
+      "tropical climate laundry",
+      "fabric care Nigeria",
+      "dry cleaning Lagos",
+      "humid weather laundry",
+    ],
+  },
+  {
+    id: "cooking",
+    name: "Meal Solutions",
+    slug: "cooking",
+    description: "Real meal prep solutions for Lagos families",
+    color: "#F59E0B",
+    icon: "🍽️",
+    postCount: 4,
+    serviceConnection: "Meal Prep & Cooking",
+    metaTitle:
+      "Meal Prep Services Lagos | Nigerian Family Cooking | Metromellow",
+    metaDescription:
+      "Professional meal prep services for Lagos families. Nigerian cuisine meal planning, family cooking services, and healthy meal solutions for busy parents.",
+    keywords: [
+      "meal prep Lagos",
+      "family cooking services",
+      "Nigerian meal planning",
+      "cooking services Lagos",
+      "family meal prep",
+    ],
+  },
+];
 
-  // SEO for category pages
-  metaTitle: string;
-  metaDescription: string;
-  keywords: string[];
-}
-
-// Authentic, customer-focused + SEO optimized blog posts
 export const blogPosts: BlogPost[] = [
   {
     id: "1",
-    slug: "deep-cleaning-transformation-victoria-island-apartment",
-    title: "How We Transformed Sarah's Dusty Lagos Apartment in 4 Hours",
+    slug: "deep-cleaning-vs-regular-cleaning-lagos-guide",
+    title:
+      "Deep Cleaning vs. Regular Cleaning: What Does Your Lagos Apartment Actually Need?",
     excerpt:
-      "See how our deep cleaning service helped Sarah, a busy lawyer in Victoria Island, reclaim her weekends and maintain a spotless home.",
+      "Confused about the difference? We break down exactly what deep cleaning covers and why Lagos homes need it at least quarterly due to local dust and humidity.",
     content: `
-When Sarah contacted us, her 2-bedroom apartment in Victoria Island hadn't had a proper deep clean in months. As a corporate lawyer working 12-hour days, cleaning was the last thing on her mind.
+Living in Lagos comes with unique maintenance challenges. Between the Harmattan dust, high humidity, and urban pollution, a standard "mop and sweep" often isn't enough to maintain a healthy living environment.
 
-## The Challenge: Lagos Apartment Deep Cleaning
+In this guide, we clarify the technical differences between regular cleaning and professional deep cleaning, helping you decide which service your home requires right now.
 
-- Dust accumulation from Lagos traffic
-- Bathroom grime from humidity  
-- Kitchen grease buildup
-- Limited time for maintenance
+## The Technical Difference: Regular vs. Deep Cleaning
 
-## Our Professional Deep Cleaning Process
+### Regular Cleaning (Maintenance)
+Regular cleaning is designed for upkeep. It maintains a certain level of cleanliness but doesn't address long-term buildup.
+* **Focus**: Surface level dirt and dust.
+* **Tasks**: Vacuuming floors, wiping countertops, cleaning visible bathroom surfaces, making beds.
+* **Frequency**: Weekly or Bi-weekly.
 
-Our Lagos cleaning team arrived with eco-friendly products and a systematic approach:
+### Deep Cleaning (Restoration)
+Deep cleaning is a restorative process intended to remove the grime that accumulates over months. It targets areas often neglected during routine cleaning.
+* **Focus**: Hidden dust, heavy grease, scale buildup, and sanitization.
+* **Tasks**: 
+    * **Kitchen**: Degreasing range hoods, cleaning inside appliances (oven, microwave), scrubbing grout lines.
+    * **Bathroom**: Descaling showerheads, removing mold from tile grout, disinfecting wastebaskets.
+    * **Living Areas**: Cleaning behind heavy furniture, washing baseboards, dusting ceiling fans and AC vents.
+* **Frequency**: Every 3-4 months (Quarterly).
 
-**Hour 1: Assessment & Preparation**
-- Moved furniture safely
-- Identified problem areas
-- Prepared cleaning solutions
+## Why Lagos Homes Require More Frequent Deep Cleaning
 
-**Hour 2-3: Deep Cleaning Services**
-- Bathroom: Removed soap scum and mold using anti-fungal treatments
-- Kitchen: Degreased surfaces and appliances with professional-grade cleaners
-- Living areas: Dusted and sanitized all surfaces
-- Floors: Mopped with antimicrobial solution
+### 1. The Dust Factor
+Lagos dust is persistent. Fine particulate matter settles into upholstery, curtains, and AC filters. Deep cleaning involves HEPA-filtration vacuuming and wet-wiping surfaces that dry dusting misses, significantly improving indoor air quality.
 
-**Hour 4: Final Quality Check**
-- Reorganized spaces for better maintenance
-- Applied protective treatments
-- Quality inspection with Sarah
+### 2. Humidity and Mold Control
+With average humidity levels often exceeding 80%, Lagos homes are prone to mold growth in hidden corners. Professional deep cleaning includes anti-fungal treatment of high-risk areas like bathroom ceilings, under-sink cabinets, and AC vents.
 
-## Deep Cleaning Results for Lagos Homes
+### 3. Pest Deterrence
+Crumbs and grease buildup in hidden kitchen crevices attract ants and cockroaches. Deep cleaning removes these food sources entirely, acting as a preventative pest control measure.
 
-Sarah's apartment was completely transformed. The air felt fresher, surfaces sparkled, and she could finally invite friends over without embarrassment.
+## Our 45-Point Deep Cleaning Checklist
 
-*"I got my weekends back. Instead of spending Saturday cleaning, I'm exploring Lagos or relaxing. Metro Mellow is worth every naira." - Sarah K., Victoria Island*
+When you book a Metromellow deep clean, our team follows a rigorous 45-point checklist to ensure consistency. This includes:
+* **High Dusting**: Light fixtures, ceiling fans, and crown molding.
+* **Vertical Surfaces**: Spot cleaning walls, door frames, and light switches.
+* **Floor Care**: Grout scrubbing and corner detailing where mops can't reach.
 
-## Why Professional Deep Cleaning Works for Busy Lagos Professionals
+## When Should You Book a Deep Clean?
 
-1. **Time Freedom**: Get 4+ hours of your weekend back
-2. **Professional Standards**: We clean like you live here
-3. **Health Benefits**: Reduced allergens and bacteria
-4. **Peace of Mind**: Consistent, reliable service
-5. **Lagos-Specific Solutions**: We understand local challenges like dust and humidity
+* **Move-In/Move-Out**: Ensure the space is sanitized before you unpack or hand over keys.
+* **Post-Renovation**: Construction dust is incredibly fine and invasive; standard cleaning cannot remove it effectively.
+* **Quarterly Reset**: To maintain property value and hygiene standards.
 
-## Deep Cleaning Service Areas in Lagos
-
-We provide professional deep cleaning services across:
-- Victoria Island
-- Ikoyi  
-- Lekki
-- Surulere
-- Ikeja
-- Gbagada
-
-## Frequently Asked Questions About Deep Cleaning
-
-**How often should I get deep cleaning service in Lagos?**
-For busy professionals, we recommend deep cleaning every 2-3 months, with regular maintenance cleaning weekly or bi-weekly.
-
-**Do you bring your own cleaning supplies?**
-Yes, we bring all professional-grade, eco-friendly cleaning supplies and equipment.
-
-**How long does apartment deep cleaning take?**
-Most 1-3 bedroom Lagos apartments take 3-5 hours depending on condition and size.
-
-Ready to reclaim your weekends like Sarah?
+*Investing in a deep clean isn't just about aesthetics; it's about resetting the hygiene baseline of your home.*
     `,
     featuredImage: "/images/blog/blog-1.jpg",
     author: {
-      name: "metromellow team",
-      avatar: "/images/brand/brand-logo/solid-bg/green-bg.png",
-      role: "Lead Cleaning Specialist Team",
-      bio: "Experience in residential cleaning. Specialized in Lagos apartment maintenance and deep cleaning services.",
+      name: "Metromellow team",
+      avatar: "/images/brand/brand-logo/single-logo/primary.JPG",
+      role: "Cleaning Operations Team",
+      bio: "Our operations team oversees quality standards for residential and commercial cleaning across Lagos, ensuring global best practices are applied locally.",
     },
-    category: {
-      id: "cleaning",
-      name: "Cleaning Stories",
-      slug: "cleaning",
-      description: "Real customer transformations and cleaning insights",
-      color: "#10B981",
-      icon: "✨",
-      postCount: 8,
-      serviceConnection: "Deep Cleaning Service",
-      metaTitle:
-        "Professional Cleaning Services Lagos | Customer Stories | Metro Mellow",
-      metaDescription:
-        "Read real customer stories about Metro Mellow's professional cleaning services in Lagos. Deep cleaning transformations, maintenance tips, and expert advice.",
-      keywords: [
-        "cleaning services Lagos",
-        "professional cleaners",
-        "deep cleaning",
-        "apartment cleaning",
-        "house cleaning Victoria Island",
-      ],
-    },
+    category: categories[0],
     tags: [
       "deep cleaning",
-      "apartment cleaning",
-      "Victoria Island",
-      "professional cleaning",
-      "Lagos cleaning services",
+      "home maintenance",
+      "Lagos living",
+      "hygiene standards",
+      "cleaning guide",
     ],
     publishedAt: "2024-03-15T09:00:00Z",
     updatedAt: "2024-03-15T09:00:00Z",
-    readTime: 4,
-    wordCount: 650,
+    readTime: 5,
+    wordCount: 750,
     metaTitle:
-      "Deep Cleaning Lagos Apartment: 4-Hour Transformation Story | Metro Mellow",
+      "Deep Cleaning vs Regular Cleaning: The Lagos Guide | Metromellow",
     metaDescription:
-      "See how Metro Mellow's deep cleaning service transformed Sarah's dusty Victoria Island apartment in 4 hours. Professional cleaning Lagos - get your weekend back.",
+      "What is the difference between deep cleaning and regular cleaning? Learn why Lagos homes need quarterly deep cleaning to combat dust and humidity.",
     canonicalUrl:
-      "https://metromellow.com/blog/deep-cleaning-transformation-victoria-island-apartment",
-    focusKeyword: "deep cleaning Lagos apartment",
+      "https://metromellow.com/blog/deep-cleaning-vs-regular-cleaning-lagos-guide",
+    focusKeyword: "deep cleaning vs regular cleaning Lagos",
     keywords: [
       "deep cleaning Lagos",
-      "apartment cleaning Victoria Island",
-      "professional cleaning services",
-      "Lagos house cleaning",
-      "cleaning service transformation",
+      "apartment cleaning guide",
+      "professional cleaning checklist",
+      "Lagos dust control",
+      "move-in cleaning",
     ],
     featured: true,
-    customerStage: "Consideration",
+    customerStage: "Awareness",
     callToAction: {
       type: "Book Service",
-      text: "Get Your Apartment Transformation",
+      text: "Book Your Deep Clean",
       link: "/book-cleaning",
-    },
-    customerStory: {
-      name: "Sarah K.",
-      location: "Victoria Island, Lagos",
-      result: "4-hour apartment transformation, weekends reclaimed",
     },
     structuredData: {
       type: "Article",
-      headline: "How We Transformed Sarah's Dusty Lagos Apartment in 4 Hours",
+      headline:
+        "Deep Cleaning vs. Regular Cleaning: What Does Your Lagos Apartment Actually Need?",
       description:
-        "Professional deep cleaning service transformation of a Victoria Island apartment by Metro Mellow's cleaning specialists.",
+        "A technical guide comparing deep cleaning and regular maintenance cleaning, specifically tailored for Lagos environmental conditions.",
       datePublished: "2024-03-15T09:00:00Z",
       dateModified: "2024-03-15T09:00:00Z",
-      wordCount: 650,
+      wordCount: 750,
       faqItems: [
         {
-          question: "How often should I get deep cleaning service in Lagos?",
+          question: "How often should I deep clean my apartment in Lagos?",
           answer:
-            "For busy professionals, we recommend deep cleaning every 2-3 months, with regular maintenance cleaning weekly or bi-weekly.",
+            "Due to high dust and humidity levels, we recommend a professional deep clean every 3 to 4 months (quarterly).",
         },
         {
-          question: "Do you bring your own cleaning supplies?",
+          question: "Does deep cleaning include mold removal?",
           answer:
-            "Yes, we bring all professional-grade, eco-friendly cleaning supplies and equipment.",
+            "Yes, deep cleaning targets surface mold in bathrooms and kitchens using anti-fungal cleaning agents.",
         },
         {
-          question: "How long does apartment deep cleaning take?",
+          question:
+            "What is the main difference between regular and deep cleaning?",
           answer:
-            "Most 1-3 bedroom Lagos apartments take 3-5 hours depending on condition and size.",
+            "Regular cleaning focuses on maintaining surface cleanliness, while deep cleaning removes long-term buildup, grime, and scale from neglected areas.",
         },
       ],
     },
@@ -281,561 +299,293 @@ Ready to reclaim your weekends like Sarah?
       ],
       businessType: "Professional Cleaning Service",
       localKeywords: [
-        "cleaning services Victoria Island",
-        "deep cleaning Lagos",
-        "apartment cleaning Ikoyi",
-        "professional cleaners Lekki",
+        "deep cleaning service Lagos",
+        "move in cleaning Victoria Island",
+        "post construction cleaning Lekki",
+        "apartment cleaning standards",
       ],
     },
     socialMeta: {
-      ogTitle: "Lagos Apartment Deep Cleaning: 4-Hour Transformation",
+      ogTitle: "Deep Cleaning vs. Regular Cleaning: The Lagos Guide",
       ogDescription:
-        "Watch how our professional cleaning team transformed a dusty Victoria Island apartment in just 4 hours. Deep cleaning Lagos made easy.",
-      ogImage: "/images/blog/social/sarah-transformation-og.jpg",
-      twitterTitle: "4-Hour Apartment Deep Cleaning Transformation in Lagos",
+        "Confused about cleaning types? We explain why Lagos homes need quarterly deep cleaning to combat dust and humidity.",
+      ogImage: "/images/blog/social/deep-clean-guide-og.jpg",
+      twitterTitle: "Deep Cleaning vs Regular Cleaning Explained",
       twitterDescription:
-        "Professional deep cleaning services Lagos - see this amazing apartment transformation in Victoria Island.",
+        "Expert guide on the difference between deep and regular cleaning for Lagos apartments.",
     },
   },
 
   {
     id: "2",
-    slug: "lagos-humidity-laundry-care-solutions",
-    title: "Why Your Clothes Smell Musty (And How to Fix It)",
+    slug: "post-construction-cleaning-lagos-guide",
+    title:
+      "Post-Construction Cleaning: Why Your New Lagos Apartment Needs More Than a Mop",
     excerpt:
-      "Lagos humidity is ruining your laundry. Here's what we learned from 500+ laundry pickups and how to keep clothes fresh in tropical climate.",
+      "Just received keys to a new property in Lekki? Learn why builder's dust requires specialized industrial cleaning before you move in.",
     content: `
-If your clothes smell musty within hours of washing, you're not alone. After handling 500+ laundry pickups across Lagos, we've identified the real culprit: humidity management, not just washing technique.
+Receiving the keys to a newly built or renovated property in Lagos is a milestone. However, the excitement often fades when you run a finger across a "clean" wall and it comes back white with chalky dust.
 
-## The Lagos Laundry Challenge
+Construction dust is not ordinary dirt. It is a combination of cement silica, drywall particulate, and sawdust. Standard domestic cleaning methods often fail to remove it, simply spreading the fine particles into the air where they settle hours later.
 
-**The Problem**: 80%+ humidity means clothes never fully dry
-**The Result**: Mildew growth, musty smell, fabric damage
-**The Cost**: Rewashing, replacing clothes, embarrassment
+## Why "Builder's Clean" isn't Enough
 
-## What We've Learned from 500+ Lagos Laundry Pickups
+Most developers in Lagos provide a cursory "builder's clean." This typically involves removing large debris and a quick sweep. It rarely addresses:
+* **Fine Particulate Matter**: Dust settled on top of cabinets, door frames, and inside wardrobes.
+* **Paint Splatters**: Tiny droplets of paint on tiles, windows, and fixtures.
+* **Cement Residue**: Haze left on bathroom tiles and windows.
+* **Adhesive Labels**: Sticker residue on new appliances and sanitary ware.
 
-**Mistake #1: Indoor Drying in Lagos Apartments**
-Most Lagos apartments lack proper ventilation. Hanging clothes indoors traps moisture and creates perfect conditions for mildew.
+## The Health Risks of Construction Dust
 
-*Our solution*: We use industrial dehumidifiers and strategic airflow in our climate-controlled facility.
+Moving furniture into a space that hasn't been industrially cleaned poses health risks.
+1.  **Respiratory Issues**: Cement and gypsum dust are respiratory irritants. Turning on your AC without a prior deep clean circulates these particles into your lungs.
+2.  **Equipment Damage**: Fine dust clogs the filters of your air conditioners and electronics, shortening their lifespan.
 
-**Mistake #2: Overloading Washing Machines**  
-Packed washing machines don't rinse properly in humid conditions, leaving detergent residue that attracts bacteria.
+## Our Post-Construction Cleaning Protocol
 
-*Our solution*: Smaller loads, extra rinse cycles, faster turnaround.
+Metromellow uses a specialized approach for post-construction projects:
 
-**Mistake #3: Wrong Detergent for Tropical Climate**
-Many detergents aren't formulated for Nigeria's high humidity levels.
+### 1. Dry Soil Removal (HEPA Vacuuming)
+Before any water touches a surface, we vacuum every inch—walls, ceilings, and floors—with industrial HEPA vacuums. Adding water to construction dust creates sludge; removing it dry is the critical first step.
 
-*Our solution*: Anti-fungal additives and proper concentration ratios for tropical conditions.
+### 2. Detail Scraping
+We use non-scratch blades to carefully remove paint splatters and cement labels from glass and tiles without damaging the finish.
 
-## The Metro Mellow Laundry Method for Lagos
+### 3. Wet Cleaning & Sanitization
+Once the dust is removed, we proceed with wet cleaning using pH-neutral detergents to protect new stone and tile finishes while removing grime.
 
-1. **Pre-treatment**: Check for humidity damage and stains
-2. **Controlled washing**: Optimal load sizes, extra rinses  
-3. **Climate-controlled drying**: Professional facility with dehumidifiers
-4. **Quality check**: Every item inspected before return
+## The Metromellow Guarantee
 
-## Quick Fixes for Home Laundry in Lagos
+We don't just clean; we prepare your home for living.
+* **Windows**: Interior and exterior (where accessible).
+* **Cabinetry**: Inside and out, ensuring your clothes go into dust-free drawers.
+* **Fixtures**: Polishing all chrome and sanitary ware to a showroom shine.
 
-- **Use a fan**: Point directly at drying clothes
-- **Vinegar rinse**: Add 1/2 cup white vinegar to final rinse cycle
-- **Dry immediately**: Don't let wet clothes sit in machine
-- **Iron while damp**: Heat kills remaining moisture and bacteria
-- **Dehumidifier**: If possible, use in drying area
-
-## When to Use Professional Laundry Services in Lagos
-
-If you're rewashing clothes or they smell within 24 hours, home methods aren't enough for Lagos climate. Our climate-controlled process ensures fresh clothes every time.
-
-*"I used to rewash everything twice. Now my clothes come back actually fresh and stay that way for weeks." - Michael O., Lekki*
-
-## Laundry Service Areas in Lagos
-
-We provide professional laundry and dry cleaning services across:
-- Lekki Phase 1 & 2
-- Victoria Island
-- Ikoyi
-- Surulere
-- Ikeja
-- Gbagada
-
-## Frequently Asked Questions About Lagos Laundry Care
-
-**Why do clothes smell musty in Lagos weather?**
-High humidity (80%+) prevents complete drying, allowing mildew and bacteria to grow on fabric.
-
-**How can I prevent musty smell in clothes?**
-Ensure complete drying with fans or dehumidifiers, use vinegar rinse, and don't let wet clothes sit.
-
-**What's the best laundry schedule for Lagos climate?**
-Wash smaller loads more frequently and dry immediately to prevent humidity damage.
+*Don't let construction dust ruin your move-in experience. Start fresh with a truly clean slate.*
     `,
     featuredImage: "/images/blog/blog-2.jpg",
     author: {
-      name: "metromellow team",
-      avatar: "/images/brand/brand-logo/solid-bg/green-bg.png",
-      role: "Laundry Specialists Team",
-      bio: "Professional laundry specialists with expertise in tropical climate fabric care and Lagos-specific laundry challenges.",
+      name: "Metromellow team",
+      avatar: "/images/brand/brand-logo/single-logo/primary.JPG",
+      role: "Industrial Cleaning Specialists",
+      bio: "Our specialized projects team handles post-construction and renovation cleaning, using industrial-grade equipment to handle heavy-duty dust and debris.",
     },
-    category: {
-      id: "laundry",
-      name: "Laundry Solutions",
-      slug: "laundry",
-      description: "Real solutions for Lagos laundry challenges",
-      color: "#3B82F6",
-      icon: "👕",
-      postCount: 6,
-      serviceConnection: "Laundry & Dry Cleaning",
-      metaTitle:
-        "Laundry Services Lagos | Tropical Climate Fabric Care | Metro Mellow",
-      metaDescription:
-        "Professional laundry services in Lagos. Expert solutions for tropical climate fabric care, humidity problems, and fresh clothes guaranteed.",
-      keywords: [
-        "laundry services Lagos",
-        "tropical climate laundry",
-        "fabric care Nigeria",
-        "dry cleaning Lagos",
-        "humid weather laundry",
-      ],
-    },
+    category: categories[0],
     tags: [
-      "laundry care",
-      "humidity problems",
-      "musty clothes",
-      "Lagos weather",
-      "tropical climate",
+      "post-construction",
+      "new apartment",
+      "Lagos real estate",
+      "industrial cleaning",
+      "dust removal",
     ],
-    publishedAt: "2024-03-12T10:30:00Z",
-    updatedAt: "2024-03-12T10:30:00Z",
-    readTime: 3,
-    wordCount: 580,
+    publishedAt: "2024-03-20T11:00:00Z",
+    updatedAt: "2024-03-20T11:00:00Z",
+    readTime: 4,
+    wordCount: 600,
     metaTitle:
-      "Lagos Humidity Ruining Your Laundry? Expert Solutions | Metro Mellow",
+      "Post-Construction Cleaning Lagos: The Essential Guide | Metromellow",
     metaDescription:
-      "Stop rewashing musty clothes! Learn why Lagos humidity affects laundry and proven solutions from 500+ Metro Mellow pickups. Professional laundry Lagos.",
+      "Moving into a new build in Lagos? Learn why standard cleaning fails against construction dust and how our industrial process protects your health.",
     canonicalUrl:
-      "https://metromellow.com/blog/lagos-humidity-laundry-care-solutions",
-    focusKeyword: "Lagos humidity laundry care",
+      "https://metromellow.com/blog/post-construction-cleaning-lagos-guide",
+    focusKeyword: "post construction cleaning Lagos",
     keywords: [
-      "Lagos laundry problems",
-      "humidity laundry solutions",
-      "musty clothes Lagos",
-      "tropical climate laundry",
-      "professional laundry Lagos",
+      "builders clean Lagos",
+      "new apartment cleaning",
+      "cement dust removal",
+      "move in cleaning Lekki",
+      "renovation cleaning",
     ],
-    featured: true,
-    customerStage: "Awareness",
+    featured: false,
+    customerStage: "Consideration",
     callToAction: {
       type: "Get Quote",
-      text: "End Musty Clothes Forever",
-      link: "/quote-laundry",
-    },
-    customerStory: {
-      name: "Michael O.",
-      location: "Lekki, Lagos",
-      result: "No more rewashing, consistently fresh clothes",
+      text: "Get Construction Cleaning Quote",
+      link: "/quote-cleaning",
     },
     structuredData: {
-      type: "FAQPage",
-      headline: "Why Your Clothes Smell Musty (And How to Fix It)",
+      type: "Article",
+      headline:
+        "Post-Construction Cleaning: Why Your New Lagos Apartment Needs More Than a Mop",
       description:
-        "Expert solutions for Lagos humidity laundry problems from professional laundry service with 500+ customer experience.",
-      datePublished: "2024-03-12T10:30:00Z",
-      dateModified: "2024-03-12T10:30:00Z",
-      wordCount: 580,
+        "A guide to the hazards of construction dust and the professional process required to remove it from new Lagos apartments.",
+      datePublished: "2024-03-20T11:00:00Z",
+      dateModified: "2024-03-20T11:00:00Z",
+      wordCount: 600,
       faqItems: [
         {
-          question: "Why do clothes smell musty in Lagos weather?",
+          question:
+            "How is post-construction cleaning different from regular cleaning?",
           answer:
-            "High humidity (80%+) prevents complete drying, allowing mildew and bacteria to grow on fabric.",
+            "It requires specialized equipment like HEPA vacuums to remove fine silica dust and scrapers for paint/cement, which regular cleaning does not address.",
         },
         {
-          question: "How can I prevent musty smell in clothes?",
+          question: "Should I clean before or after moving furniture in?",
           answer:
-            "Ensure complete drying with fans or dehumidifiers, use vinegar rinse, and don't let wet clothes sit.",
-        },
-        {
-          question: "What's the best laundry schedule for Lagos climate?",
-          answer:
-            "Wash smaller loads more frequently and dry immediately to prevent humidity damage.",
+            "Always clean BEFORE. Furniture traps dust and makes it impossible to clean corners and baseboards effectively.",
         },
       ],
     },
     localSeo: {
       serviceArea: [
         "Lekki",
-        "Victoria Island",
         "Ikoyi",
-        "Surulere",
-        "Ikeja",
-        "Gbagada",
+        "Victoria Island",
+        "Ajah",
+        "Eko Atlantic",
       ],
-      businessType: "Laundry and Dry Cleaning Service",
+      businessType: "Industrial Cleaning Service",
       localKeywords: [
-        "laundry services Lekki",
-        "dry cleaning Victoria Island",
-        "laundry pickup Lagos",
-        "professional laundry Ikoyi",
+        "after builders cleaning",
+        "new house cleaning Lagos",
+        "renovation cleanup service",
+        "cement removal tiles",
       ],
     },
     socialMeta: {
-      ogTitle: "Lagos Humidity Destroying Your Laundry? Expert Solutions",
+      ogTitle: "Don't Move In Yet: The Dangers of Construction Dust",
       ogDescription:
-        "Discover why Lagos humidity makes clothes musty and professional solutions from 500+ laundry pickups. Fresh clothes guaranteed.",
-      ogImage: "/images/blog/social/humidity-laundry-og.jpg",
-      twitterTitle: "Stop Musty Clothes: Lagos Humidity Solutions",
+        "New apartment in Lagos? Don't let cement dust ruin your furniture. Read our guide on proper post-construction cleaning.",
+      ogImage: "/images/blog/social/construction-clean-og.jpg",
+      twitterTitle: "Post-Construction Cleaning Guide for Lagos",
       twitterDescription:
-        "Expert laundry tips for Lagos humidity problems. Professional solutions that actually work.",
+        "Why your new apartment needs an industrial clean before you unpack.",
     },
   },
 
   {
     id: "3",
-    slug: "family-meal-prep-lagos-working-parents",
-    title: "How the Johnsons Feed Their Family Without Daily Cooking",
+    slug: "move-in-cleaning-checklist-lagos",
+    title:
+      "Moving in Lagos? The Ultimate Deep Cleaning Checklist Before You Unpack",
     excerpt:
-      "Meet the Johnson family: 2 working parents, 3 kids, zero time for daily cooking. Here's their Metro Mellow meal prep solution.",
+      "The best time to clean is when the house is empty. Use this checklist to ensure your new home is sanitary before your furniture arrives.",
     content: `
-The Johnson family was drowning in dinner decisions. Two working parents, three school-age children, and the daily question: "What's for dinner?"
+Moving house in Lagos is stressful enough without worrying about the hygiene of your new space. Whether you are renting in Surulere or buying in Ikeja, the previous occupants (or workers) have likely left behind more than just memories.
 
-Sound familiar?
+Cleaning an empty apartment is 100% more effective than cleaning a furnished one. Here is the ultimate checklist to ensure your new home is a sanctuary from Day 1.
 
-## The Pre-Metro Mellow Reality for Lagos Working Parents
+## Phase 1: The "Dirty" Work (Do This First)
 
-**Sunday-Thursday**: Takeout rotation (expensive, unhealthy)
-**Friday**: Grocery shopping chaos  
-**Saturday**: Cooking marathon (exhausting)
-**Result**: Stressed parents, inconsistent meals, budget strain
+Before you bring in a single box, address the heavy-duty hygiene issues.
 
-## Custom Family Meal Prep Solution for Lagos Families
+* **Pest Control (Fumigation)**: Always fumigate an empty space. It allows the chemicals to reach deep into crevices without contaminating your belongings. Wait 48 hours after fumigation before cleaning.
+* **AC Servicing**: Service all split units. The filters are likely clogged with the previous tenant's dust and mold. Cleaning them *after* painting or cleaning walls will just blow dust back onto clean surfaces.
 
-After understanding their preferences and dietary needs, we designed a family meal prep system:
+## Phase 2: The Deep Clean Checklist
 
-**Weekly Planning Session**: 
-- Family favorites: Jollof rice, grilled chicken, vegetable stew
-- Kid-friendly options: Pasta, rice dishes, finger foods
-- Health requirements: Mrs. Johnson's diabetes-friendly Nigerian meals
+### The Kitchen (Critical Zone)
+* **Cabinet Interiors**: Vacuum and wet-wipe all shelves. Look for cockroach droppings in hinges.
+* **Grease Trap/Extractor**: Degrease the range hood. This is a common fire hazard area often neglected.
+* **Sinks & Drains**: Pour boiling water and disinfectant down drains to kill odors and drain flies.
 
-**Professional Meal Prep Strategy**:
-- 3 family dinners per week (Sunday prep)
-- 2 quick-assembly meals (Wednesday prep) 
-- Healthy snacks and school lunch components
-- Weekend special meal (family choice)
+### The Bathroom (Sanitization Zone)
+* **Descaling**: Remove white limescale from taps and showerheads using acidic cleaners (carefully!).
+* **Toilet Disinfection**: Replace the toilet seat if possible. If not, deep clean hinges and under the rim with bleach.
+* **Grout Lines**: Scrub tile grout to remove mold spores.
 
-**Smart Storage System**:
-- Labeled containers for each day
-- Portion-controlled kids' meals
-- Reheating instructions included
-- Nigerian spice profiles maintained
+### Living Areas & Bedrooms
+* **High Surfaces**: Clean tops of wardrobes, curtain rails, and ceiling fans.
+* **Windows & Tracks**: Vacuum the sliding tracks of aluminum windows—a graveyard for dead insects and dust.
+* **Switches & Handles**: Disinfect all high-touch points (doorknobs, light switches, intercoms).
 
-## Real Results After 3 Months of Meal Prep Service
+## Why Hire Professionals for Move-In Cleaning?
 
-**Time Saved**: 8+ hours weekly
-**Money Saved**: 40% reduction in food costs
-**Health Improved**: Consistent home-cooked Nigerian meals
-**Stress Reduced**: No more "what's for dinner" panic
+While this checklist is doable, it is exhausting. A professional team of 3-4 cleaners can achieve in 6 hours what would take you a weekend.
+* **Equipment**: We bring steam cleaners for bathrooms and industrial vacuums for tracks.
+* **Speed**: We clean while you focus on the logistics of moving.
+* **Thoroughness**: We clean what you can't see (tops of cabinets, behind radiators).
 
-*"My kids actually ask for seconds now. We eat together as a family instead of grabbing whatever's quick. It's been life-changing." - Mrs. Johnson, Gbagada*
-
-## Is Family Meal Prep Right for Your Lagos Family?
-
-**Perfect if you:**
-- Have 2+ working parents
-- Want healthier family meals with Nigerian flavors
-- Spend 30+ minutes daily on meal decisions
-- Order takeout more than twice weekly
-- Struggle with consistent family dinner time
-
-**Not ideal if:**
-- You enjoy daily cooking as relaxation
-- Family has drastically different dietary restrictions
-- You prefer very fresh (same-day) meal preparation
-
-## Our Family Meal Prep Process in Lagos
-
-We offer a consultation to understand your family's:
-- Dietary preferences and Nigerian cuisine favorites
-- Schedule constraints and pickup preferences
-- Budget parameters and portion requirements
-- Storage capacity and reheating equipment
-
-Then create a custom meal prep plan that works for Lagos families.
-
-## Meal Prep Service Areas in Lagos
-
-We provide family meal prep and cooking services across:
-- Gbagada
-- Surulere  
-- Ikeja
-- Victoria Island
-- Ikoyi
-- Lekki
-
-## Frequently Asked Questions About Family Meal Prep
-
-**Do you cook traditional Nigerian dishes?**
-Yes, our chefs specialize in Nigerian cuisine and can prepare family favorites like jollof rice, pepper soup, and traditional stews.
-
-**How long do meal prep portions last?**
-Properly stored meals last 3-4 days refrigerated, with some items suitable for freezing up to 2 weeks.
-
-**Can you accommodate dietary restrictions?**
-Absolutely. We handle diabetes-friendly, low-sodium, and other dietary requirements while maintaining Nigerian flavors.
-
-Ready to end dinner stress like the Johnsons?
+*Start your new chapter on a clean slate. A professional move-in clean is the best housewarming gift you can give yourself.*
     `,
     featuredImage: "/images/blog/blog-3.jpg",
     author: {
-      name: "metromellow team",
-      avatar: "/images/brand/brand-logo/solid-bg/green-bg.png",
-      role: "Family Meal Specialist Team",
-      bio: "Professional chef specializing in Nigerian family meal planning and nutrition. Mother of 2, expert in Lagos family dietary needs.",
+      name: "Metromellow team",
+      avatar: "/images/brand/brand-logo/single-logo/primary.JPG",
+      role: "Residential Cleaning Experts",
+      bio: "Helping Lagosians settle into new homes with confidence. We specialize in move-in/move-out hygiene and sanitation.",
     },
-    category: {
-      id: "cooking",
-      name: "Meal Solutions",
-      slug: "cooking",
-      description: "Real meal prep solutions for Lagos families",
-      color: "#F59E0B",
-      icon: "🍽️",
-      postCount: 4,
-      serviceConnection: "Meal Prep & Cooking",
-      metaTitle:
-        "Meal Prep Services Lagos | Nigerian Family Cooking | Metro Mellow",
-      metaDescription:
-        "Professional meal prep services for Lagos families. Nigerian cuisine meal planning, family cooking services, and healthy meal solutions for busy parents.",
-      keywords: [
-        "meal prep Lagos",
-        "family cooking services",
-        "Nigerian meal planning",
-        "cooking services Lagos",
-        "family meal prep",
-      ],
-    },
+    category: categories[0],
     tags: [
-      "family meal prep",
-      "Nigerian cuisine",
-      "working parents",
-      "cooking services",
-      "Lagos families",
+      "moving tips",
+      "move-in cleaning",
+      "fumigation",
+      "hygiene checklist",
+      "Lagos apartments",
     ],
-    publishedAt: "2024-03-08T14:15:00Z",
-    updatedAt: "2024-03-08T14:15:00Z",
+    publishedAt: "2024-03-25T09:00:00Z",
+    updatedAt: "2024-03-25T09:00:00Z",
     readTime: 5,
-    wordCount: 720,
+    wordCount: 650,
     metaTitle:
-      "Family Meal Prep Lagos: How Working Parents Save 8+ Hours Weekly | Metro Mellow",
+      "Lagos Move-In Cleaning Checklist: Clean Before You Unpack | Metromellow",
     metaDescription:
-      "See how the Johnson family solved dinner stress with Metro Mellow's meal prep service. 8+ hours saved weekly, Nigerian meals, happier Lagos family.",
+      "Don't unpack yet! Follow our expert move-in cleaning checklist for Lagos homes. Fumigation, AC servicing, and deep cleaning tips.",
     canonicalUrl:
-      "https://metromellow.com/blog/family-meal-prep-lagos-working-parents",
-    focusKeyword: "family meal prep Lagos",
+      "https://metromellow.com/blog/move-in-cleaning-checklist-lagos",
+    focusKeyword: "move in cleaning checklist Lagos",
     keywords: [
-      "meal prep services Lagos",
-      "family cooking Lagos",
-      "Nigerian meal prep",
-      "working parents meal solutions",
-      "Lagos family meal planning",
+      "move in cleaning service",
+      "fumigation Lagos",
+      "cleaning empty apartment",
+      "sanitizing new home",
+      "cleaning tips Lagos",
     ],
-    featured: false,
+    featured: true,
     customerStage: "Decision",
     callToAction: {
-      type: "Contact Us",
-      text: "Plan Your Family's Meals",
-      link: "/contact-meal-prep",
-    },
-    customerStory: {
-      name: "The Johnson Family",
-      location: "Gbagada, Lagos",
-      result:
-        "8+ hours saved weekly, 40% food cost reduction, family dinners restored",
+      type: "Book Service",
+      text: "Book Move-In Clean",
+      link: "/book-cleaning",
     },
     structuredData: {
       type: "Article",
-      headline: "How the Johnsons Feed Their Family Without Daily Cooking",
+      headline:
+        "Moving in Lagos? The Ultimate Deep Cleaning Checklist Before You Unpack",
       description:
-        "Family meal prep success story showing how Lagos working parents save time and money with professional meal planning services.",
-      datePublished: "2024-03-08T14:15:00Z",
-      dateModified: "2024-03-08T14:15:00Z",
-      wordCount: 720,
+        "A comprehensive checklist for sanitizing a new home in Lagos, covering pest control, AC servicing, and deep cleaning.",
+      datePublished: "2024-03-25T09:00:00Z",
+      dateModified: "2024-03-25T09:00:00Z",
+      wordCount: 650,
       faqItems: [
         {
-          question: "Do you cook traditional Nigerian dishes?",
+          question: "Should I fumigate before or after cleaning?",
           answer:
-            "Yes, our chefs specialize in Nigerian cuisine and can prepare family favorites like jollof rice, pepper soup, and traditional stews.",
+            "Fumigate FIRST. Let the chemicals work for 48 hours, then clean thoroughly to remove dead pests and chemical residue.",
         },
         {
-          question: "How long do meal prep portions last?",
+          question: "Does move-in cleaning include AC servicing?",
           answer:
-            "Properly stored meals last 3-4 days refrigerated, with some items suitable for freezing up to 2 weeks.",
-        },
-        {
-          question: "Can you accommodate dietary restrictions?",
-          answer:
-            "Absolutely. We handle diabetes-friendly, low-sodium, and other dietary requirements while maintaining Nigerian flavors.",
+            "Standard cleaning includes cleaning the exterior units and filters, but full gas/coil servicing is usually a separate technical add-on.",
         },
       ],
     },
     localSeo: {
       serviceArea: [
-        "Gbagada",
-        "Surulere",
+        "Lagos Mainland",
+        "Lagos Island",
         "Ikeja",
-        "Victoria Island",
-        "Ikoyi",
+        "Surulere",
         "Lekki",
       ],
-      businessType: "Meal Prep and Cooking Service",
+      businessType: "Residential Cleaning Service",
       localKeywords: [
-        "meal prep Gbagada",
-        "family cooking Surulere",
-        "Nigerian chef Lagos",
-        "meal planning Victoria Island",
+        "move out cleaning",
+        "end of tenancy cleaning",
+        "pre-move cleaning",
+        "fumigation and cleaning",
       ],
     },
     socialMeta: {
-      ogTitle: "Lagos Family Meal Prep: Working Parents Save 8+ Hours Weekly",
+      ogTitle: "The Ultimate Lagos Move-In Cleaning Checklist",
       ogDescription:
-        "Discover how the Johnson family ended dinner stress with professional meal prep. Nigerian cuisine, family-friendly, time-saving solutions.",
-      ogImage: "/images/blog/blog-3.jpg",
-      twitterTitle: "Family Meal Prep Success Story Lagos",
+        "Moving house? Don't forget these critical cleaning steps before you unpack your boxes.",
+      ogImage: "/images/blog/social/move-in-og.jpg",
+      twitterTitle: "Lagos Move-In Cleaning Guide",
       twitterDescription:
-        "Working parents in Lagos save 8+ hours weekly with professional meal prep. See the Johnson family transformation.",
+        "Essential hygiene steps for moving into a new apartment in Lagos.",
     },
-  },
-];
-
-export const sampleCategories: BlogCategory[] = [
-  {
-    id: "cleaning",
-    name: "Cleaning Stories",
-    slug: "cleaning",
-    description: "Real customer transformations and cleaning insights",
-    color: "#10B981",
-    icon: "✨",
-    postCount: 8,
-    serviceConnection: "Deep Cleaning Service",
-    metaTitle:
-      "Professional Cleaning Services Lagos | Customer Stories | Metro Mellow",
-    metaDescription:
-      "Read real customer stories about Metro Mellow's professional cleaning services in Lagos. Deep cleaning transformations, maintenance tips, and expert advice.",
-    keywords: [
-      "cleaning services Lagos",
-      "professional cleaners",
-      "deep cleaning",
-      "apartment cleaning",
-      "house cleaning Victoria Island",
-    ],
-  },
-  {
-    id: "laundry",
-    name: "Laundry Solutions",
-    slug: "laundry",
-    description: "Real solutions for Lagos laundry challenges",
-    color: "#3B82F6",
-    icon: "👕",
-    postCount: 6,
-    serviceConnection: "Laundry & Dry Cleaning",
-    metaTitle:
-      "Laundry Services Lagos | Tropical Climate Fabric Care | Metro Mellow",
-    metaDescription:
-      "Professional laundry services in Lagos. Expert solutions for tropical climate fabric care, humidity problems, and fresh clothes guaranteed.",
-    keywords: [
-      "laundry services Lagos",
-      "tropical climate laundry",
-      "fabric care Nigeria",
-      "dry cleaning Lagos",
-      "humid weather laundry",
-    ],
-  },
-  {
-    id: "cooking",
-    name: "Meal Solutions",
-    slug: "cooking",
-    description: "Real meal prep solutions for Lagos families",
-    color: "#F59E0B",
-    icon: "🍽️",
-    postCount: 4,
-    serviceConnection: "Meal Prep & Cooking",
-    metaTitle:
-      "Meal Prep Services Lagos | Nigerian Family Cooking | Metro Mellow",
-    metaDescription:
-      "Professional meal prep services for Lagos families. Nigerian cuisine meal planning, family cooking services, and healthy meal solutions for busy parents.",
-    keywords: [
-      "meal prep Lagos",
-      "family cooking services",
-      "Nigerian meal planning",
-      "cooking services Lagos",
-      "family meal prep",
-    ],
-  },
-];
-
-export const categories: BlogCategory[] = [
-  {
-    id: "cleaning",
-    name: "Cleaning Stories",
-    slug: "cleaning",
-    description: "Real customer transformations and cleaning insights",
-    color: "#10B981",
-    icon: "✨",
-    postCount: 8,
-    serviceConnection: "Deep Cleaning Service",
-    metaTitle:
-      "Professional Cleaning Services Lagos | Customer Stories | Metro Mellow",
-    metaDescription:
-      "Read real customer stories about Metro Mellow's professional cleaning services in Lagos. Deep cleaning transformations, maintenance tips, and expert advice.",
-    keywords: [
-      "cleaning services Lagos",
-      "professional cleaners",
-      "deep cleaning",
-      "apartment cleaning",
-      "house cleaning Victoria Island",
-    ],
-  },
-  {
-    id: "laundry",
-    name: "Laundry Solutions",
-    slug: "laundry",
-    description: "Real solutions for Lagos laundry challenges",
-    color: "#3B82F6",
-    icon: "👕",
-    postCount: 6,
-    serviceConnection: "Laundry & Dry Cleaning",
-    metaTitle:
-      "Laundry Services Lagos | Tropical Climate Fabric Care | Metro Mellow",
-    metaDescription:
-      "Professional laundry services in Lagos. Expert solutions for tropical climate fabric care, humidity problems, and fresh clothes guaranteed.",
-    keywords: [
-      "laundry services Lagos",
-      "tropical climate laundry",
-      "fabric care Nigeria",
-      "dry cleaning Lagos",
-      "humid weather laundry",
-    ],
-  },
-  {
-    id: "cooking",
-    name: "Meal Solutions",
-    slug: "cooking",
-    description: "Real meal prep solutions for Lagos families",
-    color: "#F59E0B",
-    icon: "🍽️",
-    postCount: 4,
-    serviceConnection: "Meal Prep & Cooking",
-    metaTitle:
-      "Meal Prep Services Lagos | Nigerian Family Cooking | Metro Mellow",
-    metaDescription:
-      "Professional meal prep services for Lagos families. Nigerian cuisine meal planning, family cooking services, and healthy meal solutions for busy parents.",
-    keywords: [
-      "meal prep Lagos",
-      "family cooking services",
-      "Nigerian meal planning",
-      "cooking services Lagos",
-      "family meal prep",
-    ],
   },
 ];
 
@@ -879,7 +629,7 @@ export const SEOUtils = {
       },
       publisher: {
         "@type": "Organization",
-        name: "Metro Mellow",
+        name: "Metromellow",
         logo: {
           "@type": "ImageObject",
           url: "https://metromellow.com/images/brand/brand-logo/solid-bg/green-bg.png",
@@ -923,15 +673,15 @@ export const SEOUtils = {
     return {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
-      name: "Metro Mellow",
+      name: "Metromellow",
       image:
-        "https://metromellow.com/images/brand/brand-logo/solid-bg/green-bg.png",
+        "https://metromellow.com/images/brand/brand-logo/single-logo/primary.JPG",
       "@id": "https://metromellow.com",
       url: "https://metromellow.com",
-      telephone: "+234-XXX-XXXX",
+      telephone: "+2349068249871",
       address: {
         "@type": "PostalAddress",
-        streetAddress: "Lagos, Nigeria",
+        streetAddress: "Opeyemi Street, Yaba, Lagos",
         addressLocality: "Lagos",
         addressCountry: "NG",
       },
@@ -941,7 +691,7 @@ export const SEOUtils = {
   },
 };
 
-// Service functions (same as before but with SEO enhancements)
+// Service functions (SEO enhancements + Data Retrieval)
 export async function getBlogPosts(limit?: number): Promise<BlogPost[]> {
   const posts = blogPosts.sort(
     (a, b) =>

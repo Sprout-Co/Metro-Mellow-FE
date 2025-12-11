@@ -6,20 +6,20 @@ import { getBlogPosts, getBlogCategories } from "@/lib/services/blog";
 import styles from "./Blog.module.scss";
 
 export const metadata: Metadata = {
-  title: "Blog & Insights | Expert Home Services Tips | Metro Mellow",
+  title: "Blog & Insights | Expert Home Services Tips | Metromellow",
   description:
-    "Expert home services advice for Lagos residents. Get tips on cleaning, laundry, cooking, pest control, and home maintenance from Metro Mellow professionals.",
+    "Expert home services advice for Lagos residents. Get tips on cleaning, laundry, cooking, pest control, and home maintenance from Metromellow professionals.",
   keywords:
     "home services blog Lagos, cleaning tips Nigeria, laundry guides, cooking tips Lagos, pest control advice, home maintenance Nigeria",
   alternates: {
     canonical: "https://metromellow.com/blog",
   },
   openGraph: {
-    title: "Blog & Insights | Metro Mellow",
+    title: "Blog & Insights | Metromellow",
     description:
       "Expert advice on cleaning, laundry, cooking & pest control for Lagos homes.",
     url: "https://metromellow.com/blog",
-    siteName: "Metro Mellow",
+    siteName: "Metromellow",
     locale: "en_NG",
     type: "website",
   },
