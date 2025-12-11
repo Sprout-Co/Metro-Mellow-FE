@@ -235,8 +235,8 @@ When you book a Metromellow deep clean, our team follows a rigorous 45-point che
       "hygiene standards",
       "cleaning guide",
     ],
-    publishedAt: "2024-03-15T09:00:00Z",
-    updatedAt: "2024-03-15T09:00:00Z",
+    publishedAt: "2025-11-15T09:00:00Z",
+    updatedAt: "2025-11-15T09:00:00Z",
     readTime: 5,
     wordCount: 750,
     metaTitle:
@@ -266,8 +266,8 @@ When you book a Metromellow deep clean, our team follows a rigorous 45-point che
         "Deep Cleaning vs. Regular Cleaning: What Does Your Lagos Apartment Actually Need?",
       description:
         "A technical guide comparing deep cleaning and regular maintenance cleaning, specifically tailored for Lagos environmental conditions.",
-      datePublished: "2024-03-15T09:00:00Z",
-      dateModified: "2024-03-15T09:00:00Z",
+      datePublished: "2025-11-15T09:00:00Z",
+      dateModified: "2025-11-15T09:00:00Z",
       wordCount: 750,
       faqItems: [
         {
@@ -383,8 +383,8 @@ We don't just clean; we prepare your home for living.
       "industrial cleaning",
       "dust removal",
     ],
-    publishedAt: "2024-03-20T11:00:00Z",
-    updatedAt: "2024-03-20T11:00:00Z",
+    publishedAt: "2025-11-28T11:00:00Z",
+    updatedAt: "2025-11-28T11:00:00Z",
     readTime: 4,
     wordCount: 600,
     metaTitle:
@@ -414,8 +414,8 @@ We don't just clean; we prepare your home for living.
         "Post-Construction Cleaning: Why Your New Lagos Apartment Needs More Than a Mop",
       description:
         "A guide to the hazards of construction dust and the professional process required to remove it from new Lagos apartments.",
-      datePublished: "2024-03-20T11:00:00Z",
-      dateModified: "2024-03-20T11:00:00Z",
+      datePublished: "2025-11-28T11:00:00Z",
+      dateModified: "2025-11-28T11:00:00Z",
       wordCount: 600,
       faqItems: [
         {
@@ -553,8 +553,8 @@ While this checklist is doable, it is exhausting. A professional team of 3-4 cle
         "Moving in Lagos? The Ultimate Deep Cleaning Checklist Before You Unpack",
       description:
         "A comprehensive checklist for sanitizing a new home in Lagos, covering pest control, AC servicing, and deep cleaning.",
-      datePublished: "2024-03-25T09:00:00Z",
-      dateModified: "2024-03-25T09:00:00Z",
+      datePublished: "2025-12-05T09:00:00Z",
+      dateModified: "2025-12-05T09:00:00Z",
       wordCount: 650,
       faqItems: [
         {
