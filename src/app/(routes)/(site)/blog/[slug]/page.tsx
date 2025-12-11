@@ -34,12 +34,12 @@ export async function generateMetadata({
 
   if (!post) {
     return {
-      title: "Post Not Found | Metro Mellow Blog",
+      title: "Post Not Found | Metromellow Blog",
     };
   }
 
   return {
-    title: `${post.title} | Metro Mellow Blog`,
+    title: `${post.title} | Metromellow Blog`,
     description: post.metaDescription,
     keywords: post.tags.join(", "),
   };
@@ -196,7 +196,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </h3>
               <p className={styles["post__cta-description"]}>
                 Join thousands of Lagos residents enjoying spotless homes with
-                Metro Mellow
+                Metromellow
               </p>
               <Link href="/get-started" className={styles["post__cta-button"]}>
                 Get Started Today →
