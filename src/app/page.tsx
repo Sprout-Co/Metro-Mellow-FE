@@ -173,12 +173,6 @@ const jsonLd = {
       },
     ],
   },
-  // Aggregate rating schema
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: "4.8",
-    reviewCount: "150",
-  },
 };
 
 export default function Home() {
