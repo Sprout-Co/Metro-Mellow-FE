@@ -7,15 +7,15 @@ import styles from "./FloatingButtons.module.scss";
 
 const FloatingButtons: React.FC = () => {
   const handleWhatsAppClick = () => {
-    const phoneNumber = "+2347049452585";
+    const phoneNumber = "+2349069894176";
     const message = "Hello! I'm interested in your services.";
-    const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank");
   };
 
   const handleCallClick = () => {
     const phoneNumber = "+2347049452585";
-    window.open(`tel:${phoneNumber}`, '_self');
+    window.open(`tel:${phoneNumber}`, "_self");
   };
 
   return (
