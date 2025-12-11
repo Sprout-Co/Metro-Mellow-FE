@@ -69,14 +69,14 @@ const jsonLd = {
   description:
     "Top-rated home services in Lagos including cleaning, laundry, cooking, and pest control.",
   url: "https://metromellow.com",
-  logo: "https://metromellow.com/images/brand/brand-logo/solid-bg/green-bg.png",
+  logo: "https://metromellow.com/images/brand/brand-logo/single-logo/primary.JPG",
   image:
     "https://metromellow.com/images/brand/brand-logo/solid-bg/green-bg.png",
   telephone: "+2347049452585",
   email: "team@metromellow.com", // Replace with actual email
   address: {
     "@type": "PostalAddress",
-    streetAddress: "anike ologuntoye avenue", // Replace with actual street address
+    streetAddress: "Opeyemi Street, Yaba, Lagos", // Replace with actual street address
     addressLocality: "Lagos",
     addressRegion: "Lagos",
     postalCode: "102213", // Replace with actual postal code

@@ -296,6 +296,10 @@ When you book a Metromellow deep clean, our team follows a rigorous 45-point che
         "Surulere",
         "Ikeja",
         "Gbagada",
+        "Magodo",
+        "Maryland",
+        "Yaba",
+        "Banana Island",
       ],
       businessType: "Professional Cleaning Service",
       localKeywords: [
@@ -434,6 +438,10 @@ We don't just clean; we prepare your home for living.
         "Victoria Island",
         "Ajah",
         "Eko Atlantic",
+        "Banana Island",
+        "Oniru",
+        "VGC",
+        "Sangotedo",
       ],
       businessType: "Industrial Cleaning Service",
       localKeywords: [
@@ -568,6 +576,10 @@ While this checklist is doable, it is exhausting. A professional team of 3-4 cle
         "Ikeja",
         "Surulere",
         "Lekki",
+        "Magodo",
+        "Ogudu",
+        "Yaba",
+        "Anthony Village",
       ],
       businessType: "Residential Cleaning Service",
       localKeywords: [
