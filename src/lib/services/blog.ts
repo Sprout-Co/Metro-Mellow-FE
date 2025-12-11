@@ -701,6 +701,23 @@ export const SEOUtils = {
       serviceType: post.localSeo.businessType,
     };
   },
+
+  /**
+   * Generate social sharing links
+   */
+  generateSocialLinks(post: BlogPost) {
+    const url = encodeURIComponent(post.canonicalUrl);
+    const title = encodeURIComponent(post.title);
+    const summary = encodeURIComponent(post.excerpt);
+
+    return {
+      whatsapp: `https://wa.me/?text=${title}%20${url}`,
+      twitter: `https://twitter.com/intent/tweet?url=${url}&text=${title}`,
+      linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${title}&summary=${summary}&source=Metromellow`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+      email: `mailto:?subject=${title}&body=${summary}%0A%0ARead more here: ${url}`,
+    };
+  },
 };
 
 // Service functions (SEO enhancements + Data Retrieval)
