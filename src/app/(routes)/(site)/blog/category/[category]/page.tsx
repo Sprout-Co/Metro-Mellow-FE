@@ -4,7 +4,7 @@ import Link from "next/link";
 import {
   getBlogPostsByCategory,
   getBlogCategories,
-  sampleCategories,
+  categories,
 } from "@/lib/services/blog";
 import BlogGrid from "../../_components/BlogGrid/BlogGrid";
 import StructuredData from "@/components/common/SEO/StructuredData";
@@ -18,7 +18,7 @@ interface BlogCategoryPageProps {
 }
 
 export async function generateStaticParams() {
-  return sampleCategories.map((category) => ({
+  return categories.map((category) => ({
     category: category.slug,
   }));
 }

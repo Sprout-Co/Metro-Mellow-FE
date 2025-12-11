@@ -8,7 +8,8 @@ interface StructuredDataProps {
     | "Service"
     | "FAQPage"
     | "BreadcrumbList"
-    | "Offer";
+    | "Offer"
+    | "Blog";
   data: Record<string, any>;
 }
 
