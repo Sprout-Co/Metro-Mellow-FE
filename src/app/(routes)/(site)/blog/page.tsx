@@ -25,6 +25,8 @@ export const metadata: Metadata = {
   },
 };
 
+import Link from "next/link";
+
 export default async function BlogPage() {
   const blogPosts = await getBlogPosts();
   const categories = await getBlogCategories();
@@ -37,6 +39,31 @@ export default async function BlogPage() {
     <main className={styles["blog"]}>
       {/* Hero Section */}
       <BlogHero />
+
+      {/* Category Filter */}
+      <section className={styles["blog__categories-section"]}>
+        <div className={styles["blog__container"]}>
+          <div className={styles["blog__categories"]}>
+            <Link
+              href="/blog"
+              className={`${styles["category-pill"]} ${styles["category-pill--active"]}`}
+            >
+              All Topics
+            </Link>
+            {categories.map((cat) => (
+              <Link
+                href={`/blog/category/${cat.slug}`}
+                key={cat.id}
+                className={styles["category-pill"]}
+                style={{ "--category-color": cat.color } as React.CSSProperties}
+              >
+                <span className={styles["category-icon"]}>{cat.icon}</span>
+                {cat.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Featured Articles */}
       <section className={styles["blog__featured-section"]}>
