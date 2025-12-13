@@ -23,7 +23,7 @@
 
   &__detailsSection {
     flex: 1;
-    padding: spacing("2xl");
+    padding: 0 spacing("xl");
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -59,7 +59,7 @@
     @include font-weight("medium");
     color: color("neutral", "dark");
     line-height: line-height("relaxed");
-    margin: 0 0 spacing("lg") 0;
+    margin: 0 0 spacing("md") 0;
     flex-shrink: 0;
   }
 
@@ -203,7 +203,7 @@
 // Rooms Grid
 .roomsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: spacing("md");
 }
 

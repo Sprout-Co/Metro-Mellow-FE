@@ -1,0 +1,148 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.modal {
+  &__content {
+    padding: spacing("md") 0;
+  }
+
+  &__description {
+    font-size: 1rem;
+    color: color("neutral", "medium");
+    margin-bottom: spacing("xl");
+    text-align: center;
+  }
+
+  &__loading {
+    @include flex-column-center;
+    padding: spacing("3xl") spacing("md");
+    gap: spacing("md");
+
+    p {
+      color: color("neutral", "medium");
+      font-size: 0.875rem;
+    }
+  }
+
+  &__loader {
+    width: 40px;
+    height: 40px;
+    border: 3px solid color("neutral", "light");
+    border-top-color: color("primary", "base");
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  &__servicesList {
+    @include flex($direction: column);
+    gap: spacing("md");
+  }
+
+  &__serviceCard {
+    background: color("neutral", "lightest");
+    border: map-get($border-width, "thin") solid color("neutral", "light");
+    border-radius: border-radius("lg");
+    padding: spacing("xl");
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      border-color: color("primary", "base");
+      box-shadow: map-get($shadows, "md");
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.serviceCard {
+  &__header {
+    @include flex-between;
+    align-items: flex-start;
+    margin-bottom: spacing("sm");
+    gap: spacing("md");
+  }
+
+  &__title {
+    font-size: 1.125rem;
+    @include font-weight("semibold");
+    color: color("neutral", "darkest");
+    margin: 0;
+  }
+
+  &__price {
+    font-size: 1.125rem;
+    @include font-weight("bold");
+    color: color("primary", "base");
+    white-space: nowrap;
+  }
+
+  &__description {
+    font-size: 0.875rem;
+    color: color("neutral", "medium");
+    margin-bottom: spacing("md");
+    line-height: map-get($line-heights, "relaxed");
+  }
+
+  &__inclusions {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 spacing("md") 0;
+    @include flex($direction: column);
+    gap: spacing("xs");
+
+    li {
+      font-size: 0.8125rem;
+      color: color("neutral", "dark");
+      padding-left: spacing("lg");
+      position: relative;
+
+      &::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: color("status", "success");
+        @include font-weight("semibold");
+      }
+    }
+  }
+
+  &__button {
+    width: 100%;
+    margin-top: spacing("xs");
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive
+@include breakpoint-down("md") {
+  .modal {
+    &__servicesList {
+      gap: spacing("sm");
+    }
+
+    &__serviceCard {
+      padding: spacing("lg");
+    }
+  }
+
+  .serviceCard {
+    &__header {
+      flex-direction: column;
+      gap: spacing("xs");
+    }
+
+    &__title {
+      font-size: 1rem;
+    }
+
+    &__price {
+      font-size: 1rem;
+    }
+  }
+}

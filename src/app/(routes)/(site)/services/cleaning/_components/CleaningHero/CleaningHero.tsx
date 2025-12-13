@@ -1,4 +1,5 @@
 import ServiceHero from "@/components/ui/ServiceHero/ServiceHero";
+import { ServiceCategory } from "@/graphql/api";
 
 const CleaningHero = () => {
   return (
@@ -10,6 +11,8 @@ const CleaningHero = () => {
       ctaText="BOOK CLEANING"
       animationType="wobble"
       animationIntensity="intense"
+      serviceCategory={ServiceCategory.Cleaning}
+      useServiceModal={true}
     />
   );
 };

@@ -1,11 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import styles from "./ServiceHero.module.scss";
 import { Routes } from "@/constants/routes";
 import { CTAButton } from "@/components/ui/Button/CTAButton";
 import { ArrowRightIcon, Clock } from "lucide-react";
 import { Button } from "@/components/ui/Button/Button";
+import ServiceSelectionModal from "@/components/ui/booking/modals/ServiceSelectionModal/ServiceSelectionModal";
+import CleaningServiceModal from "@/components/ui/booking/modals/CleaningServiceModal/CleaningServiceModal";
+import LaundryServiceModal from "@/components/ui/booking/modals/LaundryServiceModal/LaundryServiceModal";
+import CookingServiceModal from "@/components/ui/booking/modals/CookingServiceModal/CookingServiceModal";
+import PestControlServiceModal from "@/components/ui/booking/modals/PestControlServiceModal/PestControlServiceModal";
+import { ServiceCategory, ServiceOption, Service } from "@/graphql/api";
+import { useGetServices } from "@/graphql/hooks/services/useServiceOperations";
+import { ServiceStatus } from "@/graphql/api";
 
 interface ServiceHeroProps {
   backgroundImage: string;
@@ -18,6 +27,8 @@ interface ServiceHeroProps {
   animationType?: "wobble" | "vibrate" | "heartbeat";
   animationIntensity?: "subtle" | "intense";
   isAvailable?: boolean;
+  serviceCategory?: ServiceCategory;
+  useServiceModal?: boolean;
 }
 
 const ServiceHero = ({
@@ -31,7 +42,86 @@ const ServiceHero = ({
   animationType = "wobble",
   animationIntensity = "intense",
   isAvailable = true,
+  serviceCategory,
+  useServiceModal = false,
 }: ServiceHeroProps) => {
+  const [isSelectionModalOpen, setIsSelectionModalOpen] = useState(false);
+  const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
+  const [selectedServiceOption, setSelectedServiceOption] =
+    useState<ServiceOption | null>(null);
+
+  const { data: servicesData } = useGetServices({
+    category: serviceCategory,
+    status: ServiceStatus.Active,
+  });
+
+  const handleCTAClick = () => {
+    if (useServiceModal && serviceCategory) {
+      setIsSelectionModalOpen(true);
+    }
+  };
+
+  const handleServiceSelect = (serviceOption: ServiceOption) => {
+    setSelectedServiceOption(serviceOption);
+    setIsServiceModalOpen(true);
+  };
+
+  const handleCloseSelectionModal = () => {
+    setIsSelectionModalOpen(false);
+  };
+
+  const handleCloseServiceModal = () => {
+    setIsServiceModalOpen(false);
+    setSelectedServiceOption(null);
+  };
+
+  const renderServiceModal = () => {
+    if (!selectedServiceOption || !servicesData?.services?.[0]) return null;
+
+    const service = servicesData.services[0];
+
+    switch (serviceCategory) {
+      case ServiceCategory.Cleaning:
+        return (
+          <CleaningServiceModal
+            isOpen={isServiceModalOpen}
+            onClose={handleCloseServiceModal}
+            serviceOption={selectedServiceOption}
+            service={service}
+            includedFeatures={selectedServiceOption.inclusions || []}
+          />
+        );
+      case ServiceCategory.Laundry:
+        return (
+          <LaundryServiceModal
+            isOpen={isServiceModalOpen}
+            onClose={handleCloseServiceModal}
+            serviceOption={selectedServiceOption}
+            service={service}
+          />
+        );
+      case ServiceCategory.Cooking:
+        return (
+          <CookingServiceModal
+            isOpen={isServiceModalOpen}
+            onClose={handleCloseServiceModal}
+            serviceOption={selectedServiceOption}
+            service={service}
+          />
+        );
+      case ServiceCategory.PestControl:
+        return (
+          <PestControlServiceModal
+            isOpen={isServiceModalOpen}
+            onClose={handleCloseServiceModal}
+            serviceOption={selectedServiceOption}
+            service={service}
+          />
+        );
+      default:
+        return null;
+    }
+  };
   const staggerContainer = {
     hidden: { opacity: 0 },
     visible: {
@@ -108,16 +198,29 @@ const ServiceHero = ({
 
           <motion.div className={styles.hero__cta} variants={fadeIn}>
             {isAvailable ? (
-              <CTAButton
-                href={ctaHref}
-                size="lg"
-                animationType={animationType}
-                animationIntensity={animationIntensity}
-                rightIcon={<ArrowRightIcon size={18} />}
-                {...getButtonAnimation()}
-              >
-                {ctaText}
-              </CTAButton>
+              useServiceModal && serviceCategory ? (
+                <CTAButton
+                  onClick={handleCTAClick}
+                  size="lg"
+                  animationType={animationType}
+                  animationIntensity={animationIntensity}
+                  rightIcon={<ArrowRightIcon size={18} />}
+                  {...getButtonAnimation()}
+                >
+                  {ctaText}
+                </CTAButton>
+              ) : (
+                <CTAButton
+                  href={ctaHref}
+                  size="lg"
+                  animationType={animationType}
+                  animationIntensity={animationIntensity}
+                  rightIcon={<ArrowRightIcon size={18} />}
+                  {...getButtonAnimation()}
+                >
+                  {ctaText}
+                </CTAButton>
+              )
             ) : (
               <Button variant="secondary" size="lg" disabled>
                 <Clock size={16} style={{ marginRight: "8px" }} />
@@ -127,6 +230,19 @@ const ServiceHero = ({
           </motion.div>
         </motion.div>
       </div>
+
+      {/* Service Selection Modal */}
+      {useServiceModal && serviceCategory && (
+        <ServiceSelectionModal
+          isOpen={isSelectionModalOpen}
+          onClose={handleCloseSelectionModal}
+          serviceCategory={serviceCategory}
+          onServiceSelect={handleServiceSelect}
+        />
+      )}
+
+      {/* Service-specific Modal */}
+      {renderServiceModal()}
     </section>
   );
 };
