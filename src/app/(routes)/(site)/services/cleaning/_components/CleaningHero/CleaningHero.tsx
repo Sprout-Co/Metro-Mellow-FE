@@ -1,7 +1,7 @@
 import ServiceHero from "@/components/ui/ServiceHero/ServiceHero";
 import { ServiceCategory } from "@/graphql/api";
 
-const CleaningHero = () => {
+const CleaningHero = ({ onCTAClick }: { onCTAClick: () => void }) => {
   return (
     <ServiceHero
       backgroundImage="/images/cleaning/cleaning1.jpg"
@@ -12,7 +12,7 @@ const CleaningHero = () => {
       animationType="wobble"
       animationIntensity="intense"
       serviceCategory={ServiceCategory.Cleaning}
-      useServiceModal={true}
+      onCTAClick={onCTAClick}
     />
   );
 };

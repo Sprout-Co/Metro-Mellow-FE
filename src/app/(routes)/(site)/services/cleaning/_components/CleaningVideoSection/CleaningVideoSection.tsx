@@ -5,10 +5,9 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import styles from "./CleaningVideoSection.module.scss";
 import { CTAButton } from "@/components/ui/Button/CTAButton";
-import { Routes } from "@/constants/routes";
 import { ArrowRightIcon, Play } from "lucide-react";
 
-const CleaningVideoSection = () => {
+const CleaningVideoSection = ({ onCTAClick }: { onCTAClick: () => void }) => {
   const [videoPlaying, setVideoPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [ref, inView] = useInView({
@@ -137,7 +136,7 @@ const CleaningVideoSection = () => {
 
             <motion.div className={styles.video__cta} variants={fadeIn}>
               <CTAButton
-                href={Routes.GET_STARTED}
+                onClick={onCTAClick}
                 size="lg"
                 animationType="pulse"
                 animationIntensity="intense"

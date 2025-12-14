@@ -53,17 +53,24 @@ const CleaningPageClient: React.FC = () => {
     status: ServiceStatus.Active,
   });
 
+  const scrollToServicesShowcase = () => {
+    const showcaseElement = document.getElementById("services-showcase");
+    if (showcaseElement) {
+      showcaseElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <>
-      <CleaningHero />
+      <CleaningHero onCTAClick={scrollToServicesShowcase} />
       <CleaningServicesShowcase
         servicesData={servicesData?.services}
         loading={loading}
         error={error}
       />
-      <CleaningPromoSection />
-      <CleaningVideoSection />
-      <CleaningStepsSection />
+      <CleaningPromoSection onCTAClick={scrollToServicesShowcase} />
+      <CleaningVideoSection onCTAClick={scrollToServicesShowcase} />
+      <CleaningStepsSection onCTAClick={scrollToServicesShowcase} />
       <FAQSection faqs={cleaningFaqs} />
     </>
   );

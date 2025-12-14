@@ -100,7 +100,11 @@ const CleaningServicesShowcase: React.FC<CleaningServicesShowcaseProps> = ({
   }
 
   return (
-    <section className={styles.showcase} ref={sectionRef}>
+    <section
+      id="services-showcase"
+      className={styles.showcase}
+      ref={sectionRef}
+    >
       <div className={styles.showcase__container}>
         {/* Section Header */}
         <motion.div

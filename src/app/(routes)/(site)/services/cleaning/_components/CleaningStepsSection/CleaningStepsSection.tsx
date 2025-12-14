@@ -4,11 +4,10 @@ import React from "react";
 import { motion } from "framer-motion";
 import styles from "./CleaningStepsSection.module.scss";
 import { Button } from "@/components/ui/Button/Button";
-import { Routes } from "@/constants/routes";
 import { CTAButton } from "@/components/ui/Button/CTAButton";
 import { ArrowRightIcon } from "lucide-react";
 
-const CleaningStepsSection = () => {
+const CleaningStepsSection = ({ onCTAClick }: { onCTAClick: () => void }) => {
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -94,7 +93,7 @@ const CleaningStepsSection = () => {
         transition={{ delay: 0.6 }}
       >
         <CTAButton
-          href={Routes.GET_STARTED}
+          onClick={onCTAClick}
           size="lg"
           animationType="vibrate"
           animationIntensity="intense"

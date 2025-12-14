@@ -4,10 +4,9 @@ import React from "react";
 import { motion } from "framer-motion";
 import styles from "./CleaningPromoSection.module.scss";
 import { CTAButton } from "@/components/ui/Button/CTAButton";
-import { Routes } from "@/constants/routes";
 import { ArrowRightIcon } from "lucide-react";
 
-const CleaningPromoSection = () => {
+const CleaningPromoSection = ({ onCTAClick }: { onCTAClick: () => void }) => {
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -52,7 +51,7 @@ const CleaningPromoSection = () => {
 
           <motion.div className={styles.promo__cta} variants={fadeIn}>
             <CTAButton
-              href={Routes.GET_STARTED}
+              onClick={onCTAClick}
               size="lg"
               animationType="pulse"
               animationIntensity="intense"
