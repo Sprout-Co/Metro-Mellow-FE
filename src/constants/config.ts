@@ -28,7 +28,7 @@ export const BOOKING_STATUS = {
 } as const;
 
 export const ContactDetails = {
-  PHONE: "+234 813 456 7890",
+  PHONE: "+234 906 989 4176",
   EMAIL: "team@metromellow.com",
   ADDRESS: "Opeyemi Street, Yaba, Lagos",
 } as const;
