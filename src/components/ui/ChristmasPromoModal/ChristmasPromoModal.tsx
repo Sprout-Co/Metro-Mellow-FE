@@ -3,8 +3,9 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Gift, ArrowRight } from "lucide-react";
+import { X, Sparkles } from "lucide-react";
 import Portal from "@/components/ui/Portal/Portal";
+import { Button } from "../Button";
 import styles from "./ChristmasPromoModal.module.scss";
 
 const PROMO = {
@@ -45,76 +46,70 @@ const ChristmasPromoModal: React.FC = () => {
   return (
     <Portal>
       <AnimatePresence>
-        <div className={styles.wrapper}>
+        <div className={styles.promo}>
           <motion.div
-            className={styles.overlay}
+            className={styles.promo__overlay}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
           />
 
-          <motion.article
-            className={styles.card}
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 40 }}
-            transition={{ type: "spring", damping: 30, stiffness: 400 }}
+          <motion.div
+            className={styles.promo__card}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ type: "spring", damping: 25, stiffness: 350 }}
           >
-            {/* Left side - Visual */}
-            <div className={styles.visual}>
-              <div className={styles.giftIcon}>
-                <Gift strokeWidth={1.5} />
+            {/* Left Visual Panel */}
+            <div className={styles.promo__visual}>
+              <div className={styles.promo__icon}>
+                <Sparkles strokeWidth={1.5} />
               </div>
-              <div className={styles.discount}>
-                <span className={styles.discountNum}>{PROMO.DISCOUNT}</span>
-                <div className={styles.discountMeta}>
-                  <span className={styles.percent}>%</span>
-                  <span className={styles.off}>OFF</span>
+              <div className={styles.promo__discount}>
+                <span className={styles.promo__discountNum}>
+                  {PROMO.DISCOUNT}
+                </span>
+                <div className={styles.promo__discountMeta}>
+                  <span className={styles.promo__percent}>%</span>
+                  <span className={styles.promo__off}>OFF</span>
                 </div>
               </div>
-              <div className={styles.ornament} />
-              <div className={styles.ornament2} />
+              <p className={styles.promo__visualText}>Holiday Special</p>
             </div>
 
-            {/* Right side - Content */}
-            <div className={styles.body}>
+            {/* Right Content Panel */}
+            <div className={styles.promo__body}>
               <button
-                className={styles.close}
+                className={styles.promo__close}
                 onClick={() => setIsOpen(false)}
                 aria-label="Close"
               >
                 <X size={18} />
               </button>
 
-              <span className={styles.badge}>Holiday Special</span>
+              <h2 className={styles.promo__title}>Christmas Cleaning Sale</h2>
 
-              <h2 className={styles.heading}>
-                Make Your Home
-                <br />
-                <em>Sparkle</em> This Season
-              </h2>
-
-              <p className={styles.text}>
-                Professional cleaning services at a special holiday price.
-                Limited time offer.
+              <p className={styles.promo__desc}>
+                Get your home sparkling clean for the holidays with our
+                professional cleaning services.
               </p>
 
-              <div className={styles.codeBox}>
-                <span>Code:</span>
-                <strong>{PROMO.CODE}</strong>
+              <div className={styles.promo__code}>
+                <span>Use code</span>
+                <code>{PROMO.CODE}</code>
               </div>
 
-              <button className={styles.cta} onClick={goToOffer}>
-                Claim Offer
-                <ArrowRight size={18} />
+              <button className={styles.promo__cta} onClick={goToOffer}>
+                Redeem Offer
               </button>
 
-              <span className={styles.terms}>
-                Ends Dec 31, 2025 • All cleaning services
-              </span>
+              <p className={styles.promo__footer}>
+                Valid until December 31, 2025
+              </p>
             </div>
-          </motion.article>
+          </motion.div>
         </div>
       </AnimatePresence>
     </Portal>
