@@ -14,6 +14,7 @@ import {
 } from "@/components/common/GoogleTagManager";
 import { CommonInitializer } from "@/components/providers/CommonProvider";
 import FloatingButtons from "@/components/common/FloatingButtons/FloatingButtons";
+import ChristmasPromoModal from "@/components/ui/ChristmasPromoModal/ChristmasPromoModal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -82,6 +83,7 @@ export default function RootLayout({
                 <CommonInitializer>{children}</CommonInitializer>
                 {/* <ModalProvider /> */}
                 <FloatingButtons />
+                <ChristmasPromoModal />
               </NotificationProvider>
             </AuthInitializer>
           </ApolloWrapper>
