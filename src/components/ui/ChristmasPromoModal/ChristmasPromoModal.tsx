@@ -3,54 +3,41 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Sparkles } from "lucide-react";
+import { X, Gift, ArrowRight } from "lucide-react";
 import Portal from "@/components/ui/Portal/Portal";
 import styles from "./ChristmasPromoModal.module.scss";
 
-const CHRISTMAS_PROMO = {
-  DISCOUNT_PERCENTAGE: 20,
-  EXPIRATION_DATE: "2025-12-31T23:59:59",
-  PROMO_CODE: "XMAS2025",
-  CTA_LINK: "/services/cleaning#services-showcase",
+const PROMO = {
+  DISCOUNT: 20,
+  EXPIRES: "2025-12-31T23:59:59",
+  CODE: "XMAS2025",
+  LINK: "/services/cleaning#services-showcase",
 };
 
-const isPromotionActive = (expirationDate: string): boolean => {
-  return new Date() < new Date(expirationDate);
-};
-
-interface ChristmasPromoModalProps {
-  delayMs?: number;
-}
-
-const ChristmasPromoModal: React.FC<ChristmasPromoModalProps> = ({
-  delayMs = 1000,
-}) => {
+const ChristmasPromoModal: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    if (!isPromotionActive(CHRISTMAS_PROMO.EXPIRATION_DATE)) return;
-    const timer = setTimeout(() => setIsOpen(true), delayMs);
+    if (new Date() > new Date(PROMO.EXPIRES)) return;
+    const timer = setTimeout(() => setIsOpen(true), 800);
     return () => clearTimeout(timer);
-  }, [delayMs]);
+  }, []);
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-      const handleEscape = (e: KeyboardEvent) => {
-        if (e.key === "Escape") setIsOpen(false);
-      };
-      document.addEventListener("keydown", handleEscape);
-      return () => {
-        document.body.style.overflow = "unset";
-        document.removeEventListener("keydown", handleEscape);
-      };
-    }
+    if (!isOpen) return;
+    document.body.style.overflow = "hidden";
+    const onEsc = (e: KeyboardEvent) => e.key === "Escape" && setIsOpen(false);
+    window.addEventListener("keydown", onEsc);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onEsc);
+    };
   }, [isOpen]);
 
-  const handleCTA = () => {
+  const goToOffer = () => {
     setIsOpen(false);
-    router.push(CHRISTMAS_PROMO.CTA_LINK);
+    router.push(PROMO.LINK);
   };
 
   if (!isOpen) return null;
@@ -58,68 +45,76 @@ const ChristmasPromoModal: React.FC<ChristmasPromoModalProps> = ({
   return (
     <Portal>
       <AnimatePresence>
-        <div className={styles.overlay}>
+        <div className={styles.wrapper}>
           <motion.div
-            className={styles.backdrop}
+            className={styles.overlay}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
           />
 
-          <motion.div
-            className={styles.modal}
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+          <motion.article
+            className={styles.card}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 40 }}
+            transition={{ type: "spring", damping: 30, stiffness: 400 }}
           >
-            <button
-              className={styles.closeBtn}
-              onClick={() => setIsOpen(false)}
-              aria-label="Close"
-            >
-              <X size={20} />
-            </button>
-
-            <div className={styles.content}>
-              <div className={styles.iconWrapper}>
-                <Sparkles size={28} />
+            {/* Left side - Visual */}
+            <div className={styles.visual}>
+              <div className={styles.giftIcon}>
+                <Gift strokeWidth={1.5} />
               </div>
-
-              <span className={styles.tag}>Limited Time Offer</span>
-
-              <h2 className={styles.title}>
-                Christmas <span>Sale</span>
-              </h2>
-
-              <p className={styles.subtitle}>
-                Get your home sparkling clean for the holidays
-              </p>
-
-              <div className={styles.discountBox}>
-                <span className={styles.discountValue}>
-                  {CHRISTMAS_PROMO.DISCOUNT_PERCENTAGE}%
-                </span>
-                <span className={styles.discountLabel}>OFF</span>
+              <div className={styles.discount}>
+                <span className={styles.discountNum}>{PROMO.DISCOUNT}</span>
+                <div className={styles.discountMeta}>
+                  <span className={styles.percent}>%</span>
+                  <span className={styles.off}>OFF</span>
+                </div>
               </div>
+              <div className={styles.ornament} />
+              <div className={styles.ornament2} />
+            </div>
 
-              <p className={styles.description}>on all cleaning services</p>
-
-              <div className={styles.codeWrapper}>
-                <span className={styles.codeLabel}>Use code</span>
-                <code className={styles.code}>
-                  {CHRISTMAS_PROMO.PROMO_CODE}
-                </code>
-              </div>
-
-              <button className={styles.ctaBtn} onClick={handleCTA}>
-                Book Now
+            {/* Right side - Content */}
+            <div className={styles.body}>
+              <button
+                className={styles.close}
+                onClick={() => setIsOpen(false)}
+                aria-label="Close"
+              >
+                <X size={18} />
               </button>
 
-              <p className={styles.expiry}>Valid until December 31, 2025</p>
+              <span className={styles.badge}>Holiday Special</span>
+
+              <h2 className={styles.heading}>
+                Make Your Home
+                <br />
+                <em>Sparkle</em> This Season
+              </h2>
+
+              <p className={styles.text}>
+                Professional cleaning services at a special holiday price.
+                Limited time offer.
+              </p>
+
+              <div className={styles.codeBox}>
+                <span>Code:</span>
+                <strong>{PROMO.CODE}</strong>
+              </div>
+
+              <button className={styles.cta} onClick={goToOffer}>
+                Claim Offer
+                <ArrowRight size={18} />
+              </button>
+
+              <span className={styles.terms}>
+                Ends Dec 31, 2025 • All cleaning services
+              </span>
             </div>
-          </motion.div>
+          </motion.article>
         </div>
       </AnimatePresence>
     </Portal>
