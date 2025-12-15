@@ -23,7 +23,7 @@
 
   &__detailsSection {
     flex: 1;
-    padding: 0 spacing("xl");
+    padding: 0 spacing("xl") spacing("xl") spacing("xl");
     display: flex;
     flex-direction: column;
     overflow: hidden;

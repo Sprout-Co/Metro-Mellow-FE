@@ -730,6 +730,16 @@
     }
   }
 
+  &--promo {
+    span:first-child {
+      color: color("status", "success");
+    }
+
+    span:last-child {
+      color: color("status", "success");
+    }
+  }
+
   &--total {
     padding-top: spacing("md");
     margin-top: spacing("xs");

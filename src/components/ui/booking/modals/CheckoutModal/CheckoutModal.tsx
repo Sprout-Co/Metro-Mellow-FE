@@ -25,6 +25,11 @@ import { AddressSection } from "./components/AddressSection";
 import { CheckoutSummary } from "./components/CheckoutSummary";
 import FullPageSpinner from "@/components/ui/FullPageSpinner/FullPageSpinner";
 
+const CHRISTMAS_PROMO = {
+  DISCOUNT: 20,
+  EXPIRES: "2025-12-31T23:59:59",
+};
+
 export interface CheckoutModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -132,8 +137,17 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     slotValidationError
   );
 
+  // Calculate Christmas promo discount (automatically applied)
+  const christmasDiscountAmount = useMemo(() => {
+    // Check if promo is still valid
+    if (new Date() > new Date(CHRISTMAS_PROMO.EXPIRES)) {
+      return 0;
+    }
+    return Math.round((totalPrice * CHRISTMAS_PROMO.DISCOUNT) / 100);
+  }, [totalPrice]);
+
   // Calculate referral discount
-  const discountAmount = useMemo(() => {
+  const referralDiscountAmount = useMemo(() => {
     const discountInfo = discountData?.myReferralDiscountInfo;
     if (
       !discountInfo?.isEligible ||
@@ -145,6 +159,9 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     return Math.round((totalPrice * discountInfo.discountPercentage) / 100);
   }, [discountData, totalPrice]);
 
+  // Total discount (referral + Christmas promo)
+  const totalDiscountAmount = referralDiscountAmount + christmasDiscountAmount;
+
   // Get discount info for display
   const discountInfo = useMemo(
     () => discountData?.myReferralDiscountInfo,
@@ -154,8 +171,8 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   // Handle payment initialization
   const handlePayment = async (bookingId: string) => {
     try {
-      // Calculate final amount with discount applied
-      const finalAmount = totalPrice + deliveryCost - discountAmount;
+      // Calculate final amount with all discounts applied
+      const finalAmount = totalPrice + deliveryCost - totalDiscountAmount;
       await initializePayment(bookingId, finalAmount, user?.email || "");
     } catch (err) {
       console.error("Payment failed:", err);
@@ -180,8 +197,8 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
       }
     }
 
-    // Calculate final total price (service price + delivery cost - discount)
-    const finalTotalPrice = totalPrice + deliveryCost - discountAmount;
+    // Calculate final total price (service price + delivery cost - all discounts)
+    const finalTotalPrice = totalPrice + deliveryCost - totalDiscountAmount;
 
     // Proceed with booking
     onCheckout(formData, finalTotalPrice, (bookingResponse: string) => {
@@ -347,7 +364,8 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 <CheckoutSummary
                   totalPrice={totalPrice}
                   deliveryCost={deliveryCost}
-                  discount={discountAmount}
+                  referralDiscount={referralDiscountAmount}
+                  promoDiscount={christmasDiscountAmount}
                 />
 
                 {/* Submit Button */}

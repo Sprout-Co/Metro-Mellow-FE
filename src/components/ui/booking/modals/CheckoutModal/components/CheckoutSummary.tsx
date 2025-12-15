@@ -4,15 +4,18 @@ import styles from "../CheckoutModal.module.scss";
 interface CheckoutSummaryProps {
   totalPrice: number;
   deliveryCost: number;
-  discount?: number;
+  referralDiscount?: number;
+  promoDiscount?: number;
 }
 
 export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
   totalPrice,
   deliveryCost,
-  discount = 0,
+  referralDiscount = 0,
+  promoDiscount = 0,
 }) => {
-  const finalTotal = totalPrice + deliveryCost - discount;
+  const totalDiscount = referralDiscount + promoDiscount;
+  const finalTotal = totalPrice + deliveryCost - totalDiscount;
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-NG", {
@@ -37,12 +40,21 @@ export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
         </span>
       </div>
 
-      {discount > 0 && (
+      {referralDiscount > 0 && (
         <div
           className={`${styles.checkoutModal__summaryItem} ${styles["checkoutModal__summaryItem--discount"]}`}
         >
           <span>Referral Discount</span>
-          <span>-₦{formatCurrency(discount)}</span>
+          <span>-₦{formatCurrency(referralDiscount)}</span>
+        </div>
+      )}
+
+      {promoDiscount > 0 && (
+        <div
+          className={`${styles.checkoutModal__summaryItem} ${styles["checkoutModal__summaryItem--discount"]} ${styles["checkoutModal__summaryItem--promo"]}`}
+        >
+          <span>🎄 Christmas Promo Discount</span>
+          <span>-₦{formatCurrency(promoDiscount)}</span>
         </div>
       )}
 
