@@ -2,6 +2,16 @@
 @import "@/styles/abstracts/mixins";
 @import "@/styles/abstracts/functions";
 
+// Christmas color palette
+$christmas-red: #c41e3a;
+$christmas-red-dark: #8b0000;
+$christmas-green: #0f4c3a;
+$christmas-green-deep: #0a2f24;
+$christmas-gold: #d4af37;
+$christmas-gold-light: #f5d76e;
+$christmas-cream: #fdf8e7;
+$christmas-snow: #f8fafc;
+
 .promo {
   position: fixed;
   inset: 0;
@@ -12,209 +22,500 @@
   &__overlay {
     position: absolute;
     inset: 0;
-    background: color-alpha("neutral", "black", 0.5);
-    backdrop-filter: blur(8px);
+    background: radial-gradient(
+      circle at 30% 20%,
+      rgba(15, 76, 58, 0.85) 0%,
+      rgba(0, 0, 0, 0.9) 100%
+    );
+    backdrop-filter: blur(12px);
   }
 
   &__card {
     position: relative;
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    background: color("neutral", "white");
-    border-radius: border-radius("xl");
-    max-width: 620px;
+    background: $christmas-green-deep;
+    border-radius: border-radius("2xl");
+    max-width: 420px;
     width: 100%;
     overflow: hidden;
-    box-shadow: 0 25px 50px -12px color-alpha("neutral", "black", 0.25);
+    box-shadow:
+      0 0 0 1px rgba($christmas-gold, 0.2),
+      0 25px 80px -20px rgba(0, 0, 0, 0.6),
+      0 0 60px -10px rgba($christmas-gold, 0.15);
+
+    // Subtle pattern overlay
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(
+          circle at 20% 80%,
+          rgba($christmas-red, 0.08) 0%,
+          transparent 50%
+        ),
+        radial-gradient(
+          circle at 80% 20%,
+          rgba($christmas-gold, 0.1) 0%,
+          transparent 40%
+        );
+      pointer-events: none;
+    }
 
     @include breakpoint-down("sm") {
-      grid-template-columns: 1fr;
-      max-width: 380px;
+      max-width: 360px;
+      border-radius: border-radius("xl");
     }
   }
 
-  // Left Visual Panel
-  &__visual {
-    background: color("primary", "base");
-    padding: spacing("2xl") spacing("xl");
-    @include flex-column-center;
-    position: relative;
+  // Snowfall container
+  &__snow {
+    position: absolute;
+    inset: 0;
     overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+  }
 
-    @include breakpoint-down("sm") {
-      flex-direction: row;
-      padding: spacing("lg");
-      gap: spacing("md");
+  &__snowflake {
+    position: absolute;
+    top: -20px;
+    background: $christmas-snow;
+    border-radius: 50%;
+    opacity: 0.7;
+    animation: snowfall linear infinite;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+  }
+
+  @keyframes snowfall {
+    0% {
+      transform: translateY(-20px) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.8;
+    }
+    90% {
+      opacity: 0.6;
+    }
+    100% {
+      transform: translateY(500px) rotate(360deg);
+      opacity: 0;
     }
   }
 
-  &__icon {
-    color: color("accent", "base");
-    margin-bottom: spacing("md");
+  // Close button
+  &__close {
+    position: absolute;
+    top: spacing("md");
+    right: spacing("md");
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba($christmas-gold, 0.3);
+    background: rgba(0, 0, 0, 0.3);
+    color: $christmas-cream;
+    @include flex-center;
+    cursor: pointer;
+    transition: $transition-fast;
+    z-index: 10;
+
+    &:hover {
+      background: rgba($christmas-red, 0.8);
+      border-color: $christmas-red;
+      transform: rotate(90deg);
+    }
+  }
+
+  // Hanging ornaments
+  &__ornaments {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 40px;
+    z-index: 2;
+  }
+
+  &__ornament {
+    width: 16px;
+    height: 20px;
+    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+    position: relative;
+    animation: swing 3s ease-in-out infinite;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 10px;
+      background: rgba($christmas-gold, 0.6);
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 6px;
+      height: 4px;
+      background: $christmas-gold;
+      border-radius: 2px 2px 0 0;
+    }
+
+    &--red {
+      background: radial-gradient(
+        circle at 30% 30%,
+        lighten($christmas-red, 15%),
+        $christmas-red-dark
+      );
+      box-shadow:
+        inset -3px -3px 6px rgba(0, 0, 0, 0.3),
+        0 2px 8px rgba($christmas-red, 0.4);
+      animation-delay: 0s;
+    }
+
+    &--gold {
+      background: radial-gradient(
+        circle at 30% 30%,
+        $christmas-gold-light,
+        darken($christmas-gold, 15%)
+      );
+      box-shadow:
+        inset -3px -3px 6px rgba(0, 0, 0, 0.2),
+        0 2px 8px rgba($christmas-gold, 0.5);
+      animation-delay: 0.5s;
+    }
+
+    &--green {
+      background: radial-gradient(
+        circle at 30% 30%,
+        lighten($christmas-green, 20%),
+        darken($christmas-green, 10%)
+      );
+      box-shadow:
+        inset -3px -3px 6px rgba(0, 0, 0, 0.3),
+        0 2px 8px rgba($christmas-green, 0.4);
+      animation-delay: 1s;
+    }
+  }
+
+  @keyframes swing {
+    0%,
+    100% {
+      transform: rotate(-3deg);
+    }
+    50% {
+      transform: rotate(3deg);
+    }
+  }
+
+  // Twinkling stars
+  &__stars {
+    position: absolute;
+    top: 60px;
+    right: spacing("xl");
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 2;
+  }
+
+  &__star {
+    color: $christmas-gold;
+    animation: twinkle 2s ease-in-out infinite;
+
+    &:nth-child(1) {
+      animation-delay: 0s;
+    }
+    &:nth-child(2) {
+      animation-delay: 0.7s;
+    }
+    &:nth-child(3) {
+      animation-delay: 1.4s;
+    }
+  }
+
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 0.4;
+      transform: scale(0.8);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+  }
+
+  // Main content area
+  &__content {
+    position: relative;
+    z-index: 3;
+    padding: spacing("3xl") spacing("xl") spacing("xl");
+    text-align: center;
+
+    @include breakpoint-down("sm") {
+      padding: spacing("2xl") spacing("lg") spacing("lg");
+    }
+  }
+
+  // Badge
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xs");
+    background: rgba($christmas-red, 0.9);
+    color: $christmas-cream;
+    padding: spacing("xs") spacing("md");
+    border-radius: border-radius("full");
+    font-size: 0.7rem;
+    @include font-weight("semibold");
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: spacing("lg");
+    box-shadow: 0 4px 12px rgba($christmas-red, 0.4);
 
     svg {
-      width: 40px;
-      height: 40px;
-    }
-
-    @include breakpoint-down("sm") {
-      margin-bottom: 0;
-
-      svg {
-        width: 28px;
-        height: 28px;
-      }
+      animation: bounce 1s ease-in-out infinite;
     }
   }
 
-  &__discount {
-    @include flex($align: flex-start);
-    color: color("neutral", "white");
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-2px);
+    }
+  }
+
+  // Discount display
+  &__discountWrap {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-bottom: spacing("md");
   }
 
   &__discountNum {
     @include font-family("heading");
-    font-size: 5rem;
+    font-size: 6rem;
     @include font-weight("black");
-    line-height: 0.9;
-    letter-spacing: -4px;
+    line-height: 0.85;
+    letter-spacing: -6px;
+    color: transparent;
+    background: radial-gradient(
+      circle at 50% 30%,
+      $christmas-gold-light 0%,
+      $christmas-gold 50%,
+      darken($christmas-gold, 10%) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow: 0 4px 20px rgba($christmas-gold, 0.4);
+    position: relative;
 
     @include breakpoint-down("sm") {
-      font-size: 3rem;
-      letter-spacing: -2px;
+      font-size: 5rem;
+      letter-spacing: -4px;
     }
   }
 
   &__discountMeta {
-    @include flex-column;
-    margin-left: 2px;
-    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 4px;
+    margin-top: 8px;
   }
 
   &__percent {
-    font-size: 1.75rem;
+    font-size: 2rem;
     @include font-weight("bold");
     line-height: 1;
-    color: color("neutral", "white");
+    color: $christmas-gold;
 
     @include breakpoint-down("sm") {
-      font-size: 1.25rem;
+      font-size: 1.5rem;
     }
   }
 
   &__off {
     font-size: 0.75rem;
     @include font-weight("bold");
-    letter-spacing: 1px;
-    color: color("accent", "base");
+    letter-spacing: 2px;
+    color: $christmas-cream;
+    opacity: 0.8;
     text-transform: uppercase;
   }
 
-  &__visualText {
-    @include font-secondary;
-    font-size: 0.75rem;
-    @include font-weight("semibold");
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: color-alpha("neutral", "white", 0.7);
-    margin: spacing("md") 0 0;
-
-    @include breakpoint-down("sm") {
-      display: none;
-    }
-  }
-
-  // Right Content Panel
-  &__body {
-    position: relative;
-    padding: spacing("2xl");
-    @include flex-column;
-
-    @include breakpoint-down("sm") {
-      padding: spacing("xl");
-    }
-  }
-
-  &__close {
-    position: absolute;
-    top: spacing("md");
-    right: spacing("md");
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: none;
-    background: color("neutral", "lightest");
-    color: color("neutral", "dark");
-    @include flex-center;
-    cursor: pointer;
-    transition: $transition-fast;
-
-    &:hover {
-      background: color("neutral", "lighter");
-      color: color("neutral", "black");
-    }
-  }
-
+  // Title
   &__title {
     @include font-family("heading");
-    font-size: 1.6rem;
+    font-size: 1.75rem;
     @include font-weight("bold");
-    color: color("neutral", "black");
+    color: $christmas-cream;
     margin: 0 0 spacing("sm");
-    line-height: 1.3;
-    padding-right: spacing("xl");
+    line-height: 1.2;
 
     @include breakpoint-down("sm") {
-      font-size: 1.35rem;
+      font-size: 1.5rem;
     }
   }
 
+  // Description
   &__desc {
     @include font-secondary;
-    font-size: 0.95rem;
-    color: color("neutral", "dark");
+    font-size: 0.9rem;
+    color: rgba($christmas-cream, 0.75);
     line-height: 1.6;
-    margin: 0 0 spacing("lg");
+    margin: 0 0 spacing("xl");
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  // Promo code section
+  &__codeBox {
+    margin-bottom: spacing("xl");
+  }
+
+  &__codeLabel {
+    font-size: 0.7rem;
+    @include font-weight("medium");
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba($christmas-cream, 0.5);
+    margin-bottom: spacing("xs");
   }
 
   &__code {
-    @include flex($align: center);
-    gap: spacing("sm");
-    background: color("neutral", "lightest");
-    border: 1px dashed color("neutral", "light");
-    border-radius: border-radius("md");
-    padding: spacing("sm") spacing("lg");
-    margin-bottom: spacing("lg");
-    align-self: flex-start;
-
-    span {
-      @include font-secondary;
-      font-size: 0.8rem;
-      color: color("neutral", "medium");
-    }
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px dashed rgba($christmas-gold, 0.5);
+    border-radius: border-radius("lg");
+    padding: spacing("sm") spacing("xl");
 
     code {
       @include font-family("mono");
-      font-size: 1rem;
+      font-size: 1.25rem;
       @include font-weight("bold");
-      color: color("neutral", "black");
-      letter-spacing: 1.5px;
+      color: $christmas-gold;
+      letter-spacing: 3px;
     }
   }
 
+  &__codeDeco {
+    position: absolute;
+    top: 50%;
+    right: -12px;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background: $christmas-red;
+    border-radius: 50%;
+    border: 3px solid $christmas-green-deep;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px;
+      height: 2px;
+      background: $christmas-cream;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 2px;
+      height: 8px;
+      background: $christmas-cream;
+    }
+  }
+
+  // CTA Button
   &__cta {
-    align-self: flex-start;
-    margin-bottom: spacing("md");
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("sm");
+    background: $christmas-red;
+    color: $christmas-cream;
+    border: none;
+    border-radius: border-radius("full");
+    padding: spacing("md") spacing("2xl");
+    font-size: 1rem;
+    @include font-weight("semibold");
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: spacing("lg");
+    box-shadow:
+      0 4px 15px rgba($christmas-red, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
 
-    @include breakpoint-down("sm") {
-      width: 100%;
+    &:hover {
+      background: lighten($christmas-red, 5%);
+      transform: translateY(-2px);
+      box-shadow:
+        0 8px 25px rgba($christmas-red, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    svg {
+      transition: transform 0.3s ease;
+    }
+
+    &:hover svg {
+      transform: rotate(-15deg) scale(1.1);
     }
   }
 
+  // Footer
   &__footer {
     @include font-secondary;
     font-size: 0.75rem;
-    color: color("neutral", "medium");
+    color: rgba($christmas-cream, 0.5);
     margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+  }
+
+  &__footerIcon {
+    animation: twinkle 1.5s ease-in-out infinite;
+  }
+
+  // Pine/tree decoration at bottom
+  &__pine {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    color: darken($christmas-green-deep, 3%);
+    z-index: 1;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
   }
 }
