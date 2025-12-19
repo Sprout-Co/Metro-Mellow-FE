@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Check, MapPin, ChevronDown, Loader2 } from "lucide-react";
+import { Check, MapPin, ChevronDown, Loader2, Search } from "lucide-react";
 import styles from "./AddressModal.module.scss";
 import Modal from "@/components/ui/Modal/Modal";
 import { Address, ServiceArea } from "@/graphql/api";
@@ -27,7 +27,9 @@ const AddressModal: React.FC<AddressModalProps> = ({
   const [label, setLabel] = useState("");
   const [isDefault, setIsDefault] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const isEditing = !!address;
 
@@ -41,15 +43,26 @@ const AddressModal: React.FC<AddressModalProps> = ({
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
+        isDropdownOpen &&
         dropdownRef.current &&
         !dropdownRef.current.contains(e.target as Node)
       ) {
         setIsDropdownOpen(false);
+        setSearchQuery("");
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [isDropdownOpen]);
+
+  // Focus search input when dropdown opens
+  useEffect(() => {
+    if (isDropdownOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isDropdownOpen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -72,13 +85,20 @@ const AddressModal: React.FC<AddressModalProps> = ({
     setIsDefault(false);
     setSelectedArea(null);
     setIsDropdownOpen(false);
+    setSearchQuery("");
   };
 
   const handleAreaSelect = (area: ServiceArea) => {
     setSelectedArea(area);
     setIsDropdownOpen(false);
+    setSearchQuery("");
     if (!isEditing) setStreetAddress("");
   };
+
+  // Filter service areas based on search query
+  const filteredServiceAreas = currentActiveServiceAreas?.filter((area) =>
+    area.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleAddressSelect = (selected: string) => {
     setStreetAddress(selected);
@@ -120,6 +140,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
       onClose={handleClose}
       title={isEditing ? "Edit Address" : "Add Address"}
       maxWidth="440px"
+      contentOverflow="visible"
     >
       <div className={styles.container}>
         {/* Step indicator */}
@@ -148,32 +169,65 @@ const AddressModal: React.FC<AddressModalProps> = ({
         <div className={styles.field}>
           <label className={styles.field__label}>Service Area</label>
           <div className={styles.dropdown} ref={dropdownRef}>
-            <button
-              type="button"
-              className={`${styles.dropdown__btn} ${selectedArea ? styles["dropdown__btn--selected"] : ""}`}
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            >
-              <MapPin size={18} />
-              <span>{selectedArea?.name || "Select area"}</span>
-              <ChevronDown
-                size={16}
-                className={isDropdownOpen ? styles["dropdown__icon--open"] : ""}
-              />
-            </button>
+            {isDropdownOpen ? (
+              <div className={styles.dropdown__inputWrapper}>
+                <Search size={18} className={styles.dropdown__searchIcon} />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  className={`${styles.dropdown__input} ${selectedArea ? styles["dropdown__input--selected"] : ""}`}
+                  placeholder="Search areas..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape") {
+                      setIsDropdownOpen(false);
+                      setSearchQuery("");
+                    }
+                  }}
+                />
+                <ChevronDown
+                  size={16}
+                  className={styles["dropdown__icon--open"]}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsDropdownOpen(false);
+                    setSearchQuery("");
+                  }}
+                />
+              </div>
+            ) : (
+              <button
+                type="button"
+                className={`${styles.dropdown__btn} ${selectedArea ? styles["dropdown__btn--selected"] : ""}`}
+                onClick={() => setIsDropdownOpen(true)}
+              >
+                <MapPin size={18} />
+                <span>{selectedArea?.name || "Select area"}</span>
+                <ChevronDown size={16} />
+              </button>
+            )}
 
             {isDropdownOpen && (
               <ul className={styles.dropdown__menu}>
-                {currentActiveServiceAreas?.map((area) => (
-                  <li
-                    key={area.id}
-                    className={`${styles.dropdown__item} ${selectedArea?.id === area.id ? styles["dropdown__item--selected"] : ""}`}
-                    onClick={() => handleAreaSelect(area)}
-                  >
-                    <MapPin size={16} />
-                    <span>{area.name}</span>
-                    {selectedArea?.id === area.id && <Check size={16} />}
+                {/* Filtered Service Areas */}
+                {filteredServiceAreas && filteredServiceAreas.length > 0 ? (
+                  filteredServiceAreas.map((area) => (
+                    <li
+                      key={area.id}
+                      className={`${styles.dropdown__item} ${selectedArea?.id === area.id ? styles["dropdown__item--selected"] : ""}`}
+                      onClick={() => handleAreaSelect(area)}
+                    >
+                      <MapPin size={16} />
+                      <span>{area.name}</span>
+                      {selectedArea?.id === area.id && <Check size={16} />}
+                    </li>
+                  ))
+                ) : (
+                  <li className={styles.dropdown__noResults}>
+                    <span>No areas found</span>
                   </li>
-                ))}
+                )}
               </ul>
             )}
           </div>

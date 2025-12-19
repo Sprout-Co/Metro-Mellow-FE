@@ -65,6 +65,8 @@
   display: flex;
   flex-direction: column;
   gap: spacing("sm");
+  position: relative;
+  z-index: 1;
 }
 
 .label {
@@ -76,6 +78,7 @@
 // Dropdown
 .dropdown {
   position: relative;
+  z-index: 1;
 
   &__btn {
     display: flex;
@@ -123,6 +126,48 @@
 
   &__chevron--open {
     transform: rotate(180deg);
+    cursor: pointer;
+    color: color("neutral", "medium");
+    transition: color transition-duration("fast") transition-timing("ease");
+
+    &:hover {
+      color: color("neutral", "darkest");
+    }
+  }
+
+  &__inputWrapper {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    width: 100%;
+    padding: spacing("md");
+    background-color: color("neutral", "lightest");
+    border: border-width("thin") solid color("primary", "base");
+    border-radius: border-radius("lg");
+    position: relative;
+  }
+
+  &__searchIcon {
+    flex-shrink: 0;
+    color: color("neutral", "medium");
+  }
+
+  &__input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    @include font-size("sm");
+    color: color("neutral", "darkest");
+    padding: 0;
+    outline: none;
+
+    &::placeholder {
+      color: color("neutral", "medium");
+    }
+
+    &--selected {
+      color: color("status", "success");
+    }
   }
 
   &__menu {
@@ -137,7 +182,37 @@
     border: border-width("thin") solid color("neutral", "lighter");
     border-radius: border-radius("lg");
     box-shadow: shadow("lg");
-    z-index: z-index("dropdown");
+    z-index: 9999;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    // Custom scrollbar styling
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: color("neutral", "lightest");
+      border-radius: border-radius("full");
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: color("neutral", "light");
+      border-radius: border-radius("full");
+
+      &:hover {
+        background: color("neutral", "medium");
+      }
+    }
+  }
+
+
+  &__noResults {
+    padding: spacing("lg");
+    text-align: center;
+    @include font-size("sm");
+    color: color("neutral", "medium");
   }
 
   &__option {
