@@ -1,7 +1,7 @@
 // components/auth/RegisterForm.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
@@ -15,6 +15,9 @@ import {
   ArrowRight,
   ArrowLeft,
   CheckCircle,
+  Search,
+  ChevronDown,
+  Check,
 } from "lucide-react";
 import FormInput from "../FormInput";
 import SocialAuth from "../SocialAuth";
@@ -79,6 +82,11 @@ export default function RegisterForm({
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
   const [showVerification, setShowVerification] = useState(false);
+  const [isServiceAreaDropdownOpen, setIsServiceAreaDropdownOpen] =
+    useState(false);
+  const [serviceAreaSearchQuery, setServiceAreaSearchQuery] = useState("");
+  const serviceAreaDropdownRef = useRef<HTMLDivElement>(null);
+  const serviceAreaSearchInputRef = useRef<HTMLInputElement>(null);
 
   const { handleRegister } = useAuthOperations();
   const { data: serviceAreasData, loading: loadingServiceAreas } =
@@ -103,6 +111,37 @@ export default function RegisterForm({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Handle click outside service area dropdown
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        isServiceAreaDropdownOpen &&
+        serviceAreaDropdownRef.current &&
+        !serviceAreaDropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsServiceAreaDropdownOpen(false);
+        setServiceAreaSearchQuery("");
+      }
+    };
+    if (isServiceAreaDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isServiceAreaDropdownOpen]);
+
+  // Focus search input when dropdown opens
+  useEffect(() => {
+    if (isServiceAreaDropdownOpen && serviceAreaSearchInputRef.current) {
+      serviceAreaSearchInputRef.current.focus();
+    }
+  }, [isServiceAreaDropdownOpen]);
+
+  // Filter service areas based on search query
+  const filteredServiceAreas = serviceAreasData?.activeServiceAreas.filter(
+    (area) =>
+      area.name.toLowerCase().includes(serviceAreaSearchQuery.toLowerCase())
+  );
 
   const validateStep = (step: FormStep): boolean => {
     const newErrors: FormErrors = {};
@@ -198,6 +237,28 @@ export default function RegisterForm({
       });
     }
   };
+
+  const handleServiceAreaSelect = (areaId: string, areaName: string) => {
+    setFormData({
+      ...formData,
+      serviceArea: areaId,
+      city: areaName,
+    });
+    setIsServiceAreaDropdownOpen(false);
+    setServiceAreaSearchQuery("");
+
+    // Clear the error for this field
+    if (errors.serviceArea) {
+      setErrors({
+        ...errors,
+        serviceArea: undefined,
+      });
+    }
+  };
+
+  const selectedServiceArea = serviceAreasData?.activeServiceAreas.find(
+    (area) => area.id === formData.serviceArea
+  );
 
   const handleNextStep = (e: React.FormEvent) => {
     e.preventDefault();
@@ -506,38 +567,121 @@ export default function RegisterForm({
                       </span>
                     </label>
                     <div
-                      className={`
-                    ${layoutStyles.formInput__wrapper} 
-                    ${
-                      errors.serviceArea
-                        ? layoutStyles["formInput__wrapper--error"]
-                        : ""
-                    }
-                      `}
+                      className={styles.serviceAreaDropdown}
+                      ref={serviceAreaDropdownRef}
                     >
-                      <div className={layoutStyles.formInput__icon}>
-                        <MapPin size={20} />
-                      </div>
-                      <select
-                        id="register-serviceArea"
-                        name="serviceArea"
-                        value={formData.serviceArea}
-                        onChange={handleSelectChange}
-                        className={layoutStyles.formInput__select}
-                        required
-                        disabled={loadingServiceAreas}
-                      >
-                        <option value="">Select service area...</option>
-                        {serviceAreasData?.activeServiceAreas.map((area) => (
-                          <option
-                            key={area.id}
-                            value={area.id}
-                            data-city={area.city}
+                      {isServiceAreaDropdownOpen ? (
+                        <div
+                          className={`${layoutStyles.formInput__wrapper} ${styles.serviceAreaDropdown__inputWrapper} ${
+                            errors.serviceArea
+                              ? layoutStyles["formInput__wrapper--error"]
+                              : ""
+                          }`}
+                        >
+                          <div className={layoutStyles.formInput__icon}>
+                            <Search size={20} />
+                          </div>
+                          <input
+                            ref={serviceAreaSearchInputRef}
+                            type="text"
+                            id="register-serviceArea"
+                            className={`${layoutStyles.formInput__input} ${styles.serviceAreaDropdown__input}`}
+                            placeholder="Search areas..."
+                            value={serviceAreaSearchQuery}
+                            onChange={(e) =>
+                              setServiceAreaSearchQuery(e.target.value)
+                            }
+                            onKeyDown={(e) => {
+                              if (e.key === "Escape") {
+                                setIsServiceAreaDropdownOpen(false);
+                                setServiceAreaSearchQuery("");
+                              }
+                            }}
+                            disabled={loadingServiceAreas}
+                          />
+                          <ChevronDown
+                            size={16}
+                            className={styles.serviceAreaDropdown__chevron}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsServiceAreaDropdownOpen(false);
+                              setServiceAreaSearchQuery("");
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          className={`${layoutStyles.formInput__wrapper} ${styles.serviceAreaDropdown__button} ${
+                            errors.serviceArea
+                              ? layoutStyles["formInput__wrapper--error"]
+                              : ""
+                          } ${
+                            selectedServiceArea
+                              ? styles["serviceAreaDropdown__wrapper--selected"]
+                              : ""
+                          }`}
+                          onClick={() => setIsServiceAreaDropdownOpen(true)}
+                        >
+                          <div className={layoutStyles.formInput__icon}>
+                            <MapPin size={20} />
+                          </div>
+                          <div
+                            className={`${layoutStyles.formInput__input} ${
+                              selectedServiceArea
+                                ? styles[
+                                    "serviceAreaDropdown__buttonText--selected"
+                                  ]
+                                : styles[
+                                    "serviceAreaDropdown__buttonText--placeholder"
+                                  ]
+                            }`}
                           >
-                            {area.name}
-                          </option>
-                        ))}
-                      </select>
+                            {selectedServiceArea?.name ||
+                              "Select service area..."}
+                          </div>
+                          <ChevronDown size={16} />
+                        </button>
+                      )}
+
+                      {isServiceAreaDropdownOpen && (
+                        <ul className={styles.serviceAreaDropdown__menu}>
+                          {filteredServiceAreas &&
+                          filteredServiceAreas.length > 0 ? (
+                            filteredServiceAreas.map((area) => (
+                              <li
+                                key={area.id}
+                                className={`${styles.serviceAreaDropdown__item} ${
+                                  formData.serviceArea === area.id
+                                    ? styles[
+                                        "serviceAreaDropdown__item--selected"
+                                      ]
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  handleServiceAreaSelect(area.id, area.name)
+                                }
+                              >
+                                <MapPin size={16} />
+                                <span>{area.name}</span>
+                                {formData.serviceArea === area.id && (
+                                  <Check size={16} />
+                                )}
+                              </li>
+                            ))
+                          ) : (
+                            <li
+                              className={styles.serviceAreaDropdown__noResults}
+                            >
+                              <span>
+                                {loadingServiceAreas
+                                  ? "Loading areas..."
+                                  : "No areas found"}
+                              </span>
+                            </li>
+                          )}
+                        </ul>
+                      )}
                     </div>
                     {errors.serviceArea && (
                       <p className={layoutStyles.formInput__error}>

@@ -257,6 +257,139 @@
   }
 }
 
+// Service Area Dropdown
+.serviceAreaDropdown {
+  position: relative;
+  z-index: 1;
+
+  &__button {
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: inherit;
+  }
+
+  &__buttonText {
+    &--selected {
+      color: color("neutral", "darkest");
+    }
+
+    &--placeholder {
+      color: color("neutral", "medium");
+    }
+  }
+
+  &__inputWrapper {
+    cursor: text;
+  }
+
+  &__input {
+    cursor: text;
+  }
+
+  &__chevron {
+    cursor: pointer;
+    color: color("neutral", "medium");
+    transition: transform transition-duration("fast")
+      transition-timing("ease");
+
+    &:hover {
+      color: color("neutral", "darkest");
+    }
+  }
+
+  &__wrapper--selected {
+    border-color: color("status", "success");
+    background-color: color-alpha("status", "success", 0.05);
+
+    .formInput__icon {
+      color: color("status", "success");
+    }
+  }
+
+  &__menu {
+    position: absolute;
+    top: calc(100% + spacing("xs"));
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: spacing("xs");
+    list-style: none;
+    background-color: color("neutral", "white");
+    border: border-width("thin") solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    box-shadow: shadow("lg");
+    z-index: 9999;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    // Custom scrollbar styling
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: color("neutral", "lightest");
+      border-radius: border-radius("full");
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: color("neutral", "light");
+      border-radius: border-radius("full");
+
+      &:hover {
+        background: color("neutral", "medium");
+      }
+    }
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("sm") spacing("md");
+    border-radius: border-radius("md");
+    @include font-size("sm");
+    color: color("neutral", "darkest");
+    cursor: pointer;
+    transition: background-color transition-duration("fast")
+      transition-timing("ease");
+
+    &:hover {
+      background-color: color("neutral", "lightest");
+    }
+
+    svg:first-child {
+      color: color("neutral", "medium");
+    }
+
+    span {
+      flex: 1;
+    }
+
+    svg:last-child {
+      color: color("status", "success");
+    }
+
+    &--selected {
+      background-color: color-alpha("status", "success", 0.05);
+
+      svg:first-child {
+        color: color("status", "success");
+      }
+    }
+  }
+
+  &__noResults {
+    padding: spacing("lg");
+    text-align: center;
+    @include font-size("sm");
+    color: color("neutral", "medium");
+  }
+}
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
