@@ -9,7 +9,7 @@
 
   &__title {
     font-family: $font-family-heading;
-    @include font-size("3xl");
+    @include font-size("2xl");
     @include font-weight("bold");
     color: color("neutral", "black");
     margin-bottom: spacing("xs");
@@ -291,8 +291,7 @@
   &__chevron {
     cursor: pointer;
     color: color("neutral", "medium");
-    transition: transform transition-duration("fast")
-      transition-timing("ease");
+    transition: transform transition-duration("fast") transition-timing("ease");
 
     &:hover {
       color: color("neutral", "darkest");

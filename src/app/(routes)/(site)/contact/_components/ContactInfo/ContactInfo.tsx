@@ -3,6 +3,7 @@
 import { FC } from "react";
 import styles from "./ContactInfo.module.scss";
 import { MapPin, Phone, Mail } from "lucide-react";
+import { ContactDetails } from "@/constants/config";
 
 const ContactInfo: FC = () => {
   return (
@@ -37,7 +38,9 @@ const ContactInfo: FC = () => {
                 <Phone className={styles.contactInfo__icon} />
               </div>
               <p className={styles.contactInfo__text}>
-                <a href="tel:+2347049452585">+2347049452585</a>
+                <a href={`tel:${ContactDetails.PHONE}`}>
+                  {ContactDetails.PHONE}
+                </a>
               </p>
             </div>
             <div className={styles.contactInfo__item}>

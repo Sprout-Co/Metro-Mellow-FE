@@ -4,6 +4,7 @@ import termsData from "@/data/legal/terms-of-service.json";
 import StructuredData from "@/components/common/SEO/StructuredData";
 import { createBreadcrumbSchema } from "@/utils/seoHelpers";
 import Link from "next/link";
+import { ContactDetails } from "@/constants/config";
 
 // Helper function to render text with bold formatting
 const renderText = (text: string) => {
@@ -81,10 +82,7 @@ export default function TermsOfServicePage() {
               >
                 Terms of Service
               </Link>
-              <Link
-                href="/privacy-policy"
-                className={styles.legalNav__link}
-              >
+              <Link href="/privacy-policy" className={styles.legalNav__link}>
                 Privacy & Cookie Policy
               </Link>
               <Link href="/privacy-notice" className={styles.legalNav__link}>
@@ -106,11 +104,12 @@ export default function TermsOfServicePage() {
                 <div key={section.id} className={styles.section}>
                   <h3 className={styles.section__title}>{section.title}</h3>
                   <div className={styles.section__content}>
-                    {section.content && section.content.map((paragraph, index) => (
-                      <p key={index} className={styles.section__paragraph}>
-                        {renderText(paragraph)}
-                      </p>
-                    ))}
+                    {section.content &&
+                      section.content.map((paragraph, index) => (
+                        <p key={index} className={styles.section__paragraph}>
+                          {renderText(paragraph)}
+                        </p>
+                      ))}
                     {section.listItems && (
                       <ul className={styles.section__list}>
                         {section.listItems.map((item, index) => (
@@ -141,7 +140,10 @@ export default function TermsOfServicePage() {
                           <thead>
                             <tr>
                               {section.table.headers.map((header, index) => (
-                                <th key={index} className={styles.section__tableHeader}>
+                                <th
+                                  key={index}
+                                  className={styles.section__tableHeader}
+                                >
                                   {renderText(header)}
                                 </th>
                               ))}
@@ -149,9 +151,15 @@ export default function TermsOfServicePage() {
                           </thead>
                           <tbody>
                             {section.table.rows.map((row, rowIndex) => (
-                              <tr key={rowIndex} className={styles.section__tableRow}>
+                              <tr
+                                key={rowIndex}
+                                className={styles.section__tableRow}
+                              >
                                 {row.map((cell, cellIndex) => (
-                                  <td key={cellIndex} className={styles.section__tableCell}>
+                                  <td
+                                    key={cellIndex}
+                                    className={styles.section__tableCell}
+                                  >
                                     {cell ? renderText(cell) : "\u00A0"}
                                   </td>
                                 ))}
@@ -248,11 +256,13 @@ export default function TermsOfServicePage() {
               </p>
               <div className={styles.contact__info}>
                 <p>
-                  <strong>Email:</strong> team@metromellow.com
+                  <strong>Email:</strong> {ContactDetails.EMAIL}
                 </p>
                 <p>
                   <strong>Phone:</strong>{" "}
-                  <a href="tel:+2347049452585">+2347049452585</a>
+                  <a href={`tel:${ContactDetails.PHONE}`}>
+                    {ContactDetails.PHONE}
+                  </a>
                 </p>
                 <p>
                   <strong>Support:</strong>{" "}
@@ -273,4 +283,3 @@ export default function TermsOfServicePage() {
     </>
   );
 }
-

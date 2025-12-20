@@ -4,6 +4,7 @@ import privacyNoticeData from "@/data/legal/privacy-notice.json";
 import StructuredData from "@/components/common/SEO/StructuredData";
 import { createBreadcrumbSchema } from "@/utils/seoHelpers";
 import Link from "next/link";
+import { ContactDetails } from "@/constants/config";
 
 // Helper function to render text with bold formatting
 const renderText = (text: string) => {
@@ -129,11 +130,12 @@ export default function PrivacyNoticePage() {
                 <div key={section.id} className={styles.section}>
                   <h3 className={styles.section__title}>{section.title}</h3>
                   <div className={styles.section__content}>
-                    {section.content && section.content.map((paragraph, index) => (
-                      <p key={index} className={styles.section__paragraph}>
-                        {renderText(paragraph)}
-                      </p>
-                    ))}
+                    {section.content &&
+                      section.content.map((paragraph, index) => (
+                        <p key={index} className={styles.section__paragraph}>
+                          {renderText(paragraph)}
+                        </p>
+                      ))}
                     {section.listItems && (
                       <ul className={styles.section__list}>
                         {section.listItems.map((item, index) => (
@@ -237,9 +239,7 @@ export default function PrivacyNoticePage() {
                       <circle cx="12" cy="12" r="10" fill="#006CFF" />
                     </svg>
                   </div>
-                  <h4 className={styles.cookieGuide__cardTitle}>
-                    Safari
-                  </h4>
+                  <h4 className={styles.cookieGuide__cardTitle}>Safari</h4>
                   <p className={styles.cookieGuide__cardDesc}>
                     Preferences → Privacy → Manage Website Data
                   </p>
@@ -277,18 +277,22 @@ export default function PrivacyNoticePage() {
 
             {/* Contact Section */}
             <div className={styles.contact}>
-              <h3 className={styles.contact__title}>Questions About Privacy?</h3>
+              <h3 className={styles.contact__title}>
+                Questions About Privacy?
+              </h3>
               <p className={styles.contact__text}>
                 If you have questions about this Privacy Notice or how we handle
                 visitor data, we're here to help.
               </p>
               <div className={styles.contact__info}>
                 <p>
-                  <strong>Privacy Email:</strong> team@metromellow.com
+                  <strong>Privacy Email:</strong> {ContactDetails.EMAIL}
                 </p>
                 <p>
                   <strong>Phone:</strong>{" "}
-                  <a href="tel:+2347049452585">+2347049452585</a>
+                  <a href={`tel:${ContactDetails.PHONE}`}>
+                    {ContactDetails.PHONE}
+                  </a>
                 </p>
                 <p>
                   <strong>General Inquiries:</strong>{" "}
@@ -302,4 +306,3 @@ export default function PrivacyNoticePage() {
     </>
   );
 }
-

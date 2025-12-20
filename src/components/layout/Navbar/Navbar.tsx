@@ -7,6 +7,9 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./Navbar.module.scss";
 import Button from "@/components/ui/Button/Button";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/redux/store";
+import { UserIcon } from "lucide-react";
 
 // Define service dropdown items
 const serviceItems = [
@@ -59,6 +62,9 @@ export default function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const pathname = usePathname();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
 
   // Handle scroll for sticky header effect
   useEffect(() => {
@@ -268,9 +274,19 @@ export default function Navbar() {
 
           {/* Action Button */}
           <div className={styles.navbar__actions}>
-            <Link href="/get-started" className={styles.navbar__loginBtn}>
-              Login
-            </Link>
+            {isAuthenticated ? (
+              <Link
+                href="/dashboard"
+                className={styles.navbar__loginBtn}
+                title="go to dashboard"
+              >
+                <UserIcon size={20} className={styles.navbar__loginBtnIcon} />
+              </Link>
+            ) : (
+              <Link href="/get-started" className={styles.navbar__loginBtn}>
+                Login
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -434,12 +450,21 @@ export default function Navbar() {
                 </nav>
 
                 <div className={styles.navbar__mobileFooter}>
-                  <Link
-                    href="/get-started"
-                    className={styles.navbar__mobileButton}
-                  >
-                    Login
-                  </Link>
+                  {isAuthenticated ? (
+                    <Link
+                      href="/dashboard"
+                      className={styles.navbar__mobileButton}
+                    >
+                      Dashboard
+                    </Link>
+                  ) : (
+                    <Link
+                      href="/get-started"
+                      className={styles.navbar__mobileButton}
+                    >
+                      Login
+                    </Link>
+                  )}
                 </div>
               </motion.div>
             )}

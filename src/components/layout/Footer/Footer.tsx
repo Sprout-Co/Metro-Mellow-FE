@@ -9,10 +9,9 @@ import { Button } from "@/components/ui/Button";
 import { Routes } from "@/constants/routes";
 import { Instagram } from "lucide-react";
 import SignaturePattern from "@/components/ui/SignaturePattern/SignaturePattern";
+import { ContactDetails } from "@/constants/config";
 
 export default function Footer() {
-  const [email, setEmail] = useState("");
-
   return (
     <footer className={styles.footerSection}>
       <SignaturePattern />
@@ -34,10 +33,10 @@ export default function Footer() {
             variant="white"
             size="md"
             onClick={() => {
-              const phoneNumber = "+2347049452585";
+              const phoneNumber = ContactDetails.PHONE;
               const message = "Hello! I'm interested in your services.";
-              const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
-              window.open(whatsappUrl, '_blank');
+              const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(message)}`;
+              window.open(whatsappUrl, "_blank");
             }}
           >
             Chat with us on WhatsApp

@@ -13,6 +13,7 @@ import TestimonialCarouselSection from "./_components/TestimonialCarouselSection
 import Navbar from "@/components/layout/Navbar/Navbar";
 import Footer from "@/components/layout/Footer/Footer";
 import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
+import { ContactDetails } from "@/constants/config";
 
 export const metadata = {
   title:
@@ -72,11 +73,11 @@ const jsonLd = {
   logo: "https://metromellow.com/images/brand/brand-logo/single-logo/primary.JPG",
   image:
     "https://metromellow.com/images/brand/brand-logo/solid-bg/green-bg.png",
-  telephone: "+2347049452585",
-  email: "team@metromellow.com", // Replace with actual email
+  telephone: ContactDetails.PHONE,
+  email: ContactDetails.EMAIL, // Replace with actual email
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Opeyemi Street, Yaba, Lagos", // Replace with actual street address
+    streetAddress: ContactDetails.ADDRESS, // Replace with actual street address
     addressLocality: "Lagos",
     addressRegion: "Lagos",
     postalCode: "102213", // Replace with actual postal code

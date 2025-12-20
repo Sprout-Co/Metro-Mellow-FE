@@ -23,7 +23,17 @@ export default function AuthLayout({
     >
       <div className={styles.authLayout__container}>
         <div className={styles.authLayout__wrapper}>
-          <div className={styles.authLayout__card}>{children}</div>
+          <div className={styles.authLayout__card}>
+            <Link href="/" className={styles.authLayout__logo}>
+              <Image
+                src="/images/brand/brand-logo/transparent-bg/green.png"
+                alt="Metromellow"
+                width={180}
+                height={50}
+              />
+            </Link>
+            {children}
+          </div>
 
           {showImage && (
             <div className={styles.authLayout__imageWrapper}>

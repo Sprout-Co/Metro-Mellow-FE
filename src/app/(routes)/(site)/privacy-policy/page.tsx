@@ -4,6 +4,7 @@ import privacyData from "@/data/legal/privacy-cookie-policy.json";
 import StructuredData from "@/components/common/SEO/StructuredData";
 import { createBreadcrumbSchema } from "@/utils/seoHelpers";
 import Link from "next/link";
+import { ContactDetails } from "@/constants/config";
 
 // Helper function to render text with bold formatting
 const renderText = (text: string) => {
@@ -128,11 +129,12 @@ export default function PrivacyPolicyPage() {
                 <div key={section.id} className={styles.section}>
                   <h3 className={styles.section__title}>{section.title}</h3>
                   <div className={styles.section__content}>
-                    {section.content && section.content.map((paragraph, index) => (
-                      <p key={index} className={styles.section__paragraph}>
-                        {renderText(paragraph)}
-                      </p>
-                    ))}
+                    {section.content &&
+                      section.content.map((paragraph, index) => (
+                        <p key={index} className={styles.section__paragraph}>
+                          {renderText(paragraph)}
+                        </p>
+                      ))}
                     {section.listItems && (
                       <ul className={styles.section__list}>
                         {section.listItems.map((item, index) => (
@@ -190,9 +192,7 @@ export default function PrivacyPolicyPage() {
                 </div>
                 <div className={styles.rightsHighlight__card}>
                   <div className={styles.rightsHighlight__cardIcon}>🚫</div>
-                  <h4 className={styles.rightsHighlight__cardTitle}>
-                    Opt-Out
-                  </h4>
+                  <h4 className={styles.rightsHighlight__cardTitle}>Opt-Out</h4>
                   <p className={styles.rightsHighlight__cardDesc}>
                     Withdraw consent for marketing and optional data processing
                   </p>
@@ -237,11 +237,13 @@ export default function PrivacyPolicyPage() {
               </p>
               <div className={styles.contact__info}>
                 <p>
-                  <strong>Email:</strong> team@metromellow.com
+                  <strong>Email:</strong> {ContactDetails.EMAIL}
                 </p>
                 <p>
                   <strong>Phone:</strong>{" "}
-                  <a href="tel:+2347049452585">+2347049452585</a>
+                  <a href={`tel:${ContactDetails.PHONE}`}>
+                    {ContactDetails.PHONE}
+                  </a>
                 </p>
                 <p>
                   <strong>General Support:</strong>{" "}
@@ -255,4 +257,3 @@ export default function PrivacyPolicyPage() {
     </>
   );
 }
-

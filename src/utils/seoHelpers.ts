@@ -2,6 +2,8 @@
  * Common SEO utility functions and data for Metromellow
  */
 
+import { ContactDetails } from "@/constants/config";
+
 /**
  * Base business information for JSON-LD schema
  */
@@ -11,11 +13,11 @@ export const businessInfo = {
   logo: "https://metromellow.com/images/brand/brand-logo/solid-bg/green-bg.png",
   image:
     "https://metromellow.com/images/brand/brand-logo/solid-bg/green-bg.png",
-  telephone: "+2347049452585",
-  email: "team@metromellow.com",
+  telephone: ContactDetails.PHONE,
+  email: ContactDetails.EMAIL,
   address: {
     "@type": "PostalAddress",
-    streetAddress: "anike ologuntoye avenue",
+    streetAddress: ContactDetails.ADDRESS,
     addressLocality: "Lagos",
     addressRegion: "Lagos",
     postalCode: "102213",

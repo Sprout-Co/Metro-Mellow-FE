@@ -4,6 +4,8 @@
  * Focus: Customer conversion with search visibility
  */
 
+import { ContactDetails } from "@/constants/config";
+
 export interface BlogCategory {
   id: string;
   name: string;
@@ -690,10 +692,10 @@ export const SEOUtils = {
         "https://metromellow.com/images/brand/brand-logo/single-logo/primary.JPG",
       "@id": "https://metromellow.com",
       url: "https://metromellow.com",
-      telephone: "+2349068249871",
+      telephone: ContactDetails.PHONE,
       address: {
         "@type": "PostalAddress",
-        streetAddress: "Opeyemi Street, Yaba, Lagos",
+        streetAddress: ContactDetails.ADDRESS,
         addressLocality: "Lagos",
         addressCountry: "NG",
       },

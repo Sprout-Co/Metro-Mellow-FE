@@ -9,7 +9,7 @@
 
   &__title {
     font-family: $font-family-heading;
-    @include font-size("3xl");
+    @include font-size("2xl");
     @include font-weight("bold");
     color: color("neutral", "black");
     margin-bottom: spacing("xs");

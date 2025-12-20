@@ -14,7 +14,7 @@ const FloatingButtons: React.FC = () => {
   };
 
   const handleCallClick = () => {
-    const phoneNumber = "+2347049452585";
+    const phoneNumber = "+2349069894176";
     window.open(`tel:${phoneNumber}`, "_self");
   };
 

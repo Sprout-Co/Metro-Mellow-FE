@@ -115,17 +115,13 @@
     {
       "id": "user-obligations",
       "title": "User Obligations",
-      "content": [
-        "As a User of the Platform, you agree to:"
-      ],
+      "content": ["As a User of the Platform, you agree to:"],
       "listItems": [
         "Use the Platform and Services only for lawful, legitimate purposes and in compliance with these Terms, the Privacy Policy, and all applicable laws and regulations.",
         "Pay all Fees, charges and taxes associated with Services ordered through the Platform.",
         "Be responsible for any chargebacks, bank fees or other payment-related costs resulting from insufficient funds or disputed transactions."
       ],
-      "contentAfterList": [
-        "You agree **not** to use the Platform to:"
-      ],
+      "contentAfterList": ["You agree **not** to use the Platform to:"],
       "listItems2": [
         "Collect, upload, transmit, display, or distribute any User Content that violates any third-party right or is unlawful, harassing, abusive, tortious, threatening, harmful, invasive of another's privacy, vulgar, defamatory, false, or intentionally misleading.",
         "Upload, transmit, or distribute any computer viruses, worms, or any software intended to damage or alter a computer system or data.",
@@ -166,15 +162,31 @@
       "table": {
         "headers": ["Service Type", "Cancellation Time", "Refund Eligibility"],
         "rows": [
-          ["**Professional Cooking Service**", "Between 24-48 hours before delivery", "Refund of Service Fee"],
+          [
+            "**Professional Cooking Service**",
+            "Between 24-48 hours before delivery",
+            "Refund of Service Fee"
+          ],
           ["", "After processing has commenced", "No Refund"],
-          ["**Cleaning**", "48 hours or more before appointment", "Full Refund of Service Fee"],
+          [
+            "**Cleaning**",
+            "48 hours or more before appointment",
+            "Full Refund of Service Fee"
+          ],
           ["", "Between 24-48 hours before appointment", "50% Refund"],
           ["", "Less than 24 hours before appointment", "No Refund"],
           ["**Laundry & Care**", "Before pickup time", "Refund of Service Fee"],
-          ["", "After pickup but before processing", "50% Refund (less logistics cost)"],
+          [
+            "",
+            "After pickup but before processing",
+            "50% Refund (less logistics cost)"
+          ],
           ["", "After processing has commenced", "No Refund"],
-          ["**Pest Control Services**", "48 hours or more before appointment", "Refund of Service Fee"],
+          [
+            "**Pest Control Services**",
+            "48 hours or more before appointment",
+            "Refund of Service Fee"
+          ],
           ["", "Less than 48 hours before appointment", "50% Refund"],
           ["", "Same-day cancellations", "No Refund"]
         ]
@@ -243,8 +255,8 @@
       "listItems": [
         "**In-App Chat Support**",
         "**Email Support:** team@metromellow.com",
-        "**Telephone Hotline:** +2347049452585",
-        "**Emergency Hotline:** +2347049452585",
+        "**Telephone Hotline:** +2349069894176",
+        "**Emergency Hotline:** +2349069894176",
         "**Hours of Operation:** Monday to Saturday, 8:00 a.m. – 6:00 p.m."
       ]
     },
@@ -358,9 +370,7 @@
         {
           "id": "laundry-turnaround",
           "title": "Turnaround Time",
-          "content": [
-            "Standard turnaround is 48 to 72 hours."
-          ]
+          "content": ["Standard turnaround is 48 to 72 hours."]
         },
         {
           "id": "laundry-exclusions",

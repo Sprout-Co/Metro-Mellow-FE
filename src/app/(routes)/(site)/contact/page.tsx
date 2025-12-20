@@ -11,6 +11,7 @@ import {
   createBreadcrumbSchema,
   createFAQSchema,
 } from "@/utils/seoHelpers";
+import { ContactDetails } from "@/constants/config";
 
 export const metadata: Metadata = {
   title: "Contact Us | Customer Support & Service Requests | Metromellow Lagos",
@@ -45,8 +46,7 @@ export default function ContactPage() {
     {
       id: "1",
       question: "How quickly can I expect a response to my inquiry?",
-      answer:
-        "We typically respond to all inquiries within 2-4 hours during business hours (8 AM - 8 PM). For urgent matters, you can call us directly at +2347049452585 for immediate assistance.",
+      answer: `We typically respond to all inquiries within 2-4 hours during business hours (8 AM - 8 PM). For urgent matters, you can call us directly at ${ContactDetails.PHONE} for immediate assistance.`,
     },
     {
       id: "2",
@@ -94,7 +94,7 @@ export default function ContactPage() {
     },
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: "+2347049452585",
+      telephone: ContactDetails.PHONE,
       contactType: "customer service",
       areaServed: "Lagos",
       availableLanguage: ["en"],
@@ -118,14 +118,14 @@ export default function ContactPage() {
     contactPoint: [
       {
         "@type": "ContactPoint",
-        telephone: "+2347049452585",
+        telephone: ContactDetails.PHONE,
         contactType: "customer service",
         areaServed: "Lagos",
         availableLanguage: ["en"],
       },
       {
         "@type": "ContactPoint",
-        telephone: "+2347049452585",
+        telephone: ContactDetails.PHONE,
         contactType: "sales",
         areaServed: "Lagos",
         availableLanguage: ["en"],
