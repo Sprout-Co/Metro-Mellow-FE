@@ -1,8 +1,7 @@
 import { Metadata } from "next";
 import styles from "./Terms.module.scss";
 import termsData from "@/data/legal/terms-of-service.json";
-import StructuredData from "@/components/common/SEO/StructuredData";
-import { createBreadcrumbSchema } from "@/utils/seoHelpers";
+import { StructuredData, createBreadcrumbSchema } from "@/lib/seo";
 import Link from "next/link";
 import { ContactDetails } from "@/constants/config";
 

@@ -1,0 +1,2 @@
+export { useGoogleTagManager } from "./hook";
+

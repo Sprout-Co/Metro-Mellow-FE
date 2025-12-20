@@ -60,3 +60,4 @@ export function GoogleTagManagerScript({ gtmId }: GoogleTagManagerProps) {
     />
   );
 }
+

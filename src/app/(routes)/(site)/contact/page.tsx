@@ -5,12 +5,12 @@ import ContactInfo from "./_components/ContactInfo/ContactInfo";
 import ContactForm from "./_components/ContactForm/ContactForm";
 import FAQSection from "@/components/ui/FAQSection/FAQSection";
 import { FAQItem } from "@/components/ui/FAQSection/FAQSection";
-import StructuredData from "@/components/common/SEO/StructuredData";
 import {
+  StructuredData,
   createLocalBusinessSchema,
   createBreadcrumbSchema,
   createFAQSchema,
-} from "@/utils/seoHelpers";
+} from "@/lib/seo";
 import { ContactDetails } from "@/constants/config";
 
 export const metadata: Metadata = {

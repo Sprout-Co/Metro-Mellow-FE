@@ -2,13 +2,13 @@ import React from "react";
 import { Metadata } from "next";
 import FoodPageClient from "./_components/FoodPageClient/FoodPageClient";
 import { foodPageMetadata } from "./metadata";
-import StructuredData from "@/components/common/SEO/StructuredData";
 import {
+  StructuredData,
   createLocalBusinessSchema,
   createBreadcrumbSchema,
   createFAQSchema,
   createServiceSchema,
-} from "@/utils/seoHelpers";
+} from "@/lib/seo";
 
 // Export metadata for Next.js
 export const metadata: Metadata = foodPageMetadata;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { reportWebVitals } from "@/lib/analytics/web-vitals";
+import { reportWebVitals } from "../web-vitals";
 
 /**
  * WebVitalsReporter Component
@@ -28,3 +28,4 @@ export default function WebVitalsReporter() {
   // This component doesn't render anything
   return null;
 }
+

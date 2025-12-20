@@ -7,8 +7,11 @@ import {
   categories,
 } from "@/lib/services/blog";
 import BlogGrid from "../../_components/BlogGrid/BlogGrid";
-import StructuredData from "@/components/common/SEO/StructuredData";
-import { createBreadcrumbSchema, createBlogSchema } from "@/utils/seoHelpers";
+import {
+  StructuredData,
+  createBreadcrumbSchema,
+  createBlogSchema,
+} from "@/lib/seo";
 import styles from "./BlogCategory.module.scss";
 
 interface BlogCategoryPageProps {

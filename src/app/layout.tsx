@@ -11,11 +11,11 @@ import ModalProvider from "./_components/ModalProvider";
 import {
   GoogleTagManagerScript,
   GoogleTagManager,
-} from "@/components/common/GoogleTagManager";
+  WebVitalsReporter,
+} from "@/lib/analytics";
 import { CommonInitializer } from "@/components/providers/CommonProvider";
 import FloatingButtons from "@/components/common/FloatingButtons/FloatingButtons";
 import ChristmasPromoModal from "@/components/ui/ChristmasPromoModal/ChristmasPromoModal";
-import WebVitalsReporter from "@/components/common/WebVitalsReporter/WebVitalsReporter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

@@ -1,8 +1,7 @@
 import { Metadata } from "next";
 import styles from "./PrivacyNotice.module.scss";
 import privacyNoticeData from "@/data/legal/privacy-notice.json";
-import StructuredData from "@/components/common/SEO/StructuredData";
-import { createBreadcrumbSchema } from "@/utils/seoHelpers";
+import { StructuredData, createBreadcrumbSchema } from "@/lib/seo";
 import Link from "next/link";
 import { ContactDetails } from "@/constants/config";
 

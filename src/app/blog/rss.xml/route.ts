@@ -1,5 +1,5 @@
 import { getBlogPosts } from "@/lib/services/blog";
-import { businessInfo } from "@/utils/seoHelpers";
+import { businessInfo } from "@/lib/seo";
 
 export async function GET() {
   const baseUrl = "https://metromellow.com";

@@ -3,11 +3,11 @@ import { Metadata } from "next";
 import BookingHero from "./_components/BookingHero/BookingHero";
 import SubscriptionModule from "./_components/SubscriptionModule/SubscriptionModule";
 import SubscriptionBuilder from "../../(app)/dashboard/subscriptions/add/_components/SubscriptionBuilder/SubscriptionBuilder";
-import StructuredData from "@/components/common/SEO/StructuredData";
 import {
+  StructuredData,
   createLocalBusinessSchema,
   createBreadcrumbSchema,
-} from "@/utils/seoHelpers";
+} from "@/lib/seo";
 
 export const metadata: Metadata = {
   title:

@@ -6,12 +6,12 @@ import WaitlistSection from "./_components/WaitlistSection/WaitlistSection";
 import SocialMediaSection from "./_components/SocialMediaSection/SocialMediaSection";
 import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
 import styles from "./Welcome.module.scss";
-import StructuredData from "@/components/common/SEO/StructuredData";
 import {
+  StructuredData,
   createLocalBusinessSchema,
   createBreadcrumbSchema,
   createFAQSchema,
-} from "@/utils/seoHelpers";
+} from "@/lib/seo";
 
 const welcomeFaqs: FAQItem[] = [
   {

@@ -1,8 +1,7 @@
 import { Metadata } from "next";
 import styles from "./PrivacyPolicy.module.scss";
 import privacyData from "@/data/legal/privacy-cookie-policy.json";
-import StructuredData from "@/components/common/SEO/StructuredData";
-import { createBreadcrumbSchema } from "@/utils/seoHelpers";
+import { StructuredData, createBreadcrumbSchema } from "@/lib/seo";
 import Link from "next/link";
 import { ContactDetails } from "@/constants/config";
 

@@ -1,13 +1,13 @@
 import React from "react";
 import { Metadata } from "next";
 import CleaningPageClient from "./_components/CleaningPageClient/CleaningPageClient";
-import StructuredData from "@/components/common/SEO/StructuredData";
 import {
+  StructuredData,
   createLocalBusinessSchema,
   createBreadcrumbSchema,
   createFAQSchema,
   createServiceSchema,
-} from "@/utils/seoHelpers";
+} from "@/lib/seo";
 
 export const metadata: Metadata = {
   title:

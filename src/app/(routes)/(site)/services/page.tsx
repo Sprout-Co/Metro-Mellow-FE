@@ -3,11 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import styles from "./ServicesPage.module.scss";
-import StructuredData from "@/components/common/SEO/StructuredData";
 import {
+  StructuredData,
   createLocalBusinessSchema,
   createBreadcrumbSchema,
-} from "@/utils/seoHelpers";
+} from "@/lib/seo";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

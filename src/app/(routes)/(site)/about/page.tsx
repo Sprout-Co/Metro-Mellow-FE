@@ -6,12 +6,12 @@ import MagicHandsSection from "./_components/MagicHandsSection/MagicHandsSection
 // import TeamCards from "./_components/TeamCards/TeamCards";
 import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
 import styles from "./About.module.scss";
-import StructuredData from "@/components/common/SEO/StructuredData";
 import {
+  StructuredData,
   createLocalBusinessSchema,
   createBreadcrumbSchema,
   createFAQSchema,
-} from "@/utils/seoHelpers";
+} from "@/lib/seo";
 
 const aboutFaqs: FAQItem[] = [
   {
@@ -34,7 +34,8 @@ const aboutFaqs: FAQItem[] = [
   },
   {
     id: "q4",
-    question: "How do you handle traditional Nigerian meals and cooking preferences?",
+    question:
+      "How do you handle traditional Nigerian meals and cooking preferences?",
     answer:
       "Our chefs are trained in both traditional Nigerian cuisine and international dishes. We can prepare jollof rice, egusi soup, pounded yam, and other local favorites just like your grandmother would make. We also accommodate dietary restrictions and cultural preferences for halal, vegetarian, or other specific requirements.",
   },
@@ -53,7 +54,8 @@ const aboutFaqs: FAQItem[] = [
 ];
 
 export const metadata: Metadata = {
-  title: "About Metromellow | Trusted Home Services Company in Lagos | Our Story",
+  title:
+    "About Metromellow | Trusted Home Services Company in Lagos | Our Story",
   description:
     "Learn about Metromellow's mission to transform home services in Lagos. Meet our professional team, discover our story, and see how we're helping 1,000+ Lagos families reclaim their time.",
   keywords:
