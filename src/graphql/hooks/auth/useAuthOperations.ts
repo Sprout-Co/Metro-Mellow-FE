@@ -194,18 +194,9 @@ export const useAuthOperations = () => {
             throw new Error("Registration failed: Invalid role");
           }
 
-          dispatch(
-            loginAction({
-              user: user as any,
-              token: token || "",
-              welcome: true,
-            })
-          );
-
-          // Use a direct browser redirect
-          // if (typeof window !== "undefined") {
-          //   window.location.href = Routes.DASHBOARD;
-          // }
+          // Don't login immediately - wait for email verification
+          // The login will happen in handleVerifyEmailWithCode after verification
+          // We can optionally store the token temporarily if needed, but don't set user/auth state yet
         }
       } catch (error) {
         console.error("Registration error:", error);

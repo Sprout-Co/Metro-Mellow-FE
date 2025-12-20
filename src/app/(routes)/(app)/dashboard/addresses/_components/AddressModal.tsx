@@ -21,7 +21,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
   onSave,
   address,
 }) => {
-  const [selectedArea, setSelectedArea] = useState<ServiceArea | null>(null);
+  const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [streetAddress, setStreetAddress] = useState("");
   const [label, setLabel] = useState("");
@@ -71,7 +71,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
         setStreetAddress(address.street || "");
         setIsDefault(address.isDefault || false);
         if (address.serviceArea) {
-          setSelectedArea(address.serviceArea as ServiceArea);
+          setSelectedArea(address.serviceArea);
         }
       } else {
         resetForm();
@@ -88,7 +88,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
     setSearchQuery("");
   };
 
-  const handleAreaSelect = (area: ServiceArea) => {
+  const handleAreaSelect = (area: string) => {
     setSelectedArea(area);
     setIsDropdownOpen(false);
     setSearchQuery("");
@@ -96,9 +96,11 @@ const AddressModal: React.FC<AddressModalProps> = ({
   };
 
   // Filter service areas based on search query
-  const filteredServiceAreas = currentActiveServiceAreas?.filter((area) =>
-    area.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredServiceAreas = currentActiveServiceAreas
+    ?.map((area) => area.name)
+    .filter((area: string) =>
+      area.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
   const handleAddressSelect = (selected: string) => {
     setStreetAddress(selected);
@@ -113,10 +115,10 @@ const AddressModal: React.FC<AddressModalProps> = ({
         {
           label: label || "Home",
           street: streetAddress,
-          city: selectedArea.city,
+          city: selectedArea,
           isDefault,
         },
-        selectedArea.id
+        selectedArea
       );
       resetForm();
       onClose();
@@ -203,7 +205,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
                 onClick={() => setIsDropdownOpen(true)}
               >
                 <MapPin size={18} />
-                <span>{selectedArea?.name || "Select area"}</span>
+                <span>{selectedArea || "Select area"}</span>
                 <ChevronDown size={16} />
               </button>
             )}
@@ -214,13 +216,13 @@ const AddressModal: React.FC<AddressModalProps> = ({
                 {filteredServiceAreas && filteredServiceAreas.length > 0 ? (
                   filteredServiceAreas.map((area) => (
                     <li
-                      key={area.id}
-                      className={`${styles.dropdown__item} ${selectedArea?.id === area.id ? styles["dropdown__item--selected"] : ""}`}
+                      key={area}
+                      className={`${styles.dropdown__item} ${selectedArea === area ? styles["dropdown__item--selected"] : ""}`}
                       onClick={() => handleAreaSelect(area)}
                     >
                       <MapPin size={16} />
-                      <span>{area.name}</span>
-                      {selectedArea?.id === area.id && <Check size={16} />}
+                      <span>{area}</span>
+                      {selectedArea === area && <Check size={16} />}
                     </li>
                   ))
                 ) : (
@@ -239,7 +241,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
             <label className={styles.field__label}>Street Address</label>
             <PlacesAutocomplete
               onSelect={handleAddressSelect}
-              placeholder={`Search in ${selectedArea.name}...`}
+              placeholder={`Search in ${selectedArea}...`}
             />
             {streetAddress && (
               <div className={styles.field__preview}>

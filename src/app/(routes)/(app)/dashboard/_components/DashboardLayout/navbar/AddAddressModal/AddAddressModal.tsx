@@ -4,7 +4,6 @@ import styles from "./AddAddressModal.module.scss";
 import { PlacesAutocomplete } from "@/components/ui/PlacesAutocomplete/PlacesAutocomplete";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import { useServiceAreaOperations } from "@/graphql/hooks/serviceArea/useServiceAreaOperations";
-import { ServiceArea } from "@/graphql/api";
 import { MapPin, ChevronDown, Check, Loader2, Search } from "lucide-react";
 
 interface AddAddressModalProps {
@@ -18,7 +17,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
   onClose,
   onAddressSelect,
 }) => {
-  const [selectedArea, setSelectedArea] = useState<ServiceArea | null>(null);
+  const [selectedArea, setSelectedArea] = useState<string>("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [address, setAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -58,7 +57,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
     }
   }, [isDropdownOpen]);
 
-  const handleAreaSelect = (area: ServiceArea) => {
+  const handleAreaSelect = (area: string) => {
     setSelectedArea(area);
     setIsDropdownOpen(false);
     setAddress("");
@@ -66,9 +65,11 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
   };
 
   // Filter service areas based on search query
-  const filteredServiceAreas = currentActiveServiceAreas?.filter((area) =>
-    area.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredServiceAreas = currentActiveServiceAreas
+    ?.map((area) => area.name)
+    .filter((area: string) =>
+      area.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
   const handleAddressSelect = (selectedAddress: string) => {
     setAddress(selectedAddress);
@@ -81,8 +82,8 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
     try {
       await handleAddAddress({
         street: address,
-        city: selectedArea.city,
-        serviceArea: selectedArea.id,
+        city: selectedArea,
+        serviceArea: selectedArea,
         isDefault: true,
       });
 
@@ -97,7 +98,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
   };
 
   const resetAndClose = () => {
-    setSelectedArea(null);
+    setSelectedArea("");
     setAddress("");
     setIsDropdownOpen(false);
     setSearchQuery("");
@@ -166,7 +167,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
                 onClick={() => setIsDropdownOpen(true)}
               >
                 <MapPin size={18} />
-                <span>{selectedArea?.name || "Choose area"}</span>
+                <span>{selectedArea || "Choose area"}</span>
                 <ChevronDown size={16} />
               </button>
             )}
@@ -177,13 +178,13 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
                 {filteredServiceAreas && filteredServiceAreas.length > 0 ? (
                   filteredServiceAreas.map((area) => (
                     <li
-                      key={area.id}
-                      className={`${styles.dropdown__option} ${selectedArea?.id === area.id ? styles["dropdown__option--selected"] : ""}`}
+                      key={area}
+                      className={`${styles.dropdown__option} ${selectedArea === area ? styles["dropdown__option--selected"] : ""}`}
                       onClick={() => handleAreaSelect(area)}
                     >
                       <MapPin size={16} />
-                      <span>{area.name}</span>
-                      {selectedArea?.id === area.id && <Check size={16} />}
+                      <span>{area}</span>
+                      {selectedArea === area && <Check size={16} />}
                     </li>
                   ))
                 ) : (
@@ -202,7 +203,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
             <label className={styles.label}>Enter your address</label>
             <PlacesAutocomplete
               onSelect={handleAddressSelect}
-              placeholder={`Search in ${selectedArea.name}...`}
+              placeholder={`Search in ${selectedArea}...`}
             />
             {address && (
               <div className={styles.selected}>

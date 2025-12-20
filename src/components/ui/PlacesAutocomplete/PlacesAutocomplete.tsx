@@ -27,11 +27,13 @@ interface PlacesAutocompleteProps {
     address: string,
     coordinates: { lat: number; lng: number }
   ) => void;
+  onChange?: (address: string) => void;
   placeholder?: string;
 }
 
 export const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
   onSelect,
+  onChange,
   placeholder = "Enter your address",
 }) => {
   const [inputValue, setInputValue] = useState("");
@@ -95,6 +97,7 @@ export const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
+    onChange?.(e.target.value);
     setIsOpen(true); // Re-open dropdown when typing
   };
 

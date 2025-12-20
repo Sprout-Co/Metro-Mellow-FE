@@ -138,10 +138,11 @@ export default function RegisterForm({
   }, [isServiceAreaDropdownOpen]);
 
   // Filter service areas based on search query
-  const filteredServiceAreas = serviceAreasData?.activeServiceAreas.filter(
-    (area) =>
-      area.name.toLowerCase().includes(serviceAreaSearchQuery.toLowerCase())
-  );
+  const filteredServiceAreas = serviceAreasData?.activeServiceAreas
+    .map((area) => area.name)
+    .filter((area: string) =>
+      area.toLowerCase().includes(serviceAreaSearchQuery.toLowerCase())
+    );
 
   const validateStep = (step: FormStep): boolean => {
     const newErrors: FormErrors = {};
@@ -197,10 +198,6 @@ export default function RegisterForm({
     return Object.keys(newErrors).length === 0;
   };
 
-  const validateForm = (): boolean => {
-    return validateStep(1) && validateStep(2);
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
 
@@ -218,30 +215,10 @@ export default function RegisterForm({
     }
   };
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    const selectedOption = e.target.options[e.target.selectedIndex];
-
+  const handleServiceAreaSelect = (areaName: string) => {
     setFormData({
       ...formData,
-      [name]: value,
-      // If service area is selected, set city to the area name
-      ...(name === "serviceArea" && value ? { city: selectedOption.text } : {}),
-    });
-
-    // Clear the error for this field when user changes it
-    if (errors[name as keyof FormErrors]) {
-      setErrors({
-        ...errors,
-        [name]: undefined,
-      });
-    }
-  };
-
-  const handleServiceAreaSelect = (areaId: string, areaName: string) => {
-    setFormData({
-      ...formData,
-      serviceArea: areaId,
+      serviceArea: areaName,
       city: areaName,
     });
     setIsServiceAreaDropdownOpen(false);
@@ -256,9 +233,9 @@ export default function RegisterForm({
     }
   };
 
-  const selectedServiceArea = serviceAreasData?.activeServiceAreas.find(
-    (area) => area.id === formData.serviceArea
-  );
+  const selectedServiceArea = serviceAreasData?.activeServiceAreas
+    .map((area) => area.name)
+    .find((area: string) => area === formData.serviceArea);
 
   const handleNextStep = (e: React.FormEvent) => {
     e.preventDefault();
@@ -302,7 +279,7 @@ export default function RegisterForm({
         referralCode: formData.referralCode || undefined,
         address: {
           street: formData.street,
-          city: formData.city,
+          city: formData.serviceArea || "Lagos",
           serviceArea: formData.serviceArea,
         },
       });
@@ -343,38 +320,6 @@ export default function RegisterForm({
       setLoading(false);
     }
   };
-
-  const passwordStrength = (): {
-    strength: "weak" | "medium" | "strong";
-    percentage: number;
-  } => {
-    if (!formData.password) {
-      return { strength: "weak", percentage: 0 };
-    }
-
-    let score = 0;
-
-    // Length check
-    if (formData.password.length >= 8) score += 1;
-    if (formData.password.length >= 12) score += 1;
-
-    // Complexity checks
-    if (/[A-Z]/.test(formData.password)) score += 1;
-    if (/[a-z]/.test(formData.password)) score += 1;
-    if (/[0-9]/.test(formData.password)) score += 1;
-    if (/[^A-Za-z0-9]/.test(formData.password)) score += 1;
-
-    // Calculate percentage and strength
-    const percentage = Math.min(100, Math.round((score / 6) * 100));
-
-    let strength: "weak" | "medium" | "strong" = "weak";
-    if (percentage >= 70) strength = "strong";
-    else if (percentage >= 40) strength = "medium";
-
-    return { strength, percentage };
-  };
-
-  const { strength, percentage } = passwordStrength();
 
   return (
     <div className={styles.registerForm}>
@@ -637,8 +582,7 @@ export default function RegisterForm({
                                   ]
                             }`}
                           >
-                            {selectedServiceArea?.name ||
-                              "Select service area..."}
+                            {selectedServiceArea || "Select service area..."}
                           </div>
                           <ChevronDown size={16} />
                         </button>
@@ -650,21 +594,19 @@ export default function RegisterForm({
                           filteredServiceAreas.length > 0 ? (
                             filteredServiceAreas.map((area) => (
                               <li
-                                key={area.id}
+                                key={area}
                                 className={`${styles.serviceAreaDropdown__item} ${
-                                  formData.serviceArea === area.id
+                                  formData.serviceArea === area
                                     ? styles[
                                         "serviceAreaDropdown__item--selected"
                                       ]
                                     : ""
                                 }`}
-                                onClick={() =>
-                                  handleServiceAreaSelect(area.id, area.name)
-                                }
+                                onClick={() => handleServiceAreaSelect(area)}
                               >
                                 <MapPin size={16} />
-                                <span>{area.name}</span>
-                                {formData.serviceArea === area.id && (
+                                <span>{area}</span>
+                                {formData.serviceArea === area && (
                                   <Check size={16} />
                                 )}
                               </li>
@@ -703,6 +645,9 @@ export default function RegisterForm({
                         if (errors.street) {
                           setErrors((prev) => ({ ...prev, street: undefined }));
                         }
+                      }}
+                      onChange={(address) => {
+                        setFormData((prev) => ({ ...prev, street: address }));
                       }}
                       placeholder="Search for your address..."
                     />

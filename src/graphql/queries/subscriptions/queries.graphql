@@ -297,13 +297,7 @@ query GetCustomerSubscriptions {
       country
       isDefault
       label
-      serviceArea {
-        id
-        name
-        city
-        deliveryCost
-        isActive
-      }
+      serviceArea
     }
     paymentMethod {
       id

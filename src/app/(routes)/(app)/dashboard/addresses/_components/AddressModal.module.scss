@@ -65,7 +65,7 @@
   flex-direction: column;
   gap: spacing("xs");
   position: relative;
-  z-index: 1;
+  // z-index: 1;
 
   &__label {
     @include font-size("sm");
@@ -131,7 +131,8 @@
 
     svg:last-child {
       color: color("neutral", "medium");
-      transition: transform transition-duration("fast") transition-timing("ease");
+      transition: transform transition-duration("fast")
+        transition-timing("ease");
     }
 
     &--selected {
@@ -244,7 +245,8 @@
     @include font-size("sm");
     color: color("neutral", "darkest");
     cursor: pointer;
-    transition: background-color transition-duration("fast") transition-timing("ease");
+    transition: background-color transition-duration("fast")
+      transition-timing("ease");
 
     &:hover {
       background-color: color("neutral", "lightest");
@@ -328,7 +330,8 @@
     height: 20px;
     background-color: color("neutral", "light");
     border-radius: border-radius("full");
-    transition: background-color transition-duration("fast") transition-timing("ease");
+    transition: background-color transition-duration("fast")
+      transition-timing("ease");
     flex-shrink: 0;
   }
 
@@ -368,7 +371,8 @@
   @include font-size("sm");
   @include font-weight("medium");
   cursor: pointer;
-  transition: background-color transition-duration("fast") transition-timing("ease");
+  transition: background-color transition-duration("fast")
+    transition-timing("ease");
 
   &:hover {
     background-color: color("neutral", "light");
@@ -387,7 +391,8 @@
   @include font-size("sm");
   @include font-weight("medium");
   cursor: pointer;
-  transition: background-color transition-duration("fast") transition-timing("ease");
+  transition: background-color transition-duration("fast")
+    transition-timing("ease");
 
   &:hover:not(:disabled) {
     background-color: color-darken("status", "success", 10%);
