@@ -4,17 +4,18 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Phone } from "lucide-react";
 import styles from "./FloatingButtons.module.scss";
+import { ContactDetails } from "@/constants/config";
 
 const FloatingButtons: React.FC = () => {
   const handleWhatsAppClick = () => {
-    const phoneNumber = "+2349069894176";
+    const phoneNumber = ContactDetails.WHATSAPP;
     const message = "Hello! I'm interested in your services.";
     const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
   };
 
   const handleCallClick = () => {
-    const phoneNumber = "+2349069894176";
+    const phoneNumber = ContactDetails.PHONE;
     window.open(`tel:${phoneNumber}`, "_self");
   };
 

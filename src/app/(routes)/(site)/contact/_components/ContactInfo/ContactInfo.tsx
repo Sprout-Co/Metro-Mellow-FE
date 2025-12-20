@@ -61,11 +61,11 @@ const ContactInfo: FC = () => {
               </div>
               <p className={styles.contactInfo__text}>
                 <a
-                  href="https://wa.me/2349069894176"
+                  href={ContactDetails.WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  +2349069894176
+                  {ContactDetails.WHATSAPP}
                 </a>
               </p>
             </div>
@@ -74,7 +74,7 @@ const ContactInfo: FC = () => {
               <div className={styles.contactInfo__iconWrapper}>
                 <Mail className={styles.contactInfo__icon} />
               </div>
-              <p className={styles.contactInfo__text}>team@metromellow.com</p>
+              <p className={styles.contactInfo__text}>{ContactDetails.EMAIL}</p>
             </div>
           </div>
         </div>

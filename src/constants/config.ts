@@ -30,6 +30,7 @@ export const BOOKING_STATUS = {
 export const ContactDetails = {
   PHONE: "+2349069894176",
   WHATSAPP: "+2349069894176",
+  WHATSAPP_URL: "https://wa.me/2349069894176",
   EMAIL: "team@metromellow.com",
   ADDRESS: "Opeyemi Street, Yaba, Lagos",
 } as const;
