@@ -111,9 +111,9 @@ const CleaningVideoSection = ({ onCTAClick }: { onCTAClick: () => void }) => {
             variants={staggerContainer}
           >
             <motion.p className={styles.video__description} variants={fadeIn}>
-              Watch our professional cleaning process in action. From initial
+              Watch our professional cleaning service in Lagos in action. From initial
               assessment to final inspection, see how we deliver exceptional
-              results every time.
+              cleaning results across Lagos State every time.
             </motion.p>
 
             <motion.ul

@@ -128,8 +128,9 @@ const CleaningServicesShowcase: React.FC<CleaningServicesShowcaseProps> = ({
             <span className={styles.showcase__titleAccent}> Clean</span>
           </h2>
           <p className={styles.showcase__subtitle}>
-            From quick touch-ups to deep transformations, we have the perfect
-            service for your needs
+            Professional cleaning service in Lagos. From quick touch-ups to deep
+            transformations, we have the perfect cleaning service for your needs
+            across Lagos State
           </p>
         </motion.div>
 

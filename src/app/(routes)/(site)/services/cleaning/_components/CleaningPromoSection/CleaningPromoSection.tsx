@@ -46,7 +46,9 @@ const CleaningPromoSection = ({ onCTAClick }: { onCTAClick: () => void }) => {
           </motion.h2>
 
           <motion.p className={styles.promo__description} variants={fadeIn}>
-            Standard, deep, move-in/move-out, we tailor to your space and needs.
+            Professional cleaning service in Lagos. Standard, deep,
+            move-in/move-out cleaning—we tailor to your space and needs. Serving
+            all major areas across Lagos State.
           </motion.p>
 
           <motion.div className={styles.promo__cta} variants={fadeIn}>
