@@ -38,6 +38,10 @@ export const metadata: Metadata = {
   },
 };
 
+// Enable Incremental Static Regeneration (ISR) for optimal SEO
+// This page will be statically generated at build time and regenerated every hour
+export const revalidate = 3600; // Revalidate every hour (3600 seconds)
+
 export default function LaundryPage() {
   // Define service schema data for laundry service
   const laundryServiceData = {

@@ -13,6 +13,10 @@ import {
 // Export metadata for Next.js
 export const metadata: Metadata = foodPageMetadata;
 
+// Enable Incremental Static Regeneration (ISR) for optimal SEO
+// This page will be statically generated at build time and regenerated every hour
+export const revalidate = 3600; // Revalidate every hour (3600 seconds)
+
 export default function FoodPage() {
   // Define service schema data for food service
   const foodServiceData = {

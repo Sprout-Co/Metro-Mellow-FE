@@ -9,6 +9,8 @@ import CleaningStepsSection from "../CleaningStepsSection/CleaningStepsSection";
 import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
 import { ServiceCategory, ServiceStatus } from "@/graphql/api";
 import { useGetServices } from "@/graphql/hooks/services/useServiceOperations";
+import ServiceInternalLinks from "@/components/common/ServiceInternalLinks/ServiceInternalLinks";
+import { allServices } from "@/constants/services";
 
 const cleaningFaqs: FAQItem[] = [
   {
@@ -72,6 +74,10 @@ const CleaningPageClient: React.FC = () => {
       <CleaningVideoSection onCTAClick={scrollToServicesShowcase} />
       <CleaningStepsSection onCTAClick={scrollToServicesShowcase} />
       <FAQSection faqs={cleaningFaqs} />
+      <ServiceInternalLinks
+        currentService="/services/cleaning"
+        services={allServices}
+      />
     </>
   );
 };

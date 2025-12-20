@@ -15,6 +15,7 @@ import {
 import { CommonInitializer } from "@/components/providers/CommonProvider";
 import FloatingButtons from "@/components/common/FloatingButtons/FloatingButtons";
 import ChristmasPromoModal from "@/components/ui/ChristmasPromoModal/ChristmasPromoModal";
+import WebVitalsReporter from "@/components/common/WebVitalsReporter/WebVitalsReporter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -84,6 +85,7 @@ export default function RootLayout({
                 {/* <ModalProvider /> */}
                 <FloatingButtons />
                 <ChristmasPromoModal />
+                <WebVitalsReporter />
               </NotificationProvider>
             </AuthInitializer>
           </ApolloWrapper>

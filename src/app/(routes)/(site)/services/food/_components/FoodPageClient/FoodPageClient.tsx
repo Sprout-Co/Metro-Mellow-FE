@@ -9,6 +9,8 @@ import FoodMenuSection from "../FoodMenuSection/FoodMenuSection";
 import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
 import { ServiceCategory, ServiceStatus } from "@/graphql/api";
 import { useGetServices } from "@/graphql/hooks/services/useServiceOperations";
+import ServiceInternalLinks from "@/components/common/ServiceInternalLinks/ServiceInternalLinks";
+import { allServices } from "@/constants/services";
 
 const foodFaqs: FAQItem[] = [
   {
@@ -66,6 +68,10 @@ const FoodPageClient: React.FC = () => {
       <FoodIllustrationSection />
       <OrderStepsSection />
       <FAQSection faqs={foodFaqs} />
+      <ServiceInternalLinks
+        currentService="/services/food"
+        services={allServices}
+      />
     </>
   );
 };

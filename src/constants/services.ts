@@ -1,122 +1,37 @@
-import * as LucideIcons from "lucide-react";
+/**
+ * Service data for internal linking and SEO
+ * This helps create consistent internal links between service pages
+ */
 
-export type IconName = keyof typeof LucideIcons;
-
-interface service_category {
-  id: number;
-  name: string;
-  slug: string;
-  icon: IconName;
-  shortDescription: string;
-  fullDescription?: string;
-  benefits?: string[];
-  inclusions?: string[];
-  pricing?: {
-    basic?: number;
-    standard?: number;
-    premium?: number;
-  };
+export interface ServiceLink {
+  title: string;
+  href: string;
+  description: string;
 }
 
-export const services: service_category[] = [
+export const allServices: ServiceLink[] = [
   {
-    id: 1,
-    name: "House Cleaning",
-    slug: "house-cleaning",
-    icon: "House",
-    shortDescription:
-      "Professional cleaning services to keep your home spotless and sanitized.",
-    fullDescription: `'Our comprehensive house cleaning services are designed to give you a spotless, sanitized home without the hassle. Our trained professionals use quality equipment and eco-friendly products to ensure a thorough clean that's safe for your family and pets.'`,
-    benefits: [
-      "Save time and energy for things you enjoy",
-      "Consistent, high-quality cleaning",
-      "Flexible scheduling to fit your lifestyle",
-      "Eco-friendly cleaning products",
-      "Trained and vetted cleaning professionals",
-    ],
-    inclusions: [
-      "Dusting and wiping all surfaces",
-      "Vacuuming and mopping floors",
-      "Bathroom cleaning and sanitizing",
-      "Kitchen cleaning including appliances",
-      "Bed making and linen changing (upon request)",
-      "Window sill and blinds cleaning",
-    ],
-    pricing: {
-      basic: 99,
-      standard: 149,
-      premium: 199,
-    },
+    title: "Cleaning Services",
+    href: "/services/cleaning",
+    description:
+      "Professional house and office cleaning services throughout Lagos. Deep cleaning, regular maintenance, and eco-friendly options available.",
   },
   {
-    id: 2,
-    name: "Laundry & Ironing",
-    slug: "laundry-ironing",
-    icon: "Shirt",
-    shortDescription:
-      "Let us handle your laundry and ironing needs with our professional service.",
-    fullDescription:
-      "Our laundry and ironing service takes the hassle out of keeping your clothes clean and wrinkle-free. We handle everything from everyday wear to delicate fabrics with care and attention to detail.",
-    pricing: {
-      basic: 79,
-      standard: 119,
-      premium: 159,
-    },
+    title: "Laundry Services",
+    href: "/services/laundry",
+    description:
+      "Professional laundry and dry cleaning with free pickup and delivery. Expert garment care and eco-friendly options available.",
   },
   {
-    id: 3,
-    name: "Cooking Service",
-    slug: "cooking-service",
-    icon: "CookingPot",
-    shortDescription:
-      "Enjoy delicious, home-cooked meals prepared by professional chefs in your kitchen.",
-    fullDescription:
-      "Our professional chefs prepare delicious meals in the comfort of your home, catering to your dietary preferences and needs.",
-    pricing: {
-      basic: 129,
-      standard: 179,
-      premium: 229,
-    },
+    title: "Food Delivery",
+    href: "/services/food",
+    description:
+      "Fresh, nutritious meals prepared by professional chefs and delivered straight to your door in Lagos.",
   },
   {
-    id: 4,
-    name: "Errand Service",
-    slug: "errand-service",
-    icon: "PersonStanding",
-    shortDescription:
-      "Save time with our reliable errand service that handles your to-do list.",
-    pricing: {
-      basic: 69,
-      standard: 99,
-      premium: 149,
-    },
-  },
-  {
-    id: 5,
-    name: "Pest Control",
-    slug: "pest-control",
-    icon: "BugOff",
-    shortDescription:
-      "Effective and safe pest control solutions for your home and garden.",
-    pricing: {
-      basic: 109,
-      standard: 159,
-      premium: 209,
-    },
-  },
-  {
-    id: 6,
-    name: "Gardening",
-    slug: "gardening",
-    icon: "Fence",
-    shortDescription:
-      "Keep your garden looking beautiful with our professional gardening services.",
-    pricing: {
-      basic: 89,
-      standard: 139,
-      premium: 189,
-    },
+    title: "Pest Control",
+    href: "/services/pest-control",
+    description:
+      "Safe and effective pest elimination for residential and commercial properties using eco-friendly methods.",
   },
 ];
-
-export default services;

@@ -9,6 +9,8 @@ import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
 import { ServiceCategory, ServiceStatus } from "@/graphql/api";
 import { useGetServices } from "@/graphql/hooks/services/useServiceOperations";
 import PestControlServicesShowcase from "../PestControlServicesShowcase/PestControlServicesShowcase";
+import ServiceInternalLinks from "@/components/common/ServiceInternalLinks/ServiceInternalLinks";
+import { allServices } from "@/constants/services";
 
 const pestFaqs: FAQItem[] = [
   {
@@ -67,6 +69,10 @@ const PestControlPageClient: React.FC = () => {
       <ServiceCoverage />
       <OrderStepsSection />
       <FAQSection faqs={pestFaqs} />
+      <ServiceInternalLinks
+        currentService="/services/pest-control"
+        services={allServices}
+      />
     </>
   );
 };

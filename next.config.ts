@@ -3,6 +3,7 @@ const path = require("path");
 
 const nextConfig: NextConfig = {
   experimental: {
+    instrumentationHook: true, // Enable instrumentation for performance monitoring
     turbo: {
       resolveAlias: {
         "@": path.resolve(__dirname, "src"),

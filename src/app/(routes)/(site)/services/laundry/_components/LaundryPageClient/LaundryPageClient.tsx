@@ -10,6 +10,8 @@ import LaundryStepsSection from "../../LaundryStepsSection/LaundryStepsSection";
 import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
 import { ServiceCategory, ServiceStatus } from "@/graphql/api";
 import { useGetServices } from "@/graphql/hooks/services/useServiceOperations";
+import ServiceInternalLinks from "@/components/common/ServiceInternalLinks/ServiceInternalLinks";
+import { allServices } from "@/constants/services";
 
 const laundryFaqs: FAQItem[] = [
   {
@@ -68,6 +70,10 @@ const LaundryPageClient: React.FC = () => {
       <LaundryStepsSection />
       <LaundryPlan />
       <FAQSection faqs={laundryFaqs} />
+      <ServiceInternalLinks
+        currentService="/services/laundry"
+        services={allServices}
+      />
     </>
   );
 };
