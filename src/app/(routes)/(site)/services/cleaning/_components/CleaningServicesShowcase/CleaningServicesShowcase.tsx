@@ -1,20 +1,15 @@
-// src/app/(routes)/(site)/services/cleaning/_components/CleaningServicesShowcase/CleaningServicesShowcase.tsx
 "use client";
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import styles from "./CleaningServicesShowcase.module.scss";
-import CleaningServiceModal, {
-  CleaningServiceConfiguration,
-} from "@/components/ui/booking/modals/CleaningServiceModal/CleaningServiceModal";
+import CleaningServiceModal from "@/components/ui/booking/modals/CleaningServiceModal/CleaningServiceModal";
 import {
   GetServicesQuery,
   ServiceCategory,
   ServiceOption,
 } from "@/graphql/api";
-import { Home, Sparkles, Building, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/Button";
 import ServiceShowcaseCard from "../../../_components/common/ServiceShowcaseCard/ServiceShowcaseCard";
 
 interface CleaningServicesShowcaseProps {
@@ -26,7 +21,6 @@ interface CleaningServicesShowcaseProps {
 const CleaningServicesShowcase: React.FC<CleaningServicesShowcaseProps> = ({
   servicesData,
   loading,
-  error,
 }) => {
   const [sectionRef, inView] = useInView({
     triggerOnce: true,
@@ -37,28 +31,6 @@ const CleaningServicesShowcase: React.FC<CleaningServicesShowcaseProps> = ({
   const [selectedServiceOption, setSelectedServiceOption] =
     useState<ServiceOption | null>(null);
 
-  const getServiceIcon = (serviceName: string) => {
-    if (serviceName.toLowerCase().includes("standard")) return <Home />;
-    if (serviceName.toLowerCase().includes("deep")) return <Sparkles />;
-    if (
-      serviceName.toLowerCase().includes("office") ||
-      serviceName.toLowerCase().includes("commercial")
-    )
-      return <Building />;
-    return <Home />;
-  };
-
-  const getServiceEmoji = (serviceName: string) => {
-    if (serviceName.toLowerCase().includes("standard")) return "🏠";
-    if (serviceName.toLowerCase().includes("deep")) return "✨";
-    if (
-      serviceName.toLowerCase().includes("office") ||
-      serviceName.toLowerCase().includes("commercial")
-    )
-      return "🏢";
-    return "🧹";
-  };
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -66,18 +38,6 @@ const CleaningServicesShowcase: React.FC<CleaningServicesShowcaseProps> = ({
       transition: {
         staggerChildren: 0.1,
         delayChildren: 0.2,
-      },
-    },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
       },
     },
   };
@@ -162,9 +122,6 @@ const CleaningServicesShowcase: React.FC<CleaningServicesShowcaseProps> = ({
           serviceOption={selectedServiceOption}
           service={servicesData[0]}
           includedFeatures={selectedServiceOption.inclusions || []}
-          onOrderSubmit={(configuration: CleaningServiceConfiguration) => {
-            console.log("Cleaning service configuration:", configuration);
-          }}
         />
       )}
     </section>

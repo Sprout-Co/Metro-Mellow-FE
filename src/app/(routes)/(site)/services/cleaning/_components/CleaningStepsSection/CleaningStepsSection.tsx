@@ -3,7 +3,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import styles from "./CleaningStepsSection.module.scss";
-import { Button } from "@/components/ui/Button/Button";
 import { CTAButton } from "@/components/ui/Button/CTAButton";
 import { ArrowRightIcon } from "lucide-react";
 

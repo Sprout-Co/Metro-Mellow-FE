@@ -38,12 +38,16 @@ async function runBatchAudits() {
 
   for (const service of servicePages) {
     const url = `${BASE_URL}${service.path}`;
+    const now = new Date();
+    const date = now.toISOString().split("T")[0];
+    const time = now.toTimeString().split(" ")[0].replace(/:/g, "-"); // Format as HH-MM-SS
+    const dateFormatted = `${date}_${time}`;
     console.log(`\n📊 Auditing: ${service.name} (${url})`);
 
     try {
       const result = await runLighthouseAudit({
         url,
-        outputPath: `${OUTPUT_DIR}/${service.name}-${Date.now()}.html`,
+        outputPath: `${OUTPUT_DIR}/${service.name}-${dateFormatted}.html`,
         categories: ["performance", "accessibility", "best-practices", "seo"],
         device: "mobile",
       });
