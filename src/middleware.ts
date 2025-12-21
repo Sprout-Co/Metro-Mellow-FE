@@ -21,9 +21,45 @@ const UserRole = {
   SuperAdmin: "SUPER_ADMIN",
 } as const;
 
+// List of permanently removed/deleted blog post slugs
+// These should return 410 Gone status for SEO
+const permanentlyRemovedBlogSlugs = [
+  "family-meal-prep-lagos-working-parents",
+  "lagos-humidity-laundry-care-solutions",
+  "deep-cleaning-transformation-victoria-island-apartment",
+];
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const hostname = request.headers.get("host") || "";
+
+  // Check for permanently removed blog posts and return 410 Gone
+  if (pathname.startsWith("/blog/")) {
+    const slug = pathname.replace("/blog/", "");
+    if (permanentlyRemovedBlogSlugs.includes(slug)) {
+      return new NextResponse(
+        `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page No Longer Available | Metromellow</title>
+</head>
+<body>
+  <h1>410 - Page No Longer Available</h1>
+  <p>This blog post has been permanently removed.</p>
+  <p><a href="/blog">Visit our blog</a> to see our latest articles.</p>
+</body>
+</html>`,
+        {
+          status: 410,
+          headers: {
+            "Content-Type": "text/html; charset=utf-8",
+          },
+        }
+      );
+    }
+  }
 
   // Redirect www to non-www for SEO consistency (301 permanent redirect)
   if (hostname.startsWith("www.")) {
