@@ -11,6 +11,7 @@ Disallow: /api/internal/
 
 # Block build internals (but NOT images)
 Disallow: /_next/server/
+Disallow: /_next/static/
 
 # Block URL parameters that cause duplicate content
 Disallow: /*?debug=*
@@ -39,4 +40,3 @@ Disallow: /`;
     },
   });
 }
-

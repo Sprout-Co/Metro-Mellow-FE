@@ -23,6 +23,14 @@ const UserRole = {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const hostname = request.headers.get("host") || "";
+
+  // Redirect www to non-www for SEO consistency (301 permanent redirect)
+  if (hostname.startsWith("www.")) {
+    const newUrl = new URL(request.url);
+    newUrl.hostname = hostname.replace("www.", "");
+    return NextResponse.redirect(newUrl, 301);
+  }
 
   // Early auth check for auth pages (before maintenance mode)
   if (

@@ -28,11 +28,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://metromellow.com"
+  ),
   title: "Metromellow | Professional Home Services in Lagos, Nigeria",
   description:
     "Professional home services in Lagos including cleaning, laundry, cooking, and pest control. Tech-enabled solutions for modern Nigerian homes. Launching Q3 2025.",
   keywords:
-    "home services Lagos, cleaning services Nigeria, laundry Lagos, meal preparation, pest control, domestic help Lagos, Metromellow",
+    "home services Lagos, cleaning services lagos, laundry Lagos, meal preparation, pest control, domestic help Lagos, Metromellow",
   authors: [{ name: "Metromellow Team" }],
   creator: "Metromellow",
   publisher: "Metromellow",

@@ -3,7 +3,6 @@ const path = require("path");
 
 const nextConfig: NextConfig = {
   experimental: {
-    instrumentationHook: true, // Enable instrumentation for performance monitoring
     turbo: {
       resolveAlias: {
         "@": path.resolve(__dirname, "src"),
@@ -16,6 +15,7 @@ const nextConfig: NextConfig = {
     },
   },
   reactStrictMode: true,
+  trailingSlash: false, // Ensure no trailing slashes for SEO consistency
   sassOptions: {
     includePaths: ["./src/styles"],
     prependData: `@import "@/styles/abstracts/variables"; @import "@/styles/abstracts/mixins"; @import "@/styles/abstracts/functions";`,
@@ -23,16 +23,40 @@ const nextConfig: NextConfig = {
   },
   images: {
     formats: ["image/avif", "image/webp"],
-    domains: [
-      "example.com",
-      "images.unsplash.com",
-      "via.placeholder.com",
-      "picsum.photos",
-      "cloudinary.com",
-      "res.cloudinary.com",
-      "firebasestorage.googleapis.com",
-      "storage.googleapis.com",
-    ], // Add your image domains here if needed
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "example.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "via.placeholder.com",
+      },
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
+      },
+      {
+        protocol: "https",
+        hostname: "cloudinary.com",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "https",
+        hostname: "firebasestorage.googleapis.com",
+      },
+      {
+        protocol: "https",
+        hostname: "storage.googleapis.com",
+      },
+    ],
     minimumCacheTTL: 60,
   },
   compress: true,

@@ -54,8 +54,6 @@ const FoodPageClient: React.FC = () => {
     status: ServiceStatus.Active,
   });
 
-  console.log(servicesData);
-
   return (
     <>
       <FoodHero />
