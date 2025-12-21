@@ -46,6 +46,41 @@ export async function generateMetadata({
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  // List of permanently removed/deleted blog post slugs
+  // These should return 410 Gone status for SEO
+  const permanentlyRemovedSlugs = [
+    "family-meal-prep-lagos-working-parents",
+    "lagos-humidity-laundry-care-solutions",
+    "deep-cleaning-transformation-victoria-island-apartment",
+  ];
+
+  // Check if this is a permanently removed post
+  if (permanentlyRemovedSlugs.includes(params.slug)) {
+    // Return 410 Gone status - tells Google the page is permanently removed
+    // This is better for SEO than 404 for deleted content
+    return new Response(
+      `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page No Longer Available | Metromellow</title>
+</head>
+<body>
+  <h1>410 - Page No Longer Available</h1>
+  <p>This blog post has been permanently removed.</p>
+  <p><a href="/blog">Visit our blog</a> to see our latest articles.</p>
+</body>
+</html>`,
+      {
+        status: 410,
+        headers: {
+          "Content-Type": "text/html; charset=utf-8",
+        },
+      }
+    );
+  }
+
   const post = await getBlogPost(params.slug);
 
   if (!post) {
