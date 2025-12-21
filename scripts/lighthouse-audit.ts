@@ -1,4 +1,3 @@
-import lighthouse from "lighthouse";
 import * as chromeLauncher from "chrome-launcher";
 import * as fs from "fs";
 import * as path from "path";
@@ -36,6 +35,10 @@ export async function runLighthouseAudit(
     categories = ["performance", "seo"],
     device = "mobile",
   } = config;
+
+  // Dynamic import to avoid ESM resolution issues with tsx
+  const lighthouseModule = await import("lighthouse");
+  const lighthouse = lighthouseModule.default || lighthouseModule;
 
   // Launch Chrome
   const chrome = await chromeLauncher.launch({

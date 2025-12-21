@@ -16,9 +16,9 @@ import {
 const welcomeFaqs: FAQItem[] = [
   {
     id: "q1",
-    question: "When will Metromellow launch?",
+    question: "Where is Metromellow available?",
     answer:
-      "We're targeting Q3 2025 for our official launch in Lagos and Abuja. Join our waitlist to be among the first to know when we go live!",
+      "Metromellow is now live in Lagos, Nigeria. We're expanding to Abuja and other major Nigerian cities soon. Book your services today!",
   },
   {
     id: "q2",
@@ -54,18 +54,18 @@ const welcomeFaqs: FAQItem[] = [
 
 export const metadata: Metadata = {
   title:
-    "Coming Soon: Premium Home Services in Lagos | Cleaning, Laundry & Cooking | Metromellow",
+    "Premium Home Services in Lagos | Cleaning, Laundry & Cooking | Metromellow",
   description:
-    "Metromellow launches Q3 2025, bringing professional home services to Lagos. Join our waitlist for first access to cleaning, laundry, cooking, and pest control services. Transforming home care in Nigeria with trusted, tech-enabled solutions.",
+    "Metromellow provides professional home services in Lagos. Book cleaning, laundry, cooking, and pest control services today. Transforming home care in Nigeria with trusted, tech-enabled solutions.",
   keywords:
-    "Metromellow launch, home services Lagos, waitlist, premium cleaning Lagos, laundry services Nigeria, meal delivery Lagos, pest control services, domestic help Lagos, house cleaning Nigeria, Q3 2025 launch, tech-enabled home services",
+    "home services Lagos, premium cleaning Lagos, laundry services Nigeria, meal delivery Lagos, pest control services, domestic help Lagos, house cleaning Nigeria, tech-enabled home services",
   alternates: {
     canonical: "https://metromellow.com/welcome",
   },
   openGraph: {
-    title: "Metromellow: Professional Home Services Coming to Lagos in 2025",
+    title: "Metromellow: Professional Home Services in Lagos",
     description:
-      "Join our exclusive waitlist to be the first to experience premium cleaning, laundry, cooking & pest control services delivered to your doorstep in Lagos. Launch: Q3 2025.",
+      "Experience premium cleaning, laundry, cooking & pest control services delivered to your doorstep in Lagos. Book your services today with Metromellow.",
     url: "https://metromellow.com/welcome",
     siteName: "Metromellow",
     locale: "en_NG",
@@ -75,15 +75,15 @@ export const metadata: Metadata = {
         url: "/images/brand/brand-logo/solid-bg/green-bg.png",
         width: 1200,
         height: 630,
-        alt: "Metromellow - Professional Home Services Coming Soon to Lagos",
+        alt: "Metromellow - Professional Home Services in Lagos",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Metromellow: Home Services Coming to Lagos Q3 2025",
+    title: "Metromellow: Home Services in Lagos",
     description:
-      "Join our waitlist for first access to cleaning, laundry & cooking services throughout Lagos.",
+      "Book cleaning, laundry & cooking services throughout Lagos. Professional, tech-enabled home services available now.",
     images: ["/images/brand/brand-logo/solid-bg/green-bg.png"],
   },
   robots: {
@@ -102,8 +102,8 @@ export default function WelcomePage() {
   // Prepare structured data objects
   const comingSoonPageSchema = {
     "@type": "WebPage",
-    name: "Metromellow - Coming Soon",
-    description: "Premium home services coming soon to Lagos",
+    name: "Metromellow - Home Services in Lagos",
+    description: "Premium home services available in Lagos",
     url: "https://metromellow.com/welcome",
     isPartOf: {
       "@type": "WebSite",
@@ -160,48 +160,6 @@ export default function WelcomePage() {
     ],
   };
 
-  // Define event schema for the launch
-  const launchEventSchema = {
-    "@context": "https://schema.org",
-    "@type": "BusinessEvent",
-    name: "Metromellow Launch: Premium Home Services in Lagos",
-    description:
-      "Official launch of Metromellow professional home services in Lagos, bringing cleaning, laundry, cooking, and pest control services to doorsteps throughout the city.",
-    startDate: "2025-07-01T00:00:00+01:00", // Approximate date based on Q3 2025 mentioned in FAQ
-    endDate: "2025-07-01T23:59:59+01:00",
-    eventStatus: "https://schema.org/EventScheduled",
-    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-    location: {
-      "@type": "Place",
-      name: "Lagos, Nigeria",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Lagos",
-        addressRegion: "Lagos State",
-        addressCountry: "NG",
-      },
-    },
-    organizer: {
-      "@type": "Organization",
-      name: "Metromellow",
-      url: "https://metromellow.com",
-    },
-    offers: {
-      "@type": "Offer",
-      name: "Early Access to Metromellow Services",
-      description:
-        "Join the waitlist for priority access and special discounts",
-      price: "0",
-      priceCurrency: "NGN",
-      availability: "https://schema.org/InStock",
-      url: "https://metromellow.com/welcome",
-      validFrom: "2023-01-01",
-      validThrough: "2025-07-01",
-    },
-    image:
-      "https://metromellow.com/images/brand/brand-logo/solid-bg/green-bg.png",
-  };
-
   return (
     <>
       {/* Add structured data */}
@@ -222,10 +180,6 @@ export default function WelcomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(launchEventSchema) }}
-      />
 
       <main
         className={styles.welcomePage}
@@ -234,8 +188,8 @@ export default function WelcomePage() {
       >
         {/* SEO-optimized heading that's visually hidden but available to search engines */}
         <h1 className={styles["visually-hidden"]}>
-          Metromellow: Professional Home Services Coming to Lagos in 2025 -
-          Cleaning, Laundry, Cooking, and Pest Control
+          Metromellow: Professional Home Services in Lagos - Cleaning, Laundry,
+          Cooking, and Pest Control
         </h1>
 
         <section
@@ -322,11 +276,11 @@ export default function WelcomePage() {
         <div className={styles["visually-hidden"]}>
           <h2>Professional Home Services in Lagos</h2>
           <p>
-            Metromellow is launching in Q3 2025, bringing professional home
-            services to Lagos. Our services include professional cleaning
-            services, laundry and dry cleaning, meal preparation and delivery,
-            and effective pest control throughout Lagos State including areas
-            such as Ikeja, Victoria Island, Lekki, and Surulere.
+            Metromellow provides professional home services in Lagos. Our
+            services include professional cleaning services, laundry and dry
+            cleaning, meal preparation and delivery, and effective pest control
+            throughout Lagos State including areas such as Ikeja, Victoria
+            Island, Lekki, and Surulere.
           </p>
           <h3>Premium Home Services Available in Lagos</h3>
           <ul>
@@ -340,10 +294,9 @@ export default function WelcomePage() {
             <li>Domestic Help Lagos</li>
           </ul>
           <p>
-            Join our waitlist today to be the first to experience Metromellow's
-            premium home services in Lagos, Nigeria. Our platform combines
-            technology with professional service delivery for a seamless
-            experience.
+            Book Metromellow's premium home services in Lagos, Nigeria today.
+            Our platform combines technology with professional service delivery
+            for a seamless experience.
           </p>
         </div>
       </main>

@@ -3,7 +3,7 @@
 import { FC, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import { ArrowRight, Mail } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import styles from "./HeroSection.module.scss";
 
 const HeroSection: FC = () => {
@@ -96,16 +96,6 @@ const HeroSection: FC = () => {
       <div className={styles.heroSection__overlay}></div>
       <div className={styles.heroSection__container}>
         <div className={styles.heroSection__content}>
-          <motion.div
-            className={styles.heroSection__badge}
-            initial="hidden"
-            animate="visible"
-            variants={badgeVariants}
-          >
-            <Mail className={styles.heroSection__badgeIcon} />
-            <span>Coming Soon</span>
-          </motion.div>
-
           <motion.h1
             className={styles.heroSection__title}
             initial="hidden"
@@ -119,7 +109,7 @@ const HeroSection: FC = () => {
             <span className={styles["heroSection__title--main"]}>
               Home Services
               <br />
-              Coming to Nigeria
+              in Nigeria
             </span>
           </motion.h1>
 
@@ -130,9 +120,9 @@ const HeroSection: FC = () => {
             custom={2}
             variants={textVariants}
           >
-            Metromellow is launching soon with professional cleaning, cooking,
-            laundry, and pest control services. Join thousands of Nigerians on
-            our waitlist to get early access and exclusive launch offers.
+            Metromellow provides professional cleaning, cooking, laundry, and
+            pest control services. Book your services today and experience
+            premium home care delivered to your doorstep.
           </motion.p>
 
           <motion.div

@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   ),
   title: "Metromellow | Professional Home Services in Lagos, Nigeria",
   description:
-    "Professional home services in Lagos including cleaning, laundry, cooking, and pest control. Tech-enabled solutions for modern Nigerian homes. Launching Q3 2025.",
+    "Professional home services in Lagos including cleaning, laundry, cooking, and pest control. Tech-enabled solutions for modern Nigerian homes.",
   keywords:
     "home services Lagos, cleaning services lagos, laundry Lagos, meal preparation, pest control, domestic help Lagos, Metromellow",
   authors: [{ name: "Metromellow Team" }],

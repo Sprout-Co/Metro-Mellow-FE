@@ -241,12 +241,10 @@ const SolutionOverview: FC = () => {
           variants={titleVariants}
         >
           <h3 className={styles.solutionOverview__launchTitle}>
-            Launching Q4 2025
+            Available Now in Lagos
           </h3>
           <p className={styles.solutionOverview__launchText}>
-            We're putting the finishing touches on Metromellow to ensure you get
-            the best possible experience from day one. Join our waitlist to be
-            among the first to experience the future of home services.
+            Metromellow is live and ready to serve you. Book your services today and experience the future of home services with professional, tech-enabled solutions.
           </p>
           <div className={styles.solutionOverview__launchBadge}>
             <span>Lagos</span>

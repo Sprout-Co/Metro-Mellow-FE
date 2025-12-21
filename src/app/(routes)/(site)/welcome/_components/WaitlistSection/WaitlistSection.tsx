@@ -120,7 +120,7 @@ const WaitlistSection: FC = () => {
             </h2>
             <p className={styles.waitlistSection__successText}>
               {successMessage ||
-                "You're now on our exclusive waitlist. We'll keep you updated on our launch progress and send you early access when we're ready to serve you."}
+                "You're now subscribed to Metromellow updates. We'll keep you informed about new services, special offers, and expansion to new cities."}
             </p>
             <div className={styles.waitlistSection__successStats}>
               <div className={styles.waitlistSection__stat}>
@@ -128,15 +128,15 @@ const WaitlistSection: FC = () => {
                   {"200+"}
                 </span>
                 <span className={styles.waitlistSection__statLabel}>
-                  People on waitlist
+                  Active users
                 </span>
               </div>
               <div className={styles.waitlistSection__stat}>
                 <span className={styles.waitlistSection__statNumber}>
-                  Q3 2025
+                  Lagos
                 </span>
                 <span className={styles.waitlistSection__statLabel}>
-                  Expected launch
+                  Currently serving
                 </span>
               </div>
             </div>
@@ -170,9 +170,8 @@ const WaitlistSection: FC = () => {
               </span>
             </h2>
             <p className={styles.waitlistSection__subtitle}>
-              Be part of the revolution in home services. Get exclusive early
-              access, special launch offers, and priority booking when we
-              launch.
+              Be part of the revolution in home services. Get exclusive offers,
+              special promotions, and priority updates on new services and city expansions.
             </p>
           </motion.div>
 
