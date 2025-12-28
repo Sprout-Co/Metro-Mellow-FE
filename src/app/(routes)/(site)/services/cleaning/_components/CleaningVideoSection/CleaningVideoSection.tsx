@@ -3,6 +3,7 @@
 import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import Image from "next/image";
 import styles from "./CleaningVideoSection.module.scss";
 import { CTAButton } from "@/components/ui/Button/CTAButton";
 import { ArrowRightIcon, Play } from "lucide-react";
@@ -76,10 +77,15 @@ const CleaningVideoSection = ({ onCTAClick }: { onCTAClick: () => void }) => {
               {!videoPlaying ? (
                 <>
                   <div className={styles.video__thumbnail}>
-                    <img
+                    <Image
                       src={THUMBNAIL_URL}
                       alt="Professional Cleaning Video Thumbnail"
                       className={styles.video__image}
+                      width={800}
+                      height={450}
+                      loading="lazy"
+                      quality={85}
+                      sizes="(max-width: 768px) 100vw, 800px"
                     />
                     <div className={styles.video__overlay}>
                       <button
@@ -111,9 +117,9 @@ const CleaningVideoSection = ({ onCTAClick }: { onCTAClick: () => void }) => {
             variants={staggerContainer}
           >
             <motion.p className={styles.video__description} variants={fadeIn}>
-              Watch our professional cleaning service in Lagos in action. From initial
-              assessment to final inspection, see how we deliver exceptional
-              cleaning results across Lagos State every time.
+              Watch our professional cleaning service in Lagos in action. From
+              initial assessment to final inspection, see how we deliver
+              exceptional cleaning results across Lagos State every time.
             </motion.p>
 
             <motion.ul

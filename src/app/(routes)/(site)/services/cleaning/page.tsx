@@ -57,9 +57,10 @@ export const metadata: Metadata = {
 };
 
 // Enable Incremental Static Regeneration (ISR) for optimal SEO
-// This page will be statically generated at build time and regenerated every hour
+// This page will be statically generated at build time and regenerated periodically
 // This provides the best of both worlds: fast static performance + fresh content
-export const revalidate = 3600; // Revalidate every hour (3600 seconds)
+// Balanced revalidate time: frequent enough for freshness, not too frequent to overload server
+export const revalidate = 3600; // Revalidate every 1 hour (3600 seconds) - balanced for performance and freshness
 
 export default function CleaningPage() {
   // Define service schema data for cleaning service
@@ -123,6 +124,13 @@ export default function CleaningPage() {
 
   return (
     <>
+      {/* Preload critical hero image for better LCP */}
+      <link
+        rel="preload"
+        href="/images/cleaning/cleaning1.jpg"
+        as="image"
+        fetchPriority="high"
+      />
       {/* Add structured data */}
       <StructuredData
         type="Service"

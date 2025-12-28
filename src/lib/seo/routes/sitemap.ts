@@ -35,7 +35,7 @@ export async function GET() {
     },
     {
       url: "services/cleaning",
-      priority: "0.9",
+      priority: "0.95", // High priority for key service page
       changefreq: "weekly",
       lastmod: new Date().toISOString(),
     },
@@ -116,4 +116,3 @@ export async function GET() {
     },
   });
 }
-

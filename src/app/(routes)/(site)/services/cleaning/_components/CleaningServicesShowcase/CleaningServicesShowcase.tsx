@@ -51,12 +51,14 @@ const CleaningServicesShowcase: React.FC<CleaningServicesShowcaseProps> = ({
     setIsModalOpen(false);
   };
 
+  // Don't render if loading - parent component handles this
   if (loading) {
-    return (
-      <div className={styles.showcase__loading}>
-        <div className={styles.showcase__loader}></div>
-      </div>
-    );
+    return null;
+  }
+
+  // Don't render if no services data - graceful degradation
+  if (!servicesData || !servicesData[0] || !servicesData[0].options || servicesData[0].options.length === 0) {
+    return null;
   }
 
   return (
@@ -103,7 +105,7 @@ const CleaningServicesShowcase: React.FC<CleaningServicesShowcaseProps> = ({
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
         >
-          {servicesData?.[0]?.options?.map((service, index) => (
+          {servicesData[0].options.map((service) => (
             <ServiceShowcaseCard
               key={service.id}
               service={service}
@@ -115,7 +117,7 @@ const CleaningServicesShowcase: React.FC<CleaningServicesShowcaseProps> = ({
       </div>
 
       {/* Service Modal */}
-      {selectedServiceOption && servicesData?.[0] && (
+      {selectedServiceOption && servicesData[0] && (
         <CleaningServiceModal
           isOpen={isModalOpen}
           onClose={handleCloseModal}

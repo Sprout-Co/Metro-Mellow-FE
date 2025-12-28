@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import styles from "./ServiceHero.module.scss";
 import { Routes } from "@/constants/routes";
 import { CTAButton } from "@/components/ui/Button/CTAButton";
@@ -89,10 +90,21 @@ const ServiceHero = ({
   };
 
   return (
-    <section
-      className={styles.hero}
-      style={{ backgroundImage: `url(${backgroundImage})` }}
-    >
+    <section className={styles.hero}>
+      <div className={styles.hero__backgroundImage}>
+        <Image
+          src={backgroundImage}
+          alt={`${accentText} ${mainText} background`}
+          fill
+          priority
+          quality={85}
+          sizes="100vw"
+          style={{
+            objectFit: "cover",
+            objectPosition: "center",
+          }}
+        />
+      </div>
       <div className={styles.hero__overlay}></div>
       <div className={styles.hero__container}>
         <motion.div
