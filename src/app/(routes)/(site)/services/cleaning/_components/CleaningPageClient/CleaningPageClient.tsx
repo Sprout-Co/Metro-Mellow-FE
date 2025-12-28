@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import CleaningHero from "../CleaningHero/CleaningHero";
 import CleaningServicesShowcase from "../CleaningServicesShowcase/CleaningServicesShowcase";
 import CleaningPromoSection from "../CleaningPromoSection/CleaningPromoSection";
@@ -49,7 +49,7 @@ const cleaningFaqs: FAQItem[] = [
   },
 ];
 
-const CleaningPageClient: React.FC = () => {
+const CleaningPageClient = () => {
   const {
     data: servicesData,
     loading,
@@ -104,7 +104,6 @@ const CleaningPageClient: React.FC = () => {
           <CleaningServicesShowcase
             servicesData={servicesData?.services}
             loading={loading && !queryTimedOut}
-            error={error}
           />
         </Suspense>
       )}

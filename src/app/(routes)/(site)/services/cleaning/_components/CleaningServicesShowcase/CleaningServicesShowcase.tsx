@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import styles from "./CleaningServicesShowcase.module.scss";
@@ -15,13 +15,12 @@ import ServiceShowcaseCard from "../../../_components/common/ServiceShowcaseCard
 interface CleaningServicesShowcaseProps {
   servicesData?: GetServicesQuery["services"];
   loading?: boolean;
-  error?: any;
 }
 
-const CleaningServicesShowcase: React.FC<CleaningServicesShowcaseProps> = ({
+const CleaningServicesShowcase = ({
   servicesData,
   loading,
-}) => {
+}: CleaningServicesShowcaseProps) => {
   const [sectionRef, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -57,7 +56,12 @@ const CleaningServicesShowcase: React.FC<CleaningServicesShowcaseProps> = ({
   }
 
   // Don't render if no services data - graceful degradation
-  if (!servicesData || !servicesData[0] || !servicesData[0].options || servicesData[0].options.length === 0) {
+  if (
+    !servicesData ||
+    !servicesData[0] ||
+    !servicesData[0].options ||
+    servicesData[0].options.length === 0
+  ) {
     return null;
   }
 
