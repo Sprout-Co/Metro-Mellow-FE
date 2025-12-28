@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
-import Navbar from "@/components/layout/Navbar/Navbar";
-import Footer from "@/components/layout/Footer/Footer";
+import dynamic from "next/dynamic";
+
+// Lazy load layout components for better initial page load performance
+const Navbar = dynamic(() => import("@/components/layout/Navbar/Navbar"), {
+  ssr: true, // Keep SSR for SEO
+});
+const Footer = dynamic(() => import("@/components/layout/Footer/Footer"), {
+  ssr: true, // Keep SSR for SEO
+});
 
 export const metadata: Metadata = {
   title: "Metromellow",

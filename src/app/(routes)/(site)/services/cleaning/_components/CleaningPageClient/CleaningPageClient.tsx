@@ -1,20 +1,31 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState, lazy } from "react";
 import CleaningHero from "../CleaningHero/CleaningHero";
 import CleaningServicesShowcase from "../CleaningServicesShowcase/CleaningServicesShowcase";
-import CleaningPromoSection from "../CleaningPromoSection/CleaningPromoSection";
-import CleaningVideoSection from "../CleaningVideoSection/CleaningVideoSection";
-import CleaningStepsSection from "../CleaningStepsSection/CleaningStepsSection";
-import FAQSection, { FAQItem } from "@/components/ui/FAQSection/FAQSection";
 import {
   ServiceCategory,
   ServiceStatus,
   GetServicesQuery,
 } from "@/graphql/api";
 import { useGetServices } from "@/graphql/hooks/services/useServiceOperations";
-import ServiceInternalLinks from "@/components/common/ServiceInternalLinks/ServiceInternalLinks";
 import { allServices } from "@/constants/services";
+import type { FAQItem } from "@/components/ui/FAQSection/FAQSection";
+
+// Lazy load below-the-fold components for better performance
+const CleaningPromoSection = lazy(
+  () => import("../CleaningPromoSection/CleaningPromoSection")
+);
+const CleaningVideoSection = lazy(
+  () => import("../CleaningVideoSection/CleaningVideoSection")
+);
+const CleaningStepsSection = lazy(
+  () => import("../CleaningStepsSection/CleaningStepsSection")
+);
+const FAQSection = lazy(() => import("@/components/ui/FAQSection/FAQSection"));
+const ServiceInternalLinks = lazy(
+  () => import("@/components/common/ServiceInternalLinks/ServiceInternalLinks")
+);
 
 const cleaningFaqs: FAQItem[] = [
   {
@@ -107,14 +118,25 @@ const CleaningPageClient = () => {
           />
         </Suspense>
       )}
-      <CleaningPromoSection onCTAClick={scrollToServicesShowcase} />
-      <CleaningVideoSection onCTAClick={scrollToServicesShowcase} />
-      <CleaningStepsSection onCTAClick={scrollToServicesShowcase} />
-      <FAQSection faqs={cleaningFaqs} />
-      <ServiceInternalLinks
-        currentService="/services/cleaning"
-        services={allServices}
-      />
+      {/* Lazy load below-the-fold sections for better performance */}
+      <Suspense fallback={null}>
+        <CleaningPromoSection onCTAClick={scrollToServicesShowcase} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <CleaningVideoSection onCTAClick={scrollToServicesShowcase} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <CleaningStepsSection onCTAClick={scrollToServicesShowcase} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <FAQSection faqs={cleaningFaqs} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <ServiceInternalLinks
+          currentService="/services/cleaning"
+          services={allServices}
+        />
+      </Suspense>
     </>
   );
 };

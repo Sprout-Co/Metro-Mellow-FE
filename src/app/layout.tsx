@@ -7,13 +7,9 @@ import ApolloWrapper from "@/components/providers/ApolloWrapper";
 import ReduxProvider from "@/components/providers/ReduxProvider";
 import { AuthInitializer } from "@/components/providers/AuthInitializer";
 import { NotificationProvider } from "@/components/providers/NotificationProvider";
-import {
-  GoogleTagManagerScript,
-  GoogleTagManager,
-  WebVitalsReporter,
-} from "@/lib/analytics";
+import { GoogleTagManagerScript, GoogleTagManager } from "@/lib/analytics";
 import { CommonInitializer } from "@/components/providers/CommonProvider";
-import FloatingButtons from "@/components/common/FloatingButtons/FloatingButtons";
+import LazyComponents from "@/components/providers/LazyComponents";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -84,9 +80,8 @@ export default function RootLayout({
               <NotificationProvider>
                 <CommonInitializer>{children}</CommonInitializer>
                 {/* <ModalProvider /> */}
-                <FloatingButtons />
+                <LazyComponents />
                 {/* <ChristmasPromoModal /> */}
-                <WebVitalsReporter />
               </NotificationProvider>
             </AuthInitializer>
           </ApolloWrapper>

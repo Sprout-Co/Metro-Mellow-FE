@@ -1,12 +1,28 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
 import { Phone } from "lucide-react";
 import styles from "./FloatingButtons.module.scss";
 import { ContactDetails } from "@/constants/config";
 
 const FloatingButtons: React.FC = () => {
+  const [whatsappVisible, setWhatsappVisible] = useState(false);
+  const [callVisible, setCallVisible] = useState(false);
+
+  useEffect(() => {
+    // Trigger animations with delays matching original framer-motion delays
+    const timer1 = setTimeout(() => {
+      setWhatsappVisible(true);
+    }, 500);
+    const timer2 = setTimeout(() => {
+      setCallVisible(true);
+    }, 700);
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
+  }, []);
+
   const handleWhatsAppClick = () => {
     const phoneNumber = ContactDetails.WHATSAPP;
     const message = "Hello! I'm interested in your services.";
@@ -21,14 +37,9 @@ const FloatingButtons: React.FC = () => {
 
   return (
     <div className={styles.floatingButtons}>
-      <motion.button
-        className={`${styles.floatingButton} ${styles.whatsappButton}`}
+      <button
+        className={`${styles.floatingButton} ${styles.whatsappButton} ${whatsappVisible ? styles.visible : ""}`}
         onClick={handleWhatsAppClick}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        initial={{ opacity: 0, x: 100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.5, duration: 0.3 }}
         aria-label="Contact us on WhatsApp"
       >
         <svg
@@ -43,20 +54,15 @@ const FloatingButtons: React.FC = () => {
             fill="currentColor"
           />
         </svg>
-      </motion.button>
+      </button>
 
-      <motion.button
-        className={`${styles.floatingButton} ${styles.callButton}`}
+      <button
+        className={`${styles.floatingButton} ${styles.callButton} ${callVisible ? styles.visible : ""}`}
         onClick={handleCallClick}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        initial={{ opacity: 0, x: 100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.7, duration: 0.3 }}
         aria-label="Call us"
       >
         <Phone size={24} />
-      </motion.button>
+      </button>
     </div>
   );
 };
