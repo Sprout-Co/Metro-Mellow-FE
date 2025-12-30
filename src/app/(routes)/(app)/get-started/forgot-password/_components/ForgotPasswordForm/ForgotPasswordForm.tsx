@@ -20,11 +20,13 @@ interface FormErrors {
 interface ForgotPasswordFormProps {
   onSuccess?: () => void;
   onBackToLogin: () => void;
+  onStepChange?: (step: number) => void;
 }
 
 export default function ForgotPasswordForm({
   onSuccess,
   onBackToLogin,
+  onStepChange,
 }: ForgotPasswordFormProps) {
   const { handleForgotPassword } = useAuthOperations();
   const [formData, setFormData] = useState<ForgotPasswordFormState>({
@@ -77,6 +79,7 @@ export default function ForgotPasswordForm({
     try {
       await handleForgotPassword(formData.email);
       setIsSubmitted(true);
+      onStepChange?.(2); // Move to step 2 after submission
 
       if (onSuccess) {
         onSuccess();

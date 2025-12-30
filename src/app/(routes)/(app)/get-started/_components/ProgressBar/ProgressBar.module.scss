@@ -1,0 +1,70 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.progressBar {
+  margin-top: spacing("xl");
+  margin-bottom: spacing("md");
+  display: flex;
+
+  &__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__circle {
+    position: relative;
+    width: 120px;
+    height: 120px;
+  }
+
+  &__svg {
+    transform: rotate(-90deg);
+  }
+
+  &__backgroundCircle {
+    stroke: rgba(255, 255, 255, 0.2);
+  }
+
+  &__progressCircle {
+    stroke: color("accent", "base");
+    transition: stroke-dashoffset 0.5s ease;
+    stroke-linecap: round;
+  }
+
+  &__content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__stepInfo {
+    display: flex;
+    align-items: baseline;
+    gap: spacing("xxs");
+  }
+
+  &__currentStep {
+    @include font-size("2xl");
+    @include font-weight("bold");
+    color: color("neutral", "white");
+    line-height: 1;
+  }
+
+  &__separator {
+    @include font-size("lg");
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1;
+  }
+
+  &__totalSteps {
+    @include font-size("lg");
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1;
+  }
+}
