@@ -18,7 +18,15 @@ export default function SpyingEmoji({
   expression = "default",
 }: SpyingEmojiProps) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [showAwkwardEyes, setShowAwkwardEyes] = useState(false);
+  const [awkwardOffset, setAwkwardOffset] = useState({ x: 0, y: 0 });
   const faceRef = useRef<HTMLDivElement>(null);
+  const mouseMoveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+  const awkwardAnimationRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -31,8 +39,8 @@ export default function SpyingEmoji({
         const relativeX = e.clientX - faceCenterX;
         const relativeY = e.clientY - faceCenterY;
 
-        // Limit eye movement range (max 12px from center for 50px eyes)
-        const maxDistance = 12;
+        // Limit eye movement range (max 15px from center for 70px eyes)
+        const maxDistance = 15;
         const distance = Math.min(
           Math.sqrt(relativeX * relativeX + relativeY * relativeY),
           maxDistance
@@ -43,12 +51,64 @@ export default function SpyingEmoji({
           x: Math.cos(angle) * distance,
           y: Math.sin(angle) * distance,
         });
+
+        // Hide awkward eyes when mouse is moving
+        setShowAwkwardEyes(false);
+
+        // Clear existing timeout
+        if (mouseMoveTimeoutRef.current) {
+          clearTimeout(mouseMoveTimeoutRef.current);
+        }
+
+        // Show awkward eyes after 1.5 seconds of no mouse movement (for all states)
+        mouseMoveTimeoutRef.current = setTimeout(() => {
+          setShowAwkwardEyes(true);
+        }, 1500);
       }
     };
 
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+
+    // Initial awkward eyes for all states
+    setShowAwkwardEyes(true);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (mouseMoveTimeoutRef.current) {
+        clearTimeout(mouseMoveTimeoutRef.current);
+      }
+    };
+  }, [expression]);
+
+  // Awkward eye animation for all states when mouse hasn't moved
+  useEffect(() => {
+    if (showAwkwardEyes) {
+      const awkwardPositions = [
+        { x: 8, y: -5 },
+        { x: -6, y: 7 },
+        { x: 10, y: 3 },
+        { x: -8, y: -4 },
+        { x: 0, y: 0 },
+      ];
+      let currentIndex = 0;
+
+      const animate = () => {
+        setAwkwardOffset(awkwardPositions[currentIndex]);
+        currentIndex = (currentIndex + 1) % awkwardPositions.length;
+        awkwardAnimationRef.current = setTimeout(animate, 800);
+      };
+
+      animate();
+
+      return () => {
+        if (awkwardAnimationRef.current) {
+          clearTimeout(awkwardAnimationRef.current);
+        }
+      };
+    } else {
+      setAwkwardOffset({ x: 0, y: 0 });
+    }
+  }, [showAwkwardEyes]);
 
   return (
     <div className={styles.spyingEmoji}>
@@ -66,7 +126,7 @@ export default function SpyingEmoji({
               <div
                 className={styles.spyingEmoji__pupil}
                 style={{
-                  transform: `translate(calc(-50% + ${mousePosition.x}px), calc(-50% + ${mousePosition.y}px))`,
+                  transform: `translate(calc(-50% + ${mousePosition.x + awkwardOffset.x}px), calc(-50% + ${mousePosition.y + awkwardOffset.y}px))`,
                 }}
               ></div>
             </div>
@@ -76,7 +136,7 @@ export default function SpyingEmoji({
               <div
                 className={styles.spyingEmoji__pupil}
                 style={{
-                  transform: `translate(calc(-50% + ${mousePosition.x}px), calc(-50% + ${mousePosition.y}px))`,
+                  transform: `translate(calc(-50% + ${mousePosition.x + awkwardOffset.x}px), calc(-50% + ${mousePosition.y + awkwardOffset.y}px))`,
                 }}
               ></div>
             </div>
