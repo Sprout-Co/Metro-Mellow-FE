@@ -6,6 +6,7 @@ import AuthLayout from "./AuthLayout";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import { REFERRAL_CODE_STORAGE_KEY } from "@/constants/config";
+import SpyingEmoji from "./SpyingEmoji/SpyingEmoji";
 
 type AuthMode = "login" | "register";
 
@@ -57,7 +58,7 @@ export default function AuthManagement({
   };
 
   return (
-    <AuthLayout showImage={showImage}>
+    <AuthLayout showImage={showImage} brandingCustomContent={<SpyingEmoji />}>
       {authMode === "login" && (
         <LoginForm
           onSuccess={handleLoginSuccess}
