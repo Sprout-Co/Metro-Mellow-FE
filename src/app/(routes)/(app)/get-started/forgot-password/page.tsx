@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import ForgotPasswordClient from "./ForgotPasswordClient";
+import ForgotPasswordClient from "./_components/ForgotPasswordClient";
 
 export const metadata: Metadata = {
   title: "Forgot Password | Metromellow",

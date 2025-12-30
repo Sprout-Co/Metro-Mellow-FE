@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, AlertCircle, CheckCircle, ArrowLeft } from "lucide-react";
-import FormInput from "./FormInput";
+import FormInput from "../../../_components/FormInput";
 import styles from "./ForgotPasswordForm.module.scss";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import { Button } from "@/components/ui/Button";

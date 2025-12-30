@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import AuthLayout from "../_components/AuthLayout";
-import ResetPasswordForm from "../_components/ResetPasswordForm";
+import AuthLayout from "../../_components/AuthLayout";
+import ResetPasswordForm from "./ResetPasswordForm/ResetPasswordForm";
 
 export default function ResetPasswordClient() {
   const router = useRouter();
@@ -24,4 +24,4 @@ export default function ResetPasswordClient() {
       />
     </AuthLayout>
   );
-} 
+}
