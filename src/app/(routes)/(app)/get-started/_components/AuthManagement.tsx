@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import AuthLayout from "./AuthLayout";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import { REFERRAL_CODE_STORAGE_KEY } from "@/constants/config";
-import SpyingEmoji from "./SpyingEmoji/SpyingEmoji";
+import SpyingEmoji, { EmojiExpression } from "./SpyingEmoji/SpyingEmoji";
 
 type AuthMode = "login" | "register";
 
@@ -15,6 +15,8 @@ export default function AuthManagement({
 }: {
   showImage?: boolean;
 }) {
+  const [emojiExpression, setEmojiExpression] =
+    useState<EmojiExpression>("default");
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -57,12 +59,40 @@ export default function AuthManagement({
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
+  const handleFormStateChange = (state: {
+    typingEmail: boolean;
+    typingPassword: boolean;
+    hasError: boolean;
+    loading: boolean;
+  }) => {
+    if (state.loading) {
+      setEmojiExpression("loading");
+    } else if (state.hasError) {
+      setEmojiExpression("error");
+    } else if (state.typingPassword) {
+      setEmojiExpression("typingPassword");
+    } else if (state.typingEmail) {
+      setEmojiExpression("typingEmail");
+    } else {
+      setEmojiExpression("default");
+    }
+  };
+
   return (
-    <AuthLayout showImage={showImage} brandingCustomContent={<SpyingEmoji />}>
+    <AuthLayout
+      showImage={showImage}
+      brandingCustomContent={
+        <>
+          <SpyingEmoji expression={emojiExpression} />
+        </>
+      }
+      // emojiContent={}
+    >
       {authMode === "login" && (
         <LoginForm
           onSuccess={handleLoginSuccess}
           onRegisterClick={handleSwitchToRegister}
+          onStateChange={handleFormStateChange}
         />
       )}
 
@@ -70,6 +100,7 @@ export default function AuthManagement({
         <RegisterForm
           onSuccess={handleRegisterSuccess}
           onLoginClick={handleSwitchToLogin}
+          onStateChange={handleFormStateChange}
         />
       )}
     </AuthLayout>

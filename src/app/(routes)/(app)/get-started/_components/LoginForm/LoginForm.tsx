@@ -1,7 +1,7 @@
 // components/auth/LoginForm.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import FormInput from "../FormInput";
@@ -25,11 +25,18 @@ interface FormErrors {
 interface LoginFormProps {
   onSuccess?: () => void;
   onRegisterClick: () => void;
+  onStateChange?: (state: {
+    typingEmail: boolean;
+    typingPassword: boolean;
+    hasError: boolean;
+    loading: boolean;
+  }) => void;
 }
 
 export default function LoginForm({
   onSuccess,
   onRegisterClick,
+  onStateChange,
 }: LoginFormProps) {
   const { handleLogin } = useAuthOperations();
   const [formData, setFormData] = useState<LoginFormState>({
@@ -40,6 +47,27 @@ export default function LoginForm({
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
+
+  // Notify parent of state changes
+  useEffect(() => {
+    if (onStateChange) {
+      onStateChange({
+        typingEmail: focusedField === "email" && formData.email.length > 0,
+        typingPassword:
+          focusedField === "password" && formData.password.length > 0,
+        hasError: Object.keys(errors).length > 0,
+        loading,
+      });
+    }
+  }, [
+    focusedField,
+    formData.email,
+    formData.password,
+    errors,
+    loading,
+    onStateChange,
+  ]);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -176,7 +204,9 @@ export default function LoginForm({
               label="Email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="team@metromellow.com"
+              onFocus={() => setFocusedField("email")}
+              onBlur={() => setFocusedField(null)}
+              placeholder="Enter your email"
               required
               error={errors.email}
               autoComplete="email"
@@ -190,7 +220,9 @@ export default function LoginForm({
                 label="Password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="Password"
+                onFocus={() => setFocusedField("password")}
+                onBlur={() => setFocusedField(null)}
+                placeholder="Enter your password"
                 required
                 error={errors.password}
                 autoComplete="current-password"

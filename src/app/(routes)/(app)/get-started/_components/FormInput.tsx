@@ -14,6 +14,7 @@ interface FormInputProps {
   error?: string;
   autoComplete?: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
   onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
 }
 
@@ -29,12 +30,16 @@ export default function FormInput({
   error,
   autoComplete,
   onChange,
+  onFocus,
   onBlur,
 }: FormInputProps) {
   const [focused, setFocused] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const handleFocus = () => setFocused(true);
+  const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
+    setFocused(true);
+    if (onFocus) onFocus(e);
+  };
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
     setFocused(false);
     if (onBlur) onBlur(e);

@@ -58,6 +58,12 @@ interface FormErrors {
 interface RegisterFormProps {
   onSuccess: () => void;
   onLoginClick: () => void;
+  onStateChange?: (state: {
+    typingEmail: boolean;
+    typingPassword: boolean;
+    hasError: boolean;
+    loading: boolean;
+  }) => void;
 }
 
 type FormStep = 1 | 2;
@@ -65,6 +71,7 @@ type FormStep = 1 | 2;
 export default function RegisterForm({
   onSuccess,
   onLoginClick,
+  onStateChange,
 }: RegisterFormProps) {
   const [currentStep, setCurrentStep] = useState<FormStep>(1);
   const [formData, setFormData] = useState<RegisterFormState>({
@@ -82,6 +89,27 @@ export default function RegisterForm({
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
   const [showVerification, setShowVerification] = useState(false);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
+
+  // Notify parent of state changes
+  useEffect(() => {
+    if (onStateChange) {
+      onStateChange({
+        typingEmail: focusedField === "email" && formData.email.length > 0,
+        typingPassword:
+          focusedField === "password" && formData.password.length > 0,
+        hasError: Object.keys(errors).length > 0,
+        loading,
+      });
+    }
+  }, [
+    focusedField,
+    formData.email,
+    formData.password,
+    errors,
+    loading,
+    onStateChange,
+  ]);
   const [isServiceAreaDropdownOpen, setIsServiceAreaDropdownOpen] =
     useState(false);
   const [serviceAreaSearchQuery, setServiceAreaSearchQuery] = useState("");
@@ -414,6 +442,8 @@ export default function RegisterForm({
                     label="Email Address"
                     value={formData.email}
                     onChange={handleChange}
+                    onFocus={() => setFocusedField("email")}
+                    onBlur={() => setFocusedField(null)}
                     placeholder="Your email"
                     required
                     error={errors.email}
@@ -428,6 +458,8 @@ export default function RegisterForm({
                     label="Password"
                     value={formData.password}
                     onChange={handleChange}
+                    onFocus={() => setFocusedField("password")}
+                    onBlur={() => setFocusedField(null)}
                     placeholder="Create a password"
                     required
                     error={errors.password}

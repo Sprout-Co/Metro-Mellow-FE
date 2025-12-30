@@ -14,6 +14,7 @@ interface AuthLayoutProps {
   title?: string;
   subtitle?: string;
   brandingCustomContent?: ReactNode;
+  emojiContent?: ReactNode;
 }
 
 export default function AuthLayout({
@@ -22,6 +23,7 @@ export default function AuthLayout({
   title = "Your home, our priority",
   subtitle = "Trusted by thousands across Lagos for professional home services that make life easier.",
   brandingCustomContent = null,
+  emojiContent = null,
 }: AuthLayoutProps) {
   return (
     <section
@@ -60,7 +62,10 @@ export default function AuthLayout({
             </div>
           )}
 
-          <div className={styles.authLayout__card}>{children}</div>
+          <div className={styles.authLayout__card}>
+            {emojiContent}
+            {children}
+          </div>
         </div>
       </div>
     </section>
