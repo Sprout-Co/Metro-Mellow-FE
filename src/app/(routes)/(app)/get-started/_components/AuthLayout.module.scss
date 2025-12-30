@@ -8,36 +8,32 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(
-    135deg,
-    color("neutral", "lightest") 0%,
-    color("accent", "lighter") 50%,
-    color("neutral", "lighter") 100%
-  );
+  background: color("primary", "base"); // Midnight green background
   position: relative;
   overflow: hidden;
   padding: spacing("xl");
 
-  // Subtle animated background pattern
+  // Creative yellow accent - smaller corner accent
   &::before {
     content: "";
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(
-      circle at 30% 20%,
-      color-alpha("primary", "base", 0.03) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 70% 80%,
-      color-alpha("secondary", "base", 0.03) 0%,
-      transparent 50%
+    bottom: 0;
+    right: 0;
+    width: 40%;
+    height: 40%;
+    background: color("accent", "base"); // Sand yellow
+    clip-path: polygon(
+      100% 0%,
+      100% 100%,
+      0% 100%,
+      20% 80%,
+      40% 60%,
+      60% 40%,
+      80% 20%,
+      100% 0%
     );
-    animation: floatBg 20s ease-in-out infinite;
     pointer-events: none;
+    z-index: 0;
   }
 
   @include breakpoint-down("sm") {
@@ -48,10 +44,65 @@
     background: color("neutral", "white");
   }
 
-  &__container {
+  &__navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
     width: 100%;
-    max-width: 1100px;
+    z-index: 10;
+    padding: spacing("lg") 0;
+    @include container;
+    padding-left: 0;
+
+    // @include breakpoint-down("sm") {
+    //   padding: spacing("md");
+    // }
+  }
+
+  &__navbarContainer {
+    // max-width: 1200px;
+    @include container;
+    padding: 0;
     margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__navbarLogo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    // filter: brightness(0) invert(1); // Makes the logo white
+
+    img {
+      height: auto;
+    }
+  }
+
+  &__helpLink {
+    color: color("neutral", "white");
+    @include font-size("sm");
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+
+    @include breakpoint-down("sm") {
+      @include font-size("xs");
+    }
+  }
+
+  &__container {
+    @include container;
+    // width: 100%;
+    // max-width: 1100px;
+    // margin: 0 auto;
+    padding: 0;
     position: relative;
     z-index: 1;
   }
@@ -60,20 +111,61 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0;
-    background: color("neutral", "white");
-    border-radius: border-radius("2xl");
-    box-shadow: 
-      0 25px 50px -12px rgba(0, 0, 0, 0.15),
-      0 0 0 1px rgba(0, 0, 0, 0.02);
-    overflow: hidden;
-    min-height: 600px;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+    min-height: 400px;
+    width: 100%;
+    // max-width: 1200px;
 
     @include breakpoint-down("lg") {
       grid-template-columns: 1fr;
-      max-width: 480px;
+      // max-width: 480px;
       margin: 0 auto;
       min-height: auto;
     }
+  }
+
+  &__branding {
+    display: flex;
+    flex-direction: column;
+    // justify-content: center;
+    padding: spacing("3xl") spacing("3xl") spacing("3xl") 0;
+    color: color("neutral", "white");
+    position: relative;
+    z-index: 1;
+
+    @include breakpoint-down("lg") {
+      display: none;
+    }
+  }
+
+  &__logoContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: spacing("3xl");
+  }
+
+  &__logoImage {
+    // filter: brightness(0) invert(1); // Makes the logo white
+  }
+
+  &__brandingTitle {
+    font-family: $font-family-heading;
+    @include font-size("5xl");
+    @include font-weight("bold");
+    margin-bottom: spacing("md");
+    line-height: line-height("tight");
+    color: color("neutral", "white");
+  }
+
+  &__brandingText {
+    @include font-size("lg");
+    color: color("neutral", "white");
+    opacity: 0.95;
+    line-height: line-height("relaxed");
+    max-width: 400px;
   }
 
   &__card {
@@ -83,6 +175,11 @@
     justify-content: center;
     position: relative;
     z-index: 1;
+    background: color("neutral", "white");
+    border-radius: border-radius("xl");
+    box-shadow:
+      0 25px 50px -12px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(0, 0, 0, 0.02);
 
     @include breakpoint-down("md") {
       padding: spacing("2xl");
@@ -267,6 +364,10 @@
     @include font-weight("medium");
     color: color("neutral", "darkest");
     margin-bottom: spacing("sm");
+
+    &:empty {
+      display: none;
+    }
   }
 
   &__required {
@@ -278,14 +379,14 @@
     position: relative;
     display: flex;
     align-items: center;
-    background: color("neutral", "lightest");
-    border: border-width("thin") solid color("neutral", "lighter");
-    border-radius: border-radius("xl");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
     transition: $transition-fast;
 
     &:focus-within {
       border-color: color("primary", "base");
-      box-shadow: 0 0 0 4px color-alpha("primary", "base", 0.1);
+      box-shadow: 0 0 0 3px color-alpha("primary", "base", 0.1);
       background: color("neutral", "white");
     }
 
@@ -316,7 +417,7 @@
 
   &__input {
     flex: 1;
-    height: 52px;
+    height: 48px;
     padding: spacing("md");
     @include font-size("base");
     color: color("neutral", "darkest");
@@ -386,26 +487,32 @@
 
 // Social Auth Styles
 .socialAuth {
-  margin-bottom: spacing("xl");
+  margin-top: spacing("xl");
 
-  &__button {
-    width: 100%;
-    padding: spacing("md");
-    border: border-width("thin") solid color("neutral", "lighter");
-    border-radius: border-radius("xl");
-    background-color: color("neutral", "white");
-    color: color("neutral", "darkest");
-    @include font-size("sm");
-    @include font-weight("medium");
-    @include flex-center;
+  &__container {
+    display: flex;
+    justify-content: center;
+    gap: spacing("xl");
+    align-items: center;
+
+    @include breakpoint-down("sm") {
+      gap: spacing("lg");
+    }
+  }
+
+  &__iconButton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: spacing("sm");
+    background: none;
+    border: none;
     cursor: pointer;
+    padding: 0;
     transition: $transition-fast;
-    margin-bottom: spacing("sm");
 
     &:hover:not(:disabled) {
-      background-color: color("neutral", "lightest");
-      border-color: color("neutral", "light");
+      opacity: 0.8;
     }
 
     &:disabled {
@@ -413,18 +520,36 @@
       cursor: not-allowed;
     }
 
-    svg {
-      flex-shrink: 0;
-    }
-
     &--loading {
       position: relative;
-      color: transparent;
-
-      svg {
-        opacity: 0;
-      }
     }
+  }
+
+  &__icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    @include flex-center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: $transition-fast;
+
+    .socialAuth__iconButton:hover:not(:disabled) & {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__label {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    @include font-weight("medium");
   }
 
   &__spinner {
@@ -438,30 +563,6 @@
     border-top-color: color("primary", "base");
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
-  }
-
-  &__divider {
-    position: relative;
-    text-align: center;
-    margin: spacing("xl") 0;
-
-    &::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background-color: color("neutral", "lighter");
-    }
-  }
-
-  &__dividerText {
-    position: relative;
-    background-color: color("neutral", "white");
-    padding: 0 spacing("md");
-    color: color("neutral", "medium");
-    @include font-size("sm");
   }
 }
 
@@ -724,7 +825,8 @@
 }
 
 @keyframes floatBg {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) rotate(0deg);
   }
   50% {

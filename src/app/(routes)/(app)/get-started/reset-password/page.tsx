@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import ResetPasswordClient from "./ResetPasswordClient";
+import ResetPasswordClient from "./_components/ResetPasswordClient";
 
 export const metadata: Metadata = {
   title: "Reset Password | Metromellow",

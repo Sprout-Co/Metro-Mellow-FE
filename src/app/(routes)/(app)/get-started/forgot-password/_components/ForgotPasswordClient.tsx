@@ -8,7 +8,10 @@ export default function ForgotPasswordClient() {
   const router = useRouter();
 
   return (
-    <AuthLayout>
+    <AuthLayout
+      title="You are just a few steps away from resetting your password 🔑"
+      subtitle="Enter your email address and we'll send you instructions to reset your password"
+    >
       <ForgotPasswordForm
         onBackToLogin={() => {
           router.push("/get-started");

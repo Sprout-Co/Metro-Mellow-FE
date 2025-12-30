@@ -9,10 +9,10 @@
 
   &__title {
     font-family: $font-family-heading;
-    @include font-size("2xl");
+    @include font-size("3xl");
     @include font-weight("bold");
     color: color("neutral", "black");
-    margin-bottom: spacing("xs");
+    margin-bottom: spacing("md");
     line-height: line-height("tight");
 
     @include breakpoint-down("sm") {
@@ -25,6 +25,30 @@
     color: color("neutral", "dark");
     margin-bottom: spacing("xl");
     line-height: line-height("relaxed");
+  }
+
+  &__signUpLink {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    margin: spacing("xl") 0;
+    line-height: line-height("relaxed");
+    text-align: center;
+  }
+
+  &__signUpButton {
+    color: color("primary", "base");
+    @include font-weight("medium");
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: none;
+    transition: color transition-duration("fast") transition-timing("ease");
+
+    &:hover {
+      color: color("primary", "dark");
+      text-decoration: underline;
+    }
   }
 
   &__error {
@@ -76,11 +100,39 @@
     transition: color transition-duration("fast") transition-timing("ease");
     text-align: right;
     display: block;
+    margin-top: spacing("sm");
 
     &:hover {
       color: color("primary", "dark");
       text-decoration: underline;
     }
+  }
+
+  &__divider {
+    position: relative;
+    text-align: center;
+    margin: spacing("xl") 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background-color: color("neutral", "lighter");
+    }
+  }
+
+  &__dividerText {
+    position: relative;
+    background-color: color("neutral", "white");
+    padding: 0 spacing("md");
+    color: color("neutral", "medium");
+    @include font-size("sm");
   }
 
   &__checkGroup {

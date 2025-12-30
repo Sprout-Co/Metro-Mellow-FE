@@ -143,12 +143,10 @@ export default function LoginForm({
           exit={{ opacity: 0, x: 20 }}
           transition={{ duration: 0.3 }}
         >
-          <h1 className={styles.loginForm__title}>Welcome Back</h1>
+          <h1 className={styles.loginForm__title}>Welcome back!</h1>
           <p className={styles.loginForm__subtitle}>
             Sign in to continue to Metromellow
           </p>
-
-          {/* <SocialAuth onSocialAuth={handleSocialAuth} /> */}
 
           <form onSubmit={handleSubmit} noValidate>
             {errors.general && (
@@ -175,37 +173,13 @@ export default function LoginForm({
               id="login-email"
               name="email"
               type="email"
-              label="Email Address"
+              label="Email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Your email"
+              placeholder="team@metromellow.com"
               required
               error={errors.email}
               autoComplete="email"
-              icon={
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M22 6L12 13L2 6"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              }
             />
 
             <div className={styles.loginForm__passwordGroup}>
@@ -216,55 +190,17 @@ export default function LoginForm({
                 label="Password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="Your password"
+                placeholder="Password"
                 required
                 error={errors.password}
                 autoComplete="current-password"
-                icon={
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M19 11H5C3.89543 11 3 11.8954 3 13V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V13C21 11.8954 20.1046 11 19 11Z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                }
               />
-
               <Link
                 href="/get-started/forgot-password"
                 className={styles.loginForm__forgotPassword}
               >
-                Forgot Password?
+                Forgot password?
               </Link>
-            </div>
-
-            <div className={styles.loginForm__checkGroup}>
-              <label className={styles.loginForm__checkbox}>
-                <input
-                  type="checkbox"
-                  name="rememberMe"
-                  checked={formData.rememberMe}
-                  onChange={handleChange}
-                />
-                <span className={styles.loginForm__checkmark}></span>
-                <span>Remember me</span>
-              </label>
             </div>
 
             <Button
@@ -277,24 +213,29 @@ export default function LoginForm({
               {loading ? (
                 <>
                   <div className={styles.loginForm__buttonSpinner}></div>
-                  Signing In...
+                  Logging in...
                 </>
               ) : (
-                "Sign In"
+                "Log in"
               )}
             </Button>
           </form>
-
-          <div className={styles.loginForm__switch}>
-            Don't have an account?
+          <div className={styles.loginForm__signUpLink}>
+            Don't have an account?{" "}
             <button
               type="button"
-              className={styles.loginForm__switchLink}
+              className={styles.loginForm__signUpButton}
               onClick={onRegisterClick}
             >
-              Sign Up
+              Sign up
             </button>
           </div>
+          {/* 
+          <div className={styles.loginForm__divider}>
+            <span className={styles.loginForm__dividerText}>OR</span>
+          </div>
+
+          <SocialAuth onSocialAuth={handleSocialAuth} /> */}
         </motion.div>
       </AnimatePresence>
     </div>

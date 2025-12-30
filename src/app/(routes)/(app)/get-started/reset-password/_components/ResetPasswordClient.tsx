@@ -15,7 +15,10 @@ export default function ResetPasswordClient() {
   }
 
   return (
-    <AuthLayout>
+    <AuthLayout
+      title="You are just a few steps away from resetting your password 🔑"
+      subtitle="Enter your new password below. Make sure it's at least 8 characters."
+    >
       <ResetPasswordForm
         token={token}
         onBackToLogin={() => {

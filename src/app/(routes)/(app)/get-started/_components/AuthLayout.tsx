@@ -5,113 +5,62 @@ import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Shield, Clock } from "lucide-react";
 import styles from "./AuthLayout.module.scss";
+import { Button } from "@/components/ui/Button";
 
 interface AuthLayoutProps {
   children: ReactNode;
   showImage?: boolean;
+  title?: string;
+  subtitle?: string;
+  brandingCustomContent?: ReactNode;
 }
 
 export default function AuthLayout({
   children,
   showImage = true,
+  title = "Your home, our priority",
+  subtitle = "Trusted by thousands across Lagos for professional home services that make life easier.",
+  brandingCustomContent = null,
 }: AuthLayoutProps) {
   return (
     <section
       className={showImage ? styles.authLayout : styles.authLayout__noImage}
     >
+      {/* Navbar */}
+      <nav className={styles.authLayout__navbar}>
+        <div className={styles.authLayout__navbarContainer}>
+          <Link href="/" className={styles.authLayout__navbarLogo}>
+            <Image
+              src="/images/brand/brand-logo/transparent-bg/yellow.png"
+              alt="Metromellow Logo"
+              width={180}
+              height={70}
+            />
+          </Link>
+          <Link href="/services" className={styles.authLayout__helpLink}>
+            Explore Services →
+          </Link>
+        </div>
+      </nav>
+
       <div className={styles.authLayout__container}>
         <div className={styles.authLayout__wrapper}>
-          <div className={styles.authLayout__card}>
-            <Link href="/" className={styles.authLayout__logo}>
-              <Image
-                src="/images/brand/brand-logo/transparent-bg/green.png"
-                alt="Metromellow"
-                width={180}
-                height={50}
-              />
-            </Link>
-            {children}
-          </div>
-
           {showImage && (
-            <div className={styles.authLayout__imageWrapper}>
-              <div className={styles.authLayout__image}>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.5 }}
-                >
-                  <h2 className={styles.authLayout__imageTitle}>
-                    Your Home, Our Priority
-                  </h2>
-                  <p className={styles.authLayout__imageText}>
-                    Experience premium home cleaning services designed around
-                    your busy lifestyle.
-                  </p>
-                </motion.div>
-
-                <motion.div
-                  className={styles.authLayout__features}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4, duration: 0.5 }}
-                >
-                  <div className={styles.authLayout__feature}>
-                    <div className={styles.authLayout__featureIcon}>
-                      <Clock size={20} />
-                    </div>
-                    <div>
-                      <h4>Flexible Scheduling</h4>
-                      <p>Book cleanings that fit your schedule</p>
-                    </div>
-                  </div>
-                  <div className={styles.authLayout__feature}>
-                    <div className={styles.authLayout__featureIcon}>
-                      <Shield size={20} />
-                    </div>
-                    <div>
-                      <h4>Vetted Professionals</h4>
-                      <p>Background-checked & trained cleaners</p>
-                    </div>
-                  </div>
-                  <div className={styles.authLayout__feature}>
-                    <div className={styles.authLayout__featureIcon}>
-                      <Sparkles size={20} />
-                    </div>
-                    <div>
-                      <h4>Spotless Results</h4>
-                      <p>Satisfaction guaranteed every time</p>
-                    </div>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  className={styles.authLayout__testimonial}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6, duration: 0.5 }}
-                >
-                  <p className={styles.authLayout__quote}>
-                    "Coming home to a spotless apartment after a long day is
-                    everything. Metromellow made it so easy!"
-                  </p>
-                  <div className={styles.authLayout__author}>
-                    <div className={styles.authLayout__authorAvatar}>T</div>
-                    <div>
-                      <div className={styles.authLayout__authorName}>
-                        Tolu A.
-                      </div>
-                      <div className={styles.authLayout__authorTitle}>
-                        Lagos Customer
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
+            <div className={styles.authLayout__branding}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+              >
+                <h2 className={styles.authLayout__brandingTitle}>{title}</h2>
+                <p className={styles.authLayout__brandingText}>{subtitle}</p>
+                {brandingCustomContent}
+              </motion.div>
             </div>
           )}
+
+          <div className={styles.authLayout__card}>{children}</div>
         </div>
       </div>
     </section>
