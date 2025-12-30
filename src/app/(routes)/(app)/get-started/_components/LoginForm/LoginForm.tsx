@@ -26,7 +26,7 @@ interface LoginFormProps {
   onSuccess?: () => void;
   onRegisterClick: () => void;
   onStateChange?: (state: {
-    typingEmail: boolean;
+    typingInput: boolean;
     typingPassword: boolean;
     hasError: boolean;
     loading: boolean;
@@ -52,22 +52,18 @@ export default function LoginForm({
   // Notify parent of state changes
   useEffect(() => {
     if (onStateChange) {
+      // Any focused field that's not password triggers typingInput
+      const isTypingInput =
+        focusedField !== null && focusedField !== "password";
+
       onStateChange({
-        typingEmail: focusedField === "email" && formData.email.length > 0,
-        typingPassword:
-          focusedField === "password" && formData.password.length > 0,
+        typingInput: isTypingInput,
+        typingPassword: focusedField === "password",
         hasError: Object.keys(errors).length > 0,
         loading,
       });
     }
-  }, [
-    focusedField,
-    formData.email,
-    formData.password,
-    errors,
-    loading,
-    onStateChange,
-  ]);
+  }, [focusedField, errors, loading, onStateChange]);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};

@@ -59,7 +59,7 @@ interface RegisterFormProps {
   onSuccess: () => void;
   onLoginClick: () => void;
   onStateChange?: (state: {
-    typingEmail: boolean;
+    typingInput: boolean;
     typingPassword: boolean;
     hasError: boolean;
     loading: boolean;
@@ -90,31 +90,27 @@ export default function RegisterForm({
   const [loading, setLoading] = useState(false);
   const [showVerification, setShowVerification] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
-
-  // Notify parent of state changes
-  useEffect(() => {
-    if (onStateChange) {
-      onStateChange({
-        typingEmail: focusedField === "email" && formData.email.length > 0,
-        typingPassword:
-          focusedField === "password" && formData.password.length > 0,
-        hasError: Object.keys(errors).length > 0,
-        loading,
-      });
-    }
-  }, [
-    focusedField,
-    formData.email,
-    formData.password,
-    errors,
-    loading,
-    onStateChange,
-  ]);
   const [isServiceAreaDropdownOpen, setIsServiceAreaDropdownOpen] =
     useState(false);
   const [serviceAreaSearchQuery, setServiceAreaSearchQuery] = useState("");
   const serviceAreaDropdownRef = useRef<HTMLDivElement>(null);
   const serviceAreaSearchInputRef = useRef<HTMLInputElement>(null);
+
+  // Notify parent of state changes
+  useEffect(() => {
+    if (onStateChange) {
+      // Any focused field that's not password triggers typingInput
+      const isTypingInput =
+        focusedField !== null && focusedField !== "password";
+
+      onStateChange({
+        typingInput: isTypingInput,
+        typingPassword: focusedField === "password",
+        hasError: Object.keys(errors).length > 0,
+        loading,
+      });
+    }
+  }, [focusedField, errors, loading, onStateChange]);
 
   const { handleRegister } = useAuthOperations();
   const { data: serviceAreasData, loading: loadingServiceAreas } =
@@ -428,6 +424,8 @@ export default function RegisterForm({
                     label="Full Name"
                     value={formData.name}
                     onChange={handleChange}
+                    onFocus={() => setFocusedField("name")}
+                    onBlur={() => setFocusedField(null)}
                     placeholder="Your full name"
                     required
                     error={errors.name}
@@ -572,8 +570,11 @@ export default function RegisterForm({
                               if (e.key === "Escape") {
                                 setIsServiceAreaDropdownOpen(false);
                                 setServiceAreaSearchQuery("");
+                                setFocusedField(null);
                               }
                             }}
+                            onFocus={() => setFocusedField("serviceArea")}
+                            onBlur={() => setFocusedField(null)}
                             disabled={loadingServiceAreas}
                           />
                           <ChevronDown
@@ -681,6 +682,8 @@ export default function RegisterForm({
                       onChange={(address) => {
                         setFormData((prev) => ({ ...prev, street: address }));
                       }}
+                      onFocus={() => setFocusedField("street")}
+                      onBlur={() => setFocusedField(null)}
                       placeholder="Search for your address..."
                     />
                     {formData.street && (
@@ -703,6 +706,8 @@ export default function RegisterForm({
                     label="Phone Number"
                     value={formData.phone}
                     onChange={handleChange}
+                    onFocus={() => setFocusedField("phone")}
+                    onBlur={() => setFocusedField(null)}
                     placeholder="Your phone number"
                     error={errors.phone}
                     autoComplete="tel"
@@ -739,6 +744,8 @@ export default function RegisterForm({
                         type="text"
                         value={formData.referralCode}
                         onChange={handleChange}
+                        onFocus={() => setFocusedField("referralCode")}
+                        onBlur={() => setFocusedField(null)}
                         placeholder="Enter referral code"
                         className={layoutStyles.formInput__input}
                         autoComplete="off"

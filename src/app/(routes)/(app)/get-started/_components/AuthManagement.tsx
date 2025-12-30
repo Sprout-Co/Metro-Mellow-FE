@@ -60,7 +60,7 @@ export default function AuthManagement({
   };
 
   const handleFormStateChange = (state: {
-    typingEmail: boolean;
+    typingInput: boolean;
     typingPassword: boolean;
     hasError: boolean;
     loading: boolean;
@@ -71,7 +71,7 @@ export default function AuthManagement({
       setEmojiExpression("error");
     } else if (state.typingPassword) {
       setEmojiExpression("typingPassword");
-    } else if (state.typingEmail) {
+    } else if (state.typingInput) {
       setEmojiExpression("typingEmail");
     } else {
       setEmojiExpression("default");

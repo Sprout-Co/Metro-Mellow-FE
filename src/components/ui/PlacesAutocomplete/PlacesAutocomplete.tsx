@@ -28,12 +28,16 @@ interface PlacesAutocompleteProps {
     coordinates: { lat: number; lng: number }
   ) => void;
   onChange?: (address: string) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
   placeholder?: string;
 }
 
 export const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
   onSelect,
   onChange,
+  onFocus,
+  onBlur,
   placeholder = "Enter your address",
 }) => {
   const [inputValue, setInputValue] = useState("");
@@ -154,7 +158,17 @@ export const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
           placeholder={placeholder}
           value={inputValue}
           onChange={handleInputChange}
-          onFocus={() => setIsOpen(true)}
+          onFocus={() => {
+            setIsOpen(true);
+            onFocus?.();
+          }}
+          onBlur={() => {
+            // Delay blur to allow clicking on suggestions
+            setTimeout(() => {
+              setIsOpen(false);
+              onBlur?.();
+            }, 200);
+          }}
         />
         {loading && (
           <Loader2
