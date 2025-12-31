@@ -78,40 +78,32 @@
     }
   }
 
-  // Primary Action Section
-  &__primary {
-    margin-bottom: spacing("lg");
-  }
-
-  &__instructions {
+  &__resendLink {
     @include font-size("sm");
     color: color("neutral", "dark");
     text-align: center;
-    margin: 0 0 spacing("md");
+    margin: spacing("lg") 0;
   }
 
-  // Divider
-  &__divider {
-    position: relative;
-    text-align: center;
-    margin: spacing("xl") 0;
+  &__resendButton {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing("xs");
+    color: color("primary", "base");
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color transition-duration("fast") transition-timing("ease");
+    @include font-weight("medium");
 
-    &::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: color("neutral", "lighter");
+    &:hover:not(&--disabled) {
+      color: color("primary", "dark");
     }
 
-    span {
-      position: relative;
-      background: color("neutral", "white");
-      padding: 0 spacing("md");
-      @include font-size("sm");
+    &--disabled {
       color: color("neutral", "medium");
+      cursor: not-allowed;
+      text-decoration: none;
+      opacity: 0.7;
     }
   }
 
@@ -182,6 +174,45 @@
     }
   }
 
+  &__codeContainer {
+    display: flex;
+    gap: spacing("sm");
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__codeInput {
+    width: 52px;
+    height: 52px;
+    text-align: center;
+    @include font-size("xl");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    background: color("neutral", "lightest");
+    border: border-width("thin") solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    outline: none;
+    transition: $transition-fast;
+    text-transform: uppercase;
+
+    &:focus {
+      border-color: color("primary", "base");
+      box-shadow: 0 0 0 4px color-alpha("primary", "base", 0.1);
+      background: color("neutral", "white");
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    @include breakpoint-down("sm") {
+      width: 48px;
+      height: 48px;
+      @include font-size("lg");
+    }
+  }
+
   // Back Button
   &__back {
     display: flex;
@@ -209,7 +240,8 @@
     }
 
     svg {
-      transition: transform transition-duration("fast") transition-timing("ease");
+      transition: transform transition-duration("fast")
+        transition-timing("ease");
     }
 
     &:hover:not(:disabled) svg {
