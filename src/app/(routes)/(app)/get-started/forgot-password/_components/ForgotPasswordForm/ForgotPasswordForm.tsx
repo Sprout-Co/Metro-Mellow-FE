@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, AlertCircle, CheckCircle, ArrowLeft } from "lucide-react";
+import { Mail, AlertCircle } from "lucide-react";
 import FormInput from "../../../_components/FormInput";
 import styles from "./ForgotPasswordForm.module.scss";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import { Button } from "@/components/ui/Button";
+import Image from "next/image";
 
 interface ForgotPasswordFormState {
   email: string;
@@ -98,6 +99,40 @@ export default function ForgotPasswordForm({
     }
   };
 
+  if (isSubmitted) {
+    return (
+      <div className={styles.success}>
+        <div className={styles.success__content}>
+          <h2 className={styles.success__title}>
+            A password reset link has been sent{" "}
+          </h2>
+          <p className={styles.success__message}>
+            A link to reset your password has been sent to your registered email
+            address. Follow the link to create a new password for your
+            Metromellow account.
+          </p>
+          <div className={styles.success__illustration}>
+            <Image
+              src="/images/general/success_order.png"
+              alt="Order Success"
+              width={300}
+              height={300}
+              priority
+            />
+          </div>
+          <Button
+            variant="primary"
+            fullWidth
+            className={styles.success__button}
+            onClick={onBackToLogin}
+          >
+            Back to Login
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.forgotForm}>
       <AnimatePresence mode="wait">
@@ -114,87 +149,56 @@ export default function ForgotPasswordForm({
             your password
           </p>
 
-          {isSubmitted ? (
-            <motion.div
-              className={styles.forgotForm__success}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className={styles.forgotForm__successIcon}>
-                <CheckCircle size={40} />
+          <form onSubmit={handleSubmit} noValidate>
+            {errors.general && (
+              <div className={styles.forgotForm__error}>
+                <AlertCircle size={20} />
+                {errors.general}
               </div>
-              <h3 className={styles.forgotForm__successTitle}>
-                Check Your Email
-              </h3>
-              <p className={styles.forgotForm__successMessage}>
-                We've sent password reset instructions to
-                <span className={styles.forgotForm__email}>
-                  {formData.email}
-                </span>
-              </p>
-              <Button
-                variant="primary"
-                size="lg"
-                fullWidth
+            )}
+
+            <FormInput
+              id="forgot-password-email"
+              name="email"
+              type="email"
+              label="Email Address"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter your email"
+              required
+              error={errors.email}
+              autoComplete="email"
+              icon={<Mail size={20} />}
+            />
+
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              fullWidth
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <div className={styles.forgotForm__buttonSpinner}></div>
+                  Sending...
+                </>
+              ) : (
+                "Send Reset Instructions"
+              )}
+            </Button>
+
+            <div className={styles.forgotForm__switch}>
+              Remember your password?
+              <button
+                type="button"
+                className={styles.forgotForm__switchLink}
                 onClick={onBackToLogin}
               >
-                <ArrowLeft size={18} />
                 Back to Login
-              </Button>
-            </motion.div>
-          ) : (
-            <form onSubmit={handleSubmit} noValidate>
-              {errors.general && (
-                <div className={styles.forgotForm__error}>
-                  <AlertCircle size={20} />
-                  {errors.general}
-                </div>
-              )}
-
-              <FormInput
-                id="forgot-password-email"
-                name="email"
-                type="email"
-                label="Email Address"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Enter your email"
-                required
-                error={errors.email}
-                autoComplete="email"
-                icon={<Mail size={20} />}
-              />
-
-              <Button
-                type="submit"
-                variant="primary"
-                size="lg"
-                fullWidth
-                disabled={loading}
-              >
-                {loading ? (
-                  <>
-                    <div className={styles.forgotForm__buttonSpinner}></div>
-                    Sending...
-                  </>
-                ) : (
-                  "Send Reset Instructions"
-                )}
-              </Button>
-
-              <div className={styles.forgotForm__switch}>
-                Remember your password?
-                <button
-                  type="button"
-                  className={styles.forgotForm__switchLink}
-                  onClick={onBackToLogin}
-                >
-                  Back to Login
-                </button>
-              </div>
-            </form>
-          )}
+              </button>
+            </div>
+          </form>
         </motion.div>
       </AnimatePresence>
     </div>

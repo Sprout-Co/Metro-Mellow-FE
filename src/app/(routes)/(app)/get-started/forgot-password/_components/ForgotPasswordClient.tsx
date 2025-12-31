@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import AuthLayout from "../../_components/AuthLayout";
 import ForgotPasswordForm from "./ForgotPasswordForm/ForgotPasswordForm";
 import ProgressBar from "../../_components/ProgressBar/ProgressBar";
+import OrderSuccessModal from "@/components/ui/booking/modals/OrderSuccessModal/OrderSuccessModal";
 
 export default function ForgotPasswordClient() {
   const router = useRouter();
@@ -30,6 +31,7 @@ export default function ForgotPasswordClient() {
         }}
         onStepChange={(step) => setCurrentStep(step)}
       />
+      {/* <OrderSuccessModal isOpen={true} onClose={() => false} /> */}
     </AuthLayout>
   );
 }
