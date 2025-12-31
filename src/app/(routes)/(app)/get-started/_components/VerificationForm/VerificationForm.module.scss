@@ -206,10 +206,30 @@
       cursor: not-allowed;
     }
 
+    &--loading {
+      border-color: color("primary", "base");
+      background: color-alpha("primary", "base", 0.05);
+    }
+
     @include breakpoint-down("sm") {
       width: 48px;
       height: 48px;
       @include font-size("lg");
+    }
+  }
+
+  &__loadingMessage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+    margin-top: spacing("md");
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("primary", "base");
+
+    svg {
+      flex-shrink: 0;
     }
   }
 

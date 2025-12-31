@@ -275,7 +275,9 @@ export default function VerificationForm({
                 onChange={(e) => handleCodeChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
                 onPaste={handlePaste}
-                className={styles.verification__codeInput}
+                className={`${styles.verification__codeInput} ${
+                  loading ? styles["verification__codeInput--loading"] : ""
+                }`}
                 autoComplete="off"
                 maxLength={1}
                 disabled={loading}
@@ -283,6 +285,16 @@ export default function VerificationForm({
               />
             ))}
           </div>
+          {loading && (
+            <motion.div
+              className={styles.verification__loadingMessage}
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <Loader2 size={16} className={styles.spinner} />
+              <span>Verifying code...</span>
+            </motion.div>
+          )}
         </div>
       </form>
       <p className={styles.verification__resendLink}>
