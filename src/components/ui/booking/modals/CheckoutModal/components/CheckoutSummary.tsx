@@ -49,15 +49,6 @@ export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
         </div>
       )}
 
-      {promoDiscount > 0 && (
-        <div
-          className={`${styles.checkoutModal__summaryItem} ${styles["checkoutModal__summaryItem--discount"]} ${styles["checkoutModal__summaryItem--promo"]}`}
-        >
-          <span>🎄 Christmas Promo Discount</span>
-          <span>-₦{formatCurrency(promoDiscount)}</span>
-        </div>
-      )}
-
       <div
         className={`${styles.checkoutModal__summaryItem} ${styles["checkoutModal__summaryItem--total"]}`}
       >

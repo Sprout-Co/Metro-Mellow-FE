@@ -138,13 +138,13 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   );
 
   // Calculate Christmas promo discount (automatically applied)
-  const christmasDiscountAmount = useMemo(() => {
-    // Check if promo is still valid
-    if (new Date() > new Date(CHRISTMAS_PROMO.EXPIRES)) {
-      return 0;
-    }
-    return Math.round((totalPrice * CHRISTMAS_PROMO.DISCOUNT) / 100);
-  }, [totalPrice]);
+  // const christmasDiscountAmount = useMemo(() => {
+  //   // Check if promo is still valid
+  //   if (new Date() > new Date(CHRISTMAS_PROMO.EXPIRES)) {
+  //     return 0;
+  //   }
+  //   return Math.round((totalPrice * CHRISTMAS_PROMO.DISCOUNT) / 100);
+  // }, [totalPrice]);
 
   // Calculate referral discount
   const referralDiscountAmount = useMemo(() => {
@@ -160,7 +160,10 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   }, [discountData, totalPrice]);
 
   // Total discount (referral + Christmas promo)
-  const totalDiscountAmount = referralDiscountAmount + christmasDiscountAmount;
+  const totalDiscountAmount = useMemo(
+    () => referralDiscountAmount /* + add any other discounts here */,
+    [referralDiscountAmount]
+  );
 
   // Get discount info for display
   const discountInfo = useMemo(
@@ -365,7 +368,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   totalPrice={totalPrice}
                   deliveryCost={deliveryCost}
                   referralDiscount={referralDiscountAmount}
-                  promoDiscount={christmasDiscountAmount}
+                  promoDiscount={0}
                 />
 
                 {/* Submit Button */}
