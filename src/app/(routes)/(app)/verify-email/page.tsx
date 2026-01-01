@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/Button";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { login as loginAction } from "@/lib/redux";
 import AuthLayout from "../get-started/_components/AuthLayout";
+import SpyingEmoji from "../get-started/_components/SpyingEmoji/SpyingEmoji";
 
 export default function VerifyEmailPage() {
   const searchParams = useSearchParams();
@@ -113,7 +114,21 @@ export default function VerifyEmailPage() {
   };
 
   return (
-    <AuthLayout>
+    <AuthLayout
+      brandingCustomContent={
+        <>
+          <SpyingEmoji
+            expression={
+              status === "verifying"
+                ? "loading"
+                : status === "error"
+                  ? "error"
+                  : "default"
+            }
+          />
+        </>
+      }
+    >
       <div className={styles.verifyEmail}>
         <motion.div
           className={styles.verifyEmail__card}
