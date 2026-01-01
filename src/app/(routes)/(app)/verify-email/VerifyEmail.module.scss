@@ -3,49 +3,13 @@
 @import "@/styles/abstracts/functions";
 
 .verifyEmail {
-  min-height: 100vh;
   @include flex-center;
-  background: linear-gradient(
-    135deg,
-    color("neutral", "lightest") 0%,
-    color("accent", "lighter") 50%,
-    color("neutral", "lighter") 100%
-  );
-  padding: spacing("xl");
   position: relative;
   overflow: hidden;
-
-  // Subtle animated background
-  &::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(
-      circle at 30% 20%,
-      color-alpha("primary", "base", 0.03) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 70% 80%,
-      color-alpha("secondary", "base", 0.03) 0%,
-      transparent 50%
-    );
-    animation: floatBg 20s ease-in-out infinite;
-    pointer-events: none;
-  }
 
   &__card {
     position: relative;
     z-index: 1;
-    background-color: color("neutral", "white");
-    border-radius: border-radius("2xl");
-    box-shadow: 
-      0 25px 50px -12px rgba(0, 0, 0, 0.15),
-      0 0 0 1px rgba(0, 0, 0, 0.02);
-    padding: spacing("3xl");
     text-align: center;
     max-width: 440px;
     width: 100%;
@@ -128,7 +92,8 @@
     @include font-size("sm");
     @include font-weight("medium");
     color: color("neutral", "darkest");
-    margin-bottom: spacing("xs");
+    margin-bottom: spacing("sm");
+    display: block;
   }
 
   &__input {
@@ -202,6 +167,42 @@
       color: color("status", "error");
     }
   }
+
+  // Back Button
+  &__back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+    width: 100%;
+    margin-top: spacing("xl");
+    padding: spacing("sm");
+    background: none;
+    border: none;
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    transition: color transition-duration("fast") transition-timing("ease");
+
+    &:hover:not(:disabled) {
+      color: color("primary", "base");
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    svg {
+      transition: transform transition-duration("fast")
+        transition-timing("ease");
+    }
+
+    &:hover:not(:disabled) svg {
+      transform: translateX(-3px);
+    }
+  }
 }
 
 @keyframes spin {
@@ -211,7 +212,8 @@
 }
 
 @keyframes floatBg {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) rotate(0deg);
   }
   50% {
