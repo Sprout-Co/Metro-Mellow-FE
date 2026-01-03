@@ -35,6 +35,7 @@ interface RegisterFormState {
   email: string;
   password: string;
   agreeTerms: boolean;
+  emailMarketingOptIn: boolean;
   phone: string;
   street: string;
   city: string;
@@ -79,6 +80,7 @@ export default function RegisterForm({
     email: "",
     password: "",
     agreeTerms: false,
+    emailMarketingOptIn: false,
     phone: "",
     street: "",
     city: "",
@@ -301,6 +303,7 @@ export default function RegisterForm({
         role: UserRole.Customer,
         phone: formData.phone,
         referralCode: formData.referralCode || undefined,
+        emailMarketingOptIn: formData.emailMarketingOptIn,
         address: {
           street: formData.street,
           city: formData.serviceArea || "Lagos",
@@ -497,6 +500,22 @@ export default function RegisterForm({
                         {errors.agreeTerms}
                       </p>
                     )}
+                  </div>
+
+                  <div className={styles.registerForm__checkGroup}>
+                    <label className={styles.registerForm__checkbox}>
+                      <input
+                        type="checkbox"
+                        name="emailMarketingOptIn"
+                        checked={formData.emailMarketingOptIn}
+                        onChange={handleChange}
+                      />
+                      <span className={styles.registerForm__checkmark}></span>
+                      <span>
+                        I want to receive marketing emails about special offers,
+                        updates, and new services
+                      </span>
+                    </label>
                   </div>
 
                   <Button
