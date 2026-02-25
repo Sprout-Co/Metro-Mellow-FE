@@ -33,14 +33,14 @@ const serviceCategories = [
 
 const ServiceCatalog: FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<ServiceCategory>(
-    ServiceCategory.Cleaning
+    ServiceCategory.Cleaning,
   );
 
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedOption, setSelectedOption] = useState<ServiceOption | null>(
-    null
+    null,
   );
 
   // Fetch services from API
@@ -79,7 +79,7 @@ const ServiceCatalog: FC = () => {
   // Function to validate and get safe image URL
   const getSafeImageUrl = (
     imageUrl: string | null | undefined,
-    serviceId: ServiceId
+    serviceId: ServiceId,
   ): string => {
     console.log("serviceId", serviceId);
     console.log("imageUrl", imageUrl);
@@ -91,11 +91,11 @@ const ServiceCatalog: FC = () => {
       case ServiceId.BasicCooking:
         return "/images/home/home5.jpg";
       case ServiceId.StandardCleaning:
-        return "/images/home/home2.jpg";
+        return "/images/cleaning/sparkelr-3-back.jpeg";
       case ServiceId.DeepCleaning:
         return "/images/home/hero.jpg";
       case ServiceId.MoveInMoveOutCleaning:
-        return "/images/home/home3.jpg";
+        return "/images/home/home4.jpeg";
       case ServiceId.PostConstructionCleaning:
         return "/images/home/home4.jpg";
       case ServiceId.Laundry:
@@ -195,7 +195,7 @@ const ServiceCatalog: FC = () => {
   // Function to get service configuration based on category and service data
   const getServiceConfiguration = (
     category: ServiceCategory,
-    service?: Service
+    service?: Service,
   ): ServiceConfiguration => {
     // Use service features from API if available
     const serviceFeatures = service?.features || [];
@@ -296,7 +296,7 @@ const ServiceCatalog: FC = () => {
   // Function to get included features based on API data and category
   const getIncludedFeatures = (
     category: ServiceCategory,
-    service?: Service
+    service?: Service,
   ): string[] => {
     // Use service features from API if available
     if (service?.features && service.features.length > 0) {
@@ -652,7 +652,7 @@ const ServiceCatalog: FC = () => {
                             <Image
                               src={getSafeImageUrl(
                                 option.imageUrl,
-                                option.service_id
+                                option.service_id,
                               )}
                               alt={option.label}
                               width={400}

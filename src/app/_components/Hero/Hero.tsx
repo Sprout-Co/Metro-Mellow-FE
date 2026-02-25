@@ -41,7 +41,7 @@ const Hero: FC = () => {
       <div
         className={styles.hero__background}
         style={{
-          backgroundImage: `url(/images/home/hero.jpg)`,
+          backgroundImage: `url(/images/cleaning/sparkeler-back-image.png)`,
         }}
       />
 

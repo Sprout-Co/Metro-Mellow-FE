@@ -1,66 +1,66 @@
 "use client";
 
-import React from 'react';
-import styles from './ServicesGallery.module.scss';
+import React from "react";
+import styles from "./ServicesGallery.module.scss";
 
 // Define the service professionals data with exact positioning
 const serviceProfessionals = [
   {
-    id: 'home1',
-    image: '/images/home/home1.jpg',
-    role: 'Home',
-    bgColor: 'primary',
-    position: 'top-left'
+    id: "home1",
+    image: "/images/home/home1.jpg",
+    role: "Home",
+    bgColor: "primary",
+    position: "top-left",
   },
   {
-    id: 'home2',
-    image: '/images/home/home2.jpg',
-    role: 'Home',
-    bgColor: 'primary',
-    position: 'top-right'
+    id: "home2",
+    image: "/images/home/home2.jpg",
+    role: "Home",
+    bgColor: "primary",
+    position: "top-right",
   },
   {
-    id: 'home3',
-    image: '/images/home/home3.jpg',
-    role: 'Home',
-    bgColor: 'secondary',
-    position: 'middle-left'
+    id: "home3",
+    image: "/images/home/home3.jpg",
+    role: "Home",
+    bgColor: "secondary",
+    position: "middle-left",
   },
   {
-    id: 'home4',
-    image: '/images/home/home4.jpg',
-    role: 'Home',
-    bgColor: 'primary',
-    position: 'middle-center-left'
+    id: "home4",
+    image: "/images/home/home4.jpeg",
+    role: "Home",
+    bgColor: "primary",
+    position: "middle-center-left",
   },
   {
-    id: 'home5',
-    image: '/images/home/home5.jpg',
-    role: 'Home',
-    bgColor: 'secondary',
-    position: 'middle-center-right'
+    id: "home5",
+    image: "/images/home/home5.jpg",
+    role: "Home",
+    bgColor: "secondary",
+    position: "middle-center-right",
   },
   {
-    id: 'home6',
-    image: '/images/home/home6.jpg',
-    role: 'Home',
-    bgColor: 'primary',
-    position: 'bottom-left'
+    id: "home6",
+    image: "/images/home/home6.jpg",
+    role: "Home",
+    bgColor: "primary",
+    position: "bottom-left",
   },
   {
-    id: 'home7',
-    image: '/images/home/home7.jpg',
-    role: 'Home',
-    bgColor: 'secondary',
-    position: 'bottom-center'
+    id: "home7",
+    image: "/images/home/home7.jpg",
+    role: "Home",
+    bgColor: "secondary",
+    position: "bottom-center",
   },
   {
-    id: 'home-hero',
-    image: '/images/home/hero.jpg',
-    role: 'Home Hero',
-    bgColor: 'primary',
-    position: 'bottom-right'
-  }
+    id: "home-hero",
+    image: "/images/home/hero.jpg",
+    role: "Home Hero",
+    bgColor: "primary",
+    position: "bottom-right",
+  },
 ];
 
 const ServicesGallery = () => {
