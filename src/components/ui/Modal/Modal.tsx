@@ -11,6 +11,7 @@ interface ModalProps {
   showCloseButton?: boolean;
   maxWidth?: string;
   maxHeight?: string;
+  fullScreen?: boolean;
   showBackdrop?: boolean;
   backdropBlur?: boolean;
   className?: string;
@@ -29,6 +30,7 @@ const Modal: React.FC<ModalProps> = ({
   showCloseButton = true,
   maxWidth = "620px",
   maxHeight = "90vh",
+  fullScreen = false,
   showBackdrop = true,
   backdropBlur = true,
   className = "",
@@ -38,6 +40,8 @@ const Modal: React.FC<ModalProps> = ({
   closeOnEscape = true,
   contentOverflow = "auto",
 }) => {
+  const effectiveMaxWidth = fullScreen ? "100%" : maxWidth;
+  const effectiveMaxHeight = fullScreen ? "100%" : maxHeight;
   React.useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && closeOnEscape) {
@@ -68,7 +72,9 @@ const Modal: React.FC<ModalProps> = ({
     <Portal>
       <AnimatePresence mode="wait">
         <motion.div
-          className={`${styles.modal} ${className}`}
+          className={`${styles.modal} ${className} ${
+            fullScreen ? styles["modal--fullScreen"] : ""
+          }`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -89,7 +95,11 @@ const Modal: React.FC<ModalProps> = ({
 
           <motion.div
             className={styles.modal__container}
-            style={{ maxWidth, maxHeight, overflow: contentOverflow }}
+            style={{
+              maxWidth: effectiveMaxWidth,
+              maxHeight: effectiveMaxHeight,
+              overflow: contentOverflow,
+            }}
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}

@@ -22,7 +22,7 @@ import {
 
 // Helper function to map ServiceId to CleaningType
 const getCleaningTypeFromServiceId = (
-  serviceId: ServiceId | undefined
+  serviceId: ServiceId | undefined,
 ): CleaningType => {
   if (!serviceId) return CleaningType.StandardCleaning;
 
@@ -41,7 +41,7 @@ const getCleaningTypeFromServiceId = (
 
 // Function to get service information sections based on cleaning type
 const getServiceInformationSections = (
-  cleaningType: CleaningType
+  cleaningType: CleaningType,
 ): ServiceInformationSection[] => {
   switch (cleaningType) {
     case CleaningType.DeepCleaning:
@@ -294,7 +294,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   // Handle room counter changes
   const handleRoomCounterChange = (
     room: keyof RoomQuantitiesInput,
-    increment: boolean
+    increment: boolean,
   ) => {
     setRoomQuantities((prev) => ({
       ...prev,
@@ -306,7 +306,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   const getTotalRoomCount = () => {
     return Object.values(roomQuantities).reduce(
       (total, quantity) => total + quantity,
-      0
+      0,
     );
   };
 
@@ -337,7 +337,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
     // Get room prices from service options
     const roomPrices =
       service.options?.find(
-        (opt) => opt.service_id === serviceOption?.service_id
+        (opt) => opt.service_id === serviceOption?.service_id,
       )?.roomPrices || {};
 
     // Calculate total price for each room type
@@ -362,7 +362,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
         }
         return total;
       },
-      0
+      0,
     );
 
     // Add room prices to base price
@@ -380,7 +380,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   const handleCheckoutComplete = async (
     formData: CheckoutFormData,
     finalTotalPrice: number,
-    onContinuePayment: (bookingId: string) => void
+    onContinuePayment: (bookingId: string) => void,
   ) => {
     try {
       setError(null); // Clear any previous errors
@@ -413,7 +413,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
       } else {
         localStorage.setItem(
           LocalStorageKeys.BOOKING_DATA_TO_COMPLETE,
-          JSON.stringify(completeOrder)
+          JSON.stringify(completeOrder),
         );
         setShowLoginModal(true);
       }
@@ -448,7 +448,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      maxWidth="800px"
+      fullScreen
       showCloseButton={true}
       className={styles.cleaningServiceModal}
       contentOverflow="hidden"
@@ -528,7 +528,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
                         onClick={() =>
                           handleRoomCounterChange(
                             room as keyof RoomQuantitiesInput,
-                            false
+                            false,
                           )
                         }
                         aria-label={`Decrement ${room}`}
@@ -541,7 +541,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
                         onClick={() =>
                           handleRoomCounterChange(
                             room as keyof RoomQuantitiesInput,
-                            true
+                            true,
                           )
                         }
                         aria-label={`Increment ${room}`}
