@@ -18,6 +18,28 @@
     flex-direction: column;
     background: color("neutral", "white");
     height: 100%;
+    min-height: 0;
+  }
+
+  &__detailsSectionWrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: spacing("xl");
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  &__footer {
+    flex-shrink: 0;
+    margin-top: auto;
+
+    // ServiceModalFooter uses negative margins when inside padded content;
+    // here it's already at the bottom so use full width
+    > div {
+      margin: 0;
+      width: 100%;
+    }
   }
 
   &__detailsSection {
@@ -64,7 +86,7 @@
 
   &__configurationSection {
     flex: 1;
-    overflow-y: auto;
+    // overflow-y: auto;
     padding-right: spacing("sm");
     margin-right: spacing("sm") * -1;
     min-height: 0;

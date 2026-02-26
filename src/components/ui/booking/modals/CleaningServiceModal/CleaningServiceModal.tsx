@@ -454,25 +454,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
       contentOverflow="hidden"
     >
       <div className={styles.modal__container}>
-        {/* Details Section */}
-        <div className={styles.modal__detailsSection}>
-          {/* Service Title and Description */}
-          <h2 className={styles.modal__title}>{serviceOption?.label}</h2>
-          <div className={styles.modal__descriptionWrapper}>
-            <p className={styles.modal__description}>
-              {serviceOption?.description}
-            </p>
-          </div>
-
-          {/* Service Information Section */}
-          {informationSections.length > 0 && (
-            <ServiceInformation
-              mainTitle={informationTitle}
-              sections={informationSections}
-            />
-          )}
-
-          {/* Configuration Section */}
+        <div className={styles.modal__detailsSectionWrapper}>
           <div className={styles.modal__configurationSection}>
             {/* Apartment Type Selection */}
             <div className={styles.section}>
@@ -554,8 +536,25 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
               </div>
             </div>
           </div>
+          <div className={styles.modal__detailsSection}>
+            {/* Service Title and Description */}
+            <h2 className={styles.modal__title}>{serviceOption?.label}</h2>
+            <div className={styles.modal__descriptionWrapper}>
+              <p className={styles.modal__description}>
+                {serviceOption?.description}
+              </p>
+            </div>
 
-          {/* Order Button */}
+            {/* Service Information Section */}
+            {informationSections.length > 0 && (
+              <ServiceInformation
+                mainTitle={informationTitle}
+                sections={informationSections}
+              />
+            )}
+          </div>
+        </div>
+        <div className={styles.modal__footer}>
           <ServiceModalFooter
             price={calculateTotalPrice()}
             handleOrderSubmit={handleOrderSubmit}
@@ -576,7 +575,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
       />
 
       {/* Service Details Slide Panel */}
-      <ServiceDetailsSlidePanel
+      {/* <ServiceDetailsSlidePanel
         isOpen={isSlidePanelOpen}
         onClose={handleSlidePanelClose}
         onOpen={handleSlidePanelOpen}
@@ -588,7 +587,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
         roomCount={getTotalRoomCount()}
         service_category="Cleaning"
         includedFeatures={includedFeatures}
-      />
+      /> */}
 
       {/* Order Success Modal */}
       <OrderSuccessModal
