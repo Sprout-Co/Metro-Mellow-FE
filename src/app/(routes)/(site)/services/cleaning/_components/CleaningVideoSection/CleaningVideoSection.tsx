@@ -16,8 +16,8 @@ const CleaningVideoSection = ({ onCTAClick }: { onCTAClick: () => void }) => {
     threshold: 0.3,
   });
 
-  const VIDEO_URL = "/videos/metromellow_animation.mp4";
-  const THUMBNAIL_URL = "/images/cleaning/cleaning1.jpg";
+  const VIDEO_URL = "/videos/deep-clean-showcase.mp4";
+  const THUMBNAIL_URL = "/images/cleaning/sparkelr-3-back.jpeg";
 
   const playVideo = () => {
     setVideoPlaying(true);

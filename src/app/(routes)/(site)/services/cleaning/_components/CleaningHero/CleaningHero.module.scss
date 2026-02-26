@@ -4,8 +4,24 @@
 @import "@/styles/abstracts/animations";
 
 .hero {
-  background-image: url("/images/cleaning/c2.jpeg");
+  position: relative;
+  overflow: hidden;
   @include hero-base;
+  min-height: 100vh;
+
+  &__videoContainer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  &__video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    // filter: brightness(0.4) blur(1.1px) grayscale(0.2);
+  }
 
   &__overlay {
     position: absolute;
@@ -99,6 +115,33 @@
     @include breakpoint-down("sm") {
       font-size: font-size("body-2");
       margin-bottom: spacing("lg");
+    }
+  }
+
+  &__slider {
+    margin-top: spacing("lg");
+    min-height: spacing("2xl");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include breakpoint-down("md") {
+      min-height: spacing("xl");
+    }
+
+    @include breakpoint-down("sm") {
+      min-height: spacing("lg");
+    }
+  }
+
+  &__sliderText {
+    @include paragraph;
+    color: color("neutral", "white");
+    font-size: font-size("body-1");
+    text-align: center;
+
+    @include breakpoint-down("md") {
+      font-size: font-size("body-2");
     }
   }
 
