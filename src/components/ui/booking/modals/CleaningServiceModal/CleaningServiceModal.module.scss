@@ -83,7 +83,83 @@
     margin: 0 0 spacing("md") 0;
     flex-shrink: 0;
   }
+}
 
+// Summary (right column) — clean card
+.summary {
+  background: color("neutral", "white");
+  border-radius: border-radius("lg");
+  margin-bottom: spacing("xl");
+
+  &__total {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+    padding-bottom: spacing("md");
+    margin-bottom: spacing("md");
+    border-bottom: 1px solid color("neutral", "lighter");
+  }
+
+  &__amount {
+    @include font-size("xl");
+    @include font-weight("bold");
+    color: color("primary", "base");
+  }
+
+  &__meta {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+  }
+
+  &__row {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+    margin-bottom: spacing("sm");
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  &__term {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+  }
+
+  &__detail {
+    @include font-size("body-2");
+    color: color("neutral", "darkest");
+    line-height: 1.4;
+  }
+
+  &__note {
+    @include font-size("sm");
+    color: color("neutral", "medium");
+    margin: spacing("md") 0 0;
+    padding-top: spacing("md");
+    border-top: 1px solid color("neutral", "lighter");
+  }
+}
+
+.summaryService {
+  &__title {
+    @include font-size("h4");
+    @include font-weight("bold");
+    font-family: $font-family-heading;
+    color: color("neutral", "darkest");
+    margin: 0 0 spacing("sm") 0;
+  }
+
+  &__desc {
+    @include font-size("body-2");
+    color: color("neutral", "dark");
+    line-height: 1.5;
+    margin: 0 0 spacing("md") 0;
+  }
+}
+
+.modal {
   &__configurationSection {
     flex: 1;
     // overflow-y: auto;

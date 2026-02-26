@@ -310,6 +310,61 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
     );
   };
 
+  // Room labels for summary (singular when qty 1)
+  const roomLabelsSingular: Record<keyof RoomQuantitiesInput, string> = {
+    bedroom: "Bedroom",
+    bathroom: "Bathroom/Toilet",
+    livingRoom: "Living Room",
+    kitchen: "Kitchen",
+    balcony: "Balcony",
+    staircase: "Staircase",
+  };
+  const roomLabelsPlural: Record<keyof RoomQuantitiesInput, string> = {
+    bedroom: "Bedrooms",
+    bathroom: "Bathrooms/Toilets",
+    livingRoom: "Living Rooms",
+    kitchen: "Kitchens",
+    balcony: "Balconies",
+    staircase: "Staircases",
+  };
+  const getRoomSummaryLine = () =>
+    Object.entries(roomQuantities)
+      .filter(([, qty]) => (qty as number) > 0)
+      .map(([room, qty]) => {
+        const n = qty as number;
+        const label =
+          n === 1
+            ? roomLabelsSingular[room as keyof RoomQuantitiesInput]
+            : roomLabelsPlural[room as keyof RoomQuantitiesInput];
+        return `${qty} ${label}`;
+      })
+      .join(", ");
+
+  // Rough estimate: 1 sparkler per 4–5 rooms, min 1; ~2–3 hrs base + 0.5 per room
+  const getEstimatedDuration = () => {
+    const total = getTotalRoomCount();
+    const sparklers = Math.max(1, Math.ceil(total / 4));
+    const hours = Math.max(2, Math.ceil(2 + total * 0.5));
+    return { sparklers, hours };
+  };
+
+  const formatAddress = (addr: {
+    street?: string | null;
+    city?: string | null;
+    state?: string | null;
+    zipCode?: string | null;
+    country?: string | null;
+  }) => {
+    const parts = [
+      addr.street,
+      addr.city,
+      addr.state,
+      addr.zipCode ? `(${addr.zipCode})` : null,
+      addr.country,
+    ].filter(Boolean);
+    return parts.length ? parts.join(" • ") : null;
+  };
+
   // Handle order submission
   const handleOrderSubmit = () => {
     setError(null); // Clear any previous errors when starting new order
@@ -444,6 +499,8 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
     setIsSlidePanelOpen(true);
   };
 
+  const estimatedDuration = getEstimatedDuration();
+
   return (
     <Modal
       isOpen={isOpen}
@@ -537,21 +594,84 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
             </div>
           </div>
           <div className={styles.modal__detailsSection}>
-            {/* Service Title and Description */}
-            <h2 className={styles.modal__title}>{serviceOption?.label}</h2>
-            <div className={styles.modal__descriptionWrapper}>
-              <p className={styles.modal__description}>
+            <div className={styles.summaryService}>
+              <h2 className={styles.summaryService__title}>
+                {serviceOption?.label}
+              </h2>
+              <p className={styles.summaryService__desc}>
                 {serviceOption?.description}
               </p>
-            </div>
+              {informationSections.length > 0 && (
+                <ServiceInformation
+                  mainTitle={informationTitle}
+                  sections={informationSections}
+                />
+              )}
+            </div>{" "}
+            <div className={styles.summary}>
+              <div className={styles.summary__total}>
+                <span className={styles.summary__amount}>
+                  ₦{calculateTotalPrice().toLocaleString()}
+                </span>
+                <span className={styles.summary__meta}>
+                  ~{estimatedDuration.hours} hrs
+                  {estimatedDuration.sparklers > 1 &&
+                    ` · ${estimatedDuration.sparklers} staff`}
+                </span>
+              </div>
 
-            {/* Service Information Section */}
-            {informationSections.length > 0 && (
-              <ServiceInformation
-                mainTitle={informationTitle}
-                sections={informationSections}
-              />
-            )}
+              <div className={styles.summary__row}>
+                <span className={styles.summary__term}>Service</span>
+                <span className={styles.summary__detail}>
+                  {serviceOption?.label}
+                </span>
+              </div>
+              <div className={styles.summary__row}>
+                <span className={styles.summary__term}>Rooms</span>
+                <span className={styles.summary__detail}>
+                  {getRoomSummaryLine() || "—"}
+                </span>
+              </div>
+              <div className={styles.summary__row}>
+                <span className={styles.summary__term}>Property</span>
+                <span className={styles.summary__detail}>
+                  {apartmentType === HouseType.Flat
+                    ? "Flat / Apartment"
+                    : "Duplex / House"}
+                </span>
+              </div>
+
+              {isAuthenticated && user ? (
+                <>
+                  <div className={styles.summary__row}>
+                    <span className={styles.summary__term}>Contact</span>
+                    <span className={styles.summary__detail}>
+                      {[
+                        [user.firstName, user.lastName]
+                          .filter(Boolean)
+                          .join(" ") || "—",
+                        user.phone || null,
+                        user.email,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </span>
+                  </div>
+                  {user.defaultAddress && (
+                    <div className={styles.summary__row}>
+                      <span className={styles.summary__term}>Address</span>
+                      <span className={styles.summary__detail}>
+                        {formatAddress(user.defaultAddress) || "—"}
+                      </span>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <p className={styles.summary__note}>
+                  Contact and address will be collected at checkout.
+                </p>
+              )}
+            </div>
           </div>
         </div>
         <div className={styles.modal__footer}>
