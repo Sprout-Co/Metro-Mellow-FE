@@ -3,41 +3,62 @@
 @import "@/styles/abstracts/functions";
 
 .serviceInformation {
-  margin-bottom: spacing("md");
-
-  // Info Popup Mode Styles
-  &__infoPopup {
-    display: flex;
-    width: 100%;
-    margin-bottom: spacing("md");
-  }
+  width: 100%;
 }
 
-// Main Trigger Button
-.mainTrigger {
-  width: 100%;
+// Accordion container
+.accordion {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: spacing("sm") spacing("md");
-  background-color: color("neutral", "lightest");
-  border: 1px solid color("neutral", "lighter");
-  border-radius: border-radius("md");
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: left;
-
-  &:hover {
-    background-color: color("primary", "lighter");
-    border-color: color("primary", "light");
-  }
-
-  &:focus-visible {
-    outline: 2px solid color("primary", "base");
-    outline-offset: 2px;
-  }
+  flex-direction: column;
+  gap: spacing("sm");
 
   &__title {
+    @include font-size("sm");
+    @include font-weight("bold");
+    color: color("neutral", "semidarkest");
+    margin: 0;
+  }
+
+  &__sections {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__section {
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+    background: color("neutral", "white");
+    overflow: hidden;
+  }
+
+  &__header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("sm") spacing("md");
+    background: color("neutral", "white");
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+      background: color("neutral", "lightest");
+    }
+
+    &:focus-visible {
+      outline: 2px solid color("primary", "base");
+      outline-offset: 2px;
+    }
+  }
+
+  &__header--open {
+    background: color("primary", "lighter");
+  }
+
+  &__label {
     @include font-size("sm");
     @include font-weight("semibold");
     color: color("neutral", "darkest");
@@ -46,123 +67,34 @@
   }
 
   &__icon {
-    @include font-size("lg");
-    @include font-weight("bold");
-    color: color("primary", "base");
-    flex-shrink: 0;
-    transition: transform 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-}
+    color: color("primary", "base");
+    transition: transform 0.2s ease;
 
-// Info Popup Styles
-.infoPopup {
-  &__wrapper {
-    position: relative;
-    display: block;
-    width: 100%;
+    svg {
+      transform-origin: center;
+    }
   }
 
-  &__popup {
-    position: absolute;
-    top: calc(100% + 12px);
-    left: 0;
-    transform: none;
-    z-index: 1000;
-    min-width: 320px;
-    max-width: 100%;
-    width: 100%;
+  &__header--open &__icon svg {
+    transform: rotate(180deg);
+  }
+
+  &__panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease;
+  }
+
+  &__panel--open {
     max-height: 400px;
-    overflow-y: auto;
-    background-color: color("neutral", "white");
-    border: 1px solid color("neutral", "lighter");
-    border-radius: border-radius("lg");
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    animation: fadeIn 0.15s ease;
-
-    // Arrow pointing up
-    &::before {
-      content: "";
-      position: absolute;
-      bottom: 100%;
-      right: 20px;
-      left: auto;
-      transform: none;
-      border-width: 8px;
-      border-style: solid;
-      border-color: transparent transparent color("neutral", "white")
-        transparent;
-    }
-
-    // Arrow border
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 100%;
-      right: 20px;
-      left: auto;
-      transform: none;
-      border-width: 9px;
-      border-style: solid;
-      border-color: transparent transparent color("neutral", "lighter")
-        transparent;
-      margin-bottom: -1px;
-    }
-
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background-color: color("neutral", "light");
-      border-radius: 6px;
-
-      &:hover {
-        background-color: color("neutral", "medium");
-      }
-    }
-
-    &::-webkit-scrollbar-track {
-      background: color("neutral", "lighter");
-      border-radius: 6px;
-    }
-  }
-
-  &__content {
-    padding: spacing("lg");
-  }
-
-  &__title {
-    @include font-size("sm");
-    @include font-weight("semibold");
-    color: color("neutral", "darkest");
-    margin: 0 0 spacing("md") 0;
-    padding-bottom: spacing("sm");
-    border-bottom: 2px solid color("primary", "lighter");
-  }
-
-  &__section {
-    margin-bottom: spacing("md");
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  &__sectionTitle {
-    @include font-size("xs");
-    @include font-weight("semibold");
-    color: color("neutral", "darkest");
-    margin: 0 0 spacing("xs") 0;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
   }
 
   &__list {
     list-style: none;
-    padding: 0;
+    padding: 0 spacing("md") spacing("md") spacing("md");
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -183,17 +115,5 @@
       color: color("primary", "base");
       font-weight: bold;
     }
-  }
-}
-
-// Animation
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }

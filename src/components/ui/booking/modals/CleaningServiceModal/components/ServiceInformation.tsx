@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./ServiceInformation.module.scss";
 
-export type ServiceInformationDisplayMode = "info-popup";
+export type ServiceInformationDisplayMode = "accordion";
 
 export interface ServiceInformationSection {
   title: string;
@@ -18,113 +18,84 @@ export interface ServiceInformationProps {
 }
 
 const ServiceInformation: React.FC<ServiceInformationProps> = ({
-  displayMode = "info-popup",
-  mainTitle = "What's Included in Standard Cleaning?",
+  displayMode = "accordion",
+  mainTitle = "What's included",
   sections,
   className,
 }) => {
-  // Info popup state
-  const [showInfoPopup, setShowInfoPopup] = useState(false);
-  const [isClicked, setIsClicked] = useState(false);
-  const infoIconRef = useRef<HTMLButtonElement>(null);
-  const popupRef = useRef<HTMLDivElement>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  // Close popup when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        popupRef.current &&
-        infoIconRef.current &&
-        !popupRef.current.contains(event.target as Node) &&
-        !infoIconRef.current.contains(event.target as Node)
-      ) {
-        setShowInfoPopup(false);
-        setIsClicked(false);
-      }
-    };
-
-    if (showInfoPopup) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showInfoPopup]);
+  const handleToggle = (index: number) => {
+    setOpenIndex((current) => (current === index ? null : index));
+  };
 
   return (
     <div
-      className={`${styles.serviceInformation} ${styles.serviceInformation__infoPopup} ${className || ""}`}
+      className={`${styles.serviceInformation} ${styles.accordion} ${
+        className || ""
+      }`}
     >
-      <div className={styles.infoPopup__wrapper}>
-        <button
-          className={styles.mainTrigger}
-          ref={infoIconRef}
-          onClick={() => {
-            setIsClicked(!isClicked);
-            setShowInfoPopup(!showInfoPopup);
-          }}
-          aria-label="Service information"
-          aria-expanded={showInfoPopup}
-        >
-          <span className={styles.mainTrigger__title}>{mainTitle}</span>
-          <span className={styles.mainTrigger__icon}>
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle
-                cx="8"
-                cy="8"
-                r="7"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                fill="none"
-              />
-              <path
-                d="M8 11V8M8 5H8.01"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
-          </span>
-        </button>
-        {showInfoPopup && (
-          <div
-            ref={popupRef}
-            className={styles.infoPopup__popup}
-            onMouseEnter={() => setShowInfoPopup(true)}
-            onMouseLeave={() => {
-              if (!isClicked) {
-                setShowInfoPopup(false);
-              }
-            }}
-          >
-            <div className={styles.infoPopup__content}>
-              {mainTitle && (
-                <h4 className={styles.infoPopup__title}>{mainTitle}</h4>
-              )}
-              {sections.map((section) => (
-                <div key={section.title} className={styles.infoPopup__section}>
-                  <h5 className={styles.infoPopup__sectionTitle}>
-                    {section.title}
-                  </h5>
-                  <ul className={styles.infoPopup__list}>
-                    {section.items.map((item, index) => (
-                      <li key={index} className={styles.infoPopup__listItem}>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+      {mainTitle && (
+        <h4 className={styles.accordion__title}>{mainTitle}</h4>
+      )}
+
+      <div className={styles.accordion__sections}>
+        {sections.map((section, index) => {
+          const isOpen = openIndex === index;
+
+          return (
+            <div key={section.title} className={styles.accordion__section}>
+              <button
+                type="button"
+                className={`${styles.accordion__header} ${
+                  isOpen ? styles["accordion__header--open"] : ""
+                }`}
+                onClick={() => handleToggle(index)}
+                aria-expanded={isOpen}
+                aria-controls={`service-info-panel-${index}`}
+              >
+                <span className={styles.accordion__label}>
+                  {section.title}
+                </span>
+                <span className={styles.accordion__icon}>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M4 6l4 4 4-4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              </button>
+
+              <div
+                id={`service-info-panel-${index}`}
+                className={`${styles.accordion__panel} ${
+                  isOpen ? styles["accordion__panel--open"] : ""
+                }`}
+              >
+                <ul className={styles.accordion__list}>
+                  {section.items.map((item, itemIndex) => (
+                    <li
+                      key={itemIndex}
+                      className={styles.accordion__listItem}
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })}
       </div>
     </div>
   );
