@@ -497,11 +497,19 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
       contentOverflow="hidden"
     >
       <div className={styles.layout}>
+        <div className={styles.hero}>
+          <h2 className={styles.heroTitle}>{serviceOption?.label}</h2>
+          <p className={styles.heroSub}>{serviceOption?.description}</p>
+        </div>
+
         <div className={styles.body}>
           {/* Left: configuration */}
           <div className={styles.config}>
             <div className={styles.configCard}>
-              <h3 className={styles.configTitle}>Your Apartment Type</h3>
+              <h3 className={styles.configTitle}>
+                <span className={styles.configIcon}>🏠</span>
+                Apartment Type
+              </h3>
               <div className={styles.typeOptions}>
                 <label
                   className={`${styles.typeOption} ${
@@ -537,7 +545,10 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
             </div>
 
             <div className={styles.configCard}>
-              <h3 className={styles.configTitle}>Select Rooms to Clean</h3>
+              <h3 className={styles.configTitle}>
+                <span className={styles.configIcon}>🛏️</span>
+                Rooms to Clean
+              </h3>
               <div className={styles.rooms}>
                 {Object.entries(roomQuantities).map(([room, quantity]) => (
                   <div key={room} className={styles.room}>
@@ -595,13 +606,14 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
           {/* Right: order summary (desktop only) */}
           <aside className={styles.sidebar}>
             <div className={styles.summaryCard}>
+              <h4 className={styles.summaryHeading}>Order Summary</h4>
               <div className={styles.summaryPrice}>
                 ₦{totalPrice.toLocaleString()}
               </div>
               <div className={styles.summaryMeta}>
                 ~{estimatedDuration.hours} hrs
                 {estimatedDuration.sparklers > 1 &&
-                  ` · ${estimatedDuration.sparklers} staff`}
+                  ` · ${estimatedDuration.sparklers} Gleamers`}
               </div>
               <div className={styles.summaryRows}>
                 <div className={styles.summaryRow}>
@@ -635,9 +647,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
             <span className={styles.footerAmount}>
               ₦{totalPrice.toLocaleString()}
             </span>
-            <span className={styles.footerHint}>
-              {getRoomSummaryLine()}
-            </span>
+            <span className={styles.footerHint}>{getRoomSummaryLine()}</span>
           </div>
           <Button
             variant="primary"
