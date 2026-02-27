@@ -10,6 +10,8 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    max-width: 80rem;
+    margin: 0 auto;
   }
 }
 
@@ -18,7 +20,6 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: color("neutral", "lightest");
 }
 
 // ── Hero banner ──
@@ -113,7 +114,8 @@
   background: color("neutral", "white");
   border-radius: border-radius("xl");
   padding: spacing("lg");
-  box-shadow: 0 1px 3px color-alpha("neutral", "black", 0.04),
+  box-shadow:
+    0 1px 3px color-alpha("neutral", "black", 0.04),
     0 4px 12px color-alpha("neutral", "black", 0.03);
 
   @include breakpoint-down("sm") {
@@ -312,7 +314,8 @@
   background: color("neutral", "white");
   border-radius: border-radius("xl");
   padding: spacing("lg");
-  box-shadow: 0 1px 3px color-alpha("neutral", "black", 0.04),
+  box-shadow:
+    0 1px 3px color-alpha("neutral", "black", 0.04),
     0 4px 12px color-alpha("neutral", "black", 0.03);
 }
 

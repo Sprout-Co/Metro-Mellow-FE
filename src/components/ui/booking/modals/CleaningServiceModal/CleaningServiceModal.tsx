@@ -496,6 +496,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
       className={styles.cleaningServiceModal}
       contentOverflow="hidden"
       minHeight="100vh"
+      maxContentWidth="80rem"
     >
       <div className={styles.layout}>
         <div className={styles.hero}>
