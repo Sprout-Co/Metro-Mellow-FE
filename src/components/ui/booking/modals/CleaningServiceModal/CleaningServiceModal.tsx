@@ -495,6 +495,7 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
       showCloseButton={true}
       className={styles.cleaningServiceModal}
       contentOverflow="hidden"
+      minHeight="100vh"
     >
       <div className={styles.layout}>
         <div className={styles.hero}>
