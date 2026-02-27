@@ -2,6 +2,7 @@
 @import "@/styles/abstracts/functions";
 @import "@/styles/abstracts/mixins";
 
+// Full-screen modal overrides
 .cleaningServiceModal {
   :global(.modal__content) {
     padding: 0;
@@ -12,232 +13,77 @@
   }
 }
 
-.modal {
-  &__container {
-    display: flex;
-    flex-direction: column;
-    background: color("neutral", "white");
-    height: 100%;
-    min-height: 0;
+// ── Layout shell ──
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: color("neutral", "lightest");
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: spacing("xl") spacing("2xl");
+
+  @include breakpoint-down("md") {
+    padding: spacing("md") spacing("md");
   }
 
-  &__detailsSectionWrapper {
+  @include breakpoint-up("lg") {
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: spacing("xl");
-    flex: 1;
-    min-height: 0;
-    overflow: auto;
-  }
-
-  &__footer {
-    flex-shrink: 0;
-    margin-top: auto;
-
-    // ServiceModalFooter uses negative margins when inside padded content;
-    // here it's already at the bottom so use full width
-    > div {
-      margin: 0;
-      width: 100%;
-    }
-  }
-
-  &__detailsSection {
-    flex: 1;
-    padding: 0 spacing("xl") spacing("xl") spacing("xl");
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    min-height: 0;
-
-    @include breakpoint-down("md") {
-      padding: spacing("xl");
-    }
-  }
-
-  &__header {
-    margin-bottom: spacing("xl");
-    text-align: center;
-    flex-shrink: 0;
-
-    @include breakpoint-up("lg") {
-      text-align: left;
-    }
-  }
-
-  &__title {
-    @include font-size("h4");
-    @include font-weight("bold");
-    font-family: $font-family-heading;
-    color: color("neutral", "darkest");
-    margin: 0 0 spacing("sm") 0;
-    line-height: 1.2;
-    flex-shrink: 0;
-  }
-
-  &__description {
-    @include font-size("body-2");
-    @include font-weight("medium");
-    color: color("neutral", "dark");
-    line-height: line-height("relaxed");
-    margin: 0 0 spacing("md") 0;
-    flex-shrink: 0;
+    grid-template-columns: 1fr 340px;
+    gap: spacing("2xl");
+    align-items: start;
   }
 }
 
-// Summary (right column) — clean card
-.summary {
+// ── Left column: configuration ──
+.config {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("lg");
+}
+
+.configCard {
   background: color("neutral", "white");
   border-radius: border-radius("lg");
-  margin-bottom: spacing("xl");
-
-  &__total {
-    display: flex;
-    flex-direction: column;
-    gap: spacing("xs");
-    padding-bottom: spacing("md");
-    margin-bottom: spacing("md");
-    border-bottom: 1px solid color("neutral", "lighter");
-  }
-
-  &__amount {
-    @include font-size("xl");
-    @include font-weight("bold");
-    color: color("primary", "base");
-  }
-
-  &__meta {
-    @include font-size("sm");
-    color: color("neutral", "medium");
-  }
-
-  &__row {
-    display: flex;
-    flex-direction: column;
-    gap: spacing("xs");
-    margin-bottom: spacing("sm");
-
-    &:last-of-type {
-      margin-bottom: 0;
-    }
-  }
-
-  &__term {
-    @include font-size("sm");
-    color: color("neutral", "medium");
-  }
-
-  &__detail {
-    @include font-size("body-2");
-    color: color("neutral", "darkest");
-    line-height: 1.4;
-  }
-
-  &__note {
-    @include font-size("sm");
-    color: color("neutral", "medium");
-    margin: spacing("md") 0 0;
-    padding-top: spacing("md");
-    border-top: 1px solid color("neutral", "lighter");
-  }
-}
-
-.summaryService {
-  &__title {
-    @include font-size("h4");
-    @include font-weight("bold");
-    font-family: $font-family-heading;
-    color: color("neutral", "darkest");
-    margin: 0 0 spacing("sm") 0;
-  }
-
-  &__desc {
-    @include font-size("body-2");
-    color: color("neutral", "dark");
-    line-height: 1.5;
-    margin: 0 0 spacing("md") 0;
-  }
-}
-
-.modal {
-  &__configurationSection {
-    flex: 1;
-    // overflow-y: auto;
-    padding-right: spacing("sm");
-    margin-right: spacing("sm") * -1;
-    min-height: 0;
-    margin-bottom: spacing("xl");
-
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background-color: color("neutral", "light");
-      border-radius: 6px;
-
-      &:hover {
-        background-color: color("neutral", "medium");
-      }
-    }
-
-    &::-webkit-scrollbar-track {
-      background: color("neutral", "lighter");
-      border-radius: 6px;
-    }
-  }
-}
-
-// Configuration Sections
-.section {
-  background: color("neutral", "white");
-  border-radius: border-radius("xl");
   padding: spacing("lg");
-  margin-bottom: spacing("lg");
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   border: 1px solid color("neutral", "lighter");
-  transition: all 0.2s ease;
 
-  &:last-child {
-    margin-bottom: spacing("md");
-  }
-
-  &:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  @include breakpoint-down("sm") {
+    padding: spacing("md");
   }
 }
 
-.sectionTitle {
+.configTitle {
   @include font-size("body-2");
   @include font-weight("semibold");
   color: color("neutral", "darkest");
   margin: 0 0 spacing("md") 0;
+}
+
+// Apartment type
+.typeOptions {
   display: flex;
-  align-items: center;
   gap: spacing("sm");
 }
 
-// Apartment Type Options
-.apartmentTypeOptions {
-  display: flex;
-  gap: spacing("md");
-  flex-wrap: wrap;
-}
-
-.apartmentTypeOption {
+.typeOption {
   flex: 1;
-  min-width: 140px;
-  padding: spacing("md") spacing("lg");
+  padding: spacing("sm") spacing("md");
   background: color("neutral", "lightest");
   border: 2px solid color("neutral", "lighter");
-  border-radius: border-radius("lg");
+  border-radius: border-radius("md");
   cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: spacing("sm");
 
   &:hover {
     border-color: color("primary", "light");
-    background: color("neutral", "white");
   }
 
   &.selected {
@@ -248,12 +94,12 @@
       color: color("neutral", "white");
     }
 
-    .radioInput {
+    .radio {
       border-color: color("neutral", "white");
-      background-color: color("neutral", "white");
+      background: color("neutral", "white");
 
       &::before {
-        background-color: color("primary", "base");
+        background: color("primary", "base");
       }
     }
   }
@@ -262,110 +108,217 @@
     @include font-size("sm");
     @include font-weight("semibold");
     color: color("neutral", "darkest");
-    transition: color 0.2s ease;
   }
 }
 
-.radioInput {
-  margin-right: spacing("sm");
-  width: 18px;
-  height: 18px;
+.radio {
+  width: 16px;
+  height: 16px;
   border: 2px solid color("neutral", "medium");
   border-radius: 50%;
-  background-color: color("neutral", "white");
-  position: relative;
-  cursor: pointer;
+  background: color("neutral", "white");
   appearance: none;
   flex-shrink: 0;
-  transition: all 0.2s ease;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.15s ease;
 
   &:checked {
     border-color: color("primary", "base");
-    background-color: color("neutral", "white");
 
     &::before {
       content: "";
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 8px;
-      height: 8px;
+      inset: 3px;
       border-radius: 50%;
-      background-color: color("primary", "base");
+      background: color("primary", "base");
     }
   }
 }
 
-// Rooms Grid
-.roomsGrid {
+// Room counters
+.rooms {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: spacing("md");
+  grid-template-columns: 1fr 1fr;
+  gap: spacing("sm");
+
+  @include breakpoint-down("sm") {
+    grid-template-columns: 1fr;
+  }
 }
 
-.roomCounter {
+.room {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: spacing("md");
-  background: color("neutral", "white");
-  border-radius: border-radius("lg");
+  padding: spacing("sm") spacing("md");
+  background: color("neutral", "lightest");
+  border-radius: border-radius("md");
   border: 1px solid color("neutral", "lighter");
-  transition: all 0.2s ease;
-
-  &:hover {
-    border-color: color("primary", "light");
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  }
 }
 
 .roomName {
   @include font-size("sm");
-  @include font-weight("semibold");
+  @include font-weight("medium");
   color: color("neutral", "darkest");
 }
 
-.counterControls {
+.counter {
   display: flex;
   align-items: center;
   gap: spacing("sm");
 }
 
-.counterButton {
-  width: 32px;
-  height: 32px;
-  border-radius: border-radius("full");
+.counterBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
   border: none;
   background: color("primary", "base");
   color: color("neutral", "white");
-  font-weight: font-weight("bold");
-  font-size: font-size("lg");
+  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.15s;
+  line-height: 1;
 
   &:hover:not(:disabled) {
     background: color("primary", "dark");
-    transform: scale(1.05);
-  }
-
-  &:active {
-    transform: scale(0.95);
   }
 
   &:disabled {
-    opacity: 0.4;
+    opacity: 0.35;
     cursor: not-allowed;
   }
 }
 
-.counterValue {
-  min-width: 30px;
+.counterVal {
+  min-width: 24px;
   text-align: center;
   @include font-size("body-2");
   @include font-weight("bold");
   color: color("neutral", "darkest");
+}
+
+// ── Right column: order summary (desktop only) ──
+.sidebar {
+  display: none;
+
+  @include breakpoint-up("lg") {
+    display: block;
+    position: sticky;
+    top: spacing("xl");
+  }
+}
+
+.summaryCard {
+  background: color("neutral", "white");
+  border-radius: border-radius("lg");
+  padding: spacing("lg");
+  border: 1px solid color("neutral", "lighter");
+}
+
+.summaryPrice {
+  @include font-size("xl");
+  @include font-weight("bold");
+  color: color("primary", "base");
+  margin-bottom: spacing("xs");
+}
+
+.summaryMeta {
+  @include font-size("sm");
+  color: color("neutral", "medium");
+  margin-bottom: spacing("lg");
+}
+
+.summaryRows {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("md");
+  padding-top: spacing("md");
+  border-top: 1px solid color("neutral", "lighter");
+}
+
+.summaryRow {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.summaryLabel {
+  @include font-size("xs");
+  @include font-weight("semibold");
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: color("neutral", "medium");
+}
+
+.summaryValue {
+  @include font-size("sm");
+  color: color("neutral", "darkest");
+  line-height: 1.4;
+}
+
+// ── Footer ──
+.footer {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: spacing("md");
+  padding: spacing("md") spacing("2xl");
+  background: color("neutral", "white");
+  border-top: 1px solid color("neutral", "lighter");
+
+  @include breakpoint-down("md") {
+    padding: spacing("md");
+    flex-wrap: wrap;
+  }
+}
+
+.footerPrice {
+  display: flex;
+  flex-direction: column;
+}
+
+.footerAmount {
+  @include font-size("lg");
+  @include font-weight("bold");
+  color: color("primary", "base");
+}
+
+.footerHint {
+  @include font-size("xs");
+  color: color("neutral", "medium");
+
+  // Show room summary only on mobile (where sidebar is hidden)
+  @include breakpoint-up("lg") {
+    display: none;
+  }
+}
+
+.footerBtn {
+  min-width: 160px;
+  padding: spacing("md") spacing("xl");
+  background: color("primary", "base");
+  color: color("neutral", "white");
+  border: none;
+  border-radius: border-radius("pill");
+  @include font-size("sm");
+  @include font-weight("bold");
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: color("primary", "dark");
+  }
+
+  @include breakpoint-down("md") {
+    width: 100%;
+    min-width: unset;
+  }
 }

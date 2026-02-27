@@ -1,13 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import Modal from "@/components/ui/Modal/Modal";
 import { Button } from "@/components/ui/Button/Button";
 import CheckoutModal, {
   CheckoutFormData,
 } from "@/components/ui/booking/modals/CheckoutModal/CheckoutModal";
-import ServiceDetailsSlidePanel from "@/components/ui/booking/modals/ServiceDetailsSlidePanel/ServiceDetailsSlidePanel";
 import styles from "./CleaningServiceModal.module.scss";
 import {
   CleaningType,
@@ -193,7 +191,6 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { LocalStorageKeys } from "@/utils/localStorage";
 import LoginModal from "@/components/ui/booking/modals/LoginModal/LoginModal";
-import ServiceModalFooter from "../ServiceModalFooter/ServiceModalFooter";
 import ServiceInformation, {
   ServiceInformationSection,
 } from "./components/ServiceInformation";
@@ -278,7 +275,6 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
 
   // State for checkout modal and slide panel
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
-  const [isSlidePanelOpen, setIsSlidePanelOpen] = useState(false);
   const [showOrderSuccessModal, setShowOrderSuccessModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -486,20 +482,10 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
   // Handle checkout modal close
   const handleCheckoutClose = () => {
     setIsCheckoutModalOpen(false);
-    setIsSlidePanelOpen(false);
-  };
-
-  // Handle slide panel close
-  const handleSlidePanelClose = () => {
-    setIsSlidePanelOpen(false);
-  };
-
-  // Handle slide panel open
-  const handleSlidePanelOpen = () => {
-    setIsSlidePanelOpen(true);
   };
 
   const estimatedDuration = getEstimatedDuration();
+  const totalPrice = calculateTotalPrice();
 
   return (
     <Modal
@@ -510,15 +496,15 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
       className={styles.cleaningServiceModal}
       contentOverflow="hidden"
     >
-      <div className={styles.modal__container}>
-        <div className={styles.modal__detailsSectionWrapper}>
-          <div className={styles.modal__configurationSection}>
-            {/* Apartment Type Selection */}
-            <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Your Apartment Type</h3>
-              <div className={styles.apartmentTypeOptions}>
+      <div className={styles.layout}>
+        <div className={styles.body}>
+          {/* Left: configuration */}
+          <div className={styles.config}>
+            <div className={styles.configCard}>
+              <h3 className={styles.configTitle}>Your Apartment Type</h3>
+              <div className={styles.typeOptions}>
                 <label
-                  className={`${styles.apartmentTypeOption} ${
+                  className={`${styles.typeOption} ${
                     apartmentType === HouseType.Flat ? styles.selected : ""
                   }`}
                 >
@@ -528,12 +514,12 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
                     value={HouseType.Flat}
                     checked={apartmentType === HouseType.Flat}
                     onChange={() => handleApartmentTypeChange(HouseType.Flat)}
-                    className={styles.radioInput}
+                    className={styles.radio}
                   />
-                  <span>Flat/Apartment</span>
+                  <span>Flat / Apartment</span>
                 </label>
                 <label
-                  className={`${styles.apartmentTypeOption} ${
+                  className={`${styles.typeOption} ${
                     apartmentType === HouseType.Duplex ? styles.selected : ""
                   }`}
                 >
@@ -543,47 +529,50 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
                     value={HouseType.Duplex}
                     checked={apartmentType === HouseType.Duplex}
                     onChange={() => handleApartmentTypeChange(HouseType.Duplex)}
-                    className={styles.radioInput}
+                    className={styles.radio}
                   />
-                  <span>Duplex/House</span>
+                  <span>Duplex / House</span>
                 </label>
               </div>
             </div>
 
-            {/* Room Selection */}
-            <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Select Rooms to Clean</h3>
-              <div className={styles.roomsGrid}>
+            <div className={styles.configCard}>
+              <h3 className={styles.configTitle}>Select Rooms to Clean</h3>
+              <div className={styles.rooms}>
                 {Object.entries(roomQuantities).map(([room, quantity]) => (
-                  <div key={room} className={styles.roomCounter}>
+                  <div key={room} className={styles.room}>
                     <span className={styles.roomName}>
-                      {room
-                        .replace(/([A-Z])/g, " $1")
-                        .replace(/^./, (str) => str.toUpperCase())}
+                      {roomLabelsSingular[room as keyof RoomQuantitiesInput] ||
+                        room
+                          .replace(/([A-Z])/g, " $1")
+                          .replace(/^./, (s) => s.toUpperCase())}
                     </span>
-                    <div className={styles.counterControls}>
+                    <div className={styles.counter}>
                       <button
-                        className={styles.counterButton}
+                        type="button"
+                        className={styles.counterBtn}
                         onClick={() =>
                           handleRoomCounterChange(
                             room as keyof RoomQuantitiesInput,
                             false,
                           )
                         }
-                        aria-label={`Decrement ${room}`}
+                        disabled={(quantity as number) === 0}
+                        aria-label={`Decrease ${room}`}
                       >
-                        -
+                        −
                       </button>
-                      <span className={styles.counterValue}>{quantity}</span>
+                      <span className={styles.counterVal}>{quantity}</span>
                       <button
-                        className={styles.counterButton}
+                        type="button"
+                        className={styles.counterBtn}
                         onClick={() =>
                           handleRoomCounterChange(
                             room as keyof RoomQuantitiesInput,
                             true,
                           )
                         }
-                        aria-label={`Increment ${room}`}
+                        aria-label={`Increase ${room}`}
                       >
                         +
                       </button>
@@ -592,94 +581,73 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
                 ))}
               </div>
             </div>
-          </div>
-          <div className={styles.modal__detailsSection}>
-            <div className={styles.summaryService}>
-              <h2 className={styles.summaryService__title}>
-                {serviceOption?.label}
-              </h2>
-              <p className={styles.summaryService__desc}>
-                {serviceOption?.description}
-              </p>
-              {informationSections.length > 0 && (
+
+            {informationSections.length > 0 && (
+              <div className={styles.configCard}>
                 <ServiceInformation
                   mainTitle={informationTitle}
                   sections={informationSections}
                 />
-              )}
-            </div>{" "}
-            <div className={styles.summary}>
-              <div className={styles.summary__total}>
-                <span className={styles.summary__amount}>
-                  ₦{calculateTotalPrice().toLocaleString()}
-                </span>
-                <span className={styles.summary__meta}>
-                  ~{estimatedDuration.hours} hrs
-                  {estimatedDuration.sparklers > 1 &&
-                    ` · ${estimatedDuration.sparklers} staff`}
-                </span>
               </div>
-
-              <div className={styles.summary__row}>
-                <span className={styles.summary__term}>Service</span>
-                <span className={styles.summary__detail}>
-                  {serviceOption?.label}
-                </span>
-              </div>
-              <div className={styles.summary__row}>
-                <span className={styles.summary__term}>Rooms</span>
-                <span className={styles.summary__detail}>
-                  {getRoomSummaryLine() || "—"}
-                </span>
-              </div>
-              <div className={styles.summary__row}>
-                <span className={styles.summary__term}>Property</span>
-                <span className={styles.summary__detail}>
-                  {apartmentType === HouseType.Flat
-                    ? "Flat / Apartment"
-                    : "Duplex / House"}
-                </span>
-              </div>
-
-              {isAuthenticated && user ? (
-                <>
-                  <div className={styles.summary__row}>
-                    <span className={styles.summary__term}>Contact</span>
-                    <span className={styles.summary__detail}>
-                      {[
-                        [user.firstName, user.lastName]
-                          .filter(Boolean)
-                          .join(" ") || "—",
-                        user.phone || null,
-                        user.email,
-                      ]
-                        .filter(Boolean)
-                        .join(" · ")}
-                    </span>
-                  </div>
-                  {user.defaultAddress && (
-                    <div className={styles.summary__row}>
-                      <span className={styles.summary__term}>Address</span>
-                      <span className={styles.summary__detail}>
-                        {formatAddress(user.defaultAddress) || "—"}
-                      </span>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <p className={styles.summary__note}>
-                  Contact and address will be collected at checkout.
-                </p>
-              )}
-            </div>
+            )}
           </div>
+
+          {/* Right: order summary (desktop only) */}
+          <aside className={styles.sidebar}>
+            <div className={styles.summaryCard}>
+              <div className={styles.summaryPrice}>
+                ₦{totalPrice.toLocaleString()}
+              </div>
+              <div className={styles.summaryMeta}>
+                ~{estimatedDuration.hours} hrs
+                {estimatedDuration.sparklers > 1 &&
+                  ` · ${estimatedDuration.sparklers} staff`}
+              </div>
+              <div className={styles.summaryRows}>
+                <div className={styles.summaryRow}>
+                  <span className={styles.summaryLabel}>Service</span>
+                  <span className={styles.summaryValue}>
+                    {serviceOption?.label}
+                  </span>
+                </div>
+                <div className={styles.summaryRow}>
+                  <span className={styles.summaryLabel}>Rooms</span>
+                  <span className={styles.summaryValue}>
+                    {getRoomSummaryLine() || "—"}
+                  </span>
+                </div>
+                <div className={styles.summaryRow}>
+                  <span className={styles.summaryLabel}>Property</span>
+                  <span className={styles.summaryValue}>
+                    {apartmentType === HouseType.Flat
+                      ? "Flat / Apartment"
+                      : "Duplex / House"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </aside>
         </div>
-        <div className={styles.modal__footer}>
-          <ServiceModalFooter
-            price={calculateTotalPrice()}
-            handleOrderSubmit={handleOrderSubmit}
-          />
-        </div>
+
+        {/* Footer */}
+        <footer className={styles.footer}>
+          <div className={styles.footerPrice}>
+            <span className={styles.footerAmount}>
+              ₦{totalPrice.toLocaleString()}
+            </span>
+            <span className={styles.footerHint}>
+              {getRoomSummaryLine()}
+            </span>
+          </div>
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={handleOrderSubmit}
+            className={styles.footerBtn}
+          >
+            Continue
+          </Button>
+        </footer>
       </div>
 
       {/* Checkout Modal */}
@@ -693,21 +661,6 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
         onClearError={() => setError(null)}
         totalPrice={calculateTotalPrice()}
       />
-
-      {/* Service Details Slide Panel */}
-      {/* <ServiceDetailsSlidePanel
-        isOpen={isSlidePanelOpen}
-        onClose={handleSlidePanelClose}
-        onOpen={handleSlidePanelOpen}
-        serviceTitle={serviceTitle}
-        serviceDescription={serviceDescription}
-        servicePrice={servicePrice}
-        serviceImage={serviceImage}
-        apartmentType={apartmentType}
-        roomCount={getTotalRoomCount()}
-        service_category="Cleaning"
-        includedFeatures={includedFeatures}
-      /> */}
 
       {/* Order Success Modal */}
       <OrderSuccessModal
