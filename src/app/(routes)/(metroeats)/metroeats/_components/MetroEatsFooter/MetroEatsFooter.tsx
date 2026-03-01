@@ -17,7 +17,7 @@ export default function MetroEatsFooter() {
             />
           </Link>
           <p className={styles.footer__tagline}>
-            Fresh meals made daily, delivered to your door in Lagos.
+            Homestyle meals, delivered. Serving Lekki, VI &amp; environs.
           </p>
           <div className={styles.footer__social}>
             <a

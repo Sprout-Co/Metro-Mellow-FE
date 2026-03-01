@@ -80,7 +80,7 @@ export default function CustomizeModal() {
             aria-label="Customize your meal"
           >
             <div className={styles.modal__header}>
-              <h2 className={styles.modal__title}>Customize your order</h2>
+              <h2 className={styles.modal__title}>Add your preferences</h2>
               <button
                 type="button"
                 className={styles.modal__close}
@@ -121,12 +121,12 @@ export default function CustomizeModal() {
               </label>
 
               <label className={styles.modal__label}>
-                Special instructions (optional)
+                Special instructions
                 <textarea
                   className={styles.modal__textarea}
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  placeholder="e.g. no onions, extra sauce..."
+                  placeholder="e.g. no onions, extra pepper..."
                   rows={3}
                 />
               </label>

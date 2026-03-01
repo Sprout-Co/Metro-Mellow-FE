@@ -68,7 +68,9 @@ export default function CartDrawer() {
             {items.length === 0 ? (
               <div className={styles.drawer__empty}>
                 <p>Your cart is empty</p>
-                <p className={styles.drawer__emptySub}>Add something delicious from our menu.</p>
+                <p className={styles.drawer__emptySub}>
+                  Add meals from our menu to get started.
+                </p>
               </div>
             ) : (
               <>

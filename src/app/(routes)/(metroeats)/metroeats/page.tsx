@@ -37,14 +37,14 @@ export default function MetroEatsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <MetroEatsNav />
+      {/* <MetroEatsNav /> */}
       <main>
         <HeroSection />
         <QuickOrder />
         <ChooseStyle />
         <SubscribeBanner />
       </main>
-      <MetroEatsFooter />
+      {/* <MetroEatsFooter /> */}
     </div>
   );
 }

@@ -8,23 +8,23 @@ import styles from "./ChooseStyle.module.scss";
 const categories = [
   {
     title: "Plates",
-    subtitle: "Single meals ready to eat",
-    label: "For Today",
+    subtitle: "One meal, one serving, ready when you are",
+    label: "Today",
     emoji: "🍽️",
     href: "/metroeats/menu?tab=plates",
     popular: false,
   },
   {
     title: "Buckets",
-    subtitle: "Bulk, stock-up and sharing",
-    label: "For The Week — Best Value",
+    subtitle: "Family-size portions for sharing or meal prep",
+    label: "The Week — Best Value",
     emoji: "🪣",
     href: "/metroeats/menu?tab=buckets",
     popular: true,
   },
   {
     title: "Subscribe",
-    subtitle: "Weekly meal plans, save up to 20%",
+    subtitle: "Set your days, save up to 20%",
     label: "Save More",
     emoji: "📅",
     href: "#subscribe",
@@ -32,7 +32,7 @@ const categories = [
   },
   {
     title: "Gift a Meal",
-    subtitle: "Send a meal to someone special",
+    subtitle: "Treat someone to a delicious meal",
     label: "For Someone Special",
     emoji: "🎁",
     href: "#gift",
@@ -51,9 +51,9 @@ export default function ChooseStyle() {
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
         >
-          <h2 className={styles.chooseStyle__title}>Choose Your Style</h2>
+          <h2 className={styles.chooseStyle__title}>How do you want to eat?</h2>
           <p className={styles.chooseStyle__subtitle}>
-            What moment are you ordering for?
+            Pick the format that fits your plans.
           </p>
         </motion.div>
 
@@ -81,7 +81,7 @@ export default function ChooseStyle() {
                   <h3 className={styles.chooseStyle__cardTitle}>{cat.title}</h3>
                   <p className={styles.chooseStyle__cardSub}>{cat.subtitle}</p>
                   <span className={styles.chooseStyle__cardCta}>
-                    View →
+                    Explore →
                   </span>
                 </div>
               </Link>

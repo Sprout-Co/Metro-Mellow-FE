@@ -261,7 +261,8 @@ const bucketMeals: Meal[] = [
   {
     id: "b10",
     name: "Party Protein",
-    description: "Assorted protein mix with turkey, chicken, and peppered sauce",
+    description:
+      "Assorted protein mix with turkey, chicken, and peppered sauce",
     price: 32000,
     emoji: "🥩",
     category: "protein",
@@ -292,28 +293,46 @@ const bucketMeals: Meal[] = [
   },
 ];
 
-const plateCategories = ["All", "Rice", "Pasta", "Pottage", "Beans", "Swallows", "Healthy"];
-const bucketCategories = ["All", "Rice", "Pasta", "Pottage", "Soups", "Protein"];
+const plateCategories = [
+  "All",
+  "Rice",
+  "Pasta",
+  "Pottage",
+  "Beans",
+  "Swallows",
+  "Healthy",
+];
+const bucketCategories = [
+  "All",
+  "Rice",
+  "Pasta",
+  "Pottage",
+  "Soups",
+  "Protein",
+];
 
 const fmt = (n: number) => `₦${n.toLocaleString()}`;
 
 function MenuContent() {
   const searchParams = useSearchParams();
-  const initialTab = searchParams.get("tab") === "buckets" ? "buckets" : "plates";
-  const { addItem, openCart, openCustomize, cartCount, cartTotal } = useMetroEatsCart();
+  const initialTab =
+    searchParams.get("tab") === "buckets" ? "buckets" : "plates";
+  const { addItem, openCart, openCustomize, cartCount, cartTotal } =
+    useMetroEatsCart();
 
   const [activeTab, setActiveTab] = useState<"plates" | "buckets">(initialTab);
   const [activeCategory, setActiveCategory] = useState("All");
   const [search, setSearch] = useState("");
 
   const meals = activeTab === "plates" ? plateMeals : bucketMeals;
-  const categories = activeTab === "plates" ? plateCategories : bucketCategories;
+  const categories =
+    activeTab === "plates" ? plateCategories : bucketCategories;
 
   const filtered = useMemo(() => {
     let result = meals;
     if (activeCategory !== "All") {
       result = result.filter(
-        (m) => m.category.toLowerCase() === activeCategory.toLowerCase()
+        (m) => m.category.toLowerCase() === activeCategory.toLowerCase(),
       );
     }
     if (search.trim()) {
@@ -321,7 +340,7 @@ function MenuContent() {
       result = result.filter(
         (m) =>
           m.name.toLowerCase().includes(q) ||
-          m.description.toLowerCase().includes(q)
+          m.description.toLowerCase().includes(q),
       );
     }
     return result;
@@ -335,7 +354,7 @@ function MenuContent() {
 
   return (
     <>
-      <nav className={styles.menu__nav}>
+      {/* <nav className={styles.menu__nav}>
         <div className={styles.menu__navInner}>
           <Link href="/metroeats" className={styles.menu__logo}>
             <Image
@@ -372,17 +391,17 @@ function MenuContent() {
               )}
             </button>
             <Link href="/metroeats" className={styles.menu__backLink}>
-              ← Home
+              ← Back
             </Link>
           </div>
         </div>
-      </nav>
+      </nav> */}
 
       <main className={styles.menu__main}>
         <div className={styles.menu__header}>
-          <h1 className={styles.menu__title}>Our Full Menu</h1>
+          <h1 className={styles.menu__title}>Full menu</h1>
           <p className={styles.menu__subtitle}>
-            Choose or enjoy a combination of our wholesome Plates and Buckets
+            Plates and buckets — order what you need
           </p>
         </div>
 
@@ -460,12 +479,18 @@ function MenuContent() {
                 <div className={styles.menu__cardBody}>
                   <div className={styles.menu__cardHead}>
                     <h3 className={styles.menu__cardName}>{meal.name}</h3>
-                    <span className={styles.menu__servingBadge}>{meal.servings}</span>
+                    <span className={styles.menu__servingBadge}>
+                      {meal.servings}
+                    </span>
                   </div>
                   <p className={styles.menu__cardDesc}>{meal.description}</p>
                   <div className={styles.menu__cardMeta}>
-                    <span className={styles.menu__cardPrice}>{fmt(meal.price)}</span>
-                    <span className={styles.menu__cardEta}>ETA: {meal.eta}</span>
+                    <span className={styles.menu__cardPrice}>
+                      {fmt(meal.price)}
+                    </span>
+                    <span className={styles.menu__cardEta}>
+                      ETA: {meal.eta}
+                    </span>
                   </div>
                   <div className={styles.menu__cardActions}>
                     <button
@@ -480,9 +505,7 @@ function MenuContent() {
                     <button
                       type="button"
                       className={styles.menu__addCartBtn}
-                      onClick={() =>
-                        addItem(meal.id, meal.name, meal.price, 1)
-                      }
+                      onClick={() => addItem(meal.id, meal.name, meal.price, 1)}
                       aria-label={`Add ${meal.name} to cart`}
                     >
                       <svg
@@ -509,20 +532,20 @@ function MenuContent() {
 
         {filtered.length === 0 && (
           <div className={styles.menu__empty}>
-            <p>No meals found. Try a different filter or search term.</p>
+            <p>Nothing here. Try a different filter or search.</p>
           </div>
         )}
 
         <div className={styles.menu__moreSection}>
-          <h2 className={styles.menu__moreTitle}>More Options</h2>
+          <h2 className={styles.menu__moreTitle}>Save more</h2>
           <Link href="#subscribe" className={styles.menu__moreCard}>
             <div>
-              <h3 className={styles.menu__moreCardTitle}>Subscribe & Save</h3>
+              <h3 className={styles.menu__moreCardTitle}>Subscribe & save</h3>
               <p className={styles.menu__moreCardSub}>
-                Weekly meal plans with up to 20% savings. Pick your days and meals.
+                Weekly plans, up to 20% off. Choose your days and meal lines.
               </p>
             </div>
-            <span className={styles.menu__moreCardCta}>Learn more →</span>
+            <span className={styles.menu__moreCardCta}>Get started →</span>
           </Link>
         </div>
       </main>
@@ -540,7 +563,9 @@ function MenuContent() {
               <span className={styles.menu__floatingCartCount}>
                 {cartCount} item{cartCount !== 1 ? "s" : ""}
               </span>
-              <span className={styles.menu__floatingCartTotal}>{fmt(cartTotal)}</span>
+              <span className={styles.menu__floatingCartTotal}>
+                {fmt(cartTotal)}
+              </span>
             </div>
             <button
               type="button"

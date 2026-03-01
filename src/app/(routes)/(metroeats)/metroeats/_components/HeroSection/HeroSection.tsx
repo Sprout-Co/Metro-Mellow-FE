@@ -1,16 +1,56 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import styles from "./HeroSection.module.scss";
 
-const HERO_IMAGE = "/images/food/jollof-rice.png";
+const SLIDESHOW_IMAGES = [
+  "/images/food/jollof-rice.png",
+  "/images/food/amala-ewedu.png",
+  "/images/food/egusi-fufu.png",
+  "/images/food/food-hero.jpg",
+  "/images/food/f1.png",
+  "/images/food/f2.png",
+];
+
+const SLIDE_INTERVAL_MS = 4500;
 
 export default function HeroSection() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % SLIDESHOW_IMAGES.length);
+    }, SLIDE_INTERVAL_MS);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <section className={styles.hero}>
+      <div className={styles.hero__slideshow}>
+        <AnimatePresence mode="sync" initial={false}>
+          <motion.div
+            key={currentIndex}
+            className={styles.hero__slide}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <Image
+              src={SLIDESHOW_IMAGES[currentIndex]}
+              alt=""
+              fill
+              sizes="100vw"
+              className={styles.hero__slideImage}
+              priority
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+      <div className={styles.hero__backdrop} aria-hidden />
       <div className={styles.hero__inner}>
         <div className={styles.hero__content}>
           <motion.h1
@@ -19,9 +59,9 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            Wholesome, Flavourful,
+            Real food,
             <br />
-            <em>and made for you</em>
+            <em>real good</em>
           </motion.h1>
 
           <motion.p
@@ -30,8 +70,8 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            Delicious food for every mood. Fresh meals made daily, delivered to
-            your door in Lekki &amp; Island.
+            Homestyle Nigerian meals cooked fresh every day. We deliver to Lekki,
+            Victoria Island &amp; environs.
           </motion.p>
 
           <motion.div
@@ -40,26 +80,10 @@ export default function HeroSection() {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <Link href="/metroeats/menu" className={styles.hero__cta}>
-              Order now
+              Browse menu
             </Link>
           </motion.div>
         </div>
-
-        <motion.div
-          className={styles.hero__imageWrap}
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-        >
-          <Image
-            src={HERO_IMAGE}
-            alt="Fresh jollof rice - one of our signature dishes"
-            fill
-            sizes="(max-width: 768px) 100vw, 45vw"
-            className={styles.hero__image}
-            priority
-          />
-        </motion.div>
       </div>
     </section>
   );

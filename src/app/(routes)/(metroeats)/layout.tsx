@@ -71,6 +71,8 @@ export const viewport: Viewport = {
 };
 
 import MetroEatsCartProvider from "./metroeats/_components/MetroEatsCartProvider/MetroEatsCartProvider";
+import MetroEatsNav from "./metroeats/_components/MetroEatsNav/MetroEatsNav";
+import MetroEatsFooter from "./metroeats/_components/MetroEatsFooter/MetroEatsFooter";
 
 /**
  * MetroEats Layout
@@ -82,5 +84,11 @@ export default function MetroEatsLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <MetroEatsCartProvider>{children}</MetroEatsCartProvider>;
+  return (
+    <MetroEatsCartProvider>
+      <MetroEatsNav />
+      {children}
+      <MetroEatsFooter />
+    </MetroEatsCartProvider>
+  );
 }

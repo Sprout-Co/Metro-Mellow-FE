@@ -5,7 +5,7 @@ $me-dark: #1a1a1a;
   position: sticky;
   top: 0;
   z-index: 100;
-  background: color("neutral", "white");
+  background: color("metroeats", "yellow");
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 
   &__inner {
@@ -39,8 +39,8 @@ $me-dark: #1a1a1a;
 
   &__link {
     @include font-size("sm");
-    @include font-weight("medium");
-    color: $me-dark;
+    @include font-weight("bold");
+    color: color("metroeats", "white");
     text-decoration: none;
     letter-spacing: -0.01em;
     transition: opacity 0.15s;

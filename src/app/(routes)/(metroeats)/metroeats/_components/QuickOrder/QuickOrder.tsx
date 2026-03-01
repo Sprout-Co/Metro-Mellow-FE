@@ -105,11 +105,11 @@ export default function QuickOrder() {
     <section id="quick-order" className={styles.quickOrder}>
       <div className={styles.quickOrder__header}>
         <div>
-          <h2 className={styles.quickOrder__title}>Quick Order</h2>
-          <p className={styles.quickOrder__subtitle}>One-click ordering</p>
+          <h2 className={styles.quickOrder__title}>Popular picks</h2>
+          <p className={styles.quickOrder__subtitle}>Add to cart in one tap</p>
         </div>
         <Link href="/metroeats/menu" className={styles.quickOrder__seeAll}>
-          See all →
+          Full menu →
         </Link>
       </div>
 
@@ -157,7 +157,7 @@ export default function QuickOrder() {
                     className={styles.quickOrder__orderBtn}
                     onClick={() => handleOrder(item)}
                   >
-                    Order
+                    Add to cart
                   </button>
                   <button
                     type="button"

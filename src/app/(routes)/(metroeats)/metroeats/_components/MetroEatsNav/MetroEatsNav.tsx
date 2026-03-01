@@ -17,7 +17,7 @@ export default function MetroEatsNav() {
       <div className={styles.nav__inner}>
         <Link href="/metroeats" className={styles.nav__logo}>
           <Image
-            src="/brand/metroeats/brand-logo/inline/white-on-yellow-inline.svg"
+            src="/images/metroeats/brand-logo/inline/white-on-yellow-inline.svg"
             alt="MetroEats"
             width={140}
             height={32}
@@ -32,7 +32,7 @@ export default function MetroEatsNav() {
             onMouseLeave={() => setMenuOpen(false)}
           >
             <button className={styles.nav__link}>
-              Our Menu
+              Menu
               <svg
                 width="12"
                 height="12"
@@ -76,7 +76,7 @@ export default function MetroEatsNav() {
             Subscribe
           </Link>
           <Link href="#quick-order" className={styles.nav__link}>
-            FAQ
+            Quick Order
           </Link>
         </div>
 
@@ -86,27 +86,27 @@ export default function MetroEatsNav() {
             onClick={openCart}
             aria-label="View cart"
           >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-              </svg>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="9" cy="21" r="1" />
+              <circle cx="20" cy="21" r="1" />
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+            </svg>
             {cartCount > 0 && (
               <span className={styles.nav__cartBadge}>{cartCount}</span>
             )}
           </button>
 
           <Link href="/metroeats/menu" className={styles.nav__orderBtn}>
-            My Pot
+            Order
           </Link>
 
           <button
@@ -149,14 +149,14 @@ export default function MetroEatsNav() {
               className={styles.nav__mobileLink}
               onClick={() => setMobileOpen(false)}
             >
-              Subscribe & Save
+              Subscribe
             </Link>
             <Link
               href="/metroeats/menu"
               className={styles.nav__mobileOrder}
               onClick={() => setMobileOpen(false)}
             >
-              Browse Full Menu
+              View full menu
             </Link>
           </motion.div>
         )}

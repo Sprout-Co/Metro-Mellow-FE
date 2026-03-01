@@ -17,11 +17,11 @@ export default function SubscribeBanner() {
       >
         <div className={styles.subscribeBanner__content}>
           <h2 className={styles.subscribeBanner__heading}>
-            Subscribe &amp; save up to 20%
+            Subscribe &amp; save
           </h2>
           <p className={styles.subscribeBanner__desc}>
-            Pick your days, choose your meal line, and we handle the rest. Pause
-            or cancel anytime — no commitments.
+            Choose your meal line and delivery days. Pause or cancel anytime —
+            no commitments.
           </p>
         </div>
         <div className={styles.subscribeBanner__plans}>
@@ -53,7 +53,7 @@ export default function SubscribeBanner() {
           </div>
         </div>
         <Link href="#get-started" className={styles.subscribeBanner__cta}>
-          Start a subscription
+          Get started
         </Link>
       </motion.div>
     </section>
