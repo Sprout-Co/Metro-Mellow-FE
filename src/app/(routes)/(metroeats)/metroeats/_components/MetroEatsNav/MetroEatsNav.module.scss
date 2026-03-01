@@ -25,6 +25,10 @@ $me-dark: #1a1a1a;
   &__logo {
     line-height: 0;
     flex-shrink: 0;
+
+    img {
+      width: 236px;
+    }
   }
 
   &__links {
