@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "next/navigation";
+import { useMetroEatsCart } from "../_context/MetroEatsCartContext";
 import styles from "./menu.module.scss";
 
 interface Meal {
@@ -299,11 +300,11 @@ const fmt = (n: number) => `₦${n.toLocaleString()}`;
 function MenuContent() {
   const searchParams = useSearchParams();
   const initialTab = searchParams.get("tab") === "buckets" ? "buckets" : "plates";
+  const { addItem, openCart, openCustomize, cartCount, cartTotal } = useMetroEatsCart();
 
   const [activeTab, setActiveTab] = useState<"plates" | "buckets">(initialTab);
   const [activeCategory, setActiveCategory] = useState("All");
   const [search, setSearch] = useState("");
-  const [cart, setCart] = useState<Record<string, number>>({});
 
   const meals = activeTab === "plates" ? plateMeals : bucketMeals;
   const categories = activeTab === "plates" ? plateCategories : bucketCategories;
@@ -326,16 +327,6 @@ function MenuContent() {
     return result;
   }, [meals, activeCategory, search]);
 
-  const cartCount = Object.values(cart).reduce((a, b) => a + b, 0);
-  const cartTotal = Object.entries(cart).reduce((sum, [id, qty]) => {
-    const meal = [...plateMeals, ...bucketMeals].find((m) => m.id === id);
-    return sum + (meal ? meal.price * qty : 0);
-  }, 0);
-
-  const addToCart = (id: string) => {
-    setCart((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
-  };
-
   const handleTabSwitch = (tab: "plates" | "buckets") => {
     setActiveTab(tab);
     setActiveCategory("All");
@@ -356,25 +347,30 @@ function MenuContent() {
             />
           </Link>
           <div className={styles.menu__navActions}>
-            {cartCount > 0 && (
-              <button className={styles.menu__cartBtn} aria-label="View cart">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="9" cy="21" r="1" />
-                  <circle cx="20" cy="21" r="1" />
-                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                </svg>
+            <button
+              type="button"
+              className={styles.menu__cartBtn}
+              onClick={openCart}
+              aria-label="View cart"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+              </svg>
+              {cartCount > 0 && (
                 <span className={styles.menu__cartBadge}>{cartCount}</span>
-              </button>
-            )}
+              )}
+            </button>
             <Link href="/metroeats" className={styles.menu__backLink}>
               ← Home
             </Link>
@@ -473,14 +469,20 @@ function MenuContent() {
                   </div>
                   <div className={styles.menu__cardActions}>
                     <button
+                      type="button"
                       className={styles.menu__viewBtn}
-                      onClick={() => addToCart(meal.id)}
+                      onClick={() =>
+                        openCustomize(meal.id, meal.name, meal.price)
+                      }
                     >
-                      View Details
+                      Customize
                     </button>
                     <button
+                      type="button"
                       className={styles.menu__addCartBtn}
-                      onClick={() => addToCart(meal.id)}
+                      onClick={() =>
+                        addItem(meal.id, meal.name, meal.price, 1)
+                      }
                       aria-label={`Add ${meal.name} to cart`}
                     >
                       <svg
@@ -536,11 +538,17 @@ function MenuContent() {
           >
             <div className={styles.menu__floatingCartInfo}>
               <span className={styles.menu__floatingCartCount}>
-                {cartCount} item{cartCount !== 1 && "s"}
+                {cartCount} item{cartCount !== 1 ? "s" : ""}
               </span>
               <span className={styles.menu__floatingCartTotal}>{fmt(cartTotal)}</span>
             </div>
-            <button className={styles.menu__floatingCartBtn}>View Cart</button>
+            <button
+              type="button"
+              className={styles.menu__floatingCartBtn}
+              onClick={openCart}
+            >
+              View Cart
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

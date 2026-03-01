@@ -1,0 +1,224 @@
+$me-yellow: #ffcc00;
+$me-dark: #1a1a1a;
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 420px;
+  background: color("neutral", "white");
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
+
+  @include breakpoint-down("sm") {
+    max-width: 100%;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("lg") spacing("xl");
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  &__title {
+    @include font-weight("bold");
+    font-family: $font-family-heading;
+    color: $me-dark;
+    margin: 0;
+    font-size: 1.25rem;
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    color: $me-dark;
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  &__empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("2xl");
+    text-align: center;
+
+    p {
+      margin: 0;
+      @include font-size("body-2");
+      color: $me-dark;
+    }
+  }
+
+  &__emptySub {
+    margin-top: spacing("xs") !important;
+    color: rgba($me-dark, 0.5) !important;
+    @include font-size("sm");
+  }
+
+  &__list {
+    flex: 1;
+    overflow-y: auto;
+    list-style: none;
+    margin: 0;
+    padding: spacing("md");
+  }
+
+  &__item {
+    padding: spacing("md") 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__itemInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__itemName {
+    @include font-weight("semibold");
+    @include font-size("body-2");
+    color: $me-dark;
+  }
+
+  &__itemCustom {
+    @include font-size("xs");
+    color: rgba($me-dark, 0.5);
+  }
+
+  &__itemPrice {
+    @include font-size("sm");
+    color: $me-yellow;
+    @include font-weight("semibold");
+  }
+
+  &__itemActions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: spacing("sm");
+  }
+
+  &__qty {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    overflow: hidden;
+
+    button {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.04);
+      border: none;
+      font-size: 1rem;
+      color: $me-dark;
+      cursor: pointer;
+      transition: background 0.15s;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.08);
+      }
+    }
+
+    span {
+      min-width: 24px;
+      text-align: center;
+      @include font-size("sm");
+      @include font-weight("medium");
+    }
+  }
+
+  &__remove {
+    @include font-size("xs");
+    color: rgba($me-dark, 0.5);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+
+    &:hover {
+      color: $me-dark;
+    }
+  }
+
+  &__footer {
+    padding: spacing("xl");
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__totalRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @include font-size("body-2");
+    color: $me-dark;
+  }
+
+  &__totalAmount {
+    @include font-weight("bold");
+    font-size: 1.125rem;
+    color: $me-dark;
+  }
+
+  &__checkout {
+    width: 100%;
+    padding: 14px spacing("xl");
+    background: $me-yellow;
+    color: $me-dark;
+    border: none;
+    border-radius: border-radius("pill");
+    @include font-weight("bold");
+    @include font-size("body-2");
+    cursor: pointer;
+    transition: opacity 0.15s;
+
+    &:hover:not(:disabled) {
+      opacity: 0.9;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}

@@ -4,10 +4,12 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useMetroEatsCart } from "../../_context/MetroEatsCartContext";
 import styles from "./QuickOrder.module.scss";
 
 interface QuickItem {
   id: string;
+  mealId: string;
   name: string;
   subtitle: string;
   price: number;
@@ -20,6 +22,7 @@ interface QuickItem {
 const quickItems: QuickItem[] = [
   {
     id: "q1",
+    mealId: "p1",
     name: "Mighty Jollof",
     subtitle: "Smoky party jollof",
     price: 8000,
@@ -30,6 +33,7 @@ const quickItems: QuickItem[] = [
   },
   {
     id: "q2",
+    mealId: "p9",
     name: "Amala & Ewedu",
     subtitle: "With gbegiri & assorted",
     price: 14500,
@@ -40,6 +44,7 @@ const quickItems: QuickItem[] = [
   },
   {
     id: "q3",
+    mealId: "p2",
     name: "Fried Rice & Chicken",
     subtitle: "Veggie-loaded fried rice",
     price: 7500,
@@ -50,6 +55,7 @@ const quickItems: QuickItem[] = [
   },
   {
     id: "q4",
+    mealId: "b7",
     name: "Egusi Soup",
     subtitle: "With spinach & stockfish",
     price: 18500,
@@ -60,6 +66,7 @@ const quickItems: QuickItem[] = [
   },
   {
     id: "q5",
+    mealId: "p10",
     name: "Grilled Chicken Salad",
     subtitle: "Mixed greens & avocado",
     price: 7000,
@@ -69,6 +76,7 @@ const quickItems: QuickItem[] = [
   },
   {
     id: "q6",
+    mealId: "b4",
     name: "Ofada Rice & Sauce",
     subtitle: "Spicy ofada sauce",
     price: 16000,
@@ -82,6 +90,17 @@ const quickItems: QuickItem[] = [
 const fmt = (n: number) => `₦${n.toLocaleString()}`;
 
 export default function QuickOrder() {
+  const { addItem, openCart, openCustomize } = useMetroEatsCart();
+
+  const handleOrder = (item: QuickItem) => {
+    addItem(item.mealId, item.name, item.price, 1);
+    openCart();
+  };
+
+  const handleCustomize = (item: QuickItem) => {
+    openCustomize(item.mealId, item.name, item.price);
+  };
+
   return (
     <section id="quick-order" className={styles.quickOrder}>
       <div className={styles.quickOrder__header}>
@@ -133,8 +152,18 @@ export default function QuickOrder() {
                   </span>
                 </div>
                 <div className={styles.quickOrder__cardActions}>
-                  <button className={styles.quickOrder__orderBtn}>Order</button>
-                  <button className={styles.quickOrder__customizeLink}>
+                  <button
+                    type="button"
+                    className={styles.quickOrder__orderBtn}
+                    onClick={() => handleOrder(item)}
+                  >
+                    Order
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.quickOrder__customizeLink}
+                    onClick={() => handleCustomize(item)}
+                  >
                     or Customize
                   </button>
                 </div>

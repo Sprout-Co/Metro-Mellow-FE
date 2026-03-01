@@ -1,0 +1,167 @@
+$me-yellow: #ffcc00;
+$me-dark: #1a1a1a;
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1100;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 440px;
+  background: color("neutral", "white");
+  border-radius: 16px;
+  z-index: 1101;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("lg") spacing("xl");
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  &__title {
+    @include font-weight("bold");
+    font-family: $font-family-heading;
+    color: $me-dark;
+    margin: 0;
+    font-size: 1.25rem;
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    color: $me-dark;
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  &__body {
+    padding: spacing("xl");
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  &__mealName {
+    @include font-weight("semibold");
+    @include font-size("body-1");
+    color: $me-dark;
+    margin: 0 0 4px;
+  }
+
+  &__mealPrice {
+    @include font-size("body-2");
+    color: $me-yellow;
+    @include font-weight("bold");
+    margin: 0 0 spacing("xl");
+  }
+
+  &__label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: spacing("lg");
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: $me-dark;
+  }
+
+  &__select {
+    padding: 12px spacing("md");
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    @include font-size("body-2");
+    color: $me-dark;
+    background: color("neutral", "white");
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      border-color: $me-yellow;
+      box-shadow: 0 0 0 2px rgba($me-yellow, 0.25);
+    }
+  }
+
+  &__textarea {
+    padding: 12px spacing("md");
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    @include font-size("body-2");
+    color: $me-dark;
+    resize: vertical;
+    min-height: 80px;
+
+    &::placeholder {
+      color: rgba($me-dark, 0.4);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $me-yellow;
+      box-shadow: 0 0 0 2px rgba($me-yellow, 0.25);
+    }
+  }
+
+  &__footer {
+    display: flex;
+    gap: spacing("md");
+    padding: spacing("lg") spacing("xl");
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  &__cancel {
+    flex: 1;
+    padding: 12px spacing("xl");
+    background: transparent;
+    color: $me-dark;
+    border: 1.5px solid rgba(0, 0, 0, 0.2);
+    border-radius: border-radius("pill");
+    @include font-weight("semibold");
+    @include font-size("sm");
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  &__add {
+    flex: 1;
+    padding: 12px spacing("xl");
+    background: $me-yellow;
+    color: $me-dark;
+    border: none;
+    border-radius: border-radius("pill");
+    @include font-weight("bold");
+    @include font-size("sm");
+    cursor: pointer;
+    transition: opacity 0.15s;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}

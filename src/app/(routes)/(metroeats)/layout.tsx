@@ -70,6 +70,8 @@ export const viewport: Viewport = {
   userScalable: true,
 };
 
+import MetroEatsCartProvider from "./metroeats/_components/MetroEatsCartProvider/MetroEatsCartProvider";
+
 /**
  * MetroEats Layout
  * Standalone layout for the MetroEats brand - no main site Navbar/Footer.
@@ -80,5 +82,5 @@ export default function MetroEatsLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <>{children}</>;
+  return <MetroEatsCartProvider>{children}</MetroEatsCartProvider>;
 }

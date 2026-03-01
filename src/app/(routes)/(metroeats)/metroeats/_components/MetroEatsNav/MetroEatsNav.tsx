@@ -4,13 +4,11 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
+import { useMetroEatsCart } from "../../_context/MetroEatsCartContext";
 import styles from "./MetroEatsNav.module.scss";
 
-interface MetroEatsNavProps {
-  cartCount?: number;
-}
-
-export default function MetroEatsNav({ cartCount = 0 }: MetroEatsNavProps) {
+export default function MetroEatsNav() {
+  const { cartCount, openCart } = useMetroEatsCart();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -83,8 +81,11 @@ export default function MetroEatsNav({ cartCount = 0 }: MetroEatsNavProps) {
         </div>
 
         <div className={styles.nav__actions}>
-          {cartCount > 0 && (
-            <button className={styles.nav__cart} aria-label="View cart">
+          <button
+            className={styles.nav__cart}
+            onClick={openCart}
+            aria-label="View cart"
+          >
               <svg
                 width="20"
                 height="20"
@@ -99,9 +100,10 @@ export default function MetroEatsNav({ cartCount = 0 }: MetroEatsNavProps) {
                 <circle cx="20" cy="21" r="1" />
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
               </svg>
+            {cartCount > 0 && (
               <span className={styles.nav__cartBadge}>{cartCount}</span>
-            </button>
-          )}
+            )}
+          </button>
 
           <Link href="/metroeats/menu" className={styles.nav__orderBtn}>
             My Pot
