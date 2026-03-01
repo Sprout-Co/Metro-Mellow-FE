@@ -1,0 +1,214 @@
+$me-yellow: #ffcc00;
+$me-dark: #1a1a1a;
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: color("neutral", "white");
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+  &__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 14px spacing("lg");
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      padding: 12px spacing("md");
+    }
+  }
+
+  &__logo {
+    line-height: 0;
+    flex-shrink: 0;
+  }
+
+  &__links {
+    display: none;
+    align-items: center;
+    gap: spacing("2xl");
+
+    @include breakpoint-up("md") {
+      display: flex;
+    }
+  }
+
+  &__link {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: $me-dark;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    transition: opacity 0.15s;
+    display: inline-flex;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+
+  &__menuDropdown {
+    position: relative;
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 8px;
+    background: color("neutral", "white");
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    min-width: 160px;
+    z-index: 110;
+  }
+
+  &__dropItem {
+    display: block;
+    padding: 12px spacing("lg");
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: $me-dark;
+    text-decoration: none;
+    transition: background 0.15s;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+  }
+
+  &__orderBtn {
+    padding: 10px spacing("xl");
+    background: $me-yellow;
+    color: $me-dark;
+    @include font-size("sm");
+    @include font-weight("semibold");
+    text-decoration: none;
+    border-radius: border-radius("pill");
+    letter-spacing: -0.01em;
+    transition: opacity 0.15s;
+
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+
+  &__cart {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: none;
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: border-radius("full");
+    color: $me-dark;
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.03);
+    }
+  }
+
+  &__cartBadge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 18px;
+    height: 18px;
+    background: $me-yellow;
+    color: $me-dark;
+    @include font-size("xxs");
+    @include font-weight("bold");
+    border-radius: border-radius("full");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__burger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+
+    span {
+      display: block;
+      height: 2px;
+      width: 100%;
+      background: $me-dark;
+      border-radius: 2px;
+    }
+
+    @include breakpoint-up("md") {
+      display: none;
+    }
+  }
+
+  &__mobile {
+    overflow: hidden;
+    background: color("neutral", "white");
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+
+    @include breakpoint-up("md") {
+      display: none;
+    }
+  }
+
+  &__mobileLink {
+    display: block;
+    padding: spacing("md") spacing("lg");
+    @include font-size("body-2");
+    @include font-weight("medium");
+    color: $me-dark;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+
+    &:active {
+      background: rgba(0, 0, 0, 0.02);
+    }
+  }
+
+  &__mobileOrder {
+    display: block;
+    margin: spacing("md") spacing("lg");
+    padding: 14px spacing("lg");
+    background: $me-yellow;
+    color: $me-dark;
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    text-align: center;
+    text-decoration: none;
+    border-radius: border-radius("xl");
+  }
+}

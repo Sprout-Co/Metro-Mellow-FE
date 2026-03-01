@@ -1,0 +1,28 @@
+{
+  "name": "MetroEats - Fresh Meal Subscriptions",
+  "short_name": "MetroEats",
+  "description": "Subscribe to delicious meal plans in Lagos. We cook, we deliver.",
+  "start_url": "/metroeats",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffcc00",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/brand/metroeats/brand-logo/white-on-yellow.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/brand/metroeats/brand-logo/white-on-yellow.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["food", "lifestyle"],
+  "lang": "en-NG",
+  "dir": "ltr",
+  "scope": "/metroeats"
+}

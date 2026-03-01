@@ -1,0 +1,511 @@
+$me-yellow: #ffcc00;
+$me-dark: #1a1a1a;
+$me-cream: #faf8f4;
+
+.menu {
+  &__nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: color("neutral", "white");
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  &__navInner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 12px spacing("lg");
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    @include breakpoint-down("sm") {
+      padding: 10px spacing("md");
+    }
+  }
+
+  &__logo {
+    line-height: 0;
+    flex-shrink: 0;
+  }
+
+  &__navActions {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+  }
+
+  &__cartBtn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: none;
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: border-radius("full");
+    color: $me-dark;
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.03);
+    }
+  }
+
+  &__cartBadge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 18px;
+    height: 18px;
+    background: $me-yellow;
+    color: $me-dark;
+    @include font-size("xxs");
+    @include font-weight("bold");
+    border-radius: border-radius("full");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__backLink {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: rgba($me-dark, 0.6);
+    text-decoration: none;
+
+    &:hover {
+      color: $me-dark;
+    }
+  }
+
+  &__main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: spacing("3xl") spacing("lg") spacing("4xl");
+
+    @include breakpoint-down("md") {
+      padding: spacing("2xl") spacing("md") spacing("3xl");
+    }
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: spacing("2xl");
+  }
+
+  &__title {
+    @include font-weight("bold");
+    font-family: $font-family-heading;
+    color: $me-dark;
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    letter-spacing: -0.03em;
+  }
+
+  &__subtitle {
+    @include font-size("body-2");
+    color: rgba($me-dark, 0.5);
+    margin: spacing("sm") 0 0;
+  }
+
+  &__controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: spacing("lg");
+    margin-bottom: spacing("2xl");
+  }
+
+  &__tabs {
+    display: flex;
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: border-radius("pill");
+    overflow: hidden;
+    width: fit-content;
+  }
+
+  &__tab {
+    padding: 12px spacing("3xl");
+    background: transparent;
+    border: none;
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    color: rgba($me-dark, 0.5);
+    cursor: pointer;
+    transition: all 0.2s;
+
+    @include breakpoint-down("sm") {
+      padding: 10px spacing("2xl");
+      @include font-size("sm");
+    }
+
+    &--active {
+      background: $me-yellow;
+      color: $me-dark;
+    }
+  }
+
+  &__searchWrap {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  &__searchIcon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba($me-dark, 0.3);
+  }
+
+  &__searchInput {
+    width: 100%;
+    padding: 12px 16px 12px 42px;
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: border-radius("pill");
+    @include font-size("sm");
+    color: $me-dark;
+    background: transparent;
+    outline: none;
+    transition: border-color 0.2s;
+
+    &::placeholder {
+      color: rgba($me-dark, 0.35);
+    }
+
+    &:focus {
+      border-color: $me-yellow;
+    }
+  }
+
+  &__filters {
+    display: flex;
+    gap: spacing("xs");
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  &__filter {
+    padding: 6px 16px;
+    background: transparent;
+    border: 1.5px solid rgba(0, 0, 0, 0.08);
+    border-radius: border-radius("pill");
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: rgba($me-dark, 0.55);
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: rgba(0, 0, 0, 0.2);
+      color: $me-dark;
+    }
+
+    &--active {
+      background: $me-yellow;
+      border-color: $me-yellow;
+      color: $me-dark;
+      @include font-weight("bold");
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: spacing("lg");
+
+    @include breakpoint-down("lg") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+      gap: spacing("md");
+    }
+  }
+
+  &__card {
+    background: color("neutral", "white");
+    border: 1.5px solid rgba(0, 0, 0, 0.06);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  &__cardImage {
+    position: relative;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #fffaeb 0%, #fff4d6 100%);
+
+    @include breakpoint-down("sm") {
+      height: 170px;
+    }
+  }
+
+  &__cardEmoji {
+    font-size: 5rem;
+    line-height: 1;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.06));
+
+    @include breakpoint-down("sm") {
+      font-size: 4rem;
+    }
+  }
+
+  &__cardTag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 4px 10px;
+    background: $me-yellow;
+    color: $me-dark;
+    @include font-size("xxs");
+    @include font-weight("bold");
+    border-radius: 6px;
+  }
+
+  &__cardBody {
+    padding: spacing("md") spacing("lg");
+
+    @include breakpoint-down("sm") {
+      padding: spacing("md");
+    }
+  }
+
+  &__cardHead {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: spacing("sm");
+    margin-bottom: 4px;
+  }
+
+  &__cardName {
+    @include font-size("body-2");
+    @include font-weight("bold");
+    color: $me-dark;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  &__servingBadge {
+    flex-shrink: 0;
+    padding: 3px 8px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    @include font-size("xxs");
+    @include font-weight("semibold");
+    color: rgba($me-dark, 0.6);
+    white-space: nowrap;
+  }
+
+  &__cardDesc {
+    @include font-size("sm");
+    color: rgba($me-dark, 0.5);
+    margin: 0 0 spacing("md");
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__cardMeta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: spacing("md");
+  }
+
+  &__cardPrice {
+    @include font-size("body-1");
+    @include font-weight("bold");
+    color: $me-yellow;
+    letter-spacing: -0.02em;
+  }
+
+  &__cardEta {
+    @include font-size("xs");
+    color: rgba($me-dark, 0.4);
+  }
+
+  &__cardActions {
+    display: flex;
+    gap: spacing("sm");
+  }
+
+  &__viewBtn {
+    flex: 1;
+    padding: 10px 0;
+    background: transparent;
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: border-radius("pill");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: $me-dark;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.03);
+      border-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  &__addCartBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background: $me-yellow;
+    border: none;
+    border-radius: border-radius("pill");
+    color: $me-dark;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: opacity 0.15s;
+
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+
+  &__empty {
+    text-align: center;
+    padding: spacing("4xl") spacing("lg");
+
+    p {
+      @include font-size("body-2");
+      color: rgba($me-dark, 0.4);
+      margin: 0;
+    }
+  }
+
+  &__moreSection {
+    margin-top: spacing("4xl");
+  }
+
+  &__moreTitle {
+    @include font-weight("bold");
+    font-family: $font-family-heading;
+    color: $me-dark;
+    margin: 0 0 spacing("lg");
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  }
+
+  &__moreCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: spacing("xl") spacing("2xl");
+    background: $me-dark;
+    border-radius: 16px;
+    text-decoration: none;
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: spacing("md");
+      padding: spacing("lg");
+    }
+  }
+
+  &__moreCardTitle {
+    @include font-weight("bold");
+    color: color("neutral", "white");
+    margin: 0 0 4px;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+  }
+
+  &__moreCardSub {
+    @include font-size("sm");
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    max-width: 400px;
+  }
+
+  &__moreCardCta {
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: $me-yellow;
+    white-space: nowrap;
+  }
+
+  &__floatingCart {
+    position: fixed;
+    bottom: spacing("xl");
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    gap: spacing("xl");
+    padding: 10px 10px 10px spacing("xl");
+    background: $me-dark;
+    border-radius: border-radius("pill");
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+    width: max-content;
+    max-width: calc(100% - 32px);
+
+    @include breakpoint-down("sm") {
+      gap: spacing("md");
+      padding: 8px 8px 8px spacing("lg");
+    }
+  }
+
+  &__floatingCartInfo {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__floatingCartCount {
+    @include font-size("xs");
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.2;
+  }
+
+  &__floatingCartTotal {
+    @include font-size("body-2");
+    @include font-weight("bold");
+    color: color("neutral", "white");
+  }
+
+  &__floatingCartBtn {
+    padding: 12px spacing("2xl");
+    background: $me-yellow;
+    color: $me-dark;
+    border: none;
+    border-radius: border-radius("pill");
+    @include font-size("sm");
+    @include font-weight("bold");
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s;
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    @include breakpoint-down("sm") {
+      padding: 10px spacing("xl");
+    }
+  }
+}

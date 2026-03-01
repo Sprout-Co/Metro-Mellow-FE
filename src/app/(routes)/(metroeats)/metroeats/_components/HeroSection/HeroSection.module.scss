@@ -1,0 +1,125 @@
+$me-yellow: #ffcc00;
+$me-dark: #1a1a1a;
+$me-bg: #f5f5f5;
+
+.hero {
+  position: relative;
+  background: $me-bg;
+  padding: spacing("4xl") spacing("lg") spacing("3xl");
+  overflow: hidden;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+
+  @include breakpoint-down("md") {
+    padding: spacing("3xl") spacing("md") spacing("2xl");
+    min-height: auto;
+  }
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: spacing("2xl");
+  align-items: center;
+
+  @include breakpoint-down("md") {
+    grid-template-columns: 1fr;
+    gap: spacing("xl");
+    text-align: center;
+  }
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: spacing("md");
+
+  @include breakpoint-down("md") {
+    align-items: center;
+  }
+}
+
+.hero__heading {
+  @include font-weight("bold");
+  font-family: $font-family-heading;
+  color: $me-dark;
+  margin: 0;
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-align: left;
+
+  em {
+    font-style: italic;
+    color: $me-dark;
+  }
+
+  @include breakpoint-down("md") {
+    text-align: center;
+  }
+}
+
+.hero__desc {
+  @include font-size("body-1");
+  color: $me-dark;
+  opacity: 0.85;
+  margin: 0;
+  max-width: 420px;
+  line-height: 1.5;
+  text-align: left;
+
+  @include breakpoint-down("md") {
+    text-align: center;
+    max-width: 360px;
+    @include font-size("body-2");
+  }
+}
+
+.hero__cta {
+  display: inline-block;
+  padding: spacing("md") spacing("2xl");
+  background: $me-yellow;
+  color: $me-dark;
+  @include font-size("sm");
+  @include font-weight("bold");
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  margin-top: spacing("sm");
+
+  &:hover {
+    background: darken($me-yellow, 8%);
+    transform: translateY(-1px);
+  }
+}
+
+.hero__imageWrap {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  background: color("neutral", "white");
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+
+  @include breakpoint-down("md") {
+    order: -1;
+    aspect-ratio: 16 / 10;
+    max-height: 280px;
+  }
+}
+
+.hero__image {
+  object-fit: cover;
+  object-position: center;
+}

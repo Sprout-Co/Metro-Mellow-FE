@@ -1,0 +1,112 @@
+$me-yellow: #ffcc00;
+$me-dark: #1a1a1a;
+
+.footer {
+  background: $me-dark;
+  color: color("neutral", "white");
+
+  &__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: spacing("3xl") spacing("lg") spacing("2xl");
+    display: flex;
+    justify-content: space-between;
+    gap: spacing("3xl");
+
+    @include breakpoint-down("md") {
+      padding: spacing("2xl") spacing("md");
+      flex-direction: column;
+      gap: spacing("2xl");
+    }
+  }
+
+  &__brand {
+    max-width: 280px;
+    flex-shrink: 0;
+  }
+
+  &__logo {
+    line-height: 0;
+    display: inline-block;
+  }
+
+  &__tagline {
+    @include font-size("sm");
+    color: rgba(255, 255, 255, 0.5);
+    margin: spacing("md") 0 0;
+    line-height: 1.5;
+  }
+
+  &__social {
+    display: flex;
+    gap: spacing("sm");
+    margin-top: spacing("lg");
+
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: border-radius("full");
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.6);
+      transition: background 0.15s, color 0.15s;
+
+      &:hover {
+        background: $me-yellow;
+        color: $me-dark;
+      }
+    }
+  }
+
+  &__columns {
+    display: flex;
+    gap: spacing("3xl");
+
+    @include breakpoint-down("sm") {
+      gap: spacing("2xl");
+      flex-wrap: wrap;
+    }
+  }
+
+  &__col {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+
+    a {
+      @include font-size("sm");
+      color: rgba(255, 255, 255, 0.5);
+      text-decoration: none;
+      transition: color 0.15s;
+
+      &:hover {
+        color: color("neutral", "white");
+      }
+    }
+  }
+
+  &__colTitle {
+    @include font-size("sm");
+    @include font-weight("bold");
+    color: color("neutral", "white");
+    margin: 0 0 spacing("xs");
+  }
+
+  &__copy {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+    p {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: spacing("md") spacing("lg");
+      @include font-size("xs");
+      color: rgba(255, 255, 255, 0.3);
+
+      @include breakpoint-down("md") {
+        padding: spacing("md");
+      }
+    }
+  }
+}
