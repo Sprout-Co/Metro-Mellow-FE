@@ -354,6 +354,26 @@ function MenuContent() {
 
   return (
     <>
+      <section className={styles.menu__hero} aria-label="Menu hero">
+        <div className={styles.menu__heroBackdrop} aria-hidden />
+        <div className={styles.menu__heroInner}>
+          <h1 className={styles.menu__heroHeadline}>
+            Want Jollof? We&apos;ve Got You.
+          </h1>
+          <p className={styles.menu__heroTagline}>
+            The place you love. The food you crave.
+          </p>
+        </div>
+        <Image
+          src="/images/food/jollof-rice.png"
+          alt=""
+          fill
+          sizes="100vw"
+          className={styles.menu__heroImage}
+          priority
+        />
+      </section>
+
       {/* <nav className={styles.menu__nav}>
         <div className={styles.menu__navInner}>
           <Link href="/metroeats" className={styles.menu__logo}>
@@ -398,13 +418,6 @@ function MenuContent() {
       </nav> */}
 
       <main className={styles.menu__main}>
-        <div className={styles.menu__header}>
-          <h1 className={styles.menu__title}>Full menu</h1>
-          <p className={styles.menu__subtitle}>
-            Plates and buckets — order what you need
-          </p>
-        </div>
-
         <div className={styles.menu__controls}>
           <div className={styles.menu__tabs}>
             <button
@@ -444,18 +457,23 @@ function MenuContent() {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
+        </div>
 
-          <div className={styles.menu__filters}>
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                className={`${styles.menu__filter} ${activeCategory === cat ? styles["menu__filter--active"] : ""}`}
-                onClick={() => setActiveCategory(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+        <h2 className={styles.menu__sectionHeading}>Prepare to crave</h2>
+        <p className={styles.menu__sectionSub}>
+          Plates and buckets — pick your category below
+        </p>
+
+        <div className={styles.menu__categoryStrip}>
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              className={`${styles.menu__categoryBtn} ${activeCategory === cat ? styles["menu__categoryBtn--active"] : ""}`}
+              onClick={() => setActiveCategory(cat)}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
 
         <motion.div className={styles.menu__grid} layout>
@@ -536,16 +554,12 @@ function MenuContent() {
           </div>
         )}
 
-        <div className={styles.menu__moreSection}>
-          <h2 className={styles.menu__moreTitle}>Save more</h2>
-          <Link href="#subscribe" className={styles.menu__moreCard}>
-            <div>
-              <h3 className={styles.menu__moreCardTitle}>Subscribe & save</h3>
-              <p className={styles.menu__moreCardSub}>
-                Weekly plans, up to 20% off. Choose your days and meal lines.
-              </p>
-            </div>
-            <span className={styles.menu__moreCardCta}>Get started →</span>
+        <div className={styles.menu__ctaSection}>
+          <Link href="#subscribe" className={styles.menu__ctaCard}>
+            <h3 className={styles.menu__ctaTitle}>
+              From the big game to the big meeting, we&apos;ve got you covered.
+            </h3>
+            <span className={styles.menu__ctaLink}>Subscribe & save →</span>
           </Link>
         </div>
       </main>
