@@ -15,7 +15,7 @@ interface QuickItem {
   price: number;
   emoji: string;
   image: string;
-  type: "plates" | "buckets";
+  type: "plates" | "bowls";
   tag?: string;
 }
 
@@ -39,7 +39,7 @@ const quickItems: QuickItem[] = [
     price: 14500,
     emoji: "🍲",
     image: "/images/food/amala-ewedu.png",
-    type: "buckets",
+    type: "bowls",
     tag: "Bestseller",
   },
   {
@@ -61,7 +61,7 @@ const quickItems: QuickItem[] = [
     price: 18500,
     emoji: "🥘",
     image: "/images/food/egusi-fufu.png",
-    type: "buckets",
+    type: "bowls",
     tag: "Bestseller",
   },
   {
@@ -82,7 +82,7 @@ const quickItems: QuickItem[] = [
     price: 16000,
     emoji: "🍛",
     image: "/images/food/pounded-yam-efo-riro.png",
-    type: "buckets",
+    type: "bowls",
     tag: "Bestseller",
   },
 ];
@@ -134,7 +134,7 @@ export default function QuickOrder() {
                 />
                 <div className={styles.quickOrder__badges}>
                   <span className={styles.quickOrder__typeBadge}>
-                    {item.type === "plates" ? "Plates" : "Buckets"}
+                    {item.type === "plates" ? "Plates" : "Bowls"}
                   </span>
                   {item.tag && (
                     <span className={styles.quickOrder__tagBadge}>

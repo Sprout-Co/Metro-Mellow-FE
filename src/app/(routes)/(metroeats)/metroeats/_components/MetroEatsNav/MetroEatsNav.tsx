@@ -63,10 +63,10 @@ export default function MetroEatsNav() {
                     Plates
                   </Link>
                   <Link
-                    href="/metroeats/menu?tab=buckets"
+                    href="/metroeats/menu?tab=bowls"
                     className={styles.nav__dropItem}
                   >
-                    Buckets
+                    Bowls
                   </Link>
                 </motion.div>
               )}
@@ -138,11 +138,11 @@ export default function MetroEatsNav() {
               Plates
             </Link>
             <Link
-              href="/metroeats/menu?tab=buckets"
+              href="/metroeats/menu?tab=bowls"
               className={styles.nav__mobileLink}
               onClick={() => setMobileOpen(false)}
             >
-              Buckets
+              Bowls
             </Link>
             <Link
               href="#subscribe"

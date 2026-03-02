@@ -13,7 +13,7 @@ const jsonLd = {
   "@id": "https://metromellow.com/metroeats",
   name: "MetroEats",
   description:
-    "Fresh meal subscription and delivery service in Lagos. Plates, Buckets, and Subscriptions. We cook, we deliver.",
+    "Fresh meal subscription and delivery service in Lagos. Plates, Bowls, and Subscriptions. We cook, we deliver.",
   url: "https://metromellow.com/metroeats",
   logo: "https://metromellow.com/brand/metroeats/brand-logo/white-on-yellow.png",
   servesCuisine: ["Nigerian", "International", "Healthy"],

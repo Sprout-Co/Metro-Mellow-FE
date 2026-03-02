@@ -15,11 +15,11 @@ const categories = [
     popular: false,
   },
   {
-    title: "Buckets",
+    title: "Bowls",
     subtitle: "Family-size portions for sharing or meal prep",
     label: "The Week — Best Value",
     emoji: "🪣",
-    href: "/metroeats/menu?tab=buckets",
+    href: "/metroeats/menu?tab=bowls",
     popular: true,
   },
   {
@@ -80,9 +80,7 @@ export default function ChooseStyle() {
                 <div className={styles.chooseStyle__cardContent}>
                   <h3 className={styles.chooseStyle__cardTitle}>{cat.title}</h3>
                   <p className={styles.chooseStyle__cardSub}>{cat.subtitle}</p>
-                  <span className={styles.chooseStyle__cardCta}>
-                    Explore →
-                  </span>
+                  <span className={styles.chooseStyle__cardCta}>Explore →</span>
                 </div>
               </Link>
             </motion.div>

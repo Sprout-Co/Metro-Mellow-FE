@@ -315,12 +315,11 @@ const fmt = (n: number) => `₦${n.toLocaleString()}`;
 
 function MenuContent() {
   const searchParams = useSearchParams();
-  const initialTab =
-    searchParams.get("tab") === "buckets" ? "buckets" : "plates";
+  const initialTab = searchParams.get("tab") === "bowls" ? "bowls" : "plates";
   const { addItem, openCart, openCustomize, cartCount, cartTotal } =
     useMetroEatsCart();
 
-  const [activeTab, setActiveTab] = useState<"plates" | "buckets">(initialTab);
+  const [activeTab, setActiveTab] = useState<"plates" | "bowls">(initialTab);
   const [activeCategory, setActiveCategory] = useState("All");
   const [search, setSearch] = useState("");
 
@@ -346,7 +345,7 @@ function MenuContent() {
     return result;
   }, [meals, activeCategory, search]);
 
-  const handleTabSwitch = (tab: "plates" | "buckets") => {
+  const handleTabSwitch = (tab: "plates" | "bowls") => {
     setActiveTab(tab);
     setActiveCategory("All");
     setSearch("");
@@ -427,10 +426,10 @@ function MenuContent() {
               Plates
             </button>
             <button
-              className={`${styles.menu__tab} ${activeTab === "buckets" ? styles["menu__tab--active"] : ""}`}
-              onClick={() => handleTabSwitch("buckets")}
+              className={`${styles.menu__tab} ${activeTab === "bowls" ? styles["menu__tab--active"] : ""}`}
+              onClick={() => handleTabSwitch("bowls")}
             >
-              Buckets
+              Bowls
             </button>
           </div>
 
@@ -452,7 +451,7 @@ function MenuContent() {
             <input
               type="text"
               className={styles.menu__searchInput}
-              placeholder={`Search ${activeTab === "plates" ? "Plates" : "Buckets"}...`}
+              placeholder={`Search ${activeTab === "plates" ? "Plates" : "Bowls"}...`}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -461,7 +460,7 @@ function MenuContent() {
 
         <h2 className={styles.menu__sectionHeading}>Prepare to crave</h2>
         <p className={styles.menu__sectionSub}>
-          Plates and buckets — pick your category below
+          Plates and bowls — pick your category below
         </p>
 
         <div className={styles.menu__categoryStrip}>

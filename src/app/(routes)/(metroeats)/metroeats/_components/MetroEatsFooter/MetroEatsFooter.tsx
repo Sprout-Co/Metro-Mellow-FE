@@ -71,7 +71,7 @@ export default function MetroEatsFooter() {
         <div className={styles.footer__columns}>
           <div className={styles.footer__col}>
             <h4 className={styles.footer__colTitle}>Quick Links</h4>
-            <Link href="/metroeats/menu?tab=buckets">Buckets</Link>
+            <Link href="/metroeats/menu?tab=bowls">Bowls</Link>
             <Link href="/metroeats/menu?tab=plates">Plates</Link>
             <Link href="#subscribe">Subscribe</Link>
           </div>
