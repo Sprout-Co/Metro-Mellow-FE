@@ -277,6 +277,13 @@ export type CreateCustomerAddressInput = {
   street: Scalars['String']['input'];
 };
 
+export type CreateMealOrderInput = {
+  addressId: Scalars['ID']['input'];
+  deliveryDate: Scalars['DateTime']['input'];
+  items: Array<MealOrderItemInput>;
+  timeSlot: TimeSlot;
+};
+
 export type CreateNotificationInput = {
   data?: InputMaybe<Scalars['JSON']['input']>;
   expiresAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -460,6 +467,28 @@ export enum LaundryType {
   StandardLaundry = 'STANDARD_LAUNDRY'
 }
 
+export type Meal = {
+  __typename?: 'Meal';
+  availableStyles: Array<MealStyle>;
+  category: MealCategory;
+  createdAt: Scalars['DateTime']['output'];
+  description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  image: Scalars['String']['output'];
+  isActive: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  priceBowl?: Maybe<Scalars['Float']['output']>;
+  pricePlate?: Maybe<Scalars['Float']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export enum MealCategory {
+  Breakfast = 'BREAKFAST',
+  Dinner = 'DINNER',
+  Lunch = 'LUNCH',
+  Snack = 'SNACK'
+}
+
 export type MealDelivery = {
   __typename?: 'MealDelivery';
   count: Scalars['Int']['output'];
@@ -470,6 +499,38 @@ export type MealDeliveryInput = {
   count: Scalars['Int']['input'];
   day: ScheduleDays;
 };
+
+export type MealOrder = {
+  __typename?: 'MealOrder';
+  address: Address;
+  createdAt: Scalars['DateTime']['output'];
+  customer: User;
+  deliveryDate: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  items: Array<MealOrderItem>;
+  paymentStatus: PaymentStatus;
+  timeSlot: TimeSlot;
+  totalPrice: Scalars['Float']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type MealOrderItem = {
+  __typename?: 'MealOrderItem';
+  meal: Meal;
+  quantity: Scalars['Int']['output'];
+  style: MealStyle;
+};
+
+export type MealOrderItemInput = {
+  mealId: Scalars['ID']['input'];
+  quantity: Scalars['Int']['input'];
+  style: MealStyle;
+};
+
+export enum MealStyle {
+  Bowl = 'BOWL',
+  Plate = 'PLATE'
+}
 
 export enum MealType {
   Basic = 'BASIC',
@@ -500,6 +561,7 @@ export type Mutation = {
   createAdminInvitation: AdminInvitationResponse;
   createBooking: Scalars['String']['output'];
   createCustomer: AuthPayload;
+  createMealOrder: MealOrder;
   createNotification: Notification;
   createPayment: Payment;
   createService: Service;
@@ -653,6 +715,11 @@ export type MutationCreateBookingArgs = {
 
 export type MutationCreateCustomerArgs = {
   input: CreateUserInput;
+};
+
+
+export type MutationCreateMealOrderArgs = {
+  input: CreateMealOrderInput;
 };
 
 
@@ -1146,6 +1213,8 @@ export type Query = {
   invoice: Invoice;
   isUserOnline: Scalars['Boolean']['output'];
   me?: Maybe<User>;
+  mealOrders: Array<MealOrder>;
+  meals: Array<Meal>;
   myCommissions: Array<Commission>;
   myReferralDiscountInfo: ReferralDiscountInfo;
   myReferralInfo: ReferralInfo;
@@ -1240,6 +1309,11 @@ export type QueryInvoiceArgs = {
 
 export type QueryIsUserOnlineArgs = {
   userId: Scalars['ID']['input'];
+};
+
+
+export type QueryMealsArgs = {
+  category?: InputMaybe<MealCategory>;
 };
 
 
@@ -2032,6 +2106,13 @@ export type AddBookingFeedbackMutationVariables = Exact<{
 
 export type AddBookingFeedbackMutation = { __typename?: 'Mutation', addBookingFeedback: boolean };
 
+export type CreateMealOrderMutationVariables = Exact<{
+  input: CreateMealOrderInput;
+}>;
+
+
+export type CreateMealOrderMutation = { __typename?: 'Mutation', createMealOrder: { __typename?: 'MealOrder', id: string, deliveryDate: any, timeSlot: TimeSlot, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string }, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null }, items: Array<{ __typename?: 'MealOrderItem', quantity: number, meal: { __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, category: MealCategory, availableStyles: Array<MealStyle> } }> } };
+
 export type CreateNotificationMutationVariables = Exact<{
   input: CreateNotificationInput;
 }>;
@@ -2436,6 +2517,18 @@ export type CheckSlotAvailabilityQueryVariables = Exact<{
 
 
 export type CheckSlotAvailabilityQuery = { __typename?: 'Query', checkSlotAvailability: { __typename?: 'SlotAvailability', date: any, timeSlot: TimeSlot, isAvailable: boolean, availableCapacity: number, maxCapacity: number } };
+
+export type GetMealsQueryVariables = Exact<{
+  category?: InputMaybe<MealCategory>;
+}>;
+
+
+export type GetMealsQuery = { __typename?: 'Query', meals: Array<{ __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, availableStyles: Array<MealStyle>, category: MealCategory, image: string, isActive: boolean, createdAt: any, updatedAt: any }> };
+
+export type GetMealOrdersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMealOrdersQuery = { __typename?: 'Query', mealOrders: Array<{ __typename?: 'MealOrder', id: string, deliveryDate: any, timeSlot: TimeSlot, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, phone?: string | null }, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea?: string | null }, items: Array<{ __typename?: 'MealOrderItem', quantity: number, style: MealStyle, meal: { __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, category: MealCategory, availableStyles: Array<MealStyle> } }> }> };
 
 export type GetNotificationsQueryVariables = Exact<{
   filters?: InputMaybe<NotificationFilters>;
@@ -3816,6 +3909,71 @@ export function useAddBookingFeedbackMutation(baseOptions?: ApolloReactHooks.Mut
 export type AddBookingFeedbackMutationHookResult = ReturnType<typeof useAddBookingFeedbackMutation>;
 export type AddBookingFeedbackMutationResult = Apollo.MutationResult<AddBookingFeedbackMutation>;
 export type AddBookingFeedbackMutationOptions = Apollo.BaseMutationOptions<AddBookingFeedbackMutation, AddBookingFeedbackMutationVariables>;
+export const CreateMealOrderDocument = gql`
+    mutation CreateMealOrder($input: CreateMealOrderInput!) {
+  createMealOrder(input: $input) {
+    id
+    customer {
+      id
+      email
+      firstName
+      lastName
+    }
+    address {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+    }
+    deliveryDate
+    timeSlot
+    items {
+      meal {
+        id
+        name
+        description
+        pricePlate
+        priceBowl
+        category
+        availableStyles
+      }
+      quantity
+    }
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export type CreateMealOrderMutationFn = Apollo.MutationFunction<CreateMealOrderMutation, CreateMealOrderMutationVariables>;
+
+/**
+ * __useCreateMealOrderMutation__
+ *
+ * To run a mutation, you first call `useCreateMealOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMealOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMealOrderMutation, { data, loading, error }] = useCreateMealOrderMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateMealOrderMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateMealOrderMutation, CreateMealOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<CreateMealOrderMutation, CreateMealOrderMutationVariables>(CreateMealOrderDocument, options);
+      }
+export type CreateMealOrderMutationHookResult = ReturnType<typeof useCreateMealOrderMutation>;
+export type CreateMealOrderMutationResult = Apollo.MutationResult<CreateMealOrderMutation>;
+export type CreateMealOrderMutationOptions = Apollo.BaseMutationOptions<CreateMealOrderMutation, CreateMealOrderMutationVariables>;
 export const CreateNotificationDocument = gql`
     mutation CreateNotification($input: CreateNotificationInput!) {
   createNotification(input: $input) {
@@ -6748,6 +6906,132 @@ export type CheckSlotAvailabilityQueryHookResult = ReturnType<typeof useCheckSlo
 export type CheckSlotAvailabilityLazyQueryHookResult = ReturnType<typeof useCheckSlotAvailabilityLazyQuery>;
 export type CheckSlotAvailabilitySuspenseQueryHookResult = ReturnType<typeof useCheckSlotAvailabilitySuspenseQuery>;
 export type CheckSlotAvailabilityQueryResult = Apollo.QueryResult<CheckSlotAvailabilityQuery, CheckSlotAvailabilityQueryVariables>;
+export const GetMealsDocument = gql`
+    query GetMeals($category: MealCategory) {
+  meals(category: $category) {
+    id
+    name
+    description
+    pricePlate
+    priceBowl
+    availableStyles
+    category
+    image
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useGetMealsQuery__
+ *
+ * To run a query within a React component, call `useGetMealsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMealsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMealsQuery({
+ *   variables: {
+ *      category: // value for 'category'
+ *   },
+ * });
+ */
+export function useGetMealsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetMealsQuery, GetMealsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetMealsQuery, GetMealsQueryVariables>(GetMealsDocument, options);
+      }
+export function useGetMealsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetMealsQuery, GetMealsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetMealsQuery, GetMealsQueryVariables>(GetMealsDocument, options);
+        }
+export function useGetMealsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetMealsQuery, GetMealsQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetMealsQuery, GetMealsQueryVariables>(GetMealsDocument, options);
+        }
+export type GetMealsQueryHookResult = ReturnType<typeof useGetMealsQuery>;
+export type GetMealsLazyQueryHookResult = ReturnType<typeof useGetMealsLazyQuery>;
+export type GetMealsSuspenseQueryHookResult = ReturnType<typeof useGetMealsSuspenseQuery>;
+export type GetMealsQueryResult = Apollo.QueryResult<GetMealsQuery, GetMealsQueryVariables>;
+export const GetMealOrdersDocument = gql`
+    query GetMealOrders {
+  mealOrders {
+    id
+    customer {
+      id
+      email
+      firstName
+      lastName
+      phone
+    }
+    address {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+      serviceArea
+    }
+    deliveryDate
+    timeSlot
+    items {
+      meal {
+        id
+        name
+        description
+        pricePlate
+        priceBowl
+        category
+        availableStyles
+      }
+      quantity
+      style
+    }
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useGetMealOrdersQuery__
+ *
+ * To run a query within a React component, call `useGetMealOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMealOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMealOrdersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMealOrdersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetMealOrdersQuery, GetMealOrdersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetMealOrdersQuery, GetMealOrdersQueryVariables>(GetMealOrdersDocument, options);
+      }
+export function useGetMealOrdersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetMealOrdersQuery, GetMealOrdersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetMealOrdersQuery, GetMealOrdersQueryVariables>(GetMealOrdersDocument, options);
+        }
+export function useGetMealOrdersSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetMealOrdersQuery, GetMealOrdersQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetMealOrdersQuery, GetMealOrdersQueryVariables>(GetMealOrdersDocument, options);
+        }
+export type GetMealOrdersQueryHookResult = ReturnType<typeof useGetMealOrdersQuery>;
+export type GetMealOrdersLazyQueryHookResult = ReturnType<typeof useGetMealOrdersLazyQuery>;
+export type GetMealOrdersSuspenseQueryHookResult = ReturnType<typeof useGetMealOrdersSuspenseQuery>;
+export type GetMealOrdersQueryResult = Apollo.QueryResult<GetMealOrdersQuery, GetMealOrdersQueryVariables>;
 export const GetNotificationsDocument = gql`
     query GetNotifications($filters: NotificationFilters, $pagination: PaginationInput) {
   notifications(filters: $filters, pagination: $pagination) {

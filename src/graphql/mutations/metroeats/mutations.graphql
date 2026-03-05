@@ -1,0 +1,37 @@
+mutation CreateMealOrder($input: CreateMealOrderInput!) {
+  createMealOrder(input: $input) {
+    id
+    customer {
+      id
+      email
+      firstName
+      lastName
+    }
+    address {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+    }
+    deliveryDate
+    timeSlot
+    items {
+      meal {
+        id
+        name
+        description
+        pricePlate
+        priceBowl
+        category
+        availableStyles
+      }
+      quantity
+    }
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+  }
+}

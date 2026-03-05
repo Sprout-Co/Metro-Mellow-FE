@@ -1,0 +1,60 @@
+# All active meals, optionally filtered by category
+query GetMeals($category: MealCategory) {
+  meals(category: $category) {
+    id
+    name
+    description
+    pricePlate
+    priceBowl
+    availableStyles
+    category
+    image
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+
+# Current user's meal orders (requires auth)
+query GetMealOrders {
+  mealOrders {
+    id
+    customer {
+      id
+      email
+      firstName
+      lastName
+      phone
+    }
+    address {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+      serviceArea
+    }
+    deliveryDate
+    timeSlot
+    items {
+      meal {
+        id
+        name
+        description
+        pricePlate
+        priceBowl
+        category
+        availableStyles
+      }
+      quantity
+      style
+    }
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+  }
+}
