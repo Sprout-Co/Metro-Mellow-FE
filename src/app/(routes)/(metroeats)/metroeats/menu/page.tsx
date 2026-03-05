@@ -5,13 +5,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "next/navigation";
-import {
-  useGetMealsQuery,
-  MealCategory,
-  MealStyle,
-} from "@/graphql/api";
+import { useGetMealsQuery, MealCategory, MealStyle } from "@/graphql/api";
 import { useMetroEatsCart } from "../_context/MetroEatsCartContext";
 import styles from "./menu.module.scss";
+import { ShoppingCart } from "lucide-react";
 
 const MEAL_CATEGORY_OPTIONS: { value: "" | MealCategory; label: string }[] = [
   { value: "", label: "All" },
@@ -37,8 +34,7 @@ function MenuContent() {
     variables: { category: activeCategory || undefined },
   });
 
-  const styleFilter =
-    activeTab === "plates" ? MealStyle.Plate : MealStyle.Bowl;
+  const styleFilter = activeTab === "plates" ? MealStyle.Plate : MealStyle.Bowl;
   const mealsByStyle = useMemo(() => {
     const list = data?.meals ?? [];
     return list.filter((m) => m.availableStyles.includes(styleFilter));
@@ -51,7 +47,7 @@ function MenuContent() {
       result = result.filter(
         (m) =>
           m.name.toLowerCase().includes(q) ||
-          m.description.toLowerCase().includes(q)
+          m.description.toLowerCase().includes(q),
       );
     }
     return result;
@@ -62,8 +58,7 @@ function MenuContent() {
     setSearch("");
   };
 
-  const cartStyle: "PLATE" | "BOWL" =
-    activeTab === "plates" ? "PLATE" : "BOWL";
+  const cartStyle: "PLATE" | "BOWL" = activeTab === "plates" ? "PLATE" : "BOWL";
 
   return (
     <>
@@ -86,49 +81,6 @@ function MenuContent() {
           priority
         />
       </section>
-
-      {/* <nav className={styles.menu__nav}>
-        <div className={styles.menu__navInner}>
-          <Link href="/metroeats" className={styles.menu__logo}>
-            <Image
-              src="/brand/metroeats/brand-logo/inline/white-on-yellow-inline.svg"
-              alt="MetroEats"
-              width={130}
-              height={30}
-              priority
-            />
-          </Link>
-          <div className={styles.menu__navActions}>
-            <button
-              type="button"
-              className={styles.menu__cartBtn}
-              onClick={openCart}
-              aria-label="View cart"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-              </svg>
-              {cartCount > 0 && (
-                <span className={styles.menu__cartBadge}>{cartCount}</span>
-              )}
-            </button>
-            <Link href="/metroeats" className={styles.menu__backLink}>
-              ← Back
-            </Link>
-          </div>
-        </div>
-      </nav> */}
 
       <main className={styles.menu__main}>
         <div className={styles.menu__controls}>
@@ -208,8 +160,8 @@ function MenuContent() {
               {filtered.map((meal) => {
                 const price =
                   activeTab === "plates"
-                    ? meal.pricePlate ?? 0
-                    : meal.priceBowl ?? 0;
+                    ? (meal.pricePlate ?? 0)
+                    : (meal.priceBowl ?? 0);
                 return (
                   <motion.div
                     key={meal.id}
@@ -237,7 +189,9 @@ function MenuContent() {
                       <div className={styles.menu__cardHead}>
                         <h3 className={styles.menu__cardName}>{meal.name}</h3>
                       </div>
-                      <p className={styles.menu__cardDesc}>{meal.description}</p>
+                      <p className={styles.menu__cardDesc}>
+                        {meal.description}
+                      </p>
                       <div className={styles.menu__cardMeta}>
                         <span className={styles.menu__cardPrice}>
                           {fmt(price)}
@@ -257,24 +211,22 @@ function MenuContent() {
                           type="button"
                           className={styles.menu__addCartBtn}
                           onClick={() =>
-                            addItem(meal.id, meal.name, price, 1, undefined, cartStyle)
+                            addItem(
+                              meal.id,
+                              meal.name,
+                              price,
+                              1,
+                              undefined,
+                              cartStyle,
+                            )
                           }
                           aria-label={`Add ${meal.name} to cart`}
                         >
-                          <svg
-                            width="18"
-                            height="18"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <circle cx="9" cy="21" r="1" />
-                            <circle cx="20" cy="21" r="1" />
-                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                          </svg>
+                          <ShoppingCart
+                            size={18}
+                            strokeWidth={2}
+                            aria-hidden="true"
+                          />
                         </button>
                       </div>
                     </div>
@@ -303,13 +255,7 @@ function MenuContent() {
 
       <AnimatePresence>
         {cartCount > 0 && (
-          <motion.div
-            className={styles.menu__floatingCart}
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            transition={{ type: "spring", damping: 20, stiffness: 300 }}
-          >
+          <div className={styles.menu__floatingCart}>
             <div className={styles.menu__floatingCartInfo}>
               <span className={styles.menu__floatingCartCount}>
                 {cartCount} item{cartCount !== 1 ? "s" : ""}
@@ -325,7 +271,7 @@ function MenuContent() {
             >
               View Cart
             </button>
-          </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </>
