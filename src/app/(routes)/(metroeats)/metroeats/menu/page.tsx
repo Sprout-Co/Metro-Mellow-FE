@@ -5,310 +5,20 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "next/navigation";
+import {
+  useGetMealsQuery,
+  MealCategory,
+  MealStyle,
+} from "@/graphql/api";
 import { useMetroEatsCart } from "../_context/MetroEatsCartContext";
 import styles from "./menu.module.scss";
 
-interface Meal {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  emoji: string;
-  category: string;
-  servings: string;
-  eta: string;
-  tag?: string;
-}
-
-const plateMeals: Meal[] = [
-  {
-    id: "p1",
-    name: "Mighty Jollof",
-    description:
-      "Smoky party-style jollof rice paired with any protein of your choice",
-    price: 8000,
-    emoji: "🍛",
-    category: "rice",
-    servings: "1 Serving",
-    eta: "45 minutes",
-    tag: "Bestseller",
-  },
-  {
-    id: "p2",
-    name: "Mama's Fried Rice",
-    description:
-      "Our signature take on the beloved Nigerian fried rice — savoury, colourful, and packed with home-style flavour",
-    price: 8000,
-    emoji: "🍚",
-    category: "rice",
-    servings: "1 Serving",
-    eta: "45 minutes",
-  },
-  {
-    id: "p3",
-    name: "Ofada Flame",
-    description:
-      "Spicy ofada sauce paired with any rice/protein choice of yours and some extras",
-    price: 7500,
-    emoji: "🍛",
-    category: "rice",
-    servings: "1 Serving",
-    eta: "45 minutes",
-  },
-  {
-    id: "p4",
-    name: "Coconut Rice & Shrimp",
-    description:
-      "Fragrant coconut rice loaded with juicy shrimp. A comforting favourite for seafood lovers",
-    price: 9000,
-    emoji: "🍤",
-    category: "rice",
-    servings: "1 Serving",
-    eta: "45 minutes",
-    tag: "Bestseller",
-  },
-  {
-    id: "p5",
-    name: "Rodo Pasta",
-    description:
-      "Spicy red pasta tossed in a bold pepper mix that brings just the right amount of heat",
-    price: 7500,
-    emoji: "🍝",
-    category: "pasta",
-    servings: "1 Serving",
-    eta: "40 minutes",
-  },
-  {
-    id: "p6",
-    name: "Stir-Fry Noodles",
-    description: "Wok-tossed noodles with vegetables and chicken strips",
-    price: 7000,
-    emoji: "🍜",
-    category: "pasta",
-    servings: "1 Serving",
-    eta: "40 minutes",
-  },
-  {
-    id: "p7",
-    name: "Lagos Pottage",
-    description:
-      "Traditional yam and sweet pottage paired with any protein of your choice",
-    price: 7000,
-    emoji: "🥘",
-    category: "pottage",
-    servings: "1 Serving",
-    eta: "1 hour",
-  },
-  {
-    id: "p8",
-    name: "Beans & Plantain",
-    description:
-      "Honey beans served with fried plantain and protein of your choice",
-    price: 6500,
-    emoji: "🫘",
-    category: "beans",
-    servings: "1 Serving",
-    eta: "45 minutes",
-  },
-  {
-    id: "p9",
-    name: "Soups & Swallow",
-    description:
-      "Choose your swallow and soup combo. Amala, eba, pounded yam with egusi, ewedu, ogbono or okra",
-    price: 8500,
-    emoji: "🍲",
-    category: "swallows",
-    servings: "1 Serving",
-    eta: "1 hour",
-    tag: "Bestseller",
-  },
-  {
-    id: "p10",
-    name: "Grilled Chicken Salad",
-    description:
-      "Mixed greens, grilled chicken breast, avocado, and vinaigrette",
-    price: 7000,
-    emoji: "🥗",
-    category: "healthy",
-    servings: "1 Serving",
-    eta: "30 minutes",
-  },
-  {
-    id: "p11",
-    name: "Smoothie Bowl",
-    description: "Acai, banana, granola, mixed berries, and chia seeds",
-    price: 5500,
-    emoji: "🫐",
-    category: "healthy",
-    servings: "1 Serving",
-    eta: "20 minutes",
-  },
-  {
-    id: "p12",
-    name: "Chicken Wrap Bowl",
-    description: "Brown rice, grilled chicken, beans, peppers, and guac",
-    price: 7500,
-    emoji: "🌯",
-    category: "healthy",
-    servings: "1 Serving",
-    eta: "35 minutes",
-  },
-];
-
-const bucketMeals: Meal[] = [
-  {
-    id: "b1",
-    name: "Mighty Jollof",
-    description:
-      "Smoky party-style jollof rice bucket — perfect for sharing or stocking up",
-    price: 16500,
-    emoji: "🍛",
-    category: "rice",
-    servings: "6 Servings, 2 Litres",
-    eta: "2 hours",
-    tag: "Bestseller",
-  },
-  {
-    id: "b2",
-    name: "Fried Rice Bucket",
-    description:
-      "Veggie-loaded fried rice in a family-size bucket. Great for events",
-    price: 16500,
-    emoji: "🍚",
-    category: "rice",
-    servings: "6 Servings, 2 Litres",
-    eta: "2 hours",
-  },
-  {
-    id: "b3",
-    name: "Coconut Rice & Shrimp",
-    description:
-      "Fragrant coconut rice with shrimp, family-size. Rich and flavourful",
-    price: 22000,
-    emoji: "🍤",
-    category: "rice",
-    servings: "6 Servings, 2 Litres",
-    eta: "2 hours",
-  },
-  {
-    id: "b4",
-    name: "Ofada Rice & Sauce",
-    description:
-      "Classic ofada rice with our signature spicy sauce, in bucket size",
-    price: 16000,
-    emoji: "🍛",
-    category: "rice",
-    servings: "6 Servings, 2 Litres",
-    eta: "2 hours",
-    tag: "Bestseller",
-  },
-  {
-    id: "b5",
-    name: "Rodo Pasta Bucket",
-    description:
-      "Spicy red pasta bucket — bold pepper mix with the right amount of heat",
-    price: 14000,
-    emoji: "🍝",
-    category: "pasta",
-    servings: "6 Servings, 2 Litres",
-    eta: "1.5 hours",
-  },
-  {
-    id: "b6",
-    name: "Lagos Pottage",
-    description:
-      "Traditional yam pottage with vegetables and spices, hearty and nutritious",
-    price: 14000,
-    emoji: "🥘",
-    category: "pottage",
-    servings: "6 Servings, 2 Litres",
-    eta: "1.5 hours",
-  },
-  {
-    id: "b7",
-    name: "Egusi Soup",
-    description:
-      "A West African favourite that features melon seeds with a unique flavour profile",
-    price: 18500,
-    emoji: "🍲",
-    category: "soups",
-    servings: "6 Servings, 2 Litres",
-    eta: "2 hours",
-  },
-  {
-    id: "b8",
-    name: "Efo Riro",
-    description:
-      "Yoruba delicacy that's as tasty as it is colourful. This spinach stew is rich and flavourful",
-    price: 19000,
-    emoji: "🥬",
-    category: "soups",
-    servings: "6 Servings, 2 Litres",
-    eta: "2 hours",
-  },
-  {
-    id: "b9",
-    name: "Chicken Stew",
-    description:
-      "Rich tomato stew with generous chicken pieces and vegetable oil base",
-    price: 38500,
-    emoji: "🍗",
-    category: "soups",
-    servings: "Chicken x10",
-    eta: "2 hours",
-    tag: "Bestseller",
-  },
-  {
-    id: "b10",
-    name: "Party Protein",
-    description:
-      "Assorted protein mix with turkey, chicken, and peppered sauce",
-    price: 32000,
-    emoji: "🥩",
-    category: "protein",
-    servings: "Turkey x6, Chicken x6",
-    eta: "2 hours",
-  },
-  {
-    id: "b11",
-    name: "Afang Soup",
-    description:
-      "Traditional Efik delicacy with afang leaves and water leaves — rich and hearty",
-    price: 14500,
-    emoji: "🍲",
-    category: "soups",
-    servings: "6 Servings, 2 Litres",
-    eta: "2 hours",
-  },
-  {
-    id: "b12",
-    name: "Ogbono Soup",
-    description:
-      "Draw soup with ogbono seeds, assorted meat and stockfish — silky and satisfying",
-    price: 16000,
-    emoji: "🫕",
-    category: "soups",
-    servings: "6 Servings, 2 Litres",
-    eta: "2 hours",
-  },
-];
-
-const plateCategories = [
-  "All",
-  "Rice",
-  "Pasta",
-  "Pottage",
-  "Beans",
-  "Swallows",
-  "Healthy",
-];
-const bucketCategories = [
-  "All",
-  "Rice",
-  "Pasta",
-  "Pottage",
-  "Soups",
-  "Protein",
+const MEAL_CATEGORY_OPTIONS: { value: "" | MealCategory; label: string }[] = [
+  { value: "", label: "All" },
+  { value: MealCategory.Breakfast, label: "Breakfast" },
+  { value: MealCategory.Lunch, label: "Lunch" },
+  { value: MealCategory.Dinner, label: "Dinner" },
+  { value: MealCategory.Snack, label: "Snack" },
 ];
 
 const fmt = (n: number) => `₦${n.toLocaleString()}`;
@@ -320,36 +30,40 @@ function MenuContent() {
     useMetroEatsCart();
 
   const [activeTab, setActiveTab] = useState<"plates" | "bowls">(initialTab);
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCategory, setActiveCategory] = useState<"" | MealCategory>("");
   const [search, setSearch] = useState("");
 
-  const meals = activeTab === "plates" ? plateMeals : bucketMeals;
-  const categories =
-    activeTab === "plates" ? plateCategories : bucketCategories;
+  const { data, loading, error } = useGetMealsQuery({
+    variables: { category: activeCategory || undefined },
+  });
+
+  const styleFilter =
+    activeTab === "plates" ? MealStyle.Plate : MealStyle.Bowl;
+  const mealsByStyle = useMemo(() => {
+    const list = data?.meals ?? [];
+    return list.filter((m) => m.availableStyles.includes(styleFilter));
+  }, [data?.meals, styleFilter]);
 
   const filtered = useMemo(() => {
-    let result = meals;
-    if (activeCategory !== "All") {
-      result = result.filter(
-        (m) => m.category.toLowerCase() === activeCategory.toLowerCase(),
-      );
-    }
+    let result = mealsByStyle;
     if (search.trim()) {
       const q = search.toLowerCase();
       result = result.filter(
         (m) =>
           m.name.toLowerCase().includes(q) ||
-          m.description.toLowerCase().includes(q),
+          m.description.toLowerCase().includes(q)
       );
     }
     return result;
-  }, [meals, activeCategory, search]);
+  }, [mealsByStyle, search]);
 
   const handleTabSwitch = (tab: "plates" | "bowls") => {
     setActiveTab(tab);
-    setActiveCategory("All");
     setSearch("");
   };
+
+  const cartStyle: "PLATE" | "BOWL" =
+    activeTab === "plates" ? "PLATE" : "BOWL";
 
   return (
     <>
@@ -464,90 +178,114 @@ function MenuContent() {
         </p>
 
         <div className={styles.menu__categoryStrip}>
-          {categories.map((cat) => (
+          {MEAL_CATEGORY_OPTIONS.map((opt) => (
             <button
-              key={cat}
-              className={`${styles.menu__categoryBtn} ${activeCategory === cat ? styles["menu__categoryBtn--active"] : ""}`}
-              onClick={() => setActiveCategory(cat)}
+              key={opt.value || "all"}
+              className={`${styles.menu__categoryBtn} ${activeCategory === opt.value ? styles["menu__categoryBtn--active"] : ""}`}
+              onClick={() => setActiveCategory(opt.value)}
             >
-              {cat}
+              {opt.label}
             </button>
           ))}
         </div>
 
-        <motion.div className={styles.menu__grid} layout>
-          <AnimatePresence mode="popLayout">
-            {filtered.map((meal) => (
-              <motion.div
-                key={meal.id}
-                className={styles.menu__card}
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.25 }}
-              >
-                <div className={styles.menu__cardImage}>
-                  <span className={styles.menu__cardEmoji}>{meal.emoji}</span>
-                  {meal.tag && (
-                    <span className={styles.menu__cardTag}>🔥 {meal.tag}</span>
-                  )}
-                </div>
-                <div className={styles.menu__cardBody}>
-                  <div className={styles.menu__cardHead}>
-                    <h3 className={styles.menu__cardName}>{meal.name}</h3>
-                    <span className={styles.menu__servingBadge}>
-                      {meal.servings}
-                    </span>
-                  </div>
-                  <p className={styles.menu__cardDesc}>{meal.description}</p>
-                  <div className={styles.menu__cardMeta}>
-                    <span className={styles.menu__cardPrice}>
-                      {fmt(meal.price)}
-                    </span>
-                    <span className={styles.menu__cardEta}>
-                      ETA: {meal.eta}
-                    </span>
-                  </div>
-                  <div className={styles.menu__cardActions}>
-                    <button
-                      type="button"
-                      className={styles.menu__viewBtn}
-                      onClick={() =>
-                        openCustomize(meal.id, meal.name, meal.price)
-                      }
-                    >
-                      Customize
-                    </button>
-                    <button
-                      type="button"
-                      className={styles.menu__addCartBtn}
-                      onClick={() => addItem(meal.id, meal.name, meal.price, 1)}
-                      aria-label={`Add ${meal.name} to cart`}
-                    >
-                      <svg
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <circle cx="9" cy="21" r="1" />
-                        <circle cx="20" cy="21" r="1" />
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        {loading && (
+          <div className={styles.menu__empty}>
+            <p>Loading menu…</p>
+          </div>
+        )}
 
-        {filtered.length === 0 && (
+        {error && (
+          <div className={styles.menu__empty}>
+            <p>Could not load menu. Please try again later.</p>
+            <Link href="/metroeats">Back to MetroEats</Link>
+          </div>
+        )}
+
+        {!loading && !error && (
+          <motion.div className={styles.menu__grid} layout>
+            <AnimatePresence mode="popLayout">
+              {filtered.map((meal) => {
+                const price =
+                  activeTab === "plates"
+                    ? meal.pricePlate ?? 0
+                    : meal.priceBowl ?? 0;
+                return (
+                  <motion.div
+                    key={meal.id}
+                    className={styles.menu__card}
+                    layout
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    <div className={styles.menu__cardImage}>
+                      {meal.image ? (
+                        <Image
+                          src={meal.image}
+                          alt={meal.name}
+                          fill
+                          sizes="(max-width: 768px) 50vw, 200px"
+                          className={styles.menu__cardImg}
+                        />
+                      ) : (
+                        <span className={styles.menu__cardEmoji}>🍽</span>
+                      )}
+                    </div>
+                    <div className={styles.menu__cardBody}>
+                      <div className={styles.menu__cardHead}>
+                        <h3 className={styles.menu__cardName}>{meal.name}</h3>
+                      </div>
+                      <p className={styles.menu__cardDesc}>{meal.description}</p>
+                      <div className={styles.menu__cardMeta}>
+                        <span className={styles.menu__cardPrice}>
+                          {fmt(price)}
+                        </span>
+                      </div>
+                      <div className={styles.menu__cardActions}>
+                        <button
+                          type="button"
+                          className={styles.menu__viewBtn}
+                          onClick={() =>
+                            openCustomize(meal.id, meal.name, price, cartStyle)
+                          }
+                        >
+                          Customize
+                        </button>
+                        <button
+                          type="button"
+                          className={styles.menu__addCartBtn}
+                          onClick={() =>
+                            addItem(meal.id, meal.name, price, 1, undefined, cartStyle)
+                          }
+                          aria-label={`Add ${meal.name} to cart`}
+                        >
+                          <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <circle cx="9" cy="21" r="1" />
+                            <circle cx="20" cy="21" r="1" />
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </motion.div>
+        )}
+
+        {!loading && !error && filtered.length === 0 && (
           <div className={styles.menu__empty}>
             <p>Nothing here. Try a different filter or search.</p>
           </div>

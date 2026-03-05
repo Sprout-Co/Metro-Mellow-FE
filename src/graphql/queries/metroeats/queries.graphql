@@ -9,6 +9,11 @@ query GetMeals($category: MealCategory) {
     availableStyles
     category
     image
+    extras {
+      id
+      name
+      price
+    }
     isActive
     createdAt
     updatedAt
@@ -48,9 +53,19 @@ query GetMealOrders {
         priceBowl
         category
         availableStyles
+        extras {
+          id
+          name
+          price
+        }
       }
       quantity
       style
+      extras {
+        id
+        name
+        price
+      }
     }
     totalPrice
     paymentStatus

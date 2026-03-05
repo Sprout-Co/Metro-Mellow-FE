@@ -7,12 +7,15 @@ export interface CartCustomization {
   notes?: string;
 }
 
+export type CartMealStyle = "PLATE" | "BOWL";
+
 export interface CartLineItem {
   lineId: string;
   mealId: string;
   name: string;
   price: number;
   quantity: number;
+  style: CartMealStyle;
   customization?: CartCustomization;
 }
 
@@ -26,15 +29,27 @@ interface MetroEatsCartContextValue {
     name: string,
     price: number,
     quantity?: number,
-    customization?: CartCustomization
+    customization?: CartCustomization,
+    style?: CartMealStyle
   ) => void;
   removeLine: (lineId: string) => void;
   updateQuantity: (lineId: string, quantity: number) => void;
+  clearCart: () => void;
   cartCount: number;
   cartTotal: number;
   // Customization modal
-  customizationMeal: { mealId: string; name: string; price: number } | null;
-  openCustomize: (mealId: string, name: string, price: number) => void;
+  customizationMeal: {
+    mealId: string;
+    name: string;
+    price: number;
+    style: CartMealStyle;
+  } | null;
+  openCustomize: (
+    mealId: string,
+    name: string,
+    price: number,
+    style: CartMealStyle
+  ) => void;
   closeCustomize: () => void;
 }
 
@@ -60,13 +75,14 @@ export function MetroEatsCartProvider({ children }: { children: React.ReactNode 
     mealId: string;
     name: string;
     price: number;
+    style: CartMealStyle;
   } | null>(null);
 
   const openCart = useCallback(() => setIsCartOpen(true), []);
   const closeCart = useCallback(() => setIsCartOpen(false), []);
   const openCustomize = useCallback(
-    (mealId: string, name: string, price: number) => {
-      setCustomizationMeal({ mealId, name, price });
+    (mealId: string, name: string, price: number, style: CartMealStyle) => {
+      setCustomizationMeal({ mealId, name, price, style });
     },
     []
   );
@@ -78,12 +94,15 @@ export function MetroEatsCartProvider({ children }: { children: React.ReactNode 
       name: string,
       price: number,
       quantity = 1,
-      customization?: CartCustomization
+      customization?: CartCustomization,
+      style: CartMealStyle = "PLATE"
     ) => {
       setItems((prev) => {
         const existingIndex = prev.findIndex(
           (line) =>
-            line.mealId === mealId && sameCustomization(line.customization, customization)
+            line.mealId === mealId &&
+            line.style === style &&
+            sameCustomization(line.customization, customization)
         );
         if (existingIndex >= 0) {
           const next = [...prev];
@@ -98,6 +117,7 @@ export function MetroEatsCartProvider({ children }: { children: React.ReactNode 
             name,
             price,
             quantity,
+            style,
             customization,
           },
         ];
@@ -105,6 +125,8 @@ export function MetroEatsCartProvider({ children }: { children: React.ReactNode 
     },
     []
   );
+
+  const clearCart = useCallback(() => setItems([]), []);
 
   const removeLine = useCallback((lineId: string) => {
     setItems((prev) => prev.filter((line) => line.lineId !== lineId));
@@ -139,6 +161,7 @@ export function MetroEatsCartProvider({ children }: { children: React.ReactNode 
       addItem,
       removeLine,
       updateQuantity,
+      clearCart,
       cartCount,
       cartTotal,
       customizationMeal,
@@ -153,6 +176,7 @@ export function MetroEatsCartProvider({ children }: { children: React.ReactNode 
       addItem,
       removeLine,
       updateQuantity,
+      clearCart,
       cartCount,
       cartTotal,
       customizationMeal,

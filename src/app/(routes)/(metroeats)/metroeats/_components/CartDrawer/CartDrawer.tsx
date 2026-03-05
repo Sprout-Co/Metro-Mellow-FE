@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMetroEatsCart } from "../../_context/MetroEatsCartContext";
 import styles from "./CartDrawer.module.scss";
@@ -8,6 +9,7 @@ import styles from "./CartDrawer.module.scss";
 const fmt = (n: number) => `₦${n.toLocaleString()}`;
 
 export default function CartDrawer() {
+  const router = useRouter();
   const {
     items,
     isCartOpen,
@@ -17,6 +19,11 @@ export default function CartDrawer() {
     cartCount,
     cartTotal,
   } = useMetroEatsCart();
+
+  const handleProceedToCheckout = () => {
+    closeCart();
+    router.push("/metroeats/checkout");
+  };
 
   useEffect(() => {
     if (isCartOpen) {
@@ -87,7 +94,7 @@ export default function CartDrawer() {
                           </span>
                         )}
                         <span className={styles.drawer__itemPrice}>
-                          {fmt(line.price)} × {line.quantity}
+                          {line.style === "PLATE" ? "Plate" : "Bowl"} · {fmt(line.price)} × {line.quantity}
                         </span>
                       </div>
                       <div className={styles.drawer__itemActions}>
@@ -129,6 +136,7 @@ export default function CartDrawer() {
                     type="button"
                     className={styles.drawer__checkout}
                     disabled={items.length === 0}
+                    onClick={handleProceedToCheckout}
                   >
                     Proceed to checkout ({cartCount} item{cartCount !== 1 ? "s" : ""})
                   </button>

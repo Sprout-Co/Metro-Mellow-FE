@@ -473,6 +473,7 @@ export type Meal = {
   category: MealCategory;
   createdAt: Scalars['DateTime']['output'];
   description: Scalars['String']['output'];
+  extras: Array<MealExtraOption>;
   id: Scalars['ID']['output'];
   image: Scalars['String']['output'];
   isActive: Scalars['Boolean']['output'];
@@ -500,6 +501,13 @@ export type MealDeliveryInput = {
   day: ScheduleDays;
 };
 
+export type MealExtraOption = {
+  __typename?: 'MealExtraOption';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  price: Scalars['Float']['output'];
+};
+
 export type MealOrder = {
   __typename?: 'MealOrder';
   address: Address;
@@ -516,12 +524,27 @@ export type MealOrder = {
 
 export type MealOrderItem = {
   __typename?: 'MealOrderItem';
+  extras: Array<MealOrderItemExtra>;
   meal: Meal;
   quantity: Scalars['Int']['output'];
   style: MealStyle;
 };
 
+export type MealOrderItemExtra = {
+  __typename?: 'MealOrderItemExtra';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  price: Scalars['Float']['output'];
+  quantity: Scalars['Int']['output'];
+};
+
+export type MealOrderItemExtraInput = {
+  extraId: Scalars['ID']['input'];
+  quantity: Scalars['Int']['input'];
+};
+
 export type MealOrderItemInput = {
+  extras?: InputMaybe<Array<MealOrderItemExtraInput>>;
   mealId: Scalars['ID']['input'];
   quantity: Scalars['Int']['input'];
   style: MealStyle;
@@ -2523,12 +2546,12 @@ export type GetMealsQueryVariables = Exact<{
 }>;
 
 
-export type GetMealsQuery = { __typename?: 'Query', meals: Array<{ __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, availableStyles: Array<MealStyle>, category: MealCategory, image: string, isActive: boolean, createdAt: any, updatedAt: any }> };
+export type GetMealsQuery = { __typename?: 'Query', meals: Array<{ __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, availableStyles: Array<MealStyle>, category: MealCategory, image: string, isActive: boolean, createdAt: any, updatedAt: any, extras: Array<{ __typename?: 'MealExtraOption', id: string, name: string, price: number }> }> };
 
 export type GetMealOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMealOrdersQuery = { __typename?: 'Query', mealOrders: Array<{ __typename?: 'MealOrder', id: string, deliveryDate: any, timeSlot: TimeSlot, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, phone?: string | null }, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea?: string | null }, items: Array<{ __typename?: 'MealOrderItem', quantity: number, style: MealStyle, meal: { __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, category: MealCategory, availableStyles: Array<MealStyle> } }> }> };
+export type GetMealOrdersQuery = { __typename?: 'Query', mealOrders: Array<{ __typename?: 'MealOrder', id: string, deliveryDate: any, timeSlot: TimeSlot, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, phone?: string | null }, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea?: string | null }, items: Array<{ __typename?: 'MealOrderItem', quantity: number, style: MealStyle, meal: { __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, category: MealCategory, availableStyles: Array<MealStyle>, extras: Array<{ __typename?: 'MealExtraOption', id: string, name: string, price: number }> }, extras: Array<{ __typename?: 'MealOrderItemExtra', id: string, name: string, price: number }> }> }> };
 
 export type GetNotificationsQueryVariables = Exact<{
   filters?: InputMaybe<NotificationFilters>;
@@ -6917,6 +6940,11 @@ export const GetMealsDocument = gql`
     availableStyles
     category
     image
+    extras {
+      id
+      name
+      price
+    }
     isActive
     createdAt
     updatedAt
@@ -6989,9 +7017,19 @@ export const GetMealOrdersDocument = gql`
         priceBowl
         category
         availableStyles
+        extras {
+          id
+          name
+          price
+        }
       }
       quantity
       style
+      extras {
+        id
+        name
+        price
+      }
     }
     totalPrice
     paymentStatus

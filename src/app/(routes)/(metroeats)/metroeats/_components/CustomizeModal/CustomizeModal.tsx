@@ -54,6 +54,7 @@ export default function CustomizeModal() {
       customizationMeal.price,
       1,
       Object.keys(customization).length ? customization : undefined,
+      customizationMeal.style
     );
     closeCustomize();
   };

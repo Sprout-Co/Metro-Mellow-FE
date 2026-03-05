@@ -93,12 +93,14 @@ export default function QuickOrder() {
   const { addItem, openCart, openCustomize } = useMetroEatsCart();
 
   const handleOrder = (item: QuickItem) => {
-    addItem(item.mealId, item.name, item.price, 1);
+    const style = item.type === "plates" ? "PLATE" : "BOWL";
+    addItem(item.mealId, item.name, item.price, 1, undefined, style);
     openCart();
   };
 
   const handleCustomize = (item: QuickItem) => {
-    openCustomize(item.mealId, item.name, item.price);
+    const style = item.type === "plates" ? "PLATE" : "BOWL";
+    openCustomize(item.mealId, item.name, item.price, style);
   };
 
   return (
