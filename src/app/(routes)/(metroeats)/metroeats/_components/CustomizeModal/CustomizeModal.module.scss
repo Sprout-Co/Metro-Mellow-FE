@@ -1,167 +1,287 @@
-$me-yellow: #ffcc00;
-$me-dark: #1a1a1a;
-
-.backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: 1100;
-}
+$primary-color: #ff5722;
+$primary-hover: #e64a19;
+$text-main: #2d3436;
+$text-muted: #636e72;
+$bg-light: #f8f9fa;
+$border-color: #e9ecef;
+$border-radius: 20px;
+$transition: all 0.3s ease;
 
 .modal {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 90%;
-  max-width: 440px;
-  background: color("neutral", "white");
-  border-radius: 16px;
-  z-index: 1101;
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
   display: flex;
-  flex-direction: column;
-  max-height: 90vh;
+  align-items: center;
+  justify-content: center;
 
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: spacing("lg") spacing("xl");
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
   }
 
-  &__title {
-    @include font-weight("bold");
-    font-family: $font-family-heading;
-    color: $me-dark;
-    margin: 0;
-    font-size: 1.25rem;
+  &__container {
+    position: relative;
+    background: #ffffff;
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+    border-radius: $border-radius;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      max-height: 85vh;
+    }
   }
 
   &__close {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: none;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: white;
     border: none;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    color: $me-dark;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    transition: background 0.15s;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    color: $text-main;
+    z-index: 20;
+    transition: $transition;
 
     &:hover {
-      background: rgba(0, 0, 0, 0.06);
+      background: $bg-light;
+      transform: rotate(90deg);
     }
   }
 
-  &__body {
-    padding: spacing("xl");
-    overflow-y: auto;
-    flex: 1;
+  &__imagePane {
+    width: 45%;
+    background-size: cover;
+    background-position: center;
+    background-color: $bg-light; // fallback
+
+    @media (max-width: 768px) {
+      width: 100%;
+      height: 220px;
+      flex-shrink: 0;
+    }
   }
 
-  &__mealName {
-    @include font-weight("semibold");
-    @include font-size("body-1");
-    color: $me-dark;
-    margin: 0 0 4px;
-  }
-
-  &__mealPrice {
-    @include font-size("body-2");
-    color: $me-yellow;
-    @include font-weight("bold");
-    margin: 0 0 spacing("xl");
-  }
-
-  &__label {
+  &__detailsPane {
+    width: 55%;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    margin-bottom: spacing("lg");
-    @include font-size("sm");
-    @include font-weight("medium");
-    color: $me-dark;
+    padding: 30px 40px;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      padding: 20px;
+      overflow-y: hidden;
+    }
+  }
+
+  &__header {
+    margin-bottom: 20px;
+  }
+
+  &__title {
+    font-size: 1.75rem;
+    color: $text-main;
+    margin: 0 0 8px 0;
+  }
+
+  &__price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $primary-color;
+    margin: 0 0 8px 0;
+  }
+
+  &__desc {
+    color: $text-muted;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  &__scrollArea {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 10px; // space for scrollbar
+    margin-bottom: 20px;
+
+    /* Custom Scrollbar for webkit */
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+  }
+
+  &__group {
+    margin-bottom: 24px;
+  }
+
+  &__groupTitle {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    color: $text-main;
   }
 
   &__select {
-    padding: 12px spacing("md");
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 8px;
-    @include font-size("body-2");
-    color: $me-dark;
-    background: color("neutral", "white");
-    cursor: pointer;
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid $border-color;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: $text-main;
+    outline: none;
+    transition: $transition;
+    appearance: none; // You can add a custom dropdown arrow icon via background-image if desired
 
     &:focus {
-      outline: none;
-      border-color: $me-yellow;
-      box-shadow: 0 0 0 2px rgba($me-yellow, 0.25);
+      border-color: $primary-color;
     }
   }
 
-  &__textarea {
-    padding: 12px spacing("md");
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 8px;
-    @include font-size("body-2");
-    color: $me-dark;
-    resize: vertical;
-    min-height: 80px;
+  &__optionLabel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    border: 1px solid $border-color;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: $transition;
 
-    &::placeholder {
-      color: rgba($me-dark, 0.4);
+    &:hover {
+      background: $bg-light;
     }
+  }
+
+  &__optionMain {
+    display: flex;
+    align-items: center;
+  }
+
+  &__optionInput {
+    accent-color: $primary-color;
+    transform: scale(1.2);
+    margin-right: 12px;
+    cursor: pointer;
+  }
+
+  &__optionName {
+    color: $text-main;
+    font-weight: 500;
+  }
+
+  &__optionPrice {
+    color: $text-muted;
+    font-size: 0.9rem;
+  }
+
+  &__textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid $border-color;
+    border-radius: 10px;
+    resize: none;
+    font-family: inherit;
+    font-size: 1rem;
+    color: $text-main;
+    transition: $transition;
 
     &:focus {
       outline: none;
-      border-color: $me-yellow;
-      box-shadow: 0 0 0 2px rgba($me-yellow, 0.25);
+      border-color: $primary-color;
     }
   }
 
   &__footer {
     display: flex;
-    gap: spacing("md");
-    padding: spacing("lg") spacing("xl");
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    align-items: center;
+    gap: 15px;
+    padding-top: 20px;
+    border-top: 1px solid $border-color;
+    margin-top: auto;
   }
 
-  &__cancel {
-    flex: 1;
-    padding: 12px spacing("xl");
-    background: transparent;
-    color: $me-dark;
-    border: 1.5px solid rgba(0, 0, 0, 0.2);
-    border-radius: border-radius("pill");
-    @include font-weight("semibold");
-    @include font-size("sm");
+  &__qtySelector {
+    display: flex;
+    align-items: center;
+    background: $bg-light;
+    border-radius: 30px;
+    padding: 5px;
+  }
+
+  &__qtyBtn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: #ffffff;
+    border-radius: 50%;
+    font-size: 1.2rem;
     cursor: pointer;
-    transition: background 0.15s;
+    color: $text-main;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: $transition;
 
     &:hover {
-      background: rgba(0, 0, 0, 0.04);
+      background: $border-color;
     }
   }
 
-  &__add {
-    flex: 1;
-    padding: 12px spacing("xl");
-    background: $me-yellow;
-    color: $me-dark;
+  &__qtyDisplay {
+    width: 40px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+    color: $text-main;
+  }
+
+  &__addBtn {
+    flex-grow: 1;
+    background: $primary-color;
+    color: #ffffff;
     border: none;
-    border-radius: border-radius("pill");
-    @include font-weight("bold");
-    @include font-size("sm");
+    padding: 16px 24px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.15s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: $transition;
 
     &:hover {
-      opacity: 0.9;
+      background: $primary-hover;
+      box-shadow: 0 5px 15px rgba(255, 87, 34, 0.4);
     }
   }
 }
