@@ -2,10 +2,10 @@
 
 import { useMemo } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { useGetMealsQuery, MealStyle } from "@/graphql/api";
 import { useMetroEatsCart } from "../../_context/MetroEatsCartContext";
+import MealCard from "../MealCard/MealCard";
 import styles from "./QuickOrder.module.scss";
 
 interface QuickItem {
@@ -90,9 +90,7 @@ export default function QuickOrder() {
 
       <div className={styles.quickOrder__scroll}>
         <div className={styles.quickOrder__track}>
-          {loading && (
-            <p style={{ padding: "1rem" }}>Loading popular picks…</p>
-          )}
+          {loading && <p style={{ padding: "1rem" }}>Loading popular picks…</p>}
 
           {!loading && (error || quickItems.length === 0) && (
             <p style={{ padding: "1rem" }}>
@@ -112,50 +110,17 @@ export default function QuickOrder() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.35, delay: i * 0.05 }}
               >
-                <div className={styles.quickOrder__cardImage}>
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    fill
-                    sizes="(max-width: 768px) 160px, 200px"
-                    className={styles.quickOrder__cardImg}
-                  />
-                  <div className={styles.quickOrder__badges}>
-                    <span className={styles.quickOrder__typeBadge}>
-                      {item.type === "plates" ? "Plates" : "Bowls"}
-                    </span>
-                    {item.tag && (
-                      <span className={styles.quickOrder__tagBadge}>
-                        {item.tag}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className={styles.quickOrder__cardBody}>
-                  <h3 className={styles.quickOrder__cardName}>{item.name}</h3>
-                  <p className={styles.quickOrder__cardSub}>{item.subtitle}</p>
-                  <div className={styles.quickOrder__cardBottom}>
-                    <span className={styles.quickOrder__cardPrice}>
-                      {fmt(item.price)}
-                    </span>
-                  </div>
-                  <div className={styles.quickOrder__cardActions}>
-                    <button
-                      type="button"
-                      className={styles.quickOrder__orderBtn}
-                      onClick={() => handleOrder(item)}
-                    >
-                      Add to cart
-                    </button>
-                    <button
-                      type="button"
-                      className={styles.quickOrder__customizeLink}
-                      onClick={() => handleCustomize(item)}
-                    >
-                      or Customize
-                    </button>
-                  </div>
-                </div>
+                <MealCard
+                  name={item.name}
+                  description={item.subtitle}
+                  priceLabel={fmt(item.price)}
+                  image={item.image}
+                  imageSizes="(max-width: 768px) 160px, 200px"
+                  badge={item.type === "plates" ? "Plates" : "Bowls"}
+                  tag={item.tag}
+                  onAddToCart={() => handleOrder(item)}
+                  onCustomize={() => handleCustomize(item)}
+                />
               </motion.div>
             ))}
         </div>

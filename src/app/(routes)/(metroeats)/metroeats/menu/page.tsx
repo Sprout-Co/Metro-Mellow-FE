@@ -7,8 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import { useGetMealsQuery, MealCategory, MealStyle } from "@/graphql/api";
 import { useMetroEatsCart } from "../_context/MetroEatsCartContext";
+import MealCard from "../_components/MealCard/MealCard";
 import styles from "./menu.module.scss";
-import { ShoppingCart } from "lucide-react";
 
 const MEAL_CATEGORY_OPTIONS: { value: "" | MealCategory; label: string }[] = [
   { value: "", label: "All" },
@@ -172,64 +172,18 @@ function MenuContent() {
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.25 }}
                   >
-                    <div className={styles.menu__cardImage}>
-                      {meal.image ? (
-                        <Image
-                          src={meal.image}
-                          alt={meal.name}
-                          fill
-                          sizes="(max-width: 768px) 50vw, 200px"
-                          className={styles.menu__cardImg}
-                        />
-                      ) : (
-                        <span className={styles.menu__cardEmoji}>🍽</span>
-                      )}
-                    </div>
-                    <div className={styles.menu__cardBody}>
-                      <div className={styles.menu__cardHead}>
-                        <h3 className={styles.menu__cardName}>{meal.name}</h3>
-                      </div>
-                      <p className={styles.menu__cardDesc}>
-                        {meal.description}
-                      </p>
-                      <div className={styles.menu__cardMeta}>
-                        <span className={styles.menu__cardPrice}>
-                          {fmt(price)}
-                        </span>
-                      </div>
-                      <div className={styles.menu__cardActions}>
-                        <button
-                          type="button"
-                          className={styles.menu__viewBtn}
-                          onClick={() =>
-                            openCustomize(meal.id, meal.name, price, cartStyle)
-                          }
-                        >
-                          Customize
-                        </button>
-                        <button
-                          type="button"
-                          className={styles.menu__addCartBtn}
-                          onClick={() =>
-                            addItem(
-                              meal.id,
-                              meal.name,
-                              price,
-                              1,
-                              undefined,
-                              cartStyle,
-                            )
-                          }
-                          aria-label={`Add ${meal.name} to cart`}
-                        >
-                          <ShoppingCart
-                            size={18}
-                            strokeWidth={2}
-                            aria-hidden="true"
-                          />
-                        </button>
-                      </div>
-                    </div>
+                    <MealCard
+                      name={meal.name}
+                      description={meal.description}
+                      priceLabel={fmt(price)}
+                      image={meal.image}
+                      onCustomize={() =>
+                        openCustomize(meal.id, meal.name, price, cartStyle)
+                      }
+                      onAddToCart={() =>
+                        addItem(meal.id, meal.name, price, 1, undefined, cartStyle)
+                      }
+                    />
                   </motion.div>
                 );
               })}
