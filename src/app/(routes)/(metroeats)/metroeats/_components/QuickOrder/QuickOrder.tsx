@@ -3,32 +3,34 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useGetMealsQuery, MealStyle } from "@/graphql/api";
+import { useGetMealsQuery, MealStyle, Meal } from "@/graphql/api";
 import { useMetroEatsCart } from "../../_context/MetroEatsCartContext";
 import MealCard from "../MealCard/MealCard";
 import styles from "./QuickOrder.module.scss";
 
-interface QuickItem {
+// One row in the "Popular picks" list: we flatten Meal[] so each meal can appear
+// as both a plate and a bowl card (each with its own price).
+type QuickOrderEntry = {
   id: string;
   mealId: string;
   name: string;
   subtitle: string;
   price: number;
   image: string;
-  type: "plates" | "bowls";
+  style: MealStyle;
   tag?: string;
-}
+};
 
 const fmt = (n: number) => `₦${n.toLocaleString()}`;
 
 export default function QuickOrder() {
-  const { addItem, openCart, openCustomize } = useMetroEatsCart();
+  const { addItem, openCart, openCustomizeMealModal } = useMetroEatsCart();
   const { data, loading, error } = useGetMealsQuery();
 
-  const quickItems: QuickItem[] = useMemo(() => {
+  const quickItems: QuickOrderEntry[] = useMemo(() => {
     if (!data?.meals) return [];
 
-    const items: QuickItem[] = [];
+    const items: QuickOrderEntry[] = [];
 
     data.meals.forEach((meal) => {
       if (!meal.isActive) return;
@@ -41,7 +43,7 @@ export default function QuickOrder() {
           subtitle: meal.description,
           price: meal.pricePlate,
           image: meal.image ?? "/images/food/jollof-rice.png",
-          type: "plates",
+          style: MealStyle.Plate,
         });
       }
 
@@ -53,7 +55,7 @@ export default function QuickOrder() {
           subtitle: meal.description,
           price: meal.priceBowl,
           image: meal.image ?? "/images/food/jollof-rice.png",
-          type: "bowls",
+          style: MealStyle.Bowl,
         });
       }
     });
@@ -65,15 +67,17 @@ export default function QuickOrder() {
     }));
   }, [data?.meals]);
 
-  const handleOrder = (item: QuickItem) => {
-    const style = item.type === "plates" ? "PLATE" : "BOWL";
-    addItem(item.mealId, item.name, item.price, 1, undefined, style);
+  const handleOrder = (item: QuickOrderEntry) => {
+    addItem(item.mealId, item.name, item.price, 1, undefined, item.style);
     openCart();
   };
 
-  const handleCustomize = (item: QuickItem) => {
-    const style = item.type === "plates" ? "PLATE" : "BOWL";
-    openCustomize(item.mealId, item.name, item.price, style);
+  const handleCustomize = (
+    meal: Meal,
+    selectedStyle: MealStyle,
+    selectedPrice: number,
+  ) => {
+    openCustomizeMealModal({ ...meal, selectedStyle, selectedPrice });
   };
 
   return (
@@ -116,10 +120,18 @@ export default function QuickOrder() {
                   priceLabel={fmt(item.price)}
                   image={item.image}
                   imageSizes="(max-width: 768px) 160px, 200px"
-                  badge={item.type === "plates" ? "Plates" : "Bowls"}
+                  badge={item.style === MealStyle.Plate ? "Plates" : "Bowls"}
                   tag={item.tag}
                   onAddToCart={() => handleOrder(item)}
-                  onCustomize={() => handleCustomize(item)}
+                  onCustomize={() =>
+                    handleCustomize(
+                      data?.meals?.find(
+                        (meal) => meal.id === item.mealId,
+                      ) as Meal,
+                      item.style,
+                      item.price,
+                    )
+                  }
                 />
               </motion.div>
             ))}

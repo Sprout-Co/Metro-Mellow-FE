@@ -23,7 +23,7 @@ const fmt = (n: number) => `₦${n.toLocaleString()}`;
 function MenuContent() {
   const searchParams = useSearchParams();
   const initialTab = searchParams.get("tab") === "bowls" ? "bowls" : "plates";
-  const { addItem, openCart, openCustomize, cartCount, cartTotal } =
+  const { addItem, openCart, openCustomizeMealModal, cartCount, cartTotal } =
     useMetroEatsCart();
 
   const [activeTab, setActiveTab] = useState<"plates" | "bowls">(initialTab);
@@ -58,7 +58,8 @@ function MenuContent() {
     setSearch("");
   };
 
-  const cartStyle: "PLATE" | "BOWL" = activeTab === "plates" ? "PLATE" : "BOWL";
+  const cartStyle: MealStyle =
+    activeTab === "plates" ? MealStyle.Plate : MealStyle.Bowl;
 
   return (
     <>
@@ -178,10 +179,21 @@ function MenuContent() {
                       priceLabel={fmt(price)}
                       image={meal.image}
                       onCustomize={() =>
-                        openCustomize(meal.id, meal.name, price, cartStyle)
+                        openCustomizeMealModal({
+                          ...meal,
+                          selectedStyle: cartStyle,
+                          selectedPrice: price,
+                        })
                       }
                       onAddToCart={() =>
-                        addItem(meal.id, meal.name, price, 1, undefined, cartStyle)
+                        addItem(
+                          meal.id,
+                          meal.name,
+                          price,
+                          1,
+                          undefined,
+                          cartStyle,
+                        )
                       }
                     />
                   </motion.div>
