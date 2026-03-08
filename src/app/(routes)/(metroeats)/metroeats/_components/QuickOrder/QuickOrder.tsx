@@ -68,7 +68,15 @@ export default function QuickOrder() {
   }, [data?.meals]);
 
   const handleOrder = (item: QuickOrderEntry) => {
-    addItem(item.mealId, item.name, item.price, 1, undefined, item.style);
+    addItem(
+      item.mealId,
+      item.name,
+      item.price,
+      1,
+      undefined,
+      item.style,
+      item.image,
+    );
     openCart();
   };
 

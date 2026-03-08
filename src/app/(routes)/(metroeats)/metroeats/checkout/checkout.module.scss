@@ -1,0 +1,402 @@
+// Checkout uses design system variables, mixins, and MetroEats accent colors
+$me-yellow: #ffcc00;
+$me-dark: #1a1a1a;
+
+.checkout {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: spacing("2xl") spacing("lg");
+  font-family: inherit;
+
+  @include breakpoint-down("sm") {
+    padding: spacing("xl") spacing("md");
+  }
+
+  &__empty {
+    text-align: center;
+    padding: spacing("4xl") spacing("lg");
+    color: color("neutral", "black");
+
+    h2 {
+      margin-bottom: spacing("sm");
+      @include font-size("h5");
+      @include font-weight("bold");
+      font-family: $font-family-heading;
+    }
+
+    p {
+      color: color("neutral", "dark");
+      margin-bottom: spacing("xl");
+      @include font-size("body-2");
+    }
+  }
+
+  &__header {
+    margin-bottom: spacing("xl");
+  }
+
+  &__backLink {
+    display: inline-block;
+    color: color("neutral", "dark");
+    text-decoration: none;
+    @include font-weight("medium");
+    @include font-size("body-2");
+    margin-bottom: spacing("sm");
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: color("accent", "base");
+    }
+  }
+
+  &__pageTitle {
+    @include font-size("title");
+    @include font-weight("bold");
+    font-family: $font-family-heading;
+    color: $me-dark;
+    margin: 0;
+  }
+
+  &__container {
+    @include flex(row, nowrap, flex-start, stretch);
+    gap: spacing("2xl");
+    align-items: flex-start;
+
+    @include breakpoint-down("lg") {
+      flex-direction: column;
+    }
+  }
+
+  &__main {
+    flex: 1;
+    min-width: 0;
+    @include flex(column);
+    gap: spacing("xl");
+  }
+
+  &__section {
+    background: color("neutral", "white");
+    border-radius: border-radius("2xl");
+    padding: spacing("xl");
+    box-shadow: map-get($shadows, "sm");
+
+    @include breakpoint-down("sm") {
+      padding: spacing("lg");
+    }
+  }
+
+  &__sectionTitle {
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    font-family: $font-family-heading;
+    color: $me-dark;
+    margin: 0 0 spacing("lg");
+    padding-bottom: spacing("md");
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  &__methodToggle {
+    display: flex;
+    gap: spacing("md");
+  }
+
+  &__methodLabel {
+    flex: 1;
+    @include flex(row, nowrap, center, center);
+    gap: spacing("sm");
+    padding: spacing("md");
+    border: 2px solid color("neutral", "light");
+    border-radius: border-radius("xl");
+    cursor: pointer;
+    @include font-weight("semibold");
+    @include font-size("body-2");
+    color: color("neutral", "dark");
+    transition: border-color 0.2s ease, background 0.2s ease;
+
+    input {
+      display: none;
+    }
+
+    &:hover {
+      background: color("neutral", "lightest");
+    }
+
+    &--active {
+      border-color: color("accent", "base");
+      background: rgba($me-yellow, 0.08);
+      color: darken($me-yellow, 15%);
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("lg");
+
+    @include breakpoint-down("sm") {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__inputGroup {
+    @include flex(column);
+    gap: spacing("xs");
+
+    &--full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      @include font-size("sm");
+      @include font-weight("medium");
+      color: $me-dark;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: spacing("sm") spacing("md");
+      border: 1px solid color("neutral", "light");
+      border-radius: border-radius("lg");
+      @include font-size("base");
+      font-family: inherit;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      outline: none;
+
+      &:focus {
+        border-color: color("accent", "base");
+        box-shadow: map-get($shadows, "focus");
+      }
+
+      &::placeholder {
+        color: color("neutral", "medium");
+      }
+    }
+
+    select {
+      cursor: pointer;
+      appearance: auto;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+  }
+
+  &__paymentOptions {
+    @include flex(column);
+    gap: spacing("md");
+  }
+
+  &__optionLabel {
+    @include flex(row, nowrap, space-between, center);
+    padding: spacing("lg") spacing("xl");
+    border: 1px solid color("neutral", "light");
+    border-radius: border-radius("xl");
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: color("neutral", "lightest");
+    }
+  }
+
+  &__optionMain {
+    @include flex(row, nowrap, flex-start, center);
+    gap: spacing("md");
+
+    input[type="radio"] {
+      accent-color: color("accent", "base");
+      cursor: pointer;
+    }
+  }
+
+  &__optionText {
+    @include font-weight("medium");
+    @include font-size("body-2");
+    color: $me-dark;
+  }
+
+  &__optionIcon {
+    @include font-size("2xl");
+  }
+
+  &__sidebar {
+    width: 400px;
+    flex-shrink: 0;
+    position: sticky;
+    top: spacing("xl");
+
+    @include breakpoint-down("lg") {
+      width: 100%;
+      position: static;
+    }
+  }
+
+  &__summaryCard {
+    background: color("neutral", "white");
+    border-radius: border-radius("2xl");
+    padding: spacing("xl");
+    box-shadow: map-get($shadows, "md");
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  &__summaryTitle {
+    @include font-size("body-2");
+    @include font-weight("semibold");
+    font-family: $font-family-heading;
+    color: $me-dark;
+    margin: 0 0 spacing("lg");
+  }
+
+  &__summaryItems {
+    @include flex(column);
+    gap: spacing("md");
+    margin-bottom: spacing("xl");
+    max-height: 360px;
+    overflow-y: auto;
+    padding-right: spacing("xs");
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: color("neutral", "light");
+      border-radius: 4px;
+    }
+  }
+
+  &__summaryItem {
+    @include flex(row, nowrap, space-between, flex-start);
+    padding-bottom: spacing("md");
+    border-bottom: 1px dashed color("neutral", "light");
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+  }
+
+  &__summaryItemInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  &__summaryItemQty {
+    @include font-weight("semibold");
+    @include font-size("sm");
+    color: $me-dark;
+    background: color("neutral", "lightest");
+    padding: 2px spacing("xs");
+    border-radius: border-radius("md");
+    width: fit-content;
+  }
+
+  &__summaryItemName {
+    display: block;
+    @include font-weight("semibold");
+    @include font-size("body-2");
+    color: $me-dark;
+    margin-bottom: 2px;
+  }
+
+  &__summaryItemMeta {
+    @include font-size("xs");
+    color: color("neutral", "dark");
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__summaryItemPrice {
+    @include font-weight("semibold");
+    @include font-size("body-2");
+    color: $me-dark;
+    flex-shrink: 0;
+  }
+
+  &__totals {
+    border-top: 2px solid color("neutral", "light");
+    padding-top: spacing("lg");
+    margin-bottom: spacing("xl");
+    @include flex(column);
+    gap: spacing("sm");
+  }
+
+  &__totalsRow {
+    @include flex(row, nowrap, space-between, center);
+    color: color("neutral", "dark");
+    @include font-size("body-2");
+
+    &--bold {
+      @include font-weight("bold");
+      @include font-size("xl");
+      color: $me-dark;
+      margin-top: spacing("sm");
+      padding-top: spacing("sm");
+      border-top: 1px dashed color("neutral", "light");
+    }
+  }
+
+  &__submitBtn,
+  &__submitBtnMobile {
+    width: 100%;
+    background: $me-dark;
+    color: color("neutral", "white");
+    border: none;
+    padding: spacing("md") spacing("xl");
+    border-radius: border-radius("xl");
+    @include font-weight("bold");
+    @include font-size("body-2");
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+    text-align: center;
+
+    &:hover:not(:disabled) {
+      background: lighten($me-dark, 8%);
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__submitBtnMobile {
+    display: none;
+    margin-top: spacing("sm");
+
+    @include breakpoint-down("lg") {
+      display: block;
+    }
+  }
+
+  @include breakpoint-down("lg") {
+    &__submitBtn {
+      display: none;
+    }
+  }
+
+  &__error {
+    @include font-size("sm");
+    color: color("status", "error");
+    margin-top: spacing("sm");
+  }
+
+  &__slotOption {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("sm") 0;
+  }
+}

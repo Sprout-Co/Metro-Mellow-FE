@@ -193,6 +193,7 @@ function MenuContent() {
                           1,
                           undefined,
                           cartStyle,
+                          meal.image,
                         )
                       }
                     />

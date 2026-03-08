@@ -5,24 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   useMetroEatsCart,
   type CartCustomization,
+  type CartLineExtra,
 } from "../../_context/MetroEatsCartContext";
 import styles from "./CustomizeModal.module.scss";
-
-// const PROTEIN_OPTIONS = [
-//   "No preference",
-//   "Chicken",
-//   "Beef",
-//   "Fish",
-//   "Turkey",
-//   "Goat",
-//   "Assorted",
-// ];
-
-// Mock add-ons for the stylish UI (you can map these from your DB later)
-const MOCK_ADDONS = [
-  { id: "a1", name: "Extra Plantain", price: 500 },
-  { id: "a2", name: "Extra Egg", price: 300 },
-];
 
 const fmt = (n: number) => `₦${n.toLocaleString()}`;
 
@@ -33,9 +18,9 @@ export default function CustomizeModal() {
   const [notes, setNotes] = useState("");
   const [quantity, setQuantity] = useState(1);
   /** Extra item id -> quantity (0 = not selected) */
-  const [extraQuantities, setExtraQuantities] = useState<Record<string, number>>(
-    {},
-  );
+  const [extraQuantities, setExtraQuantities] = useState<
+    Record<string, number>
+  >({});
 
   // Reset state when a new meal is selected
   useEffect(() => {
@@ -89,7 +74,15 @@ export default function CustomizeModal() {
     const customization: CartCustomization = {};
     if (protein && protein !== "No preference") customization.protein = protein;
     if (notes.trim()) customization.notes = notes.trim();
-    // if (selectedAddons.length > 0) customization.addons = selectedAddons; // Assuming your context accepts this
+
+    const extras: CartLineExtra[] = mealToCustomize.extras
+      .map((extra) => ({
+        id: extra.id,
+        name: extra.name,
+        price: extra.price,
+        quantity: (extraQuantities[extra.id] ?? 0) * quantity,
+      }))
+      .filter((e) => e.quantity > 0);
 
     addItem(
       mealToCustomize.id,
@@ -97,7 +90,9 @@ export default function CustomizeModal() {
       basePrice,
       quantity,
       Object.keys(customization).length ? customization : undefined,
-      mealToCustomize.availableStyles[0],
+      mealToCustomize.selectedStyle,
+      mealToCustomize.image,
+      extras.length ? extras : undefined,
     );
     closeCustomizeMealModal();
   };
