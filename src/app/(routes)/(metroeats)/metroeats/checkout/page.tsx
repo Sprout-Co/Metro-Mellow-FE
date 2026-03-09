@@ -19,12 +19,6 @@ import styles from "./checkout.module.scss";
 
 const fmt = (n: number) => `₦${n.toLocaleString()}`;
 
-const TIME_SLOTS: { value: TimeSlot; label: string }[] = [
-  { value: TimeSlot.Morning, label: "Morning" },
-  { value: TimeSlot.Afternoon, label: "Afternoon" },
-  { value: TimeSlot.Evening, label: "Evening" },
-];
-
 const DELIVERY_FEE = 500;
 
 const MIN_PASSWORD_LENGTH = 6;
@@ -43,8 +37,6 @@ export default function CheckoutPage() {
   const { data: serviceAreasData } = useActiveServiceAreasQuery();
 
   const [addressId, setAddressId] = useState("");
-  const [deliveryDate, setDeliveryDate] = useState("");
-  const [timeSlot, setTimeSlot] = useState<TimeSlot>(TimeSlot.Morning);
 
   // Guest / registration fields
   const [firstName, setFirstName] = useState("");
@@ -80,15 +72,11 @@ export default function CheckoutPage() {
   }, [hasServiceAreas, serviceAreas, serviceAreaId]);
 
   const placeOrderWithAddress = async (targetAddressId: string) => {
-    if (!deliveryDate || items.length === 0) return;
-    const deliveryDateTime =
-      new Date(deliveryDate).toISOString?.() ?? deliveryDate;
+    if (items.length === 0) return;
     await createMealOrder({
       variables: {
         input: {
           addressId: targetAddressId,
-          deliveryDate: deliveryDateTime,
-          timeSlot,
           items: items.map((line) => {
             const item: {
               mealId: string;
@@ -118,7 +106,7 @@ export default function CheckoutPage() {
   const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     setRegisterError(null);
-    if (!deliveryDate || items.length === 0) return;
+    if (items.length === 0) return;
 
     try {
       if (me) {
@@ -199,8 +187,7 @@ export default function CheckoutPage() {
     );
   }
 
-  const canSubmitLoggedIn =
-    !!addressId && !!deliveryDate && addresses.length > 0;
+  const canSubmitLoggedIn = !!addressId && addresses.length > 0;
   const canSubmitGuest =
     !!firstName.trim() &&
     !!lastName.trim() &&
@@ -208,8 +195,7 @@ export default function CheckoutPage() {
     password.length >= MIN_PASSWORD_LENGTH &&
     !!street.trim() &&
     !!city.trim() &&
-    !!serviceAreaId &&
-    !!deliveryDate;
+    !!serviceAreaId;
   const canSubmit = isGuest ? canSubmitGuest : canSubmitLoggedIn;
 
   return (
@@ -389,46 +375,6 @@ export default function CheckoutPage() {
                 )}
               </div>
             )}
-
-            <div className={styles.checkout__section}>
-              <h2 className={styles.checkout__sectionTitle}>Delivery date</h2>
-              <div className={styles.checkout__inputGroup}>
-                <label htmlFor="deliveryDate">Date</label>
-                <input
-                  id="deliveryDate"
-                  type="date"
-                  value={deliveryDate}
-                  onChange={(e) => setDeliveryDate(e.target.value)}
-                  required
-                  min={new Date().toISOString().slice(0, 10)}
-                />
-              </div>
-            </div>
-
-            <div className={styles.checkout__section}>
-              <h2 className={styles.checkout__sectionTitle}>Time slot</h2>
-              <div className={styles.checkout__paymentOptions}>
-                {TIME_SLOTS.map((slot) => (
-                  <label
-                    key={slot.value}
-                    className={styles.checkout__optionLabel}
-                  >
-                    <div className={styles.checkout__optionMain}>
-                      <input
-                        type="radio"
-                        name="timeSlot"
-                        value={slot.value}
-                        checked={timeSlot === slot.value}
-                        onChange={() => setTimeSlot(slot.value)}
-                      />
-                      <span className={styles.checkout__optionText}>
-                        {slot.label}
-                      </span>
-                    </div>
-                  </label>
-                ))}
-              </div>
-            </div>
 
             <button
               type="submit"

@@ -15,8 +15,6 @@ mutation CreateMealOrder($input: CreateMealOrderInput!) {
       zipCode
       country
     }
-    deliveryDate
-    timeSlot
     items {
       meal {
         id

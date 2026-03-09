@@ -286,9 +286,7 @@ export type CreateCustomerAddressInput = {
 
 export type CreateMealOrderInput = {
   addressId: Scalars['ID']['input'];
-  deliveryDate: Scalars['DateTime']['input'];
   items: Array<MealOrderItemInput>;
-  timeSlot: TimeSlot;
 };
 
 export type CreateNotificationInput = {
@@ -521,11 +519,9 @@ export type MealOrder = {
   address: Address;
   createdAt: Scalars['DateTime']['output'];
   customer: User;
-  deliveryDate: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   items: Array<MealOrderItem>;
   paymentStatus: PaymentStatus;
-  timeSlot: TimeSlot;
   totalPrice: Scalars['Float']['output'];
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -2142,7 +2138,7 @@ export type CreateMealOrderMutationVariables = Exact<{
 }>;
 
 
-export type CreateMealOrderMutation = { __typename?: 'Mutation', createMealOrder: { __typename?: 'MealOrder', id: string, deliveryDate: any, timeSlot: TimeSlot, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string }, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null }, items: Array<{ __typename?: 'MealOrderItem', quantity: number, meal: { __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, category: MealCategory, availableStyles: Array<MealStyle> } }> } };
+export type CreateMealOrderMutation = { __typename?: 'Mutation', createMealOrder: { __typename?: 'MealOrder', id: string, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string }, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null }, items: Array<{ __typename?: 'MealOrderItem', quantity: number, meal: { __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, category: MealCategory, availableStyles: Array<MealStyle> } }> } };
 
 export type CreateNotificationMutationVariables = Exact<{
   input: CreateNotificationInput;
@@ -2559,7 +2555,7 @@ export type GetMealsQuery = { __typename?: 'Query', meals: Array<{ __typename?: 
 export type GetMealOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMealOrdersQuery = { __typename?: 'Query', mealOrders: Array<{ __typename?: 'MealOrder', id: string, deliveryDate: any, timeSlot: TimeSlot, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, phone?: string | null }, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea?: string | null }, items: Array<{ __typename?: 'MealOrderItem', quantity: number, style: MealStyle, meal: { __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, category: MealCategory, availableStyles: Array<MealStyle>, extras: Array<{ __typename?: 'MealExtraOption', id: string, name: string, price: number }> }, extras: Array<{ __typename?: 'MealOrderItemExtra', id: string, name: string, price: number }> }> }> };
+export type GetMealOrdersQuery = { __typename?: 'Query', mealOrders: Array<{ __typename?: 'MealOrder', id: string, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, phone?: string | null }, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea?: string | null }, items: Array<{ __typename?: 'MealOrderItem', quantity: number, style: MealStyle, meal: { __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, category: MealCategory, availableStyles: Array<MealStyle>, extras: Array<{ __typename?: 'MealExtraOption', id: string, name: string, price: number }> }, extras: Array<{ __typename?: 'MealOrderItemExtra', id: string, name: string, price: number }> }> }> };
 
 export type GetNotificationsQueryVariables = Exact<{
   filters?: InputMaybe<NotificationFilters>;
@@ -3958,8 +3954,6 @@ export const CreateMealOrderDocument = gql`
       zipCode
       country
     }
-    deliveryDate
-    timeSlot
     items {
       meal {
         id
@@ -7014,8 +7008,6 @@ export const GetMealOrdersDocument = gql`
       label
       serviceArea
     }
-    deliveryDate
-    timeSlot
     items {
       meal {
         id

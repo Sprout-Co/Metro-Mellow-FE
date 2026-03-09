@@ -42,8 +42,6 @@ query GetMealOrders {
       label
       serviceArea
     }
-    deliveryDate
-    timeSlot
     items {
       meal {
         id
