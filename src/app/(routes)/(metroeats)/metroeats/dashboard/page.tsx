@@ -21,6 +21,8 @@ import {
   CreditCard as CardIcon,
   Edit3,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function ClientDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -41,34 +43,6 @@ export default function ClientDashboard() {
     const [status, setStatus] = useState("On the way!");
     const [isDelivered, setIsDelivered] = useState(false);
 
-    useEffect(() => {
-      if (isDelivered) return;
-
-      const interval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            setStatus("Delivered!");
-            setEta(0);
-            setIsDelivered(true);
-            triggerToast("Your food has arrived! Enjoy.");
-            return 100;
-          }
-          const next = prev + 5;
-          if (next >= 95 && next < 100) setStatus("Driver is nearby");
-          return next;
-        });
-
-        setEta((prev) => {
-          if (prev <= 0) return 0;
-          // Decrease ETA periodically
-          return Math.max(1, prev - 1);
-        });
-      }, 3000);
-
-      return () => clearInterval(interval);
-    }, [isDelivered]);
-
     return (
       <div className="dashboard">
         {/* ACTIVE ORDER WIDGET */}
@@ -84,12 +58,6 @@ export default function ClientDashboard() {
                   </strong>
                 </p>
               </div>
-              <button
-                className="btn btn--outline"
-                onClick={() => triggerToast("Viewing full map...")}
-              >
-                <MapPin size={18} /> View Map
-              </button>
             </div>
 
             <div className="tracking-widget__progress">
@@ -126,66 +94,6 @@ export default function ClientDashboard() {
                 1x Spicy Chicken Sandwich Combo, 1x Extra Fries, 1x Vanilla
                 Shake
               </p>
-            </div>
-          </div>
-
-          <div className="tracking-widget__driver">
-            <h3
-              style={{
-                fontSize: "1.125rem",
-                fontFamily: "var(--font-secondary)",
-              }}
-            >
-              Your Courier
-            </h3>
-            <div className="driver-info">
-              <div
-                className="driver-info__avatar"
-                style={{
-                  backgroundImage:
-                    "url('https://api.dicebear.com/7.x/avataaars/svg?seed=Felix')",
-                }}
-              ></div>
-              <div className="driver-info__details">
-                <span className="driver-info__name">Michael T.</span>
-                <span className="driver-info__vehicle">
-                  Silver Honda Civic • ABC 123
-                </span>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "4px",
-                    color: "var(--color-primary)",
-                    marginTop: "4px",
-                    fontWeight: 700,
-                  }}
-                >
-                  <Star size={14} fill="currentColor" /> 4.9
-                </div>
-              </div>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                gap: "var(--spacing-sm)",
-                marginTop: "auto",
-              }}
-            >
-              <button
-                className="btn btn--outline"
-                style={{ flex: 1, padding: "0.5rem" }}
-                onClick={() => triggerToast("Calling driver...")}
-              >
-                <Phone size={18} />
-              </button>
-              <button
-                className="btn btn--primary"
-                style={{ flex: 1, padding: "0.5rem" }}
-                onClick={() => triggerToast("Opening chat...")}
-              >
-                <MessageSquare size={18} /> Message
-              </button>
             </div>
           </div>
         </section>
@@ -1037,44 +945,6 @@ export default function ClientDashboard() {
             color: var(--color-dark-base);
         }
 
-        .tracking-widget__driver {
-            background-color: var(--color-bg-light);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md);
-            border: 1px solid var(--color-border);
-        }
-
-        .driver-info {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-        }
-
-        .driver-info__avatar {
-            width: 50px;
-            height: 50px;
-            background-color: #ddd;
-            border-radius: var(--radius-pill);
-            background-size: cover;
-        }
-
-        .driver-info__details {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .driver-info__name {
-            font-weight: 700;
-            font-size: 1.125rem;
-        }
-
-        .driver-info__vehicle {
-            font-size: 0.875rem;
-            color: var(--color-dark-muted);
-        }
 
         .btn {
             display: inline-flex;
@@ -1316,8 +1186,14 @@ export default function ClientDashboard() {
         {/* SIDEBAR */}
         <aside className="sidebar">
           <div className="sidebar__logo">
-            <Utensils className="sidebar__logo-icon" />
-            MetroEats
+            <Link href="/metroeats">
+              <Image
+                src="/images/metroeats/brand-logo/stacked/yellow-on-black-stacked.png"
+                alt="MetroEats"
+                width={235}
+                height={28}
+              />
+            </Link>
           </div>
 
           <nav className="sidebar__nav">
