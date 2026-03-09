@@ -194,6 +194,13 @@ export type BroadcastNotificationInput = {
   type: NotificationType;
 };
 
+export enum Channel {
+  MetroeatsApp = 'METROEATS_APP',
+  MetroeatsWebsite = 'METROEATS_WEBSITE',
+  MetromellowApp = 'METROMELLOW_APP',
+  MetromellowWebsite = 'METROMELLOW_WEBSITE'
+}
+
 export type CheckAvailabilityInput = {
   date: Scalars['DateTime']['input'];
   serviceCategory: ServiceCategory;
@@ -352,6 +359,7 @@ export type CreateSubscriptionResponse = {
 
 export type CreateUserInput = {
   address?: InputMaybe<CreateCustomerAddressInput>;
+  channel?: InputMaybe<Channel>;
   email: Scalars['String']['input'];
   emailMarketingOptIn?: InputMaybe<Scalars['Boolean']['input']>;
   firstName: Scalars['String']['input'];

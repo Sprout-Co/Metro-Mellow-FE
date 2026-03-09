@@ -36,6 +36,7 @@ import {
   login as loginAction,
   logout as logoutAction,
   setUser,
+  setToken,
   selectToken,
   selectUser,
 } from "@/lib/redux";
@@ -49,7 +50,7 @@ export const useAuthOperations = () => {
   const currentUser = useAppSelector(selectUser);
 
   const [loginMutation] = useLoginMutation();
-  const [registerMutation] = useRegisterMutation();
+  const [registerMutation, { loading: registerLoading }] = useRegisterMutation();
   const [updateProfileMutation] = useUpdateProfileMutation();
   const [changePasswordMutation] = useChangePasswordMutation();
   const [forgotPasswordMutation] = useForgotPasswordMutation();
@@ -205,6 +206,49 @@ export const useAuthOperations = () => {
         }
         throw new Error("An unexpected error occurred");
       }
+    },
+    [registerMutation, dispatch]
+  );
+
+  /**
+   * Registers a new customer and immediately signs them in (sets token + user in store).
+   * Use for guest checkout so the user can place an order right after registration.
+   * @param input - Registration input (firstName, lastName, email, password, phone?, address?)
+   * @returns { user, token } on success
+   * @throws Error if registration fails
+   */
+  const handleRegisterAndSignIn = useCallback(
+    async (input: CreateUserInput) => {
+      const { data, errors } = await registerMutation({
+        variables: {
+          input: {
+            ...input,
+            role: UserRole.Customer,
+          },
+        },
+      });
+
+      if (errors?.length) {
+        throw new Error(errors[0].message);
+      }
+
+      const token = data?.register?.token;
+      const user = data?.register?.user;
+
+      if (!token || !user) {
+        throw new Error(
+          (data?.register as { message?: string })?.message ?? "Registration failed"
+        );
+      }
+
+      if (user.role !== UserRole.Customer) {
+        throw new Error("Registration failed: Invalid role");
+      }
+
+      dispatch(setToken(token));
+      dispatch(setUser(user as any));
+
+      return { user, token };
     },
     [registerMutation, dispatch]
   );
@@ -761,6 +805,8 @@ export const useAuthOperations = () => {
   return {
     handleLogin,
     handleRegister,
+    handleRegisterAndSignIn,
+    registerLoading,
     handleLogout,
     handleUpdateProfile,
     handleChangePassword,

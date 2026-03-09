@@ -95,6 +95,13 @@ $me-dark: #1a1a1a;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   }
 
+  &__sectionHint {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    margin: 0 0 spacing("md");
+    line-height: 1.4;
+  }
+
   &__methodToggle {
     display: flex;
     gap: spacing("md");
