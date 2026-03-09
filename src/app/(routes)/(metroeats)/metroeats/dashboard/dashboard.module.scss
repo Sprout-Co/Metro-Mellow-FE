@@ -485,6 +485,18 @@
       background-color: $me-upcoming-bg;
       color: $me-upcoming-text;
     }
+
+    &--error {
+      background-color: rgba(#dc2626, 0.1);
+      color: #dc2626;
+    }
+  }
+
+  &__empty {
+    color: var(--color-dark-muted);
+    padding: spacing("xl");
+    text-align: center;
+    @include font-size("sm");
   }
 
   &__settings-card {
