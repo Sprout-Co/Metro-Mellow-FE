@@ -69,5 +69,6 @@ query GetMealOrders {
     paymentStatus
     createdAt
     updatedAt
+    mealOrderStatus
   }
 }

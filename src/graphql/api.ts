@@ -521,6 +521,7 @@ export type MealOrder = {
   customer: User;
   id: Scalars['ID']['output'];
   items: Array<MealOrderItem>;
+  mealOrderStatus: MealOrderStatus;
   paymentStatus: PaymentStatus;
   totalPrice: Scalars['Float']['output'];
   updatedAt: Scalars['DateTime']['output'];
@@ -553,6 +554,16 @@ export type MealOrderItemInput = {
   quantity: Scalars['Int']['input'];
   style: MealStyle;
 };
+
+export enum MealOrderStatus {
+  Cancelled = 'CANCELLED',
+  Confirmed = 'CONFIRMED',
+  Delivered = 'DELIVERED',
+  OutForDelivery = 'OUT_FOR_DELIVERY',
+  Preparing = 'PREPARING',
+  ReadyForDelivery = 'READY_FOR_DELIVERY',
+  Received = 'RECEIVED'
+}
 
 export enum MealStyle {
   Bowl = 'BOWL',
@@ -632,6 +643,7 @@ export type Mutation = {
   updateBookingPaymentStatus: Scalars['Boolean']['output'];
   updateBookingStatus: Scalars['Boolean']['output'];
   updateEmailMarketingPreference: Scalars['Boolean']['output'];
+  updateMealOrderStatus: MealOrder;
   updateProfile?: Maybe<User>;
   updateService: Service;
   updateServiceArea: ServiceArea;
@@ -971,6 +983,12 @@ export type MutationUpdateBookingStatusArgs = {
 
 export type MutationUpdateEmailMarketingPreferenceArgs = {
   optIn: Scalars['Boolean']['input'];
+};
+
+
+export type MutationUpdateMealOrderStatusArgs = {
+  orderId: Scalars['ID']['input'];
+  status: MealOrderStatus;
 };
 
 
@@ -2555,7 +2573,7 @@ export type GetMealsQuery = { __typename?: 'Query', meals: Array<{ __typename?: 
 export type GetMealOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMealOrdersQuery = { __typename?: 'Query', mealOrders: Array<{ __typename?: 'MealOrder', id: string, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, phone?: string | null }, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea?: string | null }, items: Array<{ __typename?: 'MealOrderItem', quantity: number, style: MealStyle, meal: { __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, category: MealCategory, availableStyles: Array<MealStyle>, extras: Array<{ __typename?: 'MealExtraOption', id: string, name: string, price: number }> }, extras: Array<{ __typename?: 'MealOrderItemExtra', id: string, name: string, price: number }> }> }> };
+export type GetMealOrdersQuery = { __typename?: 'Query', mealOrders: Array<{ __typename?: 'MealOrder', id: string, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, mealOrderStatus: MealOrderStatus, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, phone?: string | null }, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea?: string | null }, items: Array<{ __typename?: 'MealOrderItem', quantity: number, style: MealStyle, meal: { __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, category: MealCategory, availableStyles: Array<MealStyle>, extras: Array<{ __typename?: 'MealExtraOption', id: string, name: string, price: number }> }, extras: Array<{ __typename?: 'MealOrderItemExtra', id: string, name: string, price: number }> }> }> };
 
 export type GetNotificationsQueryVariables = Exact<{
   filters?: InputMaybe<NotificationFilters>;
@@ -7035,6 +7053,7 @@ export const GetMealOrdersDocument = gql`
     paymentStatus
     createdAt
     updatedAt
+    mealOrderStatus
   }
 }
     `;
