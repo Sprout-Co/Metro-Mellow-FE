@@ -17,7 +17,7 @@ export interface UseMetroEatsPaymentResult {
   initializeMealPayment: (
     mealOrderId: string,
     amountInNaira: number,
-    email: string
+    email: string,
   ) => Promise<void>;
   loading: boolean;
   verifyPaymentLoading: boolean;
@@ -37,7 +37,7 @@ export const useMetroEatsPayment = (): UseMetroEatsPaymentResult => {
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentReference, setPaymentReference] = useState<string | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus | null>(
-    null
+    null,
   );
 
   const PAYSTACK_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
@@ -53,12 +53,12 @@ export const useMetroEatsPayment = (): UseMetroEatsPaymentResult => {
         // First attempt: REST verify endpoint
         try {
           const verifyResponse = await axios.get(
-            `${REST_API_BASE_URL}/api/metroeats/payments/verify/${reference}`
+            `${REST_API_BASE_URL}/api/metroeats/payments/verify/${reference}`,
           );
 
           const data = verifyResponse.data?.data;
           const statusFromRest: PaymentStatus | undefined = data?.paymentStatus;
-
+          console.log(data);
           if (statusFromRest === PaymentStatus.Paid) {
             setPaymentStatus(PaymentStatus.Paid);
             setPaymentSuccess(true);
@@ -113,18 +113,18 @@ export const useMetroEatsPayment = (): UseMetroEatsPaymentResult => {
           }
 
           await new Promise((resolve) =>
-            setTimeout(resolve, VERIFICATION_POLL_INTERVAL_MS)
+            setTimeout(resolve, VERIFICATION_POLL_INTERVAL_MS),
           );
         }
 
         setError(
-          "Payment verification is taking longer than expected. Please check your orders or contact support."
+          "Payment verification is taking longer than expected. Please check your orders or contact support.",
         );
       } finally {
         setVerifyPaymentLoading(false);
       }
     },
-    [triggerPaymentStatusQuery]
+    [triggerPaymentStatusQuery],
   );
 
   const initializeMealPayment = useCallback(
@@ -158,20 +158,16 @@ export const useMetroEatsPayment = (): UseMetroEatsPaymentResult => {
           {
             mealOrderId,
           },
-          authHeaders ? { headers: authHeaders } : undefined
+          authHeaders ? { headers: authHeaders } : undefined,
         );
 
         const { data } = response.data;
-        const {
-          authorizationUrl,
-          accessCode,
-          reference,
-          publicKey,
-        } = data as MetroEatsInitializeResponseData;
+        const { authorizationUrl, accessCode, reference, publicKey } =
+          data as MetroEatsInitializeResponseData;
 
         if (!reference || !accessCode) {
           throw new Error(
-            "Initialization failed: Missing reference or access code from backend."
+            "Initialization failed: Missing reference or access code from backend.",
           );
         }
 
@@ -190,16 +186,16 @@ export const useMetroEatsPayment = (): UseMetroEatsPaymentResult => {
             try {
               await verifyPaymentWithBackendHybrid(
                 transaction.reference,
-                mealOrderId
+                mealOrderId,
               );
               setPaymentReference(transaction.reference);
             } catch (verificationError) {
               console.error(
                 "MetroEats payment verification error:",
-                verificationError
+                verificationError,
               );
               setError(
-                "Payment verification failed. Please contact support if payment was deducted."
+                "Payment verification failed. Please contact support if payment was deducted.",
               );
             }
           },
@@ -215,7 +211,9 @@ export const useMetroEatsPayment = (): UseMetroEatsPaymentResult => {
           void authorizationUrl;
           paystack.resumeTransaction(accessCode, paystackOptions);
         } else {
-          throw new Error("Paystack can only be initialized on the client side");
+          throw new Error(
+            "Paystack can only be initialized on the client side",
+          );
         }
       } catch (err) {
         console.error("Error initializing MetroEats payment:", err);
@@ -223,14 +221,14 @@ export const useMetroEatsPayment = (): UseMetroEatsPaymentResult => {
           (err as any).response?.data?.message || (err as any).message;
         setError(
           axiosErrorMsg ||
-            "Failed to initiate payment for your order. Please try again."
+            "Failed to initiate payment for your order. Please try again.",
         );
         throw err;
       } finally {
         setLoading(false);
       }
     },
-    [PAYSTACK_PUBLIC_KEY, verifyPaymentWithBackendHybrid]
+    [PAYSTACK_PUBLIC_KEY, verifyPaymentWithBackendHybrid],
   );
 
   return {
@@ -243,4 +241,3 @@ export const useMetroEatsPayment = (): UseMetroEatsPaymentResult => {
     paymentStatus,
   };
 };
-

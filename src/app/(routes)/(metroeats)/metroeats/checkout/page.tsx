@@ -205,20 +205,6 @@ export default function CheckoutPage() {
     );
   }
 
-  if (!items || items.length === 0) {
-    return (
-      <div className={styles.checkout}>
-        <div className={styles.checkout__empty}>
-          <h2>Your cart is empty</h2>
-          <p>Add meals from the menu to checkout.</p>
-          <Link href="/metroeats/menu" className={styles.checkout__backLink}>
-            ← Back to Menu
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   const canSubmitLoggedIn = !!addressId && addresses.length > 0;
   const canSubmitGuest =
     !!firstName.trim() &&
@@ -238,6 +224,20 @@ export default function CheckoutPage() {
           onClose={() => router.push("/metroeats/menu")}
           totalPaid={createdOrderTotal}
         />
+      </div>
+    );
+  }
+
+  if (!items || items.length === 0) {
+    return (
+      <div className={styles.checkout}>
+        <div className={styles.checkout__empty}>
+          <h2>Your cart is empty</h2>
+          <p>Add meals from the menu to checkout.</p>
+          <Link href="/metroeats/menu" className={styles.checkout__backLink}>
+            ← Back to Menu
+          </Link>
+        </div>
       </div>
     );
   }
