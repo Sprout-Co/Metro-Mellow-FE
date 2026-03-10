@@ -27,67 +27,61 @@ export default function HistoryTab({
   onReorder,
 }: HistoryTabProps) {
   return (
-    <div className={styles["dashboard-page__dashboard"]}>
-      <div className={styles["dashboard-page__section-header"]}>
-        <h2 className={styles["dashboard-page__section-header-title"]}>
-          Full Order History
-        </h2>
-      </div>
+    <div className={styles.section}>
       {ordersLoading ? (
-        <p className={styles["dashboard-page__empty"]}>Loading orders…</p>
+        <p className={styles.empty}>Loading orders...</p>
+      ) : recentOrders.length === 0 ? (
+        <p className={styles.empty}>No orders yet.</p>
       ) : (
-        <div className={styles["dashboard-page__history-card"]}>
-          <table className={styles["dashboard-page__history-table"]}>
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Date</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentOrders.map((order) => {
-                const isActive = ACTIVE_STATUSES.includes(order.mealOrderStatus);
-                return (
-                  <tr key={order.id}>
-                    <td>{orderDisplayId(order.id)}</td>
-                    <td>{formatOrderDate(order.createdAt)}</td>
-                    <td>{fmt(order.totalPrice)}</td>
-                    <td>
-                      <span
-                        className={`${styles["dashboard-page__status-badge"]} ${getStatusBadgeClass(order.mealOrderStatus, styles)}`}
-                      >
-                        {statusLabel(order.mealOrderStatus)}
-                      </span>
-                    </td>
-                    <td>
-                      {isActive ? (
-                        <button
-                          className={`${styles["dashboard-page__btn"]} ${styles["dashboard-page__btn--outline"]} ${styles["dashboard-page__btn--sm"]}`}
-                          onClick={onGoToDashboard}
-                        >
-                          Track
-                        </button>
-                      ) : (
-                        <button
-                          className={`${styles["dashboard-page__btn"]} ${styles["dashboard-page__btn--outline"]} ${styles["dashboard-page__btn--sm"]}`}
-                          onClick={() => onReorder(order.items)}
-                        >
-                          Reorder
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+        <div className={styles.orderList}>
+          <div className={`${styles.orderRow} ${styles.orderRowHead}`}>
+            <span>Order</span>
+            <span>Date</span>
+            <span>Total</span>
+            <span>Status</span>
+            <span />
+          </div>
+          {recentOrders.map((order) => {
+            const isActive = ACTIVE_STATUSES.includes(order.mealOrderStatus);
+            return (
+              <div className={styles.orderRow} key={order.id}>
+                <span className={`${styles.orderCell} ${styles.orderCellId}`}>
+                  {orderDisplayId(order.id)}
+                </span>
+                <span className={`${styles.orderCell} ${styles.orderCellDate}`}>
+                  {formatOrderDate(order.createdAt)}
+                </span>
+                <span className={`${styles.orderCell} ${styles.orderCellTotal}`}>
+                  {fmt(order.totalPrice)}
+                </span>
+                <span className={`${styles.orderCell} ${styles.orderCellStatus}`}>
+                  <span
+                    className={`${styles.badge} ${getStatusBadgeClass(order.mealOrderStatus, styles)}`}
+                  >
+                    {statusLabel(order.mealOrderStatus)}
+                  </span>
+                </span>
+                <span className={`${styles.orderCell} ${styles.orderCellAction}`}>
+                  {isActive ? (
+                    <button
+                      className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
+                      onClick={onGoToDashboard}
+                    >
+                      Track
+                    </button>
+                  ) : (
+                    <button
+                      className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
+                      onClick={() => onReorder(order.items)}
+                    >
+                      Reorder
+                    </button>
+                  )}
+                </span>
+              </div>
+            );
+          })}
         </div>
-      )}
-      {!ordersLoading && recentOrders.length === 0 && (
-        <p className={styles["dashboard-page__empty"]}>No orders yet.</p>
       )}
     </div>
   );

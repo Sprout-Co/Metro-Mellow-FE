@@ -51,76 +51,74 @@ export default function SettingsTab({
     }
   };
 
+  const initials = (me?.firstName?.[0] ?? me?.email?.[0] ?? "?").toUpperCase();
+
   return (
-    <div className={styles["dashboard-page__dashboard"]}>
-      <div className={styles["dashboard-page__settings-card"]}>
-          <div className={styles["dashboard-page__settings-avatar-row"]}>
-            <div className={styles["dashboard-page__settings-avatar"]}>
-              {(me?.firstName?.[0] ?? me?.email?.[0] ?? "?").toUpperCase()}
+    <div className={styles.section}>
+      <div className={styles.settingsCard}>
+        <div className={styles.settingsAvatarRow}>
+          <div className={styles.settingsAvatar}>{initials}</div>
+          <div className={styles.settingsInfo}>
+            <h3 className={styles.settingsName}>
+              {me ? `${me.firstName ?? ""} ${me.lastName ?? ""}`.trim() || "User" : "---"}
+            </h3>
+            <p className={styles.settingsEmail}>{me?.email ?? "---"}</p>
+            <button
+              type="button"
+              className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
+              onClick={() => onToast?.("Avatar upload not available")}
+            >
+              <Edit3 size={14} /> Change Picture
+            </button>
+          </div>
+        </div>
+
+        <form onSubmit={handleSave}>
+          <div className={styles.settingsGrid}>
+            <div className={styles.settingsField}>
+              <label>First Name</label>
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
             </div>
-            <div className={styles["dashboard-page__settings-info"]}>
-              <h3 className={styles["dashboard-page__settings-name"]}>
-                {me ? `${me.firstName} ${me.lastName}`.trim() || "User" : "—"}
-              </h3>
-              <p className={styles["dashboard-page__settings-email"]}>
-                {me?.email ?? "—"}
-              </p>
-              <button
-                type="button"
-                className={`${styles["dashboard-page__btn"]} ${styles["dashboard-page__btn--outline"]} ${styles["dashboard-page__btn--sm"]}`}
-                onClick={() => onToast?.("Avatar upload not available")}
-              >
-                <Edit3 size={16} /> Change Picture
-              </button>
+            <div className={styles.settingsField}>
+              <label>Last Name</label>
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </div>
+            <div className={`${styles.settingsField} ${styles.settingsFieldFull}`}>
+              <label>Phone Number</label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
             </div>
           </div>
 
-          <form onSubmit={handleSave}>
-            <div className={styles["dashboard-page__settings-grid"]}>
-              <div className={styles["dashboard-page__settings-field"]}>
-                <label>First Name</label>
-                <input
-                  type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                />
-              </div>
-              <div className={styles["dashboard-page__settings-field"]}>
-                <label>Last Name</label>
-                <input
-                  type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                />
-              </div>
-              <div className={`${styles["dashboard-page__settings-field"]} ${styles["dashboard-page__settings-field--full"]}`}>
-                <label>Phone Number</label>
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className={styles["dashboard-page__settings-actions"]}>
-              <button
-                type="submit"
-                className={`${styles["dashboard-page__btn"]} ${styles["dashboard-page__btn--primary"]}`}
-                disabled={profileSaving}
-              >
-                {profileSaving ? "Saving…" : "Save Changes"}
-              </button>
-              <button
-                type="button"
-                className={`${styles["dashboard-page__btn"]} ${styles["dashboard-page__btn--outline"]}`}
-                onClick={onCancel}
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
+          <div className={styles.settingsActions}>
+            <button
+              type="submit"
+              className={`${styles.btn} ${styles.btnPrimary}`}
+              disabled={profileSaving}
+            >
+              {profileSaving ? "Saving..." : "Save Changes"}
+            </button>
+            <button
+              type="button"
+              className={`${styles.btn} ${styles.btnOutline}`}
+              onClick={onCancel}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

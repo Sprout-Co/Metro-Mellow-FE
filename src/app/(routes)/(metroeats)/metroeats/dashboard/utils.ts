@@ -68,16 +68,16 @@ export type MealOrder = GetMealOrdersQuery["mealOrders"][0];
 
 export function getStatusBadgeClass(
   status: MealOrderStatus,
-  styles: { [key: string]: string },
+  s: { [key: string]: string },
 ): string {
   if (
     status === MealOrderStatus.Delivered ||
     status === MealOrderStatus.Received
   ) {
-    return styles["dashboard-page__status-badge--success"];
+    return s["badgeSuccess"];
   }
   if (status === MealOrderStatus.Cancelled) {
-    return styles["dashboard-page__status-badge--error"];
+    return s["badgeError"];
   }
-  return styles["dashboard-page__status-badge--upcoming"];
+  return s["badgeWarning"];
 }

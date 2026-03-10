@@ -1,925 +1,929 @@
-// MetroEats Dashboard - Modern Food Delivery Design
 $me-yellow: #ffcc00;
 $me-dark: #1a1a1a;
-$me-bg: #faf8f4;
-$me-card-bg: #ffffff;
-$me-border: #e8e5df;
+$me-bg: #faf9f6;
+$me-card: #ffffff;
+$me-border: #ebebeb;
+$me-muted: #8a8a8a;
 $me-success: #059669;
 $me-error: #ef4444;
 $me-warning: #f59e0b;
 $me-pending: #6366f1;
 
-.dashboard-page {
-  &__app-layout {
-    display: flex;
-    min-height: 100vh;
-    width: 100%;
-    background-color: $me-bg;
+// ─── PAGE WRAPPER ────────────────────────────────────────
+.page {
+  min-height: 100vh;
+  background: $me-bg;
+  display: flex;
+  flex-direction: column;
+}
 
-    @include breakpoint-down("md") {
-      flex-direction: column;
-    }
+// ─── HEADER ──────────────────────────────────────────────
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: spacing("md") spacing("2xl");
+  background: $me-card;
+  border-bottom: 1px solid $me-border;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  @include breakpoint-down("md") {
+    padding: spacing("sm") spacing("lg");
   }
+}
 
-  // ─────────────────────────────────────────────────────────
-  // SIDEBAR
-  // ─────────────────────────────────────────────────────────
-  &__sidebar {
-    width: 280px;
-    background-color: $me-dark;
-    display: flex;
-    flex-direction: column;
-    padding: spacing("xl") spacing("lg");
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow-y: auto;
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: spacing("sm");
+}
 
-    @include breakpoint-down("md") {
-      width: 100%;
+.backLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: border-radius("md");
+  color: $me-muted;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: $me-bg;
+    color: $me-dark;
+  }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+
+  @include breakpoint-down("sm") {
+    img {
+      width: 100px;
       height: auto;
-      position: relative;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      padding: spacing("md") spacing("lg");
     }
   }
+}
 
-  &__sidebar-logo {
-    display: flex;
-    align-items: center;
-    margin-bottom: spacing("3xl");
+.tabs {
+  display: flex;
+  gap: spacing("xs");
+  background: $me-bg;
+  padding: 4px;
+  border-radius: border-radius("lg");
 
-    @include breakpoint-down("md") {
-      margin-bottom: 0;
-    }
+  @include breakpoint-down("md") {
+    display: none;
   }
+}
 
-  &__sidebar-nav {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: spacing("xs");
+.tab {
+  display: flex;
+  align-items: center;
+  gap: spacing("xs");
+  padding: spacing("sm") spacing("lg");
+  border: none;
+  background: transparent;
+  border-radius: border-radius("md");
+  cursor: pointer;
+  @include font-size("sm");
+  @include font-weight("medium");
+  color: $me-muted;
+  transition: all 0.15s ease;
+  font-family: $font-family-base;
+  white-space: nowrap;
 
-    @include breakpoint-down("md") {
-      display: none;
-    }
-  }
-
-  &__sidebar-nav-item {
-    display: flex;
-    align-items: center;
-    gap: spacing("md");
-    padding: spacing("md") spacing("lg");
-    border-radius: border-radius("lg");
-    @include font-weight("semibold");
-    @include font-size("body-2");
-    color: rgba(255, 255, 255, 0.6);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    text-align: left;
-    font-family: $font-family-base;
-    transition: all 0.2s ease;
-
-    svg {
-      flex-shrink: 0;
-    }
-
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.08);
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    &--active {
-      background-color: $me-yellow;
-      color: $me-dark;
-
-      &:hover {
-        background-color: $me-yellow;
-        color: $me-dark;
-      }
-    }
-
-    &--danger {
-      color: #ef4444;
-
-      &:hover {
-        background-color: rgba(239, 68, 68, 0.1);
-        color: #ef4444;
-      }
-    }
-  }
-
-  &__sidebar-footer {
-    margin-top: auto;
-    padding-top: spacing("xl");
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: spacing("xs");
-
-    @include breakpoint-down("md") {
-      display: none;
-    }
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // MAIN CONTENT AREA
-  // ─────────────────────────────────────────────────────────
-  &__main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    min-height: 100vh;
-
-    @include breakpoint-down("md") {
-      min-height: calc(100vh - 70px);
-    }
-  }
-
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: spacing("xl") spacing("2xl");
-    background-color: $me-bg;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-
-    @include breakpoint-down("md") {
-      padding: spacing("lg");
-      flex-wrap: wrap;
-      gap: spacing("md");
-    }
-  }
-
-  &__header-greeting {
-    display: flex;
-    flex-direction: column;
-    gap: spacing("xs");
-  }
-
-  &__header-title {
-    font-family: $font-family-heading;
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    @include font-weight("bold");
+  &:hover {
     color: $me-dark;
-    margin: 0;
-    line-height: 1.2;
   }
+}
 
-  &__header-subtitle {
-    @include font-size("body-2");
-    color: rgba($me-dark, 0.5);
-    margin: 0;
+.tabActive {
+  background: $me-card;
+  color: $me-dark;
+  @include font-weight("semibold");
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.headerRight {
+  position: relative;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: border-radius("pill");
+  background: $me-yellow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include font-weight("bold");
+  font-size: 0.875rem;
+  color: $me-dark;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  user-select: none;
+
+  &:hover {
+    transform: scale(1.05);
   }
+}
 
-  &__header-actions {
-    display: flex;
-    align-items: center;
-    gap: spacing("md");
+.profileOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}
+
+.profileMenu {
+  position: absolute;
+  top: calc(100% + spacing("sm"));
+  right: 0;
+  width: 240px;
+  background: $me-card;
+  border: 1px solid $me-border;
+  border-radius: border-radius("lg");
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  z-index: 60;
+  overflow: hidden;
+  animation: fadeIn 0.12s ease-out;
+}
+
+.profileMenuHeader {
+  padding: spacing("md") spacing("lg");
+}
+
+.profileMenuName {
+  margin: 0;
+  @include font-weight("semibold");
+  @include font-size("body-2");
+  color: $me-dark;
+}
+
+.profileMenuEmail {
+  margin: 4px 0 0;
+  @include font-size("sm");
+  color: $me-muted;
+}
+
+.profileMenuDivider {
+  height: 1px;
+  background: $me-border;
+}
+
+.profileMenuItem {
+  display: flex;
+  align-items: center;
+  gap: spacing("sm");
+  width: 100%;
+  padding: spacing("sm") spacing("lg");
+  border: none;
+  background: none;
+  cursor: pointer;
+  @include font-size("sm");
+  @include font-weight("medium");
+  color: $me-dark;
+  font-family: $font-family-base;
+  transition: background 0.1s ease;
+
+  &:hover {
+    background: $me-bg;
   }
+}
 
-  &__header-btn {
-    width: 44px;
-    height: 44px;
-    background: $me-card-bg;
-    border: 2px solid $me-border;
-    border-radius: border-radius("pill");
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
+.profileMenuItemDanger {
+  color: $me-error;
+
+  &:hover {
+    background: rgba($me-error, 0.05);
+  }
+}
+
+// ─── MAIN ────────────────────────────────────────────────
+.main {
+  flex: 1;
+  padding: spacing("xl") spacing("2xl") spacing("3xl");
+
+  @include breakpoint-down("md") {
+    padding: spacing("lg") spacing("lg") 100px;
+  }
+}
+
+.mainInner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: spacing("xl");
+}
+
+.greeting {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("xs");
+}
+
+.greetingTitle {
+  font-family: $font-family-heading;
+  font-size: clamp(1.5rem, 3vw, 1.875rem);
+  @include font-weight("bold");
+  color: $me-dark;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.greetingSubtitle {
+  @include font-size("body-2");
+  color: $me-muted;
+  margin: 0;
+}
+
+.settingsBack {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  @include font-size("sm");
+  @include font-weight("medium");
+  color: $me-muted;
+  font-family: $font-family-base;
+  padding: 0;
+  margin-bottom: spacing("xs");
+  transition: color 0.15s ease;
+
+  &:hover {
     color: $me-dark;
-
-    &:hover {
-      border-color: $me-dark;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    }
   }
+}
 
-  &__header-profile {
-    width: 48px;
-    height: 48px;
-    border-radius: border-radius("pill");
-    background: linear-gradient(
-      135deg,
-      $me-yellow 0%,
-      darken($me-yellow, 10%) 100%
-    );
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    @include font-weight("bold");
-    font-size: 1.125rem;
+// ─── CONTENT SECTIONS ────────────────────────────────────
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("lg");
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sectionTitle {
+  font-family: $font-family-heading;
+  font-size: clamp(1.125rem, 2vw, 1.375rem);
+  @include font-weight("bold");
+  color: $me-dark;
+  margin: 0;
+}
+
+.sectionLink {
+  background: none;
+  border: none;
+  cursor: pointer;
+  @include font-size("sm");
+  @include font-weight("semibold");
+  color: $me-muted;
+  font-family: $font-family-base;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: spacing("xs") spacing("sm");
+  border-radius: border-radius("md");
+  transition: all 0.15s ease;
+
+  &:hover {
     color: $me-dark;
-    cursor: pointer;
-    border: 3px solid $me-dark;
-    transition: transform 0.2s ease;
-
-    &:hover {
-      transform: scale(1.05);
-    }
+    background: rgba(0, 0, 0, 0.03);
   }
+}
 
-  // ─────────────────────────────────────────────────────────
-  // DASHBOARD TAB CONTENT
-  // ─────────────────────────────────────────────────────────
-  &__dashboard {
-    padding: spacing("lg") spacing("2xl") spacing("3xl");
-    display: flex;
-    flex-direction: column;
-    gap: spacing("2xl");
-    animation: fadeSlideIn 0.4s ease-out;
+// ─── TRACKING WIDGET ─────────────────────────────────────
+.trackingWidget {
+  background: $me-dark;
+  border-radius: 16px;
+  padding: spacing("xl") spacing("2xl");
+  color: white;
+  position: relative;
+  overflow: hidden;
 
-    @include breakpoint-down("md") {
-      padding: spacing("lg");
-      gap: spacing("xl");
-    }
+  @include breakpoint-down("sm") {
+    padding: spacing("lg");
+    border-radius: 12px;
   }
+}
 
-  @keyframes fadeSlideIn {
-    from {
-      opacity: 0;
-      transform: translateY(16px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+.trackingWidgetGlow {
+  position: absolute;
+  top: -40%;
+  right: -15%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba($me-yellow, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
 
-  // ─────────────────────────────────────────────────────────
-  // ORDER TRACKING WIDGET
-  // ─────────────────────────────────────────────────────────
-  &__tracking-widget {
-    background: $me-dark;
-    border-radius: 20px;
-    padding: spacing("xl") spacing("2xl");
-    color: color("neutral", "white");
-    position: relative;
-    overflow: hidden;
+.trackingContent {
+  position: relative;
+  z-index: 1;
+}
 
-    &::before {
-      content: "";
-      position: absolute;
-      top: -50%;
-      right: -20%;
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(
-        circle,
-        rgba($me-yellow, 0.15) 0%,
-        transparent 70%
-      );
-      pointer-events: none;
-    }
+.trackingStatus {
+  font-family: $font-family-heading;
+  font-size: clamp(1.25rem, 2.5vw, 1.625rem);
+  @include font-weight("bold");
+  color: $me-yellow;
+  margin: 0;
+  line-height: 1.3;
+}
 
-    @include breakpoint-down("md") {
-      padding: spacing("lg");
-      border-radius: 16px;
-    }
-  }
+.trackingEta {
+  @include font-size("sm");
+  color: rgba(255, 255, 255, 0.6);
+  margin: spacing("xs") 0 spacing("lg");
 
-  &__tracking-widget-info {
-    position: relative;
-    z-index: 1;
-  }
-
-  &__tracking-widget-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: spacing("lg");
-  }
-
-  &__tracking-widget-status {
-    font-family: $font-family-heading;
-    font-size: clamp(1.75rem, 3.5vw, 2.25rem);
-    @include font-weight("bold");
+  strong {
     color: $me-yellow;
-    margin: 0;
-    line-height: 1.2;
   }
+}
 
-  &__tracking-widget-eta {
-    @include font-size("body-1");
-    color: rgba(255, 255, 255, 0.7);
-    margin: spacing("xs") 0 0;
+.progressBar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: border-radius("pill");
+  overflow: hidden;
+  margin-bottom: spacing("sm");
+}
 
-    strong {
-      color: $me-yellow;
-    }
-  }
+.progressFill {
+  height: 100%;
+  background: $me-yellow;
+  border-radius: border-radius("pill");
+  transition: width 0.6s ease;
+}
 
-  &__progress-bar {
-    height: 6px;
-    background-color: rgba(255, 255, 255, 0.15);
-    border-radius: border-radius("pill");
-    overflow: hidden;
-    margin-bottom: spacing("sm");
-  }
+.progressSteps {
+  display: flex;
+  justify-content: space-between;
+  @include font-size("xs");
+  color: rgba(255, 255, 255, 0.35);
+}
 
-  &__progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      $me-yellow 0%,
-      lighten($me-yellow, 10%) 100%
-    );
-    border-radius: border-radius("pill");
-    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+.progressStepActive {
+  color: $me-yellow;
+  @include font-weight("semibold");
+}
 
-  &__progress-steps {
-    display: flex;
-    justify-content: space-between;
-    @include font-size("xs");
-    @include font-weight("medium");
-    color: rgba(255, 255, 255, 0.4);
+.trackingDetails {
+  margin-top: spacing("lg");
+  padding-top: spacing("lg");
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: spacing("md");
 
-    @include breakpoint-down("sm") {
-      @include font-size("xxs");
-    }
-  }
-
-  &__progress-steps-step--active {
-    color: $me-yellow;
-    @include font-weight("bold");
-  }
-
-  &__tracking-order-details {
-    margin-top: spacing("lg");
-    padding-top: spacing("lg");
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  &__tracking-order-id {
-    @include font-weight("bold");
-    @include font-size("body-2");
-    color: color("neutral", "white");
-    margin: 0 0 spacing("xs");
-  }
-
-  &__tracking-order-items {
-    @include font-size("sm");
-    color: rgba(255, 255, 255, 0.6);
-    margin: 0;
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // SECTION HEADERS
-  // ─────────────────────────────────────────────────────────
-  &__section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: spacing("lg");
-  }
-
-  &__section-header-title {
-    font-family: $font-family-heading;
-    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
-    @include font-weight("bold");
-    color: $me-dark;
-    margin: 0;
-  }
-
-  &__quick-order-link {
-    background: none;
-    border: none;
-    color: $me-dark;
-    @include font-weight("bold");
-    @include font-size("sm");
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    padding: spacing("xs") spacing("md");
-    border-radius: border-radius("pill");
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: $me-yellow;
-    }
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // MEAL CARDS GRID
-  // ─────────────────────────────────────────────────────────
-  &__quick-order-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: spacing("lg");
-
-    @include breakpoint-down("sm") {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  &__meal-card {
-    background: $me-card-bg;
-    border: 4px solid $me-dark;
-    border-radius: 16px;
-    overflow: hidden;
-    display: flex;
+  @include breakpoint-down("sm") {
     flex-direction: column;
-    transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease;
+  }
+}
 
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
-    }
+.trackingOrderId {
+  @include font-weight("semibold");
+  @include font-size("sm");
+  color: white;
+  margin: 0 0 4px;
+}
+
+.trackingOrderItems {
+  @include font-size("xs");
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+// ─── MEAL CARDS ──────────────────────────────────────────
+.mealGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: spacing("lg");
+
+  @include breakpoint-down("sm") {
+    grid-template-columns: 1fr 1fr;
+    gap: spacing("md");
   }
 
-  &__meal-card-img-wrapper {
-    width: 100%;
-    height: 180px;
-    overflow: hidden;
-    background: linear-gradient(135deg, #fffaeb 0%, #fff4d6 100%);
-    position: relative;
+  @include breakpoint-down("xs") {
+    grid-template-columns: 1fr;
   }
+}
 
-  &__meal-card-img {
+.mealCard {
+  background: $me-card;
+  border: 1px solid $me-border;
+  border-radius: 12px;
+  overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  }
+}
+
+.mealCardImg {
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  background: #f5f2ee;
+  position: relative;
+
+  img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
   }
 
-  &__meal-card:hover &__meal-card-img {
-    transform: scale(1.08);
+  @include breakpoint-down("sm") {
+    height: 130px;
   }
+}
 
-  &__meal-card-content {
-    padding: spacing("lg");
-    display: flex;
-    flex-direction: column;
-    gap: spacing("sm");
-    flex: 1;
-  }
+.mealCard:hover .mealCardImg img {
+  transform: scale(1.04);
+}
 
-  &__meal-card-title {
-    font-family: $font-family-heading;
-    font-size: 1.25rem;
-    @include font-weight("bold");
-    color: $me-dark;
-    margin: 0;
-    line-height: 1.3;
-  }
+.mealCardBody {
+  padding: spacing("md") spacing("lg");
+  display: flex;
+  flex-direction: column;
+  gap: spacing("xs");
 
-  &__meal-card-meta {
-    @include font-size("sm");
-    color: rgba($me-dark, 0.5);
-    @include font-weight("medium");
-  }
-
-  &__meal-card-price {
-    font-size: 1.375rem;
-    @include font-weight("bold");
-    color: $me-yellow;
-    letter-spacing: -0.02em;
-  }
-
-  &__meal-card-action {
-    margin-top: auto;
-    padding-top: spacing("md");
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // BUTTONS
-  // ─────────────────────────────────────────────────────────
-  &__btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: spacing("sm");
-    @include font-size("sm");
-    @include font-weight("bold");
-    border-radius: border-radius("pill");
-    cursor: pointer;
-    padding: 12px 24px;
-    border: none;
-    transition: all 0.2s ease;
-    text-transform: none;
-  }
-
-  &__btn--sm {
-    padding: 8px 16px;
-    @include font-size("xs");
-  }
-
-  &__btn--primary {
-    background: $me-yellow;
-    color: $me-dark;
-    border: 3px solid $me-dark;
-
-    &:hover {
-      background: $me-dark;
-      color: $me-yellow;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-  }
-
-  &__btn--outline {
-    background: transparent;
-    color: $me-dark;
-    border: 2px solid $me-border;
-
-    &:hover {
-      border-color: $me-dark;
-      background: rgba(0, 0, 0, 0.02);
-    }
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // HISTORY / ORDER TABLE
-  // ─────────────────────────────────────────────────────────
-  &__history-card {
-    background: $me-card-bg;
-    border: 4px solid $me-dark;
-    border-radius: 16px;
-    overflow: hidden;
-  }
-
-  &__history-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-
-    th {
-      padding: spacing("md") spacing("lg");
-      background: $me-dark;
-      @include font-weight("semibold");
-      @include font-size("sm");
-      color: rgba(255, 255, 255, 0.7);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    td {
-      padding: spacing("md") spacing("lg");
-      border-bottom: 1px solid $me-border;
-      @include font-weight("medium");
-      @include font-size("body-2");
-      color: $me-dark;
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    tr:hover td {
-      background: rgba($me-yellow, 0.05);
-    }
-
-    @include breakpoint-down("lg") {
-      display: block;
-      overflow-x: auto;
-      white-space: nowrap;
-
-      th,
-      td {
-        padding: spacing("sm") spacing("md");
-      }
-    }
-  }
-
-  &__status-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 6px 12px;
-    border-radius: border-radius("pill");
-    @include font-size("xs");
-    @include font-weight("bold");
-    text-transform: capitalize;
-
-    &--success {
-      background: rgba($me-success, 0.1);
-      color: $me-success;
-    }
-
-    &--upcoming {
-      background: rgba($me-warning, 0.1);
-      color: darken($me-warning, 10%);
-    }
-
-    &--error {
-      background: rgba($me-error, 0.1);
-      color: $me-error;
-    }
-
-    &--pending {
-      background: rgba($me-pending, 0.1);
-      color: $me-pending;
-    }
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // EMPTY STATE
-  // ─────────────────────────────────────────────────────────
-  &__empty {
-    color: rgba($me-dark, 0.5);
-    padding: spacing("3xl") spacing("xl");
-    text-align: center;
-    @include font-size("body-2");
-    background: rgba(0, 0, 0, 0.02);
-    border-radius: 12px;
-    border: 2px dashed $me-border;
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // SETTINGS TAB
-  // ─────────────────────────────────────────────────────────
-  &__settings-card {
-    background: $me-card-bg;
-    border: 4px solid $me-dark;
-    border-radius: 16px;
-    padding: spacing("2xl");
-    max-width: 800px;
-  }
-
-  &__settings-avatar-row {
-    display: flex;
-    align-items: center;
-    gap: spacing("xl");
-    margin-bottom: spacing("2xl");
-    padding-bottom: spacing("xl");
-    border-bottom: 2px solid $me-border;
-
-    @include breakpoint-down("sm") {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  }
-
-  &__settings-avatar {
-    width: 88px;
-    height: 88px;
-    border-radius: border-radius("pill");
-    background: linear-gradient(
-      135deg,
-      $me-yellow 0%,
-      darken($me-yellow, 10%) 100%
-    );
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    @include font-weight("bold");
-    color: $me-dark;
-    border: 4px solid $me-dark;
-    flex-shrink: 0;
-  }
-
-  &__settings-info {
-    flex: 1;
-  }
-
-  &__settings-name {
-    font-family: $font-family-heading;
-    font-size: 1.5rem;
-    @include font-weight("bold");
-    color: $me-dark;
-    margin: 0 0 4px;
-  }
-
-  &__settings-email {
-    @include font-size("body-2");
-    color: rgba($me-dark, 0.5);
-    margin: 0 0 spacing("md");
-  }
-
-  &__settings-field--full {
-    grid-column: 1 / -1;
-  }
-
-  &__settings-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: spacing("lg");
-
-    @include breakpoint-down("sm") {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  &__settings-field {
-    label {
-      display: block;
-      margin-bottom: spacing("xs");
-      @include font-weight("semibold");
-      @include font-size("sm");
-      color: $me-dark;
-    }
-
-    input {
-      width: 100%;
-      padding: 14px 16px;
-      border-radius: 10px;
-      border: 2px solid $me-border;
-      outline: none;
-      @include font-size("body-2");
-      transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-
-      &:focus {
-        border-color: $me-dark;
-        box-shadow: 0 0 0 3px rgba($me-yellow, 0.3);
-      }
-    }
-  }
-
-  &__settings-actions {
-    margin-top: spacing("2xl");
-    display: flex;
-    gap: spacing("md");
-    padding-top: spacing("xl");
-    border-top: 2px solid $me-border;
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // TOAST NOTIFICATION
-  // ─────────────────────────────────────────────────────────
-  &__toast {
-    position: fixed;
-    bottom: spacing("xl");
-    right: spacing("xl");
-    background: $me-dark;
-    color: color("neutral", "white");
-    padding: spacing("md") spacing("lg");
-    border-radius: 12px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-    @include font-weight("semibold");
-    @include font-size("body-2");
-    transform: translateY(120px);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    z-index: 2000;
-    display: flex;
-    align-items: center;
-    gap: spacing("sm");
-    pointer-events: none;
-    border: 3px solid $me-yellow;
-
-    svg {
-      color: $me-yellow;
-    }
-
-    &--show {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    @include breakpoint-down("sm") {
-      left: spacing("md");
-      right: spacing("md");
-      bottom: spacing("md");
-    }
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // PAYMENT CARD (VARIANT)
-  // ─────────────────────────────────────────────────────────
-  &__payment-card {
-    background: $me-card-bg;
-    border: 4px solid $me-dark;
-    border-radius: 16px;
-    padding: spacing("xl");
-    display: flex;
-    align-items: center;
-    gap: spacing("lg");
-    transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    }
-  }
-
-  &__payment-card-icon {
-    width: 56px;
-    height: 56px;
-    background: linear-gradient(
-      135deg,
-      $me-yellow 0%,
-      darken($me-yellow, 10%) 100%
-    );
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  &__payment-card-info {
-    flex: 1;
-  }
-
-  &__payment-card-number {
-    font-family: $font-family-heading;
-    font-size: 1.25rem;
-    @include font-weight("bold");
-    color: $me-dark;
-    margin: 0 0 4px;
-    letter-spacing: 0.1em;
-  }
-
-  &__payment-card-expiry {
-    @include font-size("sm");
-    color: rgba($me-dark, 0.5);
-    margin: 0;
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // MOBILE BOTTOM NAV
-  // ─────────────────────────────────────────────────────────
-  &__mobile-nav {
-    display: none;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: $me-dark;
+  @include breakpoint-down("sm") {
     padding: spacing("sm") spacing("md");
-    padding-bottom: calc(spacing("sm") + env(safe-area-inset-bottom, 0));
-    z-index: 100;
-    border-top: 3px solid $me-yellow;
+  }
+}
 
-    @include breakpoint-down("md") {
-      display: flex;
-      justify-content: space-around;
-    }
+.mealCardName {
+  font-family: $font-family-heading;
+  @include font-size("body-2");
+  @include font-weight("bold");
+  color: $me-dark;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.mealCardPrice {
+  @include font-size("body-2");
+  @include font-weight("bold");
+  color: $me-dark;
+}
+
+.mealCardAction {
+  margin-top: spacing("xs");
+}
+
+// ─── BUTTONS ─────────────────────────────────────────────
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: spacing("xs");
+  @include font-size("sm");
+  @include font-weight("semibold");
+  border-radius: border-radius("md");
+  cursor: pointer;
+  padding: 10px 20px;
+  border: none;
+  transition: all 0.15s ease;
+  font-family: $font-family-base;
+}
+
+.btnSm {
+  padding: 6px 14px;
+  @include font-size("xs");
+}
+
+.btnPrimary {
+  background: $me-yellow;
+  color: $me-dark;
+
+  &:hover {
+    background: darken($me-yellow, 6%);
+  }
+}
+
+.btnOutline {
+  background: transparent;
+  color: $me-dark;
+  border: 1px solid $me-border;
+
+  &:hover {
+    border-color: $me-dark;
+    background: rgba(0, 0, 0, 0.02);
+  }
+}
+
+.btnFull {
+  width: 100%;
+}
+
+// ─── ORDER LIST (History / Recent Orders) ────────────────
+.orderList {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: $me-border;
+  border: 1px solid $me-border;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.orderRow {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 0.8fr 0.8fr auto;
+  align-items: center;
+  gap: spacing("md");
+  padding: spacing("md") spacing("lg");
+  background: $me-card;
+  transition: background 0.1s ease;
+
+  &:hover {
+    background: #fafaf8;
   }
 
-  &__mobile-nav-item {
+  @include breakpoint-down("md") {
+    grid-template-columns: 1fr;
+    gap: spacing("xs");
+    padding: spacing("md");
+  }
+}
+
+.orderRowHead {
+  @include font-weight("semibold");
+  @include font-size("xs");
+  color: $me-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: spacing("sm") spacing("lg");
+  background: #fafaf8;
+
+  &:hover {
+    background: #fafaf8;
+  }
+
+  @include breakpoint-down("md") {
+    display: none;
+  }
+}
+
+.orderCell {
+  @include font-size("sm");
+  @include font-weight("medium");
+  color: $me-dark;
+
+  @include breakpoint-down("md") {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    gap: 4px;
-    padding: spacing("xs") spacing("sm");
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.5);
-    @include font-size("xxs");
+
+    &::before {
+      @include font-weight("semibold");
+      @include font-size("xs");
+      color: $me-muted;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.orderCellId {
+  @include font-weight("semibold");
+  @include font-size("sm");
+  font-family: monospace;
+  color: $me-dark;
+
+  @include breakpoint-down("md") {
+    &::before {
+      content: "Order";
+    }
+  }
+}
+
+.orderCellDate {
+  @include breakpoint-down("md") {
+    &::before {
+      content: "Date";
+    }
+  }
+}
+
+.orderCellTotal {
+  @include font-weight("semibold");
+
+  @include breakpoint-down("md") {
+    &::before {
+      content: "Total";
+    }
+  }
+}
+
+.orderCellStatus {
+  @include breakpoint-down("md") {
+    &::before {
+      content: "Status";
+    }
+  }
+}
+
+.orderCellAction {
+  display: flex;
+  justify-content: flex-end;
+
+  @include breakpoint-down("md") {
+    justify-content: stretch;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}
+
+// ─── STATUS BADGES ───────────────────────────────────────
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: border-radius("pill");
+  @include font-size("xs");
+  @include font-weight("semibold");
+  text-transform: capitalize;
+}
+
+.badgeSuccess {
+  background: rgba($me-success, 0.08);
+  color: $me-success;
+}
+
+.badgeWarning {
+  background: rgba($me-warning, 0.08);
+  color: darken($me-warning, 12%);
+}
+
+.badgeError {
+  background: rgba($me-error, 0.08);
+  color: $me-error;
+}
+
+.badgePending {
+  background: rgba($me-pending, 0.08);
+  color: $me-pending;
+}
+
+// ─── EMPTY STATE ─────────────────────────────────────────
+.empty {
+  color: $me-muted;
+  padding: spacing("3xl") spacing("xl");
+  text-align: center;
+  @include font-size("sm");
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 12px;
+  border: 1px dashed $me-border;
+}
+
+// ─── SETTINGS ────────────────────────────────────────────
+.settingsCard {
+  background: $me-card;
+  border: 1px solid $me-border;
+  border-radius: 12px;
+  padding: spacing("2xl");
+  max-width: 640px;
+
+  @include breakpoint-down("sm") {
+    padding: spacing("lg");
+  }
+}
+
+.settingsAvatarRow {
+  display: flex;
+  align-items: center;
+  gap: spacing("lg");
+  margin-bottom: spacing("2xl");
+  padding-bottom: spacing("xl");
+  border-bottom: 1px solid $me-border;
+
+  @include breakpoint-down("sm") {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.settingsAvatar {
+  width: 72px;
+  height: 72px;
+  border-radius: border-radius("pill");
+  background: $me-yellow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  @include font-weight("bold");
+  color: $me-dark;
+  flex-shrink: 0;
+}
+
+.settingsInfo {
+  flex: 1;
+}
+
+.settingsName {
+  font-family: $font-family-heading;
+  font-size: 1.25rem;
+  @include font-weight("bold");
+  color: $me-dark;
+  margin: 0 0 2px;
+}
+
+.settingsEmail {
+  @include font-size("sm");
+  color: $me-muted;
+  margin: 0 0 spacing("sm");
+}
+
+.settingsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: spacing("lg");
+
+  @include breakpoint-down("sm") {
+    grid-template-columns: 1fr;
+  }
+}
+
+.settingsFieldFull {
+  grid-column: 1 / -1;
+}
+
+.settingsField {
+  label {
+    display: block;
+    margin-bottom: spacing("xs");
     @include font-weight("semibold");
-    transition: color 0.2s ease;
-
-    svg {
-      width: 22px;
-      height: 22px;
-    }
-
-    &--active {
-      color: $me-yellow;
-    }
+    @include font-size("sm");
+    color: $me-dark;
   }
 
-  // ─────────────────────────────────────────────────────────
-  // LOADING SKELETON
-  // ─────────────────────────────────────────────────────────
-  &__skeleton {
-    background: linear-gradient(
-      90deg,
-      $me-border 0%,
-      lighten($me-border, 5%) 50%,
-      $me-border 100%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    border-radius: 8px;
-  }
+  input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: border-radius("md");
+    border: 1px solid $me-border;
+    outline: none;
+    @include font-size("sm");
+    font-family: $font-family-base;
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
 
-  @keyframes shimmer {
-    0% {
-      background-position: 200% 0;
-    }
-    100% {
-      background-position: -200% 0;
+    &:focus {
+      border-color: $me-dark;
+      box-shadow: 0 0 0 3px rgba($me-yellow, 0.2);
     }
   }
+}
 
-  // ─────────────────────────────────────────────────────────
-  // CONTENT WRAPPER FOR MOBILE NAV SPACING
-  // ─────────────────────────────────────────────────────────
-  &__main-content {
-    @include breakpoint-down("md") {
-      padding-bottom: 80px;
-    }
+.settingsActions {
+  margin-top: spacing("2xl");
+  display: flex;
+  gap: spacing("md");
+  padding-top: spacing("xl");
+  border-top: 1px solid $me-border;
+}
+
+// ─── TOAST ───────────────────────────────────────────────
+.toast {
+  position: fixed;
+  bottom: spacing("xl");
+  right: spacing("xl");
+  background: $me-dark;
+  color: white;
+  padding: spacing("sm") spacing("lg");
+  border-radius: border-radius("lg");
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  @include font-weight("medium");
+  @include font-size("sm");
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  gap: spacing("sm");
+  pointer-events: none;
+
+  svg:first-child {
+    color: $me-yellow;
+    flex-shrink: 0;
+  }
+
+  @include breakpoint-down("sm") {
+    left: spacing("md");
+    right: spacing("md");
+    bottom: 100px;
+  }
+}
+
+.toastShow {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.toastClose {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  margin-left: spacing("xs");
+
+  &:hover {
+    color: white;
+  }
+}
+
+// ─── MOBILE NAV ──────────────────────────────────────────
+.mobileNav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $me-card;
+  border-top: 1px solid $me-border;
+  padding: spacing("sm") spacing("md");
+  padding-bottom: calc(spacing("sm") + env(safe-area-inset-bottom, 0));
+  z-index: 100;
+
+  @include breakpoint-down("md") {
+    display: flex;
+    justify-content: space-around;
+  }
+}
+
+.mobileNavItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: spacing("xs") spacing("md");
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: $me-muted;
+  @include font-size("xxs");
+  @include font-weight("medium");
+  transition: color 0.15s ease;
+  font-family: $font-family-base;
+}
+
+.mobileNavItemActive {
+  color: $me-dark;
+  @include font-weight("bold");
+}
+
+// ─── LOADING SKELETON ────────────────────────────────────
+.skeleton {
+  background: linear-gradient(90deg, $me-border 0%, #f5f5f5 50%, $me-border 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
   }
 }

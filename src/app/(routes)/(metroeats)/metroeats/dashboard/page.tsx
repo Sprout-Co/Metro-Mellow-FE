@@ -4,13 +4,11 @@ import React, { useState, useMemo } from "react";
 import {
   LayoutDashboard,
   Clock,
-  Heart,
-  CreditCard,
-  Settings as SettingsIcon,
   LogOut,
-  Search,
-  Bell,
   CheckCircle,
+  ChevronLeft,
+  User,
+  X,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,11 +28,14 @@ import HistoryTab from "./_components/HistoryTab/HistoryTab";
 import SettingsTab from "./_components/SettingsTab/SettingsTab";
 import styles from "./dashboard.module.scss";
 
+type Tab = "dashboard" | "history" | "settings";
+
 function ClientDashboardContent() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const [activeTab, setActiveTab] = useState<Tab>("dashboard");
   const [toast, setToast] = useState({ show: false, message: "" });
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const { data: ordersData, loading: ordersLoading } = useGetMealOrdersQuery();
   const { data: mealsData, loading: mealsLoading } = useGetMealsQuery();
@@ -113,106 +114,110 @@ function ClientDashboardContent() {
   };
 
   const firstName = me?.firstName ?? "";
-  const greeting = firstName ? `Hello, ${firstName} 👋` : "Hello 👋";
+  const greeting = firstName ? `Hello, ${firstName}` : "Hello";
+  const initials = (
+    me?.firstName?.[0] ??
+    me?.email?.[0] ??
+    "?"
+  ).toUpperCase();
+
+  const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
+    { id: "dashboard", label: "Dashboard", icon: <LayoutDashboard size={18} /> },
+    { id: "history", label: "Orders", icon: <Clock size={18} /> },
+  ];
 
   return (
-    <>
-      <div className={styles["dashboard-page__app-layout"]}>
-        <aside className={styles["dashboard-page__sidebar"]}>
-          <div className={styles["dashboard-page__sidebar-logo"]}>
-            <Link href="/metroeats">
-              <Image
-                src="/images/metroeats/brand-logo/stacked/yellow-on-black-stacked.png"
-                alt="MetroEats"
-                width={235}
-                height={28}
-              />
-            </Link>
+    <div className={styles.page}>
+      <header className={styles.header}>
+        <div className={styles.headerLeft}>
+          <Link href="/metroeats" className={styles.backLink}>
+            <ChevronLeft size={20} />
+          </Link>
+          <Link href="/metroeats" className={styles.logo}>
+            <Image
+              src="/images/metroeats/brand-logo/stacked/yellow-on-black-stacked.png"
+              alt="MetroEats"
+              width={120}
+              height={28}
+            />
+          </Link>
+        </div>
+
+        <nav className={styles.tabs}>
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              className={`${styles.tab} ${activeTab === tab.id ? styles.tabActive : ""}`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              {tab.icon}
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </nav>
+
+        <div className={styles.headerRight}>
+          <div
+            className={styles.avatar}
+            onClick={() => setShowProfileMenu((v) => !v)}
+          >
+            {initials}
           </div>
+          {showProfileMenu && (
+            <div className={styles.profileMenu}>
+              <div className={styles.profileMenuHeader}>
+                <p className={styles.profileMenuName}>
+                  {me ? `${me.firstName ?? ""} ${me.lastName ?? ""}`.trim() || "User" : "User"}
+                </p>
+                <p className={styles.profileMenuEmail}>{me?.email ?? ""}</p>
+              </div>
+              <div className={styles.profileMenuDivider} />
+              <button
+                className={styles.profileMenuItem}
+                onClick={() => {
+                  setActiveTab("settings");
+                  setShowProfileMenu(false);
+                }}
+              >
+                <User size={16} /> Account Settings
+              </button>
+              <button
+                className={`${styles.profileMenuItem} ${styles.profileMenuItemDanger}`}
+                onClick={handleLogout}
+              >
+                <LogOut size={16} /> Log Out
+              </button>
+            </div>
+          )}
+        </div>
+      </header>
 
-          <nav className={styles["dashboard-page__sidebar-nav"]}>
-            <button
-              className={`${styles["dashboard-page__sidebar-nav-item"]} ${
-                activeTab === "dashboard"
-                  ? styles["dashboard-page__sidebar-nav-item--active"]
-                  : ""
-              }`}
-              onClick={() => setActiveTab("dashboard")}
-            >
-              <LayoutDashboard size={20} /> Dashboard
-            </button>
-            <button
-              className={`${styles["dashboard-page__sidebar-nav-item"]} ${
-                activeTab === "history"
-                  ? styles["dashboard-page__sidebar-nav-item--active"]
-                  : ""
-              }`}
-              onClick={() => setActiveTab("history")}
-            >
-              <Clock size={20} /> Order History
-            </button>
-          </nav>
-
-          <div className={styles["dashboard-page__sidebar-footer"]}>
-            <button
-              className={`${styles["dashboard-page__sidebar-nav-item"]} ${
-                activeTab === "settings"
-                  ? styles["dashboard-page__sidebar-nav-item--active"]
-                  : ""
-              }`}
-              onClick={() => setActiveTab("settings")}
-            >
-              <SettingsIcon size={20} /> Settings
-            </button>
-            <button
-              className={`${styles["dashboard-page__sidebar-nav-item"]} ${styles["dashboard-page__sidebar-nav-item--danger"]}`}
-              onClick={handleLogout}
-            >
-              <LogOut size={20} /> Logout
-            </button>
-          </div>
-        </aside>
-
-        <main className={styles["dashboard-page__main-content"]}>
-          <header className={styles["dashboard-page__header"]}>
-            <div className={styles["dashboard-page__header-greeting"]}>
-              <h1 className={styles["dashboard-page__header-title"]}>
-                {activeTab === "dashboard" && greeting}
-                {activeTab === "history" && "Order History 📜"}
-                {activeTab === "favorites" && "Meals You Might Like ❤️"}
-                {activeTab === "payments" && "Payment Methods 💳"}
-                {activeTab === "settings" && "Account Settings ⚙️"}
+      <main className={styles.main}>
+        <div className={styles.mainInner}>
+          {activeTab !== "settings" && (
+            <div className={styles.greeting}>
+              <h1 className={styles.greetingTitle}>
+                {activeTab === "dashboard" ? greeting : "Order History"}
               </h1>
-              <p className={styles["dashboard-page__header-subtitle"]}>
-                {activeTab === "dashboard" &&
-                  "Ready for a delicious meal today?"}
-                {activeTab !== "dashboard" &&
-                  "Manage your account and preferences."}
+              <p className={styles.greetingSubtitle}>
+                {activeTab === "dashboard"
+                  ? "Ready for a delicious meal today?"
+                  : "View and manage your past orders"}
               </p>
             </div>
-            <div className={styles["dashboard-page__header-actions"]}>
-              <Link
-                href="/metroeats/menu"
-                className={styles["dashboard-page__header-btn"]}
-                title="Search menu"
-              >
-                <Search size={20} />
-              </Link>
+          )}
+
+          {activeTab === "settings" && (
+            <div className={styles.greeting}>
               <button
-                className={styles["dashboard-page__header-btn"]}
-                title="Notifications"
-                onClick={() => triggerToast("No new notifications")}
+                className={styles.settingsBack}
+                onClick={() => setActiveTab("dashboard")}
               >
-                <Bell size={20} />
+                <ChevronLeft size={18} /> Back to Dashboard
               </button>
-              <div
-                className={styles["dashboard-page__header-profile"]}
-                onClick={() => setActiveTab("settings")}
-              >
-                {(me?.firstName?.[0] ?? me?.email?.[0] ?? "?").toUpperCase()}
-              </div>
+              <h1 className={styles.greetingTitle}>Account Settings</h1>
             </div>
-          </header>
+          )}
 
           {activeTab === "dashboard" && (
             <DashboardTab
@@ -221,7 +226,7 @@ function ClientDashboardContent() {
               mealsLoading={mealsLoading}
               ordersLoading={ordersLoading}
               recentOrders={recentOrders}
-              onSeeAllFavorites={() => setActiveTab("favorites")}
+              onSeeAllFavorites={() => router.push("/metroeats/menu")}
               onTrackToast={triggerToast}
               onReorder={handleReorder}
               onQuickOrder={handleQuickOrder}
@@ -243,66 +248,51 @@ function ClientDashboardContent() {
               onToast={triggerToast}
             />
           )}
-        </main>
-      </div>
+        </div>
+      </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className={styles["dashboard-page__mobile-nav"]}>
+      <nav className={styles.mobileNav}>
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            className={`${styles.mobileNavItem} ${activeTab === tab.id ? styles.mobileNavItemActive : ""}`}
+            onClick={() => setActiveTab(tab.id)}
+          >
+            {tab.icon}
+            <span>{tab.label}</span>
+          </button>
+        ))}
         <button
-          className={`${styles["dashboard-page__mobile-nav-item"]} ${
-            activeTab === "dashboard"
-              ? styles["dashboard-page__mobile-nav-item--active"]
-              : ""
-          }`}
-          onClick={() => setActiveTab("dashboard")}
-        >
-          <LayoutDashboard size={22} />
-          <span>Home</span>
-        </button>
-        <button
-          className={`${styles["dashboard-page__mobile-nav-item"]} ${
-            activeTab === "history"
-              ? styles["dashboard-page__mobile-nav-item--active"]
-              : ""
-          }`}
-          onClick={() => setActiveTab("history")}
-        >
-          <Clock size={22} />
-          <span>Orders</span>
-        </button>
-        <button
-          className={`${styles["dashboard-page__mobile-nav-item"]} ${
-            activeTab === "favorites"
-              ? styles["dashboard-page__mobile-nav-item--active"]
-              : ""
-          }`}
-          onClick={() => setActiveTab("favorites")}
-        >
-          <Heart size={22} />
-          <span>Menu</span>
-        </button>
-        <button
-          className={`${styles["dashboard-page__mobile-nav-item"]} ${
-            activeTab === "settings"
-              ? styles["dashboard-page__mobile-nav-item--active"]
-              : ""
-          }`}
+          className={`${styles.mobileNavItem} ${activeTab === "settings" ? styles.mobileNavItemActive : ""}`}
           onClick={() => setActiveTab("settings")}
         >
-          <SettingsIcon size={22} />
+          <User size={18} />
           <span>Account</span>
         </button>
       </nav>
 
+      {/* Profile menu overlay for mobile */}
+      {showProfileMenu && (
+        <div
+          className={styles.profileOverlay}
+          onClick={() => setShowProfileMenu(false)}
+        />
+      )}
+
       <div
-        className={`${styles["dashboard-page__toast"]} ${
-          toast.show ? styles["dashboard-page__toast--show"] : ""
-        }`}
+        className={`${styles.toast} ${toast.show ? styles.toastShow : ""}`}
       >
-        <CheckCircle size={24} />
+        <CheckCircle size={20} />
         <span>{toast.message}</span>
+        <button
+          className={styles.toastClose}
+          onClick={() => setToast({ show: false, message: "" })}
+        >
+          <X size={16} />
+        </button>
       </div>
-    </>
+    </div>
   );
 }
 
