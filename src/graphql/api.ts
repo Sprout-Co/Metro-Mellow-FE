@@ -523,6 +523,8 @@ export type MealOrder = {
   items: Array<MealOrderItem>;
   mealOrderStatus: MealOrderStatus;
   paymentStatus: PaymentStatus;
+  paystackAccessCode?: Maybe<Scalars['String']['output']>;
+  paystackReference?: Maybe<Scalars['String']['output']>;
   totalPrice: Scalars['Float']['output'];
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -1258,6 +1260,7 @@ export type Query = {
   invoice: Invoice;
   isUserOnline: Scalars['Boolean']['output'];
   me?: Maybe<User>;
+  mealOrderPaymentStatus: PaymentStatus;
   mealOrders: Array<MealOrder>;
   meals: Array<Meal>;
   myCommissions: Array<Commission>;
@@ -1354,6 +1357,11 @@ export type QueryInvoiceArgs = {
 
 export type QueryIsUserOnlineArgs = {
   userId: Scalars['ID']['input'];
+};
+
+
+export type QueryMealOrderPaymentStatusArgs = {
+  orderId: Scalars['ID']['input'];
 };
 
 
@@ -2573,7 +2581,7 @@ export type GetMealsQuery = { __typename?: 'Query', meals: Array<{ __typename?: 
 export type GetMealOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMealOrdersQuery = { __typename?: 'Query', mealOrders: Array<{ __typename?: 'MealOrder', id: string, totalPrice: number, paymentStatus: PaymentStatus, createdAt: any, updatedAt: any, mealOrderStatus: MealOrderStatus, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, phone?: string | null }, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea?: string | null }, items: Array<{ __typename?: 'MealOrderItem', quantity: number, style: MealStyle, meal: { __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, category: MealCategory, availableStyles: Array<MealStyle>, extras: Array<{ __typename?: 'MealExtraOption', id: string, name: string, price: number }> }, extras: Array<{ __typename?: 'MealOrderItemExtra', id: string, name: string, price: number }> }> }> };
+export type GetMealOrdersQuery = { __typename?: 'Query', mealOrders: Array<{ __typename?: 'MealOrder', id: string, paymentStatus: PaymentStatus, totalPrice: number, createdAt: any, updatedAt: any, mealOrderStatus: MealOrderStatus, paystackAccessCode?: string | null, paystackReference?: string | null, items: Array<{ __typename?: 'MealOrderItem', quantity: number, style: MealStyle, meal: { __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, category: MealCategory, availableStyles: Array<MealStyle>, extras: Array<{ __typename?: 'MealExtraOption', id: string, name: string, price: number }> }, extras: Array<{ __typename?: 'MealOrderItemExtra', id: string, name: string, price: number }> }>, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, phone?: string | null }, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea?: string | null } }> };
 
 export type GetNotificationsQueryVariables = Exact<{
   filters?: InputMaybe<NotificationFilters>;
@@ -7008,24 +7016,14 @@ export const GetMealOrdersDocument = gql`
     query GetMealOrders {
   mealOrders {
     id
-    customer {
-      id
-      email
-      firstName
-      lastName
-      phone
-    }
-    address {
-      id
-      street
-      city
-      state
-      zipCode
-      country
-      isDefault
-      label
-      serviceArea
-    }
+    paymentStatus
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+    mealOrderStatus
+    paystackAccessCode
+    paystackReference
     items {
       meal {
         id
@@ -7049,11 +7047,24 @@ export const GetMealOrdersDocument = gql`
         price
       }
     }
-    totalPrice
-    paymentStatus
-    createdAt
-    updatedAt
-    mealOrderStatus
+    customer {
+      id
+      email
+      firstName
+      lastName
+      phone
+    }
+    address {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+      serviceArea
+    }
   }
 }
     `;

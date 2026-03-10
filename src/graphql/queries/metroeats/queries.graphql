@@ -24,24 +24,14 @@ query GetMeals($category: MealCategory) {
 query GetMealOrders {
   mealOrders {
     id
-    customer {
-      id
-      email
-      firstName
-      lastName
-      phone
-    }
-    address {
-      id
-      street
-      city
-      state
-      zipCode
-      country
-      isDefault
-      label
-      serviceArea
-    }
+    paymentStatus
+    totalPrice
+    paymentStatus
+    createdAt
+    updatedAt
+    mealOrderStatus
+    paystackAccessCode
+    paystackReference
     items {
       meal {
         id
@@ -65,10 +55,23 @@ query GetMealOrders {
         price
       }
     }
-    totalPrice
-    paymentStatus
-    createdAt
-    updatedAt
-    mealOrderStatus
+    customer {
+      id
+      email
+      firstName
+      lastName
+      phone
+    }
+    address {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      isDefault
+      label
+      serviceArea
+    }
   }
 }
