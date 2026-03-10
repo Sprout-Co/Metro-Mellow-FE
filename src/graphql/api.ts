@@ -2583,6 +2583,13 @@ export type GetMealOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetMealOrdersQuery = { __typename?: 'Query', mealOrders: Array<{ __typename?: 'MealOrder', id: string, paymentStatus: PaymentStatus, totalPrice: number, createdAt: any, updatedAt: any, mealOrderStatus: MealOrderStatus, paystackAccessCode?: string | null, paystackReference?: string | null, items: Array<{ __typename?: 'MealOrderItem', quantity: number, style: MealStyle, meal: { __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, category: MealCategory, availableStyles: Array<MealStyle>, extras: Array<{ __typename?: 'MealExtraOption', id: string, name: string, price: number }> }, extras: Array<{ __typename?: 'MealOrderItemExtra', id: string, name: string, price: number }> }>, customer: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, phone?: string | null }, address: { __typename?: 'Address', id: string, street?: string | null, city?: string | null, state?: string | null, zipCode?: string | null, country?: string | null, isDefault?: boolean | null, label?: string | null, serviceArea?: string | null } }> };
 
+export type GetMealOrderPaymentStatusQueryVariables = Exact<{
+  orderId: Scalars['ID']['input'];
+}>;
+
+
+export type GetMealOrderPaymentStatusQuery = { __typename?: 'Query', mealOrderPaymentStatus: PaymentStatus };
+
 export type GetNotificationsQueryVariables = Exact<{
   filters?: InputMaybe<NotificationFilters>;
   pagination?: InputMaybe<PaginationInput>;
@@ -7100,6 +7107,44 @@ export type GetMealOrdersQueryHookResult = ReturnType<typeof useGetMealOrdersQue
 export type GetMealOrdersLazyQueryHookResult = ReturnType<typeof useGetMealOrdersLazyQuery>;
 export type GetMealOrdersSuspenseQueryHookResult = ReturnType<typeof useGetMealOrdersSuspenseQuery>;
 export type GetMealOrdersQueryResult = Apollo.QueryResult<GetMealOrdersQuery, GetMealOrdersQueryVariables>;
+export const GetMealOrderPaymentStatusDocument = gql`
+    query GetMealOrderPaymentStatus($orderId: ID!) {
+  mealOrderPaymentStatus(orderId: $orderId)
+}
+    `;
+
+/**
+ * __useGetMealOrderPaymentStatusQuery__
+ *
+ * To run a query within a React component, call `useGetMealOrderPaymentStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMealOrderPaymentStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMealOrderPaymentStatusQuery({
+ *   variables: {
+ *      orderId: // value for 'orderId'
+ *   },
+ * });
+ */
+export function useGetMealOrderPaymentStatusQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetMealOrderPaymentStatusQuery, GetMealOrderPaymentStatusQueryVariables> & ({ variables: GetMealOrderPaymentStatusQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetMealOrderPaymentStatusQuery, GetMealOrderPaymentStatusQueryVariables>(GetMealOrderPaymentStatusDocument, options);
+      }
+export function useGetMealOrderPaymentStatusLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetMealOrderPaymentStatusQuery, GetMealOrderPaymentStatusQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetMealOrderPaymentStatusQuery, GetMealOrderPaymentStatusQueryVariables>(GetMealOrderPaymentStatusDocument, options);
+        }
+export function useGetMealOrderPaymentStatusSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetMealOrderPaymentStatusQuery, GetMealOrderPaymentStatusQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetMealOrderPaymentStatusQuery, GetMealOrderPaymentStatusQueryVariables>(GetMealOrderPaymentStatusDocument, options);
+        }
+export type GetMealOrderPaymentStatusQueryHookResult = ReturnType<typeof useGetMealOrderPaymentStatusQuery>;
+export type GetMealOrderPaymentStatusLazyQueryHookResult = ReturnType<typeof useGetMealOrderPaymentStatusLazyQuery>;
+export type GetMealOrderPaymentStatusSuspenseQueryHookResult = ReturnType<typeof useGetMealOrderPaymentStatusSuspenseQuery>;
+export type GetMealOrderPaymentStatusQueryResult = Apollo.QueryResult<GetMealOrderPaymentStatusQuery, GetMealOrderPaymentStatusQueryVariables>;
 export const GetNotificationsDocument = gql`
     query GetNotifications($filters: NotificationFilters, $pagination: PaginationInput) {
   notifications(filters: $filters, pagination: $pagination) {

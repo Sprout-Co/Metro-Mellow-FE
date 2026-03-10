@@ -7,7 +7,6 @@ import {
   useGetCurrentUserQuery,
   useCreateMealOrderMutation,
   useActiveServiceAreasQuery,
-  TimeSlot,
   MealStyle,
   UserRole,
   Channel,
@@ -15,6 +14,7 @@ import {
 import { Routes } from "@/constants/routes";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import { useMetroEatsCart } from "../_context/MetroEatsCartContext";
+import { useMetroEatsPayment } from "@/hooks/useMetroEatsPayment";
 import styles from "./checkout.module.scss";
 
 const fmt = (n: number) => `₦${n.toLocaleString()}`;
@@ -48,12 +48,29 @@ export default function CheckoutPage() {
   const [city, setCity] = useState("");
   const [serviceAreaId, setServiceAreaId] = useState("");
   const [registerError, setRegisterError] = useState<string | null>(null);
+  const [createdOrderId, setCreatedOrderId] = useState<string | null>(null);
+  const [createdOrderTotal, setCreatedOrderTotal] = useState<number | null>(
+    null,
+  );
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const me = userData?.me;
   const addresses = me?.addresses?.filter(Boolean) ?? [];
   const orderTotal = cartTotal + DELIVERY_FEE;
   const isGuest = !me;
-  const submitting = orderLoading || registerLoading;
+  const {
+    initializeMealPayment,
+    loading: paymentInitializing,
+    verifyPaymentLoading,
+    error: paymentError,
+    paymentSuccess,
+  } = useMetroEatsPayment();
+
+  const submitting =
+    orderLoading ||
+    registerLoading ||
+    paymentInitializing ||
+    verifyPaymentLoading;
 
   const serviceAreas = serviceAreasData?.activeServiceAreas ?? [];
   const hasServiceAreas = serviceAreas.length > 0;
@@ -73,7 +90,7 @@ export default function CheckoutPage() {
 
   const placeOrderWithAddress = async (targetAddressId: string) => {
     if (items.length === 0) return;
-    await createMealOrder({
+    const result = await createMealOrder({
       variables: {
         input: {
           addressId: targetAddressId,
@@ -99,8 +116,21 @@ export default function CheckoutPage() {
         },
       },
     });
-    clearCart();
-    router.push("/metroeats?order=success");
+    const order = result.data?.createMealOrder;
+    if (!order) {
+      throw new Error("Failed to create order. Please try again.");
+    }
+
+    setCreatedOrderId(order.id);
+    setCreatedOrderTotal(order.totalPrice);
+
+    const customerEmail = me?.email || email.trim().toLowerCase();
+    await initializeMealPayment(order.id, order.totalPrice, customerEmail);
+
+    if (items.length > 0) {
+      clearCart();
+    }
+    setShowConfirmation(true);
   };
 
   const handlePlaceOrder = async (e: React.FormEvent) => {
@@ -161,7 +191,8 @@ export default function CheckoutPage() {
     }
   };
 
-  const displayError = registerError ?? submitError?.message ?? null;
+  const displayError =
+    registerError ?? submitError?.message ?? paymentError ?? null;
 
   if (userLoading) {
     return (
@@ -197,6 +228,36 @@ export default function CheckoutPage() {
     !!city.trim() &&
     !!serviceAreaId;
   const canSubmit = isGuest ? canSubmitGuest : canSubmitLoggedIn;
+
+  if (showConfirmation && paymentSuccess && createdOrderId) {
+    return (
+      <div className={styles.checkout}>
+        <div className={styles.checkout__empty}>
+          <h2>Payment successful 🎉</h2>
+          <p>
+            Your order has been placed and is now being prepared. You can track
+            it from your dashboard.
+          </p>
+          {createdOrderTotal != null && (
+            <p>
+              Total paid: <strong>{fmt(createdOrderTotal)}</strong>
+            </p>
+          )}
+          <div className={styles.checkout__actions}>
+            <Link
+              href="/metroeats/dashboard"
+              className={styles.checkout__backLink}
+            >
+              Go to dashboard
+            </Link>
+            <Link href="/metroeats/menu" className={styles.checkout__backLink}>
+              Back to menu
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.checkout}>

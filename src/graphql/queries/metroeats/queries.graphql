@@ -75,3 +75,7 @@ query GetMealOrders {
     }
   }
 }
+
+query GetMealOrderPaymentStatus($orderId: ID!) {
+  mealOrderPaymentStatus(orderId: $orderId)
+}

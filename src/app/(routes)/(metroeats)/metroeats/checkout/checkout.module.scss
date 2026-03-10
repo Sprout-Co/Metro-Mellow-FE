@@ -118,7 +118,9 @@ $me-dark: #1a1a1a;
     @include font-weight("semibold");
     @include font-size("body-2");
     color: color("neutral", "dark");
-    transition: border-color 0.2s ease, background 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      background 0.2s ease;
 
     input {
       display: none;
@@ -168,7 +170,9 @@ $me-dark: #1a1a1a;
       border-radius: border-radius("lg");
       @include font-size("base");
       font-family: inherit;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
       outline: none;
 
       &:focus {
@@ -365,7 +369,9 @@ $me-dark: #1a1a1a;
     @include font-weight("bold");
     @include font-size("body-2");
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.15s ease;
+    transition:
+      background 0.2s ease,
+      transform 0.15s ease;
     text-align: center;
 
     &:hover:not(:disabled) {
