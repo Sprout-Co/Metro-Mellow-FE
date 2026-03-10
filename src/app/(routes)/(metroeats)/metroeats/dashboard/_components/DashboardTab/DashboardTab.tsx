@@ -60,15 +60,10 @@ export default function DashboardTab({
                 </h2>
                 <p className={styles["dashboard-page__tracking-widget-eta"]}>
                   {isDelivered ? (
-                    <strong style={{ color: "var(--color-dark-base)" }}>
-                      Delivered
-                    </strong>
+                    <strong>Delivered</strong>
                   ) : (
                     <>
-                      Estimated arrival{" "}
-                      <strong style={{ color: "var(--color-dark-base)" }}>
-                        soon
-                      </strong>
+                      Estimated arrival <strong>soon</strong>
                     </>
                   )}
                 </p>
@@ -118,16 +113,11 @@ export default function DashboardTab({
                 Delivered
               </span>
             </div>
-            <div style={{ marginTop: "var(--spacing-sm)" }}>
-              <p style={{ fontWeight: 600, marginBottom: "var(--spacing-xs)" }}>
+            <div className={styles["dashboard-page__tracking-order-details"]}>
+              <p className={styles["dashboard-page__tracking-order-id"]}>
                 Order {orderDisplayId(order.id)}
               </p>
-              <p
-                style={{
-                  color: "var(--color-dark-muted)",
-                  fontSize: "0.875rem",
-                }}
-              >
+              <p className={styles["dashboard-page__tracking-order-items"]}>
                 {order.items
                   .map(
                     (i) =>

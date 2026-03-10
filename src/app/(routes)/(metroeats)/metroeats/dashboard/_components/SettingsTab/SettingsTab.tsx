@@ -53,33 +53,21 @@ export default function SettingsTab({
 
   return (
     <div className={styles["dashboard-page__dashboard"]}>
-      <div className={styles["dashboard-page__section-header"]}>
-        <h2 className={styles["dashboard-page__section-header-title"]}>
-          Account Settings
-        </h2>
-      </div>
-      <div className={styles["dashboard-page__history-card"]}>
-        <div className={styles["dashboard-page__settings-card"]}>
+      <div className={styles["dashboard-page__settings-card"]}>
           <div className={styles["dashboard-page__settings-avatar-row"]}>
             <div className={styles["dashboard-page__settings-avatar"]}>
               {(me?.firstName?.[0] ?? me?.email?.[0] ?? "?").toUpperCase()}
             </div>
-            <div>
-              <h3
-                style={{
-                  fontSize: "1.5rem",
-                  fontWeight: 700,
-                  fontFamily: "var(--font-secondary)",
-                }}
-              >
+            <div className={styles["dashboard-page__settings-info"]}>
+              <h3 className={styles["dashboard-page__settings-name"]}>
                 {me ? `${me.firstName} ${me.lastName}`.trim() || "User" : "—"}
               </h3>
-              <p style={{ color: "var(--color-dark-muted)" }}>
+              <p className={styles["dashboard-page__settings-email"]}>
                 {me?.email ?? "—"}
               </p>
               <button
-                className={`${styles["dashboard-page__btn"]} ${styles["dashboard-page__btn--outline"]}`}
-                style={{ marginTop: "var(--spacing-md)" }}
+                type="button"
+                className={`${styles["dashboard-page__btn"]} ${styles["dashboard-page__btn--outline"]} ${styles["dashboard-page__btn--sm"]}`}
                 onClick={() => onToast?.("Avatar upload not available")}
               >
                 <Edit3 size={16} /> Change Picture
@@ -90,15 +78,7 @@ export default function SettingsTab({
           <form onSubmit={handleSave}>
             <div className={styles["dashboard-page__settings-grid"]}>
               <div className={styles["dashboard-page__settings-field"]}>
-                <label
-                  style={{
-                    display: "block",
-                    marginBottom: "var(--spacing-xs)",
-                    fontWeight: 600,
-                  }}
-                >
-                  First Name
-                </label>
+                <label>First Name</label>
                 <input
                   type="text"
                   value={firstName}
@@ -106,34 +86,15 @@ export default function SettingsTab({
                 />
               </div>
               <div className={styles["dashboard-page__settings-field"]}>
-                <label
-                  style={{
-                    display: "block",
-                    marginBottom: "var(--spacing-xs)",
-                    fontWeight: 600,
-                  }}
-                >
-                  Last Name
-                </label>
+                <label>Last Name</label>
                 <input
                   type="text"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                 />
               </div>
-              <div
-                className={styles["dashboard-page__settings-field"]}
-                style={{ gridColumn: "1 / -1" }}
-              >
-                <label
-                  style={{
-                    display: "block",
-                    marginBottom: "var(--spacing-xs)",
-                    fontWeight: 600,
-                  }}
-                >
-                  Phone Number
-                </label>
+              <div className={`${styles["dashboard-page__settings-field"]} ${styles["dashboard-page__settings-field--full"]}`}>
+                <label>Phone Number</label>
                 <input
                   type="tel"
                   value={phone}
@@ -160,7 +121,6 @@ export default function SettingsTab({
             </div>
           </form>
         </div>
-      </div>
     </div>
   );
 }

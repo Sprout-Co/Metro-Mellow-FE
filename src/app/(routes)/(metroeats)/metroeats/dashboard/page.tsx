@@ -20,7 +20,6 @@ import {
   useGetMealOrdersQuery,
   useGetMealsQuery,
   useGetCurrentUserQuery,
-  useGetPaymentMethodsQuery,
   MealStyle,
 } from "@/graphql/api";
 import { logout } from "@/lib/redux/slices/authSlice";
@@ -28,8 +27,6 @@ import { useMetroEatsCart } from "../_context/MetroEatsCartContext";
 import { ACTIVE_STATUSES, type OrderItem } from "./utils";
 import DashboardTab from "./_components/DashboardTab/DashboardTab";
 import HistoryTab from "./_components/HistoryTab/HistoryTab";
-import FavoritesTab from "./_components/FavoritesTab/FavoritesTab";
-import PaymentsTab from "./_components/PaymentsTab/PaymentsTab";
 import SettingsTab from "./_components/SettingsTab/SettingsTab";
 import styles from "./dashboard.module.scss";
 
@@ -42,13 +39,11 @@ function ClientDashboardContent() {
   const { data: ordersData, loading: ordersLoading } = useGetMealOrdersQuery();
   const { data: mealsData, loading: mealsLoading } = useGetMealsQuery();
   const { data: userData } = useGetCurrentUserQuery();
-  const { data: paymentsData } = useGetPaymentMethodsQuery();
   const { addItem, openCart } = useMetroEatsCart();
 
   const mealOrders = ordersData?.mealOrders ?? [];
   const meals = mealsData?.meals ?? [];
   const me = userData?.me;
-  const paymentMethods = paymentsData?.paymentMethods ?? [];
 
   const triggerToast = (message: string) => {
     setToast({ show: true, message });
@@ -156,26 +151,6 @@ function ClientDashboardContent() {
             >
               <Clock size={20} /> Order History
             </button>
-            <button
-              className={`${styles["dashboard-page__sidebar-nav-item"]} ${
-                activeTab === "favorites"
-                  ? styles["dashboard-page__sidebar-nav-item--active"]
-                  : ""
-              }`}
-              onClick={() => setActiveTab("favorites")}
-            >
-              <Heart size={20} /> Favorites
-            </button>
-            <button
-              className={`${styles["dashboard-page__sidebar-nav-item"]} ${
-                activeTab === "payments"
-                  ? styles["dashboard-page__sidebar-nav-item--active"]
-                  : ""
-              }`}
-              onClick={() => setActiveTab("payments")}
-            >
-              <CreditCard size={20} /> Payments
-            </button>
           </nav>
 
           <div className={styles["dashboard-page__sidebar-footer"]}>
@@ -190,8 +165,7 @@ function ClientDashboardContent() {
               <SettingsIcon size={20} /> Settings
             </button>
             <button
-              className={styles["dashboard-page__sidebar-nav-item"]}
-              style={{ color: "var(--color-error)" }}
+              className={`${styles["dashboard-page__sidebar-nav-item"]} ${styles["dashboard-page__sidebar-nav-item--danger"]}`}
               onClick={handleLogout}
             >
               <LogOut size={20} /> Logout
@@ -227,7 +201,6 @@ function ClientDashboardContent() {
               <button
                 className={styles["dashboard-page__header-btn"]}
                 title="Notifications"
-                style={{ position: "relative" }}
                 onClick={() => triggerToast("No new notifications")}
               >
                 <Bell size={20} />
@@ -262,19 +235,6 @@ function ClientDashboardContent() {
               onReorder={handleReorder}
             />
           )}
-          {activeTab === "favorites" && (
-            <FavoritesTab
-              meals={meals}
-              mealsLoading={mealsLoading}
-              onQuickOrder={handleQuickOrder}
-            />
-          )}
-          {activeTab === "payments" && (
-            <PaymentsTab
-              paymentMethods={paymentMethods}
-              onAddCardToast={triggerToast}
-            />
-          )}
           {activeTab === "settings" && (
             <SettingsTab
               onSaveSuccess={() => triggerToast("Settings saved successfully!")}
@@ -286,12 +246,60 @@ function ClientDashboardContent() {
         </main>
       </div>
 
+      {/* Mobile Bottom Navigation */}
+      <nav className={styles["dashboard-page__mobile-nav"]}>
+        <button
+          className={`${styles["dashboard-page__mobile-nav-item"]} ${
+            activeTab === "dashboard"
+              ? styles["dashboard-page__mobile-nav-item--active"]
+              : ""
+          }`}
+          onClick={() => setActiveTab("dashboard")}
+        >
+          <LayoutDashboard size={22} />
+          <span>Home</span>
+        </button>
+        <button
+          className={`${styles["dashboard-page__mobile-nav-item"]} ${
+            activeTab === "history"
+              ? styles["dashboard-page__mobile-nav-item--active"]
+              : ""
+          }`}
+          onClick={() => setActiveTab("history")}
+        >
+          <Clock size={22} />
+          <span>Orders</span>
+        </button>
+        <button
+          className={`${styles["dashboard-page__mobile-nav-item"]} ${
+            activeTab === "favorites"
+              ? styles["dashboard-page__mobile-nav-item--active"]
+              : ""
+          }`}
+          onClick={() => setActiveTab("favorites")}
+        >
+          <Heart size={22} />
+          <span>Menu</span>
+        </button>
+        <button
+          className={`${styles["dashboard-page__mobile-nav-item"]} ${
+            activeTab === "settings"
+              ? styles["dashboard-page__mobile-nav-item--active"]
+              : ""
+          }`}
+          onClick={() => setActiveTab("settings")}
+        >
+          <SettingsIcon size={22} />
+          <span>Account</span>
+        </button>
+      </nav>
+
       <div
         className={`${styles["dashboard-page__toast"]} ${
           toast.show ? styles["dashboard-page__toast--show"] : ""
         }`}
       >
-        <CheckCircle style={{ color: "var(--color-primary)" }} size={24} />
+        <CheckCircle size={24} />
         <span>{toast.message}</span>
       </div>
     </>
