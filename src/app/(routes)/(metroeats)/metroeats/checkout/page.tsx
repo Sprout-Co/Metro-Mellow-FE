@@ -15,6 +15,7 @@ import { Routes } from "@/constants/routes";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import { useMetroEatsCart } from "../_context/MetroEatsCartContext";
 import { useMetroEatsPayment } from "@/hooks/useMetroEatsPayment";
+import PaymentSuccessModal from "./_components/PaymentSuccessModal/PaymentSuccessModal";
 import styles from "./checkout.module.scss";
 
 const fmt = (n: number) => `₦${n.toLocaleString()}`;
@@ -232,29 +233,11 @@ export default function CheckoutPage() {
   if (showConfirmation && paymentSuccess && createdOrderId) {
     return (
       <div className={styles.checkout}>
-        <div className={styles.checkout__empty}>
-          <h2>Payment successful 🎉</h2>
-          <p>
-            Your order has been placed and is now being prepared. You can track
-            it from your dashboard.
-          </p>
-          {createdOrderTotal != null && (
-            <p>
-              Total paid: <strong>{fmt(createdOrderTotal)}</strong>
-            </p>
-          )}
-          <div className={styles.checkout__actions}>
-            <Link
-              href="/metroeats/dashboard"
-              className={styles.checkout__backLink}
-            >
-              Go to dashboard
-            </Link>
-            <Link href="/metroeats/menu" className={styles.checkout__backLink}>
-              Back to menu
-            </Link>
-          </div>
-        </div>
+        <PaymentSuccessModal
+          isOpen={true}
+          onClose={() => router.push("/metroeats/menu")}
+          totalPaid={createdOrderTotal}
+        />
       </div>
     );
   }

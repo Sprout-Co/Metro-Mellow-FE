@@ -75,7 +75,7 @@ export default function MetroEatsNav() {
           <Link href="#subscribe" className={styles.nav__link}>
             Subscribe
           </Link>
-          <Link href="#quick-order" className={styles.nav__link}>
+          <Link href="/metroeats" className={styles.nav__link}>
             Quick Order
           </Link>
         </div>
@@ -105,8 +105,8 @@ export default function MetroEatsNav() {
             )}
           </button>
 
-          <Link href="/metroeats/menu" className={styles.nav__orderBtn}>
-            Order
+          <Link href="/metroeats/dashboard" className={styles.nav__orderBtn}>
+            Orders
           </Link>
 
           <button
