@@ -35,3 +35,13 @@ export function formatToNairaWithDecimals(amount: number, decimalPlaces: number 
   // Add Naira symbol and handle negative numbers
   return amount < 0 ? `-₦${formattedAmount}` : `₦${formattedAmount}`;
 }
+
+export function truncateText(text: string, limit: number): string {
+  if (limit <= 0) return "";
+  if (!text || text.length <= limit) return text;
+
+  const ellipsis = "…";
+  const sliceLength = Math.max(0, limit - ellipsis.length);
+
+  return `${text.slice(0, sliceLength).trimEnd()}${ellipsis}`;
+}

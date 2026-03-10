@@ -61,10 +61,7 @@ export default function QuickOrder() {
     });
 
     const limited = items.slice(0, 8);
-    return limited.map((item, index) => ({
-      ...item,
-      tag: index < 3 ? "Bestseller" : undefined,
-    }));
+    return limited;
   }, [data?.meals]);
 
   const handleOrder = (item: QuickOrderEntry) => {
@@ -90,17 +87,55 @@ export default function QuickOrder() {
 
   return (
     <section id="quick-order" className={styles.quickOrder}>
-      <div className={styles.quickOrder__header}>
-        <div>
-          <h2 className={styles.quickOrder__title}>Popular picks</h2>
-          <p className={styles.quickOrder__subtitle}>Add to cart in one tap</p>
+      <div className={styles.quickOrder__container}>
+        <div className={styles.quickOrder__header}>
+          <div>
+            <h2 className={styles.quickOrder__title}>Popular picks</h2>
+            <p className={styles.quickOrder__subtitle}>
+              Add to cart in one tap
+            </p>
+          </div>
+          <Link href="/metroeats/menu" className={styles.quickOrder__seeAll}>
+            Full menu →
+          </Link>
         </div>
-        <Link href="/metroeats/menu" className={styles.quickOrder__seeAll}>
-          Full menu →
-        </Link>
-      </div>
 
-      <div className={styles.quickOrder__scroll}>
+        <div className={styles.quickOrder__grid}>
+          {!loading &&
+            !error &&
+            quickItems.length > 0 &&
+            quickItems.map((item, i) => (
+              // <motion.div
+              //   key={item.id}
+              //   className={styles.quickOrder__card}
+              //   initial={{ opacity: 0, y: 12 }}
+              //   whileInView={{ opacity: 1, y: 0 }}
+              //   viewport={{ once: true }}
+              //   transition={{ duration: 0.35, delay: i * 0.05 }}
+              // >
+              <MealCard
+                name={item.name}
+                description={item.subtitle}
+                priceLabel={fmt(item.price)}
+                image={item.image}
+                imageSizes="(max-width: 768px) 160px, 200px"
+                badge={item.style === MealStyle.Plate ? "Plates" : "Bowls"}
+                onAddToCart={() => handleOrder(item)}
+                onCustomize={() =>
+                  handleCustomize(
+                    data?.meals?.find(
+                      (meal) => meal.id === item.mealId,
+                    ) as Meal,
+                    item.style,
+                    item.price,
+                  )
+                }
+              />
+              // </motion.div>
+            ))}
+        </div>
+
+        {/* <div className={styles.quickOrder__scroll}>
         <div className={styles.quickOrder__track}>
           {loading && <p style={{ padding: "1rem" }}>Loading popular picks…</p>}
 
@@ -144,6 +179,7 @@ export default function QuickOrder() {
               </motion.div>
             ))}
         </div>
+      </div> */}
       </div>
     </section>
   );

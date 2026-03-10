@@ -1,13 +1,11 @@
-$me-yellow: #ffcc00;
-$me-dark: #1a1a1a;
-
 .mealCard {
   background: color("neutral", "white");
-  border: 5px solid color("neutral", "black");
-  border-radius: 16px;
+  border: 1px solid color("neutral", "medium");
+  cursor: pointer;
+  border-radius: 0.5rem;
   overflow: hidden;
   display: flex;
-  flex-direction: column;
+  max-height: 150px;
   transition:
     transform 0.2s,
     box-shadow 0.2s;
@@ -16,69 +14,54 @@ $me-dark: #1a1a1a;
     transform: translateY(-3px);
     box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
   }
-}
 
-.mealCard__image {
-  position: relative;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #fffaeb 0%, #fff4d6 100%);
-  overflow: hidden;
+  &__image {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // background: color("neutral", "lightest");
+    overflow: hidden;
+    width: 150px;
+    height: 150px;
 
-  @include breakpoint-down("sm") {
-    height: 170px;
+    @include breakpoint-down("sm") {
+      height: 170px;
+    }
   }
-}
 
-.mealCard__img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-
-.mealCard__emoji {
-  font-size: 5rem;
-  line-height: 1;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.06));
-
-  @include breakpoint-down("sm") {
-    font-size: 4rem;
+  &__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
   }
-}
 
-.mealCard__badges {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  display: flex;
-  gap: 6px;
-}
+  &__badges {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    gap: 6px;
 
-.mealCard__badgeMain {
-  padding: 3px 8px;
-  background: $me-dark;
-  color: color("neutral", "white");
-  @include font-size("xxs");
-  @include font-weight("bold");
-  border-radius: 4px;
-}
-
-.mealCard__badgeTag {
-  padding: 3px 8px;
-  background: $me-yellow;
-  color: $me-dark;
-  @include font-size("xxs");
-  @include font-weight("bold");
-  border-radius: 4px;
+    &_main {
+      padding: 3px 8px;
+      background: color("metroeats", "dark");
+      color: color("neutral", "white");
+      @include font-size("xxs");
+      @include font-weight("bold");
+      border-radius: 4px;
+    }
+  }
 }
 
 .mealCard__body {
-  padding: spacing("md") spacing("lg");
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  padding: spacing("md");
 
   @include breakpoint-down("sm") {
     padding: spacing("md");
@@ -94,17 +77,19 @@ $me-dark: #1a1a1a;
 }
 
 .mealCard__name {
-  @include font-size("body-2");
-  @include font-weight("bold");
-  color: $me-dark;
+  @include font-size("base");
+  @include font-weight("medium");
+  color: color("metroeats", "dark");
+  text-transform: capitalize;
   margin: 0;
   line-height: 1.3;
 }
 
 .mealCard__desc {
-  @include font-size("sm");
-  color: rgba($me-dark, 0.5);
-  margin: 0 0 spacing("md");
+  @include font-size("xs");
+  @include font-weight("regular");
+  color: rgba(color("metroeats", "dark"), 0.5);
+  // margin: 0 0 2rem;
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -116,14 +101,16 @@ $me-dark: #1a1a1a;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: spacing("md");
+  margin-top: auto;
+  // margin-bottom: spacing("md");
 }
 
 .mealCard__price {
-  @include font-size("body-1");
-  @include font-weight("bold");
-  color: $me-yellow;
+  font-size: inherit;
+  @include font-weight("medium");
+  color: color("primary", "base");
   letter-spacing: -0.02em;
+  align-items: center;
 }
 
 .mealCard__actions {
@@ -139,7 +126,7 @@ $me-dark: #1a1a1a;
   border-radius: border-radius("pill");
   @include font-size("sm");
   @include font-weight("semibold");
-  color: $me-dark;
+  color: color("metroeats", "dark");
   cursor: pointer;
   transition:
     background 0.15s,
@@ -157,10 +144,10 @@ $me-dark: #1a1a1a;
   justify-content: center;
   width: 42px;
   height: 42px;
-  background: $me-yellow;
+  background: color("metroeats", "yellow");
   border: none;
   border-radius: border-radius("pill");
-  color: $me-dark;
+  color: color("metroeats", "dark");
   cursor: pointer;
   flex-shrink: 0;
   transition: opacity 0.15s;

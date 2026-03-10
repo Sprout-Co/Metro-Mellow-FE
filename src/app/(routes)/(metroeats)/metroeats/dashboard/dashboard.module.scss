@@ -318,25 +318,26 @@ $me-pending: #6366f1;
 // ─── TRACKING WIDGET ─────────────────────────────────────
 .trackingWidget {
   background: $me-dark;
-  border-radius: 16px;
+  border-radius: 20px;
   padding: spacing("xl") spacing("2xl");
   color: white;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 
   @include breakpoint-down("sm") {
     padding: spacing("lg");
-    border-radius: 12px;
+    border-radius: 16px;
   }
 }
 
 .trackingWidgetGlow {
   position: absolute;
-  top: -40%;
-  right: -15%;
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba($me-yellow, 0.12) 0%, transparent 70%);
+  top: -60%;
+  right: -20%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba($me-yellow, 0.15) 0%, transparent 60%);
   pointer-events: none;
 }
 
@@ -345,64 +346,178 @@ $me-pending: #6366f1;
   z-index: 1;
 }
 
+.trackingHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: spacing("md");
+}
+
+.trackingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba($me-yellow, 0.15);
+  border-radius: border-radius("pill");
+  @include font-size("xs");
+  @include font-weight("semibold");
+  color: $me-yellow;
+
+  svg {
+    animation: pulse 2s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.trackingOrderIdInline {
+  @include font-size("sm");
+  @include font-weight("medium");
+  color: rgba(255, 255, 255, 0.5);
+  font-family: monospace;
+}
+
 .trackingStatus {
   font-family: $font-family-heading;
-  font-size: clamp(1.25rem, 2.5vw, 1.625rem);
+  font-size: clamp(1.5rem, 3vw, 2rem);
   @include font-weight("bold");
-  color: $me-yellow;
+  color: white;
   margin: 0;
-  line-height: 1.3;
+  line-height: 1.2;
 }
 
 .trackingEta {
-  @include font-size("sm");
+  @include font-size("body-2");
   color: rgba(255, 255, 255, 0.6);
-  margin: spacing("xs") 0 spacing("lg");
+  margin: spacing("xs") 0 spacing("xl");
 
   strong {
     color: $me-yellow;
   }
 }
 
+.progressTrack {
+  margin-bottom: spacing("lg");
+}
+
 .progressBar {
-  height: 4px;
-  background: rgba(255, 255, 255, 0.12);
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: border-radius("pill");
   overflow: hidden;
-  margin-bottom: spacing("sm");
+  margin-bottom: spacing("lg");
 }
 
 .progressFill {
   height: 100%;
-  background: $me-yellow;
+  background: linear-gradient(90deg, $me-yellow 0%, lighten($me-yellow, 10%) 100%);
   border-radius: border-radius("pill");
-  transition: width 0.6s ease;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 12px rgba($me-yellow, 0.4);
 }
 
 .progressSteps {
   display: flex;
   justify-content: space-between;
-  @include font-size("xs");
-  color: rgba(255, 255, 255, 0.35);
+  gap: spacing("xs");
+}
+
+.progressStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+
+  span {
+    @include font-size("xs");
+    color: rgba(255, 255, 255, 0.4);
+    text-align: center;
+
+    @include breakpoint-down("sm") {
+      display: none;
+    }
+  }
+}
+
+.progressStepIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: border-radius("pill");
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+
+  @include breakpoint-down("sm") {
+    width: 28px;
+    height: 28px;
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
 }
 
 .progressStepActive {
-  color: $me-yellow;
-  @include font-weight("semibold");
+  .progressStepIcon {
+    background: $me-yellow;
+    color: $me-dark;
+    box-shadow: 0 0 16px rgba($me-yellow, 0.4);
+  }
+
+  span {
+    color: $me-yellow;
+    @include font-weight("semibold");
+  }
 }
 
 .trackingDetails {
-  margin-top: spacing("lg");
   padding-top: spacing("lg");
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
   gap: spacing("md");
+}
 
-  @include breakpoint-down("sm") {
-    flex-direction: column;
+.trackingMeta {
+  display: flex;
+  gap: spacing("lg");
+}
+
+.trackingMetaItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  @include font-size("sm");
+  color: rgba(255, 255, 255, 0.7);
+
+  svg {
+    color: rgba(255, 255, 255, 0.4);
   }
+}
+
+.trackingItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: spacing("xs");
+}
+
+.trackingItemChip {
+  display: inline-flex;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: border-radius("md");
+  @include font-size("xs");
+  @include font-weight("medium");
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .trackingOrderId {
@@ -707,6 +822,172 @@ $me-pending: #6366f1;
   background: rgba(0, 0, 0, 0.02);
   border-radius: 12px;
   border: 1px dashed $me-border;
+}
+
+.emptyCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: spacing("3xl") spacing("xl");
+  background: linear-gradient(135deg, #fffef5 0%, #fff9e6 100%);
+  border: 1px solid rgba($me-yellow, 0.2);
+  border-radius: 16px;
+  gap: spacing("md");
+}
+
+.emptyIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: border-radius("pill");
+  background: rgba($me-yellow, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: darken($me-yellow, 15%);
+  margin-bottom: spacing("xs");
+}
+
+.emptyTitle {
+  font-family: $font-family-heading;
+  @include font-size("h5");
+  @include font-weight("bold");
+  color: $me-dark;
+  margin: 0;
+}
+
+.emptyText {
+  @include font-size("body-2");
+  color: $me-muted;
+  margin: 0;
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+.emptyCardSmall {
+  display: flex;
+  align-items: center;
+  gap: spacing("md");
+  padding: spacing("lg") spacing("xl");
+  background: $me-card;
+  border: 1px solid $me-border;
+  border-radius: 12px;
+  @include font-size("sm");
+  color: $me-muted;
+
+  p {
+    margin: 0;
+  }
+}
+
+.emptyIconSmall {
+  color: $me-border;
+  flex-shrink: 0;
+}
+
+// ─── ORDER CARDS ─────────────────────────────────────────
+.orderCards {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("md");
+}
+
+.orderCard {
+  background: $me-card;
+  border: 1px solid $me-border;
+  border-radius: 14px;
+  padding: spacing("lg");
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: darken($me-border, 8%);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+}
+
+.orderCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: spacing("sm");
+}
+
+.orderCardId {
+  @include font-weight("bold");
+  @include font-size("body-2");
+  font-family: monospace;
+  color: $me-dark;
+}
+
+.orderCardItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: spacing("xs");
+  margin-bottom: spacing("md");
+  @include font-size("sm");
+  color: $me-muted;
+
+  span:not(:last-child)::after {
+    content: ",";
+  }
+}
+
+.orderCardMore {
+  @include font-weight("medium");
+  color: darken($me-muted, 10%);
+}
+
+.orderCardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: spacing("md");
+  border-top: 1px solid $me-border;
+}
+
+.orderCardMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.orderCardTotal {
+  @include font-weight("bold");
+  @include font-size("body-2");
+  color: $me-dark;
+}
+
+.orderCardDate {
+  @include font-size("xs");
+  color: $me-muted;
+}
+
+.orderCardSkeleton {
+  background: $me-card;
+  border: 1px solid $me-border;
+  border-radius: 14px;
+  padding: spacing("lg");
+  display: flex;
+  flex-direction: column;
+  gap: spacing("sm");
+}
+
+.skeletonLine {
+  height: 16px;
+  width: 60%;
+  background: linear-gradient(90deg, $me-border 0%, #f5f5f5 50%, $me-border 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.skeletonLineShort {
+  height: 12px;
+  width: 40%;
+  background: linear-gradient(90deg, $me-border 0%, #f5f5f5 50%, $me-border 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
 }
 
 // ─── SETTINGS ────────────────────────────────────────────

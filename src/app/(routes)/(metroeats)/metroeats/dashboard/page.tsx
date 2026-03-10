@@ -115,14 +115,14 @@ function ClientDashboardContent() {
 
   const firstName = me?.firstName ?? "";
   const greeting = firstName ? `Hello, ${firstName}` : "Hello";
-  const initials = (
-    me?.firstName?.[0] ??
-    me?.email?.[0] ??
-    "?"
-  ).toUpperCase();
+  const initials = (me?.firstName?.[0] ?? me?.email?.[0] ?? "?").toUpperCase();
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
-    { id: "dashboard", label: "Dashboard", icon: <LayoutDashboard size={18} /> },
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      icon: <LayoutDashboard size={18} />,
+    },
     { id: "history", label: "Orders", icon: <Clock size={18} /> },
   ];
 
@@ -167,7 +167,10 @@ function ClientDashboardContent() {
             <div className={styles.profileMenu}>
               <div className={styles.profileMenuHeader}>
                 <p className={styles.profileMenuName}>
-                  {me ? `${me.firstName ?? ""} ${me.lastName ?? ""}`.trim() || "User" : "User"}
+                  {me
+                    ? `${me.firstName ?? ""} ${me.lastName ?? ""}`.trim() ||
+                      "User"
+                    : "User"}
                 </p>
                 <p className={styles.profileMenuEmail}>{me?.email ?? ""}</p>
               </div>
@@ -222,14 +225,10 @@ function ClientDashboardContent() {
           {activeTab === "dashboard" && (
             <DashboardTab
               activeOrder={activeOrder}
-              meals={meals}
-              mealsLoading={mealsLoading}
               ordersLoading={ordersLoading}
               recentOrders={recentOrders}
               onSeeAllFavorites={() => router.push("/metroeats/menu")}
-              onTrackToast={triggerToast}
               onReorder={handleReorder}
-              onQuickOrder={handleQuickOrder}
             />
           )}
           {activeTab === "history" && (
@@ -280,9 +279,7 @@ function ClientDashboardContent() {
         />
       )}
 
-      <div
-        className={`${styles.toast} ${toast.show ? styles.toastShow : ""}`}
-      >
+      <div className={`${styles.toast} ${toast.show ? styles.toastShow : ""}`}>
         <CheckCircle size={20} />
         <span>{toast.message}</span>
         <button
