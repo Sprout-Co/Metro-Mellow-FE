@@ -23,7 +23,7 @@ import {
   X,
 } from "lucide-react";
 import styles from "./CheckoutSummary.module.scss";
-import { BillingCycle, Address } from "@/graphql/api";
+import { BillingCycle } from "@/graphql/api";
 import { DurationType } from "../SubscriptionBuilder";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "@/lib/redux/slices/authSlice";
@@ -39,9 +39,9 @@ interface CheckoutSummaryProps {
   billingCycle: BillingCycle;
   duration: DurationType;
   startDate: Date;
-  selectedAddress: Address | null;
+  selectedAddress: string | null;
   onStartDateChange: (date: Date) => void;
-  onAddressChange: (address: Address) => void;
+  onAddressChange: (address: string) => void;
   isCreatingSubscription?: boolean;
   onBack: () => void;
   onConfirmCheckout: () => void;
@@ -72,16 +72,6 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
       month: "long",
       day: "numeric",
     });
-  };
-
-  const formatAddress = (address: Address): string => {
-    const parts = [
-      address.street,
-      address.city,
-      address.state,
-      address.zipCode,
-    ].filter(Boolean);
-    return parts.join(", ");
   };
 
   const getFrequencyLabel = (frequency: string) => {
@@ -195,11 +185,11 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
                 <div className={styles.checkout__addressTable}>
                   {currentUser.addresses.map((address) => {
                     if (!address) return null;
-                    const isSelected = selectedAddress?.id === address.id;
+                    const isSelected = selectedAddress === address;
 
                     return (
                       <div
-                        key={address.id || "address-" + Math.random()}
+                        key={address || "address-" + Math.random()}
                         className={`${styles.checkout__addressRow} ${
                           isSelected ? styles.checkout__addressRowSelected : ""
                         }`}
@@ -216,15 +206,7 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
                         </div>
                         <div className={styles.checkout__addressRowContent}>
                           <div className={styles.checkout__addressRowTitle}>
-                            {address.label || "Address"}
-                            {address.isDefault && (
-                              <span className={styles.checkout__addressRowTag}>
-                                Default
-                              </span>
-                            )}
-                          </div>
-                          <div className={styles.checkout__addressRowText}>
-                            {formatAddress(address)}
+                            {address}
                           </div>
                         </div>
                       </div>

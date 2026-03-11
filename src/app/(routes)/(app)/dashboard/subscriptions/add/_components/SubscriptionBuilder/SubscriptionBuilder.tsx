@@ -15,7 +15,6 @@ import {
   BillingCycle,
   CreateSubscriptionInput,
   SubscriptionServiceInput,
-  Address,
 } from "@/graphql/api";
 import { useServiceOperations } from "@/graphql/hooks/services/useServiceOperations";
 import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubscriptionOperations";
@@ -51,10 +50,10 @@ interface ConfiguredService {
 const SubscriptionBuilder: React.FC = () => {
   // State management
   const [currentView, setCurrentView] = useState<"builder" | "checkout">(
-    "builder"
+    "builder",
   );
   const [billingCycle, setBillingCycle] = useState<BillingCycle>(
-    BillingCycle.Monthly
+    BillingCycle.Monthly,
   );
   const [duration, setDuration] = useState<DurationType>(1);
   const [services, setServices] = useState<Service[]>([]);
@@ -74,12 +73,12 @@ const SubscriptionBuilder: React.FC = () => {
     tomorrow.setDate(tomorrow.getDate() + 1);
     return tomorrow;
   });
-  const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
+  const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
   const [isCreatingSubscription, setIsCreatingSubscription] = useState(false);
 
   // Validation state
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>(
-    []
+    [],
   );
   const [showValidationErrors, setShowValidationErrors] = useState(false);
 
@@ -107,7 +106,7 @@ const SubscriptionBuilder: React.FC = () => {
       try {
         const apiServices = await handleGetServices(
           undefined,
-          ServiceStatus.Active
+          ServiceStatus.Active,
         );
         if (apiServices) {
           setServices(apiServices);
@@ -115,7 +114,7 @@ const SubscriptionBuilder: React.FC = () => {
       } catch (error) {
         console.error("Error fetching services:", error);
         setServicesError(
-          error instanceof Error ? error.message : "Failed to fetch services"
+          error instanceof Error ? error.message : "Failed to fetch services",
         );
       } finally {
         setServicesLoading(false);
@@ -135,7 +134,7 @@ const SubscriptionBuilder: React.FC = () => {
     if (paymentSuccess && paymentReference) {
       showToast(
         "Payment successful! Your subscription is now active. 🎉",
-        "success"
+        "success",
       );
     }
   }, [paymentSuccess, paymentReference, router]);
@@ -157,7 +156,7 @@ const SubscriptionBuilder: React.FC = () => {
   // Handle service edit
   const handleServiceEdit = (serviceId: string) => {
     const configured = configuredServices.find(
-      (cs) => cs.service._id === serviceId
+      (cs) => cs.service._id === serviceId,
     );
     if (configured) {
       setSelectedServiceForConfig(configured.service);
@@ -169,7 +168,7 @@ const SubscriptionBuilder: React.FC = () => {
   // Handle service removal
   const handleServiceRemove = (serviceId: string) => {
     setConfiguredServices((prev) =>
-      prev.filter((cs) => cs.service._id !== serviceId)
+      prev.filter((cs) => cs.service._id !== serviceId),
     );
   };
 
@@ -180,7 +179,7 @@ const SubscriptionBuilder: React.FC = () => {
     // Validate the configuration before saving
     const validation = validateServiceConfiguration(
       configuration,
-      selectedServiceForConfig
+      selectedServiceForConfig,
     );
     if (!validation.isValid) {
       setValidationErrors(validation.errors);
@@ -192,8 +191,8 @@ const SubscriptionBuilder: React.FC = () => {
       // Update existing configuration
       setConfiguredServices((prev) =>
         prev.map((cs) =>
-          cs.service._id === editingServiceId ? { ...cs, configuration } : cs
-        )
+          cs.service._id === editingServiceId ? { ...cs, configuration } : cs,
+        ),
       );
     } else {
       // Add new configured service
@@ -217,7 +216,7 @@ const SubscriptionBuilder: React.FC = () => {
   const calculateSubtotal = () => {
     return configuredServices.reduce(
       (sum, cs) => sum + (cs.configuration.price || 0),
-      0
+      0,
     );
   };
 
@@ -245,7 +244,7 @@ const SubscriptionBuilder: React.FC = () => {
     const validation = validateSubscription(
       configuredServices,
       billingCycle,
-      duration
+      duration,
     );
     if (!validation.isValid) {
       setValidationErrors(validation.errors);
@@ -275,8 +274,7 @@ const SubscriptionBuilder: React.FC = () => {
 
     try {
       // Get the address to use (selected or default)
-      const addressToUse =
-        selectedAddress?.id || currentUser?.defaultAddress?.id;
+      const addressToUse = selectedAddress || currentUser?.defaultAddress;
 
       if (!addressToUse) {
         showToast("Please select an address for your subscription", "error");
@@ -336,7 +334,7 @@ const SubscriptionBuilder: React.FC = () => {
         await initializeSubscriptionPayment(
           createdSubscription.billing.id,
           totalAmount,
-          currentUser.email
+          currentUser.email,
         );
 
         // Payment modal will open automatically
@@ -347,7 +345,7 @@ const SubscriptionBuilder: React.FC = () => {
         error instanceof Error
           ? error.message
           : "Failed to create subscription",
-        "error"
+        "error",
       );
       setIsCreatingSubscription(false);
     } finally {
@@ -545,7 +543,7 @@ Please do not refresh or close this window."
         existingConfiguration={
           editingServiceId
             ? configuredServices.find(
-                (cs) => cs.service._id === editingServiceId
+                (cs) => cs.service._id === editingServiceId,
               )?.configuration
             : undefined
         }
