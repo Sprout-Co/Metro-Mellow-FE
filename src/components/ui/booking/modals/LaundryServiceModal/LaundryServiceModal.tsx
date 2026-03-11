@@ -127,7 +127,7 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
   const handleCheckoutComplete = async (
     formData: CheckoutFormData,
     finalTotalPrice: number,
-    onContinuePayment: (bookingId: string) => void
+    onContinuePayment: (bookingId: string) => void,
   ) => {
     try {
       setError(null); // Clear any previous errors
@@ -140,8 +140,10 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
         serviceOption: serviceOption?.service_id || "",
         date: formData.date,
         timeSlot: formData.timeSlot,
-        address: formData.addressId || "",
-        notes: `Laundry Type: ${LaundryType.StandardLaundry}, Bags: ${bags}`,
+        address: formData.address,
+        notes:
+          formData.notes ||
+          `Laundry Type: ${LaundryType.StandardLaundry}, Bags: ${bags}`,
         serviceDetails: {
           serviceOption: serviceOption?.service_id || "",
           laundry: {
@@ -160,7 +162,7 @@ const LaundryServiceModal: React.FC<LaundryServiceModalProps> = ({
       } else {
         localStorage.setItem(
           LocalStorageKeys.BOOKING_DATA_TO_COMPLETE,
-          JSON.stringify(completeOrder)
+          JSON.stringify(completeOrder),
         );
         setShowLoginModal(true);
       }

@@ -68,7 +68,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
   const filteredServiceAreas = currentActiveServiceAreas
     ?.map((area) => area.name)
     .filter((area: string) =>
-      area.toLowerCase().includes(searchQuery.toLowerCase())
+      area.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
   const handleAddressSelect = (selectedAddress: string) => {
@@ -80,12 +80,7 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
 
     setIsLoading(true);
     try {
-      await handleAddAddress({
-        street: address,
-        city: selectedArea,
-        serviceArea: selectedArea,
-        isDefault: true,
-      });
+      await handleAddAddress(address);
 
       await handleGetCurrentUser();
       onAddressSelect?.(address);

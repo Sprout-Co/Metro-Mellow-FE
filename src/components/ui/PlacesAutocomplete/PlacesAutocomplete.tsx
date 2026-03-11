@@ -25,7 +25,7 @@ function useDebounce<T>(value: T, delay: number): T {
 interface PlacesAutocompleteProps {
   onSelect: (
     address: string,
-    coordinates: { lat: number; lng: number }
+    coordinates: { lat: number; lng: number },
   ) => void;
   onChange?: (address: string) => void;
   onFocus?: () => void;
@@ -86,7 +86,7 @@ export const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
               // Restrict results to Nigeria only
               includedRegionCodes: ["ng"],
             }),
-          }
+          },
         );
         const data = await response.json();
         console.log("data from suggestions", data);
@@ -103,6 +103,7 @@ export const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
     setInputValue(e.target.value);
     onChange?.(e.target.value);
     setIsOpen(true); // Re-open dropdown when typing
+    onSelect?.(e.target.value, { lat: 0, lng: 0 });
   };
 
   const handleSelect = async (suggestion: any) => {
@@ -125,7 +126,7 @@ export const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
             "X-Goog-Api-Key": process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
             "X-Goog-FieldMask": "location,formattedAddress",
           },
-        }
+        },
       );
       const data = await response.json();
       console.log("data from place details", data);

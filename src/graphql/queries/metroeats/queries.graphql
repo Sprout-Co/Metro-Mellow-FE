@@ -62,17 +62,7 @@ query GetMealOrders {
       lastName
       phone
     }
-    address {
-      id
-      street
-      city
-      state
-      zipCode
-      country
-      isDefault
-      label
-      serviceArea
-    }
+    address
   }
 }
 

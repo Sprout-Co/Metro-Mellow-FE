@@ -20,16 +20,7 @@ query GetSubscriptionById($id: ID!) {
     nextBillingDate
     lastBillingDate
     autoRenew
-    address {
-      id
-      street
-      city
-      state
-      zipCode
-      country
-      isDefault
-      label
-    }
+    address
     paymentMethod {
       id
       user {
@@ -154,16 +145,7 @@ query GetSubscriptions($status: SubscriptionStatus) {
     nextBillingDate
     lastBillingDate
     autoRenew
-    address {
-      id
-      street
-      city
-      state
-      zipCode
-      country
-      isDefault
-      label
-    }
+    address
     paymentMethod {
       id
       user {
@@ -288,17 +270,7 @@ query GetCustomerSubscriptions {
     nextBillingDate
     lastBillingDate
     autoRenew
-    address {
-      id
-      street
-      city
-      state
-      zipCode
-      country
-      isDefault
-      label
-      serviceArea
-    }
+    address
     paymentMethod {
       id
       user {

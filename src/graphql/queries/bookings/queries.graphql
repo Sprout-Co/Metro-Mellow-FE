@@ -71,15 +71,7 @@ query GetBookings($status: BookingStatus) {
       createdAt
       updatedAt
     }
-    address {
-      id
-      street
-      city
-      state
-      zipCode
-      country
-      label
-    }
+    address
     serviceDetails {
       serviceOption
       cleaning {
@@ -194,15 +186,7 @@ query GetBookingById($id: ID!) {
       createdAt
       updatedAt
     }
-    address {
-      id
-      street
-      city
-      state
-      zipCode
-      country
-      label
-    }
+    address
     serviceDetails {
       serviceOption
       cleaning {
@@ -317,15 +301,7 @@ query GetCustomerBookings {
       createdAt
       updatedAt
     }
-    address {
-      id
-      street
-      city
-      state
-      zipCode
-      country
-      label
-    }
+    address
     serviceDetails {
       serviceOption
       cleaning {
@@ -423,15 +399,7 @@ query GetStaffBookings {
     timeSlot
     status
     notes
-    address {
-      id
-      street
-      city
-      state
-      zipCode
-      country
-      label
-    }
+    address
     totalPrice
     paymentStatus
     createdAt

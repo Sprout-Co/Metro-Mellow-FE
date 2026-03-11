@@ -94,26 +94,8 @@ mutation CreateStaff($input: CreateUserInput!) {
       lastName
       role
       phone
-      addresses {
-        id
-        street
-        city
-        state
-        zipCode
-        country
-        isDefault
-        label
-      }
-      defaultAddress {
-        id
-        street
-        city
-        state
-        zipCode
-        country
-        isDefault
-        label
-      }
+      addresses
+      defaultAddress
       emailVerified
       emailVerifiedAt
       accountStatus

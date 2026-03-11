@@ -36,7 +36,7 @@ export interface CheckoutModalProps {
   onCheckout: (
     formData: CheckoutFormData,
     finalTotalPrice: number,
-    onContinuePayment: (bookingResponse: string) => void
+    onContinuePayment: (bookingResponse: string) => void,
   ) => void;
   service_category?: string;
   submitting?: boolean;
@@ -48,9 +48,8 @@ export interface CheckoutModalProps {
 export interface CheckoutFormData {
   date: string;
   timeSlot: TimeSlot;
-  city: string;
-  street: string;
-  addressId?: string;
+  serviceArea: string;
+  address: string;
   notes?: string;
 }
 
@@ -85,14 +84,14 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   // Determine if availability-based date/time is required
   const serviceCategoryEnum = useMemo(
     () => mapServiceCategoryToEnum(service_category),
-    [service_category]
+    [service_category],
   );
   const requiresAvailability = useMemo(
     () =>
       ![ServiceCategory.Cooking, ServiceCategory.Laundry].includes(
-        serviceCategoryEnum
+        serviceCategoryEnum,
       ),
-    [serviceCategoryEnum]
+    [serviceCategoryEnum],
   );
 
   // Custom hooks for form management
@@ -134,7 +133,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const { errorContainerRef } = useErrorScroll(
     error,
     slotError,
-    slotValidationError
+    slotValidationError,
   );
 
   // Calculate Christmas promo discount (automatically applied)
@@ -162,13 +161,13 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   // Total discount (referral + Christmas promo)
   const totalDiscountAmount = useMemo(
     () => referralDiscountAmount /* + add any other discounts here */,
-    [referralDiscountAmount]
+    [referralDiscountAmount],
   );
 
   // Get discount info for display
   const discountInfo = useMemo(
     () => discountData?.myReferralDiscountInfo,
-    [discountData]
+    [discountData],
   );
 
   // Handle payment initialization
@@ -193,7 +192,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     if (requiresAvailability) {
       const isSlotAvailable = await validateSlotAvailability(
         formData.date,
-        formData.timeSlot
+        formData.timeSlot,
       );
       if (!isSlotAvailable) {
         return;

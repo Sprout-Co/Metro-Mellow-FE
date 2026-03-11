@@ -21,7 +21,6 @@ import {
   useVerifyEmailMutation,
   useVerifyEmailWithCodeMutation,
   useAddAddressMutation,
-  AddressInput,
   useUpdateAddressMutation,
   useSetDefaultAddressMutation,
   useRemoveAddressMutation,
@@ -50,7 +49,8 @@ export const useAuthOperations = () => {
   const currentUser = useAppSelector(selectUser);
 
   const [loginMutation] = useLoginMutation();
-  const [registerMutation, { loading: registerLoading }] = useRegisterMutation();
+  const [registerMutation, { loading: registerLoading }] =
+    useRegisterMutation();
   const [updateProfileMutation] = useUpdateProfileMutation();
   const [changePasswordMutation] = useChangePasswordMutation();
   const [forgotPasswordMutation] = useForgotPasswordMutation();
@@ -163,7 +163,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [loginMutation, dispatch]
+    [loginMutation, dispatch],
   );
 
   /**
@@ -207,7 +207,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [registerMutation, dispatch]
+    [registerMutation, dispatch],
   );
 
   /**
@@ -237,7 +237,8 @@ export const useAuthOperations = () => {
 
       if (!token || !user) {
         throw new Error(
-          (data?.register as { message?: string })?.message ?? "Registration failed"
+          (data?.register as { message?: string })?.message ??
+            "Registration failed",
         );
       }
 
@@ -250,7 +251,7 @@ export const useAuthOperations = () => {
 
       return { user, token };
     },
-    [registerMutation, dispatch]
+    [registerMutation, dispatch],
   );
 
   /**
@@ -283,7 +284,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [updateProfileMutation, dispatch, currentToken]
+    [updateProfileMutation, dispatch, currentToken],
   );
 
   /**
@@ -313,7 +314,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [changePasswordMutation]
+    [changePasswordMutation],
   );
 
   /**
@@ -342,7 +343,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [forgotPasswordMutation]
+    [forgotPasswordMutation],
   );
 
   /**
@@ -372,7 +373,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [resetPasswordMutation]
+    [resetPasswordMutation],
   );
 
   /**
@@ -402,7 +403,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [updateUserRoleMutation]
+    [updateUserRoleMutation],
   );
 
   /**
@@ -483,7 +484,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [currentToken, getUserById]
+    [currentToken, getUserById],
   );
 
   /**
@@ -523,7 +524,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [currentToken, currentUser, getUsers]
+    [currentToken, currentUser, getUsers],
   );
 
   /**
@@ -552,7 +553,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [sendVerificationEmailMutation]
+    [sendVerificationEmailMutation],
   );
 
   /**
@@ -581,7 +582,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [verifyEmailMutation]
+    [verifyEmailMutation],
   );
 
   /**
@@ -622,7 +623,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [verifyEmailWithCodeMutation, dispatch]
+    [verifyEmailWithCodeMutation, dispatch],
   );
 
   /**
@@ -632,10 +633,10 @@ export const useAuthOperations = () => {
    * @throws Error if creation fails
    */
   const handleAddAddress = useCallback(
-    async (input: AddressInput) => {
+    async (address: string) => {
       try {
         const { data, errors } = await addAddressMutation({
-          variables: { input },
+          variables: { address },
         });
 
         if (errors) {
@@ -651,7 +652,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [addAddressMutation]
+    [addAddressMutation],
   );
 
   /**
@@ -662,10 +663,10 @@ export const useAuthOperations = () => {
    * @throws Error if update fails
    */
   const handleUpdateAddress = useCallback(
-    async (id: string, input: AddressInput) => {
+    async (oldAddress: string, newAddress: string) => {
       try {
         const { data, errors } = await updateAddressMutation({
-          variables: { addressId: id, input },
+          variables: { oldAddress, newAddress },
         });
 
         if (errors) {
@@ -681,7 +682,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [updateAddressMutation]
+    [updateAddressMutation],
   );
 
   /**
@@ -691,10 +692,10 @@ export const useAuthOperations = () => {
    * @throws Error if update fails
    */
   const handleSetDefaultAddress = useCallback(
-    async (id: string) => {
+    async (address: string) => {
       try {
         const { data, errors } = await setDefaultAddressMutation({
-          variables: { addressId: id },
+          variables: { address },
         });
 
         if (errors) {
@@ -710,20 +711,20 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [setDefaultAddressMutation]
+    [setDefaultAddressMutation],
   );
 
   /**
    * Removes an address for the current user
-   * @param id - Address ID to remove
+   * @param oldAddress - Address to remove
    * @returns Boolean indicating success
    * @throws Error if removal fails
    */
   const handleRemoveAddress = useCallback(
-    async (id: string) => {
+    async (oldAddress: string) => {
       try {
         const { data, errors } = await removeAddressMutation({
-          variables: { addressId: id },
+          variables: { oldAddress },
         });
 
         if (errors) {
@@ -739,7 +740,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [removeAddressMutation]
+    [removeAddressMutation],
   );
 
   /**
@@ -770,7 +771,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [updateAccountStatusMutation]
+    [updateAccountStatusMutation],
   );
 
   /**
@@ -799,7 +800,7 @@ export const useAuthOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [updateEmailMarketingPreferenceMutation]
+    [updateEmailMarketingPreferenceMutation],
   );
 
   return {

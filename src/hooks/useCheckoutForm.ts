@@ -5,9 +5,8 @@ import { formatDateToLocalString, getTomorrowDate } from "@/utils/slotHelpers";
 export interface CheckoutFormData {
   date: string;
   timeSlot: TimeSlot;
-  city: string;
-  street: string;
-  addressId?: string;
+  serviceArea: string;
+  address: string;
   notes?: string;
 }
 
@@ -25,15 +24,11 @@ interface UseCheckoutFormReturn {
   handleInputChange: (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    >,
   ) => void;
   handleDateSelect: (date: Date) => void;
   handleTimeSlotSelect: (timeSlot: TimeSlot) => void;
-  handleAddressSelect: (
-    addressId: string,
-    city: string,
-    street: string
-  ) => void;
+  handleAddressSelect: (address: string, serviceArea: string) => void;
   resetForm: () => void;
 }
 
@@ -46,9 +41,8 @@ export const useCheckoutForm = ({
     return {
       date: formatDateToLocalString(getTomorrowDate()),
       timeSlot: TimeSlot.Morning,
-      city: user?.defaultAddress?.city ?? "",
-      street: user?.defaultAddress?.street ?? "",
-      addressId: user?.defaultAddress?.id,
+      serviceArea: "",
+      address: user?.defaultAddress ?? "",
       notes: "",
     };
   }, [user]);
@@ -62,9 +56,8 @@ export const useCheckoutForm = ({
     if (user?.defaultAddress) {
       setFormData((prev) => ({
         ...prev,
-        addressId: user.defaultAddress?.id,
-        city: user.defaultAddress?.city ?? "",
-        street: user.defaultAddress?.street ?? "",
+        address: user.defaultAddress ?? "",
+        serviceArea: "",
       }));
     }
   }, [user]);
@@ -84,7 +77,7 @@ export const useCheckoutForm = ({
     (
       e: React.ChangeEvent<
         HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-      >
+      >,
     ) => {
       const { name, value } = e.target;
       setFormData((prev) => ({
@@ -92,7 +85,7 @@ export const useCheckoutForm = ({
         [name]: value,
       }));
     },
-    []
+    [],
   );
 
   // Handle date selection
@@ -114,15 +107,14 @@ export const useCheckoutForm = ({
 
   // Handle address selection
   const handleAddressSelect = useCallback(
-    (addressId: string, city: string, street: string) => {
+    (address: string, serviceArea: string) => {
       setFormData((prev) => ({
         ...prev,
-        addressId,
-        city,
-        street,
+        address,
+        serviceArea,
       }));
     },
-    []
+    [],
   );
 
   // Reset form to initial state
@@ -133,16 +125,16 @@ export const useCheckoutForm = ({
 
   // Calculate delivery cost based on selected address
   const deliveryCost = useMemo(() => {
-    if (formData.addressId && user?.addresses) {
+    if (formData.address && user?.addresses) {
       const selectedAddress = user.addresses.find(
-        (addr) => addr?.id === formData.addressId
+        (addr) => addr === formData.address,
       );
       return 0; //TODO: Decide later if we want to charge for delivery or not
       // return selectedAddress?.serviceArea?.deliveryCost ?? 0;
     }
     // return user?.defaultAddress?.serviceArea?.deliveryCost ?? 0;
     return 0; //TODO: Decide later if we want to charge for delivery or not
-  }, [formData.addressId, user?.addresses, user?.defaultAddress]);
+  }, [formData.address, user?.addresses, user?.defaultAddress]);
 
   return {
     formData,

@@ -7,14 +7,7 @@ mutation CreateMealOrder($input: CreateMealOrderInput!) {
       firstName
       lastName
     }
-    address {
-      id
-      street
-      city
-      state
-      zipCode
-      country
-    }
+    address
     items {
       meal {
         id

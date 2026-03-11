@@ -130,7 +130,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
   };
 
   function handleConfirmAction(
-    actionType: "pause" | "cancel" | "resume" | "reschedule"
+    actionType: "pause" | "cancel" | "resume" | "reschedule",
   ) {
     setConfirmationActionType(actionType);
     setIsConfirmActionModalOpen(true);
@@ -154,7 +154,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
       await initializePayment(
         booking.id,
         booking.totalPrice,
-        booking.customer?.email || ""
+        booking.customer?.email || "",
       );
     } catch (err) {
       console.error("Payment retry failed:", err);
@@ -364,7 +364,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                 <div>
                   <span className={styles.modal__infoLabel}>Address</span>
                   <span className={styles.modal__infoValue}>
-                    {booking.address.street}
+                    {booking.address}
                   </span>
                 </div>
               </div>

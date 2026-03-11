@@ -155,19 +155,6 @@
     letter-spacing: letter-spacing("wide");
   }
 
-  &__street {
-    @include font-size("sm");
-    color: color("neutral", "darkest");
-    margin: 0 0 spacing("xxs");
-    @include truncate;
-  }
-
-  &__city {
-    @include font-size("sm");
-    color: color("neutral", "medium");
-    margin: 0;
-  }
-
   &__actions {
     position: relative;
     flex-shrink: 0;

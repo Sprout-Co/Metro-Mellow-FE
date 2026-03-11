@@ -122,7 +122,7 @@ export default function RegisterForm({
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedReferralCode = sessionStorage.getItem(
-        REFERRAL_CODE_STORAGE_KEY
+        REFERRAL_CODE_STORAGE_KEY,
       );
       if (storedReferralCode && !formData.referralCode) {
         setFormData((prev) => ({
@@ -131,7 +131,7 @@ export default function RegisterForm({
         }));
         console.log(
           "Referral code auto-filled from sessionStorage:",
-          storedReferralCode
+          storedReferralCode,
         );
       }
     }
@@ -167,7 +167,7 @@ export default function RegisterForm({
   const filteredServiceAreas = serviceAreasData?.activeServiceAreas
     .map((area) => area.name)
     .filter((area: string) =>
-      area.toLowerCase().includes(serviceAreaSearchQuery.toLowerCase())
+      area.toLowerCase().includes(serviceAreaSearchQuery.toLowerCase()),
     );
 
   const validateStep = (step: FormStep): boolean => {
@@ -304,11 +304,7 @@ export default function RegisterForm({
         phone: formData.phone,
         referralCode: formData.referralCode || undefined,
         emailMarketingOptIn: formData.emailMarketingOptIn,
-        address: {
-          street: formData.street,
-          city: formData.serviceArea || "Lagos",
-          serviceArea: formData.serviceArea,
-        },
+        address: `${formData.street} - ${formData.serviceArea}`,
       });
 
       // Show verification form

@@ -6,28 +6,8 @@ query GetCurrentUser {
     lastName
     role
     phone
-    defaultAddress {
-      street
-      city
-      state
-      zipCode
-      country
-      id
-      isDefault
-      label
-      serviceArea
-    }
-    addresses {
-      id
-      street
-      city
-      state
-      zipCode
-      country
-      isDefault
-      label
-      serviceArea
-    }
+    defaultAddress
+    addresses
     emailVerified
     emailVerifiedAt
     accountStatus
@@ -44,28 +24,8 @@ query GetUserById($id: ID!) {
     lastName
     role
     phone
-    defaultAddress {
-      street
-      city
-      state
-      zipCode
-      country
-      id
-      isDefault
-      label
-      serviceArea
-    }
-    addresses {
-      id
-      street
-      city
-      state
-      zipCode
-      country
-      isDefault
-      label
-      serviceArea
-    }
+    defaultAddress
+    addresses
     emailVerified
     emailVerifiedAt
     accountStatus
@@ -82,28 +42,8 @@ query GetUsers($role: UserRole) {
     lastName
     role
     phone
-    defaultAddress {
-      street
-      city
-      state
-      zipCode
-      country
-      id
-      isDefault
-      label
-      serviceArea
-    }
-    addresses {
-      id
-      street
-      city
-      state
-      zipCode
-      country
-      isDefault
-      label
-      serviceArea
-    }
+    defaultAddress
+    addresses
     emailVerified
     emailVerifiedAt
     accountStatus

@@ -442,8 +442,8 @@ const CleaningServiceModal: React.FC<CleaningServiceModalProps> = ({
         serviceOption: serviceOption?.service_id || ServiceId.StandardCleaning,
         date: formData.date,
         timeSlot: formData.timeSlot,
-        address: formData.addressId || "",
-        notes: `Frequency`,
+        address: formData.address,
+        notes: formData.notes || ``,
         serviceDetails: {
           serviceOption:
             serviceOption?.service_id || ServiceId.StandardCleaning,

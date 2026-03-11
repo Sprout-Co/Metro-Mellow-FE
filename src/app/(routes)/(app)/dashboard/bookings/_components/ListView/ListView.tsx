@@ -47,7 +47,7 @@ const ListView: React.FC<ListViewProps> = ({ bookings, refetchBookings }) => {
 
   // Sort bookings by date
   const sortedBookings = [...bookings].sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
   );
 
   // Get filtered bookings based on active tab
@@ -59,19 +59,19 @@ const ListView: React.FC<ListViewProps> = ({ bookings, refetchBookings }) => {
         return sortedBookings.filter(
           (booking) =>
             booking.status === BookingStatus.Confirmed ||
-            booking.status === BookingStatus.InProgress
+            booking.status === BookingStatus.InProgress,
         );
       case "pending":
         return sortedBookings.filter(
           (booking) =>
             booking.status === BookingStatus.Pending ||
-            booking.status === BookingStatus.Paused
+            booking.status === BookingStatus.Paused,
         );
       case "past":
         return sortedBookings.filter(
           (booking) =>
             booking.status === BookingStatus.Completed ||
-            booking.status === BookingStatus.Cancelled
+            booking.status === BookingStatus.Cancelled,
         );
       default:
         return sortedBookings;
@@ -92,7 +92,7 @@ const ListView: React.FC<ListViewProps> = ({ bookings, refetchBookings }) => {
       count: sortedBookings.filter(
         (b) =>
           b.status === BookingStatus.Confirmed ||
-          b.status === BookingStatus.InProgress
+          b.status === BookingStatus.InProgress,
       ).length,
       icon: Play,
     },
@@ -102,7 +102,7 @@ const ListView: React.FC<ListViewProps> = ({ bookings, refetchBookings }) => {
       count: sortedBookings.filter(
         (b) =>
           b.status === BookingStatus.Pending ||
-          b.status === BookingStatus.Paused
+          b.status === BookingStatus.Paused,
       ).length,
       icon: Clock,
     },
@@ -112,7 +112,7 @@ const ListView: React.FC<ListViewProps> = ({ bookings, refetchBookings }) => {
       count: sortedBookings.filter(
         (b) =>
           b.status === BookingStatus.Completed ||
-          b.status === BookingStatus.Cancelled
+          b.status === BookingStatus.Cancelled,
       ).length,
       icon: Calendar,
     },
@@ -255,7 +255,7 @@ const ListView: React.FC<ListViewProps> = ({ bookings, refetchBookings }) => {
               </div>
               <div className={styles.bookingCard__infoItem}>
                 <MapPin size={14} />
-                <span>{booking.address.street}</span>
+                <span>{booking.address}</span>
               </div>
             </div>
           </div>

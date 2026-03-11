@@ -107,20 +107,20 @@ mutation UpdateAccountStatus(
   updateAccountStatus(userId: $userId, status: $status, reason: $reason)
 }
 
-mutation AddAddress($input: AddressInput!) {
-  addAddress(input: $input)
+mutation AddAddress($address: String!) {
+  addAddress(address: $address)
 }
 
-mutation SetDefaultAddress($addressId: ID!) {
-  setDefaultAddress(addressId: $addressId)
+mutation SetDefaultAddress($address: String!) {
+  setDefaultAddress(address: $address)
 }
 
-mutation UpdateAddress($addressId: ID!, $input: AddressInput!) {
-  updateAddress(addressId: $addressId, input: $input)
+mutation UpdateAddress($oldAddress: String!, $newAddress: String!) {
+  updateAddress(oldAddress: $oldAddress, newAddress: $newAddress)
 }
 
-mutation RemoveAddress($addressId: ID!) {
-  removeAddress(addressId: $addressId)
+mutation RemoveAddress($oldAddress: String!) {
+  removeAddress(oldAddress: $oldAddress)
 }
 
 mutation UpdateBookingPaymentStatus(

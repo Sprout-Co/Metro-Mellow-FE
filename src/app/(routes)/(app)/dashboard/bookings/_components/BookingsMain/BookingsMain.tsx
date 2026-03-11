@@ -40,7 +40,7 @@ const BookingsMain: React.FC = () => {
     ServiceCategory | "all"
   >("all");
   const [selectedStatus, setSelectedStatus] = useState<BookingStatus | "all">(
-    "all"
+    "all",
   );
   const [selectedDateRange, setSelectedDateRange] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -80,14 +80,14 @@ const BookingsMain: React.FC = () => {
           b.staff?.firstName
             .toLowerCase()
             .includes(searchQuery.toLowerCase()) ||
-          b.address?.label?.toLowerCase().includes(searchQuery.toLowerCase())
+          b.address?.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
 
     // Filter by service type
     if (selectedservice_category !== "all") {
       filtered = filtered.filter(
-        (b) => b.service_category === selectedservice_category
+        (b) => b.service_category === selectedservice_category,
       );
     }
 

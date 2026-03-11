@@ -12,14 +12,13 @@ interface AddressSectionProps {
   isNewAddress: boolean;
   setIsNewAddress: (value: boolean) => void;
   formData: {
-    city: string;
-    street: string;
-    addressId?: string;
+    serviceArea: string;
+    address: string;
   };
   onInputChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => void;
-  onAddressSelect: (addressId: string, city: string, street: string) => void;
+  onAddressSelect: (address: string, serviceArea: string) => void;
 }
 
 export const AddressSection: React.FC<AddressSectionProps> = ({
@@ -45,22 +44,10 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
   }, [serviceAreasData]);
 
   const handleAddAddressClick = async () => {
-    if (!formData.city || !formData.street) return;
-
-    const serviceArea = serviceAreasData?.activeServiceAreas.find(
-      (area) => area.name.toLowerCase() === formData.city.toLowerCase()
-    );
-
-    if (!serviceArea) return;
+    if (!formData.serviceArea || !formData.address) return;
 
     try {
-      await handleAddAddress({
-        city: formData.city,
-        street: formData.street,
-        serviceArea: serviceArea.id,
-        label: `My Home`,
-        isDefault: !user?.addresses?.length,
-      });
+      await handleAddAddress(`${formData.address} - ${formData.serviceArea}`);
 
       await refetchUser();
     } catch (error) {
@@ -124,7 +111,7 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
             <select
               id="city"
               name="city"
-              value={formData.city}
+              value={formData.serviceArea}
               onChange={onInputChange}
               className={styles.checkoutModal__select}
               required
@@ -157,14 +144,14 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
                 } as React.ChangeEvent<HTMLInputElement>);
               }}
               placeholder={
-                formData.city
-                  ? `Search address in ${formData.city}...`
+                formData.serviceArea
+                  ? `Search address in ${formData.serviceArea}...`
                   : "Enter your full street address"
               }
             />
-            {formData.street && (
+            {formData.address && (
               <div className={styles.checkoutModal__selectedAddress}>
-                <p>{formData.street}</p>
+                <p>{formData.address}</p>
               </div>
             )}
           </div>
@@ -183,17 +170,16 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
             <div className={styles.checkoutModal__field}>
               <select
                 id="savedAddress"
-                name="addressId"
-                value={formData.addressId || ""}
+                name="address"
+                value={formData.address || ""}
                 onChange={(e) => {
                   const selectedAddress = user.addresses?.find(
-                    (addr) => addr?.id === e.target.value
+                    (addr) => addr === e.target.value,
                   );
                   if (selectedAddress) {
                     onAddressSelect(
-                      selectedAddress.id ?? "",
-                      selectedAddress.city ?? "",
-                      selectedAddress.street ?? ""
+                      selectedAddress ?? "",
+                      formData.serviceArea ?? "",
                     );
                   }
                 }}
@@ -204,11 +190,10 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
                 {user.addresses.map(
                   (address) =>
                     address && (
-                      <option key={address.id} value={address.id}>
-                        {address.street}
-                        {address.isDefault ? " ★" : ""}
+                      <option key={address} value={address}>
+                        {address}
                       </option>
-                    )
+                    ),
                 )}
               </select>
             </div>

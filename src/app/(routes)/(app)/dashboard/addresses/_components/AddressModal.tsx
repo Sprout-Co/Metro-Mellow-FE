@@ -4,15 +4,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { Check, MapPin, ChevronDown, Loader2, Search } from "lucide-react";
 import styles from "./AddressModal.module.scss";
 import Modal from "@/components/ui/Modal/Modal";
-import { Address, ServiceArea } from "@/graphql/api";
 import { PlacesAutocomplete } from "@/components/ui/PlacesAutocomplete/PlacesAutocomplete";
 import { useServiceAreaOperations } from "@/graphql/hooks/serviceArea/useServiceAreaOperations";
 
 interface AddressModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (address: Partial<Address>, serviceAreaId?: string) => Promise<void>;
-  address?: Address | null;
+  onSave: (address: string, serviceAreaId?: string) => Promise<void>;
+  address?: string | null;
 }
 
 const AddressModal: React.FC<AddressModalProps> = ({
@@ -67,12 +66,10 @@ const AddressModal: React.FC<AddressModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       if (address) {
-        setLabel(address.label || "");
-        setStreetAddress(address.street || "");
-        setIsDefault(address.isDefault || false);
-        if (address.serviceArea) {
-          setSelectedArea(address.serviceArea);
-        }
+        setLabel(address || "");
+        setStreetAddress(address || "");
+        setIsDefault(false);
+        setSelectedArea(null);
       } else {
         resetForm();
       }
@@ -99,7 +96,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
   const filteredServiceAreas = currentActiveServiceAreas
     ?.map((area) => area.name)
     .filter((area: string) =>
-      area.toLowerCase().includes(searchQuery.toLowerCase())
+      area.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
   const handleAddressSelect = (selected: string) => {
@@ -111,15 +108,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
 
     setIsSubmitting(true);
     try {
-      await onSave(
-        {
-          label: label || "Home",
-          street: streetAddress,
-          city: selectedArea,
-          isDefault,
-        },
-        selectedArea
-      );
+      await onSave(`${streetAddress} - ${selectedArea}`, selectedArea);
       resetForm();
       onClose();
     } catch (err) {
@@ -250,34 +239,6 @@ const AddressModal: React.FC<AddressModalProps> = ({
               </div>
             )}
           </div>
-        )}
-
-        {/* Label & Default */}
-        {streetAddress && (
-          <>
-            <div className={styles.field}>
-              <label className={styles.field__label}>Label (optional)</label>
-              <input
-                type="text"
-                className={styles.input}
-                placeholder="e.g., Home, Office"
-                value={label}
-                onChange={(e) => setLabel(e.target.value)}
-              />
-            </div>
-
-            <label className={styles.toggle}>
-              <input
-                type="checkbox"
-                checked={isDefault}
-                onChange={(e) => setIsDefault(e.target.checked)}
-              />
-              <div className={styles.toggle__track}>
-                <div className={styles.toggle__thumb} />
-              </div>
-              <span className={styles.toggle__label}>Set as default</span>
-            </label>
-          </>
         )}
 
         {/* Actions */}

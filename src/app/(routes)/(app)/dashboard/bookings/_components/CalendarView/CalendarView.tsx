@@ -355,7 +355,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
                                       className={styles.calendarView__dot}
                                       style={{
                                         backgroundColor: getServiceColor(
-                                          booking.service_category
+                                          booking.service_category,
                                         ),
                                       }}
                                     />
@@ -469,7 +469,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
                         className={styles.calendarView__bookingIndicator}
                         style={{
                           backgroundColor: getServiceColor(
-                            booking.service_category
+                            booking.service_category,
                           ),
                         }}
                       />
@@ -493,7 +493,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
                           </div> */}
                           <div className={styles.calendarView__bookingDetail}>
                             <MapPin size={14} />
-                            <span>{booking.address.street}</span>
+                            <span>{booking.address}</span>
                           </div>
                         </div>
 

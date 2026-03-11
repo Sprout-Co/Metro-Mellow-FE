@@ -8,17 +8,12 @@ import AddressModal from "./_components/AddressModal";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { selectUser } from "@/lib/redux";
-import {
-  Address as GraphQLAddress,
-  AddressInput,
-  Address,
-} from "@/graphql/api";
 import FnButton from "@/components/ui/Button/FnButton";
 
 const AddressManagementPage: React.FC = () => {
-  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [addresses, setAddresses] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingAddress, setEditingAddress] = useState<Address | null>(null);
+  const [editingAddress, setEditingAddress] = useState<string | null>(null);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -32,36 +27,17 @@ const AddressManagementPage: React.FC = () => {
 
   useEffect(() => {
     if (currentUser?.addresses) {
-      const filtered = currentUser.addresses.filter(
-        (addr): addr is GraphQLAddress => addr !== null
-      );
-      setAddresses(filtered);
+      setAddresses(currentUser.addresses || []);
     }
   }, [currentUser]);
 
-  const handleSaveAddress = async (
-    addressData: Partial<Address>,
-    serviceAreaId?: string
-  ) => {
+  const handleSaveAddress = async (newAddress: string) => {
     setIsLoading(true);
     try {
-      const areaId = serviceAreaId || editingAddress?.serviceArea?.id;
-      if (!areaId) return;
-
-      const addressInput: AddressInput = {
-        label: addressData.label || "",
-        street: addressData.street || "",
-        city: addressData.city || "",
-        state: addressData.state || "",
-        zipCode: addressData.zipCode || "",
-        isDefault: addressData.isDefault || false,
-        serviceArea: areaId,
-      };
-
       if (editingAddress) {
-        await handleUpdateAddress(editingAddress.id, addressInput);
+        await handleUpdateAddress(editingAddress, newAddress);
       } else {
-        await handleAddAddress(addressInput);
+        await handleAddAddress(newAddress);
       }
 
       await handleGetCurrentUser();
@@ -74,10 +50,10 @@ const AddressManagementPage: React.FC = () => {
     }
   };
 
-  const handleSetDefault = async (id: string) => {
+  const handleSetDefault = async (address: string) => {
     setIsLoading(true);
     try {
-      await handleSetDefaultAddress(id);
+      await handleSetDefaultAddress(address);
       await handleGetCurrentUser();
       setActiveMenuId(null);
     } catch (error) {
@@ -87,9 +63,9 @@ const AddressManagementPage: React.FC = () => {
     }
   };
 
-  const toggleMenu = (addressId: string, e: React.MouseEvent) => {
+  const toggleMenu = (address: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    setActiveMenuId(activeMenuId === addressId ? null : addressId);
+    setActiveMenuId(activeMenuId === address ? null : address);
   };
 
   useEffect(() => {
@@ -129,10 +105,10 @@ const AddressManagementPage: React.FC = () => {
         {/* Address List */}
         {addresses.length > 0 ? (
           <div className={styles.list}>
-            {addresses.map((address) => (
+            {addresses.map((address, index) => (
               <div
-                key={address.id}
-                className={`${styles.card} ${address.isDefault ? styles["card--default"] : ""}`}
+                key={index}
+                className={`${styles.card} ${address === currentUser?.defaultAddress ? styles["card--default"] : ""}`}
               >
                 <div className={styles.card__icon}>
                   <MapPin size={20} />
@@ -141,32 +117,26 @@ const AddressManagementPage: React.FC = () => {
                 <div className={styles.card__content}>
                   <div className={styles.card__header}>
                     <span className={styles.card__label}>
-                      {address.label || "Address"}
+                      {address || "Address"}
                     </span>
-                    {address.isDefault && (
+                    {address === currentUser?.defaultAddress && (
                       <span className={styles.card__badge}>
                         <Check size={12} />
                         Default
                       </span>
                     )}
                   </div>
-                  <p className={styles.card__street}>{address.street}</p>
-                  <p className={styles.card__city}>
-                    {address.city}
-                    {address.serviceArea?.name &&
-                      ` · ${address.serviceArea.name}`}
-                  </p>
                 </div>
 
                 <div className={styles.card__actions}>
                   <button
                     className={styles.card__menuBtn}
-                    onClick={(e) => toggleMenu(address.id, e)}
+                    onClick={(e) => toggleMenu(address, e)}
                   >
                     <MoreVertical size={18} />
                   </button>
 
-                  {activeMenuId === address.id && (
+                  {activeMenuId === address && (
                     <div className={styles.card__menu}>
                       <button
                         className={styles.card__menuItem}
@@ -179,10 +149,10 @@ const AddressManagementPage: React.FC = () => {
                         <Edit2 size={14} />
                         Edit
                       </button>
-                      {!address.isDefault && (
+                      {address !== currentUser?.defaultAddress && (
                         <button
                           className={styles.card__menuItem}
-                          onClick={() => handleSetDefault(address.id)}
+                          onClick={() => handleSetDefault(address)}
                         >
                           <Star size={14} />
                           Set as Default
