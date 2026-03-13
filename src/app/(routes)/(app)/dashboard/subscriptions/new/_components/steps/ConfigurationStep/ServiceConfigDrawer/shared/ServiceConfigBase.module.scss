@@ -1,0 +1,892 @@
+// ServiceConfigDrawer - Clean Base Styles with Subtle Enhancements
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+// ===================================
+// DRAWER CONTAINER & LAYOUT
+// ===================================
+
+.drawer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: color("neutral", "white");
+
+  // Header
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("lg") spacing("xl");
+    border-bottom: 1px solid color("neutral", "lighter");
+    background: color("neutral", "lightest");
+  }
+
+  &__headerContent {
+    h2 {
+      @include font-size("lg");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      margin: spacing("xxs") 0 0 0;
+    }
+  }
+
+  &__closeBtn {
+    width: 36px;
+    height: 36px;
+    border-radius: border-radius("lg");
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: color("neutral", "dark");
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+
+    &:hover {
+      background: color("neutral", "white");
+      border-color: color("neutral", "light");
+      color: color("neutral", "darkest");
+      transform: scale(1.05);
+    }
+  }
+
+  // Progress Steps
+  &__progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: spacing("md") spacing("xl");
+    gap: spacing("sm");
+    border-bottom: 1px solid color("neutral", "lighter");
+    background: color("neutral", "white");
+  }
+
+  &__progressStep {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+
+    &::after {
+      content: "";
+      width: 32px;
+      height: 2px;
+      background: color("neutral", "lighter");
+      margin-left: spacing("xs");
+      border-radius: 1px;
+    }
+
+    &:last-child::after {
+      display: none;
+    }
+
+    &--active {
+      .drawer__progressDot {
+        background: color("primary", "base");
+        border-color: color("primary", "base");
+        box-shadow: 0 0 0 4px rgba(color("primary", "base"), 0.15);
+      }
+
+      .drawer__progressLabel {
+        color: color("primary", "base");
+        @include font-weight("semibold");
+      }
+    }
+
+    &--completed {
+      .drawer__progressDot {
+        background: color("status", "success");
+        border-color: color("status", "success");
+      }
+
+      &::after {
+        background: color("status", "success");
+      }
+    }
+  }
+
+  &__progressDot {
+    width: 10px;
+    height: 10px;
+    border-radius: border-radius("full");
+    background: color("neutral", "white");
+    border: 2px solid color("neutral", "light");
+    transition: all 0.25s ease;
+  }
+
+  &__progressLabel {
+    @include font-size("sm");
+    color: color("neutral", "dark");
+    transition: color 0.2s ease;
+
+    @include breakpoint-down("sm") {
+      display: none;
+    }
+  }
+
+  // Content Area
+  &__content {
+    flex: 1;
+    padding: spacing("xl");
+    overflow-y: auto;
+    background: color("neutral", "white");
+
+    @include breakpoint-down("sm") {
+      padding: spacing("lg");
+    }
+  }
+
+  &__stepContent {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  &__stepHeader {
+    margin-bottom: spacing("xl");
+    text-align: center;
+
+    h3 {
+      @include font-size("xl");
+      @include font-weight("bold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xs") 0;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      margin: 0;
+    }
+  }
+
+  &__section {
+    margin-bottom: spacing("xl");
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__label {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darker");
+    margin-bottom: spacing("sm");
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+
+    &--error {
+      color: color("status", "error");
+    }
+  }
+
+  &__required {
+    color: color("status", "error");
+  }
+
+  &__scheduleNote {
+    padding: spacing("sm") spacing("md");
+    margin-top: spacing("sm");
+    background: color("accent", "lighter");
+    border-radius: border-radius("md");
+    border-left: 3px solid color("accent", "base");
+
+    p {
+      margin: 0;
+      @include font-size("sm");
+      color: color("neutral", "darker");
+    }
+  }
+
+  // ===================================
+  // FORM ELEMENTS - Enhanced
+  // ===================================
+
+  // Service Options - Cards with depth
+  &__optionsGrid {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__optionCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("lg");
+    background: color("neutral", "white");
+    border: 1.5px solid color("neutral", "lighter");
+    border-radius: border-radius("xl");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+    &:hover {
+      border-color: color("primary", "light");
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      transform: translateY(-1px);
+    }
+
+    &--active {
+      border-color: color("primary", "base");
+      background: color("neutral", "white");
+      box-shadow:
+        0 0 0 3px rgba(color("primary", "base"), 0.1),
+        0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    h4 {
+      @include font-size("base");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0 0 spacing("xxs") 0;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      margin: 0;
+      line-height: 1.4;
+    }
+  }
+
+  &__optionPrice {
+    @include font-size("base");
+    @include font-weight("bold");
+    color: color("primary", "base");
+    white-space: nowrap;
+    margin-left: spacing("lg");
+    padding: spacing("xs") spacing("sm");
+    background: rgba(color("primary", "base"), 0.08);
+    border-radius: border-radius("md");
+  }
+
+  // Frequency Selection
+  &__frequencyGrid {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__frequencyCard {
+    display: flex;
+    align-items: center;
+    padding: spacing("md") spacing("lg");
+    background: color("neutral", "white");
+    border: 1.5px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+
+    &:hover {
+      border-color: color("primary", "light");
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    &--active {
+      border-color: color("primary", "base");
+      background: rgba(color("primary", "base"), 0.02);
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.08);
+    }
+  }
+
+  &__popularTag {
+    position: absolute;
+    top: -9px;
+    right: spacing("md");
+    padding: spacing("xxs") spacing("sm");
+    background: color("accent", "base");
+    color: color("neutral", "darkest");
+    border-radius: border-radius("pill");
+    @include font-size("xs");
+    @include font-weight("bold");
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &__frequencyContent {
+    flex: 1;
+
+    h4 {
+      @include font-size("base");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0;
+    }
+
+    p {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+      margin: spacing("xxs") 0 0 0;
+    }
+  }
+
+  &__checkmark {
+    width: 22px;
+    height: 22px;
+    border-radius: border-radius("full");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: spacing("md");
+    box-shadow: 0 2px 4px rgba(color("primary", "base"), 0.3);
+  }
+
+  // Days Selection - Pills
+  &__daysGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing("xs");
+  }
+
+  &__dayCard {
+    padding: spacing("sm") spacing("md");
+    min-width: 52px;
+    text-align: center;
+    background: color("neutral", "white");
+    border: 1.5px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+
+    &:hover {
+      border-color: color("primary", "light");
+      background: color("neutral", "lightest");
+    }
+
+    &--active {
+      border-color: color("primary", "base");
+      background: color("primary", "base");
+      color: color("neutral", "white");
+      box-shadow: 0 2px 6px rgba(color("primary", "base"), 0.3);
+    }
+  }
+
+  &__dayShort {
+    @include font-size("sm");
+    @include font-weight("semibold");
+  }
+
+  // Time Selection
+  &__timeGrid {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__timeCard {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("md") spacing("lg");
+    background: color("neutral", "white");
+    border: 1.5px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+
+    &:hover {
+      border-color: color("primary", "light");
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    &--active {
+      border-color: color("primary", "base");
+      background: rgba(color("primary", "base"), 0.02);
+      box-shadow: 0 0 0 3px rgba(color("primary", "base"), 0.08);
+    }
+  }
+
+  &__timeIcon {
+    @include font-size("xl");
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+  }
+
+  &__timeInfo {
+    flex: 1;
+
+    h4 {
+      @include font-size("sm");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0;
+    }
+
+    p {
+      @include font-size("xs");
+      color: color("neutral", "dark");
+      margin: spacing("xxs") 0 0 0;
+    }
+  }
+
+  // Property Selection
+  &__propertyGrid {
+    display: flex;
+    gap: spacing("md");
+  }
+
+  &__propertyCard {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("xl") spacing("lg");
+    background: color("neutral", "white");
+    border: 1.5px solid color("neutral", "lighter");
+    border-radius: border-radius("xl");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+    &:hover {
+      border-color: color("primary", "light");
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      transform: translateY(-2px);
+    }
+
+    &--active {
+      border-color: color("primary", "base");
+      background: color("primary", "base");
+      color: color("neutral", "white");
+      box-shadow: 0 4px 16px rgba(color("primary", "base"), 0.25);
+      transform: translateY(-2px);
+    }
+
+    span {
+      @include font-size("sm");
+      @include font-weight("semibold");
+    }
+  }
+
+  &__propertyIcon {
+    @include font-size("3xl");
+  }
+
+  // Room Configuration
+  &__roomsGrid {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("xs");
+  }
+
+  &__roomCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("sm") spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+    transition: all 0.15s ease;
+
+    &:hover {
+      background: color("neutral", "white");
+      border-color: color("neutral", "light");
+    }
+  }
+
+  &__roomInfo {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+  }
+
+  &__roomIcon {
+    @include font-size("lg");
+    width: 32px;
+    text-align: center;
+  }
+
+  &__roomLabel {
+    @include font-size("sm");
+    @include font-weight("medium");
+    color: color("neutral", "darkest");
+  }
+
+  &__roomCounter {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+
+    button {
+      width: 32px;
+      height: 32px;
+      border-radius: border-radius("md");
+      background: color("neutral", "white");
+      border: 1.5px solid color("neutral", "lighter");
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      color: color("neutral", "darker");
+      @include font-size("base");
+      @include font-weight("semibold");
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+
+      &:hover:not(:disabled) {
+        border-color: color("primary", "base");
+        color: color("primary", "base");
+        background: rgba(color("primary", "base"), 0.05);
+      }
+
+      &:active:not(:disabled) {
+        transform: scale(0.95);
+      }
+
+      &:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+      }
+    }
+
+    span {
+      min-width: 32px;
+      text-align: center;
+      @include font-size("base");
+      @include font-weight("bold");
+      color: color("neutral", "darkest");
+    }
+  }
+
+  // Bag Selector (Laundry)
+  &__bagSelector {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("md");
+  }
+
+  &__bagInputWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xl");
+    padding: spacing("xl");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("xl");
+    border: 1px solid color("neutral", "lighter");
+  }
+
+  &__bagButton {
+    width: 48px;
+    height: 48px;
+    border-radius: border-radius("lg");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 0 2px 6px rgba(color("primary", "base"), 0.3);
+
+    &:hover:not(:disabled) {
+      background: color("primary", "dark");
+      transform: scale(1.05);
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  &__bagCount {
+    @include font-size("3xl");
+    @include font-weight("bold");
+    color: color("neutral", "darkest");
+    min-width: 64px;
+    text-align: center;
+  }
+
+  &__bagInfo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing("xs");
+    @include font-size("sm");
+    color: color("neutral", "dark");
+  }
+
+  // Severity Selection (Pest Control)
+  &__severityGrid {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__severityCard {
+    display: flex;
+    align-items: center;
+    gap: spacing("md");
+    padding: spacing("md") spacing("lg");
+    background: color("neutral", "white");
+    border: 1.5px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+
+    &:hover {
+      border-color: color("neutral", "light");
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    &--success {
+      border-color: color("status", "success");
+      background: rgba(color("status", "success"), 0.04);
+      box-shadow: 0 0 0 3px rgba(color("status", "success"), 0.1);
+    }
+
+    &--warning {
+      border-color: color("status", "warning");
+      background: rgba(color("status", "warning"), 0.04);
+      box-shadow: 0 0 0 3px rgba(color("status", "warning"), 0.1);
+    }
+
+    &--danger {
+      border-color: color("status", "error");
+      background: rgba(color("status", "error"), 0.04);
+      box-shadow: 0 0 0 3px rgba(color("status", "error"), 0.1);
+    }
+
+    h4 {
+      @include font-size("sm");
+      @include font-weight("semibold");
+      color: color("neutral", "darkest");
+      margin: 0;
+    }
+
+    p {
+      @include font-size("xs");
+      color: color("neutral", "dark");
+      margin: spacing("xxs") 0 0 0;
+    }
+  }
+
+  &__severityIcon {
+    @include font-size("xl");
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+  }
+
+  &__severityContent {
+    flex: 1;
+  }
+
+  // Meals Grid (Cooking)
+  &__mealsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: spacing("sm");
+  }
+
+  &__mealCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: spacing("md");
+    background: color("neutral", "lightest");
+    border-radius: border-radius("lg");
+    border: 1px solid color("neutral", "lighter");
+  }
+
+  &__mealDayInfo {
+    margin-bottom: spacing("sm");
+    text-align: center;
+    @include font-weight("semibold");
+    color: color("neutral", "darker");
+  }
+
+  &__mealCounter {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+
+    button {
+      width: 28px;
+      height: 28px;
+      border: 1.5px solid color("neutral", "lighter");
+      border-radius: border-radius("md");
+      background: color("neutral", "white");
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @include font-size("sm");
+      @include font-weight("semibold");
+      transition: all 0.15s ease;
+
+      &:hover:not(:disabled) {
+        border-color: color("primary", "base");
+        color: color("primary", "base");
+      }
+
+      &:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+      }
+    }
+
+    span {
+      min-width: 24px;
+      text-align: center;
+      @include font-size("sm");
+      @include font-weight("bold");
+    }
+  }
+
+  // ===================================
+  // FOOTER - Enhanced
+  // ===================================
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: spacing("lg") spacing("xl");
+    border-top: 1px solid color("neutral", "lighter");
+    background: color("neutral", "lightest");
+
+    @include breakpoint-down("sm") {
+      flex-direction: column;
+      gap: spacing("md");
+      padding: spacing("md");
+    }
+  }
+
+  &__footerPrice {
+    display: flex;
+    align-items: baseline;
+    gap: spacing("sm");
+
+    span {
+      @include font-size("sm");
+      color: color("neutral", "dark");
+    }
+
+    strong {
+      @include font-size("2xl");
+      @include font-weight("bold");
+      color: color("primary", "base");
+    }
+  }
+
+  &__footerActions {
+    display: flex;
+    gap: spacing("sm");
+
+    @include breakpoint-down("sm") {
+      width: 100%;
+    }
+  }
+
+  &__backBtn {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    padding: spacing("sm") spacing("lg");
+    background: color("neutral", "white");
+    border: 1.5px solid color("neutral", "lighter");
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("semibold");
+    color: color("neutral", "darker");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+
+    @include breakpoint-down("sm") {
+      flex: 1;
+      justify-content: center;
+    }
+
+    &:hover:not(:disabled) {
+      border-color: color("neutral", "light");
+      background: color("neutral", "white");
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  &__nextBtn,
+  &__saveBtn {
+    display: flex;
+    align-items: center;
+    gap: spacing("xs");
+    padding: spacing("sm") spacing("xl");
+    background: color("primary", "base");
+    color: color("neutral", "white");
+    border: none;
+    border-radius: border-radius("lg");
+    @include font-size("sm");
+    @include font-weight("bold");
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(color("primary", "base"), 0.3);
+
+    @include breakpoint-down("sm") {
+      flex: 1;
+      justify-content: center;
+    }
+
+    &:hover:not(:disabled) {
+      background: color("primary", "dark");
+      box-shadow: 0 4px 12px rgba(color("primary", "base"), 0.35);
+      transform: translateY(-1px);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+}

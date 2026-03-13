@@ -1,0 +1,8 @@
+// PestControlServiceConfiguration - Clean Minimal Styles
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+// Import shared styles
+@import "../shared/ServiceConfigBase.module.scss";
+@import "../shared/SummaryStyles.module.scss";
