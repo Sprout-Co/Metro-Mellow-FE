@@ -11,6 +11,7 @@ export enum Routes {
   DASHBOARD_BOOKINGS = "/dashboard/bookings",
   DASHBOARD_SUBSCRIPTIONS = "/dashboard/subscriptions",
   DASHBOARD_SUBSCRIPTIONS_ADD = "/dashboard/subscriptions/add",
+  DASHBOARD_SUBSCRIPTIONS_NEW = "/dashboard/subscriptions/new",
   PROFILE = "/profile",
   DASHBOARD_REFER_FRIEND = "/dashboard/refer",
   DASHBOARD_SUPPORT = "/dashboard/support",

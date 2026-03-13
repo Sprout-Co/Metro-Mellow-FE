@@ -43,7 +43,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({
       title: "Set Recurring",
       description: "Create subscription",
       color: "accent",
-      onClick: () => router.push(Routes.DASHBOARD_SUBSCRIPTIONS_ADD),
+      onClick: () => router.push(Routes.DASHBOARD_SUBSCRIPTIONS_NEW),
     },
     {
       id: "refer",

@@ -82,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     {
       icon: Repeat,
       label: "New Subscription",
-      href: Routes.DASHBOARD_SUBSCRIPTIONS_ADD,
+      href: Routes.DASHBOARD_SUBSCRIPTIONS_NEW,
       color: styles.quickActionSecondary,
       onClick: () => dispatch(openServicesListDrawer()),
     },
