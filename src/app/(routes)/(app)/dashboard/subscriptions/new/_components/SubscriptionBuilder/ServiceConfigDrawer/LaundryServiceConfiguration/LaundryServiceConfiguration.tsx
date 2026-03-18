@@ -2,31 +2,26 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  X,
-  Calendar,
-  Clock,
-  Home,
-  ChevronRight,
-  ChevronLeft,
-  Check,
-  Sparkles,
-  Package,
-} from "lucide-react";
-import styles from "./CleaningServiceConfiguration.module.scss";
+import { X, ChevronRight, ChevronLeft, Check, Minus, Plus } from "lucide-react";
+import styles from "./LaundryServiceConfiguration.module.scss";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
+import ValidationErrors from "../../ValidationErrors/ValidationErrors";
 import {
   Service,
   ScheduleDays,
   TimeSlot,
   SubscriptionFrequency,
   SubscriptionServiceInput,
-  HouseType,
-  CleaningType,
+  LaundryType,
   ServiceId,
 } from "@/graphql/api";
+import {
+  validateServiceConfiguration,
+  ValidationError,
+  hasFieldError,
+} from "../../validation";
 
-interface CleaningServiceConfigurationProps {
+interface LaundryServiceConfigurationProps {
   isOpen: boolean;
   onClose: () => void;
   service: Service;
@@ -35,8 +30,8 @@ interface CleaningServiceConfigurationProps {
   onProceedToCheckout?: (configuration: SubscriptionServiceInput) => void;
 }
 
-const CleaningServiceConfiguration: React.FC<
-  CleaningServiceConfigurationProps
+const LaundryServiceConfiguration: React.FC<
+  LaundryServiceConfigurationProps
 > = ({
   isOpen,
   onClose,
@@ -46,10 +41,10 @@ const CleaningServiceConfiguration: React.FC<
   onProceedToCheckout,
 }) => {
   const [activeStep, setActiveStep] = useState(0);
-  // const [validationErrors, setValidationErrors] = useState<ValidationError[]>(
-  //   [],
-  // );
-  // const [showValidationErrors, setShowValidationErrors] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<ValidationError[]>(
+    []
+  );
+  const [showValidationErrors, setShowValidationErrors] = useState(false);
   const [configuration, setConfiguration] = useState<SubscriptionServiceInput>({
     serviceId: service._id,
     frequency: SubscriptionFrequency.Weekly,
@@ -58,42 +53,20 @@ const CleaningServiceConfiguration: React.FC<
     price: service.price,
     category: service.category,
     serviceDetails: {
-      cleaning: {
-        cleaningType: CleaningType.StandardCleaning,
-        houseType: HouseType.Flat,
-        rooms: {
-          balcony: 0,
-          bathroom: 1,
-          bedroom: 1,
-          kitchen: 1,
-          livingRoom: 1,
-          staircase: 0,
-        },
+      laundry: {
+        laundryType: LaundryType.StandardLaundry,
+        bags: 1,
       },
       serviceOption:
-        service.options?.[0]?.service_id || ServiceId.StandardCleaning,
+        service.options?.[0]?.service_id || ServiceId.StandardLaundry,
     },
   });
 
   const steps = [
     { id: "service", label: "Package" },
-    { id: "property", label: "Property" },
+    { id: "details", label: "Details" },
     { id: "schedule", label: "Schedule" },
     { id: "summary", label: "Review" },
-  ];
-
-  const propertyTypes = [
-    { value: HouseType.Flat, label: "Flat/Apartment", icon: "🏢" },
-    { value: HouseType.Duplex, label: "Duplex/House", icon: "🏠" },
-  ];
-
-  const roomTypes = [
-    { key: "bedroom", label: "Bedroom", icon: "🛏️" },
-    { key: "livingRoom", label: "Living Room", icon: "🛋️" },
-    { key: "bathroom", label: "Bathroom", icon: "🚿" },
-    { key: "kitchen", label: "Kitchen", icon: "🍳" },
-    { key: "balcony", label: "Balcony", icon: "🌿" },
-    { key: "staircase", label: "Staircase", icon: "📚" },
   ];
 
   const frequencies = [
@@ -149,39 +122,13 @@ const CleaningServiceConfiguration: React.FC<
   useEffect(() => {
     if (isOpen) {
       setActiveStep(0);
-
+      setValidationErrors([]);
+      setShowValidationErrors(false);
       if (existingConfiguration) {
         setConfiguration(existingConfiguration);
       }
     }
   }, [isOpen, existingConfiguration]);
-
-  const updateRoomCount = (room: string, increment: boolean) => {
-    setConfiguration((prev) => {
-      const currentCount =
-        prev.serviceDetails.cleaning?.rooms?.[
-          room as keyof typeof prev.serviceDetails.cleaning.rooms
-        ] ?? 0;
-      const newCount = currentCount + (increment ? 1 : -1);
-
-      // Staircase and balcony can go to 0, others must be at least 1
-      const minValue = room === "staircase" || room === "balcony" ? 0 : 1;
-
-      return {
-        ...prev,
-        serviceDetails: {
-          ...prev.serviceDetails,
-          cleaning: {
-            ...prev.serviceDetails.cleaning!,
-            rooms: {
-              ...prev.serviceDetails.cleaning!.rooms,
-              [room]: Math.max(minValue, newCount),
-            },
-          },
-        },
-      };
-    });
-  };
 
   const toggleDay = (day: ScheduleDays) => {
     setConfiguration((prev) => {
@@ -192,6 +139,7 @@ const CleaningServiceConfiguration: React.FC<
       if (isMonthly) {
         return { ...prev, scheduledDays: isSelected ? [] : [day] };
       }
+
       return {
         ...prev,
         scheduledDays: isSelected
@@ -203,55 +151,13 @@ const CleaningServiceConfiguration: React.FC<
 
   const calculatePrice = useMemo(() => {
     const selectedOption = configuration.serviceDetails.serviceOption;
-    const roomQuantities = configuration.serviceDetails.cleaning?.rooms;
-    const propertyType = configuration.serviceDetails.cleaning?.houseType;
+    const bagsPerPickup = configuration.serviceDetails.laundry?.bags || 1;
     const daysCount = configuration.scheduledDays?.length || 0;
 
-    // Get the selected service option
-    const serviceOption = service.options?.find(
-      (opt) => opt.service_id === selectedOption,
-    );
+    let basePrice =
+      service.options?.find((opt) => opt.service_id === selectedOption)
+        ?.price || 0;
 
-    // Start with base price
-    const basePrice = serviceOption?.price || service.price;
-
-    // Get room prices from service options
-    const roomPrices = serviceOption?.roomPrices || {};
-
-    // Calculate total price for each room type
-    // Bedrooms: charge for quantity > 1 (first bedroom included in base)
-    // Other rooms: charge for quantity > bedroom count (threshold based on bedroom selection)
-    const bedroomCount = roomQuantities?.bedroom || 0;
-    const roomTotal = Object.entries(roomQuantities || {}).reduce(
-      (total, [room, quantity]) => {
-        const roomPrice = roomPrices[room as keyof typeof roomPrices] || 0;
-        const qty = quantity as number;
-
-        if (room === "bedroom") {
-          // For bedrooms: charge for quantity > 1
-          if (qty > 1) {
-            return total + roomPrice * (qty - 1);
-          }
-        } else {
-          // For other rooms: charge for quantity > bedroom count
-          if (qty > bedroomCount) {
-            return total + roomPrice * (qty - bedroomCount);
-          }
-        }
-        return total;
-      },
-      0,
-    );
-
-    // Add room prices to base price
-    let totalPrice = basePrice + roomTotal;
-
-    // Apply duplex multiplier if applicable
-    if (propertyType === HouseType.Duplex) {
-      totalPrice *= 1.5;
-    }
-
-    // Apply frequency and days multipliers
     let frequencyMultiplier = 4;
     if (configuration.frequency === SubscriptionFrequency.BiWeekly) {
       frequencyMultiplier = 2;
@@ -259,7 +165,7 @@ const CleaningServiceConfiguration: React.FC<
       frequencyMultiplier = 1;
     }
 
-    return totalPrice * daysCount * frequencyMultiplier;
+    return basePrice * bagsPerPickup * daysCount * frequencyMultiplier;
   }, [configuration, service]);
 
   useEffect(() => {
@@ -280,10 +186,10 @@ const CleaningServiceConfiguration: React.FC<
   }, [calculatePrice]);
 
   const validateCurrentStep = () => {
-    // const validation = validateServiceConfiguration(configuration, service);
-    // setValidationErrors(validation.errors);
-    // setShowValidationErrors(!validation.isValid);
-    return true;
+    const validation = validateServiceConfiguration(configuration, service);
+    setValidationErrors(validation.errors);
+    setShowValidationErrors(!validation.isValid);
+    return validation;
   };
 
   const canProceed = () => {
@@ -294,12 +200,7 @@ const CleaningServiceConfiguration: React.FC<
           !!configuration.serviceDetails.serviceOption
         );
       case 1:
-        const hasHouseType = !!configuration.serviceDetails.cleaning?.houseType;
-        const hasRooms =
-          Object.values(
-            configuration.serviceDetails.cleaning?.rooms || {},
-          ).reduce((sum, count) => sum + (count || 0), 0) > 0;
-        return hasHouseType && hasRooms;
+        return (configuration.serviceDetails.laundry?.bags || 0) > 0;
       case 2:
         return (
           configuration.scheduledDays && configuration.scheduledDays.length > 0
@@ -316,8 +217,27 @@ const CleaningServiceConfiguration: React.FC<
     onClose();
   };
 
-  // Step 1: Service Package
-  const renderServicePackageStep = () => (
+  const updateBagCount = (increment: boolean) => {
+    setConfiguration((prev) => ({
+      ...prev,
+      serviceDetails: {
+        ...prev.serviceDetails,
+        laundry: {
+          ...prev.serviceDetails.laundry!,
+          bagsPerPickup: Math.max(
+            1,
+            Math.min(
+              10,
+              (prev.serviceDetails.laundry?.bags || 1) + (increment ? 1 : -1)
+            )
+          ),
+        },
+      },
+    }));
+  };
+
+  // Step 1: Package
+  const renderServiceStep = () => (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -325,7 +245,7 @@ const CleaningServiceConfiguration: React.FC<
     >
       <div className={styles.drawer__stepHeader}>
         <h3>Select Package</h3>
-        <p>Choose your cleaning package</p>
+        <p>Choose your laundry service</p>
       </div>
 
       {service.options && service.options.length > 0 && (
@@ -345,10 +265,10 @@ const CleaningServiceConfiguration: React.FC<
                     ...prev,
                     serviceDetails: {
                       ...prev.serviceDetails,
-                      cleaning: {
-                        ...prev.serviceDetails.cleaning!,
-                        cleaningType:
-                          option.service_id as unknown as CleaningType,
+                      laundry: {
+                        ...prev.serviceDetails.laundry!,
+                        laundryType:
+                          option.service_id as unknown as LaundryType,
                       },
                       serviceOption: option.service_id,
                     },
@@ -360,7 +280,7 @@ const CleaningServiceConfiguration: React.FC<
                   <p>{option.description}</p>
                 </div>
                 <span className={styles.drawer__optionPrice}>
-                  ₦{option.price.toLocaleString()}
+                  ₦{option.price.toLocaleString()}/bag
                 </span>
               </button>
             ))}
@@ -370,105 +290,43 @@ const CleaningServiceConfiguration: React.FC<
     </motion.div>
   );
 
-  // Step 2: Property & Rooms
-  const renderPropertyStep = () => (
+  // Step 2: Details
+  const renderDetailsStep = () => (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className={styles.drawer__stepContent}
     >
       <div className={styles.drawer__stepHeader}>
-        <h3>Property Details</h3>
-        <p>Configure your property and rooms</p>
+        <h3>Bag Count</h3>
+        <p>How many bags per pickup?</p>
       </div>
 
       <div className={styles.drawer__section}>
-        <label className={styles.drawer__label}>Property Type</label>
-        <div className={styles.drawer__propertyGrid}>
-          {propertyTypes.map((type) => (
+        <div className={styles.drawer__bagSelector}>
+          <div className={styles.drawer__bagInputWrapper}>
             <button
-              key={type.value}
-              className={`${styles.drawer__propertyCard} ${
-                configuration.serviceDetails.cleaning?.houseType === type.value
-                  ? styles["drawer__propertyCard--active"]
-                  : ""
-              }`}
-              onClick={() =>
-                setConfiguration((prev) => ({
-                  ...prev,
-                  serviceDetails: {
-                    ...prev.serviceDetails,
-                    cleaning: {
-                      ...prev.serviceDetails.cleaning!,
-                      houseType: type.value,
-                    },
-                  },
-                }))
-              }
+              className={styles.drawer__bagButton}
+              onClick={() => updateBagCount(false)}
+              disabled={(configuration.serviceDetails.laundry?.bags || 1) <= 1}
             >
-              <span className={styles.drawer__propertyIcon}>{type.icon}</span>
-              <span>{type.label}</span>
+              <Minus size={18} />
             </button>
-          ))}
+            <span className={styles.drawer__bagCount}>
+              {configuration.serviceDetails.laundry?.bags || 1}
+            </span>
+            <button
+              className={styles.drawer__bagButton}
+              onClick={() => updateBagCount(true)}
+              disabled={(configuration.serviceDetails.laundry?.bags || 1) >= 10}
+            >
+              <Plus size={18} />
+            </button>
+          </div>
+          <div className={styles.drawer__bagInfo}>
+            <span>bags per pickup</span>
+          </div>
         </div>
-      </div>
-
-      <div className={styles.drawer__section}>
-        <label className={styles.drawer__label}>Rooms</label>
-        <div className={styles.drawer__roomsGrid}>
-          {roomTypes.map((room) => (
-            <div key={room.key} className={styles.drawer__roomCard}>
-              <div className={styles.drawer__roomInfo}>
-                <span className={styles.drawer__roomIcon}>{room.icon}</span>
-                <span className={styles.drawer__roomLabel}>{room.label}</span>
-              </div>
-              <div className={styles.drawer__roomCounter}>
-                <button
-                  onClick={() => updateRoomCount(room.key, false)}
-                  disabled={(() => {
-                    const currentCount =
-                      configuration.serviceDetails.cleaning?.rooms?.[
-                        room.key as keyof typeof configuration.serviceDetails.cleaning.rooms
-                      ] ?? 0;
-                    // Disable if count is 0, or if count is 1 and room is not staircase/balcony
-                    if (currentCount === 0) return true;
-                    if (
-                      currentCount === 1 &&
-                      room.key !== "staircase" &&
-                      room.key !== "balcony"
-                    )
-                      return true;
-                    return false;
-                  })()}
-                >
-                  −
-                </button>
-                <span>
-                  {configuration.serviceDetails.cleaning?.rooms?.[
-                    room.key as keyof typeof configuration.serviceDetails.cleaning.rooms
-                  ] || 0}
-                </span>
-                <button onClick={() => updateRoomCount(room.key, true)}>
-                  +
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </motion.div>
-  );
-
-  // Step 3: Schedule
-  const renderScheduleStep = () => (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className={styles.drawer__stepContent}
-    >
-      <div className={styles.drawer__stepHeader}>
-        <h3>Schedule</h3>
-        <p>Choose frequency and days</p>
       </div>
 
       <div className={styles.drawer__section}>
@@ -502,15 +360,29 @@ const CleaningServiceConfiguration: React.FC<
           ))}
         </div>
       </div>
+    </motion.div>
+  );
+
+  // Step 3: Schedule
+  const renderScheduleStep = () => (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className={styles.drawer__stepContent}
+    >
+      <div className={styles.drawer__stepHeader}>
+        <h3>Schedule</h3>
+        <p>Select pickup days and time</p>
+      </div>
 
       {configuration.frequency === SubscriptionFrequency.Monthly && (
         <div className={styles.drawer__scheduleNote}>
-          <p>Monthly allows only one day per month</p>
+          <p>Monthly allows only one pickup day</p>
         </div>
       )}
 
       <div className={styles.drawer__section}>
-        <label className={styles.drawer__label}>Days</label>
+        <label className={styles.drawer__label}>Pickup Days</label>
         <div className={styles.drawer__daysGrid}>
           {daysOfWeek.map((day) => (
             <button
@@ -529,7 +401,7 @@ const CleaningServiceConfiguration: React.FC<
       </div>
 
       <div className={styles.drawer__section}>
-        <label className={styles.drawer__label}>Time</label>
+        <label className={styles.drawer__label}>Pickup Time</label>
         <div className={styles.drawer__timeGrid}>
           {timeSlots.map((slot) => (
             <button
@@ -558,25 +430,19 @@ const CleaningServiceConfiguration: React.FC<
     </motion.div>
   );
 
-  // Step 4: Summary - Clean and minimal
+  // Step 4: Summary
   const renderSummaryStep = () => {
     const selectedOption = service.options?.find(
-      (opt) => opt.service_id === configuration.serviceDetails.serviceOption,
+      (opt) => opt.service_id === configuration.serviceDetails.serviceOption
     );
-    const rooms = configuration.serviceDetails.cleaning?.rooms || {};
-    const activeRooms = Object.entries(rooms)
-      .filter(([_, count]) => count && (count as number) > 0)
-      .map(([key, count]) => {
-        const roomType = roomTypes.find((r) => r.key === key);
-        return { key, count: count as number, label: roomType?.label || key };
-      });
     const selectedDays = configuration.scheduledDays || [];
     const selectedTime = timeSlots.find(
-      (t) => t.value === configuration.preferredTimeSlot,
+      (t) => t.value === configuration.preferredTimeSlot
     );
     const frequencyLabel = frequencies.find(
-      (f) => f.value === configuration.frequency,
+      (f) => f.value === configuration.frequency
     )?.label;
+    const bagsPerPickup = configuration.serviceDetails.laundry?.bags || 1;
 
     return (
       <motion.div
@@ -589,7 +455,6 @@ const CleaningServiceConfiguration: React.FC<
           <p>Confirm your selections</p>
         </div>
 
-        {/* Package */}
         {selectedOption && (
           <div className={styles.summary__section}>
             <h4 className={styles.summary__sectionTitle}>Package</h4>
@@ -598,40 +463,20 @@ const CleaningServiceConfiguration: React.FC<
                 {selectedOption.label}
               </span>
               <span className={styles.summary__value}>
-                ₦{selectedOption.price.toLocaleString()}
+                ₦{selectedOption.price.toLocaleString()}/bag
               </span>
             </div>
           </div>
         )}
 
-        {/* Property */}
         <div className={styles.summary__section}>
-          <h4 className={styles.summary__sectionTitle}>Property</h4>
+          <h4 className={styles.summary__sectionTitle}>Details</h4>
           <div className={styles.summary__row}>
-            <span className={styles.summary__label}>Type</span>
-            <span className={styles.summary__value}>
-              {configuration.serviceDetails.cleaning?.houseType ===
-              HouseType.Flat
-                ? "Flat/Apartment"
-                : "Duplex/House"}
-            </span>
+            <span className={styles.summary__label}>Bags per pickup</span>
+            <span className={styles.summary__value}>{bagsPerPickup}</span>
           </div>
         </div>
 
-        {/* Rooms */}
-        <div className={styles.summary__section}>
-          <h4 className={styles.summary__sectionTitle}>Rooms</h4>
-          <div className={styles.summary__roomsList}>
-            {activeRooms.map((room) => (
-              <div key={room.key} className={styles.summary__roomItem}>
-                <span>{room.label}</span>
-                <span>{room.count}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Schedule */}
         <div className={styles.summary__section}>
           <h4 className={styles.summary__sectionTitle}>Schedule</h4>
           <div className={styles.summary__row}>
@@ -657,7 +502,6 @@ const CleaningServiceConfiguration: React.FC<
           </div>
         </div>
 
-        {/* Price */}
         <div className={styles.summary__priceRow}>
           <span className={styles.summary__priceLabel}>Monthly Total</span>
           <span className={styles.summary__priceValue}>
@@ -671,9 +515,9 @@ const CleaningServiceConfiguration: React.FC<
   const renderStepContent = () => {
     switch (activeStep) {
       case 0:
-        return renderServicePackageStep();
+        return renderServiceStep();
       case 1:
-        return renderPropertyStep();
+        return renderDetailsStep();
       case 2:
         return renderScheduleStep();
       case 3:
@@ -716,13 +560,13 @@ const CleaningServiceConfiguration: React.FC<
             </div>
           ))}
         </div>
-        {/* 
+
         {showValidationErrors && validationErrors.length > 0 && (
           <ValidationErrors
             errors={validationErrors}
             onDismiss={() => setShowValidationErrors(false)}
           />
-        )} */}
+        )}
 
         <div className={styles.drawer__content}>
           <AnimatePresence mode="wait">{renderStepContent()}</AnimatePresence>
@@ -748,7 +592,7 @@ const CleaningServiceConfiguration: React.FC<
                 onClick={() => {
                   if (canProceed()) {
                     setActiveStep(activeStep + 1);
-                    // setShowValidationErrors(false);
+                    setShowValidationErrors(false);
                   } else {
                     validateCurrentStep();
                   }
@@ -762,7 +606,7 @@ const CleaningServiceConfiguration: React.FC<
                 className={styles.drawer__saveBtn}
                 onClick={() => {
                   const validation = validateCurrentStep();
-                  if (validation) {
+                  if (validation.isValid) {
                     handleSave();
                   }
                 }}
@@ -778,4 +622,4 @@ const CleaningServiceConfiguration: React.FC<
   );
 };
 
-export default CleaningServiceConfiguration;
+export default LaundryServiceConfiguration;

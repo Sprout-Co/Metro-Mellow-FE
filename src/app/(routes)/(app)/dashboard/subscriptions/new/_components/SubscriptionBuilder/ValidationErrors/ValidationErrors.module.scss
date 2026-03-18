@@ -1,0 +1,145 @@
+@import "src/styles/abstracts/variables";
+ @import "src/styles/abstracts/mixins";
+
+.validationErrors {
+  background: color("neutral", "white");
+  border: 2px solid color("status", "error");
+  border-radius: border-radius("xl");
+  padding: spacing("lg");
+  margin-bottom: spacing("xl");
+  box-shadow: 0 4px 12px rgba(color("status", "error"), 0.1);
+  position: relative;
+  animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: color("status", "error");
+    border-radius: border-radius("xl") border-radius("xl") 0 0;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    margin-bottom: spacing("md");
+
+    h4 {
+      color: color("status", "error");
+      @include font-size("sm");
+      @include font-weight("semibold");
+      margin: 0;
+      flex: 1;
+    }
+  }
+
+  &__icon {
+    width: 32px;
+    height: 32px;
+    background: rgba(color("status", "error"), 0.1);
+    border-radius: border-radius("full");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color("status", "error");
+    flex-shrink: 0;
+    animation: pulse 2s infinite;
+  }
+
+  &__dismiss {
+    width: 28px;
+    height: 28px;
+    background: color("neutral", "white");
+    border: 1px solid color("neutral", "lighter");
+    border-radius: border-radius("full");
+    color: color("neutral", "dark");
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: color("status", "error");
+      color: color("neutral", "white");
+      border-color: color("status", "error");
+      transform: rotate(90deg);
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: spacing("sm");
+  }
+
+  &__item {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing("sm");
+    padding: spacing("sm");
+    background: rgba(color("status", "error"), 0.05);
+    border-radius: border-radius("lg");
+    color: color("neutral", "darkest");
+    @include font-size("sm");
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease;
+
+    &:hover {
+      background: rgba(color("status", "error"), 0.08);
+    }
+  }
+
+  &__bullet {
+    width: 20px;
+    height: 20px;
+    background: color("status", "error");
+    color: color("neutral", "white");
+    border-radius: border-radius("full");
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+
+    &::after {
+      content: "!";
+    }
+  }
+}
+
+ @keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+ @keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+ @keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}

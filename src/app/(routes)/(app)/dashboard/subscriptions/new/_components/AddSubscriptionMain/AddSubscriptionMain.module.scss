@@ -1,0 +1,18 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/functions";
+@import "@/styles/abstracts/mixins";
+
+.addSubscriptionMain {
+  width: 100%;
+  background: linear-gradient(
+    180deg,
+    color("neutral", "lightest") 0%,
+    color("neutral", "white") 100%
+  );
+  min-height: 100vh;
+
+  &__wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}

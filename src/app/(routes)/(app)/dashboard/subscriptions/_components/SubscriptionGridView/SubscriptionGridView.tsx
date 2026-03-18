@@ -363,10 +363,7 @@ const SubscriptionGridView: React.FC<SubscriptionGridViewProps> = ({
                   </div>
                   <div className={styles.gridView__infoItem}>
                     <MapPin size={14} />
-                    <span>
-                      {subscription.address?.street || "Address"},{" "}
-                      {subscription.address?.city || "City"}
-                    </span>
+                    <span>{subscription.address}</span>
                   </div>
                 </div>
               </div>

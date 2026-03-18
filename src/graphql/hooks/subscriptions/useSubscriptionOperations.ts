@@ -12,8 +12,6 @@ import {
   usePauseSubscriptionMutation,
   useResumeSubscriptionMutation,
   useUpdateSubscriptionStatusMutation,
-  useAddServiceToSubscriptionMutation,
-  useRemoveServiceFromSubscriptionMutation,
   useUpdateSubscriptionServiceMutation,
   useGetSubscriptionByIdQuery,
   useGetSubscriptionsQuery,
@@ -40,10 +38,6 @@ export const useSubscriptionOperations = () => {
   const [resumeSubscriptionMutation] = useResumeSubscriptionMutation();
   const [updateSubscriptionStatusMutation] =
     useUpdateSubscriptionStatusMutation();
-  const [addServiceToSubscriptionMutation] =
-    useAddServiceToSubscriptionMutation();
-  const [removeServiceFromSubscriptionMutation] =
-    useRemoveServiceFromSubscriptionMutation();
   const [updateSubscriptionServiceMutation] =
     useUpdateSubscriptionServiceMutation();
   const [reactivateSubscriptionMutation] = useReactivateSubscriptionMutation();
@@ -68,7 +62,7 @@ export const useSubscriptionOperations = () => {
    */
   const handleCreateSubscription = useCallback(
     async (
-      input: CreateSubscriptionInput
+      input: CreateSubscriptionInput,
     ): Promise<CreateSubscriptionResponse | undefined> => {
       try {
         const { data, errors } = await createSubscriptionMutation({
@@ -92,7 +86,7 @@ export const useSubscriptionOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [createSubscriptionMutation]
+    [createSubscriptionMutation],
   );
 
   /**
@@ -123,7 +117,7 @@ export const useSubscriptionOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [updateSubscriptionMutation]
+    [updateSubscriptionMutation],
   );
 
   /**
@@ -152,7 +146,7 @@ export const useSubscriptionOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [cancelSubscriptionMutation]
+    [cancelSubscriptionMutation],
   );
 
   /**
@@ -182,7 +176,7 @@ export const useSubscriptionOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [pauseSubscriptionMutation]
+    [pauseSubscriptionMutation],
   );
 
   /**
@@ -212,7 +206,7 @@ export const useSubscriptionOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [resumeSubscriptionMutation]
+    [resumeSubscriptionMutation],
   );
 
   /**
@@ -244,7 +238,7 @@ export const useSubscriptionOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [reactivateSubscriptionMutation]
+    [reactivateSubscriptionMutation],
   );
   /**
    * Renews a subscription
@@ -276,7 +270,7 @@ export const useSubscriptionOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [renewSubscriptionMutation]
+    [renewSubscriptionMutation],
   );
 
   /**
@@ -307,69 +301,7 @@ export const useSubscriptionOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [updateSubscriptionStatusMutation]
-  );
-
-  /**
-   * Adds a service to a subscription
-   * @param subscriptionId - Subscription ID
-   * @param service - Service input object
-   * @returns Updated subscription
-   * @throws Error if addition fails
-   */
-  const handleAddServiceToSubscription = useCallback(
-    async (subscriptionId: string, service: SubscriptionServiceInput) => {
-      try {
-        const { data, errors } = await addServiceToSubscriptionMutation({
-          variables: { subscriptionId, service },
-        });
-
-        if (errors) {
-          throw new Error(errors[0].message);
-        }
-
-        // addServiceToSubscription returns boolean, not a subscription object
-        return data?.addServiceToSubscription;
-      } catch (error) {
-        console.error("Add service to subscription error:", error);
-        if (error instanceof Error) {
-          throw new Error(error.message);
-        }
-        throw new Error("An unexpected error occurred");
-      }
-    },
-    [addServiceToSubscriptionMutation]
-  );
-
-  /**
-   * Removes a service from a subscription
-   * @param subscriptionId - Subscription ID
-   * @param subscriptionServiceId - Subscription service ID
-   * @returns Updated subscription
-   * @throws Error if removal fails
-   */
-  const handleRemoveServiceFromSubscription = useCallback(
-    async (subscriptionId: string, subscriptionServiceId: string) => {
-      try {
-        const { data, errors } = await removeServiceFromSubscriptionMutation({
-          variables: { subscriptionId, subscriptionServiceId },
-        });
-
-        if (errors) {
-          throw new Error(errors[0].message);
-        }
-
-        // removeServiceFromSubscription returns boolean, not a subscription object
-        return data?.removeServiceFromSubscription;
-      } catch (error) {
-        console.error("Remove service from subscription error:", error);
-        if (error instanceof Error) {
-          throw new Error(error.message);
-        }
-        throw new Error("An unexpected error occurred");
-      }
-    },
-    [removeServiceFromSubscriptionMutation]
+    [updateSubscriptionStatusMutation],
   );
 
   /**
@@ -384,7 +316,7 @@ export const useSubscriptionOperations = () => {
     async (
       subscriptionId: string,
       subscriptionServiceId: string,
-      input: UpdateSubscriptionServiceInput
+      input: UpdateSubscriptionServiceInput,
     ) => {
       try {
         const { data, errors } = await updateSubscriptionServiceMutation({
@@ -404,7 +336,7 @@ export const useSubscriptionOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [updateSubscriptionServiceMutation]
+    [updateSubscriptionServiceMutation],
   );
 
   /**
@@ -434,7 +366,7 @@ export const useSubscriptionOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [getSubscriptionById]
+    [getSubscriptionById],
   );
 
   /**
@@ -464,7 +396,7 @@ export const useSubscriptionOperations = () => {
         throw new Error("An unexpected error occurred");
       }
     },
-    [getSubscriptions]
+    [getSubscriptions],
   );
 
   /**
@@ -502,9 +434,6 @@ export const useSubscriptionOperations = () => {
     handleReactivateSubscription,
     handleRenewSubscription,
     handleUpdateSubscriptionStatus,
-    handleAddServiceToSubscription,
-    handleRemoveServiceFromSubscription,
-    handleUpdateSubscriptionService,
     handleGetSubscription,
     handleGetSubscriptions,
     handleGetCustomerSubscriptions,

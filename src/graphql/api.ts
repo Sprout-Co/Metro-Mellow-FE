@@ -556,7 +556,6 @@ export type Mutation = {
   addAddress: Scalars['Boolean']['output'];
   addBookingFeedback: Scalars['Boolean']['output'];
   addPaymentMethod: PaymentMethod;
-  addServiceToSubscription: Scalars['Boolean']['output'];
   applyReferralCode: Scalars['Boolean']['output'];
   assignStaff: Scalars['Boolean']['output'];
   broadcastNotification: Scalars['Boolean']['output'];
@@ -599,7 +598,6 @@ export type Mutation = {
   register: AuthPayload;
   removeAddress: Scalars['Boolean']['output'];
   removePaymentMethod: Scalars['Boolean']['output'];
-  removeServiceFromSubscription: Scalars['Boolean']['output'];
   renewSubscription: CreateSubscriptionResponse;
   rescheduleBooking: Scalars['Boolean']['output'];
   resendAdminInvitation: Scalars['Boolean']['output'];
@@ -652,12 +650,6 @@ export type MutationAddBookingFeedbackArgs = {
 
 export type MutationAddPaymentMethodArgs = {
   input: AddPaymentMethodInput;
-};
-
-
-export type MutationAddServiceToSubscriptionArgs = {
-  service: SubscriptionServiceInput;
-  subscriptionId: Scalars['ID']['input'];
 };
 
 
@@ -863,12 +855,6 @@ export type MutationRemoveAddressArgs = {
 
 export type MutationRemovePaymentMethodArgs = {
   id: Scalars['ID']['input'];
-};
-
-
-export type MutationRemoveServiceFromSubscriptionArgs = {
-  subscriptionId: Scalars['ID']['input'];
-  subscriptionServiceId: Scalars['ID']['input'];
 };
 
 
@@ -2410,22 +2396,6 @@ export type UpdateSubscriptionStatusMutationVariables = Exact<{
 
 
 export type UpdateSubscriptionStatusMutation = { __typename?: 'Mutation', updateSubscriptionStatus: boolean };
-
-export type AddServiceToSubscriptionMutationVariables = Exact<{
-  subscriptionId: Scalars['ID']['input'];
-  service: SubscriptionServiceInput;
-}>;
-
-
-export type AddServiceToSubscriptionMutation = { __typename?: 'Mutation', addServiceToSubscription: boolean };
-
-export type RemoveServiceFromSubscriptionMutationVariables = Exact<{
-  subscriptionId: Scalars['ID']['input'];
-  subscriptionServiceId: Scalars['ID']['input'];
-}>;
-
-
-export type RemoveServiceFromSubscriptionMutation = { __typename?: 'Mutation', removeServiceFromSubscription: boolean };
 
 export type UpdateSubscriptionServiceMutationVariables = Exact<{
   subscriptionId: Scalars['ID']['input'];
@@ -5485,73 +5455,6 @@ export function useUpdateSubscriptionStatusMutation(baseOptions?: ApolloReactHoo
 export type UpdateSubscriptionStatusMutationHookResult = ReturnType<typeof useUpdateSubscriptionStatusMutation>;
 export type UpdateSubscriptionStatusMutationResult = Apollo.MutationResult<UpdateSubscriptionStatusMutation>;
 export type UpdateSubscriptionStatusMutationOptions = Apollo.BaseMutationOptions<UpdateSubscriptionStatusMutation, UpdateSubscriptionStatusMutationVariables>;
-export const AddServiceToSubscriptionDocument = gql`
-    mutation AddServiceToSubscription($subscriptionId: ID!, $service: SubscriptionServiceInput!) {
-  addServiceToSubscription(subscriptionId: $subscriptionId, service: $service)
-}
-    `;
-export type AddServiceToSubscriptionMutationFn = Apollo.MutationFunction<AddServiceToSubscriptionMutation, AddServiceToSubscriptionMutationVariables>;
-
-/**
- * __useAddServiceToSubscriptionMutation__
- *
- * To run a mutation, you first call `useAddServiceToSubscriptionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddServiceToSubscriptionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [addServiceToSubscriptionMutation, { data, loading, error }] = useAddServiceToSubscriptionMutation({
- *   variables: {
- *      subscriptionId: // value for 'subscriptionId'
- *      service: // value for 'service'
- *   },
- * });
- */
-export function useAddServiceToSubscriptionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddServiceToSubscriptionMutation, AddServiceToSubscriptionMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useMutation<AddServiceToSubscriptionMutation, AddServiceToSubscriptionMutationVariables>(AddServiceToSubscriptionDocument, options);
-      }
-export type AddServiceToSubscriptionMutationHookResult = ReturnType<typeof useAddServiceToSubscriptionMutation>;
-export type AddServiceToSubscriptionMutationResult = Apollo.MutationResult<AddServiceToSubscriptionMutation>;
-export type AddServiceToSubscriptionMutationOptions = Apollo.BaseMutationOptions<AddServiceToSubscriptionMutation, AddServiceToSubscriptionMutationVariables>;
-export const RemoveServiceFromSubscriptionDocument = gql`
-    mutation RemoveServiceFromSubscription($subscriptionId: ID!, $subscriptionServiceId: ID!) {
-  removeServiceFromSubscription(
-    subscriptionId: $subscriptionId
-    subscriptionServiceId: $subscriptionServiceId
-  )
-}
-    `;
-export type RemoveServiceFromSubscriptionMutationFn = Apollo.MutationFunction<RemoveServiceFromSubscriptionMutation, RemoveServiceFromSubscriptionMutationVariables>;
-
-/**
- * __useRemoveServiceFromSubscriptionMutation__
- *
- * To run a mutation, you first call `useRemoveServiceFromSubscriptionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveServiceFromSubscriptionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [removeServiceFromSubscriptionMutation, { data, loading, error }] = useRemoveServiceFromSubscriptionMutation({
- *   variables: {
- *      subscriptionId: // value for 'subscriptionId'
- *      subscriptionServiceId: // value for 'subscriptionServiceId'
- *   },
- * });
- */
-export function useRemoveServiceFromSubscriptionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RemoveServiceFromSubscriptionMutation, RemoveServiceFromSubscriptionMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useMutation<RemoveServiceFromSubscriptionMutation, RemoveServiceFromSubscriptionMutationVariables>(RemoveServiceFromSubscriptionDocument, options);
-      }
-export type RemoveServiceFromSubscriptionMutationHookResult = ReturnType<typeof useRemoveServiceFromSubscriptionMutation>;
-export type RemoveServiceFromSubscriptionMutationResult = Apollo.MutationResult<RemoveServiceFromSubscriptionMutation>;
-export type RemoveServiceFromSubscriptionMutationOptions = Apollo.BaseMutationOptions<RemoveServiceFromSubscriptionMutation, RemoveServiceFromSubscriptionMutationVariables>;
 export const UpdateSubscriptionServiceDocument = gql`
     mutation UpdateSubscriptionService($subscriptionId: ID!, $subscriptionServiceId: ID!, $input: UpdateSubscriptionServiceInput!) {
   updateSubscriptionService(

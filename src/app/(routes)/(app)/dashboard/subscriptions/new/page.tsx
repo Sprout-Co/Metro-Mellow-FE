@@ -1,14 +1,10 @@
-import React from "react";
 import DashboardLayout from "../../_components/DashboardLayout/DashboardLayout";
-import SingleServiceSubscriptionWizard from "./_components/SingleServiceSubscriptionWizard/SingleServiceSubscriptionWizard";
+import SubscriptionBuilder from "./_components/SubscriptionBuilder/SubscriptionBuilder";
 
-const NewSubscriptionPage = () => {
+export default function AddSubscriptionPage() {
   return (
     <DashboardLayout>
-      <SingleServiceSubscriptionWizard />
+      <SubscriptionBuilder />
     </DashboardLayout>
   );
-};
-
-export default NewSubscriptionPage;
-
+}

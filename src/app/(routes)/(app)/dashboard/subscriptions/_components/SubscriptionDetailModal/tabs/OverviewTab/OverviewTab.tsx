@@ -80,8 +80,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ subscription }) => {
             <div>
               <span className={styles.modal__infoLabel}>Service Address</span>
               <span className={styles.modal__infoValue}>
-                {subscription.address?.street || "Address"},{" "}
-                {subscription.address?.city || "City"}
+                {subscription.address}
               </span>
             </div>
           </div>

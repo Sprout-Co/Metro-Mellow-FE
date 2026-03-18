@@ -63,7 +63,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
   const sortedSubscriptions = [...subscriptions].sort(
     (a, b) =>
       new Date(a.nextBillingDate).getTime() -
-      new Date(b.nextBillingDate).getTime()
+      new Date(b.nextBillingDate).getTime(),
   );
 
   // Group subscriptions by status
@@ -72,15 +72,15 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
     active: sortedSubscriptions.filter(
       (s) =>
         s.status === SubscriptionStatus.Active ||
-        s.status === SubscriptionStatus.Pending
+        s.status === SubscriptionStatus.Pending,
     ),
     paused: sortedSubscriptions.filter(
-      (s) => s.status === SubscriptionStatus.Paused
+      (s) => s.status === SubscriptionStatus.Paused,
     ),
     expired: sortedSubscriptions.filter(
       (s) =>
         s.status === SubscriptionStatus.Expired ||
-        s.status === SubscriptionStatus.Cancelled
+        s.status === SubscriptionStatus.Cancelled,
     ),
   };
 
@@ -212,7 +212,6 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
     const progress = calculateProgress(subscription);
 
     // Get primary service for display
-    const primaryService = subscription.subscriptionServices[0];
     const serviceIcons = subscription.subscriptionServices.slice(0, 3); // Show max 3 service icons
 
     return (
@@ -223,16 +222,6 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
         onMouseEnter={() => setHoveredId(subscription.id)}
         onMouseLeave={() => setHoveredId(null)}
       >
-        {/* Service Type Indicator */}
-        {/* <div
-          className={styles.subscriptionCard__indicator}
-          style={{
-            backgroundColor: primaryService
-              ? getServiceColor(primaryService.service_category)
-              : "#6b7280",
-          }}
-        /> */}
-
         {/* Main Content Grid */}
         <div className={styles.subscriptionCard__grid}>
           {/* Left Section - Service Info */}
@@ -288,35 +277,7 @@ const SubscriptionListView: React.FC<SubscriptionListViewProps> = ({
               </div>
               <div className={styles.subscriptionCard__infoItem}>
                 <MapPin size={14} />
-                <span>
-                  {subscription.address?.street || "Address"},{" "}
-                  {subscription.address?.city || "City"}
-                </span>
-              </div>
-            </div>
-
-            {/* Progress Bar */}
-            <div className={styles.subscriptionCard__progress}>
-              <div className={styles.subscriptionCard__progressHeader}>
-                <span className={styles.subscriptionCard__progressText}>
-                  {subscription.subscriptionServices.length} services in
-                  subscription
-                </span>
-                <span className={styles.subscriptionCard__progressPercent}>
-                  {progress}%
-                </span>
-              </div>
-              <div className={styles.subscriptionCard__progressBar}>
-                <div
-                  className={styles.subscriptionCard__progressFill}
-                  style={{
-                    width: `${progress}%`,
-                    backgroundColor: "#075056",
-                    // backgroundColor: primaryService
-                    //   ? getServiceColor(primaryService.service_category)
-                    //   : "#6b7280",
-                  }}
-                />
+                <span>{subscription.address}</span>
               </div>
             </div>
           </div>

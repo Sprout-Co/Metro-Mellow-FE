@@ -311,44 +311,6 @@
     }
   }
 
-  // Progress bar section
-  &__progress {
-    margin-top: spacing("sm");
-    padding-top: spacing("sm");
-    border-top: 1px solid color("neutral", "lightest");
-  }
-
-  &__progressHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: spacing("xs");
-  }
-
-  &__progressText {
-    @include font-size("sm");
-    color: color("neutral", "dark");
-  }
-
-  &__progressPercent {
-    @include font-size("sm");
-    @include font-weight("semibold");
-    color: color("primary", "base");
-  }
-
-  &__progressBar {
-    height: 6px;
-    background: color("neutral", "lightest");
-    border-radius: border-radius("pill");
-    overflow: hidden;
-  }
-
-  &__progressFill {
-    height: 100%;
-    border-radius: border-radius("pill");
-    transition: width 0.3s ease;
-  }
-
   &__right {
     display: flex;
     flex-direction: column;

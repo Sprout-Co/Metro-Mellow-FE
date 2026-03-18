@@ -1,11 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  Service,
-  ServiceCategory,
-  SubscriptionServiceInput,
-} from "@/graphql/api";
+import { Service, ServiceCategory, SubscriptionServiceInput } from "@/graphql/api";
 import CleaningServiceConfiguration from "./CleaningServiceConfiguration";
 import CookingServiceConfiguration from "./CookingServiceConfiguration";
 import LaundryServiceConfiguration from "./LaundryServiceConfiguration";
@@ -43,15 +39,15 @@ const ServiceConfigDrawer: React.FC<ServiceConfigDrawerProps> = ({
     switch (service.category) {
       case ServiceCategory.Cleaning:
         return <CleaningServiceConfiguration {...commonProps} />;
-      // case ServiceCategory.Cooking:
-      //   return <CookingServiceConfiguration {...commonProps} />;
+      case ServiceCategory.Cooking:
+        return <CookingServiceConfiguration {...commonProps} />;
       case ServiceCategory.Laundry:
         return <LaundryServiceConfiguration {...commonProps} />;
-      // case ServiceCategory.PestControl:
-      //   return <PestControlServiceConfiguration {...commonProps} />;
-      // default:
-      //   // Fallback for any other service types
-      //   return <LaundryServiceConfiguration {...commonProps} />;
+      case ServiceCategory.PestControl:
+        return <PestControlServiceConfiguration {...commonProps} />;
+      default:
+        // Fallback for any other service types
+        return <LaundryServiceConfiguration {...commonProps} />;
     }
   };
 

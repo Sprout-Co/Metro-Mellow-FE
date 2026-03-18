@@ -26,7 +26,7 @@ import { calculateSubscriptionProgress } from "../../utils/subscriptionProgress"
 import { useBookingOperations } from "@/graphql/hooks/bookings/useBookingOperations";
 import { useBillingOperations } from "@/graphql/hooks/billing/useBillingOperations";
 import { Booking, BookingStatus, BillingStatus } from "@/graphql/api";
-import { OverviewTab, ServicesTab, BookingsTab, BillingTab } from "./tabs";
+import { OverviewTab, BookingsTab, BillingTab } from "./tabs";
 import PaymentAlertBanner from "./PaymentAlertBanner";
 import ErrorBanner from "./ErrorBanner/ErrorBanner";
 import { useSubscriptionPayment } from "@/hooks/useSubscriptionPayment";
@@ -42,7 +42,7 @@ import { useSubscriptionOperations } from "@/graphql/hooks/subscriptions/useSubs
 import FnButton from "@/components/ui/Button/FnButton";
 import OrderSuccessModal from "@/components/ui/booking/modals/OrderSuccessModal/OrderSuccessModal";
 
-type TabType = "overview" | "services" | "bookings" | "billing";
+type TabType = "overview" | "bookings" | "billing";
 
 interface SubscriptionDetailModalProps {
   isOpen: boolean;
@@ -66,7 +66,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   const [isConfirmActionModalOpen, setIsConfirmActionModalOpen] =
     useState(false);
   const [subscriptionBookings, setSubscriptionBookings] = useState<Booking[]>(
-    []
+    [],
   );
   const [allSubscriptionBookings, setAllSubscriptionBookings] = useState<
     Booking[]
@@ -129,7 +129,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
       setSubscriptionBookings(allSubscriptionBookings);
     } else {
       const filteredByStatus = allSubscriptionBookings.filter(
-        (booking) => booking.status === selectedBookingStatus
+        (booking) => booking.status === selectedBookingStatus,
       );
       setSubscriptionBookings(filteredByStatus);
     }
@@ -149,13 +149,13 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
         // 1. Bookings that are recurring (likely subscription-based)
         // 2. Bookings with services that match the subscription services
         const subscriptionServiceIds = subscription.subscriptionServices.map(
-          (s) => s.service._id
+          (s) => s.service._id,
         );
 
         const filteredBookings = allBookings.filter((booking) => {
           // Check if booking service matches any subscription service
           const matchesService = subscriptionServiceIds.includes(
-            booking.service._id
+            booking.service._id,
           );
 
           // Check if booking has recurring flag (likely subscription-based)
@@ -201,7 +201,6 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
 
   const tabs = [
     { id: "overview" as const, label: "Overview", icon: Info },
-    { id: "services" as const, label: "Services", icon: Package },
     { id: "bookings" as const, label: "Bookings", icon: Calendar },
     { id: "billing" as const, label: "Billing", icon: CreditCard },
   ];
@@ -221,7 +220,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
     console.log(
       "Subscription action completed:",
       confirmationActionType,
-      reason
+      reason,
     );
 
     // Close the detail modal after successful action
@@ -244,7 +243,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
         await initializeSubscriptionPayment(
           result.billing.id,
           result.billing.amount,
-          subscription?.customer?.email || ""
+          subscription?.customer?.email || "",
         );
         // console.log(subscriptionBillings.length, " after renewal");
       }
@@ -271,14 +270,14 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
       const unpaidBilling = subscriptionBillings.find(
         (billing) =>
           billing.status === BillingStatus.Pending ||
-          billing.status === BillingStatus.Failed
+          billing.status === BillingStatus.Failed,
       );
 
       if (unpaidBilling) {
         await initializeSubscriptionPayment(
           unpaidBilling.id,
           unpaidBilling.amount,
-          subscription.customer?.email || ""
+          subscription.customer?.email || "",
         );
       } else {
         console.error("No unpaid billing found");
@@ -296,7 +295,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
     // Find the most recent billing record
     const sortedBillings = [...subscriptionBillings].sort(
       (a, b) =>
-        new Date(b.billingDate).getTime() - new Date(a.billingDate).getTime()
+        new Date(b.billingDate).getTime() - new Date(a.billingDate).getTime(),
     );
 
     const latestBilling = sortedBillings[0];
@@ -430,7 +429,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
   );
 
   const getServiceOptionLabel = (
-    subscriptionService: SubscriptionType["subscriptionServices"][0]
+    subscriptionService: SubscriptionType["subscriptionServices"][0],
   ): string => {
     if (!subscriptionService?.service) return "Subscription";
 
@@ -466,7 +465,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
 
     // Find matching option label
     const option = service.options?.find(
-      (opt) => opt.service_id === (serviceOptionId as unknown as ServiceId)
+      (opt) => opt.service_id === (serviceOptionId as unknown as ServiceId),
     );
 
     return (
@@ -559,7 +558,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
             )}
 
             {/* Services Tab */}
-            {activeTab === "services" && (
+            {/* {activeTab === "services" && (
               <motion.div
                 key="services"
                 initial={{ opacity: 0, y: 20 }}
@@ -569,7 +568,7 @@ const SubscriptionDetailModal: React.FC<SubscriptionDetailModalProps> = ({
               >
                 <ServicesTab subscription={subscription} />
               </motion.div>
-            )}
+            )} */}
 
             {/* Bookings Tab */}
             {activeTab === "bookings" && (

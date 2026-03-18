@@ -56,23 +56,6 @@ mutation UpdateSubscriptionStatus(
   updateSubscriptionStatus(id: $updateSubscriptionStatusId, status: $status)
 }
 
-mutation AddServiceToSubscription(
-  $subscriptionId: ID!
-  $service: SubscriptionServiceInput!
-) {
-  addServiceToSubscription(subscriptionId: $subscriptionId, service: $service)
-}
-
-mutation RemoveServiceFromSubscription(
-  $subscriptionId: ID!
-  $subscriptionServiceId: ID!
-) {
-  removeServiceFromSubscription(
-    subscriptionId: $subscriptionId
-    subscriptionServiceId: $subscriptionServiceId
-  )
-}
-
 mutation UpdateSubscriptionService(
   $subscriptionId: ID!
   $subscriptionServiceId: ID!
