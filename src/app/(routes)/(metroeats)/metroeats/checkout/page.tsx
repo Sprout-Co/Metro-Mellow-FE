@@ -37,7 +37,7 @@ export default function CheckoutPage() {
   const { handleRegisterAndSignIn, registerLoading } = useAuthOperations();
   const { data: serviceAreasData } = useActiveServiceAreasQuery();
 
-  const [addressId, setAddressId] = useState("");
+  const [address, setAddress] = useState("");
 
   // Guest / registration fields
   const [firstName, setFirstName] = useState("");
@@ -46,8 +46,7 @@ export default function CheckoutPage() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [street, setStreet] = useState("");
-  const [city, setCity] = useState("");
-  const [serviceAreaId, setServiceAreaId] = useState("");
+  const [serviceArea, setServiceArea] = useState("");
   const [registerError, setRegisterError] = useState<string | null>(null);
   const [createdOrderId, setCreatedOrderId] = useState<string | null>(null);
   const [createdOrderTotal, setCreatedOrderTotal] = useState<number | null>(
@@ -77,24 +76,23 @@ export default function CheckoutPage() {
   const hasServiceAreas = serviceAreas.length > 0;
 
   useEffect(() => {
-    if (addresses.length > 0 && !addressId) {
-      const defaultAddr = addresses.find((a) => a?.isDefault) ?? addresses[0];
-      if (defaultAddr?.id) setAddressId(defaultAddr.id);
+    if (addresses.length > 0 && !address) {
+      setAddress(addresses[0] ?? "");
     }
-  }, [addresses, addressId]);
+  }, [addresses, address]);
 
   useEffect(() => {
-    if (hasServiceAreas && !serviceAreaId) {
-      setServiceAreaId(serviceAreas[0].id);
+    if (hasServiceAreas && !serviceArea) {
+      setServiceArea(serviceAreas[0].name);
     }
-  }, [hasServiceAreas, serviceAreas, serviceAreaId]);
+  }, [hasServiceAreas, serviceAreas, serviceArea]);
 
-  const placeOrderWithAddress = async (targetAddressId: string) => {
+  const placeOrderWithAddress = async (targetAddress: string) => {
     if (items.length === 0) return;
     const result = await createMealOrder({
       variables: {
         input: {
-          addressId: targetAddressId,
+          address: targetAddress,
           items: items.map((line) => {
             const item: {
               mealId: string;
@@ -141,8 +139,8 @@ export default function CheckoutPage() {
 
     try {
       if (me) {
-        if (!addressId) return;
-        await placeOrderWithAddress(addressId);
+        if (!address) return;
+        await placeOrderWithAddress(address);
         return;
       }
 
@@ -156,7 +154,7 @@ export default function CheckoutPage() {
       ) {
         return;
       }
-      if (!street.trim() || !city.trim() || !serviceAreaId) {
+      if (!street.trim() || !serviceArea) {
         return;
       }
 
@@ -167,23 +165,19 @@ export default function CheckoutPage() {
         password,
         phone: phone.trim() || undefined,
         role: UserRole.Customer,
-        address: {
-          street: street.trim(),
-          city: city.trim(),
-          serviceArea: serviceAreaId,
-        },
+        address: street.trim() + ", " + serviceArea,
         channel: Channel.MetroeatsWebsite,
       });
 
       const refetchedResult = await refetchUser();
       const newAddresses =
         refetchedResult.data?.me?.addresses?.filter(Boolean) ?? [];
-      const newAddressId = newAddresses[0]?.id;
-      if (!newAddressId) {
+      const newAddress = newAddresses[0];
+      if (!newAddress) {
         throw new Error("Address was not created. Please try again.");
       }
 
-      await placeOrderWithAddress(newAddressId);
+      await placeOrderWithAddress(newAddress);
     } catch (err) {
       console.error(err);
       if (err instanceof Error) {
@@ -205,15 +199,14 @@ export default function CheckoutPage() {
     );
   }
 
-  const canSubmitLoggedIn = !!addressId && addresses.length > 0;
+  const canSubmitLoggedIn = !!address && addresses.length > 0;
   const canSubmitGuest =
     !!firstName.trim() &&
     !!lastName.trim() &&
     !!email.trim() &&
     password.length >= MIN_PASSWORD_LENGTH &&
     !!street.trim() &&
-    !!city.trim() &&
-    !!serviceAreaId;
+    !!serviceArea;
   const canSubmit = isGuest ? canSubmitGuest : canSubmitLoggedIn;
 
   if (showConfirmation && paymentSuccess && createdOrderId) {
@@ -347,30 +340,22 @@ export default function CheckoutPage() {
                         required
                       />
                     </div>
-                    <div className={styles.checkout__inputGroup}>
-                      <label htmlFor="city">City</label>
-                      <input
-                        id="city"
-                        type="text"
-                        placeholder="e.g. Lagos"
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                        required
-                      />
-                    </div>
                     {hasServiceAreas && (
                       <div className={styles.checkout__inputGroup}>
-                        <label htmlFor="serviceArea">Area</label>
+                        <label htmlFor="serviceArea">Service area</label>
                         <select
                           id="serviceArea"
-                          value={serviceAreaId}
-                          onChange={(e) => setServiceAreaId(e.target.value)}
+                          value={serviceArea}
+                          onChange={(e) => setServiceArea(e.target.value)}
                           required
                         >
-                          <option value="">Select area</option>
+                          <option value="">Select service area</option>
                           {serviceAreas.map((area) => (
-                            <option key={area.id} value={area.id}>
-                              {area.name} {area.city ? `(${area.city})` : ""}
+                            <option
+                              key={area.id || "serviceArea-" + Math.random()}
+                              value={area.name}
+                            >
+                              {area.name}
                             </option>
                           ))}
                         </select>
@@ -399,18 +384,18 @@ export default function CheckoutPage() {
                     <label htmlFor="address">Choose address</label>
                     <select
                       id="address"
-                      value={addressId}
-                      onChange={(e) => setAddressId(e.target.value)}
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
                       required
                     >
                       <option value="">Select address</option>
                       {addresses.map((addr) =>
                         addr ? (
-                          <option key={addr.id} value={addr.id}>
-                            {addr.label ||
-                              [addr.street, addr.city, addr.state]
-                                .filter(Boolean)
-                                .join(", ")}
+                          <option
+                            key={addr || "address-" + Math.random()}
+                            value={addr}
+                          >
+                            {addr}
                           </option>
                         ) : null,
                       )}

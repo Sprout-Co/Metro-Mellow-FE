@@ -1,98 +1,128 @@
 $me-yellow: #ffcc00;
 $me-dark: #1a1a1a;
-$me-cream: #faf8f4;
 
 .quickOrder {
-  padding: spacing("3xl") spacing("lg") spacing("3xl");
+  padding: spacing("5xl") spacing("lg") spacing("3xl");
   background: color("neutral", "white");
 
   @include breakpoint-down("md") {
-    padding: spacing("2xl") spacing("md");
+    padding: spacing("4xl") spacing("md") spacing("2xl");
+  }
+}
+
+.quickOrder__container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.quickOrder__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: spacing("md");
+  margin-bottom: spacing("xl");
+
+  @include breakpoint-down("sm") {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: spacing("sm");
+    margin-bottom: spacing("lg");
+  }
+}
+
+.quickOrder__title {
+  @include font-weight("bold");
+  font-family: $font-family-heading;
+  color: $me-dark;
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: -0.02em;
+}
+
+.quickOrder__subtitle {
+  @include font-size("sm");
+  color: rgba($me-dark, 0.5);
+  margin: 4px 0 0;
+}
+
+.quickOrder__headerRight {
+  display: flex;
+  align-items: center;
+  gap: spacing("lg");
+}
+
+.quickOrder__arrows {
+  display: flex;
+  gap: spacing("xs");
+
+  @include breakpoint-down("sm") {
+    display: none;
+  }
+}
+
+.quickOrder__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba($me-dark, 0.15);
+  background: transparent;
+  color: $me-dark;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+
+  &:hover {
+    background: rgba($me-dark, 0.05);
+    border-color: rgba($me-dark, 0.3);
+  }
+}
+
+.quickOrder__seeAll {
+  @include font-size("sm");
+  @include font-weight("semibold");
+  color: $me-yellow;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.quickOrder__track {
+  display: flex;
+  gap: spacing("lg");
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: spacing("xs");
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.quickOrder__card {
+  flex: 0 0 380px;
+  scroll-snap-align: start;
+
+  @include breakpoint-down("lg") {
+    flex: 0 0 340px;
   }
 
-  &__container {
-    @include container;
+  @include breakpoint-down("sm") {
+    flex: 0 0 300px;
   }
+}
 
-  &__grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: spacing("lg");
-    max-width: 1200px;
-    margin: 0 auto;
-
-    @include breakpoint-down("2xl") {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    @include breakpoint-down("lg") {
-      grid-template-columns: repeat(1, minmax(0, 1fr));
-      gap: spacing("md");
-    }
-  }
-
-  &__header {
-    max-width: 1200px;
-    margin: 0 auto spacing("xl");
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: spacing("md");
-
-    @include breakpoint-down("sm") {
-      margin-bottom: spacing("lg");
-    }
-  }
-
-  &__title {
-    @include font-weight("bold");
-    font-family: $font-family-heading;
-    color: $me-dark;
-    margin: 0;
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    letter-spacing: -0.02em;
-  }
-
-  &__subtitle {
-    @include font-size("sm");
-    color: rgba($me-dark, 0.5);
-    margin: 4px 0 0;
-  }
-
-  &__seeAll {
-    @include font-size("sm");
-    @include font-weight("semibold");
-    color: $me-yellow;
-    text-decoration: none;
-    white-space: nowrap;
-    transition: opacity 0.15s;
-
-    &:hover {
-      opacity: 0.7;
-    }
-  }
-
-  &__scroll {
-    max-width: 1200px;
-    margin: 0 auto;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding-bottom: 4px;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
-
-  &__track {
-    display: flex;
-    gap: spacing("lg");
-    min-width: max-content;
-  }
-
-  // &__card {
-  //   width: 240px;
-  //   flex-shrink: 0;
-  // }
+.quickOrder__msg {
+  padding: spacing("md");
+  color: rgba($me-dark, 0.5);
+  @include font-size("sm");
 }
