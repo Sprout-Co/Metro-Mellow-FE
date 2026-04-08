@@ -14,8 +14,8 @@ import { UserIcon } from "lucide-react";
 // Define service dropdown items
 const serviceItems = [
   {
-    title: "Food",
-    href: "/services/food",
+    title: "Food Delivery",
+    href: "/metroeats",
     description: "Delicious home-cooked meals",
     image: "/images/food/food-hero.jpg",
   },
@@ -63,7 +63,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const isAuthenticated = useSelector(
-    (state: RootState) => state.auth.isAuthenticated
+    (state: RootState) => state.auth.isAuthenticated,
   );
 
   // Handle scroll for sticky header effect
@@ -97,10 +97,10 @@ export default function Navbar() {
     const handleClickOutside = (event: MouseEvent) => {
       if (isMobileMenuOpen) {
         const mobileMenu = document.querySelector(
-          `.${styles.navbar__mobileMenu}`
+          `.${styles.navbar__mobileMenu}`,
         );
         const mobileToggle = document.querySelector(
-          `.${styles.navbar__mobileToggle}`
+          `.${styles.navbar__mobileToggle}`,
         );
 
         if (

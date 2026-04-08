@@ -24,7 +24,7 @@ export const allServices: ServiceLink[] = [
   },
   {
     title: "Food Delivery",
-    href: "/services/food",
+    href: "/metroeats",
     description:
       "Fresh, nutritious meals prepared by professional chefs and delivered straight to your door in Lagos.",
   },

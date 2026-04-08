@@ -67,7 +67,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const services = [
     { href: "/services/cleaning", label: "Cleaning Services" },
     { href: "/services/laundry", label: "Laundry Services" },
-    { href: "/services/food", label: "Food Services" },
+    { href: "/metroeats", label: "Food Services" },
     { href: "/services/pest-control", label: "Pest Control" },
   ];
 
@@ -263,7 +263,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                   </span>
                 </motion.div>
               </div>
-            )
+            ),
           )}
         </div>
       </motion.div>

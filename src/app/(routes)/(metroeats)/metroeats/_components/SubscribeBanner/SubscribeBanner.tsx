@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import styles from "./SubscribeBanner.module.scss";
+import { Routes } from "@/constants/routes";
 
 export default function SubscribeBanner() {
   return (
@@ -24,7 +25,7 @@ export default function SubscribeBanner() {
             no commitments.
           </p>
         </div>
-        <div className={styles.subscribeBanner__plans}>
+        {/* <div className={styles.subscribeBanner__plans}>
           <div className={styles.subscribeBanner__plan}>
             <span className={styles.subscribeBanner__planEmoji}>🍚</span>
             <span className={styles.subscribeBanner__planName}>Everyday</span>
@@ -51,8 +52,11 @@ export default function SubscribeBanner() {
               <span className={styles.subscribeBanner__planPer}>/meal</span>
             </span>
           </div>
-        </div>
-        <Link href="#get-started" className={styles.subscribeBanner__cta}>
+        </div> */}
+        <Link
+          href={Routes.DASHBOARD_SUBSCRIPTIONS_NEW}
+          className={styles.subscribeBanner__cta}
+        >
           Get started
         </Link>
       </motion.div>

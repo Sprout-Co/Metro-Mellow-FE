@@ -58,7 +58,7 @@ const services = [
     title: "Food Delivery",
     description:
       "Fresh, nutritious meals prepared by professional chefs and delivered straight to your door.",
-    href: "/services/food",
+    href: "/metroeats",
     image: "/images/food/jollof-rice.png",
   },
   {
