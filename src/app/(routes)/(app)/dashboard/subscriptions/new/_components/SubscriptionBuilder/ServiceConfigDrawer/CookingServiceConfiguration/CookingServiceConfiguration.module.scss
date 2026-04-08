@@ -6,3 +6,91 @@
 // Import shared styles
 @import "../shared/ServiceConfigBase.module.scss";
 @import "../shared/SummaryStyles.module.scss";
+
+// Per-day meal + time (schedule step)
+.drawer__mealScheduleHint {
+  @include font-size("xs");
+  color: color("neutral", "dark");
+  margin: 0 0 spacing("md") 0;
+  line-height: 1.45;
+}
+
+.drawer__mealsListStack {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("md");
+}
+
+.drawer__mealDayRow {
+  padding: spacing("md");
+  background: color("neutral", "lightest");
+  border-radius: border-radius("lg");
+  border: 1px solid color("neutral", "lighter");
+}
+
+.drawer__mealDayHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: spacing("md");
+  margin-bottom: spacing("sm");
+}
+
+.drawer__mealTimeLabel {
+  display: block;
+  @include font-size("xs");
+  @include font-weight("semibold");
+  color: color("neutral", "dark");
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: spacing("xs");
+}
+
+.drawer__timePills {
+  display: flex;
+  gap: spacing("xs");
+}
+
+.drawer__timePill {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: spacing("xxs");
+  padding: spacing("xs") spacing("xxs");
+  background: color("neutral", "white");
+  border: 1.5px solid color("neutral", "lighter");
+  border-radius: border-radius("md");
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover:not(:disabled) {
+    border-color: color("primary", "light");
+  }
+
+  &:disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+  }
+
+  &--active {
+    border-color: color("primary", "base");
+    background: rgba(color("primary", "base"), 0.06);
+    box-shadow: 0 0 0 2px rgba(color("primary", "base"), 0.12);
+  }
+}
+
+.drawer__timePillIcon {
+  @include font-size("base");
+  line-height: 1;
+}
+
+.drawer__timePillLabel {
+  @include font-size("xs");
+  @include font-weight("semibold");
+  color: color("neutral", "darker");
+  text-align: center;
+  line-height: 1.2;
+}

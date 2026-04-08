@@ -2,15 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  X,
-  Calendar,
-  Clock,
-  Utensils,
-  ChevronRight,
-  ChevronLeft,
-  Check,
-} from "lucide-react";
+import { X, ChevronRight, ChevronLeft, Check } from "lucide-react";
 import styles from "./CookingServiceConfiguration.module.scss";
 import ModalDrawer from "@/components/ui/ModalDrawer/ModalDrawer";
 import ValidationErrors from "../../ValidationErrors/ValidationErrors";
@@ -26,8 +18,19 @@ import {
 import {
   validateServiceConfiguration,
   ValidationError,
-  hasFieldError,
 } from "../../validation";
+
+function pickPreferredCookingTimeSlot(c: SubscriptionServiceInput): TimeSlot {
+  const order = c.scheduledDays || [];
+  const meals = c.serviceDetails.cooking?.mealsPerDelivery || [];
+  for (const d of order) {
+    const m = meals.find((x) => x.day === d && x.count > 0);
+    if (m) return m.timeSlot;
+  }
+  const anyWithMeals = meals.find((m) => m.count > 0);
+  if (anyWithMeals) return anyWithMeals.timeSlot;
+  return c.preferredTimeSlot || TimeSlot.Morning;
+}
 
 interface CookingServiceConfigurationProps {
   isOpen: boolean;
@@ -40,17 +43,10 @@ interface CookingServiceConfigurationProps {
 
 const CookingServiceConfiguration: React.FC<
   CookingServiceConfigurationProps
-> = ({
-  isOpen,
-  onClose,
-  service,
-  existingConfiguration,
-  onSave,
-  onProceedToCheckout,
-}) => {
+> = ({ isOpen, onClose, service, existingConfiguration, onSave }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>(
-    []
+    [],
   );
   const [showValidationErrors, setShowValidationErrors] = useState(false);
   const [configuration, setConfiguration] = useState<SubscriptionServiceInput>({
@@ -64,13 +60,13 @@ const CookingServiceConfiguration: React.FC<
       cooking: {
         mealType: MealType.Basic,
         mealsPerDelivery: [
-          { day: ScheduleDays.Monday, count: 1 },
-          { day: ScheduleDays.Tuesday, count: 1 },
-          { day: ScheduleDays.Wednesday, count: 1 },
-          { day: ScheduleDays.Thursday, count: 1 },
-          { day: ScheduleDays.Friday, count: 1 },
-          { day: ScheduleDays.Saturday, count: 1 },
-          { day: ScheduleDays.Sunday, count: 1 },
+          { day: ScheduleDays.Monday, count: 1, timeSlot: TimeSlot.Morning },
+          { day: ScheduleDays.Tuesday, count: 1, timeSlot: TimeSlot.Morning },
+          { day: ScheduleDays.Wednesday, count: 1, timeSlot: TimeSlot.Morning },
+          { day: ScheduleDays.Thursday, count: 1, timeSlot: TimeSlot.Morning },
+          { day: ScheduleDays.Friday, count: 1, timeSlot: TimeSlot.Morning },
+          { day: ScheduleDays.Saturday, count: 1, timeSlot: TimeSlot.Morning },
+          { day: ScheduleDays.Sunday, count: 1, timeSlot: TimeSlot.Morning },
         ],
       },
       serviceOption:
@@ -79,24 +75,8 @@ const CookingServiceConfiguration: React.FC<
   });
 
   const steps = [
-    { id: "details", label: "Package" },
-    { id: "frequency", label: "Frequency" },
     { id: "schedule", label: "Schedule" },
     { id: "summary", label: "Review" },
-  ];
-
-  const frequencies = [
-    {
-      value: SubscriptionFrequency.Weekly,
-      label: "Weekly",
-      description: "Every week",
-      popular: true,
-    },
-    {
-      value: SubscriptionFrequency.BiWeekly,
-      label: "Bi-Weekly",
-      description: "Every 2 weeks",
-    },
   ];
 
   const daysOfWeek = [
@@ -136,7 +116,10 @@ const CookingServiceConfiguration: React.FC<
       setValidationErrors([]);
       setShowValidationErrors(false);
       if (existingConfiguration) {
-        setConfiguration(existingConfiguration);
+        setConfiguration({
+          ...existingConfiguration,
+          frequency: SubscriptionFrequency.Weekly,
+        });
       }
     }
   }, [isOpen, existingConfiguration]);
@@ -151,13 +134,20 @@ const CookingServiceConfiguration: React.FC<
         updatedMeals = currentMeals.filter((meal) => meal.day !== day);
       } else if (existingIndex >= 0) {
         updatedMeals = currentMeals.map((meal, index) =>
-          index === existingIndex ? { ...meal, count } : meal
+          index === existingIndex ? { ...meal, count } : meal,
         );
       } else {
-        updatedMeals = [...currentMeals, { day, count }];
+        updatedMeals = [
+          ...currentMeals,
+          {
+            day,
+            count,
+            timeSlot: pickPreferredCookingTimeSlot(prev),
+          },
+        ];
       }
 
-      return {
+      const next: SubscriptionServiceInput = {
         ...prev,
         serviceDetails: {
           ...prev.serviceDetails,
@@ -166,6 +156,37 @@ const CookingServiceConfiguration: React.FC<
             mealsPerDelivery: updatedMeals,
           },
         },
+      };
+      return {
+        ...next,
+        preferredTimeSlot: pickPreferredCookingTimeSlot(next),
+      };
+    });
+  };
+
+  const updateMealTimeSlot = (day: ScheduleDays, timeSlot: TimeSlot) => {
+    setConfiguration((prev) => {
+      const currentMeals = prev.serviceDetails.cooking?.mealsPerDelivery || [];
+      const existingIndex = currentMeals.findIndex((meal) => meal.day === day);
+      if (existingIndex < 0) return prev;
+
+      const updatedMeals = currentMeals.map((meal, index) =>
+        index === existingIndex ? { ...meal, timeSlot } : meal,
+      );
+
+      const next: SubscriptionServiceInput = {
+        ...prev,
+        serviceDetails: {
+          ...prev.serviceDetails,
+          cooking: {
+            mealType: prev.serviceDetails.cooking?.mealType || MealType.Basic,
+            mealsPerDelivery: updatedMeals,
+          },
+        },
+      };
+      return {
+        ...next,
+        preferredTimeSlot: pickPreferredCookingTimeSlot(next),
       };
     });
   };
@@ -176,15 +197,44 @@ const CookingServiceConfiguration: React.FC<
     return meal?.count || 0;
   };
 
+  const getTimeSlotForDay = (day: ScheduleDays): TimeSlot => {
+    const meals = configuration.serviceDetails.cooking?.mealsPerDelivery || [];
+    const meal = meals.find((m) => m.day === day);
+    return (
+      meal?.timeSlot ?? configuration.preferredTimeSlot ?? TimeSlot.Morning
+    );
+  };
+
   const toggleDay = (day: ScheduleDays) => {
     setConfiguration((prev) => {
       const currentDays = prev.scheduledDays || [];
       const isSelected = currentDays.includes(day);
-      return {
+      const scheduledDays = isSelected
+        ? currentDays.filter((d) => d !== day)
+        : [...currentDays, day];
+
+      let mealsPerDelivery =
+        prev.serviceDetails.cooking?.mealsPerDelivery || [];
+      if (isSelected) {
+        mealsPerDelivery = mealsPerDelivery.filter((m) => m.day !== day);
+      }
+
+      const next: SubscriptionServiceInput = {
         ...prev,
-        scheduledDays: isSelected
-          ? currentDays.filter((d) => d !== day)
-          : [...currentDays, day],
+        scheduledDays,
+        serviceDetails: {
+          ...prev.serviceDetails,
+          cooking: prev.serviceDetails.cooking
+            ? {
+                ...prev.serviceDetails.cooking,
+                mealsPerDelivery,
+              }
+            : prev.serviceDetails.cooking,
+        },
+      };
+      return {
+        ...next,
+        preferredTimeSlot: pickPreferredCookingTimeSlot(next),
       };
     });
   };
@@ -197,17 +247,12 @@ const CookingServiceConfiguration: React.FC<
     const totalMeals =
       configuration.serviceDetails.cooking?.mealsPerDelivery?.reduce(
         (sum, delivery) => sum + delivery.count,
-        0
+        0,
       ) || 0;
 
     totalPrice *= totalMeals;
 
-    let multiplier = 4;
-    if (configuration.frequency === SubscriptionFrequency.BiWeekly) {
-      multiplier = 2;
-    }
-
-    return totalPrice * multiplier;
+    return totalPrice * 4;
   }, [configuration, service]);
 
   useEffect(() => {
@@ -225,16 +270,9 @@ const CookingServiceConfiguration: React.FC<
     switch (activeStep) {
       case 0:
         return (
-          !service.options?.length ||
-          !!configuration.serviceDetails.serviceOption
-        );
-      case 1:
-        return !!configuration.frequency;
-      case 2:
-        return (
           configuration.scheduledDays && configuration.scheduledDays.length > 0
         );
-      case 3:
+      case 1:
         return true;
       default:
         return false;
@@ -250,110 +288,12 @@ const CookingServiceConfiguration: React.FC<
     return (
       configuration.serviceDetails.cooking?.mealsPerDelivery?.reduce(
         (sum, delivery) => sum + delivery.count,
-        0
+        0,
       ) || 0
     );
   };
 
-  // Step 1: Package
-  const renderDetailsStep = () => (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className={styles.drawer__stepContent}
-    >
-      <div className={styles.drawer__stepHeader}>
-        <h3>Select Package</h3>
-        <p>Choose your meal plan</p>
-      </div>
-
-      {service.options && service.options.length > 0 && (
-        <div className={styles.drawer__section}>
-          <div className={styles.drawer__optionsGrid}>
-            {service.options.map((option) => (
-              <button
-                key={option.id}
-                className={`${styles.drawer__optionCard} ${
-                  configuration.serviceDetails.serviceOption ===
-                  option.service_id
-                    ? styles["drawer__optionCard--active"]
-                    : ""
-                }`}
-                onClick={() =>
-                  setConfiguration((prev) => ({
-                    ...prev,
-                    serviceDetails: {
-                      ...prev.serviceDetails,
-                      cooking: {
-                        ...prev.serviceDetails.cooking!,
-                        mealType: option.service_id as unknown as MealType,
-                      },
-                      serviceOption: option.service_id,
-                    },
-                  }))
-                }
-              >
-                <div>
-                  <h4>{option.label}</h4>
-                  <p>{option.description}</p>
-                </div>
-                <span className={styles.drawer__optionPrice}>
-                  ₦{option.price.toLocaleString()}
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-    </motion.div>
-  );
-
-  // Step 2: Frequency
-  const renderFrequencyStep = () => (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className={styles.drawer__stepContent}
-    >
-      <div className={styles.drawer__stepHeader}>
-        <h3>Frequency</h3>
-        <p>How often do you need meals?</p>
-      </div>
-
-      <div className={styles.drawer__section}>
-        <div className={styles.drawer__frequencyGrid}>
-          {frequencies.map((freq) => (
-            <button
-              key={freq.value}
-              className={`${styles.drawer__frequencyCard} ${
-                configuration.frequency === freq.value
-                  ? styles["drawer__frequencyCard--active"]
-                  : ""
-              }`}
-              onClick={() =>
-                setConfiguration((prev) => ({ ...prev, frequency: freq.value }))
-              }
-            >
-              {freq.popular && (
-                <span className={styles.drawer__popularTag}>Popular</span>
-              )}
-              <div className={styles.drawer__frequencyContent}>
-                <h4>{freq.label}</h4>
-                <p>{freq.description}</p>
-              </div>
-              {configuration.frequency === freq.value && (
-                <div className={styles.drawer__checkmark}>
-                  <Check size={12} />
-                </div>
-              )}
-            </button>
-          ))}
-        </div>
-      </div>
-    </motion.div>
-  );
-
-  // Step 3: Schedule
+  // Step 1: Schedule
   const renderScheduleStep = () => (
     <motion.div
       initial={{ opacity: 0 }}
@@ -387,89 +327,93 @@ const CookingServiceConfiguration: React.FC<
       {configuration.scheduledDays &&
         configuration.scheduledDays.length > 0 && (
           <div className={styles.drawer__section}>
-            <label className={styles.drawer__label}>Meals per Day</label>
-            <div className={styles.drawer__mealsGrid}>
+            <label className={styles.drawer__label}>
+              Meals &amp; delivery time
+            </label>
+            <p className={styles.drawer__mealScheduleHint}>
+              Set how many meals you want each day, then pick a delivery window
+              for that day.
+            </p>
+            <div className={styles.drawer__mealsListStack}>
               {daysOfWeek
                 .filter((d) => configuration.scheduledDays?.includes(d.value))
-                .map((day) => (
-                  <div key={day.value} className={styles.drawer__mealCard}>
-                    <div className={styles.drawer__mealDayInfo}>
-                      <span className={styles.drawer__dayShort}>
-                        {day.label}
+                .map((day) => {
+                  const count = getMealCountForDay(day.value);
+                  const activeSlot = getTimeSlotForDay(day.value);
+                  return (
+                    <div key={day.value} className={styles.drawer__mealDayRow}>
+                      <div className={styles.drawer__mealDayHeader}>
+                        <span className={styles.drawer__dayShort}>
+                          {day.label}
+                        </span>
+                        <div className={styles.drawer__mealCounter}>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              updateMealCount(day.value, Math.max(0, count - 1))
+                            }
+                            disabled={count === 0}
+                          >
+                            −
+                          </button>
+                          <span>{count}</span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              updateMealCount(day.value, count + 1)
+                            }
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                      <span className={styles.drawer__mealTimeLabel}>
+                        Delivery time
                       </span>
+                      <div className={styles.drawer__timePills}>
+                        {timeSlots.map((slot) => (
+                          <button
+                            key={slot.value}
+                            type="button"
+                            disabled={count === 0}
+                            title={
+                              count === 0
+                                ? "Add at least one meal to choose a time"
+                                : slot.time
+                            }
+                            className={`${styles.drawer__timePill} ${
+                              activeSlot === slot.value
+                                ? styles["drawer__timePill--active"]
+                                : ""
+                            }`}
+                            onClick={() =>
+                              updateMealTimeSlot(day.value, slot.value)
+                            }
+                          >
+                            <span className={styles.drawer__timePillIcon}>
+                              {slot.icon}
+                            </span>
+                            <span className={styles.drawer__timePillLabel}>
+                              {slot.label}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                    <div className={styles.drawer__mealCounter}>
-                      <button
-                        onClick={() =>
-                          updateMealCount(
-                            day.value,
-                            Math.max(0, getMealCountForDay(day.value) - 1)
-                          )
-                        }
-                        disabled={getMealCountForDay(day.value) === 0}
-                      >
-                        −
-                      </button>
-                      <span>{getMealCountForDay(day.value)}</span>
-                      <button
-                        onClick={() =>
-                          updateMealCount(
-                            day.value,
-                            getMealCountForDay(day.value) + 1
-                          )
-                        }
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
             </div>
           </div>
         )}
-
-      <div className={styles.drawer__section}>
-        <label className={styles.drawer__label}>Delivery Time</label>
-        <div className={styles.drawer__timeGrid}>
-          {timeSlots.map((slot) => (
-            <button
-              key={slot.value}
-              className={`${styles.drawer__timeCard} ${
-                configuration.preferredTimeSlot === slot.value
-                  ? styles["drawer__timeCard--active"]
-                  : ""
-              }`}
-              onClick={() =>
-                setConfiguration((prev) => ({
-                  ...prev,
-                  preferredTimeSlot: slot.value,
-                }))
-              }
-            >
-              <span className={styles.drawer__timeIcon}>{slot.icon}</span>
-              <div className={styles.drawer__timeInfo}>
-                <h4>{slot.label}</h4>
-                <p>{slot.time}</p>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
     </motion.div>
   );
 
-  // Step 4: Summary
+  // Step 2: Summary
   const renderSummaryStep = () => {
     const selectedOption = service.options?.find(
-      (opt) => opt.service_id === configuration.serviceDetails.serviceOption
+      (opt) => opt.service_id === configuration.serviceDetails.serviceOption,
     );
     const selectedDays = configuration.scheduledDays || [];
-    const selectedTime = timeSlots.find(
-      (t) => t.value === configuration.preferredTimeSlot
-    );
-    const frequencyLabel = frequencies.find(
-      (f) => f.value === configuration.frequency
-    )?.label;
     const totalWeeklyMeals = getTotalWeeklyMeals();
     const mealsByDay = (
       configuration.serviceDetails.cooking?.mealsPerDelivery || []
@@ -477,7 +421,12 @@ const CookingServiceConfiguration: React.FC<
       .filter((m) => m.count > 0)
       .map((m) => {
         const dayInfo = daysOfWeek.find((d) => d.value === m.day);
-        return { ...m, label: dayInfo?.label || m.day };
+        const slotInfo = timeSlots.find((t) => t.value === m.timeSlot);
+        return {
+          ...m,
+          label: dayInfo?.label || m.day,
+          timeLabel: slotInfo?.label || m.timeSlot,
+        };
       });
 
     return (
@@ -509,7 +458,7 @@ const CookingServiceConfiguration: React.FC<
           <h4 className={styles.summary__sectionTitle}>Schedule</h4>
           <div className={styles.summary__row}>
             <span className={styles.summary__label}>Frequency</span>
-            <span className={styles.summary__value}>{frequencyLabel}</span>
+            <span className={styles.summary__value}>Weekly</span>
           </div>
           <div className={styles.summary__row}>
             <span className={styles.summary__label}>Days</span>
@@ -524,10 +473,6 @@ const CookingServiceConfiguration: React.FC<
               })}
             </div>
           </div>
-          <div className={styles.summary__row}>
-            <span className={styles.summary__label}>Time</span>
-            <span className={styles.summary__value}>{selectedTime?.label}</span>
-          </div>
         </div>
 
         <div className={styles.summary__section}>
@@ -537,7 +482,8 @@ const CookingServiceConfiguration: React.FC<
               <div key={meal.day} className={styles.summary__mealItem}>
                 <span>{meal.label}</span>
                 <span>
-                  {meal.count} meal{meal.count !== 1 ? "s" : ""}
+                  {meal.count} meal{meal.count !== 1 ? "s" : ""} ·{" "}
+                  {meal.timeLabel}
                 </span>
               </div>
             ))}
@@ -563,12 +509,8 @@ const CookingServiceConfiguration: React.FC<
   const renderStepContent = () => {
     switch (activeStep) {
       case 0:
-        return renderDetailsStep();
-      case 1:
-        return renderFrequencyStep();
-      case 2:
         return renderScheduleStep();
-      case 3:
+      case 1:
         return renderSummaryStep();
       default:
         return null;

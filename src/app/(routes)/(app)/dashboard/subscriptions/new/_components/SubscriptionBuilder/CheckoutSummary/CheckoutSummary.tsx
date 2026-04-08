@@ -1,37 +1,30 @@
 // CheckoutSummary.tsx - Complete Redesign
 "use client";
 
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
 import {
   ShoppingCart,
-  Calendar,
-  MapPin,
   ArrowLeft,
-  Check,
-  Sparkles,
-  Home,
-  Droplets,
-  Utensils,
-  Bug,
-  Package,
-  Clock,
   CreditCard,
   Loader,
-  ChevronDown,
   Gift,
-  X,
 } from "lucide-react";
 import styles from "./CheckoutSummary.module.scss";
-import { BillingCycle } from "@/graphql/api";
+import {
+  BillingCycle,
+  ServiceCategory,
+  Service,
+  SubscriptionServiceInput,
+} from "@/graphql/api";
 import { DurationType } from "../SubscriptionBuilder";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "@/lib/redux/slices/authSlice";
 import FnButton from "@/components/ui/Button/FnButton";
 
 interface ConfiguredService {
-  service: any;
-  configuration: any;
+  service: Service;
+  configuration: SubscriptionServiceInput;
 }
 
 interface CheckoutSummaryProps {
@@ -51,7 +44,6 @@ interface CheckoutSummaryProps {
 
 const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
   configuredServices,
-  billingCycle,
   duration,
   startDate,
   selectedAddress,
@@ -111,6 +103,28 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
       default:
         return timeSlot;
     }
+  };
+
+  const getServiceTimeSummary = (cs: ConfiguredService) => {
+    if (cs.service?.category === ServiceCategory.Cooking) {
+      const meals =
+        cs.configuration?.serviceDetails?.cooking?.mealsPerDelivery?.filter(
+          (m: { count?: number }) => (m.count || 0) > 0
+        ) || [];
+      if (meals.length === 0) {
+        return getTimeSlotLabel(cs.configuration.preferredTimeSlot);
+      }
+      const slots = [
+        ...new Set(
+          meals.map((m: { timeSlot: string }) => m.timeSlot).filter(Boolean)
+        ),
+      ];
+      if (slots.length <= 1) {
+        return getTimeSlotLabel(slots[0] || cs.configuration.preferredTimeSlot);
+      }
+      return "Mixed times";
+    }
+    return getTimeSlotLabel(cs.configuration.preferredTimeSlot);
   };
 
   return (
@@ -263,7 +277,7 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
                       {getDaysOfWeek(cs.configuration.scheduledDays || [])}
                     </div>
                     <div className={styles.checkout__serviceColTime}>
-                      {getTimeSlotLabel(cs.configuration.preferredTimeSlot)}
+                      {getServiceTimeSummary(cs)}
                     </div>
                     <div className={styles.checkout__serviceColPrice}>
                       ₦{(cs.configuration.price || 0).toLocaleString()}

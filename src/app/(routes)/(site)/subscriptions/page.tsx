@@ -2,7 +2,7 @@
 import { Metadata } from "next";
 import BookingHero from "./_components/BookingHero/BookingHero";
 import SubscriptionModule from "./_components/SubscriptionModule/SubscriptionModule";
-import SubscriptionBuilder from "../../(app)/dashboard/subscriptions/add/_components/SubscriptionBuilder/SubscriptionBuilder";
+import SubscriptionBuilder from "../../(app)/dashboard/subscriptions/new/_components/SubscriptionBuilder/SubscriptionBuilder";
 import {
   StructuredData,
   createLocalBusinessSchema,
