@@ -10,12 +10,13 @@ import { useMetroEatsCart } from "../_context/MetroEatsCartContext";
 import MealCard from "../_components/MealCard/MealCard";
 import styles from "./menu.module.scss";
 
+// Dynamically extract unique categories from MealCategory enum
 const MEAL_CATEGORY_OPTIONS: { value: "" | MealCategory; label: string }[] = [
   { value: "", label: "All" },
-  { value: MealCategory.Breakfast, label: "Breakfast" },
-  { value: MealCategory.Lunch, label: "Lunch" },
-  { value: MealCategory.Dinner, label: "Dinner" },
-  { value: MealCategory.Snack, label: "Snack" },
+  ...Object.values(MealCategory).map((cat) => ({
+    value: cat as MealCategory,
+    label: cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase(),
+  })),
 ];
 
 const fmt = (n: number) => `₦${n.toLocaleString()}`;

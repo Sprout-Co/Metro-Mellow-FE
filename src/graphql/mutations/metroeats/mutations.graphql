@@ -16,7 +16,6 @@ mutation CreateMealOrder($input: CreateMealOrderInput!) {
         pricePlate
         priceBowl
         category
-        availableStyles
       }
       quantity
     }

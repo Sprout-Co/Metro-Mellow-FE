@@ -40,12 +40,6 @@ query GetMealOrders {
         pricePlate
         priceBowl
         category
-        availableStyles
-        extras {
-          id
-          name
-          price
-        }
       }
       quantity
       style
