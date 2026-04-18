@@ -7,12 +7,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import styles from "./HeroSection.module.scss";
 
 const SLIDESHOW_IMAGES = [
-  "/images/food/jollof-rice.png",
-  "/images/food/amala-ewedu.png",
-  "/images/food/egusi-fufu.png",
-  "/images/food/food-hero.jpg",
-  "/images/food/f1.png",
-  "/images/food/f2.png",
+  "/images/metroeats/metroeats-menu/aganyin.png",
+  "/images/metroeats/metroeats-menu/fried-rice.png",
+  "/images/metroeats/metroeats-menu/jollof.png",
+  "/images/metroeats/metroeats-menu/native-rice.png",
+  "/images/metroeats/metroeats-menu/ofada.png",
+  "/images/metroeats/metroeats-menu/stir-fry-noodles.png",
 ];
 
 const SLIDE_INTERVAL_MS = 4500;
@@ -70,8 +70,8 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            Homestyle Nigerian meals cooked fresh every day. We deliver to Lekki,
-            Victoria Island &amp; environs.
+            Homestyle Nigerian meals cooked fresh every day. We deliver to
+            Lekki, Victoria Island &amp; environs.
           </motion.p>
 
           <motion.div
