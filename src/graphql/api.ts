@@ -2532,7 +2532,7 @@ export type GetMealsQueryVariables = Exact<{
 }>;
 
 
-export type GetMealsQuery = { __typename?: 'Query', meals: Array<{ __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, availableStyles: Array<MealStyle>, category: MealCategory, image: string, isActive: boolean, createdAt?: any | null, updatedAt?: any | null, extras: Array<{ __typename?: 'MealExtraOption', id: string, name: string, price: number }> }> };
+export type GetMealsQuery = { __typename?: 'Query', meals: Array<{ __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, availableStyles: Array<MealStyle>, category: MealCategory, image: string, isActive: boolean, extras: Array<{ __typename?: 'MealExtraOption', id: string, name: string, price: number }> }> };
 
 export type GetMealOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -6752,8 +6752,6 @@ export const GetMealsDocument = gql`
       price
     }
     isActive
-    createdAt
-    updatedAt
   }
 }
     `;

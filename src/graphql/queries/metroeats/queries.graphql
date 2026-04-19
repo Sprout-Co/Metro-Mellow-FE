@@ -15,8 +15,6 @@ query GetMeals($category: MealCategory) {
       price
     }
     isActive
-    createdAt
-    updatedAt
   }
 }
 
