@@ -447,7 +447,7 @@ export type Meal = {
   __typename?: 'Meal';
   availableStyles: Array<MealStyle>;
   category: MealCategory;
-  createdAt: Scalars['DateTime']['output'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
   description: Scalars['String']['output'];
   extras: Array<MealExtraOption>;
   id: Scalars['ID']['output'];
@@ -456,7 +456,7 @@ export type Meal = {
   name: Scalars['String']['output'];
   priceBowl?: Maybe<Scalars['Float']['output']>;
   pricePlate?: Maybe<Scalars['Float']['output']>;
-  updatedAt: Scalars['DateTime']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export enum MealCategory {
@@ -2532,7 +2532,7 @@ export type GetMealsQueryVariables = Exact<{
 }>;
 
 
-export type GetMealsQuery = { __typename?: 'Query', meals: Array<{ __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, availableStyles: Array<MealStyle>, category: MealCategory, image: string, isActive: boolean, createdAt: any, updatedAt: any, extras: Array<{ __typename?: 'MealExtraOption', id: string, name: string, price: number }> }> };
+export type GetMealsQuery = { __typename?: 'Query', meals: Array<{ __typename?: 'Meal', id: string, name: string, description: string, pricePlate?: number | null, priceBowl?: number | null, availableStyles: Array<MealStyle>, category: MealCategory, image: string, isActive: boolean, createdAt?: any | null, updatedAt?: any | null, extras: Array<{ __typename?: 'MealExtraOption', id: string, name: string, price: number }> }> };
 
 export type GetMealOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
