@@ -212,6 +212,23 @@ export default function DashboardTab({
                     </span>
                   )}
                 </div>
+                <div className={styles.orderCardChips}>
+                  <span className={styles.orderCardChip}>
+                    {ord.items.reduce((sum, item) => sum + item.quantity, 0)} items
+                  </span>
+                  <span className={styles.orderCardChip}>
+                    {ord.items.reduce(
+                      (sum, item) =>
+                        sum +
+                        (item.extras?.reduce(
+                          (extraSum, extra) => extraSum + extra.quantity,
+                          0,
+                        ) ?? 0),
+                      0,
+                    )}{" "}
+                    extras
+                  </span>
+                </div>
 
                 <div className={styles.orderCardFooter}>
                   <div className={styles.orderCardMeta}>

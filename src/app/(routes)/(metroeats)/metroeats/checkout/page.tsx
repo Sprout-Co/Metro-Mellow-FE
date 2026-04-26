@@ -645,10 +645,11 @@ export default function CheckoutPage() {
                         (s, e) => s + e.price * e.quantity,
                         0,
                       ) ?? 0);
-                    // Use actual item image if available in your item model, else a branded placeholder
-                    const imageUrl =
-                      (item as any).image ||
-                      `https://placehold.co/100x100/f3f4f6/1a1a1a?text=${item.name.substring(0, 1)}`;
+                    const imageUrl = (item as { image?: string }).image;
+                    const itemInitial = item.name.substring(0, 1).toUpperCase();
+                    const isLocalImage =
+                      typeof imageUrl === "string" &&
+                      (imageUrl.startsWith("/") || imageUrl.startsWith("data:"));
 
                     return (
                       <div
@@ -656,13 +657,29 @@ export default function CheckoutPage() {
                         className={styles.summaryItemRow}
                       >
                         <div className={styles.summaryItemImage}>
-                          <Image
-                            src={imageUrl}
-                            alt={item.name}
-                            width={50}
-                            height={50}
-                            style={{ objectFit: "cover" }}
-                          />
+                          {imageUrl ? (
+                            isLocalImage ? (
+                              <Image
+                                src={imageUrl}
+                                alt={item.name}
+                                width={50}
+                                height={50}
+                                style={{ objectFit: "cover" }}
+                              />
+                            ) : (
+                              <img
+                                src={imageUrl}
+                                alt={item.name}
+                                width={50}
+                                height={50}
+                                style={{ objectFit: "cover" }}
+                              />
+                            )
+                          ) : (
+                            <span className={styles.summaryItemFallback}>
+                              {itemInitial}
+                            </span>
+                          )}
                         </div>
                         <div className={styles.summaryItemDetails}>
                           <span className={styles.summaryItemName}>

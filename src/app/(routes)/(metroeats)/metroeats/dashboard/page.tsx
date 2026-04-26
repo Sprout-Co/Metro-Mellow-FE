@@ -9,6 +9,9 @@ import {
   ChevronLeft,
   User,
   X,
+  ShoppingBag,
+  History,
+  Sparkles,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,10 +22,11 @@ import {
   useGetMealsQuery,
   useGetCurrentUserQuery,
   MealStyle,
+  MealOrderStatus,
 } from "@/graphql/api";
 import { logout } from "@/lib/redux/slices/authSlice";
 import { useMetroEatsCart } from "../_context/MetroEatsCartContext";
-import { ACTIVE_STATUSES, type OrderItem } from "./utils";
+import { ACTIVE_STATUSES, fmt, type OrderItem } from "./utils";
 import DashboardTab from "./_components/DashboardTab/DashboardTab";
 import HistoryTab from "./_components/HistoryTab/HistoryTab";
 import SettingsTab from "./_components/SettingsTab/SettingsTab";
@@ -66,6 +70,30 @@ function ClientDashboardContent() {
       ),
     [mealOrders],
   );
+
+  const dashboardStats = useMemo(() => {
+    const deliveredCount = mealOrders.filter(
+      (order) =>
+        order.mealOrderStatus === MealOrderStatus.Delivered ||
+        order.mealOrderStatus === MealOrderStatus.Received,
+    ).length;
+    const activeCount = mealOrders.filter((order) =>
+      ACTIVE_STATUSES.includes(order.mealOrderStatus),
+    ).length;
+    const totalSpend = mealOrders.reduce(
+      (total, order) => total + (order.totalPrice ?? 0),
+      0,
+    );
+
+    return {
+      totalOrders: mealOrders.length,
+      deliveredCount,
+      activeCount,
+      totalSpend,
+    };
+  }, [mealOrders]);
+
+  const recommendationMeals = useMemo(() => meals.slice(0, 3), [meals]);
 
   const handleReorder = (items: OrderItem[]) => {
     for (const line of items) {
@@ -223,13 +251,120 @@ function ClientDashboardContent() {
           )}
 
           {activeTab === "dashboard" && (
-            <DashboardTab
-              activeOrder={activeOrder}
-              ordersLoading={ordersLoading}
-              recentOrders={recentOrders}
-              onSeeAllFavorites={() => router.push("/metroeats/menu")}
-              onReorder={handleReorder}
-            />
+            <>
+              <section className={styles.overviewSection}>
+                <div className={styles.overviewStats}>
+                  <article className={styles.overviewCard}>
+                    <span className={styles.overviewLabel}>Total Orders</span>
+                    <p className={styles.overviewValue}>
+                      {dashboardStats.totalOrders}
+                    </p>
+                    <span className={styles.overviewMeta}>
+                      {dashboardStats.deliveredCount} delivered
+                    </span>
+                  </article>
+                  <article className={styles.overviewCard}>
+                    <span className={styles.overviewLabel}>Active Orders</span>
+                    <p className={styles.overviewValue}>
+                      {dashboardStats.activeCount}
+                    </p>
+                    <span className={styles.overviewMeta}>
+                      Live order tracking available
+                    </span>
+                  </article>
+                  <article className={styles.overviewCard}>
+                    <span className={styles.overviewLabel}>Total Spend</span>
+                    <p className={styles.overviewValue}>
+                      {fmt(dashboardStats.totalSpend)}
+                    </p>
+                    <span className={styles.overviewMeta}>
+                      Across all MetroEats orders
+                    </span>
+                  </article>
+                </div>
+
+                <div className={styles.overviewActions}>
+                  <button
+                    className={styles.overviewAction}
+                    onClick={() => router.push("/metroeats/menu")}
+                  >
+                    <div className={styles.overviewActionIcon}>
+                      <ShoppingBag size={16} />
+                    </div>
+                    <div>
+                      <p className={styles.overviewActionTitle}>Browse Menu</p>
+                      <p className={styles.overviewActionText}>
+                        Explore today&apos;s meals and combos.
+                      </p>
+                    </div>
+                  </button>
+
+                  <button
+                    className={styles.overviewAction}
+                    onClick={() => setActiveTab("history")}
+                  >
+                    <div className={styles.overviewActionIcon}>
+                      <History size={16} />
+                    </div>
+                    <div>
+                      <p className={styles.overviewActionTitle}>Order History</p>
+                      <p className={styles.overviewActionText}>
+                        Review previous orders and reorder quickly.
+                      </p>
+                    </div>
+                  </button>
+
+                  {recommendationMeals[0] && (
+                    <button
+                      className={styles.overviewAction}
+                      onClick={() =>
+                        handleQuickOrder(
+                          recommendationMeals[0].id,
+                          recommendationMeals[0].name,
+                          recommendationMeals[0].pricePlate ?? 0,
+                          recommendationMeals[0].image ?? undefined,
+                        )
+                      }
+                    >
+                      <div className={styles.overviewActionIcon}>
+                        <Sparkles size={16} />
+                      </div>
+                      <div>
+                        <p className={styles.overviewActionTitle}>
+                          Quick Add: {recommendationMeals[0].name}
+                        </p>
+                        <p className={styles.overviewActionText}>
+                          Add one plate instantly to your cart.
+                        </p>
+                      </div>
+                    </button>
+                  )}
+                </div>
+
+                {mealsLoading && (
+                  <p className={styles.overviewHint}>
+                    Loading meal suggestions...
+                  </p>
+                )}
+                {!mealsLoading && recommendationMeals.length > 1 && (
+                  <p className={styles.overviewHint}>
+                    Suggestions:{" "}
+                    {recommendationMeals
+                      .slice(1)
+                      .map((meal) => meal.name)
+                      .join(" • ")}
+                  </p>
+                )}
+              </section>
+
+              <DashboardTab
+                activeOrder={activeOrder}
+                ordersLoading={ordersLoading}
+                recentOrders={recentOrders}
+                onSeeAllFavorites={() => router.push("/metroeats/menu")}
+                onReorder={handleReorder}
+              />
+            </>
           )}
           {activeTab === "history" && (
             <HistoryTab

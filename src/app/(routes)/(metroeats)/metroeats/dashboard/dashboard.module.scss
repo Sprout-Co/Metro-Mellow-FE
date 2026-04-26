@@ -261,6 +261,118 @@ $me-pending: #6366f1;
   }
 }
 
+// ─── DASHBOARD OVERVIEW ──────────────────────────────────
+.overviewSection {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("md");
+}
+
+.overviewStats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: spacing("md");
+
+  @include breakpoint-down("md") {
+    grid-template-columns: 1fr;
+  }
+}
+
+.overviewCard {
+  background: $me-card;
+  border: 1px solid $me-border;
+  border-radius: border-radius("lg");
+  padding: spacing("lg");
+  display: flex;
+  flex-direction: column;
+  gap: spacing("xs");
+}
+
+.overviewLabel {
+  @include font-size("xs");
+  @include font-weight("semibold");
+  color: $me-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.overviewValue {
+  margin: 0;
+  color: $me-dark;
+  font-family: $font-family-heading;
+  font-size: clamp(1.375rem, 2.6vw, 1.75rem);
+  @include font-weight("bold");
+}
+
+.overviewMeta {
+  @include font-size("sm");
+  color: $me-muted;
+}
+
+.overviewActions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: spacing("sm");
+
+  @include breakpoint-down("md") {
+    grid-template-columns: 1fr;
+  }
+}
+
+.overviewAction {
+  border: 1px solid $me-border;
+  border-radius: border-radius("lg");
+  background: $me-card;
+  padding: spacing("md");
+  display: flex;
+  align-items: flex-start;
+  gap: spacing("sm");
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+
+  &:hover {
+    border-color: darken($me-border, 12%);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+  }
+}
+
+.overviewActionIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: border-radius("pill");
+  background: rgba($me-yellow, 0.2);
+  color: $me-dark;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.overviewActionTitle {
+  margin: 0;
+  @include font-size("sm");
+  @include font-weight("semibold");
+  color: $me-dark;
+}
+
+.overviewActionText {
+  margin: spacing("xs") 0 0;
+  @include font-size("xs");
+  color: $me-muted;
+  line-height: 1.5;
+}
+
+.overviewHint {
+  margin: 0;
+  @include font-size("sm");
+  color: $me-muted;
+}
+
 // ─── CONTENT SECTIONS ────────────────────────────────────
 .section {
   display: flex;
@@ -937,6 +1049,25 @@ $me-pending: #6366f1;
   color: darken($me-muted, 10%);
 }
 
+.orderCardChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: spacing("xs");
+  margin-bottom: spacing("md");
+}
+
+.orderCardChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border: 1px solid $me-border;
+  border-radius: border-radius("pill");
+  @include font-size("xs");
+  @include font-weight("medium");
+  color: $me-muted;
+  background: $me-card;
+}
+
 .orderCardFooter {
   display: flex;
   align-items: center;
@@ -988,6 +1119,135 @@ $me-pending: #6366f1;
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 4px;
+}
+
+// ─── HISTORY TAB DETAILS ─────────────────────────────────
+.historySummary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: spacing("md");
+
+  @include breakpoint-down("sm") {
+    grid-template-columns: 1fr;
+  }
+}
+
+.historySummaryCard {
+  background: $me-card;
+  border: 1px solid $me-border;
+  border-radius: border-radius("lg");
+  padding: spacing("lg");
+  display: flex;
+  flex-direction: column;
+  gap: spacing("xs");
+}
+
+.historySummaryLabel {
+  @include font-size("xs");
+  @include font-weight("semibold");
+  color: $me-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.historySummaryValue {
+  margin: 0;
+  color: $me-dark;
+  font-family: $font-family-heading;
+  @include font-size("h5");
+  @include font-weight("bold");
+}
+
+.historyCards {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("md");
+}
+
+.historyCard {
+  background: $me-card;
+  border: 1px solid $me-border;
+  border-radius: 14px;
+  padding: spacing("lg");
+  display: flex;
+  flex-direction: column;
+  gap: spacing("md");
+}
+
+.historyCardTop {
+  display: flex;
+  justify-content: space-between;
+  gap: spacing("md");
+}
+
+.historyCardTopRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: spacing("xs");
+}
+
+.historyCardId {
+  margin: 0;
+  @include font-weight("bold");
+  @include font-size("body-2");
+  color: $me-dark;
+  font-family: monospace;
+}
+
+.historyCardDate {
+  margin: 2px 0 0;
+  @include font-size("xs");
+  color: $me-muted;
+}
+
+.historyCardTotal {
+  @include font-weight("bold");
+  @include font-size("body-2");
+  color: $me-dark;
+}
+
+.historyItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: spacing("xs");
+}
+
+.historyItemChip {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: border-radius("pill");
+  background: rgba($me-yellow, 0.15);
+  color: $me-dark;
+  @include font-size("xs");
+  @include font-weight("medium");
+}
+
+.historyItemChipMuted {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: border-radius("pill");
+  background: rgba($me-dark, 0.05);
+  color: $me-muted;
+  @include font-size("xs");
+  @include font-weight("medium");
+}
+
+.historyCardBottom {
+  display: flex;
+  align-items: center;
+  gap: spacing("sm");
+  flex-wrap: wrap;
+
+  button {
+    margin-left: auto;
+  }
+}
+
+.historyMeta {
+  @include font-size("xs");
+  @include font-weight("medium");
+  color: $me-muted;
 }
 
 // ─── SETTINGS ────────────────────────────────────────────

@@ -26,6 +26,11 @@ export default function HistoryTab({
   onGoToDashboard,
   onReorder,
 }: HistoryTabProps) {
+  const totalSpent = recentOrders.reduce(
+    (sum, order) => sum + (order.totalPrice ?? 0),
+    0,
+  );
+
   return (
     <div className={styles.section}>
       {ordersLoading ? (
@@ -33,55 +38,111 @@ export default function HistoryTab({
       ) : recentOrders.length === 0 ? (
         <p className={styles.empty}>No orders yet.</p>
       ) : (
-        <div className={styles.orderList}>
-          <div className={`${styles.orderRow} ${styles.orderRowHead}`}>
-            <span>Order</span>
-            <span>Date</span>
-            <span>Total</span>
-            <span>Status</span>
-            <span />
+        <>
+          <div className={styles.historySummary}>
+            <div className={styles.historySummaryCard}>
+              <span className={styles.historySummaryLabel}>Total Orders</span>
+              <p className={styles.historySummaryValue}>{recentOrders.length}</p>
+            </div>
+            <div className={styles.historySummaryCard}>
+              <span className={styles.historySummaryLabel}>Total Spend</span>
+              <p className={styles.historySummaryValue}>{fmt(totalSpent)}</p>
+            </div>
+            <div className={styles.historySummaryCard}>
+              <span className={styles.historySummaryLabel}>Active</span>
+              <p className={styles.historySummaryValue}>
+                {
+                  recentOrders.filter((order) =>
+                    ACTIVE_STATUSES.includes(order.mealOrderStatus),
+                  ).length
+                }
+              </p>
+            </div>
           </div>
-          {recentOrders.map((order) => {
-            const isActive = ACTIVE_STATUSES.includes(order.mealOrderStatus);
-            return (
-              <div className={styles.orderRow} key={order.id}>
-                <span className={`${styles.orderCell} ${styles.orderCellId}`}>
-                  {orderDisplayId(order.id)}
-                </span>
-                <span className={`${styles.orderCell} ${styles.orderCellDate}`}>
-                  {formatOrderDate(order.createdAt)}
-                </span>
-                <span className={`${styles.orderCell} ${styles.orderCellTotal}`}>
-                  {fmt(order.totalPrice)}
-                </span>
-                <span className={`${styles.orderCell} ${styles.orderCellStatus}`}>
-                  <span
-                    className={`${styles.badge} ${getStatusBadgeClass(order.mealOrderStatus, styles)}`}
-                  >
-                    {statusLabel(order.mealOrderStatus)}
-                  </span>
-                </span>
-                <span className={`${styles.orderCell} ${styles.orderCellAction}`}>
-                  {isActive ? (
-                    <button
-                      className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
-                      onClick={onGoToDashboard}
-                    >
-                      Track
-                    </button>
-                  ) : (
-                    <button
-                      className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
-                      onClick={() => onReorder(order.items)}
-                    >
-                      Reorder
-                    </button>
-                  )}
-                </span>
-              </div>
-            );
-          })}
-        </div>
+
+          <div className={styles.historyCards}>
+            {recentOrders.map((order) => {
+              const isActive = ACTIVE_STATUSES.includes(order.mealOrderStatus);
+              const totalItems = order.items.reduce(
+                (sum, item) => sum + item.quantity,
+                0,
+              );
+
+              return (
+                <article className={styles.historyCard} key={order.id}>
+                  <div className={styles.historyCardTop}>
+                    <div>
+                      <p className={styles.historyCardId}>
+                        {orderDisplayId(order.id)}
+                      </p>
+                      <p className={styles.historyCardDate}>
+                        {formatOrderDate(order.createdAt)}
+                      </p>
+                    </div>
+                    <div className={styles.historyCardTopRight}>
+                      <span className={styles.historyCardTotal}>
+                        {fmt(order.totalPrice)}
+                      </span>
+                      <span
+                        className={`${styles.badge} ${getStatusBadgeClass(order.mealOrderStatus, styles)}`}
+                      >
+                        {statusLabel(order.mealOrderStatus)}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className={styles.historyItems}>
+                    {order.items.slice(0, 3).map((item, idx) => (
+                      <span key={idx} className={styles.historyItemChip}>
+                        {item.quantity}x {item.meal.name}
+                      </span>
+                    ))}
+                    {order.items.length > 3 && (
+                      <span className={styles.historyItemChipMuted}>
+                        +{order.items.length - 3} more meals
+                      </span>
+                    )}
+                  </div>
+
+                  <div className={styles.historyCardBottom}>
+                    <span className={styles.historyMeta}>
+                      {totalItems} item{totalItems === 1 ? "" : "s"}
+                    </span>
+                    <span className={styles.historyMeta}>
+                      {
+                        order.items.reduce(
+                          (sum, item) =>
+                            sum +
+                            (item.extras?.reduce(
+                              (extraSum, extra) => extraSum + extra.quantity,
+                              0,
+                            ) ?? 0),
+                          0,
+                        )
+                      }{" "}
+                      extras
+                    </span>
+                    {isActive ? (
+                      <button
+                        className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
+                        onClick={onGoToDashboard}
+                      >
+                        Track
+                      </button>
+                    ) : (
+                      <button
+                        className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
+                        onClick={() => onReorder(order.items)}
+                      >
+                        Reorder
+                      </button>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </>
       )}
     </div>
   );
