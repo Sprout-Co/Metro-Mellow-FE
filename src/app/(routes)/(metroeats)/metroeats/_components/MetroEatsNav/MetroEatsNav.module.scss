@@ -1,266 +1,513 @@
-$me-yellow: #ffcc00;
-$me-dark: #1a1a1a;
+// ─── METROEATS NAVBAR — REDESIGNED ───────────────────────
+// All values resolved through the Metro Mellow design system.
 
+$me-yellow: color("metroeats", "yellow");
+$me-yellow-soft: color("accent", "lighter");
+$me-dark: color("metroeats", "dark");
+$me-dark-60: color("neutral", "darkest");
+$me-orange: color("secondary", "base");
+$me-card: color("neutral", "white");
+$me-bg: color("neutral", "lightest");
+$me-bg-soft: color("neutral", "lighter");
+$me-border: color("neutral", "light");
+$me-border-soft: color("neutral", "lighter");
+$me-muted: color("neutral", "dark");
+
+// ─── ROOT ────────────────────────────────────────────────
 .nav {
   position: fixed;
-  top: 12px;
-  left: 16px;
-  right: 16px;
-  z-index: 100;
+  top: spacing("sm");
+  left: spacing("md");
+  right: spacing("md");
+  z-index: z-index("sticky");
 
-  /* Mobile default styling */
-  border-radius: 24px;
-  background-color: rgba(35, 35, 35, 0.3);
-  border: 1px solid rgba(235, 235, 235, 0.1);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px 0 rgba(104, 104, 104, 0.37);
-  color: #000;
-  transition: all 0.3s ease;
+  background: $me-card;
+  border: 1px solid $me-border-soft;
+  border-radius: border-radius("3xl");
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+  color: $me-dark;
+  transition:
+    box-shadow 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
 
-  /* Desktop floating styling */
   @include breakpoint-up("md") {
-    top: 20px;
+    top: spacing("md");
     left: 50%;
     right: auto;
-    width: 70%;
     transform: translateX(-50%);
-    border-radius: 43px;
+    width: min(1100px, calc(100% - #{spacing("xl")}));
+    border-radius: border-radius("pill");
   }
+}
 
-  &__inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 10px 16px; /* Tighter padding on mobile */
+.navScrolled {
+  background: $me-card;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+  border-color: $me-border-soft;
+}
+
+.navInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: spacing("xs") spacing("md");
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: spacing("sm");
+
+  @include breakpoint-up("md") {
+    padding: spacing("xs") spacing("md") spacing("xs") spacing("lg");
+    gap: spacing("md");
+  }
+}
+
+// ─── LOGO ────────────────────────────────────────────────
+.logo {
+  line-height: 0;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.logoImage {
+  width: 110px;
+  height: auto;
+
+  @include breakpoint-up("md") {
+    width: 132px;
+  }
+}
+
+// ─── DESKTOP LINKS ───────────────────────────────────────
+.links {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  justify-content: center;
+
+  @include breakpoint-up("md") {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+  }
+}
 
-    @include breakpoint-up("md") {
-      padding: 14px spacing("lg");
-      gap: spacing("lg");
-    }
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px spacing("md");
+  border-radius: border-radius("pill");
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: $me-dark-60;
+  text-decoration: none;
+  font-family: $font-family-base;
+  @include font-size("sm");
+  @include font-weight("semibold");
+  letter-spacing: -0.01em;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+
+  &:hover {
+    background: $me-bg;
+    color: $me-dark;
+  }
+}
+
+.linkIcon {
+  color: $me-muted;
+  transition: color 0.15s ease;
+}
+
+.linkChevron {
+  transition: transform 0.2s ease;
+  color: $me-muted;
+}
+
+.linkChevronOpen {
+  transform: rotate(180deg);
+}
+
+.linkActive {
+  background: $me-dark;
+  color: $me-yellow;
+
+  .linkIcon,
+  .linkChevron {
+    color: $me-yellow;
   }
 
-  &__logo {
-    line-height: 0;
-    flex-shrink: 0;
-    display: flex;
+  &:hover {
+    background: $me-dark;
+    color: $me-yellow;
+  }
+}
 
-    img {
-      width: 110px; /* Scaled down for mobile */
-      height: auto;
+// ─── DROPDOWN ────────────────────────────────────────────
+.menuDropdown {
+  position: relative;
+}
 
-      @include breakpoint-up("md") {
-        width: 140px;
-      }
-    }
+.dropdown {
+  position: absolute;
+  top: calc(100% + #{spacing("xs")});
+  left: 50%;
+  transform: translateX(-50%);
+  background: $me-card;
+  border-radius: border-radius("2xl");
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid $me-border-soft;
+  overflow: hidden;
+  min-width: 280px;
+  z-index: 110;
+  padding: spacing("xs");
+}
+
+.dropItem {
+  display: flex;
+  align-items: center;
+  gap: spacing("sm");
+  padding: spacing("sm") spacing("md");
+  @include font-size("sm");
+  @include font-weight("medium");
+  color: $me-dark;
+  text-decoration: none;
+  border-radius: border-radius("xl");
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: $me-bg;
+  }
+}
+
+.dropItemActive {
+  background: $me-bg;
+
+  .dropItemIcon {
+    background: $me-dark;
+    color: $me-yellow;
   }
 
-  &__links {
-    display: none;
-    align-items: center;
-    gap: spacing("2xl");
+  .dropItemLabel {
+    color: $me-dark;
+  }
+}
 
-    @include breakpoint-up("md") {
-      display: flex;
-    }
+.dropItemIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: border-radius("xl");
+  background: rgba($me-yellow, 0.18);
+  color: $me-dark;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: $transition-fast;
+}
+
+.dropItemLabel {
+  display: block;
+  @include font-size("sm");
+  @include font-weight("semibold");
+  color: $me-dark;
+}
+
+.dropItemHint {
+  display: block;
+  margin-top: 2px;
+  @include font-size("xs");
+  @include font-weight("regular");
+  color: $me-muted;
+}
+
+.dropItemFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  padding: spacing("sm") spacing("md");
+  background: $me-dark;
+  color: $me-yellow;
+  border-radius: border-radius("xl");
+  text-decoration: none;
+  @include font-size("sm");
+  @include font-weight("semibold");
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: $me-dark-60;
+  }
+}
+
+// ─── ACTIONS ─────────────────────────────────────────────
+.actions {
+  display: flex;
+  align-items: center;
+  gap: spacing("xs");
+  flex-shrink: 0;
+
+  @include breakpoint-up("md") {
+    gap: spacing("sm");
+  }
+}
+
+.cart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: $me-bg;
+  border: 1px solid transparent;
+  border-radius: border-radius("pill");
+  color: $me-dark;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+
+  &:hover {
+    background: $me-bg-soft;
+    border-color: $me-border-soft;
+    transform: translateY(-1px);
   }
 
-  &__link {
-    @include font-size("sm");
-    @include font-weight("bold");
-    color: color("metroeats", "white");
-    text-decoration: none;
-    letter-spacing: -0.01em;
-    transition: opacity 0.15s;
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.cartBadge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: $me-orange;
+  color: $me-card;
+  @include font-size("xxs");
+  @include font-weight("bold");
+  border-radius: border-radius("pill");
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid $me-card;
+  line-height: 1;
+}
+
+.orderBtn {
+  display: none;
+
+  @include breakpoint-up("md") {
     display: inline-flex;
     align-items: center;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    font-family: inherit;
-
-    &:hover {
-      opacity: 0.6;
-    }
-  }
-
-  &__menuDropdown {
-    position: relative;
-  }
-
-  &__dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    margin-top: 8px;
-    background: color("neutral", "white");
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    overflow: hidden;
-    min-width: 160px;
-    z-index: 110;
-  }
-
-  &__dropItem {
-    display: block;
-    padding: 12px spacing("lg");
+    gap: 6px;
+    padding: 9px spacing("lg");
+    background: $me-dark;
+    color: $me-yellow;
     @include font-size("sm");
-    @include font-weight("medium");
-    color: $me-dark;
+    @include font-weight("bold");
     text-decoration: none;
-    transition: background 0.15s;
+    border-radius: border-radius("pill");
+    letter-spacing: -0.01em;
+    transition:
+      background 0.15s ease,
+      transform 0.15s ease,
+      box-shadow 0.15s ease;
+    box-shadow: 0 4px 12px rgba($me-dark, 0.18);
 
     &:hover {
-      background: rgba(0, 0, 0, 0.03);
-    }
-
-    &:not(:last-child) {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-    }
-  }
-
-  &__actions {
-    display: flex;
-    align-items: center;
-    gap: 12px; /* Smaller gap on mobile */
-
-    @include breakpoint-up("md") {
-      gap: spacing("sm");
-    }
-  }
-
-  &__orderBtn {
-    display: none; /* Hide main order button on mobile to save space */
-
-    @include breakpoint-up("md") {
-      display: block;
-      padding: 10px spacing("xl");
       background: $me-yellow;
       color: $me-dark;
-      @include font-size("sm");
-      @include font-weight("semibold");
-      text-decoration: none;
-      border-radius: border-radius("pill");
-      letter-spacing: -0.01em;
-      transition: opacity 0.15s;
-
-      &:hover {
-        opacity: 0.85;
-      }
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba($me-yellow, 0.4);
     }
-  }
-
-  &__cart {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 38px;
-    height: 38px;
-    background: none;
-    border: 1.5px solid rgba(255, 255, 255, 0.2); /* Softer border for glassmorphism */
-    border-radius: border-radius("full");
-    color: color(
-      "metroeats",
-      "white"
-    ); /* Changed to white to match your white-on-yellow logo intent */
-    cursor: pointer;
-    transition: background 0.15s;
-
-    @include breakpoint-up("md") {
-      border: 1.5px solid rgba(0, 0, 0, 0.1);
-      color: $me-dark;
-    }
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.05);
-    }
-  }
-
-  &__cartBadge {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    width: 18px;
-    height: 18px;
-    background: $me-yellow;
-    color: $me-dark;
-    @include font-size("xxs");
-    @include font-weight("bold");
-    border-radius: border-radius("full");
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__burger {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 5px;
-    width: 36px;
-    height: 36px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 6px;
-
-    span {
-      display: block;
-      height: 2px;
-      width: 100%;
-      background: color(
-        "metroeats",
-        "white"
-      ); /* Contrast for glassmorphism header */
-      border-radius: 2px;
-      transition: all 0.3s ease;
-    }
-
-    @include breakpoint-up("md") {
-      display: none;
-    }
-  }
-
-  &__mobile {
-    overflow: hidden;
-    background: color("neutral", "white");
-    border-top: 1px solid rgba(0, 0, 0, 0.06);
-    border-radius: 0 0 24px 24px; /* Matches the new mobile container curve */
-
-    @include breakpoint-up("md") {
-      display: none;
-    }
-  }
-
-  &__mobileLink {
-    display: block;
-    padding: spacing("md") spacing("lg");
-    @include font-size("body-2");
-    @include font-weight("medium");
-    color: $me-dark;
-    text-decoration: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
 
     &:active {
-      background: rgba(0, 0, 0, 0.02);
+      transform: translateY(0);
     }
   }
+}
 
-  &__mobileOrder {
-    display: block;
-    margin: spacing("md") spacing("lg");
-    padding: 14px spacing("lg");
-    background: $me-yellow;
-    color: $me-dark;
-    @include font-size("body-2");
-    @include font-weight("semibold");
-    text-align: center;
-    text-decoration: none;
-    border-radius: border-radius("xl");
+// ─── BURGER ──────────────────────────────────────────────
+.burger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: $me-bg;
+  border: 1px solid transparent;
+  border-radius: border-radius("pill");
+  cursor: pointer;
+  padding: 0;
+  color: $me-dark;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+
+  &:hover {
+    background: $me-bg-soft;
+    border-color: $me-border-soft;
+  }
+
+  @include breakpoint-up("md") {
+    display: none;
+  }
+}
+
+.burgerOpen {
+  background: $me-dark;
+  color: $me-yellow;
+
+  &:hover {
+    background: $me-dark;
+    color: $me-yellow;
+  }
+}
+
+.burgerIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ─── MOBILE MENU ─────────────────────────────────────────
+.mobileBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba($me-dark, 0.32);
+  backdrop-filter: blur(2px);
+  z-index: 90;
+
+  @include breakpoint-up("md") {
+    display: none;
+  }
+}
+
+.mobile {
+  position: absolute;
+  top: calc(100% + #{spacing("xs")});
+  left: 0;
+  right: 0;
+  background: $me-card;
+  border: 1px solid $me-border-soft;
+  border-radius: border-radius("3xl");
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.18);
+  padding: spacing("md");
+  display: flex;
+  flex-direction: column;
+  gap: spacing("md");
+  z-index: 100;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+
+  @include breakpoint-up("md") {
+    display: none;
+  }
+}
+
+.mobileGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mobileGroupLabel {
+  @include font-size("xs");
+  @include font-weight("semibold");
+  color: $me-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: spacing("xs") spacing("sm");
+}
+
+.mobileLink {
+  display: flex;
+  align-items: center;
+  gap: spacing("sm");
+  padding: spacing("sm") spacing("sm");
+  border-radius: border-radius("xl");
+  text-decoration: none;
+  color: $me-dark;
+  transition: background 0.15s ease;
+
+  &:active {
+    background: $me-bg;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background: $me-bg;
+    }
+  }
+}
+
+.mobileLinkIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: border-radius("xl");
+  background: rgba($me-yellow, 0.18);
+  color: $me-dark;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mobileLinkText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mobileLinkLabel {
+  @include font-size("body-2");
+  @include font-weight("semibold");
+  color: $me-dark;
+  line-height: 1.2;
+}
+
+.mobileLinkHint {
+  @include font-size("xs");
+  color: $me-muted;
+  line-height: 1.4;
+}
+
+.mobileCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: spacing("xs");
+  padding: spacing("md") spacing("lg");
+  background: $me-yellow;
+  color: $me-dark;
+  @include font-size("body-2");
+  @include font-weight("bold");
+  text-align: center;
+  text-decoration: none;
+  border-radius: border-radius("pill");
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
+
+  &:hover {
+    background: color-darken("accent", "base", 6%);
+  }
+
+  &:active {
+    transform: translateY(1px);
   }
 }
