@@ -5,6 +5,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -78,6 +79,7 @@ interface MetroEatsCartContextValue {
 const MetroEatsCartContext = createContext<MetroEatsCartContextValue | null>(
   null,
 );
+const METROEATS_CART_STORAGE_KEY = "metroeats-cart-v1";
 
 function generateLineId() {
   return `line-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -123,6 +125,34 @@ export function MetroEatsCartProvider({
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [mealToCustomize, setMealToCustomize] =
     useState<MealToCustomize | null>(null);
+
+  useEffect(() => {
+    try {
+      const storedItems = window.localStorage.getItem(METROEATS_CART_STORAGE_KEY);
+      if (!storedItems) return;
+
+      const parsed = JSON.parse(storedItems);
+      if (Array.isArray(parsed)) {
+        setItems(parsed as CartLineItem[]);
+      } else {
+        window.localStorage.removeItem(METROEATS_CART_STORAGE_KEY);
+      }
+    } catch {
+      window.localStorage.removeItem(METROEATS_CART_STORAGE_KEY);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (items.length === 0) {
+      window.localStorage.removeItem(METROEATS_CART_STORAGE_KEY);
+      return;
+    }
+
+    window.localStorage.setItem(
+      METROEATS_CART_STORAGE_KEY,
+      JSON.stringify(items),
+    );
+  }, [items]);
 
   const openCart = useCallback(() => setIsCartOpen(true), []);
   const closeCart = useCallback(() => setIsCartOpen(false), []);
