@@ -79,7 +79,6 @@ export default function CheckoutPage() {
   const [password, setPassword] = useState("");
   const [street, setStreet] = useState("");
   const [isStreetAddressSelected, setIsStreetAddressSelected] = useState(false);
-  const [serviceArea, setServiceArea] = useState("");
   const [specialInstructions, setSpecialInstructions] = useState("");
   const [registerError, setRegisterError] = useState<string | null>(null);
   const [createdOrderId, setCreatedOrderId] = useState<string | null>(null);
@@ -95,7 +94,7 @@ export default function CheckoutPage() {
     handleCreateMealOrder,
     createMealOrderLoading,
     handleGetCheckoutQuote,
-    checkoutQuote: quote,
+    checkoutQuote,
     checkoutQuoteLoading,
     checkoutQuoteError,
   } = useMetroeatsOperations();
@@ -113,33 +112,14 @@ export default function CheckoutPage() {
     paymentInitializing ||
     verifyPaymentLoading;
 
-  const serviceAreas = [
-    { name: "Yaba", deliveryCost: 3500 },
-    { name: "Ikoyi", deliveryCost: 3000 },
-    { name: "Victoria Island", deliveryCost: 3000 },
-    { name: "Lekki Phase 1", deliveryCost: 3000 },
-    { name: "Ikate", deliveryCost: 2500 },
-    { name: "Osapa", deliveryCost: 2000 },
-    { name: "Agungi", deliveryCost: 2000 },
-    { name: "Chevron", deliveryCost: 1500 },
-    { name: "Orchid Rd", deliveryCost: 1500 },
-    { name: "Ikota", deliveryCost: 1500 },
-    { name: "VGC", deliveryCost: 1500 },
-    { name: "Ajah", deliveryCost: 1500 },
-    { name: "Badore", deliveryCost: 2500 },
-    { name: "Abraham Adesanya", deliveryCost: 2000 },
-    { name: "Ogombo", deliveryCost: 2500 },
-    { name: "Sangotedo", deliveryCost: 3000 },
-  ];
-  const hasServiceAreas = serviceAreas.length > 0;
   const quoteAddress = me
     ? isAddingNewAddress
-      ? street.trim() && isStreetAddressSelected && serviceArea
-        ? `${street.trim()}, ${serviceArea}`
+      ? street.trim() && isStreetAddressSelected
+        ? street.trim()
         : ""
       : address
-    : !isLoginMode && street.trim() && isStreetAddressSelected && serviceArea
-      ? `${street.trim()}, ${serviceArea}`
+    : !isLoginMode && street.trim() && isStreetAddressSelected
+      ? street.trim()
       : "";
   const quoteItems = useMemo(
     () =>
@@ -164,23 +144,17 @@ export default function CheckoutPage() {
       }),
     [items],
   );
-  const subtotal = quote?.subtotal ?? cartTotal;
-  const deliveryFee = quote?.deliveryFee ?? 0;
-  const serviceCharge = quote?.serviceCharge ?? 0;
+  const subtotal = checkoutQuote?.subtotal ?? cartTotal;
+  const deliveryFee = checkoutQuote?.deliveryFee ?? 0;
+  const serviceCharge = checkoutQuote?.serviceCharge ?? 0;
   const orderTotal =
-    quote?.totalPrice ?? subtotal + deliveryFee + serviceCharge;
+    checkoutQuote?.totalPrice ?? subtotal + deliveryFee + serviceCharge;
 
   useEffect(() => {
     if (addresses.length > 0 && !address) {
       setAddress(addresses[0] ?? "");
     }
   }, [addresses, address]);
-
-  // useEffect(() => {
-  //   if (hasServiceAreas && !serviceArea) {
-  //     setServiceArea(serviceAreas[0].name);
-  //   }
-  // }, [hasServiceAreas, serviceAreas, serviceArea]);
 
   // Default to adding a new address if the logged-in user has no addresses
   useEffect(() => {
@@ -202,6 +176,7 @@ export default function CheckoutPage() {
     // In a real app, specialInstructions would be added to the input payload here
     const order = await handleCreateMealOrder({
       address: targetAddress,
+      notes: specialInstructions.trim() || undefined,
       items: items.map((line) => {
         const item: {
           mealId: string;
@@ -266,9 +241,8 @@ export default function CheckoutPage() {
         let finalAddress = address;
 
         if (isAddingNewAddress) {
-          if (!street.trim() || !serviceArea || !isStreetAddressSelected)
-            return;
-          finalAddress = street.trim() + ", " + serviceArea;
+          if (!street.trim() || !isStreetAddressSelected) return;
+          finalAddress = street.trim();
         } else {
           if (!finalAddress) return;
         }
@@ -287,7 +261,7 @@ export default function CheckoutPage() {
       ) {
         return;
       }
-      if (!street.trim() || !serviceArea || !isStreetAddressSelected) {
+      if (!street.trim() || !isStreetAddressSelected) {
         return;
       }
 
@@ -298,7 +272,7 @@ export default function CheckoutPage() {
         password,
         phone: phone.trim() || undefined,
         role: UserRole.Customer,
-        address: street.trim() + ", " + serviceArea,
+        address: street.trim(),
         channel: Channel.MetroeatsWebsite,
       });
 
@@ -334,7 +308,7 @@ export default function CheckoutPage() {
   }
 
   const canSubmitLoggedIn = isAddingNewAddress
-    ? !!street.trim() && isStreetAddressSelected && !!serviceArea
+    ? !!street.trim() && isStreetAddressSelected
     : !!address && addresses.length > 0;
 
   const canSubmitGuest = isLoginMode
@@ -344,8 +318,7 @@ export default function CheckoutPage() {
       !!email.trim() &&
       password.length >= MIN_PASSWORD_LENGTH &&
       !!street.trim() &&
-      isStreetAddressSelected &&
-      !!serviceArea;
+      isStreetAddressSelected;
 
   const canSubmit = isGuest ? canSubmitGuest : canSubmitLoggedIn;
 
@@ -521,35 +494,6 @@ export default function CheckoutPage() {
                               placeholder="Search for your address..."
                             />
                           </div>
-
-                          {/* {hasServiceAreas && (
-                            <div className={styles.inputGroup}>
-                              <label htmlFor="serviceArea">Service Area</label>
-                              <div className={styles.selectWrapper}>
-                                <select
-                                  id="serviceArea"
-                                  value={serviceArea}
-                                  onChange={(e) =>
-                                    setServiceArea(e.target.value)
-                                  }
-                                  required
-                                >
-                                  <option value="">Select service area</option>
-                                  {serviceAreas.map((area) => (
-                                    <option
-                                      key={
-                                        area.name ||
-                                        "serviceArea-" + Math.random()
-                                      }
-                                      value={area.name}
-                                    >
-                                      {area.name}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
-                            </div>
-                          )} */}
                         </>
                       )}
                     </div>
@@ -598,35 +542,6 @@ export default function CheckoutPage() {
                               placeholder="Search for your address..."
                             />
                           </div>
-                          {/* 
-                          {hasServiceAreas && (
-                            <div className={styles.inputGroup}>
-                              <label htmlFor="serviceArea">Service Area</label>
-                              <div className={styles.selectWrapper}>
-                                <select
-                                  id="serviceArea"
-                                  value={serviceArea}
-                                  onChange={(e) =>
-                                    setServiceArea(e.target.value)
-                                  }
-                                  required
-                                >
-                                  <option value="">Select service area</option>
-                                  {serviceAreas.map((area) => (
-                                    <option
-                                      key={
-                                        area.name ||
-                                        "serviceArea-" + Math.random()
-                                      }
-                                      value={area.name}
-                                    >
-                                      {area.name}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
-                            </div>
-                          )} */}
                         </>
                       ) : (
                         <div

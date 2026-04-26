@@ -265,6 +265,7 @@ export type CreateBookingInput = {
 export type CreateMealOrderInput = {
   address: Scalars['String']['input'];
   items: Array<MealOrderItemInput>;
+  notes?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateNotificationInput = {
