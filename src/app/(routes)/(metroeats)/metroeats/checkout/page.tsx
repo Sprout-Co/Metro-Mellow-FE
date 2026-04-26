@@ -1,19 +1,19 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   useGetCurrentUserQuery,
-  useCreateMealOrderMutation,
-  useActiveServiceAreasQuery,
   MealStyle,
   UserRole,
   Channel,
 } from "@/graphql/api";
 import { Routes } from "@/constants/routes";
 import { useAuthOperations } from "@/graphql/hooks/auth/useAuthOperations";
+import { useMetroeatsOperations } from "@/graphql/hooks/metroeats/useMetroeatsOperations";
+import { PlacesAutocomplete } from "@/components/ui/PlacesAutocomplete/PlacesAutocomplete";
 import { useMetroEatsCart } from "../_context/MetroEatsCartContext";
 import { useMetroEatsPayment } from "@/hooks/useMetroEatsPayment";
 import PaymentSuccessModal from "./_components/PaymentSuccessModal/PaymentSuccessModal";
@@ -21,7 +21,6 @@ import styles from "./checkout.module.scss";
 
 const fmt = (n: number) => `₦${n.toLocaleString()}`;
 
-const DELIVERY_FEE = 1500;
 const MIN_PASSWORD_LENGTH = 5;
 
 // --- Icons ---
@@ -65,11 +64,8 @@ export default function CheckoutPage() {
     loading: userLoading,
     refetch: refetchUser,
   } = useGetCurrentUserQuery();
-  const [createMealOrder, { loading: orderLoading, error: submitError }] =
-    useCreateMealOrderMutation();
   const { handleRegisterAndSignIn, handleLogin, registerLoading } =
     useAuthOperations();
-  const { data: serviceAreasData } = useActiveServiceAreasQuery();
 
   const [address, setAddress] = useState("");
   const [isLoginMode, setIsLoginMode] = useState(false);
@@ -82,6 +78,7 @@ export default function CheckoutPage() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [street, setStreet] = useState("");
+  const [isStreetAddressSelected, setIsStreetAddressSelected] = useState(false);
   const [serviceArea, setServiceArea] = useState("");
   const [specialInstructions, setSpecialInstructions] = useState("");
   const [registerError, setRegisterError] = useState<string | null>(null);
@@ -93,8 +90,15 @@ export default function CheckoutPage() {
 
   const me = userData?.me;
   const addresses = me?.addresses?.filter(Boolean) ?? [];
-  const orderTotal = cartTotal + DELIVERY_FEE;
   const isGuest = !me;
+  const {
+    handleCreateMealOrder,
+    createMealOrderLoading,
+    handleGetCheckoutQuote,
+    checkoutQuote: quote,
+    checkoutQuoteLoading,
+    checkoutQuoteError,
+  } = useMetroeatsOperations();
   const {
     initializeMealPayment,
     loading: paymentInitializing,
@@ -104,7 +108,7 @@ export default function CheckoutPage() {
   } = useMetroEatsPayment();
 
   const submitting =
-    orderLoading ||
+    createMealOrderLoading ||
     registerLoading ||
     paymentInitializing ||
     verifyPaymentLoading;
@@ -128,6 +132,43 @@ export default function CheckoutPage() {
     { name: "Sangotedo", deliveryCost: 3000 },
   ];
   const hasServiceAreas = serviceAreas.length > 0;
+  const quoteAddress = me
+    ? isAddingNewAddress
+      ? street.trim() && isStreetAddressSelected && serviceArea
+        ? `${street.trim()}, ${serviceArea}`
+        : ""
+      : address
+    : !isLoginMode && street.trim() && isStreetAddressSelected && serviceArea
+      ? `${street.trim()}, ${serviceArea}`
+      : "";
+  const quoteItems = useMemo(
+    () =>
+      items.map((line) => {
+        const item: {
+          mealId: string;
+          quantity: number;
+          style: MealStyle;
+          extras?: { extraId: string; quantity: number }[];
+        } = {
+          mealId: line.mealId,
+          quantity: line.quantity,
+          style: line.style as MealStyle,
+        };
+        if (line.extras?.length) {
+          item.extras = line.extras.map((e) => ({
+            extraId: e.id,
+            quantity: e.quantity,
+          }));
+        }
+        return item;
+      }),
+    [items],
+  );
+  const subtotal = quote?.subtotal ?? cartTotal;
+  const deliveryFee = quote?.deliveryFee ?? 0;
+  const serviceCharge = quote?.serviceCharge ?? 0;
+  const orderTotal =
+    quote?.totalPrice ?? subtotal + deliveryFee + serviceCharge;
 
   useEffect(() => {
     if (addresses.length > 0 && !address) {
@@ -135,11 +176,11 @@ export default function CheckoutPage() {
     }
   }, [addresses, address]);
 
-  useEffect(() => {
-    if (hasServiceAreas && !serviceArea) {
-      setServiceArea(serviceAreas[0].name);
-    }
-  }, [hasServiceAreas, serviceAreas, serviceArea]);
+  // useEffect(() => {
+  //   if (hasServiceAreas && !serviceArea) {
+  //     setServiceArea(serviceAreas[0].name);
+  //   }
+  // }, [hasServiceAreas, serviceAreas, serviceArea]);
 
   // Default to adding a new address if the logged-in user has no addresses
   useEffect(() => {
@@ -148,37 +189,40 @@ export default function CheckoutPage() {
     }
   }, [isGuest, addresses.length]);
 
+  useEffect(() => {
+    if (!quoteAddress || quoteItems.length === 0) return;
+    handleGetCheckoutQuote(quoteAddress, quoteItems).catch((err) => {
+      console.error("Failed to refresh checkout quote:", err);
+    });
+  }, [quoteAddress, quoteItems, handleGetCheckoutQuote]);
+
   const placeOrderWithAddress = async (targetAddress: string) => {
     if (items.length === 0) return;
 
     // In a real app, specialInstructions would be added to the input payload here
-    const result = await createMealOrder({
-      variables: {
-        input: {
-          address: targetAddress,
-          items: items.map((line) => {
-            const item: {
-              mealId: string;
-              quantity: number;
-              style: MealStyle;
-              extras?: { extraId: string; quantity: number }[];
-            } = {
-              mealId: line.mealId,
-              quantity: line.quantity,
-              style: line.style as MealStyle,
-            };
-            if (line.extras?.length) {
-              item.extras = line.extras.map((e) => ({
-                extraId: e.id,
-                quantity: e.quantity,
-              }));
-            }
-            return item;
-          }),
-        },
-      },
+    const order = await handleCreateMealOrder({
+      address: targetAddress,
+      items: items.map((line) => {
+        const item: {
+          mealId: string;
+          quantity: number;
+          style: MealStyle;
+          extras?: { extraId: string; quantity: number }[];
+        } = {
+          mealId: line.mealId,
+          quantity: line.quantity,
+          style: line.style as MealStyle,
+        };
+        if (line.extras?.length) {
+          item.extras = line.extras.map((e) => ({
+            extraId: e.id,
+            quantity: e.quantity,
+          }));
+        }
+        return item;
+      }),
     });
-    const order = result.data?.createMealOrder;
+
     if (!order) {
       throw new Error("Failed to create order. Please try again.");
     }
@@ -222,7 +266,8 @@ export default function CheckoutPage() {
         let finalAddress = address;
 
         if (isAddingNewAddress) {
-          if (!street.trim() || !serviceArea) return;
+          if (!street.trim() || !serviceArea || !isStreetAddressSelected)
+            return;
           finalAddress = street.trim() + ", " + serviceArea;
         } else {
           if (!finalAddress) return;
@@ -242,7 +287,7 @@ export default function CheckoutPage() {
       ) {
         return;
       }
-      if (!street.trim() || !serviceArea) {
+      if (!street.trim() || !serviceArea || !isStreetAddressSelected) {
         return;
       }
 
@@ -275,7 +320,7 @@ export default function CheckoutPage() {
   };
 
   const displayError =
-    registerError ?? submitError?.message ?? paymentError ?? null;
+    registerError ?? paymentError ?? checkoutQuoteError?.message ?? null;
 
   if (userLoading) {
     return (
@@ -289,7 +334,7 @@ export default function CheckoutPage() {
   }
 
   const canSubmitLoggedIn = isAddingNewAddress
-    ? !!street.trim() && !!serviceArea
+    ? !!street.trim() && isStreetAddressSelected && !!serviceArea
     : !!address && addresses.length > 0;
 
   const canSubmitGuest = isLoginMode
@@ -299,6 +344,7 @@ export default function CheckoutPage() {
       !!email.trim() &&
       password.length >= MIN_PASSWORD_LENGTH &&
       !!street.trim() &&
+      isStreetAddressSelected &&
       !!serviceArea;
 
   const canSubmit = isGuest ? canSubmitGuest : canSubmitLoggedIn;
@@ -460,17 +506,23 @@ export default function CheckoutPage() {
 
                           <div className={styles.inputGroup}>
                             <label htmlFor="street">Delivery Address</label>
-                            <input
-                              id="street"
-                              type="text"
-                              placeholder="Street Address"
-                              value={street}
-                              onChange={(e) => setStreet(e.target.value)}
-                              required
+                            <PlacesAutocomplete
+                              onSelect={(selectedAddress, coordinates) => {
+                                setStreet(selectedAddress);
+                                setIsStreetAddressSelected(
+                                  coordinates.lat !== 0 ||
+                                    coordinates.lng !== 0,
+                                );
+                              }}
+                              onChange={(typedAddress) => {
+                                setStreet(typedAddress);
+                                setIsStreetAddressSelected(false);
+                              }}
+                              placeholder="Search for your address..."
                             />
                           </div>
 
-                          {hasServiceAreas && (
+                          {/* {hasServiceAreas && (
                             <div className={styles.inputGroup}>
                               <label htmlFor="serviceArea">Service Area</label>
                               <div className={styles.selectWrapper}>
@@ -497,7 +549,7 @@ export default function CheckoutPage() {
                                 </select>
                               </div>
                             </div>
-                          )}
+                          )} */}
                         </>
                       )}
                     </div>
@@ -528,16 +580,25 @@ export default function CheckoutPage() {
                         <>
                           <div className={styles.inputGroup}>
                             <label htmlFor="street">New Street Address</label>
-                            <input
-                              id="street"
-                              type="text"
-                              placeholder="Street Address"
-                              value={street}
-                              onChange={(e) => setStreet(e.target.value)}
-                              required
+                            <PlacesAutocomplete
+                              onSelect={(selectedAddress, coordinates) => {
+                                setStreet(selectedAddress);
+                                setIsStreetAddressSelected(
+                                  coordinates.lat !== 0 ||
+                                    coordinates.lng !== 0,
+                                );
+                              }}
+                              onChange={(typedAddress) => {
+                                setStreet(typedAddress);
+                                setIsStreetAddressSelected(false);
+                              }}
+                              onBlur={() =>
+                                setIsStreetAddressSelected(street.trim() !== "")
+                              }
+                              placeholder="Search for your address..."
                             />
                           </div>
-
+                          {/* 
                           {hasServiceAreas && (
                             <div className={styles.inputGroup}>
                               <label htmlFor="serviceArea">Service Area</label>
@@ -565,7 +626,7 @@ export default function CheckoutPage() {
                                 </select>
                               </div>
                             </div>
-                          )}
+                          )} */}
                         </>
                       ) : (
                         <div
@@ -709,15 +770,23 @@ export default function CheckoutPage() {
                 <div className={styles.summaryTotalsArea}>
                   <div className={styles.totalsRow}>
                     <span>Subtotal:</span>
-                    <span>{fmt(cartTotal)}</span>
+                    <span>{fmt(subtotal)}</span>
                   </div>
                   <div className={styles.totalsRow}>
                     <span>Delivery Fee:</span>
-                    <span>{fmt(DELIVERY_FEE)}</span>
+                    <span>{fmt(deliveryFee)}</span>
+                  </div>
+                  <div className={styles.totalsRow}>
+                    <span>Service Charge:</span>
+                    <span>{fmt(serviceCharge)}</span>
                   </div>
                   <div className={styles.totalsRowTotal}>
                     <span>Total:</span>
-                    <span>{fmt(orderTotal)}</span>
+                    <span>
+                      {checkoutQuoteLoading
+                        ? "Calculating..."
+                        : fmt(orderTotal)}
+                    </span>
                   </div>
                 </div>
 
