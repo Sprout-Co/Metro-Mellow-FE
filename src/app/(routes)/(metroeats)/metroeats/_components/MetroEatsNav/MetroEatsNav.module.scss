@@ -2,32 +2,58 @@ $me-yellow: #ffcc00;
 $me-dark: #1a1a1a;
 
 .nav {
-  position: sticky;
-  top: 0;
+  position: fixed;
+  top: 12px;
+  left: 16px;
+  right: 16px;
   z-index: 100;
-  background: color("metroeats", "yellow");
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+  /* Mobile default styling */
+  border-radius: 24px;
+  background-color: rgba(35, 35, 35, 0.3);
+  border: 1px solid rgba(235, 235, 235, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px 0 rgba(104, 104, 104, 0.37);
+  color: #000;
+  transition: all 0.3s ease;
+
+  /* Desktop floating styling */
+  @include breakpoint-up("md") {
+    top: 20px;
+    left: 50%;
+    right: auto;
+    width: 70%;
+    transform: translateX(-50%);
+    border-radius: 43px;
+  }
 
   &__inner {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 14px spacing("lg");
+    padding: 10px 16px; /* Tighter padding on mobile */
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: spacing("lg");
+    gap: 12px;
 
-    @include breakpoint-down("sm") {
-      padding: 12px spacing("md");
+    @include breakpoint-up("md") {
+      padding: 14px spacing("lg");
+      gap: spacing("lg");
     }
   }
 
   &__logo {
     line-height: 0;
     flex-shrink: 0;
+    display: flex;
 
     img {
-      width: 236px;
+      width: 110px; /* Scaled down for mobile */
+      height: auto;
+
+      @include breakpoint-up("md") {
+        width: 140px;
+      }
     }
   }
 
@@ -100,22 +126,31 @@ $me-dark: #1a1a1a;
   &__actions {
     display: flex;
     align-items: center;
-    gap: spacing("sm");
+    gap: 12px; /* Smaller gap on mobile */
+
+    @include breakpoint-up("md") {
+      gap: spacing("sm");
+    }
   }
 
   &__orderBtn {
-    padding: 10px spacing("xl");
-    background: $me-yellow;
-    color: $me-dark;
-    @include font-size("sm");
-    @include font-weight("semibold");
-    text-decoration: none;
-    border-radius: border-radius("pill");
-    letter-spacing: -0.01em;
-    transition: opacity 0.15s;
+    display: none; /* Hide main order button on mobile to save space */
 
-    &:hover {
-      opacity: 0.85;
+    @include breakpoint-up("md") {
+      display: block;
+      padding: 10px spacing("xl");
+      background: $me-yellow;
+      color: $me-dark;
+      @include font-size("sm");
+      @include font-weight("semibold");
+      text-decoration: none;
+      border-radius: border-radius("pill");
+      letter-spacing: -0.01em;
+      transition: opacity 0.15s;
+
+      &:hover {
+        opacity: 0.85;
+      }
     }
   }
 
@@ -127,14 +162,22 @@ $me-dark: #1a1a1a;
     width: 38px;
     height: 38px;
     background: none;
-    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    border: 1.5px solid rgba(255, 255, 255, 0.2); /* Softer border for glassmorphism */
     border-radius: border-radius("full");
-    color: $me-dark;
+    color: color(
+      "metroeats",
+      "white"
+    ); /* Changed to white to match your white-on-yellow logo intent */
     cursor: pointer;
     transition: background 0.15s;
 
+    @include breakpoint-up("md") {
+      border: 1.5px solid rgba(0, 0, 0, 0.1);
+      color: $me-dark;
+    }
+
     &:hover {
-      background: rgba(0, 0, 0, 0.03);
+      background: rgba(0, 0, 0, 0.05);
     }
   }
 
@@ -170,8 +213,12 @@ $me-dark: #1a1a1a;
       display: block;
       height: 2px;
       width: 100%;
-      background: $me-dark;
+      background: color(
+        "metroeats",
+        "white"
+      ); /* Contrast for glassmorphism header */
       border-radius: 2px;
+      transition: all 0.3s ease;
     }
 
     @include breakpoint-up("md") {
@@ -183,6 +230,7 @@ $me-dark: #1a1a1a;
     overflow: hidden;
     background: color("neutral", "white");
     border-top: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 0 0 24px 24px; /* Matches the new mobile container curve */
 
     @include breakpoint-up("md") {
       display: none;

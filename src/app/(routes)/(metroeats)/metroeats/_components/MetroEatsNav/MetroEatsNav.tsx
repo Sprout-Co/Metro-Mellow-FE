@@ -22,6 +22,7 @@ export default function MetroEatsNav() {
             width={140}
             height={32}
             priority
+            className={styles.logoImage}
           />
         </Link>
 
@@ -105,6 +106,7 @@ export default function MetroEatsNav() {
             )}
           </button>
 
+          {/* Desktop Only Order Button */}
           <Link href="/metroeats/dashboard" className={styles.nav__orderBtn}>
             Orders
           </Link>
@@ -130,6 +132,14 @@ export default function MetroEatsNav() {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
           >
+            {/* Added Orders to Mobile Menu */}
+            <Link
+              href="/metroeats/dashboard"
+              className={styles.nav__mobileLink}
+              onClick={() => setMobileOpen(false)}
+            >
+              My Orders
+            </Link>
             <Link
               href="/metroeats/menu?tab=plates"
               className={styles.nav__mobileLink}

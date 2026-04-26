@@ -183,6 +183,14 @@ export type CheckAvailabilityInput = {
   timeSlot: TimeSlot;
 };
 
+export type CheckoutQuote = {
+  __typename?: 'CheckoutQuote';
+  deliveryFee: Scalars['Float']['output'];
+  serviceCharge: Scalars['Float']['output'];
+  subtotal: Scalars['Float']['output'];
+  totalPrice: Scalars['Float']['output'];
+};
+
 export type CleaningDetails = {
   __typename?: 'CleaningDetails';
   cleaningType: CleaningType;
@@ -1228,6 +1236,7 @@ export type Query = {
   customerPayments: Array<Payment>;
   customerSubscriptions: Array<Subscription>;
   getAvailableSlots: Array<DateAvailability>;
+  getCheckoutQuote: CheckoutQuote;
   invoice: Invoice;
   isUserOnline: Scalars['Boolean']['output'];
   me?: Maybe<User>;
@@ -1318,6 +1327,11 @@ export type QueryGetAvailableSlotsArgs = {
   endDate: Scalars['DateTime']['input'];
   serviceCategory: ServiceCategory;
   startDate: Scalars['DateTime']['input'];
+};
+
+
+export type QueryGetCheckoutQuoteArgs = {
+  input: CreateMealOrderInput;
 };
 
 
@@ -2545,6 +2559,13 @@ export type GetMealOrderPaymentStatusQueryVariables = Exact<{
 
 
 export type GetMealOrderPaymentStatusQuery = { __typename?: 'Query', mealOrderPaymentStatus: PaymentStatus };
+
+export type GetCheckoutQuoteQueryVariables = Exact<{
+  input: CreateMealOrderInput;
+}>;
+
+
+export type GetCheckoutQuoteQuery = { __typename?: 'Query', getCheckoutQuote: { __typename?: 'CheckoutQuote', subtotal: number, deliveryFee: number, serviceCharge: number, totalPrice: number } };
 
 export type GetNotificationsQueryVariables = Exact<{
   filters?: InputMaybe<NotificationFilters>;
@@ -6898,6 +6919,49 @@ export type GetMealOrderPaymentStatusQueryHookResult = ReturnType<typeof useGetM
 export type GetMealOrderPaymentStatusLazyQueryHookResult = ReturnType<typeof useGetMealOrderPaymentStatusLazyQuery>;
 export type GetMealOrderPaymentStatusSuspenseQueryHookResult = ReturnType<typeof useGetMealOrderPaymentStatusSuspenseQuery>;
 export type GetMealOrderPaymentStatusQueryResult = Apollo.QueryResult<GetMealOrderPaymentStatusQuery, GetMealOrderPaymentStatusQueryVariables>;
+export const GetCheckoutQuoteDocument = gql`
+    query GetCheckoutQuote($input: CreateMealOrderInput!) {
+  getCheckoutQuote(input: $input) {
+    subtotal
+    deliveryFee
+    serviceCharge
+    totalPrice
+  }
+}
+    `;
+
+/**
+ * __useGetCheckoutQuoteQuery__
+ *
+ * To run a query within a React component, call `useGetCheckoutQuoteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCheckoutQuoteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCheckoutQuoteQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetCheckoutQuoteQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetCheckoutQuoteQuery, GetCheckoutQuoteQueryVariables> & ({ variables: GetCheckoutQuoteQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetCheckoutQuoteQuery, GetCheckoutQuoteQueryVariables>(GetCheckoutQuoteDocument, options);
+      }
+export function useGetCheckoutQuoteLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCheckoutQuoteQuery, GetCheckoutQuoteQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetCheckoutQuoteQuery, GetCheckoutQuoteQueryVariables>(GetCheckoutQuoteDocument, options);
+        }
+export function useGetCheckoutQuoteSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GetCheckoutQuoteQuery, GetCheckoutQuoteQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GetCheckoutQuoteQuery, GetCheckoutQuoteQueryVariables>(GetCheckoutQuoteDocument, options);
+        }
+export type GetCheckoutQuoteQueryHookResult = ReturnType<typeof useGetCheckoutQuoteQuery>;
+export type GetCheckoutQuoteLazyQueryHookResult = ReturnType<typeof useGetCheckoutQuoteLazyQuery>;
+export type GetCheckoutQuoteSuspenseQueryHookResult = ReturnType<typeof useGetCheckoutQuoteSuspenseQuery>;
+export type GetCheckoutQuoteQueryResult = Apollo.QueryResult<GetCheckoutQuoteQuery, GetCheckoutQuoteQueryVariables>;
 export const GetNotificationsDocument = gql`
     query GetNotifications($filters: NotificationFilters, $pagination: PaginationInput) {
   notifications(filters: $filters, pagination: $pagination) {

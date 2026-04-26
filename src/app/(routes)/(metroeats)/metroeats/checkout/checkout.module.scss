@@ -1,415 +1,572 @@
-// Checkout uses design system variables, mixins, and MetroEats accent colors
 $me-yellow: #ffcc00;
 $me-dark: #1a1a1a;
+$me-border: #e5e7eb;
+$me-bg: #f9fafb;
+$text-secondary: #4b5563;
 
-.checkout {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: spacing("2xl") spacing("lg");
+.checkoutPage {
   font-family: inherit;
+  background-color: $me-bg;
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
 
-  @include breakpoint-down("sm") {
-    padding: spacing("xl") spacing("md");
+/* --- Hero Section --- */
+.heroSection {
+  position: relative;
+  height: 350px;
+  background-image: url("https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=2000");
+  background-size: cover;
+  background-position: center 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 640px) {
+    height: 280px;
+  }
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  z-index: 1;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: white;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 24px;
+}
+
+.heroBackLink {
+  position: absolute;
+  top: -80px;
+  left: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.2s;
+
+  &:hover {
+    color: white;
   }
 
-  &__empty {
-    text-align: center;
-    padding: spacing("4xl") spacing("lg");
-    color: color("neutral", "black");
-
-    h2 {
-      margin-bottom: spacing("sm");
-      @include font-size("h5");
-      @include font-weight("bold");
-      font-family: $font-family-heading;
-    }
-
-    p {
-      color: color("neutral", "dark");
-      margin-bottom: spacing("xl");
-      @include font-size("body-2");
-    }
+  @media (max-width: 768px) {
+    top: -40px;
   }
+}
 
-  &__header {
-    margin-bottom: spacing("xl");
+.heroTitle {
+  font-size: 56px;
+  font-weight: 800;
+  margin: 0 0 12px;
+  letter-spacing: -1px;
+
+  @media (max-width: 640px) {
+    font-size: 40px;
   }
+}
 
-  &__backLink {
-    display: inline-block;
-    color: color("neutral", "dark");
-    text-decoration: none;
-    @include font-weight("medium");
-    @include font-size("body-2");
-    margin-bottom: spacing("sm");
-    transition: color 0.2s ease;
+.heroSubtitle {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
 
-    &:hover {
-      color: color("accent", "base");
-    }
-  }
+/* --- Main Layout --- */
+.checkoutWrapper {
+  max-width: 1100px;
+  margin: -40px auto 0;
+  padding: 0 24px;
+  position: relative;
+  z-index: 10;
+}
 
-  &__pageTitle {
-    @include font-size("title");
-    @include font-weight("bold");
-    font-family: $font-family-heading;
-    color: $me-dark;
-    margin: 0;
-  }
+.checkoutContainer {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
 
-  &__container {
-    @include flex(row, nowrap, flex-start, stretch);
-    gap: spacing("2xl");
-    align-items: flex-start;
-
-    @include breakpoint-down("lg") {
-      flex-direction: column;
-    }
-  }
-
-  &__main {
-    flex: 1;
-    min-width: 0;
-    @include flex(column);
-    gap: spacing("xl");
-  }
-
-  &__section {
-    background: color("neutral", "white");
-    border-radius: border-radius("2xl");
-    padding: spacing("xl");
-    box-shadow: map-get($shadows, "sm");
-
-    @include breakpoint-down("sm") {
-      padding: spacing("lg");
-    }
-  }
-
-  &__sectionTitle {
-    @include font-size("body-2");
-    @include font-weight("semibold");
-    font-family: $font-family-heading;
-    color: $me-dark;
-    margin: 0 0 spacing("lg");
-    padding-bottom: spacing("md");
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  }
-
-  &__sectionHint {
-    @include font-size("sm");
-    color: color("neutral", "dark");
-    margin: 0 0 spacing("md");
-    line-height: 1.4;
-  }
-
-  &__methodToggle {
-    display: flex;
-    gap: spacing("md");
-  }
-
-  &__methodLabel {
-    flex: 1;
-    @include flex(row, nowrap, center, center);
-    gap: spacing("sm");
-    padding: spacing("md");
-    border: 2px solid color("neutral", "light");
-    border-radius: border-radius("xl");
-    cursor: pointer;
-    @include font-weight("semibold");
-    @include font-size("body-2");
-    color: color("neutral", "dark");
-    transition:
-      border-color 0.2s ease,
-      background 0.2s ease;
-
-    input {
-      display: none;
-    }
-
-    &:hover {
-      background: color("neutral", "lightest");
-    }
-
-    &--active {
-      border-color: color("accent", "base");
-      background: rgba($me-yellow, 0.08);
-      color: darken($me-yellow, 15%);
-    }
-  }
-
-  &__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: spacing("lg");
-
-    @include breakpoint-down("sm") {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  &__inputGroup {
-    @include flex(column);
-    gap: spacing("xs");
-
-    &--full {
-      grid-column: 1 / -1;
-    }
-
-    label {
-      @include font-size("sm");
-      @include font-weight("medium");
-      color: $me-dark;
-    }
-
-    input,
-    select,
-    textarea {
-      width: 100%;
-      padding: spacing("sm") spacing("md");
-      border: 1px solid color("neutral", "light");
-      border-radius: border-radius("lg");
-      @include font-size("base");
-      font-family: inherit;
-      transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-      outline: none;
-
-      &:focus {
-        border-color: color("accent", "base");
-        box-shadow: map-get($shadows, "focus");
-      }
-
-      &::placeholder {
-        color: color("neutral", "medium");
-      }
-    }
-
-    select {
-      cursor: pointer;
-      appearance: auto;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-  }
-
-  &__paymentOptions {
-    @include flex(column);
-    gap: spacing("md");
-  }
-
-  &__optionLabel {
-    @include flex(row, nowrap, space-between, center);
-    padding: spacing("lg") spacing("xl");
-    border: 1px solid color("neutral", "light");
-    border-radius: border-radius("xl");
-    cursor: pointer;
-    transition: background 0.2s ease;
-
-    &:hover {
-      background: color("neutral", "lightest");
-    }
-  }
-
-  &__optionMain {
-    @include flex(row, nowrap, flex-start, center);
-    gap: spacing("md");
-
-    input[type="radio"] {
-      accent-color: color("accent", "base");
-      cursor: pointer;
-    }
-  }
-
-  &__optionText {
-    @include font-weight("medium");
-    @include font-size("body-2");
-    color: $me-dark;
-  }
-
-  &__optionIcon {
-    @include font-size("2xl");
-  }
-
-  &__sidebar {
-    width: 400px;
-    flex-shrink: 0;
-    position: sticky;
-    top: spacing("xl");
-
-    @include breakpoint-down("lg") {
-      width: 100%;
-      position: static;
-    }
-  }
-
-  &__summaryCard {
-    background: color("neutral", "white");
-    border-radius: border-radius("2xl");
-    padding: spacing("xl");
-    box-shadow: map-get($shadows, "md");
-    border: 1px solid rgba(0, 0, 0, 0.04);
-  }
-
-  &__summaryTitle {
-    @include font-size("body-2");
-    @include font-weight("semibold");
-    font-family: $font-family-heading;
-    color: $me-dark;
-    margin: 0 0 spacing("lg");
-  }
-
-  &__summaryItems {
-    @include flex(column);
-    gap: spacing("md");
-    margin-bottom: spacing("xl");
-    max-height: 360px;
-    overflow-y: auto;
-    padding-right: spacing("xs");
-
-    &::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: color("neutral", "light");
-      border-radius: 4px;
-    }
-  }
-
-  &__summaryItem {
-    @include flex(row, nowrap, space-between, flex-start);
-    padding-bottom: spacing("md");
-    border-bottom: 1px dashed color("neutral", "light");
-
-    &:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-  }
-
-  &__summaryItemInfo {
-    display: flex;
+  @media (max-width: 1024px) {
     flex-direction: column;
-    gap: 2px;
-    min-width: 0;
   }
+}
 
-  &__summaryItemQty {
-    @include font-weight("semibold");
-    @include font-size("sm");
-    color: $me-dark;
-    background: color("neutral", "lightest");
-    padding: 2px spacing("xs");
-    border-radius: border-radius("md");
-    width: fit-content;
-  }
+.leftColumn {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
 
-  &__summaryItemName {
-    display: block;
-    @include font-weight("semibold");
-    @include font-size("body-2");
-    color: $me-dark;
-    margin-bottom: 2px;
-  }
+.rightColumn {
+  width: 400px;
+  flex-shrink: 0;
 
-  &__summaryItemMeta {
-    @include font-size("xs");
-    color: color("neutral", "dark");
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  &__summaryItemPrice {
-    @include font-weight("semibold");
-    @include font-size("body-2");
-    color: $me-dark;
-    flex-shrink: 0;
-  }
-
-  &__totals {
-    border-top: 2px solid color("neutral", "light");
-    padding-top: spacing("lg");
-    margin-bottom: spacing("xl");
-    @include flex(column);
-    gap: spacing("sm");
-  }
-
-  &__totalsRow {
-    @include flex(row, nowrap, space-between, center);
-    color: color("neutral", "dark");
-    @include font-size("body-2");
-
-    &--bold {
-      @include font-weight("bold");
-      @include font-size("xl");
-      color: $me-dark;
-      margin-top: spacing("sm");
-      padding-top: spacing("sm");
-      border-top: 1px dashed color("neutral", "light");
-    }
-  }
-
-  &__submitBtn,
-  &__submitBtnMobile {
+  @media (max-width: 1024px) {
     width: 100%;
-    background: $me-dark;
-    color: color("neutral", "white");
-    border: none;
-    padding: spacing("md") spacing("xl");
-    border-radius: border-radius("xl");
-    @include font-weight("bold");
-    @include font-size("body-2");
+  }
+}
+
+/* --- Steps UI --- */
+.stepSection {
+  background: transparent;
+}
+
+.stepHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stepBadge {
+  width: 32px;
+  height: 32px;
+  background-color: $me-dark;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.stepTitle {
+  font-size: 24px;
+  font-weight: 800;
+  color: $me-dark;
+  margin: 0;
+}
+
+.stepContent {
+  padding-left: 44px; /* Align with text after badge */
+
+  @media (max-width: 640px) {
+    padding-left: 0;
+  }
+}
+
+/* --- Forms & Inputs --- */
+.authToggleRow {
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.authToggleText {
+  color: $text-secondary;
+  margin-right: 8px;
+}
+
+.authToggleBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: $me-dark;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: $me-yellow;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.addressToggleRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 4px;
+}
+
+.addressToggleBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: $me-dark;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: $me-yellow;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &.fullWidth {
+    grid-column: 1 / -1;
+  }
+
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: $me-dark;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 14px 16px;
+    background: white;
+    border: 1px solid $me-border;
+    border-radius: 8px;
+    font-size: 15px;
+    color: $me-dark;
+    outline: none;
+    transition: all 0.2s;
+
+    &:focus {
+      border-color: $me-yellow;
+      box-shadow: 0 0 0 3px rgba($me-yellow, 0.15);
+    }
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+}
+
+.specialInstructions {
+  margin-top: 20px;
+}
+
+.selectWrapper {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 6px;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2212%22%20height%3D%228%22%20viewBox%3D%220%200%2012%208%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M1%201.5L6%206.5L11%201.5%22%20stroke%3D%22%231A1A1A%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    pointer-events: none;
+  }
+
+  select {
+    appearance: none;
+    padding-right: 40px;
     cursor: pointer;
-    transition:
-      background 0.2s ease,
-      transform 0.15s ease;
-    text-align: center;
+  }
+}
 
-    &:hover:not(:disabled) {
-      background: lighten($me-dark, 8%);
-      transform: translateY(-1px);
-    }
+/* --- Payment Method Visual Mock --- */
+.paymentMethodsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+.radioLabel,
+.radioLabelDisabled {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+
+  input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: $me-yellow;
+  }
+}
+
+.radioLabelDisabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.radioText {
+  font-size: 15px;
+  font-weight: 600;
+  color: $me-dark;
+}
+
+.paymentCardBox {
+  background: white;
+  border: 1px solid $me-border;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-left: 32px; /* indent under radio */
+
+  @media (max-width: 640px) {
+    margin-left: 0;
+  }
+}
+
+.paymentCardHeader {
+  background: #f3f4f6;
+  padding: 12px 16px;
+  border-bottom: 1px solid $me-border;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: $me-dark;
+}
+
+.paystackLogo {
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.paymentCardBody {
+  padding: 20px 16px;
+}
+
+.paymentDisclaimer {
+  margin: 0;
+  font-size: 13px;
+  color: $text-secondary;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.5;
+  background: rgba($me-yellow, 0.1);
+  padding: 12px;
+  border-radius: 6px;
+  color: darken(#b45309, 10%);
+}
+
+/* --- Order Summary Card --- */
+.summaryCard {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.summaryTitle {
+  font-size: 18px;
+  font-weight: 800;
+  color: $me-dark;
+  margin: 0 0 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid $me-border;
+}
+
+.summaryItemList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+  max-height: 350px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 4px;
+  }
+}
+
+.summaryItemRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.summaryItemImage {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f3f4f6;
+  flex-shrink: 0;
+}
+
+.summaryItemDetails {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.summaryItemName {
+  font-size: 14px;
+  font-weight: 700;
+  color: $me-dark;
+  line-height: 1.3;
+}
+
+.summaryItemSub {
+  font-size: 12px;
+  color: $text-secondary;
+}
+
+.summaryItemPrice {
+  font-size: 14px;
+  font-weight: 700;
+  color: $me-dark;
+}
+
+.summaryTotalsArea {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-top: 20px;
+  border-top: 1px solid $me-border;
+}
+
+.totalsRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: $text-secondary;
+  font-weight: 500;
+}
+
+.totalsRowTotal {
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+  font-weight: 800;
+  color: $me-dark;
+  margin-top: 8px;
+}
+
+.placeOrderBtn {
+  width: 100%;
+  background: $me-yellow;
+  color: $me-dark;
+  border: none;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-1px);
   }
 
-  &__submitBtnMobile {
-    display: none;
-    margin-top: spacing("sm");
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
 
-    @include breakpoint-down("lg") {
-      display: block;
+.errorAlert {
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* --- Empty / Loading States --- */
+.checkout__empty {
+  text-align: center;
+  padding: 60px 24px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  max-width: 500px;
+  margin: 40px auto;
+  border: 1px solid $me-border;
+
+  h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: $me-dark;
+    margin-bottom: 8px;
+  }
+  p {
+    color: $text-secondary;
+    margin-bottom: 24px;
+  }
+}
+
+.checkout__emptyIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.checkout__primaryBtn {
+  display: inline-block;
+  background: $me-yellow;
+  color: $me-dark;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.checkout__loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba($me-yellow, 0.3);
+  border-top-color: $me-yellow;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 16px;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
     }
-  }
-
-  @include breakpoint-down("lg") {
-    &__submitBtn {
-      display: none;
-    }
-  }
-
-  &__error {
-    @include font-size("sm");
-    color: color("status", "error");
-    margin-top: spacing("sm");
-  }
-
-  &__slotOption {
-    display: flex;
-    align-items: center;
-    gap: spacing("sm");
-    padding: spacing("sm") 0;
   }
 }

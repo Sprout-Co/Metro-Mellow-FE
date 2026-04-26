@@ -76,7 +76,11 @@ export const useAuthOperations = () => {
    * @throws Error if login fails or user is unauthorized
    */
   const handleLogin = useCallback(
-    async (email: string, password: string) => {
+    async (
+      email: string,
+      password: string,
+      options?: { redirectToDashboard?: boolean },
+    ) => {
       try {
         console.log("Attempting login with:", { email });
         const { data, errors } = await loginMutation({
@@ -113,7 +117,13 @@ export const useAuthOperations = () => {
 
         // Store auth data
         console.log("Storing auth data...");
-        dispatch(loginAction({ user: user as any, token }));
+        dispatch(
+          loginAction({
+            user: user as any,
+            token,
+            redirectToDashboard: options?.redirectToDashboard ?? true,
+          }),
+        );
 
         // Ensure cookie is set synchronously before redirecting (critical for mobile devices)
         // Mobile browsers can have delays in cookie propagation, so we need to wait and verify

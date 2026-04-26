@@ -56,9 +56,14 @@ const authSlice = createSlice({
     },
     login: (
       state,
-      action: PayloadAction<{ user: User; token: string; welcome?: boolean }>
+      action: PayloadAction<{
+        user: User;
+        token: string;
+        welcome?: boolean;
+        redirectToDashboard?: boolean;
+      }>
     ) => {
-      const { user, token, welcome } = action.payload;
+      const { user, token, welcome, redirectToDashboard = true } = action.payload;
       console.log("Auth store: Logging in", { user, token });
 
       state.user = user;
@@ -67,12 +72,14 @@ const authSlice = createSlice({
 
       // Save token to cookie
       cookieStorage.setItem("auth-token", token);
-      setTimeout(() => {
-        const redirectUrl = welcome
-          ? `${Routes.DASHBOARD}?welcome=true`
-          : Routes.DASHBOARD;
-        window.location.replace(redirectUrl);
-      }, 5000);
+      if (redirectToDashboard) {
+        setTimeout(() => {
+          const redirectUrl = welcome
+            ? `${Routes.DASHBOARD}?welcome=true`
+            : Routes.DASHBOARD;
+          window.location.replace(redirectUrl);
+        }, 5000);
+      }
     },
     logout: (state) => {
       console.log("Auth store: Logging out");

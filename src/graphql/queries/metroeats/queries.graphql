@@ -61,3 +61,12 @@ query GetMealOrders {
 query GetMealOrderPaymentStatus($orderId: ID!) {
   mealOrderPaymentStatus(orderId: $orderId)
 }
+
+query GetCheckoutQuote($input: CreateMealOrderInput!) {
+  getCheckoutQuote(input: $input) {
+    subtotal
+    deliveryFee
+    serviceCharge
+    totalPrice
+  }
+}
