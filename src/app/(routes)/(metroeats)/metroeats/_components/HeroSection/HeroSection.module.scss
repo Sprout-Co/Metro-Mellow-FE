@@ -111,7 +111,9 @@ $me-dark: #1a1a1a;
   letter-spacing: 0.05em;
   text-decoration: none;
   border-radius: 9999px;
-  transition: background 0.2s, transform 0.15s;
+  transition:
+    background 0.2s,
+    transform 0.15s;
   margin-top: spacing("sm");
 
   &:hover {

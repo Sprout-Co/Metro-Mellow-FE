@@ -649,7 +649,8 @@ export default function CheckoutPage() {
                     const itemInitial = item.name.substring(0, 1).toUpperCase();
                     const isLocalImage =
                       typeof imageUrl === "string" &&
-                      (imageUrl.startsWith("/") || imageUrl.startsWith("data:"));
+                      (imageUrl.startsWith("/") ||
+                        imageUrl.startsWith("data:"));
 
                     return (
                       <div
