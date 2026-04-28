@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckCircle2,
@@ -15,7 +14,13 @@ import {
   Percent,
   Truck,
   Check,
-  Minus
+  Minus,
+  Sparkles,
+  Bike,
+  Crown,
+  Heart,
+  Timer,
+  BadgeCheck,
 } from "lucide-react";
 import Button from "@/components/ui/Button/Button";
 import { Routes } from "@/constants/routes";
@@ -27,21 +32,7 @@ const faqs = [
     answer:
       "MetroEats Plus is our premium subscription service that gives you free delivery on eligible orders, exclusive discounts, priority access to deals, and faster checkout.",
   },
-  {
-    question: "Can I cancel anytime?",
-    answer:
-      "Yes! There are no long-term commitments. You can pause or cancel your subscription at any time directly from your dashboard.",
-  },
-  {
-    question: "Is there a free trial?",
-    answer:
-      "Yes, new members get a 14-day free trial to experience all the benefits of MetroEats Plus before being charged.",
-  },
-  {
-    question: "Which restaurants are included?",
-    answer:
-      "MetroEats Plus benefits apply to all restaurants with the MetroEats Plus badge. This includes over 80% of our top-rated partners.",
-  },
+
   {
     question: "When do my benefits apply?",
     answer:
@@ -54,7 +45,67 @@ const faqs = [
   },
 ];
 
-const FAQItem = ({ question, answer }: { question: string; answer: string }) => {
+const benefits = [
+  {
+    icon: <Truck size={26} />,
+    title: "Free Delivery",
+    desc: "Enjoy ₦0 delivery fees on all eligible orders over ₦5,000 from participating restaurants.",
+  },
+  {
+    icon: <Percent size={26} />,
+    title: "Exclusive Discounts",
+    desc: "Access member-only pricing and save up to 20% on selected meals every single day.",
+  },
+  {
+    icon: <Zap size={26} />,
+    title: "Faster Checkout",
+    desc: "Breeze through checkout with saved preferences and priority order processing.",
+  },
+  {
+    icon: <Gift size={26} />,
+    title: "Special Rewards",
+    desc: "Earn double points on every order and unlock exclusive rewards from your favourite spots.",
+  },
+  {
+    icon: <Clock size={26} />,
+    title: "Priority Access",
+    desc: "Be first to know about new restaurants, limited-time offers, and seasonal menus.",
+  },
+  {
+    icon: <ShieldCheck size={26} />,
+    title: "Big Monthly Savings",
+    desc: "Members save an average of ₦15,000 every month on delivery fees and exclusive deals.",
+  },
+];
+
+const testimonials = [
+  {
+    initials: "ST",
+    text: "I order lunch almost every day at work. MetroEats Plus pays for itself in just the first week with the free delivery alone. Highly recommended!",
+    name: "Sarah T.",
+    role: "Member since 2023",
+  },
+  {
+    initials: "DO",
+    text: "The exclusive discounts are amazing. I get to try new restaurants I normally wouldn't, and the priority support is incredibly fast.",
+    name: "David O.",
+    role: "Member since 2024",
+  },
+  {
+    initials: "AE",
+    text: "As a busy mom, this subscription is a lifesaver. We save so much on family dinners, and the checkout process is super fast.",
+    name: "Amaka E.",
+    role: "Member since 2023",
+  },
+];
+
+const FAQItem = ({
+  question,
+  answer,
+}: {
+  question: string;
+  answer: string;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -65,19 +116,18 @@ const FAQItem = ({ question, answer }: { question: string; answer: string }) => 
         aria-expanded={isOpen}
       >
         <span>{question}</span>
-        {isOpen ? (
-          <ChevronUp className={styles.faq__icon} size={20} />
-        ) : (
-          <ChevronDown className={styles.faq__icon} size={20} />
-        )}
+        <span className={styles.faq__icon}>
+          {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+        </span>
       </button>
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            style={{ overflow: "hidden" }}
           >
             <div className={styles.faq__answer}>{answer}</div>
           </motion.div>
@@ -92,21 +142,20 @@ export default function MetroEatsPlusPage() {
     <div className={styles.page}>
       {/* Hero Section */}
       <section className={styles.hero}>
-        <div className={styles.hero__content}>
+        <div className={styles.hero__inner}>
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            className={styles.hero__content}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div className={styles.hero__badge}>
-              <Star size={16} fill="currentColor" />
-              <span>MetroEats Plus</span>
-            </div>
             <h1 className={styles.hero__title}>
-              Save more on every order with <span>MetroEats Plus</span>
+              Free delivery, daily savings, <span>real flavours.</span>
             </h1>
             <p className={styles.hero__subtitle}>
-              Get free delivery, exclusive member-only discounts, and priority access to deals. Join today and start saving.
+              Join MetroEats Plus and unlock free delivery, member-only
+              discounts, and priority access to your favourite local kitchens —
+              all in one tap.
             </p>
             <div className={styles.hero__actions}>
               <Button
@@ -115,11 +164,11 @@ export default function MetroEatsPlusPage() {
                 size="lg"
                 animation="scale"
               >
-                Start Free Trial
+                Start now
               </Button>
               <Button
                 href="#benefits"
-                variant="secondary"
+                variant="ghost"
                 size="lg"
                 animation="scale"
               >
@@ -128,319 +177,100 @@ export default function MetroEatsPlusPage() {
             </div>
           </motion.div>
         </div>
-
-        <motion.div
-          className={styles.hero__image}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-        >
-          {/* Placeholder for hero image */}
-          <div style={{ width: "100%", height: "100%", background: "#f1f1f1", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Image
-              src="/images/metroeats/brand-logo/white-on-yellow.png"
-              alt="MetroEats Plus"
-              width={200}
-              height={200}
-              style={{ opacity: 0.1, objectFit: "contain" }}
-            />
-            <p style={{ position: "absolute", color: "#9f9f9f", fontWeight: "bold" }}>Food Delivery Imagery</p>
-          </div>
-        </motion.div>
       </section>
 
       {/* Benefits Section */}
       <section id="benefits" className={styles.section}>
         <div className={styles.section__header}>
-          <h2 className={styles.section__title}>Why join MetroEats Plus?</h2>
+          <span className={styles.section__eyebrow}>Member benefits</span>
+          <h2 className={styles.section__title}>
+            Built for people who <span>love good food.</span>
+          </h2>
           <p className={styles.section__subtitle}>
-            Everything you need for a better food delivery experience.
+            Six powerful perks designed to save you time, money, and effort on
+            every single order.
           </p>
         </div>
 
         <div className={styles.benefits}>
-          <div className={styles.benefits__card}>
-            <div className={styles.benefits__icon}>
-              <Truck size={24} />
-            </div>
-            <h3 className={styles.benefits__title}>Free Delivery</h3>
-            <p className={styles.benefits__desc}>
-              Enjoy $0 delivery fees on all eligible orders over ₦5,000 from participating restaurants.
+          {benefits.map((benefit, idx) => (
+            <motion.div
+              key={benefit.title}
+              className={styles.benefits__card}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.4, delay: idx * 0.05 }}
+            >
+              <div className={styles.benefits__icon}>{benefit.icon}</div>
+              <h3 className={styles.benefits__title}>{benefit.title}</h3>
+              <p className={styles.benefits__desc}>{benefit.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Promo banner */}
+      <section className={styles.section} style={{ paddingTop: 0 }}>
+        <div className={styles.promo}>
+          <div className={styles.promo__content}>
+            <span className={styles.promo__tag}>Limited offer</span>
+            <h3 className={styles.promo__title}>Try Plus free for 14 days</h3>
+            <p className={styles.promo__desc}>
+              Get the full premium experience on us. Cancel any time — no fees,
+              no fuss.
             </p>
           </div>
-          <div className={styles.benefits__card}>
-            <div className={styles.benefits__icon}>
-              <Percent size={24} />
-            </div>
-            <h3 className={styles.benefits__title}>Exclusive Discounts</h3>
-            <p className={styles.benefits__desc}>
-              Access special member-only pricing and save up to 20% on selected meals every day.
-            </p>
-          </div>
-          <div className={styles.benefits__card}>
-            <div className={styles.benefits__icon}>
-              <Zap size={24} />
-            </div>
-            <h3 className={styles.benefits__title}>Faster Checkout</h3>
-            <p className={styles.benefits__desc}>
-              Breeze through checkout with saved preferences and priority order processing.
-            </p>
-          </div>
-          <div className={styles.benefits__card}>
-            <div className={styles.benefits__icon}>
-              <Gift size={24} />
-            </div>
-            <h3 className={styles.benefits__title}>Special Rewards</h3>
-            <p className={styles.benefits__desc}>
-              Earn double points on every order and unlock exclusive rewards from your favorite spots.
-            </p>
-          </div>
-          <div className={styles.benefits__card}>
-            <div className={styles.benefits__icon}>
-              <Clock size={24} />
-            </div>
-            <h3 className={styles.benefits__title}>Priority Access</h3>
-            <p className={styles.benefits__desc}>
-              Be the first to know about new restaurants, limited-time offers, and seasonal menus.
-            </p>
-          </div>
-          <div className={styles.benefits__card}>
-            <div className={styles.benefits__icon}>
-              <ShieldCheck size={24} />
-            </div>
-            <h3 className={styles.benefits__title}>Monthly Savings</h3>
-            <p className={styles.benefits__desc}>
-              Our members save an average of ₦15,000 per month on delivery fees and exclusive deals.
-            </p>
+          <div className={styles.promo__action}>
+            <Button
+              href={Routes.DASHBOARD_SUBSCRIPTIONS_NEW}
+              variant="primary"
+              size="lg"
+              animation="scale"
+            >
+              Claim free trial
+            </Button>
           </div>
         </div>
       </section>
 
       {/* How it works */}
-      <section className={styles.section} style={{ background: "#fff", maxWidth: "100%" }}>
-        <div style={{ maxWidth: "1140px", margin: "0 auto" }}>
+      <section className={`${styles.section} ${styles["section--white"]}`}>
+        <div className={styles["section--inner"]} style={{ padding: "0 1rem" }}>
           <div className={styles.section__header}>
-            <h2 className={styles.section__title}>How it works</h2>
-            <p className={styles.section__subtitle}>
+            <span className={styles.section__eyebrow}>How it works</span>
+            <h2 className={styles.section__title}>
               Start saving in three simple steps.
+            </h2>
+            <p className={styles.section__subtitle}>
+              From sign-up to first delivery — Plus works the moment you join.
             </p>
           </div>
 
           <div className={styles.steps}>
             <div className={styles.steps__item}>
               <div className={styles.steps__number}>1</div>
-              <h3 className={styles.steps__title}>Choose a plan</h3>
+              <h3 className={styles.steps__title}>Pick your plan</h3>
               <p className={styles.steps__desc}>
-                Select the monthly or yearly plan that works best for you.
+                Choose a monthly or yearly plan in seconds. Both come with a
+                free trial.
               </p>
             </div>
             <div className={styles.steps__item}>
               <div className={styles.steps__number}>2</div>
-              <h3 className={styles.steps__title}>Order your favorites</h3>
+              <h3 className={styles.steps__title}>Order your favourites</h3>
               <p className={styles.steps__desc}>
-                Look for the MetroEats Plus badge on participating restaurants.
+                Look out for the Plus badge on participating restaurants near
+                you.
               </p>
             </div>
             <div className={styles.steps__item}>
               <div className={styles.steps__number}>3</div>
               <h3 className={styles.steps__title}>Save automatically</h3>
               <p className={styles.steps__desc}>
-                Discounts and free delivery are applied instantly at checkout.
+                Free delivery and member discounts apply instantly at checkout.
+                That's it.
               </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Savings Comparison */}
-      <section className={styles.section}>
-        <div className={styles.section__header}>
-          <h2 className={styles.section__title}>See the difference</h2>
-          <p className={styles.section__subtitle}>
-            Compare regular ordering with MetroEats Plus.
-          </p>
-        </div>
-
-        <div className={styles.comparison}>
-          <table className={styles.comparison__table}>
-            <thead>
-              <tr>
-                <th>Benefits</th>
-                <th>Regular</th>
-                <th className={styles.comparison__table_highlight}>MetroEats Plus</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Delivery Fees</td>
-                <td>Standard rates apply</td>
-                <td className={styles.comparison__table_highlight}>
-                  <strong>₦0</strong> on eligible orders
-                </td>
-              </tr>
-              <tr>
-                <td>Exclusive Discounts</td>
-                <td>
-                  <span className={styles.comparison__icon_x}><Minus size={20} /></span>
-                </td>
-                <td className={styles.comparison__table_highlight}>
-                  <span className={styles.comparison__icon_check}><Check size={20} /></span>
-                </td>
-              </tr>
-              <tr>
-                <td>Priority Support</td>
-                <td>
-                  <span className={styles.comparison__icon_x}><Minus size={20} /></span>
-                </td>
-                <td className={styles.comparison__table_highlight}>
-                  <span className={styles.comparison__icon_check}><Check size={20} /></span>
-                </td>
-              </tr>
-              <tr>
-                <td>Special Partner Perks</td>
-                <td>
-                  <span className={styles.comparison__icon_x}><Minus size={20} /></span>
-                </td>
-                <td className={styles.comparison__table_highlight}>
-                  <span className={styles.comparison__icon_check}><Check size={20} /></span>
-                </td>
-              </tr>
-              <tr>
-                <td>Average Monthly Savings</td>
-                <td>₦0</td>
-                <td className={styles.comparison__table_highlight}>
-                  <strong>₦15,000+</strong>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section id="pricing" className={styles.section}>
-        <div className={styles.section__header}>
-          <h2 className={styles.section__title}>Simple, transparent pricing</h2>
-          <p className={styles.section__subtitle}>
-            Choose the plan that fits your lifestyle. Cancel anytime.
-          </p>
-        </div>
-
-        <div className={styles.pricing}>
-          <div className={styles.pricing__card}>
-            <h3 className={styles.pricing__name}>Monthly</h3>
-            <div className={styles.pricing__price}>
-              ₦3,500<span>/month</span>
-            </div>
-            <ul className={styles.pricing__features}>
-              <li><CheckCircle2 size={20} /> Free delivery on eligible orders</li>
-              <li><CheckCircle2 size={20} /> Exclusive member discounts</li>
-              <li><CheckCircle2 size={20} /> Priority customer support</li>
-              <li><CheckCircle2 size={20} /> Cancel anytime</li>
-            </ul>
-            <div className={styles.pricing__cta}>
-              <Button
-                href={Routes.DASHBOARD_SUBSCRIPTIONS_NEW}
-                variant="secondary"
-                size="lg"
-                fullWidth
-              >
-                Start 14-Day Free Trial
-              </Button>
-            </div>
-          </div>
-
-          <div className={`${styles.pricing__card} ${styles["pricing__card--popular"]}`}>
-            <div className={styles.pricing__badge}>Best Value</div>
-            <h3 className={styles.pricing__name}>Yearly</h3>
-            <div className={styles.pricing__price}>
-              ₦35,000<span>/year</span>
-            </div>
-            <ul className={styles.pricing__features}>
-              <li><CheckCircle2 size={20} /> <strong>Save ₦7,000 annually</strong></li>
-              <li><CheckCircle2 size={20} /> Free delivery on eligible orders</li>
-              <li><CheckCircle2 size={20} /> Exclusive member discounts</li>
-              <li><CheckCircle2 size={20} /> Priority customer support</li>
-              <li><CheckCircle2 size={20} /> Special anniversary reward</li>
-            </ul>
-            <div className={styles.pricing__cta}>
-              <Button
-                href={Routes.DASHBOARD_SUBSCRIPTIONS_NEW}
-                variant="primary"
-                size="lg"
-                fullWidth
-              >
-                Start 14-Day Free Trial
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className={styles.section} style={{ background: "#fff", maxWidth: "100%" }}>
-        <div style={{ maxWidth: "1140px", margin: "0 auto" }}>
-          <div className={styles.section__header}>
-            <h2 className={styles.section__title}>Loved by our members</h2>
-          </div>
-
-          <div className={styles.testimonials}>
-            <div className={styles.testimonials__card}>
-              <div className={styles.testimonials__stars}>
-                <Star size={16} fill="currentColor" />
-                <Star size={16} fill="currentColor" />
-                <Star size={16} fill="currentColor" />
-                <Star size={16} fill="currentColor" />
-                <Star size={16} fill="currentColor" />
-              </div>
-              <p className={styles.testimonials__text}>
-                "I order lunch almost every day at work. MetroEats Plus pays for itself in just the first week with the free delivery alone. Highly recommended!"
-              </p>
-              <div className={styles.testimonials__author}>
-                <div className={styles.testimonials__avatar}></div>
-                <div>
-                  <div className={styles.testimonials__name}>Sarah T.</div>
-                  <div className={styles.testimonials__role}>Member since 2023</div>
-                </div>
-              </div>
-            </div>
-            <div className={styles.testimonials__card}>
-              <div className={styles.testimonials__stars}>
-                <Star size={16} fill="currentColor" />
-                <Star size={16} fill="currentColor" />
-                <Star size={16} fill="currentColor" />
-                <Star size={16} fill="currentColor" />
-                <Star size={16} fill="currentColor" />
-              </div>
-              <p className={styles.testimonials__text}>
-                "The exclusive discounts are amazing. I get to try new restaurants I normally wouldn't, and the priority support is incredibly fast."
-              </p>
-              <div className={styles.testimonials__author}>
-                <div className={styles.testimonials__avatar}></div>
-                <div>
-                  <div className={styles.testimonials__name}>David O.</div>
-                  <div className={styles.testimonials__role}>Member since 2024</div>
-                </div>
-              </div>
-            </div>
-            <div className={styles.testimonials__card}>
-              <div className={styles.testimonials__stars}>
-                <Star size={16} fill="currentColor" />
-                <Star size={16} fill="currentColor" />
-                <Star size={16} fill="currentColor" />
-                <Star size={16} fill="currentColor" />
-                <Star size={16} fill="currentColor" />
-              </div>
-              <p className={styles.testimonials__text}>
-                "As a busy mom, this subscription is a lifesaver. We save so much on family dinners, and the checkout process is super fast."
-              </p>
-              <div className={styles.testimonials__author}>
-                <div className={styles.testimonials__avatar}></div>
-                <div>
-                  <div className={styles.testimonials__name}>Amaka E.</div>
-                  <div className={styles.testimonials__role}>Member since 2023</div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -449,31 +279,19 @@ export default function MetroEatsPlusPage() {
       {/* FAQ Section */}
       <section className={styles.section}>
         <div className={styles.section__header}>
-          <h2 className={styles.section__title}>Frequently Asked Questions</h2>
+          <span className={styles.section__eyebrow}>FAQs</span>
+          <h2 className={styles.section__title}>
+            Got questions? We've got answers.
+          </h2>
+          <p className={styles.section__subtitle}>
+            Everything you need to know about your Plus membership.
+          </p>
         </div>
 
         <div className={styles.faq}>
           {faqs.map((faq, index) => (
             <FAQItem key={index} question={faq.question} answer={faq.answer} />
           ))}
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className={styles.section}>
-        <div className={styles.cta}>
-          <h2 className={styles.cta__title}>Ready to start saving?</h2>
-          <p className={styles.cta__desc}>
-            Join thousands of members who are already enjoying free delivery and exclusive discounts with MetroEats Plus.
-          </p>
-          <Button
-            href={Routes.DASHBOARD_SUBSCRIPTIONS_NEW}
-            variant="secondary"
-            size="lg"
-            animation="scale"
-          >
-            Start Your Free Trial
-          </Button>
         </div>
       </section>
     </div>
