@@ -212,7 +212,7 @@ function MenuContent() {
         )}
 
         <div className={styles.menu__ctaSection}>
-          <Link href="#subscribe" className={styles.menu__ctaCard}>
+          <Link href="/metroeats/plus" className={styles.menu__ctaCard}>
             <h3 className={styles.menu__ctaTitle}>
               From the big game to the big meeting, we&apos;ve got you covered.
             </h3>

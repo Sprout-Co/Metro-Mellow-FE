@@ -27,7 +27,7 @@ const categories = [
     subtitle: "Set your days, save up to 20%",
     label: "Save More",
     emoji: "📅",
-    href: "#subscribe",
+    href: "/metroeats/plus",
     popular: false,
   },
   {

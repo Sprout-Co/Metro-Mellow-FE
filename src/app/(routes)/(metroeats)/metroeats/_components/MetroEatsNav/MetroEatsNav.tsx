@@ -55,7 +55,7 @@ export default function MetroEatsNav() {
   const isMenuActive =
     pathname?.startsWith("/metroeats/menu") ?? false;
   const isQuickOrderActive = pathname === "/metroeats";
-  const isSubscribeActive = (pathname ?? "").includes("subscribe");
+  const isSubscribeActive = pathname === "/metroeats/plus";
 
   const menuLinks: NavLink[] = [
     {
@@ -154,7 +154,7 @@ export default function MetroEatsNav() {
           </div>
 
           <Link
-            href="#subscribe"
+            href="/metroeats/plus"
             className={`${styles.link} ${isSubscribeActive ? styles.linkActive : ""}`}
           >
             <Sparkles size={14} className={styles.linkIcon} />
@@ -308,7 +308,7 @@ export default function MetroEatsNav() {
                   </div>
                 </Link>
                 <Link
-                  href="#subscribe"
+                  href="/metroeats/plus"
                   className={styles.mobileLink}
                   onClick={() => setMobileOpen(false)}
                 >

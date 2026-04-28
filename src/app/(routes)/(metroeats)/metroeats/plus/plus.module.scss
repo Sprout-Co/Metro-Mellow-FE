@@ -1,0 +1,536 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+
+.page {
+  min-height: 100vh;
+  background: $color-wheat-base;
+  color: $color-darko-base;
+  font-family: $font-family-base;
+  padding-bottom: map-get($spacing, "6xl");
+}
+
+.hero {
+  position: relative;
+  padding: map-get($spacing, "6xl") map-get($spacing, "md") map-get($spacing, "4xl");
+  background: linear-gradient(135deg, $color-wheat-base 0%, $color-sand-yellow-20 100%);
+  overflow: hidden;
+  text-align: center;
+
+  @include respond-to("md") {
+    padding: map-get($spacing, "8xl") map-get($spacing, "xl") map-get($spacing, "5xl");
+  }
+
+  &__content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: map-get($spacing, "xs");
+    background: rgba($color-orange-base, 0.1);
+    color: $color-orange-base;
+    padding: map-get($spacing, "xs") map-get($spacing, "md");
+    border-radius: map-get($border-radius, "pill");
+    font-weight: map-get($font-weights, "bold");
+    font-size: map-get($font-sizes, "sm");
+    margin-bottom: map-get($spacing, "lg");
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "h4");
+    line-height: map-get($line-heights, "tight");
+    margin-bottom: map-get($spacing, "lg");
+    color: $color-darko-base;
+
+    @include respond-to("md") {
+      font-size: map-get($font-sizes, "h2");
+    }
+
+    span {
+      color: $color-orange-base;
+    }
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "lg");
+    color: $color-darko-40;
+    margin-bottom: map-get($spacing, "xl");
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+
+    @include respond-to("md") {
+      font-size: map-get($font-sizes, "xl");
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: map-get($spacing, "md");
+    justify-content: center;
+    align-items: center;
+
+    @include respond-to("sm") {
+      flex-direction: row;
+    }
+  }
+
+  &__image {
+    margin-top: map-get($spacing, "4xl");
+    position: relative;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: map-get($border-radius, "2xl");
+    overflow: hidden;
+    box-shadow: map-get($shadows, "2xl");
+    aspect-ratio: 16/9;
+    background: $color-wheat-80;
+
+    img {
+      object-fit: cover;
+    }
+  }
+}
+
+.section {
+  padding: map-get($spacing, "4xl") map-get($spacing, "md");
+  max-width: map-get($container-max-widths, "xl");
+  margin: 0 auto;
+
+  @include respond-to("md") {
+    padding: map-get($spacing, "6xl") map-get($spacing, "xl");
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: map-get($spacing, "4xl");
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "h5");
+    margin-bottom: map-get($spacing, "sm");
+
+    @include respond-to("md") {
+      font-size: map-get($font-sizes, "h3");
+    }
+  }
+
+  &__subtitle {
+    font-size: map-get($font-sizes, "lg");
+    color: $color-darko-40;
+  }
+}
+
+.benefits {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: map-get($spacing, "xl");
+
+  @include respond-to("sm") {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-to("lg") {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &__card {
+    background: #ffffff;
+    padding: map-get($spacing, "xl");
+    border-radius: map-get($border-radius, "xl");
+    box-shadow: map-get($shadows, "sm");
+    transition: $transition-base;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: map-get($spacing, "md");
+
+    &:hover {
+      box-shadow: map-get($shadows, "md");
+      transform: translateY(-4px);
+    }
+  }
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: map-get($border-radius, "lg");
+    background: rgba($color-orange-base, 0.1);
+    color: $color-orange-base;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__title {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "bold");
+    color: $color-darko-base;
+  }
+
+  &__desc {
+    color: $color-darko-40;
+    line-height: map-get($line-heights, "relaxed");
+  }
+}
+
+.pricing {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: map-get($spacing, "xl");
+  max-width: 800px;
+  margin: 0 auto;
+
+  @include respond-to("md") {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &__card {
+    background: #ffffff;
+    border-radius: map-get($border-radius, "2xl");
+    padding: map-get($spacing, "2xl");
+    box-shadow: map-get($shadows, "md");
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid transparent;
+    transition: $transition-base;
+
+    &--popular {
+      border-color: $color-orange-base;
+      transform: scale(1.05);
+      z-index: 2;
+
+      @include respond-to("md") {
+        box-shadow: map-get($shadows, "xl");
+      }
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    top: -(map-get($spacing, "md"));
+    left: 50%;
+    transform: translateX(-50%);
+    background: $color-orange-base;
+    color: #ffffff;
+    padding: map-get($spacing, "xs") map-get($spacing, "lg");
+    border-radius: map-get($border-radius, "pill");
+    font-weight: map-get($font-weights, "bold");
+    font-size: map-get($font-sizes, "sm");
+  }
+
+  &__name {
+    font-size: map-get($font-sizes, "2xl");
+    font-weight: map-get($font-weights, "bold");
+    margin-bottom: map-get($spacing, "xs");
+  }
+
+  &__price {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "h3");
+    color: $color-darko-base;
+    margin-bottom: map-get($spacing, "md");
+
+    span {
+      font-size: map-get($font-sizes, "base");
+      color: $color-darko-40;
+      font-family: $font-family-base;
+    }
+  }
+
+  &__features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 map-get($spacing, "xl") 0;
+    flex-grow: 1;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: map-get($spacing, "sm");
+      margin-bottom: map-get($spacing, "md");
+      color: $color-darko-40;
+
+      svg {
+        color: $color-success;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+    }
+  }
+
+  &__cta {
+    width: 100%;
+  }
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: map-get($spacing, "2xl");
+  position: relative;
+
+  @include respond-to("md") {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 40px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: dashed 2px $color-wheat-40;
+    z-index: 0;
+    display: none;
+
+    @include respond-to("md") {
+      display: block;
+    }
+  }
+
+  &__item {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__number {
+    width: 80px;
+    height: 80px;
+    background: #ffffff;
+    border: 4px solid $color-sand-yellow-base;
+    border-radius: map-get($border-radius, "full");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "h5");
+    color: $color-darko-base;
+    margin-bottom: map-get($spacing, "lg");
+    box-shadow: map-get($shadows, "sm");
+  }
+
+  &__title {
+    font-size: map-get($font-sizes, "xl");
+    font-weight: map-get($font-weights, "bold");
+    margin-bottom: map-get($spacing, "sm");
+  }
+
+  &__desc {
+    color: $color-darko-40;
+  }
+}
+
+.comparison {
+  background: #ffffff;
+  border-radius: map-get($border-radius, "2xl");
+  overflow: hidden;
+  box-shadow: map-get($shadows, "md");
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      padding: map-get($spacing, "lg");
+      text-align: center;
+      border-bottom: 1px solid $color-wheat-80;
+    }
+
+    th {
+      font-size: map-get($font-sizes, "lg");
+      font-weight: map-get($font-weights, "bold");
+      background: $color-wheat-base;
+
+      &:first-child {
+        text-align: left;
+      }
+
+      &.highlight {
+        background: rgba($color-orange-base, 0.1);
+        color: $color-orange-base;
+      }
+    }
+
+    td {
+      &:first-child {
+        text-align: left;
+        font-weight: map-get($font-weights, "medium");
+        color: $color-darko-base;
+      }
+
+      &.highlight {
+        background: rgba($color-orange-base, 0.05);
+      }
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &--check {
+      color: $color-success;
+    }
+
+    &--x {
+      color: $color-wheat-40;
+    }
+  }
+}
+
+.testimonials {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: map-get($spacing, "xl");
+
+  @include respond-to("md") {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &__card {
+    background: #ffffff;
+    padding: map-get($spacing, "xl");
+    border-radius: map-get($border-radius, "xl");
+    box-shadow: map-get($shadows, "sm");
+  }
+
+  &__stars {
+    color: $color-sand-yellow-base;
+    display: flex;
+    gap: 4px;
+    margin-bottom: map-get($spacing, "md");
+  }
+
+  &__text {
+    font-size: map-get($font-sizes, "lg");
+    font-style: italic;
+    color: $color-darko-base;
+    margin-bottom: map-get($spacing, "lg");
+    line-height: map-get($line-heights, "relaxed");
+  }
+
+  &__author {
+    display: flex;
+    align-items: center;
+    gap: map-get($spacing, "md");
+  }
+
+  &__avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: map-get($border-radius, "full");
+    background: $color-wheat-60;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__name {
+    font-weight: map-get($font-weights, "bold");
+    color: $color-darko-base;
+  }
+
+  &__role {
+    font-size: map-get($font-sizes, "sm");
+    color: $color-darko-40;
+  }
+}
+
+.faq {
+  max-width: 800px;
+  margin: 0 auto;
+
+  &__item {
+    background: #ffffff;
+    border-radius: map-get($border-radius, "lg");
+    margin-bottom: map-get($spacing, "md");
+    overflow: hidden;
+    box-shadow: map-get($shadows, "sm");
+  }
+
+  &__question {
+    width: 100%;
+    padding: map-get($spacing, "lg");
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    border: none;
+    font-size: map-get($font-sizes, "lg");
+    font-weight: map-get($font-weights, "bold");
+    color: $color-darko-base;
+    cursor: pointer;
+    text-align: left;
+
+    &:hover {
+      background: $color-wheat-base;
+    }
+  }
+
+  &__icon {
+    color: $color-orange-base;
+    transition: $transition-base;
+
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__answer {
+    padding: 0 map-get($spacing, "lg") map-get($spacing, "lg");
+    color: $color-darko-40;
+    line-height: map-get($line-heights, "relaxed");
+  }
+}
+
+.cta {
+  text-align: center;
+  background: $color-midnight-green-base;
+  color: #ffffff;
+  padding: map-get($spacing, "6xl") map-get($spacing, "md");
+  border-radius: map-get($border-radius, "2xl");
+  margin-top: map-get($spacing, "6xl");
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: map-get($font-sizes, "h4");
+    margin-bottom: map-get($spacing, "md");
+
+    @include respond-to("md") {
+      font-size: map-get($font-sizes, "h3");
+    }
+  }
+
+  &__desc {
+    font-size: map-get($font-sizes, "lg");
+    margin-bottom: map-get($spacing, "xl");
+    opacity: 0.9;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
