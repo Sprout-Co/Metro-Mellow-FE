@@ -229,18 +229,15 @@ export default function Home() {
           aria-label="Professional Home Services in Lagos"
         >
           <Hero />
-        </section>
-
-        {/* Experience Section - Value proposition */}
-        <section id="why-choose-us" aria-label="Why Choose Metromellow">
-          <ExperienceSection />
-        </section>
-
+        </section>{" "}
         {/* Services Gallery - Visual showcase */}
         <section id="services-gallery" aria-label="Our Services Gallery">
           <ServicesGallery />
         </section>
-
+        {/* Experience Section - Value proposition */}
+        <section id="why-choose-us" aria-label="Why Choose Metromellow">
+          <ExperienceSection />
+        </section>
         {/* Service Hero - Quick service overview */}
         <section
           id="home-services-overview"
@@ -248,15 +245,13 @@ export default function Home() {
         >
           <ServiceHero />
         </section>
-
         {/* Chores Section - Service benefits */}
-        <section
+        {/* <section
           id="house-cleaning-services"
           aria-label="Professional Cleaning Services"
         >
           <ChoresSection />
-        </section>
-
+        </section> */}
         {/* Tasks Carousel - Don't waste time section */}
         <section
           id="household-tasks"
@@ -264,30 +259,25 @@ export default function Home() {
         >
           <TasksCarousel />
         </section>
-
         {/* Service Catalog - Detailed services */}
-        <section
+        {/* <section
           id="lagos-services-catalog"
           aria-label="Lagos Home Services Catalog"
         >
           <ServiceCatalog />
-        </section>
-
+        </section> */}
         {/* Mobile App Promo - App benefits */}
         <section id="mobile-app-booking" aria-label="Book Services On The Go">
           <MobileAppPromoSection />
         </section>
-
         {/* To-Do to Ta-Da - Process explanation */}
         <section id="how-it-works" aria-label="How Metromellow Works">
           <ToDoToTaDaSection />
         </section>
-
         {/* Testimonials - Social proof */}
         {/* <section id="customer-reviews" aria-label="Customer Reviews">
           <TestimonialCarouselSection />
         </section> */}
-
         {/* FAQ Section with structured data */}
         <section id="home-services-faq" aria-label="Frequently Asked Questions">
           <FAQSection faqs={faqItems} />

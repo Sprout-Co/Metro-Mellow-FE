@@ -13,7 +13,8 @@ const MobileAppPromoSection = () => {
             Mobile App <br /> Coming Soon
           </h2>
           <p className={styles["app-promo__description"]}>
-            We're building something amazing! Get notified when our mobile app launches and be among the first to experience effortless home service management on-the-go with real-time tracking, push notifications, and exclusive app-only deals.
+            Be first to know when our app launches! Enjoy easy home service
+            bookings, real-time updates, and app-only deals—coming soon.
           </p>
         </div>
         <div className={styles["app-promo__image"]}>

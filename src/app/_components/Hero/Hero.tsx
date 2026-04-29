@@ -1,126 +1,175 @@
 "use client";
 
-import { FC } from "react";
-import { motion } from "framer-motion";
-import Link from "next/link";
+import { FC, useCallback, useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import styles from "./Hero.module.scss";
-import { Routes } from "@/constants/routes";
 import { CTAButton } from "@/components/ui/Button/CTAButton";
 
-const Hero: FC = () => {
-  // Animation variants
-  const textVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: 0.1 * i,
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    }),
-  };
+type HeroSlide = {
+  id: string;
+  headline: string;
+  description: string;
+  ctaLabel: string;
+  ctaHref: string;
+  backgroundImage: string;
+};
 
-  const buttonVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: 0.4,
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
+const heroSlides: HeroSlide[] = [
+  {
+    id: "metroeats",
+    headline: "Do you need to order meals?",
+    description:
+      "MetroEats is MetroMellow's in-house cloud kitchen serving freshly prepared homemade-style Nigerian meals, with dependable delivery and bulk meal options.",
+    ctaLabel: "Order Meals",
+    ctaHref: "/metroeats",
+    backgroundImage: "/images/metroeats/metroeats-menu/jollof.png",
+  },
+  {
+    id: "cleaning",
+    headline: "Do you need cleaning?",
+    description:
+      "MetroMellow helps you book reliable home and office cleaning professionals in minutes, so your spaces stay fresh, organized, and ready for everyday living.",
+    ctaLabel: "Book Cleaning",
+    ctaHref: "/services/cleaning",
+    backgroundImage: "/images/cleaning/sparkelr-3-back.jpeg",
+  },
+  {
+    id: "laundry",
+    headline: "Do you need laundry?",
+    description:
+      "Schedule easy pickup, professional washing, careful ironing, and doorstep delivery with MetroMellow, designed to make your weekly laundry routine effortless.",
+    ctaLabel: "Schedule Laundry",
+    ctaHref: "/services/laundry",
+    backgroundImage: "/images/home/home4.jpeg",
+  },
+];
+
+const Hero: FC = () => {
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+
+  const goToNextSlide = useCallback(() => {
+    setActiveSlideIndex((prev) => (prev + 1) % heroSlides.length);
+  }, []);
+
+  const goToPreviousSlide = useCallback(() => {
+    setActiveSlideIndex(
+      (prev) => (prev - 1 + heroSlides.length) % heroSlides.length,
+    );
+  }, []);
+
+  const goToSlide = useCallback((index: number) => {
+    setActiveSlideIndex(index);
+  }, []);
+
+  useEffect(() => {
+    const autoSlideInterval = setInterval(goToNextSlide, 10000);
+    return () => clearInterval(autoSlideInterval);
+  }, [goToNextSlide]);
+
+  const activeSlide = heroSlides[activeSlideIndex];
 
   return (
-    <section className={styles.hero} role="banner">
-      {/* Background image */}
-      <div
-        className={styles.hero__background}
-        style={{
-          backgroundImage: `url(/images/cleaning/sparkeler-back-image.png)`,
-        }}
-      />
+    <section
+      className={styles.hero}
+      role="banner"
+      aria-label="MetroMellow Hero"
+    >
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeSlide.id}
+          className={styles.hero__slide}
+          style={{ backgroundImage: `url(${activeSlide.backgroundImage})` }}
+          initial={{ opacity: 0, scale: 1.02 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.01 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
+          <div className={styles.hero__overlay} />
+        </motion.div>
+      </AnimatePresence>
 
-      <div className={styles.hero__overlay}></div>
       <div className={styles.hero__container}>
         <div className={styles.hero__content}>
           <motion.h1
+            key={`${activeSlide.id}-headline`}
             className={styles.hero__title}
-            initial="hidden"
-            animate="visible"
-            custom={1}
-            variants={textVariants}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut", delay: 0.08 }}
           >
-            <span className={styles["hero__title--accent"]}>Professional</span>
-            <span className={styles["hero__title--word"]}>Home</span>
-            <span className={styles["hero__title--word"]}>Services</span>
+            {activeSlide.headline}
           </motion.h1>
 
           <motion.p
+            key={`${activeSlide.id}-description`}
             className={styles.hero__subtitle}
-            initial="hidden"
-            animate="visible"
-            custom={2}
-            variants={textVariants}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut", delay: 0.14 }}
           >
-            Trusted professionals for{" "}
-            <Link
-              href="/services/cleaning"
-              className={styles.hero__subtitleHighlight}
-            >
-              house cleaning
-            </Link>
-            ,{" "}
-            <Link
-              href="/services/laundry"
-              className={styles.hero__subtitleHighlight}
-            >
-              laundry service
-            </Link>
-            ,{" "}
-            <Link
-              href="/services/food"
-              className={styles.hero__subtitleHighlight}
-            >
-              fresh meal delivery
-            </Link>
-            , and{" "}
-            <Link
-              href="/services/pest-control"
-              className={styles.hero__subtitleHighlight}
-            >
-              pest control
-            </Link>{" "}
-            Same-day service available.
+            {activeSlide.description}
           </motion.p>
 
           <motion.div
+            key={`${activeSlide.id}-cta`}
             className={styles.hero__cta}
-            initial="hidden"
-            animate="visible"
-            variants={buttonVariants}
-            whileHover="hover"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
           >
-            {/* <Link href="/get-started" className={styles.hero__button}>
-              BOOK A SERVICE
-            </Link> */}
             <CTAButton
               variant="white"
               size="lg"
               fullWidth={false}
-              href={Routes.GET_STARTED}
-              animationType="wobble"
-              animationIntensity="intense"
-              animationInterval={1500}
+              href={activeSlide.ctaHref}
+              animationType="pulse"
+              animationIntensity="medium"
+              animationInterval={2000}
             >
-              Get Started Today
+              {activeSlide.ctaLabel}
             </CTAButton>
           </motion.div>
         </div>
+      </div>
+
+      <div className={styles.hero__controls} aria-label="Hero slider controls">
+        <button
+          type="button"
+          className={styles.hero__arrow}
+          aria-label="Previous service slide"
+          onClick={goToPreviousSlide}
+        >
+          &#10094;
+        </button>
+
+        <div
+          className={styles.hero__dots}
+          role="tablist"
+          aria-label="Service slides"
+        >
+          {heroSlides.map((slide, index) => (
+            <button
+              key={slide.id}
+              type="button"
+              role="tab"
+              aria-label={`Show ${slide.headline} slide`}
+              aria-selected={index === activeSlideIndex}
+              className={`${styles.hero__dot} ${
+                index === activeSlideIndex ? styles["hero__dot--active"] : ""
+              }`}
+              onClick={() => goToSlide(index)}
+            />
+          ))}
+        </div>
+
+        <button
+          type="button"
+          className={styles.hero__arrow}
+          aria-label="Next service slide"
+          onClick={goToNextSlide}
+        >
+          &#10095;
+        </button>
       </div>
     </section>
   );

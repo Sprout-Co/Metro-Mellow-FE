@@ -11,9 +11,9 @@
   min-height: spacing("9xl");
   overflow: hidden;
   @include hero-base;
+  isolation: isolate;
 
-  // Sliding background images
-  &__background {
+  &__slide {
     position: absolute;
     top: 0;
     left: 0;
@@ -22,289 +22,198 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    z-index: 0;
+    z-index: z-index("base");
 
-    // Mobile optimizations
     @include breakpoint-down("md") {
       background-size: cover;
-      background-position: center 20%;
-    }
-
-    @include breakpoint-down("sm") {
-      background-size: cover;
-      background-position: center 30%;
+      background-position: center;
     }
   }
 
-  // Dark overlay for better text contrast
   &__overlay {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(
-      to right,
-      color-alpha("neutral", "black", 0.2) 0%,
-      color-alpha("neutral", "black", 0.2) 60%,
-      color-alpha("neutral", "black", 0.4) 100%
-    );
-    z-index: 1;
-
-    // Enhanced overlay for mobile
-    @include breakpoint-down("md") {
-      background: linear-gradient(
-        to bottom,
-        color-alpha("neutral", "black", 0.7) 0%,
-        color-alpha("neutral", "black", 0.5) 50%,
-        color-alpha("neutral", "black", 0.8) 100%
-      );
-    }
-
-    @include breakpoint-down("sm") {
-      background: linear-gradient(
-        to bottom,
-        color-alpha("neutral", "black", 0.6) 0%,
-        color-alpha("neutral", "black", 0.4) 40%,
-        color-alpha("neutral", "black", 0.7) 100%
-      );
-    }
+    background-color: color-alpha("neutral", "black", 0.62);
+    z-index: z-index("base");
   }
 
   &__container {
     @include container;
     position: relative;
     height: 100%;
-    z-index: 2;
+    z-index: z-index("docked");
     display: flex;
     align-items: center;
-    flex-direction: column;
     justify-content: center;
-    text-align: center;
-    position: relative;
+    padding-top: spacing("7xl");
+    padding-bottom: spacing("6xl");
 
     @include breakpoint-down("md") {
-      align-items: center;
-      padding-top: spacing("3xl");
-      width: 100%;
-      max-width: 100%;
-      margin: 0 auto;
+      justify-content: center;
+      padding-top: spacing("6xl");
+      padding-bottom: spacing("5xl");
     }
 
     @include breakpoint-down("sm") {
-      padding-top: spacing("2xl");
-      width: 100%;
-      max-width: 100%;
-      margin: 0 auto;
+      align-items: center;
+      justify-content: center;
+      padding-top: spacing("5xl");
+      padding-bottom: spacing("4xl");
       padding-left: spacing("md");
       padding-right: spacing("md");
     }
   }
 
   &__content {
-    // max-width: 655px;
-    text-align: center;
+    max-width: container-width("md");
     width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     @include breakpoint-down("md") {
-      margin-left: auto;
-      margin-right: auto;
       text-align: center;
       max-width: 100%;
-      width: 100%;
-    }
-
-    @include breakpoint-down("sm") {
-      padding: 0;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: center;
-      width: 100%;
     }
   }
 
   &__title {
     @include heading-1;
-    font-size: font-size("h1") * 1.2;
     color: color("neutral", "white");
-    margin-bottom: spacing("lg");
-    line-height: 1;
-    text-align: center;
-    width: 100%;
+    margin-bottom: spacing("md");
+    max-width: container-width("md");
+    font-size: font-size("h1");
+    line-height: line-height("tight");
+    letter-spacing: letter-spacing("tight");
+    font-weight: font-weight("black");
+    text-transform: uppercase;
     overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-word;
-    hyphens: auto;
+    margin-left: auto;
+    margin-right: auto;
 
-    &--accent {
-      color: color("accent", "base");
-      font-weight: map-get($font-weights, "bold");
-      display: inline-block;
-      white-space: nowrap;
-      margin-right: 0.25em;
-
-      @include breakpoint-down("sm") {
-        display: block;
-        margin-bottom: 0;
-        margin-right: 0;
-        white-space: nowrap;
-      }
-    }
-
-    &--word {
-      display: inline-block;
-      color: color("neutral", "white");
-      font-weight: map-get($font-weights, "bold");
-      margin-right: 0.25em;
-
-      @include breakpoint-down("sm") {
-        display: block;
-        margin-right: 0;
-      }
-    }
-
-    &--main {
-      font-weight: map-get($font-weights, "bold");
+    @include breakpoint-down("lg") {
+      font-size: font-size("h2");
+      max-width: container-width("sm");
     }
 
     @include breakpoint-down("md") {
-      font-size: font-size("h2") * 1.1;
-      text-align: center;
-      width: 100%;
-      padding: 0 spacing("md");
-      overflow-wrap: break-word;
-      word-wrap: break-word;
-      word-break: break-word;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: font-size("h3");
     }
 
     @include breakpoint-down("sm") {
-      font-size: font-size("h3");
-      line-height: 1.2;
-      text-align: center;
-      width: 100%;
-      margin-left: auto;
-      margin-right: auto;
-      padding: 0 spacing("sm");
-      overflow-wrap: break-word;
-      word-wrap: break-word;
-      word-break: break-word;
+      font-size: font-size("h4");
       max-width: 100%;
-      box-sizing: border-box;
+      line-height: line-height("normal");
     }
   }
 
   &__subtitle {
     @include body-1;
-    font-size: font-size("body-1");
-    color: color("neutral", "light");
-    margin-bottom: spacing("xl");
+    font-size: font-size("2xl");
+    color: color("neutral", "lighter");
+    margin-bottom: spacing("2xl");
     line-height: line-height("relaxed");
-    max-width: 500px;
-    margin: auto;
+    max-width: container-width("sm");
+    margin-left: auto;
+    margin-right: auto;
+
     @include breakpoint-down("md") {
       font-size: font-size("body-2");
-      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
       max-width: 100%;
     }
 
     @include breakpoint-down("sm") {
-      font-size: font-size("body-2");
-      line-height: line-height("normal");
-    }
-
-    &Highlight {
-      color: color("accent", "base");
-      font-weight: map-get($font-weights, "semibold");
-      text-decoration: underline;
-      text-decoration-color: color("accent", "base");
-      text-decoration-thickness: 2px;
-      text-underline-offset: 2px;
-      transition: all 0.3s ease;
-      cursor: pointer;
-
-      &:hover {
-        color: color("accent", "dark");
-        text-decoration-color: color("accent", "dark");
-        transform: translateY(-1px);
-      }
+      font-size: font-size("sm");
+      line-height: line-height("relaxed");
     }
   }
 
   &__cta {
-    margin-top: spacing("2xl");
-
-    @include breakpoint-down("md") {
-      margin-top: spacing("xl");
-    }
-
-    @include breakpoint-down("sm") {
-      margin-top: spacing("lg");
-    }
-  }
-
-  &__button {
-    @include button-base;
-    background-color: color("neutral", "white");
-    color: color("neutral", "darkest");
-    border-radius: border-radius("full");
-    padding: spacing("lg") spacing("2xl");
-    font-weight: map-get($font-weights, "medium");
-    letter-spacing: letter-spacing("wider");
-    transition: $transition-base;
-
-    &:hover {
-      background-color: color("primary", "base");
-      color: color("neutral", "white");
-      transform: translateY(-2px);
-      box-shadow: map-get($shadows, "md");
-    }
-
-    @include breakpoint-down("md") {
-      padding: spacing("md") spacing("xl");
-    }
-
-    @include breakpoint-down("sm") {
-      min-width: 100%;
-      width: 100%;
-      padding: spacing("xl") 0;
-      font-size: font-size("body-2");
-    }
-  }
-
-  &__indicators {
-    position: absolute;
-    bottom: spacing("2xl");
-    right: spacing("2xl");
+    margin-top: spacing("none");
     display: flex;
-    gap: spacing("xs");
-    z-index: 2;
+    justify-content: center;
+  }
 
-    @include breakpoint-down("md") {
-      right: spacing("xl");
+  &__controls {
+    position: absolute;
+    left: spacing("xl");
+    right: spacing("xl");
+    bottom: spacing("2xl");
+    z-index: z-index("docked");
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    @include breakpoint-down("sm") {
+      left: spacing("md");
+      right: spacing("md");
       bottom: spacing("xl");
     }
+  }
+
+  &__arrow {
+    @include flex-center;
+    width: spacing("2xl");
+    height: spacing("2xl");
+    border: border-width("thin") solid color-alpha("neutral", "white", 0.4);
+    border-radius: border-radius("full");
+    color: color("neutral", "white");
+    background-color: color-alpha("neutral", "white", 0.12);
+    transition: $transition-base;
+    font-size: font-size("lg");
+    line-height: line-height("none");
+    cursor: pointer;
+
+    &:hover {
+      background-color: color-alpha("neutral", "white", 0.24);
+      box-shadow: shadow("md");
+    }
+
+    &:focus-visible {
+      outline: border-width("thin") solid color("accent", "base");
+      outline-offset: spacing("xxs");
+    }
 
     @include breakpoint-down("sm") {
-      right: spacing("md");
-      bottom: spacing("lg");
+      width: spacing("xl");
+      height: spacing("xl");
+      font-size: font-size("base");
     }
   }
 
-  &__indicator {
-    width: spacing("md");
-    height: spacing("xs");
-    background-color: color("neutral", "medium");
+  &__dots {
+    display: flex;
+    align-items: center;
+    gap: spacing("sm");
+    padding: spacing("xs") spacing("sm");
+    border-radius: border-radius("pill");
+    background-color: color-alpha("neutral", "black", 0.24);
+  }
+
+  &__dot {
+    width: spacing("sm");
+    height: spacing("sm");
+    border: border-width("none");
+    background-color: color-alpha("neutral", "white", 0.42);
     border-radius: border-radius("full");
-    transition: all 0.3s ease;
+    transition: $transition-base;
+    cursor: pointer;
 
     &:hover {
-      background-color: color("neutral", "light");
-      transform: scale(1.1);
+      background-color: color-alpha("neutral", "white", 0.75);
     }
 
     &--active {
       background-color: color("accent", "base");
-      width: spacing("xl");
+      width: spacing("lg");
     }
 
     @include breakpoint-down("sm") {
@@ -312,7 +221,7 @@
       height: spacing("xxs");
 
       &--active {
-        width: spacing("lg");
+        width: spacing("md");
       }
     }
   }
