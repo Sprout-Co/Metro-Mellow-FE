@@ -1,4 +1,5 @@
 export enum Routes {
+  METROEATS = "https://metroeats.metromellow.com",
   // Auth routes
   GET_STARTED = "/get-started",
   LOGIN = "/login",

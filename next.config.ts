@@ -2,6 +2,20 @@ import type { NextConfig } from "next";
 const path = require("path");
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/metroeats",
+        destination: "https://metroeats.metromellow.com",
+        permanent: true,
+      },
+      {
+        source: "/metroeats/:path*",
+        destination: "https://metroeats.metromellow.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
   experimental: {
     turbo: {
       resolveAlias: {

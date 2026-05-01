@@ -67,7 +67,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const services = [
     { href: "/services/cleaning", label: "Cleaning Services" },
     { href: "/services/laundry", label: "Laundry Services" },
-    { href: "/metroeats", label: "Food Services" },
+    { href: Routes.METROEATS, label: "Food Services" },
     { href: "/services/pest-control", label: "Pest Control" },
   ];
 
