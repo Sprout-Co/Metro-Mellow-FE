@@ -1,3 +1,4 @@
+import { Routes } from "./routes";
 /**
  * Service data for internal linking and SEO
  * This helps create consistent internal links between service pages
@@ -24,7 +25,7 @@ export const allServices: ServiceLink[] = [
   },
   {
     title: "Food Delivery",
-    href: "/metroeats",
+    href: Routes.METROEATS,
     description:
       "Fresh, nutritious meals prepared by professional chefs and delivered straight to your door in Lagos.",
   },

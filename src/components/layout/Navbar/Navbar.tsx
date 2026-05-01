@@ -10,12 +10,13 @@ import Button from "@/components/ui/Button/Button";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/redux/store";
 import { UserIcon } from "lucide-react";
+import { Routes } from "@/constants/routes";
 
 // Define service dropdown items
 const serviceItems = [
   {
     title: "Food Delivery",
-    href: "/metroeats",
+    href: Routes.METROEATS,
     description: "Delicious home-cooked meals",
     image: "/images/food/food-hero.jpg",
   },

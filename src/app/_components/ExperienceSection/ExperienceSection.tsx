@@ -12,7 +12,7 @@ const ExperienceSection: React.FC = () => {
   return (
     <section className={styles["experience-section"]}>
       <Link
-        href="/metroeats"
+        href={Routes.METROEATS}
         className={styles["experience-section__banner"]}
         aria-label="Go to MetroEats page"
       >
@@ -35,7 +35,7 @@ const ExperienceSection: React.FC = () => {
           </p>
           <div className={styles["experience-section__banner-cta"]}>
             <CTAButton
-              href="/metroeats"
+              href={Routes.METROEATS}
               size="lg"
               variant="white"
               animationType="pulse"

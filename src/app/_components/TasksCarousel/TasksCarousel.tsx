@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import styles from "./TasksCarousel.module.scss";
 import { CTAButton } from "@/components/ui/Button/CTAButton";
+import { Routes } from "@/constants/routes";
 
 interface TaskCard {
   id: string;
@@ -25,7 +26,7 @@ const taskCards: TaskCard[] = [
     description:
       "Order fresh MetroEats meals prepared by MetroMellow's in-house kitchen team, including dependable delivery and bulk meal options.",
     ctaText: "Order Meals",
-    route: "/metroeats",
+    route: Routes.METROEATS,
     stat: "Freshly prepared and delivery-ready",
   },
   {

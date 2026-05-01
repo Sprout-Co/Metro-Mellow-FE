@@ -9,6 +9,7 @@ import {
   createBreadcrumbSchema,
 } from "@/lib/seo";
 import { Metadata } from "next";
+import { Routes } from "@/constants/routes";
 
 export const metadata: Metadata = {
   title:
@@ -58,7 +59,7 @@ const services = [
     title: "Food Delivery",
     description:
       "Fresh, nutritious meals prepared by professional chefs and delivered straight to your door.",
-    href: "/metroeats",
+    href: Routes.METROEATS,
     image: "/images/food/jollof-rice.png",
   },
   {

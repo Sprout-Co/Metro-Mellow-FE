@@ -4,6 +4,7 @@ import { FC, useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import styles from "./Hero.module.scss";
 import { CTAButton } from "@/components/ui/Button/CTAButton";
+import { Routes } from "@/constants/routes";
 
 type HeroSlide = {
   id: string;
@@ -21,7 +22,7 @@ const heroSlides: HeroSlide[] = [
     description:
       "MetroEats is MetroMellow's in-house cloud kitchen serving freshly prepared homemade-style Nigerian meals, with dependable delivery and bulk meal options.",
     ctaLabel: "Order Meals",
-    ctaHref: "/metroeats",
+    ctaHref: Routes.METROEATS,
     backgroundImage: "/images/metroeats/metroeats-menu/jollof.png",
   },
   {

@@ -75,7 +75,7 @@ export default function Footer() {
             <h3 className={styles.colTitle}>Services</h3>
             <ul>
               <li>
-                <Link href="/metroeats">Food Delivery</Link>
+                <Link href={Routes.METROEATS}>Food Delivery</Link>
               </li>
               <li>
                 <Link href="/services/laundry">Laundry</Link>
