@@ -20,7 +20,8 @@ const heroSlides: HeroSlide[] = [
     id: "metroeats",
     headline: "Do you need to order meals?",
     description:
-      "MetroEats is MetroMellow's in-house cloud kitchen serving freshly prepared homemade-style Nigerian meals, with dependable delivery and bulk meal options.",
+      "MetroEats delivers freshly prepared, homemade-style Nigerian meals with reliable delivery and convenient bulk ordering options.",
+
     ctaLabel: "Order Meals",
     ctaHref: Routes.METROEATS,
     backgroundImage: "/images/metroeats/metroeats-menu/jollof.png",
